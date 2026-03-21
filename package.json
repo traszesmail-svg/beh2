@@ -1,0 +1,28 @@
+{
+  "name": "behawior15-mvp-full",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint --no-cache",
+    "test": "node --import tsx --test tests/runtime-config.test.ts"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.54.0",
+    "next": "14.2.35",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "stripe": "20.4.1"
+  },
+  "devDependencies": {
+    "@types/node": "20.17.30",
+    "@types/react": "18.3.21",
+    "eslint": "8.57.1",
+    "eslint-config-next": "14.2.35",
+    "playwright-core": "^1.58.2",
+    "tsx": "4.21.0",
+    "typescript": "5.8.3"
+  }
+}
