@@ -1,12 +1,12 @@
 # Behawior15
 
-Lekka aplikacja Next.js dla jednego specjalisty prowadzącego 15-minutowe konsultacje głosowe online.
+Lekka aplikacja Next.js dla jednego specjalisty prowadzacego 15-minutowe konsultacje glosowe online.
 
 ## Co zawiera
 
 - flow klienta: `problem -> slot -> form -> payment -> confirmation -> call`
-- panel `/admin` z zarządzaniem ceną, terminami i podglądem rezerwacji
-- materiały przed rozmową: MP4, link, notatki
+- panel `/admin` z zarzadzaniem cena, terminami i podgladem rezerwacji
+- materialy przed rozmowa: MP4, link, notatki
 - przypomnienia mailowe i flow maili przez Resend
 - Stripe Checkout i Supabase jako tryb live
 - lokalny fallback JSON do developmentu
@@ -22,11 +22,11 @@ Lekka aplikacja Next.js dla jednego specjalisty prowadzącego 15-minutowe konsul
 npm install
 ```
 
-## Zmienne środowiskowe
+## Zmienne srodowiskowe
 
-Skopiuj `.env.example` do `.env.local` i uzupełnij wartości.
+Skopiuj `.env.example` do `.env.local` i uzupelnij wartosci.
 
-Najważniejsze zmienne:
+Najwazniejsze zmienne:
 
 - `APP_DATA_MODE`
 - `APP_PAYMENT_MODE`
@@ -39,7 +39,7 @@ Najważniejsze zmienne:
 - `RESEND_API_KEY`
 - `CRON_SECRET`
 
-Pełna lista znajduje się w `.env.example`.
+Pelna lista znajduje sie w `.env.example`.
 
 ## Migracje SQL
 
@@ -48,8 +48,13 @@ Uruchom w Supabase:
 - `supabase/2026-03-21_amount_numeric_and_reminder.sql`
 - `supabase/migrations/20260321_pricing_settings.sql`
 - `supabase/migrations/20260321_booking_preparation_materials.sql`
+- `supabase/migrations/20260321_supabase_reminder_scheduler.sql`
 
-Pełniejsze notatki wdrożeniowe są w `LIVE_SETUP.md`.
+Nastepnie wykonaj setup scheduler:
+
+- `supabase/behavior15_reminder_scheduler_setup.sql`
+
+Pelniejsze notatki wdrozeniowe sa w `LIVE_SETUP.md`.
 
 ## Lokalny start
 
@@ -66,6 +71,7 @@ npm run build
 node --import tsx scripts/verify-flow.ts
 node --import tsx scripts/pricing-smoke.ts
 node --import tsx scripts/ui-smoke.ts
+node --import tsx scripts/reminder-smoke.ts
 ```
 
 ## Build produkcyjny
@@ -75,30 +81,38 @@ npm run build
 npm run start
 ```
 
-## Deploy na Vercel
+## Deploy na Vercel Hobby
 
-Nowy projekt Vercel powinien wskazywać root repo `/`.
+Nowy projekt Vercel powinien wskazywac root repo `/`.
 
 Ustawienia:
 
 - Framework Preset: `Next.js`
 - Install Command: `npm ci`
 - Build Command: `npm run build`
-- Output Directory: domyślne dla Next.js
+- Output Directory: domyslne dla Next.js
 
-Po deployu sprawdź:
+Wazne:
+
+- `vercel.json` nie zawiera aktywnego Vercel Cron
+- scheduler remindera dziala po stronie Supabase
+- aplikacja wystawia chroniony endpoint `POST /api/reminders/run`
+
+Po deployu sprawdz:
 
 - `/admin` wymaga Basic Auth
 - w `/admin` widoczny jest marker builda `CLEAN_START_REPO_V1`
-- sekcja ceny konsultacji działa
+- sekcja ceny konsultacji dziala
+- job `behavior15-booking-reminders` istnieje po stronie Supabase
 
-## Główne moduły
+## Glowne moduly
 
 - `app/admin/page.tsx`
 - `components/AdminPricingManager.tsx`
 - `components/PreparationMaterialsCard.tsx`
 - `app/api/admin/pricing/route.ts`
 - `app/api/bookings/[id]/prep/route.ts`
-- `app/api/cron/reminders/route.ts`
+- `app/api/reminders/run/route.ts`
 - `lib/server/db.ts`
+- `lib/server/reminder-runner.ts`
 - `lib/server/stripe.ts`

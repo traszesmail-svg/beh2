@@ -29,14 +29,26 @@ Aby dzialaly maile:
 - opcjonalnie `BEHAVIOR15_CONTACT_PHONE`
 
 ## 4. Reminder 1h przed konsultacja
-Vercel cron jest zdefiniowany w `vercel.json`.
-Dla produkcji ustaw dodatkowo:
+Scheduler nie korzysta juz z Vercel Cron.
+Run remindera jest wykonywany przez Supabase `pg_cron + pg_net`, ktore wywoluje chroniony endpoint aplikacji:
+- `GET/POST /api/reminders/run`
+
+Po stronie aplikacji ustaw:
 - `CRON_SECRET`
 
-Cron wywoluje:
-- `GET/POST /api/cron/reminders`
+Po stronie Supabase uruchom dodatkowo:
+- `supabase/migrations/20260321_supabase_reminder_scheduler.sql`
+- `supabase/behavior15_reminder_scheduler_setup.sql`
 
-Naglowek autoryzacji:
+Setup SQL tworzy dwa sekrety w Supabase Vault:
+- `behavior15_app_url`
+- `behavior15_cron_secret`
+
+Nastepnie aktywuje job:
+- `behavior15-booking-reminders`
+
+Manualny smoke trigger:
+- `POST /api/reminders/run`
 - `Authorization: Bearer <CRON_SECRET>`
 
 ## 5. Admin

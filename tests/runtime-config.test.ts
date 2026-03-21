@@ -22,12 +22,14 @@ import {
 } from '@/lib/preparation'
 import { createCustomerAccessToken, hasValidCustomerAccessToken, hashCustomerAccessToken } from '@/lib/server/customer-access'
 import { shouldSendBookingConfirmationAfterPayment } from '@/lib/server/notifications'
+import { getReminderAuthorizationError, runBookingReminderSweep } from '@/lib/server/reminder-runner'
 import { getWarsawDateTime, shouldSendReminderForBooking } from '@/lib/server/reminders'
 import { assertStripeCheckoutAmountSupported, isStripeTestMode } from '@/lib/server/stripe'
 
 const originalStripeSecret = process.env.STRIPE_SECRET_KEY
 const originalCommitRef = process.env.VERCEL_GIT_COMMIT_REF
 const originalCommitSha = process.env.VERCEL_GIT_COMMIT_SHA
+const originalCronSecret = process.env.CRON_SECRET
 
 afterEach(() => {
   if (typeof originalStripeSecret === 'string') {
@@ -46,6 +48,12 @@ afterEach(() => {
     process.env.VERCEL_GIT_COMMIT_SHA = originalCommitSha
   } else {
     delete process.env.VERCEL_GIT_COMMIT_SHA
+  }
+
+  if (typeof originalCronSecret === 'string') {
+    process.env.CRON_SECRET = originalCronSecret
+  } else {
+    delete process.env.CRON_SECRET
   }
 })
 
@@ -176,6 +184,110 @@ test('selects only unpaid reminder candidates within the next hour and without d
     ),
     false,
   )
+})
+
+test('authorizes the reminder runner only with the configured bearer secret', () => {
+  process.env.CRON_SECRET = 'sekret'
+
+  assert.equal(getReminderAuthorizationError('Bearer sekret'), null)
+  assert.match(getReminderAuthorizationError('Bearer zly') ?? '', /autoryzacji remindera/)
+
+  delete process.env.CRON_SECRET
+  assert.throws(() => getReminderAuthorizationError('Bearer sekret'), /CRON_SECRET/)
+})
+
+test('reminder sweep marks only successfully delivered reminders and skips ineligible bookings', async () => {
+  const sent: string[] = []
+  const marked: string[] = []
+
+  const result = await runBookingReminderSweep({
+    now: () => new Date('2026-03-21T09:00:00Z'),
+    listBookings: async () => [
+      {
+        id: 'send-ok',
+        bookingStatus: 'confirmed',
+        paymentStatus: 'paid',
+        reminderSent: false,
+        bookingDate: '2026-03-21',
+        bookingTime: '10:30',
+      } as never,
+      {
+        id: 'send-fail',
+        bookingStatus: 'confirmed',
+        paymentStatus: 'paid',
+        reminderSent: false,
+        bookingDate: '2026-03-21',
+        bookingTime: '10:45',
+      } as never,
+      {
+        id: 'already-sent',
+        bookingStatus: 'confirmed',
+        paymentStatus: 'paid',
+        reminderSent: true,
+        bookingDate: '2026-03-21',
+        bookingTime: '10:30',
+      } as never,
+      {
+        id: 'cancelled',
+        bookingStatus: 'cancelled',
+        paymentStatus: 'paid',
+        reminderSent: false,
+        bookingDate: '2026-03-21',
+        bookingTime: '10:30',
+      } as never,
+    ],
+    sendBookingReminderEmail: async (booking) => {
+      sent.push(booking.id)
+      return booking.id === 'send-ok'
+        ? { status: 'sent' as const }
+        : { status: 'failed' as const, reason: 'SMTP timeout' }
+    },
+    markBookingReminderSent: async (bookingId) => {
+      marked.push(bookingId)
+      return null
+    },
+  })
+
+  assert.equal(result.checked, 4)
+  assert.equal(result.candidates, 2)
+  assert.equal(result.sent, 1)
+  assert.equal(result.failed, 1)
+  assert.equal(result.skipped, 0)
+  assert.deepEqual(sent, ['send-ok', 'send-fail'])
+  assert.deepEqual(marked, ['send-ok'])
+})
+
+test('reminder sweep counts skipped deliveries without setting reminder_sent', async () => {
+  const marked: string[] = []
+
+  const result = await runBookingReminderSweep({
+    now: () => new Date('2026-03-21T09:00:00Z'),
+    listBookings: async () => [
+      {
+        id: 'send-skip',
+        bookingStatus: 'confirmed',
+        paymentStatus: 'paid',
+        reminderSent: false,
+        bookingDate: '2026-03-21',
+        bookingTime: '10:15',
+      } as never,
+    ],
+    sendBookingReminderEmail: async () => ({
+      status: 'skipped' as const,
+      reason: 'RESEND_API_KEY missing',
+    }),
+    markBookingReminderSent: async (bookingId) => {
+      marked.push(bookingId)
+      return null
+    },
+  })
+
+  assert.equal(result.checked, 1)
+  assert.equal(result.candidates, 1)
+  assert.equal(result.sent, 0)
+  assert.equal(result.failed, 0)
+  assert.equal(result.skipped, 1)
+  assert.deepEqual(marked, [])
 })
 
 test('accepts a valid MP4 preparation file and rejects invalid types or oversized uploads', () => {
