@@ -7,12 +7,15 @@ import { faq, formatDateTimeLabel, problemOptions, steps } from '@/lib/data'
 import { getActiveConsultationPrice, listAvailability } from '@/lib/server/db'
 import { getDataModeStatus } from '@/lib/server/env'
 import {
-  COAPE_PROFILE_URL,
-  REAL_CASES_EMPTY_STATE,
+  CAPBT_PROFILE_URL,
+  COAPE_ORG_URL,
+  HERO_PHOTO,
+  MEDIA_MENTIONS,
   REAL_CASE_STUDIES,
   SPECIALIST_CREDENTIALS,
   SPECIALIST_LOCATION,
   SPECIALIST_NAME,
+  SPECIALIST_PHOTO,
   SPECIALIST_TRUST_STATEMENT,
 } from '@/lib/site'
 import { ProblemType } from '@/lib/types'
@@ -87,12 +90,10 @@ export default async function HomePage() {
     try {
       ;[pricing, availability] = await Promise.all([getActiveConsultationPrice(), listAvailability()])
     } catch {
-      publicFlowMessage =
-        'Rezerwacja chwilowo się odświeża. Odśwież stronę za moment albo wróć za chwilę do wyboru terminu.'
+      publicFlowMessage = 'Rezerwacja chwilowo się odświeża. Odśwież stronę za moment albo wróć za chwilę do wyboru terminu.'
     }
   } else {
-    publicFlowMessage =
-      'Rezerwacja chwilowo się odświeża. Ofertę możesz zobaczyć już teraz, a do wyboru terminu wrócić za chwilę.'
+    publicFlowMessage = 'Rezerwacja chwilowo się odświeża. Ofertę możesz zobaczyć już teraz, a do wyboru terminu wrócić za chwilę.'
   }
 
   const bookingEnabled = dataMode.isValid && !publicFlowMessage
@@ -118,9 +119,8 @@ export default async function HomePage() {
               Zarezerwuj 15 minut i odzyskaj spokój w domu. <span>Jedna rozmowa, jasny pierwszy krok i realny termin.</span>
             </h1>
             <p className="hero-text">
-              Bez chaosu, bez zgadywania i bez tygodni sprzecznych porad. Rezerwujesz jeden termin, płacisz raz i
-              rozmawiasz bezpośrednio z jednym specjalistą, który prowadzi sprawę od pierwszego pytania do rekomendacji
-              dalszego kroku.
+              Bez chaosu, bez zgadywania i bez tygodni sprzecznych porad. Rezerwujesz jeden termin, płacisz raz i rozmawiasz
+              bezpośrednio z jednym specjalistą, który prowadzi sprawę od pierwszego pytania do rekomendacji dalszego kroku.
             </p>
 
             <div className="hero-price-badge">
@@ -168,13 +168,23 @@ export default async function HomePage() {
           </div>
 
           <div className="panel side-panel hero-aside hero-credentials">
+            <div className="hero-photo-card">
+              <div className="section-eyebrow">Prowadzący konsultację</div>
+              <div className="hero-photo-shell top-gap-small">
+                <Image src={HERO_PHOTO.src} alt={HERO_PHOTO.alt} width={960} height={1200} className="hero-photo" priority />
+              </div>
+              <p className="hero-photo-caption">
+                Rozmowę prowadzi {SPECIALIST_NAME}. To nie marketplace i nie losowe przekierowanie do innej osoby po płatności.
+              </p>
+            </div>
+
             <div className="credential-mark">
               <div className="credential-copy">
                 <div className="section-eyebrow">Kwalifikacje i zaufanie</div>
                 <h2>COAPE / CAPBT</h2>
                 <p className="muted paragraph-gap">
-                  Profil specjalisty jest publicznie dostępny w katalogu COAPE / CAPBT, więc możesz sprawdzić kwalifikacje
-                  bez marketplace, bez pośrednika i bez losowego przekierowania do innej osoby.
+                  Łączę behawior, wiedzę medyczną i doświadczenie terapeutyczne, a profil specjalisty jest publicznie dostępny w
+                  katalogu COAPE / CAPBT.
                 </p>
               </div>
               <Image
@@ -204,7 +214,9 @@ export default async function HomePage() {
               <div className="section-eyebrow">Spokojny pierwszy krok</div>
               <h2>Bez obietnic z kosmosu. Tylko szybka diagnoza sytuacji i realny następny krok.</h2>
             </div>
-            <div className="muted">To krótka konsultacja, która porządkuje problem i pokazuje, co robić dalej już po pierwszej rozmowie.</div>
+            <div className="muted">
+              To krótka konsultacja, która porządkuje problem i pokazuje, co robić dalej już po pierwszej rozmowie.
+            </div>
           </div>
 
           <div className="card-grid three-up top-gap">
@@ -241,9 +253,7 @@ export default async function HomePage() {
           <div className="card-grid three-up top-gap">
             <div className="feature-card">
               <div className="simple-title">Problemy codzienne i nagłe kryzysy</div>
-              <div className="simple-desc">
-                Szczekanie, pobudzenie, lęk separacyjny, agresja, kuweta, niszczenie albo napięcie w domu.
-              </div>
+              <div className="simple-desc">Szczekanie, pobudzenie, lęk separacyjny, agresja, kuweta, niszczenie albo napięcie w domu.</div>
             </div>
             <div className="feature-card">
               <div className="simple-title">Jeden temat, jedna decyzja, jeden kierunek</div>
@@ -305,13 +315,7 @@ export default async function HomePage() {
           <div className="panel section-panel specialist-visual-card">
             <div className="section-eyebrow">Specjalista prowadzący</div>
             <div className="specialist-portrait-shell top-gap">
-              <Image
-                src="/branding/specialist-placeholder.svg"
-                alt="Portret specjalisty Behawior 15"
-                width={720}
-                height={840}
-                className="specialist-portrait"
-              />
+              <Image src={SPECIALIST_PHOTO.src} alt={SPECIALIST_PHOTO.alt} width={1200} height={1778} className="specialist-portrait" />
             </div>
             <div className="list-card top-gap">
               <strong>{SPECIALIST_NAME}</strong>
@@ -325,32 +329,36 @@ export default async function HomePage() {
           <div className="panel section-panel">
             <div className="section-eyebrow">Dlaczego temu zaufać</div>
             <h2>Łączę behawior, wiedzę medyczną i doświadczenie terapeutyczne</h2>
+            <div className="specialist-badge-list top-gap">
+              <span className="specialist-badge">Behawior</span>
+              <span className="specialist-badge">Technik weterynarii</span>
+              <span className="specialist-badge">Opiekun medyczny</span>
+              <span className="specialist-badge">Dogoterapia</span>
+              <span className="specialist-badge">COAPE / CAPBT</span>
+            </div>
             <div className="stack-gap top-gap">
               <div className="list-card">
-                <strong>Behawior + medyczne + terapia</strong>
+                <strong>Spójna praca na styku zachowania, zdrowia i terapii</strong>
                 <span>
-                  Pracuję na styku zachowania, zdrowia i codziennej terapii zwierzęcia, dzięki czemu łatwiej szybko ocenić,
-                  czy wystarczy pierwszy plan działania, czy potrzebna jest dalsza diagnostyka albo szersza praca.
+                  Dzięki temu łatwiej szybko ocenić, czy wystarczy pierwszy plan działania, czy potrzebna jest dalsza diagnostyka albo szersza praca.
                 </span>
               </div>
               <div className="list-card">
-                <strong>Zakres kompetencji</strong>
-                <span>Opiekun medyczny, technik weterynarii, dogoterapeuta oraz kwalifikacje COAPE / CAPBT.</span>
+                <strong>COAPE i CAPBT bez ściany logotypów</strong>
+                <span>Trzymamy tylko te dwa znaki zaufania i dwa konkretne linki: organizacja oraz profil specjalisty.</span>
+                <div className="hero-actions top-gap-small">
+                  <a href={COAPE_ORG_URL} target="_blank" rel="noopener noreferrer" className="button button-ghost small-button">
+                    COAPE
+                  </a>
+                  <a href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="button button-ghost small-button">
+                    Profil CAPBT
+                  </a>
+                </div>
               </div>
               <div className="list-card">
-                <strong>COAPE / CAPBT</strong>
+                <strong>Materiały przed rozmową</strong>
                 <span>
-                  Profil specjalisty jest dostępny w katalogu COAPE / CAPBT. To publiczny punkt weryfikacji kwalifikacji i zakresu pracy.
-                </span>
-                <a href={COAPE_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="text-link top-gap-small">
-                  Otwórz profil COAPE / CAPBT
-                </a>
-              </div>
-              <div className="list-card">
-                <strong>Rozmowa przygotowana pod Twój przypadek</strong>
-                <span>
-                  Jeśli chcesz, przed rozmową dodasz krótkie nagranie MP4, link albo notatki. To nie jest konsultacja wideo,
-                  ale bardzo pomaga szybciej zrozumieć sytuację.
+                  Jeżeli chcesz, przed konsultacją dodasz MP4, link albo notatki. To przyspiesza rozmowę i pomaga wejść od razu w sedno sprawy.
                 </span>
               </div>
             </div>
@@ -361,58 +369,56 @@ export default async function HomePage() {
           <div className="section-head">
             <div>
               <div className="section-eyebrow">Realne przypadki</div>
-              <h2>Opinie i historie klientów pokażemy dopiero po ich zatwierdzeniu</h2>
+              <h2>Prawdziwe zdjęcia, uczciwe zasady publikacji i miejsce na opinie po konsultacji</h2>
             </div>
-            <div className="muted">Bez zmyślonych opinii. Bez stockowych zdjęć. Tylko prawdziwe przypadki po zgodzie opiekunów.</div>
+            <div className="muted">
+              Nie wstawiamy fikcyjnych testimoniali. Po konsultacji klient dostaje link do dodania opinii i sam decyduje, czy zgadza się na publikację historii.
+            </div>
           </div>
 
-          {REAL_CASE_STUDIES.length > 0 ? (
-            <div className="real-case-grid top-gap">
-              {REAL_CASE_STUDIES.map((caseStudy) => (
-                <article key={caseStudy.id} className="real-case-card">
-                  <div className="real-case-image-shell">
-                    <Image
-                      src={caseStudy.imageSrc}
-                      alt={caseStudy.imageAlt}
-                      width={720}
-                      height={520}
-                      className="real-case-image"
-                    />
+          <div className="real-case-grid top-gap">
+            {REAL_CASE_STUDIES.map((caseStudy) => (
+              <article key={caseStudy.id} className="real-case-card">
+                <div className="real-case-image-shell">
+                  <Image src={caseStudy.imageSrc} alt={caseStudy.imageAlt} width={1200} height={900} className="real-case-image" />
+                </div>
+                <div className="real-case-copy">
+                  <div className="section-eyebrow">Materiał klienta</div>
+                  <h3>{caseStudy.problem}</h3>
+                  <p>{caseStudy.summary}</p>
+                  <div className="real-case-result">
+                    <strong>Status publikacji</strong>
+                    <span>{caseStudy.effect}</span>
                   </div>
-                  <div className="real-case-copy">
-                    <div className="section-eyebrow">Problem</div>
-                    <h3>{caseStudy.problem}</h3>
-                    <p>{caseStudy.summary}</p>
-                    <div className="real-case-result">
-                      <strong>Efekt</strong>
-                      <span>{caseStudy.effect}</span>
-                    </div>
-                  </div>
-                </article>
-              ))}
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="panel section-panel" id="publikacje">
+          <div className="section-head">
+            <div>
+              <div className="section-eyebrow">Publikacje i wzmianki</div>
+              <h2>Miejsce pod publikacje jest gotowe na dwa screeny i kolejne potwierdzone materiały</h2>
             </div>
-          ) : (
-            <>
-              <div className="real-case-empty top-gap">
-                <strong>Sekcja jest gotowa na zatwierdzone historie klientów</strong>
-                <p>{REAL_CASES_EMPTY_STATE}</p>
-              </div>
-              <div className="card-grid three-up top-gap">
-                <div className="feature-card">
-                  <div className="simple-title">Po konsultacji wysyłamy link do opinii</div>
-                  <div className="simple-desc">Klient może dodać krótką opinię i zdecydować, czy chce dopuścić publikację historii.</div>
-                </div>
-                <div className="feature-card">
-                  <div className="simple-title">Publikujemy tylko zatwierdzone przypadki</div>
-                  <div className="simple-desc">Na stronie pojawiają się wyłącznie materiały zaakceptowane do pokazania publicznie.</div>
-                </div>
-                <div className="feature-card">
-                  <div className="simple-title">Zdjęcia i opisy pojawią się po akceptacji</div>
-                  <div className="simple-desc">To miejsce jest przygotowane pod realne historie, ale nie zapełniamy go fikcją na potrzeby marketingu.</div>
-                </div>
-              </div>
-            </>
-          )}
+            <div className="muted">Na razie pokazujemy tylko jeden zweryfikowany link i dwa puste sloty, które można później uzupełnić screenami 1:1.</div>
+          </div>
+
+          <div className="media-grid top-gap">
+            {MEDIA_MENTIONS.map((item) => (
+              <article key={item.id} className={`media-card${item.placeholder ? ' media-card-placeholder' : ''}`}>
+                <div className="section-eyebrow">{item.placeholder ? 'Slot do uzupełnienia' : 'Zweryfikowana wzmianka'}</div>
+                <h3>{item.title}</h3>
+                <p>{item.summary}</p>
+                {item.href && item.cta ? (
+                  <a href={item.href} target="_blank" rel="noopener noreferrer" className="text-link top-gap-small">
+                    {item.cta}
+                  </a>
+                ) : null}
+              </article>
+            ))}
+          </div>
         </section>
 
         <section className="panel section-panel" id="faq">
@@ -430,8 +436,7 @@ export default async function HomePage() {
           <div className="section-eyebrow">Pierwszy krok</div>
           <h2>Wybierz temat i termin, a resztę przeprowadzę spokojnie krok po kroku.</h2>
           <p className="hero-text small-width">
-            Jeśli problem zaczyna się ciągnąć, najważniejsze jest dobre otwarcie. Ta konsultacja pomaga szybko ocenić,
-            co zrobić od razu i czy potrzebna jest dalsza, szersza praca.
+            Jeżeli problem zaczyna się ciągnąć, najważniejsze jest dobre otwarcie. Ta konsultacja pomaga szybko ocenić, co zrobić od razu i czy potrzebna jest dalsza, szersza praca.
           </p>
           <div className="hero-actions top-gap">
             <Link href="/problem" className="button button-primary big-button">

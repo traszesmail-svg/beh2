@@ -11,6 +11,7 @@ export function Header() {
     { href: '/#oferta', label: 'Oferta' },
     { href: '/#specjalista', label: 'Specjalista' },
     { href: '/#przypadki', label: 'Przypadki' },
+    { href: '/#publikacje', label: 'Publikacje' },
     { href: '/#faq', label: 'FAQ' },
     { href: '/#kontakt', label: 'Kontakt' },
   ]

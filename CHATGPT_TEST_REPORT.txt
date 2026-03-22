@@ -1,49 +1,128 @@
-BEH2 — REMAINING CONVERSION PASS WITHOUT PHOTOS
+BEHAWIOR 17
 Data: 2026-03-22
 
-1. Co wdrożono
-- Dodano sticky trust strip z uczciwymi komunikatami: zweryfikowany behawiorysta COAPE / CAPBT, 15-minutowa konsultacja głosowa, bezpieczna płatność i szybkie potwierdzenie.
-- Ujednolicono główne CTA na landing, w headerze i w footerze do komunikatu: „Zarezerwuj 15 minut i odzyskaj spokój w domu”.
-- Wzmocniono hero: mocniejszy headline, wyraźniejsza cena, mocniejszy akcent CTA i bardziej sprzedażowa hierarchia treści.
-- Dodano sekcję uspokajającą bez fake obietnic: szybka diagnoza sytuacji, płatność i potwierdzenie od razu, materiały przed rozmową.
-- Zostawiono `Realne przypadki` jako uczciwy placeholder. Sekcja jasno komunikuje, że po konsultacji klient dostaje link do dodania opinii i publikujemy tylko zatwierdzone historie.
-- Zachowano specjalistę, kompetencje i placeholder zdjęciowy bez podmieniania zdjęć, bo zdjęcia są poza zakresem tej iteracji.
-- Poprawiono meta tagi pod mocniejsze, ale prawdziwe pozycjonowanie produktu.
-- Utwardzono publiczny kontakt: nie pokazujemy już błędnego `mailto`, jeśli env zawiera niepoprawny adres.
+1. Ile zdjęć przejrzano
+- Przejrzano cały folder `C:\Projekt\behawior15-mvp-full\zdjecia`.
+- Łącznie przejrzano 72 pliki graficzne.
 
-2. Status flow i ograniczenia
-- Flow landing -> topic -> slot -> form -> payment -> confirmation -> room działa.
-- Pricing pozostał spójny: landing/admin korzystają z aktywnej ceny, nowy booking zapisuje snapshot, checkout i confirmation czytają `booking.amount`.
-- Materiały przed rozmową działają: upload MP4, link i notatki zapisują się poprawnie.
-- Zdjęcia realnych przypadków i finalne zdjęcia specjalisty nie zostały dodane w tej iteracji celowo.
+2. Ile odrzucono
+- Odrzucono 67 zdjęć.
+- Powody odrzucenia:
+  - duplikaty lub bardzo podobne kadry,
+  - słabsza ostrość,
+  - przypadkowe ujęcia,
+  - zbyt chaotyczne tło,
+  - niewłaściwa orientacja lub zbyt słaba przydatność do premium layoutu strony.
 
-3. Testy wykonane
+3. Które zdjęcia wybrano
+- `IMG-20210220-WA0001.jpg`
+- `20200708_134422.jpg`
+- `20211018_101846.jpg`
+- `20240119_092318.jpg`
+- `20251114_115608.jpg`
+
+4. Do których sekcji przypisano każde zdjęcie
+- `IMG-20210220-WA0001.jpg` -> HERO
+  - osadzone jako `public/branding/hero-krzysztof-cat.jpg`
+- `20200708_134422.jpg` -> sekcja specjalisty
+  - osadzone jako `public/branding/specialist-krzysztof-vet.jpg`
+- `20211018_101846.jpg` -> karta w sekcji `Realne przypadki`
+  - osadzone jako `public/branding/case-dog-home.jpg`
+- `20240119_092318.jpg` -> karta w sekcji `Realne przypadki`
+  - osadzone jako `public/branding/case-cat-snow.jpg`
+- `20251114_115608.jpg` -> karta w sekcji `Realne przypadki`
+  - osadzone jako `public/branding/case-cat-sofa.jpg`
+
+5. Jak zmieniono sekcję specjalisty / trust
+- W HERO dodano realne zdjęcie specjalisty z kotem i utrzymano najmocniejszy trust message:
+  - `Behawior + medyczne + terapia`
+- Sekcja specjalisty dostała osobne zdjęcie z pracy przy kocie na stole zabiegowym.
+- Trust block został uporządkowany do krótkich, premium elementów:
+  - behawior
+  - technik weterynarii
+  - opiekun medyczny
+  - dogoterapia
+  - COAPE / CAPBT
+- Zostawiono tylko dwa docelowe punkty zaufania:
+  - link do organizacji COAPE
+  - link do profilu specjalisty COAPE / CAPBT
+
+6. Czy przygotowano sekcję pod publikacje / media
+- TAK
+- Dodano sekcję `Publikacje i wzmianki`.
+- Sekcja zawiera:
+  - 1 zweryfikowany link do publikacji,
+  - 2 gotowe sloty pod przyszłe screeny publikacji.
+- Layout jest gotowy pod późniejsze dodanie dwóch screenów bez przebudowy landing page.
+
+7. Czy znaleziono coś sensownego po nazwisku „Regulski”
+- TAK
+- Znaleziono wiarygodną publiczną wzmiankę:
+  - `Magazyn Weterynaryjny`
+  - artykuł: `Strach, lęk i fobia u psów i kotów – różnicowanie i leczenie farmakologiczne`
+  - na stronie widnieje podpis `Krzysztof Regulski` jako współautor.
+- Dodatkowo potwierdzony został publiczny profil specjalisty w katalogu COAPE / CAPBT:
+  - `https://behawioryscicoape.pl/behawiorysta/Regulski`
+- Do strony nie dodano żadnych niepewnych publikacji ani niezweryfikowanych claimów.
+
+8. Jakie pliki zmieniono
+- `app/form/page.tsx`
+- `app/globals.css`
+- `app/layout.tsx`
+- `app/page.tsx`
+- `app/slot/page.tsx`
+- `components/Header.tsx`
+- `lib/site.ts`
+- `scripts/ui-smoke.ts`
+- `public/branding/hero-krzysztof-cat.jpg`
+- `public/branding/specialist-krzysztof-vet.jpg`
+- `public/branding/case-dog-home.jpg`
+- `public/branding/case-cat-snow.jpg`
+- `public/branding/case-cat-sofa.jpg`
+- `CHATGPT_TEST_REPORT.txt`
+
+9. Jakie testy wykonano
+- `npm install`
 - `npm run lint`
 - `npm test`
 - `npm run build`
 - `node --import tsx scripts/verify-flow.ts`
 - `node --import tsx scripts/pricing-smoke.ts`
-- `node --import tsx scripts/reminder-smoke.ts`
 - `node --import tsx scripts/ui-smoke.ts`
+- `node --import tsx scripts/reminder-smoke.ts`
 
-4. Wynik każdego testu
+10. Wynik każdego testu
+- `npm install` -> PASS
 - `npm run lint` -> PASS
 - `npm test` -> PASS
 - `npm run build` -> PASS
 - `node --import tsx scripts/verify-flow.ts` -> PASS
 - `node --import tsx scripts/pricing-smoke.ts` -> PASS
-- `node --import tsx scripts/reminder-smoke.ts` -> PASS
 - `node --import tsx scripts/ui-smoke.ts` -> PASS
-  - potwierdza: nowe CTA, trust strip, sekcję uspokajającą, FAQ accordion, placeholder `Realne przypadki`, brak błędnego `mailto`, admin pricing marker, materiały przed rozmową oraz mobilny flow do confirmation i room
+  - potwierdza:
+    - nowe zdjęcie w HERO,
+    - zdjęcie sekcji specjalisty,
+    - obecność 3 kart `Realne przypadki`,
+    - sekcję publikacji,
+    - poprawne CTA,
+    - trust strip,
+    - FAQ accordion,
+    - flow mobile do payment / confirmation / room,
+    - zapis materiałów przed rozmową,
+    - admin pricing i marker builda
+- `node --import tsx scripts/reminder-smoke.ts` -> PASS
 
-5. Push do Git
+11. Czy finalny stan został wypchnięty do beh2/main
+- TAK
 - Repo: `beh2`
 - Branch: `main`
-- Status: TAK
 
-6. Gotowość
-- ZIP: GOTOWY
-- Deploy: GOTOWY
-- Ręczne testy live: GOTOWE
-- Known limitation:
-  - zdjęcia i realne materiały klientów są nadal poza paczką tej iteracji i mają zostać dodane później po przygotowaniu assetów
+12. Status końcowy
+- Strona dostała mały, wyselekcjonowany zestaw realnych zdjęć zamiast placeholderów.
+- Nie dodano śmieciowych assetów ani fikcyjnych opinii.
+- Sekcja `Realne przypadki` pokazuje prawdziwe zdjęcia i uczciwie komunikuje, że pełne opisy pojawią się po zgodzie klientów.
+- Sekcja `Publikacje i wzmianki` jest gotowa pod dwa przyszłe screeny i już zawiera jeden zweryfikowany materiał.
+- Finalny stan jest gotowy do:
+  - push do Git
+  - deploya
+  - ręcznych testów live

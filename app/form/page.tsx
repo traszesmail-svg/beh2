@@ -55,8 +55,7 @@ export default async function FormPage({
             <div className="section-eyebrow">Krok 3 z 6</div>
             <h1>Uzupełnij dane do konsultacji</h1>
             <p className="muted paragraph-gap">
-              Po zapisaniu formularza termin zostanie tymczasowo zablokowany na czas płatności. Po opłaceniu od razu
-              zobaczysz potwierdzenie i link do rozmowy audio.
+              Po zapisaniu formularza termin zostanie tymczasowo zablokowany na czas płatności. Po opłaceniu od razu zobaczysz potwierdzenie i link do rozmowy audio.
             </p>
 
             <div className="stack-gap top-gap">
@@ -74,7 +73,7 @@ export default async function FormPage({
               </div>
               <div className="list-card">
                 <strong>Kwota</strong>
-                <span>{pricing?.formattedAmount ?? 'Cena chwilowo niedostępna'} - jedna płatność z góry za całą rozmowę.</span>
+                <span>{pricing?.formattedAmount ?? 'Cena chwilowo niedostępna'} – jedna płatność z góry za całą rozmowę.</span>
               </div>
             </div>
           </div>
@@ -109,7 +108,7 @@ export default async function FormPage({
                   </Link>
                 </div>
               </>
-              )}
+            )}
           </div>
         </section>
       </div>

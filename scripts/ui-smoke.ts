@@ -19,7 +19,7 @@ function bookingPayload(slotId: string, index: number) {
     animalType: 'Pies' as const,
     petAge: '3 lata',
     durationNotes: 'Od kilku tygodni',
-    description: 'Pies reaguje szczekaniem na wyjscie opiekuna i trudno mu sie pozniej uspokoic po powrocie do domu.',
+    description: 'Pies reaguje szczekaniem na wyjście opiekuna i trudno mu się później uspokoić po powrocie do domu.',
     phone: `50070080${index}`,
     email: `ui-smoke-${index}@example.com`,
     slotId,
@@ -30,9 +30,7 @@ async function backupData() {
   await rm(backupDir, { recursive: true, force: true })
   try {
     await cp(dataDir, backupDir, { recursive: true, force: true })
-  } catch {
-    // Fresh repo may not have a runtime data directory yet.
-  }
+  } catch {}
 }
 
 async function restoreData() {
@@ -40,9 +38,7 @@ async function restoreData() {
   try {
     await mkdir(rootDir, { recursive: true })
     await cp(backupDir, dataDir, { recursive: true, force: true })
-  } catch {
-    // No backup means there was no local runtime data before the smoke test.
-  }
+  } catch {}
   await rm(backupDir, { recursive: true, force: true })
 }
 
@@ -58,14 +54,10 @@ async function waitForServer() {
   for (let attempt = 0; attempt < 60; attempt += 1) {
     try {
       const response = await fetch(appUrl, { cache: 'no-store' })
-      if (response.ok) {
-        return
-      }
+      if (response.ok) return
     } catch {}
-
     await new Promise((resolve) => setTimeout(resolve, 1000))
   }
-
   throw new Error('Local server did not become ready in time.')
 }
 
@@ -108,20 +100,14 @@ async function main() {
     const desktop = await browser.newContext({
       locale: 'pl-PL',
       viewport: { width: 1440, height: 1200 },
-      httpCredentials: {
-        username: 'admin',
-        password: adminSecret,
-      },
+      httpCredentials: { username: 'admin', password: adminSecret },
     })
 
     const mobile = await browser.newContext({
       locale: 'pl-PL',
       viewport: { width: 390, height: 844 },
       isMobile: true,
-      httpCredentials: {
-        username: 'admin',
-        password: adminSecret,
-      },
+      httpCredentials: { username: 'admin', password: adminSecret },
     })
 
     const mobilePage = await mobile.newPage()
@@ -129,8 +115,8 @@ async function main() {
     const homeCtaVisible = await mobilePage.getByRole('link', { name: /Zarezerwuj 15 minut i odzyskaj spokój w domu/i }).first().isVisible()
     const heroHeadingVisible = await mobilePage.getByRole('heading', { name: /Zarezerwuj 15 minut i odzyskaj spokój w domu/i }).isVisible()
     const heroPriceVisible = await mobilePage.locator('.hero-price-badge').getByText(/Aktualna cena/i).isVisible()
-    const heroTrustVisible = await mobilePage.locator('.hero-note-row').getByText(/Behawior \+ medyczne \+ terapia/i).isVisible()
     const trustStripVisible = await mobilePage.locator('.header-trust-strip').getByText(/Zweryfikowany behawiorysta COAPE \/ CAPBT/i).isVisible()
+    const heroPhotoVisible = await mobilePage.locator('img[alt="Krzysztof Regulski trzyma kota podczas sesji zdjęciowej do strony Behawior 15"]').isVisible()
     const reassuranceVisible = await mobilePage.getByText(/Bez obietnic z kosmosu/i).isVisible()
     const footerLinkVisible = await mobilePage.getByRole('link', { name: /Polityka prywatności/i }).isVisible()
     const title = await mobilePage.title()
@@ -163,14 +149,8 @@ async function main() {
     const payButtonVisible = await mobilePage.getByRole('button', { name: /Opłać konsultację/i }).isVisible()
     const paymentResponse = await fetch(`${appUrl}/api/payments/mock`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        bookingId: bookingOne.booking.id,
-        accessToken: bookingOne.accessToken,
-        outcome: 'success',
-      }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ bookingId: bookingOne.booking.id, accessToken: bookingOne.accessToken, outcome: 'success' }),
     })
     const paymentPayload = (await paymentResponse.json()) as { redirectTo?: string; error?: string }
 
@@ -193,13 +173,17 @@ async function main() {
     const specialistTrustVisible = await desktopPage.getByRole('heading', {
       name: /Łączę behawior, wiedzę medyczną i doświadczenie terapeutyczne/i,
     }).isVisible()
-    const portraitAltVisible = await desktopPage.locator('img[alt="Portret specjalisty Behawior 15"]').isVisible()
+    const specialistPhotoVisible = await desktopPage.locator('img[alt="Krzysztof Regulski podczas pracy z kotem na stole zabiegowym"]').isVisible()
     const credentialAltVisible = await desktopPage.locator('img[alt*="CAPBT Polska"]').isVisible()
     const realCasesHeadingVisible = await desktopPage.getByRole('heading', {
-      name: /Opinie i historie klientów pokażemy dopiero po ich zatwierdzeniu/i,
+      name: /Prawdziwe zdjęcia, uczciwe zasady publikacji i miejsce na opinie po konsultacji/i,
     }).isVisible()
-    const realCasesPlaceholderVisible = await desktopPage.getByText(/Po konsultacji klient dostaje link do dodania opinii/i).isVisible()
-    const noBrokenMailto = (await desktopPage.locator('a[href^="mailto:"]').count()) === 0
+    const realCaseCardsCount = await desktopPage.locator('.real-case-card').count()
+    const publicationsHeadingVisible = await desktopPage.getByRole('heading', {
+      name: /Miejsce pod publikacje jest gotowe na dwa screeny i kolejne potwierdzone materiały/i,
+    }).isVisible()
+    const publicationLinkVisible = await desktopPage.getByRole('link', { name: /Otwórz publikację/i }).isVisible()
+    const noBrokenMailto = (await desktopPage.locator('a[href^="mailto:"]').count()) <= 1
     const faqButton = desktopPage.getByRole('button', { name: /Czy 15 minut wystarczy/i })
     const faqInitiallyExpanded = await faqButton.getAttribute('aria-expanded')
     const faqAnswerInitiallyVisible = await desktopPage.getByText(/To szybka konsultacja/i).isVisible()
@@ -217,8 +201,8 @@ async function main() {
     assert.equal(homeCtaVisible, true)
     assert.equal(heroHeadingVisible, true)
     assert.equal(heroPriceVisible, true)
-    assert.equal(heroTrustVisible, true)
     assert.equal(trustStripVisible, true)
+    assert.equal(heroPhotoVisible, true)
     assert.equal(reassuranceVisible, true)
     assert.equal(footerLinkVisible, true)
     assert.equal(bookingCtaWorks, true)
@@ -235,10 +219,12 @@ async function main() {
     assert.equal(headerOfertaVisible, true)
     assert.equal(specialistHeadingVisible, true)
     assert.equal(specialistTrustVisible, true)
-    assert.equal(portraitAltVisible, true)
+    assert.equal(specialistPhotoVisible, true)
     assert.equal(credentialAltVisible, true)
     assert.equal(realCasesHeadingVisible, true)
-    assert.equal(realCasesPlaceholderVisible, true)
+    assert.equal(realCaseCardsCount >= 3, true)
+    assert.equal(publicationsHeadingVisible, true)
+    assert.equal(publicationLinkVisible, true)
     assert.equal(noBrokenMailto, true)
     assert.equal(faqInitiallyExpanded, 'true')
     assert.equal(faqAnswerInitiallyVisible, true)
@@ -254,8 +240,8 @@ async function main() {
             homeCtaVisible,
             heroHeadingVisible,
             heroPriceVisible,
-            heroTrustVisible,
             trustStripVisible,
+            heroPhotoVisible,
             reassuranceVisible,
             footerLinkVisible,
             bookingCtaWorks,
@@ -274,10 +260,12 @@ async function main() {
             headerOfertaVisible,
             specialistHeadingVisible,
             specialistTrustVisible,
-            portraitAltVisible,
+            specialistPhotoVisible,
             credentialAltVisible,
             realCasesHeadingVisible,
-            realCasesPlaceholderVisible,
+            realCaseCardsCount,
+            publicationsHeadingVisible,
+            publicationLinkVisible,
             noBrokenMailto,
             faqInitiallyExpanded,
             faqAnswerInitiallyVisible,
@@ -302,14 +290,8 @@ async function main() {
     await desktop.close()
     await mobile.close()
   } finally {
-    if (browser) {
-      await browser.close()
-    }
-
-    if (server && !server.killed) {
-      server.kill()
-    }
-
+    if (browser) await browser.close()
+    if (server && !server.killed) server.kill()
     await restoreData()
   }
 }

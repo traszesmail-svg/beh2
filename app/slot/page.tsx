@@ -52,7 +52,7 @@ export default async function SlotPage({
           <div className="section-eyebrow">Krok 2 z 6</div>
           <h1>Wybierz termin rozmowy: {getProblemLabel(problem)}</h1>
           <p className="muted paragraph-gap">
-            Lista odświeża się na bieżąco. Jeśli termin zniknie po chwili, oznacza to, że został właśnie zajęty albo ktoś kończy płatność.
+            Lista odświeża się na bieżąco. Jeżeli termin zniknie po chwili, oznacza to, że został właśnie zajęty albo ktoś kończy płatność.
           </p>
 
           {publicFlowMessage ? (
