@@ -1,62 +1,49 @@
-BEHAWIOR 17 — TRUST + OPINIE KLIENTÓW (REALNE PRZYPADKI)
+BEH2 — REMAINING CONVERSION PASS WITHOUT PHOTOS
 Data: 2026-03-22
 
 1. Co wdrożono
-- Uzupełniono sekcję specjalisty o zakres kompetencji: opiekun medyczny, technik weterynarii, dogoterapeuta oraz COAPE / CAPBT.
-- Dodano główny trust statement: „Łączę behawior, wiedzę medyczną i doświadczenie terapeutyczne”.
-- Dodano nowy trust chip w hero: „Behawior + medyczne + terapia”.
-- Dodano sekcję `Realne przypadki` wraz z dużym, czystym layoutem kart przygotowanym pod zdjęcie zwierzęcia, problem, krótki opis i efekt.
-- Sekcja `Realne przypadki` działa dziś w trybie uczciwego placeholdera, ponieważ w repo nie było żadnych zatwierdzonych zdjęć ani opisów realnych przypadków klientów. Nie dodano fake opinii ani stockowych historii.
-- Dodano anchor `Przypadki` do sticky headera.
-- Dopracowano spacing i layout sekcji trust/cases: większe zdjęcia, więcej światła, brak ścisku, bardziej premium układ.
+- Dodano sticky trust strip z uczciwymi komunikatami: zweryfikowany behawiorysta COAPE / CAPBT, 15-minutowa konsultacja głosowa, bezpieczna płatność i szybkie potwierdzenie.
+- Ujednolicono główne CTA na landing, w headerze i w footerze do komunikatu: „Zarezerwuj 15 minut i odzyskaj spokój w domu”.
+- Wzmocniono hero: mocniejszy headline, wyraźniejsza cena, mocniejszy akcent CTA i bardziej sprzedażowa hierarchia treści.
+- Dodano sekcję uspokajającą bez fake obietnic: szybka diagnoza sytuacji, płatność i potwierdzenie od razu, materiały przed rozmową.
+- Zostawiono `Realne przypadki` jako uczciwy placeholder. Sekcja jasno komunikuje, że po konsultacji klient dostaje link do dodania opinii i publikujemy tylko zatwierdzone historie.
+- Zachowano specjalistę, kompetencje i placeholder zdjęciowy bez podmieniania zdjęć, bo zdjęcia są poza zakresem tej iteracji.
+- Poprawiono meta tagi pod mocniejsze, ale prawdziwe pozycjonowanie produktu.
+- Utwardzono publiczny kontakt: nie pokazujemy już błędnego `mailto`, jeśli env zawiera niepoprawny adres.
 
-2. Status sekcji Realne przypadki
-- Status: WDROŻONA UCZCIWIE
-- Sekcja jest gotowa na realne case studies.
-- W finalnym kodzie `REAL_CASE_STUDIES` jest puste celowo.
-- Powód: brak zatwierdzonych materiałów klientów w repo.
-- Efekt: użytkownik widzi uczciwy komunikat, że publikowane będą wyłącznie prawdziwe przypadki po zgodzie opiekunów.
+2. Status flow i ograniczenia
+- Flow landing -> topic -> slot -> form -> payment -> confirmation -> room działa.
+- Pricing pozostał spójny: landing/admin korzystają z aktywnej ceny, nowy booking zapisuje snapshot, checkout i confirmation czytają `booking.amount`.
+- Materiały przed rozmową działają: upload MP4, link i notatki zapisują się poprawnie.
+- Zdjęcia realnych przypadków i finalne zdjęcia specjalisty nie zostały dodane w tej iteracji celowo.
 
-3. Jak działa trust specjalisty
-- Hero pokazuje skrót zaufania: `Behawior + medyczne + terapia`.
-- Sekcja specjalisty pokazuje:
-  - imię i nazwisko,
-  - kompetencje: opiekun medyczny, technik weterynarii, dogoterapeuta, COAPE / CAPBT,
-  - zdanie przewodnie: „Łączę behawior, wiedzę medyczną i doświadczenie terapeutyczne”.
-- Zachowano link do profilu COAPE / CAPBT.
-
-4. Testy wykonane
-- `npm install`
+3. Testy wykonane
 - `npm run lint`
 - `npm test`
 - `npm run build`
-- `node --import tsx scripts/ui-smoke.ts`
 - `node --import tsx scripts/verify-flow.ts`
 - `node --import tsx scripts/pricing-smoke.ts`
 - `node --import tsx scripts/reminder-smoke.ts`
+- `node --import tsx scripts/ui-smoke.ts`
 
-5. Wynik każdego testu
-- `npm install` -> PASS
+4. Wynik każdego testu
 - `npm run lint` -> PASS
 - `npm test` -> PASS
 - `npm run build` -> PASS
-- `node --import tsx scripts/ui-smoke.ts` -> PASS
-  - potwierdza render hero trust, sekcji specjalisty, sekcji realnych przypadków, mobile layout, FAQ, materiały przed rozmową, admin marker i podstawowy booking flow
 - `node --import tsx scripts/verify-flow.ts` -> PASS
-  - potwierdza flow `landing -> topic -> slot -> form -> payment -> confirmation -> room` oraz brak przeszłych terminów
 - `node --import tsx scripts/pricing-smoke.ts` -> PASS
-  - potwierdza admin pricing, nową cenę dla nowych bookingów i snapshot starej ceny
 - `node --import tsx scripts/reminder-smoke.ts` -> PASS
-  - potwierdza brak regresji po stronie remindera Supabase Cron
+- `node --import tsx scripts/ui-smoke.ts` -> PASS
+  - potwierdza: nowe CTA, trust strip, sekcję uspokajającą, FAQ accordion, placeholder `Realne przypadki`, brak błędnego `mailto`, admin pricing marker, materiały przed rozmową oraz mobilny flow do confirmation i room
 
-6. Push main
+5. Push do Git
 - Repo: `beh2`
 - Branch: `main`
 - Status: TAK
 
-7. Gotowość paczki
+6. Gotowość
 - ZIP: GOTOWY
 - Deploy: GOTOWY
 - Ręczne testy live: GOTOWE
 - Known limitation:
-  - sekcja `Realne przypadki` jest wdrożona jako uczciwy placeholder do czasu dostarczenia zatwierdzonych zdjęć i opisów realnych przypadków klientów.
+  - zdjęcia i realne materiały klientów są nadal poza paczką tej iteracji i mają zostać dodane później po przygotowaniu assetów

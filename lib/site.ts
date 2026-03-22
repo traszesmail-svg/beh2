@@ -17,23 +17,24 @@ export type RealCaseStudy = {
 
 export const REAL_CASE_STUDIES: RealCaseStudy[] = []
 export const REAL_CASES_EMPTY_STATE =
-  'Publikujemy wyłącznie realne przypadki po zgodzie opiekunów. Ta sekcja jest gotowa na zatwierdzone historie klientów - bez zmyślonych opinii i bez stockowych zdjęć.'
+  'Po konsultacji klient dostaje link do dodania opinii i zgody na publikację historii. Pokazujemy wyłącznie zatwierdzone przypadki, bez zmyślonych opinii i bez stockowych zdjęć.'
+
+function isValidPublicEmail(value: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+}
 
 function extractEmailAddress(value: string): string | null {
   const match = value.match(/<([^>]+)>/)
+  const candidate = match?.[1]?.trim() ?? value.trim()
 
-  if (match?.[1]) {
-    return match[1]
-  }
-
-  return value.includes('@') ? value : null
+  return isValidPublicEmail(candidate) ? candidate : null
 }
 
 export function getContactDetails() {
   const configuredFrom = process.env.RESEND_FROM_EMAIL?.trim() || null
   const from = configuredFrom ?? DEFAULT_RESEND_FROM_EMAIL
   const email =
-    process.env.BEHAVIOR15_CONTACT_EMAIL?.trim() ||
+    extractEmailAddress(process.env.BEHAVIOR15_CONTACT_EMAIL?.trim() || '') ||
     (configuredFrom ? extractEmailAddress(from) : null)
   const phone = process.env.BEHAVIOR15_CONTACT_PHONE?.trim() || null
 

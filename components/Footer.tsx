@@ -30,7 +30,7 @@ export function Footer() {
         <div className="footer-card">
           <div className="footer-label">Ważne linki</div>
           <div className="footer-links">
-            <Link href="/problem">Umów konsultację</Link>
+            <Link href="/problem">Zarezerwuj 15 minut i odzyskaj spokój w domu</Link>
             <Link href="/polityka-prywatnosci">Polityka prywatności</Link>
             <Link href="/regulamin">Regulamin</Link>
           </div>

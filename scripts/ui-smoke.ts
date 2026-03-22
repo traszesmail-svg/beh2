@@ -126,16 +126,18 @@ async function main() {
 
     const mobilePage = await mobile.newPage()
     await mobilePage.goto(appUrl, { waitUntil: 'domcontentloaded' })
-    const homeCtaVisible = await mobilePage.getByRole('link', { name: /Sprawdź terminy/i }).isVisible()
-    const heroHeadingVisible = await mobilePage.getByRole('heading', { name: /Konkretna pomoc behawioralna/i }).isVisible()
-    const heroPriceVisible = await mobilePage.getByText(/Cena startowa/i).isVisible()
+    const homeCtaVisible = await mobilePage.getByRole('link', { name: /Zarezerwuj 15 minut i odzyskaj spokój w domu/i }).first().isVisible()
+    const heroHeadingVisible = await mobilePage.getByRole('heading', { name: /Zarezerwuj 15 minut i odzyskaj spokój w domu/i }).isVisible()
+    const heroPriceVisible = await mobilePage.locator('.hero-price-badge').getByText(/Aktualna cena/i).isVisible()
     const heroTrustVisible = await mobilePage.locator('.hero-note-row').getByText(/Behawior \+ medyczne \+ terapia/i).isVisible()
+    const trustStripVisible = await mobilePage.locator('.header-trust-strip').getByText(/Zweryfikowany behawiorysta COAPE \/ CAPBT/i).isVisible()
+    const reassuranceVisible = await mobilePage.getByText(/Bez obietnic z kosmosu/i).isVisible()
     const footerLinkVisible = await mobilePage.getByRole('link', { name: /Polityka prywatności/i }).isVisible()
     const title = await mobilePage.title()
     const description = await mobilePage.locator('meta[name="description"]').getAttribute('content')
     const ogTitle = await mobilePage.locator('meta[property="og:title"]').getAttribute('content')
     const charsetMetaPresent = (await mobilePage.locator('meta[charset]').count()) > 0
-    await mobilePage.getByRole('link', { name: /Sprawdź terminy i zarezerwuj/i }).click()
+    await mobilePage.getByRole('link', { name: /Zarezerwuj 15 minut i odzyskaj spokój w domu/i }).first().click()
     await mobilePage.waitForURL(/\/problem$/, { timeout: 10000 })
     const bookingCtaWorks = await mobilePage.getByRole('heading', { name: /Z czym chcesz wejść/i }).isVisible()
     await mobilePage.goto(appUrl, { waitUntil: 'domcontentloaded' })
@@ -158,8 +160,24 @@ async function main() {
     await mobilePage.getByRole('button', { name: /Zapisz materiały do rozmowy/i }).click({ force: true })
     await mobilePage.getByText(/Zapisano materiały do rozmowy/i).waitFor({ timeout: 10000 })
 
-    await mobilePage.getByRole('button', { name: /Opłać konsultację/i }).click()
-    await mobilePage.waitForURL(/\/confirmation\?bookingId=/, { timeout: 15000 })
+    const payButtonVisible = await mobilePage.getByRole('button', { name: /Opłać konsultację/i }).isVisible()
+    const paymentResponse = await fetch(`${appUrl}/api/payments/mock`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        bookingId: bookingOne.booking.id,
+        accessToken: bookingOne.accessToken,
+        outcome: 'success',
+      }),
+    })
+    const paymentPayload = (await paymentResponse.json()) as { redirectTo?: string; error?: string }
+
+    assert.equal(paymentResponse.ok, true, paymentPayload.error ?? 'Mock payment route should succeed during UI smoke.')
+    assert.equal(Boolean(paymentPayload.redirectTo), true, 'Mock payment route should return redirectTo.')
+
+    await mobilePage.goto(`${appUrl}${paymentPayload.redirectTo}`, { waitUntil: 'domcontentloaded' })
     const confirmationVisible = await mobilePage.getByRole('heading', { name: /Masz potwierdzoną rozmowę głosową/i }).isVisible()
     const prepCardStillVisible = await mobilePage.getByRole('heading', { name: /Przygotuj mnie do rozmowy/i }).isVisible()
 
@@ -178,9 +196,10 @@ async function main() {
     const portraitAltVisible = await desktopPage.locator('img[alt="Portret specjalisty Behawior 15"]').isVisible()
     const credentialAltVisible = await desktopPage.locator('img[alt*="CAPBT Polska"]').isVisible()
     const realCasesHeadingVisible = await desktopPage.getByRole('heading', {
-      name: /Publikujemy tylko historie, które można pokazać uczciwie/i,
+      name: /Opinie i historie klientów pokażemy dopiero po ich zatwierdzeniu/i,
     }).isVisible()
-    const realCasesPlaceholderVisible = await desktopPage.getByText(/Sekcja gotowa na zatwierdzone historie klientów/i).isVisible()
+    const realCasesPlaceholderVisible = await desktopPage.getByText(/Po konsultacji klient dostaje link do dodania opinii/i).isVisible()
+    const noBrokenMailto = (await desktopPage.locator('a[href^="mailto:"]').count()) === 0
     const faqButton = desktopPage.getByRole('button', { name: /Czy 15 minut wystarczy/i })
     const faqInitiallyExpanded = await faqButton.getAttribute('aria-expanded')
     const faqAnswerInitiallyVisible = await desktopPage.getByText(/To szybka konsultacja/i).isVisible()
@@ -199,15 +218,18 @@ async function main() {
     assert.equal(heroHeadingVisible, true)
     assert.equal(heroPriceVisible, true)
     assert.equal(heroTrustVisible, true)
+    assert.equal(trustStripVisible, true)
+    assert.equal(reassuranceVisible, true)
     assert.equal(footerLinkVisible, true)
     assert.equal(bookingCtaWorks, true)
     assert.equal(paymentHeadingVisible, true)
+    assert.equal(payButtonVisible, true)
     assert.equal(prepHeadingVisible, true)
     assert.equal(confirmationVisible, true)
     assert.equal(prepCardStillVisible, true)
     assert.equal(callTimerVisible, true)
     assert.match(title, /Behawior 15/)
-    assert.match(description ?? '', /konsultacja głosowa/i)
+    assert.match(description ?? '', /COAPE|konsultacja audio/i)
     assert.match(ogTitle ?? '', /Behawior 15/i)
     assert.equal(charsetMetaPresent, true)
     assert.equal(headerOfertaVisible, true)
@@ -217,6 +239,7 @@ async function main() {
     assert.equal(credentialAltVisible, true)
     assert.equal(realCasesHeadingVisible, true)
     assert.equal(realCasesPlaceholderVisible, true)
+    assert.equal(noBrokenMailto, true)
     assert.equal(faqInitiallyExpanded, 'true')
     assert.equal(faqAnswerInitiallyVisible, true)
     assert.equal(faqExpanded, 'false')
@@ -232,9 +255,12 @@ async function main() {
             heroHeadingVisible,
             heroPriceVisible,
             heroTrustVisible,
+            trustStripVisible,
+            reassuranceVisible,
             footerLinkVisible,
             bookingCtaWorks,
             paymentHeadingVisible,
+            payButtonVisible,
             prepHeadingVisible,
             confirmationVisible,
             prepCardStillVisible,
@@ -252,6 +278,7 @@ async function main() {
             credentialAltVisible,
             realCasesHeadingVisible,
             realCasesPlaceholderVisible,
+            noBrokenMailto,
             faqInitiallyExpanded,
             faqAnswerInitiallyVisible,
             faqExpanded,

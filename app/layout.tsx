@@ -17,26 +17,27 @@ const metadataBase = new URL(process.env.NEXT_PUBLIC_APP_URL?.trim() || 'http://
 export const metadata: Metadata = {
   metadataBase,
   title: {
-    default: 'Behawior 15 | 15-minutowa konsultacja głosowa',
+    default: 'Behawior 15 | 15-minutowa konsultacja głosowa dla psa lub kota',
     template: '%s | Behawior 15',
   },
-  description: 'Szybka konsultacja głosowa dla opiekunów psów i kotów. Rezerwujesz termin, opłacasz rozmowę i od razu dostajesz potwierdzenie oraz link do spotkania.',
+  description:
+    '15-minutowa konsultacja audio z behawiorystą COAPE / CAPBT. Szybka pomoc dla psa lub kota: szczekanie, kuweta, lęk separacyjny, agresja i trudne zachowania w domu.',
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title: 'Behawior 15 | 15-minutowa konsultacja głosowa',
+    title: 'Behawior 15 – 15-minutowa konsultacja głosowa',
     description:
-      'Konkretna pomoc behawioralna dla psa lub kota. Jedna rozmowa, jasny pierwszy krok i szybki dostęp do wolnych terminów.',
+      'Szybka pomoc behawioralna dla psa lub kota. Jedna rozmowa, jasny pierwszy krok i realnie wolne terminy bez sztucznej pilności.',
     type: 'website',
     locale: 'pl_PL',
     siteName: 'Behawior 15',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Behawior 15 | 15-minutowa konsultacja głosowa',
+    title: 'Behawior 15 – 15-minutowa konsultacja głosowa',
     description:
-      'Konkretna pomoc behawioralna dla psa lub kota. Jedna rozmowa, jasny pierwszy krok i szybki dostęp do wolnych terminów.',
+      'Szybka pomoc behawioralna dla psa lub kota. Jedna rozmowa, jasny pierwszy krok i realnie wolne terminy bez sztucznej pilności.',
   },
 }
 

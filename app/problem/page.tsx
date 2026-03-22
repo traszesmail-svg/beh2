@@ -79,7 +79,7 @@ export default function ProblemPage() {
                 <span className="topic-icon-shell">{renderProblemIcon(item.id)}</span>
                 <div className="topic-title">{item.title}</div>
                 <div className="topic-desc">{item.desc}</div>
-                <div className="topic-link">Pokaż wolne terminy</div>
+                <div className="topic-link">Wybierz temat i termin</div>
               </Link>
             ))}
           </div>

@@ -9,6 +9,8 @@
   --border: rgba(92, 76, 58, 0.12);
   --accent: #b07b3f;
   --accent-2: #2f7667;
+  --cta-start: #ff7a1a;
+  --cta-end: #ff5a00;
   --accent-ink: #fffdf8;
   --danger: #8a3022;
   --danger-bg: rgba(191, 82, 50, 0.11);
@@ -71,26 +73,64 @@ textarea::placeholder {
 }
 
 .header-shell {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+  display: grid;
+  gap: 0;
   position: sticky;
   top: 12px;
   z-index: 20;
   margin-bottom: 24px;
-  padding: 18px 20px;
   border: 1px solid var(--border);
   border-radius: 28px;
   background: rgba(255, 255, 255, 0.78);
   backdrop-filter: blur(18px);
   box-shadow: 0 18px 42px rgba(88, 63, 32, 0.1);
+  overflow: hidden;
+}
+
+.header-trust-strip {
+  display: flex;
+  align-items: center;
+  gap: 10px 16px;
+  flex-wrap: wrap;
+  padding: 12px 20px;
+  border-bottom: 1px solid rgba(92, 76, 58, 0.08);
+  background: linear-gradient(180deg, rgba(255, 244, 233, 0.96), rgba(255, 249, 243, 0.88));
+}
+
+.header-trust-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(31, 26, 23, 0.72);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.header-trust-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--cta-start), var(--cta-end));
+  box-shadow: 0 0 0 4px rgba(255, 106, 25, 0.12);
+}
+
+.header-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 18px 20px;
 }
 
 .header-nav {
   display: flex;
   align-items: center;
   gap: 16px;
+  flex: 1 1 380px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .header-links {
@@ -124,6 +164,7 @@ textarea::placeholder {
 
 .header-branding {
   min-width: 0;
+  flex: 1 1 320px;
 }
 
 .brand-link {
@@ -172,6 +213,7 @@ textarea::placeholder {
   margin-top: 6px;
   color: rgba(31, 26, 23, 0.62);
   font-size: 13px;
+  line-height: 1.55;
 }
 
 .nav-actions,
@@ -658,12 +700,13 @@ select:focus-visible {
 }
 
 .button-primary {
-  background: linear-gradient(180deg, #32665c, #254a43);
+  background: linear-gradient(180deg, var(--cta-start), var(--cta-end));
   color: var(--accent-ink);
+  box-shadow: 0 18px 32px rgba(255, 106, 25, 0.22);
 }
 
 .button-primary:hover {
-  background: linear-gradient(180deg, #3b7468, #2a564e);
+  background: linear-gradient(180deg, #ff8b37, #ff6416);
 }
 
 .button-ghost {
@@ -1243,7 +1286,6 @@ select:focus-visible {
     width: min(100% - 18px, 100%);
   }
 
-  .header-shell,
   .hero-panel,
   .section-panel,
   .room-panel,
@@ -1253,14 +1295,14 @@ select:focus-visible {
     border-radius: 26px;
   }
 
-  .header-shell,
+  .header-main,
   .side-top,
   .section-head,
   .checkout-box {
     align-items: stretch;
   }
 
-  .header-shell,
+  .header-main,
   .header-nav,
   .header-links,
   .hero-actions,
@@ -1276,6 +1318,15 @@ select:focus-visible {
   .checkout-right > *,
   .booking-actions > * {
     width: 100%;
+  }
+
+  .header-shell {
+    padding: 0;
+  }
+
+  .header-trust-strip,
+  .header-main {
+    padding: 18px;
   }
 
   .three-up,

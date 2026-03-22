@@ -485,3 +485,13 @@ test('does not expose the default resend onboarding address as public contact da
     phone: null,
   })
 })
+
+test('ignores invalid public contact email values', () => {
+  process.env.BEHAVIOR15_CONTACT_EMAIL = 'kontakt.behawiorystacoape.com'
+  delete process.env.BEHAVIOR15_CONTACT_PHONE
+
+  assert.deepEqual(getContactDetails(), {
+    email: null,
+    phone: null,
+  })
+})
