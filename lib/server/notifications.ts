@@ -19,12 +19,28 @@ type DeliveryResult = {
 
 function getResendConfig() {
   const apiKey = process.env.RESEND_API_KEY?.trim() || null
-  const from = process.env.RESEND_FROM_EMAIL?.trim() || DEFAULT_RESEND_FROM_EMAIL
+  const configuredFrom = process.env.RESEND_FROM_EMAIL?.trim() || null
+  const from = isValidResendFrom(configuredFrom) ? configuredFrom : DEFAULT_RESEND_FROM_EMAIL
 
   return {
     apiKey,
     from,
   }
+}
+
+function isValidPublicEmail(value: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+}
+
+function isValidResendFrom(value: string | null): value is string {
+  if (!value) {
+    return false
+  }
+
+  const match = value.match(/<([^>]+)>/)
+  const candidate = match?.[1]?.trim() ?? value.trim()
+
+  return isValidPublicEmail(candidate)
 }
 
 function buildBookingSummary(booking: BookingRecord): string {

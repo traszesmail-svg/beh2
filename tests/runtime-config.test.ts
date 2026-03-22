@@ -156,11 +156,11 @@ test('parses an admin-entered consultation price and converts it consistently fo
 })
 
 test('rejects invalid consultation price values', () => {
-  assert.throws(() => parseConsultationPriceInput('free'), /kwote konsultacji/)
+  assert.throws(() => parseConsultationPriceInput('free'), /kwotę konsultacji/)
 })
 
 test('rejects consultation prices below the Stripe PLN minimum', () => {
-  assert.throws(() => parseConsultationPriceInput('1.99'), /nie moze byc nizsza/)
+  assert.throws(() => parseConsultationPriceInput('1.99'), /nie może być niższa/)
   assert.equal(parseConsultationPriceInput(String(MIN_CONSULTATION_PRICE_PLN)), MIN_CONSULTATION_PRICE_PLN)
 })
 

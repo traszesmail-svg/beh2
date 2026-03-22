@@ -67,6 +67,7 @@ async function main() {
   process.env.APP_PAYMENT_MODE = 'mock'
   process.env.NEXT_PUBLIC_APP_URL = appUrl
   process.env.ADMIN_ACCESS_SECRET = adminSecret
+  process.env.RESEND_API_KEY = ''
 
   const localStore = await import('../lib/server/local-store')
 
@@ -113,7 +114,7 @@ async function main() {
     const mobilePage = await mobile.newPage()
     await mobilePage.goto(appUrl, { waitUntil: 'domcontentloaded' })
     const homeCtaVisible = await mobilePage.getByRole('link', { name: /Zarezerwuj 15 minut i odzyskaj spokój w domu/i }).first().isVisible()
-    const heroHeadingVisible = await mobilePage.getByRole('heading', { name: /Zarezerwuj 15 minut i odzyskaj spokój w domu/i }).isVisible()
+    const heroHeadingVisible = await mobilePage.getByRole('heading', { name: /Zarezerwuj 15 minut i odzyskaj spokój w domu/i }).first().isVisible()
     const heroPriceVisible = await mobilePage.locator('.hero-price-badge').getByText(/Aktualna cena/i).isVisible()
     const trustStripVisible = await mobilePage.locator('.header-trust-strip').getByText(/Zweryfikowany behawiorysta COAPE \/ CAPBT/i).isVisible()
     const heroPhotoVisible = await mobilePage.locator('img[alt="Krzysztof Regulski trzyma kota podczas sesji zdjęciowej do strony Behawior 15"]').isVisible()
@@ -124,8 +125,8 @@ async function main() {
     const ogTitle = await mobilePage.locator('meta[property="og:title"]').getAttribute('content')
     const charsetMetaPresent = (await mobilePage.locator('meta[charset]').count()) > 0
     await mobilePage.getByRole('link', { name: /Zarezerwuj 15 minut i odzyskaj spokój w domu/i }).first().click()
-    await mobilePage.waitForURL(/\/problem$/, { timeout: 10000 })
-    const bookingCtaWorks = await mobilePage.getByRole('heading', { name: /Z czym chcesz wejść/i }).isVisible()
+    await mobilePage.waitForURL(/\/book$/, { timeout: 10000 })
+    const bookingCtaWorks = await mobilePage.getByRole('heading', { name: /Zarezerwuj 15 minut i przejdź do realnie wolnych terminów/i }).isVisible()
     await mobilePage.goto(appUrl, { waitUntil: 'domcontentloaded' })
 
     await mobilePage.goto(`${appUrl}/payment?bookingId=${bookingOne.booking.id}&access=${encodeURIComponent(bookingOne.accessToken)}`, {
@@ -173,16 +174,16 @@ async function main() {
     const specialistTrustVisible = await desktopPage.getByRole('heading', {
       name: /Łączę behawior, wiedzę medyczną i doświadczenie terapeutyczne/i,
     }).isVisible()
-    const specialistPhotoVisible = await desktopPage.locator('img[alt="Krzysztof Regulski podczas pracy z kotem na stole zabiegowym"]').isVisible()
+    const specialistPhotoVisible = await desktopPage.locator('img[alt="Krzysztof Regulski trzyma kota na rękach w zdjęciu o specjaliście"]').isVisible()
     const credentialAltVisible = await desktopPage.locator('img[alt*="CAPBT Polska"]').isVisible()
     const realCasesHeadingVisible = await desktopPage.getByRole('heading', {
-      name: /Prawdziwe zdjęcia, uczciwe zasady publikacji i miejsce na opinie po konsultacji/i,
+      name: /Z takimi problemami opiekunowie najczęściej wchodzą na pierwszą rozmowę/i,
     }).isVisible()
     const realCaseCardsCount = await desktopPage.locator('.real-case-card').count()
     const publicationsHeadingVisible = await desktopPage.getByRole('heading', {
-      name: /Miejsce pod publikacje jest gotowe na dwa screeny i kolejne potwierdzone materiały/i,
+      name: /Zweryfikowane publikacje, które wzmacniają trust bez nadęcia/i,
     }).isVisible()
-    const publicationLinkVisible = await desktopPage.getByRole('link', { name: /Otwórz publikację/i }).isVisible()
+    const publicationLinkVisible = await desktopPage.getByRole('link', { name: /Otwórz artykuł/i }).first().isVisible()
     const noBrokenMailto = (await desktopPage.locator('a[href^="mailto:"]').count()) <= 1
     const faqButton = desktopPage.getByRole('button', { name: /Czy 15 minut wystarczy/i })
     const faqInitiallyExpanded = await faqButton.getAttribute('aria-expanded')

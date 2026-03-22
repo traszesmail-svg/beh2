@@ -119,7 +119,7 @@ export default async function ConfirmationPage({
                     Wróć do płatności
                   </Link>
                 )}
-                <Link href="/problem" className="button button-ghost big-button">
+                <Link href="/book" className="button button-ghost big-button">
                   Umów kolejny termin
                 </Link>
               </div>
@@ -140,7 +140,7 @@ export default async function ConfirmationPage({
             <>
               <div className="error-box">Ten link do potwierdzenia jest nieprawidłowy albo wygasł.</div>
               <div className="hero-actions centered-actions">
-                <Link href="/problem" className="button button-primary big-button">
+                <Link href="/book" className="button button-primary big-button">
                   Przejdź do rezerwacji
                 </Link>
               </div>

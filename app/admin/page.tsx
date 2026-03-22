@@ -46,7 +46,7 @@ export default async function AdminPage() {
               <div className="section-eyebrow">Panel specjalisty</div>
               <h1>Rezerwacje, płatności i terminy</h1>
             </div>
-            <Link href="/problem" className="button button-primary">
+            <Link href="/book" className="button button-primary">
               Przejdź do flow klienta
             </Link>
           </div>

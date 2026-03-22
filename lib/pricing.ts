@@ -48,20 +48,20 @@ export function parseConsultationPriceInput(rawValue: string | number): number {
   const normalized = raw.replace(',', '.')
 
   if (!normalized || !/^\d+(\.\d{1,2})?$/.test(normalized)) {
-    throw new Error('Podaj poprawna kwote konsultacji w PLN, np. 39 albo 49.50.')
+    throw new Error('Podaj poprawną kwotę konsultacji w PLN, np. 39 albo 49.50.')
   }
 
   const amount = Number(normalized)
 
   if (!Number.isFinite(amount) || amount <= 0) {
-    throw new Error('Cena konsultacji musi byc dodatnia.')
+    throw new Error('Cena konsultacji musi być dodatnia.')
   }
 
   if (amount < MIN_CONSULTATION_PRICE_PLN) {
     throw new Error(
-      `Cena konsultacji nie moze byc nizsza niz ${formatPricePlnExact(
+      `Cena konsultacji nie może być niższa niż ${formatPricePlnExact(
         MIN_CONSULTATION_PRICE_PLN,
-      )}, bo Stripe Checkout w PLN nie przyjmuje nizszych kwot.`,
+      )}, bo Stripe Checkout w PLN nie przyjmuje niższych kwot.`,
     )
   }
 

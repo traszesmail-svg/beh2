@@ -153,7 +153,7 @@ export default async function HomePage() {
 
             <div className="hero-actions">
               {bookingEnabled ? (
-                <Link href="/problem" className="button button-primary big-button">
+                <Link href="/book" className="button button-primary big-button">
                   Zarezerwuj 15 minut i odzyskaj spokój w domu
                 </Link>
               ) : (
@@ -241,6 +241,18 @@ export default async function HomePage() {
           </div>
         </section>
 
+        <section className="panel section-panel guarantee-panel">
+          <div className="section-head">
+            <div>
+              <div className="section-eyebrow">Gwarancja</div>
+              <h2>Jeśli rozmowa nie pomoże Ci zrozumieć problemu, możesz ubiegać się o zwrot.</h2>
+            </div>
+            <div className="muted">
+              To ma być użyteczne 15 minut, a nie płatność za chaos. Po rozmowie masz wiedzieć, co robić dalej.
+            </div>
+          </div>
+        </section>
+
         <section className="panel section-panel">
           <div className="section-head">
             <div>
@@ -274,18 +286,18 @@ export default async function HomePage() {
           <div className="section-head">
             <div>
               <div className="section-eyebrow">Tematy konsultacji</div>
-              <h2>Wybierz temat i przejdź do realnie wolnych terminów</h2>
+              <h2>Zarezerwuj 15 minut i przejdź do realnej rezerwacji</h2>
             </div>
             <div className="muted">Każdy temat prowadzi do tej samej konsultacji audio i do tej samej aktualnej ceny dla nowych rezerwacji.</div>
           </div>
 
           <div className="card-grid three-up top-gap">
             {problemOptions.map((tile) => (
-              <Link key={tile.id} href={`/slot?problem=${tile.id}`} className="topic-card">
+              <Link key={tile.id} href={`/book?problem=${tile.id}`} className="topic-card">
                 <span className="topic-icon-shell">{renderProblemIcon(tile.id)}</span>
                 <div className="topic-title">{tile.title}</div>
                 <div className="topic-desc">{tile.desc}</div>
-                <div className="topic-link">Wybierz temat i termin</div>
+                <div className="topic-link">Sprawdź wolne terminy</div>
               </Link>
             ))}
           </div>
@@ -368,11 +380,11 @@ export default async function HomePage() {
         <section className="panel section-panel" id="przypadki">
           <div className="section-head">
             <div>
-              <div className="section-eyebrow">Realne przypadki</div>
-              <h2>Prawdziwe zdjęcia, uczciwe zasady publikacji i miejsce na opinie po konsultacji</h2>
+              <div className="section-eyebrow">Realne sprawy</div>
+              <h2>Z takimi problemami opiekunowie najczęściej wchodzą na pierwszą rozmowę</h2>
             </div>
             <div className="muted">
-              Nie wstawiamy fikcyjnych testimoniali. Po konsultacji klient dostaje link do dodania opinii i sam decyduje, czy zgadza się na publikację historii.
+              Bez zmyślonych opinii i bez stockowych historii. To przykłady realnych obszarów pracy oparte o publikacje i publicznie opisany zakres specjalisty.
             </div>
           </div>
 
@@ -383,11 +395,20 @@ export default async function HomePage() {
                   <Image src={caseStudy.imageSrc} alt={caseStudy.imageAlt} width={1200} height={900} className="real-case-image" />
                 </div>
                 <div className="real-case-copy">
-                  <div className="section-eyebrow">Materiał klienta</div>
+                  <div className="section-eyebrow">Realna sprawa</div>
                   <h3>{caseStudy.problem}</h3>
                   <p>{caseStudy.summary}</p>
+                  <div className="case-source">
+                    {caseStudy.sourceHref ? (
+                      <a href={caseStudy.sourceHref} target="_blank" rel="noopener noreferrer" className="text-link">
+                        {caseStudy.sourceLabel}
+                      </a>
+                    ) : (
+                      <span>{caseStudy.sourceLabel}</span>
+                    )}
+                  </div>
                   <div className="real-case-result">
-                    <strong>Status publikacji</strong>
+                    <strong>Efekt pierwszej rozmowy</strong>
                     <span>{caseStudy.effect}</span>
                   </div>
                 </div>
@@ -399,23 +420,21 @@ export default async function HomePage() {
         <section className="panel section-panel" id="publikacje">
           <div className="section-head">
             <div>
-              <div className="section-eyebrow">Publikacje i wzmianki</div>
-              <h2>Miejsce pod publikacje jest gotowe na dwa screeny i kolejne potwierdzone materiały</h2>
+              <div className="section-eyebrow">Publikacje / Media</div>
+              <h2>Zweryfikowane publikacje, które wzmacniają trust bez nadęcia</h2>
             </div>
-            <div className="muted">Na razie pokazujemy tylko jeden zweryfikowany link i dwa puste sloty, które można później uzupełnić screenami 1:1.</div>
+            <div className="muted">Pokazujemy tylko materiały, które da się obronić nazwą medium i linkiem. Bez dopisywania wywiadów, których nie da się potwierdzić.</div>
           </div>
 
           <div className="media-grid top-gap">
             {MEDIA_MENTIONS.map((item) => (
-              <article key={item.id} className={`media-card${item.placeholder ? ' media-card-placeholder' : ''}`}>
-                <div className="section-eyebrow">{item.placeholder ? 'Slot do uzupełnienia' : 'Zweryfikowana wzmianka'}</div>
+              <article key={item.id} className="media-card">
+                <div className="section-eyebrow">{item.label}</div>
                 <h3>{item.title}</h3>
                 <p>{item.summary}</p>
-                {item.href && item.cta ? (
-                  <a href={item.href} target="_blank" rel="noopener noreferrer" className="text-link top-gap-small">
-                    {item.cta}
-                  </a>
-                ) : null}
+                <a href={item.href} target="_blank" rel="noopener noreferrer" className="text-link top-gap-small">
+                  {item.cta}
+                </a>
               </article>
             ))}
           </div>
@@ -434,12 +453,12 @@ export default async function HomePage() {
 
         <section className="panel cta-panel">
           <div className="section-eyebrow">Pierwszy krok</div>
-          <h2>Wybierz temat i termin, a resztę przeprowadzę spokojnie krok po kroku.</h2>
+          <h2>Zarezerwuj 15 minut i odzyskaj spokój w domu.</h2>
           <p className="hero-text small-width">
             Jeżeli problem zaczyna się ciągnąć, najważniejsze jest dobre otwarcie. Ta konsultacja pomaga szybko ocenić, co zrobić od razu i czy potrzebna jest dalsza, szersza praca.
           </p>
           <div className="hero-actions top-gap">
-            <Link href="/problem" className="button button-primary big-button">
+            <Link href="/book" className="button button-primary big-button">
               Zarezerwuj 15 minut i odzyskaj spokój w domu
             </Link>
           </div>

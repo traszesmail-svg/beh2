@@ -19,5 +19,5 @@ export default function LegacyConfirmPage({
     redirect(`/confirmation?bookingId=${id}`)
   }
 
-  redirect('/problem')
+  redirect('/book')
 }

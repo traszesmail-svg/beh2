@@ -72,6 +72,7 @@ async function main() {
   process.env.APP_DATA_MODE = 'local'
   process.env.APP_PAYMENT_MODE = 'mock'
   process.env.NEXT_PUBLIC_APP_URL = 'http://127.0.0.1:3101'
+  process.env.RESEND_API_KEY = ''
 
   const { getActiveConsultationPrice, listAvailability, createPendingBooking, getBookingById } = await import('../lib/server/db')
   const { buildCheckoutSessionParams } = await import('../lib/server/stripe')

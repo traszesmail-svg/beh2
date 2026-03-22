@@ -32,7 +32,7 @@ export function AdminBookingActions({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          recommendedNextStep: 'Pelna konsultacja lub dalsza terapia wedlug potrzeb klienta.',
+          recommendedNextStep: 'Pełna konsultacja lub dalsza terapia według potrzeb klienta.',
         }),
       })
 

@@ -32,12 +32,21 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'pl_PL',
     siteName: 'Behawior 15',
+    images: [
+      {
+        url: '/branding/hero-krzysztof-cat.jpg',
+        width: 1200,
+        height: 1500,
+        alt: 'Behawior 15 – konsultacja behawioralna dla opiekunów psów i kotów',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Behawior 15 – 15-minutowa konsultacja głosowa',
     description:
       'Szybka konsultacja audio dla opiekunów psów i kotów. Realne terminy, jasny pierwszy krok i spokojna ścieżka od rezerwacji do rozmowy.',
+    images: ['/branding/hero-krzysztof-cat.jpg'],
   },
 }
 

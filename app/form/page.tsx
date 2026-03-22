@@ -25,7 +25,7 @@ export default async function FormPage({
   const slotId = readSearchParam(searchParams?.slotId)
 
   if (!isProblemType(problem) || !slotId) {
-    redirect('/problem')
+    redirect('/book')
   }
 
   const dataMode = getDataModeStatus()

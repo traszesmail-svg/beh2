@@ -403,7 +403,7 @@ export async function deleteAvailabilitySlot(slotId: string): Promise<void> {
   }
 
   if (current.isBooked || current.lockedByBookingId) {
-    throw new Error('Nie mozna usunac slotu, ktory jest zarezerwowany lub oplacony.')
+    throw new Error('Nie można usunąć slotu, który jest zarezerwowany lub opłacony.')
   }
 
   const { error } = await supabase.from('availability').delete().eq('id', slotId)
@@ -653,7 +653,7 @@ export async function markBookingPaid(
       (current.bookingStatus === 'done' && current.paymentStatus === 'paid')
     )
   ) {
-    throw new Error('Ten booking nie moze juz zostac oplacony.')
+    throw new Error('Ten booking nie może już zostać opłacony.')
   }
 
   const nowIso = new Date().toISOString()
@@ -704,7 +704,7 @@ export async function markBookingPaymentFailed(bookingId: string): Promise<Booki
   }
 
   if (current.paymentStatus === 'paid' || current.bookingStatus === 'done') {
-    throw new Error('Nie mozna oznaczyc oplaconego bookingu jako nieudany.')
+    throw new Error('Nie można oznaczyć opłaconego bookingu jako nieudany.')
   }
 
   const nowIso = new Date().toISOString()
@@ -784,7 +784,7 @@ export async function markBookingDone(bookingId: string, recommendedNextStep?: s
   }
 
   if (current.paymentStatus !== 'paid') {
-    throw new Error('Nie mozna oznaczyc jako done nieoplaconej konsultacji.')
+    throw new Error('Nie można oznaczyć jako done nieopłaconej konsultacji.')
   }
 
   const { data, error } = await supabase

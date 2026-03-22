@@ -26,7 +26,7 @@ export default async function SlotPage({
   const problem = readSearchParam(searchParams?.problem)
 
   if (!isProblemType(problem)) {
-    redirect('/problem')
+    redirect('/book')
   }
 
   const dataMode = getDataModeStatus()

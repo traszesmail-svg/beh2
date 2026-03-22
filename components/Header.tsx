@@ -48,7 +48,7 @@ export function Header() {
             ))}
           </div>
 
-          <Link href="/problem" className="button button-primary header-cta">
+          <Link href="/book" className="button button-primary header-cta">
             Zarezerwuj 15 minut i odzyskaj spokój w domu
           </Link>
         </nav>

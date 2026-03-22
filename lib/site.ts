@@ -14,14 +14,16 @@ export const HERO_PHOTO = {
 }
 
 export const SPECIALIST_PHOTO = {
-  src: '/branding/specialist-krzysztof-vet.jpg',
-  alt: 'Krzysztof Regulski podczas pracy z kotem na stole zabiegowym',
+  src: '/branding/specialist-krzysztof-about.png',
+  alt: 'Krzysztof Regulski trzyma kota na rękach w zdjęciu o specjaliście',
 }
 
 export type RealCaseStudy = {
   id: string
   imageSrc: string
   imageAlt: string
+  sourceLabel: string
+  sourceHref?: string
   problem: string
   summary: string
   effect: string
@@ -29,66 +31,70 @@ export type RealCaseStudy = {
 
 export const REAL_CASE_STUDIES: RealCaseStudy[] = [
   {
-    id: 'dog-home-material',
+    id: 'fear-dog',
     imageSrc: '/branding/case-dog-home.jpg',
     imageAlt: 'Czarny pies siedzący spokojnie w domu',
-    problem: 'Realny materiał klienta: pies',
+    sourceLabel: 'Magazyn Weterynaryjny · 08.11.2018',
+    sourceHref: 'https://magwet.pl/31564%2Cstrach-lek-i-fobia-u-psow-i-kotow-roznicowanie-i-leczenie-farmakologiczne',
+    problem: 'Pies wpada w silny lęk albo fobię dźwiękową.',
     summary:
-      'To jedno z prawdziwych zdjęć przekazanych do przyszłej sekcji opinii. Po konsultacji klient dostaje link do dodania krótkiej opinii i sam decyduje, czy zgadza się na publikację opisu problemu.',
-    effect: 'Pełny opis efektu dodajemy dopiero po autoryzacji opiekuna.',
+      'To realny typ sprawy opisany w Magazynie Weterynaryjnym. Przy nasilonym lęku samo „przeczekanie” zwykle tylko wydłuża problem, dlatego trzeba rozróżnić zwykły strach od zaburzenia wymagającego szerszego planu.',
+    effect:
+      'Po pierwszej rozmowie wiesz, czy wystarczy domowy plan działania, czy trzeba szybko połączyć pracę behawioralną z dalszą konsultacją weterynaryjną.',
   },
   {
-    id: 'cat-snow-material',
+    id: 'relationships-cat-dog',
     imageSrc: '/branding/case-cat-snow.jpg',
     imageAlt: 'Kot stojący na śniegu nad zamarzniętą wodą',
-    problem: 'Realny materiał klienta: kot',
+    sourceLabel: 'Profil COAPE / CAPBT',
+    sourceHref: COAPE_PROFILE_URL,
+    problem: 'Napięcie między zwierzętami, agresja albo rozjazd w relacji pies-kot.',
     summary:
-      'Zdjęcie zostało wybrane do sekcji realnych przypadków, ale bez zgody opiekuna nie dopowiadamy historii. Dzięki temu na stronie nie pojawiają się wymyślone opinie ani marketingowe skróty.',
-    effect: 'Kiedy klient zatwierdzi publikację, uzupełnimy konkretny problem, przebieg pracy i wynik.',
+      'To jeden z publicznie opisanych obszarów pracy specjalisty w katalogu COAPE: agresja, odbudowa relacji i złożone problemy psów oraz kotów w jednym domu.',
+    effect:
+      'Pierwsza rozmowa porządkuje chaos: co jest pilne, czego nie robić od dziś i jaki następny krok ma sens w Twoim konkretnym układzie domowym.',
   },
   {
-    id: 'cat-sofa-material',
+    id: 'litter-box-cat',
     imageSrc: '/branding/case-cat-sofa.jpg',
     imageAlt: 'Kot odpoczywający na ciemnej sofie',
-    problem: 'Realny materiał klienta: historia czeka na publikację',
+    sourceLabel: 'Magazyn Weterynaryjny · 11.10.2018',
+    sourceHref: 'https://magwet.pl/31443,terapia-farmakologiczna-i-behawioralna-przy-oddawaniu-moczu-poza-kuweta-u-kota-przypadek-kliniczny',
+    problem: 'Kot oddaje mocz poza kuwetą i napięcie w domu narasta z dnia na dzień.',
     summary:
-      'Sekcja jest już przygotowana pod zdjęcie, krótki opis i rezultat. Po rozmowie klient otrzyma link do opinii, więc z czasem to miejsce zacznie pracować także marketingowo.',
-    effect: 'Na razie pokazujemy tylko uczciwy materiał zdjęciowy i miejsce na zatwierdzoną historię.',
+      'To realny przypadek kliniczny opisany w publikacji. W takich sprawach trzeba szybko oddzielić tło medyczne od behawioralnego i ustalić kolejność działań zamiast testować losowe porady z internetu.',
+    effect:
+      'Po rozmowie wychodzisz z jasną listą: co sprawdzić w środowisku kota, kiedy wrócić do lekarza weterynarii i czy problem wymaga szerszej terapii.',
   },
 ]
 
-export const REAL_CASES_EMPTY_STATE =
-  'Po konsultacji klient dostaje link do dodania opinii i zgody na publikację historii. Pokazujemy wyłącznie zatwierdzone przypadki, bez zmyślonych opinii i bez stockowych zdjęć.'
-
 export type MediaMention = {
   id: string
+  label: string
   title: string
   summary: string
-  href?: string
-  cta?: string
-  placeholder?: boolean
+  href: string
+  cta: string
 }
 
 export const MEDIA_MENTIONS: MediaMention[] = [
   {
-    id: 'magwet',
-    title: 'Magazyn Weterynaryjny',
+    id: 'magwet-litter-box',
+    label: 'Publikacja · Magazyn Weterynaryjny',
+    title: 'Terapia farmakologiczna i behawioralna przy oddawaniu moczu poza kuwetą u kota. Przypadek kliniczny',
     summary:
-      'Zweryfikowana wzmianka autorska: artykuł „Strach, lęk i fobia u psów i kotów – różnicowanie i leczenie farmakologiczne” z podpisem Krzysztof Regulski jako współautora.',
+      'Artykuł współautorski opisujący kliniczny przypadek kota oddającego mocz poza kuwetą oraz potrzebę łączenia pracy behawioralnej z tłem medycznym.',
+    href: 'https://magwet.pl/31443,terapia-farmakologiczna-i-behawioralna-przy-oddawaniu-moczu-poza-kuweta-u-kota-przypadek-kliniczny',
+    cta: 'Otwórz artykuł',
+  },
+  {
+    id: 'magwet-fear',
+    label: 'Publikacja · Magazyn Weterynaryjny',
+    title: 'Strach, lęk i fobia u psów i kotów – różnicowanie i leczenie farmakologiczne',
+    summary:
+      'Artykuł współautorski o różnicowaniu strachu, lęku i fobii oraz o tym, kiedy sama porada nie wystarcza i potrzebna jest równoległa terapia behawioralna i farmakologiczna.',
     href: 'https://magwet.pl/31564%2Cstrach-lek-i-fobia-u-psow-i-kotow-roznicowanie-i-leczenie-farmakologiczne',
-    cta: 'Otwórz publikację',
-  },
-  {
-    id: 'publication-slot-1',
-    title: 'Miejsce na screen publikacji 01',
-    summary: 'Układ jest gotowy pod pierwszy screen z publikacji lub wzmianki medialnej, bez przebudowy sekcji.',
-    placeholder: true,
-  },
-  {
-    id: 'publication-slot-2',
-    title: 'Miejsce na screen publikacji 02',
-    summary: 'Drugi slot czeka na screen po akceptacji materiału. Zachowuje proporcje i spacing także na mobile.',
-    placeholder: true,
+    cta: 'Otwórz artykuł',
   },
 ]
 

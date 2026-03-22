@@ -284,7 +284,7 @@ export async function createAvailabilitySlot(bookingDate: string, bookingTime: s
     )
 
     if (existing) {
-      throw new Error('Ten slot juz istnieje.')
+      throw new Error('Ten slot już istnieje.')
     }
 
     const nowIso = new Date().toISOString()
@@ -316,7 +316,7 @@ export async function deleteAvailabilitySlot(slotId: string): Promise<void> {
     }
 
     if (slot.isBooked || slot.lockedByBookingId) {
-      throw new Error('Nie mozna usunac slotu, ktory jest zarezerwowany lub oplacony.')
+      throw new Error('Nie można usunąć slotu, który jest zarezerwowany lub opłacony.')
     }
 
     store.availability = store.availability.filter((item) => item.id !== slotId)
@@ -506,7 +506,7 @@ export async function markBookingPaid(
         (booking.bookingStatus === 'done' && booking.paymentStatus === 'paid')
       )
     ) {
-      throw new Error('Ten booking nie moze juz zostac oplacony.')
+      throw new Error('Ten booking nie może już zostać opłacony.')
     }
 
     const slot = store.availability.find((item) => item.id === booking.slotId)
@@ -549,7 +549,7 @@ export async function markBookingPaymentFailed(bookingId: string): Promise<Booki
     }
 
     if (booking.paymentStatus === 'paid' || booking.bookingStatus === 'done') {
-      throw new Error('Nie mozna oznaczyc oplaconego bookingu jako nieudany.')
+      throw new Error('Nie można oznaczyć opłaconego bookingu jako nieudany.')
     }
 
     const slot = store.availability.find((item) => item.id === booking.slotId)
@@ -605,7 +605,7 @@ export async function markBookingDone(bookingId: string, recommendedNextStep?: s
     }
 
     if (booking.paymentStatus !== 'paid') {
-      throw new Error('Nie mozna oznaczyc jako done nieoplaconej konsultacji.')
+      throw new Error('Nie można oznaczyć jako done nieopłaconej konsultacji.')
     }
 
     booking.bookingStatus = 'done'

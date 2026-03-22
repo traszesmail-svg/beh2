@@ -55,6 +55,7 @@ async function restoreFiles(backups: Awaited<ReturnType<typeof backupFiles>>) {
 }
 
 async function main() {
+  process.env.RESEND_API_KEY = ''
   const backups = await backupFiles()
 
   try {

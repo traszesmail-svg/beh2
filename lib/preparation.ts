@@ -54,7 +54,7 @@ export function normalizePreparationLinkUrl(value: string | null | undefined): s
   const url = new URL(trimmed)
 
   if (!(url.protocol === 'http:' || url.protocol === 'https:')) {
-    throw new Error('Link musi zaczynac sie od http:// lub https://.')
+    throw new Error('Link musi zaczynać się od http:// lub https://.')
   }
 
   return url.toString()
@@ -73,7 +73,7 @@ export function validatePreparationNotes(value: string | null | undefined): stri
   }
 
   if (normalized.length > PREPARATION_NOTES_MAX_LENGTH) {
-    return `Opis sytuacji moze miec maksymalnie ${PREPARATION_NOTES_MAX_LENGTH} znakow.`
+    return `Opis sytuacji może mieć maksymalnie ${PREPARATION_NOTES_MAX_LENGTH} znaków.`
   }
 
   return null
@@ -84,7 +84,7 @@ export function validatePreparationLinkUrl(value: string | null | undefined): st
     normalizePreparationLinkUrl(value)
     return null
   } catch (error) {
-    return error instanceof Error ? error.message : 'Podaj poprawny link do materialu.'
+    return error instanceof Error ? error.message : 'Podaj poprawny link do materiału.'
   }
 }
 
@@ -96,7 +96,7 @@ export function validatePreparationVideoMeta({ fileName, contentType, size }: Pr
   }
 
   if (!contentType || !ALLOWED_VIDEO_CONTENT_TYPES.has(contentType.toLowerCase())) {
-    return 'Nagranie musi byc zapisane jako plik MP4.'
+    return 'Nagranie musi być zapisane jako plik MP4.'
   }
 
   if (!Number.isFinite(size) || size <= 0) {
@@ -104,7 +104,7 @@ export function validatePreparationVideoMeta({ fileName, contentType, size }: Pr
   }
 
   if (size > PREPARATION_VIDEO_MAX_SIZE_BYTES) {
-    return `Nagranie moze miec maksymalnie ${formatPreparationFileSize(PREPARATION_VIDEO_MAX_SIZE_BYTES)}.`
+    return `Nagranie może mieć maksymalnie ${formatPreparationFileSize(PREPARATION_VIDEO_MAX_SIZE_BYTES)}.`
   }
 
   return null

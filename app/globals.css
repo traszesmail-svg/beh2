@@ -603,6 +603,10 @@ h1 span {
   margin-top: 24px;
 }
 
+.guarantee-panel {
+  background: linear-gradient(180deg, rgba(255, 122, 26, 0.08), rgba(255, 255, 255, 0.94));
+}
+
 .card-grid {
   display: grid;
   gap: 16px;
@@ -1117,7 +1121,7 @@ select:focus-visible {
 
 .real-case-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
 }
 
@@ -1161,6 +1165,10 @@ select:focus-visible {
   line-height: 1.75;
 }
 
+.case-source {
+  margin-top: 14px;
+}
+
 .real-case-result {
   display: grid;
   gap: 8px;
@@ -1185,7 +1193,7 @@ select:focus-visible {
 
 .media-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 18px;
 }
 
@@ -1211,11 +1219,6 @@ select:focus-visible {
   margin: 0;
   color: var(--muted);
   line-height: 1.75;
-}
-
-.media-card-placeholder {
-  border-style: dashed;
-  background: rgba(250, 245, 238, 0.92);
 }
 
 .faq-list {

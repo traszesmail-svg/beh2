@@ -32,7 +32,7 @@ export function assertStripeCheckoutAmountSupported(amount: number) {
     throw new Error(
       `Stripe Checkout w PLN wymaga kwoty co najmniej ${formatPricePln(
         MIN_STRIPE_CHECKOUT_AMOUNT_PLN,
-      )}. Ustaw wyzsza cene konsultacji w panelu specjalisty, zanim wlaczysz platnosc Stripe.`,
+      )}. Ustaw wyższą cenę konsultacji w panelu specjalisty, zanim włączysz płatność Stripe.`,
     )
   }
 }
@@ -70,7 +70,7 @@ export function buildCheckoutSessionParams(
           currency: 'pln',
           unit_amount: stripeUnitAmount,
           product_data: {
-            name: 'Behawior 15 - 15-minutowa konsultacja glosowa',
+            name: 'Behawior 15 - 15-minutowa konsultacja głosowa',
             description: `${getProblemLabel(booking.problemType)} | ${booking.bookingDate} ${booking.bookingTime} | ${formatPricePln(
               booking.amount,
             )}`,
@@ -89,11 +89,11 @@ export async function createCheckoutSession(
   const booking = await getBookingForViewer(bookingId, accessToken, authorizationHeader)
 
   if (!booking) {
-    throw new Error('Nie znaleziono rezerwacji do platnosci.')
+    throw new Error('Nie znaleziono rezerwacji do płatności.')
   }
 
   if (!(booking.bookingStatus === 'pending' && booking.paymentStatus === 'unpaid')) {
-    throw new Error('Stripe Checkout mozna uruchomic tylko dla bookingu oczekujacego na platnosc.')
+    throw new Error('Stripe Checkout można uruchomić tylko dla bookingu oczekującego na płatność.')
   }
 
   const stripe = getStripeClient()

@@ -47,7 +47,7 @@ export default async function CallPage({
           <section className="panel centered-panel">
             <div className="error-box">Ten link do rozmowy jest nieprawidłowy albo wygasł.</div>
             <div className="hero-actions centered-actions">
-              <Link href="/problem" className="button button-primary big-button">
+              <Link href="/book" className="button button-primary big-button">
                 Wróć do rezerwacji
               </Link>
             </div>
