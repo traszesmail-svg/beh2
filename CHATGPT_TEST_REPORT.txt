@@ -1,53 +1,67 @@
-BEHAWIOR 18
+BEHAWIOR 18 — FAZA 1A
 Data: 2026-03-22
 
-1. Co dokładnie zostało zmienione
-- Dopasowano mobile i small tablet dla sekcji „Prowadzący konsultację” oraz „Specjalista prowadzący”: mniejsze pionowe odstępy, lżejszy header, krótszy header CTA, spokojniejsze proporcje zdjęć i mniej agresywny crop.
-- Sekcja „Specjalista prowadzący” używa teraz pliku `public/branding/omnie.png` jako głównego zdjęcia z poprawionym `alt`.
-- Utrzymano działający flow `landing -> /book -> /slot -> /form -> /payment -> /confirmation -> /call/[id]` bez regresji.
-- Ujednolicono CTA w kartach tematów na `Wybierz ten temat i zarezerwuj termin`.
-- Dodano komunikację ceny `Tylko 28,99 zł zamiast 180–250 zł za tradycyjną wizytę.` na landing page, `/book` i w checkout boxie.
-- Dopracowano trust bar na górze do wersji: `✅ Zweryfikowany behawiorysta COAPE/CAPBT • Bezpieczna płatność • Zwrot pieniędzy`.
-- Utrzymano i dopięto SEO: finalny meta description z 28,99 zł, OG image na bezpiecznym istniejącym assetcie i viewport w setupie Next.js.
-- Zsynchronizowano cenę w aktywnej warstwie Supabase: live cena została poprawiona z `2,00 zł` na `28,99 zł`.
+1. Co zmieniłem
+- Rozdzieliłem header na dwa poziomy: cienki sticky trust bar i osobny, niesticky header z brandingiem, nawigacją i CTA.
+- Ustawiłem trust bar na treść: `✅ Zweryfikowany behawiorysta COAPE/CAPBT • Bezpieczna płatność • 100% gwarancja zwrotu`.
+- Przebudowałem sekcję hero tak, żeby była lżejsza i spokojniejsza:
+  - nowy nagłówek oparty o obietnicę 15 minut,
+  - nowy opis wspierający,
+  - dwa CTA prowadzące do `/book`,
+  - uproszczona ekspozycja ceny,
+  - lżejszy zestaw faktów zamiast cięższego miksu chipsów i stat cards,
+  - mikrocopy: `Tylko 28,99 zł • Zwrot pieniędzy jeśli nie pomoże • Natychmiastowe potwierdzenie`.
+- Ujednoliciłem zdjęcie specjalisty: to samo zdjęcie jest teraz użyte zarówno w `Prowadzący konsultację`, jak i w `Specjalista prowadzący`.
+- Wprowadziłem jedno źródło prawdy dla zdjęcia w `lib/site.ts`.
+- Dopracowałem mobile i small tablet dla prawej kolumny hero:
+  - spokojniejsze proporcje portretu,
+  - mniejsze pionowe odstępy,
+  - brak overflow w headerze i CTA,
+  - bardziej czytelny podpis pod zdjęciem.
+- Zaktualizowałem smoke test UI pod nowy trust bar, nowe hero copy i wspólne zdjęcie specjalisty.
 
-2. Jakie pliki zostały ruszone
+2. Które pliki ruszyłem
 - `app/page.tsx`
-- `app/book/page.tsx`
-- `app/layout.tsx`
 - `app/globals.css`
 - `components/Header.tsx`
-- `components/BookingForm.tsx`
-- `components/AdminPricingManager.tsx`
 - `lib/site.ts`
-- `lib/pricing.ts`
 - `scripts/ui-smoke.ts`
-- `scripts/pricing-smoke.ts`
-- `scripts/reminder-smoke.ts`
-- `supabase/schema.sql`
-- `supabase/seed.sql`
-- `supabase/migrations/20260321_pricing_settings.sql`
-- `public/branding/omnie.png`
+- `CHATGPT_TEST_REPORT.txt`
 
-3. Wynik lint / build / testów
+3. Czy zdjęcie zostało ujednolicone w obu sekcjach
+- Tak.
+- Obie sekcje korzystają teraz z tego samego zdjęcia referencyjnego specjalisty.
+- Kanoniczne źródło jest w `lib/site.ts`.
+
+4. Jak poprawiłem mobile / small tablet
+- Sticky trust bar został odchudzony i odseparowany od głównego headera.
+- Header przestał rozpychać pierwszy ekran na telefonie.
+- Hero ma prostszą hierarchię i czytelniejsze CTA.
+- Prawa kolumna `Prowadzący konsultację` używa spokojniejszego kadrowania i bardziej kontrolowanego kontenera pod portret.
+- Układ przy breakpointach tablet/mobile został uproszczony tak, żeby uniknąć wrażenia ściśniętego sidebaru.
+- Ręczny check potwierdził sticky zachowanie trust bara przy scrollu.
+
+5. Wyniki testów
+- `npm install` -> PASS
 - `npm run lint` -> PASS
-- `npm test` -> PASS
 - `npm run build` -> PASS
+- `npm run test` -> PASS
 - `npm run verify-flow` -> PASS
 - `npm run pricing-smoke` -> PASS
 - `npm run ui-smoke` -> PASS
-- `npm run reminder-smoke` -> PASS
 
-4. Ręczna weryfikacja
-- Mobile i tablet sprawdzone ręcznie na lokalnym preview developerskim ze stylami.
-- Sekcja „Prowadzący konsultację” na mobile nie rozpycha już pierwszego ekranu tak agresywnie jak wcześniej.
-- Sekcja „Specjalista prowadzący” poprawnie renderuje `omnie.png` na mobile i tablecie bez ciężkiego cropu twarzy.
-- Główne CTA i przejście do `/book` zostały sprawdzone ręcznie oraz potwierdzone przez `ui-smoke`.
+6. Ręczna weryfikacja
+- Home sprawdzony ręcznie na mobile `390px`.
+- Hero aside sprawdzony ręcznie na mobile.
+- Hero aside sprawdzony ręcznie na small tablet.
+- Sekcja `Specjalista prowadzący` sprawdzona ręcznie na mobile ze wspólnym zdjęciem.
+- Sticky trust bar utrzymuje pozycję przy scrollu.
+- CTA z hero prowadzą do `/book`.
 
-5. Link do deploymentu
+7. Link do deploymentu
 - Produkcyjny deployment po pushu na `main`: `https://beh2.vercel.app`
 
-6. Ryzyka / rzeczy do dalszego doszlifowania
-- Header mobile jest już lżejszy i czytelniejszy, ale jeśli będziemy dalej optymalizować konwersję, warto zrobić jeszcze jedną rundę stricte pod skrócenie trust bara i nawigacji na bardzo wąskich ekranach.
-- Lokalny preview uruchamiany przez `next start` zwracał `400` dla assetu CSS w tym środowisku terminalowym, dlatego ręczny proof layoutu był wykonany na `next dev`, a build i smoke testy osobno na zbudowanej aplikacji.
-- OG image używa nadal bezpiecznego istniejącego assetu hero; można później podmienić na dedykowany `og-hero.jpg`, jeśli powstanie finalna grafika share.
+8. Ryzyka / rzeczy odłożone
+- Ta runda celowo nie przebudowuje szeroko sekcji 2–8; zmiany poza sekcją 1 ograniczyłem do minimum potrzebnego dla spójności.
+- OG image nadal wskazuje bezpieczny, istniejący asset. Dedykowany asset share można podmienić w kolejnej rundzie, jeśli powstanie finalna grafika.
+- `verify-flow` i `pricing-smoke` nie powinny być uruchamiane równolegle, bo oba operują na tym samym lokalnym store testowym; finalny wynik został potwierdzony po sekwencyjnym rerunie.

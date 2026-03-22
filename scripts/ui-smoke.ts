@@ -114,10 +114,13 @@ async function main() {
     const mobilePage = await mobile.newPage()
     await mobilePage.goto(appUrl, { waitUntil: 'domcontentloaded' })
     const homeCtaVisible = await mobilePage.getByRole('link', { name: /Zarezerwuj 15 minut i odzyskaj spokój w domu/i }).first().isVisible()
-    const heroHeadingVisible = await mobilePage.getByRole('heading', { name: /Zarezerwuj 15 minut i odzyskaj spokój w domu/i }).first().isVisible()
+    const secondaryHeroCtaVisible = await mobilePage.getByRole('link', { name: /Sprawdź wszystkie terminy/i }).isVisible()
+    const heroHeadingVisible = await mobilePage
+      .getByRole('heading', { name: /W 15 minut dowiesz się dokładnie, co robić z problemem Twojego psa lub kota/i })
+      .isVisible()
     const heroPriceVisible = await mobilePage.locator('.hero-price-badge').getByText(/Aktualna cena/i).isVisible()
-    const trustStripVisible = await mobilePage.locator('.header-trust-strip').getByText(/Zweryfikowany behawiorysta COAPE\/CAPBT/i).isVisible()
-    const heroPhotoVisible = await mobilePage.locator('img[alt="Krzysztof Regulski trzyma kota podczas sesji zdjęciowej do strony Behawior 15"]').isVisible()
+    const trustStripVisible = await mobilePage.locator('.header-trust-strip').getByText(/100% gwarancja zwrotu/i).isVisible()
+    const heroPhotoVisible = await mobilePage.locator('.hero-aside img[alt="Krzysztof Regulski z kotem na zdjęciu do strony Behawior 15"]').isVisible()
     const reassuranceVisible = await mobilePage.getByText(/Bez obietnic z kosmosu/i).isVisible()
     const footerLinkVisible = await mobilePage.getByRole('link', { name: /Polityka prywatności/i }).isVisible()
     const title = await mobilePage.title()
@@ -174,7 +177,7 @@ async function main() {
     const specialistTrustVisible = await desktopPage.getByRole('heading', {
       name: /Łączę behawior, wiedzę medyczną i doświadczenie terapeutyczne/i,
     }).isVisible()
-    const specialistPhotoVisible = await desktopPage.locator('img[alt="Krzysztof Regulski z kotem na rękach w sekcji o specjaliście Behawior 15"]').isVisible()
+    const specialistPhotoVisible = await desktopPage.locator('#specjalista img[alt="Krzysztof Regulski z kotem na zdjęciu do strony Behawior 15"]').isVisible()
     const credentialAltVisible = await desktopPage.locator('img[alt*="CAPBT Polska"]').isVisible()
     const realCasesHeadingVisible = await desktopPage.getByRole('heading', {
       name: /Z takimi problemami opiekunowie najczęściej wchodzą na pierwszą rozmowę/i,
@@ -200,6 +203,7 @@ async function main() {
     await desktopPage.getByText(/Zapisano now.*cen.*konsultacji/i).waitFor({ timeout: 10000 })
 
     assert.equal(homeCtaVisible, true)
+    assert.equal(secondaryHeroCtaVisible, true)
     assert.equal(heroHeadingVisible, true)
     assert.equal(heroPriceVisible, true)
     assert.equal(trustStripVisible, true)
@@ -239,6 +243,7 @@ async function main() {
         {
           mobile: {
             homeCtaVisible,
+            secondaryHeroCtaVisible,
             heroHeadingVisible,
             heroPriceVisible,
             trustStripVisible,

@@ -9,15 +9,13 @@ export const CAPBT_PROFILE_URL = COAPE_PROFILE_URL
 export const SPECIALIST_TRUST_STATEMENT = 'Łączę behawior, wiedzę medyczną i doświadczenie terapeutyczne.'
 export const CONSULTATION_PRICE_COMPARE_COPY = 'Tylko 28,99 zł zamiast 180–250 zł za tradycyjną wizytę.'
 
-export const HERO_PHOTO = {
-  src: '/branding/hero-krzysztof-cat.jpg',
-  alt: 'Krzysztof Regulski trzyma kota podczas sesji zdjęciowej do strony Behawior 15',
+export const LANDING_SPECIALIST_PHOTO = {
+  src: '/branding/omnie.png',
+  alt: 'Krzysztof Regulski z kotem na zdjęciu do strony Behawior 15',
 }
 
-export const SPECIALIST_PHOTO = {
-  src: '/branding/omnie.png',
-  alt: 'Krzysztof Regulski z kotem na rękach w sekcji o specjaliście Behawior 15',
-}
+export const HERO_PHOTO = LANDING_SPECIALIST_PHOTO
+export const SPECIALIST_PHOTO = LANDING_SPECIALIST_PHOTO
 
 export type RealCaseStudy = {
   id: string

@@ -10,7 +10,6 @@ import {
   CAPBT_PROFILE_URL,
   COAPE_ORG_URL,
   CONSULTATION_PRICE_COMPARE_COPY,
-  HERO_PHOTO,
   MEDIA_MENTIONS,
   REAL_CASE_STUDIES,
   SPECIALIST_CREDENTIALS,
@@ -104,6 +103,7 @@ export default async function HomePage() {
       ? formatDateTimeLabel(nextSlot.bookingDate, nextSlot.bookingTime)
       : 'Brak wolnych terminów'
     : 'Terminy chwilowo się odświeżają'
+  const heroMicrocopy = 'Tylko 28,99 zł • Zwrot pieniędzy jeśli nie pomoże • Natychmiastowe potwierdzenie'
 
   return (
     <main className="page-wrap">
@@ -116,67 +116,61 @@ export default async function HomePage() {
 
             <div className="pill">15-minutowa konsultacja głosowa online</div>
             <div className="hero-topline">Zweryfikowany behawiorysta COAPE/CAPBT dla opiekunów psów i kotów.</div>
-            <h1>
-              Zarezerwuj 15 minut i odzyskaj spokój w domu. <span>Jedna rozmowa, jasny pierwszy krok i realny termin.</span>
-            </h1>
+            <h1>W 15 minut dowiesz się dokładnie, co robić z problemem Twojego psa lub kota</h1>
             <p className="hero-text">
-              Bez chaosu, bez zgadywania i bez tygodni sprzecznych porad. Rezerwujesz jeden termin, płacisz raz i rozmawiasz
-              bezpośrednio z jednym specjalistą, który prowadzi sprawę od pierwszego pytania do rekomendacji dalszego kroku.
+              Bez chaosu. Bez sprzecznych porad z internetu. Jeden konkretny, spokojny pierwszy krok.
             </p>
 
             <div className="hero-price-badge">
-              <span className="hero-price-label">Aktualna cena</span>
+              <span className="hero-price-label">Aktualna cena konsultacji</span>
               <strong>{pricing?.formattedAmount ?? 'Cena chwilowo niedostępna'}</strong>
-              <span className="hero-price-note">za 15 minut rozmowy audio</span>
+              <span className="hero-price-note">15 minut rozmowy audio z jednym specjalistą</span>
               <span className="hero-price-compare">{CONSULTATION_PRICE_COMPARE_COPY}</span>
             </div>
 
-            <div className="hero-note-row">
-              <span className="trust-chip">Behawior + medyczne + terapia</span>
-              <span className="trust-chip">Bezpieczna płatność</span>
-              <span className="trust-chip">Audio online bez instalacji</span>
-              <span className="trust-chip">Psy i koty</span>
-            </div>
-
-            <div className="stats-grid">
-              <div className="stat-card">
-                <div className="stat-label">Czas rozmowy</div>
-                <div className="stat-value">15 min</div>
+            <div className="hero-inline-facts">
+              <div className="hero-inline-fact">
+                <strong>{nextSlotLabel}</strong>
+                <span>Najbliższy realny termin</span>
               </div>
-              <div className="stat-card">
-                <div className="stat-label">Aktualna cena</div>
-                <div className="stat-value">{pricing?.formattedAmount ?? 'Sprawdź za moment'}</div>
+              <div className="hero-inline-fact">
+                <strong>Bezpieczna płatność</strong>
+                <span>Potwierdzenie od razu po opłaceniu</span>
               </div>
-              <div className="stat-card">
-                <div className="stat-label">Najbliższy realny termin</div>
-                <div className="stat-value">{nextSlotLabel}</div>
+              <div className="hero-inline-fact">
+                <strong>Zwrot pieniędzy</strong>
+                <span>Jeśli rozmowa nie pomoże zrozumieć problemu</span>
               </div>
             </div>
 
             <div className="hero-actions">
-              {bookingEnabled ? (
-                <Link href="/book" className="button button-primary big-button">
-                  Zarezerwuj 15 minut i odzyskaj spokój w domu
-                </Link>
-              ) : (
-                <a href="#specjalista" className="button button-primary big-button">
-                  Zobacz, jak pracuję
-                </a>
-              )}
-              <a href="#jak-to-dziala" className="button button-ghost big-button">
-                Jak wygląda rezerwacja
-              </a>
+              <Link href="/book" className="button button-primary big-button">
+                Zarezerwuj 15 minut i odzyskaj spokój w domu
+              </Link>
+              <Link href="/book" className="button button-ghost big-button">
+                Sprawdź wszystkie terminy
+              </Link>
             </div>
+            <div className="hero-microcopy">{heroMicrocopy}</div>
           </div>
 
           <div className="panel side-panel hero-aside hero-credentials">
             <div className="hero-photo-card">
               <div className="section-eyebrow">Prowadzący konsultację</div>
               <div className="hero-photo-shell top-gap-small">
-                <Image src={HERO_PHOTO.src} alt={HERO_PHOTO.alt} width={960} height={1200} className="hero-photo" priority />
+                <Image
+                  src={SPECIALIST_PHOTO.src}
+                  alt={SPECIALIST_PHOTO.alt}
+                  width={1200}
+                  height={1778}
+                  sizes="(max-width: 980px) 82vw, 30vw"
+                  className="hero-photo"
+                  priority
+                />
               </div>
               <p className="hero-photo-caption">
-                Rozmowę prowadzi {SPECIALIST_NAME}. To nie marketplace i nie losowe przekierowanie do innej osoby po płatności.
+                Konsultację prowadzi osobiście {SPECIALIST_NAME}. Rezerwujesz jedną rozmowę z konkretną osobą, bez marketplace i bez
+                losowego przekierowania po płatności.
               </p>
             </div>
 
@@ -199,7 +193,7 @@ export default async function HomePage() {
             </div>
 
             <div className="mini-card availability-card">
-              <div className="muted">Najbliższy dostępny termin</div>
+              <div className="muted">Najbliższy realny termin</div>
               <div className="side-title">{nextSlotLabel}</div>
               <ul className="hero-checklist">
                 <li>Realny slot z terminarza, nie sztuczny licznik pilności.</li>
