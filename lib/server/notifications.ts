@@ -44,7 +44,7 @@ function renderContactBlockHtml() {
   }
 
   if (!parts.length) {
-    parts.push('<p><strong>Kontakt:</strong> odpowiedz na te wiadomosc, jesli potrzebujesz doprecyzowania terminu.</p>')
+    parts.push('<p><strong>Kontakt:</strong> odpowiedz na tę wiadomość, jeśli potrzebujesz doprecyzowania terminu.</p>')
   }
 
   return parts.join('')
@@ -63,7 +63,7 @@ function renderContactBlockText() {
   }
 
   if (!lines.length) {
-    lines.push('Kontakt: odpowiedz na te wiadomosc, jesli potrzebujesz doprecyzowania terminu.')
+    lines.push('Kontakt: odpowiedz na tę wiadomość, jeśli potrzebujesz doprecyzowania terminu.')
   }
 
   return lines.join('\n')
@@ -81,7 +81,7 @@ function renderEmailShell(title: string, intro: string, content: string, outro: 
           <p style="margin-top:0;">${intro}</p>
           ${content}
           <p>${outro}</p>
-          <p style="margin-bottom:0;color:#6b625b;font-size:13px;">Wiadomosc wyslana automatycznie przez Behawior 15.</p>
+          <p style="margin-bottom:0;color:#6b625b;font-size:13px;">Wiadomość wysłana automatycznie przez Behawior 15.</p>
         </div>
       </div>
     </div>
@@ -162,25 +162,25 @@ async function deliverEmail(payload: SendEmailPayload): Promise<DeliveryResult> 
 
 export async function sendBookingReservationCreatedEmail(booking: BookingRecord): Promise<DeliveryResult> {
   const summary = buildBookingSummary(booking)
-  const subject = `Rezerwacja przyjeta - Behawior 15 - ${summary}`
+  const subject = `Rezerwacja przyjęta - Behawior 15 - ${summary}`
   const html = renderEmailShell(
-    'Mamy Twoja rezerwacje',
-    'Termin zostal chwilowo zablokowany i czeka na platnosc. To pierwszy krok do spokojniejszego planu dzialania.',
+    'Mamy Twoją rezerwację',
+    'Termin został chwilowo zablokowany i czeka na płatność. To pierwszy krok do spokojniejszego planu działania.',
     `
       <p><strong>Termin:</strong> ${formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}</p>
       <p><strong>Temat:</strong> ${getProblemLabel(booking.problemType)}</p>
       <p><strong>Kwota:</strong> ${formatPricePln(booking.amount)}</p>
-      <p><strong>Co dalej:</strong> dokoncz platnosc, aby ostatecznie potwierdzic konsultacje i odblokowac link do rozmowy.</p>
+      <p><strong>Co dalej:</strong> dokończ płatność, aby ostatecznie potwierdzić konsultację i odblokować link do rozmowy.</p>
       ${renderContactBlockHtml()}
     `,
-    'Po oplaceniu od razu wyslemy finalne potwierdzenie. Jesli nie dokonczysz platnosci, slot automatycznie wroci do terminarza.',
+    'Po opłaceniu od razu wyślemy finalne potwierdzenie. Jeśli nie dokończysz płatności, slot automatycznie wróci do terminarza.',
   )
   const text = [
-    'Behawior 15 - rezerwacja przyjeta.',
+    'Behawior 15 - rezerwacja przyjęta.',
     `Termin: ${formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}`,
     `Temat: ${getProblemLabel(booking.problemType)}`,
     `Kwota: ${formatPricePln(booking.amount)}`,
-    'Co dalej: dokoncz platnosc, aby ostatecznie potwierdzic konsultacje i odblokowac link do rozmowy.',
+    'Co dalej: dokończ płatność, aby ostatecznie potwierdzić konsultację i odblokować link do rozmowy.',
     renderContactBlockText(),
   ].join('\n')
 
@@ -192,24 +192,24 @@ export async function sendBookingConfirmationEmail(booking: BookingRecord): Prom
   const subject = `Potwierdzenie konsultacji - Behawior 15 - ${summary}`
   const html = renderEmailShell(
     'Konsultacja potwierdzona',
-    'Platnosc zostala przyjeta, a Twoj termin jest juz przypisany do Ciebie.',
+    'Płatność została przyjęta, a Twój termin jest już przypisany do Ciebie.',
     `
       <p><strong>Termin:</strong> ${formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}</p>
       <p><strong>Temat:</strong> ${getProblemLabel(booking.problemType)}</p>
-      <p><strong>Opis zgloszenia:</strong> ${booking.description}</p>
+      <p><strong>Opis zgłoszenia:</strong> ${booking.description}</p>
       <p><strong>Link do rozmowy:</strong> <a href="${booking.meetingUrl}">${booking.meetingUrl}</a></p>
-      <p><strong>Co dalej:</strong> wejdz 3-5 minut przed czasem i przygotuj najwazniejsze obserwacje oraz pytania. Po rozmowie dostaniesz jasny nastepny krok zamiast ogolnych porad.</p>
+      <p><strong>Co dalej:</strong> wejdź 3-5 minut przed czasem i przygotuj najważniejsze obserwacje oraz pytania. Po rozmowie dostaniesz jasny następny krok zamiast ogólnych porad.</p>
       ${renderContactBlockHtml()}
     `,
-    'Jesli bedzie potrzebny kolejny krok po rozmowie, dostaniesz jasna rekomendacje zamiast ogolnych porad.',
+    'Jeśli będzie potrzebny kolejny krok po rozmowie, dostaniesz jasną rekomendację zamiast ogólnych porad.',
   )
   const text = [
-    'Twoja konsultacja Behawior 15 zostala potwierdzona.',
+    'Twoja konsultacja Behawior 15 została potwierdzona.',
     `Termin: ${formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}`,
     `Temat: ${getProblemLabel(booking.problemType)}`,
     `Opis: ${booking.description}`,
     `Link do rozmowy: ${booking.meetingUrl}`,
-    'Co dalej: wejdz 3-5 minut przed czasem i przygotuj najwazniejsze obserwacje oraz pytania. Po rozmowie dostaniesz jasny nastepny krok zamiast ogolnych porad.',
+    'Co dalej: wejdź 3-5 minut przed czasem i przygotuj najważniejsze obserwacje oraz pytania. Po rozmowie dostaniesz jasny następny krok zamiast ogólnych porad.',
     renderContactBlockText(),
   ].join('\n')
 
@@ -217,25 +217,25 @@ export async function sendBookingConfirmationEmail(booking: BookingRecord): Prom
 }
 
 export async function sendBookingReminderEmail(booking: BookingRecord): Promise<DeliveryResult> {
-  const subject = 'Przypomnienie: konsultacja Behawior 15 startuje za mniej niz godzine'
+  const subject = 'Przypomnienie: konsultacja Behawior 15 startuje za mniej niż godzinę'
   const html = renderEmailShell(
     'Przypomnienie o konsultacji',
-    'Za mniej niz godzine startuje Twoja rozmowa. Warto wejsc chwile wczesniej, zeby zaczac spokojnie i bez pospiechu.',
+    'Za mniej niż godzinę startuje Twoja rozmowa. Warto wejść chwilę wcześniej, żeby zacząć spokojnie i bez pośpiechu.',
     `
       <p><strong>Termin:</strong> ${formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}</p>
       <p><strong>Temat:</strong> ${getProblemLabel(booking.problemType)}</p>
       <p><strong>Link do rozmowy:</strong> <a href="${booking.meetingUrl}">${booking.meetingUrl}</a></p>
-      <p><strong>Przed rozmowa:</strong> przygotuj 2-3 najwazniejsze pytania i najkrotszy mozliwy opis problemu.</p>
+      <p><strong>Przed rozmową:</strong> przygotuj 2-3 najważniejsze pytania i najkrótszy możliwy opis problemu.</p>
       ${renderContactBlockHtml()}
     `,
-    'Do uslyszenia. To bedzie krotka rozmowa, ale z konkretnym kierunkiem dzialania.',
+    'Do usłyszenia. To będzie krótka rozmowa, ale z konkretnym kierunkiem działania.',
   )
   const text = [
     'Przypomnienie o konsultacji Behawior 15.',
     `Termin: ${formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}`,
     `Temat: ${getProblemLabel(booking.problemType)}`,
     `Link do rozmowy: ${booking.meetingUrl}`,
-    'Przed rozmowa przygotuj 2-3 najwazniejsze pytania i najkrotszy mozliwy opis problemu.',
+    'Przed rozmową przygotuj 2-3 najważniejsze pytania i najkrótszy możliwy opis problemu.',
     renderContactBlockText(),
   ].join('\n')
 

@@ -21,11 +21,22 @@ export const metadata: Metadata = {
     template: '%s | Behawior 15',
   },
   description: 'Szybka konsultacja głosowa dla opiekunów psów i kotów. Rezerwujesz termin, opłacasz rozmowę i od razu dostajesz potwierdzenie oraz link do spotkania.',
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     title: 'Behawior 15 | 15-minutowa konsultacja głosowa',
     description:
       'Konkretna pomoc behawioralna dla psa lub kota. Jedna rozmowa, jasny pierwszy krok i szybki dostęp do wolnych terminów.',
     type: 'website',
+    locale: 'pl_PL',
+    siteName: 'Behawior 15',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Behawior 15 | 15-minutowa konsultacja głosowa',
+    description:
+      'Konkretna pomoc behawioralna dla psa lub kota. Jedna rozmowa, jasny pierwszy krok i szybki dostęp do wolnych terminów.',
   },
 }
 

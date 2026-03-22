@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server'
 import { createCheckoutSession } from '@/lib/server/stripe'
-import { ConfigurationError, getPaymentModeStatus } from '@/lib/server/env'
+import { ConfigurationError, getPaymentModeStatus, getPublicFeatureUnavailableMessage } from '@/lib/server/env'
 
 export async function POST(request: Request) {
   try {
     const paymentMode = getPaymentModeStatus()
 
     if (!paymentMode.isValid || paymentMode.active !== 'stripe') {
-      return NextResponse.json({ error: paymentMode.summary }, { status: 503 })
+      return NextResponse.json({ error: getPublicFeatureUnavailableMessage('payment') }, { status: 503 })
     }
 
     const body = (await request.json()) as { bookingId?: string; accessToken?: string }
@@ -23,7 +23,11 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ url: session.url })
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Nie udało się uruchomić checkout.'
+    const message = error instanceof ConfigurationError
+      ? getPublicFeatureUnavailableMessage('payment')
+      : error instanceof Error
+        ? error.message
+        : 'Nie udało się uruchomić checkout.'
     return NextResponse.json({ error: message }, { status: error instanceof ConfigurationError ? 503 : 500 })
   }
 }

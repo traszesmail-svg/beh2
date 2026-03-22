@@ -13,7 +13,7 @@ import {
   validatePreparationVideoMeta,
 } from '@/lib/preparation'
 import { getBookingForViewer, updateBookingPreparation } from '@/lib/server/db'
-import { ConfigurationError, getDataModeStatus, getSupabaseServerConfig } from '@/lib/server/env'
+import { ConfigurationError, getDataModeStatus, getPublicFeatureUnavailableMessage, getSupabaseServerConfig } from '@/lib/server/env'
 import { BookingPreparationPatch, BookingRecord } from '@/lib/types'
 
 export const runtime = 'nodejs'
@@ -54,6 +54,10 @@ function getSupabaseAdmin() {
 }
 
 function getErrorMessage(error: unknown): string {
+  if (error instanceof ConfigurationError) {
+    return getPublicFeatureUnavailableMessage('materials')
+  }
+
   if (error instanceof Error) {
     return error.message
   }

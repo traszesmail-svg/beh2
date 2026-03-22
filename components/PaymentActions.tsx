@@ -7,11 +7,10 @@ interface PaymentActionsProps {
   bookingId: string
   accessToken: string
   paymentMode: 'stripe' | 'mock'
-  modeSummary: string
   checkoutBlockedReason?: string | null
 }
 
-export function PaymentActions({ bookingId, accessToken, paymentMode, modeSummary, checkoutBlockedReason }: PaymentActionsProps) {
+export function PaymentActions({ bookingId, accessToken, paymentMode, checkoutBlockedReason }: PaymentActionsProps) {
   const router = useRouter()
   const [error, setError] = useState('')
   const [loadingMode, setLoadingMode] = useState<'pay' | 'fail' | null>(null)
@@ -109,7 +108,7 @@ export function PaymentActions({ bookingId, accessToken, paymentMode, modeSummar
           ? checkoutBlockedReason
           : paymentMode === 'stripe'
             ? 'Płatność obsługuje Stripe w bezpiecznym oknie checkout. Po anulowaniu od razu zobaczysz, jak wybrać nowy termin.'
-            : modeSummary}
+            : 'To bezpieczna symulacja płatności do testów flow. Po sukcesie zobaczysz dokładnie ten sam ekran potwierdzenia i link do rozmowy.'}
       </div>
     </div>
   )

@@ -4,7 +4,7 @@ import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
 import { buildPreparationVideoStoragePath, PREPARATION_STORAGE_BUCKET } from '@/lib/preparation'
 import { getBookingForViewer } from '@/lib/server/db'
-import { ConfigurationError, resolveDataMode, getSupabaseServerConfig } from '@/lib/server/env'
+import { ConfigurationError, getPublicFeatureUnavailableMessage, resolveDataMode, getSupabaseServerConfig } from '@/lib/server/env'
 
 export const runtime = 'nodejs'
 
@@ -66,7 +66,11 @@ export async function GET(
       },
     })
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Nie udało się pobrać nagrania.'
+    const message = error instanceof ConfigurationError
+      ? getPublicFeatureUnavailableMessage('materials')
+      : error instanceof Error
+        ? error.message
+        : 'Nie udało się pobrać nagrania.'
     const isMissingFile =
       typeof error === 'object' && error !== null && 'code' in error && error.code === 'ENOENT'
 

@@ -188,6 +188,10 @@ async function main() {
     await desktopPage.getByText(/Zapisano now.*cen.*konsultacji/i).waitFor({ timeout: 10000 })
 
     await desktopPage.goto(appUrl, { waitUntil: 'domcontentloaded' })
+    await desktopPage.waitForFunction(() => {
+      const priceCard = document.querySelector('.stats-grid .stat-card:nth-child(2)')
+      return priceCard?.textContent?.includes('47') ?? false
+    }, undefined, { timeout: 10000 })
     const landingPriceCardText = (await desktopPage.locator('.stats-grid .stat-card').nth(1).textContent()) ?? ''
     const landingUpdatedPriceVisible = /47/.test(landingPriceCardText)
     assert.equal(homeCtaVisible, true)

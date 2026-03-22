@@ -7,7 +7,7 @@ import { PreparationMaterialsCard } from '@/components/PreparationMaterialsCard'
 import { formatDateTimeLabel, getProblemLabel } from '@/lib/data'
 import { formatPricePln } from '@/lib/pricing'
 import { getBookingForViewer, markBookingPaymentFailed } from '@/lib/server/db'
-import { getDataModeStatus, getPaymentModeStatus } from '@/lib/server/env'
+import { getDataModeStatus, getPaymentModeStatus, getPublicFeatureUnavailableMessage } from '@/lib/server/env'
 import { isStripeTestMode, MIN_STRIPE_CHECKOUT_AMOUNT_PLN } from '@/lib/server/stripe'
 
 export const dynamic = 'force-dynamic'
@@ -39,7 +39,7 @@ export default async function PaymentPage({
   let flowError: string | null = null
 
   if (!dataMode.isValid) {
-    flowError = 'Płatność chwilowo nie jest dostępna. Spróbuj ponownie za kilka minut.'
+    flowError = getPublicFeatureUnavailableMessage('payment')
   } else if (bookingId) {
     try {
       booking = await getBookingForViewer(bookingId, accessToken, authorizationHeader)
@@ -50,7 +50,7 @@ export default async function PaymentPage({
   const bookingPriceLabel = booking ? formatPricePln(booking.amount) : null
   const checkoutBlockedReason =
     paymentMode.active === 'stripe' && booking && booking.amount < MIN_STRIPE_CHECKOUT_AMOUNT_PLN
-      ? `Stripe Checkout w PLN nie przyjmuje kwot poniżej ${formatPricePln(MIN_STRIPE_CHECKOUT_AMOUNT_PLN)}. Ustaw wyższą cenę konsultacji w panelu specjalisty i zapisz nową rezerwację.`
+      ? 'Płatność dla tej rezerwacji chwilowo jest niedostępna. Wróć do wyboru terminu i spróbuj ponownie za moment.'
       : null
 
   if (booking && cancelled && booking.bookingStatus === 'pending' && booking.paymentStatus === 'unpaid') {
@@ -163,7 +163,7 @@ export default async function PaymentPage({
               </div>
 
               {!paymentMode.isValid ? (
-                <div className="error-box top-gap">{paymentMode.summary}</div>
+                <div className="error-box top-gap">{getPublicFeatureUnavailableMessage('payment')}</div>
               ) : booking.paymentStatus === 'paid' && (booking.bookingStatus === 'confirmed' || booking.bookingStatus === 'done') ? (
                 <div className="hero-actions centered-actions">
                   <Link
@@ -184,7 +184,6 @@ export default async function PaymentPage({
                   bookingId={booking.id}
                   accessToken={accessToken ?? ''}
                   paymentMode={paymentMode.active!}
-                  modeSummary={paymentMode.summary}
                   checkoutBlockedReason={checkoutBlockedReason}
                 />
               )}

@@ -94,7 +94,7 @@ export function CallRoom({ bookingId, meetingUrl, ownerName }: CallRoomProps) {
           <button type="button" onClick={() => setRunning(true)} className="button button-primary big-button" disabled={running || finished}>
             {running ? 'Rozmowa trwa' : finished ? 'Rozmowa zakończona' : 'Uruchom licznik 15 minut'}
           </button>
-          <a href={meetingUrl} target="_blank" rel="noreferrer" className="button button-ghost big-button">
+          <a href={meetingUrl} target="_blank" rel="noopener noreferrer" className="button button-ghost big-button">
             Otwórz rozmowę w nowej karcie
           </a>
           <button type="button" onClick={handleFinish} className="button button-ghost big-button">

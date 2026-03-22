@@ -278,7 +278,7 @@ export function PreparationMaterialsCard({
             <a
               href={buildVideoUrl(bookingId, accessToken)}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="prep-inline-link top-gap-small"
             >
               {videoState.prepVideoFilename ?? 'Otwórz nagranie'}{' '}

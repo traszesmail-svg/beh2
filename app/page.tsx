@@ -300,7 +300,7 @@ export default async function HomePage() {
                   Profil specjalisty jest dostępny w katalogu COAPE / CAPBT. To publiczny punkt weryfikacji kwalifikacji
                   i zakresu pracy.
                 </span>
-                <a href={COAPE_PROFILE_URL} target="_blank" rel="noreferrer" className="text-link top-gap-small">
+                <a href={COAPE_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="text-link top-gap-small">
                   Otwórz profil COAPE / CAPBT
                 </a>
               </div>

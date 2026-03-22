@@ -52,8 +52,23 @@ function buildMissingConfigMessage(
   blockedFeature: string,
   fallbackMessage?: string,
 ): string {
-  const base = `${modeLabel} wymaga ${formatEnvList(missing)}. Bez tego nie mozna uruchomic ${blockedFeature}.`
+  const base = `${modeLabel} wymaga ${formatEnvList(missing)}. Bez tego nie można uruchomić ${blockedFeature}.`
   return fallbackMessage ? `${base} ${fallbackMessage}` : base
+}
+
+export function getPublicFeatureUnavailableMessage(feature: 'booking' | 'payment' | 'materials' | 'admin'): string {
+  switch (feature) {
+    case 'booking':
+      return 'Rezerwacja chwilowo jest niedostępna. Odśwież stronę za moment i spróbuj ponownie.'
+    case 'payment':
+      return 'Płatność chwilowo jest niedostępna. Spróbuj ponownie za kilka minut.'
+    case 'materials':
+      return 'Materiały do rozmowy chwilowo są niedostępne. Spróbuj ponownie za moment.'
+    case 'admin':
+      return 'Panel specjalisty wymaga dokończenia konfiguracji przed pierwszym logowaniem.'
+    default:
+      return 'Ta funkcja chwilowo jest niedostępna. Spróbuj ponownie za moment.'
+  }
 }
 
 function parseMode<T extends readonly string[]>(envName: string, allowed: T, fallback: T[number]): T[number] {
@@ -67,7 +82,7 @@ function parseMode<T extends readonly string[]>(envName: string, allowed: T, fal
     return raw as T[number]
   }
 
-  throw new ConfigurationError(`${envName} ma nieprawidlowa wartosc "${raw}". Dozwolone: ${allowed.join(', ')}.`)
+  throw new ConfigurationError(`${envName} ma nieprawidłową wartość "${raw}". Dozwolone: ${allowed.join(', ')}.`)
 }
 
 function getMissingSupabaseVars(): string[] {
@@ -115,7 +130,7 @@ export function getSupabaseServiceRoleKeyIssue(serviceRoleKey = readEnv('SUPABAS
   }
 
   if (serviceRoleKey.startsWith('sb_publishable_')) {
-    return 'SUPABASE_SERVICE_ROLE_KEY wskazuje na klucz publishable. Uzyj klucza service role / sb_secret_, bo zapis ceny i bookingow wymaga uprawnien admina.'
+    return 'SUPABASE_SERVICE_ROLE_KEY wskazuje na klucz publishable. Użyj klucza service role / sb_secret_, bo zapis ceny i bookingów wymaga uprawnień admina.'
   }
 
   const role = readJwtRole(serviceRoleKey)
@@ -125,10 +140,10 @@ export function getSupabaseServiceRoleKeyIssue(serviceRoleKey = readEnv('SUPABAS
   }
 
   if (role) {
-    return `SUPABASE_SERVICE_ROLE_KEY ma role "${role}" zamiast "service_role". Uzyj prawdziwego klucza service role.`
+    return `SUPABASE_SERVICE_ROLE_KEY ma rolę "${role}" zamiast "service_role". Użyj prawdziwego klucza service role.`
   }
 
-  return 'SUPABASE_SERVICE_ROLE_KEY nie wyglada jak prawidlowy klucz service role. Uzyj klucza service role / sb_secret_ z panelu Supabase.'
+  return 'SUPABASE_SERVICE_ROLE_KEY nie wygląda jak prawidłowy klucz service role. Użyj klucza service role / sb_secret_ z panelu Supabase.'
 }
 
 function getSupabaseRuntimeProblem() {
@@ -153,7 +168,7 @@ function buildSupabaseConfigMessage(
 
   if (missing.length > 0) {
     problems.push(
-      `${modeLabel} wymaga ${formatEnvList(missing)}. Bez tego nie mozna uruchomic ${blockedFeature}.`,
+      `${modeLabel} wymaga ${formatEnvList(missing)}. Bez tego nie można uruchomić ${blockedFeature}.`,
     )
   }
 
@@ -261,9 +276,9 @@ export function getDataModeStatus(): RuntimeModeStatus<DataMode, ActiveDataMode>
       isValid: true,
       usesFallback: true,
       missing: [],
-      summary: `APP_DATA_MODE=auto -> aktywny jest local JSON fallback (development only), bo brakuje ${formatEnvList(
-        ['NEXT_PUBLIC_SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY'],
-      )}.`,
+        summary: `APP_DATA_MODE=auto -> aktywny jest local JSON fallback (development only), bo brakuje ${formatEnvList(
+          ['NEXT_PUBLIC_SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY'],
+        )}.`,
     }
   }
 
@@ -418,7 +433,7 @@ export function assertMockPaymentAllowed() {
 
   if (status.active !== 'mock') {
     throw new ConfigurationError(
-      `Mock payment endpoint jest wylaczony, bo aktywny tryb platnosci to ${status.active}.`,
+      `Mock payment endpoint jest wyłączony, bo aktywny tryb płatności to ${status.active}.`,
     )
   }
 }

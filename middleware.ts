@@ -1,10 +1,10 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import {
-  ADMIN_ACCESS_SECRET_ENV,
   getAdminAccessSecret,
   getAdminAuthChallengeHeaders,
   hasValidAdminAuthorization,
 } from '@/lib/admin-auth'
+import { getPublicFeatureUnavailableMessage } from '@/lib/server/env'
 
 function createUnauthorizedResponse(message: string, status: number) {
   return new NextResponse(message, {
@@ -17,10 +17,7 @@ export function middleware(request: NextRequest) {
   const secret = getAdminAccessSecret()
 
   if (!secret) {
-    return createUnauthorizedResponse(
-      `Brak konfiguracji ochrony panelu. Ustaw ${ADMIN_ACCESS_SECRET_ENV}, aby odblokowac /admin i adminowe API.`,
-      503,
-    )
+    return createUnauthorizedResponse(getPublicFeatureUnavailableMessage('admin'), 503)
   }
 
   if (hasValidAdminAuthorization(request.headers.get('authorization'), secret)) {

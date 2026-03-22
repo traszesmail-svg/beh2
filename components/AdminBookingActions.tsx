@@ -51,7 +51,7 @@ export function AdminBookingActions({
 
   return (
     <div className="booking-actions">
-      <a href={meetingUrl} target="_blank" rel="noreferrer" className="button button-ghost small-button">
+      <a href={meetingUrl} target="_blank" rel="noopener noreferrer" className="button button-ghost small-button">
         Link do rozmowy
       </a>
 

@@ -125,7 +125,7 @@ export default async function AdminPage() {
                       {booking.prepVideoPath ? (
                         <div className="booking-meta">
                           Nagranie:{' '}
-                          <a href={`/api/bookings/${booking.id}/prep/video`} target="_blank" rel="noreferrer" className="prep-inline-link">
+                          <a href={`/api/bookings/${booking.id}/prep/video`} target="_blank" rel="noopener noreferrer" className="prep-inline-link">
                             {booking.prepVideoFilename ?? 'Otwórz nagranie'}
                             {booking.prepVideoSizeBytes ? ` (${formatPreparationFileSize(booking.prepVideoSizeBytes)})` : ''}
                           </a>
@@ -134,7 +134,7 @@ export default async function AdminPage() {
                       {booking.prepLinkUrl ? (
                         <div className="booking-meta">
                           Link:{' '}
-                          <a href={booking.prepLinkUrl} target="_blank" rel="noreferrer" className="prep-inline-link">
+                          <a href={booking.prepLinkUrl} target="_blank" rel="noopener noreferrer" className="prep-inline-link">
                             {booking.prepLinkUrl}
                           </a>
                         </div>
@@ -157,7 +157,7 @@ export default async function AdminPage() {
                       <span className={`status-pill ${booking.paymentStatus === 'paid' ? 'status-paid' : 'status-pending'}`}>
                         {getPaymentStatusLabel(booking.paymentStatus)}
                       </span>
-                      <a href={booking.meetingUrl} target="_blank" rel="noreferrer" className="button button-ghost small-button">
+                      <a href={booking.meetingUrl} target="_blank" rel="noopener noreferrer" className="button button-ghost small-button">
                         Otwórz rozmowę
                       </a>
                       <AdminBookingActions

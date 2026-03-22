@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getBookingForViewer, markBookingPaid, markBookingPaymentFailed } from '@/lib/server/db'
-import { ConfigurationError, assertMockPaymentAllowed } from '@/lib/server/env'
+import { ConfigurationError, assertMockPaymentAllowed, getPublicFeatureUnavailableMessage } from '@/lib/server/env'
 
 export async function POST(request: Request) {
   try {
@@ -32,7 +32,11 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ redirectTo: `/confirmation?bookingId=${body.bookingId}${accessQuery}` })
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Mock płatność nie powiodła się.'
+    const message = error instanceof ConfigurationError
+      ? getPublicFeatureUnavailableMessage('payment')
+      : error instanceof Error
+        ? error.message
+        : 'Mock płatność nie powiodła się.'
     return NextResponse.json({ error: message }, { status: error instanceof ConfigurationError ? 503 : 500 })
   }
 }
