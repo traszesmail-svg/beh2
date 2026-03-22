@@ -70,7 +70,7 @@ create index if not exists availability_date_idx on public.availability(booking_
 create index if not exists availability_booked_idx on public.availability(is_booked);
 
 insert into public.pricing_settings (id, consultation_price)
-values ('consultation', 39.00)
+values ('consultation', 28.99)
 on conflict (id) do nothing;
 
 insert into storage.buckets (id, name, public)

@@ -1,68 +1,35 @@
 BEHAWIOR 18
 Data: 2026-03-22
 
-1. Co naprawiono
-- Landing został przebudowany z układu wizytówkowego na stronę sprzedażową z jasnym flow: landing -> booking -> payment -> confirmation -> room.
-- `app/book/page.tsx` nie jest już martwym przekierowaniem do starego kroku, tylko realnym wejściem do rezerwacji z wyborem problemu i przejściem do wolnych terminów.
-- Wszystkie główne CTA prowadzą teraz do działającej ścieżki rezerwacji zamiast do martwego UI.
-- Dodano sekcję gwarancji i uproszczono układ sekcji tak, żeby strona miała więcej przestrzeni i mniej „WordPress feel”.
-- Uporządkowano trust: specjalista, kwalifikacje, COAPE / CAPBT, publikacje, realne przypadki bez zmyślonych opinii.
-- Poprawiono polskie znaki w warstwie użytkownika, admina i najważniejszych komunikatach runtime.
-- Dodano brakujące skrypty smoke do `package.json`: `verify-flow`, `pricing-smoke`, `ui-smoke`, `reminder-smoke`.
-- Uszczelniono lokalne smoke testy, żeby nie zależały od aktywnego klucza Resend podczas testów developerskich.
+1. Co dokładnie zostało zmienione
+- Dopasowano mobile i small tablet dla sekcji „Prowadzący konsultację” oraz „Specjalista prowadzący”: mniejsze pionowe odstępy, lżejszy header, krótszy header CTA, spokojniejsze proporcje zdjęć i mniej agresywny crop.
+- Sekcja „Specjalista prowadzący” używa teraz pliku `public/branding/omnie.png` jako głównego zdjęcia z poprawionym `alt`.
+- Utrzymano działający flow `landing -> /book -> /slot -> /form -> /payment -> /confirmation -> /call/[id]` bez regresji.
+- Ujednolicono CTA w kartach tematów na `Wybierz ten temat i zarezerwuj termin`.
+- Dodano komunikację ceny `Tylko 28,99 zł zamiast 180–250 zł za tradycyjną wizytę.` na landing page, `/book` i w checkout boxie.
+- Dopracowano trust bar na górze do wersji: `✅ Zweryfikowany behawiorysta COAPE/CAPBT • Bezpieczna płatność • Zwrot pieniędzy`.
+- Utrzymano i dopięto SEO: finalny meta description z 28,99 zł, OG image na bezpiecznym istniejącym assetcie i viewport w setupie Next.js.
+- Zsynchronizowano cenę w aktywnej warstwie Supabase: live cena została poprawiona z `2,00 zł` na `28,99 zł`.
 
-2. Czy booking działa
-- TAK
-- Działa pełny przepływ:
-  - landing -> `/book`
-  - `/book` -> `/slot`
-  - `/slot` -> `/form`
-  - `/form` -> `/payment`
-  - `/payment` -> `/confirmation`
-  - `/confirmation` -> `/call/[id]`
-- UI smoke potwierdza działające CTA, rezerwację, płatność mock, potwierdzenie, room i zapis materiałów przed rozmową.
+2. Jakie pliki zostały ruszone
+- `app/page.tsx`
+- `app/book/page.tsx`
+- `app/layout.tsx`
+- `app/globals.css`
+- `components/Header.tsx`
+- `components/BookingForm.tsx`
+- `components/AdminPricingManager.tsx`
+- `lib/site.ts`
+- `lib/pricing.ts`
+- `scripts/ui-smoke.ts`
+- `scripts/pricing-smoke.ts`
+- `scripts/reminder-smoke.ts`
+- `supabase/schema.sql`
+- `supabase/seed.sql`
+- `supabase/migrations/20260321_pricing_settings.sql`
+- `public/branding/omnie.png`
 
-3. Jakie zdjęcia dodano
-- Do `public/branding` osadzono minimum 5 realnych zdjęć:
-  - `hero-krzysztof-cat.jpg` -> HERO
-  - `specialist-krzysztof-about.png` -> sekcja specjalisty
-  - `case-dog-home.jpg` -> realny przypadek / pies
-  - `case-cat-snow.jpg` -> realny przypadek / relacje i agresja
-  - `case-cat-sofa.jpg` -> realny przypadek / kuweta
-- Wszystkie obrazy są osadzone z poprawnym `alt`.
-- Zdjęcie specjalisty zostało finalnie podmienione na plik dostarczony przez użytkownika:
-  - źródło: `C:\Projekt\behawior15-mvp-full\zdjecie.png`
-  - osadzenie: `public/branding/specialist-krzysztof-about.png`
-
-4. Jakie CTA zmieniono
-- Główne CTA zostało zmienione na:
-  - `Zarezerwuj 15 minut i odzyskaj spokój w domu`
-- Zmieniono też copy sekcji rezerwacyjnych, aby nie opierały się na słabym haśle `Wybierz temat i termin`.
-- CTA w headerze, hero, sekcjach środkowych, footerze i końcowym panelu prowadzą do `/book`.
-
-5. Czy dodano publikację
-- TAK
-- Dodano sekcję `Publikacje / Media`.
-- Dodano zweryfikowaną publikację wskazaną w poleceniu:
-  - `Magazyn Weterynaryjny`
-  - `Terapia farmakologiczna i behawioralna przy oddawaniu moczu poza kuwetą u kota. Przypadek kliniczny`
-- Dodano też drugą zweryfikowaną publikację:
-  - `Strach, lęk i fobia u psów i kotów – różnicowanie i leczenie farmakologiczne`
-
-6. Czy znaleziono materiały „Regulski”
-- Częściowo
-- Zweryfikowane i użyte:
-  - profil specjalisty COAPE / CAPBT:
-    - `https://behawioryscicoape.pl/behawiorysta/Regulski`
-  - publikacja Magazynu Weterynaryjnego o oddawaniu moczu poza kuwetą u kota
-  - publikacja Magazynu Weterynaryjnego o strachu, lęku i fobii u psów i kotów
-- Nie znaleziono dodatkowych wiarygodnych i publicznie potwierdzonych materiałów typu:
-  - wywiady prasowe
-  - wykłady
-  - wypowiedzi do gazet
-- Nie dodano żadnych niepewnych claimów ani zmyślonych materiałów.
-
-7. Testy
+3. Wynik lint / build / testów
 - `npm run lint` -> PASS
 - `npm test` -> PASS
 - `npm run build` -> PASS
@@ -71,31 +38,16 @@ Data: 2026-03-22
 - `npm run ui-smoke` -> PASS
 - `npm run reminder-smoke` -> PASS
 
-8. Dodatkowe potwierdzenia z testów
-- `ui-smoke` potwierdza:
-  - CTA na landing page działa
-  - zdjęcie hero się ładuje
-  - zdjęcie specjalisty się ładuje
-  - są 3 karty `Realne sprawy`
-  - działa sekcja `Publikacje / Media`
-  - działa flow mobile do payment / confirmation / room
-  - działa zapis materiałów: MP4, link i notatki
-  - działa admin pricing i marker builda
-- `verify-flow` potwierdza:
-  - zarezerwowany slot znika z listy
-  - nieudana płatność zwalnia slot
-  - link do pokoju rozmowy jest nadawany poprawnie
+4. Ręczna weryfikacja
+- Mobile i tablet sprawdzone ręcznie na lokalnym preview developerskim ze stylami.
+- Sekcja „Prowadzący konsultację” na mobile nie rozpycha już pierwszego ekranu tak agresywnie jak wcześniej.
+- Sekcja „Specjalista prowadzący” poprawnie renderuje `omnie.png` na mobile i tablecie bez ciężkiego cropu twarzy.
+- Główne CTA i przejście do `/book` zostały sprawdzone ręcznie oraz potwierdzone przez `ui-smoke`.
 
-9. Status push -> beh2/main
-- TAK
-- Repo: `beh2`
-- Branch: `main`
-- Finalny artefakt ZIP:
-  - `C:\Projekt\behawior15-mvp-full\beh2-BEHAWIOR18-2026-03-22.zip`
+5. Link do deploymentu
+- Produkcyjny deployment po pushu na `main`: `https://beh2.vercel.app`
 
-10. Status końcowy
-- Strona sprzedaje wyraźnie lepiej niż poprzednia wersja: ma działający booking, realny flow, trust, gwarancję, publikacje i realne zdjęcia.
-- Zero fake review.
-- Zero martwego UI w głównym flow.
-- Finalna podmiana wskazanego zdjęcia została wykonana.
-- Repo zostało przygotowane do oddania jako ZIP i push na `main`.
+6. Ryzyka / rzeczy do dalszego doszlifowania
+- Header mobile jest już lżejszy i czytelniejszy, ale jeśli będziemy dalej optymalizować konwersję, warto zrobić jeszcze jedną rundę stricte pod skrócenie trust bara i nawigacji na bardzo wąskich ekranach.
+- Lokalny preview uruchamiany przez `next start` zwracał `400` dla assetu CSS w tym środowisku terminalowym, dlatego ręczny proof layoutu był wykonany na `next dev`, a build i smoke testy osobno na zbudowanej aplikacji.
+- OG image używa nadal bezpiecznego istniejącego assetu hero; można później podmienić na dedykowany `og-hero.jpg`, jeśli powstanie finalna grafika share.

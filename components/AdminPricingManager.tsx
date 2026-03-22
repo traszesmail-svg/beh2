@@ -73,7 +73,7 @@ export function AdminPricingManager({ currentAmount, currentLabel, updatedAtLabe
             inputMode="decimal"
             value={amount}
             onChange={(event) => setAmount(event.target.value)}
-            placeholder="np. 39.00"
+            placeholder="np. 28.99"
             required
           />
         </div>

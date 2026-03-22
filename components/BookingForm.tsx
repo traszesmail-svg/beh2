@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { getProblemLabel } from '@/lib/data'
+import { CONSULTATION_PRICE_COMPARE_COPY } from '@/lib/site'
 import { AnimalType, ProblemType } from '@/lib/types'
 
 interface BookingFormProps {
@@ -162,6 +163,7 @@ export function BookingForm({ problemType, slotId, slotLabel, priceLabel }: Book
           <div className="muted">Po zapisaniu danych termin zostanie chwilowo zablokowany na czas płatności, żeby nikt nie przejął go przed Tobą.</div>
           <div className="checkout-title">Następny krok: bezpieczna płatność</div>
           <div className="muted">Kwota do opłacenia: {priceLabel}. Po opłaceniu od razu zobaczysz potwierdzenie, link do rozmowy audio i kolejne kroki.</div>
+          <div className="price-compare-text">{CONSULTATION_PRICE_COMPARE_COPY}</div>
         </div>
         <div className="checkout-right">
           <button type="submit" className="button button-primary big-button" disabled={isSubmitting}>

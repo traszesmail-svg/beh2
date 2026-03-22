@@ -18,7 +18,7 @@ function createBooking(id: string, overrides: Partial<BookingRecord> = {}): Book
     bookingDate: '2026-03-21',
     bookingTime: '10:30',
     slotId: `${id}-slot`,
-    amount: 39,
+    amount: 28.99,
     bookingStatus: 'confirmed',
     paymentStatus: 'paid',
     meetingUrl: `https://meet.jit.si/${id}`,

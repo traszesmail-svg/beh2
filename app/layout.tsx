@@ -21,14 +21,14 @@ export const metadata: Metadata = {
     template: '%s | Behawior 15',
   },
   description:
-    '15-minutowa konsultacja audio z behawiorystą COAPE / CAPBT. Szybki pierwszy krok dla psa lub kota: szczekanie, kuweta, lęk separacyjny, agresja i trudne zachowania w domu.',
+    '15-minutowa konsultacja głosowa z behawiorystą COAPE/CAPBT. Szybka pomoc dla psa lub kota już od 28,99 zł. Zarezerwuj termin i odzyskaj spokój w domu.',
   alternates: {
     canonical: '/',
   },
   openGraph: {
     title: 'Behawior 15 – 15-minutowa konsultacja głosowa',
     description:
-      'Behawior, wiedza medyczna i doświadczenie terapeutyczne w jednej rozmowie. Rezerwujesz termin, opłacasz konsultację i od razu dostajesz potwierdzenie.',
+      '15-minutowa konsultacja głosowa z behawiorystą COAPE/CAPBT. Szybka pomoc dla psa lub kota już od 28,99 zł.',
     type: 'website',
     locale: 'pl_PL',
     siteName: 'Behawior 15',
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Behawior 15 – 15-minutowa konsultacja głosowa',
     description:
-      'Szybka konsultacja audio dla opiekunów psów i kotów. Realne terminy, jasny pierwszy krok i spokojna ścieżka od rezerwacji do rozmowy.',
+      'Szybka pomoc dla psa lub kota już od 28,99 zł. Zarezerwuj termin i odzyskaj spokój w domu.',
     images: ['/branding/hero-krzysztof-cat.jpg'],
   },
 }

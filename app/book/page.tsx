@@ -1,7 +1,11 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { Header } from '@/components/Header'
+import { formatPricePln, DEFAULT_PRICE_PLN } from '@/lib/pricing'
 import { problemOptions } from '@/lib/data'
+import { getActiveConsultationPrice } from '@/lib/server/db'
+import { getDataModeStatus } from '@/lib/server/env'
+import { CONSULTATION_PRICE_COMPARE_COPY } from '@/lib/site'
 import { ProblemType } from '@/lib/types'
 
 function readSearchParam(value: string | string[] | undefined): string | null {
@@ -70,15 +74,23 @@ function renderProblemIcon(problem: ProblemType) {
   }
 }
 
-export default function BookPage({
+export default async function BookPage({
   searchParams,
 }: {
   searchParams?: Record<string, string | string[] | undefined>
 }) {
   const problem = readSearchParam(searchParams?.problem)
+  let priceLabel = formatPricePln(DEFAULT_PRICE_PLN)
 
   if (problem) {
     redirect(`/slot?problem=${problem}`)
+  }
+
+  if (getDataModeStatus().isValid) {
+    try {
+      const pricing = await getActiveConsultationPrice()
+      priceLabel = pricing.formattedAmount
+    } catch {}
   }
 
   return (
@@ -109,6 +121,11 @@ export default function BookPage({
             </div>
           </div>
 
+          <div className="price-context top-gap">
+            <strong>{priceLabel}</strong>
+            <span>{CONSULTATION_PRICE_COMPARE_COPY}</span>
+          </div>
+
           <div className="list-card accent-outline top-gap">
             <strong>Gwarancja</strong>
             <span>
@@ -123,7 +140,7 @@ export default function BookPage({
                 <span className="topic-icon-shell">{renderProblemIcon(item.id)}</span>
                 <div className="topic-title">{item.title}</div>
                 <div className="topic-desc">{item.desc}</div>
-                <div className="topic-link">Sprawdź wolne terminy</div>
+                <div className="topic-link">Wybierz ten temat i zarezerwuj termin</div>
               </Link>
             ))}
           </div>

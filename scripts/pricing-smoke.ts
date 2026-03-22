@@ -84,20 +84,20 @@ async function main() {
     await cleanLocalData()
 
     const initialPrice = await getActiveConsultationPrice()
-    assert.equal(initialPrice.amount, 39)
+    assert.equal(initialPrice.amount, 28.99)
 
     const availability = await listAvailability()
     const firstThreeSlots = availability.flatMap((group) => group.slots).slice(0, 3)
     assert.equal(firstThreeSlots.length, 3, 'Expected at least 3 free slots for pricing smoke test.')
 
     const bookingOneCreate = await createPendingBooking(testBookingPayload(firstThreeSlots[0].id, 1))
-    assert.equal(bookingOneCreate.booking.amount, 39)
+    assert.equal(bookingOneCreate.booking.amount, 28.99)
     const checkoutOne = buildCheckoutSessionParams(bookingOneCreate.booking, {
       accessToken: bookingOneCreate.accessToken,
       baseUrl: process.env.NEXT_PUBLIC_APP_URL,
     })
     const checkoutOneLineItem = checkoutOne.line_items?.[0]
-    assert.equal(extractUnitAmount(checkoutOneLineItem), 3900)
+    assert.equal(extractUnitAmount(checkoutOneLineItem), 2899)
 
     const routeUpdateResponse = await updatePricingRoute(
       new Request('http://localhost/api/admin/pricing', {
@@ -123,22 +123,22 @@ async function main() {
     assert.equal(extractUnitAmount(checkoutTwoLineItem), 4700)
 
     const bookingOneSnapshot = await getBookingById(bookingOneCreate.booking.id)
-    assert.equal(bookingOneSnapshot?.amount, 39)
+    assert.equal(bookingOneSnapshot?.amount, 28.99)
 
     const restorePriceResponse = await updatePricingRoute(
       new Request('http://localhost/api/admin/pricing', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: '39' }),
+        body: JSON.stringify({ amount: '28.99' }),
       }),
     )
     assert.equal(restorePriceResponse.status, 200)
 
     const restoredPrice = await getActiveConsultationPrice()
-    assert.equal(restoredPrice.amount, 39)
+    assert.equal(restoredPrice.amount, 28.99)
 
     const bookingThreeCreate = await createPendingBooking(testBookingPayload(firstThreeSlots[2].id, 3))
-    assert.equal(bookingThreeCreate.booking.amount, 39)
+    assert.equal(bookingThreeCreate.booking.amount, 28.99)
 
     const bookingsFile = await readBookingsFile()
 
@@ -151,7 +151,7 @@ async function main() {
           bookingOne: {
             id: bookingOneCreate.booking.id,
             amount: bookingOneCreate.booking.amount,
-            checkoutUnitAmount: 3900,
+            checkoutUnitAmount: 2899,
           },
           bookingTwo: {
             id: bookingTwoCreate.booking.id,
@@ -162,7 +162,7 @@ async function main() {
             id: bookingThreeCreate.booking.id,
             amount: bookingThreeCreate.booking.amount,
           },
-          oldBookingKeptHistoricalPrice: bookingOneSnapshot?.amount === 39,
+          oldBookingKeptHistoricalPrice: bookingOneSnapshot?.amount === 28.99,
           bookingCount: bookingsFile.length,
         },
         null,

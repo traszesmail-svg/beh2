@@ -1,12 +1,13 @@
 const DEFAULT_RESEND_FROM_EMAIL = 'Behawior 15 <onboarding@resend.dev>'
 
 export const SPECIALIST_NAME = 'Krzysztof Regulski'
-export const SPECIALIST_CREDENTIALS = 'opiekun medyczny, technik weterynarii, dogoterapeuta, COAPE / CAPBT'
+export const SPECIALIST_CREDENTIALS = 'opiekun medyczny, technik weterynarii, dogoterapeuta, COAPE/CAPBT'
 export const SPECIALIST_LOCATION = 'Olsztyn, woj. warmińsko-mazurskie'
 export const COAPE_ORG_URL = 'https://coape.pl'
 export const COAPE_PROFILE_URL = 'https://behawioryscicoape.pl/behawiorysta/Regulski'
 export const CAPBT_PROFILE_URL = COAPE_PROFILE_URL
 export const SPECIALIST_TRUST_STATEMENT = 'Łączę behawior, wiedzę medyczną i doświadczenie terapeutyczne.'
+export const CONSULTATION_PRICE_COMPARE_COPY = 'Tylko 28,99 zł zamiast 180–250 zł za tradycyjną wizytę.'
 
 export const HERO_PHOTO = {
   src: '/branding/hero-krzysztof-cat.jpg',
@@ -14,8 +15,8 @@ export const HERO_PHOTO = {
 }
 
 export const SPECIALIST_PHOTO = {
-  src: '/branding/specialist-krzysztof-about.png',
-  alt: 'Krzysztof Regulski trzyma kota na rękach w zdjęciu o specjaliście',
+  src: '/branding/omnie.png',
+  alt: 'Krzysztof Regulski z kotem na rękach w sekcji o specjaliście Behawior 15',
 }
 
 export type RealCaseStudy = {
@@ -46,7 +47,7 @@ export const REAL_CASE_STUDIES: RealCaseStudy[] = [
     id: 'relationships-cat-dog',
     imageSrc: '/branding/case-cat-snow.jpg',
     imageAlt: 'Kot stojący na śniegu nad zamarzniętą wodą',
-    sourceLabel: 'Profil COAPE / CAPBT',
+    sourceLabel: 'Profil COAPE/CAPBT',
     sourceHref: COAPE_PROFILE_URL,
     problem: 'Napięcie między zwierzętami, agresja albo rozjazd w relacji pies-kot.',
     summary:

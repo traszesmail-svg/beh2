@@ -2,9 +2,9 @@ import Link from 'next/link'
 
 export function Header() {
   const trustItems = [
-    'Zweryfikowany behawiorysta COAPE / CAPBT',
-    '15-minutowa konsultacja głosowa',
-    'Bezpieczna płatność i szybkie potwierdzenie',
+    '✅ Zweryfikowany behawiorysta COAPE/CAPBT',
+    'Bezpieczna płatność',
+    'Zwrot pieniędzy',
   ]
 
   const navItems = [
@@ -21,7 +21,6 @@ export function Header() {
       <div className="header-trust-strip" aria-label="Zaufanie i bezpieczeństwo">
         {trustItems.map((item) => (
           <span key={item} className="header-trust-item">
-            <span className="header-trust-dot" aria-hidden="true" />
             {item}
           </span>
         ))}
@@ -32,11 +31,11 @@ export function Header() {
           <Link href="/" className="brand-link">
             <span className="brand-mark" aria-hidden="true" />
             <div>
-              <div className="eyebrow">15-minutowa konsultacja głosowa dla opiekunów psów i kotów</div>
+              <div className="eyebrow">15-minutowa konsultacja audio dla psa lub kota</div>
               <div className="brand">Behawior 15</div>
             </div>
           </Link>
-          <div className="header-subtitle">Szybka pomoc behawioralna bez chaosu, zgadywania i martwych kroków.</div>
+          <div className="header-subtitle">Szybka pomoc behawioralna bez chaosu i zgadywania.</div>
         </div>
 
         <nav className="header-nav" aria-label="Główna nawigacja">
@@ -49,7 +48,7 @@ export function Header() {
           </div>
 
           <Link href="/book" className="button button-primary header-cta">
-            Zarezerwuj 15 minut i odzyskaj spokój w domu
+            Zarezerwuj 15 minut
           </Link>
         </nav>
       </div>

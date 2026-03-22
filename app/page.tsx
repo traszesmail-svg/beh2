@@ -9,6 +9,7 @@ import { getDataModeStatus } from '@/lib/server/env'
 import {
   CAPBT_PROFILE_URL,
   COAPE_ORG_URL,
+  CONSULTATION_PRICE_COMPARE_COPY,
   HERO_PHOTO,
   MEDIA_MENTIONS,
   REAL_CASE_STUDIES,
@@ -114,7 +115,7 @@ export default async function HomePage() {
             {publicFlowMessage ? <div className="info-box">{publicFlowMessage}</div> : null}
 
             <div className="pill">15-minutowa konsultacja głosowa online</div>
-            <div className="hero-topline">Zweryfikowany behawiorysta COAPE / CAPBT dla opiekunów psów i kotów.</div>
+            <div className="hero-topline">Zweryfikowany behawiorysta COAPE/CAPBT dla opiekunów psów i kotów.</div>
             <h1>
               Zarezerwuj 15 minut i odzyskaj spokój w domu. <span>Jedna rozmowa, jasny pierwszy krok i realny termin.</span>
             </h1>
@@ -126,7 +127,8 @@ export default async function HomePage() {
             <div className="hero-price-badge">
               <span className="hero-price-label">Aktualna cena</span>
               <strong>{pricing?.formattedAmount ?? 'Cena chwilowo niedostępna'}</strong>
-              <span>za 15 minut rozmowy audio</span>
+              <span className="hero-price-note">za 15 minut rozmowy audio</span>
+              <span className="hero-price-compare">{CONSULTATION_PRICE_COMPARE_COPY}</span>
             </div>
 
             <div className="hero-note-row">
@@ -181,10 +183,10 @@ export default async function HomePage() {
             <div className="credential-mark">
               <div className="credential-copy">
                 <div className="section-eyebrow">Kwalifikacje i zaufanie</div>
-                <h2>COAPE / CAPBT</h2>
+                <h2>COAPE/CAPBT</h2>
                 <p className="muted paragraph-gap">
                   Łączę behawior, wiedzę medyczną i doświadczenie terapeutyczne, a profil specjalisty jest publicznie dostępny w
-                  katalogu COAPE / CAPBT.
+                  katalogu COAPE/CAPBT.
                 </p>
               </div>
               <Image
@@ -288,7 +290,9 @@ export default async function HomePage() {
               <div className="section-eyebrow">Tematy konsultacji</div>
               <h2>Zarezerwuj 15 minut i przejdź do realnej rezerwacji</h2>
             </div>
-            <div className="muted">Każdy temat prowadzi do tej samej konsultacji audio i do tej samej aktualnej ceny dla nowych rezerwacji.</div>
+            <div className="muted">
+              Każdy temat prowadzi do tej samej konsultacji audio i do tej samej aktualnej ceny {pricing?.formattedAmount ?? '28,99 zł'} dla nowych rezerwacji.
+            </div>
           </div>
 
           <div className="card-grid three-up top-gap">
@@ -297,7 +301,7 @@ export default async function HomePage() {
                 <span className="topic-icon-shell">{renderProblemIcon(tile.id)}</span>
                 <div className="topic-title">{tile.title}</div>
                 <div className="topic-desc">{tile.desc}</div>
-                <div className="topic-link">Sprawdź wolne terminy</div>
+                <div className="topic-link">Wybierz ten temat i zarezerwuj termin</div>
               </Link>
             ))}
           </div>
@@ -326,10 +330,17 @@ export default async function HomePage() {
         <section className="two-col-section" id="specjalista">
           <div className="panel section-panel specialist-visual-card">
             <div className="section-eyebrow">Specjalista prowadzący</div>
-            <div className="specialist-portrait-shell top-gap">
-              <Image src={SPECIALIST_PHOTO.src} alt={SPECIALIST_PHOTO.alt} width={1200} height={1778} className="specialist-portrait" />
+            <div className="specialist-portrait-shell top-gap-small">
+              <Image
+                src={SPECIALIST_PHOTO.src}
+                alt={SPECIALIST_PHOTO.alt}
+                width={1200}
+                height={1778}
+                sizes="(max-width: 980px) 88vw, 42vw"
+                className="specialist-portrait"
+              />
             </div>
-            <div className="list-card top-gap">
+            <div className="list-card top-gap specialist-summary-card">
               <strong>{SPECIALIST_NAME}</strong>
               <span>
                 {SPECIALIST_CREDENTIALS}. {SPECIALIST_LOCATION}. Każdą rozmowę prowadzi osobiście od rezerwacji do wskazania kolejnego kroku.
@@ -338,7 +349,7 @@ export default async function HomePage() {
             </div>
           </div>
 
-          <div className="panel section-panel">
+          <div className="panel section-panel specialist-copy-panel">
             <div className="section-eyebrow">Dlaczego temu zaufać</div>
             <h2>Łączę behawior, wiedzę medyczną i doświadczenie terapeutyczne</h2>
             <div className="specialist-badge-list top-gap">
@@ -346,7 +357,7 @@ export default async function HomePage() {
               <span className="specialist-badge">Technik weterynarii</span>
               <span className="specialist-badge">Opiekun medyczny</span>
               <span className="specialist-badge">Dogoterapia</span>
-              <span className="specialist-badge">COAPE / CAPBT</span>
+              <span className="specialist-badge">COAPE/CAPBT</span>
             </div>
             <div className="stack-gap top-gap">
               <div className="list-card">
