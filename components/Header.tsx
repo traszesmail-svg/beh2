@@ -4,6 +4,7 @@ export function Header() {
   const navItems = [
     { href: '/#oferta', label: 'Oferta' },
     { href: '/#specjalista', label: 'Specjalista' },
+    { href: '/#przypadki', label: 'Przypadki' },
     { href: '/#faq', label: 'FAQ' },
     { href: '/#kontakt', label: 'Kontakt' },
   ]

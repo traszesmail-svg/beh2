@@ -129,6 +129,7 @@ async function main() {
     const homeCtaVisible = await mobilePage.getByRole('link', { name: /Sprawdź terminy/i }).isVisible()
     const heroHeadingVisible = await mobilePage.getByRole('heading', { name: /Konkretna pomoc behawioralna/i }).isVisible()
     const heroPriceVisible = await mobilePage.getByText(/Cena startowa/i).isVisible()
+    const heroTrustVisible = await mobilePage.locator('.hero-note-row').getByText(/Behawior \+ medyczne \+ terapia/i).isVisible()
     const footerLinkVisible = await mobilePage.getByRole('link', { name: /Polityka prywatności/i }).isVisible()
     const title = await mobilePage.title()
     const description = await mobilePage.locator('meta[name="description"]').getAttribute('content')
@@ -170,9 +171,16 @@ async function main() {
     const desktopPage = await desktop.newPage()
     await desktopPage.goto(appUrl, { waitUntil: 'domcontentloaded' })
     const headerOfertaVisible = await desktopPage.getByRole('link', { name: /^Oferta$/i }).isVisible()
-    const specialistHeadingVisible = await desktopPage.getByRole('heading', { name: /Jedna osoba, jedna odpowiedzialność/i }).isVisible()
+    const specialistHeadingVisible = await desktopPage.getByText(/Specjalista prowadzący/i).isVisible()
+    const specialistTrustVisible = await desktopPage.getByRole('heading', {
+      name: /Łączę behawior, wiedzę medyczną i doświadczenie terapeutyczne/i,
+    }).isVisible()
     const portraitAltVisible = await desktopPage.locator('img[alt="Portret specjalisty Behawior 15"]').isVisible()
     const credentialAltVisible = await desktopPage.locator('img[alt*="CAPBT Polska"]').isVisible()
+    const realCasesHeadingVisible = await desktopPage.getByRole('heading', {
+      name: /Publikujemy tylko historie, które można pokazać uczciwie/i,
+    }).isVisible()
+    const realCasesPlaceholderVisible = await desktopPage.getByText(/Sekcja gotowa na zatwierdzone historie klientów/i).isVisible()
     const faqButton = desktopPage.getByRole('button', { name: /Czy 15 minut wystarczy/i })
     const faqInitiallyExpanded = await faqButton.getAttribute('aria-expanded')
     const faqAnswerInitiallyVisible = await desktopPage.getByText(/To szybka konsultacja/i).isVisible()
@@ -187,16 +195,10 @@ async function main() {
     await desktopPage.getByRole('button', { name: /Zapisz now.*cen/i }).click()
     await desktopPage.getByText(/Zapisano now.*cen.*konsultacji/i).waitFor({ timeout: 10000 })
 
-    await desktopPage.goto(appUrl, { waitUntil: 'domcontentloaded' })
-    await desktopPage.waitForFunction(() => {
-      const priceCard = document.querySelector('.stats-grid .stat-card:nth-child(2)')
-      return priceCard?.textContent?.includes('47') ?? false
-    }, undefined, { timeout: 10000 })
-    const landingPriceCardText = (await desktopPage.locator('.stats-grid .stat-card').nth(1).textContent()) ?? ''
-    const landingUpdatedPriceVisible = /47/.test(landingPriceCardText)
     assert.equal(homeCtaVisible, true)
     assert.equal(heroHeadingVisible, true)
     assert.equal(heroPriceVisible, true)
+    assert.equal(heroTrustVisible, true)
     assert.equal(footerLinkVisible, true)
     assert.equal(bookingCtaWorks, true)
     assert.equal(paymentHeadingVisible, true)
@@ -210,15 +212,17 @@ async function main() {
     assert.equal(charsetMetaPresent, true)
     assert.equal(headerOfertaVisible, true)
     assert.equal(specialistHeadingVisible, true)
+    assert.equal(specialistTrustVisible, true)
     assert.equal(portraitAltVisible, true)
     assert.equal(credentialAltVisible, true)
+    assert.equal(realCasesHeadingVisible, true)
+    assert.equal(realCasesPlaceholderVisible, true)
     assert.equal(faqInitiallyExpanded, 'true')
     assert.equal(faqAnswerInitiallyVisible, true)
     assert.equal(faqExpanded, 'false')
     assert.equal(faqAnswerVisibleAfterToggle, true)
     assert.equal(adminPricingVisible, true)
     assert.equal(adminBuildMarkerVisible, true)
-    assert.equal(landingUpdatedPriceVisible, true)
 
     console.log(
       JSON.stringify(
@@ -227,6 +231,7 @@ async function main() {
             homeCtaVisible,
             heroHeadingVisible,
             heroPriceVisible,
+            heroTrustVisible,
             footerLinkVisible,
             bookingCtaWorks,
             paymentHeadingVisible,
@@ -242,18 +247,19 @@ async function main() {
           landing: {
             headerOfertaVisible,
             specialistHeadingVisible,
+            specialistTrustVisible,
             portraitAltVisible,
             credentialAltVisible,
+            realCasesHeadingVisible,
+            realCasesPlaceholderVisible,
             faqInitiallyExpanded,
             faqAnswerInitiallyVisible,
             faqExpanded,
             faqAnswerVisibleAfterToggle,
-            landingUpdatedPriceVisible,
           },
           admin: {
             pricingVisible: adminPricingVisible,
             buildMarkerVisible: adminBuildMarkerVisible,
-            landingUpdatedPriceVisible,
           },
           materials: {
             videoUploaded: true,

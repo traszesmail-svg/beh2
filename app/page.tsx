@@ -6,7 +6,15 @@ import { Header } from '@/components/Header'
 import { faq, formatDateTimeLabel, problemOptions, steps } from '@/lib/data'
 import { listAvailability, getActiveConsultationPrice } from '@/lib/server/db'
 import { getDataModeStatus } from '@/lib/server/env'
-import { COAPE_PROFILE_URL, SPECIALIST_CREDENTIALS, SPECIALIST_LOCATION, SPECIALIST_NAME } from '@/lib/site'
+import {
+  COAPE_PROFILE_URL,
+  REAL_CASES_EMPTY_STATE,
+  REAL_CASE_STUDIES,
+  SPECIALIST_CREDENTIALS,
+  SPECIALIST_LOCATION,
+  SPECIALIST_NAME,
+  SPECIALIST_TRUST_STATEMENT,
+} from '@/lib/site'
 import { ProblemType } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
@@ -122,6 +130,7 @@ export default async function HomePage() {
             </div>
 
             <div className="hero-note-row">
+              <span className="trust-chip">Behawior + medyczne + terapia</span>
               <span className="trust-chip">Audio online bez instalacji</span>
               <span className="trust-chip">Psy i koty</span>
               <span className="trust-chip">CAPBT / COAPE</span>
@@ -280,19 +289,24 @@ export default async function HomePage() {
                 {SPECIALIST_CREDENTIALS}. {SPECIALIST_LOCATION}. Prowadzi każdą rozmowę osobiście od rezerwacji do
                 rekomendacji kolejnego kroku.
               </span>
+              <span className="specialist-trust-line">{SPECIALIST_TRUST_STATEMENT}</span>
             </div>
           </div>
 
           <div className="panel section-panel">
             <div className="section-eyebrow">Dlaczego temu zaufać</div>
-            <h2>Jedna osoba, jedna odpowiedzialność i realne kwalifikacje</h2>
+            <h2>Łączę behawior, wiedzę medyczną i doświadczenie terapeutyczne</h2>
             <div className="stack-gap top-gap">
               <div className="list-card">
-                <strong>Behawior i weterynaria w jednym obrazie sytuacji</strong>
+                <strong>Behawior + medyczne + terapia</strong>
                 <span>
-                  To spojrzenie łączące pracę behawioralną z doświadczeniem technika weterynarii, co pomaga szybciej
-                  wychwycić, kiedy problem wymaga dalszej diagnostyki albo planu pracy.
+                  Pracuję na styku zachowania, zdrowia i codziennej terapii zwierzęcia, dzięki czemu łatwiej szybko
+                  ocenić, czy wystarczy pierwszy plan działania, czy potrzebna jest dalsza diagnostyka albo szersza praca.
                 </span>
+              </div>
+              <div className="list-card">
+                <strong>Zakres kompetencji</strong>
+                <span>Opiekun medyczny, technik weterynarii, dogoterapeuta oraz kwalifikacje COAPE / CAPBT.</span>
               </div>
               <div className="list-card">
                 <strong>COAPE / CAPBT</strong>
@@ -313,6 +327,50 @@ export default async function HomePage() {
               </div>
             </div>
           </div>
+        </section>
+
+        <section className="panel section-panel" id="przypadki">
+          <div className="section-head">
+            <div>
+              <div className="section-eyebrow">Realne przypadki</div>
+              <h2>Publikujemy tylko historie, które można pokazać uczciwie</h2>
+            </div>
+            <div className="muted">
+              Bez zmyślonych opinii. Bez stockowych zdjęć. Tylko prawdziwe przypadki po zgodzie opiekunów.
+            </div>
+          </div>
+
+          {REAL_CASE_STUDIES.length > 0 ? (
+            <div className="real-case-grid top-gap">
+              {REAL_CASE_STUDIES.map((caseStudy) => (
+                <article key={caseStudy.id} className="real-case-card">
+                  <div className="real-case-image-shell">
+                    <Image
+                      src={caseStudy.imageSrc}
+                      alt={caseStudy.imageAlt}
+                      width={720}
+                      height={520}
+                      className="real-case-image"
+                    />
+                  </div>
+                  <div className="real-case-copy">
+                    <div className="section-eyebrow">Problem</div>
+                    <h3>{caseStudy.problem}</h3>
+                    <p>{caseStudy.summary}</p>
+                    <div className="real-case-result">
+                      <strong>Efekt</strong>
+                      <span>{caseStudy.effect}</span>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div className="real-case-empty top-gap">
+              <strong>Sekcja gotowa na zatwierdzone historie klientów</strong>
+              <p>{REAL_CASES_EMPTY_STATE}</p>
+            </div>
+          )}
         </section>
 
         <section className="panel section-panel" id="faq">

@@ -1,103 +1,62 @@
-Behawior 15 — raport końcowy iteracji E2E flow / conversion pass
+BEHAWIOR 17 — TRUST + OPINIE KLIENTÓW (REALNE PRZYPADKI)
 Data: 2026-03-22
 
-1. Fixed production issues
-- Utrzymano działający flow `landing -> topic -> slot -> form -> payment -> confirmation -> room`.
-- Domknięto publiczne fallbacki tak, aby flow klienta nie pokazywał już technicznych komunikatów o konfiguracji, env ani sekretach.
-- Płatność w publicznym UI pokazuje teraz bezpieczne komunikaty zamiast surowych summary z runtime config.
-- Checkout z niską lub błędnie skonfigurowaną kwotą nie zdradza już szczegółów panelu specjalisty.
-- Materiały przed rozmową i pobieranie nagrania zwracają przy błędach konfiguracji bezpieczne, użytkownikowe komunikaty.
-- Panel admina przy braku sekretu ochrony zwraca kontrolowany komunikat zamiast instrukcji z nazwą zmiennej env.
-- Uzupełniono brakujące elementy SEO / accessiblity: `canonical`, `twitter` metadata i bezpieczne `rel="noopener noreferrer"` dla linków zewnętrznych.
-- Uporządkowano polski copy w mailach: tematy wiadomości, treść i przypomnienia mają pełne polskie znaki.
+1. Co wdrożono
+- Uzupełniono sekcję specjalisty o zakres kompetencji: opiekun medyczny, technik weterynarii, dogoterapeuta oraz COAPE / CAPBT.
+- Dodano główny trust statement: „Łączę behawior, wiedzę medyczną i doświadczenie terapeutyczne”.
+- Dodano nowy trust chip w hero: „Behawior + medyczne + terapia”.
+- Dodano sekcję `Realne przypadki` wraz z dużym, czystym layoutem kart przygotowanym pod zdjęcie zwierzęcia, problem, krótki opis i efekt.
+- Sekcja `Realne przypadki` działa dziś w trybie uczciwego placeholdera, ponieważ w repo nie było żadnych zatwierdzonych zdjęć ani opisów realnych przypadków klientów. Nie dodano fake opinii ani stockowych historii.
+- Dodano anchor `Przypadki` do sticky headera.
+- Dopracowano spacing i layout sekcji trust/cases: większe zdjęcia, więcej światła, brak ścisku, bardziej premium układ.
 
-2. Booking flow status (E2E)
-- Status: PASS
-- Potwierdzone lokalnie:
-  - landing -> CTA do `/problem`
-  - wybór tematu -> `/slot`
-  - wybór realnego, przyszłego terminu -> `/form`
-  - zapis formularza -> `/payment`
-  - sukces płatności -> `/confirmation`
-  - wejście z potwierdzenia -> `/call/[id]`
-- Dodatkowo `scripts/verify-flow.ts` potwierdza, że publiczna dostępność nie zawiera terminów z przeszłości.
+2. Status sekcji Realne przypadki
+- Status: WDROŻONA UCZCIWIE
+- Sekcja jest gotowa na realne case studies.
+- W finalnym kodzie `REAL_CASE_STUDIES` jest puste celowo.
+- Powód: brak zatwierdzonych materiałów klientów w repo.
+- Efekt: użytkownik widzi uczciwy komunikat, że publikowane będą wyłącznie prawdziwe przypadki po zgodzie opiekunów.
 
-3. Payment flow status
-- Status: PASS
-- Success path prowadzi do confirmation i zachowuje snapshot ceny z `booking.amount`.
-- Failure path zwalnia slot i nie pozwala oznaczyć anulowanej płatności jako `paid`.
-- Publiczne błędy płatności zostały zsanityzowane do bezpiecznych komunikatów bez ekspozycji konfiguracji.
-- `scripts/pricing-smoke.ts` i `scripts/verify-flow.ts` potwierdzają poprawne przejścia i kwoty checkout.
+3. Jak działa trust specjalisty
+- Hero pokazuje skrót zaufania: `Behawior + medyczne + terapia`.
+- Sekcja specjalisty pokazuje:
+  - imię i nazwisko,
+  - kompetencje: opiekun medyczny, technik weterynarii, dogoterapeuta, COAPE / CAPBT,
+  - zdanie przewodnie: „Łączę behawior, wiedzę medyczną i doświadczenie terapeutyczne”.
+- Zachowano link do profilu COAPE / CAPBT.
 
-4. Materials form status
-- Status: PASS
-- Formularz materiałów obsługuje:
-  - upload MP4,
-  - zapis linku,
-  - zapis notatek,
-  - ponowny render zapisanych danych.
-- Upload nie blokuje edycji tekstu, a zapis działa zarówno na payment page, jak i na confirmation / call room.
-- `scripts/ui-smoke.ts` potwierdza pełny przebieg: upload -> link -> notatki -> save.
-
-5. Visual improvements
-- Premium hero z wyraźnym price callout i mocnym CTA.
-- Sticky header z czytelną nawigacją i CTA.
-- Sekcja specjalisty z czytelnym trust blockiem.
-- Tematy konsultacji jako karty.
-- FAQ jako dostępny accordion.
-- Footer i strony prawne zachowane i czytelne.
-- Metadata `title`, `description`, `og:*`, `twitter:*`, `charset`, `canonical` są obecne.
-
-6. Certificate simplification
-- Status: PASS
-- W UI utrzymano tylko COAPE i CAPBT.
-- Link do profilu COAPE / CAPBT działa jako link zewnętrzny z `rel="noopener noreferrer"`.
-
-7. Pricing behavior across system
-- Status: PASS
-- Źródło prawdy aktywnej ceny:
-  - Supabase `pricing_settings` w live mode,
-  - local runtime store tylko w local mode.
-- `/admin` zapisuje cenę przez `POST /api/admin/pricing`.
-- Landing, admin i formularz pokazują aktywną cenę.
-- Nowy booking zapisuje snapshot w `bookings.amount`.
-- Checkout i confirmation korzystają z `booking.amount`, więc stary booking zachowuje historyczną kwotę po zmianie ceny.
-- `scripts/pricing-smoke.ts` potwierdza:
-  - admin price change działa,
-  - nowy booking bierze nową cenę,
-  - checkout bierze nową cenę,
-  - stary booking zachowuje stary snapshot.
-
-8. Tests executed
+4. Testy wykonane
 - `npm install`
 - `npm run lint`
 - `npm test`
 - `npm run build`
+- `node --import tsx scripts/ui-smoke.ts`
 - `node --import tsx scripts/verify-flow.ts`
 - `node --import tsx scripts/pricing-smoke.ts`
-- `node --import tsx scripts/ui-smoke.ts`
 - `node --import tsx scripts/reminder-smoke.ts`
 
-9. Results of each test
+5. Wynik każdego testu
 - `npm install` -> PASS
 - `npm run lint` -> PASS
 - `npm test` -> PASS
 - `npm run build` -> PASS
-- `node --import tsx scripts/verify-flow.ts` -> PASS
-- `node --import tsx scripts/pricing-smoke.ts` -> PASS
 - `node --import tsx scripts/ui-smoke.ts` -> PASS
+  - potwierdza render hero trust, sekcji specjalisty, sekcji realnych przypadków, mobile layout, FAQ, materiały przed rozmową, admin marker i podstawowy booking flow
+- `node --import tsx scripts/verify-flow.ts` -> PASS
+  - potwierdza flow `landing -> topic -> slot -> form -> payment -> confirmation -> room` oraz brak przeszłych terminów
+- `node --import tsx scripts/pricing-smoke.ts` -> PASS
+  - potwierdza admin pricing, nową cenę dla nowych bookingów i snapshot starej ceny
 - `node --import tsx scripts/reminder-smoke.ts` -> PASS
+  - potwierdza brak regresji po stronie remindera Supabase Cron
 
-10. Potwierdzenie push do main
+6. Push main
 - Repo: `beh2`
 - Branch: `main`
-- Status: TAK, po finalnym commicie tej iteracji.
+- Status: TAK
 
-11. Deployment readiness
-- ZIP eksportowy: GOTOWY
-- Push do Git: GOTOWY
-- Deploy na Vercel: GOTOWY
+7. Gotowość paczki
+- ZIP: GOTOWY
+- Deploy: GOTOWY
 - Ręczne testy live: GOTOWE
-- Known limitations:
-  - lokalny success path płatności był testowany w trybie mock/local, bez realnego charge w Stripe;
-  - mail flow i reminder flow przechodzą lokalną walidację bez realnej wysyłki, gdy brak `RESEND_API_KEY`.
+- Known limitation:
+  - sekcja `Realne przypadki` jest wdrożona jako uczciwy placeholder do czasu dostarczenia zatwierdzonych zdjęć i opisów realnych przypadków klientów.
