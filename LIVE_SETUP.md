@@ -2,7 +2,7 @@
 
 ## 1. Cena konsultacji
 Aktywna cena dla nowych rezerwacji jest przechowywana w warstwie danych:
-- lokalnie: `data/pricing-settings.json`
+- lokalnie: runtime plik `data/pricing-settings.json`, tworzony automatycznie tylko w trybie local
 - live: tabela `public.pricing_settings`
 
 Zmiana ceny odbywa sie z panelu `/admin`. Istniejace bookingi zachowuja swoja historyczna kwote.

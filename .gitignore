@@ -5,9 +5,7 @@ node_modules/
 
 .env*
 !.env.example
-data/availability.json
-data/pricing-settings.json
-data/prep-materials/
+data/
 
 CHATGPT_*.txt
 FINAL_*REPORT*.txt

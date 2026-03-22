@@ -9,7 +9,7 @@ Lekka aplikacja Next.js dla jednego specjalisty prowadzacego 15-minutowe konsult
 - materialy przed rozmowa: MP4, link, notatki
 - przypomnienia mailowe i flow maili przez Resend
 - Stripe Checkout i Supabase jako tryb live
-- lokalny fallback JSON do developmentu
+- lokalny fallback JSON do developmentu, ktory tworzy katalog `data/` runtime tylko wtedy, gdy pracujesz w trybie local
 
 ## Wymagania
 
