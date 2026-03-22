@@ -2,11 +2,24 @@ import assert from 'node:assert/strict'
 import { cp, mkdir, readFile, rm } from 'fs/promises'
 import path from 'path'
 import { loadEnvConfig } from '@next/env'
-import Stripe from 'stripe'
 
 const rootDir = process.cwd()
 const dataDir = path.join(rootDir, 'data')
 const backupDir = path.join(rootDir, '.tmp-pricing-data-backup')
+
+function extractUnitAmount(lineItem: unknown): number | null {
+  if (!lineItem || typeof lineItem !== 'object' || !('price_data' in lineItem)) {
+    return null
+  }
+
+  const priceData = lineItem.price_data
+
+  if (!priceData || typeof priceData !== 'object' || !('unit_amount' in priceData)) {
+    return null
+  }
+
+  return typeof priceData.unit_amount === 'number' ? priceData.unit_amount : null
+}
 
 function testBookingPayload(slotId: string, index: number) {
   return {
@@ -49,20 +62,12 @@ async function readBookingsFile() {
 async function main() {
   loadEnvConfig(rootDir)
   process.env.APP_DATA_MODE = 'local'
-  process.env.APP_PAYMENT_MODE = 'stripe'
+  process.env.APP_PAYMENT_MODE = 'mock'
   process.env.NEXT_PUBLIC_APP_URL = 'http://127.0.0.1:3101'
 
   const { getActiveConsultationPrice, listAvailability, createPendingBooking, getBookingById } = await import('../lib/server/db')
-  const { createCheckoutSession } = await import('../lib/server/stripe')
+  const { buildCheckoutSessionParams } = await import('../lib/server/stripe')
   const { POST: updatePricingRoute } = await import('../app/api/admin/pricing/route')
-
-  if (!process.env.STRIPE_SECRET_KEY) {
-    throw new Error('Missing STRIPE_SECRET_KEY in .env.local for pricing smoke test.')
-  }
-
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-    apiVersion: '2026-02-25.clover',
-  })
 
   await backupData()
 
@@ -78,12 +83,12 @@ async function main() {
 
     const bookingOneCreate = await createPendingBooking(testBookingPayload(firstThreeSlots[0].id, 1))
     assert.equal(bookingOneCreate.booking.amount, 39)
-    const sessionOne = await createCheckoutSession(bookingOneCreate.booking.id, bookingOneCreate.accessToken)
-    assert.ok(sessionOne.url)
-    const bookingOneAfter = await getBookingById(bookingOneCreate.booking.id)
-    assert.ok(bookingOneAfter?.checkoutSessionId)
-    const stripeSessionOne = await stripe.checkout.sessions.retrieve(bookingOneAfter!.checkoutSessionId!)
-    assert.equal(stripeSessionOne.amount_total, 3900)
+    const checkoutOne = buildCheckoutSessionParams(bookingOneCreate.booking, {
+      accessToken: bookingOneCreate.accessToken,
+      baseUrl: process.env.NEXT_PUBLIC_APP_URL,
+    })
+    const checkoutOneLineItem = checkoutOne.line_items?.[0]
+    assert.equal(extractUnitAmount(checkoutOneLineItem), 3900)
 
     const routeUpdateResponse = await updatePricingRoute(
       new Request('http://localhost/api/admin/pricing', {
@@ -101,12 +106,12 @@ async function main() {
 
     const bookingTwoCreate = await createPendingBooking(testBookingPayload(firstThreeSlots[1].id, 2))
     assert.equal(bookingTwoCreate.booking.amount, 47)
-    const sessionTwo = await createCheckoutSession(bookingTwoCreate.booking.id, bookingTwoCreate.accessToken)
-    assert.ok(sessionTwo.url)
-    const bookingTwoAfter = await getBookingById(bookingTwoCreate.booking.id)
-    assert.ok(bookingTwoAfter?.checkoutSessionId)
-    const stripeSessionTwo = await stripe.checkout.sessions.retrieve(bookingTwoAfter!.checkoutSessionId!)
-    assert.equal(stripeSessionTwo.amount_total, 4700)
+    const checkoutTwo = buildCheckoutSessionParams(bookingTwoCreate.booking, {
+      accessToken: bookingTwoCreate.accessToken,
+      baseUrl: process.env.NEXT_PUBLIC_APP_URL,
+    })
+    const checkoutTwoLineItem = checkoutTwo.line_items?.[0]
+    assert.equal(extractUnitAmount(checkoutTwoLineItem), 4700)
 
     const bookingOneSnapshot = await getBookingById(bookingOneCreate.booking.id)
     assert.equal(bookingOneSnapshot?.amount, 39)
@@ -137,12 +142,12 @@ async function main() {
           bookingOne: {
             id: bookingOneCreate.booking.id,
             amount: bookingOneCreate.booking.amount,
-            stripeAmount: stripeSessionOne.amount_total,
+            checkoutUnitAmount: 3900,
           },
           bookingTwo: {
             id: bookingTwoCreate.booking.id,
             amount: bookingTwoCreate.booking.amount,
-            stripeAmount: stripeSessionTwo.amount_total,
+            checkoutUnitAmount: 4700,
           },
           bookingThree: {
             id: bookingThreeCreate.booking.id,

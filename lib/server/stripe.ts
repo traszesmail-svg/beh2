@@ -3,6 +3,7 @@ import { getProblemLabel } from '@/lib/data'
 import { formatPricePln, MIN_CONSULTATION_PRICE_PLN, toStripeUnitAmount } from '@/lib/pricing'
 import { attachCheckoutSession, getBookingForViewer, markBookingPaid } from '@/lib/server/db'
 import { getBaseUrl, getStripeServerConfig, reportRuntimeModeUsage } from '@/lib/server/env'
+import { BookingRecord } from '@/lib/types'
 
 let stripeClient: Stripe | null = null
 let stripeSecretCache: string | null = null
@@ -36,34 +37,25 @@ export function assertStripeCheckoutAmountSupported(amount: number) {
   }
 }
 
-export async function createCheckoutSession(
-  bookingId: string,
-  accessToken?: string | null,
-  authorizationHeader?: string | null,
-) {
-  const booking = await getBookingForViewer(bookingId, accessToken, authorizationHeader)
+type CheckoutBookingSnapshot = Pick<
+  BookingRecord,
+  'id' | 'email' | 'problemType' | 'bookingDate' | 'bookingTime' | 'amount'
+>
 
-  if (!booking) {
-    throw new Error('Nie znaleziono rezerwacji do platnosci.')
-  }
-
-  if (!(booking.bookingStatus === 'pending' && booking.paymentStatus === 'unpaid')) {
-    throw new Error('Stripe Checkout mozna uruchomic tylko dla bookingu oczekujacego na platnosc.')
-  }
-
-  const stripe = getStripeClient()
-  const baseUrl = getBaseUrl()
+export function buildCheckoutSessionParams(
+  booking: CheckoutBookingSnapshot,
+  options?: {
+    accessToken?: string | null
+    baseUrl?: string
+  },
+): Stripe.Checkout.SessionCreateParams {
   const stripeUnitAmount = toStripeUnitAmount(booking.amount)
-  const accessQuery = accessToken ? `&access=${encodeURIComponent(accessToken)}` : ''
-  console.info('[behawior15][pricing] stripe-checkout-session', {
-    bookingId: booking.id,
-    bookingAmount: booking.amount,
-    unitAmount: stripeUnitAmount,
-    currency: 'pln',
-    isStripeTestMode: isStripeTestMode(),
-  })
+  const accessQuery = options?.accessToken ? `&access=${encodeURIComponent(options.accessToken)}` : ''
+  const baseUrl = options?.baseUrl ?? getBaseUrl()
+
   assertStripeCheckoutAmountSupported(booking.amount)
-  const session = await stripe.checkout.sessions.create({
+
+  return {
     mode: 'payment',
     success_url: `${baseUrl}/confirmation?bookingId=${booking.id}${accessQuery}&session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${baseUrl}/payment?bookingId=${booking.id}${accessQuery}&cancelled=1`,
@@ -86,7 +78,39 @@ export async function createCheckoutSession(
         },
       },
     ],
+  }
+}
+
+export async function createCheckoutSession(
+  bookingId: string,
+  accessToken?: string | null,
+  authorizationHeader?: string | null,
+) {
+  const booking = await getBookingForViewer(bookingId, accessToken, authorizationHeader)
+
+  if (!booking) {
+    throw new Error('Nie znaleziono rezerwacji do platnosci.')
+  }
+
+  if (!(booking.bookingStatus === 'pending' && booking.paymentStatus === 'unpaid')) {
+    throw new Error('Stripe Checkout mozna uruchomic tylko dla bookingu oczekujacego na platnosc.')
+  }
+
+  const stripe = getStripeClient()
+  const stripeUnitAmount = toStripeUnitAmount(booking.amount)
+  console.info('[behawior15][pricing] stripe-checkout-session', {
+    bookingId: booking.id,
+    bookingAmount: booking.amount,
+    unitAmount: stripeUnitAmount,
+    currency: 'pln',
+    isStripeTestMode: isStripeTestMode(),
   })
+  const session = await stripe.checkout.sessions.create(
+    buildCheckoutSessionParams(booking, {
+      accessToken: accessToken ?? null,
+      baseUrl: getBaseUrl(),
+    }),
+  )
 
   await attachCheckoutSession(booking.id, session.id)
   return session

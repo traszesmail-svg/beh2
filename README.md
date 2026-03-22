@@ -39,6 +39,11 @@ Najwazniejsze zmienne:
 - `RESEND_API_KEY`
 - `CRON_SECRET`
 
+Uwaga:
+
+- `SUPABASE_SERVICE_ROLE_KEY` musi byc prawdziwym kluczem service role (`sb_secret_...` albo legacy JWT z rola `service_role`).
+- Klucz `sb_publishable_...` nie wystarczy do zapisu ceny, bookingow ani adminowych operacji.
+
 Pelna lista znajduje sie w `.env.example`.
 
 ## Migracje SQL

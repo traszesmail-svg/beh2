@@ -42,6 +42,10 @@ function formatEnvList(names: string[]): string {
   return names.join(', ')
 }
 
+function hasAnyEnv(...names: string[]): boolean {
+  return names.some((name) => Boolean(readEnv(name)))
+}
+
 function buildMissingConfigMessage(
   modeLabel: string,
   missing: string[],
@@ -68,6 +72,97 @@ function parseMode<T extends readonly string[]>(envName: string, allowed: T, fal
 
 function getMissingSupabaseVars(): string[] {
   return ['NEXT_PUBLIC_SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY'].filter((name) => !readEnv(name))
+}
+
+function decodeBase64Url(value: string): string | null {
+  try {
+    const normalized = value.replace(/-/g, '+').replace(/_/g, '/')
+    const padding = normalized.length % 4 === 0 ? '' : '='.repeat(4 - (normalized.length % 4))
+    return Buffer.from(`${normalized}${padding}`, 'base64').toString('utf8')
+  } catch {
+    return null
+  }
+}
+
+function readJwtRole(token: string): string | null {
+  const parts = token.split('.')
+
+  if (parts.length !== 3) {
+    return null
+  }
+
+  const payload = decodeBase64Url(parts[1] ?? '')
+
+  if (!payload) {
+    return null
+  }
+
+  try {
+    const parsed = JSON.parse(payload) as { role?: unknown }
+    return typeof parsed.role === 'string' ? parsed.role : null
+  } catch {
+    return null
+  }
+}
+
+export function getSupabaseServiceRoleKeyIssue(serviceRoleKey = readEnv('SUPABASE_SERVICE_ROLE_KEY')): string | null {
+  if (!serviceRoleKey) {
+    return null
+  }
+
+  if (serviceRoleKey.startsWith('sb_secret_')) {
+    return null
+  }
+
+  if (serviceRoleKey.startsWith('sb_publishable_')) {
+    return 'SUPABASE_SERVICE_ROLE_KEY wskazuje na klucz publishable. Uzyj klucza service role / sb_secret_, bo zapis ceny i bookingow wymaga uprawnien admina.'
+  }
+
+  const role = readJwtRole(serviceRoleKey)
+
+  if (role === 'service_role') {
+    return null
+  }
+
+  if (role) {
+    return `SUPABASE_SERVICE_ROLE_KEY ma role "${role}" zamiast "service_role". Uzyj prawdziwego klucza service role.`
+  }
+
+  return 'SUPABASE_SERVICE_ROLE_KEY nie wyglada jak prawidlowy klucz service role. Uzyj klucza service role / sb_secret_ z panelu Supabase.'
+}
+
+function getSupabaseRuntimeProblem() {
+  const missing = getMissingSupabaseVars()
+  const keyIssue = missing.includes('SUPABASE_SERVICE_ROLE_KEY') ? null : getSupabaseServiceRoleKeyIssue()
+
+  return {
+    missing,
+    keyIssue,
+    hasExplicitConfig: hasAnyEnv('NEXT_PUBLIC_SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY'),
+  }
+}
+
+function buildSupabaseConfigMessage(
+  modeLabel: string,
+  missing: string[],
+  blockedFeature: string,
+  keyIssue?: string | null,
+  fallbackMessage?: string,
+): string {
+  const problems: string[] = []
+
+  if (missing.length > 0) {
+    problems.push(
+      `${modeLabel} wymaga ${formatEnvList(missing)}. Bez tego nie mozna uruchomic ${blockedFeature}.`,
+    )
+  }
+
+  if (keyIssue) {
+    problems.push(keyIssue)
+  }
+
+  const base = problems.join(' ')
+  return fallbackMessage ? `${base} ${fallbackMessage}` : base
 }
 
 function getMissingStripeVars(options?: StripeConfigOptions): string[] {
@@ -119,7 +214,7 @@ export function getReservationWindowMinutes(): number {
 
 export function getDataModeStatus(): RuntimeModeStatus<DataMode, ActiveDataMode> {
   const configured = parseMode('APP_DATA_MODE', DATA_MODE_VALUES, 'auto')
-  const missing = getMissingSupabaseVars()
+  const { missing, keyIssue, hasExplicitConfig } = getSupabaseRuntimeProblem()
 
   if (configured === 'local') {
     return {
@@ -133,17 +228,18 @@ export function getDataModeStatus(): RuntimeModeStatus<DataMode, ActiveDataMode>
   }
 
   if (configured === 'supabase') {
-    if (missing.length > 0) {
+    if (missing.length > 0 || keyIssue) {
       return {
         configured,
         active: null,
         isValid: false,
         usesFallback: false,
         missing,
-        summary: buildMissingConfigMessage(
+        summary: buildSupabaseConfigMessage(
           'APP_DATA_MODE=supabase',
           missing,
           'live bookings, availability i admin na Supabase',
+          keyIssue,
         ),
       }
     }
@@ -158,16 +254,32 @@ export function getDataModeStatus(): RuntimeModeStatus<DataMode, ActiveDataMode>
     }
   }
 
-  if (missing.length > 0) {
+  if (!hasExplicitConfig) {
     return {
       configured,
       active: 'local',
       isValid: true,
       usesFallback: true,
-      missing,
+      missing: [],
       summary: `APP_DATA_MODE=auto -> aktywny jest local JSON fallback (development only), bo brakuje ${formatEnvList(
-        missing,
+        ['NEXT_PUBLIC_SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY'],
       )}.`,
+    }
+  }
+
+  if (missing.length > 0 || keyIssue) {
+    return {
+      configured,
+      active: null,
+      isValid: false,
+      usesFallback: false,
+      missing,
+      summary: buildSupabaseConfigMessage(
+        'APP_DATA_MODE=auto',
+        missing,
+        'live bookings, availability i admin na Supabase',
+        keyIssue,
+      ),
     }
   }
 

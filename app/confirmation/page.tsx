@@ -4,6 +4,7 @@ import { headers } from 'next/headers'
 import { Header } from '@/components/Header'
 import { PreparationMaterialsCard } from '@/components/PreparationMaterialsCard'
 import { formatDateTimeLabel, getProblemLabel } from '@/lib/data'
+import { formatPricePln } from '@/lib/pricing'
 import { getBookingForViewer } from '@/lib/server/db'
 import { getPaymentModeStatus } from '@/lib/server/env'
 import { finalizeStripeCheckoutSession } from '@/lib/server/stripe'
@@ -69,6 +70,10 @@ export default async function ConfirmationPage({
                 <div className="summary-card">
                   <div className="stat-label">Kontakt</div>
                   <div className="summary-value">{booking.email}</div>
+                </div>
+                <div className="summary-card">
+                  <div className="stat-label">Kwota</div>
+                  <div className="summary-value">{formatPricePln(booking.amount)}</div>
                 </div>
               </div>
 

@@ -1,6 +1,13 @@
 import Link from 'next/link'
 
 export function Header() {
+  const navItems = [
+    { href: '/#oferta', label: 'Oferta' },
+    { href: '/#specjalista', label: 'Specjalista' },
+    { href: '/#faq', label: 'FAQ' },
+    { href: '/#kontakt', label: 'Kontakt' },
+  ]
+
   return (
     <header className="header-shell">
       <div className="header-branding">
@@ -13,9 +20,18 @@ export function Header() {
         </Link>
         <div className="header-subtitle">Szybka pomoc behawioralna dla opiekunow psow i kotow</div>
       </div>
-      <nav className="nav-actions header-nav">
-        <Link href="/problem" className="button button-primary">
-          Sprawdz terminy
+
+      <nav className="header-nav" aria-label="Glowna nawigacja">
+        <div className="header-links">
+          {navItems.map((item) => (
+            <Link key={item.href} href={item.href} className="header-link">
+              {item.label}
+            </Link>
+          ))}
+        </div>
+
+        <Link href="/problem" className="button button-primary header-cta">
+          Umow konsultacje
         </Link>
       </nav>
     </header>

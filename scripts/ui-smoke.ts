@@ -119,6 +119,8 @@ async function main() {
     const mobilePage = await mobile.newPage()
     await mobilePage.goto(appUrl, { waitUntil: 'domcontentloaded' })
     const homeCtaVisible = await mobilePage.getByRole('link', { name: /Sprawdz terminy/i }).isVisible()
+    const heroHeadingVisible = await mobilePage.getByRole('heading', { name: /Konkretna pomoc behawioralna/i }).isVisible()
+    const footerLinkVisible = await mobilePage.getByRole('link', { name: /Polityka prywatnosci/i }).isVisible()
 
     await mobilePage.goto(`${appUrl}/payment?bookingId=${bookingOne.booking.id}&access=${encodeURIComponent(bookingOne.accessToken)}`, {
       waitUntil: 'domcontentloaded',
@@ -149,12 +151,22 @@ async function main() {
     const callTimerVisible = await mobilePage.getByRole('button', { name: /Uruchom licznik 15 minut/i }).isVisible()
 
     const desktopPage = await desktop.newPage()
+    await desktopPage.goto(appUrl, { waitUntil: 'domcontentloaded' })
+    const headerOfertaVisible = await desktopPage.getByRole('link', { name: /^Oferta$/i }).isVisible()
+    const specialistHeadingVisible = await desktopPage.getByRole('heading', { name: /Jedna osoba, jedna odpowiedzialnosc/i }).isVisible()
+    await desktopPage.locator('summary').first().click()
+    const faqAnswerVisible = await desktopPage.getByText(/To szybka konsultacja porzadkujaca sytuacje/i).isVisible()
+
     await desktopPage.goto(`${appUrl}/admin`, { waitUntil: 'domcontentloaded' })
     const adminPricingVisible = await desktopPage.getByRole('heading', { name: /Aktywna cena dla nowych rezerwacji/i }).isVisible()
     const adminBuildMarkerVisible = await desktopPage.getByText(new RegExp(BUILD_MARKER_KEY)).isVisible()
     await desktopPage.locator('input[type="number"]').fill('47')
     await desktopPage.getByRole('button', { name: /Zapisz nowa cene/i }).click()
     await desktopPage.getByText(/Zapisano nowa cene konsultacji/i).waitFor({ timeout: 10000 })
+
+    await desktopPage.goto(appUrl, { waitUntil: 'domcontentloaded' })
+    const landingPriceCardText = (await desktopPage.locator('.stats-grid .stat-card').nth(1).textContent()) ?? ''
+    const landingUpdatedPriceVisible = /47/.test(landingPriceCardText)
 
     const bookingTwo = await localStore.createPendingBooking(bookingPayload(freeSlots[1].id, 2))
     const bookingOneAmount = bookingOne.booking.amount
@@ -168,11 +180,19 @@ async function main() {
         {
           mobile: {
             homeCtaVisible,
+            heroHeadingVisible,
+            footerLinkVisible,
             paymentHeadingVisible,
             prepHeadingVisible,
             confirmationVisible,
             prepCardStillVisible,
             callTimerVisible,
+          },
+          landing: {
+            headerOfertaVisible,
+            specialistHeadingVisible,
+            faqAnswerVisible,
+            landingUpdatedPriceVisible,
           },
           admin: {
             pricingVisible: adminPricingVisible,

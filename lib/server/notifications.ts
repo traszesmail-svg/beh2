@@ -1,5 +1,6 @@
 import { formatDateTimeLabel, getProblemLabel } from '@/lib/data'
 import { formatPricePln } from '@/lib/pricing'
+import { getContactDetails } from '@/lib/site'
 import { BookingRecord } from '@/lib/types'
 
 const DEFAULT_RESEND_FROM_EMAIL = 'Behawior 15 <onboarding@resend.dev>'
@@ -23,27 +24,6 @@ function getResendConfig() {
   return {
     apiKey,
     from,
-  }
-}
-
-function extractEmailAddress(value: string): string | null {
-  const match = value.match(/<([^>]+)>/)
-
-  if (match?.[1]) {
-    return match[1]
-  }
-
-  return value.includes('@') ? value : null
-}
-
-function getContactDetails() {
-  const resend = getResendConfig()
-  const email = process.env.BEHAVIOR15_CONTACT_EMAIL?.trim() || extractEmailAddress(resend.from)
-  const phone = process.env.BEHAVIOR15_CONTACT_PHONE?.trim() || null
-
-  return {
-    email,
-    phone,
   }
 }
 

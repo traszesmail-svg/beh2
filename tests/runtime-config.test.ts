@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
 import { ADMIN_BASIC_AUTH_USERNAME, hasValidAdminAuthorization } from '@/lib/admin-auth'
 import { BUILD_MARKER_KEY, getBuildMarkerSnapshot } from '@/lib/build-marker'
+import { getDataModeStatus, getSupabaseServiceRoleKeyIssue } from '@/lib/server/env'
 import {
   createActiveConsultationPrice,
   DEFAULT_PRICE_PLN,
@@ -24,12 +25,16 @@ import { createCustomerAccessToken, hasValidCustomerAccessToken, hashCustomerAcc
 import { shouldSendBookingConfirmationAfterPayment } from '@/lib/server/notifications'
 import { getReminderAuthorizationError, runBookingReminderSweep } from '@/lib/server/reminder-runner'
 import { getWarsawDateTime, shouldSendReminderForBooking } from '@/lib/server/reminders'
-import { assertStripeCheckoutAmountSupported, isStripeTestMode } from '@/lib/server/stripe'
+import { assertStripeCheckoutAmountSupported, buildCheckoutSessionParams, isStripeTestMode } from '@/lib/server/stripe'
 
 const originalStripeSecret = process.env.STRIPE_SECRET_KEY
 const originalCommitRef = process.env.VERCEL_GIT_COMMIT_REF
 const originalCommitSha = process.env.VERCEL_GIT_COMMIT_SHA
 const originalCronSecret = process.env.CRON_SECRET
+const originalAppDataMode = process.env.APP_DATA_MODE
+const originalSupabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const originalSupabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+const originalBaseUrl = process.env.NEXT_PUBLIC_APP_URL
 
 afterEach(() => {
   if (typeof originalStripeSecret === 'string') {
@@ -55,10 +60,48 @@ afterEach(() => {
   } else {
     delete process.env.CRON_SECRET
   }
+
+  if (typeof originalAppDataMode === 'string') {
+    process.env.APP_DATA_MODE = originalAppDataMode
+  } else {
+    delete process.env.APP_DATA_MODE
+  }
+
+  if (typeof originalSupabaseUrl === 'string') {
+    process.env.NEXT_PUBLIC_SUPABASE_URL = originalSupabaseUrl
+  } else {
+    delete process.env.NEXT_PUBLIC_SUPABASE_URL
+  }
+
+  if (typeof originalSupabaseServiceRoleKey === 'string') {
+    process.env.SUPABASE_SERVICE_ROLE_KEY = originalSupabaseServiceRoleKey
+  } else {
+    delete process.env.SUPABASE_SERVICE_ROLE_KEY
+  }
+
+  if (typeof originalBaseUrl === 'string') {
+    process.env.NEXT_PUBLIC_APP_URL = originalBaseUrl
+  } else {
+    delete process.env.NEXT_PUBLIC_APP_URL
+  }
 })
 
 function buildBasicHeader(username: string, password: string): string {
   return `Basic ${Buffer.from(`${username}:${password}`).toString('base64')}`
+}
+
+function extractUnitAmount(lineItem: unknown): number | null {
+  if (!lineItem || typeof lineItem !== 'object' || !('price_data' in lineItem)) {
+    return null
+  }
+
+  const priceData = lineItem.price_data
+
+  if (!priceData || typeof priceData !== 'object' || !('unit_amount' in priceData)) {
+    return null
+  }
+
+  return typeof priceData.unit_amount === 'number' ? priceData.unit_amount : null
 }
 
 test('accepts the configured admin basic auth header', () => {
@@ -98,6 +141,31 @@ test('rejects consultation prices below the Stripe PLN minimum', () => {
   assert.equal(parseConsultationPriceInput(String(MIN_CONSULTATION_PRICE_PLN)), MIN_CONSULTATION_PRICE_PLN)
 })
 
+test('rejects a publishable Supabase key as an admin data source', () => {
+  process.env.APP_DATA_MODE = 'supabase'
+  process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://example.supabase.co'
+  process.env.SUPABASE_SERVICE_ROLE_KEY = 'sb_publishable_example'
+
+  assert.match(getSupabaseServiceRoleKeyIssue() ?? '', /publishable/i)
+
+  const status = getDataModeStatus()
+  assert.equal(status.isValid, false)
+  assert.equal(status.active, null)
+  assert.match(status.summary, /service role|publishable/i)
+})
+
+test('accepts a secret Supabase service key for admin data operations', () => {
+  process.env.APP_DATA_MODE = 'supabase'
+  process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://example.supabase.co'
+  process.env.SUPABASE_SERVICE_ROLE_KEY = 'sb_secret_example'
+
+  assert.equal(getSupabaseServiceRoleKeyIssue(), null)
+
+  const status = getDataModeStatus()
+  assert.equal(status.isValid, true)
+  assert.equal(status.active, 'supabase')
+})
+
 test('detects Stripe test mode from the secret key prefix', () => {
   process.env.STRIPE_SECRET_KEY = 'sk_test_example'
 
@@ -115,6 +183,30 @@ test('does not detect Stripe test mode for live keys or missing secret', () => {
 test('rejects Stripe Checkout amounts below the PLN minimum', () => {
   assert.throws(() => assertStripeCheckoutAmountSupported(0.01), /co najmniej/)
   assert.doesNotThrow(() => assertStripeCheckoutAmountSupported(DEFAULT_PRICE_PLN))
+})
+
+test('builds Stripe checkout params from the immutable booking snapshot amount', () => {
+  process.env.NEXT_PUBLIC_APP_URL = 'https://behawior15.test'
+
+  const params = buildCheckoutSessionParams(
+    {
+      id: 'booking-123',
+      email: 'client@example.com',
+      problemType: 'szczeniak',
+      bookingDate: '2026-03-22',
+      bookingTime: '10:40',
+      amount: 47,
+    } as const,
+    {
+      accessToken: 'opaque-token',
+    },
+  )
+
+  const lineItem = params.line_items?.[0]
+
+  assert.equal(params.success_url, 'https://behawior15.test/confirmation?bookingId=booking-123&access=opaque-token&session_id={CHECKOUT_SESSION_ID}')
+  assert.equal(params.cancel_url, 'https://behawior15.test/payment?bookingId=booking-123&access=opaque-token&cancelled=1')
+  assert.equal(extractUnitAmount(lineItem), 4700)
 })
 
 test('sends the payment confirmation only for the first pending to paid transition', () => {

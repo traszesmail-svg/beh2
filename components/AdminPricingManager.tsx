@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 interface AdminPricingManagerProps {
   currentAmount: number
@@ -15,6 +15,10 @@ export function AdminPricingManager({ currentAmount, currentLabel, updatedAtLabe
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  useEffect(() => {
+    setAmount(currentAmount.toFixed(2))
+  }, [currentAmount])
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -37,7 +41,7 @@ export function AdminPricingManager({ currentAmount, currentLabel, updatedAtLabe
         throw new Error(payload.error ?? 'Nie udalo sie zapisac ceny konsultacji.')
       }
 
-      setAmount(String(payload.price?.amount ?? amount))
+      setAmount(Number(payload.price?.amount ?? amount).toFixed(2))
       setSuccess(`Zapisano nowa cene konsultacji: ${payload.price?.formattedAmount ?? amount}. Nowa kwota obejmie tylko kolejne rezerwacje.`)
       router.refresh()
     } catch (submitError) {

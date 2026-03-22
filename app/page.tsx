@@ -1,10 +1,12 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { FaqAccordion } from '@/components/FaqAccordion'
+import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { faq, formatDateTimeLabel, problemOptions, steps } from '@/lib/data'
-import { createActiveConsultationPrice, DEFAULT_PRICE_PLN } from '@/lib/pricing'
 import { listAvailability, getActiveConsultationPrice } from '@/lib/server/db'
 import { getDataModeStatus } from '@/lib/server/env'
+import { COAPE_PROFILE_URL, SPECIALIST_CREDENTIALS, SPECIALIST_LOCATION, SPECIALIST_NAME } from '@/lib/site'
 import { ProblemType } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
@@ -69,11 +71,16 @@ function renderProblemIcon(problem: ProblemType) {
 
 export default async function HomePage() {
   const dataMode = getDataModeStatus()
-  const pricing = dataMode.isValid ? await getActiveConsultationPrice() : createActiveConsultationPrice(DEFAULT_PRICE_PLN)
-  const availability = dataMode.isValid ? await listAvailability() : []
+  let pricing: Awaited<ReturnType<typeof getActiveConsultationPrice>> | null = null
+  let availability: Awaited<ReturnType<typeof listAvailability>> = []
+
+  if (dataMode.isValid) {
+    ;[pricing, availability] = await Promise.all([getActiveConsultationPrice(), listAvailability()])
+  }
+
   const nextSlot = availability[0]?.slots[0]
   const nextSlotLabel = !dataMode.isValid
-    ? 'Brak dostepu do terminarza'
+    ? 'Terminarz chwilowo niedostepny'
     : nextSlot
       ? formatDateTimeLabel(nextSlot.bookingDate, nextSlot.bookingTime)
       : 'Brak wolnych terminow'
@@ -83,44 +90,55 @@ export default async function HomePage() {
       <div className="container">
         <Header />
 
-        <section className="hero-grid">
+        <section className="hero-grid" id="oferta">
           <div className="panel hero-panel hero-surface">
             {!dataMode.isValid ? <div className="error-box">{dataMode.summary}</div> : null}
-            <div className="pill">Pierwszy krok przy problemie behawioralnym</div>
-            <div className="hero-topline">Krotka konsultacja glosowa, ktora pomaga szybko uporzadkowac sytuacje i wybrac dobry nastepny krok.</div>
+
+            <div className="pill">15-minutowa konsultacja glosowa online</div>
+            <div className="hero-topline">
+              Bez chaosu, bez zgadywania i bez zamieniania problemu w tygodnie sprzecznych porad.
+            </div>
             <h1>
-              Szybka pomoc behawioralna. <span>15 minut i pierwszy konkretny plan.</span>
+              Konkretna pomoc behawioralna dla psa lub kota. <span>Jedna rozmowa i jasny pierwszy krok.</span>
             </h1>
             <p className="hero-text">
-              Behawior 15 to platna z gory konsultacja glosowa online prowadzona przez Krzysztofa Regulskiego, tech.wet., behawioryste zwierzecego i trenera COAPE. W jednej krotkiej rozmowie porzadkujesz problem, uspokajasz chaos i dostajesz pierwszy sensowny kierunek dzialania.
+              Placisz raz, rezerwujesz realny termin i rozmawiasz bezposrednio z jednym specjalista. To krotka, spokojna
+              konsultacja audio, ktora pomaga ocenic sytuacje i wybrac najlepszy dalszy ruch.
             </p>
 
             <div className="hero-note-row">
-              <span className="trust-chip">Rozmowa audio, bez instalacji</span>
-              <span className="trust-chip">Jeden specjalista od poczatku do konca</span>
+              <span className="trust-chip">Audio online bez instalacji</span>
               <span className="trust-chip">Psy i koty</span>
+              <span className="trust-chip">CAPBT / COAPE</span>
             </div>
+
             <div className="stats-grid">
               <div className="stat-card">
-                <div className="stat-label">Czas</div>
+                <div className="stat-label">Czas rozmowy</div>
                 <div className="stat-value">15 min</div>
               </div>
               <div className="stat-card">
-                <div className="stat-label">Cena</div>
-                <div className="stat-value">{pricing.formattedAmount}</div>
+                <div className="stat-label">Aktualna cena</div>
+                <div className="stat-value">{pricing?.formattedAmount ?? 'Sprawdz panel danych'}</div>
               </div>
               <div className="stat-card">
-                <div className="stat-label">Format</div>
-                <div className="stat-value">Audio online</div>
+                <div className="stat-label">Prowadzacy</div>
+                <div className="stat-value">1 specjalista</div>
               </div>
             </div>
 
             <div className="hero-actions">
-              <Link href="/problem" className="button button-primary big-button">
-                Sprawdz wolne terminy
-              </Link>
+              {dataMode.isValid ? (
+                <Link href="/problem" className="button button-primary big-button">
+                  Sprawdz terminy i zarezerwuj
+                </Link>
+              ) : (
+                <a href="#specjalista" className="button button-primary big-button">
+                  Zobacz informacje o specjaliscie
+                </a>
+              )}
               <a href="#jak-to-dziala" className="button button-ghost big-button">
-                Zobacz jak to wyglada
+                Jak to dziala
               </a>
             </div>
           </div>
@@ -128,8 +146,12 @@ export default async function HomePage() {
           <div className="panel side-panel hero-aside hero-credentials">
             <div className="credential-mark">
               <div className="credential-copy">
-                <div className="section-eyebrow">Kwalifikacje</div>
+                <div className="section-eyebrow">Kwalifikacje i zaufanie</div>
                 <h2>COAPE / CAPBT</h2>
+                <p className="muted paragraph-gap">
+                  Profil specjalisty jest publicznie dostepny w katalogu COAPE / CAPBT, bez marketplace i bez losowego
+                  przekierowania do innej osoby.
+                </p>
               </div>
               <Image
                 src="/branding/capbt-polska.png"
@@ -140,30 +162,13 @@ export default async function HomePage() {
               />
             </div>
 
-            <div className="mini-card specialist-card">
-              <div className="muted">Specjalista prowadzacy</div>
-              <div className="side-title">Krzysztof Regulski, tech.wet.</div>
-              <div className="accent-text">
-                Behawiorysta zwierzecy i trener COAPE. Pracuje z trudnymi przypadkami psow i kotow, laczac spojrzenie
-                behawioralne z wiedza technika weterynarii.
-              </div>
-              <a
-                href="https://behawioryscicoape.pl/behawiorysta/Regulski"
-                target="_blank"
-                rel="noreferrer"
-                className="text-link top-gap-small"
-              >
-                Zobacz profil w katalogu COAPE / CAPBT
-              </a>
-            </div>
-
             <div className="mini-card availability-card">
-              <div className="muted">Najblizszy wolny termin</div>
+              <div className="muted">Najblizszy dostepny termin</div>
               <div className="side-title">{nextSlotLabel}</div>
               <ul className="hero-checklist">
-                <li>Pierwsza ocena sytuacji i uspokojenie chaosu informacyjnego</li>
-                <li>Wstepne wskazowki do wdrozenia jeszcze tego samego dnia</li>
-                <li>Decyzja, czy potrzebna jest pelna konsultacja lub plan pracy</li>
+                <li>Realny slot z terminarza, nie sztuczny licznik pilnosci.</li>
+                <li>Po platnosci od razu dostajesz potwierdzenie i link do rozmowy.</li>
+                <li>Jesli chcesz, przed rozmowa dodasz nagranie, link albo notatki.</li>
               </ul>
             </div>
           </div>
@@ -172,36 +177,45 @@ export default async function HomePage() {
         <section className="panel section-panel">
           <div className="section-head">
             <div>
-              <div className="section-eyebrow">Dla kogo jest ta usluga</div>
-              <h2>Gdy potrzebujesz szybkiego, profesjonalnego pierwszego kroku</h2>
+              <div className="section-eyebrow">Dla kogo</div>
+              <h2>Gdy chcesz szybko uporzadkowac problem i wiedziec, co robic dalej</h2>
             </div>
-            <div className="muted">Bez przeciagania decyzji i bez zgadywania, od czego zaczac.</div>
+            <div className="muted">To pierwszy, spokojny krok przed pelna konsultacja albo planem pracy.</div>
           </div>
+
           <div className="card-grid three-up top-gap">
             <div className="feature-card">
-              <div className="simple-title">Dla opiekunow psow i kotow</div>
-              <div className="simple-desc">Problemy domowe, napiecie, agresja, trudnosci separacyjne, pobudzenie, kuweta albo relacje z otoczeniem.</div>
+              <div className="simple-title">Problemy codzienne i nagle kryzysy</div>
+              <div className="simple-desc">
+                Szczekanie, pobudzenie, lek separacyjny, agresja, kuweta, niszczenie albo napiecie w domu.
+              </div>
             </div>
             <div className="feature-card">
-              <div className="simple-title">Dla osob, ktore chca szybko ruszyc dalej</div>
-              <div className="simple-desc">W 15 minut porzadkujesz sytuacje i dostajesz pierwszy kierunek, zamiast tygodniami szukac sprzecznych porad.</div>
+              <div className="simple-title">Jeden temat, jedna decyzja, jeden kierunek</div>
+              <div className="simple-desc">
+                W 15 minut porzadkujesz sytuacje i wiesz, czy wystarcza pierwsze wskazowki, czy potrzeba dalszej pracy.
+              </div>
             </div>
             <div className="feature-card">
-              <div className="simple-title">Dla tych, ktorzy chca wiedziec, co potem</div>
-              <div className="simple-desc">Jesli potrzeba wiecej pracy, kolejnym krokiem moze byc pelna konsultacja, plan zachowan albo dalsze wsparcie.</div>
+              <div className="simple-title">Bez konsultacji wideo i bez rozpraszaczy</div>
+              <div className="simple-desc">
+                To rozmowa audio. Kamera nie jest potrzebna, ale mozesz dodac materialy przed rozmowa, zeby lepiej
+                pokazac problem.
+              </div>
             </div>
           </div>
         </section>
 
-        <section className="panel section-panel">
+        <section className="panel section-panel" id="tematy">
           <div className="section-head">
             <div>
               <div className="section-eyebrow">Tematy konsultacji</div>
-              <h2>Wybierz temat, od ktorego chcesz zaczac</h2>
+              <h2>Wybierz punkt startowy, a potem przejdz do realnie wolnych terminow</h2>
             </div>
-            <div className="muted">Kazdy temat prowadzi od razu do realnie wolnych terminow i tej samej 15-minutowej rozmowy audio.</div>
+            <div className="muted">Kazdy temat prowadzi do tej samej konsultacji audio i tej samej ceny startowej.</div>
           </div>
-          <div className="card-grid three-up">
+
+          <div className="card-grid three-up top-gap">
             {problemOptions.map((tile) => (
               <Link key={tile.id} href={`/slot?problem=${tile.id}`} className="topic-card">
                 <span className="topic-icon-shell">{renderProblemIcon(tile.id)}</span>
@@ -214,8 +228,14 @@ export default async function HomePage() {
         </section>
 
         <section className="panel section-panel" id="jak-to-dziala">
-          <div className="section-eyebrow">Jak to dziala</div>
-          <h2>Prosty proces, bez niejasnosci i bez instalowania dodatkowych narzedzi</h2>
+          <div className="section-head">
+            <div>
+              <div className="section-eyebrow">Jak to dziala</div>
+              <h2>Prosto: temat, termin, platnosc, rozmowa</h2>
+            </div>
+            <div className="muted">Bez osobnych rozmow wstepnych, bez czekania na oddzwonienie i bez rozbudowanego onboardingu.</div>
+          </div>
+
           <div className="card-grid three-up top-gap">
             {steps.map((step) => (
               <div key={step.n} className="simple-card">
@@ -227,66 +247,76 @@ export default async function HomePage() {
           </div>
         </section>
 
-        <section className="two-col-section">
-          <div className="panel section-panel">
-            <div className="section-eyebrow">O specjaliscie</div>
-            <h2>Krzysztof Regulski, tech.wet., behawiorysta zwierzecy i trener COAPE</h2>
-            <p className="muted paragraph-gap">Olsztyn, woj. warminsko-mazurskie</p>
-            <div className="stack-gap top-gap">
-              <div className="list-card">
-                <strong>Praca z trudnymi przypadkami</strong>
-                <span>Na co dzien pracuje z psami i kotami z trudnymi problemami behawioralnymi, w tym z agresja, napieciem i zaburzonymi relacjami.</span>
-              </div>
-              <div className="list-card">
-                <strong>Polaczenie wiedzy behawioralnej i weterynaryjnej</strong>
-                <span>Jako technik weterynarii laczy spojrzenie behawioralne z medycznym, co pomaga lepiej ocenic sytuacje i zaplanowac dalsze kroki.</span>
-              </div>
-              <div className="list-card">
-                <strong>Jedna osoba, jedna odpowiedzialnosc</strong>
-                <span>Konsultacja trafia do jednego specjalisty. To nie marketplace ani losowy system przekierowan.</span>
-              </div>
+        <section className="two-col-section" id="specjalista">
+          <div className="panel section-panel specialist-visual-card">
+            <div className="section-eyebrow">Specjalista prowadzacy</div>
+            <div className="specialist-portrait-shell top-gap">
+              <Image
+                src="/branding/specialist-placeholder.svg"
+                alt="Portret specjalisty Behawior 15"
+                width={720}
+                height={840}
+                className="specialist-portrait"
+              />
+            </div>
+            <div className="list-card top-gap">
+              <strong>{SPECIALIST_NAME}</strong>
+              <span>
+                {SPECIALIST_CREDENTIALS}. {SPECIALIST_LOCATION}. Prowadzi kazda rozmowe osobiscie od rezerwacji do
+                rekomendacji kolejnego kroku.
+              </span>
             </div>
           </div>
 
           <div className="panel section-panel">
-            <div className="section-eyebrow">Przed rozmowa</div>
-            <h2>Co warto przygotowac</h2>
+            <div className="section-eyebrow">Dlaczego temu zaufac</div>
+            <h2>Jedna osoba, jedna odpowiedzialnosc i realne kwalifikacje</h2>
             <div className="stack-gap top-gap">
               <div className="list-card">
-                <strong>Krotki opis sytuacji</strong>
-                <span>Zastanow sie, kiedy problem wystepuje najczesciej i co go nasila.</span>
+                <strong>Behawior i weterynaria w jednym obrazie sytuacji</strong>
+                <span>
+                  To spojrzenie laczace prace behawioralna z doswiadczeniem technika weterynarii, co pomaga szybciej
+                  wychwycic, kiedy problem wymaga dalszej diagnostyki albo planu pracy.
+                </span>
               </div>
               <div className="list-card">
-                <strong>Najwazniejsze pytanie</strong>
-                <span>W 15 minut najlepiej sprawdza sie jedna glowna trudnosc albo decyzja, ktora chcesz podjac.</span>
+                <strong>COAPE / CAPBT</strong>
+                <span>
+                  Profil specjalisty jest dostepny w katalogu COAPE / CAPBT. To publiczny punkt weryfikacji kwalifikacji
+                  i zakresu pracy.
+                </span>
+                <a href={COAPE_PROFILE_URL} target="_blank" rel="noreferrer" className="text-link top-gap-small">
+                  Otworz profil COAPE / CAPBT
+                </a>
               </div>
               <div className="list-card">
-                <strong>Spokojne miejsce do rozmowy</strong>
-                <span>To konsultacja glosowa. Kamera nie jest potrzebna, ale dobrze miec chwile spokoju i notatki pod reka.</span>
+                <strong>Rozmowa przygotowana pod Twoj przypadek</strong>
+                <span>
+                  Jesli chcesz, przed rozmowa dodasz krotkie nagranie MP4, link albo notatki. To nie jest konsultacja
+                  wideo, ale bardzo pomaga szybciej zrozumiec sytuacje.
+                </span>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="panel section-panel">
-          <div className="section-eyebrow">FAQ</div>
-          <h2>Najczestsze pytania przed pierwsza konsultacja</h2>
-          <div className="stack-gap top-gap">
-            {faq.map((item) => (
-              <div key={item.q} className="list-card">
-                <strong>{item.q}</strong>
-                <span>{item.a}</span>
-              </div>
-            ))}
+        <section className="panel section-panel" id="faq">
+          <div className="section-head">
+            <div>
+              <div className="section-eyebrow">FAQ</div>
+              <h2>Najczestsze pytania przed pierwsza rozmowa</h2>
+            </div>
+            <div className="muted">Krotkie odpowiedzi na to, co zwykle blokuje decyzje o rezerwacji.</div>
           </div>
+          <FaqAccordion items={faq} />
         </section>
 
         <section className="panel cta-panel">
           <div className="section-eyebrow">Pierwszy krok</div>
-          <h2>Jesli chcesz szybko uporzadkowac sytuacje, zacznij od 15-minutowej konsultacji glosowej</h2>
+          <h2>Zacznij od 15 minut rozmowy, ktora porzadkuje sytuacje i daje kierunek.</h2>
           <p className="hero-text small-width">
-            To spokojny, konkretny pierwszy kontakt, po ktorym od razu wiesz, czy wystarcza proste wskazowki, czy warto
-            przejsc do pelnej konsultacji albo dalszego planu pracy.
+            Jesli problem zaczyna sie ciagnac, najwazniejsze jest dobre otwarcie. Ta konsultacja pomaga szybko ocenic,
+            co robic od razu i czy potrzebna jest dalsza, szersza praca.
           </p>
           <div className="hero-actions top-gap">
             <Link href="/problem" className="button button-primary big-button">
@@ -294,6 +324,8 @@ export default async function HomePage() {
             </Link>
           </div>
         </section>
+
+        <Footer />
       </div>
     </main>
   )

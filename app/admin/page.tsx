@@ -6,7 +6,6 @@ import { AdminPricingManager } from '@/components/AdminPricingManager'
 import { Header } from '@/components/Header'
 import { getBuildMarkerSnapshot } from '@/lib/build-marker'
 import { formatDateLabel, formatDateTimeLabel, getBookingStatusLabel, getPaymentStatusLabel, getProblemLabel } from '@/lib/data'
-import { createActiveConsultationPrice, DEFAULT_PRICE_PLN } from '@/lib/pricing'
 import { formatPreparationFileSize, hasPreparationMaterials } from '@/lib/preparation'
 import { getActiveConsultationPrice, listAvailabilityAdmin, listBookings } from '@/lib/server/db'
 import { getRuntimeModeSnapshot } from '@/lib/server/env'
@@ -18,15 +17,21 @@ export default async function AdminPage() {
   noStore()
   const runtime = getRuntimeModeSnapshot()
   const buildMarker = getBuildMarkerSnapshot()
-  const [bookings, availability, price] = await Promise.all([
-    runtime.data.isValid ? listBookings() : Promise.resolve([]),
-    runtime.data.isValid ? listAvailabilityAdmin() : Promise.resolve([]),
-    runtime.data.isValid ? getActiveConsultationPrice() : Promise.resolve(createActiveConsultationPrice(DEFAULT_PRICE_PLN)),
-  ])
+  let bookings: Awaited<ReturnType<typeof listBookings>> = []
+  let availability: Awaited<ReturnType<typeof listAvailabilityAdmin>> = []
+  let price: Awaited<ReturnType<typeof getActiveConsultationPrice>> | null = null
+
+  if (runtime.data.isValid) {
+    ;[bookings, availability, price] = await Promise.all([
+      listBookings(),
+      listAvailabilityAdmin(),
+      getActiveConsultationPrice(),
+    ])
+  }
   const confirmedCount = bookings.filter((booking) => booking.bookingStatus === 'confirmed').length
   const paidCount = bookings.filter((booking) => booking.paymentStatus === 'paid').length
   const doneCount = bookings.filter((booking) => booking.bookingStatus === 'done').length
-  const priceUpdatedAtLabel = price.updatedAt
+  const priceUpdatedAtLabel = price?.updatedAt
     ? `${formatDateLabel(price.updatedAt.slice(0, 10))}, ${price.updatedAt.slice(11, 16)}`
     : null
 
@@ -82,7 +87,7 @@ export default async function AdminPage() {
             <div className="section-eyebrow">Cena konsultacji</div>
             <h2>Aktywna cena dla nowych rezerwacji</h2>
             <p className="muted paragraph-gap">Nowa cena dotyczy tylko kolejnych bookingow. Oplacone lub zapisane wczesniej rezerwacje zachowuja swoja historyczna kwote.</p>
-            {runtime.data.isValid ? (
+            {runtime.data.isValid && price ? (
               <AdminPricingManager currentAmount={price.amount} currentLabel={price.formattedAmount} updatedAtLabel={priceUpdatedAtLabel} />
             ) : (
               <div className="error-box">Zmiana ceny jest zablokowana: {runtime.data.summary}</div>
