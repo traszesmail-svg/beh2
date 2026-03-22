@@ -2,8 +2,9 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { BookingForm } from '@/components/BookingForm'
 import { Header } from '@/components/Header'
-import { formatDateTimeLabel, getProblemLabel, isProblemType } from '@/lib/data'
+import { formatDateTimeLabel, getProblemLabel, isFutureAvailabilitySlot, isProblemType } from '@/lib/data'
 import { getAvailabilitySlot, getActiveConsultationPrice } from '@/lib/server/db'
+import { getDataModeStatus } from '@/lib/server/env'
 
 export const dynamic = 'force-dynamic'
 
@@ -27,8 +28,23 @@ export default async function FormPage({
     redirect('/problem')
   }
 
-  const pricing = await getActiveConsultationPrice()
-  const slot = await getAvailabilitySlot(slotId)
+  const dataMode = getDataModeStatus()
+  let pricing: Awaited<ReturnType<typeof getActiveConsultationPrice>> | null = null
+  let slot: Awaited<ReturnType<typeof getAvailabilitySlot>> = null
+  let flowError: string | null = null
+
+  if (dataMode.isValid) {
+    try {
+      ;[pricing, slot] = await Promise.all([getActiveConsultationPrice(), getAvailabilitySlot(slotId)])
+    } catch {
+      flowError = 'Formularz chwilowo się odświeża. Spróbuj ponownie za moment.'
+    }
+  } else {
+    flowError = 'Formularz chwilowo się odświeża. Spróbuj ponownie za moment.'
+  }
+
+  const slotIsBookable = slot && !slot.isBooked && !slot.lockedByBookingId && isFutureAvailabilitySlot(slot.bookingDate, slot.bookingTime)
+  const activeSlot = slotIsBookable ? slot : null
 
   return (
     <main className="page-wrap">
@@ -37,9 +53,9 @@ export default async function FormPage({
         <section className="two-col-section booking-layout">
           <div className="panel section-panel">
             <div className="section-eyebrow">Krok 3 z 6</div>
-            <h1>Uzupelnij dane do konsultacji</h1>
+            <h1>Uzupełnij dane do konsultacji</h1>
             <p className="muted paragraph-gap">
-              Po zapisaniu formularza termin zostanie tymczasowo zablokowany na czas platnosci. Po oplaceniu od razu
+              Po zapisaniu formularza termin zostanie tymczasowo zablokowany na czas płatności. Po opłaceniu od razu
               zobaczysz potwierdzenie i link do rozmowy audio.
             </p>
 
@@ -50,37 +66,46 @@ export default async function FormPage({
               </div>
               <div className="list-card">
                 <strong>Termin rozmowy</strong>
-                <span>{slot ? formatDateTimeLabel(slot.bookingDate, slot.bookingTime) : 'Termin nie jest juz dostepny.'}</span>
+                <span>{slot ? formatDateTimeLabel(slot.bookingDate, slot.bookingTime) : 'Termin nie jest już dostępny.'}</span>
               </div>
               <div className="list-card accent-outline">
                 <strong>Format</strong>
-                <span>15-minutowa konsultacja glosowa online. Kamera nie jest potrzebna.</span>
+                <span>15-minutowa konsultacja głosowa online. Kamera nie jest potrzebna.</span>
               </div>
               <div className="list-card">
                 <strong>Kwota</strong>
-                <span>{pricing.formattedAmount} - jedna platnosc z gory za cala rozmowe.</span>
+                <span>{pricing?.formattedAmount ?? 'Cena chwilowo niedostępna'} - jedna płatność z góry za całą rozmowę.</span>
               </div>
             </div>
           </div>
 
           <div className="panel section-panel">
-            {slot && !slot.isBooked && !slot.lockedByBookingId ? (
+            {flowError ? (
+              <>
+                <div className="info-box">{flowError}</div>
+                <div className="hero-actions top-gap">
+                  <Link href={`/slot?problem=${problem}`} className="button button-primary big-button">
+                    Wróć do terminów
+                  </Link>
+                </div>
+              </>
+            ) : activeSlot && pricing ? (
               <>
                 <div className="section-eyebrow">Dane do potwierdzenia</div>
-                <h2>Formularz konsultacji glosowej</h2>
+                <h2>Formularz konsultacji głosowej</h2>
                 <BookingForm
                   problemType={problem}
-                  slotId={slot.id}
-                  slotLabel={formatDateTimeLabel(slot.bookingDate, slot.bookingTime)}
+                  slotId={activeSlot.id}
+                  slotLabel={formatDateTimeLabel(activeSlot.bookingDate, activeSlot.bookingTime)}
                   priceLabel={pricing.formattedAmount}
                 />
               </>
             ) : (
               <>
-                <div className="error-box">Ten termin nie jest juz dostepny. Wroc do listy i wybierz inna godzine rozmowy.</div>
+                <div className="error-box">Ten termin nie jest już dostępny. Wróć do listy i wybierz inną godzinę rozmowy.</div>
                 <div className="hero-actions top-gap">
                   <Link href={`/slot?problem=${problem}`} className="button button-primary big-button">
-                    Wroc do terminow
+                    Wróć do terminów
                   </Link>
                 </div>
               </>

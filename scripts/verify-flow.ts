@@ -1,5 +1,6 @@
 import { mkdir, readFile, rm, writeFile } from 'fs/promises'
 import path from 'path'
+import { isFutureAvailabilitySlot } from '../lib/data'
 import {
   createAvailabilitySlot,
   createPendingBooking,
@@ -62,9 +63,11 @@ async function main() {
     const initialAvailability = await listAvailability()
     const firstSlot = initialAvailability[0]?.slots[0]
     const secondSlot = initialAvailability[0]?.slots[1] ?? initialAvailability[1]?.slots[0]
+    const allInitialSlots = initialAvailability.flatMap((group) => group.slots)
 
     assert(firstSlot, 'Brak pierwszego slotu testowego.')
     assert(secondSlot, 'Brak drugiego slotu testowego.')
+    assert(allInitialSlots.every((slot) => isFutureAvailabilitySlot(slot.bookingDate, slot.bookingTime)), 'W local mode nie powinny pojawiac sie terminy z przeszlosci.')
 
     const created = await createPendingBooking({
       ownerName: 'Test Owner',
@@ -133,7 +136,13 @@ async function main() {
     assert(doneBooking?.bookingStatus === 'done', 'Booking nie przeszedl do statusu done.')
     assert(doneBooking?.paymentStatus === 'paid', 'Booking done powinien zachowac payment status paid.')
 
-    const adminSlot = await createAvailabilitySlot('2026-03-24', '08:00')
+    const futureAdminSlotDate = new Intl.DateTimeFormat('sv-SE', {
+      timeZone: 'Europe/Warsaw',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).format(new Date(Date.now() + 5 * 24 * 60 * 60 * 1000))
+    const adminSlot = await createAvailabilitySlot(futureAdminSlotDate, '08:00')
     const adminAvailability = await listAvailabilityAdmin()
     assert(adminAvailability.some((slot) => slot.id === adminSlot.id), 'Admin slot nie zostal dodany.')
 
@@ -150,6 +159,7 @@ async function main() {
           reservedSlotDisappears: true,
           paymentFailureReleasesSlot: true,
           adminAvailabilityAddRemove: true,
+          noPastSlotsInAvailability: true,
           jitsiLinkAssigned: finalBooking?.meetingUrl ?? null,
           bookingStatus: finalBooking?.bookingStatus ?? null,
           paymentStatus: finalBooking?.paymentStatus ?? null,

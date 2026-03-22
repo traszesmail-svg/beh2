@@ -54,20 +54,20 @@ export function CallRoom({ bookingId, meetingUrl, ownerName }: CallRoomProps) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          recommendedNextStep: 'W razie potrzeby kolejnym krokiem moze byc pelna konsultacja, wizyta domowa albo dalsza praca wedlug ustalonego planu.',
+          recommendedNextStep: 'W razie potrzeby kolejnym krokiem może być pełna konsultacja, wizyta domowa albo dalsza praca według ustalonego planu.',
         }),
       })
 
       if (!response.ok) {
         const payload = (await response.json()) as { error?: string }
-        throw new Error(payload.error ?? 'Nie udalo sie zamknac konsultacji.')
+        throw new Error(payload.error ?? 'Nie udało się zamknąć konsultacji.')
       }
 
       setRunning(false)
       setFinished(true)
       router.refresh()
     } catch (finishError) {
-      setError(finishError instanceof Error ? finishError.message : 'Wystapil blad podczas zamykania konsultacji.')
+      setError(finishError instanceof Error ? finishError.message : 'Wystąpił błąd podczas zamykania konsultacji.')
     }
   }
 
@@ -75,15 +75,15 @@ export function CallRoom({ bookingId, meetingUrl, ownerName }: CallRoomProps) {
     <section className="two-col-section booking-layout">
       <div className="panel room-panel">
         <div className="section-eyebrow">Krok 6 z 6</div>
-        <h1>Panel rozmowy glosowej</h1>
+        <h1>Panel rozmowy głosowej</h1>
         <p className="muted paragraph-gap">
           To jest link do 15-minutowej konsultacji audio. Kamera nie jest potrzebna. Przygotuj spokojne miejsce,
-          najwazniejsze obserwacje o zwierzeciu i otworz rozmowe kilka minut przed czasem.
+          najważniejsze obserwacje o zwierzęciu i otwórz rozmowę kilka minut przed czasem.
         </p>
 
         <div className="video-shell">
           <iframe
-            title="Panel rozmowy glosowej"
+            title="Panel rozmowy głosowej"
             src={embedUrl}
             className="video-frame"
             allow="camera; microphone; fullscreen; display-capture"
@@ -92,13 +92,13 @@ export function CallRoom({ bookingId, meetingUrl, ownerName }: CallRoomProps) {
 
         <div className="hero-actions top-gap">
           <button type="button" onClick={() => setRunning(true)} className="button button-primary big-button" disabled={running || finished}>
-            {running ? 'Rozmowa trwa' : finished ? 'Rozmowa zakonczona' : 'Uruchom licznik 15 minut'}
+            {running ? 'Rozmowa trwa' : finished ? 'Rozmowa zakończona' : 'Uruchom licznik 15 minut'}
           </button>
           <a href={meetingUrl} target="_blank" rel="noreferrer" className="button button-ghost big-button">
-            Otworz rozmowe w nowej karcie
+            Otwórz rozmowę w nowej karcie
           </a>
           <button type="button" onClick={handleFinish} className="button button-ghost big-button">
-            Zakoncz rozmowe
+            Zakończ rozmowę
           </button>
         </div>
 
@@ -107,7 +107,7 @@ export function CallRoom({ bookingId, meetingUrl, ownerName }: CallRoomProps) {
 
       <div className="panel section-panel room-sidebar">
         <div className="timer-box">{formatTime(secondsLeft)}</div>
-        <div className="status-box">{running ? 'Rozmowa aktywna' : finished ? 'Rozmowa zakonczona' : 'Oczekiwanie na dolaczenie'}</div>
+        <div className="status-box">{running ? 'Rozmowa aktywna' : finished ? 'Rozmowa zakończona' : 'Oczekiwanie na dołączenie'}</div>
 
         <div className="stack-gap top-gap">
           <div className="list-card">
@@ -120,7 +120,7 @@ export function CallRoom({ bookingId, meetingUrl, ownerName }: CallRoomProps) {
           </div>
           <div className="list-card accent-outline">
             <strong>Po rozmowie</strong>
-            <span>Po tej konsultacji mozna zaplanowac pelna konsultacje, wizyte domowa albo dalsze wsparcie, jesli sytuacja wymaga szerszej pracy.</span>
+            <span>Po tej konsultacji można zaplanować pełną konsultację, wizytę domową albo dalsze wsparcie, jeśli sytuacja wymaga szerszej pracy.</span>
           </div>
         </div>
       </div>

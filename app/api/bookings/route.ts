@@ -25,7 +25,7 @@ function getErrorMessage(error: unknown): string {
     return error.message
   }
 
-  return 'Nie udalo sie utworzyc bookingu.'
+  return 'Nie udało się utworzyć bookingu.'
 }
 
 export async function POST(request: Request) {
@@ -69,7 +69,7 @@ export async function POST(request: Request) {
     ]
 
     if (fields.some((value) => value.trim().length === 0)) {
-      return NextResponse.json({ error: 'Uzupelnij wszystkie pola formularza.' }, { status: 400 })
+      return NextResponse.json({ error: 'Uzupełnij wszystkie pola formularza.' }, { status: 400 })
     }
 
     if (!isEmailValid(email.trim())) {
@@ -82,7 +82,7 @@ export async function POST(request: Request) {
 
     if (description.trim().length < 20) {
       return NextResponse.json(
-        { error: 'Dodaj krotski, ale konkretny opis sytuacji, aby dobrze wykorzystac 15 minut rozmowy.' },
+        { error: 'Dodaj krótki, ale konkretny opis sytuacji, aby dobrze wykorzystać 15 minut rozmowy.' },
         { status: 400 },
       )
     }

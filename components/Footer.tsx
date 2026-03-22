@@ -11,23 +11,27 @@ export function Footer() {
           <div className="section-eyebrow">Behawior 15</div>
           <h2 className="footer-title">Spokojny pierwszy krok przy problemie behawioralnym.</h2>
           <p className="muted footer-copy">
-            {SPECIALIST_NAME}, {SPECIALIST_CREDENTIALS}. Konsultacja audio online dla opiekunow psow i kotow.
+            {SPECIALIST_NAME}, {SPECIALIST_CREDENTIALS}. Konsultacja audio online dla opiekunów psów i kotów.
           </p>
         </div>
 
         <div className="footer-card">
           <div className="footer-label">Kontakt</div>
           <div className="footer-links">
-            {contact.email ? <a href={`mailto:${contact.email}`}>{contact.email}</a> : <span>Adres e-mail ustawisz przez env.</span>}
+            {contact.email ? (
+              <a href={`mailto:${contact.email}`}>{contact.email}</a>
+            ) : (
+              <span>Adres e-mail ustawisz przez produkcyjne env.</span>
+            )}
             {contact.phone ? <a href={`tel:${contact.phone.replace(/\s+/g, '')}`}>{contact.phone}</a> : null}
           </div>
         </div>
 
         <div className="footer-card">
-          <div className="footer-label">Wazne linki</div>
+          <div className="footer-label">Ważne linki</div>
           <div className="footer-links">
-            <Link href="/problem">Umow konsultacje</Link>
-            <Link href="/polityka-prywatnosci">Polityka prywatnosci</Link>
+            <Link href="/problem">Umów konsultację</Link>
+            <Link href="/polityka-prywatnosci">Polityka prywatności</Link>
             <Link href="/regulamin">Regulamin</Link>
           </div>
         </div>

@@ -43,7 +43,7 @@ function getLocalVideoAbsolutePath(bookingId: string) {
 }
 
 function getSupabaseAdmin() {
-  const config = getSupabaseServerConfig('materialy przygotowawcze do rozmowy')
+  const config = getSupabaseServerConfig('materiały przygotowawcze do rozmowy')
 
   return createClient(config.url, config.serviceRoleKey, {
     auth: {
@@ -58,7 +58,7 @@ function getErrorMessage(error: unknown): string {
     return error.message
   }
 
-  return 'Nie udalo sie zapisac materialow przygotowawczych.'
+  return 'Nie udało się zapisać materiałów przygotowawczych.'
 }
 
 export async function POST(
@@ -69,12 +69,12 @@ export async function POST(
     const booking = await resolveViewerBooking(request, params.id)
 
     if (!booking) {
-      return NextResponse.json({ error: 'Ten link do materialow jest nieprawidlowy albo wygasl.' }, { status: 403 })
+      return NextResponse.json({ error: 'Ten link do materiałów jest nieprawidłowy albo wygasł.' }, { status: 403 })
     }
 
     if (!canEditPreparationMaterials(booking)) {
       return NextResponse.json(
-        { error: 'Materialy mozna dodawac lub zmieniac tylko przed rozpoczeciem albo w trakcie aktywnej rezerwacji.' },
+        { error: 'Materiały można dodawać lub zmieniać tylko przed rozpoczęciem albo w trakcie aktywnej rezerwacji.' },
         { status: 409 },
       )
     }
@@ -86,7 +86,7 @@ export async function POST(
 
       if (dataMode.active !== 'local') {
         return NextResponse.json(
-          { error: 'W tym trybie nagranie przesylane jest bezposrednio do bezpiecznego magazynu plikow.' },
+          { error: 'W tym trybie nagranie przesyłane jest bezpośrednio do bezpiecznego magazynu plików.' },
           { status: 400 },
         )
       }
@@ -95,7 +95,7 @@ export async function POST(
       const file = formData.get('file')
 
       if (!(file instanceof File)) {
-        return NextResponse.json({ error: 'Wybierz plik MP4 do wyslania.' }, { status: 400 })
+        return NextResponse.json({ error: 'Wybierz plik MP4 do wysłania.' }, { status: 400 })
       }
 
       const validationError = validatePreparationVideoMeta({
@@ -120,7 +120,7 @@ export async function POST(
       })
 
       if (!updatedBooking) {
-        return NextResponse.json({ error: 'Nie znaleziono rezerwacji do zapisania materialow.' }, { status: 404 })
+        return NextResponse.json({ error: 'Nie znaleziono rezerwacji do zapisania materiałów.' }, { status: 404 })
       }
 
       return NextResponse.json({ ok: true, prep: buildPrepPayload(updatedBooking) })
@@ -134,7 +134,7 @@ export async function POST(
     }
 
     if (body.action !== 'get-upload-target') {
-      return NextResponse.json({ error: 'Niepoprawna akcja materialow.' }, { status: 400 })
+      return NextResponse.json({ error: 'Niepoprawna akcja materiałów.' }, { status: 400 })
     }
 
     const validationError = validatePreparationVideoMeta({
@@ -160,7 +160,7 @@ export async function POST(
       .createSignedUploadUrl(storagePath, { upsert: true })
 
     if (error || !data) {
-      throw error ?? new Error('Nie udalo sie przygotowac bezpiecznego uploadu nagrania.')
+      throw error ?? new Error('Nie udało się przygotować bezpiecznego uploadu nagrania.')
     }
 
     return NextResponse.json({
@@ -185,12 +185,12 @@ export async function PATCH(
     const booking = await resolveViewerBooking(request, params.id)
 
     if (!booking) {
-      return NextResponse.json({ error: 'Ten link do materialow jest nieprawidlowy albo wygasl.' }, { status: 403 })
+      return NextResponse.json({ error: 'Ten link do materiałów jest nieprawidłowy albo wygasł.' }, { status: 403 })
     }
 
     if (!canEditPreparationMaterials(booking)) {
       return NextResponse.json(
-        { error: 'Materialy mozna zmieniac tylko dla aktywnej rezerwacji lub potwierdzonej rozmowy.' },
+        { error: 'Materiały można zmieniać tylko dla aktywnej rezerwacji lub potwierdzonej rozmowy.' },
         { status: 409 },
       )
     }
@@ -229,7 +229,7 @@ export async function PATCH(
       const expectedStoragePath = buildPreparationVideoStoragePath(booking.id)
 
       if (body.prepVideoPath !== expectedStoragePath) {
-        return NextResponse.json({ error: 'Sciezka nagrania jest nieprawidlowa.' }, { status: 400 })
+        return NextResponse.json({ error: 'Ścieżka nagrania jest nieprawidłowa.' }, { status: 400 })
       }
 
       const videoError = validatePreparationVideoMeta({

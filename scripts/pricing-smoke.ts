@@ -37,13 +37,21 @@ function testBookingPayload(slotId: string, index: number) {
 
 async function backupData() {
   await rm(backupDir, { recursive: true, force: true })
-  await cp(dataDir, backupDir, { recursive: true, force: true })
+  try {
+    await cp(dataDir, backupDir, { recursive: true, force: true })
+  } catch {
+    // Fresh repo may not have runtime-local data yet.
+  }
 }
 
 async function restoreData() {
   await rm(dataDir, { recursive: true, force: true })
-  await mkdir(rootDir, { recursive: true })
-  await cp(backupDir, dataDir, { recursive: true, force: true })
+  try {
+    await mkdir(rootDir, { recursive: true })
+    await cp(backupDir, dataDir, { recursive: true, force: true })
+  } catch {
+    // Nothing to restore when there was no local runtime data before the smoke test.
+  }
   await rm(backupDir, { recursive: true, force: true })
 }
 

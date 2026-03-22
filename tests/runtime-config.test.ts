@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
 import { ADMIN_BASIC_AUTH_USERNAME, hasValidAdminAuthorization } from '@/lib/admin-auth'
 import { BUILD_MARKER_KEY, getBuildMarkerSnapshot } from '@/lib/build-marker'
+import { buildRollingAvailabilitySeed, isFutureAvailabilitySlot } from '@/lib/data'
 import { getDataModeStatus, getSupabaseServiceRoleKeyIssue } from '@/lib/server/env'
 import {
   createActiveConsultationPrice,
@@ -26,6 +27,7 @@ import { shouldSendBookingConfirmationAfterPayment } from '@/lib/server/notifica
 import { getReminderAuthorizationError, runBookingReminderSweep } from '@/lib/server/reminder-runner'
 import { getWarsawDateTime, shouldSendReminderForBooking } from '@/lib/server/reminders'
 import { assertStripeCheckoutAmountSupported, buildCheckoutSessionParams, isStripeTestMode } from '@/lib/server/stripe'
+import { getContactDetails } from '@/lib/site'
 
 const originalStripeSecret = process.env.STRIPE_SECRET_KEY
 const originalCommitRef = process.env.VERCEL_GIT_COMMIT_REF
@@ -35,6 +37,9 @@ const originalAppDataMode = process.env.APP_DATA_MODE
 const originalSupabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const originalSupabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 const originalBaseUrl = process.env.NEXT_PUBLIC_APP_URL
+const originalResendFromEmail = process.env.RESEND_FROM_EMAIL
+const originalContactEmail = process.env.BEHAVIOR15_CONTACT_EMAIL
+const originalContactPhone = process.env.BEHAVIOR15_CONTACT_PHONE
 
 afterEach(() => {
   if (typeof originalStripeSecret === 'string') {
@@ -83,6 +88,24 @@ afterEach(() => {
     process.env.NEXT_PUBLIC_APP_URL = originalBaseUrl
   } else {
     delete process.env.NEXT_PUBLIC_APP_URL
+  }
+
+  if (typeof originalResendFromEmail === 'string') {
+    process.env.RESEND_FROM_EMAIL = originalResendFromEmail
+  } else {
+    delete process.env.RESEND_FROM_EMAIL
+  }
+
+  if (typeof originalContactEmail === 'string') {
+    process.env.BEHAVIOR15_CONTACT_EMAIL = originalContactEmail
+  } else {
+    delete process.env.BEHAVIOR15_CONTACT_EMAIL
+  }
+
+  if (typeof originalContactPhone === 'string') {
+    process.env.BEHAVIOR15_CONTACT_PHONE = originalContactPhone
+  } else {
+    delete process.env.BEHAVIOR15_CONTACT_PHONE
   }
 })
 
@@ -152,6 +175,14 @@ test('rejects a publishable Supabase key as an admin data source', () => {
   assert.equal(status.isValid, false)
   assert.equal(status.active, null)
   assert.match(status.summary, /service role|publishable/i)
+})
+
+test('builds rolling local availability without past slots', () => {
+  const now = new Date('2026-03-22T16:10:00Z')
+  const seed = buildRollingAvailabilitySeed(now)
+
+  assert.ok(seed.length > 0)
+  assert.ok(seed.every((entry) => entry.times.every((time) => isFutureAvailabilitySlot(entry.date, time, now))))
 })
 
 test('accepts a secret Supabase service key for admin data operations', () => {
@@ -442,4 +473,15 @@ test('build marker includes the expected branch and short commit when Vercel env
   assert.equal(marker.branch, 'main')
   assert.equal(marker.commit, '09d9b02')
   assert.equal(marker.value, `${BUILD_MARKER_KEY}:main:09d9b02`)
+})
+
+test('does not expose the default resend onboarding address as public contact data', () => {
+  delete process.env.RESEND_FROM_EMAIL
+  delete process.env.BEHAVIOR15_CONTACT_EMAIL
+  delete process.env.BEHAVIOR15_CONTACT_PHONE
+
+  assert.deepEqual(getContactDetails(), {
+    email: null,
+    phone: null,
+  })
 })

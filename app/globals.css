@@ -49,6 +49,12 @@ button {
   cursor: pointer;
 }
 
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.72;
+  transform: none;
+}
+
 input::placeholder,
 textarea::placeholder {
   color: rgba(31, 26, 23, 0.34);
@@ -373,6 +379,34 @@ h1 span {
   margin-top: 20px;
 }
 
+.hero-price-badge {
+  display: inline-grid;
+  gap: 4px;
+  margin-top: 22px;
+  padding: 18px 20px;
+  border-radius: 24px;
+  border: 1px solid rgba(176, 123, 63, 0.22);
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 14px 34px rgba(98, 67, 37, 0.08);
+}
+
+.hero-price-badge strong {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(30px, 4vw, 42px);
+  line-height: 1;
+  color: var(--muted-strong);
+}
+
+.hero-price-badge span {
+  color: var(--muted);
+}
+
+.hero-price-label {
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
 .trust-chip {
   display: inline-flex;
   align-items: center;
@@ -610,6 +644,17 @@ h1 span {
 
 .button:hover {
   transform: translateY(-1px);
+}
+
+.button:focus-visible,
+.header-link:focus-visible,
+.slot-button:focus-visible,
+.faq-trigger:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid rgba(47, 118, 103, 0.28);
+  outline-offset: 3px;
 }
 
 .button-primary {
@@ -985,20 +1030,22 @@ h1 span {
   overflow: hidden;
 }
 
-.faq-summary {
-  list-style: none;
+.faq-heading {
+  margin: 0;
+}
+
+.faq-trigger {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+  width: 100%;
+  border: 0;
+  background: transparent;
   padding: 20px 22px;
   font-weight: 700;
   color: var(--muted-strong);
-  cursor: pointer;
-}
-
-.faq-summary::-webkit-details-marker {
-  display: none;
+  text-align: left;
 }
 
 .faq-chevron {
@@ -1008,7 +1055,7 @@ h1 span {
   transition: transform 0.18s ease;
 }
 
-.faq-item[open] .faq-chevron {
+.faq-trigger[aria-expanded='true'] .faq-chevron {
   transform: rotate(45deg);
 }
 

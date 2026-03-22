@@ -10,7 +10,7 @@ export async function DELETE(
     await deleteAvailabilitySlot(params.id)
     return NextResponse.json({ ok: true })
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Nie udalo sie usunac slotu.'
+    const message = error instanceof Error ? error.message : 'Nie udało się usunąć slotu.'
     return NextResponse.json({ error: message }, { status: error instanceof ConfigurationError ? 503 : 400 })
   }
 }

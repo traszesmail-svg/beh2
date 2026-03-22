@@ -16,7 +16,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ price })
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Nie udalo sie zapisac nowej ceny.'
+    const message = error instanceof Error ? error.message : 'Nie udało się zapisać nowej ceny.'
     return NextResponse.json({ error: message }, { status: error instanceof ConfigurationError ? 503 : 400 })
   }
 }

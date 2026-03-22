@@ -17,30 +17,30 @@ export default function TermsPage() {
           <h1>Zasady rezerwacji konsultacji Behawior 15</h1>
           <div className="stack-gap top-gap">
             <div className="list-card">
-              <strong>Forma uslugi</strong>
+              <strong>Forma usługi</strong>
               <span>
-                Behawior 15 to 15-minutowa konsultacja glosowa online prowadzona przez {SPECIALIST_NAME},{' '}
+                Behawior 15 to 15-minutowa konsultacja głosowa online prowadzona przez {SPECIALIST_NAME},{' '}
                 {SPECIALIST_CREDENTIALS}. To nie jest konsultacja wideo.
               </span>
             </div>
             <div className="list-card">
-              <strong>Rezerwacja i platnosc</strong>
+              <strong>Rezerwacja i płatność</strong>
               <span>
-                Termin zostaje chwilowo zablokowany na czas platnosci. Pelne potwierdzenie rezerwacji nastepuje po
-                skutecznym oplaceniu konsultacji.
+                Termin zostaje chwilowo zablokowany na czas płatności. Pełne potwierdzenie rezerwacji następuje po
+                skutecznym opłaceniu konsultacji.
               </span>
             </div>
             <div className="list-card">
               <strong>Cena</strong>
               <span>
-                Cena widoczna w chwili rezerwacji staje sie historyczna kwota danego bookingu. Zmiany ceny dotycza
+                Cena widoczna w chwili rezerwacji staje się historyczną kwotą danego bookingu. Zmiany ceny dotyczą
                 tylko nowych rezerwacji.
               </span>
             </div>
             <div className="list-card">
-              <strong>Materialy przed rozmowa</strong>
+              <strong>Materiały przed rozmową</strong>
               <span>
-                Materialy dodawane przed rozmowa sa opcjonalne i sluza wylacznie lepszemu przygotowaniu specjalisty do
+                Materiały dodawane przed rozmową są opcjonalne i służą wyłącznie lepszemu przygotowaniu specjalisty do
                 konsultacji.
               </span>
             </div>
@@ -49,7 +49,7 @@ export default function TermsPage() {
               <span>
                 {contact.email ? `E-mail: ${contact.email}. ` : ''}
                 {contact.phone ? `Telefon: ${contact.phone}. ` : ''}
-                W razie problemu z rezerwacja lub platnoscia skontaktuj sie bezposrednio przed terminem rozmowy.
+                W razie problemu z rezerwacją lub płatnością skontaktuj się bezpośrednio przed terminem rozmowy.
               </span>
             </div>
           </div>

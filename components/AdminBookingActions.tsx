@@ -38,12 +38,12 @@ export function AdminBookingActions({
 
       const payload = (await response.json()) as { error?: string }
       if (!response.ok) {
-        throw new Error(payload.error ?? 'Nie udalo sie oznaczyc konsultacji jako done.')
+        throw new Error(payload.error ?? 'Nie udało się oznaczyć konsultacji jako done.')
       }
 
       router.refresh()
     } catch (submitError) {
-      setError(submitError instanceof Error ? submitError.message : 'Wystapil blad akcji admina.')
+      setError(submitError instanceof Error ? submitError.message : 'Wystąpił błąd akcji admina.')
     } finally {
       setIsSubmitting(false)
     }
@@ -57,7 +57,7 @@ export function AdminBookingActions({
 
       {paymentStatus === 'paid' && bookingStatus !== 'done' ? (
         <button type="button" className="button button-primary small-button" onClick={handleMarkDone} disabled={isSubmitting}>
-          {isSubmitting ? 'Zapisywanie...' : 'Oznacz jako zakonczona'}
+          {isSubmitting ? 'Zapisywanie...' : 'Oznacz jako zakończoną'}
         </button>
       ) : null}
 

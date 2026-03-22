@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     const booking = await getBookingForViewer(body.bookingId, body.accessToken ?? null, request.headers.get('authorization'))
 
     if (!booking) {
-      return NextResponse.json({ error: 'Nie znaleziono rezerwacji albo link wygasl.' }, { status: 403 })
+      return NextResponse.json({ error: 'Nie znaleziono rezerwacji albo link wygasł.' }, { status: 403 })
     }
 
     const accessQuery = body.accessToken ? `&access=${encodeURIComponent(body.accessToken)}` : ''
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ redirectTo: `/confirmation?bookingId=${body.bookingId}${accessQuery}` })
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Mock platnosc nie powiodla sie.'
+    const message = error instanceof Error ? error.message : 'Mock płatność nie powiodła się.'
     return NextResponse.json({ error: message }, { status: error instanceof ConfigurationError ? 503 : 500 })
   }
 }

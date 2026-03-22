@@ -6,6 +6,7 @@ import { Header } from '@/components/Header'
 import { PreparationMaterialsCard } from '@/components/PreparationMaterialsCard'
 import { getProblemLabel } from '@/lib/data'
 import { getBookingForViewer } from '@/lib/server/db'
+import { getDataModeStatus } from '@/lib/server/env'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -27,7 +28,16 @@ export default async function CallPage({
 }) {
   noStore()
   const accessToken = readSearchParam(searchParams?.access)
-  const booking = await getBookingForViewer(params.id, accessToken, headers().get('authorization'))
+  const dataMode = getDataModeStatus()
+  let booking: Awaited<ReturnType<typeof getBookingForViewer>> = null
+
+  if (dataMode.isValid) {
+    try {
+      booking = await getBookingForViewer(params.id, accessToken, headers().get('authorization'))
+    } catch {
+      booking = null
+    }
+  }
 
   if (!booking) {
     return (
@@ -35,10 +45,10 @@ export default async function CallPage({
         <div className="container">
           <Header />
           <section className="panel centered-panel">
-            <div className="error-box">Ten link do rozmowy jest nieprawidlowy albo wygasl.</div>
+            <div className="error-box">Ten link do rozmowy jest nieprawidłowy albo wygasł.</div>
             <div className="hero-actions centered-actions">
               <Link href="/problem" className="button button-primary big-button">
-                Wroc do rezerwacji
+                Wróć do rezerwacji
               </Link>
             </div>
           </section>
@@ -59,9 +69,9 @@ export default async function CallPage({
             <div className="panel section-panel">
               <div className="section-eyebrow">Twoja rozmowa</div>
               <h2>{getProblemLabel(booking.problemType)}</h2>
-              <p className="muted paragraph-gap">To jest podsumowanie sprawy, z ktora przychodzisz na rozmowe. W razie potrzeby uzupelnij jeszcze materialy przygotowawcze ponizej.</p>
+              <p className="muted paragraph-gap">To jest podsumowanie sprawy, z którą przychodzisz na rozmowę. W razie potrzeby uzupełnij jeszcze materiały przygotowawcze poniżej.</p>
               <div className="list-card top-gap">
-                <strong>Opis zgloszenia</strong>
+                <strong>Opis zgłoszenia</strong>
                 <span>{booking.description}</span>
               </div>
             </div>
@@ -80,13 +90,13 @@ export default async function CallPage({
           </>
         ) : (
           <section className="panel centered-panel">
-            <div className="error-box">Dostep do rozmowy glosowej jest aktywny dopiero po poprawnej platnosci.</div>
+            <div className="error-box">Dostęp do rozmowy głosowej jest aktywny dopiero po poprawnej płatności.</div>
             <div className="hero-actions centered-actions">
               <Link
                 href={`/payment?bookingId=${booking.id}${accessToken ? `&access=${encodeURIComponent(accessToken)}` : ''}`}
                 className="button button-primary big-button"
               >
-                Wroc do platnosci
+                Wróć do płatności
               </Link>
             </div>
           </section>

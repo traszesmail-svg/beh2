@@ -1,6 +1,6 @@
 import { mkdir, readFile, writeFile } from 'fs/promises'
 import path from 'path'
-import { availabilitySeed, compareDateAndTime, formatDateLabel } from '@/lib/data'
+import { buildRollingAvailabilitySeed, compareDateAndTime, formatDateLabel, isFutureAvailabilitySlot } from '@/lib/data'
 import { createActiveConsultationPrice, DEFAULT_PRICE_PLN, parseConsultationPriceInput } from '@/lib/pricing'
 import { createCustomerAccessToken, hasValidCustomerAccessToken } from '@/lib/server/customer-access'
 import { getReservationWindowMinutes } from '@/lib/server/env'
@@ -48,7 +48,7 @@ function withLock<T>(work: () => Promise<T>): Promise<T> {
 }
 
 function createSeedAvailability(nowIso: string): AvailabilitySlot[] {
-  return availabilitySeed.flatMap((entry) =>
+  return buildRollingAvailabilitySeed(new Date(nowIso)).flatMap((entry) =>
     entry.times.map((bookingTime) => ({
       id: `${entry.date}-${bookingTime}`,
       bookingDate: entry.date,
@@ -187,7 +187,7 @@ function groupAvailability(slots: AvailabilitySlot[]): GroupedAvailability[] {
   const grouped = new Map<string, AvailabilitySlot[]>()
 
   for (const slot of slots) {
-    if (slot.isBooked || slot.lockedByBookingId) {
+    if (slot.isBooked || slot.lockedByBookingId || !isFutureAvailabilitySlot(slot.bookingDate, slot.bookingTime)) {
       continue
     }
 
@@ -260,12 +260,24 @@ export async function listAvailabilityAdmin(): Promise<AvailabilitySlot[]> {
 export async function getAvailabilitySlot(slotId: string): Promise<AvailabilitySlot | null> {
   return withLock(async () => {
     const store = await readStore()
-    return store.availability.find((slot) => slot.id === slotId) ?? null
+    const slot = store.availability.find((item) => item.id === slotId) ?? null
+
+    if (!slot) {
+      return null
+    }
+
+    return !slot.isBooked && !slot.lockedByBookingId && !isFutureAvailabilitySlot(slot.bookingDate, slot.bookingTime)
+      ? null
+      : slot
   })
 }
 
 export async function createAvailabilitySlot(bookingDate: string, bookingTime: string): Promise<AvailabilitySlot> {
   return withLock(async () => {
+    if (!isFutureAvailabilitySlot(bookingDate, bookingTime)) {
+      throw new Error('Możesz dodać tylko przyszły termin.')
+    }
+
     const store = await readStore()
     const existing = store.availability.find(
       (slot) => slot.bookingDate === bookingDate && slot.bookingTime === bookingTime,
@@ -319,7 +331,11 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
     const slot = store.availability.find((item) => item.id === form.slotId)
 
     if (!slot || slot.isBooked || slot.lockedByBookingId) {
-      throw new Error('Wybrany termin nie jest juz dostepny.')
+      throw new Error('Wybrany termin nie jest już dostępny.')
+    }
+
+    if (!isFutureAvailabilitySlot(slot.bookingDate, slot.bookingTime)) {
+      throw new Error('Wybrany termin jest już przeszły. Wybierz nową godzinę rozmowy.')
     }
 
     const nowIso = new Date().toISOString()

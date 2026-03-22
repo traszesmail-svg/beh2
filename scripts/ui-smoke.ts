@@ -28,13 +28,21 @@ function bookingPayload(slotId: string, index: number) {
 
 async function backupData() {
   await rm(backupDir, { recursive: true, force: true })
-  await cp(dataDir, backupDir, { recursive: true, force: true })
+  try {
+    await cp(dataDir, backupDir, { recursive: true, force: true })
+  } catch {
+    // Fresh repo may not have a runtime data directory yet.
+  }
 }
 
 async function restoreData() {
   await rm(dataDir, { recursive: true, force: true })
-  await mkdir(rootDir, { recursive: true })
-  await cp(backupDir, dataDir, { recursive: true, force: true })
+  try {
+    await mkdir(rootDir, { recursive: true })
+    await cp(backupDir, dataDir, { recursive: true, force: true })
+  } catch {
+    // No backup means there was no local runtime data before the smoke test.
+  }
   await rm(backupDir, { recursive: true, force: true })
 }
 
@@ -118,14 +126,23 @@ async function main() {
 
     const mobilePage = await mobile.newPage()
     await mobilePage.goto(appUrl, { waitUntil: 'domcontentloaded' })
-    const homeCtaVisible = await mobilePage.getByRole('link', { name: /Sprawdz terminy/i }).isVisible()
+    const homeCtaVisible = await mobilePage.getByRole('link', { name: /Sprawdź terminy/i }).isVisible()
     const heroHeadingVisible = await mobilePage.getByRole('heading', { name: /Konkretna pomoc behawioralna/i }).isVisible()
-    const footerLinkVisible = await mobilePage.getByRole('link', { name: /Polityka prywatnosci/i }).isVisible()
+    const heroPriceVisible = await mobilePage.getByText(/Cena startowa/i).isVisible()
+    const footerLinkVisible = await mobilePage.getByRole('link', { name: /Polityka prywatności/i }).isVisible()
+    const title = await mobilePage.title()
+    const description = await mobilePage.locator('meta[name="description"]').getAttribute('content')
+    const ogTitle = await mobilePage.locator('meta[property="og:title"]').getAttribute('content')
+    const charsetMetaPresent = (await mobilePage.locator('meta[charset]').count()) > 0
+    await mobilePage.getByRole('link', { name: /Sprawdź terminy i zarezerwuj/i }).click()
+    await mobilePage.waitForURL(/\/problem$/, { timeout: 10000 })
+    const bookingCtaWorks = await mobilePage.getByRole('heading', { name: /Z czym chcesz wejść/i }).isVisible()
+    await mobilePage.goto(appUrl, { waitUntil: 'domcontentloaded' })
 
     await mobilePage.goto(`${appUrl}/payment?bookingId=${bookingOne.booking.id}&access=${encodeURIComponent(bookingOne.accessToken)}`, {
       waitUntil: 'domcontentloaded',
     })
-    const paymentHeadingVisible = await mobilePage.getByRole('heading', { name: /Za chwile przejdziesz do bezpiecznej platnosci/i }).isVisible()
+    const paymentHeadingVisible = await mobilePage.getByRole('heading', { name: /Za chwilę przejdziesz do bezpiecznej płatności/i }).isVisible()
     const prepHeadingVisible = await mobilePage.getByRole('heading', { name: /Przygotuj mnie do rozmowy/i }).isVisible()
 
     await mobilePage.locator('input[type="file"]').setInputFiles({
@@ -133,16 +150,16 @@ async function main() {
       mimeType: 'video/mp4',
       buffer: Buffer.from('behawior15-mp4-smoke'),
     })
-    await mobilePage.getByText(/Nagranie zostalo dodane do rezerwacji/i).waitFor({ timeout: 10000 })
+    await mobilePage.getByText(/Nagranie zostało dodane do rezerwacji/i).waitFor({ timeout: 10000 })
 
     await mobilePage.locator('input[placeholder="https://..."]').fill('https://example.com/material')
-    await mobilePage.locator('textarea').fill('Na nagraniu widac szczekanie przy wychodzeniu opiekuna i pobudzenie po jego powrocie.')
-    await mobilePage.getByRole('button', { name: /Zapisz materialy do rozmowy/i }).click({ force: true })
-    await mobilePage.getByText(/Zapisano materialy do rozmowy/i).waitFor({ timeout: 10000 })
+    await mobilePage.locator('textarea').fill('Na nagraniu widać szczekanie przy wychodzeniu opiekuna i pobudzenie po jego powrocie.')
+    await mobilePage.getByRole('button', { name: /Zapisz materiały do rozmowy/i }).click({ force: true })
+    await mobilePage.getByText(/Zapisano materiały do rozmowy/i).waitFor({ timeout: 10000 })
 
-    await mobilePage.getByRole('button', { name: /Oplac konsultacje/i }).click()
+    await mobilePage.getByRole('button', { name: /Opłać konsultację/i }).click()
     await mobilePage.waitForURL(/\/confirmation\?bookingId=/, { timeout: 15000 })
-    const confirmationVisible = await mobilePage.getByRole('heading', { name: /Masz potwierdzona rozmowe glosowa/i }).isVisible()
+    const confirmationVisible = await mobilePage.getByRole('heading', { name: /Masz potwierdzoną rozmowę głosową/i }).isVisible()
     const prepCardStillVisible = await mobilePage.getByRole('heading', { name: /Przygotuj mnie do rozmowy/i }).isVisible()
 
     await mobilePage.goto(`${appUrl}/call/${bookingOne.booking.id}?access=${encodeURIComponent(bookingOne.accessToken)}`, {
@@ -153,27 +170,51 @@ async function main() {
     const desktopPage = await desktop.newPage()
     await desktopPage.goto(appUrl, { waitUntil: 'domcontentloaded' })
     const headerOfertaVisible = await desktopPage.getByRole('link', { name: /^Oferta$/i }).isVisible()
-    const specialistHeadingVisible = await desktopPage.getByRole('heading', { name: /Jedna osoba, jedna odpowiedzialnosc/i }).isVisible()
-    await desktopPage.locator('summary').first().click()
-    const faqAnswerVisible = await desktopPage.getByText(/To szybka konsultacja porzadkujaca sytuacje/i).isVisible()
+    const specialistHeadingVisible = await desktopPage.getByRole('heading', { name: /Jedna osoba, jedna odpowiedzialność/i }).isVisible()
+    const portraitAltVisible = await desktopPage.locator('img[alt="Portret specjalisty Behawior 15"]').isVisible()
+    const credentialAltVisible = await desktopPage.locator('img[alt*="CAPBT Polska"]').isVisible()
+    const faqButton = desktopPage.getByRole('button', { name: /Czy 15 minut wystarczy/i })
+    const faqInitiallyExpanded = await faqButton.getAttribute('aria-expanded')
+    const faqAnswerInitiallyVisible = await desktopPage.getByText(/To szybka konsultacja/i).isVisible()
+    await faqButton.click()
+    const faqExpanded = await faqButton.getAttribute('aria-expanded')
+    const faqAnswerVisibleAfterToggle = await desktopPage.getByText(/To szybka konsultacja/i).isHidden()
 
     await desktopPage.goto(`${appUrl}/admin`, { waitUntil: 'domcontentloaded' })
     const adminPricingVisible = await desktopPage.getByRole('heading', { name: /Aktywna cena dla nowych rezerwacji/i }).isVisible()
     const adminBuildMarkerVisible = await desktopPage.getByText(new RegExp(BUILD_MARKER_KEY)).isVisible()
     await desktopPage.locator('input[type="number"]').fill('47')
-    await desktopPage.getByRole('button', { name: /Zapisz nowa cene/i }).click()
-    await desktopPage.getByText(/Zapisano nowa cene konsultacji/i).waitFor({ timeout: 10000 })
+    await desktopPage.getByRole('button', { name: /Zapisz now.*cen/i }).click()
+    await desktopPage.getByText(/Zapisano now.*cen.*konsultacji/i).waitFor({ timeout: 10000 })
 
     await desktopPage.goto(appUrl, { waitUntil: 'domcontentloaded' })
     const landingPriceCardText = (await desktopPage.locator('.stats-grid .stat-card').nth(1).textContent()) ?? ''
     const landingUpdatedPriceVisible = /47/.test(landingPriceCardText)
-
-    const bookingTwo = await localStore.createPendingBooking(bookingPayload(freeSlots[1].id, 2))
-    const bookingOneAmount = bookingOne.booking.amount
-    const bookingTwoAmount = bookingTwo.booking.amount
-
-    assert.equal(bookingOneAmount, 39)
-    assert.equal(bookingTwoAmount, 47)
+    assert.equal(homeCtaVisible, true)
+    assert.equal(heroHeadingVisible, true)
+    assert.equal(heroPriceVisible, true)
+    assert.equal(footerLinkVisible, true)
+    assert.equal(bookingCtaWorks, true)
+    assert.equal(paymentHeadingVisible, true)
+    assert.equal(prepHeadingVisible, true)
+    assert.equal(confirmationVisible, true)
+    assert.equal(prepCardStillVisible, true)
+    assert.equal(callTimerVisible, true)
+    assert.match(title, /Behawior 15/)
+    assert.match(description ?? '', /konsultacja głosowa/i)
+    assert.match(ogTitle ?? '', /Behawior 15/i)
+    assert.equal(charsetMetaPresent, true)
+    assert.equal(headerOfertaVisible, true)
+    assert.equal(specialistHeadingVisible, true)
+    assert.equal(portraitAltVisible, true)
+    assert.equal(credentialAltVisible, true)
+    assert.equal(faqInitiallyExpanded, 'true')
+    assert.equal(faqAnswerInitiallyVisible, true)
+    assert.equal(faqExpanded, 'false')
+    assert.equal(faqAnswerVisibleAfterToggle, true)
+    assert.equal(adminPricingVisible, true)
+    assert.equal(adminBuildMarkerVisible, true)
+    assert.equal(landingUpdatedPriceVisible, true)
 
     console.log(
       JSON.stringify(
@@ -181,24 +222,34 @@ async function main() {
           mobile: {
             homeCtaVisible,
             heroHeadingVisible,
+            heroPriceVisible,
             footerLinkVisible,
+            bookingCtaWorks,
             paymentHeadingVisible,
             prepHeadingVisible,
             confirmationVisible,
             prepCardStillVisible,
             callTimerVisible,
+            title,
+            description,
+            ogTitle,
+            charsetMetaPresent,
           },
           landing: {
             headerOfertaVisible,
             specialistHeadingVisible,
-            faqAnswerVisible,
+            portraitAltVisible,
+            credentialAltVisible,
+            faqInitiallyExpanded,
+            faqAnswerInitiallyVisible,
+            faqExpanded,
+            faqAnswerVisibleAfterToggle,
             landingUpdatedPriceVisible,
           },
           admin: {
             pricingVisible: adminPricingVisible,
             buildMarkerVisible: adminBuildMarkerVisible,
-            bookingOneAmount,
-            bookingTwoAmount,
+            landingUpdatedPriceVisible,
           },
           materials: {
             videoUploaded: true,

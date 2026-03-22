@@ -16,7 +16,7 @@ export async function POST(
 
     return NextResponse.json({ ok: true })
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Nie udalo sie zamknac konsultacji.'
+    const message = error instanceof Error ? error.message : 'Nie udało się zamknąć konsultacji.'
     return NextResponse.json({ error: message }, { status: error instanceof ConfigurationError ? 503 : 500 })
   }
 }

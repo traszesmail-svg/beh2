@@ -73,17 +73,26 @@ export default async function HomePage() {
   const dataMode = getDataModeStatus()
   let pricing: Awaited<ReturnType<typeof getActiveConsultationPrice>> | null = null
   let availability: Awaited<ReturnType<typeof listAvailability>> = []
+  let publicFlowMessage: string | null = null
 
   if (dataMode.isValid) {
-    ;[pricing, availability] = await Promise.all([getActiveConsultationPrice(), listAvailability()])
+    try {
+      ;[pricing, availability] = await Promise.all([getActiveConsultationPrice(), listAvailability()])
+    } catch {
+      publicFlowMessage =
+        'Cena i terminy chwilowo się odświeżają. Odśwież stronę za moment albo skontaktuj się bezpośrednio, jeśli chcesz zarezerwować rozmowę.'
+    }
+  } else {
+    publicFlowMessage =
+      'Panel danych wymaga jeszcze konfiguracji. Możesz zobaczyć ofertę i wrócić za chwilę do rezerwacji.'
   }
 
   const nextSlot = availability[0]?.slots[0]
-  const nextSlotLabel = !dataMode.isValid
-    ? 'Terminarz chwilowo niedostepny'
+  const nextSlotLabel = !dataMode.isValid || publicFlowMessage
+    ? 'Terminy chwilowo się odświeżają'
     : nextSlot
       ? formatDateTimeLabel(nextSlot.bookingDate, nextSlot.bookingTime)
-      : 'Brak wolnych terminow'
+      : 'Brak wolnych terminów'
 
   return (
     <main className="page-wrap">
@@ -92,9 +101,9 @@ export default async function HomePage() {
 
         <section className="hero-grid" id="oferta">
           <div className="panel hero-panel hero-surface">
-            {!dataMode.isValid ? <div className="error-box">{dataMode.summary}</div> : null}
+            {publicFlowMessage ? <div className="info-box">{publicFlowMessage}</div> : null}
 
-            <div className="pill">15-minutowa konsultacja glosowa online</div>
+            <div className="pill">15-minutowa konsultacja głosowa online</div>
             <div className="hero-topline">
               Bez chaosu, bez zgadywania i bez zamieniania problemu w tygodnie sprzecznych porad.
             </div>
@@ -102,9 +111,15 @@ export default async function HomePage() {
               Konkretna pomoc behawioralna dla psa lub kota. <span>Jedna rozmowa i jasny pierwszy krok.</span>
             </h1>
             <p className="hero-text">
-              Placisz raz, rezerwujesz realny termin i rozmawiasz bezposrednio z jednym specjalista. To krotka, spokojna
-              konsultacja audio, ktora pomaga ocenic sytuacje i wybrac najlepszy dalszy ruch.
+              Płacisz raz, rezerwujesz realny termin i rozmawiasz bezpośrednio z jednym specjalistą. To krótka, spokojna
+              konsultacja audio, która pomaga ocenić sytuację i wybrać najlepszy dalszy ruch.
             </p>
+
+            <div className="hero-price-badge">
+              <span className="hero-price-label">Cena startowa</span>
+              <strong>{pricing?.formattedAmount ?? 'Cena chwilowo niedostępna'}</strong>
+              <span>za 15 minut rozmowy audio</span>
+            </div>
 
             <div className="hero-note-row">
               <span className="trust-chip">Audio online bez instalacji</span>
@@ -119,26 +134,26 @@ export default async function HomePage() {
               </div>
               <div className="stat-card">
                 <div className="stat-label">Aktualna cena</div>
-                <div className="stat-value">{pricing?.formattedAmount ?? 'Sprawdz panel danych'}</div>
+                <div className="stat-value">{pricing?.formattedAmount ?? 'Cena chwilowo niedostępna'}</div>
               </div>
               <div className="stat-card">
-                <div className="stat-label">Prowadzacy</div>
+                <div className="stat-label">Prowadzący</div>
                 <div className="stat-value">1 specjalista</div>
               </div>
             </div>
 
             <div className="hero-actions">
-              {dataMode.isValid ? (
+              {dataMode.isValid && !publicFlowMessage ? (
                 <Link href="/problem" className="button button-primary big-button">
-                  Sprawdz terminy i zarezerwuj
+                  Sprawdź terminy i zarezerwuj
                 </Link>
               ) : (
                 <a href="#specjalista" className="button button-primary big-button">
-                  Zobacz informacje o specjaliscie
+                  Zobacz informacje o specjaliście
                 </a>
               )}
               <a href="#jak-to-dziala" className="button button-ghost big-button">
-                Jak to dziala
+                Jak to działa
               </a>
             </div>
           </div>
@@ -149,7 +164,7 @@ export default async function HomePage() {
                 <div className="section-eyebrow">Kwalifikacje i zaufanie</div>
                 <h2>COAPE / CAPBT</h2>
                 <p className="muted paragraph-gap">
-                  Profil specjalisty jest publicznie dostepny w katalogu COAPE / CAPBT, bez marketplace i bez losowego
+                  Profil specjalisty jest publicznie dostępny w katalogu COAPE / CAPBT, bez marketplace i bez losowego
                   przekierowania do innej osoby.
                 </p>
               </div>
@@ -163,12 +178,12 @@ export default async function HomePage() {
             </div>
 
             <div className="mini-card availability-card">
-              <div className="muted">Najblizszy dostepny termin</div>
+              <div className="muted">Najbliższy dostępny termin</div>
               <div className="side-title">{nextSlotLabel}</div>
               <ul className="hero-checklist">
-                <li>Realny slot z terminarza, nie sztuczny licznik pilnosci.</li>
-                <li>Po platnosci od razu dostajesz potwierdzenie i link do rozmowy.</li>
-                <li>Jesli chcesz, przed rozmowa dodasz nagranie, link albo notatki.</li>
+                <li>Realny slot z terminarza, nie sztuczny licznik pilności.</li>
+                <li>Po płatności od razu dostajesz potwierdzenie i link do rozmowy.</li>
+                <li>Jeśli chcesz, przed rozmową dodasz nagranie, link albo notatki.</li>
               </ul>
             </div>
           </div>
@@ -178,29 +193,29 @@ export default async function HomePage() {
           <div className="section-head">
             <div>
               <div className="section-eyebrow">Dla kogo</div>
-              <h2>Gdy chcesz szybko uporzadkowac problem i wiedziec, co robic dalej</h2>
+              <h2>Gdy chcesz szybko uporządkować problem i wiedzieć, co robić dalej</h2>
             </div>
-            <div className="muted">To pierwszy, spokojny krok przed pelna konsultacja albo planem pracy.</div>
+            <div className="muted">To pierwszy, spokojny krok przed pełną konsultacją albo planem pracy.</div>
           </div>
 
           <div className="card-grid three-up top-gap">
             <div className="feature-card">
-              <div className="simple-title">Problemy codzienne i nagle kryzysy</div>
+              <div className="simple-title">Problemy codzienne i nagłe kryzysy</div>
               <div className="simple-desc">
-                Szczekanie, pobudzenie, lek separacyjny, agresja, kuweta, niszczenie albo napiecie w domu.
+                Szczekanie, pobudzenie, lęk separacyjny, agresja, kuweta, niszczenie albo napięcie w domu.
               </div>
             </div>
             <div className="feature-card">
               <div className="simple-title">Jeden temat, jedna decyzja, jeden kierunek</div>
               <div className="simple-desc">
-                W 15 minut porzadkujesz sytuacje i wiesz, czy wystarcza pierwsze wskazowki, czy potrzeba dalszej pracy.
+                W 15 minut porządkujesz sytuację i wiesz, czy wystarczą pierwsze wskazówki, czy potrzeba dalszej pracy.
               </div>
             </div>
             <div className="feature-card">
               <div className="simple-title">Bez konsultacji wideo i bez rozpraszaczy</div>
               <div className="simple-desc">
-                To rozmowa audio. Kamera nie jest potrzebna, ale mozesz dodac materialy przed rozmowa, zeby lepiej
-                pokazac problem.
+                To rozmowa audio. Kamera nie jest potrzebna, ale możesz dodać materiały przed rozmową, żeby lepiej
+                pokazać problem.
               </div>
             </div>
           </div>
@@ -210,9 +225,9 @@ export default async function HomePage() {
           <div className="section-head">
             <div>
               <div className="section-eyebrow">Tematy konsultacji</div>
-              <h2>Wybierz punkt startowy, a potem przejdz do realnie wolnych terminow</h2>
+              <h2>Wybierz punkt startowy, a potem przejdź do realnie wolnych terminów</h2>
             </div>
-            <div className="muted">Kazdy temat prowadzi do tej samej konsultacji audio i tej samej ceny startowej.</div>
+            <div className="muted">Każdy temat prowadzi do tej samej konsultacji audio i tej samej ceny startowej.</div>
           </div>
 
           <div className="card-grid three-up top-gap">
@@ -231,9 +246,9 @@ export default async function HomePage() {
           <div className="section-head">
             <div>
               <div className="section-eyebrow">Jak to dziala</div>
-              <h2>Prosto: temat, termin, platnosc, rozmowa</h2>
+              <h2>Prosto: temat, termin, płatność, rozmowa</h2>
             </div>
-            <div className="muted">Bez osobnych rozmow wstepnych, bez czekania na oddzwonienie i bez rozbudowanego onboardingu.</div>
+            <div className="muted">Bez osobnych rozmów wstępnych, bez czekania na oddzwonienie i bez rozbudowanego onboardingu.</div>
           </div>
 
           <div className="card-grid three-up top-gap">
@@ -249,7 +264,7 @@ export default async function HomePage() {
 
         <section className="two-col-section" id="specjalista">
           <div className="panel section-panel specialist-visual-card">
-            <div className="section-eyebrow">Specjalista prowadzacy</div>
+            <div className="section-eyebrow">Specjalista prowadzący</div>
             <div className="specialist-portrait-shell top-gap">
               <Image
                 src="/branding/specialist-placeholder.svg"
@@ -262,38 +277,38 @@ export default async function HomePage() {
             <div className="list-card top-gap">
               <strong>{SPECIALIST_NAME}</strong>
               <span>
-                {SPECIALIST_CREDENTIALS}. {SPECIALIST_LOCATION}. Prowadzi kazda rozmowe osobiscie od rezerwacji do
+                {SPECIALIST_CREDENTIALS}. {SPECIALIST_LOCATION}. Prowadzi każdą rozmowę osobiście od rezerwacji do
                 rekomendacji kolejnego kroku.
               </span>
             </div>
           </div>
 
           <div className="panel section-panel">
-            <div className="section-eyebrow">Dlaczego temu zaufac</div>
-            <h2>Jedna osoba, jedna odpowiedzialnosc i realne kwalifikacje</h2>
+            <div className="section-eyebrow">Dlaczego temu zaufać</div>
+            <h2>Jedna osoba, jedna odpowiedzialność i realne kwalifikacje</h2>
             <div className="stack-gap top-gap">
               <div className="list-card">
                 <strong>Behawior i weterynaria w jednym obrazie sytuacji</strong>
                 <span>
-                  To spojrzenie laczace prace behawioralna z doswiadczeniem technika weterynarii, co pomaga szybciej
-                  wychwycic, kiedy problem wymaga dalszej diagnostyki albo planu pracy.
+                  To spojrzenie łączące pracę behawioralną z doświadczeniem technika weterynarii, co pomaga szybciej
+                  wychwycić, kiedy problem wymaga dalszej diagnostyki albo planu pracy.
                 </span>
               </div>
               <div className="list-card">
                 <strong>COAPE / CAPBT</strong>
                 <span>
-                  Profil specjalisty jest dostepny w katalogu COAPE / CAPBT. To publiczny punkt weryfikacji kwalifikacji
+                  Profil specjalisty jest dostępny w katalogu COAPE / CAPBT. To publiczny punkt weryfikacji kwalifikacji
                   i zakresu pracy.
                 </span>
                 <a href={COAPE_PROFILE_URL} target="_blank" rel="noreferrer" className="text-link top-gap-small">
-                  Otworz profil COAPE / CAPBT
+                  Otwórz profil COAPE / CAPBT
                 </a>
               </div>
               <div className="list-card">
-                <strong>Rozmowa przygotowana pod Twoj przypadek</strong>
+                <strong>Rozmowa przygotowana pod Twój przypadek</strong>
                 <span>
-                  Jesli chcesz, przed rozmowa dodasz krotkie nagranie MP4, link albo notatki. To nie jest konsultacja
-                  wideo, ale bardzo pomaga szybciej zrozumiec sytuacje.
+                  Jeśli chcesz, przed rozmową dodasz krótkie nagranie MP4, link albo notatki. To nie jest konsultacja
+                  wideo, ale bardzo pomaga szybciej zrozumieć sytuację.
                 </span>
               </div>
             </div>
@@ -304,23 +319,23 @@ export default async function HomePage() {
           <div className="section-head">
             <div>
               <div className="section-eyebrow">FAQ</div>
-              <h2>Najczestsze pytania przed pierwsza rozmowa</h2>
+              <h2>Najczęstsze pytania przed pierwszą rozmową</h2>
             </div>
-            <div className="muted">Krotkie odpowiedzi na to, co zwykle blokuje decyzje o rezerwacji.</div>
+            <div className="muted">Krótkie odpowiedzi na to, co zwykle blokuje decyzję o rezerwacji.</div>
           </div>
           <FaqAccordion items={faq} />
         </section>
 
         <section className="panel cta-panel">
           <div className="section-eyebrow">Pierwszy krok</div>
-          <h2>Zacznij od 15 minut rozmowy, ktora porzadkuje sytuacje i daje kierunek.</h2>
+          <h2>Zacznij od 15 minut rozmowy, która porządkuje sytuację i daje kierunek.</h2>
           <p className="hero-text small-width">
-            Jesli problem zaczyna sie ciagnac, najwazniejsze jest dobre otwarcie. Ta konsultacja pomaga szybko ocenic,
-            co robic od razu i czy potrzebna jest dalsza, szersza praca.
+            Jeśli problem zaczyna się ciągnąć, najważniejsze jest dobre otwarcie. Ta konsultacja pomaga szybko ocenić,
+            co robić od razu i czy potrzebna jest dalsza, szersza praca.
           </p>
           <div className="hero-actions top-gap">
             <Link href="/problem" className="button button-primary big-button">
-              Umow konsultacje
+              Umów konsultację
             </Link>
           </div>
         </section>

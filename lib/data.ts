@@ -1,49 +1,92 @@
 import { AvailabilitySeed, ProblemOption, ProblemType } from './types'
 
 export const problemOptions: ProblemOption[] = [
-  { id: 'szczeniak', icon: 'puppy', title: 'Szczeniak i mlody pies', desc: 'gryzienie, nauka czystosci, pobudzenie i pierwsze zasady w domu' },
-  { id: 'kot', icon: 'cat', title: 'Kot i trudne zachowania', desc: 'problemy z kuweta, napiecie, wokalizacja i trudnosci w domu' },
-  { id: 'separacja', icon: 'home', title: 'Lek separacyjny', desc: 'wycie, niszczenie, trudnosc zostawania samemu i napiecie po wyjsciu opiekuna' },
-  { id: 'agresja', icon: 'shield', title: 'Agresja i reakcje obronne', desc: 'trudne zachowania wobec ludzi, zwierzat lub w codziennych sytuacjach' },
-  { id: 'niszczenie', icon: 'spark', title: 'Szczekanie, niszczenie, pobudzenie', desc: 'halas, rozregulowanie i trudnosc z wyciszeniem lub kontrola emocji' },
-  { id: 'inne', icon: 'compass', title: 'Inny temat do omowienia', desc: 'gdy chcesz szybko uporzadkowac sytuacje i dostac pierwszy kierunek dzialania' },
+  { id: 'szczeniak', icon: 'puppy', title: 'Szczeniak i młody pies', desc: 'gryzienie, nauka czystości, pobudzenie i pierwsze zasady w domu' },
+  { id: 'kot', icon: 'cat', title: 'Kot i trudne zachowania', desc: 'problemy z kuwetą, napięcie, wokalizacja i trudności w domu' },
+  { id: 'separacja', icon: 'home', title: 'Lęk separacyjny', desc: 'wycie, niszczenie, trudność zostawania samemu i napięcie po wyjściu opiekuna' },
+  { id: 'agresja', icon: 'shield', title: 'Agresja i reakcje obronne', desc: 'trudne zachowania wobec ludzi, zwierząt lub w codziennych sytuacjach' },
+  { id: 'niszczenie', icon: 'spark', title: 'Szczekanie, niszczenie, pobudzenie', desc: 'hałas, rozregulowanie i trudność z wyciszeniem lub kontrolą emocji' },
+  { id: 'inne', icon: 'compass', title: 'Inny temat do omówienia', desc: 'gdy chcesz szybko uporządkować sytuację i dostać pierwszy kierunek działania' },
 ]
 
 export const steps = [
-  { n: '01', title: 'Wybierasz temat', desc: 'Okreslasz, czego dotyczy trudnosc, i sprawdzasz realnie wolne terminy.' },
-  { n: '02', title: 'Rezerwujesz i oplacasz', desc: 'Podajesz dane, blokujesz termin na czas platnosci i przechodzisz do bezpiecznego checkoutu.' },
-  { n: '03', title: 'Dostajesz rozmowe i dalszy kierunek', desc: 'Po oplaceniu otrzymujesz potwierdzenie, link do rozmowy audio i jasny kolejny krok po konsultacji.' },
+  { n: '01', title: 'Wybierasz temat', desc: 'Określasz, czego dotyczy trudność, i sprawdzasz realnie wolne terminy.' },
+  { n: '02', title: 'Rezerwujesz i opłacasz', desc: 'Podajesz dane, blokujesz termin na czas płatności i przechodzisz do bezpiecznego checkoutu.' },
+  { n: '03', title: 'Dostajesz rozmowę i dalszy kierunek', desc: 'Po opłaceniu otrzymujesz potwierdzenie, link do rozmowy audio i jasny kolejny krok po konsultacji.' },
 ]
 
 export const faq = [
   {
     q: 'Czy 15 minut wystarczy?',
-    a: 'To szybka konsultacja porzadkujaca sytuacje. Jej celem jest wstepna ocena problemu i pierwszy, konkretny kierunek dzialania.',
+    a: 'To szybka konsultacja porządkująca sytuację. Jej celem jest wstępna ocena problemu i pierwszy, konkretny kierunek działania.',
   },
   {
-    q: 'Czy konsultacja dotyczy rowniez kotow?',
-    a: 'Tak. Konsultacja jest przeznaczona dla opiekunow psow i kotow, takze w sprawach dotyczacych kuwety, stresu i napiecia.',
+    q: 'Czy konsultacja dotyczy również kotów?',
+    a: 'Tak. Konsultacja jest przeznaczona dla opiekunów psów i kotów, także w sprawach dotyczących kuwety, stresu i napięcia.',
   },
   {
-    q: 'Czy musze cos instalowac?',
-    a: 'Nie. Rezerwacja, platnosc i dolaczenie do rozmowy glosowej dzialaja w przegladarce telefonu albo komputera.',
+    q: 'Czy muszę coś instalować?',
+    a: 'Nie. Rezerwacja, płatność i dołączenie do rozmowy głosowej działają w przeglądarce telefonu albo komputera.',
   },
   {
-    q: 'Co dzieje sie po rozmowie?',
-    a: 'Po rozmowie otrzymujesz wskazowki, co robic dalej. W razie potrzeby kolejnym krokiem moze byc pelna konsultacja, plan pracy, wizyta domowa albo dalsze wsparcie.',
+    q: 'Co dzieje się po rozmowie?',
+    a: 'Po rozmowie otrzymujesz wskazówki, co robić dalej. W razie potrzeby kolejnym krokiem może być pełna konsultacja, plan pracy, wizyta domowa albo dalsze wsparcie.',
   },
   {
-    q: 'Czy to jest konsultacja glosowa?',
+    q: 'Czy to jest konsultacja głosowa?',
     a: 'Tak. Ten 15-minutowy produkt jest przygotowany jako rozmowa audio online. Kamera nie jest potrzebna.',
   },
 ]
 
-export const availabilitySeed: AvailabilitySeed[] = [
-  { date: '2026-03-20', times: ['10:00', '10:20', '10:40', '11:00', '11:20', '11:40', '12:00'] },
-  { date: '2026-03-21', times: ['09:00', '09:20', '09:40', '10:00', '10:20', '17:00', '17:20'] },
-  { date: '2026-03-22', times: ['11:00', '11:20', '11:40', '18:00', '18:20'] },
-  { date: '2026-03-23', times: ['09:00', '09:20', '16:00', '16:20', '16:40'] },
-]
+const rollingAvailabilityTimeGroups = [
+  ['09:00', '09:20', '09:40', '10:00', '10:20', '10:40'],
+  ['11:00', '11:20', '11:40', '16:00', '16:20', '16:40'],
+  ['09:00', '09:20', '17:00', '17:20', '17:40', '18:00'],
+  ['10:00', '10:20', '10:40', '11:00', '18:00', '18:20'],
+] as const
+
+function formatWarsawDate(date: Date): string {
+  return new Intl.DateTimeFormat('sv-SE', {
+    timeZone: 'Europe/Warsaw',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(date)
+}
+
+function formatWarsawTime(date: Date): string {
+  return new Intl.DateTimeFormat('sv-SE', {
+    timeZone: 'Europe/Warsaw',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(date)
+}
+
+export function getWarsawNowBoundary(now = new Date()) {
+  return {
+    date: formatWarsawDate(now),
+    time: formatWarsawTime(now),
+  }
+}
+
+export function isFutureAvailabilitySlot(bookingDate: string, bookingTime: string, now = new Date()): boolean {
+  const boundary = getWarsawNowBoundary(now)
+  return `${bookingDate}T${bookingTime}` >= `${boundary.date}T${boundary.time}`
+}
+
+export function buildRollingAvailabilitySeed(now = new Date(), dayCount = 6): AvailabilitySeed[] {
+  return Array.from({ length: dayCount }, (_, index) => {
+    const date = new Date(now.getTime() + index * 24 * 60 * 60 * 1000)
+    const bookingDate = formatWarsawDate(date)
+    return {
+      date: bookingDate,
+      times: [...rollingAvailabilityTimeGroups[index % rollingAvailabilityTimeGroups.length]].filter((time) =>
+        isFutureAvailabilitySlot(bookingDate, time, now),
+      ),
+    }
+  }).filter((entry) => entry.times.some((time) => isFutureAvailabilitySlot(entry.date, time, now)))
+}
 
 export function getProblemLabel(problem: ProblemType): string {
   return problemOptions.find((item) => item.id === problem)?.title ?? 'Konsultacja'
@@ -52,15 +95,15 @@ export function getProblemLabel(problem: ProblemType): string {
 export function getBookingStatusLabel(status: 'pending' | 'confirmed' | 'done' | 'cancelled' | 'expired'): string {
   switch (status) {
     case 'pending':
-      return 'Oczekuje na platnosc'
+      return 'Oczekuje na płatność'
     case 'confirmed':
       return 'Potwierdzona'
     case 'done':
-      return 'Zakonczona'
+      return 'Zakończona'
     case 'cancelled':
       return 'Anulowana'
     case 'expired':
-      return 'Wygasla'
+      return 'Wygasła'
     default:
       return status
   }
@@ -69,13 +112,13 @@ export function getBookingStatusLabel(status: 'pending' | 'confirmed' | 'done' |
 export function getPaymentStatusLabel(status: 'unpaid' | 'paid' | 'failed' | 'refunded'): string {
   switch (status) {
     case 'unpaid':
-      return 'Nieoplacona'
+      return 'Nieopłacona'
     case 'paid':
-      return 'Oplacona'
+      return 'Opłacona'
     case 'failed':
-      return 'Platnosc nieudana'
+      return 'Płatność nieudana'
     case 'refunded':
-      return 'Zwrocona'
+      return 'Zwrócona'
     default:
       return status
   }

@@ -17,7 +17,7 @@ function getLocalVideoAbsolutePath(bookingId: string) {
 }
 
 function getSupabaseAdmin() {
-  const config = getSupabaseServerConfig('odczyt materialow przygotowawczych')
+  const config = getSupabaseServerConfig('odczyt materiałów przygotowawczych')
 
   return createClient(config.url, config.serviceRoleKey, {
     auth: {
@@ -35,21 +35,21 @@ export async function GET(
     const booking = await getBookingForViewer(params.id, resolveAccessToken(request), request.headers.get('authorization'))
 
     if (!booking) {
-      return NextResponse.json({ error: 'Ten link do nagrania jest nieprawidlowy albo wygasl.' }, { status: 403 })
+      return NextResponse.json({ error: 'Ten link do nagrania jest nieprawidłowy albo wygasł.' }, { status: 403 })
     }
 
     if (!booking.prepVideoPath) {
       return NextResponse.json({ error: 'Do tej rezerwacji nie dodano jeszcze nagrania.' }, { status: 404 })
     }
 
-    if (resolveDataMode('odczyt materialow przygotowawczych') === 'supabase') {
+    if (resolveDataMode('odczyt materiałów przygotowawczych') === 'supabase') {
       const supabase = getSupabaseAdmin()
       const { data, error } = await supabase.storage
         .from(PREPARATION_STORAGE_BUCKET)
         .createSignedUrl(booking.prepVideoPath, 60 * 10)
 
       if (error || !data?.signedUrl) {
-        throw error ?? new Error('Nie udalo sie przygotowac dostepu do nagrania.')
+        throw error ?? new Error('Nie udało się przygotować dostępu do nagrania.')
       }
 
       return NextResponse.redirect(data.signedUrl)
@@ -66,7 +66,7 @@ export async function GET(
       },
     })
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Nie udalo sie pobrac nagrania.'
+    const message = error instanceof Error ? error.message : 'Nie udało się pobrać nagrania.'
     const isMissingFile =
       typeof error === 'object' && error !== null && 'code' in error && error.code === 'ENOENT'
 

@@ -93,7 +93,7 @@ export function PreparationMaterialsCard({
     }
 
     if (!response.ok || !payload.prep) {
-      throw new Error(payload.error ?? 'Nie udalo sie zapisac materialow.')
+      throw new Error(payload.error ?? 'Nie udało się zapisać materiałów.')
     }
 
     setLinkValue(payload.prep.prepLinkUrl ?? '')
@@ -131,9 +131,9 @@ export function PreparationMaterialsCard({
         prepLinkUrl: linkValue,
         prepNotes: notesValue,
       })
-      setMessage('Zapisano materialy do rozmowy.')
+      setMessage('Zapisano materiały do rozmowy.')
     } catch (saveError) {
-      setError(saveError instanceof Error ? saveError.message : 'Nie udalo sie zapisac materialow.')
+      setError(saveError instanceof Error ? saveError.message : 'Nie udało się zapisać materiałów.')
     } finally {
       setIsSaving(false)
     }
@@ -162,7 +162,7 @@ export function PreparationMaterialsCard({
     const duration = await readVideoDuration(file)
 
     if (duration && duration > PREPARATION_VIDEO_MAX_DURATION_SECONDS) {
-      setError('Nagranie powinno trwac maksymalnie 5 minut, zeby dalo sie je szybko obejrzec przed rozmowa.')
+      setError('Nagranie powinno trwać maksymalnie 5 minut, żeby dało się je szybko obejrzeć przed rozmową.')
       setMessage('')
       event.target.value = ''
       return
@@ -194,7 +194,7 @@ export function PreparationMaterialsCard({
       }
 
       if (!prepResponse.ok || !prepPayload.mode) {
-        throw new Error(prepPayload.error ?? 'Nie udalo sie przygotowac uploadu nagrania.')
+        throw new Error(prepPayload.error ?? 'Nie udało się przygotować uploadu nagrania.')
       }
 
       if (prepPayload.mode === 'local') {
@@ -212,7 +212,7 @@ export function PreparationMaterialsCard({
         }
 
         if (!localResponse.ok || !localPayload.prep) {
-          throw new Error(localPayload.error ?? 'Nie udalo sie wyslac nagrania.')
+          throw new Error(localPayload.error ?? 'Nie udało się wysłać nagrania.')
         }
 
         setVideoState({
@@ -222,7 +222,7 @@ export function PreparationMaterialsCard({
         })
       } else {
         if (!prepPayload.signedUrl || !prepPayload.storagePath) {
-          throw new Error('Brakuje bezpiecznego adresu uploadu do magazynu plikow.')
+          throw new Error('Brakuje bezpiecznego adresu uploadu do magazynu plików.')
         }
 
         const uploadBody = new FormData()
@@ -238,7 +238,7 @@ export function PreparationMaterialsCard({
         })
 
         if (!uploadResponse.ok) {
-          throw new Error('Nie udalo sie przeslac nagrania do bezpiecznego magazynu.')
+          throw new Error('Nie udało się przesłać nagrania do bezpiecznego magazynu.')
         }
 
         await savePrepMetadata({
@@ -248,9 +248,9 @@ export function PreparationMaterialsCard({
         })
       }
 
-      setMessage('Nagranie zostalo dodane do rezerwacji.')
+      setMessage('Nagranie zostało dodane do rezerwacji.')
     } catch (uploadError) {
-      setError(uploadError instanceof Error ? uploadError.message : 'Nie udalo sie dodac nagrania.')
+      setError(uploadError instanceof Error ? uploadError.message : 'Nie udało się dodać nagrania.')
     } finally {
       setIsUploading(false)
       event.target.value = ''
@@ -262,15 +262,15 @@ export function PreparationMaterialsCard({
       <div className="section-eyebrow">Przygotowanie do rozmowy</div>
       <h2>Przygotuj mnie do rozmowy</h2>
       <p className="muted paragraph-gap prep-copy">
-        Jesli masz nagranie zachowania psa lub kota, mozesz dodac je przed rozmowa. To nie jest konsultacja wideo -
-        material sluzy tylko do lepszego przygotowania do rozmowy glosowej.
+        Jeśli masz nagranie zachowania psa lub kota, możesz dodać je przed rozmową. To nie jest konsultacja wideo -
+        materiał służy tylko do lepszego przygotowania do rozmowy głosowej.
       </p>
 
       <div className="prep-grid top-gap">
         <div className="prep-card">
           <strong>Nagranie MP4</strong>
           <span>
-            Krotki material do 5 minut bardzo pomaga szybciej zrozumiec sytuacje. Akceptujemy tylko MP4 do{' '}
+            Krótki materiał do 5 minut bardzo pomaga szybciej zrozumieć sytuację. Akceptujemy tylko MP4 do{' '}
             {formatPreparationFileSize(PREPARATION_VIDEO_MAX_SIZE_BYTES)}.
           </span>
 
@@ -281,7 +281,7 @@ export function PreparationMaterialsCard({
               rel="noreferrer"
               className="prep-inline-link top-gap-small"
             >
-              {videoState.prepVideoFilename ?? 'Otworz nagranie'}{' '}
+              {videoState.prepVideoFilename ?? 'Otwórz nagranie'}{' '}
               {videoState.prepVideoSizeBytes ? `(${formatPreparationFileSize(videoState.prepVideoSizeBytes)})` : ''}
             </a>
           ) : (
@@ -291,7 +291,7 @@ export function PreparationMaterialsCard({
           {canEdit ? (
             <div className="top-gap">
               <label htmlFor={fileInputId} className="button button-ghost">
-                {isUploading ? 'Wysylam nagranie...' : videoState.hasVideo ? 'Zastap nagranie' : 'Dodaj nagranie MP4'}
+                {isUploading ? 'Wysyłam nagranie...' : videoState.hasVideo ? 'Zastąp nagranie' : 'Dodaj nagranie MP4'}
               </label>
               <input
                 id={fileInputId}
@@ -306,8 +306,8 @@ export function PreparationMaterialsCard({
         </div>
 
         <div className="prep-card">
-          <strong>Link do materialu</strong>
-          <span>Moze to byc YouTube, Google Drive albo inny link, ktory jest publiczny lub poprawnie udostepniony specjaliscie.</span>
+          <strong>Link do materiału</strong>
+          <span>Może to być YouTube, Google Drive albo inny link, który jest publiczny lub poprawnie udostępniony specjaliście.</span>
           <input
             value={linkValue}
             onChange={(event) => setLinkValue(event.target.value)}
@@ -319,17 +319,17 @@ export function PreparationMaterialsCard({
       </div>
 
       <div className="top-gap">
-        <label>Krotki opis sytuacji</label>
+        <label>Krótki opis sytuacji</label>
         <textarea
           rows={5}
           value={notesValue}
           onChange={(event) => setNotesValue(event.target.value)}
           disabled={!canEdit || isSaving}
-          placeholder="Napisz, co dokladnie widac, kiedy problem sie pojawia i co chcesz omowic podczas rozmowy."
+          placeholder="Napisz, co dokładnie widać, kiedy problem się pojawia i co chcesz omówić podczas rozmowy."
         />
         <div className="disclaimer top-gap-small">
-          Maksymalnie {PREPARATION_NOTES_MAX_LENGTH} znakow. Wystarczy kilka konkretow: co widac, kiedy to sie dzieje,
-          od kiedy trwa i co chcesz omowic na rozmowie.
+          Maksymalnie {PREPARATION_NOTES_MAX_LENGTH} znaków. Wystarczy kilka konkretów: co widać, kiedy to się dzieje,
+          od kiedy trwa i co chcesz omówić na rozmowie.
         </div>
       </div>
 
@@ -339,20 +339,20 @@ export function PreparationMaterialsCard({
       {canEdit ? (
         <div className="hero-actions top-gap">
           <button type="button" className="button button-primary" onClick={handleSaveDetails} disabled={isSaving || isUploading}>
-            {isSaving ? 'Zapisuje informacje...' : 'Zapisz materialy do rozmowy'}
+            {isSaving ? 'Zapisuję informacje...' : 'Zapisz materiały do rozmowy'}
           </button>
         </div>
       ) : (
-        <div className="info-box top-gap">Ta rezerwacja jest juz zamknieta, dlatego materialy pozostaja tylko do podgladu.</div>
+        <div className="info-box top-gap">Ta rezerwacja jest już zamknięta, dlatego materiały pozostają tylko do podglądu.</div>
       )}
 
       <div className="prep-checklist top-gap">
-        <strong>Jak przygotowac sie do rozmowy w 2 minuty</strong>
+        <strong>Jak przygotować się do rozmowy w 2 minuty</strong>
         <ul>
-          <li>Przygotuj 2-3 najwazniejsze pytania, od ktorych chcesz zaczac.</li>
-          <li>Zanotuj, w jakich sytuacjach problem pojawia sie najczesciej.</li>
-          <li>Jesli mozesz, przypomnij sobie plan spacerow, rytm dnia lub sytuacje wyzwalajace.</li>
-          <li>Wystarczy krotki opis i jedno nagranie - nie potrzebujesz konsultacji wideo.</li>
+          <li>Przygotuj 2-3 najważniejsze pytania, od których chcesz zacząć.</li>
+          <li>Zanotuj, w jakich sytuacjach problem pojawia się najczęściej.</li>
+          <li>Jeśli możesz, przypomnij sobie plan spacerów, rytm dnia lub sytuacje wyzwalające.</li>
+          <li>Wystarczy krótki opis i jedno nagranie - nie potrzebujesz konsultacji wideo.</li>
         </ul>
       </div>
     </section>

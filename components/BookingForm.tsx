@@ -38,12 +38,12 @@ export function BookingForm({ problemType, slotId, slotLabel, priceLabel }: Book
     setError('')
 
     if (!ownerName.trim() || !phone.trim() || !email.trim() || !description.trim() || !petAge.trim() || !durationNotes.trim()) {
-      setError('Uzupelnij wszystkie pola, aby zarezerwowac termin i przejsc do platnosci.')
+      setError('Uzupełnij wszystkie pola, aby zarezerwować termin i przejść do płatności.')
       return
     }
 
     if (!isEmailValid(email.trim())) {
-      setError('Podaj poprawny adres e-mail. Na ten adres wyslemy potwierdzenie rozmowy.')
+      setError('Podaj poprawny adres e-mail. Na ten adres wyślemy potwierdzenie rozmowy.')
       return
     }
 
@@ -53,7 +53,7 @@ export function BookingForm({ problemType, slotId, slotLabel, priceLabel }: Book
     }
 
     if (description.trim().length < 20) {
-      setError('Dodaj 2-4 konkretne zdania o problemie. To pomoze lepiej wykorzystac 15 minut rozmowy.')
+      setError('Dodaj 2-4 konkretne zdania o problemie. To pomoże lepiej wykorzystać 15 minut rozmowy.')
       return
     }
 
@@ -81,14 +81,14 @@ export function BookingForm({ problemType, slotId, slotLabel, priceLabel }: Book
       const payload = (await response.json()) as { bookingId?: string; accessToken?: string; error?: string }
 
       if (!response.ok || !payload.bookingId || !payload.accessToken) {
-        throw new Error(payload.error ?? 'Nie udalo sie zapisac rezerwacji. Sprawdz dane lub wybierz inny termin.')
+        throw new Error(payload.error ?? 'Nie udało się zapisać rezerwacji. Sprawdź dane lub wybierz inny termin.')
       }
 
       router.push(`/payment?bookingId=${payload.bookingId}&access=${encodeURIComponent(payload.accessToken)}`)
     } catch (submissionError) {
-      const message = submissionError instanceof Error ? submissionError.message : 'Wystapil blad formularza.'
-      if (message.includes('nie jest juz dostepny')) {
-        setError('Ten termin zostal wlasnie zajety. Wroc do listy terminow i wybierz inna godzine rozmowy.')
+      const message = submissionError instanceof Error ? submissionError.message : 'Wystąpił błąd formularza.'
+      if (message.includes('nie jest już dostępny') || message.includes('został przed chwilą zajęty')) {
+        setError('Ten termin został właśnie zajęty. Wróć do listy terminów i wybierz inną godzinę rozmowy.')
       } else {
         setError(message)
       }
@@ -99,12 +99,12 @@ export function BookingForm({ problemType, slotId, slotLabel, priceLabel }: Book
   return (
     <form className="form-grid top-gap" onSubmit={handleSubmit}>
       <div>
-        <label>Imie opiekuna</label>
+        <label>Imię opiekuna</label>
         <input value={ownerName} onChange={(event) => setOwnerName(event.target.value)} placeholder="np. Anna" />
       </div>
 
       <div>
-        <label>Zwierze</label>
+        <label>Zwierzę</label>
         <select value={animalType} onChange={(event) => setAnimalType(event.target.value as AnimalType)}>
           <option value="Pies">Pies</option>
           <option value="Kot">Kot</option>
@@ -112,8 +112,8 @@ export function BookingForm({ problemType, slotId, slotLabel, priceLabel }: Book
       </div>
 
       <div>
-        <label>Wiek zwierzecia</label>
-        <input value={petAge} onChange={(event) => setPetAge(event.target.value)} placeholder="np. 8 miesiecy lub 4 lata" />
+        <label>Wiek zwierzęcia</label>
+        <input value={petAge} onChange={(event) => setPetAge(event.target.value)} placeholder="np. 8 miesięcy lub 4 lata" />
       </div>
 
       <div>
@@ -136,12 +136,12 @@ export function BookingForm({ problemType, slotId, slotLabel, priceLabel }: Book
       </div>
 
       <div className="full-width">
-        <label>Krotki opis sytuacji</label>
+        <label>Krótki opis sytuacji</label>
         <textarea
           rows={5}
           value={description}
           onChange={(event) => setDescription(event.target.value)}
-          placeholder="Napisz, co sie dzieje, kiedy problem wystepuje i co jest dla Ciebie najtrudniejsze."
+          placeholder="Napisz, co się dzieje, kiedy problem występuje i co jest dla Ciebie najtrudniejsze."
         />
       </div>
 
@@ -159,13 +159,13 @@ export function BookingForm({ problemType, slotId, slotLabel, priceLabel }: Book
 
       <div className="checkout-box full-width">
         <div>
-          <div className="muted">Po zapisaniu danych termin zostanie chwilowo zablokowany na czas platnosci, zeby nikt nie przejal go przed Toba.</div>
-          <div className="checkout-title">Nastepny krok: bezpieczna platnosc</div>
-          <div className="muted">Kwota do oplacenia: {priceLabel}. Po oplaceniu od razu zobaczysz potwierdzenie, link do rozmowy audio i kolejne kroki.</div>
+          <div className="muted">Po zapisaniu danych termin zostanie chwilowo zablokowany na czas płatności, żeby nikt nie przejął go przed Tobą.</div>
+          <div className="checkout-title">Następny krok: bezpieczna płatność</div>
+          <div className="muted">Kwota do opłacenia: {priceLabel}. Po opłaceniu od razu zobaczysz potwierdzenie, link do rozmowy audio i kolejne kroki.</div>
         </div>
         <div className="checkout-right">
           <button type="submit" className="button button-primary big-button" disabled={isSubmitting}>
-            {isSubmitting ? 'Zapisuje dane...' : 'Zablokuj termin i przejdz do platnosci'}
+            {isSubmitting ? 'Zapisuję dane...' : 'Zablokuj termin i przejdź do płatności'}
           </button>
         </div>
       </div>

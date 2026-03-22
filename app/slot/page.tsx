@@ -30,7 +30,18 @@ export default async function SlotPage({
   }
 
   const dataMode = getDataModeStatus()
-  const groupedAvailability = dataMode.isValid ? await listAvailability() : []
+  let groupedAvailability: Awaited<ReturnType<typeof listAvailability>> = []
+  let publicFlowMessage: string | null = null
+
+  if (dataMode.isValid) {
+    try {
+      groupedAvailability = await listAvailability()
+    } catch {
+      publicFlowMessage = 'Terminy chwilowo się odświeżają. Spróbuj ponownie za kilka minut.'
+    }
+  } else {
+    publicFlowMessage = 'Terminy chwilowo się odświeżają. Spróbuj ponownie za kilka minut.'
+  }
 
   return (
     <main className="page-wrap">
@@ -41,21 +52,21 @@ export default async function SlotPage({
           <div className="section-eyebrow">Krok 2 z 6</div>
           <h1>Wybierz termin rozmowy: {getProblemLabel(problem)}</h1>
           <p className="muted paragraph-gap">
-            Lista odswieza sie na biezaco. Jesli termin zniknie po chwili, oznacza to, ze zostal wlasnie zajety albo ktos konczy platnosc.
+            Lista odświeża się na bieżąco. Jeśli termin zniknie po chwili, oznacza to, że został właśnie zajęty albo ktoś kończy płatność.
           </p>
 
-          {!dataMode.isValid ? (
-            <div className="error-box top-gap">{dataMode.summary}</div>
+          {publicFlowMessage ? (
+            <div className="info-box top-gap">{publicFlowMessage}</div>
           ) : groupedAvailability.length === 0 ? (
             <div className="empty-box top-gap">
-              W tej chwili nie ma wolnych terminow. Wroc pozniej albo sprawdz ponownie, gdy pojawia sie nowe godziny.
+              W tej chwili nie ma wolnych terminów. Wróć później albo sprawdź ponownie, gdy pojawią się nowe godziny.
             </div>
           ) : (
             <div className="stack-gap top-gap">
               {groupedAvailability.map((group) => (
                 <div key={group.date} className="list-card">
                   <strong>{group.label}</strong>
-                  <span>Wybierasz 15-minutowa rozmowe glosowa online.</span>
+                  <span>Wybierasz 15-minutową rozmowę głosową online.</span>
                   <div className="time-grid top-gap-small">
                     {group.slots.map((slot) => (
                       <Link

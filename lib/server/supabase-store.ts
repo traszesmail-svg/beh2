@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
-import { compareDateAndTime, formatDateLabel } from '@/lib/data'
+import { compareDateAndTime, formatDateLabel, isFutureAvailabilitySlot } from '@/lib/data'
 import { createActiveConsultationPrice, DEFAULT_PRICE_PLN, parseConsultationPriceInput } from '@/lib/pricing'
 import { createCustomerAccessToken, hashCustomerAccessToken } from '@/lib/server/customer-access'
 import { getReservationWindowMinutes, getSupabaseServerConfig } from '@/lib/server/env'
@@ -158,7 +158,7 @@ function groupAvailability(rows: AvailabilitySlot[]): GroupedAvailability[] {
   const grouped = new Map<string, AvailabilitySlot[]>()
 
   for (const slot of rows) {
-    if (slot.isBooked || slot.lockedByBookingId) {
+    if (slot.isBooked || slot.lockedByBookingId || !isFutureAvailabilitySlot(slot.bookingDate, slot.bookingTime)) {
       continue
     }
 
@@ -356,10 +356,22 @@ export async function getAvailabilitySlot(slotId: string): Promise<AvailabilityS
     throw error
   }
 
-  return data ? mapAvailabilityRow(data as AvailabilityRow) : null
+  if (!data) {
+    return null
+  }
+
+  const slot = mapAvailabilityRow(data as AvailabilityRow)
+
+  return !slot.isBooked && !slot.lockedByBookingId && !isFutureAvailabilitySlot(slot.bookingDate, slot.bookingTime)
+    ? null
+    : slot
 }
 
 export async function createAvailabilitySlot(bookingDate: string, bookingTime: string): Promise<AvailabilitySlot> {
+  if (!isFutureAvailabilitySlot(bookingDate, bookingTime)) {
+    throw new Error('Możesz dodać tylko przyszły termin.')
+  }
+
   const supabase = getSupabaseAdmin()
   const nowIso = new Date().toISOString()
   const payload = {
@@ -414,10 +426,15 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
   }
 
   if (!slotData || slotData.is_booked || slotData.locked_by_booking_id) {
-    throw new Error('Wybrany termin nie jest juz dostepny.')
+    throw new Error('Wybrany termin nie jest już dostępny.')
   }
 
   const slot = mapAvailabilityRow(slotData as AvailabilityRow)
+
+  if (!isFutureAvailabilitySlot(slot.bookingDate, slot.bookingTime)) {
+    throw new Error('Wybrany termin jest już przeszły. Wybierz nową godzinę rozmowy.')
+  }
+
   const user = await findOrCreateUser(form.email)
   const bookingId = crypto.randomUUID()
   const accessToken = createCustomerAccessToken()

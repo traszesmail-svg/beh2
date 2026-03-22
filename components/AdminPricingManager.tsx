@@ -38,14 +38,14 @@ export function AdminPricingManager({ currentAmount, currentLabel, updatedAtLabe
       const payload = (await response.json()) as { error?: string; price?: { amount?: number; formattedAmount?: string } }
 
       if (!response.ok) {
-        throw new Error(payload.error ?? 'Nie udalo sie zapisac ceny konsultacji.')
+        throw new Error(payload.error ?? 'Nie udało się zapisać ceny konsultacji.')
       }
 
       setAmount(Number(payload.price?.amount ?? amount).toFixed(2))
-      setSuccess(`Zapisano nowa cene konsultacji: ${payload.price?.formattedAmount ?? amount}. Nowa kwota obejmie tylko kolejne rezerwacje.`)
+      setSuccess(`Zapisano nową cenę konsultacji: ${payload.price?.formattedAmount ?? amount}. Nowa kwota obejmie tylko kolejne rezerwacje.`)
       router.refresh()
     } catch (submitError) {
-      setError(submitError instanceof Error ? submitError.message : 'Wystapil blad zapisu ceny.')
+      setError(submitError instanceof Error ? submitError.message : 'Wystąpił błąd zapisu ceny.')
     } finally {
       setIsSubmitting(false)
     }
@@ -58,7 +58,7 @@ export function AdminPricingManager({ currentAmount, currentLabel, updatedAtLabe
           <div className="stat-label">Aktualna cena</div>
           <div className="summary-value">{currentLabel}</div>
           <div className="admin-price-meta">
-            {updatedAtLabel ? `Obowiazuje od: ${updatedAtLabel}` : 'Domyslna cena startowa dla nowych rezerwacji.'}
+            {updatedAtLabel ? `Obowiązuje od: ${updatedAtLabel}` : 'Domyślna cena startowa dla nowych rezerwacji.'}
           </div>
         </div>
       </div>
@@ -79,14 +79,14 @@ export function AdminPricingManager({ currentAmount, currentLabel, updatedAtLabe
         </div>
         <div className="full-width">
           <button type="submit" className="button button-primary big-button" disabled={isSubmitting}>
-            {isSubmitting ? 'Zapisuje cene...' : 'Zapisz nowa cene'}
+            {isSubmitting ? 'Zapisuję cenę...' : 'Zapisz nową cenę'}
           </button>
         </div>
       </form>
 
       <div className="list-card">
-        <strong>Jak to dziala</strong>
-        <span>Zmiana dotyczy tylko nowych rezerwacji. Istniejace bookingi zachowuja swoja historyczna kwote.</span>
+        <strong>Jak to działa</strong>
+        <span>Zmiana dotyczy tylko nowych rezerwacji. Istniejące bookingi zachowują swoją historyczną kwotę.</span>
       </div>
 
       {success ? <div className="success-inline">{success}</div> : null}

@@ -19,7 +19,7 @@ export function PaymentActions({ bookingId, accessToken, paymentMode, modeSummar
 
   async function handlePayment(mode: 'success' | 'failed') {
     if (checkoutBlocked && mode === 'success') {
-      setError(checkoutBlockedReason ?? 'Platnosc jest chwilowo niedostepna.')
+      setError(checkoutBlockedReason ?? 'Płatność jest chwilowo niedostępna.')
       return
     }
 
@@ -47,7 +47,7 @@ export function PaymentActions({ bookingId, accessToken, paymentMode, modeSummar
       const payload = (await response.json()) as { url?: string; redirectTo?: string; error?: string }
 
       if (!response.ok) {
-        throw new Error(payload.error ?? 'Platnosc nie mogla zostac uruchomiona.')
+        throw new Error(payload.error ?? 'Płatność nie mogła zostać uruchomiona.')
       }
 
       if (payload.url) {
@@ -60,9 +60,9 @@ export function PaymentActions({ bookingId, accessToken, paymentMode, modeSummar
         return
       }
 
-      throw new Error('Brak przekierowania po platnosci.')
+      throw new Error('Brak przekierowania po płatności.')
     } catch (paymentError) {
-      setError(paymentError instanceof Error ? paymentError.message : 'Wystapil blad platnosci.')
+      setError(paymentError instanceof Error ? paymentError.message : 'Wystąpił błąd płatności.')
       setLoadingMode(null)
     }
   }
@@ -72,14 +72,14 @@ export function PaymentActions({ bookingId, accessToken, paymentMode, modeSummar
       {error ? <div className="error-box">{error}</div> : null}
 
       <div className="list-card accent-outline payment-next-card">
-        <strong>Co wydarzy sie dalej</strong>
-        <span>Po platnosci od razu zobaczysz potwierdzenie, link do rozmowy i spokojna instrukcje, jak przygotowac sie do konsultacji.</span>
+        <strong>Co wydarzy się dalej</strong>
+        <span>Po płatności od razu zobaczysz potwierdzenie, link do rozmowy i spokojną instrukcję, jak przygotować się do konsultacji.</span>
       </div>
 
       <div className="summary-grid trust-grid payment-logo-grid">
-        <div className="summary-card trust-card"><strong>Karta lub BLIK</strong><span>Dostepne metody zobaczysz dopiero w bezpiecznym oknie Stripe po kliknieciu przycisku platnosci.</span></div>
-        <div className="summary-card trust-card"><strong>Szyfrowane okno Stripe</strong><span>Platnosc otwiera sie poza aplikacja, w bezpiecznym i zgodnym z wymaganiami checkoutcie.</span></div>
-        <div className="summary-card trust-card"><strong>Natychmiastowy powrot do potwierdzenia</strong><span>Po platnosci wracasz do potwierdzenia terminu, linku do rozmowy i materialow przygotowawczych.</span></div>
+        <div className="summary-card trust-card"><strong>Karta lub BLIK</strong><span>Dostępne metody zobaczysz dopiero w bezpiecznym oknie Stripe po kliknięciu przycisku płatności.</span></div>
+        <div className="summary-card trust-card"><strong>Szyfrowane okno Stripe</strong><span>Płatność otwiera się poza aplikacją, w bezpiecznym i zgodnym z wymaganiami checkoutcie.</span></div>
+        <div className="summary-card trust-card"><strong>Natychmiastowy powrót do potwierdzenia</strong><span>Po płatności wracasz do potwierdzenia terminu, linku do rozmowy i materiałów przygotowawczych.</span></div>
       </div>
 
       <div className="hero-actions">
@@ -89,7 +89,7 @@ export function PaymentActions({ bookingId, accessToken, paymentMode, modeSummar
           onClick={() => handlePayment('success')}
           disabled={loadingMode !== null || checkoutBlocked}
         >
-          {loadingMode === 'pay' ? 'Przechodze do platnosci...' : paymentMode === 'stripe' ? 'Przejdz do bezpiecznej platnosci' : 'Oplac konsultacje'}
+          {loadingMode === 'pay' ? 'Przechodzę do płatności...' : paymentMode === 'stripe' ? 'Przejdź do bezpiecznej płatności' : 'Opłać konsultację'}
         </button>
 
         {paymentMode === 'mock' ? (
@@ -99,7 +99,7 @@ export function PaymentActions({ bookingId, accessToken, paymentMode, modeSummar
             onClick={() => handlePayment('failed')}
             disabled={loadingMode !== null}
           >
-            {loadingMode === 'fail' ? 'Symuluje blad...' : 'Symuluj nieudana platnosc'}
+            {loadingMode === 'fail' ? 'Symuluję błąd...' : 'Symuluj nieudaną płatność'}
           </button>
         ) : null}
       </div>
@@ -108,7 +108,7 @@ export function PaymentActions({ bookingId, accessToken, paymentMode, modeSummar
         {checkoutBlocked
           ? checkoutBlockedReason
           : paymentMode === 'stripe'
-            ? 'Platnosc obsluguje Stripe w bezpiecznym oknie checkout. Po anulowaniu od razu zobaczysz, jak wybrac nowy termin.'
+            ? 'Płatność obsługuje Stripe w bezpiecznym oknie checkout. Po anulowaniu od razu zobaczysz, jak wybrać nowy termin.'
             : modeSummary}
       </div>
     </div>

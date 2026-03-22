@@ -68,9 +68,9 @@ export default function ProblemPage() {
         <Header />
         <section className="panel section-panel">
           <div className="section-eyebrow">Krok 1 z 6</div>
-          <h1>Z czym chcesz wejsc do 15-minutowej rozmowy?</h1>
+          <h1>Z czym chcesz wejść do 15-minutowej rozmowy?</h1>
           <p className="muted paragraph-gap">
-            Wybierz temat, ktory najlepiej opisuje sytuacje. W nastepnym kroku zobaczysz tylko realnie wolne terminy rozmowy audio.
+            Wybierz temat, który najlepiej opisuje sytuację. W następnym kroku zobaczysz tylko realnie wolne terminy rozmowy audio.
           </p>
 
           <div className="card-grid three-up top-gap">
@@ -79,7 +79,7 @@ export default function ProblemPage() {
                 <span className="topic-icon-shell">{renderProblemIcon(item.id)}</span>
                 <div className="topic-title">{item.title}</div>
                 <div className="topic-desc">{item.desc}</div>
-                <div className="topic-link">Pokaz wolne terminy</div>
+                <div className="topic-link">Pokaż wolne terminy</div>
               </Link>
             ))}
           </div>

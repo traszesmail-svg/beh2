@@ -18,12 +18,12 @@ export async function POST(request: Request) {
     const session = await createCheckoutSession(body.bookingId, body.accessToken ?? null, request.headers.get('authorization'))
 
     if (!session.url) {
-      return NextResponse.json({ error: 'Stripe nie zwrocil URL checkout.' }, { status: 500 })
+      return NextResponse.json({ error: 'Stripe nie zwrócił URL checkout.' }, { status: 500 })
     }
 
     return NextResponse.json({ url: session.url })
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Nie udalo sie uruchomic checkout.'
+    const message = error instanceof Error ? error.message : 'Nie udało się uruchomić checkout.'
     return NextResponse.json({ error: message }, { status: error instanceof ConfigurationError ? 503 : 500 })
   }
 }

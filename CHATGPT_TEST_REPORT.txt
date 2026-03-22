@@ -1,0 +1,88 @@
+Behawior15 — raport końcowy iteracji P0/P1/P2
+Data: 2026-03-22
+
+1. Lista naprawionych elementów
+- Przywrócono poprawne polskie znaki w kluczowych widokach, CTA, formularzach, FAQ, meta danych, stronach prawnych i komunikatach użytkownika.
+- Dodano jawny `<meta charSet="UTF-8">`, poprawiono `title`, `description`, `viewport` i podstawowe Open Graph.
+- Zachowano i potwierdzono działanie flow `landing -> booking -> payment -> confirmation -> room`.
+- Zostawiono działający route `/book` jako alias do flow rezerwacji.
+- Usunięto przeszłe terminy z publicznej listy dostępności; local mode generuje teraz rolling future slots względem bieżącej daty.
+- Formularz rezerwacji i payment flow zostały dopięte tak, by prowadzić do potwierdzenia i wejścia do room.
+- Flow materiałów przed rozmową działa dla MP4, linku i notatek; poprawiono copy i komunikaty.
+- Hero wyraźnie pokazuje cenę w sekcji oferty.
+- Widoczne certyfikaty w UI zostały ograniczone do COAPE i CAPBT.
+- Dopracowano sticky header, hero, sekcję specjalisty, karty tematów, FAQ accordion, footer i strony prawne.
+- FAQ zostało przebudowane na dostępny accordion oparty o `button`, `aria-expanded` i `aria-controls`.
+- Poprawiono alt tagi dla istotnych grafik i potwierdzono ich obecność w smoke teście.
+- Publiczny footer nie pokazuje już domyślnie deweloperskiego adresu `onboarding@resend.dev`, jeśli kontakt nie jest skonfigurowany przez env.
+- Zachowano admin pricing, snapshot ceny w bookingu, materiały przed rozmową, Supabase Cron reminder, hardening admina i build marker `CLEAN_START_REPO_V1`.
+
+2. Czy cały flow działa
+- TAK
+- Potwierdzone lokalnie w trybie testowym przez:
+  - landing -> klik CTA -> booking topic page
+  - slot selection bez przeszłych terminów
+  - formularz -> payment
+  - payment success -> confirmation
+  - confirmation -> room
+  - materiały przed rozmową: upload MP4 -> zapis linku -> zapis notatek
+
+3. Jak działa pricing end-to-end
+- Źródłem prawdy aktywnej ceny jest warstwa danych `pricing_settings` przez `lib/server/db.ts`.
+- W local mode cena jest zapisywana przez local store do runtime pliku `data/pricing-settings.json`, tworzonego automatycznie tylko na potrzeby developmentu/testów.
+- W trybie Supabase cena jest odczytywana i zapisywana w `public.pricing_settings`.
+- Zmiana ceny w `/admin` trafia przez `POST /api/admin/pricing` do tej samej warstwy danych.
+- Landing, `/admin` i formularz rezerwacji pokazują aktywną cenę konsultacji.
+- Nowy booking zapisuje snapshot ceny w `bookings.amount` podczas tworzenia rezerwacji.
+- Checkout i confirmation używają `booking.amount`, więc historyczna kwota już utworzonego bookingu nie zmienia się po późniejszej zmianie ceny.
+- Potwierdzenie 5 wymaganych punktów:
+  - zmiana ceny w `/admin` działa: PASS (`scripts/pricing-smoke.ts`, `scripts/ui-smoke.ts`)
+  - zapis ceny trafia do źródła prawdy: PASS (`scripts/pricing-smoke.ts`)
+  - nowy booking pobiera nową cenę: PASS (`scripts/pricing-smoke.ts`)
+  - checkout bierze nową cenę: PASS (`scripts/pricing-smoke.ts`)
+  - stary booking zachowuje stary snapshot: PASS (`scripts/pricing-smoke.ts`)
+
+4. Jakie poprawki wizualne są w finalnej paczce
+- Premium hero z wyraźnym price callout.
+- Mocniejsze CTA w hero i headerze.
+- Czystsza typografia, spacing, focus states i disabled states.
+- Uspójniony sticky header na desktop i mobile.
+- Sekcja specjalisty z placeholder portrait i trust blockiem COAPE/CAPBT.
+- Tematy konsultacji jako czytelne, klikalne karty.
+- FAQ jako dostępny accordion.
+- Pełny footer z kontaktem i linkami do stron prawnych.
+- Strony `Polityka prywatności` i `Regulamin`.
+
+5. Jakie testy wykonałeś
+- `npm install`
+- `npm run lint`
+- `npm test`
+- `npm run build`
+- `node --import tsx scripts/verify-flow.ts`
+- `node --import tsx scripts/pricing-smoke.ts`
+- `node --import tsx scripts/ui-smoke.ts`
+- `node --import tsx scripts/reminder-smoke.ts`
+
+6. Wynik każdego testu
+- `npm install` -> PASS
+- `npm run lint` -> PASS
+- `npm test` -> PASS
+- `npm run build` -> PASS
+- `node --import tsx scripts/verify-flow.ts` -> PASS
+- `node --import tsx scripts/pricing-smoke.ts` -> PASS
+- `node --import tsx scripts/ui-smoke.ts` -> PASS
+- `node --import tsx scripts/reminder-smoke.ts` -> PASS
+
+7. Known limitations
+- Local smoke dla płatności działa w trybie mock/local, więc nie wykonywał realnego charge w Stripe.
+- Mail flow i reminder logic zostały potwierdzone lokalnie bez realnego wysyłania wiadomości, ponieważ w testowym środowisku brakowało produkcyjnego `RESEND_API_KEY`.
+- Live deploy nadal wymaga poprawnych env na Vercelu i działających migracji Supabase.
+
+8. Potwierdzenie push do beh2/main
+- Finalny stan został wypchnięty do repo `beh2`.
+- Branch docelowy: `main`.
+
+9. Gotowość
+- Push do Git: TAK
+- Deploy: TAK
+- Ręczne testy live: TAK

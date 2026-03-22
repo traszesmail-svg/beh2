@@ -13,7 +13,7 @@ export async function POST(request: Request) {
     const slot = await createAvailabilitySlot(body.bookingDate, body.bookingTime)
     return NextResponse.json({ slot })
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Nie udalo sie dodac slotu.'
+    const message = error instanceof Error ? error.message : 'Nie udało się dodać slotu.'
     return NextResponse.json({ error: message }, { status: error instanceof ConfigurationError ? 503 : 400 })
   }
 }

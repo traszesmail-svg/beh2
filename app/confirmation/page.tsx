@@ -6,7 +6,7 @@ import { PreparationMaterialsCard } from '@/components/PreparationMaterialsCard'
 import { formatDateTimeLabel, getProblemLabel } from '@/lib/data'
 import { formatPricePln } from '@/lib/pricing'
 import { getBookingForViewer } from '@/lib/server/db'
-import { getPaymentModeStatus } from '@/lib/server/env'
+import { getDataModeStatus, getPaymentModeStatus } from '@/lib/server/env'
 import { finalizeStripeCheckoutSession } from '@/lib/server/stripe'
 
 export const dynamic = 'force-dynamic'
@@ -29,9 +29,16 @@ export default async function ConfirmationPage({
   const bookingId = readSearchParam(searchParams?.bookingId)
   const accessToken = readSearchParam(searchParams?.access)
   const sessionId = readSearchParam(searchParams?.session_id)
+  const dataMode = getDataModeStatus()
   const paymentMode = getPaymentModeStatus()
+  let booking: Awaited<ReturnType<typeof getBookingForViewer>> = null
+  let flowError: string | null = null
 
-  if (bookingId && sessionId && paymentMode.active === 'stripe') {
+  if (!dataMode.isValid) {
+    flowError = 'Potwierdzenie chwilowo nie jest dostępne. Spróbuj ponownie za kilka minut.'
+  }
+
+  if (!flowError && bookingId && sessionId && paymentMode.active === 'stripe') {
     try {
       await finalizeStripeCheckoutSession(sessionId)
     } catch {
@@ -39,7 +46,13 @@ export default async function ConfirmationPage({
     }
   }
 
-  const booking = bookingId ? await getBookingForViewer(bookingId, accessToken, headers().get('authorization')) : null
+  if (!flowError && bookingId) {
+    try {
+      booking = await getBookingForViewer(bookingId, accessToken, headers().get('authorization'))
+    } catch {
+      flowError = 'Nie udało się wczytać potwierdzenia. Spróbuj ponownie za moment.'
+    }
+  }
   const isConfirmed =
     booking?.paymentStatus === 'paid' && (booking.bookingStatus === 'confirmed' || booking.bookingStatus === 'done')
 
@@ -48,14 +61,16 @@ export default async function ConfirmationPage({
       <div className="container">
         <Header />
         <section className="panel centered-panel">
-          {booking ? (
+          {flowError ? (
+            <div className="error-box">{flowError}</div>
+          ) : booking ? (
             <>
-              <div className="success-badge">{isConfirmed ? 'Konsultacja potwierdzona' : 'Sprawdzamy status platnosci'}</div>
-              <h1>{isConfirmed ? 'Masz potwierdzona rozmowe glosowa' : 'Platnosc nie zostala jeszcze potwierdzona'}</h1>
+              <div className="success-badge">{isConfirmed ? 'Konsultacja potwierdzona' : 'Sprawdzamy status płatności'}</div>
+              <h1>{isConfirmed ? 'Masz potwierdzoną rozmowę głosową' : 'Płatność nie została jeszcze potwierdzona'}</h1>
               <p className="hero-text small-width center-text">
                 {isConfirmed
-                  ? 'Termin jest zapisany, a link do rozmowy audio czeka juz przy rezerwacji. Wystarczy wejsc kilka minut przed konsultacja i miec pod reka najwazniejsze obserwacje.'
-                  : 'Jesli przed chwila oplaciles konsultacje, odswiez te strone za chwile. Jesli platnosc nie doszla, wroc do platnosci i sprobuj ponownie.'}
+                  ? 'Termin jest zapisany, a link do rozmowy audio czeka już przy rezerwacji. Wystarczy wejść kilka minut przed konsultacją i mieć pod ręką najważniejsze obserwacje.'
+                  : 'Jeśli przed chwilą opłaciłeś konsultację, odśwież tę stronę za chwilę. Jeśli płatność nie doszła, wróć do płatności i spróbuj ponownie.'}
               </p>
 
               <div className="summary-grid">
@@ -79,12 +94,12 @@ export default async function ConfirmationPage({
 
               <div className="stack-gap top-gap">
                 <div className="list-card">
-                  <strong>Jak przygotowac sie do rozmowy</strong>
-                  <span>Znajdz spokojne miejsce, miej pod reka najwazniejsze obserwacje i przygotuj 1-2 pytania, od ktorych chcesz zaczac. Jesli chcesz, ponizej dodasz nagranie, link lub notatki.</span>
+                  <strong>Jak przygotować się do rozmowy</strong>
+                  <span>Znajdź spokojne miejsce, miej pod ręką najważniejsze obserwacje i przygotuj 1-2 pytania, od których chcesz zacząć. Jeśli chcesz, poniżej dodasz nagranie, link lub notatki.</span>
                 </div>
                 <div className="list-card accent-outline">
                   <strong>Co dalej po 15 minutach</strong>
-                  <span>Jesli sytuacja wymaga szerszej pracy, kolejnym krokiem moze byc pelna konsultacja, plan pracy, wizyta domowa albo dalsze wsparcie.</span>
+                  <span>Jeśli sytuacja wymaga szerszej pracy, kolejnym krokiem może być pełna konsultacja, plan pracy, wizyta domowa albo dalsze wsparcie.</span>
                 </div>
               </div>
 
@@ -94,18 +109,18 @@ export default async function ConfirmationPage({
                     href={`/call/${booking.id}${accessToken ? `?access=${encodeURIComponent(accessToken)}` : ''}`}
                     className="button button-primary big-button"
                   >
-                    Dolacz do rozmowy audio
+                    Dołącz do rozmowy audio
                   </Link>
                 ) : (
                   <Link
                     href={`/payment?bookingId=${booking.id}${accessToken ? `&access=${encodeURIComponent(accessToken)}` : ''}`}
                     className="button button-primary big-button"
                   >
-                    Wroc do platnosci
+                    Wróć do płatności
                   </Link>
                 )}
                 <Link href="/problem" className="button button-ghost big-button">
-                  Umow kolejny termin
+                  Umów kolejny termin
                 </Link>
               </div>
 
@@ -123,10 +138,10 @@ export default async function ConfirmationPage({
             </>
           ) : (
             <>
-              <div className="error-box">Ten link do potwierdzenia jest nieprawidlowy albo wygasl.</div>
+              <div className="error-box">Ten link do potwierdzenia jest nieprawidłowy albo wygasł.</div>
               <div className="hero-actions centered-actions">
                 <Link href="/problem" className="button button-primary big-button">
-                  Przejdz do rezerwacji
+                  Przejdź do rezerwacji
                 </Link>
               </div>
             </>

@@ -38,14 +38,14 @@ export function AdminAvailabilityManager({ slots }: AdminAvailabilityManagerProp
 
       const payload = (await response.json()) as { error?: string }
       if (!response.ok) {
-        throw new Error(payload.error ?? 'Nie udalo sie dodac slotu.')
+        throw new Error(payload.error ?? 'Nie udało się dodać slotu.')
       }
 
       setBookingDate('')
       setBookingTime('')
       router.refresh()
     } catch (submitError) {
-      setError(submitError instanceof Error ? submitError.message : 'Wystapil blad dodawania slotu.')
+      setError(submitError instanceof Error ? submitError.message : 'Wystąpił błąd dodawania slotu.')
     } finally {
       setIsSubmitting(false)
     }
@@ -62,12 +62,12 @@ export function AdminAvailabilityManager({ slots }: AdminAvailabilityManagerProp
 
       const payload = (await response.json()) as { error?: string }
       if (!response.ok) {
-        throw new Error(payload.error ?? 'Nie udalo sie usunac slotu.')
+        throw new Error(payload.error ?? 'Nie udało się usunąć slotu.')
       }
 
       router.refresh()
     } catch (deleteError) {
-      setError(deleteError instanceof Error ? deleteError.message : 'Wystapil blad usuwania slotu.')
+      setError(deleteError instanceof Error ? deleteError.message : 'Wystąpił błąd usuwania slotu.')
     } finally {
       setLoadingSlotId(null)
     }
@@ -105,7 +105,7 @@ export function AdminAvailabilityManager({ slots }: AdminAvailabilityManagerProp
                   {slot.bookingDate} {slot.bookingTime}
                 </div>
                 <div className="booking-meta">
-                  {slot.isBooked ? 'Termin oplacony' : slot.lockedByBookingId ? 'W trakcie platnosci' : 'Wolny termin'}
+                  {slot.isBooked ? 'Termin opłacony' : slot.lockedByBookingId ? 'W trakcie płatności' : 'Wolny termin'}
                 </div>
               </div>
 
@@ -113,7 +113,7 @@ export function AdminAvailabilityManager({ slots }: AdminAvailabilityManagerProp
                 {slot.isBooked
                   ? 'Termin jest przypisany do potwierdzonej konsultacji.'
                   : slot.lockedByBookingId
-                    ? 'Termin jest chwilowo zablokowany, bo klient konczy platnosc.'
+                    ? 'Termin jest chwilowo zablokowany, bo klient kończy płatność.'
                     : 'Termin jest widoczny w rezerwacji i gotowy do wyboru.'}
               </div>
 
@@ -124,7 +124,7 @@ export function AdminAvailabilityManager({ slots }: AdminAvailabilityManagerProp
                   onClick={() => handleDelete(slot.id)}
                   disabled={disabled || loadingSlotId === slot.id}
                 >
-                  {loadingSlotId === slot.id ? 'Usuwanie...' : 'Usun termin'}
+                  {loadingSlotId === slot.id ? 'Usuwanie...' : 'Usuń termin'}
                 </button>
               </div>
             </div>

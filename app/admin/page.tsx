@@ -44,10 +44,10 @@ export default async function AdminPage() {
           <div className="section-head">
             <div>
               <div className="section-eyebrow">Panel specjalisty</div>
-              <h1>Rezerwacje, platnosci i terminy</h1>
+              <h1>Rezerwacje, płatności i terminy</h1>
             </div>
             <Link href="/problem" className="button button-primary">
-              Przejdz do flow klienta
+              Przejdź do flow klienta
             </Link>
           </div>
 
@@ -57,13 +57,13 @@ export default async function AdminPage() {
               <div className="summary-value">{bookings.length}</div>
             </div>
             <div className="summary-card">
-              <div className="stat-label">Potwierdzone / oplacone</div>
+              <div className="stat-label">Potwierdzone / opłacone</div>
               <div className="summary-value">
                 {confirmedCount} / {paidCount}
               </div>
             </div>
             <div className="summary-card">
-              <div className="stat-label">Zakonczone</div>
+              <div className="stat-label">Zakończone</div>
               <div className="summary-value">{doneCount}</div>
             </div>
           </div>
@@ -74,7 +74,7 @@ export default async function AdminPage() {
               <span>{runtime.data.summary}</span>
             </div>
             <div className="list-card">
-              <strong>Tryb platnosci</strong>
+              <strong>Tryb płatności</strong>
               <span>{runtime.payment.summary}</span>
             </div>
             <div className="list-card">
@@ -86,7 +86,7 @@ export default async function AdminPage() {
           <div className="top-gap">
             <div className="section-eyebrow">Cena konsultacji</div>
             <h2>Aktywna cena dla nowych rezerwacji</h2>
-            <p className="muted paragraph-gap">Nowa cena dotyczy tylko kolejnych bookingow. Oplacone lub zapisane wczesniej rezerwacje zachowuja swoja historyczna kwote.</p>
+            <p className="muted paragraph-gap">Nowa cena dotyczy tylko kolejnych bookingów. Opłacone lub zapisane wcześniej rezerwacje zachowują swoją historyczną kwotę.</p>
             {runtime.data.isValid && price ? (
               <AdminPricingManager currentAmount={price.amount} currentLabel={price.formattedAmount} updatedAtLabel={priceUpdatedAtLabel} />
             ) : (
@@ -96,11 +96,11 @@ export default async function AdminPage() {
 
           <div className="top-gap">
             {!runtime.data.isValid ? (
-              <div className="error-box">Warstwa danych panelu nie wystartowala: {runtime.data.summary}</div>
+              <div className="error-box">Warstwa danych panelu nie wystartowała: {runtime.data.summary}</div>
             ) : null}
 
             {bookings.length === 0 ? (
-              <div className="empty-box">Nie ma jeszcze rezerwacji. Przejdz przez flow klienta, aby utworzyc pierwsza konsultacje.</div>
+              <div className="empty-box">Nie ma jeszcze rezerwacji. Przejdź przez flow klienta, aby utworzyć pierwszą konsultację.</div>
             ) : (
               <div className="booking-list">
                 {bookings.map((booking) => (
@@ -116,17 +116,17 @@ export default async function AdminPage() {
                     <div className="booking-description">
                       <div>{booking.description}</div>
                       <div className="booking-meta top-gap-small">Status rezerwacji: {getBookingStatusLabel(booking.bookingStatus)}</div>
-                      <div className="booking-meta">Status platnosci: {getPaymentStatusLabel(booking.paymentStatus)}</div>
+                      <div className="booking-meta">Status płatności: {getPaymentStatusLabel(booking.paymentStatus)}</div>
                       <div className="booking-meta top-gap-small">
                         {hasPreparationMaterials(booking)
-                          ? 'Dodano materialy przygotowawcze do rozmowy.'
-                          : 'Bez dodatkowych materialow przed rozmowa.'}
+                          ? 'Dodano materiały przygotowawcze do rozmowy.'
+                          : 'Bez dodatkowych materiałów przed rozmową.'}
                       </div>
                       {booking.prepVideoPath ? (
                         <div className="booking-meta">
                           Nagranie:{' '}
                           <a href={`/api/bookings/${booking.id}/prep/video`} target="_blank" rel="noreferrer" className="prep-inline-link">
-                            {booking.prepVideoFilename ?? 'Otworz nagranie'}
+                            {booking.prepVideoFilename ?? 'Otwórz nagranie'}
                             {booking.prepVideoSizeBytes ? ` (${formatPreparationFileSize(booking.prepVideoSizeBytes)})` : ''}
                           </a>
                         </div>
@@ -158,7 +158,7 @@ export default async function AdminPage() {
                         {getPaymentStatusLabel(booking.paymentStatus)}
                       </span>
                       <a href={booking.meetingUrl} target="_blank" rel="noreferrer" className="button button-ghost small-button">
-                        Otworz rozmowe
+                        Otwórz rozmowę
                       </a>
                       <AdminBookingActions
                         bookingId={booking.id}
@@ -175,13 +175,13 @@ export default async function AdminPage() {
         </section>
 
         <section className="panel section-panel">
-          <div className="section-eyebrow">Zarzadzanie terminami</div>
+          <div className="section-eyebrow">Zarządzanie terminami</div>
           <h2>Wolne godziny jednego specjalisty</h2>
-          <p className="muted paragraph-gap">Tutaj dodajesz i usuwasz terminy. Rezerwacji w trakcie platnosci albo oplaconej nie da sie usunac.</p>
+          <p className="muted paragraph-gap">Tutaj dodajesz i usuwasz terminy. Rezerwacji w trakcie płatności albo opłaconej nie da się usunąć.</p>
           {runtime.data.isValid ? (
             <AdminAvailabilityManager slots={availability} />
           ) : (
-            <div className="error-box">Zarzadzanie terminami jest zablokowane: {runtime.data.summary}</div>
+            <div className="error-box">Zarządzanie terminami jest zablokowane: {runtime.data.summary}</div>
           )}
         </section>
       </div>

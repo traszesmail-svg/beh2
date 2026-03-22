@@ -7,7 +7,7 @@ import { PreparationMaterialsCard } from '@/components/PreparationMaterialsCard'
 import { formatDateTimeLabel, getProblemLabel } from '@/lib/data'
 import { formatPricePln } from '@/lib/pricing'
 import { getBookingForViewer, markBookingPaymentFailed } from '@/lib/server/db'
-import { getPaymentModeStatus } from '@/lib/server/env'
+import { getDataModeStatus, getPaymentModeStatus } from '@/lib/server/env'
 import { isStripeTestMode, MIN_STRIPE_CHECKOUT_AMOUNT_PLN } from '@/lib/server/stripe'
 
 export const dynamic = 'force-dynamic'
@@ -31,14 +31,26 @@ export default async function PaymentPage({
   const accessToken = readSearchParam(searchParams?.access)
   const failed = readSearchParam(searchParams?.failed)
   const cancelled = readSearchParam(searchParams?.cancelled)
+  const dataMode = getDataModeStatus()
   const paymentMode = getPaymentModeStatus()
   const stripeTestMode = paymentMode.active === 'stripe' && isStripeTestMode()
   const authorizationHeader = headers().get('authorization')
-  let booking = bookingId ? await getBookingForViewer(bookingId, accessToken, authorizationHeader) : null
+  let booking: Awaited<ReturnType<typeof getBookingForViewer>> = null
+  let flowError: string | null = null
+
+  if (!dataMode.isValid) {
+    flowError = 'Płatność chwilowo nie jest dostępna. Spróbuj ponownie za kilka minut.'
+  } else if (bookingId) {
+    try {
+      booking = await getBookingForViewer(bookingId, accessToken, authorizationHeader)
+    } catch {
+      flowError = 'Nie udało się wczytać rezerwacji do płatności. Spróbuj ponownie za moment.'
+    }
+  }
   const bookingPriceLabel = booking ? formatPricePln(booking.amount) : null
   const checkoutBlockedReason =
     paymentMode.active === 'stripe' && booking && booking.amount < MIN_STRIPE_CHECKOUT_AMOUNT_PLN
-      ? `Stripe Checkout w PLN nie przyjmuje kwot ponizej ${formatPricePln(MIN_STRIPE_CHECKOUT_AMOUNT_PLN)}. Ustaw wyzsza cene konsultacji w panelu specjalisty i zapisz nowa rezerwacje.`
+      ? `Stripe Checkout w PLN nie przyjmuje kwot poniżej ${formatPricePln(MIN_STRIPE_CHECKOUT_AMOUNT_PLN)}. Ustaw wyższą cenę konsultacji w panelu specjalisty i zapisz nową rezerwację.`
       : null
 
   if (booking && cancelled && booking.bookingStatus === 'pending' && booking.paymentStatus === 'unpaid') {
@@ -61,28 +73,30 @@ export default async function PaymentPage({
       <div className="container">
         <Header />
         <section className="panel centered-panel">
-          <div className="section-eyebrow">Bezpieczna platnosc online</div>
-          <h1>Za chwile przejdziesz do bezpiecznej platnosci</h1>
+          <div className="section-eyebrow">Bezpieczna płatność online</div>
+          <h1>Za chwilę przejdziesz do bezpiecznej płatności</h1>
           <p className="hero-text small-width center-text">
-            Platnosc obsluguje zewnetrzna, szyfrowana bramka Stripe. Po jej zakonczeniu wrocisz od razu do potwierdzenia
-            rezerwacji, materialow przed rozmowa i linku do konsultacji audio.
+            Płatność obsługuje zewnętrzna, szyfrowana bramka Stripe. Po jej zakończeniu wrócisz od razu do potwierdzenia
+            rezerwacji, materiałów przed rozmową i linku do konsultacji audio.
           </p>
 
           {stripeTestMode ? (
             <div className="info-box top-gap">
-              To srodowisko testowe platnosci. Karta nie zostanie realnie obciazona poza testowym scenariuszem.
+              To środowisko testowe płatności. Karta nie zostanie realnie obciążona poza testowym scenariuszem.
             </div>
           ) : null}
 
-          {!booking ? (
+          {flowError ? (
+            <div className="error-box top-gap">{flowError}</div>
+          ) : !booking ? (
             <div className="error-box top-gap">
-              Ten link do platnosci jest nieprawidlowy albo wygasl. Wroc do wyboru tematu i wybierz termin ponownie.
+              Ten link do płatności jest nieprawidłowy albo wygasł. Wróć do wyboru tematu i wybierz termin ponownie.
             </div>
           ) : (
             <>
               {(failed || cancelled || booking.paymentStatus === 'failed' || booking.bookingStatus === 'cancelled') && (
                 <div className="error-box top-gap">
-                  Platnosc nie zostala zakonczona. Termin zostal zwolniony, wiec mozesz spokojnie wybrac nowa godzine rozmowy.
+                  Płatność nie została zakończona. Termin został zwolniony, więc możesz spokojnie wybrać nową godzinę rozmowy.
                 </div>
               )}
 
@@ -112,8 +126,8 @@ export default async function PaymentPage({
                         <path d="m9.5 12 1.8 1.8 3.8-4.1" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </span>
-                    <strong>Obslugiwane przez Stripe</strong>
-                    <span>Platnosc otworzy sie w hosted checkout Stripe, bez przekazywania karty przez aplikacje.</span>
+                    <strong>Obsługiwane przez Stripe</strong>
+                    <span>Płatność otworzy się w hosted checkout Stripe, bez przekazywania karty przez aplikację.</span>
                   </div>
                   <div className="summary-card trust-card">
                     <span className="trust-icon" aria-hidden="true">
@@ -122,8 +136,8 @@ export default async function PaymentPage({
                         <path d="M8 10V8a4 4 0 1 1 8 0v2" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
                       </svg>
                     </span>
-                    <strong>Szyfrowane polaczenie</strong>
-                    <span>Przejscie do platnosci odbywa sie przez bezpieczne, szyfrowane polaczenie.</span>
+                    <strong>Szyfrowane połączenie</strong>
+                    <span>Przejście do płatności odbywa się przez bezpieczne, szyfrowane połączenie.</span>
                   </div>
                   <div className="summary-card trust-card">
                     <span className="trust-icon" aria-hidden="true">
@@ -134,17 +148,17 @@ export default async function PaymentPage({
                       </svg>
                     </span>
                     <strong>Karta nie jest zapisywana w aplikacji</strong>
-                    <span>Dane karty pozostaja po stronie operatora platnosci, a w aplikacji zapisujemy tylko stan bookingu.</span>
+                    <span>Dane karty pozostają po stronie operatora płatności, a w aplikacji zapisujemy tylko stan bookingu.</span>
                   </div>
                 </div>
 
                 <div className="list-card">
                   <strong>Co kupujesz</strong>
-                  <span>15-minutowa konsultacja glosowa online, ktora pomaga szybko uporzadkowac problem i wybrac pierwszy sensowny krok bez chaosu i zgadywania.</span>
+                  <span>15-minutową konsultację głosową online, która pomaga szybko uporządkować problem i wybrać pierwszy sensowny krok bez chaosu i zgadywania.</span>
                 </div>
                 <div className="list-card">
-                  <strong>Co stanie sie po platnosci</strong>
-                  <span>Dostaniesz potwierdzenie, link do rozmowy i mozliwosc dodania materialow, jesli chcesz lepiej przygotowac specjaliste przed konsultacja.</span>
+                  <strong>Co stanie się po płatności</strong>
+                  <span>Dostaniesz potwierdzenie, link do rozmowy i możliwość dodania materiałów, jeśli chcesz lepiej przygotować specjalistę przed konsultacją.</span>
                 </div>
               </div>
 
