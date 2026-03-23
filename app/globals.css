@@ -172,6 +172,7 @@ textarea::placeholder {
 .header-cta {
   white-space: normal;
   text-align: center;
+  text-wrap: balance;
 }
 
 .header-branding {
@@ -280,6 +281,7 @@ textarea::placeholder {
 .hero-panel h1,
 .cta-panel h2 {
   font-size: clamp(40px, 5.6vw, 64px);
+  text-wrap: balance;
 }
 
 .section-panel h1,
@@ -1843,6 +1845,10 @@ select:focus-visible {
     rgba(255, 255, 255, 0.8);
 }
 
+.booking-mobile-photo {
+  display: none;
+}
+
 .booking-photo {
   display: block;
   width: 100%;
@@ -2002,6 +2008,14 @@ select:focus-visible {
     grid-template-columns: 1fr 1fr;
   }
 
+  .booking-mobile-photo {
+    display: block;
+  }
+
+  .booking-side-panel .booking-photo-shell {
+    display: none;
+  }
+
   .three-up,
   .stats-grid,
   .summary-grid,
@@ -2112,9 +2126,20 @@ select:focus-visible {
     padding: 14px 16px;
   }
 
+  .header-trust-strip {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    scrollbar-width: none;
+  }
+
+  .header-trust-strip::-webkit-scrollbar {
+    display: none;
+  }
+
   .header-trust-item {
     font-size: 11px;
-    white-space: normal;
+    white-space: nowrap;
+    flex: 0 0 auto;
   }
 
   .header-trust-item + .header-trust-item::before {
@@ -2148,22 +2173,16 @@ select:focus-visible {
     width: 100%;
     max-width: 100%;
     flex-direction: row;
-    flex-wrap: nowrap;
-    overflow-x: auto;
+    flex-wrap: wrap;
+    overflow: visible;
     gap: 8px;
-    padding-bottom: 2px;
-    scrollbar-width: none;
-  }
-
-  .header-links::-webkit-scrollbar {
-    display: none;
+    padding-bottom: 0;
   }
 
   .header-link {
-    width: auto;
-    min-height: 38px;
+    min-height: 36px;
     padding-inline: 12px;
-    flex: 0 0 auto;
+    flex: 0 1 auto;
   }
 
   .header-branding .eyebrow {
@@ -2179,6 +2198,9 @@ select:focus-visible {
     max-width: 100%;
     white-space: normal;
     text-align: center;
+    min-height: 48px;
+    padding-inline: 16px;
+    font-size: 15px;
   }
 
   .share-links {
@@ -2226,19 +2248,21 @@ select:focus-visible {
 
   .hero-panel h1,
   .cta-panel h2 {
-    font-size: clamp(34px, 11vw, 48px);
+    font-size: clamp(30px, 10vw, 42px);
+    line-height: 1;
   }
 
   .section-panel h1,
   .section-panel h2,
   .room-panel h1,
   .centered-panel h1 {
-    font-size: clamp(28px, 9vw, 36px);
+    font-size: clamp(24px, 7.6vw, 33px);
+    line-height: 1.06;
   }
 
   .hero-text {
-    font-size: 16px;
-    line-height: 1.68;
+    font-size: 15px;
+    line-height: 1.64;
   }
 
   .hero-price-badge {
@@ -2261,10 +2285,25 @@ select:focus-visible {
     padding: 16px;
   }
 
+  .topic-card,
+  .real-case-card,
+  .media-card,
+  .footer-card {
+    padding: 18px;
+    border-radius: 24px;
+  }
+
   .hero-photo-shell {
     aspect-ratio: 4 / 4.6;
     padding: 10px 10px 0;
     border-radius: 20px;
+  }
+
+  .booking-photo-shell-mobile {
+    width: min(100%, 360px);
+    margin-inline: auto;
+    border-radius: 22px;
+    aspect-ratio: 4 / 4.85;
   }
 
   .hero-photo-caption {
@@ -2290,6 +2329,27 @@ select:focus-visible {
 
   .specialist-badge-list {
     gap: 8px;
+  }
+
+  .real-case-image-shell {
+    min-height: 220px;
+  }
+
+  .section-head {
+    gap: 12px;
+  }
+
+  .site-footer {
+    border-radius: 28px;
+  }
+
+  .footer-title {
+    font-size: clamp(24px, 8vw, 30px);
+  }
+
+  .contact-item {
+    gap: 6px;
+    padding: 2px 0;
   }
 
   .prep-panel .button,

@@ -138,6 +138,20 @@ export default async function BookPage({
               Po opłaceniu od razu dostajesz potwierdzenie z linkiem do rozmowy audio i możliwością dodania materiałów.
             </p>
 
+            <div className="booking-mobile-photo" aria-label="Zdjęcie prowadzącego konsultację">
+              <div className="booking-photo-shell booking-photo-shell-mobile top-gap-small">
+                <Image
+                  src={SPECIALIST_PHOTO.src}
+                  alt={SPECIALIST_PHOTO.alt}
+                  width={1200}
+                  height={1600}
+                  sizes="(max-width: 980px) 82vw, 30vw"
+                  className="booking-photo"
+                  priority
+                />
+              </div>
+            </div>
+
             <div className="summary-grid top-gap">
               <div className="summary-card">
                 <div className="stat-label">Cena konsultacji</div>
