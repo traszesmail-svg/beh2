@@ -31,8 +31,7 @@ export function TestimonialsSection({ testimonials = TESTIMONIALS }: Testimonial
           <h2 id="opinie-heading">Opinie klientów</h2>
         </div>
         <div className="muted">
-          Prawdziwe, ręcznie weryfikowane historie opiekunów psów i kotów po konsultacji. Pokazujemy tylko treści, które zostały sprawdzone przed
-          publikacją.
+          Prawdziwe, ręcznie weryfikowane historie opiekunów psów i kotów po konsultacji. Pokazujemy tylko treści, które zostały sprawdzone przed publikacją.
         </div>
       </div>
 
@@ -61,7 +60,9 @@ export function TestimonialsSection({ testimonials = TESTIMONIALS }: Testimonial
                 <div className="testimonial-meta">
                   <strong>{testimonial.displayName}</strong>
                   <span>{testimonial.dateLabel}</span>
-                  <span className="testimonial-category">{getTestimonialIssueLabel(testimonial.issueCategory)}</span>
+                  <span className="testimonial-category">
+                    {getTestimonialIssueLabel(testimonial.issueCategory)}
+                  </span>
                 </div>
               </div>
 

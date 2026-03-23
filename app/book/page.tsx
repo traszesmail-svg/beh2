@@ -88,7 +88,7 @@ export default async function BookPage({
   const problem = readSearchParam(searchParams?.problem)
   const dataMode = getDataModeStatus()
   let priceLabel = formatPricePln(DEFAULT_PRICE_PLN)
-  let nextSlotLabel = 'Terminy chwilowo się odświeżają'
+  let nextSlotLabel = 'Najbliższe realnie dostępne terminy zobaczysz w kolejnym kroku rezerwacji.'
 
   if (problem) {
     redirect(`/slot?problem=${problem}`)
@@ -125,7 +125,7 @@ export default async function BookPage({
                 <div className="summary-value">{priceLabel}</div>
               </div>
               <div className="summary-card">
-                <div className="stat-label">Najbliższy termin</div>
+                <div className="stat-label">Najbliższy dostępny termin</div>
                 <div className="summary-value">{nextSlotLabel}</div>
               </div>
               <div className="summary-card">

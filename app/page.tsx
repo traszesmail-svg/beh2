@@ -112,7 +112,7 @@ export default async function HomePage() {
     ? nextSlot
       ? formatDateTimeLabel(nextSlot.bookingDate, nextSlot.bookingTime)
       : 'Brak wolnych terminów'
-    : 'Terminy chwilowo się odświeżają'
+    : 'Najbliższe realnie dostępne terminy zobaczysz w kolejnym kroku rezerwacji.'
   const structuredData = [
     {
       '@context': 'https://schema.org',

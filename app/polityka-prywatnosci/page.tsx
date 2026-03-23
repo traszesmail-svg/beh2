@@ -1,6 +1,6 @@
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
-import { getContactDetails, SPECIALIST_CREDENTIALS, SPECIALIST_NAME } from '@/lib/site'
+import { FACEBOOK_PROFILE_URL, SPECIALIST_CREDENTIALS, SPECIALIST_NAME, getContactDetails } from '@/lib/site'
 
 export const dynamic = 'force-dynamic'
 
@@ -19,36 +19,51 @@ export default function PrivacyPolicyPage() {
             <div className="list-card">
               <strong>Administrator danych</strong>
               <span>
-                {SPECIALIST_NAME}, {SPECIALIST_CREDENTIALS}.
+                Administratorem danych związanych z rezerwacją konsultacji Behawior 15 jest {SPECIALIST_NAME}, {SPECIALIST_CREDENTIALS}.
               </span>
             </div>
+
             <div className="list-card">
-              <strong>Zakres danych</strong>
+              <strong>Zakres przetwarzanych danych</strong>
               <span>
-                W formularzu rezerwacji przetwarzane są dane potrzebne do obsługi konsultacji: imię opiekuna, dane
-                kontaktowe, opis problemu, termin, status płatności oraz opcjonalne materiały przed rozmową.
+                Przetwarzane są dane niezbędne do obsługi konsultacji: imię opiekuna, dane kontaktowe, opis problemu, wybrany termin, status płatności oraz opcjonalne materiały dodane przed rozmową.
               </span>
             </div>
+
             <div className="list-card">
-              <strong>Cel przetwarzania</strong>
+              <strong>Cele i podstawy przetwarzania</strong>
               <span>
-                Dane są wykorzystywane do umówienia konsultacji, obsługi płatności, wysyłki potwierdzeń i przypomnień
-                oraz przygotowania specjalisty do rozmowy.
+                Dane są przetwarzane w celu przyjęcia rezerwacji, przeprowadzenia konsultacji, obsługi płatności, wysłania potwierdzeń i przypomnień, przygotowania specjalisty do rozmowy oraz obsługi ewentualnych reklamacji i zwrotów.
               </span>
             </div>
+
             <div className="list-card">
-              <strong>Operatorzy techniczni</strong>
+              <strong>Odbiorcy danych</strong>
               <span>
-                Aplikacja korzysta z Supabase do przechowywania danych, Stripe do obsługi płatności oraz Resend do
-                wysyłki wiadomości e-mail.
+                Do działania produktu wykorzystywane są usługi Supabase, Stripe oraz Resend. Dane są przekazywane tylko w zakresie potrzebnym do obsługi rezerwacji, płatności i komunikacji e-mail.
               </span>
             </div>
+
+            <div className="list-card">
+              <strong>Jak długo przechowujemy dane</strong>
+              <span>
+                Dane rezerwacyjne i rozliczeniowe przechowujemy tak długo, jak jest to potrzebne do obsługi konsultacji, rozliczeń, kontaktu posprzedażowego oraz spełnienia obowiązków prawnych.
+              </span>
+            </div>
+
+            <div className="list-card">
+              <strong>Twoje prawa</strong>
+              <span>
+                Możesz poprosić o dostęp do danych, ich sprostowanie, ograniczenie przetwarzania lub usunięcie, o ile nie koliduje to z obowiązkami rozliczeniowymi albo bezpieczeństwem obsługi rezerwacji.
+              </span>
+            </div>
+
             <div className="list-card">
               <strong>Kontakt w sprawie danych</strong>
               <span>
-                {contact.email ? `E-mail: ${contact.email}. ` : ''}
+                {contact.email ? `E-mail: ${contact.email}. ` : 'Publiczny adres e-mail do kontaktu nie został jeszcze ustawiony. '}
                 {contact.phone ? `Telefon: ${contact.phone}. ` : ''}
-                Możesz poprosić o wgląd, korektę lub usunięcie danych, o ile nie koliduje to z obowiązkami rozliczeniowymi.
+                Możesz też skorzystać z publicznego profilu Facebook: {FACEBOOK_PROFILE_URL}.
               </span>
             </div>
           </div>

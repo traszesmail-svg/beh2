@@ -2,16 +2,16 @@ import Link from 'next/link'
 
 export function Header() {
   const trustItems = [
-    '✅ Zweryfikowany behawiorysta COAPE/CAPBT',
+    'Zweryfikowany behawiorysta COAPE/CAPBT',
     'Bezpieczna płatność',
-    'Zwrot pieniędzy',
+    'Zwrot zgodnie z regulaminem',
   ]
 
   const navItems = [
     { href: '/#oferta', label: 'Oferta' },
+    { href: '/#jak-to-dziala', label: 'Jak to działa' },
     { href: '/#specjalista', label: 'Specjalista' },
     { href: '/#przypadki', label: 'Realne sprawy' },
-    { href: '/#opinie', label: 'Opinie' },
     { href: '/#publikacje', label: 'Publikacje' },
     { href: '/#faq', label: 'FAQ' },
     { href: '/#kontakt', label: 'Kontakt' },
@@ -37,7 +37,9 @@ export function Header() {
                 <div className="brand">Behawior 15</div>
               </div>
             </Link>
-            <div className="header-subtitle">Spokojna, konkretna konsultacja dla opiekunów psów i kotów.</div>
+            <div className="header-subtitle">
+              Spokojna, konkretna konsultacja dla opiekunów psów i kotów.
+            </div>
           </div>
 
           <nav className="header-nav" aria-label="Główna nawigacja">
@@ -49,7 +51,7 @@ export function Header() {
               ))}
             </div>
 
-            <Link href="/book" className="button button-primary header-cta">
+            <Link href="/book" className="button button-primary header-cta" data-analytics-event="reserve_click" data-analytics-location="header">
               Zarezerwuj 15 minut i odzyskaj spokój w domu
             </Link>
           </nav>

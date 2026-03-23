@@ -1,18 +1,60 @@
 import { AvailabilitySeed, ProblemOption, ProblemType } from './types'
 
 export const problemOptions: ProblemOption[] = [
-  { id: 'szczeniak', icon: 'puppy', title: 'Szczeniak i młody pies', desc: 'gryzienie, nauka czystości, pobudzenie i pierwsze zasady w domu' },
-  { id: 'kot', icon: 'cat', title: 'Kot i trudne zachowania', desc: 'problemy z kuwetą, napięcie, wokalizacja i trudności w domu' },
-  { id: 'separacja', icon: 'home', title: 'Lęk separacyjny', desc: 'wycie, niszczenie, trudność zostawania samemu i napięcie po wyjściu opiekuna' },
-  { id: 'agresja', icon: 'shield', title: 'Agresja i reakcje obronne', desc: 'trudne zachowania wobec ludzi, zwierząt lub w codziennych sytuacjach' },
-  { id: 'niszczenie', icon: 'spark', title: 'Szczekanie, niszczenie, pobudzenie', desc: 'hałas, rozregulowanie i trudność z wyciszeniem lub kontrolą emocji' },
-  { id: 'inne', icon: 'compass', title: 'Inny temat do omówienia', desc: 'gdy chcesz szybko uporządkować sytuację i dostać pierwszy kierunek działania' },
+  {
+    id: 'szczeniak',
+    icon: 'puppy',
+    title: 'Szczeniak i młody pies',
+    desc: 'gryzienie, nauka czystości, pobudzenie i pierwsze zasady w domu',
+  },
+  {
+    id: 'kot',
+    icon: 'cat',
+    title: 'Kot i trudne zachowania',
+    desc: 'problemy z kuwetą, napięcie, wokalizacja i trudności w domu',
+  },
+  {
+    id: 'separacja',
+    icon: 'home',
+    title: 'Lęk separacyjny',
+    desc: 'wycie, niszczenie, trudność zostawania samemu i napięcie po wyjściu opiekuna',
+  },
+  {
+    id: 'agresja',
+    icon: 'shield',
+    title: 'Agresja i reakcje obronne',
+    desc: 'trudne zachowania wobec ludzi, zwierząt lub w codziennych sytuacjach',
+  },
+  {
+    id: 'niszczenie',
+    icon: 'spark',
+    title: 'Szczekanie, niszczenie, pobudzenie',
+    desc: 'hałas, rozregulowanie i trudność z wyciszeniem lub kontrolą emocji',
+  },
+  {
+    id: 'inne',
+    icon: 'compass',
+    title: 'Inny temat do omówienia',
+    desc: 'gdy chcesz szybko uporządkować sytuację i dostać pierwszy kierunek działania',
+  },
 ]
 
 export const steps = [
-  { n: '01', title: 'Wybierasz temat', desc: 'Określasz, czego dotyczy trudność, i sprawdzasz realnie wolne terminy.' },
-  { n: '02', title: 'Rezerwujesz i opłacasz', desc: 'Podajesz dane, blokujesz termin na czas płatności i przechodzisz do bezpiecznego checkoutu.' },
-  { n: '03', title: 'Dostajesz rozmowę i dalszy kierunek', desc: 'Po opłaceniu otrzymujesz potwierdzenie, link do rozmowy audio i jasny kolejny krok po konsultacji.' },
+  {
+    n: '01',
+    title: 'Wybierasz temat',
+    desc: 'Określasz, czego dotyczy trudność, i sprawdzasz realnie wolne terminy.',
+  },
+  {
+    n: '02',
+    title: 'Rezerwujesz i opłacasz',
+    desc: 'Podajesz dane, blokujesz termin na czas płatności i przechodzisz do bezpiecznego checkoutu.',
+  },
+  {
+    n: '03',
+    title: 'Dostajesz rozmowę i dalszy kierunek',
+    desc: 'Po opłaceniu otrzymujesz potwierdzenie, link do rozmowy audio i jasny kolejny krok po konsultacji.',
+  },
 ]
 
 export const faq = [
@@ -21,20 +63,44 @@ export const faq = [
     a: 'To szybka konsultacja porządkująca sytuację. Jej celem jest wstępna ocena problemu i pierwszy, konkretny kierunek działania.',
   },
   {
-    q: 'Czy konsultacja dotyczy również kotów?',
-    a: 'Tak. Konsultacja jest przeznaczona dla opiekunów psów i kotów, także w sprawach dotyczących kuwety, stresu i napięcia.',
+    q: 'Czy mogę ubiegać się o zwrot pieniędzy?',
+    a: 'Tak. Jeśli uznasz, że konsultacja nie pomogła Ci zrozumieć problemu ani ustalić kolejnego kroku, możesz złożyć wniosek o zwrot zgodnie z regulaminem.',
   },
   {
-    q: 'Czy muszę coś instalować?',
-    a: 'Nie. Rezerwacja, płatność i dołączenie do rozmowy głosowej działają w przeglądarce telefonu albo komputera.',
+    q: 'Czy mogę przełożyć termin?',
+    a: 'Jeśli wiesz wcześniej, że nie możesz pojawić się na rozmowie, skontaktuj się jak najszybciej przez kanał kontaktowy podany w stopce i regulaminie. Najbezpieczniej zrobić to przed rozpoczęciem terminu.',
   },
   {
-    q: 'Co dzieje się po rozmowie?',
-    a: 'Po rozmowie otrzymujesz wskazówki, co robić dalej. W razie potrzeby kolejnym krokiem może być pełna konsultacja, plan pracy, wizyta domowa albo dalsze wsparcie.',
+    q: 'Czy muszę mieć MP4 albo inne materiały przed rozmową?',
+    a: 'Nie. Materiały są opcjonalne. Jeśli ich nie masz, nadal możesz przejść przez pełne flow rezerwacji i odbyć rozmowę audio.',
   },
   {
-    q: 'Czy to jest konsultacja głosowa?',
-    a: 'Tak. Ten 15-minutowy produkt jest przygotowany jako rozmowa audio online. Kamera nie jest potrzebna.',
+    q: 'Czy konsultacja jest tylko audio?',
+    a: 'Tak. Behawior 15 jest zaprojektowany jako spokojna 15-minutowa rozmowa głosowa online. Kamera nie jest potrzebna.',
+  },
+  {
+    q: 'Czy rozmowa jest nagrywana?',
+    a: 'Nie zakładamy automatycznego nagrywania rozmów w standardowym flow. Jeśli pojawi się potrzeba dodatkowych ustaleń, będą one komunikowane osobno.',
+  },
+  {
+    q: 'Co dzieje się po 15 minutach?',
+    a: 'Po rozmowie masz otrzymać jasny następny krok: co wdrożyć od razu, co obserwować dalej i czy potrzebna będzie szersza konsultacja albo dalsza diagnostyka.',
+  },
+  {
+    q: 'Czy konsultacja dotyczy zarówno psa, jak i kota?',
+    a: 'Tak. Rozmowa jest przeznaczona dla opiekunów psów i kotów, także w sprawach dotyczących lęku, kuwety, napięcia, pobudzenia czy relacji między zwierzętami.',
+  },
+  {
+    q: 'Czy to zastępuje wizytę stacjonarną albo badanie weterynaryjne?',
+    a: 'Nie zawsze. To pierwszy krok, który pomaga uporządkować problem. Jeśli sytuacja tego wymaga, po rozmowie dostaniesz rekomendację dalszej pracy albo konsultacji weterynaryjnej.',
+  },
+  {
+    q: 'Jak szybko dostaję potwierdzenie rezerwacji?',
+    a: 'Po skutecznej płatności od razu widzisz potwierdzenie terminu, link do rozmowy i możliwość dodania materiałów przygotowawczych.',
+  },
+  {
+    q: 'Jak najlepiej przygotować się do rozmowy?',
+    a: 'Wystarczy krótki opis problemu, najważniejsze obserwacje i 2–3 pytania. Jeśli chcesz, możesz dodać MP4, link albo notatki jeszcze przed konsultacją.',
   },
 ]
 
@@ -70,7 +136,11 @@ export function getWarsawNowBoundary(now = new Date()) {
   }
 }
 
-export function isFutureAvailabilitySlot(bookingDate: string, bookingTime: string, now = new Date()): boolean {
+export function isFutureAvailabilitySlot(
+  bookingDate: string,
+  bookingTime: string,
+  now = new Date(),
+): boolean {
   const boundary = getWarsawNowBoundary(now)
   return `${bookingDate}T${bookingTime}` >= `${boundary.date}T${boundary.time}`
 }
@@ -81,8 +151,8 @@ export function buildRollingAvailabilitySeed(now = new Date(), dayCount = 6): Av
     const bookingDate = formatWarsawDate(date)
     return {
       date: bookingDate,
-      times: [...rollingAvailabilityTimeGroups[index % rollingAvailabilityTimeGroups.length]].filter((time) =>
-        isFutureAvailabilitySlot(bookingDate, time, now),
+      times: [...rollingAvailabilityTimeGroups[index % rollingAvailabilityTimeGroups.length]].filter(
+        (time) => isFutureAvailabilitySlot(bookingDate, time, now),
       ),
     }
   }).filter((entry) => entry.times.some((time) => isFutureAvailabilitySlot(entry.date, time, now)))
@@ -92,7 +162,9 @@ export function getProblemLabel(problem: ProblemType): string {
   return problemOptions.find((item) => item.id === problem)?.title ?? 'Konsultacja'
 }
 
-export function getBookingStatusLabel(status: 'pending' | 'confirmed' | 'done' | 'cancelled' | 'expired'): string {
+export function getBookingStatusLabel(
+  status: 'pending' | 'confirmed' | 'done' | 'cancelled' | 'expired',
+): string {
   switch (status) {
     case 'pending':
       return 'Oczekuje na płatność'
@@ -140,6 +212,11 @@ export function isProblemType(value: string | null | undefined): value is Proble
   return problemOptions.some((option) => option.id === value)
 }
 
-export function compareDateAndTime(leftDate: string, leftTime: string, rightDate: string, rightTime: string): number {
+export function compareDateAndTime(
+  leftDate: string,
+  leftTime: string,
+  rightDate: string,
+  rightTime: string,
+): number {
   return `${leftDate}T${leftTime}`.localeCompare(`${rightDate}T${rightTime}`)
 }

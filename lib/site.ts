@@ -1,14 +1,18 @@
 import { ProblemType } from './types'
 
-const DEFAULT_RESEND_FROM_EMAIL = 'Behawior 15 <onboarding@resend.dev>'
+export const SITE_NAME = 'Behawior 15'
+export const SITE_URL_FALLBACK = 'http://localhost:3000'
+export const FACEBOOK_PROFILE_URL = 'https://www.facebook.com/krzysztof.regulski.148/'
 
 export const SPECIALIST_NAME = 'Krzysztof Regulski'
-export const SPECIALIST_CREDENTIALS = 'behawior, technik weterynarii, opiekun medyczny, dogoterapia, COAPE/CAPBT'
+export const SPECIALIST_CREDENTIALS =
+  'behawiorysta, technik weterynarii, opiekun medyczny, dogoterapeuta, COAPE/CAPBT'
 export const SPECIALIST_LOCATION = 'Olsztyn, woj. warmińsko-mazurskie'
 export const COAPE_ORG_URL = 'https://coape.pl'
 export const COAPE_PROFILE_URL = 'https://behawioryscicoape.pl/behawiorysta/Regulski'
 export const CAPBT_PROFILE_URL = COAPE_PROFILE_URL
-export const SPECIALIST_TRUST_STATEMENT = 'Łączę behawior, wiedzę medyczną i doświadczenie terapeutyczne.'
+export const SPECIALIST_TRUST_STATEMENT =
+  'Łączę behawior, wiedzę medyczną i doświadczenie terapeutyczne.'
 export const CONSULTATION_PRICE_COMPARE_COPY =
   'To krótki pierwszy krok przed pełną konsultacją, planem pracy albo dalszą diagnostyką.'
 
@@ -138,7 +142,8 @@ export const MEDIA_MENTIONS: MediaMention[] = [
   {
     id: 'magwet-litter-box',
     label: 'Publikacja · Magazyn Weterynaryjny',
-    title: 'Terapia farmakologiczna i behawioralna przy oddawaniu moczu poza kuwetą u kota. Przypadek kliniczny',
+    title:
+      'Terapia farmakologiczna i behawioralna przy oddawaniu moczu poza kuwetą u kota. Przypadek kliniczny',
     summary:
       'Artykuł współautorski o klinicznym przypadku kota oddającego mocz poza kuwetą i o potrzebie łączenia pracy behawioralnej z tłem medycznym.',
     href: 'https://magwet.pl/31443,terapia-farmakologiczna-i-behawioralna-przy-oddawaniu-moczu-poza-kuweta-u-kota-przypadek-kliniczny',
@@ -159,23 +164,14 @@ function isValidPublicEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
 }
 
-function extractEmailAddress(value: string): string | null {
-  const match = value.match(/<([^>]+)>/)
-  const candidate = match?.[1]?.trim() ?? value.trim()
-
-  return isValidPublicEmail(candidate) ? candidate : null
-}
-
 export function getContactDetails() {
-  const configuredFrom = process.env.RESEND_FROM_EMAIL?.trim() || null
-  const from = configuredFrom ?? DEFAULT_RESEND_FROM_EMAIL
-  const email =
-    extractEmailAddress(process.env.BEHAVIOR15_CONTACT_EMAIL?.trim() || '') ||
-    (configuredFrom ? extractEmailAddress(from) : null)
+  const emailCandidate = process.env.BEHAVIOR15_CONTACT_EMAIL?.trim() || null
   const phone = process.env.BEHAVIOR15_CONTACT_PHONE?.trim() || null
+  const email = emailCandidate && isValidPublicEmail(emailCandidate) ? emailCandidate : null
 
   return {
     email,
     phone,
+    facebookUrl: FACEBOOK_PROFILE_URL,
   }
 }
