@@ -29,7 +29,7 @@ import {
   validatePreparationVideoMeta,
 } from '@/lib/preparation'
 import { createCustomerAccessToken, hasValidCustomerAccessToken, hashCustomerAccessToken } from '@/lib/server/customer-access'
-import { getTestimonialSubmissionConfigIssue, shouldSendBookingConfirmationAfterPayment } from '@/lib/server/notifications'
+import { shouldSendBookingConfirmationAfterPayment } from '@/lib/server/notifications'
 import { getReminderAuthorizationError, runBookingReminderSweep } from '@/lib/server/reminder-runner'
 import { getWarsawDateTime, shouldSendReminderForBooking } from '@/lib/server/reminders'
 import { assertStripeCheckoutAmountSupported, buildCheckoutSessionParams, isStripeTestMode } from '@/lib/server/stripe'
@@ -536,14 +536,6 @@ test('prefers a valid configured public email over the fallback address', () => 
     phoneHref: null,
     facebookUrl: 'https://www.facebook.com/krzysztof.regulski.148/',
   })
-})
-
-test('allows testimonial submissions with resend api key even when custom from email is missing', () => {
-  process.env.RESEND_API_KEY = 're_test_key'
-  delete process.env.RESEND_FROM_EMAIL
-  delete process.env.BEHAVIOR15_CONTACT_EMAIL
-
-  assert.equal(getTestimonialSubmissionConfigIssue(), null)
 })
 
 test('builds a robots response that points to the sitemap', () => {

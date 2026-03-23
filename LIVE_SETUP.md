@@ -24,7 +24,7 @@ Zawiera:
 ## 3. Email
 Aby dzialaly maile:
 - `RESEND_API_KEY`
-- opcjonalnie `RESEND_FROM_EMAIL` jako techniczny adres nadawcy
+- `RESEND_FROM_EMAIL` jako techniczny adres nadawcy
 - opcjonalnie `BEHAVIOR15_CONTACT_EMAIL` jesli chcesz nadpisac publiczny adres kontaktowy
 - opcjonalnie `BEHAVIOR15_CONTACT_PHONE`
 
