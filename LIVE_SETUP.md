@@ -24,9 +24,12 @@ Zawiera:
 ## 3. Email
 Aby dzialaly maile:
 - `RESEND_API_KEY`
-- opcjonalnie `RESEND_FROM_EMAIL`
-- opcjonalnie `BEHAVIOR15_CONTACT_EMAIL`
+- opcjonalnie `RESEND_FROM_EMAIL` jako techniczny adres nadawcy
+- opcjonalnie `BEHAVIOR15_CONTACT_EMAIL` jesli chcesz nadpisac publiczny adres kontaktowy
 - opcjonalnie `BEHAVIOR15_CONTACT_PHONE`
+
+Domyslny publiczny adres kontaktowy w aplikacji:
+- `coapebehawiorysta@gmail.com`
 
 ## 4. Reminder 1h przed konsultacja
 Scheduler nie korzysta juz z Vercel Cron.

@@ -74,10 +74,6 @@ export function getTestimonialSubmissionConfigIssue(): string | null {
     return 'RESEND_API_KEY missing'
   }
 
-  if (!isValidResendFrom(process.env.RESEND_FROM_EMAIL?.trim() || null)) {
-    return 'RESEND_FROM_EMAIL missing or invalid'
-  }
-
   if (!getNotificationRecipientEmail()) {
     return 'public contact email missing or invalid'
   }

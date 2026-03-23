@@ -29,7 +29,7 @@ import {
   validatePreparationVideoMeta,
 } from '@/lib/preparation'
 import { createCustomerAccessToken, hasValidCustomerAccessToken, hashCustomerAccessToken } from '@/lib/server/customer-access'
-import { shouldSendBookingConfirmationAfterPayment } from '@/lib/server/notifications'
+import { getTestimonialSubmissionConfigIssue, shouldSendBookingConfirmationAfterPayment } from '@/lib/server/notifications'
 import { getReminderAuthorizationError, runBookingReminderSweep } from '@/lib/server/reminder-runner'
 import { getWarsawDateTime, shouldSendReminderForBooking } from '@/lib/server/reminders'
 import { assertStripeCheckoutAmountSupported, buildCheckoutSessionParams, isStripeTestMode } from '@/lib/server/stripe'
@@ -495,7 +495,7 @@ test('does not expose the default resend onboarding address as public contact da
   delete process.env.BEHAVIOR15_CONTACT_PHONE
 
   assert.deepEqual(getContactDetails(), {
-    email: null,
+    email: 'coapebehawiorysta@gmail.com',
     phoneDisplay: null,
     phoneHref: null,
     facebookUrl: 'https://www.facebook.com/krzysztof.regulski.148/',
@@ -507,7 +507,7 @@ test('ignores invalid public contact email values', () => {
   delete process.env.BEHAVIOR15_CONTACT_PHONE
 
   assert.deepEqual(getContactDetails(), {
-    email: null,
+    email: 'coapebehawiorysta@gmail.com',
     phoneDisplay: null,
     phoneHref: null,
     facebookUrl: 'https://www.facebook.com/krzysztof.regulski.148/',
@@ -519,11 +519,31 @@ test('formats public phone details for the footer and legal pages', () => {
   process.env.BEHAVIOR15_CONTACT_PHONE = '500600700'
 
   assert.deepEqual(getContactDetails(), {
-    email: null,
+    email: 'coapebehawiorysta@gmail.com',
     phoneDisplay: '500 600 700',
     phoneHref: '500600700',
     facebookUrl: 'https://www.facebook.com/krzysztof.regulski.148/',
   })
+})
+
+test('prefers a valid configured public email over the fallback address', () => {
+  process.env.BEHAVIOR15_CONTACT_EMAIL = 'kontakt@behawior15.pl'
+  delete process.env.BEHAVIOR15_CONTACT_PHONE
+
+  assert.deepEqual(getContactDetails(), {
+    email: 'kontakt@behawior15.pl',
+    phoneDisplay: null,
+    phoneHref: null,
+    facebookUrl: 'https://www.facebook.com/krzysztof.regulski.148/',
+  })
+})
+
+test('allows testimonial submissions with resend api key even when custom from email is missing', () => {
+  process.env.RESEND_API_KEY = 're_test_key'
+  delete process.env.RESEND_FROM_EMAIL
+  delete process.env.BEHAVIOR15_CONTACT_EMAIL
+
+  assert.equal(getTestimonialSubmissionConfigIssue(), null)
 })
 
 test('builds a robots response that points to the sitemap', () => {

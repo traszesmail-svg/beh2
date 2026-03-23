@@ -147,7 +147,7 @@ async function main() {
     }
     const gaScriptBeforeConsent = await mobilePage.locator('script[src*="googletagmanager"]').count()
     if (consentVisible) {
-      await mobilePage.getByRole('button', { name: /Odrzuć/i }).click()
+      await mobilePage.getByRole('button', { name: /Odrzuć/i }).click({ force: true })
     }
     const consentDismissed = consentVisible ? await consentDialog.isHidden() : true
     const gaScriptAfterReject = await mobilePage.locator('script[src*="googletagmanager"]').count()

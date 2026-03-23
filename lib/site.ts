@@ -3,6 +3,7 @@ import { ProblemType } from './types'
 export const SITE_NAME = 'Behawior 15'
 export const SITE_URL_FALLBACK = 'http://localhost:3000'
 export const FACEBOOK_PROFILE_URL = 'https://www.facebook.com/krzysztof.regulski.148/'
+export const PUBLIC_CONTACT_EMAIL_FALLBACK = 'coapebehawiorysta@gmail.com'
 
 export const SPECIALIST_NAME = 'Krzysztof Regulski'
 export const SPECIALIST_CREDENTIALS =
@@ -226,8 +227,7 @@ function normalizePublicPhone(value: string | null): PublicPhone {
 
 export function getContactDetails() {
   const emailCandidate =
-    extractConfiguredEmail(process.env.BEHAVIOR15_CONTACT_EMAIL?.trim() || null) ??
-    extractConfiguredEmail(process.env.RESEND_FROM_EMAIL?.trim() || null)
+    extractConfiguredEmail(process.env.BEHAVIOR15_CONTACT_EMAIL?.trim() || null) ?? PUBLIC_CONTACT_EMAIL_FALLBACK
   const phoneCandidate = process.env.BEHAVIOR15_CONTACT_PHONE?.trim() || null
   const phone = normalizePublicPhone(phoneCandidate)
 
