@@ -8,8 +8,9 @@ import { ADMIN_BASIC_AUTH_USERNAME, hasValidAdminAuthorization } from '@/lib/adm
 import { POST as submitTestimonialRoute } from '@/app/api/testimonials/route'
 import { SocialProofSection } from '@/components/SocialProofSection'
 import { BUILD_MARKER_KEY, getBuildMarkerSnapshot } from '@/lib/build-marker'
-import { buildRollingAvailabilitySeed, isFutureAvailabilitySlot } from '@/lib/data'
+import { buildRollingAvailabilitySeed, getProblemLabel, isFutureAvailabilitySlot, isProblemType } from '@/lib/data'
 import { getDataModeStatus, getSupabaseServiceRoleKeyIssue } from '@/lib/server/env'
+import { buildSeedAvailabilitySlots, hasFutureAvailabilitySlots } from '@/lib/server/availability-seed'
 import {
   createActiveConsultationPrice,
   DEFAULT_PRICE_PLN,
@@ -197,6 +198,27 @@ test('builds rolling local availability without past slots', () => {
 
   assert.ok(seed.length > 0)
   assert.ok(seed.every((entry) => entry.times.every((time) => isFutureAvailabilitySlot(entry.date, time, now))))
+})
+
+test('backfills future availability only when the current calendar has no future slots left', () => {
+  const now = new Date('2026-03-23T18:00:00+01:00')
+  const pastSlots = [
+    { bookingDate: '2026-03-23', bookingTime: '16:00' },
+    { bookingDate: '2026-03-23', bookingTime: '16:20' },
+  ]
+
+  assert.equal(hasFutureAvailabilitySlots(pastSlots, now), false)
+
+  const seedSlots = buildSeedAvailabilitySlots(now, '2026-03-23T17:00:00.000Z')
+
+  assert.ok(seedSlots.length > 0)
+  assert.equal(hasFutureAvailabilitySlots(seedSlots, now), true)
+  assert.ok(seedSlots.every((slot) => isFutureAvailabilitySlot(slot.bookingDate, slot.bookingTime, now)))
+})
+
+test('keeps dogoterapia as a standard public topic label', () => {
+  assert.equal(isProblemType('dogoterapia'), true)
+  assert.equal(getProblemLabel('dogoterapia'), 'Dogoterapia')
 })
 
 test('accepts a secret Supabase service key for admin data operations', () => {

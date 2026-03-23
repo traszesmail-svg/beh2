@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { cp, mkdir, rm } from 'fs/promises'
 import path from 'path'
-import { spawn } from 'child_process'
+import { execFileSync, spawn } from 'child_process'
 import { loadEnvConfig } from '@next/env'
 import { chromium } from 'playwright-core'
 import { BUILD_MARKER_KEY } from '../lib/build-marker'
@@ -9,7 +9,8 @@ import { BUILD_MARKER_KEY } from '../lib/build-marker'
 const rootDir = process.cwd()
 const dataDir = path.join(rootDir, 'data')
 const backupDir = path.join(rootDir, '.tmp-ui-data-backup')
-const appUrl = 'http://127.0.0.1:3210'
+const port = 3210 + Math.floor(Math.random() * 200)
+const appUrl = `http://127.0.0.1:${port}`
 const adminSecret = 'codex-admin-secret'
 
 function bookingPayload(slotId: string, index: number) {
@@ -88,7 +89,7 @@ async function main() {
     const nextPublicSlot = availabilityAfterBooking.flatMap((group) => group.slots)[0]
     assert.ok(nextPublicSlot, 'Expected at least one public slot after locking the first booking.')
 
-    server = spawn('cmd.exe', ['/c', 'npm run start -- --port 3210'], {
+    server = spawn('cmd.exe', ['/c', `npm run start -- --port ${port}`], {
       cwd: rootDir,
       env: process.env,
       stdio: 'ignore',
@@ -124,7 +125,7 @@ async function main() {
       .isVisible()
     const heroPriceVisible = await mobilePage.locator('.hero-price-badge').getByText(/Aktualna cena/i).isVisible()
     const trustStripVisible = await mobilePage.locator('.header-trust-strip').getByText(/Zwrot zgodnie z regulaminem/i).isVisible()
-    const heroPhotoVisible = await mobilePage.locator('.hero-aside img[alt="Krzysztof Regulski na portretowym zdjęciu do strony Behawior 15"]').isVisible()
+    const heroPhotoVisible = await mobilePage.locator('img[alt="Krzysztof Regulski na portretowym zdjęciu do strony Behawior 15"]').first().isVisible()
     const reassuranceVisible = await mobilePage.getByText(/Jedna rozmowa, jasny plan i realny następny krok/i).isVisible()
     const shareVisible = await mobilePage.getByText(/Udostępnij znajomemu, który ma problem z pupilem/i).isVisible()
     const footerLinkVisible = await mobilePage.getByRole('link', { name: /Polityka prywatności/i }).isVisible()
@@ -272,6 +273,7 @@ async function main() {
       }),
     })
     const testimonialRoutePayload = (await testimonialRouteResponse.json()) as { error?: string }
+    const faviconResponse = await fetch(`${appUrl}/favicon.ico`)
     const robotsResponse = await fetch(`${appUrl}/robots.txt`)
     const robotsText = await robotsResponse.text()
     const sitemapResponse = await fetch(`${appUrl}/sitemap.xml`)
@@ -358,6 +360,7 @@ async function main() {
     assert.equal(dogotherapySlotHeadingVisible, true)
     assert.equal(testimonialRouteResponse.status, 503)
     assert.match(testimonialRoutePayload.error ?? '', /Formularz opinii jest chwilowo niedostępny/i)
+    assert.equal(faviconResponse.ok, true)
     assert.equal(robotsResponse.ok, true)
     assert.match(robotsText, /Sitemap:\s*https?:\/\/.+\/sitemap\.xml/i)
     assert.equal(sitemapResponse.ok, true)
@@ -459,7 +462,11 @@ async function main() {
     await mobile.close()
   } finally {
     if (browser) await browser.close()
-    if (server && !server.killed) server.kill()
+    if (server?.pid) {
+      try {
+        execFileSync('taskkill', ['/PID', String(server.pid), '/T', '/F'], { stdio: 'ignore' })
+      } catch {}
+    }
     await restoreData()
   }
 }

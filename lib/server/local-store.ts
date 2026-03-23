@@ -1,7 +1,8 @@
 import { mkdir, readFile, writeFile } from 'fs/promises'
 import path from 'path'
-import { buildRollingAvailabilitySeed, compareDateAndTime, formatDateLabel, isFutureAvailabilitySlot } from '@/lib/data'
+import { compareDateAndTime, formatDateLabel, isFutureAvailabilitySlot } from '@/lib/data'
 import { createActiveConsultationPrice, DEFAULT_PRICE_PLN, parseConsultationPriceInput } from '@/lib/pricing'
+import { buildSeedAvailabilitySlots } from '@/lib/server/availability-seed'
 import { createCustomerAccessToken, hasValidCustomerAccessToken } from '@/lib/server/customer-access'
 import { getReservationWindowMinutes } from '@/lib/server/env'
 import { createMeetingUrl } from '@/lib/server/jitsi'
@@ -48,18 +49,7 @@ function withLock<T>(work: () => Promise<T>): Promise<T> {
 }
 
 function createSeedAvailability(nowIso: string): AvailabilitySlot[] {
-  return buildRollingAvailabilitySeed(new Date(nowIso)).flatMap((entry) =>
-    entry.times.map((bookingTime) => ({
-      id: `${entry.date}-${bookingTime}`,
-      bookingDate: entry.date,
-      bookingTime,
-      isBooked: false,
-      lockedByBookingId: null,
-      lockedUntil: null,
-      createdAt: nowIso,
-      updatedAt: nowIso,
-    })),
-  )
+  return buildSeedAvailabilitySlots(new Date(nowIso), nowIso)
 }
 
 async function ensureFile(filePath: string, fallbackValue: unknown) {

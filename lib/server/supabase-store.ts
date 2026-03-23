@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { compareDateAndTime, formatDateLabel, isFutureAvailabilitySlot } from '@/lib/data'
 import { createActiveConsultationPrice, DEFAULT_PRICE_PLN, parseConsultationPriceInput } from '@/lib/pricing'
+import { buildSeedAvailabilitySlots, hasFutureAvailabilitySlots } from '@/lib/server/availability-seed'
 import { createCustomerAccessToken, hashCustomerAccessToken } from '@/lib/server/customer-access'
 import { getReservationWindowMinutes, getSupabaseServerConfig } from '@/lib/server/env'
 import { createMeetingUrl } from '@/lib/server/jitsi'
@@ -101,6 +102,19 @@ function mapAvailabilityRow(row: AvailabilityRow): AvailabilitySlot {
     lockedUntil: row.locked_until,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
+  }
+}
+
+function mapAvailabilitySlotToRow(slot: AvailabilitySlot): AvailabilityRow {
+  return {
+    id: slot.id,
+    booking_date: slot.bookingDate,
+    booking_time: slot.bookingTime,
+    is_booked: slot.isBooked,
+    locked_by_booking_id: slot.lockedByBookingId ?? null,
+    locked_until: slot.lockedUntil ?? null,
+    created_at: slot.createdAt,
+    updated_at: slot.updatedAt,
   }
 }
 
@@ -222,6 +236,44 @@ async function cleanupExpiredReservations() {
   }
 }
 
+async function listAvailabilityRows(): Promise<AvailabilityRow[]> {
+  const supabase = getSupabaseAdmin()
+  const { data, error } = await supabase
+    .from('availability')
+    .select('*')
+    .order('booking_date', { ascending: true })
+    .order('booking_time', { ascending: true })
+
+  if (error) {
+    throw error
+  }
+
+  return (data as AvailabilityRow[]) ?? []
+}
+
+async function ensureFutureAvailabilityRows(): Promise<AvailabilitySlot[]> {
+  const currentRows = await listAvailabilityRows()
+  const currentSlots = currentRows.map(mapAvailabilityRow)
+
+  if (hasFutureAvailabilitySlots(currentSlots)) {
+    return currentSlots
+  }
+
+  const supabase = getSupabaseAdmin()
+  const nowIso = new Date().toISOString()
+  const seedRows = buildSeedAvailabilitySlots(new Date(nowIso), nowIso).map(mapAvailabilitySlotToRow)
+
+  if (seedRows.length > 0) {
+    const { error } = await supabase.from('availability').upsert(seedRows, { onConflict: 'id' })
+
+    if (error) {
+      throw error
+    }
+  }
+
+  return (await listAvailabilityRows()).map(mapAvailabilityRow)
+}
+
 async function findOrCreateUser(email: string): Promise<UserRecord> {
   const supabase = getSupabaseAdmin()
   const nowIso = new Date().toISOString()
@@ -288,19 +340,7 @@ async function readPricingSettings() {
 
 export async function listAvailability(): Promise<GroupedAvailability[]> {
   await cleanupExpiredReservations()
-  const supabase = getSupabaseAdmin()
-  const { data, error } = await supabase
-    .from('availability')
-    .select('*')
-    .eq('is_booked', false)
-    .order('booking_date', { ascending: true })
-    .order('booking_time', { ascending: true })
-
-  if (error) {
-    throw error
-  }
-
-  return groupAvailability((data as AvailabilityRow[]).map(mapAvailabilityRow))
+  return groupAvailability((await ensureFutureAvailabilityRows()).filter((slot) => !slot.isBooked))
 }
 
 export async function getActiveConsultationPrice() {
@@ -333,18 +373,7 @@ export async function updateActiveConsultationPrice(amount: number) {
 
 export async function listAvailabilityAdmin(): Promise<AvailabilitySlot[]> {
   await cleanupExpiredReservations()
-  const supabase = getSupabaseAdmin()
-  const { data, error } = await supabase
-    .from('availability')
-    .select('*')
-    .order('booking_date', { ascending: true })
-    .order('booking_time', { ascending: true })
-
-  if (error) {
-    throw error
-  }
-
-  return (data as AvailabilityRow[]).map(mapAvailabilityRow)
+  return await ensureFutureAvailabilityRows()
 }
 
 export async function getAvailabilitySlot(slotId: string): Promise<AvailabilitySlot | null> {
