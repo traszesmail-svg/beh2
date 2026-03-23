@@ -190,6 +190,10 @@ function getMissingStripeVars(options?: StripeConfigOptions): string[] {
   return required.filter((name) => !readEnv(name))
 }
 
+function hasProductionStripeTestKey(): boolean {
+  return process.env.VERCEL_ENV === 'production' && Boolean(readEnv('STRIPE_SECRET_KEY')?.startsWith('sk_test_'))
+}
+
 function logRuntimeMessage(key: string, summary: string, level: 'info' | 'warn') {
   if (reportedRuntimeMessages.has(key)) {
     return
@@ -311,6 +315,7 @@ export function getDataModeStatus(): RuntimeModeStatus<DataMode, ActiveDataMode>
 export function getPaymentModeStatus(): RuntimeModeStatus<PaymentMode, ActivePaymentMode> {
   const configured = parseMode('APP_PAYMENT_MODE', PAYMENT_MODE_VALUES, 'auto')
   const missing = getMissingStripeVars()
+  const productionTestKey = hasProductionStripeTestKey()
 
   if (configured === 'mock') {
     return {
@@ -335,6 +340,17 @@ export function getPaymentModeStatus(): RuntimeModeStatus<PaymentMode, ActivePay
       }
     }
 
+    if (productionTestKey) {
+      return {
+        configured,
+        active: null,
+        isValid: false,
+        usesFallback: false,
+        missing: [],
+        summary: 'APP_PAYMENT_MODE=stripe -> produkcyjny checkout jest zablokowany, bo STRIPE_SECRET_KEY wskazuje na testowy klucz Stripe.',
+      }
+    }
+
     return {
       configured,
       active: 'stripe',
@@ -355,6 +371,17 @@ export function getPaymentModeStatus(): RuntimeModeStatus<PaymentMode, ActivePay
       summary: `APP_PAYMENT_MODE=auto -> aktywny jest mock payment fallback (development only), bo brakuje ${formatEnvList(
         missing,
       )}.`,
+    }
+  }
+
+  if (productionTestKey) {
+    return {
+      configured,
+      active: null,
+      isValid: false,
+      usesFallback: false,
+      missing: [],
+      summary: 'APP_PAYMENT_MODE=auto -> produkcyjny checkout jest zablokowany, bo STRIPE_SECRET_KEY wskazuje na testowy klucz Stripe.',
     }
   }
 

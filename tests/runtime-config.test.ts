@@ -12,7 +12,7 @@ import { Header } from '@/components/Header'
 import { SocialProofSection } from '@/components/SocialProofSection'
 import { BUILD_MARKER_KEY, getBuildMarkerSnapshot } from '@/lib/build-marker'
 import { buildRollingAvailabilitySeed, getProblemLabel, isFutureAvailabilitySlot, isProblemType } from '@/lib/data'
-import { getDataModeStatus, getSupabaseServiceRoleKeyIssue } from '@/lib/server/env'
+import { getDataModeStatus, getPaymentModeStatus, getSupabaseServiceRoleKeyIssue } from '@/lib/server/env'
 import { buildSeedAvailabilitySlots, hasFutureAvailabilitySlots } from '@/lib/server/availability-seed'
 import {
   createActiveConsultationPrice,
@@ -41,6 +41,7 @@ import { getContactDetails } from '@/lib/site'
 import { TESTIMONIALS } from '@/lib/testimonials'
 
 const originalStripeSecret = process.env.STRIPE_SECRET_KEY
+const originalVercelEnv = process.env.VERCEL_ENV
 const originalCommitRef = process.env.VERCEL_GIT_COMMIT_REF
 const originalCommitSha = process.env.VERCEL_GIT_COMMIT_SHA
 const originalCronSecret = process.env.CRON_SECRET
@@ -58,6 +59,12 @@ afterEach(() => {
     process.env.STRIPE_SECRET_KEY = originalStripeSecret
   } else {
     delete process.env.STRIPE_SECRET_KEY
+  }
+
+  if (typeof originalVercelEnv === 'string') {
+    process.env.VERCEL_ENV = originalVercelEnv
+  } else {
+    delete process.env.VERCEL_ENV
   }
 
   if (typeof originalCommitRef === 'string') {
@@ -248,6 +255,18 @@ test('does not detect Stripe test mode for live keys or missing secret', () => {
 
   delete process.env.STRIPE_SECRET_KEY
   assert.equal(isStripeTestMode(), false)
+})
+
+test('blocks Stripe checkout on Vercel production when the Stripe secret is still a test key', () => {
+  process.env.VERCEL_ENV = 'production'
+  process.env.STRIPE_SECRET_KEY = 'sk_test_example'
+  process.env.APP_PAYMENT_MODE = 'auto'
+
+  const status = getPaymentModeStatus()
+
+  assert.equal(status.isValid, false)
+  assert.equal(status.active, null)
+  assert.match(status.summary, /testowy klucz Stripe/i)
 })
 
 test('rejects Stripe Checkout amounts below the PLN minimum', () => {
