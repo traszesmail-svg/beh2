@@ -124,9 +124,15 @@ async function main() {
     const reassuranceVisible = await mobilePage.getByText(/Jedna rozmowa, jasny plan i realny następny krok/i).isVisible()
     const shareVisible = await mobilePage.getByText(/Udostępnij znajomemu, który ma problem z pupilem/i).isVisible()
     const footerLinkVisible = await mobilePage.getByRole('link', { name: /Polityka prywatności/i }).isVisible()
+    const socialSectionVisible = await mobilePage.getByRole('heading', {
+      name: /Sprawdź profil i podeślij stronę osobie, która też potrzebuje spokojnego wsparcia/i,
+    }).isVisible()
+    const socialFacebookVisible = await mobilePage.getByRole('link', { name: /Otwórz profil Krzysztofa Regulskiego na Facebooku/i }).isVisible()
     const title = await mobilePage.title()
     const description = await mobilePage.locator('meta[name="description"]').getAttribute('content')
     const ogTitle = await mobilePage.locator('meta[property="og:title"]').getAttribute('content')
+    const twitterCard = await mobilePage.locator('meta[name="twitter:card"]').getAttribute('content')
+    const jsonLdContent = await mobilePage.locator('script[type="application/ld+json"]').first().textContent()
     const charsetMetaPresent = (await mobilePage.locator('meta[charset]').count()) > 0
     await mobilePage.getByRole('link', { name: /Zarezerwuj 15 minut i odzyskaj spokój w domu/i }).first().click()
     await mobilePage.waitForURL(/\/book$/, { timeout: 10000 })
@@ -212,6 +218,8 @@ async function main() {
     assert.equal(reassuranceVisible, true)
     assert.equal(shareVisible, true)
     assert.equal(footerLinkVisible, true)
+    assert.equal(socialSectionVisible, true)
+    assert.equal(socialFacebookVisible, true)
     assert.equal(bookingCtaWorks, true)
     assert.equal(paymentHeadingVisible, true)
     assert.equal(payButtonVisible, true)
@@ -220,8 +228,10 @@ async function main() {
     assert.equal(prepCardStillVisible, true)
     assert.equal(callTimerVisible, true)
     assert.match(title, /Behawior 15/)
-    assert.match(description ?? '', /COAPE|konsultacja audio/i)
+    assert.match(description ?? '', /Krzysztof Regulski|28,99 zł|konsultacja głosowa/i)
     assert.match(ogTitle ?? '', /Behawior 15/i)
+    assert.equal(twitterCard, 'summary_large_image')
+    assert.match(jsonLdContent ?? '', /"@type":"Service"/)
     assert.equal(charsetMetaPresent, true)
     assert.equal(headerOfertaVisible, true)
     assert.equal(specialistHeadingVisible, true)
@@ -252,6 +262,8 @@ async function main() {
             heroPhotoVisible,
             reassuranceVisible,
             footerLinkVisible,
+            socialSectionVisible,
+            socialFacebookVisible,
             bookingCtaWorks,
             paymentHeadingVisible,
             payButtonVisible,
@@ -262,6 +274,7 @@ async function main() {
             title,
             description,
             ogTitle,
+            twitterCard,
             charsetMetaPresent,
           },
           landing: {

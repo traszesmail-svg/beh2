@@ -36,7 +36,8 @@ export default async function SlotPage({
   if (dataMode.isValid) {
     try {
       groupedAvailability = await listAvailability()
-    } catch {
+    } catch (error) {
+      console.warn('[behawior15][slot] nie udało się odczytać dostępnych terminów', error)
       publicFlowMessage = 'Terminy chwilowo się odświeżają. Spróbuj ponownie za kilka minut.'
     }
   } else {
@@ -56,10 +57,24 @@ export default async function SlotPage({
           </p>
 
           {publicFlowMessage ? (
-            <div className="info-box top-gap">{publicFlowMessage}</div>
+            <div className="stack-gap top-gap">
+              <div className="info-box">{publicFlowMessage}</div>
+              <div className="hero-actions">
+                <Link href="/book" className="button button-ghost" aria-label="Wróć do wyboru tematu konsultacji">
+                  Wróć do wyboru tematu
+                </Link>
+              </div>
+            </div>
           ) : groupedAvailability.length === 0 ? (
-            <div className="empty-box top-gap">
-              W tej chwili nie ma wolnych terminów. Wróć później albo sprawdź ponownie, gdy pojawią się nowe godziny.
+            <div className="stack-gap top-gap">
+              <div className="empty-box">
+                W tej chwili nie ma wolnych terminów. Wróć później albo sprawdź ponownie, gdy pojawią się nowe godziny.
+              </div>
+              <div className="hero-actions">
+                <Link href="/book" className="button button-ghost" aria-label="Wróć do wyboru tematu konsultacji">
+                  Wróć do wyboru tematu
+                </Link>
+              </div>
             </div>
           ) : (
             <div className="stack-gap top-gap">
@@ -73,6 +88,7 @@ export default async function SlotPage({
                         key={slot.id}
                         href={`/form?problem=${problem}&slotId=${slot.id}`}
                         className="slot-button slot-link"
+                        aria-label={`Wybierz termin ${group.label} o ${slot.bookingTime} dla tematu ${getProblemLabel(problem)}`}
                       >
                         {slot.bookingTime}
                       </Link>

@@ -97,7 +97,9 @@ export default async function BookPage({
       priceLabel = pricing.formattedAmount
       const nextSlot = availability[0]?.slots[0]
       nextSlotLabel = nextSlot ? formatDateTimeLabel(nextSlot.bookingDate, nextSlot.bookingTime) : 'Brak wolnych terminów'
-    } catch {}
+    } catch (error) {
+      console.warn('[behawior15][book] nie udało się wczytać pricingu lub slotów', error)
+    }
   }
 
   return (
@@ -144,7 +146,7 @@ export default async function BookPage({
 
             <div className="list-card top-gap">
               <strong>Dlaczego warto wejść teraz</strong>
-              <span>Widzisz tylko realne sloty z terminarza, a nie sztuczny licznik presji. Jeśli termin zniknie, oznacza to, że ktoś właśnie kończy płatność.</span>
+              <span>Widzisz tylko realne sloty z terminarza, a nie sztuczny licznik presji. Jeśli termin zniknie, oznacza to po prostu, że nie jest już dostępny.</span>
             </div>
 
             <div className="card-grid three-up top-gap" id="tematy">
@@ -154,7 +156,14 @@ export default async function BookPage({
                 return (
                   <Link key={item.id} href={`/slot?problem=${item.id}`} className="topic-card">
                     <div className="topic-media-shell">
-                      <Image src={topicVisual.src} alt={topicVisual.alt} width={1200} height={900} className="topic-media-image" />
+                      <Image
+                        src={topicVisual.src}
+                        alt={topicVisual.alt}
+                        width={1200}
+                        height={900}
+                        sizes="(max-width: 680px) 100vw, (max-width: 980px) 50vw, 33vw"
+                        className="topic-media-image"
+                      />
                     </div>
                     <span className="topic-icon-shell">{renderProblemIcon(item.id)}</span>
                     <div className="topic-title">{item.title}</div>

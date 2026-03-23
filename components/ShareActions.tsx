@@ -29,13 +29,25 @@ export function ShareActions({ url, text, label = 'Udostępnij znajomemu, który
     <div className="share-actions" aria-label="Udostępnianie strony">
       <span className="share-label">{label}</span>
       <div className="share-links">
-        <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="share-chip">
+        <a
+          href={whatsappHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="share-chip"
+          aria-label="Udostępnij stronę Behawior 15 przez WhatsApp"
+        >
           WhatsApp
         </a>
-        <a href={facebookHref} target="_blank" rel="noopener noreferrer" className="share-chip">
+        <a
+          href={facebookHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="share-chip"
+          aria-label="Udostępnij stronę Behawior 15 na Facebooku"
+        >
           Facebook
         </a>
-        <button type="button" className="share-chip" onClick={handleCopyLink}>
+        <button type="button" className="share-chip" onClick={handleCopyLink} aria-label="Skopiuj link do strony Behawior 15">
           {copyState === 'done' ? 'Skopiowano link' : copyState === 'error' ? 'Nie udało się skopiować' : 'Kopiuj link'}
         </button>
       </div>

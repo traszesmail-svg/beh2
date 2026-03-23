@@ -4,9 +4,10 @@ import { FaqAccordion } from '@/components/FaqAccordion'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { ShareActions } from '@/components/ShareActions'
+import { SocialSection } from '@/components/SocialSection'
 import { faq, formatDateTimeLabel, problemOptions, steps } from '@/lib/data'
 import { getActiveConsultationPrice, listAvailability } from '@/lib/server/db'
-import { getDataModeStatus } from '@/lib/server/env'
+import { getBaseUrl, getDataModeStatus } from '@/lib/server/env'
 import {
   CAPBT_PROFILE_URL,
   COAPE_ORG_URL,
@@ -87,7 +88,7 @@ function renderProblemIcon(problem: ProblemType) {
 
 export default async function HomePage() {
   const dataMode = getDataModeStatus()
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL?.trim() || 'http://localhost:3000'
+  const baseUrl = getBaseUrl()
   let pricing: Awaited<ReturnType<typeof getActiveConsultationPrice>> | null = null
   let availability: Awaited<ReturnType<typeof listAvailability>> = []
   let publicFlowMessage: string | null = null
@@ -95,7 +96,8 @@ export default async function HomePage() {
   if (dataMode.isValid) {
     try {
       ;[pricing, availability] = await Promise.all([getActiveConsultationPrice(), listAvailability()])
-    } catch {
+    } catch (error) {
+      console.warn('[behawior15][home] nie udało się wczytać pricingu lub slotów', error)
       publicFlowMessage = 'Rezerwacja chwilowo się odświeża. Odśwież stronę za moment albo wróć za chwilę do wyboru terminu.'
     }
   } else {
@@ -109,10 +111,56 @@ export default async function HomePage() {
       ? formatDateTimeLabel(nextSlot.bookingDate, nextSlot.bookingTime)
       : 'Brak wolnych terminów'
     : 'Terminy chwilowo się odświeżają'
+  const structuredData = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Service',
+      name: 'Behawior 15',
+      serviceType: '15-minutowa konsultacja głosowa online dla psa lub kota',
+      url: baseUrl,
+      description:
+        'Spokojna 15-minutowa konsultacja głosowa online dla psa lub kota. Certyfikowany behawiorysta Krzysztof Regulski (COAPE/CAPBT).',
+      areaServed: {
+        '@type': 'City',
+        name: 'Olsztyn',
+      },
+      offers: {
+        '@type': 'Offer',
+        price: '28.99',
+        priceCurrency: 'PLN',
+        availability: availability.length > 0 ? 'https://schema.org/InStock' : 'https://schema.org/LimitedAvailability',
+        url: `${baseUrl}/book`,
+      },
+      provider: {
+        '@type': 'Person',
+        name: SPECIALIST_NAME,
+        jobTitle: SPECIALIST_CREDENTIALS,
+        image: new URL(SPECIALIST_PHOTO.src, baseUrl).toString(),
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: 'Olsztyn',
+          addressCountry: 'PL',
+        },
+      },
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Person',
+      name: SPECIALIST_NAME,
+      description: SPECIALIST_TRUST_STATEMENT,
+      image: new URL(SPECIALIST_PHOTO.src, baseUrl).toString(),
+      homeLocation: {
+        '@type': 'Place',
+        name: SPECIALIST_LOCATION,
+      },
+      sameAs: [COAPE_ORG_URL, CAPBT_PROFILE_URL],
+    },
+  ]
 
   return (
     <main className="page-wrap">
       <div className="container">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
         <Header />
 
         <section className="hero-grid" id="oferta">
@@ -192,7 +240,14 @@ export default async function HomePage() {
               {HERO_SUPPORT_IMAGES.map((item) => (
                 <div key={item.id} className="hero-animal-card">
                   <div className="hero-animal-shell">
-                    <Image src={item.src} alt={item.alt} width={1200} height={900} className="hero-animal-image" />
+                    <Image
+                      src={item.src}
+                      alt={item.alt}
+                      width={1200}
+                      height={900}
+                      sizes="(max-width: 680px) 100vw, (max-width: 980px) 50vw, 18vw"
+                      className="hero-animal-image"
+                    />
                   </div>
                   <span>{item.label}</span>
                 </div>
@@ -292,7 +347,14 @@ export default async function HomePage() {
               return (
                 <Link key={tile.id} href={`/book?problem=${tile.id}`} className="topic-card">
                   <div className="topic-media-shell">
-                    <Image src={topicVisual.src} alt={topicVisual.alt} width={1200} height={900} className="topic-media-image" />
+                    <Image
+                      src={topicVisual.src}
+                      alt={topicVisual.alt}
+                      width={1200}
+                      height={900}
+                      sizes="(max-width: 680px) 100vw, (max-width: 980px) 50vw, 33vw"
+                      className="topic-media-image"
+                    />
                   </div>
                   <span className="topic-icon-shell">{renderProblemIcon(tile.id)}</span>
                   <div className="topic-title">{tile.title}</div>
@@ -364,6 +426,7 @@ export default async function HomePage() {
                     alt={SUPPORTING_SPECIALIST_PHOTO.alt}
                     width={1200}
                     height={1778}
+                    sizes="(max-width: 680px) 100vw, (max-width: 980px) 80vw, 16vw"
                     className="specialist-inline-photo"
                   />
                 </div>
@@ -411,7 +474,14 @@ export default async function HomePage() {
             {REAL_CASE_STUDIES.map((caseStudy) => (
               <article key={caseStudy.id} className="real-case-card">
                 <div className="real-case-image-shell">
-                  <Image src={caseStudy.imageSrc} alt={caseStudy.imageAlt} width={1200} height={900} className="real-case-image" />
+                  <Image
+                    src={caseStudy.imageSrc}
+                    alt={caseStudy.imageAlt}
+                    width={1200}
+                    height={900}
+                    sizes="(max-width: 680px) 100vw, 50vw"
+                    className="real-case-image"
+                  />
                 </div>
                 <div className="real-case-copy">
                   <div className="section-eyebrow">Realna sprawa</div>
@@ -469,6 +539,8 @@ export default async function HomePage() {
           </div>
           <FaqAccordion items={faq} />
         </section>
+
+        <SocialSection />
 
         <section className="panel cta-panel">
           <div className="section-eyebrow">Pierwszy krok</div>

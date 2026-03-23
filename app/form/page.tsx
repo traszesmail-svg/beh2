@@ -36,7 +36,8 @@ export default async function FormPage({
   if (dataMode.isValid) {
     try {
       ;[pricing, slot] = await Promise.all([getActiveConsultationPrice(), getAvailabilitySlot(slotId)])
-    } catch {
+    } catch (error) {
+      console.warn('[behawior15][form] nie udało się wczytać formularza lub terminu', error)
       flowError = 'Formularz chwilowo się odświeża. Spróbuj ponownie za moment.'
     }
   } else {

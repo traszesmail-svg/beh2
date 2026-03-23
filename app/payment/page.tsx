@@ -43,7 +43,8 @@ export default async function PaymentPage({
   } else if (bookingId) {
     try {
       booking = await getBookingForViewer(bookingId, accessToken, authorizationHeader)
-    } catch {
+    } catch (error) {
+      console.warn('[behawior15][payment] nie udało się wczytać bookingu do płatności', error)
       flowError = 'Nie udało się wczytać rezerwacji do płatności. Spróbuj ponownie za moment.'
     }
   }
