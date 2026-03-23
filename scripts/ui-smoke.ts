@@ -5,6 +5,7 @@ import { spawn } from 'child_process'
 import { loadEnvConfig } from '@next/env'
 import { chromium } from 'playwright-core'
 import { BUILD_MARKER_KEY } from '../lib/build-marker'
+import { formatDateTimeLabel } from '../lib/data'
 
 const rootDir = process.cwd()
 const dataDir = path.join(rootDir, 'data')
@@ -68,6 +69,7 @@ async function main() {
   process.env.NEXT_PUBLIC_APP_URL = appUrl
   process.env.ADMIN_ACCESS_SECRET = adminSecret
   process.env.RESEND_API_KEY = ''
+  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID = 'G-TESTLOCAL'
 
   const localStore = await import('../lib/server/local-store')
 
@@ -83,6 +85,10 @@ async function main() {
     assert.ok(freeSlots.length >= 2, 'Expected at least two free slots for UI smoke test.')
 
     const bookingOne = await localStore.createPendingBooking(bookingPayload(freeSlots[0].id, 1))
+    const availabilityAfterBooking = await localStore.listAvailability()
+    const nextPublicSlot = availabilityAfterBooking.flatMap((group) => group.slots)[0]
+    assert.ok(nextPublicSlot, 'Expected at least one public slot after locking the first booking.')
+    const expectedNextSlotLabel = formatDateTimeLabel(nextPublicSlot.bookingDate, nextPublicSlot.bookingTime)
 
     server = spawn(process.execPath, [path.join(rootDir, 'node_modules', 'next', 'dist', 'bin', 'next'), 'start', '--port', '3210'], {
       cwd: rootDir,
@@ -119,7 +125,7 @@ async function main() {
       .getByRole('heading', { name: /Spokojna konsultacja, która porządkuje problem psa lub kota w 15 minut/i })
       .isVisible()
     const heroPriceVisible = await mobilePage.locator('.hero-price-badge').getByText(/Aktualna cena/i).isVisible()
-    const trustStripVisible = await mobilePage.locator('.header-trust-strip').getByText(/Zwrot pieniędzy/i).isVisible()
+    const trustStripVisible = await mobilePage.locator('.header-trust-strip').getByText(/Zwrot zgodnie z regulaminem/i).isVisible()
     const heroPhotoVisible = await mobilePage.locator('.hero-aside img[alt="Krzysztof Regulski na portretowym zdjęciu do strony Behawior 15"]').isVisible()
     const reassuranceVisible = await mobilePage.getByText(/Jedna rozmowa, jasny plan i realny następny krok/i).isVisible()
     const shareVisible = await mobilePage.getByText(/Udostępnij znajomemu, który ma problem z pupilem/i).isVisible()
@@ -128,6 +134,13 @@ async function main() {
       name: /Sprawdź profil i podeślij stronę osobie, która też potrzebuje spokojnego wsparcia/i,
     }).isVisible()
     const socialFacebookVisible = await mobilePage.getByRole('link', { name: /Otwórz profil Krzysztofa Regulskiego na Facebooku/i }).isVisible()
+    const homeContent = await mobilePage.locator('main').textContent()
+    const nextSlotVisible = (homeContent ?? '').includes(expectedNextSlotLabel)
+    const consentVisible = await mobilePage.getByRole('dialog').isVisible()
+    const gaScriptBeforeConsent = await mobilePage.locator('script[src*="googletagmanager"]').count()
+    await mobilePage.getByRole('button', { name: /Odrzuć/i }).click()
+    const consentDismissed = await mobilePage.getByRole('dialog').isHidden()
+    const gaScriptAfterReject = await mobilePage.locator('script[src*="googletagmanager"]').count()
     const title = await mobilePage.title()
     const description = await mobilePage.locator('meta[name="description"]').getAttribute('content')
     const ogTitle = await mobilePage.locator('meta[property="og:title"]').getAttribute('content')
@@ -137,6 +150,9 @@ async function main() {
     await mobilePage.getByRole('link', { name: /Zarezerwuj 15 minut i odzyskaj spokój w domu/i }).first().click()
     await mobilePage.waitForURL(/\/book$/, { timeout: 10000 })
     const bookingCtaWorks = await mobilePage.getByRole('heading', { name: /Zarezerwuj 15 minut i przejdź do realnie wolnych terminów/i }).isVisible()
+    const bookContent = await mobilePage.locator('main').textContent()
+    const bookingNextSlotVisible = (bookContent ?? '').includes(expectedNextSlotLabel)
+    const bookingTitle = await mobilePage.title()
     await mobilePage.goto(appUrl, { waitUntil: 'domcontentloaded' })
 
     await mobilePage.goto(`${appUrl}/payment?bookingId=${bookingOne.booking.id}&access=${encodeURIComponent(bookingOne.accessToken)}`, {
@@ -179,6 +195,7 @@ async function main() {
 
     const desktopPage = await desktop.newPage()
     await desktopPage.goto(appUrl, { waitUntil: 'domcontentloaded' })
+    const headerLinkTexts = await desktopPage.locator('.header-links a').allTextContents()
     const headerOfertaVisible = await desktopPage.getByRole('link', { name: /^Oferta$/i }).isVisible()
     const specialistHeadingVisible = await desktopPage.getByText(/Specjalista prowadzący/i).isVisible()
     const specialistTrustVisible = await desktopPage.getByRole('heading', {
@@ -220,6 +237,10 @@ async function main() {
       }),
     })
     const testimonialRoutePayload = (await testimonialRouteResponse.json()) as { error?: string }
+    const robotsResponse = await fetch(`${appUrl}/robots.txt`)
+    const robotsText = await robotsResponse.text()
+    const sitemapResponse = await fetch(`${appUrl}/sitemap.xml`)
+    const sitemapText = await sitemapResponse.text()
     const publicationsHeadingVisible = await desktopPage.getByRole('heading', {
       name: /Zweryfikowane materiały, które wzmacniają trust bez nadęcia/i,
     }).isVisible()
@@ -231,6 +252,14 @@ async function main() {
     await faqButton.click()
     const faqExpanded = await faqButton.getAttribute('aria-expanded')
     const faqAnswerVisibleAfterToggle = await desktopPage.getByText(/To szybka konsultacja/i).isHidden()
+
+    await desktopPage.goto(`${appUrl}/polityka-prywatnosci`, { waitUntil: 'domcontentloaded' })
+    const privacyHeadingVisible = await desktopPage.getByRole('heading', { name: /Jak przetwarzane są dane w Behawior 15/i }).isVisible()
+    const privacyTitle = await desktopPage.title()
+
+    await desktopPage.goto(`${appUrl}/regulamin`, { waitUntil: 'domcontentloaded' })
+    const termsHeadingVisible = await desktopPage.getByRole('heading', { name: /Zasady rezerwacji konsultacji Behawior 15/i }).isVisible()
+    const termsTitle = await desktopPage.title()
 
     await desktopPage.goto(`${appUrl}/admin`, { waitUntil: 'domcontentloaded' })
     const adminPricingVisible = await desktopPage.getByRole('heading', { name: /Aktywna cena dla nowych rezerwacji/i }).isVisible()
@@ -250,7 +279,13 @@ async function main() {
     assert.equal(footerLinkVisible, true)
     assert.equal(socialSectionVisible, true)
     assert.equal(socialFacebookVisible, true)
+    assert.equal(nextSlotVisible, true)
+    assert.equal(consentVisible, true)
+    assert.equal(gaScriptBeforeConsent, 0)
+    assert.equal(consentDismissed, true)
+    assert.equal(gaScriptAfterReject, 0)
     assert.equal(bookingCtaWorks, true)
+    assert.equal(bookingNextSlotVisible, true)
     assert.equal(paymentHeadingVisible, true)
     assert.equal(payButtonVisible, true)
     assert.equal(prepHeadingVisible, true)
@@ -258,12 +293,14 @@ async function main() {
     assert.equal(prepCardStillVisible, true)
     assert.equal(callTimerVisible, true)
     assert.match(title, /Behawior 15/)
-    assert.match(description ?? '', /Krzysztof Regulski|28,99 zł|konsultacja głosowa/i)
+    assert.match(description ?? '', /Krzysztof Regulski|konsultacja głosowa/i)
     assert.match(ogTitle ?? '', /Behawior 15/i)
     assert.equal(twitterCard, 'summary_large_image')
     assert.match(jsonLdContent ?? '', /"@type":"Service"/)
     assert.equal(charsetMetaPresent, true)
+    assert.match(bookingTitle, /Rezerwacja konsultacji/i)
     assert.equal(headerOfertaVisible, true)
+    assert.equal(headerLinkTexts.includes('Opinie'), false)
     assert.equal(specialistHeadingVisible, true)
     assert.equal(specialistTrustVisible, true)
     assert.equal(specialistPhotoVisible, true)
@@ -278,6 +315,10 @@ async function main() {
     assert.equal(testimonialSectionOrder, true)
     assert.equal(testimonialRouteResponse.status, 503)
     assert.match(testimonialRoutePayload.error ?? '', /Formularz opinii jest chwilowo niedostępny/i)
+    assert.equal(robotsResponse.ok, true)
+    assert.match(robotsText, /Sitemap:\s*https?:\/\/.+\/sitemap\.xml/i)
+    assert.equal(sitemapResponse.ok, true)
+    assert.match(sitemapText, /<loc>https?:\/\/.+\/book<\/loc>/i)
     assert.equal(publicationsHeadingVisible, true)
     assert.equal(publicationLinkVisible, true)
     assert.equal(noBrokenMailto, true)
@@ -285,6 +326,10 @@ async function main() {
     assert.equal(faqAnswerInitiallyVisible, true)
     assert.equal(faqExpanded, 'false')
     assert.equal(faqAnswerVisibleAfterToggle, true)
+    assert.equal(privacyHeadingVisible, true)
+    assert.match(privacyTitle, /Polityka prywatności/i)
+    assert.equal(termsHeadingVisible, true)
+    assert.match(termsTitle, /Regulamin/i)
     assert.equal(adminPricingVisible, true)
     assert.equal(adminBuildMarkerVisible, true)
 
@@ -302,7 +347,11 @@ async function main() {
             footerLinkVisible,
             socialSectionVisible,
             socialFacebookVisible,
+            nextSlotVisible,
+            consentVisible,
+            consentDismissed,
             bookingCtaWorks,
+            bookingNextSlotVisible,
             paymentHeadingVisible,
             payButtonVisible,
             prepHeadingVisible,
@@ -310,6 +359,7 @@ async function main() {
             prepCardStillVisible,
             callTimerVisible,
             title,
+            bookingTitle,
             description,
             ogTitle,
             twitterCard,
@@ -317,6 +367,7 @@ async function main() {
           },
           landing: {
             headerOfertaVisible,
+            headerLinkTexts,
             specialistHeadingVisible,
             specialistTrustVisible,
             specialistPhotoVisible,
@@ -329,6 +380,8 @@ async function main() {
             testimonialSubmitVisible,
             testimonialDisclaimerVisible,
             testimonialSectionOrder,
+            robotsOk: robotsResponse.ok,
+            sitemapOk: sitemapResponse.ok,
             publicationsHeadingVisible,
             publicationLinkVisible,
             noBrokenMailto,
@@ -336,6 +389,10 @@ async function main() {
             faqAnswerInitiallyVisible,
             faqExpanded,
             faqAnswerVisibleAfterToggle,
+            privacyHeadingVisible,
+            privacyTitle,
+            termsHeadingVisible,
+            termsTitle,
           },
           admin: {
             pricingVisible: adminPricingVisible,

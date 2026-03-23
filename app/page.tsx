@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FaqAccordion } from '@/components/FaqAccordion'
@@ -8,6 +9,8 @@ import { ShareActions } from '@/components/ShareActions'
 import { SocialSection } from '@/components/SocialSection'
 import { TestimonialsSection } from '@/components/TestimonialsSection'
 import { faq, formatDateTimeLabel, problemOptions, steps } from '@/lib/data'
+import { DEFAULT_PRICE_PLN } from '@/lib/pricing'
+import { buildHomeMetadata } from '@/lib/seo'
 import { getActiveConsultationPrice, listAvailability } from '@/lib/server/db'
 import { getBaseUrl, getDataModeStatus } from '@/lib/server/env'
 import {
@@ -29,6 +32,10 @@ import {
 import { ProblemType } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
+
+export async function generateMetadata(): Promise<Metadata> {
+  return buildHomeMetadata()
+}
 
 function renderProblemIcon(problem: ProblemType) {
   switch (problem) {
@@ -128,7 +135,7 @@ export default async function HomePage() {
       },
       offers: {
         '@type': 'Offer',
-        price: '28.99',
+        price: String(pricing?.amount ?? DEFAULT_PRICE_PLN),
         priceCurrency: 'PLN',
         availability: availability.length > 0 ? 'https://schema.org/InStock' : 'https://schema.org/LimitedAvailability',
         url: `${baseUrl}/book`,
@@ -204,10 +211,20 @@ export default async function HomePage() {
             </div>
 
             <div className="hero-actions">
-              <Link href="/book" className="button button-primary big-button">
+              <Link
+                href="/book"
+                className="button button-primary big-button"
+                data-analytics-event="reserve_click"
+                data-analytics-location="hero-primary"
+              >
                 Zarezerwuj 15 minut i odzyskaj spokój w domu
               </Link>
-              <Link href="/book#tematy" className="button button-ghost big-button">
+              <Link
+                href="/book#tematy"
+                className="button button-ghost big-button"
+                data-analytics-event="reserve_click"
+                data-analytics-location="hero-secondary"
+              >
                 Wybierz temat i termin
               </Link>
             </div>
@@ -347,7 +364,14 @@ export default async function HomePage() {
               const topicVisual = TOPIC_VISUALS[tile.id]
 
               return (
-                <Link key={tile.id} href={`/book?problem=${tile.id}`} className="topic-card">
+                <Link
+                  key={tile.id}
+                  href={`/book?problem=${tile.id}`}
+                  className="topic-card"
+                  data-analytics-event="topic_select"
+                  data-analytics-location="home-topics"
+                  data-analytics-problem={tile.id}
+                >
                   <div className="topic-media-shell">
                     <Image
                       src={topicVisual.src}
@@ -557,10 +581,20 @@ export default async function HomePage() {
             potrzebna jest dalsza, szersza praca.
           </p>
           <div className="hero-actions top-gap">
-            <Link href="/book" className="button button-primary big-button">
+            <Link
+              href="/book"
+              className="button button-primary big-button"
+              data-analytics-event="reserve_click"
+              data-analytics-location="final-cta"
+            >
               Zarezerwuj 15 minut i odzyskaj spokój w domu
             </Link>
-            <Link href="/book#tematy" className="button button-ghost big-button">
+            <Link
+              href="/book#tematy"
+              className="button button-ghost big-button"
+              data-analytics-event="reserve_click"
+              data-analytics-location="final-cta-secondary"
+            >
               Wybierz temat i termin
             </Link>
           </div>

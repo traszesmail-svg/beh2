@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { Fraunces, Manrope } from 'next/font/google'
+import { AnalyticsConsent } from '@/components/AnalyticsConsent'
 import './globals.css'
 
 const manrope = Manrope({
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
     template: '%s | Behawior 15',
   },
   description:
-    'Behawior 15 – spokojna 15-minutowa konsultacja głosowa online dla psa lub kota. Certyfikowany behawiorysta Krzysztof Regulski (COAPE/CAPBT). 28,99 zł, bezpieczna płatność i możliwość ubiegania się o zwrot.',
+    'Behawior 15 – spokojna 15-minutowa konsultacja głosowa online dla psa lub kota. Certyfikowany behawiorysta Krzysztof Regulski (COAPE/CAPBT). Bezpieczna płatność, szybkie potwierdzenie i jasny pierwszy krok.',
   alternates: {
     canonical: '/',
   },
@@ -66,7 +67,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <meta charSet="UTF-8" />
       </head>
-      <body className={`${manrope.variable} ${fraunces.variable}`}>{children}</body>
+      <body className={`${manrope.variable} ${fraunces.variable}`}>
+        {children}
+        <AnalyticsConsent measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim() || null} />
+      </body>
     </html>
   )
 }

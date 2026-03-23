@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { trackAnalyticsEvent } from '@/lib/analytics'
 
 interface PaymentActionsProps {
   bookingId: string
@@ -24,6 +25,10 @@ export function PaymentActions({ bookingId, accessToken, paymentMode, checkoutBl
 
     setError('')
     setLoadingMode(mode === 'success' ? 'pay' : 'fail')
+
+    if (mode === 'success') {
+      trackAnalyticsEvent('payment_start', { payment_mode: paymentMode })
+    }
 
     try {
       const endpoint = paymentMode === 'stripe' ? '/api/stripe/checkout' : '/api/payments/mock'

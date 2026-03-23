@@ -89,6 +89,10 @@ export default async function SlotPage({
                         href={`/form?problem=${problem}&slotId=${slot.id}`}
                         className="slot-button slot-link"
                         aria-label={`Wybierz termin ${group.label} o ${slot.bookingTime} dla tematu ${getProblemLabel(problem)}`}
+                        data-analytics-event="slot_select"
+                        data-analytics-location="slot-list"
+                        data-analytics-problem={problem}
+                        data-analytics-slot={`${group.label} ${slot.bookingTime}`}
                       >
                         {slot.bookingTime}
                       </Link>

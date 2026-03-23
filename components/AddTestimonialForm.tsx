@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useMemo, useState } from 'react'
+import { trackAnalyticsEvent } from '@/lib/analytics'
 import { TESTIMONIAL_FORM_LIMITS, TESTIMONIAL_ISSUE_OPTIONS } from '@/lib/testimonials'
 
 type FormState = 'idle' | 'loading' | 'success' | 'error'
@@ -121,6 +122,7 @@ export function AddTestimonialForm() {
       }
 
       setStatus('success')
+      trackAnalyticsEvent('opinion_add', { issue_category: form.issueCategory })
       setMessage(payload.message ?? 'Dziękujemy. Twoja opinia trafiła do weryfikacji. Po akceptacji dodamy ją na stronę.')
       setForm(INITIAL_FORM)
     } catch (error) {

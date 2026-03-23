@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { trackAnalyticsEvent } from '@/lib/analytics'
 
 type FaqItem = {
   q: string
@@ -26,7 +27,13 @@ export function FaqAccordion({ items }: { items: FaqItem[] }) {
                 className="faq-trigger"
                 aria-expanded={isOpen}
                 aria-controls={panelId}
-                onClick={() => setOpenIndex(isOpen ? null : index)}
+                onClick={() => {
+                  if (!isOpen) {
+                    trackAnalyticsEvent('faq_open', { question: item.q, index: index + 1 })
+                  }
+
+                  setOpenIndex(isOpen ? null : index)
+                }}
               >
                 <span>{item.q}</span>
                 <span className="faq-chevron" aria-hidden="true">

@@ -2,6 +2,8 @@ import assert from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
 import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
+import robots from '@/app/robots'
+import sitemap from '@/app/sitemap'
 import { ADMIN_BASIC_AUTH_USERNAME, hasValidAdminAuthorization } from '@/lib/admin-auth'
 import { POST as submitTestimonialRoute } from '@/app/api/testimonials/route'
 import { TestimonialsSection } from '@/components/TestimonialsSection'
@@ -495,6 +497,7 @@ test('does not expose the default resend onboarding address as public contact da
   assert.deepEqual(getContactDetails(), {
     email: null,
     phone: null,
+    facebookUrl: 'https://www.facebook.com/krzysztof.regulski.148/',
   })
 })
 
@@ -505,7 +508,31 @@ test('ignores invalid public contact email values', () => {
   assert.deepEqual(getContactDetails(), {
     email: null,
     phone: null,
+    facebookUrl: 'https://www.facebook.com/krzysztof.regulski.148/',
   })
+})
+
+test('builds a robots response that points to the sitemap', () => {
+  process.env.NEXT_PUBLIC_APP_URL = 'https://beh2.vercel.app'
+
+  const config = robots()
+
+  assert.equal(config.host, 'https://beh2.vercel.app')
+  assert.equal(config.sitemap, 'https://beh2.vercel.app/sitemap.xml')
+})
+
+test('builds a sitemap with the core public routes', () => {
+  process.env.NEXT_PUBLIC_APP_URL = 'https://beh2.vercel.app'
+
+  const entries = sitemap()
+  const urls = entries.map((entry) => entry.url)
+
+  assert.deepEqual(urls, [
+    'https://beh2.vercel.app/',
+    'https://beh2.vercel.app/book',
+    'https://beh2.vercel.app/polityka-prywatnosci',
+    'https://beh2.vercel.app/regulamin',
+  ])
 })
 
 test('renders the testimonials section empty state when there are no approved testimonials', () => {

@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
@@ -5,6 +6,7 @@ import { Header } from '@/components/Header'
 import { ShareActions } from '@/components/ShareActions'
 import { formatDateTimeLabel, problemOptions } from '@/lib/data'
 import { formatPricePln, DEFAULT_PRICE_PLN } from '@/lib/pricing'
+import { buildBookMetadata } from '@/lib/seo'
 import { getActiveConsultationPrice, listAvailability } from '@/lib/server/db'
 import { getDataModeStatus } from '@/lib/server/env'
 import { CONSULTATION_PRICE_COMPARE_COPY, SPECIALIST_NAME, SPECIALIST_PHOTO, SPECIALIST_TRUST_STATEMENT, TOPIC_VISUALS } from '@/lib/site'
@@ -12,6 +14,10 @@ import { ProblemType } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
+
+export async function generateMetadata(): Promise<Metadata> {
+  return buildBookMetadata()
+}
 
 function readSearchParam(value: string | string[] | undefined): string | null {
   if (Array.isArray(value)) {
@@ -157,7 +163,14 @@ export default async function BookPage({
                 const topicVisual = TOPIC_VISUALS[item.id]
 
                 return (
-                  <Link key={item.id} href={`/slot?problem=${item.id}`} className="topic-card">
+                    <Link
+                      key={item.id}
+                      href={`/slot?problem=${item.id}`}
+                      className="topic-card"
+                      data-analytics-event="topic_select"
+                      data-analytics-location="book-topics"
+                      data-analytics-problem={item.id}
+                    >
                     <div className="topic-media-shell">
                       <Image
                         src={topicVisual.src}

@@ -1,8 +1,16 @@
+import type { Metadata } from 'next'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { FACEBOOK_PROFILE_URL, SPECIALIST_CREDENTIALS, SPECIALIST_NAME, getContactDetails } from '@/lib/site'
+import { buildLegalMetadata } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
+
+export const metadata: Metadata = buildLegalMetadata(
+  'Regulamin',
+  '/regulamin',
+  'Zasady rezerwacji, płatności, konsultacji audio, zwrotów i kontaktu dla produktu Behawior 15.',
+)
 
 export default function TermsPage() {
   const contact = getContactDetails()
