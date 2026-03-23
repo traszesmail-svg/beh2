@@ -52,7 +52,7 @@ async function cleanLocalData() {
 }
 
 async function waitForServer() {
-  for (let attempt = 0; attempt < 60; attempt += 1) {
+  for (let attempt = 0; attempt < 120; attempt += 1) {
     try {
       const response = await fetch(appUrl, { cache: 'no-store' })
       if (response.ok) return
@@ -60,6 +60,22 @@ async function waitForServer() {
     await new Promise((resolve) => setTimeout(resolve, 1000))
   }
   throw new Error('Local server did not become ready in time.')
+}
+
+async function fetchPublicPageState(url: string) {
+  const response = await fetch(url, { cache: 'no-store' })
+  const content = await response.text()
+
+  return {
+    ok: response.ok,
+    hasInternalError: content.includes('Internal Error'),
+    hasLegacyPrice: content.includes('28,99') || content.includes('28.99'),
+    hasFormHeading: content.includes('Formularz konsultacji'),
+    hasHistorieHeader: content.includes('Historie i efekty'),
+    hasLegacyHeader: content.includes('Realne sprawy'),
+    hasContactEmail: content.includes('coapebehawiorysta@gmail.com'),
+    content,
+  }
 }
 
 async function main() {
@@ -89,9 +105,10 @@ async function main() {
     const nextPublicSlot = availabilityAfterBooking.flatMap((group) => group.slots)[0]
     assert.ok(nextPublicSlot, 'Expected at least one public slot after locking the first booking.')
 
-    server = spawn('cmd.exe', ['/c', `npm run start -- --port ${port}`], {
+    server = spawn(`npm run start -- --port ${port}`, {
       cwd: rootDir,
       env: process.env,
+      shell: true,
       stdio: 'ignore',
       windowsHide: true,
     })
@@ -117,6 +134,28 @@ async function main() {
     })
 
     const mobilePage = await mobile.newPage()
+    const publicSlotHrefs = Array.from(
+      new Set(
+        await mobilePage.locator('.slot-link').evaluateAll((elements) =>
+          elements
+            .map((element) => element.getAttribute('href'))
+            .filter((href): href is string => Boolean(href)),
+        ),
+      ),
+    )
+    const formResponses = [] as Array<{ href: string; ok: boolean; hasInternalError: boolean; hasFormHeading: boolean; hasLegacyPrice: boolean }>
+    for (const href of publicSlotHrefs) {
+      const response = await fetchPublicPageState(`${appUrl}${href}`)
+      formResponses.push({
+        href,
+        ok: response.ok,
+        hasInternalError: response.hasInternalError,
+        hasFormHeading: response.hasFormHeading,
+        hasLegacyPrice: response.hasLegacyPrice,
+      })
+    }
+    const homepageHasJoinedSpecialistText = await mobilePage.evaluate(() => document.body.innerText.includes('kolejnego kroku.Łączę'))
+    const homepageHasJoinedModerationText = await mobilePage.evaluate(() => document.body.innerText.includes('weryfikacji.Publikujemy'))
     await mobilePage.goto(appUrl, { waitUntil: 'domcontentloaded' })
     const homeCtaVisible = await mobilePage.getByRole('link', { name: /Zarezerwuj 15 minut i odzyskaj spokój w domu/i }).first().isVisible()
     const secondaryHeroCtaVisible = await mobilePage.getByRole('link', { name: /Wybierz temat i termin/i }).first().isVisible()
@@ -172,7 +211,43 @@ async function main() {
     const slotOptionVisible =
       (await mobilePage.locator('.slot-link').count()) > 0 ||
       (await mobilePage.getByRole('link', { name: /Odśwież terminy|Spróbuj ponownie|Wróć do wyboru tematu/i }).count()) > 0
+    await mobilePage.goto(`${appUrl}/slot?problem=szczeniak`, { waitUntil: 'domcontentloaded' })
+
+    const currentPublicSlotHrefs = Array.from(
+      new Set(
+        await mobilePage.locator('.slot-link').evaluateAll((elements) =>
+          elements
+            .map((element) => element.getAttribute('href'))
+            .filter((href): href is string => Boolean(href)),
+        ),
+      ),
+    )
+    const currentFormResponses = [] as Array<{
+      href: string
+      ok: boolean
+      hasInternalError: boolean
+      hasFormHeading: boolean
+      hasLegacyPrice: boolean
+      hasHistorieHeader: boolean
+      hasLegacyHeader: boolean
+      hasContactEmail: boolean
+    }>
+    for (const href of currentPublicSlotHrefs) {
+      const response = await fetchPublicPageState(`${appUrl}${href}`)
+      currentFormResponses.push({
+        href,
+        ok: response.ok,
+        hasInternalError: response.hasInternalError,
+        hasFormHeading: response.hasFormHeading,
+        hasLegacyPrice: response.hasLegacyPrice,
+        hasHistorieHeader: response.hasHistorieHeader,
+        hasLegacyHeader: response.hasLegacyHeader,
+        hasContactEmail: response.hasContactEmail,
+      })
+    }
     await mobilePage.goto(appUrl, { waitUntil: 'domcontentloaded' })
+    const currentHomepageHasJoinedSpecialistText = await mobilePage.evaluate(() => document.body.innerText.includes('kolejnego kroku.Łączę'))
+    const currentHomepageHasJoinedModerationText = await mobilePage.evaluate(() => document.body.innerText.includes('weryfikacji.Publikujemy'))
 
     await mobilePage.goto(`${appUrl}/payment?bookingId=${bookingOne.booking.id}&access=${encodeURIComponent(bookingOne.accessToken)}`, {
       waitUntil: 'domcontentloaded',
@@ -293,10 +368,12 @@ async function main() {
     await desktopPage.goto(`${appUrl}/polityka-prywatnosci`, { waitUntil: 'domcontentloaded' })
     const privacyHeadingVisible = await desktopPage.getByRole('heading', { name: /Jak przetwarzane są dane w Behawior 15/i }).isVisible()
     const privacyTitle = await desktopPage.title()
+    const privacyContactVisible = await desktopPage.getByText(/coapebehawiorysta@gmail.com/i).first().isVisible()
 
     await desktopPage.goto(`${appUrl}/regulamin`, { waitUntil: 'domcontentloaded' })
     const termsHeadingVisible = await desktopPage.getByRole('heading', { name: /Zasady rezerwacji konsultacji Behawior 15/i }).isVisible()
     const termsTitle = await desktopPage.title()
+    const termsContactVisible = await desktopPage.getByText(/coapebehawiorysta@gmail.com/i).first().isVisible()
 
     await desktopPage.goto(`${appUrl}/slot?problem=dogoterapia`, { waitUntil: 'domcontentloaded' })
     const dogotherapySlotHeadingVisible = await desktopPage.getByRole('heading', { name: /Wybierz termin rozmowy: Dogoterapia/i }).isVisible()
@@ -328,6 +405,22 @@ async function main() {
     assert.equal(bookingAvailabilityVisible, true)
     assert.equal(slotHeadingVisible || slotOptionVisible, true)
     assert.equal(slotOptionVisible, true)
+    assert.equal(currentPublicSlotHrefs.length > 0, true)
+    assert.equal(
+      currentFormResponses.every(
+        (entry) =>
+          entry.ok &&
+          entry.hasFormHeading &&
+          !entry.hasInternalError &&
+          !entry.hasLegacyPrice &&
+          entry.hasHistorieHeader &&
+          !entry.hasLegacyHeader &&
+          entry.hasContactEmail,
+      ),
+      true,
+    )
+    assert.equal(currentHomepageHasJoinedSpecialistText, false)
+    assert.equal(currentHomepageHasJoinedModerationText, false)
     assert.equal(paymentHeadingVisible, true)
     assert.equal(payButtonVisible, true)
     assert.equal(prepHeadingVisible, true)
@@ -373,8 +466,10 @@ async function main() {
     assert.equal(faqExpanded, 'false')
     assert.equal(faqAnswerVisibleAfterToggle, true)
     assert.equal(privacyHeadingVisible, true)
+    assert.equal(privacyContactVisible, true)
     assert.match(privacyTitle, /Polityka prywatności/i)
     assert.equal(termsHeadingVisible, true)
+    assert.equal(termsContactVisible, true)
     assert.match(termsTitle, /Regulamin/i)
     assert.equal(adminPricingVisible, true)
     assert.equal(adminBuildMarkerVisible, true)
@@ -400,6 +495,14 @@ async function main() {
             bookingAvailabilityVisible,
             slotHeadingVisible,
             slotOptionVisible,
+            initialSlotCount: publicSlotHrefs.length,
+            currentSlotCount: currentPublicSlotHrefs.length,
+            initialHomepageHasJoinedSpecialistText: homepageHasJoinedSpecialistText,
+            initialHomepageHasJoinedModerationText: homepageHasJoinedModerationText,
+            currentHomepageHasJoinedSpecialistText,
+            currentHomepageHasJoinedModerationText,
+            formResponses,
+            currentFormResponses,
             paymentHeadingVisible,
             payButtonVisible,
             prepHeadingVisible,
@@ -439,8 +542,10 @@ async function main() {
             faqExpanded,
             faqAnswerVisibleAfterToggle,
             privacyHeadingVisible,
+            privacyContactVisible,
             privacyTitle,
             termsHeadingVisible,
+            termsContactVisible,
             termsTitle,
           },
           admin: {

@@ -1526,6 +1526,7 @@ select:focus-visible {
 }
 
 .specialist-trust-line {
+  display: block;
   margin-top: 10px;
   color: var(--muted-strong);
   font-weight: 700;

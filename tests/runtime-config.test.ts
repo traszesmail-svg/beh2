@@ -6,6 +6,7 @@ import robots from '@/app/robots'
 import sitemap from '@/app/sitemap'
 import { ADMIN_BASIC_AUTH_USERNAME, hasValidAdminAuthorization } from '@/lib/admin-auth'
 import { POST as submitTestimonialRoute } from '@/app/api/testimonials/route'
+import { Header } from '@/components/Header'
 import { SocialProofSection } from '@/components/SocialProofSection'
 import { BUILD_MARKER_KEY, getBuildMarkerSnapshot } from '@/lib/build-marker'
 import { buildRollingAvailabilitySeed, getProblemLabel, isFutureAvailabilitySlot, isProblemType } from '@/lib/data'
@@ -558,6 +559,13 @@ test('prefers a valid configured public email over the fallback address', () => 
     phoneHref: null,
     facebookUrl: 'https://www.facebook.com/krzysztof.regulski.148/',
   })
+})
+
+test('renders the same public navigation label for the social proof section everywhere', () => {
+  const markup = renderToStaticMarkup(createElement(Header))
+
+  assert.match(markup, /Historie i efekty/)
+  assert.doesNotMatch(markup, /Realne sprawy/)
 })
 
 test('builds a robots response that points to the sitemap', () => {
