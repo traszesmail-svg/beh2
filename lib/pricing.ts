@@ -1,4 +1,4 @@
-export const DEFAULT_PRICE_PLN = 28.99
+export const DEFAULT_PRICE_PLN = 69
 export const MIN_CONSULTATION_PRICE_PLN = 2
 
 export type ActiveConsultationPrice = {
@@ -48,7 +48,7 @@ export function parseConsultationPriceInput(rawValue: string | number): number {
   const normalized = raw.replace(',', '.')
 
   if (!normalized || !/^\d+(\.\d{1,2})?$/.test(normalized)) {
-    throw new Error('Podaj poprawną kwotę konsultacji w PLN, np. 28.99 albo 49.50.')
+    throw new Error('Podaj poprawną kwotę konsultacji w PLN, np. 69 albo 89.50.')
   }
 
   const amount = Number(normalized)

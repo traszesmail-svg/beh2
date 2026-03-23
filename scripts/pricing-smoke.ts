@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import { cp, mkdir, readFile, rm } from 'fs/promises'
 import path from 'path'
 import { loadEnvConfig } from '@next/env'
+import { DEFAULT_PRICE_PLN, toStripeUnitAmount } from '../lib/pricing'
 
 const rootDir = process.cwd()
 const dataDir = path.join(rootDir, 'data')
@@ -84,20 +85,20 @@ async function main() {
     await cleanLocalData()
 
     const initialPrice = await getActiveConsultationPrice()
-    assert.equal(initialPrice.amount, 28.99)
+    assert.equal(initialPrice.amount, DEFAULT_PRICE_PLN)
 
     const availability = await listAvailability()
     const firstThreeSlots = availability.flatMap((group) => group.slots).slice(0, 3)
     assert.equal(firstThreeSlots.length, 3, 'Expected at least 3 free slots for pricing smoke test.')
 
     const bookingOneCreate = await createPendingBooking(testBookingPayload(firstThreeSlots[0].id, 1))
-    assert.equal(bookingOneCreate.booking.amount, 28.99)
+    assert.equal(bookingOneCreate.booking.amount, DEFAULT_PRICE_PLN)
     const checkoutOne = buildCheckoutSessionParams(bookingOneCreate.booking, {
       accessToken: bookingOneCreate.accessToken,
       baseUrl: process.env.NEXT_PUBLIC_APP_URL,
     })
     const checkoutOneLineItem = checkoutOne.line_items?.[0]
-    assert.equal(extractUnitAmount(checkoutOneLineItem), 2899)
+    assert.equal(extractUnitAmount(checkoutOneLineItem), toStripeUnitAmount(DEFAULT_PRICE_PLN))
 
     const routeUpdateResponse = await updatePricingRoute(
       new Request('http://localhost/api/admin/pricing', {
@@ -123,22 +124,22 @@ async function main() {
     assert.equal(extractUnitAmount(checkoutTwoLineItem), 4700)
 
     const bookingOneSnapshot = await getBookingById(bookingOneCreate.booking.id)
-    assert.equal(bookingOneSnapshot?.amount, 28.99)
+    assert.equal(bookingOneSnapshot?.amount, DEFAULT_PRICE_PLN)
 
     const restorePriceResponse = await updatePricingRoute(
       new Request('http://localhost/api/admin/pricing', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: '28.99' }),
+        body: JSON.stringify({ amount: String(DEFAULT_PRICE_PLN) }),
       }),
     )
     assert.equal(restorePriceResponse.status, 200)
 
     const restoredPrice = await getActiveConsultationPrice()
-    assert.equal(restoredPrice.amount, 28.99)
+    assert.equal(restoredPrice.amount, DEFAULT_PRICE_PLN)
 
     const bookingThreeCreate = await createPendingBooking(testBookingPayload(firstThreeSlots[2].id, 3))
-    assert.equal(bookingThreeCreate.booking.amount, 28.99)
+    assert.equal(bookingThreeCreate.booking.amount, DEFAULT_PRICE_PLN)
 
     const bookingsFile = await readBookingsFile()
 
@@ -151,7 +152,7 @@ async function main() {
           bookingOne: {
             id: bookingOneCreate.booking.id,
             amount: bookingOneCreate.booking.amount,
-            checkoutUnitAmount: 2899,
+            checkoutUnitAmount: toStripeUnitAmount(DEFAULT_PRICE_PLN),
           },
           bookingTwo: {
             id: bookingTwoCreate.booking.id,
@@ -162,7 +163,7 @@ async function main() {
             id: bookingThreeCreate.booking.id,
             amount: bookingThreeCreate.booking.amount,
           },
-          oldBookingKeptHistoricalPrice: bookingOneSnapshot?.amount === 28.99,
+          oldBookingKeptHistoricalPrice: bookingOneSnapshot?.amount === DEFAULT_PRICE_PLN,
           bookingCount: bookingsFile.length,
         },
         null,

@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import { DEFAULT_PRICE_PLN } from '../lib/pricing'
 import { runBookingReminderSweep } from '../lib/server/reminder-runner'
 import { BookingRecord } from '../lib/types'
 
@@ -18,7 +19,7 @@ function createBooking(id: string, overrides: Partial<BookingRecord> = {}): Book
     bookingDate: '2026-03-21',
     bookingTime: '10:30',
     slotId: `${id}-slot`,
-    amount: 28.99,
+    amount: DEFAULT_PRICE_PLN,
     bookingStatus: 'confirmed',
     paymentStatus: 'paid',
     meetingUrl: `https://meet.jit.si/${id}`,

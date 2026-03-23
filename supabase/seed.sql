@@ -1,5 +1,5 @@
 insert into public.pricing_settings (id, consultation_price)
-values ('consultation', 28.99)
+values ('consultation', 69.00)
 on conflict (id) do nothing;
 
 insert into public.availability (id, booking_date, booking_time, is_booked)
