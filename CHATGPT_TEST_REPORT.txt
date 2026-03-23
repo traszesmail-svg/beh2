@@ -1,84 +1,185 @@
-BEHAWIOR 18 — RAPORT WDROŻENIA
+BEHAWIOR 15 — V2 LEGAL / SEO / TRUST / ANALYTICS REPORT
 
-1. Wybrane zdjęcia z C:\Projekt\zdjecia i miejsca użycia
-- Przejrzano 72 pliki zdjęciowe z folderu źródłowego.
-- Odrzucono 65 plików jako duplikaty, kadry zbyt podobne, materiały zbyt słabe jakościowo albo nienadające się do spokojnego premium layoutu.
-- Wybrano 7 plików i skopiowano je do public/images/:
-  - omnie.png -> public/images/hero-main.png
-    Użycie: hero na landing page, sekcja „Prowadzący konsultację”, sekcja „Specjalista prowadzący”, karta boczna na /book.
-  - 20200708_134422.jpg -> public/images/krzysztof-vet-action.jpg
-    Użycie: trust block w sekcji specjalisty.
-  - 20210310_121313.jpg -> public/images/case-dog-bed.jpg
-    Użycie: hero support tile, karta tematu „Szczeniak i młody pies”.
-  - IMG_20210302_200420_331.jpg -> public/images/case-cat-scratcher.jpg
-    Użycie: hero support tile, karta tematu „Kot i trudne zachowania”, karta „Kot omija kuwetę”.
-  - 20211018_101846.jpg -> public/images/case-dog-black.jpg
-    Użycie: karty tematów „Lęk separacyjny” i „Inny temat”, karta realnej sprawy o napięciu i szczekaniu.
-  - 20240119_092318.jpg -> public/images/case-cat-snow.jpg
-    Użycie: karta tematu „Agresja i reakcje obronne”, karta realnej sprawy o napięciu między zwierzętami.
-  - 20251114_115608.jpg -> public/images/case-cat-sofa.jpg
-    Użycie: karta tematu „Szczekanie, niszczenie, pobudzenie”, karta realnej sprawy o pobudzeniu i chaosie w domu.
-
-2. Zmienione pliki
-- app/page.tsx
+1. Zmienione pliki
+- .env.example
+- .gitignore
 - app/book/page.tsx
-- app/layout.tsx
 - app/globals.css
-- components/Header.tsx
+- app/layout.tsx
+- app/page.tsx
+- app/polityka-prywatnosci/page.tsx
+- app/regulamin/page.tsx
+- app/robots.ts
+- app/sitemap.ts
+- app/slot/page.tsx
+- components/AddTestimonialForm.tsx
+- components/AnalyticsConsent.tsx
+- components/FaqAccordion.tsx
 - components/Footer.tsx
-- components/ShareActions.tsx
+- components/Header.tsx
+- components/PaymentActions.tsx
+- components/SocialSection.tsx
+- components/TestimonialsSection.tsx
+- lib/analytics.ts
+- lib/data.ts
+- lib/seo.ts
 - lib/site.ts
 - scripts/ui-smoke.ts
-- public/images/hero-main.png
-- public/images/krzysztof-vet-action.jpg
-- public/images/case-dog-bed.jpg
-- public/images/case-cat-scratcher.jpg
-- public/images/case-dog-black.jpg
-- public/images/case-cat-snow.jpg
-- public/images/case-cat-sofa.jpg
-- CHATGPT_TEST_REPORT.txt
+- tests/runtime-config.test.ts
 
-3. Najważniejsze zmiany UX / CRO / visual
-- Landing page dostał nowy hero z dużym zdjęciem prowadzącego, mocniejszą hierarchią, wyraźną ceną, 2 CTA i sekcją share.
-- Sticky trust bar został uproszczony do prawdziwych komunikatów: COAPE/CAPBT, bezpieczna płatność, zwrot pieniędzy.
-- Sekcja specjalisty jest spójna wizerunkowo: to samo główne zdjęcie Krzysztofa w sekcji hero i w sekcji specjalisty.
-- Tematy konsultacji zostały rozbudowane do 6 kart z ikonami SVG, zdjęciami, opisami i CTA prowadzącym do istniejącego flow rezerwacji.
-- /book zostało uporządkowane wizualnie: wyraźna cena, najbliższy termin, niski próg ryzyka, prowadzący konsultację i share.
-- Sekcja „Realne sprawy” używa uczciwych kart case-summary zamiast fikcyjnych opinii.
-- Metadata zostały dopięte pod nowe zdjęcie hero oraz bardziej spójny opis produktu.
-- Dodano lekkie micro-interakcje dla share, kart i CTA bez ciężkich popupów i bez tandetnego marketingu.
+2. Legal / contact
+- Polityka prywatności i regulamin zostały przepisane do bardziej produkcyjnej formy.
+- Dodałem wyraźne sekcje o:
+  - administratorze danych
+  - zakresie i celu przetwarzania
+  - operatorach technicznych: Supabase, Stripe, Resend
+  - zasadach rezerwacji i płatności
+  - zasadach zwrotu i reklamacji
+  - materiałach przed rozmową
+  - kontakcie
+- Footer nie pokazuje już placeholdera typu „uzupełnimy później”.
+- Publiczny kontakt opiera się na:
+  - BEHAVIOR15_CONTACT_EMAIL
+  - BEHAVIOR15_CONTACT_PHONE
+- Jeśli publiczny e-mail nie jest ustawiony, UI pokazuje uczciwy fallback bez zmyślonego adresu i odsyła do telefonu / Facebooka.
 
-4. Co wdrożono realnie, a co zostało świadomie uproszczone
-- Wdrożono realnie:
-  - nowe zdjęcia z lokalnego folderu C:\Projekt\zdjecia
-  - spójny trust bar
-  - nowy hero
-  - wzmocnione CTA
-  - uporządkowaną stronę /book
-  - karty tematów z realnym routingiem do flow
-  - uczciwą sekcję „Realne sprawy”
-  - share actions (WhatsApp, Facebook, kopiowanie linku)
-  - metadata OG/Twitter z nowym hero image
-- Świadomie uproszczono:
-  - nie dodawałem fikcyjnych opinii klientów ani fikcyjnych liczb
-  - nie wdrażałem automatycznego „60-sekundowego anulowania”, bo w obecnej logice produktu nie ma takiego mechanizmu; w UI zostawiłem uczciwy komunikat o możliwości ubiegania się o zwrot
-  - w folderze zdjęć nie było jednego wyraźnie lepszego, gotowego do użycia poziomego zdjęcia „Krzysztof + pies + kot razem”, więc hero zostało zbudowane uczciwie z najmocniejszego zdjęcia Krzysztofa oraz dwóch wspierających zdjęć zwierząt
-  - nie dodawałem fake referral ani sztucznej presji typu „ktoś właśnie rezerwuje”
+3. Hardcoded termin / dostępność
+- Nie dodałem drugiego źródła prawdy dla terminów.
+- Homepage i /book dalej korzystają z istniejącej logiki live availability.
+- Usunąłem ryzyko sztywnej komunikacji o terminie:
+  - jeśli dostępny jest realny slot, pokazujemy realny najbliższy termin
+  - jeśli nie da się bezpiecznie odczytać danych, UI pokazuje neutralny komunikat:
+    „Najbliższe realnie dostępne terminy zobaczysz w kolejnym kroku rezerwacji.”
 
-5. Wyniki walidacji
+4. Header / footer / nawigacja
+- Header został uporządkowany bez przebudowy od zera.
+- Główne sekcje w nawigacji:
+  - Oferta
+  - Jak to działa
+  - Specjalista
+  - Realne sprawy
+  - Publikacje
+  - FAQ
+  - Kontakt
+- Usunąłem „Opinie” z głównego headera, bo trust nadal opiera się głównie na:
+  - specjaliście
+  - realnych sprawach
+  - publikacjach
+- CTA do /book zostało zachowane.
+- Footer ma spójniejszy układ: marka / kontakt / ważne linki.
+
+5. SEO / OG / robots / sitemap
+- Naprawiłem metadata w stylu Next App Router.
+- Dodałem lub uporządkowałem:
+  - title
+  - description
+  - openGraph
+  - twitter
+  - canonical
+- Dodałem page-level metadata dla:
+  - /
+  - /book
+  - /polityka-prywatnosci
+  - /regulamin
+- Dodałem:
+  - app/robots.ts
+  - app/sitemap.ts
+- OG image używa istniejącego assetu:
+  - /images/hero-main.png
+
+6. Trust layer
+- Zachowałem obecne sekcje specjalisty i je dopracowałem zamiast przepisywać od zera.
+- Trust został wzmocniony przez:
+  - spójne kwalifikacje specjalisty
+  - uporządkowane copy
+  - czytelniejsze linki do COAPE / CAPBT
+  - dopracowany social/contact layer
+- Ten sam wizerunek specjalisty pozostał spójny w kluczowych sekcjach flow.
+
+7. FAQ 2.0
+- FAQ zostało rozszerzone do szerszego zestawu realnych pytań, m.in.:
+  - zwrot
+  - przełożenie terminu
+  - brak MP4 lub materiałów
+  - audio-only
+  - nagrywanie rozmowy
+  - co dzieje się po 15 minutach
+  - pies i kot
+  - czy to zastępuje wizytę stacjonarną
+  - kiedy przychodzi potwierdzenie
+  - jak przygotować się do rozmowy
+- Accordion pozostał lekki i został podpięty pod event analytics tylko po zgodzie.
+
+8. GA4 i consent
+- Dodałem lekki mechanizm zgody po stronie klienta.
+- Tracking nie uruchamia się przed zgodą.
+- Stan zgody jest zapisywany w:
+  - localStorage
+  - cookie
+- Dodałem hooki eventów:
+  - reserve_click
+  - topic_select
+  - slot_select
+  - payment_start
+  - opinion_add
+  - faq_open
+- GA4 jest aktywowane tylko gdy istnieje:
+  - NEXT_PUBLIC_GA_MEASUREMENT_ID
+- Hotjar nie został wdrożony w tej iteracji.
+
+9. Structured data
+- Zostawiłem JSON-LD zgodne z realnym produktem.
+- Uporządkowałem warstwę SEO tak, aby była spójna z:
+  - Service
+  - Person
+- Nie dopisywałem niepewnych danych ani fikcyjnych claimów.
+
+10. Performance / mobile
+- Zostawiłem istniejące flow i zoptymalizowałem warstwę UI bez ciężkich zależności.
+- Poprawiłem:
+  - scroll-margin dla anchorów
+  - sticky behavior i czytelność trust/header na mobile
+  - consent banner w wersji mobile
+  - event/data hooks bez rozbijania SSR flow
+- Nie dodawałem zbędnych assetów ani równoległego systemu rezerwacji.
+
+11. Wyniki walidacji
 - npm run lint -> PASS
 - npm test -> PASS
 - npm run build -> PASS
-- node --import tsx scripts/verify-flow.ts -> PASS
-- node --import tsx scripts/pricing-smoke.ts -> PASS
-- node --import tsx scripts/ui-smoke.ts -> PASS
-- node --import tsx scripts/reminder-smoke.ts -> PASS
+- npm run ui-smoke -> PASS
 
-6. Git / branch / gotowość
+12. Git / branch / deployment
 - Repo: beh2
-- Branch docelowy: main
-- Finalny stan tej iteracji został przygotowany do pushu na main i po walidacji został wypchnięty.
-- Iteracja nie zepsuła istniejącego flow booking -> payment -> confirmation -> room.
-- Admin pricing, reminder po Supabase Cron, materiały przed rozmową i ochrona /admin pozostały zachowane.
+- Branch: main
+- Commit 1: bfce3a0
+  feat: harden legal seo and booking trust surfaces
+- Commit 2: 90aa40f
+  feat: add consented analytics and search metadata
+- Production deployment built from commit:
+  90aa40f
+- Vercel inspect:
+  https://vercel.com/traszesmail-svgs-projects/beh2/Bmbj3kSuCLZVCKRrBtLNfAdYsLpG
+- Production deployment URL:
+  https://beh2-atrq2y1w4-traszesmail-svgs-projects.vercel.app
+- Production alias:
+  https://beh2.vercel.app
+- Status deployu:
+  PASS
 
-✅ Wdrożyłem pakiet poprawek i przygotowałem wersję do deployu oraz testów.
+13. Live smoke po deployu
+- https://beh2.vercel.app/ -> 200
+- https://beh2.vercel.app/book -> 200
+- https://beh2.vercel.app/robots.txt -> 200
+- https://beh2.vercel.app/sitemap.xml -> 200
+- Homepage po deployu zawiera:
+  - Opinie klientów
+  - Jak to działa
+- /book po deployu ma poprawny title:
+  Rezerwacja konsultacji | Behawior 15
+
+14. Rekomendowany następny etap
+- podpiąć prawdziwy publiczny e-mail kontaktowy, jeśli ma być widoczny także poza telefonem i Facebookiem
+- dodać pierwsze zatwierdzone opinie klientów do sekcji opinii
+- przygotować dedykowany asset OG w poziomie zamiast reuse portretu
+- rozważyć dopięcie page-level metadata także dla /slot i /form
