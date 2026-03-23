@@ -184,6 +184,21 @@ export default async function HomePage() {
             </div>
             <div className="hero-topline">Zweryfikowany behawiorysta COAPE/CAPBT dla opiekunów psów i kotów.</div>
             <h1>Spokojna konsultacja, która porządkuje problem psa lub kota w 15 minut</h1>
+
+            <div className="hero-mobile-photo" aria-label="Zdjęcie prowadzącego konsultację">
+              <div className="hero-photo-shell hero-photo-shell-mobile">
+                <Image
+                  src={HERO_PHOTO.src}
+                  alt={HERO_PHOTO.alt}
+                  width={1200}
+                  height={1600}
+                  sizes="(max-width: 980px) 82vw, 30vw"
+                  className="hero-photo"
+                  priority
+                />
+              </div>
+            </div>
+
             <p className="hero-text">
               Bez chaosu, bez zgadywania i bez przeciążenia poradami z internetu. Rezerwujesz rozmowę z jedną osobą,
               płacisz bezpiecznie i od razu dostajesz pierwszy konkretny kierunek działania.

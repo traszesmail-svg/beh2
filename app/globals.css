@@ -671,6 +671,10 @@ h1 span {
   gap: 16px;
 }
 
+.hero-mobile-photo {
+  display: none;
+}
+
 .hero-photo-card {
   display: grid;
   gap: 10px;
@@ -1981,6 +1985,15 @@ select:focus-visible {
     grid-area: auto;
   }
 
+  .hero-mobile-photo {
+    display: block;
+    margin-top: 18px;
+  }
+
+  .hero-photo-card {
+    display: none;
+  }
+
   .credential-logo-grid {
     grid-template-columns: 1fr;
   }
@@ -2014,6 +2027,12 @@ select:focus-visible {
   }
 
   .hero-photo-shell {
+    aspect-ratio: 4 / 4.72;
+  }
+
+  .hero-photo-shell-mobile {
+    width: min(100%, 430px);
+    margin-inline: auto;
     aspect-ratio: 4 / 4.72;
   }
 
