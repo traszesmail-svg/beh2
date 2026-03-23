@@ -65,9 +65,8 @@ function formatMultilineHtml(value: string): string {
   return escapeHtml(value).replace(/\n/g, '<br />')
 }
 
-function getExplicitContactEmail(): string | null {
-  const value = process.env.BEHAVIOR15_CONTACT_EMAIL?.trim() || null
-  return value && isValidPublicEmail(value) ? value : null
+function getNotificationRecipientEmail(): string | null {
+  return getContactDetails().email
 }
 
 export function getTestimonialSubmissionConfigIssue(): string | null {
@@ -79,8 +78,8 @@ export function getTestimonialSubmissionConfigIssue(): string | null {
     return 'RESEND_FROM_EMAIL missing or invalid'
   }
 
-  if (!getExplicitContactEmail()) {
-    return 'BEHAVIOR15_CONTACT_EMAIL missing or invalid'
+  if (!getNotificationRecipientEmail()) {
+    return 'public contact email missing or invalid'
   }
 
   return null
@@ -302,13 +301,13 @@ export async function sendBookingReminderEmail(booking: BookingRecord): Promise<
 }
 
 export async function sendTestimonialSubmissionEmail(submission: TestimonialSubmission): Promise<DeliveryResult> {
-  const recipient = getExplicitContactEmail()
+  const recipient = getNotificationRecipientEmail()
   const configIssue = getTestimonialSubmissionConfigIssue()
 
   if (!recipient || configIssue) {
     return {
       status: 'skipped',
-      reason: configIssue ?? 'BEHAVIOR15_CONTACT_EMAIL missing or invalid',
+      reason: configIssue ?? 'public contact email missing or invalid',
     }
   }
 

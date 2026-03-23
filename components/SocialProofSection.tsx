@@ -100,7 +100,8 @@ export function SocialProofSection() {
         <div className="social-proof-summary top-gap">
           <strong>Po każdej konsultacji można zostawić krótką opinię do weryfikacji.</strong>
           <span>
-            Gdy pojawią się pierwsze zaakceptowane opinie, będą publikowane tutaj obok realnych historii problemów i efektów pracy.
+            Publikujemy tylko zweryfikowane historie i zostawiamy tutaj te przykłady, które pomagają innym opiekunom
+            rozpoznać problem, pierwszy krok i realny efekt rozmowy.
           </span>
         </div>
       )}

@@ -26,13 +26,13 @@ async function getCurrentPriceLabel() {
   }
 }
 
-function buildMarketingDescription(priceLabel: string) {
-  return `${SITE_NAME} – spokojna 15-minutowa konsultacja głosowa online dla psa lub kota. Certyfikowany behawiorysta ${SPECIALIST_NAME} (COAPE/CAPBT). ${priceLabel}, bezpieczna płatność i możliwość ubiegania się o zwrot.`
+function buildBookMarketingDescription(priceLabel: string) {
+  return `Wybierz temat, sprawdź aktualny kalendarz i zarezerwuj konsultację Behawior 15. Aktualna cena: ${priceLabel}. Po płatności od razu dostajesz potwierdzenie i link do rozmowy audio.`
 }
 
 export async function buildHomeMetadata(): Promise<Metadata> {
-  const priceLabel = await getCurrentPriceLabel()
-  const description = buildMarketingDescription(priceLabel)
+  const description =
+    `${SITE_NAME} – spokojna 15-minutowa konsultacja głosowa online dla psa lub kota. Certyfikowany behawiorysta ${SPECIALIST_NAME} (COAPE/CAPBT). Wybierasz temat, sprawdzasz aktualny kalendarz i dopiero w flow rezerwacji widzisz ostateczną kwotę.`
 
   return {
     title: `${SITE_NAME} | 15-minutowa konsultacja głosowa dla psa lub kota`,
@@ -57,7 +57,7 @@ export async function buildHomeMetadata(): Promise<Metadata> {
 
 export async function buildBookMetadata(): Promise<Metadata> {
   const priceLabel = await getCurrentPriceLabel()
-  const description = `Wybierz temat, sprawdź aktualny kalendarz i zarezerwuj konsultację Behawior 15. Aktualna cena: ${priceLabel}. Po płatności od razu dostajesz potwierdzenie i link do rozmowy audio.`
+  const description = buildBookMarketingDescription(priceLabel)
 
   return {
     title: 'Rezerwacja konsultacji',

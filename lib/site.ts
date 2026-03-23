@@ -169,6 +169,17 @@ function isValidPublicEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
 }
 
+function extractConfiguredEmail(value: string | null): string | null {
+  if (!value) {
+    return null
+  }
+
+  const match = value.match(/<([^>]+)>/)
+  const candidate = (match?.[1] ?? value).trim()
+
+  return isValidPublicEmail(candidate) ? candidate : null
+}
+
 function normalizePublicPhone(value: string | null): PublicPhone {
   if (!value) {
     return { display: null, href: null }
@@ -202,13 +213,14 @@ function normalizePublicPhone(value: string | null): PublicPhone {
 }
 
 export function getContactDetails() {
-  const emailCandidate = process.env.BEHAVIOR15_CONTACT_EMAIL?.trim() || null
+  const emailCandidate =
+    extractConfiguredEmail(process.env.BEHAVIOR15_CONTACT_EMAIL?.trim() || null) ??
+    extractConfiguredEmail(process.env.RESEND_FROM_EMAIL?.trim() || null)
   const phoneCandidate = process.env.BEHAVIOR15_CONTACT_PHONE?.trim() || null
-  const email = emailCandidate && isValidPublicEmail(emailCandidate) ? emailCandidate : null
   const phone = normalizePublicPhone(phoneCandidate)
 
   return {
-    email,
+    email: emailCandidate,
     phoneDisplay: phone.display,
     phoneHref: phone.href,
     facebookUrl: FACEBOOK_PROFILE_URL,

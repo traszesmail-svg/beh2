@@ -8,9 +8,8 @@ import { ShareActions } from '@/components/ShareActions'
 import { SocialProofSection } from '@/components/SocialProofSection'
 import { SocialSection } from '@/components/SocialSection'
 import { faq, problemOptions, steps } from '@/lib/data'
-import { DEFAULT_PRICE_PLN, formatPricePln } from '@/lib/pricing'
 import { buildHomeMetadata } from '@/lib/seo'
-import { getActiveConsultationPrice, listAvailability } from '@/lib/server/db'
+import { listAvailability } from '@/lib/server/db'
 import { getBaseUrl, getDataModeStatus } from '@/lib/server/env'
 import {
   CAPBT_PROFILE_URL,
@@ -96,13 +95,12 @@ function renderProblemIcon(problem: ProblemType) {
 export default async function HomePage() {
   const dataMode = getDataModeStatus()
   const baseUrl = getBaseUrl()
-  let pricing: Awaited<ReturnType<typeof getActiveConsultationPrice>> | null = null
   let availability: Awaited<ReturnType<typeof listAvailability>> = []
   let publicFlowMessage: string | null = null
 
   if (dataMode.isValid) {
     try {
-      ;[pricing, availability] = await Promise.all([getActiveConsultationPrice(), listAvailability()])
+      availability = await listAvailability()
     } catch (error) {
       console.warn('[behawior15][home] nie udało się wczytać ceny lub dostępności', error)
       publicFlowMessage = 'Rezerwacja chwilowo się odświeża. Sprawdź kalendarz za moment albo przejdź od razu do wyboru tematu.'
@@ -118,8 +116,6 @@ export default async function HomePage() {
       : 'Brak wolnych terminów'
     : 'Najbliższe realnie dostępne terminy zobaczysz w kolejnym kroku rezerwacji.'
 
-  const priceLabel = pricing?.formattedAmount ?? formatPricePln(DEFAULT_PRICE_PLN)
-
   const structuredData = [
     {
       '@context': 'https://schema.org',
@@ -132,13 +128,6 @@ export default async function HomePage() {
       areaServed: {
         '@type': 'City',
         name: 'Olsztyn',
-      },
-      offers: {
-        '@type': 'Offer',
-        price: String(pricing?.amount ?? DEFAULT_PRICE_PLN),
-        priceCurrency: 'PLN',
-        availability: availability.length > 0 ? 'https://schema.org/InStock' : 'https://schema.org/LimitedAvailability',
-        url: `${baseUrl}/book`,
       },
       provider: {
         '@type': 'Person',
@@ -189,8 +178,8 @@ export default async function HomePage() {
             </p>
 
             <div className="hero-price-badge">
-              <span className="hero-price-label">Aktualna cena konsultacji</span>
-              <strong>{priceLabel}</strong>
+              <span className="hero-price-label">Aktualna cena i płatność</span>
+              <strong>Kwotę potwierdzisz po wyborze tematu konsultacji</strong>
               <span className="hero-price-note">15 minut rozmowy audio z jednym specjalistą</span>
               <span className="hero-price-compare">{CONSULTATION_PRICE_COMPARE_COPY}</span>
             </div>
