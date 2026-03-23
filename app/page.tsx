@@ -504,6 +504,73 @@ export default async function HomePage() {
           </div>
         </section>
 
+        <section className="two-col-section" id="dogoterapia">
+          <div className="panel section-panel specialist-visual-card">
+            <div className="section-eyebrow">Dogoterapia</div>
+            <h2>Umów wstępną rozmowę o dogoterapii</h2>
+            <p className="muted">
+              Jeśli chcesz sprawdzić, czy dogoterapia będzie dobrym następnym krokiem, możesz przejść przez to samo,
+              działające flow rezerwacji. Najpierw wybierasz termin rozmowy, a w formularzu doprecyzowujesz, że chodzi
+              właśnie o dogoterapię.
+            </p>
+            <div className="hero-animal-shell top-gap">
+              <Image
+                src="/branding/case-dog-home.jpg"
+                alt="Spokojny pies w domowym otoczeniu jako ilustracja sekcji o dogoterapii"
+                width={1200}
+                height={900}
+                sizes="(max-width: 980px) 100vw, 42vw"
+                className="hero-animal-image"
+              />
+            </div>
+          </div>
+
+          <div className="panel section-panel specialist-copy-panel">
+            <div className="section-eyebrow">Jak wejść w rezerwację</div>
+            <h2>Jedno wejście do kalendarza, bez osobnej ścieżki technicznej</h2>
+            <div className="stack-gap top-gap">
+              <div className="list-card accent-outline">
+                <strong>Co wpiszesz w formularzu</strong>
+                <span>
+                  Po wyborze terminu dopiszesz, że chodzi o dogoterapię, dla kogo ma być przygotowane spotkanie i jaki
+                  jest najważniejszy cel rozmowy.
+                </span>
+              </div>
+              <div className="list-card">
+                <strong>Co ustalisz na starcie</strong>
+                <span>
+                  Taka pierwsza rozmowa pomaga ocenić, czy dogoterapia ma sens w Twojej sytuacji, jak się przygotować i
+                  jaki następny krok będzie najbardziej użyteczny.
+                </span>
+              </div>
+              <div className="list-card">
+                <strong>Ta sama bezpieczna rezerwacja</strong>
+                <span>
+                  Nie dokładamy osobnego systemu terminów. Korzystasz z tego samego kalendarza, płatności i potwierdzenia,
+                  które działają już dla całej usługi Behawior 15.
+                </span>
+              </div>
+            </div>
+            <div className="hero-actions top-gap">
+              <Link
+                href="/book?problem=inne"
+                className="button button-primary big-button"
+                data-analytics-event="reserve_click"
+                data-analytics-location="dogotherapy-section"
+              >
+                Umów dogoterapię
+              </Link>
+              <Link href="/book" className="button button-ghost big-button">
+                Zobacz kalendarz rezerwacji
+              </Link>
+            </div>
+            <p className="muted top-gap-small">
+              Najszybciej wejdziesz tą ścieżką przez temat <strong>Inny temat do omówienia</strong>. Dzięki temu nie
+              rozwalamy obecnego flow, a nadal możesz od razu przejść do realnie dostępnych terminów.
+            </p>
+          </div>
+        </section>
+
         <SocialProofSection />
 
         <section className="panel section-panel" id="publikacje">

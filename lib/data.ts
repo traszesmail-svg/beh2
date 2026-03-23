@@ -35,7 +35,7 @@ export const problemOptions: ProblemOption[] = [
     id: 'inne',
     icon: 'compass',
     title: 'Inny temat do omówienia',
-    desc: 'gdy chcesz szybko uporządkować sytuację i dostać pierwszy kierunek działania',
+    desc: 'dogoterapia albo inna sytuacja, którą chcesz szybko uporządkować i dobrze opisać w formularzu',
   },
 ]
 
