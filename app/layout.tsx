@@ -34,10 +34,10 @@ export const metadata: Metadata = {
     siteName: 'Behawior 15',
     images: [
       {
-        url: '/images/hero-main.jpg',
+        url: '/images/hero-main.png',
         width: 1200,
-        height: 1600,
-        alt: 'Krzysztof Regulski z kotem na zdjęciu do strony Behawior 15',
+        height: 1778,
+        alt: 'Krzysztof Regulski na portretowym zdjęciu do strony Behawior 15',
       },
     ],
   },
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     title: 'Behawior 15 – spokojna 15-minutowa konsultacja dla psa lub kota',
     description:
       'Spokojny pierwszy krok, bezpieczna płatność i szybkie potwierdzenie dla opiekunów psów i kotów.',
-    images: ['/images/hero-main.jpg'],
+    images: ['/images/hero-main.png'],
   },
 }
 

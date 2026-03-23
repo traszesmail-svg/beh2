@@ -13,8 +13,8 @@ export const CONSULTATION_PRICE_COMPARE_COPY =
   'To krótki pierwszy krok przed pełną konsultacją, planem pracy albo dalszą diagnostyką.'
 
 export const LANDING_SPECIALIST_PHOTO = {
-  src: '/images/hero-main.jpg',
-  alt: 'Krzysztof Regulski trzymający kota podczas zdjęcia do strony Behawior 15',
+  src: '/images/hero-main.png',
+  alt: 'Krzysztof Regulski na portretowym zdjęciu do strony Behawior 15',
 }
 
 export const HERO_PHOTO = LANDING_SPECIALIST_PHOTO

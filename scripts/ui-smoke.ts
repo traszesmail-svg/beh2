@@ -120,7 +120,7 @@ async function main() {
       .isVisible()
     const heroPriceVisible = await mobilePage.locator('.hero-price-badge').getByText(/Aktualna cena/i).isVisible()
     const trustStripVisible = await mobilePage.locator('.header-trust-strip').getByText(/Zwrot pieniędzy/i).isVisible()
-    const heroPhotoVisible = await mobilePage.locator('.hero-aside img[alt="Krzysztof Regulski trzymający kota podczas zdjęcia do strony Behawior 15"]').isVisible()
+    const heroPhotoVisible = await mobilePage.locator('.hero-aside img[alt="Krzysztof Regulski na portretowym zdjęciu do strony Behawior 15"]').isVisible()
     const reassuranceVisible = await mobilePage.getByText(/Jedna rozmowa, jasny plan i realny następny krok/i).isVisible()
     const shareVisible = await mobilePage.getByText(/Udostępnij znajomemu, który ma problem z pupilem/i).isVisible()
     const footerLinkVisible = await mobilePage.getByRole('link', { name: /Polityka prywatności/i }).isVisible()
@@ -178,7 +178,7 @@ async function main() {
     const specialistTrustVisible = await desktopPage.getByRole('heading', {
       name: /Behawior, wiedza medyczna i doświadczenie terapeutyczne w jednym miejscu/i,
     }).isVisible()
-    const specialistPhotoVisible = await desktopPage.locator('#specjalista img[alt="Krzysztof Regulski trzymający kota podczas zdjęcia do strony Behawior 15"]').isVisible()
+    const specialistPhotoVisible = await desktopPage.locator('#specjalista img[alt="Krzysztof Regulski na portretowym zdjęciu do strony Behawior 15"]').isVisible()
     const credentialAltVisible = await desktopPage.locator('img[alt*="CAPBT Polska"]').isVisible()
     const realCasesHeadingVisible = await desktopPage.getByRole('heading', {
       name: /Takie problemy najczęściej trafiają na pierwszą 15-minutową rozmowę/i,

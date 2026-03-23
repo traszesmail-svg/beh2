@@ -4,7 +4,7 @@ BEHAWIOR 18 — RAPORT WDROŻENIA
 - Przejrzano 72 pliki zdjęciowe z folderu źródłowego.
 - Odrzucono 65 plików jako duplikaty, kadry zbyt podobne, materiały zbyt słabe jakościowo albo nienadające się do spokojnego premium layoutu.
 - Wybrano 7 plików i skopiowano je do public/images/:
-  - IMG-20210220-WA0001.jpg -> public/images/hero-main.jpg
+  - omnie.png -> public/images/hero-main.png
     Użycie: hero na landing page, sekcja „Prowadzący konsultację”, sekcja „Specjalista prowadzący”, karta boczna na /book.
   - 20200708_134422.jpg -> public/images/krzysztof-vet-action.jpg
     Użycie: trust block w sekcji specjalisty.
@@ -29,7 +29,7 @@ BEHAWIOR 18 — RAPORT WDROŻENIA
 - components/ShareActions.tsx
 - lib/site.ts
 - scripts/ui-smoke.ts
-- public/images/hero-main.jpg
+- public/images/hero-main.png
 - public/images/krzysztof-vet-action.jpg
 - public/images/case-dog-bed.jpg
 - public/images/case-cat-scratcher.jpg
