@@ -19,6 +19,7 @@ export const TESTIMONIAL_ISSUE_OPTIONS: TestimonialIssueOption[] = [
   { value: 'kot-i-kuweta', label: 'Kot i kuweta' },
   { value: 'konflikt-miedzy-zwierzetami', label: 'Konflikt między zwierzętami' },
   { value: 'niszczenie-rzeczy', label: 'Niszczenie rzeczy' },
+  { value: 'dogoterapia', label: 'Dogoterapia' },
   { value: 'inne', label: 'Inne' },
 ]
 

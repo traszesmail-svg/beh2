@@ -1,7 +1,4 @@
 import type { Metadata } from 'next'
-import { DEFAULT_PRICE_PLN, formatPricePln } from '@/lib/pricing'
-import { getActiveConsultationPrice } from '@/lib/server/db'
-import { getDataModeStatus } from '@/lib/server/env'
 import { SITE_NAME, SPECIALIST_NAME } from '@/lib/site'
 
 const DEFAULT_OG_IMAGE = {
@@ -11,23 +8,8 @@ const DEFAULT_OG_IMAGE = {
   alt: 'Krzysztof Regulski na portretowym zdjęciu do strony Behawior 15',
 } as const
 
-async function getCurrentPriceLabel() {
-  const dataMode = getDataModeStatus()
-
-  if (!dataMode.isValid) {
-    return formatPricePln(DEFAULT_PRICE_PLN)
-  }
-
-  try {
-    const pricing = await getActiveConsultationPrice()
-    return pricing.formattedAmount
-  } catch {
-    return formatPricePln(DEFAULT_PRICE_PLN)
-  }
-}
-
-function buildBookMarketingDescription(priceLabel: string) {
-  return `Wybierz temat, sprawdź aktualny kalendarz i zarezerwuj konsultację Behawior 15. Aktualna cena: ${priceLabel}. Po płatności od razu dostajesz potwierdzenie i link do rozmowy audio.`
+function buildBookMarketingDescription() {
+  return 'Wybierz temat, sprawdź aktualny kalendarz i zarezerwuj konsultację Behawior 15. Po płatności od razu dostajesz potwierdzenie i link do rozmowy audio.'
 }
 
 export async function buildHomeMetadata(): Promise<Metadata> {
@@ -56,8 +38,7 @@ export async function buildHomeMetadata(): Promise<Metadata> {
 }
 
 export async function buildBookMetadata(): Promise<Metadata> {
-  const priceLabel = await getCurrentPriceLabel()
-  const description = buildBookMarketingDescription(priceLabel)
+  const description = buildBookMarketingDescription()
 
   return {
     title: 'Rezerwacja konsultacji',

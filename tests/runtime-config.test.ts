@@ -555,7 +555,7 @@ test('renders the combined social proof section when there are no approved testi
   if (TESTIMONIALS.length === 0) {
     assert.match(markup, /Opinie i realne przypadki/)
     assert.match(markup, /Historie opiekunów i efekty konsultacji/)
-    assert.match(markup, /Po każdej konsultacji można zostawić krótką opinię do weryfikacji/)
+    assert.match(markup, /To miejsce zbiera realne opisy efektów pierwszej konsultacji/)
     assert.match(markup, /Publikujemy wyłącznie opinie zaakceptowane po weryfikacji/)
     return
   }

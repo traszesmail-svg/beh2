@@ -28,7 +28,7 @@ export function SocialProofSection() {
           <h2 id="historie-heading">Historie opiekunów i efekty konsultacji</h2>
         </div>
         <div className="muted">
-          Ta sekcja łączy dwa rodzaje dowodu społecznego: krótkie historie typowych problemów oraz opinie klientów,
+          W jednym miejscu pokazujemy typowe punkty wyjścia, pierwszy krok po rozmowie i krótkie opinie opiekunów,
           które publikujemy dopiero po ręcznej weryfikacji.
         </div>
       </div>
@@ -98,10 +98,9 @@ export function SocialProofSection() {
         </div>
       ) : (
         <div className="social-proof-summary top-gap">
-          <strong>Po każdej konsultacji można zostawić krótką opinię do weryfikacji.</strong>
+          <strong>To miejsce zbiera realne opisy efektów pierwszej konsultacji.</strong>
           <span>
-            Publikujemy tylko zweryfikowane historie i zostawiamy tutaj te przykłady, które pomagają innym opiekunom
-            rozpoznać problem, pierwszy krok i realny efekt rozmowy.
+            Pokazujemy tylko te historie, które pomagają innym opiekunom rozpoznać problem, pierwszy krok i realny efekt rozmowy.
           </span>
         </div>
       )}

@@ -83,6 +83,15 @@ function renderProblemIcon(problem: ProblemType) {
           <path d="m20 26 2 2 6-6" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       )
+    case 'dogoterapia':
+      return (
+        <svg viewBox="0 0 48 48" className="topic-svg" aria-hidden="true">
+          <path d="M15 30c0-6 3.6-11 9-11 5.1 0 9 4 9 10.5" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
+          <path d="M18 18c.6-3.4 2.7-5 6-5 3.2 0 5.2 1.6 6 4.8" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
+          <path d="M16 35c2.2-3 5-4.5 8-4.5s5.8 1.5 8 4.5" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
+          <path d="m24 22.5 1.8 2.4 2.9-.9-1.8 2.4 1.8 2.4-2.9-.9-1.8 2.4-1.8-2.4-2.9.9 1.8-2.4-1.8-2.4 2.9.9Z" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinejoin="round" />
+        </svg>
+      )
     case 'inne':
       return (
         <svg viewBox="0 0 48 48" className="topic-svg" aria-hidden="true">
@@ -510,8 +519,8 @@ export default async function HomePage() {
             <h2>Umów wstępną rozmowę o dogoterapii</h2>
             <p className="muted">
               Jeśli chcesz sprawdzić, czy dogoterapia będzie dobrym następnym krokiem, możesz przejść przez to samo,
-              działające flow rezerwacji. Najpierw wybierasz termin rozmowy, a w formularzu doprecyzowujesz, że chodzi
-              właśnie o dogoterapię.
+              działające flow rezerwacji. Najpierw wybierasz temat dogoterapii i termin rozmowy, a potem w formularzu
+              doprecyzowujesz cel spotkania, odbiorców i kontekst pracy.
             </p>
             <div className="hero-animal-shell top-gap">
               <Image
@@ -532,8 +541,8 @@ export default async function HomePage() {
               <div className="list-card accent-outline">
                 <strong>Co wpiszesz w formularzu</strong>
                 <span>
-                  Po wyborze terminu dopiszesz, że chodzi o dogoterapię, dla kogo ma być przygotowane spotkanie i jaki
-                  jest najważniejszy cel rozmowy.
+                  Po wyborze terminu dopiszesz, dla kogo ma być przygotowane spotkanie, jaki jest najważniejszy cel
+                  rozmowy i jakiego wsparcia potrzebujesz na starcie.
                 </span>
               </div>
               <div className="list-card">
@@ -553,7 +562,7 @@ export default async function HomePage() {
             </div>
             <div className="hero-actions top-gap">
               <Link
-                href="/book?problem=inne"
+                href="/book?problem=dogoterapia"
                 className="button button-primary big-button"
                 data-analytics-event="reserve_click"
                 data-analytics-location="dogotherapy-section"
@@ -564,10 +573,7 @@ export default async function HomePage() {
                 Zobacz kalendarz rezerwacji
               </Link>
             </div>
-            <p className="muted top-gap-small">
-              Najszybciej wejdziesz tą ścieżką przez temat <strong>Inny temat do omówienia</strong>. Dzięki temu nie
-              rozwalamy obecnego flow, a nadal możesz od razu przejść do realnie dostępnych terminów.
-            </p>
+            <p className="muted top-gap-small">Dogoterapia ma już własny temat w kalendarzu, ale korzysta z tego samego, działającego flow rezerwacji Behawior 15.</p>
           </div>
         </section>
 

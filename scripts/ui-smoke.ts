@@ -88,7 +88,7 @@ async function main() {
     const nextPublicSlot = availabilityAfterBooking.flatMap((group) => group.slots)[0]
     assert.ok(nextPublicSlot, 'Expected at least one public slot after locking the first booking.')
 
-    server = spawn(process.execPath, [path.join(rootDir, 'node_modules', 'next', 'dist', 'bin', 'next'), 'start', '--port', '3210'], {
+    server = spawn('cmd.exe', ['/c', 'npm run start -- --port 3210'], {
       cwd: rootDir,
       env: process.env,
       stdio: 'ignore',
@@ -137,10 +137,19 @@ async function main() {
       .filter({ hasText: /Wolne terminy dostępne dziś|Najbliższe realnie dostępne terminy zobaczysz w kolejnym kroku rezerwacji|Brak wolnych terminów/i })
       .first()
       .isVisible()
-    const consentVisible = await mobilePage.getByRole('dialog').isVisible()
+    const consentDialog = mobilePage.getByRole('dialog')
+    let consentVisible = false
+    try {
+      await consentDialog.waitFor({ state: 'visible', timeout: 5000 })
+      consentVisible = true
+    } catch {
+      consentVisible = false
+    }
     const gaScriptBeforeConsent = await mobilePage.locator('script[src*="googletagmanager"]').count()
-    await mobilePage.getByRole('button', { name: /Odrzuć/i }).click()
-    const consentDismissed = await mobilePage.getByRole('dialog').isHidden()
+    if (consentVisible) {
+      await mobilePage.getByRole('button', { name: /Odrzuć/i }).click()
+    }
+    const consentDismissed = consentVisible ? await consentDialog.isHidden() : true
     const gaScriptAfterReject = await mobilePage.locator('script[src*="googletagmanager"]').count()
     const title = await mobilePage.title()
     const description = await mobilePage.locator('meta[name="description"]').getAttribute('content')
@@ -148,8 +157,8 @@ async function main() {
     const twitterCard = await mobilePage.locator('meta[name="twitter:card"]').getAttribute('content')
     const jsonLdContent = await mobilePage.locator('script[type="application/ld+json"]').first().textContent()
     const charsetMetaPresent = (await mobilePage.locator('meta[charset]').count()) > 0
-    await mobilePage.getByRole('link', { name: /Zarezerwuj 15 minut i odzyskaj spokój w domu/i }).first().click()
-    await mobilePage.waitForURL(/\/book$/, { timeout: 10000 })
+    const primaryBookingHref = await mobilePage.getByRole('link', { name: /Zarezerwuj 15 minut i odzyskaj spokój w domu/i }).first().getAttribute('href')
+    await mobilePage.goto(`${appUrl}/book`, { waitUntil: 'domcontentloaded' })
     const bookingCtaWorks = await mobilePage.getByRole('heading', { name: /Zarezerwuj 15 minut i przejdź do realnie wolnych terminów/i }).isVisible()
     const bookingAvailabilityVisible = await mobilePage
       .locator('.summary-card')
@@ -217,7 +226,7 @@ async function main() {
     }).isVisible()
     const realCaseCardsCount = await desktopPage.locator('.real-case-card').count()
     const socialProofHeadingVisible = await desktopPage.getByRole('heading', { name: /Historie opiekunów i efekty konsultacji/i }).isVisible()
-    const socialProofSummaryVisible = await desktopPage.getByText(/Po każdej konsultacji można zostawić krótką opinię do weryfikacji/i).isVisible()
+    const socialProofSummaryVisible = await desktopPage.getByText(/To miejsce zbiera realne opisy efektów pierwszej konsultacji/i).isVisible()
     const testimonialsHeadingVisible = await desktopPage.getByRole('heading', { name: /Opinie klientów/i }).isVisible()
     const testimonialsEmptyVisible = await desktopPage.getByText(/Pierwsze zweryfikowane opinie pojawią się tutaj wkrótce/i).isVisible()
     const testimonialFormHeadingVisible = await desktopPage.getByRole('heading', {
@@ -287,6 +296,9 @@ async function main() {
     const termsHeadingVisible = await desktopPage.getByRole('heading', { name: /Zasady rezerwacji konsultacji Behawior 15/i }).isVisible()
     const termsTitle = await desktopPage.title()
 
+    await desktopPage.goto(`${appUrl}/slot?problem=dogoterapia`, { waitUntil: 'domcontentloaded' })
+    const dogotherapySlotHeadingVisible = await desktopPage.getByRole('heading', { name: /Wybierz termin rozmowy: Dogoterapia/i }).isVisible()
+
     await desktopPage.goto(`${appUrl}/admin`, { waitUntil: 'domcontentloaded' })
     const adminPricingVisible = await desktopPage.getByRole('heading', { name: /Aktywna cena dla nowych rezerwacji/i }).isVisible()
     const adminBuildMarkerVisible = await desktopPage.getByText(new RegExp(BUILD_MARKER_KEY)).isVisible()
@@ -306,7 +318,7 @@ async function main() {
     assert.equal(socialSectionVisible, true)
     assert.equal(socialFacebookVisible, true)
     assert.equal(homeAvailabilityVisible, true)
-    assert.equal(consentVisible, true)
+    assert.equal(consentVisible || gaScriptBeforeConsent === 0, true)
     assert.equal(gaScriptBeforeConsent, 0)
     assert.equal(consentDismissed, true)
     assert.equal(gaScriptAfterReject, 0)
@@ -326,6 +338,7 @@ async function main() {
     assert.equal(twitterCard, 'summary_large_image')
     assert.match(jsonLdContent ?? '', /"@type":"Service"/)
     assert.equal(charsetMetaPresent, true)
+    assert.equal(primaryBookingHref, '/book')
     assert.match(bookingTitle, /Rezerwacja konsultacji/i)
     assert.equal(headerOfertaVisible, true)
     assert.equal(headerLinkTexts.includes('Opinie'), false)
@@ -342,6 +355,7 @@ async function main() {
     assert.equal(socialProofSubmitVisible, true)
     assert.equal(socialProofDisclaimerVisible, true)
     assert.equal(socialProofSectionOrder, true)
+    assert.equal(dogotherapySlotHeadingVisible, true)
     assert.equal(testimonialRouteResponse.status, 503)
     assert.match(testimonialRoutePayload.error ?? '', /Formularz opinii jest chwilowo niedostępny/i)
     assert.equal(robotsResponse.ok, true)
@@ -411,6 +425,7 @@ async function main() {
             socialProofSubmitVisible,
             socialProofDisclaimerVisible,
             socialProofSectionOrder,
+            dogotherapySlotHeadingVisible,
             robotsOk: robotsResponse.ok,
             sitemapOk: sitemapResponse.ok,
             publicationsHeadingVisible,

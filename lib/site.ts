@@ -73,6 +73,10 @@ export const TOPIC_VISUALS: Record<ProblemType, { src: string; alt: string }> = 
     src: '/images/case-cat-sofa.jpg',
     alt: 'Kot odpoczywający na sofie w domu',
   },
+  dogoterapia: {
+    src: '/branding/case-dog-home.jpg',
+    alt: 'Spokojny pies w domowym otoczeniu jako ilustracja dogoterapii',
+  },
   inne: {
     src: '/images/case-dog-black.jpg',
     alt: 'Czarny pies w spokojnym ujęciu domowym',

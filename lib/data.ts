@@ -32,10 +32,16 @@ export const problemOptions: ProblemOption[] = [
     desc: 'hałas, rozregulowanie i trudność z wyciszeniem lub kontrolą emocji',
   },
   {
+    id: 'dogoterapia',
+    icon: 'heart-paw',
+    title: 'Dogoterapia',
+    desc: 'wstępna rozmowa o celu spotkania, odbiorcach, przygotowaniu psa i dalszym planie',
+  },
+  {
     id: 'inne',
     icon: 'compass',
     title: 'Inny temat do omówienia',
-    desc: 'dogoterapia albo inna sytuacja, którą chcesz szybko uporządkować i dobrze opisać w formularzu',
+    desc: 'nietypowa sytuacja, którą chcesz szybko uporządkować i dobrze opisać w formularzu',
   },
 ]
 

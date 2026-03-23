@@ -2,11 +2,11 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
+import { unstable_noStore as noStore } from 'next/cache'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { ShareActions } from '@/components/ShareActions'
 import { problemOptions } from '@/lib/data'
-import { formatPricePln, DEFAULT_PRICE_PLN } from '@/lib/pricing'
 import { buildBookMetadata } from '@/lib/seo'
 import { getActiveConsultationPrice, listAvailability } from '@/lib/server/db'
 import { getDataModeStatus } from '@/lib/server/env'
@@ -74,6 +74,15 @@ function renderProblemIcon(problem: ProblemType) {
           <path d="m20 26 2 2 6-6" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       )
+    case 'dogoterapia':
+      return (
+        <svg viewBox="0 0 48 48" className="topic-svg" aria-hidden="true">
+          <path d="M15 30c0-6 3.6-11 9-11 5.1 0 9 4 9 10.5" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
+          <path d="M18 18c.6-3.4 2.7-5 6-5 3.2 0 5.2 1.6 6 4.8" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
+          <path d="M16 35c2.2-3 5-4.5 8-4.5s5.8 1.5 8 4.5" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
+          <path d="m24 22.5 1.8 2.4 2.9-.9-1.8 2.4 1.8 2.4-2.9-.9-1.8 2.4-1.8-2.4-2.9.9 1.8-2.4-1.8-2.4 2.9.9Z" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinejoin="round" />
+        </svg>
+      )
     case 'inne':
       return (
         <svg viewBox="0 0 48 48" className="topic-svg" aria-hidden="true">
@@ -91,10 +100,11 @@ export default async function BookPage({
 }: {
   searchParams?: Record<string, string | string[] | undefined>
 }) {
+  noStore()
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL?.trim() || 'http://localhost:3000'
   const problem = readSearchParam(searchParams?.problem)
   const dataMode = getDataModeStatus()
-  let priceLabel = formatPricePln(DEFAULT_PRICE_PLN)
+  let priceLabel: string | null = null
   let availabilityLabel = 'Najbliższe realnie dostępne terminy zobaczysz po wyborze tematu konsultacji.'
 
   if (problem) {
@@ -131,7 +141,7 @@ export default async function BookPage({
             <div className="summary-grid top-gap">
               <div className="summary-card">
                 <div className="stat-label">Cena konsultacji</div>
-                <div className="summary-value">{priceLabel}</div>
+                <div className="summary-value">{priceLabel ?? 'Kwotę potwierdzisz po wyborze tematu'}</div>
               </div>
               <div className="summary-card">
                 <div className="stat-label">Dostępność</div>
@@ -143,10 +153,17 @@ export default async function BookPage({
               </div>
             </div>
 
-            <div className="price-context top-gap">
-              <strong>{priceLabel}</strong>
-              <span>{CONSULTATION_PRICE_COMPARE_COPY}</span>
-            </div>
+            {priceLabel ? (
+              <div className="price-context top-gap">
+                <strong>{priceLabel}</strong>
+                <span>{CONSULTATION_PRICE_COMPARE_COPY}</span>
+              </div>
+            ) : (
+              <div className="list-card top-gap">
+                <strong>Aktualna cena</strong>
+                <span>Kwotę zobaczysz po wyborze tematu i potwierdzisz ponownie na ekranie płatności.</span>
+              </div>
+            )}
 
             <div className="list-card accent-outline top-gap">
               <strong>Niski próg ryzyka</strong>

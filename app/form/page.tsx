@@ -1,13 +1,15 @@
 import Link from 'next/link'
+import { unstable_noStore as noStore } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { BookingForm } from '@/components/BookingForm'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { formatDateTimeLabel, getProblemLabel, isFutureAvailabilitySlot, isProblemType } from '@/lib/data'
-import { getAvailabilitySlot, getActiveConsultationPrice } from '@/lib/server/db'
+import { getAvailabilitySlot } from '@/lib/server/db'
 import { getDataModeStatus } from '@/lib/server/env'
 
 export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 function readSearchParam(value: string | string[] | undefined): string | null {
   if (Array.isArray(value)) {
@@ -22,6 +24,7 @@ export default async function FormPage({
 }: {
   searchParams?: Record<string, string | string[] | undefined>
 }) {
+  noStore()
   const problem = readSearchParam(searchParams?.problem)
   const slotId = readSearchParam(searchParams?.slotId)
 
@@ -30,13 +33,12 @@ export default async function FormPage({
   }
 
   const dataMode = getDataModeStatus()
-  let pricing: Awaited<ReturnType<typeof getActiveConsultationPrice>> | null = null
   let slot: Awaited<ReturnType<typeof getAvailabilitySlot>> = null
   let flowError: string | null = null
 
   if (dataMode.isValid) {
     try {
-      ;[pricing, slot] = await Promise.all([getActiveConsultationPrice(), getAvailabilitySlot(slotId)])
+      slot = await getAvailabilitySlot(slotId)
     } catch (error) {
       console.warn('[behawior15][form] nie udało się wczytać formularza lub terminu', error)
       flowError = 'Formularz chwilowo się odświeża. Spróbuj ponownie za moment.'
@@ -75,7 +77,7 @@ export default async function FormPage({
               </div>
               <div className="list-card">
                 <strong>Kwota</strong>
-                <span>{pricing?.formattedAmount ?? 'Cena chwilowo niedostępna'} — jedna płatność z góry za całą rozmowę.</span>
+                <span>Kwotę potwierdzisz na ekranie płatności po zapisaniu rezerwacji i zablokowaniu terminu.</span>
               </div>
             </div>
           </div>
@@ -90,7 +92,7 @@ export default async function FormPage({
                   </Link>
                 </div>
               </>
-            ) : activeSlot && pricing ? (
+            ) : activeSlot ? (
               <>
                 <div className="section-eyebrow">Dane do potwierdzenia</div>
                 <h2>Formularz konsultacji głosowej</h2>
@@ -98,7 +100,6 @@ export default async function FormPage({
                   problemType={problem}
                   slotId={activeSlot.id}
                   slotLabel={formatDateTimeLabel(activeSlot.bookingDate, activeSlot.bookingTime)}
-                  priceLabel={pricing.formattedAmount}
                 />
               </>
             ) : (

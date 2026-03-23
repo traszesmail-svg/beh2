@@ -10,13 +10,37 @@ interface BookingFormProps {
   problemType: ProblemType
   slotId: string
   slotLabel: string
-  priceLabel: string
 }
 
-export function BookingForm({ problemType, slotId, slotLabel, priceLabel }: BookingFormProps) {
+function getProblemFormCopy(problemType: ProblemType) {
+  if (problemType === 'dogoterapia') {
+    return {
+      animalType: 'Pies' as AnimalType,
+      durationLabel: 'Na jakim etapie jest temat',
+      durationPlaceholder: 'np. chcę ustalić plan pierwszego spotkania w tym miesiącu',
+      descriptionLabel: 'Krótki opis celu rozmowy',
+      descriptionPlaceholder:
+        'Napisz, dla kogo ma być przygotowane spotkanie, jaki jest cel dogoterapii i co chcesz uporządkować na początku.',
+      helperText:
+        'W tym polu najlepiej od razu dopisać kontekst spotkania, grupę odbiorców i to, czego potrzebujesz po pierwszej rozmowie.',
+    }
+  }
+
+  return {
+    animalType: problemType === 'kot' ? ('Kot' as AnimalType) : ('Pies' as AnimalType),
+    durationLabel: 'Od kiedy trwa problem',
+    durationPlaceholder: 'np. od 3 tygodni',
+    descriptionLabel: 'Krótki opis sytuacji',
+    descriptionPlaceholder: 'Napisz, co się dzieje, kiedy problem występuje i co jest dla Ciebie najtrudniejsze.',
+    helperText: null,
+  }
+}
+
+export function BookingForm({ problemType, slotId, slotLabel }: BookingFormProps) {
   const router = useRouter()
+  const formCopy = getProblemFormCopy(problemType)
   const [ownerName, setOwnerName] = useState('')
-  const [animalType, setAnimalType] = useState<AnimalType>('Pies')
+  const [animalType, setAnimalType] = useState<AnimalType>(formCopy.animalType)
   const [petAge, setPetAge] = useState('')
   const [durationNotes, setDurationNotes] = useState('')
   const [description, setDescription] = useState('')
@@ -128,22 +152,23 @@ export function BookingForm({ problemType, slotId, slotLabel, priceLabel }: Book
       </div>
 
       <div>
-        <label>Od kiedy trwa problem</label>
+        <label>{formCopy.durationLabel}</label>
         <input
           value={durationNotes}
           onChange={(event) => setDurationNotes(event.target.value)}
-          placeholder="np. od 3 tygodni"
+          placeholder={formCopy.durationPlaceholder}
         />
       </div>
 
       <div className="full-width">
-        <label>Krótki opis sytuacji</label>
+        <label>{formCopy.descriptionLabel}</label>
         <textarea
           rows={5}
           value={description}
           onChange={(event) => setDescription(event.target.value)}
-          placeholder="Napisz, co się dzieje, kiedy problem występuje i co jest dla Ciebie najtrudniejsze."
+          placeholder={formCopy.descriptionPlaceholder}
         />
+        {formCopy.helperText ? <div className="muted top-gap-small">{formCopy.helperText}</div> : null}
       </div>
 
       <div>
@@ -162,7 +187,7 @@ export function BookingForm({ problemType, slotId, slotLabel, priceLabel }: Book
         <div>
           <div className="muted">Po zapisaniu danych termin zostanie chwilowo zablokowany na czas płatności, żeby nikt nie przejął go przed Tobą.</div>
           <div className="checkout-title">Następny krok: bezpieczna płatność</div>
-          <div className="muted">Kwota do opłacenia: {priceLabel}. Po opłaceniu od razu zobaczysz potwierdzenie, link do rozmowy audio i kolejne kroki.</div>
+          <div className="muted">Dokładną kwotę zobaczysz jeszcze raz na ekranie płatności, już po zapisaniu rezerwacji i zablokowaniu terminu.</div>
           <div className="price-compare-text">{CONSULTATION_PRICE_COMPARE_COPY}</div>
         </div>
         <div className="checkout-right">

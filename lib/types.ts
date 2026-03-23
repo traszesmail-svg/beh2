@@ -4,6 +4,7 @@ export type ProblemType =
   | 'separacja'
   | 'agresja'
   | 'niszczenie'
+  | 'dogoterapia'
   | 'inne'
 
 export type AnimalType = 'Pies' | 'Kot'
