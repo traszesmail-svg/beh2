@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { ConfigurationError } from '@/lib/server/env'
 import { getTestimonialSubmissionConfigIssue, sendTestimonialSubmissionEmail } from '@/lib/server/notifications'
+import { getContactDetails } from '@/lib/site'
 import {
   TESTIMONIAL_FORM_LIMITS,
   TESTIMONIAL_ISSUE_OPTIONS,
@@ -21,6 +22,16 @@ type Payload = {
   consentContact: boolean
   consentPublish: boolean
   website?: string
+}
+
+function getUnavailableMessage(): string {
+  const contact = getContactDetails()
+
+  if (contact.email) {
+    return `Formularz opinii jest chwilowo niedostępny. Spróbuj później albo napisz na ${contact.email}.`
+  }
+
+  return UNAVAILABLE_MESSAGE
 }
 
 function isEmailValid(value: string): boolean {
@@ -118,7 +129,7 @@ export async function POST(request: Request) {
     const configIssue = getTestimonialSubmissionConfigIssue()
     if (configIssue) {
       console.warn('[behawior15][testimonials] missing mail config', configIssue)
-      return NextResponse.json({ error: UNAVAILABLE_MESSAGE }, { status: 503 })
+      return NextResponse.json({ error: getUnavailableMessage() }, { status: 503 })
     }
 
     const delivery = await sendTestimonialSubmissionEmail(payload)
@@ -128,7 +139,7 @@ export async function POST(request: Request) {
 
     if (delivery.status === 'skipped') {
       console.warn('[behawior15][testimonials] submission skipped', delivery.reason)
-      return NextResponse.json({ error: UNAVAILABLE_MESSAGE }, { status: 503 })
+      return NextResponse.json({ error: getUnavailableMessage() }, { status: 503 })
     }
 
     console.error('[behawior15][testimonials] submission failed', delivery.reason)
@@ -137,7 +148,7 @@ export async function POST(request: Request) {
     console.error('[behawior15][testimonials] unexpected error', error)
 
     if (error instanceof ConfigurationError) {
-      return NextResponse.json({ error: UNAVAILABLE_MESSAGE }, { status: 503 })
+      return NextResponse.json({ error: getUnavailableMessage() }, { status: 503 })
     }
 
     return NextResponse.json({ error: GENERIC_ERROR_MESSAGE }, { status: 500 })
