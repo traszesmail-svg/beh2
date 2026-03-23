@@ -114,14 +114,15 @@ async function main() {
     const mobilePage = await mobile.newPage()
     await mobilePage.goto(appUrl, { waitUntil: 'domcontentloaded' })
     const homeCtaVisible = await mobilePage.getByRole('link', { name: /Zarezerwuj 15 minut i odzyskaj spokój w domu/i }).first().isVisible()
-    const secondaryHeroCtaVisible = await mobilePage.getByRole('link', { name: /Sprawdź wszystkie terminy/i }).isVisible()
+    const secondaryHeroCtaVisible = await mobilePage.getByRole('link', { name: /Wybierz temat i termin/i }).first().isVisible()
     const heroHeadingVisible = await mobilePage
-      .getByRole('heading', { name: /W 15 minut dowiesz się dokładnie, co robić z problemem Twojego psa lub kota/i })
+      .getByRole('heading', { name: /Spokojna konsultacja, która porządkuje problem psa lub kota w 15 minut/i })
       .isVisible()
     const heroPriceVisible = await mobilePage.locator('.hero-price-badge').getByText(/Aktualna cena/i).isVisible()
-    const trustStripVisible = await mobilePage.locator('.header-trust-strip').getByText(/100% gwarancja zwrotu/i).isVisible()
-    const heroPhotoVisible = await mobilePage.locator('.hero-aside img[alt="Krzysztof Regulski z kotem na zdjęciu do strony Behawior 15"]').isVisible()
-    const reassuranceVisible = await mobilePage.getByText(/Bez obietnic z kosmosu/i).isVisible()
+    const trustStripVisible = await mobilePage.locator('.header-trust-strip').getByText(/Zwrot pieniędzy/i).isVisible()
+    const heroPhotoVisible = await mobilePage.locator('.hero-aside img[alt="Krzysztof Regulski trzymający kota podczas zdjęcia do strony Behawior 15"]').isVisible()
+    const reassuranceVisible = await mobilePage.getByText(/Jedna rozmowa, jasny plan i realny następny krok/i).isVisible()
+    const shareVisible = await mobilePage.getByText(/Udostępnij znajomemu, który ma problem z pupilem/i).isVisible()
     const footerLinkVisible = await mobilePage.getByRole('link', { name: /Polityka prywatności/i }).isVisible()
     const title = await mobilePage.title()
     const description = await mobilePage.locator('meta[name="description"]').getAttribute('content')
@@ -175,16 +176,16 @@ async function main() {
     const headerOfertaVisible = await desktopPage.getByRole('link', { name: /^Oferta$/i }).isVisible()
     const specialistHeadingVisible = await desktopPage.getByText(/Specjalista prowadzący/i).isVisible()
     const specialistTrustVisible = await desktopPage.getByRole('heading', {
-      name: /Łączę behawior, wiedzę medyczną i doświadczenie terapeutyczne/i,
+      name: /Behawior, wiedza medyczna i doświadczenie terapeutyczne w jednym miejscu/i,
     }).isVisible()
-    const specialistPhotoVisible = await desktopPage.locator('#specjalista img[alt="Krzysztof Regulski z kotem na zdjęciu do strony Behawior 15"]').isVisible()
+    const specialistPhotoVisible = await desktopPage.locator('#specjalista img[alt="Krzysztof Regulski trzymający kota podczas zdjęcia do strony Behawior 15"]').isVisible()
     const credentialAltVisible = await desktopPage.locator('img[alt*="CAPBT Polska"]').isVisible()
     const realCasesHeadingVisible = await desktopPage.getByRole('heading', {
-      name: /Z takimi problemami opiekunowie najczęściej wchodzą na pierwszą rozmowę/i,
+      name: /Takie problemy najczęściej trafiają na pierwszą 15-minutową rozmowę/i,
     }).isVisible()
     const realCaseCardsCount = await desktopPage.locator('.real-case-card').count()
     const publicationsHeadingVisible = await desktopPage.getByRole('heading', {
-      name: /Zweryfikowane publikacje, które wzmacniają trust bez nadęcia/i,
+      name: /Zweryfikowane materiały, które wzmacniają trust bez nadęcia/i,
     }).isVisible()
     const publicationLinkVisible = await desktopPage.getByRole('link', { name: /Otwórz artykuł/i }).first().isVisible()
     const noBrokenMailto = (await desktopPage.locator('a[href^="mailto:"]').count()) <= 1
@@ -209,6 +210,7 @@ async function main() {
     assert.equal(trustStripVisible, true)
     assert.equal(heroPhotoVisible, true)
     assert.equal(reassuranceVisible, true)
+    assert.equal(shareVisible, true)
     assert.equal(footerLinkVisible, true)
     assert.equal(bookingCtaWorks, true)
     assert.equal(paymentHeadingVisible, true)

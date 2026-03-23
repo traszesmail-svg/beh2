@@ -21,7 +21,7 @@ export function Footer() {
             {contact.email ? (
               <a href={`mailto:${contact.email}`}>{contact.email}</a>
             ) : (
-              <span>Adres e-mail ustawisz przez produkcyjne env.</span>
+              <span>Kontakt mailowy uzupełnimy przed publikacją danych na produkcji.</span>
             )}
             {contact.phone ? <a href={`tel:${contact.phone.replace(/\s+/g, '')}`}>{contact.phone}</a> : null}
           </div>

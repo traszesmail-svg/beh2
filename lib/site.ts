@@ -1,21 +1,71 @@
+import { ProblemType } from './types'
+
 const DEFAULT_RESEND_FROM_EMAIL = 'Behawior 15 <onboarding@resend.dev>'
 
 export const SPECIALIST_NAME = 'Krzysztof Regulski'
-export const SPECIALIST_CREDENTIALS = 'opiekun medyczny, technik weterynarii, dogoterapeuta, COAPE/CAPBT'
+export const SPECIALIST_CREDENTIALS = 'behawior, technik weterynarii, opiekun medyczny, dogoterapia, COAPE/CAPBT'
 export const SPECIALIST_LOCATION = 'Olsztyn, woj. warmińsko-mazurskie'
 export const COAPE_ORG_URL = 'https://coape.pl'
 export const COAPE_PROFILE_URL = 'https://behawioryscicoape.pl/behawiorysta/Regulski'
 export const CAPBT_PROFILE_URL = COAPE_PROFILE_URL
 export const SPECIALIST_TRUST_STATEMENT = 'Łączę behawior, wiedzę medyczną i doświadczenie terapeutyczne.'
-export const CONSULTATION_PRICE_COMPARE_COPY = 'Tylko 28,99 zł zamiast 180–250 zł za tradycyjną wizytę.'
+export const CONSULTATION_PRICE_COMPARE_COPY =
+  'To krótki pierwszy krok przed pełną konsultacją, planem pracy albo dalszą diagnostyką.'
 
 export const LANDING_SPECIALIST_PHOTO = {
-  src: '/branding/omnie.png',
-  alt: 'Krzysztof Regulski z kotem na zdjęciu do strony Behawior 15',
+  src: '/images/hero-main.jpg',
+  alt: 'Krzysztof Regulski trzymający kota podczas zdjęcia do strony Behawior 15',
 }
 
 export const HERO_PHOTO = LANDING_SPECIALIST_PHOTO
 export const SPECIALIST_PHOTO = LANDING_SPECIALIST_PHOTO
+
+export const SUPPORTING_SPECIALIST_PHOTO = {
+  src: '/images/krzysztof-vet-action.jpg',
+  alt: 'Krzysztof Regulski podczas pracy z kotem w gabinecie',
+}
+
+export const HERO_SUPPORT_IMAGES = [
+  {
+    id: 'hero-dog',
+    src: '/images/case-dog-bed.jpg',
+    alt: 'Biały pies leżący spokojnie na łóżku w świetle dziennym',
+    label: 'Pies w domowym środowisku',
+  },
+  {
+    id: 'hero-cat',
+    src: '/images/case-cat-scratcher.jpg',
+    alt: 'Kot siedzący przy drapaku i patrzący w obiektyw',
+    label: 'Kot w spokojnym kadrze',
+  },
+] as const
+
+export const TOPIC_VISUALS: Record<ProblemType, { src: string; alt: string }> = {
+  szczeniak: {
+    src: '/images/case-dog-bed.jpg',
+    alt: 'Biały pies odpoczywający na łóżku',
+  },
+  kot: {
+    src: '/images/case-cat-scratcher.jpg',
+    alt: 'Kot siedzący przy drapaku',
+  },
+  separacja: {
+    src: '/images/case-dog-black.jpg',
+    alt: 'Czarny pies siedzący w domu i patrzący w stronę opiekuna',
+  },
+  agresja: {
+    src: '/images/case-cat-snow.jpg',
+    alt: 'Kot stojący na śniegu i obserwujący otoczenie',
+  },
+  niszczenie: {
+    src: '/images/case-cat-sofa.jpg',
+    alt: 'Kot odpoczywający na sofie w domu',
+  },
+  inne: {
+    src: '/images/case-dog-black.jpg',
+    alt: 'Czarny pies w spokojnym ujęciu domowym',
+  },
+}
 
 export type RealCaseStudy = {
   id: string
@@ -31,39 +81,47 @@ export type RealCaseStudy = {
 export const REAL_CASE_STUDIES: RealCaseStudy[] = [
   {
     id: 'fear-dog',
-    imageSrc: '/branding/case-dog-home.jpg',
-    imageAlt: 'Czarny pies siedzący spokojnie w domu',
-    sourceLabel: 'Magazyn Weterynaryjny · 08.11.2018',
-    sourceHref: 'https://magwet.pl/31564%2Cstrach-lek-i-fobia-u-psow-i-kotow-roznicowanie-i-leczenie-farmakologiczne',
-    problem: 'Pies wpada w silny lęk albo fobię dźwiękową.',
+    imageSrc: '/images/case-dog-black.jpg',
+    imageAlt: 'Czarny pies siedzący w domu',
+    sourceLabel: 'Realny obszar pierwszej konsultacji',
+    problem: 'Pies szczeka, nie wycisza się i trudno mu zostać samemu.',
     summary:
-      'To realny typ sprawy opisany w Magazynie Weterynaryjnym. Przy nasilonym lęku samo „przeczekanie” zwykle tylko wydłuża problem, dlatego trzeba rozróżnić zwykły strach od zaburzenia wymagającego szerszego planu.',
+      'To typowa sprawa na pierwszą rozmowę: trzeba odróżnić napięcie, brak rutyny i możliwy lęk separacyjny od zwykłego pobudzenia.',
     effect:
-      'Po pierwszej rozmowie wiesz, czy wystarczy domowy plan działania, czy trzeba szybko połączyć pracę behawioralną z dalszą konsultacją weterynaryjną.',
-  },
-  {
-    id: 'relationships-cat-dog',
-    imageSrc: '/branding/case-cat-snow.jpg',
-    imageAlt: 'Kot stojący na śniegu nad zamarzniętą wodą',
-    sourceLabel: 'Profil COAPE/CAPBT',
-    sourceHref: COAPE_PROFILE_URL,
-    problem: 'Napięcie między zwierzętami, agresja albo rozjazd w relacji pies-kot.',
-    summary:
-      'To jeden z publicznie opisanych obszarów pracy specjalisty w katalogu COAPE: agresja, odbudowa relacji i złożone problemy psów oraz kotów w jednym domu.',
-    effect:
-      'Pierwsza rozmowa porządkuje chaos: co jest pilne, czego nie robić od dziś i jaki następny krok ma sens w Twoim konkretnym układzie domowym.',
+      'Po 15 minutach wiesz, co robić od razu w domu, czego nie dokładać i czy temat wymaga szerszej pracy.',
   },
   {
     id: 'litter-box-cat',
-    imageSrc: '/branding/case-cat-sofa.jpg',
-    imageAlt: 'Kot odpoczywający na ciemnej sofie',
-    sourceLabel: 'Magazyn Weterynaryjny · 11.10.2018',
-    sourceHref: 'https://magwet.pl/31443,terapia-farmakologiczna-i-behawioralna-przy-oddawaniu-moczu-poza-kuweta-u-kota-przypadek-kliniczny',
-    problem: 'Kot oddaje mocz poza kuwetą i napięcie w domu narasta z dnia na dzień.',
+    imageSrc: '/images/case-cat-scratcher.jpg',
+    imageAlt: 'Kot siedzący przy drapaku i patrzący w obiektyw',
+    sourceLabel: 'Realny obszar pierwszej konsultacji',
+    problem: 'Kot omija kuwetę albo sygnalizuje stres w domu.',
     summary:
-      'To realny przypadek kliniczny opisany w publikacji. W takich sprawach trzeba szybko oddzielić tło medyczne od behawioralnego i ustalić kolejność działań zamiast testować losowe porady z internetu.',
+      'W takich przypadkach trzeba szybko uporządkować tło środowiskowe, napięcie w domu i moment, w którym warto wrócić do lekarza weterynarii.',
     effect:
-      'Po rozmowie wychodzisz z jasną listą: co sprawdzić w środowisku kota, kiedy wrócić do lekarza weterynarii i czy problem wymaga szerszej terapii.',
+      'Rozmowa daje jasny plan: co sprawdzić w domu, co zanotować i jaki następny krok ma sens.',
+  },
+  {
+    id: 'multi-animal-home',
+    imageSrc: '/images/case-cat-snow.jpg',
+    imageAlt: 'Kot stojący na śniegu i obserwujący otoczenie',
+    sourceLabel: 'Realny obszar pierwszej konsultacji',
+    problem: 'Napięcie między zwierzętami, konflikt albo rozjazd relacji w domu.',
+    summary:
+      'Pierwsza konsultacja pomaga oddzielić sygnały ostrzegawcze od codziennych napięć i ustalić, co trzeba zabezpieczyć natychmiast.',
+    effect:
+      'Opiekun wychodzi z konkretem: co uspokoić dziś, jak zarządzić przestrzenią i kiedy potrzebna będzie dalsza praca.',
+  },
+  {
+    id: 'overstimulation-home',
+    imageSrc: '/images/case-cat-sofa.jpg',
+    imageAlt: 'Kot odpoczywający na sofie',
+    sourceLabel: 'Realny obszar pierwszej konsultacji',
+    problem: 'Pobudzenie, hałas, niszczenie albo trudność z wyhamowaniem po bodźcach.',
+    summary:
+      'To częsty punkt startowy, gdy opiekun ma poczucie chaosu i nie wie już, które porady z internetu są bezpieczne, a które tylko dokładają napięcia.',
+    effect:
+      'Po rozmowie masz pierwszy spokojny plan i wiesz, czy wystarczy praca domowa, czy potrzebujesz pełnej konsultacji.',
   },
 ]
 
@@ -82,7 +140,7 @@ export const MEDIA_MENTIONS: MediaMention[] = [
     label: 'Publikacja · Magazyn Weterynaryjny',
     title: 'Terapia farmakologiczna i behawioralna przy oddawaniu moczu poza kuwetą u kota. Przypadek kliniczny',
     summary:
-      'Artykuł współautorski opisujący kliniczny przypadek kota oddającego mocz poza kuwetą oraz potrzebę łączenia pracy behawioralnej z tłem medycznym.',
+      'Artykuł współautorski o klinicznym przypadku kota oddającego mocz poza kuwetą i o potrzebie łączenia pracy behawioralnej z tłem medycznym.',
     href: 'https://magwet.pl/31443,terapia-farmakologiczna-i-behawioralna-przy-oddawaniu-moczu-poza-kuweta-u-kota-przypadek-kliniczny',
     cta: 'Otwórz artykuł',
   },
@@ -91,7 +149,7 @@ export const MEDIA_MENTIONS: MediaMention[] = [
     label: 'Publikacja · Magazyn Weterynaryjny',
     title: 'Strach, lęk i fobia u psów i kotów – różnicowanie i leczenie farmakologiczne',
     summary:
-      'Artykuł współautorski o różnicowaniu strachu, lęku i fobii oraz o tym, kiedy sama porada nie wystarcza i potrzebna jest równoległa terapia behawioralna i farmakologiczna.',
+      'Artykuł współautorski o rozróżnianiu strachu, lęku i fobii oraz o momentach, kiedy sama rozmowa nie wystarcza i trzeba połączyć behawior z dalszym wsparciem weterynaryjnym.',
     href: 'https://magwet.pl/31564%2Cstrach-lek-i-fobia-u-psow-i-kotow-roznicowanie-i-leczenie-farmakologiczne',
     cta: 'Otwórz artykuł',
   },

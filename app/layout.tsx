@@ -21,32 +21,32 @@ export const metadata: Metadata = {
     template: '%s | Behawior 15',
   },
   description:
-    '15-minutowa konsultacja głosowa z behawiorystą COAPE/CAPBT. Szybka pomoc dla psa lub kota już od 28,99 zł. Zarezerwuj termin i odzyskaj spokój w domu.',
+    '15-minutowa konsultacja głosowa z behawiorystą COAPE/CAPBT dla opiekunów psów i kotów. Spokojny pierwszy krok, bezpieczna płatność, szybkie potwierdzenie i możliwość dodania materiałów przed rozmową.',
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title: 'Behawior 15 – 15-minutowa konsultacja głosowa',
+    title: 'Behawior 15 – spokojna 15-minutowa konsultacja dla psa lub kota',
     description:
-      '15-minutowa konsultacja głosowa z behawiorystą COAPE/CAPBT. Szybka pomoc dla psa lub kota już od 28,99 zł.',
+      'Spokojna konsultacja głosowa z behawiorystą COAPE/CAPBT. Rezerwacja, bezpieczna płatność, potwierdzenie i jasny pierwszy krok dla opiekuna psa lub kota.',
     type: 'website',
     locale: 'pl_PL',
     siteName: 'Behawior 15',
     images: [
       {
-        url: '/branding/hero-krzysztof-cat.jpg',
+        url: '/images/hero-main.jpg',
         width: 1200,
-        height: 1500,
-        alt: 'Behawior 15 – konsultacja behawioralna dla opiekunów psów i kotów',
+        height: 1600,
+        alt: 'Krzysztof Regulski z kotem na zdjęciu do strony Behawior 15',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Behawior 15 – 15-minutowa konsultacja głosowa',
+    title: 'Behawior 15 – spokojna 15-minutowa konsultacja dla psa lub kota',
     description:
-      'Szybka pomoc dla psa lub kota już od 28,99 zł. Zarezerwuj termin i odzyskaj spokój w domu.',
-    images: ['/branding/hero-krzysztof-cat.jpg'],
+      'Spokojny pierwszy krok, bezpieczna płatność i szybkie potwierdzenie dla opiekunów psów i kotów.',
+    images: ['/images/hero-main.jpg'],
   },
 }
 

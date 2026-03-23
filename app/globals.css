@@ -165,7 +165,8 @@ textarea::placeholder {
 }
 
 .header-cta {
-  white-space: nowrap;
+  white-space: normal;
+  text-align: center;
 }
 
 .header-branding {
@@ -574,6 +575,41 @@ h1 span {
   line-height: 1.65;
 }
 
+.hero-animal-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.hero-animal-card {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 24px;
+  border: 1px solid rgba(10, 92, 54, 0.12);
+  background: rgba(255, 255, 255, 0.84);
+}
+
+.hero-animal-shell {
+  overflow: hidden;
+  border-radius: 18px;
+  aspect-ratio: 4 / 3;
+  background: rgba(10, 92, 54, 0.08);
+}
+
+.hero-animal-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-animal-card span {
+  color: var(--muted-strong);
+  font-size: 13px;
+  font-weight: 700;
+}
+
 .credential-mark {
   display: grid;
   gap: 16px;
@@ -724,6 +760,21 @@ h1 span {
   border: 1px solid rgba(10, 92, 54, 0.14);
 }
 
+.topic-media-shell {
+  overflow: hidden;
+  border-radius: 22px;
+  aspect-ratio: 4 / 3;
+  margin: -2px 0 18px;
+  background: rgba(10, 92, 54, 0.08);
+}
+
+.topic-media-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .topic-svg {
   width: 34px;
   height: 34px;
@@ -848,6 +899,44 @@ select:focus-visible {
 }
 
 .button-ghost:hover {
+  background: rgba(10, 92, 54, 0.06);
+}
+
+.share-actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.share-label {
+  color: var(--muted-strong);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.share-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.share-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(10, 92, 54, 0.14);
+  background: rgba(255, 255, 255, 0.74);
+  color: var(--muted-strong);
+  font-weight: 700;
+  transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+}
+
+.share-chip:hover {
+  transform: translateY(-1px);
   background: rgba(10, 92, 54, 0.06);
 }
 
@@ -1239,9 +1328,36 @@ select:focus-visible {
   font-weight: 700;
 }
 
+.specialist-inline-photo-card {
+  display: grid;
+  grid-template-columns: minmax(0, 170px) minmax(0, 1fr);
+  gap: 16px;
+  align-items: center;
+}
+
+.specialist-inline-photo-shell {
+  overflow: hidden;
+  border-radius: 22px;
+  aspect-ratio: 4 / 5;
+  background: rgba(10, 92, 54, 0.08);
+}
+
+.specialist-inline-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 22%;
+}
+
+.specialist-inline-copy {
+  display: grid;
+  gap: 10px;
+}
+
 .real-case-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
 }
 
@@ -1398,6 +1514,28 @@ select:focus-visible {
   box-shadow: 0 24px 52px rgba(7, 44, 28, 0.18);
 }
 
+.booking-side-panel {
+  display: grid;
+  align-content: start;
+}
+
+.booking-photo-shell {
+  overflow: hidden;
+  border-radius: 28px;
+  aspect-ratio: 4 / 5.1;
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.94), rgba(248, 244, 235, 0.94) 64%),
+    rgba(255, 255, 255, 0.8);
+}
+
+.booking-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 10%;
+}
+
 .site-footer .section-eyebrow,
 .site-footer .muted {
   color: rgba(255, 252, 246, 0.72);
@@ -1544,6 +1682,10 @@ select:focus-visible {
     object-fit: contain;
     object-position: center top;
   }
+
+  .specialist-inline-photo-card {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 680px) {
@@ -1669,6 +1811,11 @@ select:focus-visible {
     text-align: center;
   }
 
+  .share-links {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
   .three-up,
   .stats-grid,
   .summary-grid,
@@ -1738,6 +1885,10 @@ select:focus-visible {
   .hero-photo-caption {
     font-size: 14px;
     line-height: 1.6;
+  }
+
+  .hero-animal-row {
+    grid-template-columns: 1fr;
   }
 
   .specialist-portrait-shell {

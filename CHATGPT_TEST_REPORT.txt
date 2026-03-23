@@ -1,67 +1,84 @@
-BEHAWIOR 18 — FAZA 1A
-Data: 2026-03-22
+BEHAWIOR 18 — RAPORT WDROŻENIA
 
-1. Co zmieniłem
-- Rozdzieliłem header na dwa poziomy: cienki sticky trust bar i osobny, niesticky header z brandingiem, nawigacją i CTA.
-- Ustawiłem trust bar na treść: `✅ Zweryfikowany behawiorysta COAPE/CAPBT • Bezpieczna płatność • 100% gwarancja zwrotu`.
-- Przebudowałem sekcję hero tak, żeby była lżejsza i spokojniejsza:
-  - nowy nagłówek oparty o obietnicę 15 minut,
-  - nowy opis wspierający,
-  - dwa CTA prowadzące do `/book`,
-  - uproszczona ekspozycja ceny,
-  - lżejszy zestaw faktów zamiast cięższego miksu chipsów i stat cards,
-  - mikrocopy: `Tylko 28,99 zł • Zwrot pieniędzy jeśli nie pomoże • Natychmiastowe potwierdzenie`.
-- Ujednoliciłem zdjęcie specjalisty: to samo zdjęcie jest teraz użyte zarówno w `Prowadzący konsultację`, jak i w `Specjalista prowadzący`.
-- Wprowadziłem jedno źródło prawdy dla zdjęcia w `lib/site.ts`.
-- Dopracowałem mobile i small tablet dla prawej kolumny hero:
-  - spokojniejsze proporcje portretu,
-  - mniejsze pionowe odstępy,
-  - brak overflow w headerze i CTA,
-  - bardziej czytelny podpis pod zdjęciem.
-- Zaktualizowałem smoke test UI pod nowy trust bar, nowe hero copy i wspólne zdjęcie specjalisty.
+1. Wybrane zdjęcia z C:\Projekt\zdjecia i miejsca użycia
+- Przejrzano 72 pliki zdjęciowe z folderu źródłowego.
+- Odrzucono 65 plików jako duplikaty, kadry zbyt podobne, materiały zbyt słabe jakościowo albo nienadające się do spokojnego premium layoutu.
+- Wybrano 7 plików i skopiowano je do public/images/:
+  - IMG-20210220-WA0001.jpg -> public/images/hero-main.jpg
+    Użycie: hero na landing page, sekcja „Prowadzący konsultację”, sekcja „Specjalista prowadzący”, karta boczna na /book.
+  - 20200708_134422.jpg -> public/images/krzysztof-vet-action.jpg
+    Użycie: trust block w sekcji specjalisty.
+  - 20210310_121313.jpg -> public/images/case-dog-bed.jpg
+    Użycie: hero support tile, karta tematu „Szczeniak i młody pies”.
+  - IMG_20210302_200420_331.jpg -> public/images/case-cat-scratcher.jpg
+    Użycie: hero support tile, karta tematu „Kot i trudne zachowania”, karta „Kot omija kuwetę”.
+  - 20211018_101846.jpg -> public/images/case-dog-black.jpg
+    Użycie: karty tematów „Lęk separacyjny” i „Inny temat”, karta realnej sprawy o napięciu i szczekaniu.
+  - 20240119_092318.jpg -> public/images/case-cat-snow.jpg
+    Użycie: karta tematu „Agresja i reakcje obronne”, karta realnej sprawy o napięciu między zwierzętami.
+  - 20251114_115608.jpg -> public/images/case-cat-sofa.jpg
+    Użycie: karta tematu „Szczekanie, niszczenie, pobudzenie”, karta realnej sprawy o pobudzeniu i chaosie w domu.
 
-2. Które pliki ruszyłem
-- `app/page.tsx`
-- `app/globals.css`
-- `components/Header.tsx`
-- `lib/site.ts`
-- `scripts/ui-smoke.ts`
-- `CHATGPT_TEST_REPORT.txt`
+2. Zmienione pliki
+- app/page.tsx
+- app/book/page.tsx
+- app/layout.tsx
+- app/globals.css
+- components/Header.tsx
+- components/Footer.tsx
+- components/ShareActions.tsx
+- lib/site.ts
+- scripts/ui-smoke.ts
+- public/images/hero-main.jpg
+- public/images/krzysztof-vet-action.jpg
+- public/images/case-dog-bed.jpg
+- public/images/case-cat-scratcher.jpg
+- public/images/case-dog-black.jpg
+- public/images/case-cat-snow.jpg
+- public/images/case-cat-sofa.jpg
+- CHATGPT_TEST_REPORT.txt
 
-3. Czy zdjęcie zostało ujednolicone w obu sekcjach
-- Tak.
-- Obie sekcje korzystają teraz z tego samego zdjęcia referencyjnego specjalisty.
-- Kanoniczne źródło jest w `lib/site.ts`.
+3. Najważniejsze zmiany UX / CRO / visual
+- Landing page dostał nowy hero z dużym zdjęciem prowadzącego, mocniejszą hierarchią, wyraźną ceną, 2 CTA i sekcją share.
+- Sticky trust bar został uproszczony do prawdziwych komunikatów: COAPE/CAPBT, bezpieczna płatność, zwrot pieniędzy.
+- Sekcja specjalisty jest spójna wizerunkowo: to samo główne zdjęcie Krzysztofa w sekcji hero i w sekcji specjalisty.
+- Tematy konsultacji zostały rozbudowane do 6 kart z ikonami SVG, zdjęciami, opisami i CTA prowadzącym do istniejącego flow rezerwacji.
+- /book zostało uporządkowane wizualnie: wyraźna cena, najbliższy termin, niski próg ryzyka, prowadzący konsultację i share.
+- Sekcja „Realne sprawy” używa uczciwych kart case-summary zamiast fikcyjnych opinii.
+- Metadata zostały dopięte pod nowe zdjęcie hero oraz bardziej spójny opis produktu.
+- Dodano lekkie micro-interakcje dla share, kart i CTA bez ciężkich popupów i bez tandetnego marketingu.
 
-4. Jak poprawiłem mobile / small tablet
-- Sticky trust bar został odchudzony i odseparowany od głównego headera.
-- Header przestał rozpychać pierwszy ekran na telefonie.
-- Hero ma prostszą hierarchię i czytelniejsze CTA.
-- Prawa kolumna `Prowadzący konsultację` używa spokojniejszego kadrowania i bardziej kontrolowanego kontenera pod portret.
-- Układ przy breakpointach tablet/mobile został uproszczony tak, żeby uniknąć wrażenia ściśniętego sidebaru.
-- Ręczny check potwierdził sticky zachowanie trust bara przy scrollu.
+4. Co wdrożono realnie, a co zostało świadomie uproszczone
+- Wdrożono realnie:
+  - nowe zdjęcia z lokalnego folderu C:\Projekt\zdjecia
+  - spójny trust bar
+  - nowy hero
+  - wzmocnione CTA
+  - uporządkowaną stronę /book
+  - karty tematów z realnym routingiem do flow
+  - uczciwą sekcję „Realne sprawy”
+  - share actions (WhatsApp, Facebook, kopiowanie linku)
+  - metadata OG/Twitter z nowym hero image
+- Świadomie uproszczono:
+  - nie dodawałem fikcyjnych opinii klientów ani fikcyjnych liczb
+  - nie wdrażałem automatycznego „60-sekundowego anulowania”, bo w obecnej logice produktu nie ma takiego mechanizmu; w UI zostawiłem uczciwy komunikat o możliwości ubiegania się o zwrot
+  - w folderze zdjęć nie było jednego wyraźnie lepszego, gotowego do użycia poziomego zdjęcia „Krzysztof + pies + kot razem”, więc hero zostało zbudowane uczciwie z najmocniejszego zdjęcia Krzysztofa oraz dwóch wspierających zdjęć zwierząt
+  - nie dodawałem fake referral ani sztucznej presji typu „ktoś właśnie rezerwuje”
 
-5. Wyniki testów
-- `npm install` -> PASS
-- `npm run lint` -> PASS
-- `npm run build` -> PASS
-- `npm run test` -> PASS
-- `npm run verify-flow` -> PASS
-- `npm run pricing-smoke` -> PASS
-- `npm run ui-smoke` -> PASS
+5. Wyniki walidacji
+- npm run lint -> PASS
+- npm test -> PASS
+- npm run build -> PASS
+- node --import tsx scripts/verify-flow.ts -> PASS
+- node --import tsx scripts/pricing-smoke.ts -> PASS
+- node --import tsx scripts/ui-smoke.ts -> PASS
+- node --import tsx scripts/reminder-smoke.ts -> PASS
 
-6. Ręczna weryfikacja
-- Home sprawdzony ręcznie na mobile `390px`.
-- Hero aside sprawdzony ręcznie na mobile.
-- Hero aside sprawdzony ręcznie na small tablet.
-- Sekcja `Specjalista prowadzący` sprawdzona ręcznie na mobile ze wspólnym zdjęciem.
-- Sticky trust bar utrzymuje pozycję przy scrollu.
-- CTA z hero prowadzą do `/book`.
+6. Git / branch / gotowość
+- Repo: beh2
+- Branch docelowy: main
+- Finalny stan tej iteracji został przygotowany do pushu na main i po walidacji został wypchnięty.
+- Iteracja nie zepsuła istniejącego flow booking -> payment -> confirmation -> room.
+- Admin pricing, reminder po Supabase Cron, materiały przed rozmową i ochrona /admin pozostały zachowane.
 
-7. Link do deploymentu
-- Produkcyjny deployment po pushu na `main`: `https://beh2.vercel.app`
-
-8. Ryzyka / rzeczy odłożone
-- Ta runda celowo nie przebudowuje szeroko sekcji 2–8; zmiany poza sekcją 1 ograniczyłem do minimum potrzebnego dla spójności.
-- OG image nadal wskazuje bezpieczny, istniejący asset. Dedykowany asset share można podmienić w kolejnej rundzie, jeśli powstanie finalna grafika.
-- `verify-flow` i `pricing-smoke` nie powinny być uruchamiane równolegle, bo oba operują na tym samym lokalnym store testowym; finalny wynik został potwierdzony po sekwencyjnym rerunie.
+✅ Wdrożyłem pakiet poprawek i przygotowałem wersję do deployu oraz testów.

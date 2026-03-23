@@ -4,13 +4,13 @@ export function Header() {
   const trustItems = [
     '✅ Zweryfikowany behawiorysta COAPE/CAPBT',
     'Bezpieczna płatność',
-    '100% gwarancja zwrotu',
+    'Zwrot pieniędzy',
   ]
 
   const navItems = [
     { href: '/#oferta', label: 'Oferta' },
     { href: '/#specjalista', label: 'Specjalista' },
-    { href: '/#przypadki', label: 'Przypadki' },
+    { href: '/#przypadki', label: 'Realne sprawy' },
     { href: '/#publikacje', label: 'Publikacje' },
     { href: '/#faq', label: 'FAQ' },
     { href: '/#kontakt', label: 'Kontakt' },
@@ -36,7 +36,7 @@ export function Header() {
                 <div className="brand">Behawior 15</div>
               </div>
             </Link>
-            <div className="header-subtitle">Szybka pomoc behawioralna bez chaosu i zgadywania.</div>
+            <div className="header-subtitle">Spokojna, konkretna konsultacja dla opiekunów psów i kotów.</div>
           </div>
 
           <nav className="header-nav" aria-label="Główna nawigacja">
@@ -49,7 +49,7 @@ export function Header() {
             </div>
 
             <Link href="/book" className="button button-primary header-cta">
-              Zarezerwuj 15 minut
+              Zarezerwuj 15 minut i odzyskaj spokój w domu
             </Link>
           </nav>
         </div>
