@@ -17,6 +17,15 @@ type DeliveryResult = {
   reason?: string
 }
 
+export type TestimonialSubmission = {
+  displayName: string
+  email: string
+  issueCategory: string
+  opinion: string
+  beforeAfter: string
+  photoUrl: string
+}
+
 function getResendConfig() {
   const apiKey = process.env.RESEND_API_KEY?.trim() || null
   const configuredFrom = process.env.RESEND_FROM_EMAIL?.trim() || null
@@ -41,6 +50,40 @@ function isValidResendFrom(value: string | null): value is string {
   const candidate = match?.[1]?.trim() ?? value.trim()
 
   return isValidPublicEmail(candidate)
+}
+
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
+function formatMultilineHtml(value: string): string {
+  return escapeHtml(value).replace(/\n/g, '<br />')
+}
+
+function getExplicitContactEmail(): string | null {
+  const value = process.env.BEHAVIOR15_CONTACT_EMAIL?.trim() || null
+  return value && isValidPublicEmail(value) ? value : null
+}
+
+export function getTestimonialSubmissionConfigIssue(): string | null {
+  if (!(process.env.RESEND_API_KEY?.trim() || null)) {
+    return 'RESEND_API_KEY missing'
+  }
+
+  if (!isValidResendFrom(process.env.RESEND_FROM_EMAIL?.trim() || null)) {
+    return 'RESEND_FROM_EMAIL missing or invalid'
+  }
+
+  if (!getExplicitContactEmail()) {
+    return 'BEHAVIOR15_CONTACT_EMAIL missing or invalid'
+  }
+
+  return null
 }
 
 function buildBookingSummary(booking: BookingRecord): string {
@@ -256,4 +299,47 @@ export async function sendBookingReminderEmail(booking: BookingRecord): Promise<
   ].join('\n')
 
   return deliverEmail({ to: booking.email, subject, html, text })
+}
+
+export async function sendTestimonialSubmissionEmail(submission: TestimonialSubmission): Promise<DeliveryResult> {
+  const recipient = getExplicitContactEmail()
+  const configIssue = getTestimonialSubmissionConfigIssue()
+
+  if (!recipient || configIssue) {
+    return {
+      status: 'skipped',
+      reason: configIssue ?? 'BEHAVIOR15_CONTACT_EMAIL missing or invalid',
+    }
+  }
+
+  const subject = `Nowe zgłoszenie opinii do weryfikacji - Behawior 15 - ${submission.displayName}`
+  const photoBlock = submission.photoUrl
+    ? `<p><strong>Link do zdjęcia:</strong> <a href="${escapeHtml(submission.photoUrl)}">${escapeHtml(submission.photoUrl)}</a></p>`
+    : '<p><strong>Link do zdjęcia:</strong> klient nie dodał linku.</p>'
+  const html = renderEmailShell(
+    'Nowa opinia czeka na weryfikację',
+    'Klient wysłał opinię przez formularz na stronie. Wpis nie jest jeszcze opublikowany.',
+    `
+      <p><strong>Imię do publikacji:</strong> ${escapeHtml(submission.displayName)}</p>
+      <p><strong>Email do kontaktu:</strong> <a href="mailto:${escapeHtml(submission.email)}">${escapeHtml(submission.email)}</a></p>
+      <p><strong>Kategoria problemu:</strong> ${escapeHtml(submission.issueCategory)}</p>
+      <p><strong>Treść opinii:</strong><br />${formatMultilineHtml(submission.opinion)}</p>
+      <p><strong>Co się zmieniło:</strong><br />${formatMultilineHtml(submission.beforeAfter)}</p>
+      ${photoBlock}
+      <p><strong>Status:</strong> wpis nadal wymaga ręcznej akceptacji i ręcznego dodania do statycznej listy opinii.</p>
+    `,
+    'Po akceptacji zapisz zdjęcie lokalnie i dopisz nowy wpis do lib/testimonials.ts przed kolejnym deployem.',
+  )
+  const text = [
+    'Nowa opinia czeka na weryfikację. Wpis nie jest jeszcze opublikowany.',
+    `Imię do publikacji: ${submission.displayName}`,
+    `Email do kontaktu: ${submission.email}`,
+    `Kategoria problemu: ${submission.issueCategory}`,
+    `Treść opinii: ${submission.opinion}`,
+    `Co się zmieniło: ${submission.beforeAfter}`,
+    `Link do zdjęcia: ${submission.photoUrl || 'brak'}`,
+    'Status: wpis nadal wymaga ręcznej akceptacji i ręcznego dodania do statycznej listy opinii.',
+  ].join('\n')
+
+  return deliverEmail({ to: recipient, subject, html, text })
 }

@@ -1,6 +1,10 @@
 import assert from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
+import { createElement } from 'react'
+import { renderToStaticMarkup } from 'react-dom/server'
 import { ADMIN_BASIC_AUTH_USERNAME, hasValidAdminAuthorization } from '@/lib/admin-auth'
+import { POST as submitTestimonialRoute } from '@/app/api/testimonials/route'
+import { TestimonialsSection } from '@/components/TestimonialsSection'
 import { BUILD_MARKER_KEY, getBuildMarkerSnapshot } from '@/lib/build-marker'
 import { buildRollingAvailabilitySeed, isFutureAvailabilitySlot } from '@/lib/data'
 import { getDataModeStatus, getSupabaseServiceRoleKeyIssue } from '@/lib/server/env'
@@ -28,6 +32,7 @@ import { getReminderAuthorizationError, runBookingReminderSweep } from '@/lib/se
 import { getWarsawDateTime, shouldSendReminderForBooking } from '@/lib/server/reminders'
 import { assertStripeCheckoutAmountSupported, buildCheckoutSessionParams, isStripeTestMode } from '@/lib/server/stripe'
 import { getContactDetails } from '@/lib/site'
+import { TESTIMONIALS } from '@/lib/testimonials'
 
 const originalStripeSecret = process.env.STRIPE_SECRET_KEY
 const originalCommitRef = process.env.VERCEL_GIT_COMMIT_REF
@@ -37,6 +42,7 @@ const originalAppDataMode = process.env.APP_DATA_MODE
 const originalSupabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const originalSupabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 const originalBaseUrl = process.env.NEXT_PUBLIC_APP_URL
+const originalResendApiKey = process.env.RESEND_API_KEY
 const originalResendFromEmail = process.env.RESEND_FROM_EMAIL
 const originalContactEmail = process.env.BEHAVIOR15_CONTACT_EMAIL
 const originalContactPhone = process.env.BEHAVIOR15_CONTACT_PHONE
@@ -88,6 +94,12 @@ afterEach(() => {
     process.env.NEXT_PUBLIC_APP_URL = originalBaseUrl
   } else {
     delete process.env.NEXT_PUBLIC_APP_URL
+  }
+
+  if (typeof originalResendApiKey === 'string') {
+    process.env.RESEND_API_KEY = originalResendApiKey
+  } else {
+    delete process.env.RESEND_API_KEY
   }
 
   if (typeof originalResendFromEmail === 'string') {
@@ -494,4 +506,91 @@ test('ignores invalid public contact email values', () => {
     email: null,
     phone: null,
   })
+})
+
+test('renders the testimonials section empty state when there are no approved testimonials', () => {
+  const markup = renderToStaticMarkup(createElement(TestimonialsSection, { testimonials: TESTIMONIALS }))
+
+  assert.match(markup, /Opinie klientów/)
+  assert.match(markup, /Pierwsze zweryfikowane opinie pojawią się tutaj wkrótce/)
+  assert.match(markup, /Publikujemy wyłącznie opinie zaakceptowane po weryfikacji/)
+})
+
+test('rejects testimonial submission when required consents are missing', async () => {
+  const response = await submitTestimonialRoute(
+    new Request('http://localhost/api/testimonials', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        displayName: 'Anna',
+        email: 'anna@example.com',
+        issueCategory: 'lek-separacyjny',
+        opinion: 'Rozmowa pomogła mi uporządkować pierwszy plan działania i wrócić do spokojniejszej pracy w domu.',
+        beforeAfter: 'Wcześniej nie wiedziałam, od czego zacząć. Po konsultacji miałam jasny plan na kolejne dni.',
+        photoUrl: '',
+        consentContact: true,
+        consentPublish: false,
+        website: '',
+      }),
+    }),
+  )
+
+  const payload = (await response.json()) as { error?: string }
+
+  assert.equal(response.status, 400)
+  assert.match(payload.error ?? '', /obie zgody/i)
+})
+
+test('rejects testimonial submission with invalid email', async () => {
+  const response = await submitTestimonialRoute(
+    new Request('http://localhost/api/testimonials', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        displayName: 'Anna',
+        email: 'anna-at-example.com',
+        issueCategory: 'lek-separacyjny',
+        opinion: 'Rozmowa pomogła mi uporządkować pierwszy plan działania i wrócić do spokojniejszej pracy w domu.',
+        beforeAfter: 'Wcześniej nie wiedziałam, od czego zacząć. Po konsultacji miałam jasny plan na kolejne dni.',
+        photoUrl: '',
+        consentContact: true,
+        consentPublish: true,
+        website: '',
+      }),
+    }),
+  )
+
+  const payload = (await response.json()) as { error?: string }
+
+  assert.equal(response.status, 400)
+  assert.match(payload.error ?? '', /adres e-mail/i)
+})
+
+test('returns a controlled unavailable message when testimonial mail env is missing', async () => {
+  delete process.env.RESEND_API_KEY
+  delete process.env.RESEND_FROM_EMAIL
+  delete process.env.BEHAVIOR15_CONTACT_EMAIL
+
+  const response = await submitTestimonialRoute(
+    new Request('http://localhost/api/testimonials', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        displayName: 'Anna',
+        email: 'anna@example.com',
+        issueCategory: 'lek-separacyjny',
+        opinion: 'Rozmowa pomogła mi uporządkować pierwszy plan działania i wrócić do spokojniejszej pracy w domu.',
+        beforeAfter: 'Wcześniej nie wiedziałam, od czego zacząć. Po konsultacji miałam jasny plan na kolejne dni.',
+        photoUrl: '',
+        consentContact: true,
+        consentPublish: true,
+        website: '',
+      }),
+    }),
+  )
+
+  const payload = (await response.json()) as { error?: string }
+
+  assert.equal(response.status, 503)
+  assert.match(payload.error ?? '', /Formularz opinii jest chwilowo niedostępny/i)
 })

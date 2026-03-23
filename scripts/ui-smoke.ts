@@ -190,6 +190,36 @@ async function main() {
       name: /Takie problemy najczęściej trafiają na pierwszą 15-minutową rozmowę/i,
     }).isVisible()
     const realCaseCardsCount = await desktopPage.locator('.real-case-card').count()
+    const testimonialsHeadingVisible = await desktopPage.getByRole('heading', { name: /Opinie klientów/i }).isVisible()
+    const testimonialsEmptyVisible = await desktopPage.getByText(/Pierwsze zweryfikowane opinie pojawią się tutaj wkrótce/i).isVisible()
+    const testimonialFormHeadingVisible = await desktopPage.getByRole('heading', {
+      name: /Wyślij opinię do ręcznej moderacji/i,
+    }).isVisible()
+    const testimonialSubmitVisible = await desktopPage.getByRole('button', { name: /Wyślij opinię do weryfikacji/i }).isVisible()
+    const testimonialDisclaimerVisible = await desktopPage.getByText(/Publikujemy wyłącznie opinie zaakceptowane po weryfikacji/i).isVisible()
+    const testimonialSectionOrder = await desktopPage.locator('main').evaluate((element) => {
+      const content = element.textContent ?? ''
+      return (
+        content.indexOf('Realne sprawy') < content.indexOf('Opinie klientów') &&
+        content.indexOf('Opinie klientów') < content.indexOf('Publikacje / Media')
+      )
+    })
+    const testimonialRouteResponse = await fetch(`${appUrl}/api/testimonials`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        displayName: 'UI Smoke',
+        email: 'ui-smoke@example.com',
+        issueCategory: 'lek-separacyjny',
+        opinion: 'To test kontrolowanego błędu formularza opinii w środowisku smoke.',
+        beforeAfter: 'Przed testem sprawdzamy walidację i kontrolowany fallback, po teście nadal nie ma publikacji automatycznej.',
+        photoUrl: '',
+        consentContact: true,
+        consentPublish: true,
+        website: '',
+      }),
+    })
+    const testimonialRoutePayload = (await testimonialRouteResponse.json()) as { error?: string }
     const publicationsHeadingVisible = await desktopPage.getByRole('heading', {
       name: /Zweryfikowane materiały, które wzmacniają trust bez nadęcia/i,
     }).isVisible()
@@ -240,6 +270,14 @@ async function main() {
     assert.equal(credentialAltVisible, true)
     assert.equal(realCasesHeadingVisible, true)
     assert.equal(realCaseCardsCount >= 3, true)
+    assert.equal(testimonialsHeadingVisible, true)
+    assert.equal(testimonialsEmptyVisible, true)
+    assert.equal(testimonialFormHeadingVisible, true)
+    assert.equal(testimonialSubmitVisible, true)
+    assert.equal(testimonialDisclaimerVisible, true)
+    assert.equal(testimonialSectionOrder, true)
+    assert.equal(testimonialRouteResponse.status, 503)
+    assert.match(testimonialRoutePayload.error ?? '', /Formularz opinii jest chwilowo niedostępny/i)
     assert.equal(publicationsHeadingVisible, true)
     assert.equal(publicationLinkVisible, true)
     assert.equal(noBrokenMailto, true)
@@ -285,6 +323,12 @@ async function main() {
             credentialAltVisible,
             realCasesHeadingVisible,
             realCaseCardsCount,
+            testimonialsHeadingVisible,
+            testimonialsEmptyVisible,
+            testimonialFormHeadingVisible,
+            testimonialSubmitVisible,
+            testimonialDisclaimerVisible,
+            testimonialSectionOrder,
             publicationsHeadingVisible,
             publicationLinkVisible,
             noBrokenMailto,

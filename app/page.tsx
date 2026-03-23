@@ -3,8 +3,10 @@ import Link from 'next/link'
 import { FaqAccordion } from '@/components/FaqAccordion'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
+import { AddTestimonialForm } from '@/components/AddTestimonialForm'
 import { ShareActions } from '@/components/ShareActions'
 import { SocialSection } from '@/components/SocialSection'
+import { TestimonialsSection } from '@/components/TestimonialsSection'
 import { faq, formatDateTimeLabel, problemOptions, steps } from '@/lib/data'
 import { getActiveConsultationPrice, listAvailability } from '@/lib/server/db'
 import { getBaseUrl, getDataModeStatus } from '@/lib/server/env'
@@ -504,6 +506,11 @@ export default async function HomePage() {
               </article>
             ))}
           </div>
+        </section>
+
+        <section className="two-col-section">
+          <TestimonialsSection />
+          <AddTestimonialForm />
         </section>
 
         <section className="panel section-panel" id="publikacje">

@@ -10,6 +10,9 @@ import { getDataModeStatus } from '@/lib/server/env'
 import { CONSULTATION_PRICE_COMPARE_COPY, SPECIALIST_NAME, SPECIALIST_PHOTO, SPECIALIST_TRUST_STATEMENT, TOPIC_VISUALS } from '@/lib/site'
 import { ProblemType } from '@/lib/types'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 function readSearchParam(value: string | string[] | undefined): string | null {
   if (Array.isArray(value)) {
     return value[0] ?? null
