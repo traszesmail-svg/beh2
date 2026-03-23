@@ -214,7 +214,7 @@ export default async function HomePage() {
             <div className="hero-inline-facts">
               <div className="hero-inline-fact">
                 <strong>{availabilityPreviewLabel}</strong>
-                <span>Aktualną godzinę zobaczysz dopiero w właściwym kalendarzu rezerwacji.</span>
+                <span>Aktualną godzinę zobaczysz dopiero we właściwym kalendarzu rezerwacji.</span>
               </div>
               <div className="hero-inline-fact">
                 <strong>Bezpieczna płatność</strong>
@@ -403,7 +403,7 @@ export default async function HomePage() {
               <h2>Wybierz temat i przejdź do realnej rezerwacji</h2>
             </div>
             <div className="muted">
-              Każdy temat prowadzi do tego samego flow rezerwacji, do tej samej ceny dla nowych bookingów i do realnie dostępnych terminów.
+              Każdy temat prowadzi do tego samego procesu rezerwacji, tej samej ceny dla nowych rezerwacji i realnie dostępnych terminów.
             </div>
           </div>
 

@@ -8,7 +8,7 @@ import { formatDateTimeLabel, getProblemLabel } from '@/lib/data'
 import { formatPricePln } from '@/lib/pricing'
 import { getBookingForViewer, markBookingPaymentFailed } from '@/lib/server/db'
 import { getDataModeStatus, getPaymentModeStatus, getPublicFeatureUnavailableMessage } from '@/lib/server/env'
-import { isStripeTestMode, MIN_STRIPE_CHECKOUT_AMOUNT_PLN } from '@/lib/server/stripe'
+import { MIN_STRIPE_CHECKOUT_AMOUNT_PLN } from '@/lib/server/stripe'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -33,7 +33,6 @@ export default async function PaymentPage({
   const cancelled = readSearchParam(searchParams?.cancelled)
   const dataMode = getDataModeStatus()
   const paymentMode = getPaymentModeStatus()
-  const stripeTestMode = paymentMode.active === 'stripe' && isStripeTestMode()
   const authorizationHeader = headers().get('authorization')
   let booking: Awaited<ReturnType<typeof getBookingForViewer>> = null
   let flowError: string | null = null
@@ -65,7 +64,6 @@ export default async function PaymentPage({
       displayedAmount: booking.amount,
       displayedAmountLabel: bookingPriceLabel,
       paymentMode: paymentMode.active,
-      isStripeTestMode: stripeTestMode,
     })
   }
 
@@ -80,12 +78,6 @@ export default async function PaymentPage({
             Płatność obsługuje zewnętrzna, szyfrowana bramka Stripe. Po jej zakończeniu wrócisz od razu do potwierdzenia
             rezerwacji, materiałów przed rozmową i linku do konsultacji audio.
           </p>
-
-          {stripeTestMode ? (
-            <div className="info-box top-gap">
-              To środowisko testowe płatności. Karta nie zostanie realnie obciążona poza testowym scenariuszem.
-            </div>
-          ) : null}
 
           {flowError ? (
             <div className="error-box top-gap">{flowError}</div>

@@ -1,4 +1,6 @@
 import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
+import path from 'node:path'
 import { afterEach, test } from 'node:test'
 import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
@@ -566,6 +568,20 @@ test('renders the same public navigation label for the social proof section ever
 
   assert.match(markup, /Historie i efekty/)
   assert.doesNotMatch(markup, /Realne sprawy/)
+})
+
+test('homepage copy does not contain the broken calendar or mixed booking wording', () => {
+  const source = readFileSync(path.join(process.cwd(), 'app', 'page.tsx'), 'utf8')
+
+  assert.match(source, /we właściwym kalendarzu rezerwacji/)
+  assert.doesNotMatch(source, /w właściwym kalendarzu rezerwacji/)
+  assert.doesNotMatch(source, /flow rezerwacji, do tej samej ceny dla nowych bookingów/)
+})
+
+test('payment page does not expose the public test-mode banner copy', () => {
+  const source = readFileSync(path.join(process.cwd(), 'app', 'payment', 'page.tsx'), 'utf8')
+
+  assert.doesNotMatch(source, /To środowisko testowe płatności/)
 })
 
 test('builds a robots response that points to the sitemap', () => {

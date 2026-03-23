@@ -74,6 +74,11 @@ async function fetchPublicPageState(url: string) {
     hasHistorieHeader: content.includes('Historie i efekty'),
     hasLegacyHeader: content.includes('Realne sprawy'),
     hasContactEmail: content.includes('coapebehawiorysta@gmail.com'),
+    hasTestPaymentBanner: content.includes('To środowisko testowe płatności. Karta nie zostanie realnie obciążona poza testowym scenariuszem.'),
+    hasWrongCalendarCopy: content.includes('Aktualną godzinę zobaczysz dopiero w właściwym kalendarzu rezerwacji.'),
+    hasMixedBookingCopy: content.includes(
+      'Każdy temat prowadzi do tego samego flow rezerwacji, do tej samej ceny dla nowych bookingów i do realnie dostępnych terminów.',
+    ),
     content,
   }
 }
@@ -157,6 +162,7 @@ async function main() {
     const homepageHasJoinedSpecialistText = await mobilePage.evaluate(() => document.body.innerText.includes('kolejnego kroku.Łączę'))
     const homepageHasJoinedModerationText = await mobilePage.evaluate(() => document.body.innerText.includes('weryfikacji.Publikujemy'))
     await mobilePage.goto(appUrl, { waitUntil: 'domcontentloaded' })
+    const homepageText = await mobilePage.locator('body').innerText()
     const homeCtaVisible = await mobilePage.getByRole('link', { name: /Zarezerwuj 15 minut i odzyskaj spokój w domu/i }).first().isVisible()
     const secondaryHeroCtaVisible = await mobilePage.getByRole('link', { name: /Wybierz temat i termin/i }).first().isVisible()
     const heroHeadingVisible = await mobilePage
@@ -248,12 +254,20 @@ async function main() {
     await mobilePage.goto(appUrl, { waitUntil: 'domcontentloaded' })
     const currentHomepageHasJoinedSpecialistText = await mobilePage.evaluate(() => document.body.innerText.includes('kolejnego kroku.Łączę'))
     const currentHomepageHasJoinedModerationText = await mobilePage.evaluate(() => document.body.innerText.includes('weryfikacji.Publikujemy'))
+    const homepageHasWrongCalendarCopy = homepageText.includes('Aktualną godzinę zobaczysz dopiero w właściwym kalendarzu rezerwacji.')
+    const homepageHasMixedBookingCopy = homepageText.includes(
+      'Każdy temat prowadzi do tego samego flow rezerwacji, do tej samej ceny dla nowych bookingów i do realnie dostępnych terminów.',
+    )
 
     await mobilePage.goto(`${appUrl}/payment?bookingId=${bookingOne.booking.id}&access=${encodeURIComponent(bookingOne.accessToken)}`, {
       waitUntil: 'domcontentloaded',
     })
+    const paymentPageText = await mobilePage.locator('body').innerText()
     const paymentHeadingVisible = await mobilePage.getByRole('heading', { name: /Za chwilę przejdziesz do bezpiecznej płatności/i }).isVisible()
     const prepHeadingVisible = await mobilePage.getByRole('heading', { name: /Przygotuj mnie do rozmowy/i }).isVisible()
+    const paymentPageHasTestBanner = paymentPageText.includes(
+      'To środowisko testowe płatności. Karta nie zostanie realnie obciążona poza testowym scenariuszem.',
+    )
 
     await mobilePage.locator('input[type="file"]').setInputFiles({
       name: 'zachowanie.mp4',
@@ -421,9 +435,12 @@ async function main() {
     )
     assert.equal(currentHomepageHasJoinedSpecialistText, false)
     assert.equal(currentHomepageHasJoinedModerationText, false)
+    assert.equal(homepageHasWrongCalendarCopy, false)
+    assert.equal(homepageHasMixedBookingCopy, false)
     assert.equal(paymentHeadingVisible, true)
     assert.equal(payButtonVisible, true)
     assert.equal(prepHeadingVisible, true)
+    assert.equal(paymentPageHasTestBanner, false)
     assert.equal(confirmationVisible, true)
     assert.equal(prepCardStillVisible, true)
     assert.equal(callTimerVisible, true)
@@ -501,11 +518,14 @@ async function main() {
             initialHomepageHasJoinedModerationText: homepageHasJoinedModerationText,
             currentHomepageHasJoinedSpecialistText,
             currentHomepageHasJoinedModerationText,
+            homepageHasWrongCalendarCopy,
+            homepageHasMixedBookingCopy,
             formResponses,
             currentFormResponses,
             paymentHeadingVisible,
             payButtonVisible,
             prepHeadingVisible,
+            paymentPageHasTestBanner,
             confirmationVisible,
             prepCardStillVisible,
             callTimerVisible,
