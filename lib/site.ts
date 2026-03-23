@@ -8,9 +8,17 @@ export const SPECIALIST_NAME = 'Krzysztof Regulski'
 export const SPECIALIST_CREDENTIALS =
   'behawiorysta, technik weterynarii, opiekun medyczny, dogoterapeuta, COAPE/CAPBT'
 export const SPECIALIST_LOCATION = 'Olsztyn, woj. warmińsko-mazurskie'
-export const COAPE_ORG_URL = 'https://coape.pl'
-export const COAPE_PROFILE_URL = 'https://behawioryscicoape.pl/behawiorysta/Regulski'
-export const CAPBT_PROFILE_URL = COAPE_PROFILE_URL
+export const COAPE_ORG_URL = 'https://coape.pl/'
+export const CAPBT_ORG_URL = 'https://behawioryscicoape.pl/'
+export const CAPBT_PROFILE_URL = 'https://behawioryscicoape.pl/behawiorysta/Regulski'
+export const COAPE_LOGO = {
+  src: '/branding/coape-polska.png',
+  alt: 'Logo COAPE Polska',
+}
+export const CAPBT_LOGO = {
+  src: '/branding/capbt-polska.png',
+  alt: 'Logo CAPBT Polska, Stowarzyszenie Behawiorystów i Trenerów COAPE',
+}
 export const SPECIALIST_TRUST_STATEMENT =
   'Łączę behawior, wiedzę medyczną i doświadczenie terapeutyczne.'
 export const CONSULTATION_PRICE_COMPARE_COPY =

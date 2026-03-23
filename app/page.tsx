@@ -12,7 +12,10 @@ import { buildHomeMetadata } from '@/lib/seo'
 import { listAvailability } from '@/lib/server/db'
 import { getBaseUrl, getDataModeStatus } from '@/lib/server/env'
 import {
+  CAPBT_LOGO,
+  CAPBT_ORG_URL,
   CAPBT_PROFILE_URL,
+  COAPE_LOGO,
   COAPE_ORG_URL,
   CONSULTATION_PRICE_COMPARE_COPY,
   HERO_PHOTO,
@@ -141,19 +144,19 @@ export default async function HomePage() {
         },
       },
     },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'Person',
+      {
+        '@context': 'https://schema.org',
+        '@type': 'Person',
       name: SPECIALIST_NAME,
       description: SPECIALIST_TRUST_STATEMENT,
       image: new URL(SPECIALIST_PHOTO.src, baseUrl).toString(),
-      homeLocation: {
-        '@type': 'Place',
-        name: SPECIALIST_LOCATION,
+        homeLocation: {
+          '@type': 'Place',
+          name: SPECIALIST_LOCATION,
+        },
+        sameAs: [COAPE_ORG_URL, CAPBT_ORG_URL, CAPBT_PROFILE_URL],
       },
-      sameAs: [COAPE_ORG_URL, CAPBT_PROFILE_URL],
-    },
-  ]
+    ]
 
   return (
     <main className="page-wrap">
@@ -270,13 +273,45 @@ export default async function HomePage() {
                   {SPECIALIST_TRUST_STATEMENT} Profil specjalisty i organizację możesz sprawdzić publicznie, zanim przejdziesz do rezerwacji.
                 </p>
               </div>
-              <Image
-                src="/branding/capbt-polska.png"
-                alt="Logo CAPBT Polska, Stowarzyszenie Behawiorystów i Trenerów COAPE"
-                width={230}
-                height={76}
-                className="credential-logo"
-              />
+              <div className="credential-logo-grid">
+                <a
+                  href={COAPE_ORG_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="credential-logo-link"
+                  aria-label="Otwórz oficjalną stronę COAPE Polska"
+                >
+                  <Image
+                    src={COAPE_LOGO.src}
+                    alt={COAPE_LOGO.alt}
+                    width={442}
+                    height={104}
+                    className="credential-logo"
+                  />
+                  <span className="credential-logo-label">Oficjalna strona COAPE Polska</span>
+                </a>
+                <a
+                  href={CAPBT_ORG_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="credential-logo-link"
+                  aria-label="Otwórz stronę CAPBT Polska"
+                >
+                  <Image
+                    src={CAPBT_LOGO.src}
+                    alt={CAPBT_LOGO.alt}
+                    width={436}
+                    height={107}
+                    className="credential-logo"
+                  />
+                  <span className="credential-logo-label">Strona CAPBT Polska</span>
+                </a>
+              </div>
+              <div className="credential-links-row">
+                <a href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="button button-ghost small-button">
+                  Profil Krzysztofa w CAPBT
+                </a>
+              </div>
             </div>
 
             <div className="mini-card availability-card">
@@ -453,14 +488,11 @@ export default async function HomePage() {
                 </div>
               </div>
               <div className="list-card">
-                <strong>COAPE i CAPBT bez ściany logotypów</strong>
-                <span>Pokazujemy tylko te dwa znaki zaufania i dwa konkretne linki: organizacja oraz publiczny profil specjalisty.</span>
+                <strong>COAPE i CAPBT weryfikujesz publicznie</strong>
+                <span>Logo COAPE i CAPBT prowadzą bezpośrednio do oficjalnych stron organizacji, a obok zostaje publiczny profil specjalisty.</span>
                 <div className="hero-actions top-gap-small">
-                  <a href={COAPE_ORG_URL} target="_blank" rel="noopener noreferrer" className="button button-ghost small-button">
-                    COAPE
-                  </a>
                   <a href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="button button-ghost small-button">
-                    Profil CAPBT
+                    Profil Krzysztofa
                   </a>
                 </div>
               </div>
