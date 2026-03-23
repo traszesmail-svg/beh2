@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
-import { FACEBOOK_PROFILE_URL, SPECIALIST_CREDENTIALS, SPECIALIST_NAME, getContactDetails } from '@/lib/site'
+import { SPECIALIST_CREDENTIALS, SPECIALIST_NAME, getContactDetails } from '@/lib/site'
 import { buildLegalMetadata } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = buildLegalMetadata(
   'Regulamin',
   '/regulamin',
-  'Zasady rezerwacji, płatności, konsultacji audio, zwrotów i kontaktu dla produktu Behawior 15.',
+  'Zasady rezerwacji, płatności, konsultacji audio, zwrotów, reklamacji i kontaktu dla produktu Behawior 15.',
 )
 
 export default function TermsPage() {
@@ -39,16 +39,23 @@ export default function TermsPage() {
             </div>
 
             <div className="list-card">
-              <strong>Cena i źródło prawdy dla kwoty</strong>
+              <strong>Przełożenie terminu i anulacja</strong>
               <span>
-                Cena widoczna w chwili rezerwacji staje się historyczną kwotą danego bookingu. Późniejsze zmiany ceny dotyczą tylko nowych rezerwacji i nie wpływają na już opłacone konsultacje.
+                Jeśli wiesz wcześniej, że nie możesz pojawić się na rozmowie, skontaktuj się przed rozpoczęciem terminu. Zmiana terminu zależy od dostępności innych slotów. Po rozpoczęciu zarezerwowanej godziny zmiana albo anulacja może nie być możliwa.
+              </span>
+            </div>
+
+            <div className="list-card">
+              <strong>No-show i nieopłacone rezerwacje</strong>
+              <span>
+                Jeśli płatność nie zostanie ukończona, rezerwacja wygasa i termin wraca do kalendarza. Jeśli klient nie stawi się na opłaconą rozmowę bez wcześniejszego kontaktu, konsultacja może zostać uznana za zrealizowaną.
               </span>
             </div>
 
             <div className="list-card">
               <strong>Zwrot i reklamacja</strong>
               <span>
-                Jeśli konsultacja nie spełni swojej roli jako pierwszy krok do uporządkowania problemu, możesz zgłosić reklamację lub wniosek o zwrot. Sprawy te rozpatrywane są indywidualnie, zgodnie z informacjami przekazanymi w kontakcie posprzedażowym i niniejszym regulaminie.
+                Jeśli konsultacja nie spełni swojej roli jako pierwszy krok do uporządkowania problemu, możesz złożyć reklamację lub wniosek o zwrot. Każda sprawa jest rozpatrywana indywidualnie na podstawie przebiegu usługi i zgłoszenia przesłanego przez kanał kontaktowy.
               </span>
             </div>
 
@@ -60,18 +67,18 @@ export default function TermsPage() {
             </div>
 
             <div className="list-card">
-              <strong>Zakres konsultacji</strong>
+              <strong>Zakres konsultacji i ograniczenia</strong>
               <span>
-                Konsultacja ma pomóc szybko uporządkować sytuację i ustalić pierwszy sensowny krok. W zależności od problemu może prowadzić do dalszej pracy behawioralnej, konsultacji weterynaryjnej albo szerszego planu działania.
+                Konsultacja pomaga szybko uporządkować sytuację i ustalić pierwszy sensowny krok. W zależności od problemu może prowadzić do dalszej pracy behawioralnej, konsultacji weterynaryjnej albo szerszego planu działania. Usługa nie zastępuje badania lekarskiego ani pełnej diagnostyki.
               </span>
             </div>
 
             <div className="list-card">
               <strong>Kontakt</strong>
               <span>
-                {contact.email ? `E-mail: ${contact.email}. ` : 'Publiczny adres e-mail do kontaktu nie został jeszcze ustawiony. '}
-                {contact.phone ? `Telefon: ${contact.phone}. ` : ''}
-                W sprawach rezerwacji, płatności, reklamacji i przełożenia terminu możesz też skorzystać z publicznego profilu Facebook: {FACEBOOK_PROFILE_URL}.
+                {contact.email ? `E-mail: ${contact.email}. ` : ''}
+                {contact.phoneDisplay ? `Telefon: ${contact.phoneDisplay}. ` : ''}
+                W sprawach rezerwacji, płatności, reklamacji i przełożenia terminu możesz też skorzystać z publicznego profilu Facebook podanego w stopce.
               </span>
             </div>
           </div>

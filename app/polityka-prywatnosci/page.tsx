@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
-import { FACEBOOK_PROFILE_URL, SPECIALIST_CREDENTIALS, SPECIALIST_NAME, getContactDetails } from '@/lib/site'
+import { SPECIALIST_CREDENTIALS, SPECIALIST_NAME, getContactDetails } from '@/lib/site'
 import { buildLegalMetadata } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
@@ -32,30 +32,30 @@ export default function PrivacyPolicyPage() {
             </div>
 
             <div className="list-card">
-              <strong>Zakres przetwarzanych danych</strong>
+              <strong>Jakie dane przetwarzamy</strong>
               <span>
-                Przetwarzane są dane niezbędne do obsługi konsultacji: imię opiekuna, dane kontaktowe, opis problemu, wybrany termin, status płatności oraz opcjonalne materiały dodane przed rozmową.
+                Przetwarzamy dane niezbędne do obsługi konsultacji: imię opiekuna, dane kontaktowe, opis problemu, wybrany termin, status płatności oraz opcjonalne materiały dodane przed rozmową.
               </span>
             </div>
 
             <div className="list-card">
               <strong>Cele i podstawy przetwarzania</strong>
               <span>
-                Dane są przetwarzane w celu przyjęcia rezerwacji, przeprowadzenia konsultacji, obsługi płatności, wysłania potwierdzeń i przypomnień, przygotowania specjalisty do rozmowy oraz obsługi ewentualnych reklamacji i zwrotów.
+                Dane przetwarzamy w celu przyjęcia rezerwacji, przeprowadzenia konsultacji, obsługi płatności, wysłania potwierdzeń i przypomnień, przygotowania specjalisty do rozmowy oraz obsługi reklamacji, zwrotów i kontaktu posprzedażowego.
               </span>
             </div>
 
             <div className="list-card">
-              <strong>Odbiorcy danych</strong>
+              <strong>Operatorzy zewnętrzni i odbiorcy danych</strong>
               <span>
-                Do działania produktu wykorzystywane są usługi Supabase, Stripe oraz Resend. Dane są przekazywane tylko w zakresie potrzebnym do obsługi rezerwacji, płatności i komunikacji e-mail.
+                Do działania produktu wykorzystujemy usługi Supabase, Stripe oraz Resend. Dane są przekazywane wyłącznie w zakresie potrzebnym do obsługi rezerwacji, płatności, wysyłki wiadomości i bezpieczeństwa działania serwisu.
               </span>
             </div>
 
             <div className="list-card">
               <strong>Jak długo przechowujemy dane</strong>
               <span>
-                Dane rezerwacyjne i rozliczeniowe przechowujemy tak długo, jak jest to potrzebne do obsługi konsultacji, rozliczeń, kontaktu posprzedażowego oraz spełnienia obowiązków prawnych.
+                Dane rezerwacyjne i rozliczeniowe przechowujemy tak długo, jak jest to potrzebne do realizacji usługi, rozliczeń, kontaktu posprzedażowego oraz spełnienia obowiązków prawnych i podatkowych.
               </span>
             </div>
 
@@ -69,9 +69,9 @@ export default function PrivacyPolicyPage() {
             <div className="list-card">
               <strong>Kontakt w sprawie danych</strong>
               <span>
-                {contact.email ? `E-mail: ${contact.email}. ` : 'Publiczny adres e-mail do kontaktu nie został jeszcze ustawiony. '}
-                {contact.phone ? `Telefon: ${contact.phone}. ` : ''}
-                Możesz też skorzystać z publicznego profilu Facebook: {FACEBOOK_PROFILE_URL}.
+                {contact.email ? `E-mail: ${contact.email}. ` : ''}
+                {contact.phoneDisplay ? `Telefon: ${contact.phoneDisplay}. ` : ''}
+                Jeśli wygodniej, możesz też skorzystać z publicznego profilu Facebook widocznego w stopce serwisu.
               </span>
             </div>
           </div>

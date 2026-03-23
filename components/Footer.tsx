@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import {
-  FACEBOOK_PROFILE_URL,
   SPECIALIST_CREDENTIALS,
   SPECIALIST_NAME,
   getContactDetails,
@@ -22,15 +21,24 @@ export function Footer() {
 
         <div className="footer-card">
           <div className="footer-label">Kontakt i wsparcie</div>
-          <div className="footer-links">
+          <div className="footer-links contact-links">
             {contact.email ? (
-              <a href={`mailto:${contact.email}`}>{contact.email}</a>
-            ) : (
-              <span>Publiczny adres e-mail pojawi się po finalnej konfiguracji kontaktu. Na teraz możesz skorzystać z telefonu lub Facebooka.</span>
-            )}
-            {contact.phone ? <a href={`tel:${contact.phone.replace(/\s+/g, '')}`}>{contact.phone}</a> : null}
-            <a href={FACEBOOK_PROFILE_URL} target="_blank" rel="noopener noreferrer">
-              Facebook Krzysztofa Regulskiego
+              <a href={`mailto:${contact.email}`} className="contact-item">
+                <span className="contact-label">E-mail</span>
+                <span>{contact.email}</span>
+              </a>
+            ) : null}
+
+            {contact.phoneDisplay && contact.phoneHref ? (
+              <a href={`tel:${contact.phoneHref}`} className="contact-item">
+                <span className="contact-label">Telefon</span>
+                <span>{contact.phoneDisplay}</span>
+              </a>
+            ) : null}
+
+            <a href={contact.facebookUrl} target="_blank" rel="noopener noreferrer" className="contact-item">
+              <span className="contact-label">Facebook</span>
+              <span>Publiczny profil Krzysztofa Regulskiego</span>
             </a>
           </div>
         </div>

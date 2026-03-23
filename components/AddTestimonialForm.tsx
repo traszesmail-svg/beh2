@@ -45,7 +45,7 @@ export function AddTestimonialForm() {
 
   const submitLabel = useMemo(() => {
     if (status === 'loading') {
-      return 'Wysyłam opinię...'
+      return 'Wysyłam zgłoszenie...'
     }
 
     return 'Wyślij opinię do weryfikacji'
@@ -57,7 +57,7 @@ export function AddTestimonialForm() {
 
   function validate(): string | null {
     if (!normalizeText(form.displayName)) {
-      return 'Podaj imię lub inicjały, których możemy użyć po akceptacji opinii.'
+      return 'Podaj imię albo inicjały, których możemy użyć po akceptacji opinii.'
     }
 
     if (!isEmailValid(form.email.trim())) {
@@ -132,15 +132,14 @@ export function AddTestimonialForm() {
   }
 
   return (
-    <section className="panel section-panel" id="dodaj-opinie" aria-labelledby="dodaj-opinie-heading">
+    <section className="social-proof-form-shell" aria-labelledby="dodaj-opinie-heading">
       <div className="section-head">
         <div>
-          <div className="section-eyebrow">Dodaj opinię</div>
-          <h2 id="dodaj-opinie-heading">Wyślij opinię do ręcznej moderacji</h2>
+          <div className="section-eyebrow">Po konsultacji</div>
+          <h3 id="dodaj-opinie-heading">Dodaj swoją opinię do ręcznej weryfikacji</h3>
         </div>
         <div className="muted">
-          Po konsultacji możesz zostawić krótką opinię. Najpierw trafi ona do weryfikacji mailowej, a dopiero potem — po ręcznej akceptacji —
-          pojawi się na stronie.
+          Formularz służy tylko do zgłoszenia opinii. Treść, zdjęcie i dane kontaktowe nie trafiają automatycznie na stronę.
         </div>
       </div>
 
@@ -194,19 +193,19 @@ export function AddTestimonialForm() {
         </div>
 
         <div className="full-width">
-          <label htmlFor="testimonial-opinion">Treść opinii</label>
+          <label htmlFor="testimonial-opinion">Krótka opinia</label>
           <textarea
             id="testimonial-opinion"
             rows={5}
             value={form.opinion}
             onChange={(event) => updateField('opinion', event.target.value)}
             maxLength={TESTIMONIAL_FORM_LIMITS.opinion}
-            placeholder="Napisz, jak wyglądało Twoje doświadczenie po konsultacji."
+            placeholder="Napisz, co było dla Ciebie najważniejsze po konsultacji."
           />
         </div>
 
         <div className="full-width">
-          <label htmlFor="testimonial-before-after">Co się działo wcześniej i co zmieniło się po konsultacji</label>
+          <label htmlFor="testimonial-before-after">Co działo się wcześniej i co zmieniło się po konsultacji</label>
           <textarea
             id="testimonial-before-after"
             rows={5}
@@ -219,7 +218,13 @@ export function AddTestimonialForm() {
 
         <div style={{ position: 'absolute', left: '-9999px', top: 'auto', width: '1px', height: '1px', overflow: 'hidden' }} aria-hidden="true">
           <label htmlFor="testimonial-website">Strona internetowa</label>
-          <input id="testimonial-website" tabIndex={-1} autoComplete="off" value={form.website} onChange={(event) => updateField('website', event.target.value)} />
+          <input
+            id="testimonial-website"
+            tabIndex={-1}
+            autoComplete="off"
+            value={form.website}
+            onChange={(event) => updateField('website', event.target.value)}
+          />
         </div>
 
         <div className="full-width consent-stack">
@@ -253,8 +258,7 @@ export function AddTestimonialForm() {
         <div className="checkout-box full-width">
           <div>
             <div className="muted">
-              Formularz nie publikuje treści automatycznie. Najpierw wysyłamy zgłoszenie do właściciela projektu, który potwierdza zgodę i dopiero
-              wtedy dodaje opinię na stronę.
+              Najpierw wysyłamy zgłoszenie do właściciela projektu. Po potwierdzeniu zgody treść może zostać ręcznie dodana do sekcji historii i efektów.
             </div>
           </div>
           <div className="checkout-right">

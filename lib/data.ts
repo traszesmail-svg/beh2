@@ -43,36 +43,36 @@ export const steps = [
   {
     n: '01',
     title: 'Wybierasz temat',
-    desc: 'Określasz, czego dotyczy trudność, i sprawdzasz realnie wolne terminy.',
+    desc: 'Określasz, czego dotyczy trudność, i przechodzisz do aktualnych terminów dla tego flow rezerwacji.',
   },
   {
     n: '02',
-    title: 'Rezerwujesz i opłacasz',
-    desc: 'Podajesz dane, blokujesz termin na czas płatności i przechodzisz do bezpiecznego checkoutu.',
+    title: 'Blokujesz termin na czas płatności',
+    desc: 'Podajesz dane, zapisujesz rezerwację i przechodzisz do bezpiecznego checkoutu bez ryzyka utraty slotu w trakcie płatności.',
   },
   {
     n: '03',
-    title: 'Dostajesz rozmowę i dalszy kierunek',
-    desc: 'Po opłaceniu otrzymujesz potwierdzenie, link do rozmowy audio i jasny kolejny krok po konsultacji.',
+    title: 'Otrzymujesz potwierdzenie i dalszy krok',
+    desc: 'Po opłaceniu widzisz potwierdzenie, link do rozmowy audio i możliwość dodania materiałów przygotowawczych.',
   },
 ]
 
 export const faq = [
   {
     q: 'Czy 15 minut wystarczy?',
-    a: 'To szybka konsultacja porządkująca sytuację. Jej celem jest wstępna ocena problemu i pierwszy, konkretny kierunek działania.',
+    a: 'To szybka konsultacja porządkująca sytuację. Jej celem jest wstępna ocena problemu i pierwszy, konkretny kierunek działania, a nie pełna terapia behawioralna.',
   },
   {
     q: 'Czy mogę ubiegać się o zwrot pieniędzy?',
-    a: 'Tak. Jeśli uznasz, że konsultacja nie pomogła Ci zrozumieć problemu ani ustalić kolejnego kroku, możesz złożyć wniosek o zwrot zgodnie z regulaminem.',
+    a: 'Tak. Jeśli po konsultacji uznasz, że rozmowa nie pomogła Ci zrozumieć problemu ani ustalić kolejnego kroku, możesz złożyć reklamację lub wniosek o zwrot zgodnie z regulaminem.',
   },
   {
     q: 'Czy mogę przełożyć termin?',
-    a: 'Jeśli wiesz wcześniej, że nie możesz pojawić się na rozmowie, skontaktuj się jak najszybciej przez kanał kontaktowy podany w stopce i regulaminie. Najbezpieczniej zrobić to przed rozpoczęciem terminu.',
+    a: 'Tak, o ile zrobisz to przed rozpoczęciem zarezerwowanej godziny i będzie dostępny inny wolny slot. Najszybciej skontaktować się telefonicznie albo przez publiczny profil Facebook podany w stopce.',
   },
   {
-    q: 'Czy muszę mieć MP4 albo inne materiały przed rozmową?',
-    a: 'Nie. Materiały są opcjonalne. Jeśli ich nie masz, nadal możesz przejść przez pełne flow rezerwacji i odbyć rozmowę audio.',
+    q: 'Co jeśli nie mam MP4 albo innych materiałów?',
+    a: 'Materiały są całkowicie opcjonalne. Jeśli ich nie masz, nadal możesz przejść przez cały flow rezerwacji i odbyć rozmowę audio.',
   },
   {
     q: 'Czy konsultacja jest tylko audio?',
@@ -84,11 +84,11 @@ export const faq = [
   },
   {
     q: 'Co dzieje się po 15 minutach?',
-    a: 'Po rozmowie masz otrzymać jasny następny krok: co wdrożyć od razu, co obserwować dalej i czy potrzebna będzie szersza konsultacja albo dalsza diagnostyka.',
+    a: 'Po rozmowie masz otrzymać jasny następny krok: co wdrożyć od razu, co obserwować dalej i czy potrzebna będzie szersza konsultacja albo diagnostyka weterynaryjna.',
   },
   {
     q: 'Czy konsultacja dotyczy zarówno psa, jak i kota?',
-    a: 'Tak. Rozmowa jest przeznaczona dla opiekunów psów i kotów, także w sprawach dotyczących lęku, kuwety, napięcia, pobudzenia czy relacji między zwierzętami.',
+    a: 'Tak. Rozmowa jest przeznaczona dla opiekunów psów i kotów, także w sprawach lęku, kuwety, pobudzenia, niszczenia czy relacji między zwierzętami.',
   },
   {
     q: 'Czy to zastępuje wizytę stacjonarną albo badanie weterynaryjne?',
@@ -100,7 +100,7 @@ export const faq = [
   },
   {
     q: 'Jak najlepiej przygotować się do rozmowy?',
-    a: 'Wystarczy krótki opis problemu, najważniejsze obserwacje i 2–3 pytania. Jeśli chcesz, możesz dodać MP4, link albo notatki jeszcze przed konsultacją.',
+    a: 'Wystarczy krótki opis problemu, najważniejsze obserwacje i 2–3 pytania. Jeśli chcesz, możesz dodać MP4, link albo notatki po zapisaniu rezerwacji.',
   },
 ]
 

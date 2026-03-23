@@ -6,7 +6,7 @@ import robots from '@/app/robots'
 import sitemap from '@/app/sitemap'
 import { ADMIN_BASIC_AUTH_USERNAME, hasValidAdminAuthorization } from '@/lib/admin-auth'
 import { POST as submitTestimonialRoute } from '@/app/api/testimonials/route'
-import { TestimonialsSection } from '@/components/TestimonialsSection'
+import { SocialProofSection } from '@/components/SocialProofSection'
 import { BUILD_MARKER_KEY, getBuildMarkerSnapshot } from '@/lib/build-marker'
 import { buildRollingAvailabilitySeed, isFutureAvailabilitySlot } from '@/lib/data'
 import { getDataModeStatus, getSupabaseServiceRoleKeyIssue } from '@/lib/server/env'
@@ -496,7 +496,8 @@ test('does not expose the default resend onboarding address as public contact da
 
   assert.deepEqual(getContactDetails(), {
     email: null,
-    phone: null,
+    phoneDisplay: null,
+    phoneHref: null,
     facebookUrl: 'https://www.facebook.com/krzysztof.regulski.148/',
   })
 })
@@ -507,7 +508,20 @@ test('ignores invalid public contact email values', () => {
 
   assert.deepEqual(getContactDetails(), {
     email: null,
-    phone: null,
+    phoneDisplay: null,
+    phoneHref: null,
+    facebookUrl: 'https://www.facebook.com/krzysztof.regulski.148/',
+  })
+})
+
+test('formats public phone details for the footer and legal pages', () => {
+  delete process.env.BEHAVIOR15_CONTACT_EMAIL
+  process.env.BEHAVIOR15_CONTACT_PHONE = '500600700'
+
+  assert.deepEqual(getContactDetails(), {
+    email: null,
+    phoneDisplay: '500 600 700',
+    phoneHref: '500600700',
     facebookUrl: 'https://www.facebook.com/krzysztof.regulski.148/',
   })
 })
@@ -535,8 +549,16 @@ test('builds a sitemap with the core public routes', () => {
   ])
 })
 
-test('renders the testimonials section empty state when there are no approved testimonials', () => {
-  const markup = renderToStaticMarkup(createElement(TestimonialsSection, { testimonials: TESTIMONIALS }))
+test('renders the combined social proof section when there are no approved testimonials yet', () => {
+  const markup = renderToStaticMarkup(createElement(SocialProofSection))
+
+  if (TESTIMONIALS.length === 0) {
+    assert.match(markup, /Opinie i realne przypadki/)
+    assert.match(markup, /Historie opiekunów i efekty konsultacji/)
+    assert.match(markup, /Po każdej konsultacji można zostawić krótką opinię do weryfikacji/)
+    assert.match(markup, /Publikujemy wyłącznie opinie zaakceptowane po weryfikacji/)
+    return
+  }
 
   assert.match(markup, /Opinie klientów/)
   assert.match(markup, /Pierwsze zweryfikowane opinie pojawią się tutaj wkrótce/)

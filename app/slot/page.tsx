@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { unstable_noStore as noStore } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { getProblemLabel, isProblemType } from '@/lib/data'
 import { listAvailability } from '@/lib/server/db'
@@ -38,10 +39,10 @@ export default async function SlotPage({
       groupedAvailability = await listAvailability()
     } catch (error) {
       console.warn('[behawior15][slot] nie udało się odczytać dostępnych terminów', error)
-      publicFlowMessage = 'Terminy chwilowo się odświeżają. Spróbuj ponownie za kilka minut.'
+      publicFlowMessage = 'Terminy chwilowo się odświeżają. Spróbuj ponownie za moment.'
     }
   } else {
-    publicFlowMessage = 'Terminy chwilowo się odświeżają. Spróbuj ponownie za kilka minut.'
+    publicFlowMessage = 'Terminy chwilowo się odświeżają. Spróbuj ponownie za moment.'
   }
 
   return (
@@ -53,13 +54,16 @@ export default async function SlotPage({
           <div className="section-eyebrow">Krok 2 z 6</div>
           <h1>Wybierz termin rozmowy: {getProblemLabel(problem)}</h1>
           <p className="muted paragraph-gap">
-            Lista odświeża się na bieżąco. Jeżeli termin zniknie po chwili, oznacza to, że został właśnie zajęty albo ktoś kończy płatność.
+            Lista odświeża się na bieżąco. Jeśli termin zniknie po chwili, oznacza to, że został właśnie zajęty albo ktoś kończy płatność.
           </p>
 
           {publicFlowMessage ? (
             <div className="stack-gap top-gap">
               <div className="info-box">{publicFlowMessage}</div>
               <div className="hero-actions">
+                <Link href={`/slot?problem=${problem}`} className="button button-primary big-button" aria-label="Spróbuj ponownie wczytać listę terminów">
+                  Spróbuj ponownie
+                </Link>
                 <Link href="/book" className="button button-ghost" aria-label="Wróć do wyboru tematu konsultacji">
                   Wróć do wyboru tematu
                 </Link>
@@ -68,9 +72,12 @@ export default async function SlotPage({
           ) : groupedAvailability.length === 0 ? (
             <div className="stack-gap top-gap">
               <div className="empty-box">
-                W tej chwili nie ma wolnych terminów. Wróć później albo sprawdź ponownie, gdy pojawią się nowe godziny.
+                W tej chwili nie ma wolnych terminów dla tego flow rezerwacji. Sprawdź ponownie za jakiś czas albo wróć do wyboru tematu.
               </div>
               <div className="hero-actions">
+                <Link href={`/slot?problem=${problem}`} className="button button-primary big-button" aria-label="Odśwież listę terminów dla wybranego tematu">
+                  Odśwież terminy
+                </Link>
                 <Link href="/book" className="button button-ghost" aria-label="Wróć do wyboru tematu konsultacji">
                   Wróć do wyboru tematu
                 </Link>
@@ -103,6 +110,8 @@ export default async function SlotPage({
             </div>
           )}
         </section>
+
+        <Footer />
       </div>
     </main>
   )

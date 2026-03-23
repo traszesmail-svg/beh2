@@ -87,21 +87,21 @@ export const REAL_CASE_STUDIES: RealCaseStudy[] = [
     id: 'fear-dog',
     imageSrc: '/images/case-dog-black.jpg',
     imageAlt: 'Czarny pies siedzący w domu',
-    sourceLabel: 'Realny obszar pierwszej konsultacji',
+    sourceLabel: 'Kategoria: lęk separacyjny i pobudzenie',
     problem: 'Pies szczeka, nie wycisza się i trudno mu zostać samemu.',
     summary:
       'To typowa sprawa na pierwszą rozmowę: trzeba odróżnić napięcie, brak rutyny i możliwy lęk separacyjny od zwykłego pobudzenia.',
     effect:
-      'Po 15 minutach wiesz, co robić od razu w domu, czego nie dokładać i czy temat wymaga szerszej pracy.',
+      'Po 15 minutach opiekun wie, co wdrożyć od razu w domu, czego nie dokładać i czy temat wymaga szerszej pracy.',
   },
   {
     id: 'litter-box-cat',
     imageSrc: '/images/case-cat-scratcher.jpg',
     imageAlt: 'Kot siedzący przy drapaku i patrzący w obiektyw',
-    sourceLabel: 'Realny obszar pierwszej konsultacji',
-    problem: 'Kot omija kuwetę albo sygnalizuje stres w domu.',
+    sourceLabel: 'Kategoria: kot i kuweta',
+    problem: 'Kot omija kuwetę albo wyraźnie sygnalizuje stres w domu.',
     summary:
-      'W takich przypadkach trzeba szybko uporządkować tło środowiskowe, napięcie w domu i moment, w którym warto wrócić do lekarza weterynarii.',
+      'W takich sytuacjach trzeba szybko uporządkować tło środowiskowe, napięcie w domu i moment, w którym warto wrócić do lekarza weterynarii.',
     effect:
       'Rozmowa daje jasny plan: co sprawdzić w domu, co zanotować i jaki następny krok ma sens.',
   },
@@ -109,7 +109,7 @@ export const REAL_CASE_STUDIES: RealCaseStudy[] = [
     id: 'multi-animal-home',
     imageSrc: '/images/case-cat-snow.jpg',
     imageAlt: 'Kot stojący na śniegu i obserwujący otoczenie',
-    sourceLabel: 'Realny obszar pierwszej konsultacji',
+    sourceLabel: 'Kategoria: konflikt między zwierzętami',
     problem: 'Napięcie między zwierzętami, konflikt albo rozjazd relacji w domu.',
     summary:
       'Pierwsza konsultacja pomaga oddzielić sygnały ostrzegawcze od codziennych napięć i ustalić, co trzeba zabezpieczyć natychmiast.',
@@ -120,12 +120,12 @@ export const REAL_CASE_STUDIES: RealCaseStudy[] = [
     id: 'overstimulation-home',
     imageSrc: '/images/case-cat-sofa.jpg',
     imageAlt: 'Kot odpoczywający na sofie',
-    sourceLabel: 'Realny obszar pierwszej konsultacji',
+    sourceLabel: 'Kategoria: niszczenie i pobudzenie',
     problem: 'Pobudzenie, hałas, niszczenie albo trudność z wyhamowaniem po bodźcach.',
     summary:
       'To częsty punkt startowy, gdy opiekun ma poczucie chaosu i nie wie już, które porady z internetu są bezpieczne, a które tylko dokładają napięcia.',
     effect:
-      'Po rozmowie masz pierwszy spokojny plan i wiesz, czy wystarczy praca domowa, czy potrzebujesz pełnej konsultacji.',
+      'Po rozmowie ma pierwszy spokojny plan i wie, czy wystarczy praca domowa, czy potrzebna będzie pełna konsultacja.',
   },
 ]
 
@@ -160,18 +160,57 @@ export const MEDIA_MENTIONS: MediaMention[] = [
   },
 ]
 
+type PublicPhone = {
+  display: string | null
+  href: string | null
+}
+
 function isValidPublicEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
 }
 
+function normalizePublicPhone(value: string | null): PublicPhone {
+  if (!value) {
+    return { display: null, href: null }
+  }
+
+  const trimmed = value.trim()
+  const digits = trimmed.replace(/\D/g, '')
+
+  if (!digits) {
+    return { display: null, href: null }
+  }
+
+  if (digits.length === 9) {
+    return {
+      display: `${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6)}`,
+      href: digits,
+    }
+  }
+
+  if (digits.length === 11 && digits.startsWith('48')) {
+    return {
+      display: `+48 ${digits.slice(2, 5)} ${digits.slice(5, 8)} ${digits.slice(8)}`,
+      href: `+${digits}`,
+    }
+  }
+
+  return {
+    display: trimmed,
+    href: trimmed.replace(/\s+/g, ''),
+  }
+}
+
 export function getContactDetails() {
   const emailCandidate = process.env.BEHAVIOR15_CONTACT_EMAIL?.trim() || null
-  const phone = process.env.BEHAVIOR15_CONTACT_PHONE?.trim() || null
+  const phoneCandidate = process.env.BEHAVIOR15_CONTACT_PHONE?.trim() || null
   const email = emailCandidate && isValidPublicEmail(emailCandidate) ? emailCandidate : null
+  const phone = normalizePublicPhone(phoneCandidate)
 
   return {
     email,
-    phone,
+    phoneDisplay: phone.display,
+    phoneHref: phone.href,
     facebookUrl: FACEBOOK_PROFILE_URL,
   }
 }

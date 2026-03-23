@@ -54,7 +54,7 @@ export function BookingForm({ problemType, slotId, slotLabel, priceLabel }: Book
     }
 
     if (description.trim().length < 20) {
-      setError('Dodaj 2-4 konkretne zdania o problemie. To pomoże lepiej wykorzystać 15 minut rozmowy.')
+      setError('Dodaj 2–4 konkretne zdania o problemie. To pomoże lepiej wykorzystać 15 minut rozmowy.')
       return
     }
 

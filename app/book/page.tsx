@@ -2,9 +2,10 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
+import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { ShareActions } from '@/components/ShareActions'
-import { formatDateTimeLabel, problemOptions } from '@/lib/data'
+import { problemOptions } from '@/lib/data'
 import { formatPricePln, DEFAULT_PRICE_PLN } from '@/lib/pricing'
 import { buildBookMetadata } from '@/lib/seo'
 import { getActiveConsultationPrice, listAvailability } from '@/lib/server/db'
@@ -94,7 +95,7 @@ export default async function BookPage({
   const problem = readSearchParam(searchParams?.problem)
   const dataMode = getDataModeStatus()
   let priceLabel = formatPricePln(DEFAULT_PRICE_PLN)
-  let nextSlotLabel = 'Najbliższe realnie dostępne terminy zobaczysz w kolejnym kroku rezerwacji.'
+  let availabilityLabel = 'Najbliższe realnie dostępne terminy zobaczysz po wyborze tematu konsultacji.'
 
   if (problem) {
     redirect(`/slot?problem=${problem}`)
@@ -104,10 +105,12 @@ export default async function BookPage({
     try {
       const [pricing, availability] = await Promise.all([getActiveConsultationPrice(), listAvailability()])
       priceLabel = pricing.formattedAmount
-      const nextSlot = availability[0]?.slots[0]
-      nextSlotLabel = nextSlot ? formatDateTimeLabel(nextSlot.bookingDate, nextSlot.bookingTime) : 'Brak wolnych terminów'
+      availabilityLabel =
+        availability.length > 0
+          ? 'Wolne terminy zobaczysz po wyborze tematu konsultacji.'
+          : 'Brak wolnych terminów'
     } catch (error) {
-      console.warn('[behawior15][book] nie udało się wczytać pricingu lub slotów', error)
+      console.warn('[behawior15][book] nie udało się wczytać ceny lub dostępności', error)
     }
   }
 
@@ -121,8 +124,8 @@ export default async function BookPage({
             <div className="section-eyebrow">Rezerwacja</div>
             <h1>Zarezerwuj 15 minut i przejdź do realnie wolnych terminów</h1>
             <p className="hero-text">
-              Najpierw wybierasz temat, potem widzisz realne sloty, wypełniasz dane i przechodzisz do płatności. Po opłaceniu od razu dostajesz
-              potwierdzenie z linkiem do rozmowy audio i możliwością dodania materiałów.
+              Najpierw wybierasz temat, potem widzisz aktualne sloty, wypełniasz dane i przechodzisz do płatności.
+              Po opłaceniu od razu dostajesz potwierdzenie z linkiem do rozmowy audio i możliwością dodania materiałów.
             </p>
 
             <div className="summary-grid top-gap">
@@ -131,8 +134,8 @@ export default async function BookPage({
                 <div className="summary-value">{priceLabel}</div>
               </div>
               <div className="summary-card">
-                <div className="stat-label">Najbliższy dostępny termin</div>
-                <div className="summary-value">{nextSlotLabel}</div>
+                <div className="stat-label">Dostępność</div>
+                <div className="summary-value">{availabilityLabel}</div>
               </div>
               <div className="summary-card">
                 <div className="stat-label">Po płatności</div>
@@ -148,14 +151,14 @@ export default async function BookPage({
             <div className="list-card accent-outline top-gap">
               <strong>Niski próg ryzyka</strong>
               <span>
-                Jeśli rozmowa nie pomoże Ci zrozumieć problemu, możesz ubiegać się o zwrot pieniędzy. Nie obiecujemy automatycznego anulowania w 60
-                sekund, bo taki mechanizm nie jest jeszcze częścią produktu.
+                Jeśli rozmowa nie pomoże Ci zrozumieć problemu, możesz ubiegać się o zwrot pieniędzy.
+                Nie obiecujemy automatycznego anulowania w 60 sekund, bo taki mechanizm nie jest częścią produktu.
               </span>
             </div>
 
             <div className="list-card top-gap">
               <strong>Dlaczego warto wejść teraz</strong>
-              <span>Widzisz tylko realne sloty z terminarza, a nie sztuczny licznik presji. Jeśli termin zniknie, oznacza to po prostu, że nie jest już dostępny.</span>
+              <span>Widzisz tylko realne sloty z terminarza po wyborze tematu. Jeśli termin zniknie, oznacza to po prostu, że nie jest już dostępny.</span>
             </div>
 
             <div className="card-grid three-up top-gap" id="tematy">
@@ -163,14 +166,14 @@ export default async function BookPage({
                 const topicVisual = TOPIC_VISUALS[item.id]
 
                 return (
-                    <Link
-                      key={item.id}
-                      href={`/slot?problem=${item.id}`}
-                      className="topic-card"
-                      data-analytics-event="topic_select"
-                      data-analytics-location="book-topics"
-                      data-analytics-problem={item.id}
-                    >
+                  <Link
+                    key={item.id}
+                    href={`/slot?problem=${item.id}`}
+                    className="topic-card"
+                    data-analytics-event="topic_select"
+                    data-analytics-location="book-topics"
+                    data-analytics-problem={item.id}
+                  >
                     <div className="topic-media-shell">
                       <Image
                         src={topicVisual.src}
@@ -205,7 +208,7 @@ export default async function BookPage({
             </div>
             <div className="list-card top-gap">
               <strong>{SPECIALIST_NAME}</strong>
-              <span>{SPECIALIST_TRUST_STATEMENT} Jedna rozmowa, jedna osoba, jeden spójny kierunek działania.</span>
+              <span>{SPECIALIST_TRUST_STATEMENT} Jedna rozmowa, jedna osoba i jeden spójny kierunek działania.</span>
             </div>
             <ul className="hero-checklist top-gap">
               <li>Rezerwacja prowadzi do tego samego działającego flow terminów i płatności.</li>
@@ -219,6 +222,8 @@ export default async function BookPage({
             />
           </aside>
         </section>
+
+        <Footer />
       </div>
     </main>
   )

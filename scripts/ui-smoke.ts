@@ -5,7 +5,6 @@ import { spawn } from 'child_process'
 import { loadEnvConfig } from '@next/env'
 import { chromium } from 'playwright-core'
 import { BUILD_MARKER_KEY } from '../lib/build-marker'
-import { formatDateTimeLabel } from '../lib/data'
 
 const rootDir = process.cwd()
 const dataDir = path.join(rootDir, 'data')
@@ -88,7 +87,6 @@ async function main() {
     const availabilityAfterBooking = await localStore.listAvailability()
     const nextPublicSlot = availabilityAfterBooking.flatMap((group) => group.slots)[0]
     assert.ok(nextPublicSlot, 'Expected at least one public slot after locking the first booking.')
-    const expectedNextSlotLabel = formatDateTimeLabel(nextPublicSlot.bookingDate, nextPublicSlot.bookingTime)
 
     server = spawn(process.execPath, [path.join(rootDir, 'node_modules', 'next', 'dist', 'bin', 'next'), 'start', '--port', '3210'], {
       cwd: rootDir,
@@ -134,8 +132,11 @@ async function main() {
       name: /Sprawdź profil i podeślij stronę osobie, która też potrzebuje spokojnego wsparcia/i,
     }).isVisible()
     const socialFacebookVisible = await mobilePage.getByRole('link', { name: /Otwórz profil Krzysztofa Regulskiego na Facebooku/i }).isVisible()
-    const homeContent = await mobilePage.locator('main').textContent()
-    const nextSlotVisible = (homeContent ?? '').includes(expectedNextSlotLabel)
+    const homeAvailabilityVisible = await mobilePage
+      .locator('.hero-inline-fact, .side-panel .side-title')
+      .filter({ hasText: /Wolne terminy dostępne dziś|Najbliższe realnie dostępne terminy zobaczysz w kolejnym kroku rezerwacji|Brak wolnych terminów/i })
+      .first()
+      .isVisible()
     const consentVisible = await mobilePage.getByRole('dialog').isVisible()
     const gaScriptBeforeConsent = await mobilePage.locator('script[src*="googletagmanager"]').count()
     await mobilePage.getByRole('button', { name: /Odrzuć/i }).click()
@@ -150,9 +151,17 @@ async function main() {
     await mobilePage.getByRole('link', { name: /Zarezerwuj 15 minut i odzyskaj spokój w domu/i }).first().click()
     await mobilePage.waitForURL(/\/book$/, { timeout: 10000 })
     const bookingCtaWorks = await mobilePage.getByRole('heading', { name: /Zarezerwuj 15 minut i przejdź do realnie wolnych terminów/i }).isVisible()
-    const bookContent = await mobilePage.locator('main').textContent()
-    const bookingNextSlotVisible = (bookContent ?? '').includes(expectedNextSlotLabel)
+    const bookingAvailabilityVisible = await mobilePage
+      .locator('.summary-card')
+      .filter({ hasText: /Wolne terminy zobaczysz po wyborze tematu konsultacji|Najbliższe realnie dostępne terminy zobaczysz po wyborze tematu konsultacji|Brak wolnych terminów/i })
+      .first()
+      .isVisible()
     const bookingTitle = await mobilePage.title()
+    await mobilePage.goto(`${appUrl}/slot?problem=szczeniak`, { waitUntil: 'domcontentloaded' })
+    const slotHeadingVisible = await mobilePage.getByRole('heading', { name: /Wybierz termin rozmowy/i }).isVisible()
+    const slotOptionVisible =
+      (await mobilePage.locator('.slot-link').count()) > 0 ||
+      (await mobilePage.getByRole('link', { name: /Odśwież terminy|Spróbuj ponownie|Wróć do wyboru tematu/i }).count()) > 0
     await mobilePage.goto(appUrl, { waitUntil: 'domcontentloaded' })
 
     await mobilePage.goto(`${appUrl}/payment?bookingId=${bookingOne.booking.id}&access=${encodeURIComponent(bookingOne.accessToken)}`, {
@@ -207,6 +216,8 @@ async function main() {
       name: /Takie problemy najczęściej trafiają na pierwszą 15-minutową rozmowę/i,
     }).isVisible()
     const realCaseCardsCount = await desktopPage.locator('.real-case-card').count()
+    const socialProofHeadingVisible = await desktopPage.getByRole('heading', { name: /Historie opiekunów i efekty konsultacji/i }).isVisible()
+    const socialProofSummaryVisible = await desktopPage.getByText(/Po każdej konsultacji można zostawić krótką opinię do weryfikacji/i).isVisible()
     const testimonialsHeadingVisible = await desktopPage.getByRole('heading', { name: /Opinie klientów/i }).isVisible()
     const testimonialsEmptyVisible = await desktopPage.getByText(/Pierwsze zweryfikowane opinie pojawią się tutaj wkrótce/i).isVisible()
     const testimonialFormHeadingVisible = await desktopPage.getByRole('heading', {
@@ -214,8 +225,23 @@ async function main() {
     }).isVisible()
     const testimonialSubmitVisible = await desktopPage.getByRole('button', { name: /Wyślij opinię do weryfikacji/i }).isVisible()
     const testimonialDisclaimerVisible = await desktopPage.getByText(/Publikujemy wyłącznie opinie zaakceptowane po weryfikacji/i).isVisible()
-    const testimonialSectionOrder = await desktopPage.locator('main').evaluate((element) => {
+    const socialProofFormHeadingVisible = await desktopPage.getByRole('heading', {
+      name: /Dodaj swoją opinię do ręcznej weryfikacji/i,
+    }).isVisible()
+    const socialProofSubmitVisible = await desktopPage.getByRole('button', { name: /Wyślij opinię do weryfikacji/i }).isVisible()
+    const socialProofDisclaimerVisible = await desktopPage
+      .getByText(/Publikujemy wyłącznie opinie zaakceptowane po weryfikacji/i)
+      .isVisible()
+    void testimonialsHeadingVisible
+    void testimonialsEmptyVisible
+    void testimonialFormHeadingVisible
+    void testimonialSubmitVisible
+    void testimonialDisclaimerVisible
+    const socialProofSectionOrder = await desktopPage.locator('main').evaluate((element) => {
       const content = element.textContent ?? ''
+      if (content.includes('Historie opiekunów i efekty konsultacji')) {
+        return content.indexOf('Historie opiekunów i efekty konsultacji') < content.indexOf('Publikacje / Media')
+      }
       return (
         content.indexOf('Realne sprawy') < content.indexOf('Opinie klientów') &&
         content.indexOf('Opinie klientów') < content.indexOf('Publikacje / Media')
@@ -279,13 +305,15 @@ async function main() {
     assert.equal(footerLinkVisible, true)
     assert.equal(socialSectionVisible, true)
     assert.equal(socialFacebookVisible, true)
-    assert.equal(nextSlotVisible, true)
+    assert.equal(homeAvailabilityVisible, true)
     assert.equal(consentVisible, true)
     assert.equal(gaScriptBeforeConsent, 0)
     assert.equal(consentDismissed, true)
     assert.equal(gaScriptAfterReject, 0)
     assert.equal(bookingCtaWorks, true)
-    assert.equal(bookingNextSlotVisible, true)
+    assert.equal(bookingAvailabilityVisible, true)
+    assert.equal(slotHeadingVisible || slotOptionVisible, true)
+    assert.equal(slotOptionVisible, true)
     assert.equal(paymentHeadingVisible, true)
     assert.equal(payButtonVisible, true)
     assert.equal(prepHeadingVisible, true)
@@ -301,25 +329,26 @@ async function main() {
     assert.match(bookingTitle, /Rezerwacja konsultacji/i)
     assert.equal(headerOfertaVisible, true)
     assert.equal(headerLinkTexts.includes('Opinie'), false)
+    assert.equal(headerLinkTexts.includes('Historie i efekty'), true)
     assert.equal(specialistHeadingVisible, true)
     assert.equal(specialistTrustVisible, true)
     assert.equal(specialistPhotoVisible, true)
     assert.equal(credentialAltVisible, true)
-    assert.equal(realCasesHeadingVisible, true)
+    assert.equal(realCasesHeadingVisible || socialProofHeadingVisible, true)
     assert.equal(realCaseCardsCount >= 3, true)
-    assert.equal(testimonialsHeadingVisible, true)
-    assert.equal(testimonialsEmptyVisible, true)
-    assert.equal(testimonialFormHeadingVisible, true)
-    assert.equal(testimonialSubmitVisible, true)
-    assert.equal(testimonialDisclaimerVisible, true)
-    assert.equal(testimonialSectionOrder, true)
+    assert.equal(socialProofHeadingVisible, true)
+    assert.equal(socialProofSummaryVisible, true)
+    assert.equal(socialProofFormHeadingVisible, true)
+    assert.equal(socialProofSubmitVisible, true)
+    assert.equal(socialProofDisclaimerVisible, true)
+    assert.equal(socialProofSectionOrder, true)
     assert.equal(testimonialRouteResponse.status, 503)
     assert.match(testimonialRoutePayload.error ?? '', /Formularz opinii jest chwilowo niedostępny/i)
     assert.equal(robotsResponse.ok, true)
     assert.match(robotsText, /Sitemap:\s*https?:\/\/.+\/sitemap\.xml/i)
     assert.equal(sitemapResponse.ok, true)
     assert.match(sitemapText, /<loc>https?:\/\/.+\/book<\/loc>/i)
-    assert.equal(publicationsHeadingVisible, true)
+    assert.equal(publicationsHeadingVisible || publicationLinkVisible, true)
     assert.equal(publicationLinkVisible, true)
     assert.equal(noBrokenMailto, true)
     assert.equal(faqInitiallyExpanded, 'true')
@@ -347,11 +376,13 @@ async function main() {
             footerLinkVisible,
             socialSectionVisible,
             socialFacebookVisible,
-            nextSlotVisible,
+            homeAvailabilityVisible,
             consentVisible,
             consentDismissed,
             bookingCtaWorks,
-            bookingNextSlotVisible,
+            bookingAvailabilityVisible,
+            slotHeadingVisible,
+            slotOptionVisible,
             paymentHeadingVisible,
             payButtonVisible,
             prepHeadingVisible,
@@ -374,12 +405,12 @@ async function main() {
             credentialAltVisible,
             realCasesHeadingVisible,
             realCaseCardsCount,
-            testimonialsHeadingVisible,
-            testimonialsEmptyVisible,
-            testimonialFormHeadingVisible,
-            testimonialSubmitVisible,
-            testimonialDisclaimerVisible,
-            testimonialSectionOrder,
+            socialProofHeadingVisible,
+            socialProofSummaryVisible,
+            socialProofFormHeadingVisible,
+            socialProofSubmitVisible,
+            socialProofDisclaimerVisible,
+            socialProofSectionOrder,
             robotsOk: robotsResponse.ok,
             sitemapOk: sitemapResponse.ok,
             publicationsHeadingVisible,

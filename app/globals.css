@@ -490,6 +490,26 @@ h1 span {
   margin-top: 18px;
 }
 
+.social-proof-summary {
+  display: grid;
+  gap: 10px;
+  padding: 22px;
+  border-radius: 28px;
+  border: 1px solid rgba(10, 92, 54, 0.12);
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.social-proof-summary strong {
+  color: var(--muted-strong);
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+.social-proof-summary span {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
 .stat-label {
   font-size: 13px;
   color: rgba(23, 49, 37, 0.56);
@@ -1613,7 +1633,7 @@ select:focus-visible {
 
 .social-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 420px);
   gap: 18px;
 }
 
@@ -1821,6 +1841,28 @@ select:focus-visible {
   margin-top: 14px;
 }
 
+.contact-links {
+  gap: 12px;
+}
+
+.contact-item {
+  display: grid;
+  gap: 4px;
+}
+
+.contact-label {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 252, 246, 0.56);
+}
+
+.footer-note {
+  margin: 16px 0 0;
+  color: rgba(255, 252, 246, 0.72);
+  line-height: 1.6;
+}
+
 .footer-links a,
 .footer-links span {
   color: rgba(255, 252, 246, 0.9);
@@ -1829,6 +1871,13 @@ select:focus-visible {
 
 .footer-links a:hover {
   color: #ffffff;
+}
+
+.social-proof-form-shell h3 {
+  margin: 8px 0 0;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(26px, 3vw, 32px);
+  line-height: 1.15;
 }
 
 .legal-panel {

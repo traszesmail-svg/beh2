@@ -98,8 +98,8 @@ function renderContactBlockHtml() {
     parts.push(`<p><strong>Kontakt:</strong> <a href="mailto:${contact.email}">${contact.email}</a></p>`)
   }
 
-  if (contact.phone) {
-    parts.push(`<p><strong>Telefon:</strong> ${contact.phone}</p>`)
+  if (contact.phoneDisplay) {
+    parts.push(`<p><strong>Telefon:</strong> ${contact.phoneDisplay}</p>`)
   }
 
   if (!parts.length) {
@@ -117,8 +117,8 @@ function renderContactBlockText() {
     lines.push(`Kontakt: ${contact.email}`)
   }
 
-  if (contact.phone) {
-    lines.push(`Telefon: ${contact.phone}`)
+  if (contact.phoneDisplay) {
+    lines.push(`Telefon: ${contact.phoneDisplay}`)
   }
 
   if (!lines.length) {

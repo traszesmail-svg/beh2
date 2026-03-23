@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Behawior 15 | 15-minutowa konsultacja głosowa dla psa lub kota',
     description:
-      'Behawior 15 – spokojna 15-minutowa konsultacja głosowa online dla psa lub kota. Certyfikowany behawiorysta Krzysztof Regulski (COAPE/CAPBT). 28,99 zł, bezpieczna płatność i możliwość ubiegania się o zwrot.',
+      'Behawior 15 – spokojna 15-minutowa konsultacja głosowa online dla psa lub kota. Certyfikowany behawiorysta Krzysztof Regulski (COAPE/CAPBT). Bezpieczna płatność, szybkie potwierdzenie i jasny pierwszy krok.',
     type: 'website',
     locale: 'pl_PL',
     siteName: 'Behawior 15',
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Behawior 15 | 15-minutowa konsultacja głosowa dla psa lub kota',
     description:
-      'Spokojna konsultacja online dla psa lub kota: 28,99 zł, bezpieczna płatność, szybkie potwierdzenie i jasny pierwszy krok.',
+      'Spokojna konsultacja online dla psa lub kota: bezpieczna płatność, szybkie potwierdzenie i jasny pierwszy krok.',
     images: ['/images/hero-main.png'],
   },
 }
@@ -64,9 +64,6 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pl">
-      <head>
-        <meta charSet="UTF-8" />
-      </head>
       <body className={`${manrope.variable} ${fraunces.variable}`}>
         {children}
         <AnalyticsConsent measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim() || null} />

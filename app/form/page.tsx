@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { BookingForm } from '@/components/BookingForm'
+import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { formatDateTimeLabel, getProblemLabel, isFutureAvailabilitySlot, isProblemType } from '@/lib/data'
 import { getAvailabilitySlot, getActiveConsultationPrice } from '@/lib/server/db'
@@ -74,7 +75,7 @@ export default async function FormPage({
               </div>
               <div className="list-card">
                 <strong>Kwota</strong>
-                <span>{pricing?.formattedAmount ?? 'Cena chwilowo niedostępna'} – jedna płatność z góry za całą rozmowę.</span>
+                <span>{pricing?.formattedAmount ?? 'Cena chwilowo niedostępna'} — jedna płatność z góry za całą rozmowę.</span>
               </div>
             </div>
           </div>
@@ -112,6 +113,8 @@ export default async function FormPage({
             )}
           </div>
         </section>
+
+        <Footer />
       </div>
     </main>
   )

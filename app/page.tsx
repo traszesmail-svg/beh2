@@ -4,12 +4,11 @@ import Link from 'next/link'
 import { FaqAccordion } from '@/components/FaqAccordion'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
-import { AddTestimonialForm } from '@/components/AddTestimonialForm'
 import { ShareActions } from '@/components/ShareActions'
+import { SocialProofSection } from '@/components/SocialProofSection'
 import { SocialSection } from '@/components/SocialSection'
-import { TestimonialsSection } from '@/components/TestimonialsSection'
-import { faq, formatDateTimeLabel, problemOptions, steps } from '@/lib/data'
-import { DEFAULT_PRICE_PLN } from '@/lib/pricing'
+import { faq, problemOptions, steps } from '@/lib/data'
+import { DEFAULT_PRICE_PLN, formatPricePln } from '@/lib/pricing'
 import { buildHomeMetadata } from '@/lib/seo'
 import { getActiveConsultationPrice, listAvailability } from '@/lib/server/db'
 import { getBaseUrl, getDataModeStatus } from '@/lib/server/env'
@@ -20,7 +19,6 @@ import {
   HERO_PHOTO,
   HERO_SUPPORT_IMAGES,
   MEDIA_MENTIONS,
-  REAL_CASE_STUDIES,
   SPECIALIST_CREDENTIALS,
   SPECIALIST_LOCATION,
   SPECIALIST_NAME,
@@ -106,20 +104,22 @@ export default async function HomePage() {
     try {
       ;[pricing, availability] = await Promise.all([getActiveConsultationPrice(), listAvailability()])
     } catch (error) {
-      console.warn('[behawior15][home] nie udało się wczytać pricingu lub slotów', error)
-      publicFlowMessage = 'Rezerwacja chwilowo się odświeża. Odśwież stronę za moment albo wróć za chwilę do wyboru terminu.'
+      console.warn('[behawior15][home] nie udało się wczytać ceny lub dostępności', error)
+      publicFlowMessage = 'Rezerwacja chwilowo się odświeża. Sprawdź kalendarz za moment albo przejdź od razu do wyboru tematu.'
     }
   } else {
-    publicFlowMessage = 'Rezerwacja chwilowo się odświeża. Ofertę możesz zobaczyć już teraz, a do wyboru terminu wrócić za chwilę.'
+    publicFlowMessage = 'Rezerwacja chwilowo się odświeża. Ofertę możesz zobaczyć już teraz, a aktualny kalendarz sprawdzić w kolejnym kroku.'
   }
 
   const bookingEnabled = dataMode.isValid && !publicFlowMessage
-  const nextSlot = availability[0]?.slots[0]
-  const nextSlotLabel = bookingEnabled
-    ? nextSlot
-      ? formatDateTimeLabel(nextSlot.bookingDate, nextSlot.bookingTime)
+  const availabilityPreviewLabel = bookingEnabled
+    ? availability.length > 0
+      ? 'Wolne terminy dostępne dziś — sprawdź aktualny kalendarz.'
       : 'Brak wolnych terminów'
     : 'Najbliższe realnie dostępne terminy zobaczysz w kolejnym kroku rezerwacji.'
+
+  const priceLabel = pricing?.formattedAmount ?? formatPricePln(DEFAULT_PRICE_PLN)
+
   const structuredData = [
     {
       '@context': 'https://schema.org',
@@ -184,21 +184,21 @@ export default async function HomePage() {
             <div className="hero-topline">Zweryfikowany behawiorysta COAPE/CAPBT dla opiekunów psów i kotów.</div>
             <h1>Spokojna konsultacja, która porządkuje problem psa lub kota w 15 minut</h1>
             <p className="hero-text">
-              Bez chaosu, bez zgadywania i bez przeciążenia poradami z internetu. Rezerwujesz termin, opłacasz rozmowę i dostajesz
-              konkretny pierwszy kierunek działania.
+              Bez chaosu, bez zgadywania i bez przeciążenia poradami z internetu. Rezerwujesz rozmowę z jedną osobą,
+              płacisz bezpiecznie i od razu dostajesz pierwszy konkretny kierunek działania.
             </p>
 
             <div className="hero-price-badge">
               <span className="hero-price-label">Aktualna cena konsultacji</span>
-              <strong>{pricing?.formattedAmount ?? '28,99 zł'}</strong>
+              <strong>{priceLabel}</strong>
               <span className="hero-price-note">15 minut rozmowy audio z jednym specjalistą</span>
               <span className="hero-price-compare">{CONSULTATION_PRICE_COMPARE_COPY}</span>
             </div>
 
             <div className="hero-inline-facts">
               <div className="hero-inline-fact">
-                <strong>{nextSlotLabel}</strong>
-                <span>Najbliższy realnie dostępny termin</span>
+                <strong>{availabilityPreviewLabel}</strong>
+                <span>Aktualną godzinę zobaczysz dopiero w właściwym kalendarzu rezerwacji.</span>
               </div>
               <div className="hero-inline-fact">
                 <strong>Bezpieczna płatność</strong>
@@ -291,10 +291,10 @@ export default async function HomePage() {
             </div>
 
             <div className="mini-card availability-card">
-              <div className="muted">Najbliższy realny termin</div>
-              <div className="side-title">{nextSlotLabel}</div>
+              <div className="muted">Dostępność</div>
+              <div className="side-title">{availabilityPreviewLabel}</div>
               <ul className="hero-checklist">
-                <li>Realny slot z terminarza, nie sztuczny licznik pilności.</li>
+                <li>Realny kalendarz z aktualnymi slotami, bez sztucznego licznika pilności.</li>
                 <li>Po płatności od razu dostajesz potwierdzenie i link do rozmowy.</li>
                 <li>Jeśli chcesz, przed rozmową dodasz nagranie MP4, link albo notatki.</li>
               </ul>
@@ -342,8 +342,8 @@ export default async function HomePage() {
               <h2>Jeśli rozmowa nie pomoże Ci zrozumieć problemu, możesz ubiegać się o zwrot pieniędzy.</h2>
             </div>
             <div className="muted">
-              Nie obiecujemy automatycznego zwrotu jednym kliknięciem, bo taki mechanizm nie jest jeszcze wdrożony. Obiecujemy uczciwie, że ta
-              konsultacja ma dać Ci użyteczne 15 minut i jasny kolejny krok.
+              Nie obiecujemy automatycznego zwrotu jednym kliknięciem, bo taki mechanizm nie jest częścią produktu.
+              Obiecujemy uczciwie, że ta konsultacja ma dać Ci użyteczne 15 minut i jasny kolejny krok.
             </div>
           </div>
         </section>
@@ -459,8 +459,7 @@ export default async function HomePage() {
                 <div className="specialist-inline-copy">
                   <strong>Spójna praca na styku zachowania, zdrowia i terapii</strong>
                   <span>
-                    Dzięki temu łatwiej szybko ocenić, czy wystarczy pierwszy plan domowy, czy trzeba połączyć behawior z dalszą diagnostyką albo
-                    wizytą u lekarza weterynarii.
+                    Dzięki temu łatwiej szybko ocenić, czy wystarczy pierwszy plan domowy, czy trzeba połączyć behawior z dalszą diagnostyką albo wizytą u lekarza weterynarii.
                   </span>
                 </div>
               </div>
@@ -478,70 +477,19 @@ export default async function HomePage() {
               </div>
               <div className="list-card">
                 <strong>Materiały przed rozmową</strong>
-                <span>Jeżeli chcesz, przed konsultacją dodasz MP4, link albo notatki. To przyspiesza rozmowę i pomaga wejść od razu w sedno sprawy.</span>
+                <span>Jeżeli chcesz, po rezerwacji dodasz MP4, link albo notatki. To przyspiesza rozmowę i pomaga wejść od razu w sedno sprawy.</span>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="panel section-panel" id="przypadki">
-          <div className="section-head">
-            <div>
-              <div className="section-eyebrow">Realne sprawy</div>
-              <h2>Takie problemy najczęściej trafiają na pierwszą 15-minutową rozmowę</h2>
-            </div>
-            <div className="muted">
-              To nie są fikcyjne opinie. To uczciwie opisane obszary problemów, z którymi opiekunowie najczęściej szukają szybkiego, spokojnego
-              pierwszego kroku.
-            </div>
-          </div>
-
-          <div className="real-case-grid top-gap">
-            {REAL_CASE_STUDIES.map((caseStudy) => (
-              <article key={caseStudy.id} className="real-case-card">
-                <div className="real-case-image-shell">
-                  <Image
-                    src={caseStudy.imageSrc}
-                    alt={caseStudy.imageAlt}
-                    width={1200}
-                    height={900}
-                    sizes="(max-width: 680px) 100vw, 50vw"
-                    className="real-case-image"
-                  />
-                </div>
-                <div className="real-case-copy">
-                  <div className="section-eyebrow">Realna sprawa</div>
-                  <h3>{caseStudy.problem}</h3>
-                  <p>{caseStudy.summary}</p>
-                  <div className="case-source">
-                    {caseStudy.sourceHref ? (
-                      <a href={caseStudy.sourceHref} target="_blank" rel="noopener noreferrer" className="text-link">
-                        {caseStudy.sourceLabel}
-                      </a>
-                    ) : (
-                      <span>{caseStudy.sourceLabel}</span>
-                    )}
-                  </div>
-                  <div className="real-case-result">
-                    <strong>Efekt pierwszej rozmowy</strong>
-                    <span>{caseStudy.effect}</span>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="two-col-section">
-          <TestimonialsSection />
-          <AddTestimonialForm />
-        </section>
+        <SocialProofSection />
 
         <section className="panel section-panel" id="publikacje">
           <div className="section-head">
             <div>
               <div className="section-eyebrow">Publikacje / Media</div>
-              <h2>Zweryfikowane materiały, które wzmacniają trust bez nadęcia</h2>
+              <h2>Zweryfikowane materiały, które wzmacniają zaufanie bez nadęcia</h2>
             </div>
             <div className="muted">Pokazujemy tylko treści, które da się obronić nazwą medium albo publicznym linkiem.</div>
           </div>
