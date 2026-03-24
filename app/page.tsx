@@ -18,7 +18,6 @@ import {
   CAPBT_PROFILE_URL,
   COAPE_LOGO,
   COAPE_ORG_URL,
-  HERO_PHOTO,
   MEDIA_MENTIONS,
   SPECIALIST_CREDENTIALS,
   SPECIALIST_LOCATION,
@@ -286,10 +285,10 @@ export default async function HomePage() {
           <div className="panel side-panel hero-aside hero-spotlight">
             <div className="hero-spotlight-media">
               <Image
-                src={HERO_PHOTO.src}
-                alt={HERO_PHOTO.alt}
+                src={SUPPORTING_SPECIALIST_PHOTO.src}
+                alt={SUPPORTING_SPECIALIST_PHOTO.alt}
                 width={1200}
-                height={1600}
+                height={1778}
                 sizes="(max-width: 980px) 100vw, 34vw"
                 className="hero-spotlight-image"
                 priority

@@ -30,11 +30,6 @@ export const LANDING_SPECIALIST_PHOTO = {
   alt: 'Krzysztof Regulski na portretowym zdjęciu do strony Behawior 15',
 }
 
-export const HERO_PHOTO = {
-  src: '/branding/hero-krzysztof-cat.jpg',
-  alt: 'Krzysztof Regulski w spokojnym kontakcie z kotem w jasnym wnętrzu',
-}
-
 export const SPECIALIST_PHOTO = LANDING_SPECIALIST_PHOTO
 
 export const SUPPORTING_SPECIALIST_PHOTO = {

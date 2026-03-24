@@ -171,7 +171,7 @@ async function main() {
       .isVisible()
     const heroPriceVisible = await mobilePage.locator('.hero-price-badge').getByText(/Oferta i płatność/i).isVisible()
     const trustStripVisible = await mobilePage.locator('.header-trust-strip').getByText(/Zwrot zgodnie z regulaminem/i).isVisible()
-    const heroPhotoVisible = await mobilePage.locator('img[alt="Krzysztof Regulski na portretowym zdjęciu do strony Behawior 15"]').first().isVisible()
+    const heroPhotoVisible = await mobilePage.locator('.hero-spotlight-image').isVisible()
     const reassuranceVisible = await mobilePage.getByText(/Pierwsza realna pomoc w 15 minut - bez stresu/i).isVisible()
     const shareVisible = await mobilePage.getByText(/Udostępnij znajomemu, który ma problem z pupilem/i).isVisible()
     const footerLinkVisible = await mobilePage.getByRole('link', { name: /Polityka prywatności/i }).isVisible()
