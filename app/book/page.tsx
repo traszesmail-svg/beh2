@@ -3,14 +3,15 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { unstable_noStore as noStore } from 'next/cache'
+import { BookingStageEyebrow } from '@/components/BookingStageEyebrow'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
-import { ShareActions } from '@/components/ShareActions'
+import { PricingDisclosure } from '@/components/PricingDisclosure'
 import { problemOptions } from '@/lib/data'
 import { buildBookMetadata } from '@/lib/seo'
-import { getActiveConsultationPrice, listAvailability } from '@/lib/server/db'
+import { listAvailability } from '@/lib/server/db'
 import { getDataModeStatus } from '@/lib/server/env'
-import { CONSULTATION_PRICE_COMPARE_COPY, SPECIALIST_NAME, SPECIALIST_PHOTO, SPECIALIST_TRUST_STATEMENT, TOPIC_VISUALS } from '@/lib/site'
+import { SPECIALIST_NAME, SPECIALIST_PHOTO, SPECIALIST_TRUST_STATEMENT, TOPIC_VISUALS } from '@/lib/site'
 import { ProblemType } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
@@ -101,10 +102,8 @@ export default async function BookPage({
   searchParams?: Record<string, string | string[] | undefined>
 }) {
   noStore()
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL?.trim() || 'http://localhost:3000'
   const problem = readSearchParam(searchParams?.problem)
   const dataMode = getDataModeStatus()
-  let priceLabel: string | null = null
   let availabilityLabel = 'Najbliższe realnie dostępne terminy zobaczysz po wyborze tematu konsultacji.'
 
   if (problem) {
@@ -113,14 +112,13 @@ export default async function BookPage({
 
   if (dataMode.isValid) {
     try {
-      const [pricing, availability] = await Promise.all([getActiveConsultationPrice(), listAvailability()])
-      priceLabel = pricing.formattedAmount
+      const availability = await listAvailability()
       availabilityLabel =
         availability.length > 0
           ? 'Wolne terminy zobaczysz po wyborze tematu konsultacji.'
           : 'Brak wolnych terminów'
     } catch (error) {
-      console.warn('[behawior15][book] nie udało się wczytać ceny lub dostępności', error)
+      console.warn('[behawior15][book] nie udało się wczytać dostępności', error)
     }
   }
 
@@ -131,7 +129,7 @@ export default async function BookPage({
 
         <section className="booking-layout">
           <div className="panel section-panel">
-            <div className="section-eyebrow">Rezerwacja</div>
+            <BookingStageEyebrow stage="topic" className="section-eyebrow" />
             <h1>Zarezerwuj 15 minut i przejdź do realnie wolnych terminów</h1>
             <p className="hero-text">
               Najpierw wybierasz temat, potem widzisz aktualne sloty, wypełniasz dane i przechodzisz do płatności.
@@ -154,8 +152,13 @@ export default async function BookPage({
 
             <div className="summary-grid top-gap">
               <div className="summary-card">
-                <div className="stat-label">Cena konsultacji</div>
-                <div className="summary-value">{priceLabel ?? 'Kwotę potwierdzisz po wyborze tematu'}</div>
+                <PricingDisclosure
+                  stage="pre-topic"
+                  labelAs="div"
+                  labelClassName="stat-label"
+                  messageAs="div"
+                  messageClassName="summary-value"
+                />
               </div>
               <div className="summary-card">
                 <div className="stat-label">Dostępność</div>
@@ -167,17 +170,18 @@ export default async function BookPage({
               </div>
             </div>
 
-            {priceLabel ? (
-              <div className="price-context top-gap">
-                <strong>{priceLabel}</strong>
-                <span>{CONSULTATION_PRICE_COMPARE_COPY}</span>
-              </div>
-            ) : (
-              <div className="list-card top-gap">
-                <strong>Aktualna cena</strong>
-                <span>Kwotę zobaczysz po wyborze tematu i potwierdzisz ponownie na ekranie płatności.</span>
-              </div>
-            )}
+            <div className="list-card top-gap">
+              <PricingDisclosure
+                stage="pre-topic"
+                labelAs="strong"
+                noteClassName="muted top-gap-small"
+                compareClassName="price-compare-text"
+                showLabel={false}
+                showMessage={false}
+                showNote
+                showCompare
+              />
+            </div>
 
             <div className="list-card accent-outline top-gap">
               <strong>Niski próg ryzyka</strong>
@@ -246,11 +250,6 @@ export default async function BookPage({
               <li>Po opłaceniu od razu zobaczysz potwierdzenie i wejście do rozmowy.</li>
               <li>Jeśli chcesz, dodasz MP4, link albo notatki jeszcze przed konsultacją.</li>
             </ul>
-            <ShareActions
-              url={`${baseUrl}/book`}
-              text="Podeślij znajomemu link do spokojnej konsultacji Behawior 15"
-              label="Podeślij tę stronę komuś, kto też potrzebuje szybkiego wsparcia dla pupila"
-            />
           </aside>
         </section>
 

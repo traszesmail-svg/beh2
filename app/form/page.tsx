@@ -1,9 +1,11 @@
 import Link from 'next/link'
 import { unstable_noStore as noStore } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { BookingStageEyebrow } from '@/components/BookingStageEyebrow'
 import { BookingForm } from '@/components/BookingForm'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
+import { PricingDisclosure } from '@/components/PricingDisclosure'
 import { formatDateTimeLabel, getProblemLabel, isFutureAvailabilitySlot, isProblemType } from '@/lib/data'
 import { getAvailabilitySlot } from '@/lib/server/db'
 import { getDataModeStatus } from '@/lib/server/env'
@@ -56,7 +58,7 @@ export default async function FormPage({
         <Header />
         <section className="two-col-section booking-layout">
           <div className="panel section-panel">
-            <div className="section-eyebrow">Krok 3 z 6</div>
+            <BookingStageEyebrow stage="details" className="section-eyebrow" />
             <h1>Uzupełnij dane do konsultacji</h1>
             <p className="muted paragraph-gap">
               Po zapisaniu formularza termin zostanie tymczasowo zablokowany na czas płatności. Po opłaceniu od razu zobaczysz potwierdzenie i link do rozmowy audio.
@@ -76,8 +78,7 @@ export default async function FormPage({
                 <span>15-minutowa konsultacja głosowa online. Kamera nie jest potrzebna.</span>
               </div>
               <div className="list-card">
-                <strong>Kwota</strong>
-                <span>Kwotę potwierdzisz na ekranie płatności po zapisaniu rezerwacji i zablokowaniu terminu.</span>
+                <PricingDisclosure stage="pre-payment" labelAs="strong" />
               </div>
             </div>
           </div>

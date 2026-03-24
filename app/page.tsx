@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { FaqAccordion } from '@/components/FaqAccordion'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
+import { PricingDisclosure } from '@/components/PricingDisclosure'
 import { ShareActions } from '@/components/ShareActions'
 import { SocialProofSection } from '@/components/SocialProofSection'
 import { SocialSection } from '@/components/SocialSection'
@@ -17,7 +18,6 @@ import {
   CAPBT_PROFILE_URL,
   COAPE_LOGO,
   COAPE_ORG_URL,
-  CONSULTATION_PRICE_COMPARE_COPY,
   HERO_PHOTO,
   HERO_SUPPORT_IMAGES,
   MEDIA_MENTIONS,
@@ -205,10 +205,15 @@ export default async function HomePage() {
             </p>
 
             <div className="hero-price-badge">
-              <span className="hero-price-label">Aktualna cena i płatność</span>
-              <strong>Kwotę potwierdzisz po wyborze tematu konsultacji</strong>
-              <span className="hero-price-note">15 minut rozmowy audio z jednym specjalistą</span>
-              <span className="hero-price-compare">{CONSULTATION_PRICE_COMPARE_COPY}</span>
+              <PricingDisclosure
+                stage="pre-topic"
+                labelClassName="hero-price-label"
+                messageAs="strong"
+                showNote
+                noteClassName="hero-price-note"
+                showCompare
+                compareClassName="hero-price-compare"
+              />
             </div>
 
             <div className="hero-inline-facts">
@@ -528,6 +533,69 @@ export default async function HomePage() {
           </div>
         </section>
 
+        <SocialProofSection />
+
+        <section className="panel section-panel" id="publikacje">
+          <div className="section-head">
+            <div>
+              <div className="section-eyebrow">Publikacje / Media</div>
+              <h2>Zweryfikowane materiały, które wzmacniają zaufanie bez nadęcia</h2>
+            </div>
+            <div className="muted">Pokazujemy tylko treści, które da się obronić nazwą medium albo publicznym linkiem.</div>
+          </div>
+
+          <div className="media-grid top-gap">
+            {MEDIA_MENTIONS.map((item) => (
+              <article key={item.id} className="media-card">
+                <div className="section-eyebrow">{item.label}</div>
+                <h3>{item.title}</h3>
+                <p>{item.summary}</p>
+                <a href={item.href} target="_blank" rel="noopener noreferrer" className="text-link top-gap-small">
+                  {item.cta}
+                </a>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="panel section-panel" id="faq">
+          <div className="section-head">
+            <div>
+              <div className="section-eyebrow">FAQ</div>
+              <h2>Najczęstsze pytania przed pierwszą rozmową</h2>
+            </div>
+            <div className="muted">Krótkie odpowiedzi na to, co zwykle blokuje decyzję o rezerwacji.</div>
+          </div>
+          <FaqAccordion items={faq} />
+        </section>
+
+        <section className="panel cta-panel">
+          <div className="section-eyebrow">Pierwszy krok</div>
+          <h2>Zarezerwuj 15 minut i odzyskaj spokój w domu.</h2>
+          <p className="hero-text small-width">
+            Jeżeli problem zaczyna się ciągnąć, najważniejsze jest dobre otwarcie. Ta konsultacja pomaga szybko ocenić, co zrobić od razu i czy
+            potrzebna jest dalsza, szersza praca.
+          </p>
+          <div className="hero-actions top-gap">
+            <Link
+              href="/book"
+              className="button button-primary big-button"
+              data-analytics-event="reserve_click"
+              data-analytics-location="final-cta"
+            >
+              Zarezerwuj 15 minut i odzyskaj spokój w domu
+            </Link>
+            <Link
+              href="/book#tematy"
+              className="button button-ghost big-button"
+              data-analytics-event="reserve_click"
+              data-analytics-location="final-cta-secondary"
+            >
+              Wybierz temat i termin
+            </Link>
+          </div>
+        </section>
+
         <section className="two-col-section" id="dogoterapia">
           <div className="panel section-panel specialist-visual-card">
             <div className="section-eyebrow">Dogoterapia</div>
@@ -592,70 +660,7 @@ export default async function HomePage() {
           </div>
         </section>
 
-        <SocialProofSection />
-
-        <section className="panel section-panel" id="publikacje">
-          <div className="section-head">
-            <div>
-              <div className="section-eyebrow">Publikacje / Media</div>
-              <h2>Zweryfikowane materiały, które wzmacniają zaufanie bez nadęcia</h2>
-            </div>
-            <div className="muted">Pokazujemy tylko treści, które da się obronić nazwą medium albo publicznym linkiem.</div>
-          </div>
-
-          <div className="media-grid top-gap">
-            {MEDIA_MENTIONS.map((item) => (
-              <article key={item.id} className="media-card">
-                <div className="section-eyebrow">{item.label}</div>
-                <h3>{item.title}</h3>
-                <p>{item.summary}</p>
-                <a href={item.href} target="_blank" rel="noopener noreferrer" className="text-link top-gap-small">
-                  {item.cta}
-                </a>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="panel section-panel" id="faq">
-          <div className="section-head">
-            <div>
-              <div className="section-eyebrow">FAQ</div>
-              <h2>Najczęstsze pytania przed pierwszą rozmową</h2>
-            </div>
-            <div className="muted">Krótkie odpowiedzi na to, co zwykle blokuje decyzję o rezerwacji.</div>
-          </div>
-          <FaqAccordion items={faq} />
-        </section>
-
         <SocialSection />
-
-        <section className="panel cta-panel">
-          <div className="section-eyebrow">Pierwszy krok</div>
-          <h2>Zarezerwuj 15 minut i odzyskaj spokój w domu.</h2>
-          <p className="hero-text small-width">
-            Jeżeli problem zaczyna się ciągnąć, najważniejsze jest dobre otwarcie. Ta konsultacja pomaga szybko ocenić, co zrobić od razu i czy
-            potrzebna jest dalsza, szersza praca.
-          </p>
-          <div className="hero-actions top-gap">
-            <Link
-              href="/book"
-              className="button button-primary big-button"
-              data-analytics-event="reserve_click"
-              data-analytics-location="final-cta"
-            >
-              Zarezerwuj 15 minut i odzyskaj spokój w domu
-            </Link>
-            <Link
-              href="/book#tematy"
-              className="button button-ghost big-button"
-              data-analytics-event="reserve_click"
-              data-analytics-location="final-cta-secondary"
-            >
-              Wybierz temat i termin
-            </Link>
-          </div>
-        </section>
 
         <Footer />
       </div>

@@ -8,7 +8,9 @@ import robots from '@/app/robots'
 import sitemap from '@/app/sitemap'
 import { ADMIN_BASIC_AUTH_USERNAME, hasValidAdminAuthorization } from '@/lib/admin-auth'
 import { POST as submitTestimonialRoute } from '@/app/api/testimonials/route'
+import { BookingStageEyebrow } from '@/components/BookingStageEyebrow'
 import { Header } from '@/components/Header'
+import { PricingDisclosure } from '@/components/PricingDisclosure'
 import { SocialProofSection } from '@/components/SocialProofSection'
 import { BUILD_MARKER_KEY, getBuildMarkerSnapshot } from '@/lib/build-marker'
 import { buildRollingAvailabilitySeed, getProblemLabel, isFutureAvailabilitySlot, isProblemType } from '@/lib/data'
@@ -601,6 +603,68 @@ test('payment page does not expose the public test-mode banner copy', () => {
   const source = readFileSync(path.join(process.cwd(), 'app', 'payment', 'page.tsx'), 'utf8')
 
   assert.doesNotMatch(source, /To środowisko testowe płatności/)
+})
+
+test('public pricing disclosure keeps the amount hidden before checkout', () => {
+  const homeSource = readFileSync(path.join(process.cwd(), 'app', 'page.tsx'), 'utf8')
+  const bookSource = readFileSync(path.join(process.cwd(), 'app', 'book', 'page.tsx'), 'utf8')
+  const formSource = readFileSync(path.join(process.cwd(), 'app', 'form', 'page.tsx'), 'utf8')
+  const beforeTopicMarkup = renderToStaticMarkup(
+    createElement(PricingDisclosure, {
+      stage: 'pre-topic',
+      labelClassName: 'hero-price-label',
+      messageAs: 'strong',
+      showNote: true,
+      showCompare: true,
+    }),
+  )
+  const beforePaymentMarkup = renderToStaticMarkup(
+    createElement(PricingDisclosure, {
+      stage: 'pre-payment',
+      labelAs: 'strong',
+    }),
+  )
+
+  assert.doesNotMatch(beforeTopicMarkup, /69(?:\s|\u00a0)?zł/i)
+  assert.doesNotMatch(beforePaymentMarkup, /69(?:\s|\u00a0)?zł/i)
+  assert.doesNotMatch(homeSource, /69(?:\s|\u00a0)?zł/i)
+  assert.doesNotMatch(bookSource, /69(?:\s|\u00a0)?zł/i)
+  assert.doesNotMatch(formSource, /69(?:\s|\u00a0)?zł/i)
+  assert.doesNotMatch(bookSource, /getActiveConsultationPrice|formattedAmount/)
+})
+
+test('booking flow uses neutral stage labels instead of a conflicting six-step counter', () => {
+  const bookSource = readFileSync(path.join(process.cwd(), 'app', 'book', 'page.tsx'), 'utf8')
+  const slotSource = readFileSync(path.join(process.cwd(), 'app', 'slot', 'page.tsx'), 'utf8')
+  const slotLoadingSource = readFileSync(path.join(process.cwd(), 'app', 'slot', 'loading.tsx'), 'utf8')
+  const formSource = readFileSync(path.join(process.cwd(), 'app', 'form', 'page.tsx'), 'utf8')
+  const topicStageMarkup = renderToStaticMarkup(createElement(BookingStageEyebrow, { stage: 'topic' }))
+  const slotStageMarkup = renderToStaticMarkup(createElement(BookingStageEyebrow, { stage: 'slot' }))
+  const detailsStageMarkup = renderToStaticMarkup(createElement(BookingStageEyebrow, { stage: 'details' }))
+
+  assert.match(topicStageMarkup, /Etap rezerwacji: wybór tematu/)
+  assert.match(slotStageMarkup, /Etap rezerwacji: wybór terminu/)
+  assert.match(detailsStageMarkup, /Etap rezerwacji: dane do konsultacji/)
+  assert.doesNotMatch(`${slotSource}\n${formSource}`, /Krok\s+\d+\s+z\s+\d+/)
+  assert.doesNotMatch(slotLoadingSource, /Krok\s+\d+\s+z\s+\d+/)
+  assert.doesNotMatch(bookSource, /ShareActions/)
+})
+
+test('homepage keeps the main booking CTA above secondary dogoterapia and social sections', () => {
+  const homeSource = readFileSync(path.join(process.cwd(), 'app', 'page.tsx'), 'utf8')
+  const socialProofIndex = homeSource.indexOf('<SocialProofSection />')
+  const publicationsIndex = homeSource.indexOf('id="publikacje"')
+  const faqIndex = homeSource.indexOf('id="faq"')
+  const ctaIndex = homeSource.indexOf('<section className="panel cta-panel">')
+  const dogoterapiaIndex = homeSource.indexOf('id="dogoterapia"')
+  const socialIndex = homeSource.indexOf('<SocialSection />')
+
+  assert.ok(socialProofIndex > -1)
+  assert.ok(publicationsIndex > socialProofIndex)
+  assert.ok(faqIndex > publicationsIndex)
+  assert.ok(ctaIndex > faqIndex)
+  assert.ok(dogoterapiaIndex > ctaIndex)
+  assert.ok(socialIndex > dogoterapiaIndex)
 })
 
 test('builds a robots response that points to the sitemap', () => {

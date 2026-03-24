@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { unstable_noStore as noStore } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { BookingStageEyebrow } from '@/components/BookingStageEyebrow'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { getProblemLabel, isProblemType } from '@/lib/data'
@@ -51,7 +52,7 @@ export default async function SlotPage({
         <Header />
 
         <section className="panel section-panel">
-          <div className="section-eyebrow">Krok 2 z 6</div>
+          <BookingStageEyebrow stage="slot" className="section-eyebrow" />
           <h1>Wybierz termin rozmowy: {getProblemLabel(problem)}</h1>
           <p className="muted paragraph-gap">
             Lista odświeża się na bieżąco. Jeśli termin zniknie po chwili, oznacza to, że został właśnie zajęty albo ktoś kończy płatność.
