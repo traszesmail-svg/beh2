@@ -71,7 +71,8 @@ async function fetchPublicPageState(url: string) {
     hasInternalError: content.includes('Internal Error'),
     hasLegacyPrice: content.includes('28,99') || content.includes('28.99'),
     hasFormHeading: content.includes('Formularz konsultacji'),
-    hasHistorieHeader: content.includes('Historie i efekty'),
+    hasBookingHeaderCta: content.includes('Zarezerwuj konsultację'),
+    hasTrustStrip: content.includes('COAPE / CAPBT'),
     hasLegacyHeader: content.includes('Realne sprawy'),
     hasContactEmail: content.includes('coapebehawiorysta@gmail.com'),
     hasTestPaymentBanner: content.includes('To środowisko testowe płatności. Karta nie zostanie realnie obciążona poza testowym scenariuszem.'),
@@ -163,15 +164,15 @@ async function main() {
     const homepageHasJoinedModerationText = await mobilePage.evaluate(() => document.body.innerText.includes('weryfikacji.Publikujemy'))
     await mobilePage.goto(appUrl, { waitUntil: 'domcontentloaded' })
     const homepageText = await mobilePage.locator('body').innerText()
-    const homeCtaVisible = await mobilePage.getByRole('link', { name: /Zarezerwuj 15 minut i odzyskaj spokój w domu/i }).first().isVisible()
-    const secondaryHeroCtaVisible = await mobilePage.getByRole('link', { name: /Wybierz temat i termin/i }).first().isVisible()
+    const homeCtaVisible = await mobilePage.getByRole('link', { name: /Zarezerwuj konsultacj/i }).first().isVisible()
+    const secondaryHeroCtaVisible = await mobilePage.getByRole('link', { name: /Zobacz, jak wygląda rezerwacja/i }).isVisible()
     const heroHeadingVisible = await mobilePage
       .getByRole('heading', { name: /Spokojna konsultacja, która porządkuje problem psa lub kota w 15 minut/i })
       .isVisible()
-    const heroPriceVisible = await mobilePage.locator('.hero-price-badge').getByText(/Aktualna cena/i).isVisible()
+    const heroPriceVisible = await mobilePage.locator('.hero-price-badge').getByText(/Oferta i płatność/i).isVisible()
     const trustStripVisible = await mobilePage.locator('.header-trust-strip').getByText(/Zwrot zgodnie z regulaminem/i).isVisible()
     const heroPhotoVisible = await mobilePage.locator('img[alt="Krzysztof Regulski na portretowym zdjęciu do strony Behawior 15"]').first().isVisible()
-    const reassuranceVisible = await mobilePage.getByText(/Jedna rozmowa, jasny plan i realny następny krok/i).isVisible()
+    const reassuranceVisible = await mobilePage.getByText(/Pierwsza realna pomoc w 15 minut - bez stresu/i).isVisible()
     const shareVisible = await mobilePage.getByText(/Udostępnij znajomemu, który ma problem z pupilem/i).isVisible()
     const footerLinkVisible = await mobilePage.getByRole('link', { name: /Polityka prywatności/i }).isVisible()
     const socialSectionVisible = await mobilePage.getByRole('heading', {
@@ -179,7 +180,7 @@ async function main() {
     }).isVisible()
     const socialFacebookVisible = await mobilePage.getByRole('link', { name: /Otwórz profil Krzysztofa Regulskiego na Facebooku/i }).isVisible()
     const homeAvailabilityVisible = await mobilePage
-      .locator('.hero-inline-fact, .side-panel .side-title')
+      .locator('.hero-spotlight-meta, .hero-inline-fact')
       .filter({ hasText: /Wolne terminy dostępne dziś|Najbliższe realnie dostępne terminy zobaczysz w kolejnym kroku rezerwacji|Brak wolnych terminów/i })
       .first()
       .isVisible()
@@ -203,7 +204,7 @@ async function main() {
     const twitterCard = await mobilePage.locator('meta[name="twitter:card"]').getAttribute('content')
     const jsonLdContent = await mobilePage.locator('script[type="application/ld+json"]').first().textContent()
     const charsetMetaPresent = (await mobilePage.locator('meta[charset]').count()) > 0
-    const primaryBookingHref = await mobilePage.getByRole('link', { name: /Zarezerwuj 15 minut i odzyskaj spokój w domu/i }).first().getAttribute('href')
+    const primaryBookingHref = await mobilePage.getByRole('link', { name: /Zarezerwuj konsultacj/i }).first().getAttribute('href')
     await mobilePage.goto(`${appUrl}/book`, { waitUntil: 'domcontentloaded' })
     const bookingCtaWorks = await mobilePage.getByRole('heading', { name: /Zarezerwuj 15 minut i przejdź do realnie wolnych terminów/i }).isVisible()
     const bookingAvailabilityVisible = await mobilePage
@@ -234,7 +235,8 @@ async function main() {
       hasInternalError: boolean
       hasFormHeading: boolean
       hasLegacyPrice: boolean
-      hasHistorieHeader: boolean
+      hasBookingHeaderCta: boolean
+      hasTrustStrip: boolean
       hasLegacyHeader: boolean
       hasContactEmail: boolean
     }>
@@ -246,7 +248,8 @@ async function main() {
         hasInternalError: response.hasInternalError,
         hasFormHeading: response.hasFormHeading,
         hasLegacyPrice: response.hasLegacyPrice,
-        hasHistorieHeader: response.hasHistorieHeader,
+        hasBookingHeaderCta: response.hasBookingHeaderCta,
+        hasTrustStrip: response.hasTrustStrip,
         hasLegacyHeader: response.hasLegacyHeader,
         hasContactEmail: response.hasContactEmail,
       })
@@ -263,7 +266,9 @@ async function main() {
       waitUntil: 'domcontentloaded',
     })
     const paymentPageText = await mobilePage.locator('body').innerText()
-    const paymentHeadingVisible = await mobilePage.getByRole('heading', { name: /Za chwilę przejdziesz do bezpiecznej płatności/i }).isVisible()
+    const paymentHeadingVisible = await mobilePage
+      .getByRole('heading', { name: /Możesz przejść dalej bez płatności|Za chwilę przejdziesz do bezpiecznej płatności/i })
+      .isVisible()
     const prepHeadingVisible = await mobilePage.getByRole('heading', { name: /Przygotuj mnie do rozmowy/i }).isVisible()
     const paymentPageHasTestBanner = paymentPageText.includes(
       'To środowisko testowe płatności. Karta nie zostanie realnie obciążona poza testowym scenariuszem.',
@@ -281,7 +286,9 @@ async function main() {
     await mobilePage.getByRole('button', { name: /Zapisz materiały do rozmowy/i }).click({ force: true })
     await mobilePage.getByText(/Zapisano materiały do rozmowy/i).waitFor({ timeout: 10000 })
 
-    const payButtonVisible = await mobilePage.getByRole('button', { name: /Opłać konsultację/i }).isVisible()
+    const payButtonVisible = await mobilePage
+      .getByRole('button', { name: /Przejdź dalej bez płatności|Przejdź do bezpiecznej płatności/i })
+      .isVisible()
     const paymentResponse = await fetch(`${appUrl}/api/payments/mock`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -303,8 +310,8 @@ async function main() {
 
     const desktopPage = await desktop.newPage()
     await desktopPage.goto(appUrl, { waitUntil: 'domcontentloaded' })
-    const headerLinkTexts = await desktopPage.locator('.header-links a').allTextContents()
-    const headerOfertaVisible = await desktopPage.getByRole('link', { name: /^Oferta$/i }).isVisible()
+    const headerLinkTexts = await desktopPage.locator('.header-nav a').allTextContents()
+    const headerOfertaVisible = (await desktopPage.locator('.header-links').count()) === 0
     const specialistHeadingVisible = await desktopPage.getByText(/Specjalista prowadzący/i).isVisible()
     const specialistTrustVisible = await desktopPage.getByRole('heading', {
       name: /Behawior, wiedza medyczna i doświadczenie terapeutyczne w jednym miejscu/i,
@@ -427,7 +434,8 @@ async function main() {
           entry.hasFormHeading &&
           !entry.hasInternalError &&
           !entry.hasLegacyPrice &&
-          entry.hasHistorieHeader &&
+          entry.hasBookingHeaderCta &&
+          entry.hasTrustStrip &&
           !entry.hasLegacyHeader &&
           entry.hasContactEmail,
       ),
@@ -454,7 +462,8 @@ async function main() {
     assert.match(bookingTitle, /Rezerwacja konsultacji/i)
     assert.equal(headerOfertaVisible, true)
     assert.equal(headerLinkTexts.includes('Opinie'), false)
-    assert.equal(headerLinkTexts.includes('Historie i efekty'), true)
+    assert.equal(headerLinkTexts.includes('Historie i efekty'), false)
+    assert.equal(headerLinkTexts.includes('Zarezerwuj konsultację'), true)
     assert.equal(specialistHeadingVisible, true)
     assert.equal(specialistTrustVisible, true)
     assert.equal(specialistPhotoVisible, true)

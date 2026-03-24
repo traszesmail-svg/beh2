@@ -206,6 +206,8 @@ export default async function HomePage() {
     'Zwrot zgodnie z regulaminem',
   ]
 
+  const heroTopicPicks = problemOptions.filter((item) => item.id !== 'inne')
+
   const valueHighlights = [
     {
       title: 'Szybka pierwsza pomoc',

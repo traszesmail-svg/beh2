@@ -6,8 +6,8 @@ type DisclosureTag = 'div' | 'span' | 'strong'
 
 const PRICING_DISCLOSURE = {
   'pre-topic': {
-    label: 'Aktualna cena i płatność',
-    message: 'Kwotę potwierdzisz po wyborze tematu konsultacji',
+    label: 'Oferta i płatność',
+    message: 'Od 39 zł. Dokładną kwotę potwierdzisz po wyborze tematu konsultacji.',
     note: '15 minut rozmowy audio z jednym specjalistą',
   },
   'pre-payment': {

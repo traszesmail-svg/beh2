@@ -595,14 +595,17 @@ test('prefers a valid configured public email over the fallback address', () => 
 test('renders the same public navigation label for the social proof section everywhere', () => {
   const markup = renderToStaticMarkup(createElement(Header))
 
-  assert.match(markup, /Historie i efekty/)
+  assert.match(markup, /Zarezerwuj konsultację/)
+  assert.match(markup, /COAPE \/ CAPBT/)
   assert.doesNotMatch(markup, /Realne sprawy/)
 })
 
 test('homepage copy does not contain the broken calendar or mixed booking wording', () => {
   const source = readFileSync(path.join(process.cwd(), 'app', 'page.tsx'), 'utf8')
 
-  assert.match(source, /we właściwym kalendarzu rezerwacji/)
+  assert.match(source, /aktualny kalendarz sprawdzić w kolejnym kroku/)
+  assert.match(source, /Najbliższe realnie dostępne terminy zobaczysz w kolejnym kroku rezerwacji/)
+  assert.doesNotMatch(source, /we właściwym kalendarzu rezerwacji/)
   assert.doesNotMatch(source, /w właściwym kalendarzu rezerwacji/)
   assert.doesNotMatch(source, /flow rezerwacji, do tej samej ceny dla nowych bookingów/)
 })
