@@ -53,18 +53,13 @@ export const steps = [
   },
   {
     n: '02',
-    title: 'Wybierasz realny termin',
-    desc: 'Widzisz aktualne sloty i blokujesz wybraną godzinę na czas dokończenia rezerwacji.',
+    title: 'Wybierasz termin i finalizujesz zakup',
+    desc: 'Widzisz realne sloty, podajesz krótki opis problemu i przechodzisz do bezpiecznej płatności.',
   },
   {
     n: '03',
-    title: 'Uzupełniasz krótki formularz',
-    desc: 'Podajesz najważniejsze informacje o problemie, żeby wejść w rozmowę szybciej i spokojniej.',
-  },
-  {
-    n: '04',
-    title: 'Dostajesz potwierdzenie i link',
-    desc: 'Po opłaceniu od razu widzisz potwierdzenie, link do rozmowy audio i możliwość dodania materiałów.',
+    title: 'Dostajesz potwierdzenie i minutę na anulację',
+    desc: 'Po opłaceniu od razu widzisz link do rozmowy, materiały przygotowawcze i przycisk anulacji dostępny przez 1 minutę.',
   },
 ]
 
@@ -74,44 +69,16 @@ export const faq = [
     a: 'To szybka konsultacja porządkująca sytuację. Jej celem jest wstępna ocena problemu i pierwszy, konkretny kierunek działania, a nie pełna terapia behawioralna.',
   },
   {
-    q: 'Czy mogę ubiegać się o zwrot pieniędzy?',
-    a: 'Tak. Jeśli po konsultacji uznasz, że rozmowa nie pomogła Ci zrozumieć problemu ani ustalić kolejnego kroku, możesz złożyć reklamację lub wniosek o zwrot zgodnie z regulaminem.',
+    q: 'Czy zakup jest bezpieczny?',
+    a: 'Tak. Płatność przechodzi przez bezpieczny flow, potwierdzenie dostajesz od razu, a konsultację prowadzi realny specjalista z publicznie sprawdzalnymi kompetencjami.',
   },
   {
-    q: 'Czy mogę przełożyć termin?',
-    a: 'Tak, o ile zrobisz to przed rozpoczęciem zarezerwowanej godziny i będzie dostępny inny wolny slot. Najszybciej skontaktować się telefonicznie albo przez publiczny profil Facebook podany w stopce.',
+    q: 'Czy mogę anulować zakup?',
+    a: 'Tak. Po opłaceniu masz 1 minutę na samodzielną rezygnację przyciskiem anulacji na ekranie potwierdzenia. Po tej minucie nadal działa reklamacja lub wniosek o zwrot zgodnie z regulaminem.',
   },
   {
-    q: 'Co jeśli nie mam MP4 albo innych materiałów?',
-    a: 'Materiały są całkowicie opcjonalne. Jeśli ich nie masz, nadal możesz przejść przez cały flow rezerwacji i odbyć rozmowę audio.',
-  },
-  {
-    q: 'Czy konsultacja jest tylko audio?',
-    a: 'Tak. Behawior 15 jest zaprojektowany jako spokojna 15-minutowa rozmowa głosowa online. Kamera nie jest potrzebna.',
-  },
-  {
-    q: 'Czy rozmowa jest nagrywana?',
-    a: 'Nie zakładamy automatycznego nagrywania rozmów w standardowym flow. Jeśli pojawi się potrzeba dodatkowych ustaleń, będą one komunikowane osobno.',
-  },
-  {
-    q: 'Co dzieje się po 15 minutach?',
-    a: 'Po rozmowie masz otrzymać jasny następny krok: co wdrożyć od razu, co obserwować dalej i czy potrzebna będzie szersza konsultacja albo diagnostyka weterynaryjna.',
-  },
-  {
-    q: 'Czy konsultacja dotyczy zarówno psa, jak i kota?',
-    a: 'Tak. Rozmowa jest przeznaczona dla opiekunów psów i kotów, także w sprawach lęku, kuwety, pobudzenia, niszczenia czy relacji między zwierzętami.',
-  },
-  {
-    q: 'Czy to zastępuje wizytę stacjonarną albo badanie weterynaryjne?',
-    a: 'Nie zawsze. To pierwszy krok, który pomaga uporządkować problem. Jeśli sytuacja tego wymaga, po rozmowie dostaniesz rekomendację dalszej pracy albo konsultacji weterynaryjnej.',
-  },
-  {
-    q: 'Jak szybko dostaję potwierdzenie rezerwacji?',
-    a: 'Po skutecznej płatności od razu widzisz potwierdzenie terminu, link do rozmowy i możliwość dodania materiałów przygotowawczych.',
-  },
-  {
-    q: 'Jak najlepiej przygotować się do rozmowy?',
-    a: 'Wystarczy krótki opis problemu, najważniejsze obserwacje i 2–3 pytania. Jeśli chcesz, możesz dodać MP4, link albo notatki po zapisaniu rezerwacji.',
+    q: 'Co dostaję po rozmowie?',
+    a: 'Jasny pierwszy plan: co zrobić od razu, co obserwować dalej i czy potrzebna będzie szersza konsultacja, plan pracy albo diagnostyka weterynaryjna.',
   },
 ]
 

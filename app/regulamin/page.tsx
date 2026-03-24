@@ -41,7 +41,7 @@ export default function TermsPage() {
             <div className="list-card">
               <strong>Przełożenie terminu i anulacja</strong>
               <span>
-                Jeśli wiesz wcześniej, że nie możesz pojawić się na rozmowie, skontaktuj się przed rozpoczęciem terminu. Zmiana terminu zależy od dostępności innych slotów. Po rozpoczęciu zarezerwowanej godziny zmiana albo anulacja może nie być możliwa.
+                Po skutecznym opłaceniu rezerwacji klient ma 1 minutę na samodzielne anulowanie zakupu przyciskiem dostępnym na ekranie potwierdzenia. W tym czasie termin wraca do kalendarza, a płatność jest cofana zgodnie z aktywnym trybem płatności. Jeśli wiesz wcześniej, że nie możesz pojawić się na rozmowie po upływie tej minuty, skontaktuj się przed rozpoczęciem terminu. Zmiana terminu zależy od dostępności innych slotów.
               </span>
             </div>
 
@@ -55,7 +55,7 @@ export default function TermsPage() {
             <div className="list-card">
               <strong>Zwrot i reklamacja</strong>
               <span>
-                Jeśli konsultacja nie spełni swojej roli jako pierwszy krok do uporządkowania problemu, możesz złożyć reklamację lub wniosek o zwrot. Każda sprawa jest rozpatrywana indywidualnie na podstawie przebiegu usługi i zgłoszenia przesłanego przez kanał kontaktowy.
+                Po upływie pierwszej minuty od zakupu nadal możesz złożyć reklamację albo wniosek o zwrot, jeśli konsultacja nie spełni swojej roli jako pierwszy krok do uporządkowania problemu. Każda sprawa jest rozpatrywana indywidualnie na podstawie przebiegu usługi i zgłoszenia przesłanego przez kanał kontaktowy.
               </span>
             </div>
 

@@ -42,6 +42,8 @@ type CheckoutBookingSnapshot = Pick<
   'id' | 'email' | 'problemType' | 'bookingDate' | 'bookingTime' | 'amount'
 >
 
+type RefundableBookingSnapshot = Pick<BookingRecord, 'id' | 'paymentIntentId' | 'checkoutSessionId'>
+
 export function buildCheckoutSessionParams(
   booking: CheckoutBookingSnapshot,
   options?: {
@@ -138,5 +140,43 @@ export async function finalizeStripeCheckoutSession(sessionId: string) {
       typeof session.payment_intent === 'string'
         ? session.payment_intent
         : session.payment_intent?.id ?? null,
+  })
+}
+
+async function resolveStripePaymentIntentId(booking: RefundableBookingSnapshot): Promise<string> {
+  if (booking.paymentIntentId) {
+    return booking.paymentIntentId
+  }
+
+  if (!booking.checkoutSessionId) {
+    throw new Error('Brak payment intent albo checkout session do wykonania zwrotu Stripe.')
+  }
+
+  const stripe = getStripeClient()
+  const session = await stripe.checkout.sessions.retrieve(booking.checkoutSessionId, {
+    expand: ['payment_intent'],
+  })
+  const paymentIntentId =
+    typeof session.payment_intent === 'string'
+      ? session.payment_intent
+      : session.payment_intent?.id ?? null
+
+  if (!paymentIntentId) {
+    throw new Error('Nie udało się ustalić payment intent dla tej płatności Stripe.')
+  }
+
+  return paymentIntentId
+}
+
+export async function refundStripeCheckoutBooking(booking: RefundableBookingSnapshot) {
+  const stripe = getStripeClient()
+  const paymentIntentId = await resolveStripePaymentIntentId(booking)
+
+  return stripe.refunds.create({
+    payment_intent: paymentIntentId,
+    reason: 'requested_by_customer',
+    metadata: {
+      bookingId: booking.id,
+    },
   })
 }

@@ -559,6 +559,37 @@ export async function markBookingPaymentFailed(bookingId: string): Promise<Booki
   })
 }
 
+export async function markBookingRefunded(bookingId: string): Promise<BookingRecord | null> {
+  return withLock(async () => {
+    const store = await readStore()
+    const booking = store.bookings.find((item) => item.id === bookingId)
+
+    if (!booking) {
+      return null
+    }
+
+    if (booking.paymentStatus !== 'paid' || booking.bookingStatus !== 'confirmed') {
+      throw new Error('Tylko świeżo opłacona, potwierdzona rezerwacja może zostać anulowana z automatycznym zwrotem.')
+    }
+
+    const slot = store.availability.find((item) => item.id === booking.slotId)
+    const nowIso = new Date().toISOString()
+
+    booking.bookingStatus = 'cancelled'
+    booking.paymentStatus = 'refunded'
+    booking.cancelledAt = nowIso
+    booking.refundedAt = nowIso
+    booking.updatedAt = nowIso
+
+    if (slot) {
+      releaseSlot(slot, nowIso)
+    }
+
+    await persistStore(store)
+    return booking
+  })
+}
+
 export async function markBookingExpired(bookingId: string): Promise<BookingRecord | null> {
   return withLock(async () => {
     const store = await readStore()

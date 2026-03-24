@@ -42,6 +42,7 @@ import {
   validatePreparationNotes,
   validatePreparationVideoMeta,
 } from '@/lib/preparation'
+import { canSelfCancelBooking, getRemainingSelfCancellationSeconds, SELF_CANCELLATION_WINDOW_MS } from '@/lib/self-cancellation'
 import { createCustomerAccessToken, hasValidCustomerAccessToken, hashCustomerAccessToken } from '@/lib/server/customer-access'
 import { shouldSendBookingConfirmationAfterPayment } from '@/lib/server/notifications'
 import { getReminderAuthorizationError, runBookingReminderSweep } from '@/lib/server/reminder-runner'
@@ -531,6 +532,44 @@ test('creates and verifies opaque customer access tokens', () => {
   assert.equal(hasValidCustomerAccessToken('zly-token', token.tokenHash), false)
 })
 
+test('allows self-cancellation only during the first minute after payment', () => {
+  const paidAt = '2026-03-24T10:00:00.000Z'
+
+  assert.equal(
+    canSelfCancelBooking(
+      {
+        bookingStatus: 'confirmed',
+        paymentStatus: 'paid',
+        paidAt,
+      },
+      new Date(Date.parse(paidAt) + 15 * 1000),
+    ),
+    true,
+  )
+
+  assert.equal(
+    getRemainingSelfCancellationSeconds(
+      {
+        paidAt,
+      },
+      new Date(Date.parse(paidAt) + SELF_CANCELLATION_WINDOW_MS + 1000),
+    ),
+    0,
+  )
+
+  assert.equal(
+    canSelfCancelBooking(
+      {
+        bookingStatus: 'cancelled',
+        paymentStatus: 'refunded',
+        paidAt,
+      },
+      new Date(Date.parse(paidAt) + 15 * 1000),
+    ),
+    false,
+  )
+})
+
 test('build marker includes the expected branch and short commit when Vercel env is present', () => {
   process.env.VERCEL_GIT_COMMIT_REF = 'main'
   process.env.VERCEL_GIT_COMMIT_SHA = '09d9b0281c292275c0e9d9a406b1b964bb4bf427'
@@ -592,28 +631,35 @@ test('prefers a valid configured public email over the fallback address', () => 
   })
 })
 
-test('renders the same public navigation label for the social proof section everywhere', () => {
+test('header keeps the sales CTA and the updated trust strip', () => {
   const markup = renderToStaticMarkup(createElement(Header))
 
   assert.match(markup, /Zarezerwuj konsultację/)
+  assert.match(markup, /Technik wet\./)
   assert.match(markup, /COAPE \/ CAPBT/)
-  assert.doesNotMatch(markup, /Realne sprawy/)
+  assert.match(markup, /1 minuta na anulację/)
 })
 
-test('homepage copy does not contain the broken calendar or mixed booking wording', () => {
+test('homepage copy stays sales-first and removes legacy secondary sections', () => {
   const source = readFileSync(path.join(process.cwd(), 'app', 'page.tsx'), 'utf8')
 
-  assert.match(source, /aktualny kalendarz sprawdzić w kolejnym kroku/)
-  assert.match(source, /Najbliższe realnie dostępne terminy zobaczysz w kolejnym kroku rezerwacji/)
-  assert.doesNotMatch(source, /we właściwym kalendarzu rezerwacji/)
-  assert.doesNotMatch(source, /w właściwym kalendarzu rezerwacji/)
-  assert.doesNotMatch(source, /flow rezerwacji, do tej samej ceny dla nowych bookingów/)
+  assert.match(source, /Dlaczego ten zakup jest bezpieczny i uczciwy/)
+  assert.match(source, /W jakich problemach ta rozmowa pomaga/)
+  assert.match(source, /Co dostajesz po 15 minutach/)
+  assert.match(source, /Jak wygląda zakup konsultacji/)
+  assert.match(source, /Najczęstsze pytania przed zakupem/)
+  assert.doesNotMatch(source, /SocialProofSection/)
+  assert.doesNotMatch(source, /SocialSection/)
+  assert.doesNotMatch(source, /ShareActions/)
+  assert.doesNotMatch(source, /id="publikacje"/)
+  assert.doesNotMatch(source, /id="dogoterapia"/)
 })
 
 test('payment page does not expose the public test-mode banner copy', () => {
   const source = readFileSync(path.join(process.cwd(), 'app', 'payment', 'page.tsx'), 'utf8')
 
   assert.doesNotMatch(source, /To środowisko testowe płatności/)
+  assert.match(source, /1 minutę na samodzielne anulowanie zakupu/)
 })
 
 test('public pricing disclosure keeps the amount hidden before checkout', () => {
@@ -663,32 +709,26 @@ test('booking flow uses neutral stage labels instead of a conflicting six-step c
   assert.doesNotMatch(bookSource, /ShareActions/)
 })
 
-test('homepage keeps the main booking CTA above secondary dogoterapia and social sections', () => {
+test('homepage keeps the simplified section order for the sales flow', () => {
   const homeSource = readFileSync(path.join(process.cwd(), 'app', 'page.tsx'), 'utf8')
-  const socialProofIndex = homeSource.indexOf('<SocialProofSection />')
-  const publicationsIndex = homeSource.indexOf('id="publikacje"')
+  const safetyIndex = homeSource.indexOf('id="bezpieczenstwo"')
+  const topicsIndex = homeSource.indexOf('id="tematy"')
+  const processIndex = homeSource.indexOf('id="jak-to-dziala"')
   const faqIndex = homeSource.indexOf('id="faq"')
-  const ctaIndex = homeSource.indexOf('<section className="panel cta-panel">')
-  const dogoterapiaIndex = homeSource.indexOf('id="dogoterapia"')
-  const socialIndex = homeSource.indexOf('<SocialSection />')
+  const ctaIndex = homeSource.indexOf('<section className="panel cta-panel guarantee-panel">')
 
-  assert.ok(socialProofIndex > -1)
-  assert.ok(publicationsIndex > socialProofIndex)
-  assert.ok(faqIndex > publicationsIndex)
+  assert.ok(safetyIndex > -1)
+  assert.ok(topicsIndex > safetyIndex)
+  assert.ok(processIndex > topicsIndex)
+  assert.ok(faqIndex > processIndex)
   assert.ok(ctaIndex > faqIndex)
-  assert.ok(dogoterapiaIndex > ctaIndex)
-  assert.ok(socialIndex > dogoterapiaIndex)
 })
 
-test('homepage keeps share actions below the final CTA instead of inside the hero', () => {
-  const homeSource = readFileSync(path.join(process.cwd(), 'app', 'page.tsx'), 'utf8')
-  const heroIndex = homeSource.indexOf('<section className="hero-grid" id="oferta">')
-  const ctaIndex = homeSource.indexOf('<section className="panel cta-panel">')
-  const shareIndex = homeSource.lastIndexOf('<ShareActions')
+test('book page exposes the updated 1-minute self-cancel promise instead of the old disclaimer', () => {
+  const bookSource = readFileSync(path.join(process.cwd(), 'app', 'book', 'page.tsx'), 'utf8')
 
-  assert.ok(heroIndex > -1)
-  assert.ok(ctaIndex > heroIndex)
-  assert.ok(shareIndex > ctaIndex)
+  assert.match(bookSource, /Po opłaceniu masz 1 minutę na samodzielną rezygnację/)
+  assert.doesNotMatch(bookSource, /automatycznego anulowania w 60 sekund/)
 })
 
 test('footer renders a visible build marker summary', () => {
@@ -722,25 +762,25 @@ test('release smoke normalizes visible text and extracts the build marker from h
 test('release smoke detects missing, forbidden and out-of-order phrases', () => {
   const html = `
     <main data-build-marker="${BUILD_MARKER_KEY}:main:9bf474c">
-      <section>Dogoterapia</section>
-      <section>Pierwszy krok</section>
-      <section>Social media</section>
-      <section>Cena konsultacji</section>
+      <section>W jakich problemach ta rozmowa pomaga</section>
+      <section>Dlaczego ten zakup jest bezpieczny i uczciwy</section>
+      <section>Zarezerwuj 15 minut i kup spokojny pierwszy krok</section>
+      <section>Udostępnij znajomemu</section>
     </main>
   `
 
   const result = evaluateReleaseSmokePage(html, 'https://beh2.vercel.app/', {
     path: '/',
     required: ['Wersja serwisu'],
-    forbidden: ['Cena konsultacji'],
-    ordered: ['Pierwszy krok', 'Dogoterapia', 'Social media'],
+    forbidden: ['Udostępnij znajomemu'],
+    ordered: ['Dlaczego ten zakup jest bezpieczny i uczciwy', 'W jakich problemach ta rozmowa pomaga'],
     requireBuildMarker: true,
   })
 
   assert.equal(result.url, 'https://beh2.vercel.app/')
   assert.deepEqual(result.missing, ['Wersja serwisu'])
-  assert.deepEqual(result.forbiddenFound, ['Cena konsultacji'])
-  assert.deepEqual(result.orderFailures, ['wrong order around: Dogoterapia'])
+  assert.deepEqual(result.forbiddenFound, ['Udostępnij znajomemu'])
+  assert.deepEqual(result.orderFailures, ['wrong order around: W jakich problemach ta rozmowa pomaga'])
   assert.equal(result.ok, false)
 })
 

@@ -75,12 +75,6 @@ async function fetchPublicPageState(url: string) {
     hasTrustStrip: content.includes('COAPE / CAPBT'),
     hasLegacyHeader: content.includes('Realne sprawy'),
     hasContactEmail: content.includes('coapebehawiorysta@gmail.com'),
-    hasTestPaymentBanner: content.includes('To środowisko testowe płatności. Karta nie zostanie realnie obciążona poza testowym scenariuszem.'),
-    hasWrongCalendarCopy: content.includes('Aktualną godzinę zobaczysz dopiero w właściwym kalendarzu rezerwacji.'),
-    hasMixedBookingCopy: content.includes(
-      'Każdy temat prowadzi do tego samego flow rezerwacji, do tej samej ceny dla nowych bookingów i do realnie dostępnych terminów.',
-    ),
-    content,
   }
 }
 
@@ -104,12 +98,13 @@ async function main() {
     await cleanLocalData()
     const availability = await localStore.listAvailability()
     const freeSlots = availability.flatMap((group) => group.slots)
-    assert.ok(freeSlots.length >= 2, 'Expected at least two free slots for UI smoke test.')
+    assert.ok(freeSlots.length >= 3, 'Expected at least three free slots for UI smoke test.')
 
     const bookingOne = await localStore.createPendingBooking(bookingPayload(freeSlots[0].id, 1))
-    const availabilityAfterBooking = await localStore.listAvailability()
-    const nextPublicSlot = availabilityAfterBooking.flatMap((group) => group.slots)[0]
-    assert.ok(nextPublicSlot, 'Expected at least one public slot after locking the first booking.')
+    const bookingTwo = await localStore.createPendingBooking(bookingPayload(freeSlots[1].id, 2))
+    const availabilityAfterBookings = await localStore.listAvailability()
+    const nextPublicSlot = availabilityAfterBookings.flatMap((group) => group.slots)[0]
+    assert.ok(nextPublicSlot, 'Expected at least one public slot after locking smoke bookings.')
 
     server = spawn(`npm run start -- --port ${port}`, {
       cwd: rootDir,
@@ -140,50 +135,32 @@ async function main() {
     })
 
     const mobilePage = await mobile.newPage()
-    const publicSlotHrefs = Array.from(
-      new Set(
-        await mobilePage.locator('.slot-link').evaluateAll((elements) =>
-          elements
-            .map((element) => element.getAttribute('href'))
-            .filter((href): href is string => Boolean(href)),
-        ),
-      ),
-    )
-    const formResponses = [] as Array<{ href: string; ok: boolean; hasInternalError: boolean; hasFormHeading: boolean; hasLegacyPrice: boolean }>
-    for (const href of publicSlotHrefs) {
-      const response = await fetchPublicPageState(`${appUrl}${href}`)
-      formResponses.push({
-        href,
-        ok: response.ok,
-        hasInternalError: response.hasInternalError,
-        hasFormHeading: response.hasFormHeading,
-        hasLegacyPrice: response.hasLegacyPrice,
-      })
-    }
-    const homepageHasJoinedSpecialistText = await mobilePage.evaluate(() => document.body.innerText.includes('kolejnego kroku.Łączę'))
-    const homepageHasJoinedModerationText = await mobilePage.evaluate(() => document.body.innerText.includes('weryfikacji.Publikujemy'))
     await mobilePage.goto(appUrl, { waitUntil: 'domcontentloaded' })
+
     const homepageText = await mobilePage.locator('body').innerText()
-    const homeCtaVisible = await mobilePage.getByRole('link', { name: /Zarezerwuj konsultacj/i }).first().isVisible()
-    const secondaryHeroCtaVisible = await mobilePage.getByRole('link', { name: /Zobacz, jak wygląda rezerwacja/i }).isVisible()
+    const homeCtaVisible = await mobilePage.getByRole('link', { name: /Zarezerwuj konsultację/i }).first().isVisible()
+    const secondaryHeroCtaVisible = (await mobilePage.getByRole('link', { name: /Zobacz, jak wygląda rezerwacja/i }).count()) > 0
     const heroHeadingVisible = await mobilePage
-      .getByRole('heading', { name: /Spokojna konsultacja, która porządkuje problem psa lub kota w 15 minut/i })
+      .getByRole('heading', { name: /15 minut, które porządkują problem psa lub kota i dają pierwszy plan działania/i })
       .isVisible()
     const heroPriceVisible = await mobilePage.locator('.hero-price-badge').getByText(/Oferta i płatność/i).isVisible()
-    const trustStripVisible = await mobilePage.locator('.header-trust-strip').getByText(/Zwrot zgodnie z regulaminem/i).isVisible()
+    const trustStripVisible = await mobilePage.locator('.header-trust-strip').getByText(/1 minuta na anulację/i).isVisible()
     const heroPhotoVisible = await mobilePage.locator('.hero-spotlight-image').isVisible()
-    const reassuranceVisible = await mobilePage.getByText(/Pierwsza realna pomoc w 15 minut - bez stresu/i).isVisible()
-    const shareVisible = await mobilePage.getByText(/Udostępnij znajomemu, który ma problem z pupilem/i).isVisible()
+    const reassuranceVisible = await mobilePage.getByText(/Dogoterapeuta/i).first().isVisible()
+    const shareVisible = homepageText.includes('Udostępnij znajomemu')
     const footerLinkVisible = await mobilePage.getByRole('link', { name: /Polityka prywatności/i }).isVisible()
-    const socialSectionVisible = await mobilePage.getByRole('heading', {
-      name: /Sprawdź profil i podeślij stronę osobie, która też potrzebuje spokojnego wsparcia/i,
-    }).isVisible()
-    const socialFacebookVisible = await mobilePage.getByRole('link', { name: /Otwórz profil Krzysztofa Regulskiego na Facebooku/i }).isVisible()
-    const homeAvailabilityVisible = await mobilePage
-      .locator('.hero-spotlight-meta, .hero-inline-fact')
-      .filter({ hasText: /Wolne terminy dostępne dziś|Najbliższe realnie dostępne terminy zobaczysz w kolejnym kroku rezerwacji|Brak wolnych terminów/i })
-      .first()
-      .isVisible()
+    const socialSectionVisible = homepageText.includes('Sprawdź profil i podeślij stronę osobie')
+    const socialFacebookVisible = (await mobilePage.locator('a[href*="facebook.com"]').count()) > 0
+    const salesSafetyHeadingVisible = await mobilePage.getByRole('heading', { name: /Dlaczego ten zakup jest bezpieczny i uczciwy/i }).isVisible()
+    const topicsHeadingVisible = await mobilePage.getByRole('heading', { name: /W jakich problemach ta rozmowa pomaga/i }).isVisible()
+    const processHeadingVisible = await mobilePage.getByRole('heading', { name: /Jak wygląda zakup konsultacji/i }).isVisible()
+    const finalCtaHeadingVisible = await mobilePage.getByRole('heading', { name: /Zarezerwuj 15 minut i kup spokojny pierwszy krok/i }).isVisible()
+    const homeAvailabilityVisible =
+      (await mobilePage
+        .locator('.hero-spotlight-meta')
+        .filter({ hasText: /Wolne terminy|Najbliższe realnie dostępne terminy|Brak wolnych terminów/i })
+        .count()) > 0
+
     const consentDialog = mobilePage.getByRole('dialog')
     let consentVisible = false
     try {
@@ -204,7 +181,8 @@ async function main() {
     const twitterCard = await mobilePage.locator('meta[name="twitter:card"]').getAttribute('content')
     const jsonLdContent = await mobilePage.locator('script[type="application/ld+json"]').first().textContent()
     const charsetMetaPresent = (await mobilePage.locator('meta[charset]').count()) > 0
-    const primaryBookingHref = await mobilePage.getByRole('link', { name: /Zarezerwuj konsultacj/i }).first().getAttribute('href')
+    const primaryBookingHref = await mobilePage.getByRole('link', { name: /Zarezerwuj konsultację/i }).first().getAttribute('href')
+
     await mobilePage.goto(`${appUrl}/book`, { waitUntil: 'domcontentloaded' })
     const bookingCtaWorks = await mobilePage.getByRole('heading', { name: /Zarezerwuj 15 minut i przejdź do realnie wolnych terminów/i }).isVisible()
     const bookingAvailabilityVisible = await mobilePage
@@ -213,12 +191,12 @@ async function main() {
       .first()
       .isVisible()
     const bookingTitle = await mobilePage.title()
+
     await mobilePage.goto(`${appUrl}/slot?problem=szczeniak`, { waitUntil: 'domcontentloaded' })
     const slotHeadingVisible = await mobilePage.getByRole('heading', { name: /Wybierz termin rozmowy/i }).isVisible()
     const slotOptionVisible =
       (await mobilePage.locator('.slot-link').count()) > 0 ||
       (await mobilePage.getByRole('link', { name: /Odśwież terminy|Spróbuj ponownie|Wróć do wyboru tematu/i }).count()) > 0
-    await mobilePage.goto(`${appUrl}/slot?problem=szczeniak`, { waitUntil: 'domcontentloaded' })
 
     const currentPublicSlotHrefs = Array.from(
       new Set(
@@ -254,9 +232,7 @@ async function main() {
         hasContactEmail: response.hasContactEmail,
       })
     }
-    await mobilePage.goto(appUrl, { waitUntil: 'domcontentloaded' })
-    const currentHomepageHasJoinedSpecialistText = await mobilePage.evaluate(() => document.body.innerText.includes('kolejnego kroku.Łączę'))
-    const currentHomepageHasJoinedModerationText = await mobilePage.evaluate(() => document.body.innerText.includes('weryfikacji.Publikujemy'))
+
     const homepageHasWrongCalendarCopy = homepageText.includes('Aktualną godzinę zobaczysz dopiero w właściwym kalendarzu rezerwacji.')
     const homepageHasMixedBookingCopy = homepageText.includes(
       'Każdy temat prowadzi do tego samego flow rezerwacji, do tej samej ceny dla nowych bookingów i do realnie dostępnych terminów.',
@@ -302,8 +278,26 @@ async function main() {
     await mobilePage.goto(`${appUrl}${paymentPayload.redirectTo}`, { waitUntil: 'domcontentloaded' })
     const confirmationVisible = await mobilePage.getByRole('heading', { name: /Masz potwierdzoną rozmowę głosową/i }).isVisible()
     const prepCardStillVisible = await mobilePage.getByRole('heading', { name: /Przygotuj mnie do rozmowy/i }).isVisible()
+    const selfCancelButtonVisible = await mobilePage.getByRole('button', { name: /Anuluj zakup w 1 minutę/i }).isVisible()
+    await mobilePage.getByRole('button', { name: /Anuluj zakup w 1 minutę/i }).click({ force: true })
+    await mobilePage.getByRole('heading', { name: /Rezerwacja została anulowana/i }).waitFor({ timeout: 10000 })
+    const cancellationVisible = await mobilePage.getByRole('heading', { name: /Rezerwacja została anulowana/i }).isVisible()
+    const prepCardHiddenAfterCancel = (await mobilePage.getByRole('heading', { name: /Przygotuj mnie do rozmowy/i }).count()) === 0
 
-    await mobilePage.goto(`${appUrl}/call/${bookingOne.booking.id}?access=${encodeURIComponent(bookingOne.accessToken)}`, {
+    const secondPaymentResponse = await fetch(`${appUrl}/api/payments/mock`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ bookingId: bookingTwo.booking.id, accessToken: bookingTwo.accessToken, outcome: 'success' }),
+    })
+    const secondPaymentPayload = (await secondPaymentResponse.json()) as { redirectTo?: string; error?: string }
+
+    assert.equal(secondPaymentResponse.ok, true, secondPaymentPayload.error ?? 'Second mock payment should succeed during UI smoke.')
+    assert.equal(Boolean(secondPaymentPayload.redirectTo), true, 'Second mock payment should return redirectTo.')
+
+    await mobilePage.goto(`${appUrl}${secondPaymentPayload.redirectTo}`, { waitUntil: 'domcontentloaded' })
+    const secondConfirmationVisible = await mobilePage.getByRole('heading', { name: /Masz potwierdzoną rozmowę głosową/i }).isVisible()
+
+    await mobilePage.goto(`${appUrl}/call/${bookingTwo.booking.id}?access=${encodeURIComponent(bookingTwo.accessToken)}`, {
       waitUntil: 'domcontentloaded',
     })
     const callTimerVisible = await mobilePage.getByRole('button', { name: /Uruchom licznik 15 minut/i }).isVisible()
@@ -312,47 +306,21 @@ async function main() {
     await desktopPage.goto(appUrl, { waitUntil: 'domcontentloaded' })
     const headerLinkTexts = await desktopPage.locator('.header-nav a').allTextContents()
     const headerOfertaVisible = (await desktopPage.locator('.header-links').count()) === 0
-    const specialistHeadingVisible = await desktopPage.getByText(/Specjalista prowadzący/i).isVisible()
-    const specialistTrustVisible = await desktopPage.getByRole('heading', {
-      name: /Behawior, wiedza medyczna i doświadczenie terapeutyczne w jednym miejscu/i,
-    }).isVisible()
-    const specialistPhotoVisible = await desktopPage.locator('#specjalista img[alt="Krzysztof Regulski na portretowym zdjęciu do strony Behawior 15"]').isVisible()
-    const credentialAltVisible = await desktopPage.locator('img[alt*="CAPBT Polska"]').isVisible()
-    const realCasesHeadingVisible = await desktopPage.getByRole('heading', {
-      name: /Takie problemy najczęściej trafiają na pierwszą 15-minutową rozmowę/i,
-    }).isVisible()
-    const realCaseCardsCount = await desktopPage.locator('.real-case-card').count()
-    const socialProofHeadingVisible = await desktopPage.getByRole('heading', { name: /Historie opiekunów i efekty konsultacji/i }).isVisible()
-    const socialProofSummaryVisible = await desktopPage.getByText(/To miejsce zbiera realne opisy efektów pierwszej konsultacji/i).isVisible()
-    const testimonialsHeadingVisible = await desktopPage.getByRole('heading', { name: /Opinie klientów/i }).isVisible()
-    const testimonialsEmptyVisible = await desktopPage.getByText(/Pierwsze zweryfikowane opinie pojawią się tutaj wkrótce/i).isVisible()
-    const testimonialFormHeadingVisible = await desktopPage.getByRole('heading', {
-      name: /Wyślij opinię do ręcznej moderacji/i,
-    }).isVisible()
-    const testimonialSubmitVisible = await desktopPage.getByRole('button', { name: /Wyślij opinię do weryfikacji/i }).isVisible()
-    const testimonialDisclaimerVisible = await desktopPage.getByText(/Publikujemy wyłącznie opinie zaakceptowane po weryfikacji/i).isVisible()
-    const socialProofFormHeadingVisible = await desktopPage.getByRole('heading', {
-      name: /Dodaj swoją opinię do ręcznej weryfikacji/i,
-    }).isVisible()
-    const socialProofSubmitVisible = await desktopPage.getByRole('button', { name: /Wyślij opinię do weryfikacji/i }).isVisible()
-    const socialProofDisclaimerVisible = await desktopPage
-      .getByText(/Publikujemy wyłącznie opinie zaakceptowane po weryfikacji/i)
-      .isVisible()
-    void testimonialsHeadingVisible
-    void testimonialsEmptyVisible
-    void testimonialFormHeadingVisible
-    void testimonialSubmitVisible
-    void testimonialDisclaimerVisible
-    const socialProofSectionOrder = await desktopPage.locator('main').evaluate((element) => {
-      const content = element.textContent ?? ''
-      if (content.includes('Historie opiekunów i efekty konsultacji')) {
-        return content.indexOf('Historie opiekunów i efekty konsultacji') < content.indexOf('Publikacje / Media')
-      }
-      return (
-        content.indexOf('Realne sprawy') < content.indexOf('Opinie klientów') &&
-        content.indexOf('Opinie klientów') < content.indexOf('Publikacje / Media')
-      )
-    })
+    const specialistHeadingVisible = await desktopPage.getByText(/Konsultację prowadzi osobiście/i).isVisible()
+    const specialistTrustVisible = await desktopPage.getByRole('heading', { name: /Dlaczego ten zakup jest bezpieczny i uczciwy/i }).isVisible()
+    const specialistPhotoVisible = await desktopPage.locator('.hero-spotlight-image').first().isVisible()
+    const credentialAltVisible = await desktopPage.locator('img[alt*="CAPBT Polska"]').first().isVisible()
+    const realCasesHeadingVisible = await desktopPage.getByRole('heading', { name: /W jakich problemach ta rozmowa pomaga/i }).isVisible()
+    const realCaseCardsCount = await desktopPage.locator('#tematy .topic-card').count()
+    const outcomesHeadingVisible = await desktopPage.getByRole('heading', { name: /Co dostajesz po 15 minutach/i }).isVisible()
+    const desktopProcessHeadingVisible = await desktopPage.getByRole('heading', { name: /Jak wygląda zakup konsultacji/i }).isVisible()
+    const desktopFinalCtaVisible = await desktopPage.getByRole('heading', { name: /Zarezerwuj 15 minut i kup spokojny pierwszy krok/i }).isVisible()
+    const socialProofHeadingVisible = (await desktopPage.getByRole('heading', { name: /Historie opiekunów i efekty konsultacji/i }).count()) > 0
+    const socialProofSummaryVisible = (await desktopPage.getByText(/To miejsce zbiera realne opisy efektów pierwszej konsultacji/i).count()) > 0
+    const socialProofFormHeadingVisible = (await desktopPage.getByRole('heading', { name: /Dodaj swoją opinię do ręcznej weryfikacji/i }).count()) > 0
+    const socialProofSubmitVisible = (await desktopPage.getByRole('button', { name: /Wyślij opinię do weryfikacji/i }).count()) > 0
+    const socialProofDisclaimerVisible = (await desktopPage.getByText(/Publikujemy wyłącznie opinie zaakceptowane po weryfikacji/i).count()) > 0
+    const socialProofSectionOrder = false
     const testimonialRouteResponse = await fetch(`${appUrl}/api/testimonials`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -374,10 +342,8 @@ async function main() {
     const robotsText = await robotsResponse.text()
     const sitemapResponse = await fetch(`${appUrl}/sitemap.xml`)
     const sitemapText = await sitemapResponse.text()
-    const publicationsHeadingVisible = await desktopPage.getByRole('heading', {
-      name: /Zweryfikowane materiały, które wzmacniają trust bez nadęcia/i,
-    }).isVisible()
-    const publicationLinkVisible = await desktopPage.getByRole('link', { name: /Otwórz artykuł/i }).first().isVisible()
+    const publicationsHeadingVisible = (await desktopPage.getByRole('heading', { name: /Zweryfikowane materiały, które wzmacniają trust bez nadęcia/i }).count()) > 0
+    const publicationLinkVisible = (await desktopPage.getByRole('link', { name: /Otwórz artykuł/i }).count()) > 0
     const noBrokenMailto = (await desktopPage.locator('a[href^="mailto:"]').count()) <= 1
     const faqButton = desktopPage.getByRole('button', { name: /Czy 15 minut wystarczy/i })
     const faqInitiallyExpanded = await faqButton.getAttribute('aria-expanded')
@@ -407,16 +373,20 @@ async function main() {
     await desktopPage.getByText(/Zapisano now.*cen.*konsultacji/i).waitFor({ timeout: 10000 })
 
     assert.equal(homeCtaVisible, true)
-    assert.equal(secondaryHeroCtaVisible, true)
+    assert.equal(secondaryHeroCtaVisible, false)
     assert.equal(heroHeadingVisible, true)
     assert.equal(heroPriceVisible, true)
     assert.equal(trustStripVisible, true)
     assert.equal(heroPhotoVisible, true)
     assert.equal(reassuranceVisible, true)
-    assert.equal(shareVisible, true)
+    assert.equal(shareVisible, false)
     assert.equal(footerLinkVisible, true)
-    assert.equal(socialSectionVisible, true)
+    assert.equal(socialSectionVisible, false)
     assert.equal(socialFacebookVisible, true)
+    assert.equal(salesSafetyHeadingVisible, true)
+    assert.equal(topicsHeadingVisible, true)
+    assert.equal(processHeadingVisible, true)
+    assert.equal(finalCtaHeadingVisible, true)
     assert.equal(homeAvailabilityVisible, true)
     assert.equal(consentVisible || gaScriptBeforeConsent === 0, true)
     assert.equal(gaScriptBeforeConsent, 0)
@@ -441,8 +411,6 @@ async function main() {
       ),
       true,
     )
-    assert.equal(currentHomepageHasJoinedSpecialistText, false)
-    assert.equal(currentHomepageHasJoinedModerationText, false)
     assert.equal(homepageHasWrongCalendarCopy, false)
     assert.equal(homepageHasMixedBookingCopy, false)
     assert.equal(paymentHeadingVisible, true)
@@ -451,6 +419,10 @@ async function main() {
     assert.equal(paymentPageHasTestBanner, false)
     assert.equal(confirmationVisible, true)
     assert.equal(prepCardStillVisible, true)
+    assert.equal(selfCancelButtonVisible, true)
+    assert.equal(cancellationVisible, true)
+    assert.equal(prepCardHiddenAfterCancel, true)
+    assert.equal(secondConfirmationVisible, true)
     assert.equal(callTimerVisible, true)
     assert.match(title, /Behawior 15/)
     assert.match(description ?? '', /Krzysztof Regulski|konsultacja głosowa/i)
@@ -468,14 +440,17 @@ async function main() {
     assert.equal(specialistTrustVisible, true)
     assert.equal(specialistPhotoVisible, true)
     assert.equal(credentialAltVisible, true)
-    assert.equal(realCasesHeadingVisible || socialProofHeadingVisible, true)
-    assert.equal(realCaseCardsCount >= 3, true)
-    assert.equal(socialProofHeadingVisible, true)
-    assert.equal(socialProofSummaryVisible, true)
-    assert.equal(socialProofFormHeadingVisible, true)
-    assert.equal(socialProofSubmitVisible, true)
-    assert.equal(socialProofDisclaimerVisible, true)
-    assert.equal(socialProofSectionOrder, true)
+    assert.equal(realCasesHeadingVisible, true)
+    assert.equal(realCaseCardsCount >= 4, true)
+    assert.equal(outcomesHeadingVisible, true)
+    assert.equal(desktopProcessHeadingVisible, true)
+    assert.equal(desktopFinalCtaVisible, true)
+    assert.equal(socialProofHeadingVisible, false)
+    assert.equal(socialProofSummaryVisible, false)
+    assert.equal(socialProofFormHeadingVisible, false)
+    assert.equal(socialProofSubmitVisible, false)
+    assert.equal(socialProofDisclaimerVisible, false)
+    assert.equal(socialProofSectionOrder, false)
     assert.equal(dogotherapySlotHeadingVisible, true)
     assert.equal(testimonialRouteResponse.status, 503)
     assert.match(testimonialRoutePayload.error ?? '', /Formularz opinii jest chwilowo niedostępny/i)
@@ -484,8 +459,8 @@ async function main() {
     assert.match(robotsText, /Sitemap:\s*https?:\/\/.+\/sitemap\.xml/i)
     assert.equal(sitemapResponse.ok, true)
     assert.match(sitemapText, /<loc>https?:\/\/.+\/book<\/loc>/i)
-    assert.equal(publicationsHeadingVisible || publicationLinkVisible, true)
-    assert.equal(publicationLinkVisible, true)
+    assert.equal(publicationsHeadingVisible, false)
+    assert.equal(publicationLinkVisible, false)
     assert.equal(noBrokenMailto, true)
     assert.equal(faqInitiallyExpanded, 'true')
     assert.equal(faqAnswerInitiallyVisible, true)
@@ -511,6 +486,10 @@ async function main() {
             trustStripVisible,
             heroPhotoVisible,
             reassuranceVisible,
+            salesSafetyHeadingVisible,
+            topicsHeadingVisible,
+            processHeadingVisible,
+            finalCtaHeadingVisible,
             footerLinkVisible,
             socialSectionVisible,
             socialFacebookVisible,
@@ -521,15 +500,9 @@ async function main() {
             bookingAvailabilityVisible,
             slotHeadingVisible,
             slotOptionVisible,
-            initialSlotCount: publicSlotHrefs.length,
             currentSlotCount: currentPublicSlotHrefs.length,
-            initialHomepageHasJoinedSpecialistText: homepageHasJoinedSpecialistText,
-            initialHomepageHasJoinedModerationText: homepageHasJoinedModerationText,
-            currentHomepageHasJoinedSpecialistText,
-            currentHomepageHasJoinedModerationText,
             homepageHasWrongCalendarCopy,
             homepageHasMixedBookingCopy,
-            formResponses,
             currentFormResponses,
             paymentHeadingVisible,
             payButtonVisible,
@@ -537,6 +510,10 @@ async function main() {
             paymentPageHasTestBanner,
             confirmationVisible,
             prepCardStillVisible,
+            selfCancelButtonVisible,
+            cancellationVisible,
+            prepCardHiddenAfterCancel,
+            secondConfirmationVisible,
             callTimerVisible,
             title,
             bookingTitle,
@@ -552,14 +529,16 @@ async function main() {
             specialistTrustVisible,
             specialistPhotoVisible,
             credentialAltVisible,
-            realCasesHeadingVisible,
-            realCaseCardsCount,
+            topicsSectionVisible: realCasesHeadingVisible,
+            topicsCardCount: realCaseCardsCount,
+            outcomesHeadingVisible,
+            desktopProcessHeadingVisible,
+            desktopFinalCtaVisible,
             socialProofHeadingVisible,
             socialProofSummaryVisible,
             socialProofFormHeadingVisible,
             socialProofSubmitVisible,
             socialProofDisclaimerVisible,
-            socialProofSectionOrder,
             dogotherapySlotHeadingVisible,
             robotsOk: robotsResponse.ok,
             sitemapOk: sitemapResponse.ok,

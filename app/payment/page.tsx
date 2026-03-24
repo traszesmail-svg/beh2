@@ -182,8 +182,8 @@ export default async function PaymentPage({
                   <strong>{isMockPayment ? 'Co stanie się po potwierdzeniu testowym' : 'Co stanie się po płatności'}</strong>
                   <span>
                     {isMockPayment
-                      ? 'Dostaniesz potwierdzenie, link do rozmowy i możliwość dodania materiałów, tak samo jak w finalnym flow po prawdziwej płatności.'
-                      : 'Dostaniesz potwierdzenie, link do rozmowy i możliwość dodania materiałów, jeśli chcesz lepiej przygotować specjalistę przed konsultacją.'}
+                      ? 'Dostaniesz potwierdzenie, link do rozmowy, możliwość dodania materiałów i tę samą minutę na anulację, którą zobaczy klient po prawdziwej płatności.'
+                      : 'Dostaniesz potwierdzenie, link do rozmowy, możliwość dodania materiałów i 1 minutę na samodzielne anulowanie zakupu przyciskiem na ekranie potwierdzenia.'}
                   </span>
                 </div>
               </div>

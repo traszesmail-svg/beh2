@@ -107,6 +107,10 @@ export async function markBookingPaymentFailed(bookingId: string) {
   return getProvider().markBookingPaymentFailed(bookingId)
 }
 
+export async function markBookingRefunded(bookingId: string) {
+  return getProvider().markBookingRefunded(bookingId)
+}
+
 export async function markBookingExpired(bookingId: string) {
   return getProvider().markBookingExpired(bookingId)
 }

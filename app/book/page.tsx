@@ -186,8 +186,8 @@ export default async function BookPage({
             <div className="list-card accent-outline top-gap">
               <strong>Niski próg ryzyka</strong>
               <span>
-                Jeśli rozmowa nie pomoże Ci zrozumieć problemu, możesz ubiegać się o zwrot pieniędzy.
-                Nie obiecujemy automatycznego anulowania w 60 sekund, bo taki mechanizm nie jest częścią produktu.
+                Po opłaceniu masz 1 minutę na samodzielną rezygnację przyciskiem anulacji na ekranie potwierdzenia.
+                Jeśli zrezygnujesz później albo po rozmowie uznasz, że usługa nie spełniła swojej roli, nadal działa reklamacja lub wniosek o zwrot zgodnie z regulaminem.
               </span>
             </div>
 

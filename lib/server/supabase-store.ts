@@ -766,6 +766,53 @@ export async function markBookingPaymentFailed(bookingId: string): Promise<Booki
   return bookingUpdate.data ? mapBookingRow(bookingUpdate.data as BookingRow) : null
 }
 
+export async function markBookingRefunded(bookingId: string): Promise<BookingRecord | null> {
+  const supabase = getSupabaseAdmin()
+  const current = await getBookingById(bookingId)
+
+  if (!current) {
+    return null
+  }
+
+  if (current.paymentStatus !== 'paid' || current.bookingStatus !== 'confirmed') {
+    throw new Error('Tylko świeżo opłacona, potwierdzona rezerwacja może zostać anulowana z automatycznym zwrotem.')
+  }
+
+  const nowIso = new Date().toISOString()
+  const bookingUpdate = await supabase
+    .from('bookings')
+    .update({
+      booking_status: 'cancelled',
+      payment_status: 'refunded',
+      cancelled_at: nowIso,
+      refunded_at: nowIso,
+      updated_at: nowIso,
+    })
+    .eq('id', bookingId)
+    .select('*')
+    .maybeSingle()
+
+  if (bookingUpdate.error) {
+    throw bookingUpdate.error
+  }
+
+  const slotUpdate = await supabase
+    .from('availability')
+    .update({
+      is_booked: false,
+      locked_by_booking_id: null,
+      locked_until: null,
+      updated_at: nowIso,
+    })
+    .eq('id', current.slotId)
+
+  if (slotUpdate.error) {
+    throw slotUpdate.error
+  }
+
+  return bookingUpdate.data ? mapBookingRow(bookingUpdate.data as BookingRow) : null
+}
+
 export async function markBookingExpired(bookingId: string): Promise<BookingRecord | null> {
   const supabase = getSupabaseAdmin()
   const current = await getBookingById(bookingId)

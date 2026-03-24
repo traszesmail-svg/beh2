@@ -5,9 +5,6 @@ import { FaqAccordion } from '@/components/FaqAccordion'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { PricingDisclosure } from '@/components/PricingDisclosure'
-import { ShareActions } from '@/components/ShareActions'
-import { SocialProofSection } from '@/components/SocialProofSection'
-import { SocialSection } from '@/components/SocialSection'
 import { faq, problemOptions, steps } from '@/lib/data'
 import { buildHomeMetadata } from '@/lib/seo'
 import { listAvailability } from '@/lib/server/db'
@@ -18,13 +15,11 @@ import {
   CAPBT_PROFILE_URL,
   COAPE_LOGO,
   COAPE_ORG_URL,
-  MEDIA_MENTIONS,
   SPECIALIST_CREDENTIALS,
   SPECIALIST_LOCATION,
   SPECIALIST_NAME,
   SPECIALIST_PHOTO,
   SPECIALIST_TRUST_STATEMENT,
-  SUPPORTING_SPECIALIST_PHOTO,
   TOPIC_VISUALS,
 } from '@/lib/site'
 import { ProblemType } from '@/lib/types'
@@ -72,33 +67,13 @@ function renderProblemIcon(problem: ProblemType) {
           <path d="M18 25h12m-9 4h6" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
         </svg>
       )
-    case 'niszczenie':
-      return (
-        <svg viewBox="0 0 48 48" className="topic-svg" aria-hidden="true">
-          <path d="M15 31c0-6.6 3.8-12 9-12 4.7 0 9 4.2 9 10.8" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
-          <path d="M18 17c.8-3.4 3-5 6-5 2.8 0 5 1.4 6 4.6" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
-          <path d="M14 34h20" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
-          <path d="m20 26 2 2 6-6" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      )
-    case 'dogoterapia':
-      return (
-        <svg viewBox="0 0 48 48" className="topic-svg" aria-hidden="true">
-          <path d="M15 30c0-6 3.6-11 9-11 5.1 0 9 4 9 10.5" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
-          <path d="M18 18c.6-3.4 2.7-5 6-5 3.2 0 5.2 1.6 6 4.8" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
-          <path d="M16 35c2.2-3 5-4.5 8-4.5s5.8 1.5 8 4.5" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
-          <path d="m24 22.5 1.8 2.4 2.9-.9-1.8 2.4 1.8 2.4-2.9-.9-1.8 2.4-1.8-2.4-2.9.9 1.8-2.4-1.8-2.4 2.9.9Z" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinejoin="round" />
-        </svg>
-      )
-    case 'inne':
+    default:
       return (
         <svg viewBox="0 0 48 48" className="topic-svg" aria-hidden="true">
           <circle cx="24" cy="24" r="12" fill="none" stroke="currentColor" strokeWidth="2.3" />
           <path d="M24 18v12m6-6H18" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
         </svg>
       )
-    default:
-      return null
   }
 }
 
@@ -118,21 +93,12 @@ function renderProcessIcon(step: string) {
           <path d="M16 10v6m16-6v6M16 22h16" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
         </svg>
       )
-    case '03':
-      return (
-        <svg viewBox="0 0 48 48" className="topic-svg" aria-hidden="true">
-          <rect x="13" y="10" width="22" height="28" rx="4" fill="none" stroke="currentColor" strokeWidth="2.3" />
-          <path d="M19 20h10m-10 6h10m-10 6h6" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
-        </svg>
-      )
-    case '04':
+    default:
       return (
         <svg viewBox="0 0 48 48" className="topic-svg" aria-hidden="true">
           <path d="M10 24 18 32 38 14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       )
-    default:
-      return null
   }
 }
 
@@ -153,12 +119,12 @@ export default async function HomePage() {
     publicFlowMessage = 'Rezerwacja chwilowo się odświeża. Ofertę możesz zobaczyć już teraz, a aktualny kalendarz sprawdzić w kolejnym kroku.'
   }
 
-  const bookingEnabled = dataMode.isValid && !publicFlowMessage
-  const availabilityPreviewLabel = bookingEnabled
-    ? availability.length > 0
-      ? 'Wolne terminy dostępne dziś — sprawdź aktualny kalendarz.'
-      : 'Brak wolnych terminów'
-    : 'Najbliższe realnie dostępne terminy zobaczysz w kolejnym kroku rezerwacji.'
+  const availabilityPreviewLabel =
+    dataMode.isValid && !publicFlowMessage
+      ? availability.length > 0
+        ? 'Wolne terminy są dostępne. Aktualny kalendarz zobaczysz po wejściu do rezerwacji.'
+        : 'Brak wolnych terminów'
+      : 'Najbliższe realnie dostępne terminy zobaczysz w kolejnym kroku rezerwacji.'
 
   const structuredData = [
     {
@@ -168,7 +134,7 @@ export default async function HomePage() {
       serviceType: '15-minutowa konsultacja głosowa online dla psa lub kota',
       url: baseUrl,
       description:
-        'Spokojna 15-minutowa konsultacja głosowa online dla psa lub kota. Certyfikowany behawiorysta Krzysztof Regulski (COAPE/CAPBT).',
+        'Spokojna 15-minutowa konsultacja głosowa online dla psa lub kota. Realny specjalista, bezpieczny zakup i jasny pierwszy krok po rozmowie.',
       areaServed: {
         '@type': 'City',
         name: 'Olsztyn',
@@ -178,50 +144,38 @@ export default async function HomePage() {
         name: SPECIALIST_NAME,
         jobTitle: SPECIALIST_CREDENTIALS,
         image: new URL(SPECIALIST_PHOTO.src, baseUrl).toString(),
-        address: {
-          '@type': 'PostalAddress',
-          addressLocality: 'Olsztyn',
-          addressCountry: 'PL',
-        },
       },
     },
-      {
-        '@context': 'https://schema.org',
-        '@type': 'Person',
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Person',
       name: SPECIALIST_NAME,
       description: SPECIALIST_TRUST_STATEMENT,
       image: new URL(SPECIALIST_PHOTO.src, baseUrl).toString(),
-        homeLocation: {
-          '@type': 'Place',
-          name: SPECIALIST_LOCATION,
-        },
-        sameAs: [COAPE_ORG_URL, CAPBT_ORG_URL, CAPBT_PROFILE_URL],
+      homeLocation: {
+        '@type': 'Place',
+        name: SPECIALIST_LOCATION,
       },
-    ]
-
-  const heroProofs = [
-    'Zweryfikowany behawiorysta COAPE / CAPBT',
-    'Bezpieczna płatność',
-    'Zwrot zgodnie z regulaminem',
+      sameAs: [COAPE_ORG_URL, CAPBT_ORG_URL, CAPBT_PROFILE_URL],
+    },
   ]
 
-  const heroTopicPicks = problemOptions.filter((item) => item.id !== 'inne')
+  const salesTopics = problemOptions.filter((item) =>
+    ['szczeniak', 'kot', 'separacja', 'agresja'].includes(item.id),
+  )
 
-  const valueHighlights = [
+  const outcomeHighlights = [
     {
-      title: 'Szybka pierwsza pomoc',
-      description:
-        'W 15 minut porządkujesz problem i dostajesz pierwszy realny kierunek zamiast kolejnych ogólników z internetu.',
+      title: 'Porządek w problemie',
+      description: 'Po 15 minutach wiesz, co jest najważniejsze teraz, a co może spokojnie poczekać.',
     },
     {
-      title: 'Jedna osoba od początku do końca',
-      description:
-        'Rozmawiasz z konkretnym specjalistą, bez marketplace, bez przepychania i bez chaosu organizacyjnego.',
+      title: 'Pierwszy konkretny plan',
+      description: 'Dostajesz prosty następny krok zamiast kolejnej porcji ogólnych porad z internetu.',
     },
     {
-      title: 'Spokojny próg wejścia',
-      description:
-        'Bezpieczna płatność, szybkie potwierdzenie i możliwość ubiegania się o zwrot zgodnie z regulaminem.',
+      title: 'Decyzję, co dalej',
+      description: 'Od razu wiesz, czy wystarczy spokojna praca w domu, czy trzeba iść szerzej w konsultację albo diagnostykę.',
     },
   ]
 
@@ -236,17 +190,12 @@ export default async function HomePage() {
             {publicFlowMessage ? <div className="info-box">{publicFlowMessage}</div> : null}
 
             <div className="pill subtle-pill">15-minutowa konsultacja audio online</div>
-            <div className="hero-topline">
-              Dla opiekunów psów i kotów, którzy potrzebują szybkiej, spokojnej pierwszej pomocy i jasnego następnego kroku.
-            </div>
-            <h1>Spokojna konsultacja, która porządkuje problem psa lub kota w 15 minut</h1>
+            <div className="hero-topline">Dla opiekunów psów i kotów, którzy chcą szybko kupić spokojny pierwszy krok, a nie kolejną chaotyczną obietnicę.</div>
+            <h1>15 minut, które porządkują problem psa lub kota i dają pierwszy plan działania</h1>
 
             <p className="hero-text hero-text-tight">
-              Pierwsza realna pomoc, kiedy chcesz szybko zrozumieć problem i wiedzieć, co zrobić dalej bez chaosu, bez zgadywania i bez
-              przeciążenia poradami z internetu.
+              To krótka, konkretna konsultacja na moment, w którym chcesz zrozumieć problem, przestać zgadywać i wiedzieć, co zrobić dalej bez chaosu i przeciążenia poradami.
             </p>
-
-            <div className="hero-microcopy">Pierwsza realna pomoc w 15 minut - bez stresu.</div>
 
             <div className="hero-price-badge hero-price-badge-compact">
               <PricingDisclosure
@@ -258,28 +207,31 @@ export default async function HomePage() {
               />
             </div>
 
-            <div className="hero-actions">
+            <div className="hero-inline-facts">
+              <div className="hero-inline-fact">
+                <strong>Technik weterynarii</strong>
+                <span>Łączę zachowanie z myśleniem o zdrowiu, bezpieczeństwie i tle medycznym.</span>
+              </div>
+              <div className="hero-inline-fact">
+                <strong>Dogoterapeuta</strong>
+                <span>Łączę świat ludzi i zwierząt, więc patrzę nie tylko na objaw, ale też na relację i kontekst.</span>
+              </div>
+              <div className="hero-inline-fact">
+                <strong>1 minuta na anulację</strong>
+                <span>Po zakupie dostajesz uczciwy czas na samodzielne cofnięcie płatności przyciskiem anulacji.</span>
+              </div>
+            </div>
+
+            <div className="hero-actions top-gap">
               <Link
                 href="/book"
                 className="button button-primary big-button"
                 data-analytics-event="reserve_click"
-                data-analytics-location="hero-primary"
+                data-analytics-location="hero"
               >
-                Zarezerwuj konsultację
+                Zarezerwuj 15 minut
               </Link>
             </div>
-
-            <div className="hero-proof-row">
-              {heroProofs.map((item) => (
-                <span key={item} className="hero-proof-pill">
-                  {item}
-                </span>
-              ))}
-            </div>
-
-            <Link href="/#jak-to-dziala" className="text-link hero-secondary-link">
-              Zobacz, jak wygląda rezerwacja
-            </Link>
           </div>
 
           <div className="panel side-panel hero-aside hero-spotlight">
@@ -289,106 +241,106 @@ export default async function HomePage() {
                 alt={SPECIALIST_PHOTO.alt}
                 width={1200}
                 height={1600}
-                sizes="(max-width: 980px) 100vw, 34vw"
+                sizes="(max-width: 980px) 88vw, 38vw"
                 className="hero-spotlight-image"
                 priority
               />
             </div>
 
-            <div className="hero-spotlight-card">
+            <div className="hero-spotlight-card" id="specjalista">
               <div className="section-eyebrow">Konsultację prowadzi osobiście</div>
               <h2>{SPECIALIST_NAME}</h2>
               <div className="hero-spotlight-role">{SPECIALIST_CREDENTIALS}</div>
-              <p className="muted paragraph-gap">
-                {SPECIALIST_TRUST_STATEMENT} Rozmawiasz z konkretną osobą od pierwszego kliknięcia do pierwszego planu działania.
-              </p>
 
+              <div className="hero-spotlight-meta">
+                <strong>Jedna rozmowa, jedna osoba i jeden spokojny kierunek działania.</strong>
+                <span>{availabilityPreviewLabel}</span>
+              </div>
+
+              <a
+                href={CAPBT_PROFILE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hero-spotlight-proof"
+                aria-label="Otwórz publiczny profil COAPE CAPBT"
+              >
+                <Image src={CAPBT_LOGO.src} alt={CAPBT_LOGO.alt} width={442} height={104} className="hero-coape-logo" />
+                <span>COAPE / CAPBT możesz sprawdzić publicznie jeszcze przed zakupem.</span>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <section className="panel section-panel guarantee-panel" id="bezpieczenstwo">
+          <div className="section-eyebrow">Pewność zakupu</div>
+          <h2>Dlaczego ten zakup jest bezpieczny i uczciwy</h2>
+          <p className="hero-text">
+            To nie jest obietnica cudu w 15 minut. To spokojny pierwszy krok z realnym specjalistą, publicznie sprawdzalnymi kompetencjami i jasnymi zasadami zakupu.
+          </p>
+
+          <div className="summary-grid trust-grid top-gap">
+            <div className="summary-card trust-card">
+              <strong>Technik weterynarii</strong>
+              <span>Jeśli temat dotyka zdrowia, napięcia albo przeciążenia, łatwiej od razu ustawić bezpieczny kierunek dalszych decyzji.</span>
+            </div>
+            <div className="summary-card trust-card">
+              <strong>Dogoterapeuta</strong>
+              <span>To ważne tam, gdzie problem nie dotyczy tylko zwierzęcia, ale też relacji człowiek-zwierzę i sposobu prowadzenia wsparcia.</span>
+            </div>
+            <div className="summary-card trust-card">
+              <strong>Bezpieczna płatność i minuta na anulację</strong>
+              <span>Po opłaceniu widzisz potwierdzenie, link do rozmowy i przycisk anulacji działający przez 1 minutę.</span>
+            </div>
+          </div>
+
+          <div className="list-card accent-outline top-gap">
+            <strong>COAPE i CAPBT sprawdzisz publicznie</strong>
+            <span>To nie jest anonimowy marketplace. Poniżej masz oficjalne miejsca do weryfikacji organizacji i profilu specjalisty.</span>
+
+            <div className="credential-logo-grid top-gap-small">
               <a
                 href={COAPE_ORG_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hero-spotlight-proof"
+                className="credential-logo-link"
                 aria-label="Otwórz oficjalną stronę COAPE Polska"
               >
-                <Image src={COAPE_LOGO.src} alt={COAPE_LOGO.alt} width={442} height={104} className="hero-coape-logo" />
-                <span>Zweryfikowany specjalista COAPE / CAPBT</span>
+                <Image src={COAPE_LOGO.src} alt={COAPE_LOGO.alt} width={442} height={104} className="credential-logo" />
+                <span className="credential-logo-label">Oficjalna strona COAPE Polska</span>
               </a>
-
-              <div className="hero-spotlight-meta">
-                <strong>{availabilityPreviewLabel}</strong>
-                <span>Po potwierdzeniu dostajesz od razu link do rozmowy audio i możliwość dodania materiałów.</span>
-              </div>
+              <a
+                href={CAPBT_PROFILE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="credential-logo-link"
+                aria-label="Otwórz profil Krzysztofa Regulskiego w CAPBT"
+              >
+                <Image src={CAPBT_LOGO.src} alt={CAPBT_LOGO.alt} width={442} height={104} className="credential-logo" />
+                <span className="credential-logo-label">Profil COAPE / CAPBT</span>
+              </a>
             </div>
-          </div>
-        </section>
-
-        <section className="panel section-panel value-panel">
-          <div className="section-head">
-            <div>
-              <div className="section-eyebrow">Spokojny pierwszy krok</div>
-              <h2>Najpierw szybka ulga i porządek, dopiero potem rozwinięcie szczegółów</h2>
-            </div>
-            <div className="muted">
-              To nie jest rozwlekła konsultacja wstępna. To krótki, konkretny start, który pomaga ocenić sytuację i przejść do sensownego działania.
-            </div>
-          </div>
-
-          <div className="card-grid three-up top-gap">
-            {valueHighlights.map((item) => (
-              <div key={item.title} className="feature-card feature-card-quiet">
-                <div className="simple-title">{item.title}</div>
-                <div className="simple-desc">{item.description}</div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="panel section-panel" id="jak-to-dziala">
-          <div className="section-head">
-            <div>
-              <div className="section-eyebrow">Jak to działa</div>
-              <h2>Krótka ścieżka do rezerwacji, bez rozbudowanego onboardingu</h2>
-            </div>
-            <div className="muted">Wchodzisz szybko do właściwego kalendarza, wybierasz termin i przechodzisz do spokojnej rozmowy.</div>
-          </div>
-
-          <div className="journey-grid top-gap">
-            {steps.map((step) => (
-              <article key={step.n} className="journey-card">
-                <div className="journey-card-top">
-                  <div className="step-number">{step.n}</div>
-                  <span className="journey-icon-shell">{renderProcessIcon(step.n)}</span>
-                </div>
-                <div className="simple-title">{step.title}</div>
-                <div className="simple-desc">{step.desc}</div>
-              </article>
-            ))}
           </div>
         </section>
 
         <section className="panel section-panel" id="tematy">
-          <div className="section-head">
-            <div>
-              <div className="section-eyebrow">Tematy konsultacji</div>
-              <h2>Wybierz temat konsultacji i przejdź do rezerwacji</h2>
-            </div>
-            <div className="muted">
-              Każdy temat prowadzi do tego samego procesu rezerwacji, tej samej ceny dla nowych rezerwacji i realnie dostępnych terminów.
-            </div>
-          </div>
+          <div className="section-eyebrow">Najczęstsze sprawy</div>
+          <h2>W jakich problemach ta rozmowa pomaga</h2>
+          <p className="hero-text">
+            To dobra rozmowa na pierwszy krok, kiedy chcesz przestać zgadywać i szybko ustalić, od czego zacząć w domu, w relacji ze zwierzęciem albo w dalszej diagnostyce.
+          </p>
 
           <div className="card-grid three-up top-gap">
-            {problemOptions.map((tile) => {
-              const topicVisual = TOPIC_VISUALS[tile.id]
+            {salesTopics.map((item) => {
+              const topicVisual = TOPIC_VISUALS[item.id]
 
               return (
                 <Link
-                  key={tile.id}
-                  href={`/book?problem=${tile.id}`}
+                  key={item.id}
+                  href={`/slot?problem=${item.id}`}
                   className="topic-card"
                   data-analytics-event="topic_select"
-                  data-analytics-location="home-topics"
-                  data-analytics-problem={tile.id}
+                  data-analytics-location="home-sales-topics"
+                  data-analytics-problem={item.id}
                 >
                   <div className="topic-media-shell">
                     <Image
@@ -400,241 +352,73 @@ export default async function HomePage() {
                       className="topic-media-image"
                     />
                   </div>
-                  <span className="topic-icon-shell">{renderProblemIcon(tile.id)}</span>
-                  <div className="topic-title">{tile.title}</div>
-                  <div className="topic-desc">{tile.desc}</div>
-                  <div className="topic-link">Wybierz temat i zarezerwuj termin</div>
+                  <span className="topic-icon-shell">{renderProblemIcon(item.id)}</span>
+                  <div className="topic-title">{item.title}</div>
+                  <div className="topic-desc">{item.desc}</div>
+                  <div className="topic-link">Wybierz ten temat i przejdź do terminu</div>
                 </Link>
               )
             })}
           </div>
-        </section>
 
-        <section className="two-col-section" id="specjalista">
-          <div className="panel section-panel specialist-visual-card">
-            <div className="section-eyebrow">Specjalista prowadzący</div>
-            <div className="specialist-portrait-shell top-gap-small">
-              <Image
-                src={SPECIALIST_PHOTO.src}
-                alt={SPECIALIST_PHOTO.alt}
-                width={1200}
-                height={1600}
-                sizes="(max-width: 980px) 88vw, 42vw"
-                className="specialist-portrait"
-              />
-            </div>
-            <div className="list-card top-gap specialist-summary-card">
-              <strong>{SPECIALIST_NAME}</strong>
-              <span>
-                {SPECIALIST_CREDENTIALS}. {SPECIALIST_LOCATION}. Każdą rozmowę prowadzi osobiście od rezerwacji do wskazania kolejnego kroku.
-              </span>
-              <span className="specialist-trust-line">{SPECIALIST_TRUST_STATEMENT}</span>
-            </div>
-          </div>
-
-          <div className="panel section-panel specialist-copy-panel">
-            <div className="section-eyebrow">Poznaj osobę, z którą rozmawiasz</div>
-            <h2>Behawior, wiedza medyczna i doświadczenie terapeutyczne w jednym miejscu</h2>
-            <div className="specialist-badge-list top-gap">
-              <span className="specialist-badge">Behawior</span>
-              <span className="specialist-badge">Technik weterynarii</span>
-              <span className="specialist-badge">Opiekun medyczny</span>
-              <span className="specialist-badge">Dogoterapia</span>
-              <span className="specialist-badge">COAPE/CAPBT</span>
-            </div>
-            <div className="stack-gap top-gap">
-              <div className="list-card specialist-inline-photo-card">
-                <div className="specialist-inline-photo-shell">
-                  <Image
-                    src={SUPPORTING_SPECIALIST_PHOTO.src}
-                    alt={SUPPORTING_SPECIALIST_PHOTO.alt}
-                    width={1200}
-                    height={1778}
-                    sizes="(max-width: 680px) 100vw, (max-width: 980px) 80vw, 16vw"
-                    className="specialist-inline-photo"
-                  />
-                </div>
-                <div className="specialist-inline-copy">
-                  <strong>Spójna praca na styku zachowania, zdrowia i terapii</strong>
-                  <span>
-                    Dzięki temu łatwiej szybko ocenić, czy wystarczy pierwszy plan domowy, czy trzeba połączyć behawior z dalszą diagnostyką albo wizytą u lekarza weterynarii.
-                  </span>
-                </div>
-              </div>
-              <div className="list-card certification-card">
-                <strong>COAPE i CAPBT weryfikujesz publicznie</strong>
-                <span>Logo prowadzą do oficjalnych stron organizacji, a obok zostaje publiczny profil specjalisty.</span>
-                <div className="credential-logo-grid top-gap-small">
-                  <a
-                    href={COAPE_ORG_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="credential-logo-link"
-                    aria-label="Otwórz oficjalną stronę COAPE Polska"
-                  >
-                    <Image
-                      src={COAPE_LOGO.src}
-                      alt={COAPE_LOGO.alt}
-                      width={442}
-                      height={104}
-                      className="credential-logo"
-                    />
-                    <span className="credential-logo-label">Oficjalna strona COAPE Polska</span>
-                  </a>
-                  <a
-                    href={CAPBT_ORG_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="credential-logo-link"
-                    aria-label="Otwórz stronę CAPBT Polska"
-                  >
-                    <Image
-                      src={CAPBT_LOGO.src}
-                      alt={CAPBT_LOGO.alt}
-                      width={436}
-                      height={107}
-                      className="credential-logo"
-                    />
-                    <span className="credential-logo-label">Strona CAPBT Polska</span>
-                  </a>
-                </div>
-                <div className="hero-actions top-gap-small">
-                  <a href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="button button-ghost small-button">
-                    Profil Krzysztofa
-                  </a>
-                </div>
-              </div>
-              <div className="list-card">
-                <strong>Materiały przed rozmową</strong>
-                <span>Jeżeli chcesz, po rezerwacji dodasz MP4, link albo notatki. To przyspiesza rozmowę i pomaga wejść od razu w sedno sprawy.</span>
-              </div>
-            </div>
+          <div className="list-card top-gap">
+            <strong>Jeśli temat jest inny albo dotyczy dogoterapii</strong>
+            <span>Też wejdziesz przez ten sam, prosty flow rezerwacji. Temat wybierzesz po kliknięciu w rezerwację.</span>
           </div>
         </section>
 
-        <SocialProofSection />
+        <section className="panel section-panel">
+          <div className="section-eyebrow">Efekt rozmowy</div>
+          <h2>Co dostajesz po 15 minutach</h2>
 
-        <section className="panel section-panel" id="publikacje">
-          <div className="section-head">
-            <div>
-              <div className="section-eyebrow">Publikacje / Media</div>
-              <h2>Zweryfikowane materiały, które wzmacniają zaufanie bez nadęcia</h2>
-            </div>
-            <div className="muted">Pokazujemy tylko treści, które da się obronić nazwą medium albo publicznym linkiem.</div>
+          <div className="summary-grid top-gap">
+            {outcomeHighlights.map((item) => (
+              <div key={item.title} className="summary-card">
+                <div className="stat-label">{item.title}</div>
+                <div className="summary-value">{item.description}</div>
+              </div>
+            ))}
           </div>
+        </section>
 
-          <div className="media-grid top-gap">
-            {MEDIA_MENTIONS.map((item) => (
-              <article key={item.id} className="media-card">
-                <div className="section-eyebrow">{item.label}</div>
-                <h3>{item.title}</h3>
-                <p>{item.summary}</p>
-                <a href={item.href} target="_blank" rel="noopener noreferrer" className="text-link top-gap-small">
-                  {item.cta}
-                </a>
-              </article>
+        <section className="panel section-panel" id="jak-to-dziala">
+          <div className="section-eyebrow">Prosty proces</div>
+          <h2>Jak wygląda zakup konsultacji</h2>
+
+          <div className="card-grid three-up top-gap">
+            {steps.map((step) => (
+              <div key={step.n} className="topic-card">
+                <span className="topic-icon-shell">{renderProcessIcon(step.n)}</span>
+                <div className="topic-title">{step.title}</div>
+                <div className="topic-desc">{step.desc}</div>
+              </div>
             ))}
           </div>
         </section>
 
         <section className="panel section-panel" id="faq">
-          <div className="section-head">
-            <div>
-              <div className="section-eyebrow">FAQ</div>
-              <h2>Najczęstsze pytania przed pierwszą rozmową</h2>
-            </div>
-            <div className="muted">Krótkie odpowiedzi na to, co zwykle blokuje decyzję o rezerwacji.</div>
-          </div>
+          <div className="section-eyebrow">FAQ</div>
+          <h2>Najczęstsze pytania przed zakupem</h2>
           <FaqAccordion items={faq} />
         </section>
 
-        <section className="panel cta-panel">
+        <section className="panel cta-panel guarantee-panel">
           <div className="section-eyebrow">Pierwszy krok</div>
-          <h2>Zarezerwuj 15 minut i odzyskaj spokój w domu.</h2>
-          <p className="hero-text small-width">
-            Jeżeli problem zaczyna się ciągnąć, najważniejsze jest dobre otwarcie. Ta konsultacja pomaga szybko ocenić, co zrobić od razu i czy
-            potrzebna jest dalsza, szersza praca.
+          <h2>Zarezerwuj 15 minut i kup spokojny pierwszy krok</h2>
+          <p className="hero-text">
+            Bez marketplace, bez zbędnych dodatków, z prawdziwym specjalistą po drugiej stronie i uczciwą minutą na anulację po zakupie.
           </p>
           <div className="hero-actions top-gap">
             <Link
               href="/book"
               className="button button-primary big-button"
               data-analytics-event="reserve_click"
-              data-analytics-location="final-cta"
+              data-analytics-location="home-final-cta"
             >
               Zarezerwuj konsultację
             </Link>
           </div>
-          <div className="top-gap">
-            <ShareActions url={baseUrl} text="Behawior 15" />
-          </div>
         </section>
-
-        <section className="two-col-section" id="dogoterapia">
-          <div className="panel section-panel specialist-visual-card">
-            <div className="section-eyebrow">Dogoterapia</div>
-            <h2>Umów wstępną rozmowę o dogoterapii</h2>
-            <p className="muted">
-              Jeśli chcesz sprawdzić, czy dogoterapia będzie dobrym następnym krokiem, możesz przejść przez to samo,
-              działające flow rezerwacji. Najpierw wybierasz temat dogoterapii i termin rozmowy, a potem w formularzu
-              doprecyzowujesz cel spotkania, odbiorców i kontekst pracy.
-            </p>
-            <div className="hero-animal-shell top-gap">
-              <Image
-                src="/branding/case-dog-home.jpg"
-                alt="Spokojny pies w domowym otoczeniu jako ilustracja sekcji o dogoterapii"
-                width={1200}
-                height={900}
-                sizes="(max-width: 980px) 100vw, 42vw"
-                className="hero-animal-image"
-              />
-            </div>
-          </div>
-
-          <div className="panel section-panel specialist-copy-panel">
-            <div className="section-eyebrow">Jak wejść w rezerwację</div>
-            <h2>Jedno wejście do kalendarza, bez osobnej ścieżki technicznej</h2>
-            <div className="stack-gap top-gap">
-              <div className="list-card accent-outline">
-                <strong>Co wpiszesz w formularzu</strong>
-                <span>
-                  Po wyborze terminu dopiszesz, dla kogo ma być przygotowane spotkanie, jaki jest najważniejszy cel
-                  rozmowy i jakiego wsparcia potrzebujesz na starcie.
-                </span>
-              </div>
-              <div className="list-card">
-                <strong>Co ustalisz na starcie</strong>
-                <span>
-                  Taka pierwsza rozmowa pomaga ocenić, czy dogoterapia ma sens w Twojej sytuacji, jak się przygotować i
-                  jaki następny krok będzie najbardziej użyteczny.
-                </span>
-              </div>
-              <div className="list-card">
-                <strong>Ta sama bezpieczna rezerwacja</strong>
-                <span>
-                  Nie dokładamy osobnego systemu terminów. Korzystasz z tego samego kalendarza, płatności i potwierdzenia,
-                  które działają już dla całej usługi Behawior 15.
-                </span>
-              </div>
-            </div>
-            <div className="hero-actions top-gap">
-              <Link
-                href="/book?problem=dogoterapia"
-                className="button button-primary big-button"
-                data-analytics-event="reserve_click"
-                data-analytics-location="dogotherapy-section"
-              >
-                Umów dogoterapię
-              </Link>
-              <Link href="/book" className="button button-ghost big-button">
-                Zobacz kalendarz rezerwacji
-              </Link>
-            </div>
-            <p className="muted top-gap-small">Dogoterapia ma już własny temat w kalendarzu, ale korzysta z tego samego, działającego flow rezerwacji Behawior 15.</p>
-          </div>
-        </section>
-
-        <SocialSection />
 
         <Footer />
       </div>
