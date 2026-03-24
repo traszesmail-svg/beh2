@@ -16,6 +16,7 @@ export function PaymentActions({ bookingId, accessToken, paymentMode, checkoutBl
   const [error, setError] = useState('')
   const [loadingMode, setLoadingMode] = useState<'pay' | 'fail' | null>(null)
   const checkoutBlocked = Boolean(checkoutBlockedReason)
+  const isMockPayment = paymentMode === 'mock'
 
   async function handlePayment(mode: 'success' | 'failed') {
     if (checkoutBlocked && mode === 'success') {
@@ -76,14 +77,46 @@ export function PaymentActions({ bookingId, accessToken, paymentMode, checkoutBl
       {error ? <div className="error-box">{error}</div> : null}
 
       <div className="list-card accent-outline payment-next-card">
-        <strong>Co wydarzy się dalej</strong>
-        <span>Po płatności od razu zobaczysz potwierdzenie, link do rozmowy i spokojną instrukcję, jak przygotować się do konsultacji.</span>
+        <strong>{isMockPayment ? 'Co wydarzy się po potwierdzeniu testowym' : 'Co wydarzy się dalej'}</strong>
+        <span>
+          {isMockPayment
+            ? 'Po potwierdzeniu testowym od razu zobaczysz potwierdzenie, link do rozmowy i spokojną instrukcję, jak przygotować się do konsultacji bez przechodzenia przez Stripe.'
+            : 'Po płatności od razu zobaczysz potwierdzenie, link do rozmowy i spokojną instrukcję, jak przygotować się do konsultacji.'}
+        </span>
       </div>
 
       <div className="summary-grid trust-grid payment-logo-grid">
-        <div className="summary-card trust-card"><strong>Karta lub BLIK</strong><span>Dostępne metody zobaczysz dopiero w bezpiecznym oknie Stripe po kliknięciu przycisku płatności.</span></div>
-        <div className="summary-card trust-card"><strong>Szyfrowane okno Stripe</strong><span>Płatność otwiera się poza aplikacją, w bezpiecznym i zgodnym z wymaganiami checkoutcie.</span></div>
-        <div className="summary-card trust-card"><strong>Natychmiastowy powrót do potwierdzenia</strong><span>Po płatności wracasz do potwierdzenia terminu, linku do rozmowy i materiałów przygotowawczych.</span></div>
+        {isMockPayment ? (
+          <>
+            <div className="summary-card trust-card">
+              <strong>Stripe jest odłączony</strong>
+              <span>To tryb testowy do przejścia całego flow bez realnej bramki płatności.</span>
+            </div>
+            <div className="summary-card trust-card">
+              <strong>Ten sam dalszy ekran</strong>
+              <span>Po sukcesie zobaczysz dokładnie potwierdzenie, materiały i link do rozmowy, jak po realnym checkoutcie.</span>
+            </div>
+            <div className="summary-card trust-card">
+              <strong>Możesz zasymulować błąd</strong>
+              <span>Drugi przycisk pozwala sprawdzić, jak zachowuje się flow po nieudanym potwierdzeniu.</span>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="summary-card trust-card">
+              <strong>Karta lub BLIK</strong>
+              <span>Dostępne metody zobaczysz dopiero w bezpiecznym oknie Stripe po kliknięciu przycisku płatności.</span>
+            </div>
+            <div className="summary-card trust-card">
+              <strong>Szyfrowane okno Stripe</strong>
+              <span>Płatność otwiera się poza aplikacją, w bezpiecznym i zgodnym z wymaganiami checkoutcie.</span>
+            </div>
+            <div className="summary-card trust-card">
+              <strong>Natychmiastowy powrót do potwierdzenia</strong>
+              <span>Po płatności wracasz do potwierdzenia terminu, linku do rozmowy i materiałów przygotowawczych.</span>
+            </div>
+          </>
+        )}
       </div>
 
       <div className="hero-actions">
@@ -93,17 +126,23 @@ export function PaymentActions({ bookingId, accessToken, paymentMode, checkoutBl
           onClick={() => handlePayment('success')}
           disabled={loadingMode !== null || checkoutBlocked}
         >
-          {loadingMode === 'pay' ? 'Przechodzę do płatności...' : paymentMode === 'stripe' ? 'Przejdź do bezpiecznej płatności' : 'Opłać konsultację'}
+          {loadingMode === 'pay'
+            ? isMockPayment
+              ? 'Potwierdzam testowo...'
+              : 'Przechodzę do płatności...'
+            : isMockPayment
+              ? 'Przejdź dalej bez płatności'
+              : 'Przejdź do bezpiecznej płatności'}
         </button>
 
-        {paymentMode === 'mock' ? (
+        {isMockPayment ? (
           <button
             type="button"
             className="button button-ghost big-button"
             onClick={() => handlePayment('failed')}
             disabled={loadingMode !== null}
           >
-            {loadingMode === 'fail' ? 'Symuluję błąd...' : 'Symuluj nieudaną płatność'}
+            {loadingMode === 'fail' ? 'Symuluję błąd...' : 'Symuluj nieudane potwierdzenie'}
           </button>
         ) : null}
       </div>
@@ -111,9 +150,9 @@ export function PaymentActions({ bookingId, accessToken, paymentMode, checkoutBl
       <div className="disclaimer">
         {checkoutBlocked
           ? checkoutBlockedReason
-          : paymentMode === 'stripe'
-            ? 'Płatność obsługuje Stripe w bezpiecznym oknie checkout. Po anulowaniu od razu zobaczysz, jak wybrać nowy termin.'
-            : 'To bezpieczna symulacja płatności do testów flow. Po sukcesie zobaczysz dokładnie ten sam ekran potwierdzenia i link do rozmowy.'}
+          : isMockPayment
+            ? 'To testowy bypass płatności. Po sukcesie zobaczysz ten sam ekran potwierdzenia, materiały i link do rozmowy co po realnym checkoutcie.'
+            : 'Płatność obsługuje Stripe w bezpiecznym oknie checkout. Po anulowaniu od razu zobaczysz, jak wybrać nowy termin.'}
       </div>
     </div>
   )

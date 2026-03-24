@@ -669,8 +669,29 @@ h1 span {
 }
 
 .hero-credentials {
+  position: relative;
   display: grid;
   gap: 16px;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    linear-gradient(180deg, rgba(18, 38, 28, 0.64), rgba(39, 26, 16, 0.52)),
+    url('/branding/tlo-boczne.jpg') center / cover no-repeat;
+}
+
+.hero-credentials::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at top right, rgba(255, 255, 255, 0.2), transparent 34%),
+    linear-gradient(180deg, rgba(255, 248, 238, 0.08), rgba(255, 248, 238, 0));
+  pointer-events: none;
+}
+
+.hero-credentials > * {
+  position: relative;
+  z-index: 1;
 }
 
 .hero-mobile-photo {

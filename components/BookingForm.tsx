@@ -10,6 +10,7 @@ interface BookingFormProps {
   problemType: ProblemType
   slotId: string
   slotLabel: string
+  paymentMode: 'stripe' | 'mock'
 }
 
 function getProblemFormCopy(problemType: ProblemType) {
@@ -36,9 +37,10 @@ function getProblemFormCopy(problemType: ProblemType) {
   }
 }
 
-export function BookingForm({ problemType, slotId, slotLabel }: BookingFormProps) {
+export function BookingForm({ problemType, slotId, slotLabel, paymentMode }: BookingFormProps) {
   const router = useRouter()
   const formCopy = getProblemFormCopy(problemType)
+  const isMockPayment = paymentMode === 'mock'
   const [ownerName, setOwnerName] = useState('')
   const [animalType, setAnimalType] = useState<AnimalType>(formCopy.animalType)
   const [petAge, setPetAge] = useState('')
@@ -63,7 +65,11 @@ export function BookingForm({ problemType, slotId, slotLabel }: BookingFormProps
     setError('')
 
     if (!ownerName.trim() || !phone.trim() || !email.trim() || !description.trim() || !petAge.trim() || !durationNotes.trim()) {
-      setError('Uzupełnij wszystkie pola, aby zarezerwować termin i przejść do płatności.')
+      setError(
+        isMockPayment
+          ? 'Uzupełnij wszystkie pola, aby zarezerwować termin i przejść do testowego potwierdzenia.'
+          : 'Uzupełnij wszystkie pola, aby zarezerwować termin i przejść do płatności.',
+      )
       return
     }
 
@@ -78,7 +84,7 @@ export function BookingForm({ problemType, slotId, slotLabel }: BookingFormProps
     }
 
     if (description.trim().length < 20) {
-      setError('Dodaj 2–4 konkretne zdania o problemie. To pomoże lepiej wykorzystać 15 minut rozmowy.')
+      setError('Dodaj 2-4 konkretne zdania o problemie. To pomoże lepiej wykorzystać 15 minut rozmowy.')
       return
     }
 
@@ -185,14 +191,28 @@ export function BookingForm({ problemType, slotId, slotLabel }: BookingFormProps
 
       <div className="checkout-box full-width">
         <div>
-          <div className="muted">Po zapisaniu danych termin zostanie chwilowo zablokowany na czas płatności, żeby nikt nie przejął go przed Tobą.</div>
-          <div className="checkout-title">Następny krok: bezpieczna płatność</div>
-          <div className="muted">Dokładną kwotę zobaczysz jeszcze raz na ekranie płatności, już po zapisaniu rezerwacji i zablokowaniu terminu.</div>
+          <div className="muted">
+            {isMockPayment
+              ? 'Po zapisaniu danych termin zostanie chwilowo zablokowany na czas testowego potwierdzenia, żeby nikt nie przejął go przed Tobą.'
+              : 'Po zapisaniu danych termin zostanie chwilowo zablokowany na czas płatności, żeby nikt nie przejął go przed Tobą.'}
+          </div>
+          <div className="checkout-title">
+            {isMockPayment ? 'Następny krok: potwierdzenie testowe' : 'Następny krok: bezpieczna płatność'}
+          </div>
+          <div className="muted">
+            {isMockPayment
+              ? 'Stripe jest tu odłączony. Przejdziesz dalej bez realnej płatności, ale zobaczysz ten sam dalszy flow potwierdzenia, materiałów i linku do rozmowy.'
+              : 'Dokładną kwotę zobaczysz jeszcze raz na ekranie płatności, już po zapisaniu rezerwacji i zablokowaniu terminu.'}
+          </div>
           <div className="price-compare-text">{CONSULTATION_PRICE_COMPARE_COPY}</div>
         </div>
         <div className="checkout-right">
           <button type="submit" className="button button-primary big-button" disabled={isSubmitting}>
-            {isSubmitting ? 'Zapisuję dane...' : 'Zablokuj termin i przejdź do płatności'}
+            {isSubmitting
+              ? 'Zapisuję dane...'
+              : isMockPayment
+                ? 'Zablokuj termin i przejdź dalej bez płatności'
+                : 'Zablokuj termin i przejdź do płatności'}
           </button>
         </div>
       </div>

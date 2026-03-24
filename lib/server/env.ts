@@ -324,7 +324,7 @@ export function getPaymentModeStatus(): RuntimeModeStatus<PaymentMode, ActivePay
       isValid: true,
       usesFallback: true,
       missing: [],
-      summary: 'APP_PAYMENT_MODE=mock -> aktywny jest mock payment fallback (development only).',
+      summary: 'APP_PAYMENT_MODE=mock -> aktywny jest testowy bypass płatności do pełnego QA flow bez Stripe.',
     }
   }
 
@@ -368,7 +368,7 @@ export function getPaymentModeStatus(): RuntimeModeStatus<PaymentMode, ActivePay
       isValid: true,
       usesFallback: true,
       missing,
-      summary: `APP_PAYMENT_MODE=auto -> aktywny jest mock payment fallback (development only), bo brakuje ${formatEnvList(
+      summary: `APP_PAYMENT_MODE=auto -> aktywny jest testowy bypass płatności, bo brakuje ${formatEnvList(
         missing,
       )}.`,
     }

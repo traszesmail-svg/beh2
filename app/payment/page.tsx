@@ -34,6 +34,7 @@ export default async function PaymentPage({
   const dataMode = getDataModeStatus()
   const paymentMode = getPaymentModeStatus()
   const authorizationHeader = headers().get('authorization')
+  const isMockPayment = paymentMode.active === 'mock'
   let booking: Awaited<ReturnType<typeof getBookingForViewer>> = null
   let flowError: string | null = null
 
@@ -72,11 +73,14 @@ export default async function PaymentPage({
       <div className="container">
         <Header />
         <section className="panel centered-panel">
-          <div className="section-eyebrow">Bezpieczna płatność online</div>
-          <h1>Za chwilę przejdziesz do bezpiecznej płatności</h1>
+          <div className="section-eyebrow">
+            {isMockPayment ? 'Test flow bez bramki płatności' : 'Bezpieczna płatność online'}
+          </div>
+          <h1>{isMockPayment ? 'Możesz przejść dalej bez płatności' : 'Za chwilę przejdziesz do bezpiecznej płatności'}</h1>
           <p className="hero-text small-width center-text">
-            Płatność obsługuje zewnętrzna, szyfrowana bramka Stripe. Po jej zakończeniu wrócisz od razu do potwierdzenia
-            rezerwacji, materiałów przed rozmową i linku do konsultacji audio.
+            {isMockPayment
+              ? 'Stripe jest tutaj celowo odłączony. Ten tryb pozwala przejść cały flow rezerwacji, potwierdzenia, materiałów i linku do rozmowy bez realnego obciążenia karty.'
+              : 'Płatność obsługuje zewnętrzna, szyfrowana bramka Stripe. Po jej zakończeniu wrócisz od razu do potwierdzenia rezerwacji, materiałów przed rozmową i linku do konsultacji audio.'}
           </p>
 
           {flowError ? (
@@ -89,7 +93,9 @@ export default async function PaymentPage({
             <>
               {(failed || cancelled || booking.paymentStatus === 'failed' || booking.bookingStatus === 'cancelled') && (
                 <div className="error-box top-gap">
-                  Płatność nie została zakończona. Termin został zwolniony, więc możesz spokojnie wybrać nową godzinę rozmowy.
+                  {isMockPayment
+                    ? 'Testowe potwierdzenie nie zostało zakończone. Termin został zwolniony, więc możesz spokojnie wybrać nową godzinę rozmowy.'
+                    : 'Płatność nie została zakończona. Termin został zwolniony, więc możesz spokojnie wybrać nową godzinę rozmowy.'}
                 </div>
               )}
 
@@ -112,46 +118,73 @@ export default async function PaymentPage({
 
               <div className="stack-gap top-gap">
                 <div className="summary-grid trust-grid">
-                  <div className="summary-card trust-card">
-                    <span className="trust-icon" aria-hidden="true">
-                      <svg viewBox="0 0 24 24" className="trust-svg">
-                        <path d="M12 3l7 3v5c0 4.9-2.6 8.4-7 10-4.4-1.6-7-5.1-7-10V6l7-3Z" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
-                        <path d="m9.5 12 1.8 1.8 3.8-4.1" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </span>
-                    <strong>Obsługiwane przez Stripe</strong>
-                    <span>Płatność otworzy się w hosted checkout Stripe, bez przekazywania karty przez aplikację.</span>
-                  </div>
-                  <div className="summary-card trust-card">
-                    <span className="trust-icon" aria-hidden="true">
-                      <svg viewBox="0 0 24 24" className="trust-svg">
-                        <rect x="5" y="10" width="14" height="10" rx="2" fill="none" stroke="currentColor" strokeWidth="1.8" />
-                        <path d="M8 10V8a4 4 0 1 1 8 0v2" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                      </svg>
-                    </span>
-                    <strong>Szyfrowane połączenie</strong>
-                    <span>Przejście do płatności odbywa się przez bezpieczne, szyfrowane połączenie.</span>
-                  </div>
-                  <div className="summary-card trust-card">
-                    <span className="trust-icon" aria-hidden="true">
-                      <svg viewBox="0 0 24 24" className="trust-svg">
-                        <path d="M4 8h16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                        <rect x="3" y="5" width="18" height="14" rx="3" fill="none" stroke="currentColor" strokeWidth="1.8" />
-                        <path d="M7 15h4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                      </svg>
-                    </span>
-                    <strong>Karta nie jest zapisywana w aplikacji</strong>
-                    <span>Dane karty pozostają po stronie operatora płatności, a w aplikacji zapisujemy tylko stan bookingu.</span>
-                  </div>
+                  {isMockPayment ? (
+                    <>
+                      <div className="summary-card trust-card">
+                        <strong>Tryb testowy jest aktywny</strong>
+                        <span>Na tym etapie nie otwieramy żadnej zewnętrznej bramki płatności.</span>
+                      </div>
+                      <div className="summary-card trust-card">
+                        <strong>Pełny dalszy flow zostaje</strong>
+                        <span>Po sukcesie przejdziesz do potwierdzenia, materiałów przygotowawczych i linku do rozmowy.</span>
+                      </div>
+                      <div className="summary-card trust-card">
+                        <strong>Możesz też sprawdzić błąd</strong>
+                        <span>Tryb testowy pozwala zasymulować nieudane potwierdzenie i sprawdzić powrót slotu do puli.</span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="summary-card trust-card">
+                        <span className="trust-icon" aria-hidden="true">
+                          <svg viewBox="0 0 24 24" className="trust-svg">
+                            <path d="M12 3l7 3v5c0 4.9-2.6 8.4-7 10-4.4-1.6-7-5.1-7-10V6l7-3Z" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+                            <path d="m9.5 12 1.8 1.8 3.8-4.1" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        </span>
+                        <strong>Obsługiwane przez Stripe</strong>
+                        <span>Płatność otworzy się w hosted checkout Stripe, bez przekazywania karty przez aplikację.</span>
+                      </div>
+                      <div className="summary-card trust-card">
+                        <span className="trust-icon" aria-hidden="true">
+                          <svg viewBox="0 0 24 24" className="trust-svg">
+                            <rect x="5" y="10" width="14" height="10" rx="2" fill="none" stroke="currentColor" strokeWidth="1.8" />
+                            <path d="M8 10V8a4 4 0 1 1 8 0v2" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                          </svg>
+                        </span>
+                        <strong>Szyfrowane połączenie</strong>
+                        <span>Przejście do płatności odbywa się przez bezpieczne, szyfrowane połączenie.</span>
+                      </div>
+                      <div className="summary-card trust-card">
+                        <span className="trust-icon" aria-hidden="true">
+                          <svg viewBox="0 0 24 24" className="trust-svg">
+                            <path d="M4 8h16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                            <rect x="3" y="5" width="18" height="14" rx="3" fill="none" stroke="currentColor" strokeWidth="1.8" />
+                            <path d="M7 15h4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                          </svg>
+                        </span>
+                        <strong>Karta nie jest zapisywana w aplikacji</strong>
+                        <span>Dane karty pozostają po stronie operatora płatności, a w aplikacji zapisujemy tylko stan bookingu.</span>
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 <div className="list-card">
-                  <strong>Co kupujesz</strong>
-                  <span>15-minutową konsultację głosową online, która pomaga szybko uporządkować problem i wybrać pierwszy sensowny krok bez chaosu i zgadywania.</span>
+                  <strong>{isMockPayment ? 'Co testujesz w tym kroku' : 'Co kupujesz'}</strong>
+                  <span>
+                    {isMockPayment
+                      ? 'Pełny flow od zablokowania terminu do potwierdzenia i linku do rozmowy, tylko bez realnej płatności.'
+                      : '15-minutową konsultację głosową online, która pomaga szybko uporządkować problem i wybrać pierwszy sensowny krok bez chaosu i zgadywania.'}
+                  </span>
                 </div>
                 <div className="list-card">
-                  <strong>Co stanie się po płatności</strong>
-                  <span>Dostaniesz potwierdzenie, link do rozmowy i możliwość dodania materiałów, jeśli chcesz lepiej przygotować specjalistę przed konsultacją.</span>
+                  <strong>{isMockPayment ? 'Co stanie się po potwierdzeniu testowym' : 'Co stanie się po płatności'}</strong>
+                  <span>
+                    {isMockPayment
+                      ? 'Dostaniesz potwierdzenie, link do rozmowy i możliwość dodania materiałów, tak samo jak w finalnym flow po prawdziwej płatności.'
+                      : 'Dostaniesz potwierdzenie, link do rozmowy i możliwość dodania materiałów, jeśli chcesz lepiej przygotować specjalistę przed konsultacją.'}
+                  </span>
                 </div>
               </div>
 
