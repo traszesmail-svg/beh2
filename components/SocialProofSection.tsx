@@ -28,8 +28,23 @@ export function SocialProofSection() {
           <h2 id="historie-heading">Historie opiekunów i efekty konsultacji</h2>
         </div>
         <div className="muted">
-          W jednym miejscu pokazujemy typowe punkty wyjścia, pierwszy krok po rozmowie i krótkie opinie opiekunów,
-          które publikujemy dopiero po ręcznej weryfikacji.
+          W jednym miejscu pokazujemy typowe punkty wyjścia, pierwszy krok po rozmowie i tylko takie materiały, które
+          da się obronić spokojnie i wiarygodnie.
+        </div>
+      </div>
+
+      <div className="social-proof-strip top-gap">
+        <div className="social-proof-point">
+          <strong>Typowe sytuacje z życia domu</strong>
+          <span>Pokazujemy sprawy, z którymi opiekunowie naprawdę przychodzą na pierwszy, szybki kontakt.</span>
+        </div>
+        <div className="social-proof-point">
+          <strong>Pierwszy krok, nie chaos</strong>
+          <span>Każda karta pokazuje, co porządkuje rozmowa i z jakim konkretem można wyjść po 15 minutach.</span>
+        </div>
+        <div className="social-proof-point">
+          <strong>Wiarygodność przed ozdobnikami</strong>
+          <span>Opinie trafiają tu dopiero po ręcznej weryfikacji, a sekcja nie udaje setek recenzji bez pokrycia.</span>
         </div>
       </div>
 
@@ -100,7 +115,8 @@ export function SocialProofSection() {
         <div className="social-proof-summary top-gap">
           <strong>To miejsce zbiera realne opisy efektów pierwszej konsultacji.</strong>
           <span>
-            Pokazujemy tylko te historie, które pomagają innym opiekunom rozpoznać problem, pierwszy krok i realny efekt rozmowy.
+            Zamiast sztucznie pompować sekcję opinii, pokazujemy tylko takie historie i recenzje, które realnie pomagają
+            innym opiekunom rozpoznać problem, pierwszy krok i efekt rozmowy.
           </span>
         </div>
       )}

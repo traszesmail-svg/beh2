@@ -49,17 +49,22 @@ export const steps = [
   {
     n: '01',
     title: 'Wybierasz temat',
-    desc: 'Określasz, czego dotyczy trudność, i przechodzisz do aktualnych terminów dla tego flow rezerwacji.',
+    desc: 'Określasz, czego dotyczy trudność, i od razu przechodzisz do właściwego wejścia w rezerwację.',
   },
   {
     n: '02',
-    title: 'Blokujesz termin na czas płatności',
-    desc: 'Podajesz dane, zapisujesz rezerwację i przechodzisz do bezpiecznego checkoutu bez ryzyka utraty slotu w trakcie płatności.',
+    title: 'Wybierasz realny termin',
+    desc: 'Widzisz aktualne sloty i blokujesz wybraną godzinę na czas dokończenia rezerwacji.',
   },
   {
     n: '03',
-    title: 'Otrzymujesz potwierdzenie i dalszy krok',
-    desc: 'Po opłaceniu widzisz potwierdzenie, link do rozmowy audio i możliwość dodania materiałów przygotowawczych.',
+    title: 'Uzupełniasz krótki formularz',
+    desc: 'Podajesz najważniejsze informacje o problemie, żeby wejść w rozmowę szybciej i spokojniej.',
+  },
+  {
+    n: '04',
+    title: 'Dostajesz potwierdzenie i link',
+    desc: 'Po opłaceniu od razu widzisz potwierdzenie, link do rozmowy audio i możliwość dodania materiałów.',
   },
 ]
 

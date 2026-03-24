@@ -1,7 +1,9 @@
 import React from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { getBuildMarkerSnapshot } from '@/lib/build-marker'
 import {
+  COAPE_LOGO,
   SPECIALIST_CREDENTIALS,
   SPECIALIST_NAME,
   getContactDetails,
@@ -50,12 +52,25 @@ export function Footer() {
           <div className="footer-label">Ważne linki</div>
           <div className="footer-links">
             <Link href="/book" data-analytics-event="reserve_click" data-analytics-location="footer">
-              Zarezerwuj 15 minut i odzyskaj spokój w domu
+              Zarezerwuj konsultację
             </Link>
             <Link href="/polityka-prywatnosci">Polityka prywatności</Link>
             <Link href="/regulamin">Regulamin</Link>
           </div>
         </div>
+      </div>
+      <div className="footer-certification">
+        <div className="footer-certification-copy">
+          <span className="footer-label">Certyfikacja</span>
+          <span>Zweryfikowany behawiorysta COAPE / CAPBT</span>
+        </div>
+        <Image
+          src={COAPE_LOGO.src}
+          alt={COAPE_LOGO.alt}
+          width={442}
+          height={104}
+          className="footer-certification-logo"
+        />
       </div>
       <div className="footer-runtime" data-build-marker={buildMarker.value}>
         <span className="footer-runtime-label">Wersja serwisu</span>

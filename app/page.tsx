@@ -19,7 +19,6 @@ import {
   COAPE_LOGO,
   COAPE_ORG_URL,
   HERO_PHOTO,
-  HERO_SUPPORT_IMAGES,
   MEDIA_MENTIONS,
   SPECIALIST_CREDENTIALS,
   SPECIALIST_LOCATION,
@@ -104,6 +103,40 @@ function renderProblemIcon(problem: ProblemType) {
   }
 }
 
+function renderProcessIcon(step: string) {
+  switch (step) {
+    case '01':
+      return (
+        <svg viewBox="0 0 48 48" className="topic-svg" aria-hidden="true">
+          <circle cx="24" cy="24" r="12" fill="none" stroke="currentColor" strokeWidth="2.3" />
+          <path d="M19 24h10m-5-5v10" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
+        </svg>
+      )
+    case '02':
+      return (
+        <svg viewBox="0 0 48 48" className="topic-svg" aria-hidden="true">
+          <rect x="10" y="13" width="28" height="24" rx="4" fill="none" stroke="currentColor" strokeWidth="2.3" />
+          <path d="M16 10v6m16-6v6M16 22h16" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
+        </svg>
+      )
+    case '03':
+      return (
+        <svg viewBox="0 0 48 48" className="topic-svg" aria-hidden="true">
+          <rect x="13" y="10" width="22" height="28" rx="4" fill="none" stroke="currentColor" strokeWidth="2.3" />
+          <path d="M19 20h10m-10 6h10m-10 6h6" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
+        </svg>
+      )
+    case '04':
+      return (
+        <svg viewBox="0 0 48 48" className="topic-svg" aria-hidden="true">
+          <path d="M10 24 18 32 38 14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      )
+    default:
+      return null
+  }
+}
+
 export default async function HomePage() {
   const dataMode = getDataModeStatus()
   const baseUrl = getBaseUrl()
@@ -167,6 +200,30 @@ export default async function HomePage() {
       },
     ]
 
+  const heroProofs = [
+    'Zweryfikowany behawiorysta COAPE / CAPBT',
+    'Bezpieczna płatność',
+    'Zwrot zgodnie z regulaminem',
+  ]
+
+  const valueHighlights = [
+    {
+      title: 'Szybka pierwsza pomoc',
+      description:
+        'W 15 minut porządkujesz problem i dostajesz pierwszy realny kierunek zamiast kolejnych ogólników z internetu.',
+    },
+    {
+      title: 'Jedna osoba od początku do końca',
+      description:
+        'Rozmawiasz z konkretnym specjalistą, bez marketplace, bez przepychania i bez chaosu organizacyjnego.',
+    },
+    {
+      title: 'Spokojny próg wejścia',
+      description:
+        'Bezpieczna płatność, szybkie potwierdzenie i możliwość ubiegania się o zwrot zgodnie z regulaminem.',
+    },
+  ]
+
   return (
     <main className="page-wrap">
       <div className="container">
@@ -174,61 +231,30 @@ export default async function HomePage() {
         <Header />
 
         <section className="hero-grid" id="oferta">
-          <div className="panel hero-panel hero-surface">
+          <div className="panel hero-panel hero-surface hero-sales-panel">
             {publicFlowMessage ? <div className="info-box">{publicFlowMessage}</div> : null}
 
-            <div className="pill">15-minutowa konsultacja audio online</div>
-            <div className="hero-note-row">
-              <span className="trust-chip">Behawior + medyczne + terapia</span>
-              <span className="trust-chip">Pies lub kot • jeden specjalista • jeden konkretny pierwszy krok</span>
+            <div className="pill subtle-pill">15-minutowa konsultacja audio online</div>
+            <div className="hero-topline">
+              Dla opiekunów psów i kotów, którzy potrzebują szybkiej, spokojnej pierwszej pomocy i jasnego następnego kroku.
             </div>
-            <div className="hero-topline">Zweryfikowany behawiorysta COAPE/CAPBT dla opiekunów psów i kotów.</div>
             <h1>Spokojna konsultacja, która porządkuje problem psa lub kota w 15 minut</h1>
 
-            <div className="hero-mobile-photo" aria-label="Zdjęcie prowadzącego konsultację">
-              <div className="hero-photo-shell hero-photo-shell-mobile">
-                <Image
-                  src={HERO_PHOTO.src}
-                  alt={HERO_PHOTO.alt}
-                  width={1200}
-                  height={1600}
-                  sizes="(max-width: 980px) 82vw, 30vw"
-                  className="hero-photo"
-                  priority
-                />
-              </div>
-            </div>
-
-            <p className="hero-text">
-              Bez chaosu, bez zgadywania i bez przeciążenia poradami z internetu. Rezerwujesz rozmowę z jedną osobą,
-              płacisz bezpiecznie i od razu dostajesz pierwszy konkretny kierunek działania.
+            <p className="hero-text hero-text-tight">
+              Pierwsza realna pomoc, kiedy chcesz szybko zrozumieć problem i wiedzieć, co zrobić dalej bez chaosu, bez zgadywania i bez
+              przeciążenia poradami z internetu.
             </p>
 
-            <div className="hero-price-badge">
+            <div className="hero-microcopy">Pierwsza realna pomoc w 15 minut - bez stresu.</div>
+
+            <div className="hero-price-badge hero-price-badge-compact">
               <PricingDisclosure
                 stage="pre-topic"
                 labelClassName="hero-price-label"
                 messageAs="strong"
                 showNote
                 noteClassName="hero-price-note"
-                showCompare
-                compareClassName="hero-price-compare"
               />
-            </div>
-
-            <div className="hero-inline-facts">
-              <div className="hero-inline-fact">
-                <strong>{availabilityPreviewLabel}</strong>
-                <span>Aktualną godzinę zobaczysz dopiero we właściwym kalendarzu rezerwacji.</span>
-              </div>
-              <div className="hero-inline-fact">
-                <strong>Bezpieczna płatność</strong>
-                <span>Po opłaceniu od razu dostajesz potwierdzenie i link do rozmowy.</span>
-              </div>
-              <div className="hero-inline-fact">
-                <strong>Niski próg ryzyka</strong>
-                <span>Jeśli rozmowa nie pomoże zrozumieć problemu, możesz ubiegać się o zwrot pieniędzy.</span>
-              </div>
             </div>
 
             <div className="hero-actions">
@@ -238,162 +264,104 @@ export default async function HomePage() {
                 data-analytics-event="reserve_click"
                 data-analytics-location="hero-primary"
               >
-                Zarezerwuj 15 minut i odzyskaj spokój w domu
-              </Link>
-              <Link
-                href="/book#tematy"
-                className="button button-ghost big-button"
-                data-analytics-event="reserve_click"
-                data-analytics-location="hero-secondary"
-              >
-                Wybierz temat i termin
+                Zarezerwuj konsultację
               </Link>
             </div>
 
-          </div>
-
-          <div className="panel side-panel hero-aside hero-credentials">
-            <div className="hero-photo-card">
-              <div className="section-eyebrow">Prowadzący konsultację</div>
-              <div className="hero-photo-shell top-gap-small">
-                <Image
-                  src={HERO_PHOTO.src}
-                  alt={HERO_PHOTO.alt}
-                  width={1200}
-                  height={1600}
-                  sizes="(max-width: 980px) 82vw, 30vw"
-                  className="hero-photo"
-                  priority
-                />
-              </div>
-              <p className="hero-photo-caption">
-                Konsultację prowadzi osobiście {SPECIALIST_NAME}. Rezerwujesz rozmowę z konkretną osobą, bez losowego marketplace i bez
-                przepychania między specjalistami.
-              </p>
-            </div>
-
-            <div className="hero-animal-row">
-              {HERO_SUPPORT_IMAGES.map((item) => (
-                <div key={item.id} className="hero-animal-card">
-                  <div className="hero-animal-shell">
-                    <Image
-                      src={item.src}
-                      alt={item.alt}
-                      width={1200}
-                      height={900}
-                      sizes="(max-width: 680px) 100vw, (max-width: 980px) 50vw, 18vw"
-                      className="hero-animal-image"
-                    />
-                  </div>
-                  <span>{item.label}</span>
-                </div>
+            <div className="hero-proof-row">
+              {heroProofs.map((item) => (
+                <span key={item} className="hero-proof-pill">
+                  {item}
+                </span>
               ))}
             </div>
 
-            <div className="credential-mark">
-              <div className="credential-copy">
-                <div className="section-eyebrow">Kwalifikacje i zaufanie</div>
-                <h2>COAPE / CAPBT</h2>
-                <p className="muted paragraph-gap">
-                  {SPECIALIST_TRUST_STATEMENT} Profil specjalisty i organizację możesz sprawdzić publicznie, zanim przejdziesz do rezerwacji.
-                </p>
-              </div>
-              <div className="credential-logo-grid">
-                <a
-                  href={COAPE_ORG_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="credential-logo-link"
-                  aria-label="Otwórz oficjalną stronę COAPE Polska"
-                >
-                  <Image
-                    src={COAPE_LOGO.src}
-                    alt={COAPE_LOGO.alt}
-                    width={442}
-                    height={104}
-                    className="credential-logo"
-                  />
-                  <span className="credential-logo-label">Oficjalna strona COAPE Polska</span>
-                </a>
-                <a
-                  href={CAPBT_ORG_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="credential-logo-link"
-                  aria-label="Otwórz stronę CAPBT Polska"
-                >
-                  <Image
-                    src={CAPBT_LOGO.src}
-                    alt={CAPBT_LOGO.alt}
-                    width={436}
-                    height={107}
-                    className="credential-logo"
-                  />
-                  <span className="credential-logo-label">Strona CAPBT Polska</span>
-                </a>
-              </div>
-              <div className="credential-links-row">
-                <a href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="button button-ghost small-button">
-                  Profil Krzysztofa w CAPBT
-                </a>
-              </div>
+            <Link href="/#jak-to-dziala" className="text-link hero-secondary-link">
+              Zobacz, jak wygląda rezerwacja
+            </Link>
+          </div>
+
+          <div className="panel side-panel hero-aside hero-spotlight">
+            <div className="hero-spotlight-media">
+              <Image
+                src={HERO_PHOTO.src}
+                alt={HERO_PHOTO.alt}
+                width={1200}
+                height={1600}
+                sizes="(max-width: 980px) 100vw, 34vw"
+                className="hero-spotlight-image"
+                priority
+              />
             </div>
 
-            <div className="mini-card availability-card">
-              <div className="muted">Dostępność</div>
-              <div className="side-title">{availabilityPreviewLabel}</div>
-              <ul className="hero-checklist">
-                <li>Realny kalendarz z aktualnymi slotami, bez sztucznego licznika pilności.</li>
-                <li>Po płatności od razu dostajesz potwierdzenie i link do rozmowy.</li>
-                <li>Jeśli chcesz, przed rozmową dodasz nagranie MP4, link albo notatki.</li>
-              </ul>
+            <div className="hero-spotlight-card">
+              <div className="section-eyebrow">Konsultację prowadzi osobiście</div>
+              <h2>{SPECIALIST_NAME}</h2>
+              <div className="hero-spotlight-role">{SPECIALIST_CREDENTIALS}</div>
+              <p className="muted paragraph-gap">
+                {SPECIALIST_TRUST_STATEMENT} Rozmawiasz z konkretną osobą od pierwszego kliknięcia do pierwszego planu działania.
+              </p>
+
+              <a
+                href={COAPE_ORG_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hero-spotlight-proof"
+                aria-label="Otwórz oficjalną stronę COAPE Polska"
+              >
+                <Image src={COAPE_LOGO.src} alt={COAPE_LOGO.alt} width={442} height={104} className="hero-coape-logo" />
+                <span>Zweryfikowany specjalista COAPE / CAPBT</span>
+              </a>
+
+              <div className="hero-spotlight-meta">
+                <strong>{availabilityPreviewLabel}</strong>
+                <span>Po potwierdzeniu dostajesz od razu link do rozmowy audio i możliwość dodania materiałów.</span>
+              </div>
             </div>
           </div>
         </section>
 
-        <section className="panel section-panel">
+        <section className="panel section-panel value-panel">
           <div className="section-head">
             <div>
               <div className="section-eyebrow">Spokojny pierwszy krok</div>
-              <h2>Jedna rozmowa, jasny plan i realny następny krok zamiast chaosu</h2>
+              <h2>Najpierw szybka ulga i porządek, dopiero potem rozwinięcie szczegółów</h2>
             </div>
             <div className="muted">
-              To krótka konsultacja, która pomaga uporządkować sytuację i zdecydować, czy wystarczy plan domowy, czy potrzebna będzie dalsza praca.
+              To nie jest rozwlekła konsultacja wstępna. To krótki, konkretny start, który pomaga ocenić sytuację i przejść do sensownego działania.
             </div>
           </div>
 
           <div className="card-grid three-up top-gap">
-            <div className="feature-card">
-              <div className="simple-title">Jedna rozmowa, bez rozmywania tematu</div>
-              <div className="simple-desc">
-                W 15 minut zbieramy kluczowe informacje i ustalamy pierwszy sensowny kierunek działania.
+            {valueHighlights.map((item) => (
+              <div key={item.title} className="feature-card feature-card-quiet">
+                <div className="simple-title">{item.title}</div>
+                <div className="simple-desc">{item.description}</div>
               </div>
-            </div>
-            <div className="feature-card">
-              <div className="simple-title">Potwierdzenie i link od razu po płatności</div>
-              <div className="simple-desc">
-                Rezerwujesz termin, kończysz płatność i od razu widzisz potwierdzenie oraz link do rozmowy audio.
-              </div>
-            </div>
-            <div className="feature-card">
-              <div className="simple-title">Materiały przed rozmową, jeśli ich potrzebujesz</div>
-              <div className="simple-desc">
-                MP4, link albo krótkie notatki pomagają wejść w sedno sprawy bez przeciążania konsultacji.
-              </div>
-            </div>
+            ))}
           </div>
         </section>
 
-        <section className="panel section-panel guarantee-panel">
+        <section className="panel section-panel" id="jak-to-dziala">
           <div className="section-head">
             <div>
-              <div className="section-eyebrow">Niski próg ryzyka</div>
-              <h2>Jeśli rozmowa nie pomoże Ci zrozumieć problemu, możesz ubiegać się o zwrot pieniędzy.</h2>
+              <div className="section-eyebrow">Jak to działa</div>
+              <h2>Krótka ścieżka do rezerwacji, bez rozbudowanego onboardingu</h2>
             </div>
-            <div className="muted">
-              Nie obiecujemy automatycznego zwrotu jednym kliknięciem, bo taki mechanizm nie jest częścią produktu.
-              Obiecujemy uczciwie, że ta konsultacja ma dać Ci użyteczne 15 minut i jasny kolejny krok.
-            </div>
+            <div className="muted">Wchodzisz szybko do właściwego kalendarza, wybierasz termin i przechodzisz do spokojnej rozmowy.</div>
+          </div>
+
+          <div className="journey-grid top-gap">
+            {steps.map((step) => (
+              <article key={step.n} className="journey-card">
+                <div className="journey-card-top">
+                  <div className="step-number">{step.n}</div>
+                  <span className="journey-icon-shell">{renderProcessIcon(step.n)}</span>
+                </div>
+                <div className="simple-title">{step.title}</div>
+                <div className="simple-desc">{step.desc}</div>
+              </article>
+            ))}
           </div>
         </section>
 
@@ -401,7 +369,7 @@ export default async function HomePage() {
           <div className="section-head">
             <div>
               <div className="section-eyebrow">Tematy konsultacji</div>
-              <h2>Wybierz temat i przejdź do realnej rezerwacji</h2>
+              <h2>Wybierz temat konsultacji i przejdź do rezerwacji</h2>
             </div>
             <div className="muted">
               Każdy temat prowadzi do tego samego procesu rezerwacji, tej samej ceny dla nowych rezerwacji i realnie dostępnych terminów.
@@ -434,30 +402,10 @@ export default async function HomePage() {
                   <span className="topic-icon-shell">{renderProblemIcon(tile.id)}</span>
                   <div className="topic-title">{tile.title}</div>
                   <div className="topic-desc">{tile.desc}</div>
-                  <div className="topic-link">Wybierz ten temat i zarezerwuj termin</div>
+                  <div className="topic-link">Wybierz temat i zarezerwuj termin</div>
                 </Link>
               )
             })}
-          </div>
-        </section>
-
-        <section className="panel section-panel" id="jak-to-dziala">
-          <div className="section-head">
-            <div>
-              <div className="section-eyebrow">Jak to działa</div>
-              <h2>Temat, termin, płatność i spokojna rozmowa</h2>
-            </div>
-            <div className="muted">Bez osobnych rozmów wstępnych, bez czekania na oddzwonienie i bez rozbudowanego onboardingu.</div>
-          </div>
-
-          <div className="card-grid three-up top-gap">
-            {steps.map((step) => (
-              <div key={step.n} className="simple-card">
-                <div className="step-number">{step.n}</div>
-                <div className="simple-title">{step.title}</div>
-                <div className="simple-desc">{step.desc}</div>
-              </div>
-            ))}
           </div>
         </section>
 
@@ -484,7 +432,7 @@ export default async function HomePage() {
           </div>
 
           <div className="panel section-panel specialist-copy-panel">
-            <div className="section-eyebrow">Dlaczego temu zaufać</div>
+            <div className="section-eyebrow">Poznaj osobę, z którą rozmawiasz</div>
             <h2>Behawior, wiedza medyczna i doświadczenie terapeutyczne w jednym miejscu</h2>
             <div className="specialist-badge-list top-gap">
               <span className="specialist-badge">Behawior</span>
@@ -512,9 +460,43 @@ export default async function HomePage() {
                   </span>
                 </div>
               </div>
-              <div className="list-card">
+              <div className="list-card certification-card">
                 <strong>COAPE i CAPBT weryfikujesz publicznie</strong>
-                <span>Logo COAPE i CAPBT prowadzą bezpośrednio do oficjalnych stron organizacji, a obok zostaje publiczny profil specjalisty.</span>
+                <span>Logo prowadzą do oficjalnych stron organizacji, a obok zostaje publiczny profil specjalisty.</span>
+                <div className="credential-logo-grid top-gap-small">
+                  <a
+                    href={COAPE_ORG_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="credential-logo-link"
+                    aria-label="Otwórz oficjalną stronę COAPE Polska"
+                  >
+                    <Image
+                      src={COAPE_LOGO.src}
+                      alt={COAPE_LOGO.alt}
+                      width={442}
+                      height={104}
+                      className="credential-logo"
+                    />
+                    <span className="credential-logo-label">Oficjalna strona COAPE Polska</span>
+                  </a>
+                  <a
+                    href={CAPBT_ORG_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="credential-logo-link"
+                    aria-label="Otwórz stronę CAPBT Polska"
+                  >
+                    <Image
+                      src={CAPBT_LOGO.src}
+                      alt={CAPBT_LOGO.alt}
+                      width={436}
+                      height={107}
+                      className="credential-logo"
+                    />
+                    <span className="credential-logo-label">Strona CAPBT Polska</span>
+                  </a>
+                </div>
                 <div className="hero-actions top-gap-small">
                   <a href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="button button-ghost small-button">
                     Profil Krzysztofa
@@ -579,15 +561,7 @@ export default async function HomePage() {
               data-analytics-event="reserve_click"
               data-analytics-location="final-cta"
             >
-              Zarezerwuj 15 minut i odzyskaj spokój w domu
-            </Link>
-            <Link
-              href="/book#tematy"
-              className="button button-ghost big-button"
-              data-analytics-event="reserve_click"
-              data-analytics-location="final-cta-secondary"
-            >
-              Wybierz temat i termin
+              Zarezerwuj konsultację
             </Link>
           </div>
           <div className="top-gap">

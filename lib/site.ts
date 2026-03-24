@@ -30,48 +30,52 @@ export const LANDING_SPECIALIST_PHOTO = {
   alt: 'Krzysztof Regulski na portretowym zdjęciu do strony Behawior 15',
 }
 
-export const HERO_PHOTO = LANDING_SPECIALIST_PHOTO
+export const HERO_PHOTO = {
+  src: '/branding/hero-krzysztof-cat.jpg',
+  alt: 'Krzysztof Regulski w spokojnym kontakcie z kotem w jasnym wnętrzu',
+}
+
 export const SPECIALIST_PHOTO = LANDING_SPECIALIST_PHOTO
 
 export const SUPPORTING_SPECIALIST_PHOTO = {
-  src: '/images/krzysztof-vet-action.jpg',
+  src: '/branding/specialist-krzysztof-vet.jpg',
   alt: 'Krzysztof Regulski podczas pracy z kotem w gabinecie',
 }
 
 export const HERO_SUPPORT_IMAGES = [
   {
     id: 'hero-dog',
-    src: '/images/case-dog-bed.jpg',
-    alt: 'Biały pies leżący spokojnie na łóżku w świetle dziennym',
+    src: '/branding/case-dog-home.jpg',
+    alt: 'Spokojny pies w jasnym, domowym otoczeniu',
     label: 'Pies w domowym środowisku',
   },
   {
     id: 'hero-cat',
-    src: '/images/case-cat-scratcher.jpg',
-    alt: 'Kot siedzący przy drapaku i patrzący w obiektyw',
+    src: '/branding/case-cat-sofa.jpg',
+    alt: 'Kot odpoczywający w jasnym wnętrzu',
     label: 'Kot w spokojnym kadrze',
   },
 ] as const
 
 export const TOPIC_VISUALS: Record<ProblemType, { src: string; alt: string }> = {
   szczeniak: {
-    src: '/images/case-dog-bed.jpg',
-    alt: 'Biały pies odpoczywający na łóżku',
+    src: '/branding/case-dog-home.jpg',
+    alt: 'Spokojny pies odpoczywający w domowym otoczeniu',
   },
   kot: {
-    src: '/images/case-cat-scratcher.jpg',
-    alt: 'Kot siedzący przy drapaku',
+    src: '/branding/case-cat-sofa.jpg',
+    alt: 'Kot odpoczywający w jasnym wnętrzu',
   },
   separacja: {
     src: '/images/case-dog-black.jpg',
     alt: 'Czarny pies siedzący w domu i patrzący w stronę opiekuna',
   },
   agresja: {
-    src: '/images/case-cat-snow.jpg',
+    src: '/branding/case-cat-snow.jpg',
     alt: 'Kot stojący na śniegu i obserwujący otoczenie',
   },
   niszczenie: {
-    src: '/images/case-cat-sofa.jpg',
+    src: '/branding/case-cat-sofa.jpg',
     alt: 'Kot odpoczywający na sofie w domu',
   },
   dogoterapia: {
@@ -98,47 +102,36 @@ export type RealCaseStudy = {
 export const REAL_CASE_STUDIES: RealCaseStudy[] = [
   {
     id: 'fear-dog',
-    imageSrc: '/images/case-dog-black.jpg',
-    imageAlt: 'Czarny pies siedzący w domu',
-    sourceLabel: 'Kategoria: lęk separacyjny i pobudzenie',
+    imageSrc: '/branding/case-dog-home.jpg',
+    imageAlt: 'Spokojny pies w domowym otoczeniu',
+    sourceLabel: 'Najczęstszy start: napięcie i zostawanie samemu',
     problem: 'Pies szczeka, nie wycisza się i trudno mu zostać samemu.',
     summary:
-      'To typowa sprawa na pierwszą rozmowę: trzeba odróżnić napięcie, brak rutyny i możliwy lęk separacyjny od zwykłego pobudzenia.',
+      'To typowa sprawa na pierwszą rozmowę: trzeba odróżnić przeciążenie, brak rutyny i możliwy lęk separacyjny od zwykłego pobudzenia.',
     effect:
-      'Po 15 minutach opiekun wie, co wdrożyć od razu w domu, czego nie dokładać i czy temat wymaga szerszej pracy.',
+      'Po 15 minutach opiekun wie, co wdrożyć od razu w domu, czego nie dokładać i czy temat wymaga spokojniejszej, szerszej pracy.',
   },
   {
     id: 'litter-box-cat',
-    imageSrc: '/images/case-cat-scratcher.jpg',
-    imageAlt: 'Kot siedzący przy drapaku i patrzący w obiektyw',
-    sourceLabel: 'Kategoria: kot i kuweta',
+    imageSrc: '/branding/case-cat-sofa.jpg',
+    imageAlt: 'Kot odpoczywający w jasnym wnętrzu',
+    sourceLabel: 'Najczęstszy start: kot, napięcie i kuweta',
     problem: 'Kot omija kuwetę albo wyraźnie sygnalizuje stres w domu.',
     summary:
       'W takich sytuacjach trzeba szybko uporządkować tło środowiskowe, napięcie w domu i moment, w którym warto wrócić do lekarza weterynarii.',
     effect:
-      'Rozmowa daje jasny plan: co sprawdzić w domu, co zanotować i jaki następny krok ma sens.',
+      'Rozmowa daje jasny plan: co sprawdzić w domu, co zanotować i jaki następny krok ma sens bez chaotycznych porad.',
   },
   {
     id: 'multi-animal-home',
-    imageSrc: '/images/case-cat-snow.jpg',
+    imageSrc: '/branding/case-cat-snow.jpg',
     imageAlt: 'Kot stojący na śniegu i obserwujący otoczenie',
-    sourceLabel: 'Kategoria: konflikt między zwierzętami',
+    sourceLabel: 'Najczęstszy start: konflikt i napięcie w domu',
     problem: 'Napięcie między zwierzętami, konflikt albo rozjazd relacji w domu.',
     summary:
       'Pierwsza konsultacja pomaga oddzielić sygnały ostrzegawcze od codziennych napięć i ustalić, co trzeba zabezpieczyć natychmiast.',
     effect:
       'Opiekun wychodzi z konkretem: co uspokoić dziś, jak zarządzić przestrzenią i kiedy potrzebna będzie dalsza praca.',
-  },
-  {
-    id: 'overstimulation-home',
-    imageSrc: '/images/case-cat-sofa.jpg',
-    imageAlt: 'Kot odpoczywający na sofie',
-    sourceLabel: 'Kategoria: niszczenie i pobudzenie',
-    problem: 'Pobudzenie, hałas, niszczenie albo trudność z wyhamowaniem po bodźcach.',
-    summary:
-      'To częsty punkt startowy, gdy opiekun ma poczucie chaosu i nie wie już, które porady z internetu są bezpieczne, a które tylko dokładają napięcia.',
-    effect:
-      'Po rozmowie ma pierwszy spokojny plan i wie, czy wystarczy praca domowa, czy potrzebna będzie pełna konsultacja.',
   },
 ]
 
