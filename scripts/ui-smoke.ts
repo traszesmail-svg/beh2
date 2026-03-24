@@ -55,7 +55,7 @@ async function waitForServer() {
   for (let attempt = 0; attempt < 120; attempt += 1) {
     try {
       const response = await fetch(appUrl, { cache: 'no-store' })
-      if (response.ok) return
+      if (response.status > 0) return
     } catch {}
     await new Promise((resolve) => setTimeout(resolve, 1000))
   }
@@ -106,10 +106,9 @@ async function main() {
     const nextPublicSlot = availabilityAfterBookings.flatMap((group) => group.slots)[0]
     assert.ok(nextPublicSlot, 'Expected at least one public slot after locking smoke bookings.')
 
-    server = spawn(`npm run start -- --port ${port}`, {
+    server = spawn('cmd.exe', ['/c', 'npm', 'run', 'start', '--', '--port', String(port)], {
       cwd: rootDir,
       env: process.env,
-      shell: true,
       stdio: 'ignore',
       windowsHide: true,
     })
@@ -141,20 +140,22 @@ async function main() {
     const homeCtaVisible = await mobilePage.getByRole('link', { name: /Zarezerwuj konsultację/i }).first().isVisible()
     const secondaryHeroCtaVisible = (await mobilePage.getByRole('link', { name: /Zobacz, jak wygląda rezerwacja/i }).count()) > 0
     const heroHeadingVisible = await mobilePage
-      .getByRole('heading', { name: /15 minut, które porządkują problem psa lub kota i dają pierwszy plan działania/i })
+      .getByRole('heading', { name: /Spokojna konsultacja, która porządkuje problem psa lub kota w 15 minut/i })
       .isVisible()
     const heroPriceVisible = await mobilePage.locator('.hero-price-badge').getByText(/Oferta i płatność/i).isVisible()
     const trustStripVisible = await mobilePage.locator('.header-trust-strip').getByText(/1 minuta na anulację/i).isVisible()
+    const dietitianVisible = await mobilePage.getByText(/Dietetyk/i).first().isVisible()
     const heroPhotoVisible = await mobilePage.locator('.hero-spotlight-image').isVisible()
-    const reassuranceVisible = await mobilePage.getByText(/Dogoterapeuta/i).first().isVisible()
+    const certaintyHeadingVisible = await mobilePage.getByRole('heading', { name: /Ma być prosto, uczciwie i bez niepewności/i }).isVisible()
+    const aboutHeadingVisible = await mobilePage.getByRole('heading', { name: /Krótko o tym, jak pracuję/i }).isVisible()
+    const faqHeadingVisible = await mobilePage.getByRole('heading', { name: /Pytania przed kliknięciem/i }).isVisible()
+    const finalCtaHeadingVisible = await mobilePage
+      .getByRole('heading', { name: /Jeśli chcesz to uporządkować, przejdź do rezerwacji/i })
+      .isVisible()
     const shareVisible = homepageText.includes('Udostępnij znajomemu')
-    const footerLinkVisible = await mobilePage.getByRole('link', { name: /Polityka prywatności/i }).isVisible()
     const socialSectionVisible = homepageText.includes('Sprawdź profil i podeślij stronę osobie')
     const socialFacebookVisible = (await mobilePage.locator('a[href*="facebook.com"]').count()) > 0
-    const salesSafetyHeadingVisible = await mobilePage.getByRole('heading', { name: /Dlaczego ten zakup jest bezpieczny i uczciwy/i }).isVisible()
-    const topicsHeadingVisible = await mobilePage.getByRole('heading', { name: /W jakich problemach ta rozmowa pomaga/i }).isVisible()
-    const processHeadingVisible = await mobilePage.getByRole('heading', { name: /Jak wygląda zakup konsultacji/i }).isVisible()
-    const finalCtaHeadingVisible = await mobilePage.getByRole('heading', { name: /Zarezerwuj 15 minut i kup spokojny pierwszy krok/i }).isVisible()
+    const footerLinkVisible = await mobilePage.getByRole('link', { name: /Polityka prywatności/i }).isVisible()
     const homeAvailabilityVisible =
       (await mobilePage
         .locator('.hero-spotlight-meta')
@@ -184,12 +185,12 @@ async function main() {
     const primaryBookingHref = await mobilePage.getByRole('link', { name: /Zarezerwuj konsultację/i }).first().getAttribute('href')
 
     await mobilePage.goto(`${appUrl}/book`, { waitUntil: 'domcontentloaded' })
-    const bookingCtaWorks = await mobilePage.getByRole('heading', { name: /Zarezerwuj 15 minut i przejdź do realnie wolnych terminów/i }).isVisible()
-    const bookingAvailabilityVisible = await mobilePage
-      .locator('.summary-card')
-      .filter({ hasText: /Wolne terminy zobaczysz po wyborze tematu konsultacji|Najbliższe realnie dostępne terminy zobaczysz po wyborze tematu konsultacji|Brak wolnych terminów/i })
-      .first()
-      .isVisible()
+    const bookingPageText = await mobilePage.locator('body').innerText()
+    const bookingHeadingVisible = await mobilePage.getByRole('heading', { name: /Wybierz temat i przejdź do terminu/i }).isVisible()
+    const bookingAvailabilityVisible = /Wolne terminy są dostępne i pokażą się od razu po wyborze tematu|Najbliższe realnie dostępne terminy zobaczysz po kliknięciu w wybrany temat|Brak wolnych terminów/i.test(
+      bookingPageText,
+    )
+    const bookingTopicCardsCount = await mobilePage.locator('#tematy .topic-card').count()
     const bookingTitle = await mobilePage.title()
 
     await mobilePage.goto(`${appUrl}/slot?problem=szczeniak`, { waitUntil: 'domcontentloaded' })
@@ -207,6 +208,7 @@ async function main() {
         ),
       ),
     )
+
     const currentFormResponses = [] as Array<{
       href: string
       ok: boolean
@@ -218,6 +220,7 @@ async function main() {
       hasLegacyHeader: boolean
       hasContactEmail: boolean
     }>
+
     for (const href of currentPublicSlotHrefs) {
       const response = await fetchPublicPageState(`${appUrl}${href}`)
       currentFormResponses.push({
@@ -301,20 +304,36 @@ async function main() {
       waitUntil: 'domcontentloaded',
     })
     const callTimerVisible = await mobilePage.getByRole('button', { name: /Uruchom licznik 15 minut/i }).isVisible()
+    const roomIframeSrc = await mobilePage.locator('iframe[title="Panel rozmowy głosowej"]').getAttribute('src')
+    const roomIframeHasMeetingConfig =
+      Boolean(roomIframeSrc?.includes('config.startAudioOnly=true')) &&
+      Boolean(roomIframeSrc?.includes('config.startWithVideoMuted=true')) &&
+      Boolean(roomIframeSrc?.includes('config.prejoinPageEnabled=false'))
+    const roomOpenLinkHref = await mobilePage.getByRole('link', { name: /Otwórz rozmowę w nowej karcie/i }).getAttribute('href')
+    const roomOpenLinkValid = Boolean(roomOpenLinkHref && roomOpenLinkHref.startsWith('https://meet.jit.si/'))
+
+    await mobilePage.goto(`${appUrl}/room/${bookingTwo.booking.id}?access=${encodeURIComponent(bookingTwo.accessToken)}`, {
+      waitUntil: 'domcontentloaded',
+    })
+    await mobilePage.waitForURL(new RegExp(`/call/${bookingTwo.booking.id}`), { timeout: 10000 })
+    await mobilePage.getByRole('button', { name: /Uruchom licznik 15 minut/i }).waitFor({ timeout: 10000 })
+    const legacyRoomRedirected = mobilePage.url().includes(`/call/${bookingTwo.booking.id}`)
+    const legacyRoomTimerVisible = await mobilePage.getByRole('button', { name: /Uruchom licznik 15 minut/i }).isVisible()
 
     const desktopPage = await desktop.newPage()
     await desktopPage.goto(appUrl, { waitUntil: 'domcontentloaded' })
     const headerLinkTexts = await desktopPage.locator('.header-nav a').allTextContents()
     const headerOfertaVisible = (await desktopPage.locator('.header-links').count()) === 0
-    const specialistHeadingVisible = await desktopPage.getByText(/Konsultację prowadzi osobiście/i).isVisible()
-    const specialistTrustVisible = await desktopPage.getByRole('heading', { name: /Dlaczego ten zakup jest bezpieczny i uczciwy/i }).isVisible()
+    const specialistNameVisible = await desktopPage.locator('#specjalista').getByRole('heading', { name: /Krzysztof Regulski/i }).isVisible()
+    const specialistTrustVisible = await desktopPage.getByRole('heading', { name: /Ma być prosto, uczciwie i bez niepewności/i }).isVisible()
     const specialistPhotoVisible = await desktopPage.locator('.hero-spotlight-image').first().isVisible()
     const credentialAltVisible = await desktopPage.locator('img[alt*="CAPBT Polska"]').first().isVisible()
-    const realCasesHeadingVisible = await desktopPage.getByRole('heading', { name: /W jakich problemach ta rozmowa pomaga/i }).isVisible()
-    const realCaseCardsCount = await desktopPage.locator('#tematy .topic-card').count()
-    const outcomesHeadingVisible = await desktopPage.getByRole('heading', { name: /Co dostajesz po 15 minutach/i }).isVisible()
-    const desktopProcessHeadingVisible = await desktopPage.getByRole('heading', { name: /Jak wygląda zakup konsultacji/i }).isVisible()
-    const desktopFinalCtaVisible = await desktopPage.getByRole('heading', { name: /Zarezerwuj 15 minut i kup spokojny pierwszy krok/i }).isVisible()
+    const proofCardsCount = await desktopPage.locator('#pewnosc-zakupu .trust-card').count()
+    const aboutSectionVisible = await desktopPage.getByRole('heading', { name: /Krótko o tym, jak pracuję/i }).isVisible()
+    const desktopFaqVisible = await desktopPage.getByRole('heading', { name: /Pytania przed kliknięciem/i }).isVisible()
+    const desktopFinalCtaVisible = await desktopPage
+      .getByRole('heading', { name: /Jeśli chcesz to uporządkować, przejdź do rezerwacji/i })
+      .isVisible()
     const socialProofHeadingVisible = (await desktopPage.getByRole('heading', { name: /Historie opiekunów i efekty konsultacji/i }).count()) > 0
     const socialProofSummaryVisible = (await desktopPage.getByText(/To miejsce zbiera realne opisy efektów pierwszej konsultacji/i).count()) > 0
     const socialProofFormHeadingVisible = (await desktopPage.getByRole('heading', { name: /Dodaj swoją opinię do ręcznej weryfikacji/i }).count()) > 0
@@ -377,23 +396,24 @@ async function main() {
     assert.equal(heroHeadingVisible, true)
     assert.equal(heroPriceVisible, true)
     assert.equal(trustStripVisible, true)
+    assert.equal(dietitianVisible, true)
     assert.equal(heroPhotoVisible, true)
-    assert.equal(reassuranceVisible, true)
+    assert.equal(certaintyHeadingVisible, true)
+    assert.equal(aboutHeadingVisible, true)
+    assert.equal(faqHeadingVisible, true)
+    assert.equal(finalCtaHeadingVisible, true)
     assert.equal(shareVisible, false)
     assert.equal(footerLinkVisible, true)
     assert.equal(socialSectionVisible, false)
     assert.equal(socialFacebookVisible, true)
-    assert.equal(salesSafetyHeadingVisible, true)
-    assert.equal(topicsHeadingVisible, true)
-    assert.equal(processHeadingVisible, true)
-    assert.equal(finalCtaHeadingVisible, true)
     assert.equal(homeAvailabilityVisible, true)
     assert.equal(consentVisible || gaScriptBeforeConsent === 0, true)
     assert.equal(gaScriptBeforeConsent, 0)
     assert.equal(consentDismissed, true)
     assert.equal(gaScriptAfterReject, 0)
-    assert.equal(bookingCtaWorks, true)
+    assert.equal(bookingHeadingVisible, true)
     assert.equal(bookingAvailabilityVisible, true)
+    assert.equal(bookingTopicCardsCount >= 7, true)
     assert.equal(slotHeadingVisible || slotOptionVisible, true)
     assert.equal(slotOptionVisible, true)
     assert.equal(currentPublicSlotHrefs.length > 0, true)
@@ -424,6 +444,10 @@ async function main() {
     assert.equal(prepCardHiddenAfterCancel, true)
     assert.equal(secondConfirmationVisible, true)
     assert.equal(callTimerVisible, true)
+    assert.equal(roomIframeHasMeetingConfig, true)
+    assert.equal(roomOpenLinkValid, true)
+    assert.equal(legacyRoomRedirected, true)
+    assert.equal(legacyRoomTimerVisible, true)
     assert.match(title, /Behawior 15/)
     assert.match(description ?? '', /Krzysztof Regulski|konsultacja głosowa/i)
     assert.match(ogTitle ?? '', /Behawior 15/i)
@@ -436,14 +460,13 @@ async function main() {
     assert.equal(headerLinkTexts.includes('Opinie'), false)
     assert.equal(headerLinkTexts.includes('Historie i efekty'), false)
     assert.equal(headerLinkTexts.includes('Zarezerwuj konsultację'), true)
-    assert.equal(specialistHeadingVisible, true)
+    assert.equal(specialistNameVisible, true)
     assert.equal(specialistTrustVisible, true)
     assert.equal(specialistPhotoVisible, true)
     assert.equal(credentialAltVisible, true)
-    assert.equal(realCasesHeadingVisible, true)
-    assert.equal(realCaseCardsCount >= 4, true)
-    assert.equal(outcomesHeadingVisible, true)
-    assert.equal(desktopProcessHeadingVisible, true)
+    assert.equal(proofCardsCount >= 6, true)
+    assert.equal(aboutSectionVisible, true)
+    assert.equal(desktopFaqVisible, true)
     assert.equal(desktopFinalCtaVisible, true)
     assert.equal(socialProofHeadingVisible, false)
     assert.equal(socialProofSummaryVisible, false)
@@ -484,11 +507,11 @@ async function main() {
             heroHeadingVisible,
             heroPriceVisible,
             trustStripVisible,
+            dietitianVisible,
             heroPhotoVisible,
-            reassuranceVisible,
-            salesSafetyHeadingVisible,
-            topicsHeadingVisible,
-            processHeadingVisible,
+            certaintyHeadingVisible,
+            aboutHeadingVisible,
+            faqHeadingVisible,
             finalCtaHeadingVisible,
             footerLinkVisible,
             socialSectionVisible,
@@ -496,8 +519,9 @@ async function main() {
             homeAvailabilityVisible,
             consentVisible,
             consentDismissed,
-            bookingCtaWorks,
+            bookingHeadingVisible,
             bookingAvailabilityVisible,
+            bookingTopicCardsCount,
             slotHeadingVisible,
             slotOptionVisible,
             currentSlotCount: currentPublicSlotHrefs.length,
@@ -515,6 +539,10 @@ async function main() {
             prepCardHiddenAfterCancel,
             secondConfirmationVisible,
             callTimerVisible,
+            roomIframeHasMeetingConfig,
+            roomOpenLinkValid,
+            legacyRoomRedirected,
+            legacyRoomTimerVisible,
             title,
             bookingTitle,
             description,
@@ -525,14 +553,13 @@ async function main() {
           landing: {
             headerOfertaVisible,
             headerLinkTexts,
-            specialistHeadingVisible,
+            specialistNameVisible,
             specialistTrustVisible,
             specialistPhotoVisible,
             credentialAltVisible,
-            topicsSectionVisible: realCasesHeadingVisible,
-            topicsCardCount: realCaseCardsCount,
-            outcomesHeadingVisible,
-            desktopProcessHeadingVisible,
+            proofCardsCount,
+            aboutSectionVisible,
+            desktopFaqVisible,
             desktopFinalCtaVisible,
             socialProofHeadingVisible,
             socialProofSummaryVisible,

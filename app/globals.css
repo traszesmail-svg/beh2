@@ -350,6 +350,31 @@ h1 span {
   line-height: 1.75;
 }
 
+.tree-backed-card,
+.tree-panel-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.tree-backed-card::before,
+.tree-panel-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.76), rgba(248, 244, 235, 0.84)),
+    url('/branding/tlo-boczne.jpg') center / cover no-repeat;
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+.tree-backed-card > *,
+.tree-panel-card > * {
+  position: relative;
+  z-index: 1;
+}
+
 .pill,
 .online-badge,
 .success-badge,
@@ -726,6 +751,35 @@ h1 span {
   padding: 16px 18px;
 }
 
+.sales-hero-grid {
+  align-items: stretch;
+}
+
+.sales-home-panel,
+.sales-home-aside,
+.sales-book-side {
+  display: grid;
+  align-content: start;
+}
+
+.sales-home-aside,
+.sales-book-side {
+  gap: 18px;
+}
+
+.sales-hero-grid > .panel,
+.compact-info-section > .panel,
+.sales-book-layout > .panel {
+  margin-top: 0;
+}
+
+.sales-mini-grid,
+.booking-note-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
 .hero-proof-row {
   display: flex;
   flex-wrap: wrap;
@@ -750,6 +804,13 @@ h1 span {
 .hero-secondary-link {
   display: inline-flex;
   margin-top: 14px;
+}
+
+.marketing-note {
+  color: var(--accent-2);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.6;
 }
 
 .trust-chip {
@@ -1120,6 +1181,16 @@ h1 span {
 
 .guarantee-panel {
   background: linear-gradient(180deg, rgba(255, 107, 0, 0.08), rgba(255, 255, 255, 0.94));
+}
+
+.proof-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.compact-info-section,
+.compact-sales-cta,
+.sales-book-layout {
+  margin-top: 24px;
 }
 
 .card-grid {
@@ -2328,6 +2399,12 @@ select:focus-visible {
     grid-template-columns: 1fr 1fr;
   }
 
+  .sales-mini-grid,
+  .booking-note-grid,
+  .proof-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
   .booking-mobile-photo {
     display: block;
   }
@@ -2605,6 +2682,16 @@ select:focus-visible {
 
   .hero-price-badge {
     padding: 16px;
+  }
+
+  .sales-hero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sales-mini-grid,
+  .booking-note-grid,
+  .proof-grid {
+    grid-template-columns: 1fr;
   }
 
   .hero-proof-row {

@@ -635,24 +635,28 @@ test('header keeps the sales CTA and the updated trust strip', () => {
   const markup = renderToStaticMarkup(createElement(Header))
 
   assert.match(markup, /Zarezerwuj konsultację/)
-  assert.match(markup, /Technik wet\./)
-  assert.match(markup, /COAPE \/ CAPBT/)
+  assert.match(markup, /Behawiorysta COAPE \/ CAPBT/)
+  assert.match(markup, /Technik weterynarii/)
+  assert.match(markup, /Dietetyk/)
   assert.match(markup, /1 minuta na anulację/)
 })
 
 test('homepage copy stays sales-first and removes legacy secondary sections', () => {
   const source = readFileSync(path.join(process.cwd(), 'app', 'page.tsx'), 'utf8')
 
-  assert.match(source, /Dlaczego ten zakup jest bezpieczny i uczciwy/)
-  assert.match(source, /W jakich problemach ta rozmowa pomaga/)
-  assert.match(source, /Co dostajesz po 15 minutach/)
-  assert.match(source, /Jak wygląda zakup konsultacji/)
-  assert.match(source, /Najczęstsze pytania przed zakupem/)
+  assert.match(source, /Spokojna konsultacja, która porządkuje problem psa lub kota w 15 minut/)
+  assert.match(source, /Ma być prosto, uczciwie i bez niepewności/)
+  assert.match(source, /Krótko o tym, jak pracuję/)
+  assert.match(source, /Pytania przed kliknięciem/)
+  assert.match(source, /Jeśli chcesz to uporządkować, przejdź do rezerwacji/)
+  assert.match(source, /Dietetyk/)
   assert.doesNotMatch(source, /SocialProofSection/)
   assert.doesNotMatch(source, /SocialSection/)
   assert.doesNotMatch(source, /ShareActions/)
   assert.doesNotMatch(source, /id="publikacje"/)
   assert.doesNotMatch(source, /id="dogoterapia"/)
+  assert.doesNotMatch(source, /W jakich problemach ta rozmowa pomaga/)
+  assert.doesNotMatch(source, /Jak wygląda zakup konsultacji/)
 })
 
 test('payment page does not expose the public test-mode banner copy', () => {
@@ -711,17 +715,15 @@ test('booking flow uses neutral stage labels instead of a conflicting six-step c
 
 test('homepage keeps the simplified section order for the sales flow', () => {
   const homeSource = readFileSync(path.join(process.cwd(), 'app', 'page.tsx'), 'utf8')
-  const safetyIndex = homeSource.indexOf('id="bezpieczenstwo"')
-  const topicsIndex = homeSource.indexOf('id="tematy"')
-  const processIndex = homeSource.indexOf('id="jak-to-dziala"')
-  const faqIndex = homeSource.indexOf('id="faq"')
-  const ctaIndex = homeSource.indexOf('<section className="panel cta-panel guarantee-panel">')
+  const heroIndex = homeSource.indexOf('id="oferta"')
+  const certaintyIndex = homeSource.indexOf('id="pewnosc-zakupu"')
+  const detailsIndex = homeSource.indexOf('id="dla-zainteresowanych"')
+  const ctaIndex = homeSource.indexOf('<section className="panel cta-panel compact-sales-cta">')
 
-  assert.ok(safetyIndex > -1)
-  assert.ok(topicsIndex > safetyIndex)
-  assert.ok(processIndex > topicsIndex)
-  assert.ok(faqIndex > processIndex)
-  assert.ok(ctaIndex > faqIndex)
+  assert.ok(heroIndex > -1)
+  assert.ok(certaintyIndex > heroIndex)
+  assert.ok(detailsIndex > certaintyIndex)
+  assert.ok(ctaIndex > detailsIndex)
 })
 
 test('book page exposes the updated 1-minute self-cancel promise instead of the old disclaimer', () => {
@@ -762,9 +764,9 @@ test('release smoke normalizes visible text and extracts the build marker from h
 test('release smoke detects missing, forbidden and out-of-order phrases', () => {
   const html = `
     <main data-build-marker="${BUILD_MARKER_KEY}:main:9bf474c">
-      <section>W jakich problemach ta rozmowa pomaga</section>
-      <section>Dlaczego ten zakup jest bezpieczny i uczciwy</section>
-      <section>Zarezerwuj 15 minut i kup spokojny pierwszy krok</section>
+      <section>Krótko o tym, jak pracuję</section>
+      <section>Ma być prosto, uczciwie i bez niepewności</section>
+      <section>Jeśli chcesz to uporządkować, przejdź do rezerwacji</section>
       <section>Udostępnij znajomemu</section>
     </main>
   `
@@ -773,14 +775,14 @@ test('release smoke detects missing, forbidden and out-of-order phrases', () => 
     path: '/',
     required: ['Wersja serwisu'],
     forbidden: ['Udostępnij znajomemu'],
-    ordered: ['Dlaczego ten zakup jest bezpieczny i uczciwy', 'W jakich problemach ta rozmowa pomaga'],
+    ordered: ['Ma być prosto, uczciwie i bez niepewności', 'Krótko o tym, jak pracuję'],
     requireBuildMarker: true,
   })
 
   assert.equal(result.url, 'https://beh2.vercel.app/')
   assert.deepEqual(result.missing, ['Wersja serwisu'])
   assert.deepEqual(result.forbiddenFound, ['Udostępnij znajomemu'])
-  assert.deepEqual(result.orderFailures, ['wrong order around: W jakich problemach ta rozmowa pomaga'])
+  assert.deepEqual(result.orderFailures, ['wrong order around: Krótko o tym, jak pracuję'])
   assert.equal(result.ok, false)
 })
 

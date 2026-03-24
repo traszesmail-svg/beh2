@@ -3,8 +3,10 @@ import Link from 'next/link'
 
 export function Header() {
   const trustItems = [
-    'Technik wet. i dogoterapeuta',
-    'COAPE / CAPBT',
+    'Behawiorysta COAPE / CAPBT',
+    'Technik weterynarii',
+    'Dogoterapeuta',
+    'Dietetyk',
     'Bezpieczna płatność',
     '1 minuta na anulację',
   ]

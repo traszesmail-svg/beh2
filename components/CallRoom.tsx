@@ -74,7 +74,7 @@ export function CallRoom({ bookingId, meetingUrl, ownerName }: CallRoomProps) {
   return (
     <section className="two-col-section booking-layout">
       <div className="panel room-panel">
-        <div className="section-eyebrow">Krok 6 z 6</div>
+        <div className="section-eyebrow">Panel rozmowy audio</div>
         <h1>Panel rozmowy głosowej</h1>
         <p className="muted paragraph-gap">
           To jest link do 15-minutowej konsultacji audio. Kamera nie jest potrzebna. Przygotuj spokojne miejsce,

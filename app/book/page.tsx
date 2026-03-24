@@ -11,7 +11,7 @@ import { problemOptions } from '@/lib/data'
 import { buildBookMetadata } from '@/lib/seo'
 import { listAvailability } from '@/lib/server/db'
 import { getDataModeStatus } from '@/lib/server/env'
-import { SPECIALIST_NAME, SPECIALIST_PHOTO, SPECIALIST_TRUST_STATEMENT, TOPIC_VISUALS } from '@/lib/site'
+import { SPECIALIST_CREDENTIALS, SPECIALIST_NAME, SPECIALIST_PHOTO, TOPIC_VISUALS } from '@/lib/site'
 import { ProblemType } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
@@ -104,7 +104,7 @@ export default async function BookPage({
   noStore()
   const problem = readSearchParam(searchParams?.problem)
   const dataMode = getDataModeStatus()
-  let availabilityLabel = 'Najbliższe realnie dostępne terminy zobaczysz po wyborze tematu konsultacji.'
+  let availabilityLabel = 'Najbliższe realnie dostępne terminy zobaczysz po kliknięciu w wybrany temat.'
 
   if (problem) {
     redirect(`/slot?problem=${problem}`)
@@ -115,10 +115,10 @@ export default async function BookPage({
       const availability = await listAvailability()
       availabilityLabel =
         availability.length > 0
-          ? 'Wolne terminy zobaczysz po wyborze tematu konsultacji.'
+          ? 'Wolne terminy są dostępne i pokażą się od razu po wyborze tematu.'
           : 'Brak wolnych terminów'
     } catch (error) {
-      console.warn('[behawior15][book] nie udało się wczytać dostępności', error)
+      console.warn('[behawior15][book] nie udalo sie wczytac dostepnosci', error)
     }
   }
 
@@ -127,73 +127,27 @@ export default async function BookPage({
       <div className="container">
         <Header />
 
-        <section className="booking-layout">
+        <section className="booking-layout sales-book-layout">
           <div className="panel section-panel">
             <BookingStageEyebrow stage="topic" className="section-eyebrow" />
-            <h1>Zarezerwuj 15 minut i przejdź do realnie wolnych terminów</h1>
+            <h1>Wybierz temat i przejdź do terminu</h1>
             <p className="hero-text">
-              Najpierw wybierasz temat, potem widzisz aktualne sloty, wypełniasz dane i przechodzisz do płatności.
-              Po opłaceniu od razu dostajesz potwierdzenie z linkiem do rozmowy audio i możliwością dodania materiałów.
+              To jest pierwszy realny krok rezerwacji. Wybierasz temat, a potem od razu widzisz terminy i przechodzisz dalej bez zbędnych przystanków.
             </p>
 
-            <div className="booking-mobile-photo" aria-label="Zdjęcie prowadzącego konsultację">
-              <div className="booking-photo-shell booking-photo-shell-mobile top-gap-small">
-                <Image
-                  src={SPECIALIST_PHOTO.src}
-                  alt={SPECIALIST_PHOTO.alt}
-                  width={1200}
-                  height={1600}
-                  sizes="(max-width: 980px) 82vw, 30vw"
-                  className="booking-photo"
-                  priority
-                />
+            <div className="booking-note-grid top-gap">
+              <div className="list-card tree-backed-card">
+                <strong>Jak wygląda flow</strong>
+                <span>Temat - termin - dane - płatność - potwierdzenie rozmowy.</span>
               </div>
-            </div>
-
-            <div className="summary-grid top-gap">
-              <div className="summary-card">
-                <PricingDisclosure
-                  stage="pre-topic"
-                  labelAs="div"
-                  labelClassName="stat-label"
-                  messageAs="div"
-                  messageClassName="summary-value"
-                />
+              <div className="list-card tree-backed-card">
+                <strong>Płatność i anulacja</strong>
+                <span>Po opłaceniu masz 1 minutę na samodzielną rezygnację przyciskiem anulacji na ekranie potwierdzenia.</span>
               </div>
-              <div className="summary-card">
-                <div className="stat-label">Dostępność</div>
-                <div className="summary-value">{availabilityLabel}</div>
+              <div className="list-card tree-backed-card">
+                <strong>Dostępność</strong>
+                <span>{availabilityLabel}</span>
               </div>
-              <div className="summary-card">
-                <div className="stat-label">Po płatności</div>
-                <div className="summary-value">Potwierdzenie + link</div>
-              </div>
-            </div>
-
-            <div className="list-card top-gap">
-              <PricingDisclosure
-                stage="pre-topic"
-                labelAs="strong"
-                noteClassName="muted top-gap-small"
-                compareClassName="price-compare-text"
-                showLabel={false}
-                showMessage={false}
-                showNote
-                showCompare
-              />
-            </div>
-
-            <div className="list-card accent-outline top-gap">
-              <strong>Niski próg ryzyka</strong>
-              <span>
-                Po opłaceniu masz 1 minutę na samodzielną rezygnację przyciskiem anulacji na ekranie potwierdzenia.
-                Jeśli zrezygnujesz później albo po rozmowie uznasz, że usługa nie spełniła swojej roli, nadal działa reklamacja lub wniosek o zwrot zgodnie z regulaminem.
-              </span>
-            </div>
-
-            <div className="list-card top-gap">
-              <strong>Dlaczego warto wejść teraz</strong>
-              <span>Widzisz tylko realne sloty z terminarza po wyborze tematu. Jeśli termin zniknie, oznacza to po prostu, że nie jest już dostępny.</span>
             </div>
 
             <div className="card-grid three-up top-gap" id="tematy">
@@ -204,7 +158,7 @@ export default async function BookPage({
                   <Link
                     key={item.id}
                     href={`/slot?problem=${item.id}`}
-                    className="topic-card"
+                    className="topic-card tree-backed-card"
                     data-analytics-event="topic_select"
                     data-analytics-location="book-topics"
                     data-analytics-problem={item.id}
@@ -222,16 +176,15 @@ export default async function BookPage({
                     <span className="topic-icon-shell">{renderProblemIcon(item.id)}</span>
                     <div className="topic-title">{item.title}</div>
                     <div className="topic-desc">{item.desc}</div>
-                    <div className="topic-link">Wybierz ten temat i zarezerwuj termin</div>
+                    <div className="topic-link">Wybierz ten temat</div>
                   </Link>
                 )
               })}
             </div>
           </div>
 
-          <aside className="panel side-panel booking-side-panel">
-            <div className="section-eyebrow">Prowadzący konsultację</div>
-            <div className="booking-photo-shell top-gap-small">
+          <aside className="panel side-panel booking-side-panel sales-book-side">
+            <div className="booking-photo-shell top-gap-small tree-panel-card">
               <Image
                 src={SPECIALIST_PHOTO.src}
                 alt={SPECIALIST_PHOTO.alt}
@@ -239,17 +192,32 @@ export default async function BookPage({
                 height={1600}
                 sizes="(max-width: 980px) 88vw, 30vw"
                 className="booking-photo"
+                priority
               />
             </div>
-            <div className="list-card top-gap">
+
+            <div className="list-card tree-backed-card top-gap">
               <strong>{SPECIALIST_NAME}</strong>
-              <span>{SPECIALIST_TRUST_STATEMENT} Jedna rozmowa, jedna osoba i jeden spójny kierunek działania.</span>
+              <span>{SPECIALIST_CREDENTIALS}</span>
             </div>
-            <ul className="hero-checklist top-gap">
-              <li>Rezerwacja prowadzi do tego samego działającego flow terminów i płatności.</li>
-              <li>Po opłaceniu od razu zobaczysz potwierdzenie i wejście do rozmowy.</li>
-              <li>Jeśli chcesz, dodasz MP4, link albo notatki jeszcze przed konsultacją.</li>
-            </ul>
+
+            <div className="list-card tree-backed-card top-gap">
+              <strong>Co kupujesz na tym etapie</strong>
+              <span>Wejście do realnego kalendarza i krótkiej konsultacji, która ma dać pierwszy plan działania, a nie przeciągać sprzedaży.</span>
+            </div>
+
+            <div className="list-card tree-backed-card top-gap">
+              <PricingDisclosure
+                stage="pre-topic"
+                labelAs="strong"
+                noteClassName="muted top-gap-small"
+                compareClassName="price-compare-text"
+                showLabel={false}
+                showMessage
+                showNote
+                showCompare
+              />
+            </div>
           </aside>
         </section>
 

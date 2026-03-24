@@ -106,9 +106,10 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
     {
       path: '/',
       required: [
-        '15 minut, które porządkują problem psa lub kota i dają pierwszy plan działania',
+        'Spokojna konsultacja, która porządkuje problem psa lub kota w 15 minut',
         'Oferta i płatność',
         'Od 39 zł. Dokładną kwotę potwierdzisz po wyborze tematu konsultacji.',
+        'Pewność jakości i zakupu',
         'Wersja serwisu',
       ],
       forbidden: [
@@ -117,20 +118,18 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
         'Social media',
       ],
       ordered: [
-        'Dlaczego ten zakup jest bezpieczny i uczciwy',
-        'W jakich problemach ta rozmowa pomaga',
-        'Co dostajesz po 15 minutach',
-        'Jak wygląda zakup konsultacji',
-        'Najczęstsze pytania przed zakupem',
-        'Zarezerwuj 15 minut i kup spokojny pierwszy krok',
+        'Spokojna konsultacja, która porządkuje problem psa lub kota w 15 minut',
+        'Ma być prosto, uczciwie i bez niepewności',
+        'Krótko o tym, jak pracuję',
+        'Jeśli chcesz to uporządkować, przejdź do rezerwacji',
       ],
       requireBuildMarker: true,
     },
     {
       path: '/book',
       required: [
-        'Oferta i płatność',
         'Etap rezerwacji: wybór tematu',
+        'Wybierz temat i przejdź do terminu',
       ],
       forbidden: [
         'Cena konsultacji',
