@@ -30,28 +30,17 @@ export async function generateMetadata(): Promise<Metadata> {
 
 const purchaseProofs = [
   {
-    title: 'Behawiorysta COAPE / CAPBT',
-    description: 'Kompetencje sprawdzisz publicznie jeszcze przed zakupem konsultacji.',
+    title: 'Sprawdzalne kompetencje',
+    description:
+      'Behawiorysta COAPE / CAPBT, technik weterynarii, dogoterapeuta i dietetyk w jednej, publicznie weryfikowalnej osobie.',
   },
   {
-    title: 'Technik weterynarii',
-    description: 'Łatwiej oddzielić problem behawioralny od sygnałów, które wymagają szerszej diagnostyki.',
+    title: 'Bezpieczny zakup',
+    description: 'Szyfrowana płatność, jasne potwierdzenie rezerwacji i uczciwa minuta na samodzielne anulowanie po zakupie.',
   },
   {
-    title: 'Dogoterapeuta',
-    description: 'Patrzę na zachowanie nie tylko przez objaw, ale też przez relację człowiek-zwierzę.',
-  },
-  {
-    title: 'Dietetyk',
-    description: 'Modyfikacja diety może wspierać terapię behawioralną, kiedy problem dotyka napięcia i regulacji.',
-  },
-  {
-    title: 'Bezpieczna płatność',
-    description: 'Zakup prowadzi do szyfrowanego checkoutu i jasnego potwierdzenia rezerwacji.',
-  },
-  {
-    title: '1 minuta na anulację',
-    description: 'Po opłaceniu masz uczciwy czas na samodzielne cofnięcie zakupu przyciskiem anulacji.',
+    title: 'Jeden spokojny rezultat',
+    description: 'Po rozmowie masz pierwszy plan działania, zamiast chaotycznego zbierania kolejnych porad z internetu.',
   },
 ] as const
 
@@ -326,6 +315,17 @@ export default async function HomePage() {
         </section>
 
         <Footer />
+
+        <div className="mobile-sticky-cta" aria-label="Mobilne CTA rezerwacji">
+          <Link
+            href="/book"
+            className="button button-primary big-button"
+            data-analytics-event="reserve_click"
+            data-analytics-location="mobile-sticky"
+          >
+            Zarezerwuj konsultację
+          </Link>
+        </div>
       </div>
     </main>
   )

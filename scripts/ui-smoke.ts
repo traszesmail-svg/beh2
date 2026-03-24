@@ -464,7 +464,7 @@ async function main() {
     assert.equal(specialistTrustVisible, true)
     assert.equal(specialistPhotoVisible, true)
     assert.equal(credentialAltVisible, true)
-    assert.equal(proofCardsCount >= 6, true)
+    assert.equal(proofCardsCount >= 3, true)
     assert.equal(aboutSectionVisible, true)
     assert.equal(desktopFaqVisible, true)
     assert.equal(desktopFinalCtaVisible, true)
