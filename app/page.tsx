@@ -250,10 +250,6 @@ export default async function HomePage() {
               </Link>
             </div>
 
-            <ShareActions
-              url={baseUrl}
-              text="Behawior 15 — szybka konsultacja dla opiekunów psów i kotów"
-            />
           </div>
 
           <div className="panel side-panel hero-aside hero-credentials">
@@ -593,6 +589,9 @@ export default async function HomePage() {
             >
               Wybierz temat i termin
             </Link>
+          </div>
+          <div className="top-gap">
+            <ShareActions url={baseUrl} text="Behawior 15" />
           </div>
         </section>
 

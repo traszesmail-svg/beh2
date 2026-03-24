@@ -9,6 +9,7 @@ import sitemap from '@/app/sitemap'
 import { ADMIN_BASIC_AUTH_USERNAME, hasValidAdminAuthorization } from '@/lib/admin-auth'
 import { POST as submitTestimonialRoute } from '@/app/api/testimonials/route'
 import { BookingStageEyebrow } from '@/components/BookingStageEyebrow'
+import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { PricingDisclosure } from '@/components/PricingDisclosure'
 import { SocialProofSection } from '@/components/SocialProofSection'
@@ -638,6 +639,7 @@ test('booking flow uses neutral stage labels instead of a conflicting six-step c
   const slotSource = readFileSync(path.join(process.cwd(), 'app', 'slot', 'page.tsx'), 'utf8')
   const slotLoadingSource = readFileSync(path.join(process.cwd(), 'app', 'slot', 'loading.tsx'), 'utf8')
   const formSource = readFileSync(path.join(process.cwd(), 'app', 'form', 'page.tsx'), 'utf8')
+  const formLoadingSource = readFileSync(path.join(process.cwd(), 'app', 'form', 'loading.tsx'), 'utf8')
   const topicStageMarkup = renderToStaticMarkup(createElement(BookingStageEyebrow, { stage: 'topic' }))
   const slotStageMarkup = renderToStaticMarkup(createElement(BookingStageEyebrow, { stage: 'slot' }))
   const detailsStageMarkup = renderToStaticMarkup(createElement(BookingStageEyebrow, { stage: 'details' }))
@@ -647,6 +649,7 @@ test('booking flow uses neutral stage labels instead of a conflicting six-step c
   assert.match(detailsStageMarkup, /Etap rezerwacji: dane do konsultacji/)
   assert.doesNotMatch(`${slotSource}\n${formSource}`, /Krok\s+\d+\s+z\s+\d+/)
   assert.doesNotMatch(slotLoadingSource, /Krok\s+\d+\s+z\s+\d+/)
+  assert.doesNotMatch(formLoadingSource, /Krok\s+\d+\s+z\s+\d+/)
   assert.doesNotMatch(bookSource, /ShareActions/)
 })
 
@@ -665,6 +668,28 @@ test('homepage keeps the main booking CTA above secondary dogoterapia and social
   assert.ok(ctaIndex > faqIndex)
   assert.ok(dogoterapiaIndex > ctaIndex)
   assert.ok(socialIndex > dogoterapiaIndex)
+})
+
+test('homepage keeps share actions below the final CTA instead of inside the hero', () => {
+  const homeSource = readFileSync(path.join(process.cwd(), 'app', 'page.tsx'), 'utf8')
+  const heroIndex = homeSource.indexOf('<section className="hero-grid" id="oferta">')
+  const ctaIndex = homeSource.indexOf('<section className="panel cta-panel">')
+  const shareIndex = homeSource.lastIndexOf('<ShareActions')
+
+  assert.ok(heroIndex > -1)
+  assert.ok(ctaIndex > heroIndex)
+  assert.ok(shareIndex > ctaIndex)
+})
+
+test('footer renders a visible build marker summary', () => {
+  process.env.VERCEL_GIT_COMMIT_REF = 'main'
+  process.env.VERCEL_GIT_COMMIT_SHA = 'fa5563d1234567890abcdef'
+
+  const markup = renderToStaticMarkup(createElement(Footer))
+
+  assert.match(markup, /Wersja serwisu/)
+  assert.match(markup, /main \/ fa5563d/)
+  assert.match(markup, /data-build-marker="CLEAN_START_REPO_V1:main:fa5563d"/)
 })
 
 test('builds a robots response that points to the sitemap', () => {

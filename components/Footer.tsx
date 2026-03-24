@@ -1,4 +1,6 @@
+import React from 'react'
 import Link from 'next/link'
+import { getBuildMarkerSnapshot } from '@/lib/build-marker'
 import {
   SPECIALIST_CREDENTIALS,
   SPECIALIST_NAME,
@@ -7,6 +9,7 @@ import {
 
 export function Footer() {
   const contact = getContactDetails()
+  const buildMarker = getBuildMarkerSnapshot()
 
   return (
     <footer className="site-footer" id="kontakt">
@@ -53,6 +56,12 @@ export function Footer() {
             <Link href="/regulamin">Regulamin</Link>
           </div>
         </div>
+      </div>
+      <div className="footer-runtime" data-build-marker={buildMarker.value}>
+        <span className="footer-runtime-label">Wersja serwisu</span>
+        <span className="footer-runtime-value">
+          {buildMarker.branch} / {buildMarker.commit}
+        </span>
       </div>
     </footer>
   )
