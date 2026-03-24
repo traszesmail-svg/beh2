@@ -285,10 +285,10 @@ export default async function HomePage() {
           <div className="panel side-panel hero-aside hero-spotlight">
             <div className="hero-spotlight-media">
               <Image
-                src={SUPPORTING_SPECIALIST_PHOTO.src}
-                alt={SUPPORTING_SPECIALIST_PHOTO.alt}
+                src={SPECIALIST_PHOTO.src}
+                alt={SPECIALIST_PHOTO.alt}
                 width={1200}
-                height={1778}
+                height={1600}
                 sizes="(max-width: 980px) 100vw, 34vw"
                 className="hero-spotlight-image"
                 priority
