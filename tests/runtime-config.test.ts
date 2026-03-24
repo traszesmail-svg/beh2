@@ -14,6 +14,13 @@ import { Header } from '@/components/Header'
 import { PricingDisclosure } from '@/components/PricingDisclosure'
 import { SocialProofSection } from '@/components/SocialProofSection'
 import { BUILD_MARKER_KEY, getBuildMarkerSnapshot } from '@/lib/build-marker'
+import {
+  buildExpectedMarker,
+  evaluateReleaseSmokePage,
+  extractBuildMarkerFromHtml,
+  extractVisibleTextFromHtml,
+  normalizeReleaseSmokeText,
+} from '@/lib/release-smoke'
 import { buildRollingAvailabilitySeed, getProblemLabel, isFutureAvailabilitySlot, isProblemType } from '@/lib/data'
 import { getDataModeStatus, getPaymentModeStatus, getSupabaseServiceRoleKeyIssue } from '@/lib/server/env'
 import { buildSeedAvailabilitySlots, hasFutureAvailabilitySlots } from '@/lib/server/availability-seed'
@@ -690,6 +697,52 @@ test('footer renders a visible build marker summary', () => {
   assert.match(markup, /Wersja serwisu/)
   assert.match(markup, /main \/ fa5563d/)
   assert.match(markup, /data-build-marker="CLEAN_START_REPO_V1:main:fa5563d"/)
+})
+
+test('release smoke normalizes visible text and extracts the build marker from html', () => {
+  const html = `
+    <section>
+      <h1>Aktualna cena&nbsp;i płatność</h1>
+      <p>Kwotę potwierdzisz po wyborze tematu konsultacji.</p>
+      <script>window.__ignore = "Cena konsultacji"</script>
+      <div data-build-marker="${BUILD_MARKER_KEY}:main:9bf474c">Wersja serwisu</div>
+    </section>
+  `
+
+  const visibleText = extractVisibleTextFromHtml(html)
+
+  assert.equal(normalizeReleaseSmokeText(visibleText).includes('Aktualna cena i płatność'), true)
+  assert.equal(normalizeReleaseSmokeText(visibleText).includes('Cena konsultacji'), false)
+  assert.equal(extractBuildMarkerFromHtml(html), `${BUILD_MARKER_KEY}:main:9bf474c`)
+})
+
+test('release smoke detects missing, forbidden and out-of-order phrases', () => {
+  const html = `
+    <main data-build-marker="${BUILD_MARKER_KEY}:main:9bf474c">
+      <section>Dogoterapia</section>
+      <section>Pierwszy krok</section>
+      <section>Social media</section>
+      <section>Cena konsultacji</section>
+    </main>
+  `
+
+  const result = evaluateReleaseSmokePage(html, 'https://beh2.vercel.app/', {
+    path: '/',
+    required: ['Wersja serwisu'],
+    forbidden: ['Cena konsultacji'],
+    ordered: ['Pierwszy krok', 'Dogoterapia', 'Social media'],
+    requireBuildMarker: true,
+  })
+
+  assert.equal(result.url, 'https://beh2.vercel.app/')
+  assert.deepEqual(result.missing, ['Wersja serwisu'])
+  assert.deepEqual(result.forbiddenFound, ['Cena konsultacji'])
+  assert.deepEqual(result.orderFailures, ['wrong order around: Dogoterapia'])
+  assert.equal(result.ok, false)
+})
+
+test('release smoke builds the expected marker from branch and short commit', () => {
+  assert.equal(buildExpectedMarker('main', '9bf474c'), `${BUILD_MARKER_KEY}:main:9bf474c`)
 })
 
 test('builds a robots response that points to the sitemap', () => {

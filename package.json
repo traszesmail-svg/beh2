@@ -11,6 +11,7 @@
     "verify-flow": "node --import tsx scripts/verify-flow.ts",
     "pricing-smoke": "node --import tsx scripts/pricing-smoke.ts",
     "ui-smoke": "node --import tsx scripts/ui-smoke.ts",
+    "live-smoke": "node --import tsx scripts/live-smoke.ts",
     "reminder-smoke": "node --import tsx scripts/reminder-smoke.ts"
   },
   "dependencies": {
