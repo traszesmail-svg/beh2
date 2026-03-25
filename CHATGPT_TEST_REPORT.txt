@@ -1,109 +1,210 @@
-BEHAWIOR 15 — POPRAWKI PO QA LIVE
+BEHAWIOR 18
+CHATGPT_TEST_REPORT
+Data raportu: 2026-03-25
+Repo: beh2
+Branch docelowy: main
+Commit zmian funkcjonalnych: a574ba1
 
-1. Zakres wdrożenia
-- Naprawiono publiczny flow rezerwacji od `/book` do `/slot`, bez zmiany architektury bookingowej.
-- Ujednolicono komunikację o dostępności terminów między homepage i `/book`.
-- Usunięto placeholderowe komunikaty kontaktowe z publicznego UI.
-- Ujednolicono header i scalono sekcję społecznego dowodu w jeden moduł: `Opinie i realne przypadki` / `Historie opiekunów i efekty konsultacji`.
-- Dopracowano legal pages, copy runtime i smoke testy pod stan produkcyjny.
+1. Jak wdrożono dwie metody płatności
+- Ekran [app/payment/page.tsx] pokazuje dwie metody:
+  - BLIK na telefon / przelew jako pierwszą i domyślną
+  - PayU jako drugą metodę online
+- UI wyboru jest obsługiwane przez [components/PaymentActions.tsx].
+- Obie metody pokazują tę samą cenę bookingu, bez dopłaty zależnej od metody.
+- Admin pricing nie został ruszony jako mechanizm źródła ceny dla bookingów.
 
-2. Zmienione pliki
-- app/book/page.tsx
-- app/form/page.tsx
-- app/globals.css
-- app/layout.tsx
-- app/page.tsx
-- app/polityka-prywatnosci/page.tsx
-- app/regulamin/page.tsx
-- app/slot/loading.tsx
-- app/slot/page.tsx
-- components/AddTestimonialForm.tsx
-- components/BookingForm.tsx
-- components/Footer.tsx
-- components/Header.tsx
-- components/SocialProofSection.tsx
-- components/SocialSection.tsx
-- components/TestimonialsSection.tsx (usunięty)
-- lib/data.ts
-- lib/seo.ts
-- lib/server/notifications.ts
-- lib/site.ts
-- scripts/ui-smoke.ts
-- tests/runtime-config.test.ts
+2. Jak działa BLIK na telefon / przelew
+- Po zapisaniu formularza klient trafia na ekran płatności.
+- Widzi:
+  - kwotę
+  - numer telefonu do BLIK na telefon
+  - numer konta do przelewu
+  - nazwę odbiorcy
+  - tytuł płatności / identyfikator bookingu
+- Kliknięcie "Zapłaciłem, czekam na potwierdzenie" wywołuje [app/api/payments/manual/route.ts].
+- Booking przechodzi na:
+  - bookingStatus: pending_manual_payment
+  - paymentStatus: pending_manual_review
+- Rezerwacja pozostaje zablokowana na czas ręcznej weryfikacji.
 
-3. Booking flow i terminy
-- `/book` pozostaje kanonicznym wejściem do rezerwacji.
-- `/slot` pokazuje tylko bezpieczne stany publiczne:
-  - loading
-  - empty state
-  - recoverable error
-  - retry
-- UI nie pokazuje już surowych komunikatów env/config.
-- Homepage i `/book` nie pokazują już twardej godziny typu `16:00`.
-- Poza właściwym flow rezerwacji używany jest neutralny komunikat o dostępności:
-  - `Wolne terminy dostępne dziś — sprawdź aktualny kalendarz.`
-  - albo bezpieczny fallback o sprawdzeniu terminu w kolejnym kroku.
+3. Jak działa ręczne potwierdzenie płatności
+- Backend przejść płatności ręcznej:
+  - [lib/server/manual-payments.ts]
+  - [lib/server/manual-payment-review.ts]
+  - [lib/server/local-store.ts]
+  - [lib/server/supabase-store.ts]
+- Po akceptacji:
+  - booking przechodzi do paid / confirmed
+  - pokój rozmowy zostaje odblokowany
+  - klient dostaje mail z linkiem do pokoju
+  - opcjonalny SMS może zostać wysłany webhookiem
+- Po odrzuceniu:
+  - booking nie przechodzi do paid
+  - bookingStatus: cancelled
+  - paymentStatus: rejected
+  - slot wraca do puli
 
-4. Kontakt, footer i legal
-- Usunięto publiczne placeholdery kontaktowe.
-- Kontakt jest renderowany wyłącznie z realnych danych publicznych:
-  - telefon
-  - Facebook
-  - e-mail tylko jeśli jest poprawnie ustawiony
-- Polityka prywatności i regulamin zostały dopracowane do wersji produkcyjnej:
-  - administrator danych
-  - cele i podstawy przetwarzania
-  - operatorzy zewnętrzni
-  - rezerwacja, płatność, zwroty, reklamacje, no-show
-  - kontakt
+4. Jak działa mail do admina
+- Mail admina jest wysyłany przez [lib/server/notifications.ts] funkcją `sendManualPaymentReportedAdminEmail`.
+- Zawiera:
+  - booking ID
+  - tytuł płatności
+  - temat
+  - termin
+  - kwotę
+  - dane klienta
+  - opis zgłoszenia
+  - link "Potwierdź płatność"
+  - link "Odrzuć / nie znaleziono wpłaty"
+- Linki są podpisane tokenem HMAC opartym o bookingId, akcję i paymentReportedAt.
 
-5. Header, social proof i social media
-- Header jest spójny między homepage i booking flow.
-- Globalne linki:
-  - Oferta
-  - Jak to działa
-  - Specjalista
-  - Historie i efekty
-  - Publikacje
-  - FAQ
-  - Kontakt
-- Zamiast dwóch osobnych bytów `Opinie` i `Realne sprawy` wdrożono jeden moduł:
-  - `Historie opiekunów i efekty konsultacji`
-- Sekcja social pokazuje tylko aktywny kanał:
-  - Facebook
-- Nie ma już publicznych zapowiedzi Instagrama / TikToka.
+5. Jak działa mail do klienta z linkiem do pokoju
+- Nie ma fake automatyzacji dla BLIK na telefon.
+- Mail z linkiem do pokoju leci dopiero po realnym przejściu bookingu do `paid`.
+- Wykorzystana została istniejąca funkcja `sendBookingConfirmationEmail` w [lib/server/notifications.ts].
+- Ta sama ścieżka działa po:
+  - ręcznym approve
+  - sukcesie PayU
+  - legacy Stripe/mock, jeśli w repo nadal są używane do QA lub kompatybilności wstecznej
 
-6. Polskie znaki i runtime copy
-- Poprawiono publiczne copy na homepage, `/book`, `/slot`, formularzu, footerze i legal pages.
-- `/slot` ma pełne polskie znaki i bezpieczne komunikaty dla użytkownika końcowego.
+6. Czy SMS został wdrożony czy przygotowany
+- SMS jest przygotowany jako opcjonalny webhook w [lib/server/sms.ts].
+- Wysyłka odpala się po ręcznym approve.
+- Jeśli brak env `SMS_NOTIFICATION_WEBHOOK_URL`, SMS jest pomijany bez wywracania flow.
+- Status: prepared, not active by default.
 
-7. Testy wykonane lokalnie
-- `npm run lint` — PASS
-- `npm test` — PASS
-- `npm run build` — PASS
-- `npm run ui-smoke` — PASS
+7. Jak wygląda status bookingu w każdej ścieżce
+- Nowe statusy i pola są w [lib/types.ts] oraz schemacie Supabase.
+- Ścieżka standardowa przed płatnością:
+  - bookingStatus: pending
+  - paymentStatus: unpaid
+- Po zgłoszeniu BLIK/przelewu:
+  - bookingStatus: pending_manual_payment
+  - paymentStatus: pending_manual_review
+  - paymentMethod: manual
+- Po ręcznym approve:
+  - bookingStatus: confirmed
+  - paymentStatus: paid
+  - paymentMethod: manual
+- Po PayU success:
+  - bookingStatus: confirmed
+  - paymentStatus: paid
+  - paymentMethod: payu
+- Po ręcznym reject:
+  - bookingStatus: cancelled
+  - paymentStatus: rejected
+- Po technicznym fail online:
+  - bookingStatus: cancelled
+  - paymentStatus: failed
+- Po expiry:
+  - bookingStatus: expired
+  - paymentStatus:
+    - unpaid dla zwykłego pending
+    - rejected dla oczekującej weryfikacji ręcznej
 
-8. Live smoke po deployu
-- `https://beh2.vercel.app/` — 200 PASS
-- `https://beh2.vercel.app/book` — 200 PASS
-- `https://beh2.vercel.app/slot?problem=szczeniak` — 200 PASS
-- Na live potwierdzono:
-  - obecność sekcji `Historie opiekunów i efekty konsultacji`
-  - brak placeholderowego komunikatu kontaktowego
-  - brak hardcoded `16:00` na homepage i `/book`
-  - brak wycieku `SUPABASE_SERVICE_ROLE_KEY` / `publishable` w publicznym UI `/slot`
-  - brak publicznych kart Instagram / TikTok
+8. Jak wygląda integracja PayU
+- Plik integracji: [lib/server/payu.ts]
+- Dodane elementy:
+  - OAuth client_credentials
+  - tworzenie orderu PayU
+  - zapis `payuOrderId` i `payuOrderStatus` do bookingu
+  - webhook [app/api/payu/notify/route.ts]
+  - synchronizacja statusu na confirmation page przy powrocie z PayU
+  - refund helper dla self-cancel płatności online
+- Link do pokoju odblokowuje się dopiero po `paid`.
+- Jeśli PayU env nie są ustawione, karta PayU jest widoczna, ale checkout pozostaje niedostępny z jasnym komunikatem.
 
-9. Git i deployment
-- Branch: `main`
-- Commit: `06a1fc8`
-- Commit message: `fix: stabilize booking flow and unify social proof`
-- Push do repo: PASS
-- Repo: `https://github.com/traszesmail-svg/beh2.git`
-- Production alias: `https://beh2.vercel.app`
-- Deploy: PASS
+9. Jakie env są potrzebne
+- Obowiązkowe dla obecnej architektury danych/live:
+  - APP_DATA_MODE
+  - NEXT_PUBLIC_SUPABASE_URL
+  - SUPABASE_SERVICE_ROLE_KEY
+  - ADMIN_ACCESS_SECRET
+- Mail:
+  - RESEND_API_KEY
+  - RESEND_FROM_EMAIL
+  - ADMIN_NOTIFICATION_EMAIL
+- Manual payment:
+  - MANUAL_PAYMENT_BLIK_PHONE lub publiczny numer kontaktowy
+  - MANUAL_PAYMENT_BANK_ACCOUNT
+  - MANUAL_PAYMENT_ACCOUNT_NAME
+  - MANUAL_PAYMENT_INSTRUCTIONS
+  - MANUAL_PAYMENT_HOLD_MINUTES
+  - MANUAL_PAYMENT_REVIEW_SECRET opcjonalnie, inaczej fallback do ADMIN_ACCESS_SECRET
+- Public contact:
+  - BEHAVIOR15_CONTACT_EMAIL
+  - BEHAVIOR15_CONTACT_PHONE
+- PayU:
+  - PAYU_ENVIRONMENT
+  - PAYU_CLIENT_ID
+  - PAYU_CLIENT_SECRET
+  - PAYU_POS_ID
+  - PAYU_SECOND_KEY
+- Optional SMS:
+  - SMS_NOTIFICATION_WEBHOOK_URL
+  - SMS_NOTIFICATION_WEBHOOK_TOKEN
+- Legacy compatibility:
+  - STRIPE_SECRET_KEY
+  - STRIPE_WEBHOOK_SECRET
 
-10. Następny sensowny etap
-- Ustawić prawidłowy publiczny e-mail kontaktowy, jeśli ma być widoczny obok telefonu i Facebooka.
-- Dodać pierwsze zaakceptowane historie klientów do scalonej sekcji społecznego dowodu.
-- Jeśli live dalej pokaże różnice po stronie pojedynczego użytkownika, zrobić twarde odświeżenie przeglądarki `Ctrl+F5`, bo deploy jest już podpięty pod nowy commit.
+10. Jakie testy wykonano
+- npm install
+- npm run lint
+- npm test
+- npm run build
+- npm run verify-flow
+- npm run pricing-smoke
+- npm run ui-smoke
+- npm run live-smoke -- --expected-branch main --expected-commit a574ba1
+
+11. Wynik każdego testu
+- npm install: PASS
+  - dependencies up to date
+- npm run lint: PASS
+- npm test: PASS
+  - 50/50 testów zielone
+- npm run build: PASS
+- npm run verify-flow: PASS
+  - manual pending_manual_payment -> paid
+  - manual reject -> cancelled/rejected
+  - payu simulated success -> confirmed/paid
+- npm run pricing-smoke: PASS
+- npm run ui-smoke: PASS
+  - booking start
+  - ekran z dwiema metodami płatności
+  - manual "Zapłaciłem"
+  - blokada pokoju przed approve
+  - admin approve
+  - odblokowanie confirmation i call room
+- npm run live-smoke: FAIL na aktualizację deploya
+  - smoke strony przeszedł funkcjonalnie
+  - marker produkcyjny nadal: CLEAN_START_REPO_V1:main:6b1b8c6
+  - oczekiwany marker: CLEAN_START_REPO_V1:main:a574ba1
+  - wniosek: publiczny deploy nie zrolował się jeszcze na nowy commit w chwili raportu
+
+12. Czy zmiany zostały wypchnięte do beh2/main
+- Tak.
+- Push wykonany do:
+  - origin/main
+- Zakres push:
+  - 6b1b8c6 -> a574ba1
+
+13. Czy paczka jest gotowa do deploya live
+- Tak, jako paczka kodu i konfiguracji.
+- Nie, jako potwierdzony publiczny rollout na produkcji w chwili raportu.
+- Stan faktyczny na moment raportu:
+  - kod na main: a574ba1
+  - publiczny marker live: 6b1b8c6
+- Wniosek:
+  - artefakt jest gotowy
+  - repo jest zaktualizowane
+  - testy lokalne i smoke lokalne są zielone
+  - produkcyjny rollout Vercel wymaga jeszcze dojścia albo ręcznej interwencji po stronie deploya
+
+Dodatkowe uwagi techniczne
+- Nie ruszono mechanizmu admin pricing jako źródła kwoty dla bookingów.
+- Nie cofnięto materiałów przed rozmową.
+- Nie cofnięto clean startu.
+- Nie cofnięto remindera Supabase.
+- Nie dodano fake automatyzacji dla BLIK na telefon.
+- Manual payment review ma też drogę z panelu admina, nie tylko z maila.
