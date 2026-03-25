@@ -133,8 +133,12 @@ export default async function BookPage({
             <BookingStageEyebrow stage="topic" className="section-eyebrow" />
             <h1>Wybierz temat i przejdź do terminu</h1>
             <p className="hero-text">
-              To jest pierwszy realny krok rezerwacji. Wybierasz temat, a potem od razu widzisz terminy i przechodzisz dalej bez zbędnych przystanków.
+              Zacznij od karty, która najbardziej przypomina Twój problem. Gryzienie rąk, rzucanie się do psów, wycie po wyjściu
+              albo kuweta to dobry punkt startu nawet wtedy, gdy sytuacja jest bardziej złożona.
             </p>
+            <div className="topic-selection-note top-gap-small">
+              Nie musisz trafić idealnie. Wybierz najbliższy temat, a resztę doprecyzujesz w formularzu.
+            </div>
 
             <div className="booking-note-grid top-gap">
               <div className="list-card tree-backed-card">
@@ -154,6 +158,8 @@ export default async function BookPage({
             <div className="card-grid three-up top-gap" id="tematy">
               {problemOptions.map((item) => {
                 const topicVisual = TOPIC_VISUALS[item.id]
+                const cardTitle = item.marketingTitle ?? item.title
+                const cardDescription = item.marketingDesc ?? item.desc
 
                 return (
                   <Link
@@ -175,8 +181,17 @@ export default async function BookPage({
                       />
                     </div>
                     <span className="topic-icon-shell">{renderProblemIcon(item.id)}</span>
-                    <div className="topic-title">{item.title}</div>
-                    <div className="topic-desc">{item.desc}</div>
+                    <div className="topic-title">{cardTitle}</div>
+                    <div className="topic-desc">{cardDescription}</div>
+                    {item.examples?.length ? (
+                      <div className="topic-examples" aria-label={`Przykładowe sytuacje dla tematu ${item.title}`}>
+                        {item.examples.slice(0, 3).map((example) => (
+                          <span key={example} className="topic-example-chip">
+                            {example}
+                          </span>
+                        ))}
+                      </div>
+                    ) : null}
                     <div className="topic-link">Wybierz ten temat</div>
                   </Link>
                 )

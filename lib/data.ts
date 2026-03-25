@@ -6,42 +6,69 @@ export const problemOptions: ProblemOption[] = [
     icon: 'puppy',
     title: 'Szczeniak i młody pies',
     desc: 'gryzienie, nauka czystości, pobudzenie i pierwsze zasady w domu',
+    marketingTitle: 'Szczeniak gryzie ręce, skacze i nie umie się wyciszyć',
+    marketingDesc:
+      'Podgryzanie rąk i nóg, chaos w domu, nauka czystości, skakanie, pierwsze granice i spokojniejszy plan dla młodego psa.',
+    examples: ['buldog francuski gryzie ręce', 'szczeniak łapie za nogawki', 'młody pies nie odpuszcza'],
   },
   {
     id: 'kot',
     icon: 'cat',
     title: 'Kot i trudne zachowania',
     desc: 'problemy z kuwetą, napięcie, wokalizacja i trudności w domu',
+    marketingTitle: 'Kot sika poza kuwetą, gryzie albo miauczy nocą',
+    marketingDesc:
+      'Problemy z kuwetą, napięcie w domu, atak przy głaskaniu, konflikt między kotami i trudne sygnały stresu.',
+    examples: ['kot sika poza kuwetą', 'kot gryzie przy głaskaniu', 'kot bije drugiego kota'],
   },
   {
     id: 'separacja',
     icon: 'home',
     title: 'Lęk separacyjny',
     desc: 'wycie, niszczenie, trudność zostawania samemu i napięcie po wyjściu opiekuna',
+    marketingTitle: 'Wyje i niszczy, gdy zostaje sam',
+    marketingDesc:
+      'Szczekanie po wyjściu, drapanie drzwi, demolka, napięcie i trudność zostawania samemu nawet na chwilę.',
+    examples: ['pies szczeka, gdy zostaje sam', 'pies niszczy po wyjściu', 'nie mogę wyjść z domu bez stresu psa'],
   },
   {
     id: 'agresja',
     icon: 'shield',
     title: 'Agresja i reakcje obronne',
     desc: 'trudne zachowania wobec ludzi, zwierząt lub w codziennych sytuacjach',
+    marketingTitle: 'Rzuca się do psów lub ludzi na spacerze',
+    marketingDesc:
+      'Szczekanie, lungowanie, warczenie, napięcie przy mijaniu i trudne zachowania obronne wobec ludzi albo zwierząt.',
+    examples: ['owczarek agresywny do psów', 'pies warczy na gości', 'pies broni miski lub kanapy'],
   },
   {
     id: 'niszczenie',
     icon: 'spark',
     title: 'Szczekanie, niszczenie, pobudzenie',
     desc: 'hałas, rozregulowanie i trudność z wyciszeniem lub kontrolą emocji',
+    marketingTitle: 'Goni auta, rowery i nie umie się zatrzymać',
+    marketingDesc:
+      'Pogoń za ruchem, frustracja, szczekanie, demolka, nakręcanie się na spacerze albo w domu i brak wyciszenia.',
+    examples: ['border collie goni wszystko', 'pies rzuca się na rowery', 'pies demoluje dom z pobudzenia'],
   },
   {
     id: 'dogoterapia',
     icon: 'heart-paw',
     title: 'Dogoterapia',
     desc: 'wstępna rozmowa o celu spotkania, odbiorcach, przygotowaniu psa i dalszym planie',
+    marketingTitle: 'Dogoterapia',
+    marketingDesc: 'Wstępna rozmowa o celu spotkania, odbiorcach, przygotowaniu psa i dalszym planie pracy.',
+    examples: ['pierwsza rozmowa o spotkaniach', 'przygotowanie psa do pracy', 'jak ułożyć bezpieczny plan'],
   },
   {
     id: 'inne',
     icon: 'compass',
     title: 'Inny temat do omówienia',
     desc: 'nietypowa sytuacja, którą chcesz szybko uporządkować i dobrze opisać w formularzu',
+    marketingTitle: 'Nie wiesz, jak nazwać problem?',
+    marketingDesc:
+      'Opisz sytuację po swojemu. To dobra opcja, gdy problem jest mieszany albo nie mieści się w jednej kategorii.',
+    examples: ['temat mieszany', 'dziwne zachowanie w domu', 'chcę to najpierw dobrze opisać'],
   },
 ]
 

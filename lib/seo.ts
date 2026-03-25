@@ -9,12 +9,12 @@ const DEFAULT_OG_IMAGE = {
 } as const
 
 function buildBookMarketingDescription() {
-  return 'Wybierz temat, sprawdź aktualny kalendarz i zarezerwuj konsultację Behawior 15. Po płatności od razu dostajesz potwierdzenie i link do rozmowy audio.'
+  return 'Wybierz temat najbliższy problemowi, sprawdź aktualny kalendarz i zarezerwuj konsultację Behawior 15. Gryzienie rąk, rzucanie się do psów, lęk separacyjny czy kuweta to dobry punkt startu.'
 }
 
 export async function buildHomeMetadata(): Promise<Metadata> {
   const description =
-    `${SITE_NAME} – spokojna 15-minutowa konsultacja głosowa online dla psa lub kota. Certyfikowany behawiorysta ${SPECIALIST_NAME} (COAPE/CAPBT). Wybierasz temat, sprawdzasz aktualny kalendarz i dopiero w flow rezerwacji widzisz ostateczną kwotę.`
+    `${SITE_NAME} – spokojna 15-minutowa konsultacja głosowa online dla psa lub kota. Szczeniak gryzie ręce? Pies rzuca się do innych psów? Kot sika poza kuwetą? Certyfikowany behawiorysta ${SPECIALIST_NAME} (COAPE/CAPBT) porządkuje sytuację i daje pierwszy sensowny krok.`
 
   return {
     title: `${SITE_NAME} | 15-minutowa konsultacja głosowa dla psa lub kota`,

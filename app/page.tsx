@@ -52,13 +52,20 @@ const quietHighlights = [
   {
     title: 'Co proponuję',
     description:
-      '15-minutową konsultację głosową online, która porządkuje problem psa lub kota i daje pierwszy sensowny krok.',
+      '15-minutową konsultację głosową online dla sytuacji takich jak gryzienie rąk, rzucanie się do psów, lęk separacyjny czy kuweta.',
   },
   {
     title: 'Po co to działa',
     description:
-      'Nie kupujesz długiej obietnicy. Kupujesz spokojną diagnozę sytuacji, pierwszy plan i decyzję, co robić dalej.',
+      'Nie kupujesz długiej obietnicy. Kupujesz spokojne uporządkowanie sytuacji, pierwszy plan i decyzję, co robić dalej.',
   },
+] as const
+
+const heroProblemSignals = [
+  'Szczeniak gryzie ręce',
+  'Pies rzuca się do innych psów',
+  'Kot zaczął sikać poza kuwetą',
+  'Pies wyje i niszczy po wyjściu',
 ] as const
 
 export default async function HomePage() {
@@ -94,7 +101,7 @@ export default async function HomePage() {
       serviceType: '15-minutowa konsultacja głosowa online dla psa lub kota',
       url: baseUrl,
       description:
-        'Sprzedażowa strona konsultacji Behawior 15: kim jest specjalista, co proponuje i jak bezpiecznie kupić pierwszy krok dla psa lub kota.',
+        'Sprzedażowa strona konsultacji Behawior 15 dla problemów takich jak gryzienie rąk, reaktywność na spacerze, lęk separacyjny czy kuweta u kota.',
       areaServed: {
         '@type': 'City',
         name: 'Olsztyn',
@@ -131,13 +138,21 @@ export default async function HomePage() {
             {publicFlowMessage ? <div className="info-box">{publicFlowMessage}</div> : null}
 
             <div className="pill subtle-pill">15-minutowa konsultacja audio online</div>
-            <div className="hero-topline">Najpierw widzisz, kim jestem i co proponuję. Temat i termin wybierzesz dopiero po kliknięciu w rezerwację.</div>
+            <div className="hero-topline">Szczeniak gryzie ręce? Pies rzuca się do innych psów? Kot zaczął sikać poza kuwetą?</div>
             <h1>Spokojna konsultacja, która porządkuje problem psa lub kota w 15 minut</h1>
 
             <p className="hero-text hero-text-tight">
-              Rozmawiasz bezpośrednio ze specjalistą. Celem nie jest przegadanie wszystkiego, tylko spokojne uchwycenie
-              problemu, pierwszy plan działania i decyzja, co robić dalej.
+              Rozmawiasz bezpośrednio ze specjalistą. Celem nie jest przegadanie wszystkiego, tylko szybkie uchwycenie
+              problemu, pierwszy sensowny krok i decyzja, co robić dalej bez chaosu.
             </p>
+
+            <div className="hero-problem-strip top-gap-small" aria-label="Przykładowe problemy, z którymi możesz zacząć">
+              {heroProblemSignals.map((signal) => (
+                <span key={signal} className="hero-problem-pill">
+                  {signal}
+                </span>
+              ))}
+            </div>
 
             <div className="sales-mini-grid top-gap">
               {quietHighlights.map((item) => (
@@ -179,7 +194,7 @@ export default async function HomePage() {
             </div>
 
             <div className="marketing-note top-gap-small">
-              Po kliknięciu zobaczysz dopiero tematy konsultacji i realnie wolne terminy.
+              Po kliknięciu wybierzesz temat najbliższy Twojej sytuacji i od razu zobaczysz realnie wolne terminy.
             </div>
           </div>
 

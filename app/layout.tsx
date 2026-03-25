@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     template: '%s | Behawior 15',
   },
   description:
-    'Behawior 15 – spokojna 15-minutowa konsultacja głosowa online dla psa lub kota. Certyfikowany behawiorysta Krzysztof Regulski (COAPE/CAPBT). Bezpieczna płatność, szybkie potwierdzenie i jasny pierwszy krok.',
+    'Behawior 15 – spokojna 15-minutowa konsultacja głosowa online dla psa lub kota. Szczeniak gryzie ręce? Pies rzuca się do innych psów? Kot sika poza kuwetą? Certyfikowany behawiorysta Krzysztof Regulski (COAPE/CAPBT) daje pierwszy sensowny krok.',
   alternates: {
     canonical: '/',
   },
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Behawior 15 | 15-minutowa konsultacja głosowa dla psa lub kota',
     description:
-      'Behawior 15 – spokojna 15-minutowa konsultacja głosowa online dla psa lub kota. Certyfikowany behawiorysta Krzysztof Regulski (COAPE/CAPBT). Bezpieczna płatność, szybkie potwierdzenie i jasny pierwszy krok.',
+      'Behawior 15 – spokojna 15-minutowa konsultacja głosowa online dla psa lub kota. Szczeniak gryzie ręce? Pies rzuca się do innych psów? Kot sika poza kuwetą? Certyfikowany behawiorysta Krzysztof Regulski (COAPE/CAPBT) daje pierwszy sensowny krok.',
     type: 'website',
     locale: 'pl_PL',
     siteName: 'Behawior 15',
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Behawior 15 | 15-minutowa konsultacja głosowa dla psa lub kota',
     description:
-      'Spokojna konsultacja online dla psa lub kota: bezpieczna płatność, szybkie potwierdzenie i jasny pierwszy krok.',
+      'Szczeniak gryzie ręce? Pies rzuca się do innych psów? Kot sika poza kuwetą? Spokojna konsultacja online daje pierwszy sensowny krok.',
     images: ['/images/hero-main.png'],
   },
 }

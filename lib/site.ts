@@ -54,32 +54,32 @@ export const HERO_SUPPORT_IMAGES = [
 
 export const TOPIC_VISUALS: Record<ProblemType, { src: string; alt: string }> = {
   szczeniak: {
-    src: '/branding/case-dog-home.jpg',
-    alt: 'Spokojny pies odpoczywający w domowym otoczeniu',
+    src: '/images/case-dog-bed.jpg',
+    alt: 'Pies odpoczywający w domowym otoczeniu jako ilustracja pracy nad wyciszeniem młodego psa',
   },
   kot: {
-    src: '/branding/case-cat-sofa.jpg',
-    alt: 'Kot odpoczywający w jasnym wnętrzu',
+    src: '/images/case-cat-scratcher.jpg',
+    alt: 'Kot siedzący przy drapaku w domowym otoczeniu',
   },
   separacja: {
-    src: '/images/case-dog-black.jpg',
-    alt: 'Czarny pies siedzący w domu i patrzący w stronę opiekuna',
+    src: '/images/case-dog-bed.jpg',
+    alt: 'Pies odpoczywający samotnie przy oknie jako ilustracja zostawania samemu w domu',
   },
   agresja: {
-    src: '/branding/case-cat-snow.jpg',
-    alt: 'Kot stojący na śniegu i obserwujący otoczenie',
+    src: '/images/case-dog-black.jpg',
+    alt: 'Pies uważnie obserwujący otoczenie jako ilustracja napięcia i reaktywności',
   },
   niszczenie: {
-    src: '/branding/case-cat-sofa.jpg',
-    alt: 'Kot odpoczywający na sofie w domu',
+    src: '/branding/case-dog-home.jpg',
+    alt: 'Pies skupiony na otoczeniu jako ilustracja pobudzenia i trudności z wyciszeniem',
   },
   dogoterapia: {
     src: '/branding/case-dog-home.jpg',
     alt: 'Spokojny pies w domowym otoczeniu jako ilustracja dogoterapii',
   },
   inne: {
-    src: '/images/case-dog-black.jpg',
-    alt: 'Czarny pies w spokojnym ujęciu domowym',
+    src: '/branding/hero-krzysztof-cat.jpg',
+    alt: 'Krzysztof Regulski z kotem jako ilustracja konsultacji w nietypowych sprawach',
   },
 }
 

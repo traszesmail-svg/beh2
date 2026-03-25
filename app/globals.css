@@ -638,6 +638,8 @@ h1 span {
 }
 
 .hero-topline,
+.hero-problem-strip,
+.hero-problem-pill,
 .hero-proof-pill,
 .hero-secondary-link {
   position: relative;
@@ -661,6 +663,26 @@ h1 span {
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 20px;
+}
+
+.hero-problem-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.hero-problem-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 107, 0, 0.18);
+  background: rgba(255, 247, 240, 0.9);
+  color: var(--accent-2);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.45;
 }
 
 .hero-price-badge {
@@ -807,6 +829,14 @@ h1 span {
 }
 
 .marketing-note {
+  color: var(--accent-2);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.topic-selection-note {
+  max-width: 760px;
   color: var(--accent-2);
   font-size: 14px;
   font-weight: 700;
@@ -1207,7 +1237,8 @@ h1 span {
 }
 
 .topic-card {
-  display: block;
+  display: flex;
+  flex-direction: column;
   border-radius: 30px;
   padding: 22px;
   transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
@@ -1274,8 +1305,30 @@ h1 span {
   line-height: 1.7;
 }
 
+.topic-examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.topic-example-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(10, 92, 54, 0.12);
+  background: rgba(255, 255, 255, 0.76);
+  color: var(--accent-2);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
 .topic-link {
-  margin-top: 18px;
+  margin-top: auto;
+  padding-top: 18px;
   color: var(--accent);
   font-weight: 700;
 }

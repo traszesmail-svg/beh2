@@ -20,6 +20,9 @@ export interface ProblemOption {
   icon: string
   title: string
   desc: string
+  marketingTitle?: string
+  marketingDesc?: string
+  examples?: string[]
 }
 
 export interface AvailabilitySeed {
