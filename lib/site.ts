@@ -58,28 +58,28 @@ export const TOPIC_VISUALS: Record<ProblemType, { src: string; alt: string }> = 
     alt: 'Pies odpoczywający w domowym otoczeniu jako ilustracja pracy nad wyciszeniem młodego psa',
   },
   kot: {
-    src: '/images/case-cat-scratcher.jpg',
-    alt: 'Kot siedzący przy drapaku w domowym otoczeniu',
+    src: '/branding/hero-krzysztof-cat.jpg',
+    alt: 'Krzysztof Regulski trzymający kota jako ilustracja problemów kocich i spokojnej pracy ze zwierzęciem',
   },
   separacja: {
-    src: '/images/case-dog-bed.jpg',
-    alt: 'Pies odpoczywający samotnie przy oknie jako ilustracja zostawania samemu w domu',
+    src: '/images/case-dog-black.jpg',
+    alt: 'Pies siedzący przy drzwiach jako ilustracja zostawania samemu i napięcia po wyjściu opiekuna',
   },
   agresja: {
     src: '/images/case-dog-black.jpg',
     alt: 'Pies uważnie obserwujący otoczenie jako ilustracja napięcia i reaktywności',
   },
   niszczenie: {
-    src: '/branding/case-dog-home.jpg',
-    alt: 'Pies skupiony na otoczeniu jako ilustracja pobudzenia i trudności z wyciszeniem',
+    src: '/images/case-dog-bed.jpg',
+    alt: 'Pies w domowym otoczeniu jako ilustracja pobudzenia, gonienia bodźców i trudności z wyciszeniem',
   },
   dogoterapia: {
-    src: '/branding/case-dog-home.jpg',
-    alt: 'Spokojny pies w domowym otoczeniu jako ilustracja dogoterapii',
+    src: '/images/krzysztof-vet-action.jpg',
+    alt: 'Krzysztof Regulski podczas pracy ze zwierzęciem jako ilustracja profesjonalnego przygotowania do dogoterapii',
   },
   inne: {
-    src: '/branding/hero-krzysztof-cat.jpg',
-    alt: 'Krzysztof Regulski z kotem jako ilustracja konsultacji w nietypowych sprawach',
+    src: '/images/case-cat-scratcher.jpg',
+    alt: 'Kot przy drapaku jako ilustracja mieszanych i nietypowych tematów do omówienia',
   },
 }
 

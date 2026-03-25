@@ -133,11 +133,11 @@ export default async function BookPage({
             <BookingStageEyebrow stage="topic" className="section-eyebrow" />
             <h1>Wybierz temat i przejdź do terminu</h1>
             <p className="hero-text">
-              Zacznij od karty, która najbardziej przypomina Twój problem. Gryzienie rąk, rzucanie się do psów, wycie po wyjściu
-              albo kuweta to dobry punkt startu nawet wtedy, gdy sytuacja jest bardziej złożona.
+              Zacznij od karty, która najbardziej przypomina to, co dzieje się u Ciebie. Nie chodzi o idealną etykietę, tylko o
+              dobry punkt wejścia w rozmowę.
             </p>
             <div className="topic-selection-note top-gap-small">
-              Nie musisz trafić idealnie. Wybierz najbliższy temat, a resztę doprecyzujesz w formularzu.
+              Wybierz najbliższy temat, a resztę doprecyzujesz spokojnie w formularzu.
             </div>
 
             <div className="booking-note-grid top-gap">
@@ -166,6 +166,7 @@ export default async function BookPage({
                     key={item.id}
                     href={`/slot?problem=${item.id}`}
                     className="topic-card tree-backed-card"
+                    data-problem={item.id}
                     data-analytics-event="topic_select"
                     data-analytics-location="book-topics"
                     data-analytics-problem={item.id}
@@ -179,6 +180,8 @@ export default async function BookPage({
                         sizes="(max-width: 680px) 100vw, (max-width: 980px) 50vw, 33vw"
                         className="topic-media-image"
                       />
+                      <div className="topic-media-overlay" aria-hidden="true" />
+                      {item.visualLabel ? <div className="topic-media-badge">{item.visualLabel}</div> : null}
                     </div>
                     <span className="topic-icon-shell">{renderProblemIcon(item.id)}</span>
                     <div className="topic-title">{cardTitle}</div>

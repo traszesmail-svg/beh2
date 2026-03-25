@@ -52,12 +52,12 @@ const quietHighlights = [
   {
     title: 'Co proponuję',
     description:
-      '15-minutową konsultację głosową online dla sytuacji takich jak gryzienie rąk, rzucanie się do psów, lęk separacyjny czy kuweta.',
+      '15-minutową konsultację głosową online dla sytuacji takich jak gryzienie rąk, trudne spacery, zostawanie samemu czy kuweta.',
   },
   {
     title: 'Po co to działa',
     description:
-      'Nie kupujesz długiej obietnicy. Kupujesz spokojne uporządkowanie sytuacji, pierwszy plan i decyzję, co robić dalej.',
+      'Nie kupujesz długiej obietnicy. Kupujesz spokojne uporządkowanie sytuacji i pierwszy sensowny krok.',
   },
 ] as const
 
@@ -142,8 +142,8 @@ export default async function HomePage() {
             <h1>Spokojna konsultacja, która porządkuje problem psa lub kota w 15 minut</h1>
 
             <p className="hero-text hero-text-tight">
-              Rozmawiasz bezpośrednio ze specjalistą. Celem nie jest przegadanie wszystkiego, tylko szybkie uchwycenie
-              problemu, pierwszy sensowny krok i decyzja, co robić dalej bez chaosu.
+              Rozmawiasz bezpośrednio ze specjalistą. W 15 minut porządkujemy sytuację, wybieramy pierwszy sensowny krok i
+              odcinamy chaos kolejnych, sprzecznych porad.
             </p>
 
             <div className="hero-problem-strip top-gap-small" aria-label="Przykładowe problemy, z którymi możesz zacząć">

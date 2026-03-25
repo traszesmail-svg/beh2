@@ -23,6 +23,7 @@ export interface ProblemOption {
   marketingTitle?: string
   marketingDesc?: string
   examples?: string[]
+  visualLabel?: string
 }
 
 export interface AvailabilitySeed {
