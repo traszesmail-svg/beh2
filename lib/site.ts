@@ -54,32 +54,32 @@ export const HERO_SUPPORT_IMAGES = [
 
 export const TOPIC_VISUALS: Record<ProblemType, { src: string; alt: string }> = {
   szczeniak: {
-    src: '/images/case-dog-bed.jpg',
-    alt: 'Pies odpoczywający w domowym otoczeniu jako ilustracja pracy nad wyciszeniem młodego psa',
+    src: '/branding/topic-cards/puppy-hands.jpg',
+    alt: 'Szczeniak przy dłoni opiekuna jako ilustracja gryzienia rąk i nauki wyciszenia',
   },
   kot: {
-    src: '/branding/hero-krzysztof-cat.jpg',
-    alt: 'Krzysztof Regulski trzymający kota jako ilustracja problemów kocich i spokojnej pracy ze zwierzęciem',
+    src: '/branding/topic-cards/cat-veterinarian.jpg',
+    alt: 'Kot podczas badania w gabinecie jako ilustracja problemów z kuwetą, stresem i zachowaniem',
   },
   separacja: {
-    src: '/images/case-dog-black.jpg',
-    alt: 'Pies siedzący przy drzwiach jako ilustracja zostawania samemu i napięcia po wyjściu opiekuna',
+    src: '/branding/topic-cards/dog-window-alone.jpg',
+    alt: 'Pies patrzący przez okno jako ilustracja zostawania samemu i napięcia po wyjściu opiekuna',
   },
   agresja: {
-    src: '/images/case-dog-black.jpg',
-    alt: 'Pies uważnie obserwujący otoczenie jako ilustracja napięcia i reaktywności',
+    src: '/branding/topic-cards/french-bulldog-leash.jpg',
+    alt: 'Buldog francuski na smyczy w napięciu jako ilustracja reaktywności i trudnych spacerów',
   },
   niszczenie: {
-    src: '/images/case-dog-bed.jpg',
-    alt: 'Pies w domowym otoczeniu jako ilustracja pobudzenia, gonienia bodźców i trudności z wyciszeniem',
+    src: '/branding/topic-cards/border-collie-running.jpg',
+    alt: 'Border collie w biegu jako ilustracja pogoni za ruchem i silnego pobudzenia',
   },
   dogoterapia: {
-    src: '/images/krzysztof-vet-action.jpg',
-    alt: 'Krzysztof Regulski podczas pracy ze zwierzęciem jako ilustracja profesjonalnego przygotowania do dogoterapii',
+    src: '/branding/topic-cards/dog-checkup.jpg',
+    alt: 'Specjalista badający psa jako ilustracja przygotowania psa do pracy i bezpiecznego planu',
   },
   inne: {
-    src: '/images/case-cat-scratcher.jpg',
-    alt: 'Kot przy drapaku jako ilustracja mieszanych i nietypowych tematów do omówienia',
+    src: '/branding/topic-cards/cat-in-arms.jpg',
+    alt: 'Opiekunka trzymająca kota jako ilustracja mieszanego lub nietypowego tematu konsultacji',
   },
 }
 
