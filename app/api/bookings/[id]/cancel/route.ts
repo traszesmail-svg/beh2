@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server'
 import { canSelfCancelBooking } from '@/lib/self-cancellation'
 import { getBookingForViewer, markBookingRefunded } from '@/lib/server/db'
-import { ConfigurationError, getPaymentModeStatus, getPublicFeatureUnavailableMessage } from '@/lib/server/env'
+import { ConfigurationError, getPublicFeatureUnavailableMessage } from '@/lib/server/env'
+import { refundPayuBooking } from '@/lib/server/payu'
 import { refundStripeCheckoutBooking } from '@/lib/server/stripe'
 
 export const runtime = 'nodejs'
@@ -40,14 +41,12 @@ export async function POST(
       )
     }
 
-    const paymentMode = getPaymentModeStatus()
-
-    if (!paymentMode.isValid || !paymentMode.active) {
-      throw new ConfigurationError(paymentMode.summary)
+    if (booking.paymentMethod === 'stripe') {
+      await refundStripeCheckoutBooking(booking)
     }
 
-    if (paymentMode.active === 'stripe') {
-      await refundStripeCheckoutBooking(booking)
+    if (booking.paymentMethod === 'payu') {
+      await refundPayuBooking(booking)
     }
 
     const updatedBooking = await markBookingRefunded(booking.id)

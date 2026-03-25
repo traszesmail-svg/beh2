@@ -8,7 +8,7 @@ import { Header } from '@/components/Header'
 import { PricingDisclosure } from '@/components/PricingDisclosure'
 import { formatDateTimeLabel, getProblemLabel, isFutureAvailabilitySlot, isProblemType } from '@/lib/data'
 import { getAvailabilitySlot } from '@/lib/server/db'
-import { getDataModeStatus, getPaymentModeStatus } from '@/lib/server/env'
+import { getDataModeStatus } from '@/lib/server/env'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -35,7 +35,6 @@ export default async function FormPage({
   }
 
   const dataMode = getDataModeStatus()
-  const paymentMode = getPaymentModeStatus()
   let slot: Awaited<ReturnType<typeof getAvailabilitySlot>> = null
   let flowError: string | null = null
 
@@ -52,7 +51,6 @@ export default async function FormPage({
 
   const slotIsBookable = slot && !slot.isBooked && !slot.lockedByBookingId && isFutureAvailabilitySlot(slot.bookingDate, slot.bookingTime)
   const activeSlot = slotIsBookable ? slot : null
-  const isMockPayment = paymentMode.active === 'mock'
 
   return (
     <main className="page-wrap">
@@ -63,9 +61,7 @@ export default async function FormPage({
             <BookingStageEyebrow stage="details" className="section-eyebrow" />
             <h1>Uzupełnij dane do konsultacji</h1>
             <p className="muted paragraph-gap">
-              {isMockPayment
-                ? 'Po zapisaniu formularza termin zostanie tymczasowo zablokowany na czas testowego potwierdzenia. Bez Stripe przejdziesz dalej do potwierdzenia, materiałów i linku do rozmowy audio.'
-                : 'Po zapisaniu formularza termin zostanie tymczasowo zablokowany na czas płatności. Po opłaceniu od razu zobaczysz potwierdzenie i link do rozmowy audio.'}
+              Po zapisaniu formularza termin zostanie tymczasowo zablokowany. Na kolejnym ekranie wybierzesz prostą wpłatę BLIK/przelewem albo PayU.
             </p>
 
             <div className="stack-gap top-gap">
@@ -105,7 +101,6 @@ export default async function FormPage({
                   problemType={problem}
                   slotId={activeSlot.id}
                   slotLabel={formatDateTimeLabel(activeSlot.bookingDate, activeSlot.bookingTime)}
-                  paymentMode={isMockPayment ? 'mock' : 'stripe'}
                 />
               </>
             ) : (

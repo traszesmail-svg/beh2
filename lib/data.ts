@@ -54,12 +54,12 @@ export const steps = [
   {
     n: '02',
     title: 'Wybierasz termin i finalizujesz zakup',
-    desc: 'Widzisz realne sloty, podajesz krótki opis problemu i przechodzisz do bezpiecznej płatności.',
+    desc: 'Widzisz realne sloty, podajesz krótki opis problemu i przechodzisz do płatności lub zgłoszenia wpłaty.',
   },
   {
     n: '03',
-    title: 'Dostajesz potwierdzenie i minutę na anulację',
-    desc: 'Po opłaceniu od razu widzisz link do rozmowy, materiały przygotowawcze i przycisk anulacji dostępny przez 1 minutę.',
+    title: 'Dostajesz potwierdzenie i link do rozmowy',
+    desc: 'Po opłaceniu lub ręcznym potwierdzeniu wpłaty widzisz link do rozmowy, materiały przygotowawcze i dalsze kroki.',
   },
 ]
 
@@ -70,11 +70,11 @@ export const faq = [
   },
   {
     q: 'Czy zakup jest bezpieczny?',
-    a: 'Tak. Płatność przechodzi przez bezpieczny flow, potwierdzenie dostajesz od razu, a konsultację prowadzi realny specjalista z publicznie sprawdzalnymi kompetencjami.',
+    a: 'Tak. Możesz wybrać prostą wpłatę BLIK/przelewem albo checkout PayU, a link do rozmowy odblokowuje się dopiero po potwierdzeniu płatności.',
   },
   {
     q: 'Czy mogę anulować zakup?',
-    a: 'Tak. Po opłaceniu masz 1 minutę na samodzielną rezygnację przyciskiem anulacji na ekranie potwierdzenia. Po tej minucie nadal działa reklamacja lub wniosek o zwrot zgodnie z regulaminem.',
+    a: 'Płatność online potwierdzona automatycznie nadal daje krótkie okno na samodzielną rezygnację. Przy wpłacie ręcznej ewentualny zwrot wymaga kontaktu i ręcznej decyzji.',
   },
   {
     q: 'Co dostaję po rozmowie?',
@@ -141,11 +141,13 @@ export function getProblemLabel(problem: ProblemType): string {
 }
 
 export function getBookingStatusLabel(
-  status: 'pending' | 'confirmed' | 'done' | 'cancelled' | 'expired',
+  status: 'pending' | 'pending_manual_payment' | 'confirmed' | 'done' | 'cancelled' | 'expired',
 ): string {
   switch (status) {
     case 'pending':
       return 'Oczekuje na płatność'
+    case 'pending_manual_payment':
+      return 'Czeka na ręczne potwierdzenie'
     case 'confirmed':
       return 'Potwierdzona'
     case 'done':
@@ -159,14 +161,20 @@ export function getBookingStatusLabel(
   }
 }
 
-export function getPaymentStatusLabel(status: 'unpaid' | 'paid' | 'failed' | 'refunded'): string {
+export function getPaymentStatusLabel(
+  status: 'unpaid' | 'pending_manual_review' | 'paid' | 'failed' | 'rejected' | 'refunded',
+): string {
   switch (status) {
     case 'unpaid':
       return 'Nieopłacona'
+    case 'pending_manual_review':
+      return 'Zgłoszona, czeka na weryfikację'
     case 'paid':
       return 'Opłacona'
     case 'failed':
       return 'Płatność nieudana'
+    case 'rejected':
+      return 'Wpłata niepotwierdzona'
     case 'refunded':
       return 'Zwrócona'
     default:

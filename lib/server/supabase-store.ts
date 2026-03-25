@@ -5,6 +5,7 @@ import { buildSeedAvailabilitySlots, hasFutureAvailabilitySlots } from '@/lib/se
 import { createCustomerAccessToken, hashCustomerAccessToken } from '@/lib/server/customer-access'
 import { getReservationWindowMinutes, getSupabaseServerConfig } from '@/lib/server/env'
 import { createMeetingUrl } from '@/lib/server/jitsi'
+import { getManualPaymentConfig } from '@/lib/server/payment-options'
 import {
   sendBookingConfirmationEmail,
   sendBookingReservationCreatedEmail,
@@ -48,16 +49,23 @@ type BookingRow = {
   slot_id: string
   booking_status: string
   payment_status: string
+  payment_method: string | null
+  payment_reference: string | null
   amount: number | string
   meeting_url: string
   created_at: string
   updated_at: string
   paid_at: string | null
+  payment_reported_at: string | null
+  payment_rejected_at: string | null
+  payment_rejected_reason: string | null
   cancelled_at: string | null
   expired_at: string | null
   refunded_at: string | null
   checkout_session_id: string | null
   payment_intent_id: string | null
+  payu_order_id: string | null
+  payu_order_status: string | null
   recommended_next_step: string | null
   reminder_sent: boolean | null
   prep_video_path: string | null
@@ -136,16 +144,23 @@ function mapBookingRow(row: BookingRow): BookingRecord {
     slotId: row.slot_id,
     bookingStatus: row.booking_status as BookingRecord['bookingStatus'],
     paymentStatus: row.payment_status as BookingRecord['paymentStatus'],
+    paymentMethod: row.payment_method as BookingRecord['paymentMethod'],
+    paymentReference: row.payment_reference,
     amount: typeof row.amount === 'string' ? Number(row.amount) : row.amount,
     meetingUrl: row.meeting_url,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
     paidAt: row.paid_at,
+    paymentReportedAt: row.payment_reported_at,
+    paymentRejectedAt: row.payment_rejected_at,
+    paymentRejectedReason: row.payment_rejected_reason,
     cancelledAt: row.cancelled_at,
     expiredAt: row.expired_at,
     refundedAt: row.refunded_at,
     checkoutSessionId: row.checkout_session_id,
     paymentIntentId: row.payment_intent_id,
+    payuOrderId: row.payu_order_id,
+    payuOrderStatus: row.payu_order_status,
     recommendedNextStep: row.recommended_next_step,
     reminderSent: row.reminder_sent ?? false,
     prepVideoPath: row.prep_video_path,
@@ -232,6 +247,20 @@ async function cleanupExpiredReservations() {
       })
       .eq('booking_status', 'pending')
       .eq('payment_status', 'unpaid')
+      .in('id', bookingIds)
+
+    await supabase
+      .from('bookings')
+      .update({
+        booking_status: 'expired',
+        payment_status: 'rejected',
+        payment_rejected_at: nowIso,
+        payment_rejected_reason: 'Upłynął czas na ręczne potwierdzenie wpłaty.',
+        expired_at: nowIso,
+        updated_at: nowIso,
+      })
+      .eq('booking_status', 'pending_manual_payment')
+      .eq('payment_status', 'pending_manual_review')
       .in('id', bookingIds)
   }
 }
@@ -492,8 +521,15 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
       slot_id: slot.id,
       booking_status: 'pending',
       payment_status: 'unpaid',
+      payment_method: null,
+      payment_reference: null,
       amount: pricing.amount,
       meeting_url: createMeetingUrl(bookingId),
+      payment_reported_at: null,
+      payment_rejected_at: null,
+      payment_rejected_reason: null,
+      payu_order_id: null,
+      payu_order_status: null,
       prep_video_path: null,
       prep_video_filename: null,
       prep_video_size_bytes: null,
@@ -664,9 +700,33 @@ export async function attachCheckoutSession(bookingId: string, checkoutSessionId
   return data ? mapBookingRow(data as BookingRow) : null
 }
 
-export async function markBookingPaid(
+export async function attachPayuOrder(
   bookingId: string,
-  paymentData?: { checkoutSessionId?: string | null; paymentIntentId?: string | null },
+  paymentData: { payuOrderId: string; payuOrderStatus?: string | null },
+): Promise<BookingRecord | null> {
+  const supabase = getSupabaseAdmin()
+  const { data, error } = await supabase
+    .from('bookings')
+    .update({
+      payment_method: 'payu',
+      payu_order_id: paymentData.payuOrderId,
+      payu_order_status: paymentData.payuOrderStatus ?? null,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', bookingId)
+    .select('*')
+    .maybeSingle()
+
+  if (error) {
+    throw error
+  }
+
+  return data ? mapBookingRow(data as BookingRow) : null
+}
+
+export async function markBookingManualPaymentPending(
+  bookingId: string,
+  paymentData?: { paymentReference?: string | null },
 ): Promise<BookingRecord | null> {
   const supabase = getSupabaseAdmin()
   const current = await getBookingById(bookingId)
@@ -678,9 +738,78 @@ export async function markBookingPaid(
   if (
     !(
       (current.bookingStatus === 'pending' && current.paymentStatus === 'unpaid') ||
-      (current.bookingStatus === 'confirmed' && current.paymentStatus === 'paid') ||
-      (current.bookingStatus === 'done' && current.paymentStatus === 'paid')
+      (current.bookingStatus === 'pending_manual_payment' && current.paymentStatus === 'pending_manual_review')
     )
+  ) {
+    throw new Error('Tę rezerwację można zgłosić do ręcznego potwierdzenia tylko przed opłaceniem.')
+  }
+
+  const nowIso = new Date().toISOString()
+  const holdUntil = new Date(Date.now() + getManualPaymentConfig().holdMinutes * 60 * 1000).toISOString()
+  const bookingUpdate = await supabase
+    .from('bookings')
+    .update({
+      booking_status: 'pending_manual_payment',
+      payment_status: 'pending_manual_review',
+      payment_method: 'manual',
+      payment_reference: paymentData?.paymentReference ?? current.paymentReference ?? null,
+      payment_reported_at: nowIso,
+      payment_rejected_at: null,
+      payment_rejected_reason: null,
+      cancelled_at: null,
+      expired_at: null,
+      updated_at: nowIso,
+    })
+    .eq('id', bookingId)
+    .select('*')
+    .maybeSingle()
+
+  if (bookingUpdate.error) {
+    throw bookingUpdate.error
+  }
+
+  const slotUpdate = await supabase
+    .from('availability')
+    .update({
+      is_booked: false,
+      locked_by_booking_id: bookingId,
+      locked_until: holdUntil,
+      updated_at: nowIso,
+    })
+    .eq('id', current.slotId)
+
+  if (slotUpdate.error) {
+    throw slotUpdate.error
+  }
+
+  return bookingUpdate.data ? mapBookingRow(bookingUpdate.data as BookingRow) : null
+}
+
+export async function markBookingPaid(
+  bookingId: string,
+  paymentData?: {
+    checkoutSessionId?: string | null
+    paymentIntentId?: string | null
+    paymentMethod?: BookingRecord['paymentMethod']
+    paymentReference?: string | null
+    payuOrderId?: string | null
+    payuOrderStatus?: string | null
+  },
+): Promise<BookingRecord | null> {
+  const supabase = getSupabaseAdmin()
+  const current = await getBookingById(bookingId)
+
+  if (!current) {
+    return null
+  }
+
+  if (
+      !(
+        (current.bookingStatus === 'pending' && current.paymentStatus === 'unpaid') ||
+        (current.bookingStatus === 'pending_manual_payment' && current.paymentStatus === 'pending_manual_review') ||
+        (current.bookingStatus === 'confirmed' && current.paymentStatus === 'paid') ||
+        (current.bookingStatus === 'done' && current.paymentStatus === 'paid')
+      )
   ) {
     throw new Error('Ten booking nie może już zostać opłacony.')
   }
@@ -695,9 +824,15 @@ export async function markBookingPaid(
       paid_at: nowIso,
       cancelled_at: null,
       expired_at: null,
+      payment_method: paymentData?.paymentMethod ?? current.paymentMethod ?? null,
+      payment_reference: paymentData?.paymentReference ?? current.paymentReference ?? null,
+      payment_rejected_at: null,
+      payment_rejected_reason: null,
       updated_at: nowIso,
       checkout_session_id: paymentData?.checkoutSessionId ?? current.checkoutSessionId ?? null,
       payment_intent_id: paymentData?.paymentIntentId ?? current.paymentIntentId ?? null,
+      payu_order_id: paymentData?.payuOrderId ?? current.payuOrderId ?? null,
+      payu_order_status: paymentData?.payuOrderStatus ?? current.payuOrderStatus ?? null,
     })
     .eq('id', bookingId)
     .select('*')
@@ -766,6 +901,58 @@ export async function markBookingPaymentFailed(bookingId: string): Promise<Booki
   return bookingUpdate.data ? mapBookingRow(bookingUpdate.data as BookingRow) : null
 }
 
+export async function markBookingManualPaymentRejected(
+  bookingId: string,
+  reason?: string,
+): Promise<BookingRecord | null> {
+  const supabase = getSupabaseAdmin()
+  const current = await getBookingById(bookingId)
+
+  if (!current) {
+    return null
+  }
+
+  if (current.paymentStatus === 'paid' || current.bookingStatus === 'done') {
+    throw new Error('Nie można odrzucić wpłaty dla opłaconej konsultacji.')
+  }
+
+  const nowIso = new Date().toISOString()
+  const bookingUpdate = await supabase
+    .from('bookings')
+    .update({
+      booking_status: 'cancelled',
+      payment_status: 'rejected',
+      payment_method: current.paymentMethod ?? 'manual',
+      payment_rejected_at: nowIso,
+      payment_rejected_reason: reason ?? 'Nie znaleziono wpłaty.',
+      cancelled_at: nowIso,
+      updated_at: nowIso,
+    })
+    .eq('id', bookingId)
+    .select('*')
+    .maybeSingle()
+
+  if (bookingUpdate.error) {
+    throw bookingUpdate.error
+  }
+
+  const slotUpdate = await supabase
+    .from('availability')
+    .update({
+      is_booked: false,
+      locked_by_booking_id: null,
+      locked_until: null,
+      updated_at: nowIso,
+    })
+    .eq('id', current.slotId)
+
+  if (slotUpdate.error) {
+    throw slotUpdate.error
+  }
+
+  return bookingUpdate.data ? mapBookingRow(bookingUpdate.data as BookingRow) : null
+}
+
 export async function markBookingRefunded(bookingId: string): Promise<BookingRecord | null> {
   const supabase = getSupabaseAdmin()
   const current = await getBookingById(bookingId)
@@ -826,7 +1013,12 @@ export async function markBookingExpired(bookingId: string): Promise<BookingReco
     .from('bookings')
     .update({
       booking_status: 'expired',
-      payment_status: 'unpaid',
+      payment_status: current.paymentStatus === 'pending_manual_review' ? 'rejected' : 'unpaid',
+      payment_rejected_at: current.paymentStatus === 'pending_manual_review' ? nowIso : current.paymentRejectedAt ?? null,
+      payment_rejected_reason:
+        current.paymentStatus === 'pending_manual_review'
+          ? current.paymentRejectedReason ?? 'Upłynął czas na ręczne potwierdzenie wpłaty.'
+          : current.paymentRejectedReason ?? null,
       expired_at: nowIso,
       updated_at: nowIso,
     })

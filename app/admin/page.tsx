@@ -9,13 +9,30 @@ import { formatDateLabel, formatDateTimeLabel, getBookingStatusLabel, getPayment
 import { formatPreparationFileSize, hasPreparationMaterials } from '@/lib/preparation'
 import { getActiveConsultationPrice, listAvailabilityAdmin, listBookings } from '@/lib/server/db'
 import { getRuntimeModeSnapshot } from '@/lib/server/env'
+import { getPaymentOptionsSummary } from '@/lib/server/payment-options'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
+function getPaymentMethodLabel(value: string | null | undefined) {
+  switch (value) {
+    case 'manual':
+      return 'BLIK / przelew ręczny'
+    case 'payu':
+      return 'PayU'
+    case 'stripe':
+      return 'Stripe legacy'
+    case 'mock':
+      return 'Mock QA'
+    default:
+      return 'Jeszcze nie wybrano'
+  }
+}
+
 export default async function AdminPage() {
   noStore()
   const runtime = getRuntimeModeSnapshot()
+  const paymentOptions = getPaymentOptionsSummary()
   const buildMarker = getBuildMarkerSnapshot()
   let bookings: Awaited<ReturnType<typeof listBookings>> = []
   let availability: Awaited<ReturnType<typeof listAvailabilityAdmin>> = []
@@ -30,7 +47,7 @@ export default async function AdminPage() {
   }
   const confirmedCount = bookings.filter((booking) => booking.bookingStatus === 'confirmed').length
   const paidCount = bookings.filter((booking) => booking.paymentStatus === 'paid').length
-  const doneCount = bookings.filter((booking) => booking.bookingStatus === 'done').length
+  const manualPendingCount = bookings.filter((booking) => booking.paymentStatus === 'pending_manual_review').length
   const priceUpdatedAtLabel = price?.updatedAt
     ? `${formatDateLabel(price.updatedAt.slice(0, 10))}, ${price.updatedAt.slice(11, 16)}`
     : null
@@ -63,8 +80,8 @@ export default async function AdminPage() {
               </div>
             </div>
             <div className="summary-card">
-              <div className="stat-label">Zakończone</div>
-              <div className="summary-value">{doneCount}</div>
+              <div className="stat-label">Ręczne płatności do weryfikacji</div>
+              <div className="summary-value">{manualPendingCount}</div>
             </div>
           </div>
 
@@ -74,8 +91,12 @@ export default async function AdminPage() {
               <span>{runtime.data.summary}</span>
             </div>
             <div className="list-card">
-              <strong>Tryb płatności</strong>
+              <strong>Legacy payment mode</strong>
               <span>{runtime.payment.summary}</span>
+            </div>
+            <div className="list-card">
+              <strong>Manualna płatność i PayU</strong>
+              <span>{paymentOptions.summary}</span>
             </div>
             <div className="list-card">
               <strong>Build marker</strong>
@@ -117,6 +138,10 @@ export default async function AdminPage() {
                       <div>{booking.description}</div>
                       <div className="booking-meta top-gap-small">Status rezerwacji: {getBookingStatusLabel(booking.bookingStatus)}</div>
                       <div className="booking-meta">Status płatności: {getPaymentStatusLabel(booking.paymentStatus)}</div>
+                      <div className="booking-meta">Metoda płatności: {getPaymentMethodLabel(booking.paymentMethod)}</div>
+                      {booking.paymentReference ? <div className="booking-meta">Tytuł / ID płatności: {booking.paymentReference}</div> : null}
+                      {booking.payuOrderId ? <div className="booking-meta">PayU orderId: {booking.payuOrderId}</div> : null}
+                      {booking.paymentRejectedReason ? <div className="booking-meta">Powód odrzucenia: {booking.paymentRejectedReason}</div> : null}
                       <div className="booking-meta top-gap-small">
                         {hasPreparationMaterials(booking)
                           ? 'Dodano materiały przygotowawcze do rozmowy.'
@@ -157,9 +182,6 @@ export default async function AdminPage() {
                       <span className={`status-pill ${booking.paymentStatus === 'paid' ? 'status-paid' : 'status-pending'}`}>
                         {getPaymentStatusLabel(booking.paymentStatus)}
                       </span>
-                      <a href={booking.meetingUrl} target="_blank" rel="noopener noreferrer" className="button button-ghost small-button">
-                        Otwórz rozmowę
-                      </a>
                       <AdminBookingActions
                         bookingId={booking.id}
                         bookingStatus={booking.bookingStatus}

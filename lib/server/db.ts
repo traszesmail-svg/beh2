@@ -96,6 +96,20 @@ export async function attachCheckoutSession(bookingId: string, checkoutSessionId
   return getProvider().attachCheckoutSession(bookingId, checkoutSessionId)
 }
 
+export async function attachPayuOrder(
+  bookingId: string,
+  paymentData: Parameters<StoreProvider['attachPayuOrder']>[1],
+) {
+  return getProvider().attachPayuOrder(bookingId, paymentData)
+}
+
+export async function markBookingManualPaymentPending(
+  bookingId: string,
+  paymentData?: Parameters<StoreProvider['markBookingManualPaymentPending']>[1],
+) {
+  return getProvider().markBookingManualPaymentPending(bookingId, paymentData)
+}
+
 export async function markBookingPaid(
   bookingId: string,
   paymentData?: Parameters<StoreProvider['markBookingPaid']>[1],
@@ -105,6 +119,10 @@ export async function markBookingPaid(
 
 export async function markBookingPaymentFailed(bookingId: string) {
   return getProvider().markBookingPaymentFailed(bookingId)
+}
+
+export async function markBookingManualPaymentRejected(bookingId: string, reason?: string) {
+  return getProvider().markBookingManualPaymentRejected(bookingId, reason)
 }
 
 export async function markBookingRefunded(bookingId: string) {

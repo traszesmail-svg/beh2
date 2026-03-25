@@ -28,6 +28,7 @@ export async function POST(request: Request) {
     await markBookingPaid(body.bookingId, {
       checkoutSessionId: 'mock-checkout-session',
       paymentIntentId: 'mock-payment-intent',
+      paymentMethod: 'mock',
     })
 
     return NextResponse.json({ redirectTo: `/confirmation?bookingId=${body.bookingId}${accessQuery}` })

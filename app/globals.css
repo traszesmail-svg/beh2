@@ -2335,6 +2335,78 @@ select:focus-visible {
   box-shadow: 0 12px 28px rgba(10, 92, 54, 0.06);
 }
 
+.payment-method-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.payment-method-card {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+  width: 100%;
+  padding: 22px;
+  border: 1px solid rgba(10, 92, 54, 0.14);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.82);
+  text-align: left;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.payment-method-card:hover,
+.payment-method-card:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(10, 92, 54, 0.24);
+  box-shadow: 0 14px 30px rgba(10, 92, 54, 0.08);
+}
+
+.payment-method-card-active {
+  border-color: rgba(255, 107, 0, 0.42);
+  box-shadow: 0 16px 34px rgba(255, 107, 0, 0.12);
+}
+
+.payment-method-card-copy {
+  display: grid;
+  gap: 10px;
+}
+
+.payment-method-card-copy strong {
+  color: var(--muted-strong);
+  font-size: 20px;
+  line-height: 1.25;
+}
+
+.payment-method-card-copy span {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.payment-method-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  width: fit-content;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(10, 92, 54, 0.14);
+  background: rgba(10, 92, 54, 0.08);
+  color: var(--accent-2);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.payment-reference-value {
+  font-size: clamp(16px, 2.4vw, 22px);
+  line-height: 1.35;
+  word-break: break-word;
+}
+
+.payment-summary-value {
+  font-size: clamp(18px, 2.6vw, 24px);
+}
+
 .empty-box {
   text-align: center;
   line-height: 1.7;
@@ -2369,7 +2441,8 @@ select:focus-visible {
   .hero-grid,
   .two-col-section,
   .booking-layout,
-  .booking-row {
+  .booking-row,
+  .payment-method-grid {
     grid-template-columns: 1fr;
     gap: 18px;
   }

@@ -41,7 +41,11 @@ export function hasPreparationMaterials(
 export function canEditPreparationMaterials(
   booking: Pick<BookingRecord, 'bookingStatus'>,
 ): boolean {
-  return booking.bookingStatus === 'pending' || booking.bookingStatus === 'confirmed'
+  return (
+    booking.bookingStatus === 'pending' ||
+    booking.bookingStatus === 'pending_manual_payment' ||
+    booking.bookingStatus === 'confirmed'
+  )
 }
 
 export function normalizePreparationLinkUrl(value: string | null | undefined): string | null {

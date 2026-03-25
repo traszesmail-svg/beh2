@@ -8,7 +8,8 @@ import { formatDateTimeLabel, getProblemLabel } from '@/lib/data'
 import { formatPricePln } from '@/lib/pricing'
 import { canSelfCancelBooking, getRemainingSelfCancellationSeconds } from '@/lib/self-cancellation'
 import { getBookingForViewer } from '@/lib/server/db'
-import { getDataModeStatus, getPaymentModeStatus } from '@/lib/server/env'
+import { getDataModeStatus } from '@/lib/server/env'
+import { syncPayuBookingByBookingId } from '@/lib/server/payu'
 import { finalizeStripeCheckoutSession } from '@/lib/server/stripe'
 
 export const dynamic = 'force-dynamic'
@@ -31,8 +32,8 @@ export default async function ConfirmationPage({
   const bookingId = readSearchParam(searchParams?.bookingId)
   const accessToken = readSearchParam(searchParams?.access)
   const sessionId = readSearchParam(searchParams?.session_id)
+  const payuReturn = readSearchParam(searchParams?.payu)
   const dataMode = getDataModeStatus()
-  const paymentMode = getPaymentModeStatus()
   let booking: Awaited<ReturnType<typeof getBookingForViewer>> = null
   let flowError: string | null = null
 
@@ -40,11 +41,19 @@ export default async function ConfirmationPage({
     flowError = 'Potwierdzenie chwilowo nie jest dostępne. Spróbuj ponownie za kilka minut.'
   }
 
-  if (!flowError && bookingId && sessionId && paymentMode.active === 'stripe') {
+  if (!flowError && bookingId && sessionId) {
     try {
       await finalizeStripeCheckoutSession(sessionId)
     } catch {
-      // Webhook mógł już zaktualizować booking, więc nie wywalamy całego potwierdzenia.
+      // Legacy Stripe flow may already be updated by webhook.
+    }
+  }
+
+  if (!flowError && bookingId && payuReturn) {
+    try {
+      await syncPayuBookingByBookingId(bookingId)
+    } catch {
+      // If webhook has not arrived yet, the page below will show a waiting state.
     }
   }
 
@@ -58,6 +67,9 @@ export default async function ConfirmationPage({
 
   const isConfirmed =
     booking?.paymentStatus === 'paid' && (booking.bookingStatus === 'confirmed' || booking.bookingStatus === 'done')
+  const isWaitingManual =
+    booking?.bookingStatus === 'pending_manual_payment' && booking.paymentStatus === 'pending_manual_review'
+  const isRejected = booking?.paymentStatus === 'rejected' && booking.bookingStatus === 'cancelled'
   const isSelfCancelled = booking?.paymentStatus === 'refunded' && booking.bookingStatus === 'cancelled'
   const canSelfCancel = Boolean(booking && accessToken && canSelfCancelBooking(booking))
   const initialRemainingSeconds = booking ? getRemainingSelfCancellationSeconds(booking) : 0
@@ -72,21 +84,37 @@ export default async function ConfirmationPage({
           ) : booking ? (
             <>
               <div className="success-badge">
-                {isSelfCancelled ? 'Zakup anulowany' : isConfirmed ? 'Konsultacja potwierdzona' : 'Sprawdzamy status płatności'}
+                {isSelfCancelled
+                  ? 'Zakup anulowany'
+                  : isConfirmed
+                    ? 'Konsultacja potwierdzona'
+                    : isWaitingManual
+                      ? 'Czekamy na ręczne potwierdzenie'
+                      : isRejected
+                        ? 'Wpłata niepotwierdzona'
+                        : 'Sprawdzamy status płatności'}
               </div>
               <h1>
                 {isSelfCancelled
                   ? 'Rezerwacja została anulowana'
                   : isConfirmed
                     ? 'Masz potwierdzoną rozmowę głosową'
-                    : 'Płatność nie została jeszcze potwierdzona'}
+                    : isWaitingManual
+                      ? 'Wpłata czeka na ręczne sprawdzenie'
+                      : isRejected
+                        ? 'Nie znaleziono wpłaty do tej rezerwacji'
+                        : 'Płatność nie została jeszcze potwierdzona'}
               </h1>
               <p className="hero-text small-width center-text">
                 {isSelfCancelled
                   ? 'Termin wrócił do kalendarza, a płatność została cofnięta. Jeśli chcesz, możesz od razu wybrać nowy termin albo wrócić później.'
                   : isConfirmed
                     ? 'Termin jest zapisany, a link do rozmowy audio czeka już przy rezerwacji. Wystarczy wejść kilka minut przed konsultacją i mieć pod ręką najważniejsze obserwacje.'
-                    : 'Jeśli przed chwilą opłaciłeś konsultację, odśwież tę stronę za chwilę. Jeśli płatność nie doszła, wróć do płatności i spróbuj ponownie.'}
+                    : isWaitingManual
+                      ? 'Po ręcznym potwierdzeniu wpłaty od razu wyślemy mail z linkiem do pokoju rozmowy. Do tego czasu pokój pozostaje zablokowany.'
+                      : isRejected
+                        ? booking.paymentRejectedReason ?? 'Termin wrócił do puli. Jeśli trzeba, utwórz nową rezerwację i zgłoś wpłatę ponownie.'
+                        : 'Jeśli przed chwilą opłaciłeś konsultację online, odśwież tę stronę za chwilę. Jeśli płatność nie doszła, wróć do wyboru metody i spróbuj ponownie.'}
               </p>
 
               <div className="summary-grid">
@@ -116,6 +144,12 @@ export default async function ConfirmationPage({
                 />
               ) : null}
 
+              {isWaitingManual ? (
+                <div className="info-box top-gap">
+                  Tytuł wpłaty: <strong>{booking.paymentReference ?? booking.id}</strong>. Gdy tylko płatność zostanie zatwierdzona, wyślemy link do rozmowy na {booking.email}.
+                </div>
+              ) : null}
+
               {!isSelfCancelled ? (
                 <div className="stack-gap top-gap">
                   <div className="list-card tree-backed-card">
@@ -135,7 +169,7 @@ export default async function ConfirmationPage({
               )}
 
               <div className="hero-actions centered-actions">
-                {isSelfCancelled ? (
+                {isSelfCancelled || isRejected ? (
                   <Link href="/book" className="button button-primary big-button">
                     Wybierz nowy termin
                   </Link>
@@ -163,7 +197,11 @@ export default async function ConfirmationPage({
                 <PreparationMaterialsCard
                   bookingId={booking.id}
                   accessToken={accessToken ?? ''}
-                  canEdit={booking.bookingStatus === 'pending' || booking.bookingStatus === 'confirmed'}
+                  canEdit={
+                    booking.bookingStatus === 'pending' ||
+                    booking.bookingStatus === 'pending_manual_payment' ||
+                    booking.bookingStatus === 'confirmed'
+                  }
                   hasVideo={Boolean(booking.prepVideoPath)}
                   prepVideoFilename={booking.prepVideoFilename ?? null}
                   prepVideoSizeBytes={booking.prepVideoSizeBytes ?? null}

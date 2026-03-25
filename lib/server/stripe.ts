@@ -140,6 +140,7 @@ export async function finalizeStripeCheckoutSession(sessionId: string) {
       typeof session.payment_intent === 'string'
         ? session.payment_intent
         : session.payment_intent?.id ?? null,
+    paymentMethod: 'stripe',
   })
 }
 

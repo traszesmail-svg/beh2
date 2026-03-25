@@ -556,6 +556,7 @@ test('allows self-cancellation only during the first minute after payment', () =
       {
         bookingStatus: 'confirmed',
         paymentStatus: 'paid',
+        paymentMethod: 'payu',
         paidAt,
       },
       new Date(Date.parse(paidAt) + 15 * 1000),
@@ -578,6 +579,20 @@ test('allows self-cancellation only during the first minute after payment', () =
       {
         bookingStatus: 'cancelled',
         paymentStatus: 'refunded',
+        paymentMethod: 'payu',
+        paidAt,
+      },
+      new Date(Date.parse(paidAt) + 15 * 1000),
+    ),
+    false,
+  )
+
+  assert.equal(
+    canSelfCancelBooking(
+      {
+        bookingStatus: 'confirmed',
+        paymentStatus: 'paid',
+        paymentMethod: 'manual',
         paidAt,
       },
       new Date(Date.parse(paidAt) + 15 * 1000),

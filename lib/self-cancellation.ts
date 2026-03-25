@@ -2,7 +2,7 @@ import { BookingRecord } from '@/lib/types'
 
 export const SELF_CANCELLATION_WINDOW_MS = 60 * 1000
 
-type SelfCancellationBooking = Pick<BookingRecord, 'bookingStatus' | 'paymentStatus' | 'paidAt'>
+type SelfCancellationBooking = Pick<BookingRecord, 'bookingStatus' | 'paymentStatus' | 'paidAt' | 'paymentMethod'>
 
 function parsePaidAtMs(paidAt: string | null | undefined): number | null {
   if (!paidAt) {
@@ -38,6 +38,10 @@ export function getRemainingSelfCancellationSeconds(
 
 export function canSelfCancelBooking(booking: SelfCancellationBooking, now = new Date()): boolean {
   if (!(booking.bookingStatus === 'confirmed' && booking.paymentStatus === 'paid')) {
+    return false
+  }
+
+  if (!(booking.paymentMethod === 'payu' || booking.paymentMethod === 'stripe' || booking.paymentMethod === 'mock')) {
     return false
   }
 

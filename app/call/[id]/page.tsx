@@ -79,7 +79,11 @@ export default async function CallPage({
             <PreparationMaterialsCard
               bookingId={booking.id}
               accessToken={accessToken ?? ''}
-              canEdit={booking.bookingStatus === 'pending' || booking.bookingStatus === 'confirmed'}
+              canEdit={
+                booking.bookingStatus === 'pending' ||
+                booking.bookingStatus === 'pending_manual_payment' ||
+                booking.bookingStatus === 'confirmed'
+              }
               hasVideo={Boolean(booking.prepVideoPath)}
               prepVideoFilename={booking.prepVideoFilename ?? null}
               prepVideoSizeBytes={booking.prepVideoSizeBytes ?? null}
@@ -90,7 +94,7 @@ export default async function CallPage({
           </>
         ) : (
           <section className="panel centered-panel">
-            <div className="error-box">Dostęp do rozmowy głosowej jest aktywny dopiero po poprawnej płatności.</div>
+            <div className="error-box">Dostęp do pokoju rozmowy odblokowuje się dopiero po statusie paid: po ręcznym potwierdzeniu wpłaty albo po sukcesie PayU.</div>
             <div className="hero-actions centered-actions">
               <Link
                 href={`/payment?bookingId=${booking.id}${accessToken ? `&access=${encodeURIComponent(accessToken)}` : ''}`}

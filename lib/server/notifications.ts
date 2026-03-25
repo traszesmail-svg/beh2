@@ -17,6 +17,11 @@ type DeliveryResult = {
   reason?: string
 }
 
+type ManualPaymentReviewLinks = {
+  approveUrl: string
+  rejectUrl: string
+}
+
 export type TestimonialSubmission = {
   displayName: string
   email: string
@@ -67,6 +72,10 @@ function formatMultilineHtml(value: string): string {
 
 function getNotificationRecipientEmail(): string | null {
   return getContactDetails().email
+}
+
+function getAdminNotificationRecipientEmail(): string | null {
+  return process.env.ADMIN_NOTIFICATION_EMAIL?.trim() || getNotificationRecipientEmail()
 }
 
 export function getTestimonialSubmissionConfigIssue(): string | null {
@@ -149,7 +158,10 @@ function renderEmailShell(title: string, intro: string, content: string, outro: 
 export function shouldSendBookingConfirmationAfterPayment(
   booking: Pick<BookingRecord, 'bookingStatus' | 'paymentStatus'>,
 ): boolean {
-  return booking.bookingStatus === 'pending' && booking.paymentStatus === 'unpaid'
+  return (
+    (booking.bookingStatus === 'pending' && booking.paymentStatus === 'unpaid') ||
+    (booking.bookingStatus === 'pending_manual_payment' && booking.paymentStatus === 'pending_manual_review')
+  )
 }
 
 async function deliverEmail(payload: SendEmailPayload): Promise<DeliveryResult> {
@@ -272,6 +284,54 @@ export async function sendBookingConfirmationEmail(booking: BookingRecord): Prom
   ].join('\n')
 
   return deliverEmail({ to: booking.email, subject, html, text })
+}
+
+export async function sendManualPaymentReportedAdminEmail(
+  booking: BookingRecord,
+  links: ManualPaymentReviewLinks,
+): Promise<DeliveryResult> {
+  const recipient = getAdminNotificationRecipientEmail()
+
+  if (!recipient) {
+    return {
+      status: 'skipped',
+      reason: 'ADMIN_NOTIFICATION_EMAIL missing',
+    }
+  }
+
+  const subject = `Manualna płatność do weryfikacji - Behawior 15 - ${buildBookingSummary(booking)}`
+  const html = renderEmailShell(
+    'Wpłata czeka na decyzję',
+    'Klient kliknął "Zapłaciłem" dla manualnej płatności BLIK/przelewem. Sprawdź wpłatę i kliknij właściwą decyzję.',
+    `
+      <p><strong>Booking ID:</strong> ${escapeHtml(booking.id)}</p>
+      <p><strong>Tytuł płatności:</strong> ${escapeHtml(booking.paymentReference ?? booking.id)}</p>
+      <p><strong>Termin:</strong> ${formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}</p>
+      <p><strong>Temat:</strong> ${getProblemLabel(booking.problemType)}</p>
+      <p><strong>Kwota:</strong> ${formatPricePln(booking.amount)}</p>
+      <p><strong>Klient:</strong> ${escapeHtml(booking.ownerName)} | <a href="mailto:${escapeHtml(booking.email)}">${escapeHtml(booking.email)}</a> | ${escapeHtml(booking.phone)}</p>
+      <p><strong>Opis:</strong> ${formatMultilineHtml(booking.description)}</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:20px;">
+        <a href="${links.approveUrl}" style="display:inline-block;padding:12px 18px;border-radius:999px;background:#0a5c36;color:#ffffff;text-decoration:none;font-weight:700;">Potwierdź płatność</a>
+        <a href="${links.rejectUrl}" style="display:inline-block;padding:12px 18px;border-radius:999px;background:#8a3022;color:#ffffff;text-decoration:none;font-weight:700;">Odrzuć / nie znaleziono wpłaty</a>
+      </div>
+    `,
+    'Po potwierdzeniu klient automatycznie dostanie mail z linkiem do pokoju rozmowy.',
+  )
+  const text = [
+    'Manualna płatność czeka na weryfikację.',
+    `Booking ID: ${booking.id}`,
+    `Tytuł płatności: ${booking.paymentReference ?? booking.id}`,
+    `Termin: ${formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}`,
+    `Temat: ${getProblemLabel(booking.problemType)}`,
+    `Kwota: ${formatPricePln(booking.amount)}`,
+    `Klient: ${booking.ownerName} | ${booking.email} | ${booking.phone}`,
+    `Opis: ${booking.description}`,
+    `Potwierdź: ${links.approveUrl}`,
+    `Odrzuć: ${links.rejectUrl}`,
+  ].join('\n')
+
+  return deliverEmail({ to: recipient, subject, html, text })
 }
 
 export async function sendBookingReminderEmail(booking: BookingRecord): Promise<DeliveryResult> {

@@ -6,6 +6,7 @@ import { buildSeedAvailabilitySlots } from '@/lib/server/availability-seed'
 import { createCustomerAccessToken, hasValidCustomerAccessToken } from '@/lib/server/customer-access'
 import { getReservationWindowMinutes } from '@/lib/server/env'
 import { createMeetingUrl } from '@/lib/server/jitsi'
+import { getManualPaymentConfig } from '@/lib/server/payment-options'
 import {
   sendBookingConfirmationEmail,
   sendBookingReservationCreatedEmail,
@@ -85,13 +86,17 @@ function releaseSlot(slot: AvailabilitySlot, nowIso: string) {
   slot.updatedAt = nowIso
 }
 
-function normalizeExpiredReservations(store: LocalStoreData): LocalStoreData {
-  const now = Date.now()
-  let changed = false
-
-  const bookings = store.bookings.map((booking) => ({
+function normalizeBookingRecord(booking: BookingRecord): BookingRecord {
+  return {
     ...booking,
     customerAccessTokenHash: booking.customerAccessTokenHash ?? '',
+    paymentMethod: booking.paymentMethod ?? null,
+    paymentReference: booking.paymentReference ?? null,
+    paymentReportedAt: booking.paymentReportedAt ?? null,
+    paymentRejectedAt: booking.paymentRejectedAt ?? null,
+    paymentRejectedReason: booking.paymentRejectedReason ?? null,
+    payuOrderId: booking.payuOrderId ?? null,
+    payuOrderStatus: booking.payuOrderStatus ?? null,
     reminderSent: booking.reminderSent ?? false,
     prepVideoPath: booking.prepVideoPath ?? null,
     prepVideoFilename: booking.prepVideoFilename ?? null,
@@ -99,7 +104,14 @@ function normalizeExpiredReservations(store: LocalStoreData): LocalStoreData {
     prepLinkUrl: booking.prepLinkUrl ?? null,
     prepNotes: booking.prepNotes ?? null,
     prepUploadedAt: booking.prepUploadedAt ?? null,
-  }))
+  }
+}
+
+function normalizeExpiredReservations(store: LocalStoreData): LocalStoreData {
+  const now = Date.now()
+  let changed = false
+
+  const bookings = store.bookings.map(normalizeBookingRecord)
   const availability = store.availability.map((slot) => ({ ...slot }))
   const pricingSettings = {
     amount: Number.isFinite(store.pricingSettings.amount) ? store.pricingSettings.amount : DEFAULT_PRICE_PLN,
@@ -121,17 +133,20 @@ function normalizeExpiredReservations(store: LocalStoreData): LocalStoreData {
       continue
     }
 
-    const booking = bookings.find(
-      (item) => item.id === bookingId && item.bookingStatus === 'pending' && item.paymentStatus === 'unpaid',
-    )
+    const booking = bookings.find((item) => item.id === bookingId)
 
     if (!booking) {
       continue
     }
 
     booking.bookingStatus = 'expired'
-    booking.paymentStatus = 'unpaid'
+    booking.paymentStatus = booking.paymentStatus === 'pending_manual_review' ? 'rejected' : 'unpaid'
     booking.expiredAt = nowIso
+    booking.paymentRejectedAt = booking.paymentStatus === 'rejected' ? nowIso : booking.paymentRejectedAt ?? null
+    booking.paymentRejectedReason =
+      booking.paymentStatus === 'rejected'
+        ? booking.paymentRejectedReason ?? 'Upłynął czas na ręczne potwierdzenie wpłaty.'
+        : booking.paymentRejectedReason ?? null
     booking.updatedAt = nowIso
   }
 
@@ -357,12 +372,19 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
       amount: pricing.amount,
       bookingStatus: 'pending',
       paymentStatus: 'unpaid',
+      paymentMethod: null,
+      paymentReference: null,
       meetingUrl: createMeetingUrl(bookingId),
       createdAt: nowIso,
       updatedAt: nowIso,
       checkoutSessionId: null,
       paymentIntentId: null,
+      payuOrderId: null,
+      payuOrderStatus: null,
       paidAt: null,
+      paymentReportedAt: null,
+      paymentRejectedAt: null,
+      paymentRejectedReason: null,
       cancelledAt: null,
       expiredAt: null,
       refundedAt: null,
@@ -477,9 +499,30 @@ export async function attachCheckoutSession(bookingId: string, checkoutSessionId
   })
 }
 
-export async function markBookingPaid(
+export async function attachPayuOrder(
   bookingId: string,
-  paymentData?: { checkoutSessionId?: string | null; paymentIntentId?: string | null },
+  paymentData: { payuOrderId: string; payuOrderStatus?: string | null },
+): Promise<BookingRecord | null> {
+  return withLock(async () => {
+    const store = await readStore()
+    const booking = store.bookings.find((item) => item.id === bookingId)
+
+    if (!booking) {
+      return null
+    }
+
+    booking.paymentMethod = 'payu'
+    booking.payuOrderId = paymentData.payuOrderId
+    booking.payuOrderStatus = paymentData.payuOrderStatus ?? booking.payuOrderStatus ?? null
+    booking.updatedAt = new Date().toISOString()
+    await persistStore(store)
+    return booking
+  })
+}
+
+export async function markBookingManualPaymentPending(
+  bookingId: string,
+  paymentData?: { paymentReference?: string | null },
 ): Promise<BookingRecord | null> {
   return withLock(async () => {
     const store = await readStore()
@@ -492,6 +535,62 @@ export async function markBookingPaid(
     if (
       !(
         (booking.bookingStatus === 'pending' && booking.paymentStatus === 'unpaid') ||
+        (booking.bookingStatus === 'pending_manual_payment' && booking.paymentStatus === 'pending_manual_review')
+      )
+    ) {
+      throw new Error('Tę rezerwację można zgłosić do ręcznego potwierdzenia tylko przed opłaceniem.')
+    }
+
+    const slot = store.availability.find((item) => item.id === booking.slotId)
+    const nowIso = new Date().toISOString()
+    const holdUntil = new Date(Date.now() + getManualPaymentConfig().holdMinutes * 60 * 1000).toISOString()
+
+    booking.bookingStatus = 'pending_manual_payment'
+    booking.paymentStatus = 'pending_manual_review'
+    booking.paymentMethod = 'manual'
+    booking.paymentReference = paymentData?.paymentReference ?? booking.paymentReference ?? null
+    booking.paymentReportedAt = nowIso
+    booking.paymentRejectedAt = null
+    booking.paymentRejectedReason = null
+    booking.cancelledAt = null
+    booking.expiredAt = null
+    booking.updatedAt = nowIso
+
+    if (slot) {
+      slot.isBooked = false
+      slot.lockedByBookingId = booking.id
+      slot.lockedUntil = holdUntil
+      slot.updatedAt = nowIso
+    }
+
+    await persistStore(store)
+    return booking
+  })
+}
+
+export async function markBookingPaid(
+  bookingId: string,
+  paymentData?: {
+    checkoutSessionId?: string | null
+    paymentIntentId?: string | null
+    paymentMethod?: BookingRecord['paymentMethod']
+    paymentReference?: string | null
+    payuOrderId?: string | null
+    payuOrderStatus?: string | null
+  },
+): Promise<BookingRecord | null> {
+  return withLock(async () => {
+    const store = await readStore()
+    const booking = store.bookings.find((item) => item.id === bookingId)
+
+    if (!booking) {
+      return null
+    }
+
+    if (
+      !(
+        (booking.bookingStatus === 'pending' && booking.paymentStatus === 'unpaid') ||
+        (booking.bookingStatus === 'pending_manual_payment' && booking.paymentStatus === 'pending_manual_review') ||
         (booking.bookingStatus === 'confirmed' && booking.paymentStatus === 'paid') ||
         (booking.bookingStatus === 'done' && booking.paymentStatus === 'paid')
       )
@@ -508,8 +607,15 @@ export async function markBookingPaid(
     booking.paidAt = nowIso
     booking.cancelledAt = null
     booking.expiredAt = null
+    booking.paymentMethod = paymentData?.paymentMethod ?? booking.paymentMethod ?? null
+    booking.paymentReference = paymentData?.paymentReference ?? booking.paymentReference ?? null
+    booking.paymentReportedAt = booking.paymentReportedAt ?? null
+    booking.paymentRejectedAt = null
+    booking.paymentRejectedReason = null
     booking.checkoutSessionId = paymentData?.checkoutSessionId ?? booking.checkoutSessionId ?? null
     booking.paymentIntentId = paymentData?.paymentIntentId ?? booking.paymentIntentId ?? null
+    booking.payuOrderId = paymentData?.payuOrderId ?? booking.payuOrderId ?? null
+    booking.payuOrderStatus = paymentData?.payuOrderStatus ?? booking.payuOrderStatus ?? null
     booking.updatedAt = nowIso
 
     if (slot) {
@@ -547,6 +653,43 @@ export async function markBookingPaymentFailed(bookingId: string): Promise<Booki
 
     booking.bookingStatus = 'cancelled'
     booking.paymentStatus = 'failed'
+    booking.cancelledAt = nowIso
+    booking.payuOrderStatus = booking.payuOrderStatus ?? null
+    booking.updatedAt = nowIso
+
+    if (slot) {
+      releaseSlot(slot, nowIso)
+    }
+
+    await persistStore(store)
+    return booking
+  })
+}
+
+export async function markBookingManualPaymentRejected(
+  bookingId: string,
+  reason?: string,
+): Promise<BookingRecord | null> {
+  return withLock(async () => {
+    const store = await readStore()
+    const booking = store.bookings.find((item) => item.id === bookingId)
+
+    if (!booking) {
+      return null
+    }
+
+    if (booking.paymentStatus === 'paid' || booking.bookingStatus === 'done') {
+      throw new Error('Nie można odrzucić wpłaty dla opłaconej konsultacji.')
+    }
+
+    const slot = store.availability.find((item) => item.id === booking.slotId)
+    const nowIso = new Date().toISOString()
+
+    booking.bookingStatus = 'cancelled'
+    booking.paymentStatus = 'rejected'
+    booking.paymentMethod = booking.paymentMethod ?? 'manual'
+    booking.paymentRejectedAt = nowIso
+    booking.paymentRejectedReason = reason ?? 'Nie znaleziono wpłaty.'
     booking.cancelledAt = nowIso
     booking.updatedAt = nowIso
 
@@ -603,8 +746,13 @@ export async function markBookingExpired(bookingId: string): Promise<BookingReco
     const nowIso = new Date().toISOString()
 
     booking.bookingStatus = 'expired'
-    booking.paymentStatus = 'unpaid'
+    booking.paymentStatus = booking.paymentStatus === 'pending_manual_review' ? 'rejected' : 'unpaid'
     booking.expiredAt = nowIso
+    booking.paymentRejectedAt = booking.paymentStatus === 'rejected' ? nowIso : booking.paymentRejectedAt ?? null
+    booking.paymentRejectedReason =
+      booking.paymentStatus === 'rejected'
+        ? booking.paymentRejectedReason ?? 'Upłynął czas na ręczne potwierdzenie wpłaty.'
+        : booking.paymentRejectedReason ?? null
     booking.updatedAt = nowIso
 
     if (slot) {

@@ -9,9 +9,11 @@ export type ProblemType =
 
 export type AnimalType = 'Pies' | 'Kot'
 
-export type BookingStatus = 'pending' | 'confirmed' | 'done' | 'cancelled' | 'expired'
+export type BookingStatus = 'pending' | 'pending_manual_payment' | 'confirmed' | 'done' | 'cancelled' | 'expired'
 
-export type PaymentStatus = 'unpaid' | 'paid' | 'failed' | 'refunded'
+export type PaymentStatus = 'unpaid' | 'pending_manual_review' | 'paid' | 'failed' | 'rejected' | 'refunded'
+
+export type PaymentMethod = 'manual' | 'payu' | 'stripe' | 'mock'
 
 export interface ProblemOption {
   id: ProblemType
@@ -73,15 +75,22 @@ export interface BookingRecord {
   amount: number
   bookingStatus: BookingStatus
   paymentStatus: PaymentStatus
+  paymentMethod?: PaymentMethod | null
+  paymentReference?: string | null
   meetingUrl: string
   createdAt: string
   updatedAt: string
   paidAt?: string | null
+  paymentReportedAt?: string | null
+  paymentRejectedAt?: string | null
+  paymentRejectedReason?: string | null
   cancelledAt?: string | null
   expiredAt?: string | null
   refundedAt?: string | null
   checkoutSessionId?: string | null
   paymentIntentId?: string | null
+  payuOrderId?: string | null
+  payuOrderStatus?: string | null
   recommendedNextStep?: string | null
   reminderSent?: boolean
   prepVideoPath?: string | null

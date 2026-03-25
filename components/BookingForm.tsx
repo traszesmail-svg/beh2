@@ -10,7 +10,6 @@ interface BookingFormProps {
   problemType: ProblemType
   slotId: string
   slotLabel: string
-  paymentMode: 'stripe' | 'mock'
 }
 
 function getProblemFormCopy(problemType: ProblemType) {
@@ -37,10 +36,9 @@ function getProblemFormCopy(problemType: ProblemType) {
   }
 }
 
-export function BookingForm({ problemType, slotId, slotLabel, paymentMode }: BookingFormProps) {
+export function BookingForm({ problemType, slotId, slotLabel }: BookingFormProps) {
   const router = useRouter()
   const formCopy = getProblemFormCopy(problemType)
-  const isMockPayment = paymentMode === 'mock'
   const [ownerName, setOwnerName] = useState('')
   const [animalType, setAnimalType] = useState<AnimalType>(formCopy.animalType)
   const [petAge, setPetAge] = useState('')
@@ -65,11 +63,7 @@ export function BookingForm({ problemType, slotId, slotLabel, paymentMode }: Boo
     setError('')
 
     if (!ownerName.trim() || !phone.trim() || !email.trim() || !description.trim() || !petAge.trim() || !durationNotes.trim()) {
-      setError(
-        isMockPayment
-          ? 'Uzupełnij wszystkie pola, aby zarezerwować termin i przejść do testowego potwierdzenia.'
-          : 'Uzupełnij wszystkie pola, aby zarezerwować termin i przejść do płatności.',
-      )
+      setError('Uzupełnij wszystkie pola, aby zarezerwować termin i przejść do wyboru płatności.')
       return
     }
 
@@ -118,7 +112,7 @@ export function BookingForm({ problemType, slotId, slotLabel, paymentMode }: Boo
       router.push(`/payment?bookingId=${payload.bookingId}&access=${encodeURIComponent(payload.accessToken)}`)
     } catch (submissionError) {
       const message = submissionError instanceof Error ? submissionError.message : 'Wystąpił błąd formularza.'
-      if (message.includes('nie jest już dostępny') || message.includes('został przed chwilą zajęty')) {
+      if (message.includes('nie jest już dostępny') || message.includes('zostal przed chwila zajety')) {
         setError('Ten termin został właśnie zajęty. Wróć do listy terminów i wybierz inną godzinę rozmowy.')
       } else {
         setError(message)
@@ -191,28 +185,16 @@ export function BookingForm({ problemType, slotId, slotLabel, paymentMode }: Boo
 
       <div className="checkout-box full-width tree-backed-card">
         <div>
+          <div className="muted">Po zapisaniu danych termin zostanie chwilowo zablokowany, żeby nikt nie przejął go przed Tobą.</div>
+          <div className="checkout-title">Następny krok: wybór płatności</div>
           <div className="muted">
-            {isMockPayment
-              ? 'Po zapisaniu danych termin zostanie chwilowo zablokowany na czas testowego potwierdzenia, żeby nikt nie przejął go przed Tobą.'
-              : 'Po zapisaniu danych termin zostanie chwilowo zablokowany na czas płatności, żeby nikt nie przejął go przed Tobą.'}
-          </div>
-          <div className="checkout-title">
-            {isMockPayment ? 'Następny krok: potwierdzenie testowe' : 'Następny krok: bezpieczna płatność'}
-          </div>
-          <div className="muted">
-            {isMockPayment
-              ? 'Stripe jest tu odłączony. Przejdziesz dalej bez realnej płatności, ale zobaczysz ten sam dalszy flow potwierdzenia, materiałów i linku do rozmowy.'
-              : 'Dokładną kwotę zobaczysz jeszcze raz na ekranie płatności, już po zapisaniu rezerwacji i zablokowaniu terminu.'}
+            Na kolejnym ekranie wybierzesz prostą wpłatę BLIK/przelewem albo PayU. Dokładną kwotę zobaczysz jeszcze raz przy obu metodach.
           </div>
           <div className="price-compare-text">{CONSULTATION_PRICE_COMPARE_COPY}</div>
         </div>
         <div className="checkout-right">
           <button type="submit" className="button button-primary big-button" disabled={isSubmitting}>
-            {isSubmitting
-              ? 'Zapisuję dane...'
-              : isMockPayment
-                ? 'Zablokuj termin i przejdź dalej bez płatności'
-                : 'Zablokuj termin i przejdź do płatności'}
+            {isSubmitting ? 'Zapisuję dane...' : 'Zablokuj termin i przejdź do płatności'}
           </button>
         </div>
       </div>

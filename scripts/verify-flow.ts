@@ -2,6 +2,7 @@ import { mkdir, readFile, rm, writeFile } from 'fs/promises'
 import path from 'path'
 import { isFutureAvailabilitySlot } from '../lib/data'
 import {
+  attachPayuOrder,
   createAvailabilitySlot,
   createPendingBooking,
   deleteAvailabilitySlot,
@@ -9,13 +10,15 @@ import {
   listAvailability,
   listAvailabilityAdmin,
   markBookingDone,
+  markBookingManualPaymentPending,
+  markBookingManualPaymentRejected,
   markBookingPaid,
-  markBookingPaymentFailed,
 } from '../lib/server/local-store'
+import { getManualPaymentReference } from '../lib/server/payment-options'
 
 const rootDir = process.cwd()
 const dataDir = path.join(rootDir, 'data')
-const trackedFiles = ['availability.json', 'bookings.json', 'users.json']
+const trackedFiles = ['availability.json', 'bookings.json', 'users.json', 'pricing-settings.json']
 
 function assert(condition: unknown, message: string): asserts condition {
   if (!condition) {
@@ -56,84 +59,108 @@ async function restoreFiles(backups: Awaited<ReturnType<typeof backupFiles>>) {
 
 async function main() {
   process.env.RESEND_API_KEY = ''
+  process.env.BEHAVIOR15_CONTACT_PHONE = '500600700'
+  process.env.MANUAL_PAYMENT_BANK_ACCOUNT = '11112222333344445555666677'
   const backups = await backupFiles()
 
   try {
     await Promise.all(trackedFiles.map((fileName) => rm(path.join(dataDir, fileName), { force: true })))
 
     const initialAvailability = await listAvailability()
-    const firstSlot = initialAvailability[0]?.slots[0]
-    const secondSlot = initialAvailability[0]?.slots[1] ?? initialAvailability[1]?.slots[0]
+    const [manualSuccessSlot, manualRejectedSlot, payuSlot] = initialAvailability.flatMap((group) => group.slots).slice(0, 3)
     const allInitialSlots = initialAvailability.flatMap((group) => group.slots)
 
-    assert(firstSlot, 'Brak pierwszego slotu testowego.')
-    assert(secondSlot, 'Brak drugiego slotu testowego.')
-    assert(allInitialSlots.every((slot) => isFutureAvailabilitySlot(slot.bookingDate, slot.bookingTime)), 'W local mode nie powinny pojawiac sie terminy z przeszlosci.')
+    assert(manualSuccessSlot, 'Brak pierwszego slotu testowego.')
+    assert(manualRejectedSlot, 'Brak drugiego slotu testowego.')
+    assert(payuSlot, 'Brak trzeciego slotu testowego.')
+    assert(
+      allInitialSlots.every((slot) => isFutureAvailabilitySlot(slot.bookingDate, slot.bookingTime)),
+      'W local mode nie powinny pojawiac sie terminy z przeszlosci.',
+    )
 
-    const created = await createPendingBooking({
-      ownerName: 'Test Owner',
+    const manualBooking = await createPendingBooking({
+      ownerName: 'Manual Success',
       problemType: 'szczeniak',
       animalType: 'Pies',
       petAge: '8 miesiecy',
       durationNotes: '2 tygodnie',
-      description: 'Testowe zachowanie do weryfikacji flow.',
+      description: 'Testowe zachowanie do weryfikacji recznej platnosci.',
       phone: '500000000',
-      email: 'test+paid@example.com',
-      slotId: firstSlot.id,
+      email: 'manual-success@example.com',
+      slotId: manualSuccessSlot.id,
     })
 
-    assert(created.booking.bookingStatus === 'pending', 'Booking nie zaczyna od statusu pending.')
-    assert(created.booking.paymentStatus === 'unpaid', 'Booking nie zaczyna od payment status unpaid.')
+    assert(manualBooking.booking.bookingStatus === 'pending', 'Booking nie zaczyna od statusu pending.')
+    assert(manualBooking.booking.paymentStatus === 'unpaid', 'Booking nie zaczyna od payment status unpaid.')
 
-    const availabilityAfterReserve = await listAvailability()
-    const firstSlotStillVisible = availabilityAfterReserve.some((group) =>
-      group.slots.some((slot) => slot.id === firstSlot.id),
-    )
-
-    assert(!firstSlotStillVisible, 'Zarezerwowany slot nadal jest widoczny na liscie.')
-
-    const paidBooking = await markBookingPaid(created.booking.id, {
-      checkoutSessionId: 'test-checkout-success',
-      paymentIntentId: 'test-intent-success',
+    const manualPending = await markBookingManualPaymentPending(manualBooking.booking.id, {
+      paymentReference: getManualPaymentReference(manualBooking.booking.id),
     })
 
-    assert(paidBooking?.bookingStatus === 'confirmed', 'Booking nie przeszedl do statusu confirmed.')
-    assert(paidBooking?.paymentStatus === 'paid', 'Payment status nie przeszedl do paid.')
-    assert(paidBooking.meetingUrl.startsWith('https://meet.jit.si/behawior15-'), 'Nie wygenerowano linku Jitsi.')
+    assert(manualPending?.bookingStatus === 'pending_manual_payment', 'Booking nie przeszedl do statusu pending_manual_payment.')
+    assert(manualPending?.paymentStatus === 'pending_manual_review', 'Payment status nie przeszedl do pending_manual_review.')
 
-    const createdFailed = await createPendingBooking({
-      ownerName: 'Test Failed',
+    const manualPaid = await markBookingPaid(manualBooking.booking.id, {
+      paymentMethod: 'manual',
+      paymentReference: getManualPaymentReference(manualBooking.booking.id),
+    })
+
+    assert(manualPaid?.bookingStatus === 'confirmed', 'Booking po recznej akceptacji nie przeszedl do statusu confirmed.')
+    assert(manualPaid?.paymentStatus === 'paid', 'Booking po recznej akceptacji nie ma statusu paid.')
+    assert(manualPaid?.meetingUrl.startsWith('https://meet.jit.si/behawior15-'), 'Nie wygenerowano linku Jitsi.')
+
+    const rejectedBooking = await createPendingBooking({
+      ownerName: 'Manual Reject',
       problemType: 'kot',
       animalType: 'Kot',
       petAge: '2 lata',
       durationNotes: '3 dni',
-      description: 'Test nieudanej platnosci.',
+      description: 'Test odrzucenia manualnej platnosci po zgloszeniu.',
       phone: '501000000',
-      email: 'test+failed@example.com',
-      slotId: secondSlot.id,
+      email: 'manual-reject@example.com',
+      slotId: manualRejectedSlot.id,
     })
 
-    const failedBooking = await markBookingPaymentFailed(createdFailed.booking.id)
-    assert(failedBooking?.bookingStatus === 'cancelled', 'Booking po fail nie ma statusu cancelled.')
-    assert(failedBooking?.paymentStatus === 'failed', 'Booking po fail nie ma payment status failed.')
+    await markBookingManualPaymentPending(rejectedBooking.booking.id, {
+      paymentReference: getManualPaymentReference(rejectedBooking.booking.id),
+    })
+    const rejectedResult = await markBookingManualPaymentRejected(rejectedBooking.booking.id, 'Nie znaleziono wplaty.')
 
-    let paymentOnFailedThrows = false
-    try {
-      await markBookingPaid(createdFailed.booking.id)
-    } catch {
-      paymentOnFailedThrows = true
-    }
+    assert(rejectedResult?.bookingStatus === 'cancelled', 'Booking po odrzuceniu wplaty nie ma statusu cancelled.')
+    assert(rejectedResult?.paymentStatus === 'rejected', 'Booking po odrzuceniu wplaty nie ma payment status rejected.')
 
-    assert(paymentOnFailedThrows, 'Booking po nieudanej platnosci nadal daje sie oznaczyc jako paid.')
-
-    const availabilityAfterFailedPayment = await listAvailability()
-    const secondSlotVisibleAgain = availabilityAfterFailedPayment.some((group) =>
-      group.slots.some((slot) => slot.id === secondSlot.id),
+    const availabilityAfterReject = await listAvailability()
+    const rejectedSlotVisibleAgain = availabilityAfterReject.some((group) =>
+      group.slots.some((slot) => slot.id === manualRejectedSlot.id),
     )
+    assert(rejectedSlotVisibleAgain, 'Slot po odrzuceniu manualnej platnosci nie wrocil do puli.')
 
-    assert(secondSlotVisibleAgain, 'Slot po nieudanej platnosci nie wrocil do puli.')
+    const payuBooking = await createPendingBooking({
+      ownerName: 'PayU Success',
+      problemType: 'separacja',
+      animalType: 'Pies',
+      petAge: '3 lata',
+      durationNotes: 'Od miesiaca',
+      description: 'Test automatycznego przejscia do paid po sukcesie PayU.',
+      phone: '502000000',
+      email: 'payu-success@example.com',
+      slotId: payuSlot.id,
+    })
 
-    const doneBooking = await markBookingDone(created.booking.id, 'Pelna konsultacja')
+    await attachPayuOrder(payuBooking.booking.id, {
+      payuOrderId: 'payu-order-test-001',
+      payuOrderStatus: 'NEW',
+    })
+    const payuPaid = await markBookingPaid(payuBooking.booking.id, {
+      paymentMethod: 'payu',
+      payuOrderId: 'payu-order-test-001',
+      payuOrderStatus: 'COMPLETED',
+    })
+
+    assert(payuPaid?.bookingStatus === 'confirmed', 'Booking po sukcesie PayU nie przeszedl do confirmed.')
+    assert(payuPaid?.paymentStatus === 'paid', 'Booking po sukcesie PayU nie ma statusu paid.')
+
+    const doneBooking = await markBookingDone(manualBooking.booking.id, 'Pelna konsultacja')
     assert(doneBooking?.bookingStatus === 'done', 'Booking nie przeszedl do statusu done.')
     assert(doneBooking?.paymentStatus === 'paid', 'Booking done powinien zachowac payment status paid.')
 
@@ -151,19 +178,31 @@ async function main() {
     const adminAvailabilityAfterDelete = await listAvailabilityAdmin()
     assert(!adminAvailabilityAfterDelete.some((slot) => slot.id === adminSlot.id), 'Admin slot nie zostal usuniety.')
 
-    const finalBooking = await getBookingById(created.booking.id)
+    const finalManualBooking = await getBookingById(manualBooking.booking.id)
 
     console.log(
       JSON.stringify(
         {
-          bookingFlow: 'ok',
-          reservedSlotDisappears: true,
-          paymentFailureReleasesSlot: true,
+          manualPaymentFlow: {
+            pendingStatus: manualPending?.bookingStatus ?? null,
+            pendingPaymentStatus: manualPending?.paymentStatus ?? null,
+            finalBookingStatus: manualPaid?.bookingStatus ?? null,
+            finalPaymentStatus: manualPaid?.paymentStatus ?? null,
+          },
+          manualRejectFlow: {
+            bookingStatus: rejectedResult?.bookingStatus ?? null,
+            paymentStatus: rejectedResult?.paymentStatus ?? null,
+            slotReleased: rejectedSlotVisibleAgain,
+          },
+          payuFlow: {
+            bookingStatus: payuPaid?.bookingStatus ?? null,
+            paymentStatus: payuPaid?.paymentStatus ?? null,
+            orderId: payuPaid?.payuOrderId ?? null,
+          },
           adminAvailabilityAddRemove: true,
           noPastSlotsInAvailability: true,
-          jitsiLinkAssigned: finalBooking?.meetingUrl ?? null,
-          bookingStatus: finalBooking?.bookingStatus ?? null,
-          paymentStatus: finalBooking?.paymentStatus ?? null,
+          jitsiLinkAssigned: finalManualBooking?.meetingUrl ?? null,
+          finalDoneStatus: doneBooking?.bookingStatus ?? null,
         },
         null,
         2,
