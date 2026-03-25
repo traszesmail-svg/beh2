@@ -25,6 +25,7 @@ import { buildRollingAvailabilitySeed, getProblemLabel, isFutureAvailabilitySlot
 import { getDataModeStatus, getPaymentModeStatus, getSupabaseServiceRoleKeyIssue } from '@/lib/server/env'
 import { buildSeedAvailabilitySlots, hasFutureAvailabilitySlots } from '@/lib/server/availability-seed'
 import {
+  buildPublicPricingDisclosureMessage,
   createActiveConsultationPrice,
   DEFAULT_PRICE_PLN,
   MIN_CONSULTATION_PRICE_PLN,
@@ -189,6 +190,21 @@ test('parses an admin-entered consultation price and converts it consistently fo
 
   assert.equal(amount, 49.5)
   assert.equal(toStripeUnitAmount(amount), 4950)
+})
+
+test('builds the public pricing disclosure from the active amount and falls back safely', () => {
+  assert.equal(
+    buildPublicPricingDisclosureMessage(39),
+    `Od ${formatPricePln(39)}. Dokładną kwotę potwierdzisz po wyborze tematu konsultacji.`,
+  )
+  assert.equal(
+    buildPublicPricingDisclosureMessage(28.99),
+    `Od ${formatPricePln(28.99)}. Dokładną kwotę potwierdzisz po wyborze tematu konsultacji.`,
+  )
+  assert.equal(
+    buildPublicPricingDisclosureMessage(null),
+    'Dokładną kwotę potwierdzisz po wyborze tematu konsultacji.',
+  )
 })
 
 test('rejects invalid consultation price values', () => {
@@ -666,7 +682,7 @@ test('payment page does not expose the public test-mode banner copy', () => {
   assert.match(source, /1 minutę na samodzielne anulowanie zakupu/)
 })
 
-test('public pricing disclosure keeps the amount hidden before checkout', () => {
+test('public pricing disclosure reads the active price source on public steps and keeps generic checkout copy', () => {
   const homeSource = readFileSync(path.join(process.cwd(), 'app', 'page.tsx'), 'utf8')
   const bookSource = readFileSync(path.join(process.cwd(), 'app', 'book', 'page.tsx'), 'utf8')
   const formSource = readFileSync(path.join(process.cwd(), 'app', 'form', 'page.tsx'), 'utf8')
@@ -685,13 +701,24 @@ test('public pricing disclosure keeps the amount hidden before checkout', () => 
       labelAs: 'strong',
     }),
   )
+  const fallbackTopicMarkup = renderToStaticMarkup(createElement(PricingDisclosure, { stage: 'pre-topic' }))
+  const dynamicTopicMarkup = renderToStaticMarkup(
+    createElement(PricingDisclosure, {
+      stage: 'pre-topic',
+      message: buildPublicPricingDisclosureMessage(DEFAULT_PRICE_PLN),
+      messageAs: 'strong',
+    }),
+  )
 
   assert.doesNotMatch(beforeTopicMarkup, /69(?:\s|\u00a0)?zł/i)
   assert.doesNotMatch(beforePaymentMarkup, /69(?:\s|\u00a0)?zł/i)
   assert.doesNotMatch(homeSource, /69(?:\s|\u00a0)?zł/i)
   assert.doesNotMatch(bookSource, /69(?:\s|\u00a0)?zł/i)
   assert.doesNotMatch(formSource, /69(?:\s|\u00a0)?zł/i)
-  assert.doesNotMatch(bookSource, /getActiveConsultationPrice|formattedAmount/)
+  assert.match(homeSource, /getActiveConsultationPrice/)
+  assert.match(bookSource, /getActiveConsultationPrice/)
+  assert.doesNotMatch(homeSource, /Od 39 zł\./)
+  assert.doesNotMatch(bookSource, /Od 39 zł\./)
 })
 
 test('booking flow uses neutral stage labels instead of a conflicting six-step counter', () => {

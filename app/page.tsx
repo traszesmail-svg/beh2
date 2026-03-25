@@ -6,8 +6,9 @@ import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { PricingDisclosure } from '@/components/PricingDisclosure'
 import { faq } from '@/lib/data'
+import { buildPublicPricingDisclosureMessage } from '@/lib/pricing'
 import { buildHomeMetadata } from '@/lib/seo'
-import { listAvailability } from '@/lib/server/db'
+import { getActiveConsultationPrice, listAvailability } from '@/lib/server/db'
 import { getBaseUrl, getDataModeStatus } from '@/lib/server/env'
 import {
   CAPBT_LOGO,
@@ -65,6 +66,7 @@ export default async function HomePage() {
   const dataMode = getDataModeStatus()
   const baseUrl = getBaseUrl()
   let availability: Awaited<ReturnType<typeof listAvailability>> = []
+  let publicPricingMessage = buildPublicPricingDisclosureMessage(null)
   let publicFlowMessage: string | null = null
 
   if (dataMode.isValid) {
@@ -73,6 +75,13 @@ export default async function HomePage() {
     } catch (error) {
       console.warn('[behawior15][home] nie udalo sie wczytac kalendarza', error)
       publicFlowMessage = 'Kalendarz rezerwacji odświeża się. Możesz przejść dalej do wyboru tematu, a sloty pojawią się w następnym kroku.'
+    }
+
+    try {
+      const activeConsultationPrice = await getActiveConsultationPrice()
+      publicPricingMessage = buildPublicPricingDisclosureMessage(activeConsultationPrice.amount)
+    } catch (error) {
+      console.warn('[behawior15][home] nie udalo sie wczytac publicznej ceny', error)
     }
   } else {
     publicFlowMessage = 'Kalendarz rezerwacji odświeża się. Możesz przejść dalej do wyboru tematu, a sloty pojawią się w następnym kroku.'
@@ -150,6 +159,7 @@ export default async function HomePage() {
             <div className="hero-price-badge hero-price-badge-compact tree-backed-card">
               <PricingDisclosure
                 stage="pre-topic"
+                message={publicPricingMessage}
                 labelClassName="hero-price-label"
                 messageAs="strong"
                 showNote

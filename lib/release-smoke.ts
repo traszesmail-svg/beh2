@@ -108,7 +108,7 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
       required: [
         'Spokojna konsultacja, która porządkuje problem psa lub kota w 15 minut',
         'Oferta i płatność',
-        'Od 39 zł. Dokładną kwotę potwierdzisz po wyborze tematu konsultacji.',
+        'Dokładną kwotę potwierdzisz po wyborze tematu konsultacji.',
         'Pewność jakości i zakupu',
         'Wersja serwisu',
       ],

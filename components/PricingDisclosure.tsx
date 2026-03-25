@@ -7,7 +7,7 @@ type DisclosureTag = 'div' | 'span' | 'strong'
 const PRICING_DISCLOSURE = {
   'pre-topic': {
     label: 'Oferta i płatność',
-    message: 'Od 39 zł. Dokładną kwotę potwierdzisz po wyborze tematu konsultacji.',
+    message: 'Dokładną kwotę potwierdzisz po wyborze tematu konsultacji.',
     note: '15 minut rozmowy audio z jednym specjalistą',
   },
   'pre-payment': {
@@ -19,6 +19,7 @@ const PRICING_DISCLOSURE = {
 
 interface PricingDisclosureProps {
   stage: PricingDisclosureStage
+  message?: string
   labelAs?: DisclosureTag
   labelClassName?: string
   messageAs?: DisclosureTag
@@ -33,6 +34,7 @@ interface PricingDisclosureProps {
 
 export function PricingDisclosure({
   stage,
+  message,
   labelAs = 'span',
   labelClassName,
   messageAs = 'span',
@@ -47,11 +49,12 @@ export function PricingDisclosure({
   const content = PRICING_DISCLOSURE[stage]
   const LabelTag = labelAs
   const MessageTag = messageAs
+  const resolvedMessage = message ?? content.message
 
   return (
     <>
       {showLabel ? <LabelTag className={labelClassName}>{content.label}</LabelTag> : null}
-      {showMessage ? <MessageTag className={messageClassName}>{content.message}</MessageTag> : null}
+      {showMessage ? <MessageTag className={messageClassName}>{resolvedMessage}</MessageTag> : null}
       {showNote && content.note ? <span className={noteClassName}>{content.note}</span> : null}
       {showCompare ? <span className={compareClassName}>{CONSULTATION_PRICE_COMPARE_COPY}</span> : null}
     </>

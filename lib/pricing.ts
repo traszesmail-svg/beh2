@@ -1,5 +1,6 @@
 export const DEFAULT_PRICE_PLN = 69
 export const MIN_CONSULTATION_PRICE_PLN = 2
+export const PRE_TOPIC_PRICE_CONFIRMATION_COPY = 'Dokładną kwotę potwierdzisz po wyborze tematu konsultacji.'
 
 export type ActiveConsultationPrice = {
   amount: number
@@ -41,6 +42,14 @@ export function createActiveConsultationPrice(amount: number, updatedAt: string 
     updatedAt,
     summary: `Aktywna cena konsultacji: ${formatPricePln(normalizedAmount)}.`,
   }
+}
+
+export function buildPublicPricingDisclosureMessage(amount: number | null | undefined): string {
+  if (typeof amount !== 'number' || !Number.isFinite(amount)) {
+    return PRE_TOPIC_PRICE_CONFIRMATION_COPY
+  }
+
+  return `Od ${formatPricePln(amount)}. ${PRE_TOPIC_PRICE_CONFIRMATION_COPY}`
 }
 
 export function parseConsultationPriceInput(rawValue: string | number): number {
