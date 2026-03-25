@@ -267,7 +267,7 @@ export function PreparationMaterialsCard({
       </p>
 
       <div className="prep-grid top-gap">
-        <div className="prep-card">
+        <div className="prep-card tree-backed-card">
           <strong>Nagranie MP4</strong>
           <span>
             Krótki materiał do 5 minut bardzo pomaga szybciej zrozumieć sytuację. Akceptujemy tylko MP4 do{' '}
@@ -305,7 +305,7 @@ export function PreparationMaterialsCard({
           ) : null}
         </div>
 
-        <div className="prep-card">
+        <div className="prep-card tree-backed-card">
           <strong>Link do materiału</strong>
           <span>Może to być YouTube, Google Drive albo inny link, który jest publiczny lub poprawnie udostępniony specjaliście.</span>
           <input
@@ -346,7 +346,7 @@ export function PreparationMaterialsCard({
         <div className="info-box top-gap">Ta rezerwacja jest już zamknięta, dlatego materiały pozostają tylko do podglądu.</div>
       )}
 
-      <div className="prep-checklist top-gap">
+      <div className="prep-checklist top-gap tree-backed-card">
         <strong>Jak przygotować się do rozmowy w 2 minuty</strong>
         <ul>
           <li>Przygotuj 2-3 najważniejsze pytania, od których chcesz zacząć.</li>

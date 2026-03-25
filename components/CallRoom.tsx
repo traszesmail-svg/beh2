@@ -106,19 +106,19 @@ export function CallRoom({ bookingId, meetingUrl, ownerName }: CallRoomProps) {
       </div>
 
       <div className="panel section-panel room-sidebar">
-        <div className="timer-box">{formatTime(secondsLeft)}</div>
-        <div className="status-box">{running ? 'Rozmowa aktywna' : finished ? 'Rozmowa zakończona' : 'Oczekiwanie na dołączenie'}</div>
+        <div className="timer-box tree-backed-card">{formatTime(secondsLeft)}</div>
+        <div className="status-box tree-backed-card">{running ? 'Rozmowa aktywna' : finished ? 'Rozmowa zakończona' : 'Oczekiwanie na dołączenie'}</div>
 
         <div className="stack-gap top-gap">
-          <div className="list-card">
+          <div className="list-card tree-backed-card">
             <strong>Opiekun</strong>
             <span>{ownerName}</span>
           </div>
-          <div className="list-card">
+          <div className="list-card tree-backed-card">
             <strong>Link do rozmowy</strong>
             <span>{meetingUrl}</span>
           </div>
-          <div className="list-card accent-outline">
+          <div className="list-card accent-outline tree-backed-card">
             <strong>Po rozmowie</strong>
             <span>Po tej konsultacji można zaplanować pełną konsultację, wizytę domową albo dalsze wsparcie, jeśli sytuacja wymaga szerszej pracy.</span>
           </div>

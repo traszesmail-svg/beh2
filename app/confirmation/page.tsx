@@ -90,19 +90,19 @@ export default async function ConfirmationPage({
               </p>
 
               <div className="summary-grid">
-                <div className="summary-card">
+                <div className="summary-card tree-backed-card">
                   <div className="stat-label">Temat rozmowy</div>
                   <div className="summary-value">{getProblemLabel(booking.problemType)}</div>
                 </div>
-                <div className="summary-card">
+                <div className="summary-card tree-backed-card">
                   <div className="stat-label">Termin</div>
                   <div className="summary-value">{formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}</div>
                 </div>
-                <div className="summary-card">
+                <div className="summary-card tree-backed-card">
                   <div className="stat-label">Kontakt</div>
                   <div className="summary-value">{booking.email}</div>
                 </div>
-                <div className="summary-card">
+                <div className="summary-card tree-backed-card">
                   <div className="stat-label">Kwota</div>
                   <div className="summary-value">{formatPricePln(booking.amount)}</div>
                 </div>
@@ -118,17 +118,17 @@ export default async function ConfirmationPage({
 
               {!isSelfCancelled ? (
                 <div className="stack-gap top-gap">
-                  <div className="list-card">
+                  <div className="list-card tree-backed-card">
                     <strong>Jak przygotować się do rozmowy</strong>
                     <span>Znajdź spokojne miejsce, miej pod ręką najważniejsze obserwacje i przygotuj 1-2 pytania, od których chcesz zacząć. Jeśli chcesz, poniżej dodasz nagranie, link lub notatki.</span>
                   </div>
-                  <div className="list-card accent-outline">
+                  <div className="list-card accent-outline tree-backed-card">
                     <strong>Co dalej po 15 minutach</strong>
                     <span>Jeśli sytuacja wymaga szerszej pracy, kolejnym krokiem może być pełna konsultacja, plan pracy, wizyta domowa albo dalsze wsparcie.</span>
                   </div>
                 </div>
               ) : (
-                <div className="list-card accent-outline top-gap">
+                <div className="list-card accent-outline top-gap tree-backed-card">
                   <strong>Co stało się po anulacji</strong>
                   <span>To anulowanie zwolniło termin i zakończyło ten booking. Jeśli wrócisz do rezerwacji, przejdziesz przez zwykły wybór tematu i nowego slotu.</span>
                 </div>

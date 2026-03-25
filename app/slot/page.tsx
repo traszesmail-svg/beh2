@@ -87,7 +87,7 @@ export default async function SlotPage({
           ) : (
             <div className="stack-gap top-gap">
               {groupedAvailability.map((group) => (
-                <div key={group.date} className="list-card">
+                <div key={group.date} className="list-card tree-backed-card">
                   <strong>{group.label}</strong>
                   <span>Wybierasz 15-minutową rozmowę głosową online.</span>
                   <div className="time-grid top-gap-small">

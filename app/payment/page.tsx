@@ -102,15 +102,15 @@ export default async function PaymentPage({
               {checkoutBlockedReason ? <div className="error-box top-gap">{checkoutBlockedReason}</div> : null}
 
               <div className="summary-grid top-gap">
-                <div className="summary-card">
+                <div className="summary-card tree-backed-card">
                   <div className="stat-label">Temat rozmowy</div>
                   <div className="summary-value">{getProblemLabel(booking.problemType)}</div>
                 </div>
-                <div className="summary-card">
+                <div className="summary-card tree-backed-card">
                   <div className="stat-label">Termin</div>
                   <div className="summary-value">{formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}</div>
                 </div>
-                <div className="summary-card">
+                <div className="summary-card tree-backed-card">
                   <div className="stat-label">Kwota</div>
                   <div className="summary-value">{bookingPriceLabel}</div>
                 </div>
@@ -120,22 +120,22 @@ export default async function PaymentPage({
                 <div className="summary-grid trust-grid">
                   {isMockPayment ? (
                     <>
-                      <div className="summary-card trust-card">
+                      <div className="summary-card trust-card tree-backed-card">
                         <strong>Tryb testowy jest aktywny</strong>
                         <span>Na tym etapie nie otwieramy żadnej zewnętrznej bramki płatności.</span>
                       </div>
-                      <div className="summary-card trust-card">
+                      <div className="summary-card trust-card tree-backed-card">
                         <strong>Pełny dalszy flow zostaje</strong>
                         <span>Po sukcesie przejdziesz do potwierdzenia, materiałów przygotowawczych i linku do rozmowy.</span>
                       </div>
-                      <div className="summary-card trust-card">
+                      <div className="summary-card trust-card tree-backed-card">
                         <strong>Możesz też sprawdzić błąd</strong>
                         <span>Tryb testowy pozwala zasymulować nieudane potwierdzenie i sprawdzić powrót slotu do puli.</span>
                       </div>
                     </>
                   ) : (
                     <>
-                      <div className="summary-card trust-card">
+                      <div className="summary-card trust-card tree-backed-card">
                         <span className="trust-icon" aria-hidden="true">
                           <svg viewBox="0 0 24 24" className="trust-svg">
                             <path d="M12 3l7 3v5c0 4.9-2.6 8.4-7 10-4.4-1.6-7-5.1-7-10V6l7-3Z" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
@@ -145,7 +145,7 @@ export default async function PaymentPage({
                         <strong>Obsługiwane przez Stripe</strong>
                         <span>Płatność otworzy się w hosted checkout Stripe, bez przekazywania karty przez aplikację.</span>
                       </div>
-                      <div className="summary-card trust-card">
+                      <div className="summary-card trust-card tree-backed-card">
                         <span className="trust-icon" aria-hidden="true">
                           <svg viewBox="0 0 24 24" className="trust-svg">
                             <rect x="5" y="10" width="14" height="10" rx="2" fill="none" stroke="currentColor" strokeWidth="1.8" />
@@ -155,7 +155,7 @@ export default async function PaymentPage({
                         <strong>Szyfrowane połączenie</strong>
                         <span>Przejście do płatności odbywa się przez bezpieczne, szyfrowane połączenie.</span>
                       </div>
-                      <div className="summary-card trust-card">
+                      <div className="summary-card trust-card tree-backed-card">
                         <span className="trust-icon" aria-hidden="true">
                           <svg viewBox="0 0 24 24" className="trust-svg">
                             <path d="M4 8h16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
@@ -170,7 +170,7 @@ export default async function PaymentPage({
                   )}
                 </div>
 
-                <div className="list-card">
+                <div className="list-card tree-backed-card">
                   <strong>{isMockPayment ? 'Co testujesz w tym kroku' : 'Co kupujesz'}</strong>
                   <span>
                     {isMockPayment
@@ -178,7 +178,7 @@ export default async function PaymentPage({
                       : '15-minutową konsultację głosową online, która pomaga szybko uporządkować problem i wybrać pierwszy sensowny krok bez chaosu i zgadywania.'}
                   </span>
                 </div>
-                <div className="list-card">
+                <div className="list-card tree-backed-card">
                   <strong>{isMockPayment ? 'Co stanie się po potwierdzeniu testowym' : 'Co stanie się po płatności'}</strong>
                   <span>
                     {isMockPayment

@@ -76,7 +76,7 @@ export function PaymentActions({ bookingId, accessToken, paymentMode, checkoutBl
     <div className="stack-gap top-gap">
       {error ? <div className="error-box">{error}</div> : null}
 
-      <div className="list-card accent-outline payment-next-card">
+      <div className="list-card accent-outline payment-next-card tree-backed-card">
         <strong>{isMockPayment ? 'Co wydarzy się po potwierdzeniu testowym' : 'Co wydarzy się dalej'}</strong>
         <span>
           {isMockPayment
@@ -88,30 +88,30 @@ export function PaymentActions({ bookingId, accessToken, paymentMode, checkoutBl
       <div className="summary-grid trust-grid payment-logo-grid">
         {isMockPayment ? (
           <>
-            <div className="summary-card trust-card">
+            <div className="summary-card trust-card tree-backed-card">
               <strong>Stripe jest odłączony</strong>
               <span>To tryb testowy do przejścia całego flow bez realnej bramki płatności.</span>
             </div>
-            <div className="summary-card trust-card">
+            <div className="summary-card trust-card tree-backed-card">
               <strong>Ten sam dalszy ekran</strong>
               <span>Po sukcesie zobaczysz dokładnie potwierdzenie, materiały i link do rozmowy, jak po realnym checkoutcie.</span>
             </div>
-            <div className="summary-card trust-card">
+            <div className="summary-card trust-card tree-backed-card">
               <strong>Możesz zasymulować błąd</strong>
               <span>Drugi przycisk pozwala sprawdzić, jak zachowuje się flow po nieudanym potwierdzeniu.</span>
             </div>
           </>
         ) : (
           <>
-            <div className="summary-card trust-card">
+            <div className="summary-card trust-card tree-backed-card">
               <strong>Karta lub BLIK</strong>
               <span>Dostępne metody zobaczysz dopiero w bezpiecznym oknie Stripe po kliknięciu przycisku płatności.</span>
             </div>
-            <div className="summary-card trust-card">
+            <div className="summary-card trust-card tree-backed-card">
               <strong>Szyfrowane okno Stripe</strong>
               <span>Płatność otwiera się poza aplikacją, w bezpiecznym i zgodnym z wymaganiami checkoutcie.</span>
             </div>
-            <div className="summary-card trust-card">
+            <div className="summary-card trust-card tree-backed-card">
               <strong>Natychmiastowy powrót do potwierdzenia</strong>
               <span>Po płatności wracasz do potwierdzenia terminu, linku do rozmowy i materiałów przygotowawczych.</span>
             </div>

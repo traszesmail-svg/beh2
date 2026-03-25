@@ -69,19 +69,19 @@ export default async function FormPage({
             </p>
 
             <div className="stack-gap top-gap">
-              <div className="list-card">
+              <div className="list-card tree-backed-card">
                 <strong>Temat</strong>
                 <span>{getProblemLabel(problem)}</span>
               </div>
-              <div className="list-card">
+              <div className="list-card tree-backed-card">
                 <strong>Termin rozmowy</strong>
                 <span>{slot ? formatDateTimeLabel(slot.bookingDate, slot.bookingTime) : 'Termin nie jest już dostępny.'}</span>
               </div>
-              <div className="list-card accent-outline">
+              <div className="list-card accent-outline tree-backed-card">
                 <strong>Format</strong>
                 <span>15-minutowa konsultacja głosowa online. Kamera nie jest potrzebna.</span>
               </div>
-              <div className="list-card">
+              <div className="list-card tree-backed-card">
                 <PricingDisclosure stage="pre-payment" labelAs="strong" />
               </div>
             </div>

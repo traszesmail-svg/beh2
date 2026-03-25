@@ -189,7 +189,7 @@ export function BookingForm({ problemType, slotId, slotLabel, paymentMode }: Boo
 
       {error ? <div className="error-box full-width">{error}</div> : null}
 
-      <div className="checkout-box full-width">
+      <div className="checkout-box full-width tree-backed-card">
         <div>
           <div className="muted">
             {isMockPayment
