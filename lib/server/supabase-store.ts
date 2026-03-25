@@ -89,6 +89,140 @@ type PricingSettingsRow = {
   updated_at: string
 }
 
+type LegacyPaymentMeta = {
+  version: 1
+  method: 'manual' | 'payu'
+  paymentReference?: string | null
+  paymentReportedAt?: string | null
+  paymentRejectedAt?: string | null
+  paymentRejectedReason?: string | null
+  payuOrderId?: string | null
+  payuOrderStatus?: string | null
+}
+
+const LEGACY_PAYMENT_META_PREFIX = '__beh15_payment__:' as const
+const LEGACY_PAYMENT_COLUMN_NAMES = [
+  'payment_method',
+  'payment_reference',
+  'payu_order_id',
+  'payu_order_status',
+  'payment_reported_at',
+  'payment_rejected_at',
+  'payment_rejected_reason',
+] as const
+
+let paymentSchemaMode: 'unknown' | 'modern' | 'legacy' = 'unknown'
+
+function setPaymentSchemaMode(mode: typeof paymentSchemaMode) {
+  paymentSchemaMode = mode
+}
+
+function getErrorText(error: unknown): string {
+  if (!error || typeof error !== 'object') {
+    return ''
+  }
+
+  const values = ['message', 'details', 'hint']
+    .map((key) => {
+      const value = Reflect.get(error, key)
+      return typeof value === 'string' ? value : ''
+    })
+    .filter(Boolean)
+
+  return values.join(' ').toLowerCase()
+}
+
+function isLegacyPaymentColumnError(error: unknown): boolean {
+  const text = getErrorText(error)
+
+  return LEGACY_PAYMENT_COLUMN_NAMES.some((column) => text.includes(column))
+}
+
+function isLegacyManualStatusError(error: unknown): boolean {
+  const text = getErrorText(error)
+
+  return (
+    text.includes('bookings_booking_status_check') ||
+    text.includes('bookings_payment_status_check') ||
+    text.includes('pending_manual_payment') ||
+    text.includes('pending_manual_review') ||
+    text.includes('payment_status') && text.includes('rejected')
+  )
+}
+
+function shouldRetryWithLegacyPaymentSchema(error: unknown, includeManualStatuses = false): boolean {
+  if (isLegacyPaymentColumnError(error)) {
+    setPaymentSchemaMode('legacy')
+    return true
+  }
+
+  if (includeManualStatuses && isLegacyManualStatusError(error)) {
+    setPaymentSchemaMode('legacy')
+    return true
+  }
+
+  return false
+}
+
+function encodeLegacyPaymentMeta(meta: LegacyPaymentMeta | null | undefined): string | null {
+  if (!meta) {
+    return null
+  }
+
+  return `${LEGACY_PAYMENT_META_PREFIX}${Buffer.from(JSON.stringify(meta), 'utf8').toString('base64url')}`
+}
+
+function decodeLegacyPaymentMeta(value: string | null | undefined): LegacyPaymentMeta | null {
+  if (!value?.startsWith(LEGACY_PAYMENT_META_PREFIX)) {
+    return null
+  }
+
+  try {
+    const decoded = Buffer.from(value.slice(LEGACY_PAYMENT_META_PREFIX.length), 'base64url').toString('utf8')
+    const parsed = JSON.parse(decoded) as Partial<LegacyPaymentMeta>
+
+    if (parsed.version !== 1 || (parsed.method !== 'manual' && parsed.method !== 'payu')) {
+      return null
+    }
+
+    return {
+      version: 1,
+      method: parsed.method,
+      paymentReference: parsed.paymentReference ?? null,
+      paymentReportedAt: parsed.paymentReportedAt ?? null,
+      paymentRejectedAt: parsed.paymentRejectedAt ?? null,
+      paymentRejectedReason: parsed.paymentRejectedReason ?? null,
+      payuOrderId: parsed.payuOrderId ?? null,
+      payuOrderStatus: parsed.payuOrderStatus ?? null,
+    }
+  } catch {
+    return null
+  }
+}
+
+function inferPaymentMethod(row: BookingRow, legacyMeta: LegacyPaymentMeta | null): BookingRecord['paymentMethod'] | null {
+  if (row.payment_method) {
+    return row.payment_method as BookingRecord['paymentMethod']
+  }
+
+  if (legacyMeta?.method) {
+    return legacyMeta.method
+  }
+
+  if (
+    row.payment_intent_id?.startsWith('mock-') ||
+    row.checkout_session_id?.startsWith('mock-')
+  ) {
+    return 'mock'
+  }
+
+  if (row.checkout_session_id || row.payment_intent_id) {
+    return 'stripe'
+  }
+
+  return null
+}
+
 function getSupabaseAdmin() {
   const config = getSupabaseServerConfig('Supabase admin client')
 
@@ -127,6 +261,28 @@ function mapAvailabilitySlotToRow(slot: AvailabilitySlot): AvailabilityRow {
 }
 
 function mapBookingRow(row: BookingRow): BookingRecord {
+  const legacyPaymentMeta = decodeLegacyPaymentMeta(row.recommended_next_step)
+  const paymentMethod = inferPaymentMethod(row, legacyPaymentMeta)
+  let bookingStatus = row.booking_status as BookingRecord['bookingStatus']
+  let paymentStatus = row.payment_status as BookingRecord['paymentStatus']
+  const paymentReference = row.payment_reference ?? legacyPaymentMeta?.paymentReference ?? null
+  const paymentReportedAt = row.payment_reported_at ?? legacyPaymentMeta?.paymentReportedAt ?? null
+  const paymentRejectedAt = row.payment_rejected_at ?? legacyPaymentMeta?.paymentRejectedAt ?? null
+  const paymentRejectedReason = row.payment_rejected_reason ?? legacyPaymentMeta?.paymentRejectedReason ?? null
+  const payuOrderId = row.payu_order_id ?? legacyPaymentMeta?.payuOrderId ?? null
+  const payuOrderStatus = row.payu_order_status ?? legacyPaymentMeta?.payuOrderStatus ?? null
+
+  if (legacyPaymentMeta?.method === 'manual') {
+    if (bookingStatus === 'pending' && paymentStatus === 'unpaid' && paymentReportedAt) {
+      bookingStatus = 'pending_manual_payment'
+      paymentStatus = 'pending_manual_review'
+    } else if (bookingStatus === 'cancelled' && paymentStatus === 'failed') {
+      paymentStatus = 'rejected'
+    } else if (bookingStatus === 'expired' && paymentStatus === 'unpaid' && paymentReportedAt) {
+      paymentStatus = 'rejected'
+    }
+  }
+
   return {
     id: row.id,
     userId: row.user_id,
@@ -142,26 +298,26 @@ function mapBookingRow(row: BookingRow): BookingRecord {
     bookingDate: row.booking_date,
     bookingTime: row.booking_time,
     slotId: row.slot_id,
-    bookingStatus: row.booking_status as BookingRecord['bookingStatus'],
-    paymentStatus: row.payment_status as BookingRecord['paymentStatus'],
-    paymentMethod: row.payment_method as BookingRecord['paymentMethod'],
-    paymentReference: row.payment_reference,
+    bookingStatus,
+    paymentStatus,
+    paymentMethod,
+    paymentReference,
     amount: typeof row.amount === 'string' ? Number(row.amount) : row.amount,
     meetingUrl: row.meeting_url,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
     paidAt: row.paid_at,
-    paymentReportedAt: row.payment_reported_at,
-    paymentRejectedAt: row.payment_rejected_at,
-    paymentRejectedReason: row.payment_rejected_reason,
+    paymentReportedAt,
+    paymentRejectedAt,
+    paymentRejectedReason,
     cancelledAt: row.cancelled_at,
     expiredAt: row.expired_at,
     refundedAt: row.refunded_at,
     checkoutSessionId: row.checkout_session_id,
     paymentIntentId: row.payment_intent_id,
-    payuOrderId: row.payu_order_id,
-    payuOrderStatus: row.payu_order_status,
-    recommendedNextStep: row.recommended_next_step,
+    payuOrderId,
+    payuOrderStatus,
+    recommendedNextStep: legacyPaymentMeta ? null : row.recommended_next_step,
     reminderSent: row.reminder_sent ?? false,
     prepVideoPath: row.prep_video_path,
     prepVideoFilename: row.prep_video_filename,
@@ -249,19 +405,29 @@ async function cleanupExpiredReservations() {
       .eq('payment_status', 'unpaid')
       .in('id', bookingIds)
 
-    await supabase
-      .from('bookings')
-      .update({
-        booking_status: 'expired',
-        payment_status: 'rejected',
-        payment_rejected_at: nowIso,
-        payment_rejected_reason: 'Upłynął czas na ręczne potwierdzenie wpłaty.',
-        expired_at: nowIso,
-        updated_at: nowIso,
-      })
-      .eq('booking_status', 'pending_manual_payment')
-      .eq('payment_status', 'pending_manual_review')
-      .in('id', bookingIds)
+    if (paymentSchemaMode !== 'legacy') {
+      const manualExpired = await supabase
+        .from('bookings')
+        .update({
+          booking_status: 'expired',
+          payment_status: 'rejected',
+          payment_rejected_at: nowIso,
+          payment_rejected_reason: 'Upłynął czas na ręczne potwierdzenie wpłaty.',
+          expired_at: nowIso,
+          updated_at: nowIso,
+        })
+        .eq('booking_status', 'pending_manual_payment')
+        .eq('payment_status', 'pending_manual_review')
+        .in('id', bookingIds)
+
+      if (manualExpired.error) {
+        if (!shouldRetryWithLegacyPaymentSchema(manualExpired.error, true)) {
+          throw manualExpired.error
+        }
+      } else {
+        setPaymentSchemaMode('modern')
+      }
+    }
   }
 }
 
@@ -502,45 +668,58 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
     amount: pricing.amount,
     summary: pricing.summary,
   })
-  const inserted = await supabase
-    .from('bookings')
-    .insert({
-      id: bookingId,
-      user_id: user.id,
-      customer_access_token_hash: accessToken.tokenHash,
-      owner_name: form.ownerName,
-      animal_type: form.animalType,
-      problem_type: form.problemType,
-      pet_age: form.petAge,
-      duration_notes: form.durationNotes,
-      description: form.description,
-      phone: form.phone,
-      email: form.email,
-      booking_date: slot.bookingDate,
-      booking_time: slot.bookingTime,
-      slot_id: slot.id,
-      booking_status: 'pending',
-      payment_status: 'unpaid',
-      payment_method: null,
-      payment_reference: null,
-      amount: pricing.amount,
-      meeting_url: createMeetingUrl(bookingId),
-      payment_reported_at: null,
-      payment_rejected_at: null,
-      payment_rejected_reason: null,
-      payu_order_id: null,
-      payu_order_status: null,
-      prep_video_path: null,
-      prep_video_filename: null,
-      prep_video_size_bytes: null,
-      prep_link_url: null,
-      prep_notes: null,
-      prep_uploaded_at: null,
-      created_at: nowIso,
-      updated_at: nowIso,
-    })
-    .select('*')
-    .single()
+  const baseInsertPayload = {
+    id: bookingId,
+    user_id: user.id,
+    customer_access_token_hash: accessToken.tokenHash,
+    owner_name: form.ownerName,
+    animal_type: form.animalType,
+    problem_type: form.problemType,
+    pet_age: form.petAge,
+    duration_notes: form.durationNotes,
+    description: form.description,
+    phone: form.phone,
+    email: form.email,
+    booking_date: slot.bookingDate,
+    booking_time: slot.bookingTime,
+    slot_id: slot.id,
+    booking_status: 'pending',
+    payment_status: 'unpaid',
+    amount: pricing.amount,
+    meeting_url: createMeetingUrl(bookingId),
+    recommended_next_step: null,
+    prep_video_path: null,
+    prep_video_filename: null,
+    prep_video_size_bytes: null,
+    prep_link_url: null,
+    prep_notes: null,
+    prep_uploaded_at: null,
+    created_at: nowIso,
+    updated_at: nowIso,
+  }
+  const modernInsertPayload = {
+    ...baseInsertPayload,
+    payment_method: null,
+    payment_reference: null,
+    payment_reported_at: null,
+    payment_rejected_at: null,
+    payment_rejected_reason: null,
+    payu_order_id: null,
+    payu_order_status: null,
+  }
+  let inserted
+
+  if (paymentSchemaMode === 'legacy') {
+    inserted = await supabase.from('bookings').insert(baseInsertPayload).select('*').single()
+  } else {
+    inserted = await supabase.from('bookings').insert(modernInsertPayload).select('*').single()
+
+    if (inserted.error && shouldRetryWithLegacyPaymentSchema(inserted.error)) {
+      inserted = await supabase.from('bookings').insert(baseInsertPayload).select('*').single()
+    } else if (!inserted.error) {
+      setPaymentSchemaMode('modern')
+    }
+  }
 
   if (inserted.error) {
     throw inserted.error
@@ -705,23 +884,58 @@ export async function attachPayuOrder(
   paymentData: { payuOrderId: string; payuOrderStatus?: string | null },
 ): Promise<BookingRecord | null> {
   const supabase = getSupabaseAdmin()
-  const { data, error } = await supabase
-    .from('bookings')
-    .update({
-      payment_method: 'payu',
-      payu_order_id: paymentData.payuOrderId,
-      payu_order_status: paymentData.payuOrderStatus ?? null,
-      updated_at: new Date().toISOString(),
-    })
-    .eq('id', bookingId)
-    .select('*')
-    .maybeSingle()
+  const nowIso = new Date().toISOString()
+  const legacyMeta = encodeLegacyPaymentMeta({
+    version: 1,
+    method: 'payu',
+    payuOrderId: paymentData.payuOrderId,
+    payuOrderStatus: paymentData.payuOrderStatus ?? null,
+  })
+  let result
 
-  if (error) {
-    throw error
+  if (paymentSchemaMode === 'legacy') {
+    result = await supabase
+      .from('bookings')
+      .update({
+        recommended_next_step: legacyMeta,
+        updated_at: nowIso,
+      })
+      .eq('id', bookingId)
+      .select('*')
+      .maybeSingle()
+  } else {
+    result = await supabase
+      .from('bookings')
+      .update({
+        payment_method: 'payu',
+        payu_order_id: paymentData.payuOrderId,
+        payu_order_status: paymentData.payuOrderStatus ?? null,
+        updated_at: nowIso,
+      })
+      .eq('id', bookingId)
+      .select('*')
+      .maybeSingle()
+
+    if (result.error && shouldRetryWithLegacyPaymentSchema(result.error)) {
+      result = await supabase
+        .from('bookings')
+        .update({
+          recommended_next_step: legacyMeta,
+          updated_at: nowIso,
+        })
+        .eq('id', bookingId)
+        .select('*')
+        .maybeSingle()
+    } else if (!result.error) {
+      setPaymentSchemaMode('modern')
+    }
   }
 
-  return data ? mapBookingRow(data as BookingRow) : null
+  if (result.error) {
+    throw result.error
+  }
+
+  return result.data ? mapBookingRow(result.data as BookingRow) : null
 }
 
 export async function markBookingManualPaymentPending(
@@ -746,23 +960,66 @@ export async function markBookingManualPaymentPending(
 
   const nowIso = new Date().toISOString()
   const holdUntil = new Date(Date.now() + getManualPaymentConfig().holdMinutes * 60 * 1000).toISOString()
-  const bookingUpdate = await supabase
-    .from('bookings')
-    .update({
-      booking_status: 'pending_manual_payment',
-      payment_status: 'pending_manual_review',
-      payment_method: 'manual',
-      payment_reference: paymentData?.paymentReference ?? current.paymentReference ?? null,
-      payment_reported_at: nowIso,
-      payment_rejected_at: null,
-      payment_rejected_reason: null,
-      cancelled_at: null,
-      expired_at: null,
-      updated_at: nowIso,
-    })
-    .eq('id', bookingId)
-    .select('*')
-    .maybeSingle()
+  const paymentReference = paymentData?.paymentReference ?? current.paymentReference ?? null
+  const legacyMeta = encodeLegacyPaymentMeta({
+    version: 1,
+    method: 'manual',
+    paymentReference,
+    paymentReportedAt: nowIso,
+  })
+  let bookingUpdate
+
+  if (paymentSchemaMode === 'legacy') {
+    bookingUpdate = await supabase
+      .from('bookings')
+      .update({
+        booking_status: 'pending',
+        payment_status: 'unpaid',
+        recommended_next_step: legacyMeta,
+        cancelled_at: null,
+        expired_at: null,
+        updated_at: nowIso,
+      })
+      .eq('id', bookingId)
+      .select('*')
+      .maybeSingle()
+  } else {
+    bookingUpdate = await supabase
+      .from('bookings')
+      .update({
+        booking_status: 'pending_manual_payment',
+        payment_status: 'pending_manual_review',
+        payment_method: 'manual',
+        payment_reference: paymentReference,
+        payment_reported_at: nowIso,
+        payment_rejected_at: null,
+        payment_rejected_reason: null,
+        cancelled_at: null,
+        expired_at: null,
+        updated_at: nowIso,
+      })
+      .eq('id', bookingId)
+      .select('*')
+      .maybeSingle()
+
+    if (bookingUpdate.error && shouldRetryWithLegacyPaymentSchema(bookingUpdate.error, true)) {
+      bookingUpdate = await supabase
+        .from('bookings')
+        .update({
+          booking_status: 'pending',
+          payment_status: 'unpaid',
+          recommended_next_step: legacyMeta,
+          cancelled_at: null,
+          expired_at: null,
+          updated_at: nowIso,
+        })
+        .eq('id', bookingId)
+        .select('*')
+        .maybeSingle()
+    } else if (!bookingUpdate.error) {
+      setPaymentSchemaMode('modern')
+    }
+  }
 
   if (bookingUpdate.error) {
     throw bookingUpdate.error
@@ -816,27 +1073,86 @@ export async function markBookingPaid(
 
   const nowIso = new Date().toISOString()
   const shouldSendConfirmation = shouldSendBookingConfirmationAfterPayment(current)
-  const bookingUpdate = await supabase
-    .from('bookings')
-    .update({
-      booking_status: current.bookingStatus === 'done' ? 'done' : 'confirmed',
-      payment_status: 'paid',
-      paid_at: nowIso,
-      cancelled_at: null,
-      expired_at: null,
-      payment_method: paymentData?.paymentMethod ?? current.paymentMethod ?? null,
-      payment_reference: paymentData?.paymentReference ?? current.paymentReference ?? null,
-      payment_rejected_at: null,
-      payment_rejected_reason: null,
-      updated_at: nowIso,
-      checkout_session_id: paymentData?.checkoutSessionId ?? current.checkoutSessionId ?? null,
-      payment_intent_id: paymentData?.paymentIntentId ?? current.paymentIntentId ?? null,
-      payu_order_id: paymentData?.payuOrderId ?? current.payuOrderId ?? null,
-      payu_order_status: paymentData?.payuOrderStatus ?? current.payuOrderStatus ?? null,
-    })
-    .eq('id', bookingId)
-    .select('*')
-    .maybeSingle()
+  const paymentMethod = paymentData?.paymentMethod ?? current.paymentMethod ?? null
+  const legacyMeta =
+    paymentMethod === 'manual'
+      ? encodeLegacyPaymentMeta({
+          version: 1,
+          method: 'manual',
+          paymentReference: paymentData?.paymentReference ?? current.paymentReference ?? null,
+          paymentReportedAt: current.paymentReportedAt ?? nowIso,
+        })
+      : paymentMethod === 'payu'
+        ? encodeLegacyPaymentMeta({
+            version: 1,
+            method: 'payu',
+            payuOrderId: paymentData?.payuOrderId ?? current.payuOrderId ?? null,
+            payuOrderStatus: paymentData?.payuOrderStatus ?? current.payuOrderStatus ?? 'COMPLETED',
+          })
+        : null
+  let bookingUpdate
+
+  if (paymentSchemaMode === 'legacy') {
+    bookingUpdate = await supabase
+      .from('bookings')
+      .update({
+        booking_status: current.bookingStatus === 'done' ? 'done' : 'confirmed',
+        payment_status: 'paid',
+        paid_at: nowIso,
+        cancelled_at: null,
+        expired_at: null,
+        updated_at: nowIso,
+        checkout_session_id: paymentData?.checkoutSessionId ?? current.checkoutSessionId ?? null,
+        payment_intent_id: paymentData?.paymentIntentId ?? current.paymentIntentId ?? null,
+        recommended_next_step: legacyMeta,
+      })
+      .eq('id', bookingId)
+      .select('*')
+      .maybeSingle()
+  } else {
+    bookingUpdate = await supabase
+      .from('bookings')
+      .update({
+        booking_status: current.bookingStatus === 'done' ? 'done' : 'confirmed',
+        payment_status: 'paid',
+        paid_at: nowIso,
+        cancelled_at: null,
+        expired_at: null,
+        payment_method: paymentMethod,
+        payment_reference: paymentData?.paymentReference ?? current.paymentReference ?? null,
+        payment_rejected_at: null,
+        payment_rejected_reason: null,
+        updated_at: nowIso,
+        checkout_session_id: paymentData?.checkoutSessionId ?? current.checkoutSessionId ?? null,
+        payment_intent_id: paymentData?.paymentIntentId ?? current.paymentIntentId ?? null,
+        payu_order_id: paymentData?.payuOrderId ?? current.payuOrderId ?? null,
+        payu_order_status: paymentData?.payuOrderStatus ?? current.payuOrderStatus ?? null,
+      })
+      .eq('id', bookingId)
+      .select('*')
+      .maybeSingle()
+
+    if (bookingUpdate.error && shouldRetryWithLegacyPaymentSchema(bookingUpdate.error)) {
+      bookingUpdate = await supabase
+        .from('bookings')
+        .update({
+          booking_status: current.bookingStatus === 'done' ? 'done' : 'confirmed',
+          payment_status: 'paid',
+          paid_at: nowIso,
+          cancelled_at: null,
+          expired_at: null,
+          updated_at: nowIso,
+          checkout_session_id: paymentData?.checkoutSessionId ?? current.checkoutSessionId ?? null,
+          payment_intent_id: paymentData?.paymentIntentId ?? current.paymentIntentId ?? null,
+          recommended_next_step: legacyMeta,
+        })
+        .eq('id', bookingId)
+        .select('*')
+        .maybeSingle()
+    } else if (!bookingUpdate.error) {
+      setPaymentSchemaMode('modern')
+    }
+  }
 
   if (bookingUpdate.error) {
     throw bookingUpdate.error
@@ -917,20 +1233,63 @@ export async function markBookingManualPaymentRejected(
   }
 
   const nowIso = new Date().toISOString()
-  const bookingUpdate = await supabase
-    .from('bookings')
-    .update({
-      booking_status: 'cancelled',
-      payment_status: 'rejected',
-      payment_method: current.paymentMethod ?? 'manual',
-      payment_rejected_at: nowIso,
-      payment_rejected_reason: reason ?? 'Nie znaleziono wpłaty.',
-      cancelled_at: nowIso,
-      updated_at: nowIso,
-    })
-    .eq('id', bookingId)
-    .select('*')
-    .maybeSingle()
+  const rejectionReason = reason ?? 'Nie znaleziono wpłaty.'
+  const legacyMeta = encodeLegacyPaymentMeta({
+    version: 1,
+    method: 'manual',
+    paymentReference: current.paymentReference ?? null,
+    paymentReportedAt: current.paymentReportedAt ?? null,
+    paymentRejectedAt: nowIso,
+    paymentRejectedReason: rejectionReason,
+  })
+  let bookingUpdate
+
+  if (paymentSchemaMode === 'legacy') {
+    bookingUpdate = await supabase
+      .from('bookings')
+      .update({
+        booking_status: 'cancelled',
+        payment_status: 'failed',
+        cancelled_at: nowIso,
+        updated_at: nowIso,
+        recommended_next_step: legacyMeta,
+      })
+      .eq('id', bookingId)
+      .select('*')
+      .maybeSingle()
+  } else {
+    bookingUpdate = await supabase
+      .from('bookings')
+      .update({
+        booking_status: 'cancelled',
+        payment_status: 'rejected',
+        payment_method: current.paymentMethod ?? 'manual',
+        payment_rejected_at: nowIso,
+        payment_rejected_reason: rejectionReason,
+        cancelled_at: nowIso,
+        updated_at: nowIso,
+      })
+      .eq('id', bookingId)
+      .select('*')
+      .maybeSingle()
+
+    if (bookingUpdate.error && shouldRetryWithLegacyPaymentSchema(bookingUpdate.error, true)) {
+      bookingUpdate = await supabase
+        .from('bookings')
+        .update({
+          booking_status: 'cancelled',
+          payment_status: 'failed',
+          cancelled_at: nowIso,
+          updated_at: nowIso,
+          recommended_next_step: legacyMeta,
+        })
+        .eq('id', bookingId)
+        .select('*')
+        .maybeSingle()
+    } else if (!bookingUpdate.error) {
+      setPaymentSchemaMode('modern')
+    }
+  }
 
   if (bookingUpdate.error) {
     throw bookingUpdate.error
@@ -1009,22 +1368,75 @@ export async function markBookingExpired(bookingId: string): Promise<BookingReco
   }
 
   const nowIso = new Date().toISOString()
-  const bookingUpdate = await supabase
-    .from('bookings')
-    .update({
-      booking_status: 'expired',
-      payment_status: current.paymentStatus === 'pending_manual_review' ? 'rejected' : 'unpaid',
-      payment_rejected_at: current.paymentStatus === 'pending_manual_review' ? nowIso : current.paymentRejectedAt ?? null,
-      payment_rejected_reason:
-        current.paymentStatus === 'pending_manual_review'
-          ? current.paymentRejectedReason ?? 'Upłynął czas na ręczne potwierdzenie wpłaty.'
-          : current.paymentRejectedReason ?? null,
-      expired_at: nowIso,
-      updated_at: nowIso,
-    })
-    .eq('id', bookingId)
-    .select('*')
-    .maybeSingle()
+  const manualExpiryReason = current.paymentRejectedReason ?? 'Upłynął czas na ręczne potwierdzenie wpłaty.'
+  const legacyMeta =
+    current.paymentStatus === 'pending_manual_review'
+      ? encodeLegacyPaymentMeta({
+          version: 1,
+          method: 'manual',
+          paymentReference: current.paymentReference ?? null,
+          paymentReportedAt: current.paymentReportedAt ?? null,
+          paymentRejectedAt: nowIso,
+          paymentRejectedReason: manualExpiryReason,
+        })
+      : current.paymentMethod === 'payu'
+        ? encodeLegacyPaymentMeta({
+            version: 1,
+            method: 'payu',
+            payuOrderId: current.payuOrderId ?? null,
+            payuOrderStatus: current.payuOrderStatus ?? null,
+          })
+        : null
+  let bookingUpdate
+
+  if (paymentSchemaMode === 'legacy') {
+    bookingUpdate = await supabase
+      .from('bookings')
+      .update({
+        booking_status: 'expired',
+        payment_status: 'unpaid',
+        expired_at: nowIso,
+        updated_at: nowIso,
+        recommended_next_step: legacyMeta,
+      })
+      .eq('id', bookingId)
+      .select('*')
+      .maybeSingle()
+  } else {
+    bookingUpdate = await supabase
+      .from('bookings')
+      .update({
+        booking_status: 'expired',
+        payment_status: current.paymentStatus === 'pending_manual_review' ? 'rejected' : 'unpaid',
+        payment_rejected_at: current.paymentStatus === 'pending_manual_review' ? nowIso : current.paymentRejectedAt ?? null,
+        payment_rejected_reason:
+          current.paymentStatus === 'pending_manual_review'
+            ? manualExpiryReason
+            : current.paymentRejectedReason ?? null,
+        expired_at: nowIso,
+        updated_at: nowIso,
+      })
+      .eq('id', bookingId)
+      .select('*')
+      .maybeSingle()
+
+    if (bookingUpdate.error && shouldRetryWithLegacyPaymentSchema(bookingUpdate.error, true)) {
+      bookingUpdate = await supabase
+        .from('bookings')
+        .update({
+          booking_status: 'expired',
+          payment_status: 'unpaid',
+          expired_at: nowIso,
+          updated_at: nowIso,
+          recommended_next_step: legacyMeta,
+        })
+        .eq('id', bookingId)
+        .select('*')
+        .maybeSingle()
+    } else if (!bookingUpdate.error) {
+      setPaymentSchemaMode('modern')
+    }
+  }
 
   if (bookingUpdate.error) {
     throw bookingUpdate.error
