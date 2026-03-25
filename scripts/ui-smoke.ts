@@ -5,6 +5,7 @@ import { execFileSync, spawn } from 'child_process'
 import { loadEnvConfig } from '@next/env'
 import { chromium } from 'playwright-core'
 import { BUILD_MARKER_KEY } from '../lib/build-marker'
+import { BLOCKED_CONSULTATION_PRICE_PLN } from '../lib/pricing'
 
 const rootDir = process.cwd()
 const dataDir = path.join(rootDir, 'data')
@@ -65,11 +66,17 @@ async function waitForServer() {
 async function fetchPublicPageState(url: string) {
   const response = await fetch(url, { cache: 'no-store' })
   const content = await response.text()
+  const blockedWholePrice = String(BLOCKED_CONSULTATION_PRICE_PLN)
 
   return {
     ok: response.ok,
     hasInternalError: content.includes('Internal Error'),
-    hasLegacyPrice: content.includes('28,99') || content.includes('28.99'),
+    hasLegacyPrice:
+      content.includes('28,99') ||
+      content.includes('28.99') ||
+      content.includes(`${blockedWholePrice} zł`) ||
+      content.includes(`${blockedWholePrice},00`) ||
+      content.includes(`${blockedWholePrice}.00`),
     hasFormHeading: content.includes('Formularz konsultacji'),
     hasBookingHeaderCta: content.includes('Zarezerwuj konsultację'),
     hasTrustStrip: content.includes('COAPE / CAPBT'),

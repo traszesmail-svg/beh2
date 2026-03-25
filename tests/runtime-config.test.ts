@@ -25,10 +25,12 @@ import { buildRollingAvailabilitySeed, getProblemLabel, isFutureAvailabilitySlot
 import { getDataModeStatus, getPaymentModeStatus, getSupabaseServiceRoleKeyIssue } from '@/lib/server/env'
 import { buildSeedAvailabilitySlots, hasFutureAvailabilitySlots } from '@/lib/server/availability-seed'
 import {
+  BLOCKED_CONSULTATION_PRICE_PLN,
   buildPublicPricingDisclosureMessage,
   createActiveConsultationPrice,
   DEFAULT_PRICE_PLN,
   MIN_CONSULTATION_PRICE_PLN,
+  PRE_TOPIC_PRICE_CONFIRMATION_COPY,
   formatPricePln,
   formatPricePlnExact,
   parseConsultationPriceInput,
@@ -192,27 +194,25 @@ test('parses an admin-entered consultation price and converts it consistently fo
   assert.equal(toStripeUnitAmount(amount), 4950)
 })
 
-test('builds the public pricing disclosure from the active amount and falls back safely', () => {
-  assert.equal(
-    buildPublicPricingDisclosureMessage(39),
-    `Od ${formatPricePln(39)}. Dokładną kwotę potwierdzisz po wyborze tematu konsultacji.`,
-  )
-  assert.equal(
-    buildPublicPricingDisclosureMessage(28.99),
-    `Od ${formatPricePln(28.99)}. Dokładną kwotę potwierdzisz po wyborze tematu konsultacji.`,
-  )
-  assert.equal(
-    buildPublicPricingDisclosureMessage(null),
-    'Dokładną kwotę potwierdzisz po wyborze tematu konsultacji.',
-  )
+test('builds the public pricing disclosure from the stable project baseline and ignores legacy values', () => {
+  const expectedMessage = `Od ${formatPricePln(DEFAULT_PRICE_PLN)}. ${PRE_TOPIC_PRICE_CONFIRMATION_COPY}`
+
+  assert.equal(buildPublicPricingDisclosureMessage(DEFAULT_PRICE_PLN), expectedMessage)
+  assert.equal(buildPublicPricingDisclosureMessage(28.99), expectedMessage)
+  assert.equal(buildPublicPricingDisclosureMessage(BLOCKED_CONSULTATION_PRICE_PLN), expectedMessage)
+  assert.equal(buildPublicPricingDisclosureMessage(null), expectedMessage)
 })
 
 test('rejects invalid consultation price values', () => {
   assert.throws(() => parseConsultationPriceInput('free'), /kwotę konsultacji/)
 })
 
-test('rejects consultation prices below the Stripe PLN minimum', () => {
-  assert.throws(() => parseConsultationPriceInput('1.99'), /nie może być niższa/)
+test('rejects consultation prices below the project minimum and blocks the legacy cross-project amount', () => {
+  assert.throws(() => parseConsultationPriceInput('38.99'), /39/)
+  assert.throws(
+    () => parseConsultationPriceInput(String(BLOCKED_CONSULTATION_PRICE_PLN)),
+    /innego projektu/,
+  )
   assert.equal(parseConsultationPriceInput(String(MIN_CONSULTATION_PRICE_PLN)), MIN_CONSULTATION_PRICE_PLN)
 })
 
@@ -682,10 +682,12 @@ test('payment page does not expose the public test-mode banner copy', () => {
   assert.match(source, /1 minutę na samodzielne anulowanie zakupu/)
 })
 
-test('public pricing disclosure reads the active price source on public steps and keeps generic checkout copy', () => {
+test('public pricing disclosure stays fixed at the 39 zl baseline on public steps and keeps generic checkout copy', () => {
   const homeSource = readFileSync(path.join(process.cwd(), 'app', 'page.tsx'), 'utf8')
   const bookSource = readFileSync(path.join(process.cwd(), 'app', 'book', 'page.tsx'), 'utf8')
   const formSource = readFileSync(path.join(process.cwd(), 'app', 'form', 'page.tsx'), 'utf8')
+  const expectedMessage = `Od ${formatPricePln(DEFAULT_PRICE_PLN)}. ${PRE_TOPIC_PRICE_CONFIRMATION_COPY}`
+  const blockedPricePattern = new RegExp(`${BLOCKED_CONSULTATION_PRICE_PLN}(?:\\s|\\u00a0)?zł`, 'i')
   const beforeTopicMarkup = renderToStaticMarkup(
     createElement(PricingDisclosure, {
       stage: 'pre-topic',
@@ -710,15 +712,16 @@ test('public pricing disclosure reads the active price source on public steps an
     }),
   )
 
-  assert.doesNotMatch(beforeTopicMarkup, /69(?:\s|\u00a0)?zł/i)
-  assert.doesNotMatch(beforePaymentMarkup, /69(?:\s|\u00a0)?zł/i)
-  assert.doesNotMatch(homeSource, /69(?:\s|\u00a0)?zł/i)
-  assert.doesNotMatch(bookSource, /69(?:\s|\u00a0)?zł/i)
-  assert.doesNotMatch(formSource, /69(?:\s|\u00a0)?zł/i)
-  assert.match(homeSource, /getActiveConsultationPrice/)
-  assert.match(bookSource, /getActiveConsultationPrice/)
-  assert.doesNotMatch(homeSource, /Od 39 zł\./)
-  assert.doesNotMatch(bookSource, /Od 39 zł\./)
+  assert.doesNotMatch(beforeTopicMarkup, blockedPricePattern)
+  assert.doesNotMatch(beforePaymentMarkup, blockedPricePattern)
+  assert.doesNotMatch(homeSource, blockedPricePattern)
+  assert.doesNotMatch(bookSource, blockedPricePattern)
+  assert.doesNotMatch(formSource, blockedPricePattern)
+  assert.equal(beforeTopicMarkup.includes(expectedMessage), true)
+  assert.equal(fallbackTopicMarkup.includes(expectedMessage), true)
+  assert.equal(dynamicTopicMarkup.includes(expectedMessage), true)
+  assert.doesNotMatch(homeSource, /getActiveConsultationPrice/)
+  assert.doesNotMatch(bookSource, /getActiveConsultationPrice/)
 })
 
 test('booking flow uses neutral stage labels instead of a conflicting six-step counter', () => {

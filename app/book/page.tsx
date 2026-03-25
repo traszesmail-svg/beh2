@@ -8,9 +8,8 @@ import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { PricingDisclosure } from '@/components/PricingDisclosure'
 import { problemOptions } from '@/lib/data'
-import { buildPublicPricingDisclosureMessage } from '@/lib/pricing'
 import { buildBookMetadata } from '@/lib/seo'
-import { getActiveConsultationPrice, listAvailability } from '@/lib/server/db'
+import { listAvailability } from '@/lib/server/db'
 import { getDataModeStatus } from '@/lib/server/env'
 import { SPECIALIST_CREDENTIALS, SPECIALIST_NAME, SPECIALIST_PHOTO, TOPIC_VISUALS } from '@/lib/site'
 import { ProblemType } from '@/lib/types'
@@ -106,7 +105,6 @@ export default async function BookPage({
   const problem = readSearchParam(searchParams?.problem)
   const dataMode = getDataModeStatus()
   let availabilityLabel = 'Najbliższe realnie dostępne terminy zobaczysz po kliknięciu w wybrany temat.'
-  let publicPricingMessage = buildPublicPricingDisclosureMessage(null)
 
   if (problem) {
     redirect(`/slot?problem=${problem}`)
@@ -123,12 +121,6 @@ export default async function BookPage({
       console.warn('[behawior15][book] nie udalo sie wczytac dostepnosci', error)
     }
 
-    try {
-      const activeConsultationPrice = await getActiveConsultationPrice()
-      publicPricingMessage = buildPublicPricingDisclosureMessage(activeConsultationPrice.amount)
-    } catch (error) {
-      console.warn('[behawior15][book] nie udalo sie wczytac publicznej ceny', error)
-    }
   }
 
   return (
@@ -218,7 +210,6 @@ export default async function BookPage({
             <div className="list-card tree-backed-card top-gap">
               <PricingDisclosure
                 stage="pre-topic"
-                message={publicPricingMessage}
                 labelAs="strong"
                 noteClassName="muted top-gap-small"
                 compareClassName="price-compare-text"

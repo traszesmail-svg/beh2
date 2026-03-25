@@ -5,5 +5,5 @@ create table if not exists public.pricing_settings (
 );
 
 insert into public.pricing_settings (id, consultation_price)
-values ('consultation', 28.99)
+values ('consultation', 39.00)
 on conflict (id) do nothing;

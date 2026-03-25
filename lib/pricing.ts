@@ -1,5 +1,6 @@
-export const DEFAULT_PRICE_PLN = 69
-export const MIN_CONSULTATION_PRICE_PLN = 2
+export const DEFAULT_PRICE_PLN = 39
+export const MIN_CONSULTATION_PRICE_PLN = 39
+export const BLOCKED_CONSULTATION_PRICE_PLN = DEFAULT_PRICE_PLN + 30
 export const PRE_TOPIC_PRICE_CONFIRMATION_COPY = 'Dokładną kwotę potwierdzisz po wyborze tematu konsultacji.'
 
 export type ActiveConsultationPrice = {
@@ -12,6 +13,12 @@ export type ActiveConsultationPrice = {
 
 function normalizeAmount(value: number): number {
   return Math.round(value * 100) / 100
+}
+
+function isLegacyConsultationPrice(amount: number): boolean {
+  const normalizedAmount = normalizeAmount(amount)
+
+  return normalizedAmount === BLOCKED_CONSULTATION_PRICE_PLN || normalizedAmount < MIN_CONSULTATION_PRICE_PLN
 }
 
 export function formatPricePln(amount: number): string {
@@ -33,7 +40,7 @@ export function formatPricePlnExact(amount: number): string {
 }
 
 export function createActiveConsultationPrice(amount: number, updatedAt: string | null = null): ActiveConsultationPrice {
-  const normalizedAmount = normalizeAmount(amount)
+  const normalizedAmount = isLegacyConsultationPrice(amount) ? DEFAULT_PRICE_PLN : normalizeAmount(amount)
 
   return {
     amount: normalizedAmount,
@@ -45,8 +52,8 @@ export function createActiveConsultationPrice(amount: number, updatedAt: string 
 }
 
 export function buildPublicPricingDisclosureMessage(amount: number | null | undefined): string {
-  if (typeof amount !== 'number' || !Number.isFinite(amount)) {
-    return PRE_TOPIC_PRICE_CONFIRMATION_COPY
+  if (typeof amount !== 'number' || !Number.isFinite(amount) || isLegacyConsultationPrice(amount)) {
+    return `Od ${formatPricePln(DEFAULT_PRICE_PLN)}. ${PRE_TOPIC_PRICE_CONFIRMATION_COPY}`
   }
 
   return `Od ${formatPricePln(amount)}. ${PRE_TOPIC_PRICE_CONFIRMATION_COPY}`
@@ -57,7 +64,7 @@ export function parseConsultationPriceInput(rawValue: string | number): number {
   const normalized = raw.replace(',', '.')
 
   if (!normalized || !/^\d+(\.\d{1,2})?$/.test(normalized)) {
-    throw new Error('Podaj poprawną kwotę konsultacji w PLN, np. 69 albo 89.50.')
+    throw new Error('Podaj poprawną kwotę konsultacji w PLN, np. 39 albo 49.50.')
   }
 
   const amount = Number(normalized)
@@ -66,12 +73,12 @@ export function parseConsultationPriceInput(rawValue: string | number): number {
     throw new Error('Cena konsultacji musi być dodatnia.')
   }
 
+  if (normalizeAmount(amount) === BLOCKED_CONSULTATION_PRICE_PLN) {
+    throw new Error('Ta kwota należy do innego projektu i nie może być użyta tutaj.')
+  }
+
   if (amount < MIN_CONSULTATION_PRICE_PLN) {
-    throw new Error(
-      `Cena konsultacji nie może być niższa niż ${formatPricePlnExact(
-        MIN_CONSULTATION_PRICE_PLN,
-      )}, bo Stripe Checkout w PLN nie przyjmuje niższych kwot.`,
-    )
+    throw new Error(`Cena konsultacji nie może być niższa niż ${formatPricePlnExact(MIN_CONSULTATION_PRICE_PLN)}.`)
   }
 
   return normalizeAmount(amount)

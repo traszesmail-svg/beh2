@@ -1,4 +1,5 @@
 import React from 'react'
+import { buildPublicPricingDisclosureMessage } from '@/lib/pricing'
 import { CONSULTATION_PRICE_COMPARE_COPY } from '@/lib/site'
 
 type PricingDisclosureStage = 'pre-topic' | 'pre-payment'
@@ -7,7 +8,7 @@ type DisclosureTag = 'div' | 'span' | 'strong'
 const PRICING_DISCLOSURE = {
   'pre-topic': {
     label: 'Oferta i płatność',
-    message: 'Dokładną kwotę potwierdzisz po wyborze tematu konsultacji.',
+    message: buildPublicPricingDisclosureMessage(null),
     note: '15 minut rozmowy audio z jednym specjalistą',
   },
   'pre-payment': {
