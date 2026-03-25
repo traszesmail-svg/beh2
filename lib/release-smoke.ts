@@ -130,10 +130,10 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
       required: [
         'Etap rezerwacji: wybór tematu',
         'Wybierz temat i przejdź do terminu',
+        'Dokładną kwotę potwierdzisz po wyborze tematu konsultacji.',
       ],
       forbidden: [
         'Cena konsultacji',
-        '69 zł',
         'Podeślij tę stronę komuś, kto też potrzebuje szybkiego wsparcia dla pupila',
       ],
       requireBuildMarker: true,
