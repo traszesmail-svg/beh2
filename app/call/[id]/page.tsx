@@ -83,6 +83,9 @@ export default async function CallPage({
               accessToken={accessToken ?? null}
               meetingUrl={booking.meetingUrl}
               ownerName={booking.ownerName}
+              bookingDate={booking.bookingDate}
+              bookingTime={booking.bookingTime}
+              bookingStatus={booking.bookingStatus}
             />
             <PreparationMaterialsCard
               bookingId={booking.id}

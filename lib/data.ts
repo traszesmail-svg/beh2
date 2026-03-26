@@ -142,6 +142,39 @@ function formatWarsawTime(date: Date): string {
   }).format(date)
 }
 
+function getWarsawDateTimeParts(now = new Date()) {
+  const formatter = new Intl.DateTimeFormat('sv-SE', {
+    timeZone: 'Europe/Warsaw',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  })
+  const values: Record<string, string> = {}
+
+  for (const part of formatter.formatToParts(now)) {
+    if (part.type !== 'literal') {
+      values[part.type] = part.value
+    }
+  }
+
+  return {
+    date: `${values.year}-${values.month}-${values.day}`,
+    time: `${values.hour}:${values.minute}`,
+    second: Number(values.second ?? '0'),
+  }
+}
+
+function getPseudoUtcTimestamp(date: string, time: string, second = 0): number {
+  const [year, month, day] = date.split('-').map(Number)
+  const [hour, minute] = time.split(':').map(Number)
+
+  return Date.UTC(year, month - 1, day, hour, minute, second)
+}
+
 export function getWarsawNowBoundary(now = new Date()) {
   return {
     date: formatWarsawDate(now),
@@ -169,6 +202,34 @@ export function buildRollingAvailabilitySeed(now = new Date(), dayCount = 6): Av
       ),
     }
   }).filter((entry) => entry.times.some((time) => isFutureAvailabilitySlot(entry.date, time, now)))
+}
+
+export function getSecondsUntilBookingStart(
+  bookingDate: string,
+  bookingTime: string,
+  now = new Date(),
+): number {
+  const currentBoundary = getWarsawDateTimeParts(now)
+  const bookingTimestamp = getPseudoUtcTimestamp(bookingDate, bookingTime)
+  const currentTimestamp = getPseudoUtcTimestamp(currentBoundary.date, currentBoundary.time, currentBoundary.second)
+
+  return Math.floor((bookingTimestamp - currentTimestamp) / 1000)
+}
+
+export function getSecondsUntilRoomUnlock(
+  bookingDate: string,
+  bookingTime: string,
+  now = new Date(),
+): number {
+  return getSecondsUntilBookingStart(bookingDate, bookingTime, now) - 15 * 60
+}
+
+export function isCallRoomUnlocked(
+  bookingDate: string,
+  bookingTime: string,
+  now = new Date(),
+): boolean {
+  return getSecondsUntilRoomUnlock(bookingDate, bookingTime, now) <= 0
 }
 
 export function getProblemLabel(problem: ProblemType): string {

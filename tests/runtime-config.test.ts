@@ -25,7 +25,14 @@ import {
   extractVisibleTextFromHtml,
   normalizeReleaseSmokeText,
 } from '@/lib/release-smoke'
-import { buildRollingAvailabilitySeed, getProblemLabel, isFutureAvailabilitySlot, isProblemType } from '@/lib/data'
+import {
+  buildRollingAvailabilitySeed,
+  getProblemLabel,
+  getSecondsUntilRoomUnlock,
+  isCallRoomUnlocked,
+  isFutureAvailabilitySlot,
+  isProblemType,
+} from '@/lib/data'
 import { normalizePolishPhone } from '@/lib/phone'
 import { getDataModeStatus, getPaymentModeStatus, getSupabaseServiceRoleKeyIssue } from '@/lib/server/env'
 import {
@@ -350,6 +357,15 @@ test('backfills future availability only when the current calendar has no future
 test('keeps dogoterapia as a standard public topic label', () => {
   assert.equal(isProblemType('dogoterapia'), true)
   assert.equal(getProblemLabel('dogoterapia'), 'Dogoterapia')
+})
+
+test('keeps the room locked until exactly 15 minutes before the consultation', () => {
+  const beforeUnlock = new Date('2026-03-26T10:44:30Z')
+  const atUnlock = new Date('2026-03-26T10:45:00Z')
+
+  assert.equal(getSecondsUntilRoomUnlock('2026-03-26', '12:00', beforeUnlock), 30)
+  assert.equal(isCallRoomUnlocked('2026-03-26', '12:00', beforeUnlock), false)
+  assert.equal(isCallRoomUnlocked('2026-03-26', '12:00', atUnlock), true)
 })
 
 test('accepts a secret Supabase service key for admin data operations', () => {

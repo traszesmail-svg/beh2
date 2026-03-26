@@ -12,6 +12,31 @@ const port = 3210 + Math.floor(Math.random() * 200)
 const appUrl = `http://localhost:${port}`
 const adminSecret = 'codex-admin-secret'
 
+function getWarsawSlotInMinutes(offsetMinutes: number) {
+  const target = new Date(Date.now() + offsetMinutes * 60 * 1000)
+  const formatter = new Intl.DateTimeFormat('sv-SE', {
+    timeZone: 'Europe/Warsaw',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  })
+  const values: Record<string, string> = {}
+
+  for (const part of formatter.formatToParts(target)) {
+    if (part.type !== 'literal') {
+      values[part.type] = part.value
+    }
+  }
+
+  return {
+    date: `${values.year}-${values.month}-${values.day}`,
+    time: `${values.hour}:${values.minute}`,
+  }
+}
+
 async function backupData() {
   await rm(backupDir, { recursive: true, force: true })
   try {
@@ -72,9 +97,9 @@ async function main() {
 
   try {
     await cleanLocalData()
-    const availability = await localStore.listAvailability()
-    const [slot] = availability.flatMap((group) => group.slots)
-    assert.ok(slot, 'Expected at least one free slot for UI smoke test.')
+    const nearRoomSlot = getWarsawSlotInMinutes(12)
+    const slot = await localStore.createAvailabilitySlot(nearRoomSlot.date, nearRoomSlot.time)
+    assert.ok(slot, 'Expected a custom near-room slot for UI smoke test.')
 
     server = spawn('cmd.exe', ['/c', 'npm', 'run', 'start', '--', '--port', String(port)], {
       cwd: rootDir,
@@ -178,7 +203,7 @@ async function main() {
     await publicPage.getByRole('link', { name: /Dołącz do rozmowy audio/i }).click()
     await publicPage.waitForURL(new RegExp(`/call/${bookingId}`), { timeout: 10000 })
     await publicPage.getByRole('button', { name: /Uruchom licznik 15 minut/i }).waitFor({ timeout: 10000 })
-    assert.equal(await publicPage.getByText(/Oczekiwanie na/i).isVisible(), true)
+    assert.equal(await publicPage.getByText(/Pokój aktywny/i).isVisible(), true)
     assert.equal(await publicPage.getByText(/UI Smoke/i).isVisible(), true)
 
     const paymentRoomIframeSrc = await publicPage.locator('iframe[title="Panel rozmowy głosowej"]').getAttribute('src')
