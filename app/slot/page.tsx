@@ -53,7 +53,7 @@ export default async function SlotPage({
 
         <section className="panel section-panel">
           <BookingStageEyebrow stage="slot" className="section-eyebrow" />
-          <h1>Wybierz termin rozmowy: {getProblemLabel(problem)}</h1>
+          <h1>Wybierz termin szybkiej konsultacji: {getProblemLabel(problem)}</h1>
           <p className="muted paragraph-gap">
             Lista odświeża się na bieżąco. Jeśli termin zniknie po chwili, oznacza to, że został właśnie zajęty albo ktoś kończy płatność.
           </p>
@@ -89,7 +89,7 @@ export default async function SlotPage({
               {groupedAvailability.map((group) => (
                 <div key={group.date} className="list-card tree-backed-card">
                   <strong>{group.label}</strong>
-                  <span>Wybierasz 15-minutową rozmowę głosową online.</span>
+                  <span>Wybierasz 15-minutową rozmowę głosową online jako pierwszy etap pracy.</span>
                   <div className="time-grid top-gap-small">
                     {group.slots.map((slot) => (
                       <Link

@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = buildLegalMetadata(
   'Polityka prywatności',
   '/polityka-prywatnosci',
-  'Informacje o przetwarzaniu danych, kontakcie, operatorach technicznych i zasadach prywatności w Behawior 15.',
+  'Informacje o przetwarzaniu danych, kontakcie, operatorach technicznych i zasadach prywatności w marce Regulski | Terapia behawioralna.',
 )
 
 export default function PrivacyPolicyPage() {
@@ -22,12 +22,12 @@ export default function PrivacyPolicyPage() {
 
         <section className="panel section-panel legal-panel">
           <div className="section-eyebrow">Polityka prywatności</div>
-          <h1>Jak przetwarzane są dane w Behawior 15</h1>
+          <h1>Jak przetwarzane są dane w marce Regulski | Terapia behawioralna</h1>
           <div className="stack-gap top-gap">
             <div className="list-card">
               <strong>Administrator danych</strong>
               <span>
-                Administratorem danych związanych z rezerwacją konsultacji Behawior 15 jest {SPECIALIST_NAME}, {SPECIALIST_CREDENTIALS}.
+                Administratorem danych związanych z serwisem, kontaktem i rezerwacją konsultacji jest {SPECIALIST_NAME}, {SPECIALIST_CREDENTIALS}.
               </span>
             </div>
 
@@ -48,7 +48,7 @@ export default function PrivacyPolicyPage() {
             <div className="list-card">
               <strong>Operatorzy zewnętrzni i odbiorcy danych</strong>
               <span>
-                Do działania produktu wykorzystujemy usługi Supabase, Stripe oraz Resend. Dane są przekazywane wyłącznie w zakresie potrzebnym do obsługi rezerwacji, płatności, wysyłki wiadomości i bezpieczeństwa działania serwisu.
+                Do działania serwisu wykorzystujemy usługi Supabase, PayU oraz Resend, a także pomocnicze rozwiązania techniczne niezbędne do działania płatności i bezpieczeństwa strony. Dane są przekazywane wyłącznie w zakresie potrzebnym do obsługi rezerwacji, płatności, wysyłki wiadomości i bezpieczeństwa działania serwisu.
               </span>
             </div>
 

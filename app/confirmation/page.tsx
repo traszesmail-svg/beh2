@@ -157,8 +157,8 @@ export default async function ConfirmationPage({
                     <span>Znajdź spokojne miejsce, miej pod ręką najważniejsze obserwacje i przygotuj 1-2 pytania, od których chcesz zacząć. Jeśli chcesz, poniżej dodasz nagranie, link lub notatki.</span>
                   </div>
                   <div className="list-card accent-outline tree-backed-card">
-                    <strong>Co dalej po 15 minutach</strong>
-                    <span>Jeśli sytuacja wymaga szerszej pracy, kolejnym krokiem może być pełna konsultacja, plan pracy, wizyta domowa albo dalsze wsparcie.</span>
+                    <strong>Co dalej po tym etapie</strong>
+                    <span>Jeśli sytuacja wymaga szerszej pracy, kolejnym krokiem może być konsultacja 30 min, pełna konsultacja online, wizyta domowa, terapia albo dalsze wsparcie.</span>
                   </div>
                 </div>
               ) : (

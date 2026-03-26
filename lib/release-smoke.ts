@@ -106,22 +106,23 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
     {
       path: '/',
       required: [
-        'Spokojna konsultacja, która porządkuje problem psa lub kota w 15 minut',
-        'Oferta i płatność',
-        'Od 39 zł. Dokładną kwotę potwierdzisz po wyborze tematu konsultacji.',
-        'Pewność jakości i zakupu',
-        'Wersja serwisu',
+        'Regulski | Terapia behawioralna',
+        'Jak mogę pomóc',
+        'Formy współpracy',
+        'Pobyty socjalizacyjno-terapeutyczne',
+        'Terapia kotów',
       ],
       forbidden: [
         'Historie opiekunów i efekty konsultacji',
         'Udostępnij znajomemu',
         'Social media',
+        'Wersja serwisu',
       ],
       ordered: [
-        'Spokojna konsultacja, która porządkuje problem psa lub kota w 15 minut',
-        'Ma być prosto, uczciwie i bez niepewności',
-        'Krótko o tym, jak pracuję',
-        'Jeśli chcesz to uporządkować, przejdź do rezerwacji',
+        'Regulski | Terapia behawioralna',
+        'Jak mogę pomóc',
+        'Formy współpracy',
+        'Pytania przed pierwszym kontaktem',
       ],
       requireBuildMarker: true,
     },
@@ -129,7 +130,7 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
       path: '/book',
       required: [
         'Etap rezerwacji: wybór tematu',
-        'Wybierz temat i przejdź do terminu',
+        'Wybierz temat szybkiej konsultacji 15 min',
         'Od 39 zł. Dokładną kwotę potwierdzisz po wyborze tematu konsultacji.',
       ],
       forbidden: [
@@ -142,7 +143,7 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
       path: '/slot?problem=szczeniak',
       required: [
         'Etap rezerwacji: wybór terminu',
-        'Wybierz termin rozmowy: Szczeniak i młody pies',
+        'Wybierz termin szybkiej konsultacji: Szczeniak i młody pies',
       ],
       forbidden: ['Krok 2 z 6'],
       requireBuildMarker: true,
@@ -151,6 +152,7 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
       path: '/form?problem=szczeniak&slotId=2026-03-24-11%3A20',
       required: [
         'Etap rezerwacji: dane do konsultacji',
+        'Uzupełnij dane do szybkiej konsultacji',
         'Kwotę potwierdzisz na ekranie płatności po zapisaniu rezerwacji i zablokowaniu terminu.',
       ],
       forbidden: ['Krok 3 z 6'],

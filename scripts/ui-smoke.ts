@@ -101,13 +101,13 @@ async function main() {
 
     const publicPage = await publicContext.newPage()
     await publicPage.goto(appUrl, { waitUntil: 'domcontentloaded' })
-    await publicPage.getByRole('heading', { name: /Spokojna konsultacja, kt[oó]ra porz[aą]dkuje problem psa lub kota w 15 minut/i }).waitFor()
+    await publicPage.locator('main').getByRole('heading', { level: 1, name: /Regulski\s+\|\s+Terapia behawioralna/i }).waitFor()
 
     await publicPage.goto(`${appUrl}/book`, { waitUntil: 'domcontentloaded' })
-    await publicPage.getByRole('heading', { name: /Wybierz temat i przejdź do terminu/i }).waitFor()
+    await publicPage.getByRole('heading', { name: /Wybierz temat szybkiej konsultacji 15 min/i }).waitFor()
 
     await publicPage.goto(`${appUrl}/slot?problem=szczeniak`, { waitUntil: 'domcontentloaded' })
-    await publicPage.getByRole('heading', { name: /Wybierz termin rozmowy: Szczeniak i młody pies/i }).waitFor()
+    await publicPage.getByRole('heading', { name: /Wybierz termin szybkiej konsultacji: Szczeniak i młody pies/i }).waitFor()
 
     await publicPage.goto(
       `${appUrl}/form?problem=szczeniak&slotId=${encodeURIComponent(slot.id)}`,
@@ -133,7 +133,7 @@ async function main() {
     assert.ok(bookingId, 'Expected bookingId in payment URL.')
     assert.ok(accessToken, 'Expected access token in payment URL.')
 
-    await publicPage.getByRole('heading', { name: /Wybierz sposób płatności za konsultację/i }).waitFor()
+    await publicPage.getByRole('heading', { name: /Wybierz sposób płatności za szybki pierwszy krok/i }).waitFor()
     assert.equal(await publicPage.getByText(/BLIK na telefon \/ przelew/i).isVisible(), true)
     assert.equal(await publicPage.getByText(/Zapłać online PayU/i).isVisible(), true)
     assert.equal(await publicPage.getByText(/1111 2222 3333 4444 5555 6666 77/i).isVisible(), true)

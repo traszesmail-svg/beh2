@@ -67,7 +67,7 @@ export default async function PaymentPage({
           <div className="section-eyebrow">
             {isWaitingManual ? 'Czekamy na potwierdzenie wpłaty' : 'Wybór płatności'}
           </div>
-          <h1>{isWaitingManual ? 'Wpłata została zgłoszona' : 'Wybierz sposób płatności za konsultację'}</h1>
+          <h1>{isWaitingManual ? 'Wpłata została zgłoszona' : 'Wybierz sposób płatności za szybki pierwszy krok'}</h1>
           <p className="hero-text small-width center-text">
             {isWaitingManual
               ? 'Sprawdzimy wpłatę ręcznie. Gdy status zmieni się na opłacona, klient dostanie mail z linkiem do pokoju rozmowy.'
@@ -130,7 +130,7 @@ export default async function PaymentPage({
                 <div className="list-card tree-backed-card">
                   <strong>Co kupujesz</strong>
                   <span>
-                    15-minutową konsultację głosową online, która pomaga szybko uporządkować problem i wybrać pierwszy sensowny krok bez chaosu i zgadywania. Po płatności online nadal masz 1 minutę na samodzielne anulowanie zakupu.
+                    15-minutową konsultację głosową online, która ma uporządkować sytuację i pomóc zdecydować, czy wystarczy ten pierwszy krok, czy potrzebna będzie szersza forma pracy. Po płatności online nadal masz 1 minutę na samodzielne anulowanie zakupu.
                   </span>
                 </div>
               </div>

@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = buildLegalMetadata(
   'Regulamin',
   '/regulamin',
-  'Zasady rezerwacji, płatności, konsultacji audio, zwrotów, reklamacji i kontaktu dla produktu Behawior 15.',
+  'Zasady rezerwacji, płatności, konsultacji audio, zwrotów, reklamacji i kontaktu dla szybkiej konsultacji 15 min w marce Regulski | Terapia behawioralna.',
 )
 
 export default function TermsPage() {
@@ -22,19 +22,19 @@ export default function TermsPage() {
 
         <section className="panel section-panel legal-panel">
           <div className="section-eyebrow">Regulamin</div>
-          <h1>Zasady rezerwacji konsultacji Behawior 15</h1>
+          <h1>Zasady rezerwacji szybkiej konsultacji 15 min</h1>
           <div className="stack-gap top-gap">
             <div className="list-card">
               <strong>Forma usługi</strong>
               <span>
-                Behawior 15 to 15-minutowa konsultacja głosowa online prowadzona przez {SPECIALIST_NAME}, {SPECIALIST_CREDENTIALS}. To nie jest konsultacja wideo ani pełna terapia behawioralna.
+                Szybka konsultacja 15 min to 15-minutowa konsultacja głosowa online prowadzona przez {SPECIALIST_NAME}, {SPECIALIST_CREDENTIALS}. To pierwszy krok w szerszym systemie pracy, a nie konsultacja wideo ani pełna terapia behawioralna.
               </span>
             </div>
 
             <div className="list-card">
               <strong>Rezerwacja i płatność</strong>
               <span>
-                Termin jest blokowany na czas płatności. Ostateczne potwierdzenie rezerwacji następuje po skutecznym opłaceniu konsultacji. Jeśli płatność nie zostanie dokończona, slot wraca do puli dostępnych terminów.
+                Termin jest blokowany na czas płatności. Ostateczne potwierdzenie rezerwacji następuje po skutecznym opłaceniu konsultacji. Jeśli płatność nie zostanie dokończona, slot wraca do puli dostępnych terminów. Publicznie dostępne metody płatności to wpłata ręczna oraz PayU.
               </span>
             </div>
 

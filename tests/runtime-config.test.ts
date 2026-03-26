@@ -665,29 +665,29 @@ test('prefers a valid configured public email over the fallback address', () => 
 test('header keeps the sales CTA and the updated trust strip', () => {
   const markup = renderToStaticMarkup(createElement(Header))
 
-  assert.match(markup, /Zarezerwuj konsultację/)
-  assert.match(markup, /Behawiorysta COAPE \/ CAPBT/)
-  assert.match(markup, /Technik weterynarii/)
-  assert.match(markup, /Dietetyk/)
-  assert.match(markup, /1 minuta na anulację/)
+  assert.match(markup, /Umów konsultację/)
+  assert.match(markup, /Psy i koty/)
+  assert.match(markup, /COAPE \/ CAPBT/)
+  assert.match(markup, /Spokojny pierwszy krok/)
+  assert.match(markup, /Dalsza ścieżka pracy, jeśli potrzeba/)
 })
 
 test('homepage copy stays sales-first and removes legacy secondary sections', () => {
   const source = readFileSync(path.join(process.cwd(), 'app', 'page.tsx'), 'utf8')
 
-  assert.match(source, /Spokojna konsultacja, która porządkuje problem psa lub kota w 15 minut/)
-  assert.match(source, /Ma być prosto, uczciwie i bez niepewności/)
-  assert.match(source, /Krótko o tym, jak pracuję/)
-  assert.match(source, /Pytania przed kliknięciem/)
-  assert.match(source, /Jeśli chcesz to uporządkować, przejdź do rezerwacji/)
-  assert.match(source, /Dietetyk/)
+  assert.match(source, /Mały krok na start\. Szersza ścieżka pracy, gdy sytuacja tego wymaga\./)
+  assert.match(source, /Nie sprzedaję przypadkowych porad\. Dobieram właściwą formę pomocy\./)
+  assert.match(source, /Jak mogę pomóc/)
+  assert.match(source, /Formy współpracy/)
+  assert.match(source, /Pobyty socjalizacyjno-terapeutyczne/)
+  assert.match(source, /Terapia kotów/)
+  assert.match(source, /Pytania przed pierwszym kontaktem/)
   assert.doesNotMatch(source, /SocialProofSection/)
   assert.doesNotMatch(source, /SocialSection/)
   assert.doesNotMatch(source, /ShareActions/)
   assert.doesNotMatch(source, /id="publikacje"/)
-  assert.doesNotMatch(source, /id="dogoterapia"/)
-  assert.doesNotMatch(source, /W jakich problemach ta rozmowa pomaga/)
-  assert.doesNotMatch(source, /Jak wygląda zakup konsultacji/)
+  assert.doesNotMatch(source, /Spokojna konsultacja, która porządkuje problem psa lub kota w 15 minut/)
+  assert.doesNotMatch(source, /Ma być prosto, uczciwie i bez niepewności/)
 })
 
 test('payment page does not expose the public test-mode banner copy', () => {
@@ -760,15 +760,25 @@ test('booking flow uses neutral stage labels instead of a conflicting six-step c
 
 test('homepage keeps the simplified section order for the sales flow', () => {
   const homeSource = readFileSync(path.join(process.cwd(), 'app', 'page.tsx'), 'utf8')
-  const heroIndex = homeSource.indexOf('id="oferta"')
-  const certaintyIndex = homeSource.indexOf('id="pewnosc-zakupu"')
-  const detailsIndex = homeSource.indexOf('id="dla-zainteresowanych"')
-  const ctaIndex = homeSource.indexOf('<section className="panel cta-panel compact-sales-cta">')
+  const heroIndex = homeSource.indexOf('id="start"')
+  const helpIndex = homeSource.indexOf('id="jak-moge-pomoc"')
+  const offersIndex = homeSource.indexOf('id="formy-wspolpracy"')
+  const staysIndex = homeSource.indexOf('id="pobyty"')
+  const catsIndex = homeSource.indexOf('id="koty"')
+  const processIndex = homeSource.indexOf('id="jak-pracuje"')
+  const trustIndex = homeSource.indexOf('id="zaufanie"')
+  const faqIndex = homeSource.indexOf('id="faq"')
+  const ctaIndex = homeSource.indexOf('Przejdź do kontaktu')
 
   assert.ok(heroIndex > -1)
-  assert.ok(certaintyIndex > heroIndex)
-  assert.ok(detailsIndex > certaintyIndex)
-  assert.ok(ctaIndex > detailsIndex)
+  assert.ok(helpIndex > heroIndex)
+  assert.ok(offersIndex > helpIndex)
+  assert.ok(staysIndex > offersIndex)
+  assert.ok(catsIndex > staysIndex)
+  assert.ok(processIndex > catsIndex)
+  assert.ok(trustIndex > processIndex)
+  assert.ok(faqIndex > trustIndex)
+  assert.ok(ctaIndex > faqIndex)
 })
 
 test('book page exposes the updated 1-minute self-cancel promise instead of the old disclaimer', () => {
@@ -778,30 +788,30 @@ test('book page exposes the updated 1-minute self-cancel promise instead of the 
   assert.doesNotMatch(bookSource, /automatycznego anulowania w 60 sekund/)
 })
 
-test('footer renders a visible build marker summary', () => {
+test('footer keeps a hidden build marker without exposing technical copy to the client', () => {
   process.env.VERCEL_GIT_COMMIT_REF = 'main'
   process.env.VERCEL_GIT_COMMIT_SHA = 'fa5563d1234567890abcdef'
 
   const markup = renderToStaticMarkup(createElement(Footer))
 
-  assert.match(markup, /Wersja serwisu/)
-  assert.match(markup, /main \/ fa5563d/)
+  assert.doesNotMatch(markup, /Wersja serwisu/)
+  assert.doesNotMatch(markup, /main \/ fa5563d/)
   assert.match(markup, /data-build-marker="CLEAN_START_REPO_V1:main:fa5563d"/)
 })
 
 test('release smoke normalizes visible text and extracts the build marker from html', () => {
   const html = `
     <section>
-      <h1>Aktualna cena&nbsp;i płatność</h1>
-      <p>Kwotę potwierdzisz po wyborze tematu konsultacji.</p>
+      <h1>Formy współpracy</h1>
+      <p>Dobierz formę pomocy do sytuacji.</p>
       <script>window.__ignore = "Cena konsultacji"</script>
-      <div data-build-marker="${BUILD_MARKER_KEY}:main:9bf474c">Wersja serwisu</div>
+      <div data-build-marker="${BUILD_MARKER_KEY}:main:9bf474c" hidden></div>
     </section>
   `
 
   const visibleText = extractVisibleTextFromHtml(html)
 
-  assert.equal(normalizeReleaseSmokeText(visibleText).includes('Aktualna cena i płatność'), true)
+  assert.equal(normalizeReleaseSmokeText(visibleText).includes('Formy współpracy'), true)
   assert.equal(normalizeReleaseSmokeText(visibleText).includes('Cena konsultacji'), false)
   assert.equal(extractBuildMarkerFromHtml(html), `${BUILD_MARKER_KEY}:main:9bf474c`)
 })
@@ -809,25 +819,25 @@ test('release smoke normalizes visible text and extracts the build marker from h
 test('release smoke detects missing, forbidden and out-of-order phrases', () => {
   const html = `
     <main data-build-marker="${BUILD_MARKER_KEY}:main:9bf474c">
-      <section>Krótko o tym, jak pracuję</section>
-      <section>Ma być prosto, uczciwie i bez niepewności</section>
-      <section>Jeśli chcesz to uporządkować, przejdź do rezerwacji</section>
+      <section>Formy współpracy</section>
+      <section>Jak mogę pomóc</section>
+      <section>Kontakt</section>
       <section>Udostępnij znajomemu</section>
     </main>
   `
 
   const result = evaluateReleaseSmokePage(html, 'https://beh2.vercel.app/', {
     path: '/',
-    required: ['Wersja serwisu'],
+    required: ['Terapia kotów'],
     forbidden: ['Udostępnij znajomemu'],
-    ordered: ['Ma być prosto, uczciwie i bez niepewności', 'Krótko o tym, jak pracuję'],
+    ordered: ['Jak mogę pomóc', 'Formy współpracy'],
     requireBuildMarker: true,
   })
 
   assert.equal(result.url, 'https://beh2.vercel.app/')
-  assert.deepEqual(result.missing, ['Wersja serwisu'])
+  assert.deepEqual(result.missing, ['Terapia kotów'])
   assert.deepEqual(result.forbiddenFound, ['Udostępnij znajomemu'])
-  assert.deepEqual(result.orderFailures, ['wrong order around: Krótko o tym, jak pracuję'])
+  assert.deepEqual(result.orderFailures, ['wrong order around: Formy współpracy'])
   assert.equal(result.ok, false)
 })
 
@@ -852,6 +862,16 @@ test('builds a sitemap with the core public routes', () => {
 
   assert.deepEqual(urls, [
     'https://beh2.vercel.app/',
+    'https://beh2.vercel.app/oferta',
+    'https://beh2.vercel.app/oferta/szybka-konsultacja-15-min',
+    'https://beh2.vercel.app/oferta/konsultacja-30-min',
+    'https://beh2.vercel.app/oferta/konsultacja-behawioralna-online',
+    'https://beh2.vercel.app/oferta/konsultacja-domowa-wyjazdowa',
+    'https://beh2.vercel.app/oferta/indywidualna-terapia-behawioralna',
+    'https://beh2.vercel.app/oferta/pobyty-socjalizacyjno-terapeutyczne',
+    'https://beh2.vercel.app/oferta/poradniki-pdf',
+    'https://beh2.vercel.app/koty',
+    'https://beh2.vercel.app/kontakt',
     'https://beh2.vercel.app/book',
     'https://beh2.vercel.app/polityka-prywatnosci',
     'https://beh2.vercel.app/regulamin',

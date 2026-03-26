@@ -1,9 +1,14 @@
 import { ProblemType } from './types'
 
-export const SITE_NAME = 'Behawior 15'
+export const SITE_NAME = 'Regulski | Terapia behawioralna'
+export const SITE_SHORT_NAME = 'Regulski'
 export const SITE_URL_FALLBACK = 'http://localhost:3000'
 export const FACEBOOK_PROFILE_URL = 'https://www.facebook.com/krzysztof.regulski.148/'
 export const PUBLIC_CONTACT_EMAIL_FALLBACK = 'coapebehawiorysta@gmail.com'
+export const SITE_TAGLINE =
+  'Konsultacje dla psów i kotów, terapia problemów w zachowaniu oraz pobyty socjalizacyjno-terapeutyczne'
+export const SITE_DESCRIPTION =
+  'Marka ekspercka Krzysztofa Regulskiego. Konsultacje dla psów i kotów, terapia problemów w zachowaniu oraz pobyty socjalizacyjno-terapeutyczne.'
 
 export const SPECIALIST_NAME = 'Krzysztof Regulski'
 export const SPECIALIST_CREDENTIALS =
@@ -21,20 +26,20 @@ export const CAPBT_LOGO = {
   alt: 'Logo CAPBT Polska, Stowarzyszenie Behawiorystów i Trenerów COAPE',
 }
 export const SPECIALIST_TRUST_STATEMENT =
-  'Łączę behawior, wiedzę weterynaryjną, dogoterapię i modyfikację diety w celu wsparcia terapii behawioralnej.'
+  'Pomagam przejść od rozpoznania sytuacji do właściwej formy pracy: od pierwszej konsultacji po terapię, wizytę domową lub pobyt.'
 export const CONSULTATION_PRICE_COMPARE_COPY =
-  'To krótki pierwszy krok przed pełną konsultacją, planem pracy albo dalszą diagnostyką.'
+  'To pierwszy krok w szerszym systemie pracy, jeśli problem wymaga czegoś więcej niż jednej rozmowy.'
 
 export const LANDING_SPECIALIST_PHOTO = {
   src: '/images/hero-main.png',
-  alt: 'Krzysztof Regulski na portretowym zdjęciu do strony Behawior 15',
+  alt: 'Krzysztof Regulski na portretowym zdjęciu do marki Regulski Terapia behawioralna',
 }
 
 export const SPECIALIST_PHOTO = LANDING_SPECIALIST_PHOTO
 
 export const SUPPORTING_SPECIALIST_PHOTO = {
   src: '/branding/specialist-krzysztof-vet.jpg',
-  alt: 'Krzysztof Regulski podczas pracy z kotem w gabinecie',
+  alt: 'Krzysztof Regulski podczas pracy z kotem',
 }
 
 export const HERO_SUPPORT_IMAGES = [
@@ -225,4 +230,16 @@ export function getContactDetails() {
     phoneHref: phone.href,
     facebookUrl: FACEBOOK_PROFILE_URL,
   }
+}
+
+export function buildMailtoHref(email: string, subject: string, body?: string) {
+  const params = new URLSearchParams({
+    subject,
+  })
+
+  if (body) {
+    params.set('body', body)
+  }
+
+  return `mailto:${email}?${params.toString()}`
 }

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Fraunces, Manrope } from 'next/font/google'
 import { AnalyticsConsent } from '@/components/AnalyticsConsent'
+import { SITE_DESCRIPTION, SITE_NAME, SITE_SHORT_NAME, SITE_TAGLINE } from '@/lib/site'
 import './globals.css'
 
 const manrope = Manrope({
@@ -18,11 +19,10 @@ const metadataBase = new URL(process.env.NEXT_PUBLIC_APP_URL?.trim() || 'http://
 export const metadata: Metadata = {
   metadataBase,
   title: {
-    default: 'Behawior 15 | 15-minutowa konsultacja głosowa dla psa lub kota',
-    template: '%s | Behawior 15',
+    default: SITE_NAME,
+    template: `%s | ${SITE_SHORT_NAME}`,
   },
-  description:
-    'Behawior 15 – spokojna 15-minutowa konsultacja głosowa online dla psa lub kota. Szczeniak gryzie ręce? Pies rzuca się do innych psów? Kot sika poza kuwetą? Certyfikowany behawiorysta Krzysztof Regulski (COAPE/CAPBT) daje pierwszy sensowny krok.',
+  description: SITE_DESCRIPTION,
   alternates: {
     canonical: '/',
   },
@@ -31,27 +31,25 @@ export const metadata: Metadata = {
     follow: true,
   },
   openGraph: {
-    title: 'Behawior 15 | 15-minutowa konsultacja głosowa dla psa lub kota',
-    description:
-      'Behawior 15 – spokojna 15-minutowa konsultacja głosowa online dla psa lub kota. Szczeniak gryzie ręce? Pies rzuca się do innych psów? Kot sika poza kuwetą? Certyfikowany behawiorysta Krzysztof Regulski (COAPE/CAPBT) daje pierwszy sensowny krok.',
+    title: SITE_NAME,
+    description: `${SITE_TAGLINE}. ${SITE_DESCRIPTION}`,
     type: 'website',
     locale: 'pl_PL',
-    siteName: 'Behawior 15',
+    siteName: SITE_NAME,
     url: '/',
     images: [
       {
         url: '/images/hero-main.png',
         width: 1200,
         height: 1778,
-        alt: 'Krzysztof Regulski na portretowym zdjęciu do strony Behawior 15',
+        alt: 'Krzysztof Regulski na portretowym zdjęciu do marki Regulski Terapia behawioralna',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Behawior 15 | 15-minutowa konsultacja głosowa dla psa lub kota',
-    description:
-      'Szczeniak gryzie ręce? Pies rzuca się do innych psów? Kot sika poza kuwetą? Spokojna konsultacja online daje pierwszy sensowny krok.',
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
     images: ['/images/hero-main.png'],
   },
 }

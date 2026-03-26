@@ -59,7 +59,7 @@ export default async function FormPage({
         <section className="two-col-section booking-layout">
           <div className="panel section-panel">
             <BookingStageEyebrow stage="details" className="section-eyebrow" />
-            <h1>Uzupełnij dane do konsultacji</h1>
+            <h1>Uzupełnij dane do szybkiej konsultacji</h1>
             <p className="muted paragraph-gap">
               Po zapisaniu formularza termin zostanie tymczasowo zablokowany. Na kolejnym ekranie wybierzesz prostą wpłatę BLIK/przelewem albo PayU.
             </p>
@@ -75,7 +75,7 @@ export default async function FormPage({
               </div>
               <div className="list-card accent-outline tree-backed-card">
                 <strong>Format</strong>
-                <span>15-minutowa konsultacja głosowa online. Kamera nie jest potrzebna.</span>
+                <span>15-minutowa konsultacja głosowa online. To pierwszy krok w systemie pracy. Kamera nie jest potrzebna.</span>
               </div>
               <div className="list-card tree-backed-card">
                 <PricingDisclosure stage="pre-payment" labelAs="strong" />

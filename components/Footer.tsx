@@ -3,32 +3,43 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { getBuildMarkerSnapshot } from '@/lib/build-marker'
 import {
+  CAPBT_PROFILE_URL,
   COAPE_LOGO,
+  SITE_NAME,
+  SITE_TAGLINE,
   SPECIALIST_CREDENTIALS,
   SPECIALIST_NAME,
+  buildMailtoHref,
   getContactDetails,
 } from '@/lib/site'
 
 export function Footer() {
   const contact = getContactDetails()
   const buildMarker = getBuildMarkerSnapshot()
+  const mailtoHref = contact.email
+    ? buildMailtoHref(
+        contact.email,
+        'Zapytanie - Regulski | Terapia behawioralna',
+        'Dzień dobry,\n\nopisuję krótko swoją sytuację:\n\n- gatunek:\n- problem:\n- od kiedy trwa:\n- jaka forma pracy mnie interesuje:\n',
+      )
+    : null
 
   return (
     <footer className="site-footer" id="kontakt">
       <div className="site-footer-grid">
         <div className="footer-card">
-          <div className="section-eyebrow">Behawior 15</div>
-          <h2 className="footer-title">Spokojny pierwszy krok przy problemie behawioralnym.</h2>
+          <div className="section-eyebrow">Kontakt końcowy</div>
+          <h2 className="footer-title">{SITE_NAME}</h2>
           <p className="muted footer-copy">
-            {SPECIALIST_NAME}, {SPECIALIST_CREDENTIALS}. Konsultacja audio online dla opiekunów psów i kotów.
+            {SITE_TAGLINE}. {SPECIALIST_NAME}, {SPECIALIST_CREDENTIALS}.
           </p>
         </div>
 
         <div className="footer-card">
-          <div className="footer-label">Kontakt i wsparcie</div>
+          <div className="footer-label">Kontakt</div>
           <div className="footer-links contact-links">
-            {contact.email ? (
-              <a href={`mailto:${contact.email}`} className="contact-item">
+            {contact.email && mailtoHref ? (
+              <a href={mailtoHref} className="contact-item">
                 <span className="contact-label">E-mail</span>
                 <span>{contact.email}</span>
               </a>
@@ -41,28 +52,37 @@ export function Footer() {
               </a>
             ) : null}
 
-            <a href={contact.facebookUrl} target="_blank" rel="noopener noreferrer" className="contact-item">
-              <span className="contact-label">Facebook</span>
-              <span>Publiczny profil Krzysztofa Regulskiego</span>
-            </a>
+            <Link href="/kontakt" className="contact-item">
+              <span className="contact-label">Zapytanie</span>
+              <span>Dobierz formę współpracy</span>
+            </Link>
           </div>
         </div>
 
         <div className="footer-card">
-          <div className="footer-label">Ważne linki</div>
+          <div className="footer-label">Skróty</div>
           <div className="footer-links">
+            <Link href="/oferta">Formy współpracy</Link>
+            <Link href="/koty">Terapia kotów</Link>
+            <Link href="/oferta/pobyty-socjalizacyjno-terapeutyczne">Pobyty</Link>
             <Link href="/book" data-analytics-event="reserve_click" data-analytics-location="footer">
-              Zarezerwuj konsultację
+              Umów konsultację 15 min
             </Link>
             <Link href="/polityka-prywatnosci">Polityka prywatności</Link>
             <Link href="/regulamin">Regulamin</Link>
           </div>
         </div>
       </div>
+
       <div className="footer-certification">
         <div className="footer-certification-copy">
-          <span className="footer-label">Certyfikacja</span>
-          <span>Zweryfikowany behawiorysta COAPE / CAPBT</span>
+          <span className="footer-label">Zaufanie</span>
+          <span>
+            COAPE / CAPBT jako sygnał kwalifikacji.{' '}
+            <a href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="inline-link">
+              Zobacz publiczny profil specjalisty
+            </a>
+          </span>
         </div>
         <Image
           src={COAPE_LOGO.src}
@@ -72,12 +92,8 @@ export function Footer() {
           className="footer-certification-logo"
         />
       </div>
-      <div className="footer-runtime" data-build-marker={buildMarker.value}>
-        <span className="footer-runtime-label">Wersja serwisu</span>
-        <span className="footer-runtime-value">
-          {buildMarker.branch} / {buildMarker.commit}
-        </span>
-      </div>
+
+      <div data-build-marker={buildMarker.value} hidden aria-hidden="true" />
     </footer>
   )
 }

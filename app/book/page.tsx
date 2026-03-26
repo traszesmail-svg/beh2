@@ -131,13 +131,13 @@ export default async function BookPage({
         <section className="booking-layout sales-book-layout">
           <div className="panel section-panel">
             <BookingStageEyebrow stage="topic" className="section-eyebrow" />
-            <h1>Wybierz temat i przejdź do terminu</h1>
+            <h1>Wybierz temat szybkiej konsultacji 15 min</h1>
             <p className="hero-text">
-              Zacznij od karty, która najbardziej przypomina to, co dzieje się u Ciebie. Nie chodzi o idealną etykietę, tylko o
-              dobry punkt wejścia w rozmowę.
+              To osobny flow dla pierwszego, lekkiego kroku. Zacznij od karty, która najlepiej przypomina to, co dzieje
+              się u Ciebie. Nie chodzi o idealną etykietę, tylko o dobry punkt wejścia w rozmowę.
             </p>
             <div className="topic-selection-note top-gap-small">
-              Wybierz najbliższy temat, a resztę doprecyzujesz spokojnie w formularzu.
+              Jeśli po drodze okaże się, że sprawa wymaga szerszej pracy, dalszy etap dobierzemy już po rozpoznaniu sytuacji.
             </div>
 
             <div className="booking-note-grid top-gap">
@@ -222,7 +222,17 @@ export default async function BookPage({
 
             <div className="list-card tree-backed-card top-gap">
               <strong>Co kupujesz na tym etapie</strong>
-              <span>Wejście do realnego kalendarza i krótkiej konsultacji, która ma dać pierwszy plan działania, a nie przeciągać sprzedaży.</span>
+              <span>Wejście do osobnego flow szybkiej konsultacji 15 min, która ma uporządkować sytuację i wskazać właściwy dalszy krok.</span>
+            </div>
+
+            <div className="list-card tree-backed-card top-gap">
+              <strong>Jeśli potrzebujesz czegoś więcej</strong>
+              <span>W każdej chwili możesz wrócić do pełnego przeglądu oferty i sprawdzić konsultację 30 min, konsultację online, terapię albo pobyty.</span>
+              <div className="offer-card-actions top-gap-small">
+                <Link href="/oferta" className="button button-ghost">
+                  Zobacz formy współpracy
+                </Link>
+              </div>
             </div>
 
             <div className="list-card tree-backed-card top-gap">
