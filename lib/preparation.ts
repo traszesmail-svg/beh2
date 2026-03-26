@@ -38,14 +38,19 @@ export function hasPreparationMaterials(
   return Boolean(booking.prepVideoPath || booking.prepLinkUrl || booking.prepNotes)
 }
 
-export function canEditPreparationMaterials(
-  booking: Pick<BookingRecord, 'bookingStatus'>,
+export function canAccessPreparationMaterials(
+  booking: Pick<BookingRecord, 'bookingStatus' | 'paymentStatus'>,
 ): boolean {
   return (
-    booking.bookingStatus === 'pending' ||
-    booking.bookingStatus === 'pending_manual_payment' ||
-    booking.bookingStatus === 'confirmed'
+    booking.paymentStatus === 'paid' &&
+    (booking.bookingStatus === 'confirmed' || booking.bookingStatus === 'done')
   )
+}
+
+export function canEditPreparationMaterials(
+  booking: Pick<BookingRecord, 'bookingStatus' | 'paymentStatus'>,
+): boolean {
+  return canAccessPreparationMaterials(booking)
 }
 
 export function normalizePreparationLinkUrl(value: string | null | undefined): string | null {

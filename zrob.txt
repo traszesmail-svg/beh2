@@ -1,0 +1,124 @@
+ZROB - uruchomienie SMS na live krok po kroku
+Data: 2026-03-26
+Projekt: https://beh2.vercel.app
+
+AKTUALNY STAN
+1. Kod pod SMS jest juz wdrozony na live.
+2. Live jest na commicie 7b6c71f.
+3. Mail o manualnej wplacie idzie juz na krzyre@gmail.com.
+4. SMS jeszcze nie dziala produkcyjnie, bo brakuje:
+   - migracji SQL w Supabase
+   - konta / klucza providera SMS
+   - env SMS na Vercel
+
+NAJPROSTSZY WYBOR
+1. Provider SMS: SMSAPI
+2. Dlaczego:
+   - dziala w PL
+   - latwa integracja
+   - juz jest podpiety w kodzie
+   - nie trzeba przepisywac backendu
+
+KONTA, KTORE MUSISZ MIEC
+1. Konto SMSAPI
+   - do wysylki SMS
+   - potrzebne beda:
+     - SMS_API_KEY
+     - SMS_SENDER
+   - mozliwe, ze trzeba doladowac konto
+   - mozliwe, ze trzeba aktywowac lub zatwierdzic nadawce
+
+2. Konto Vercel do projektu beh2
+   - do ustawienia env
+   - potrzebne beda uprawnienia do projektu beh2
+
+3. Konto Supabase do tej bazy
+   - do odpalenia migracji SQL
+   - potrzebne beda uprawnienia do SQL Editor dla projektu:
+     - uogrlryjlucfvrugdvpx
+
+CO MASZ ZROBIC KROK PO KROKU
+
+KROK 1 - zaloz konto SMSAPI
+1. Wejdz na:
+   - https://www.smsapi.com/pl/
+2. Zaloz konto.
+3. Zweryfikuj konto, jesli system tego wymaga.
+4. Doladuj srodki, jesli bez tego nie da sie wysylac SMS.
+
+KROK 2 - pobierz dane z SMSAPI
+1. Zaloguj sie do panelu SMSAPI.
+2. Znajdz sekcje API / tokeny / klucze.
+3. Utworz token API do wysylki SMS.
+4. Zapisz:
+   - SMS_API_KEY
+5. Sprawdz nadawce SMS.
+6. Ustal, jaka wartosc ma byc w:
+   - SMS_SENDER
+7. Jesli sender wymaga zatwierdzenia, zakoncz ten proces przed testem live.
+
+KROK 3 - ustaw env na Vercel
+1. W projekcie beh2 na Vercel ustaw:
+   - SMS_PROVIDER=smsapi
+   - SMS_API_KEY=twoj_klucz_z_SMSAPI
+   - SMS_SENDER=twoj_sender_z_SMSAPI
+2. Opcjonalnie zostaw:
+   - SMS_API_BASE_URL=https://api.smsapi.com
+3. Nie wpisuj kluczy do repo ani do plikow w kodzie.
+
+KROK 4 - odpal migracje w Supabase
+1. Otworz Supabase projektu.
+2. Wejdz do SQL Editor.
+3. Otworz plik:
+   - supabase/migrations/20260326_sms_payment_confirmation.sql
+4. Wklej jego zawartosc do SQL Editor.
+5. Uruchom SQL.
+6. Ta migracja doda pola potrzebne do:
+   - idempotencji SMS
+   - logow statusu SMS
+   - diagnostyki bledow
+
+KROK 5 - zrob redeploy
+1. Po ustawieniu env i migracji zrob nowy deploy na Vercel.
+2. Kod jest juz na main, ale po zmianie env i bazy najlepiej zrobic swiezy deploy produkcyjny.
+
+KROK 6 - test po wdrozeniu
+1. Zrob testowa rezerwacje.
+2. Oplac ja poprawnie.
+3. Sprawdz:
+   - czy platnosc przechodzi na paid
+   - czy SMS przychodzi na numer klienta
+   - czy przy duplikacie webhooka SMS nie idzie drugi raz
+   - czy success page pokazuje poprawny komunikat
+
+CO BEDZIE MI JESZCZE POTRZEBNE OD CIEBIE
+1. Wybor providera:
+   - najlepiej SMSAPI
+2. Dane do env:
+   - SMS_API_KEY
+   - SMS_SENDER
+3. Potwierdzenie, ze migracja w Supabase zostala odpalona
+
+JAKI JEST MINIMALNY ZESTAW DANYCH, ZEBYM MOGL DOMKNAC SMS
+1. SMS_PROVIDER=smsapi
+2. SMS_API_KEY
+3. SMS_SENDER
+4. wykonana migracja:
+   - supabase/migrations/20260326_sms_payment_confirmation.sql
+
+JESLI NIE CHCESZ TEGO ROBIC SAM
+1. Zaloz konto SMSAPI.
+2. Wyslij mi:
+   - SMS_API_KEY
+   - SMS_SENDER
+3. Daj znac, ze migracja w Supabase jest odpalona.
+4. Wtedy ja koncze:
+   - ustawienie brakujacych env
+   - deploy
+   - test live
+   - finalne potwierdzenie dzialania
+
+WAZNE
+1. Bez klucza providera SMS nie da sie uruchomic prawdziwej wysylki.
+2. Bez migracji Supabase nie da sie bezpiecznie zapisac statusu SMS i ochrony przed duplikatami.
+3. Sam kod jest juz gotowy. Braki sa tylko po stronie zewnetrznych kont i konfiguracji.

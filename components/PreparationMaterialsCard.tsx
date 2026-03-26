@@ -131,7 +131,7 @@ export function PreparationMaterialsCard({
         prepLinkUrl: linkValue,
         prepNotes: notesValue,
       })
-      setMessage('Zapisano materiały do rozmowy.')
+      setMessage('Zapisano materiały do sprawy.')
     } catch (saveError) {
       setError(saveError instanceof Error ? saveError.message : 'Nie udało się zapisać materiałów.')
     } finally {
@@ -248,7 +248,7 @@ export function PreparationMaterialsCard({
         })
       }
 
-      setMessage('Nagranie zostało dodane do rezerwacji.')
+      setMessage('Nagranie zostało dodane do sprawy.')
     } catch (uploadError) {
       setError(uploadError instanceof Error ? uploadError.message : 'Nie udało się dodać nagrania.')
     } finally {
@@ -259,11 +259,11 @@ export function PreparationMaterialsCard({
 
   return (
     <section className="panel section-panel prep-panel">
-      <div className="section-eyebrow">Przygotowanie do rozmowy</div>
-      <h2>Przygotuj mnie do rozmowy</h2>
+      <div className="section-eyebrow">Dodaj materiały do sprawy</div>
+      <h2>Nagranie, link lub krótki opis</h2>
       <p className="muted paragraph-gap prep-copy">
-        Jeśli masz nagranie zachowania psa lub kota, możesz dodać je przed rozmową. To nie jest konsultacja wideo -
-        materiał służy tylko do lepszego przygotowania do rozmowy głosowej.
+        To nie jest obowiązkowe. Jeśli chcesz, możesz po płatności dodać nagranie MP4, link do zdjęć albo krótki opis
+        sytuacji. To pomoże lepiej przygotować rozmowę i dalszą pracę.
       </p>
 
       <div className="prep-grid top-gap">
@@ -285,7 +285,7 @@ export function PreparationMaterialsCard({
               {videoState.prepVideoSizeBytes ? `(${formatPreparationFileSize(videoState.prepVideoSizeBytes)})` : ''}
             </a>
           ) : (
-            <div className="muted top-gap-small">Nie dodano jeszcze nagrania.</div>
+            <div className="muted top-gap-small">Nie dodano jeszcze nagrania MP4.</div>
           )}
 
           {canEdit ? (
@@ -306,7 +306,7 @@ export function PreparationMaterialsCard({
         </div>
 
         <div className="prep-card tree-backed-card">
-          <strong>Link do materiału</strong>
+          <strong>Link do zdjęć lub folderu</strong>
           <span>Może to być YouTube, Google Drive albo inny link, który jest publiczny lub poprawnie udostępniony specjaliście.</span>
           <input
             value={linkValue}
@@ -339,7 +339,7 @@ export function PreparationMaterialsCard({
       {canEdit ? (
         <div className="hero-actions top-gap">
           <button type="button" className="button button-primary" onClick={handleSaveDetails} disabled={isSaving || isUploading}>
-            {isSaving ? 'Zapisuję informacje...' : 'Zapisz materiały do rozmowy'}
+            {isSaving ? 'Zapisuję informacje...' : 'Zapisz materiały do sprawy'}
           </button>
         </div>
       ) : (
@@ -347,12 +347,12 @@ export function PreparationMaterialsCard({
       )}
 
       <div className="prep-checklist top-gap tree-backed-card">
-        <strong>Jak przygotować się do rozmowy w 2 minuty</strong>
+        <strong>Co warto dodać w 2 minuty</strong>
         <ul>
-          <li>Przygotuj 2-3 najważniejsze pytania, od których chcesz zacząć.</li>
-          <li>Zanotuj, w jakich sytuacjach problem pojawia się najczęściej.</li>
-          <li>Jeśli możesz, przypomnij sobie plan spacerów, rytm dnia lub sytuacje wyzwalające.</li>
-          <li>Wystarczy krótki opis i jedno nagranie - nie potrzebujesz konsultacji wideo.</li>
+          <li>Jedno krótkie nagranie MP4 z najważniejszym momentem zachowania.</li>
+          <li>Link do zdjęć, folderu albo materiału, który warto zobaczyć przed rozmową.</li>
+          <li>Kilka zdań: co się dzieje, od kiedy trwa i co chcesz omówić najpierw.</li>
+          <li>To etap opcjonalny. Jeśli nic nie dodasz, płatność i termin nadal są ważne.</li>
         </ul>
       </div>
     </section>

@@ -2,9 +2,18 @@ import { readFile } from 'fs/promises'
 import path from 'path'
 import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
-import { buildPreparationVideoStoragePath, PREPARATION_STORAGE_BUCKET } from '@/lib/preparation'
+import {
+  buildPreparationVideoStoragePath,
+  canAccessPreparationMaterials,
+  PREPARATION_STORAGE_BUCKET,
+} from '@/lib/preparation'
 import { getBookingForViewer } from '@/lib/server/db'
-import { ConfigurationError, getPublicFeatureUnavailableMessage, resolveDataMode, getSupabaseServerConfig } from '@/lib/server/env'
+import {
+  ConfigurationError,
+  getPublicFeatureUnavailableMessage,
+  resolveDataMode,
+  getSupabaseServerConfig,
+} from '@/lib/server/env'
 
 export const runtime = 'nodejs'
 
@@ -36,6 +45,13 @@ export async function GET(
 
     if (!booking) {
       return NextResponse.json({ error: 'Ten link do nagrania jest nieprawidłowy albo wygasł.' }, { status: 403 })
+    }
+
+    if (!canAccessPreparationMaterials(booking)) {
+      return NextResponse.json(
+        { error: 'Materiały do sprawy są dostępne dopiero po potwierdzonej płatności.' },
+        { status: 409 },
+      )
     }
 
     if (!booking.prepVideoPath) {

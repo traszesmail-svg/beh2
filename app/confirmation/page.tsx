@@ -11,6 +11,7 @@ import { getBookingForViewer } from '@/lib/server/db'
 import { getDataModeStatus } from '@/lib/server/env'
 import { syncPayuBookingByBookingId } from '@/lib/server/payu'
 import { finalizeStripeCheckoutSession } from '@/lib/server/stripe'
+import { SmsConfirmationStatus } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -21,6 +22,27 @@ function readSearchParam(value: string | string[] | undefined): string | null {
   }
 
   return value ?? null
+}
+
+function getSmsPanelContent(status: SmsConfirmationStatus | null | undefined) {
+  if (status === 'sent') {
+    return {
+      title: 'SMS z potwierdzeniem został wysłany',
+      body: 'Wysłaliśmy SMS z potwierdzeniem na numer telefonu podany w rezerwacji.',
+    }
+  }
+
+  if (status === 'processing') {
+    return {
+      title: 'Kończymy wysyłkę SMS',
+      body: 'Płatność jest już potwierdzona. Jeśli SMS nie pojawi się od razu, szczegóły rezerwacji są zapisane na tej stronie.',
+    }
+  }
+
+  return {
+    title: 'Potwierdzenie rezerwacji jest zapisane',
+    body: 'Jeśli nie otrzymasz SMS, skontaktujemy się na podstawie danych z rezerwacji. Sukces płatności pozostaje ważny.',
+  }
 }
 
 export default async function ConfirmationPage({
@@ -73,9 +95,9 @@ export default async function ConfirmationPage({
     booking?.bookingStatus === 'pending_manual_payment' && booking.paymentStatus === 'pending_manual_review'
   const isRejected = booking?.paymentStatus === 'rejected' && booking.bookingStatus === 'cancelled'
   const isSelfCancelled = booking?.paymentStatus === 'refunded' && booking.bookingStatus === 'cancelled'
-  const confirmationSmsSent = booking?.smsConfirmationStatus === 'sent'
   const canSelfCancel = Boolean(booking && accessToken && canSelfCancelBooking(booking))
   const initialRemainingSeconds = booking ? getRemainingSelfCancellationSeconds(booking) : 0
+  const smsPanel = getSmsPanelContent(booking?.smsConfirmationStatus)
 
   return (
     <main className="page-wrap">
@@ -90,7 +112,7 @@ export default async function ConfirmationPage({
                 {isSelfCancelled
                   ? 'Zakup anulowany'
                   : isConfirmed
-                    ? 'Konsultacja potwierdzona'
+                    ? 'Płatność potwierdzona'
                     : isWaitingManual
                       ? 'Czekamy na ręczne potwierdzenie'
                       : isRejected
@@ -101,7 +123,7 @@ export default async function ConfirmationPage({
                 {isSelfCancelled
                   ? 'Rezerwacja została anulowana'
                   : isConfirmed
-                    ? 'Masz potwierdzoną rozmowę głosową'
+                    ? 'Płatność za konsultację została potwierdzona'
                     : isWaitingManual
                       ? 'Wpłata czeka na ręczne sprawdzenie'
                       : isRejected
@@ -112,17 +134,19 @@ export default async function ConfirmationPage({
                 {isSelfCancelled
                   ? 'Termin wrócił do kalendarza, a płatność została cofnięta. Jeśli chcesz, możesz od razu wybrać nowy termin albo wrócić później.'
                   : isConfirmed
-                    ? confirmationSmsSent
-                      ? 'Platnosc potwierdzona. Wyslalismy SMS z potwierdzeniem na podany numer telefonu. Termin jest zapisany, a link do rozmowy audio czeka juz przy rezerwacji.'
-                      : 'Platnosc potwierdzona. Potwierdzenie rezerwacji jest zapisane. Jesli nie otrzymasz SMS, skontaktujemy sie na podstawie danych z rezerwacji.'
+                    ? 'Opłacona rezerwacja jest już zapisana. Poniżej masz podsumowanie zakupu, status SMS i kolejny krok po płatności.'
                     : isWaitingManual
-                      ? 'Po ręcznym potwierdzeniu wpłaty od razu wyślemy mail z linkiem do pokoju rozmowy. Do tego czasu pokój pozostaje zablokowany.'
+                      ? 'Po ręcznym potwierdzeniu wpłaty od razu odblokujemy ekran po zakupie, link do rozmowy i sekcję materiałów do sprawy.'
                       : isRejected
                         ? booking.paymentRejectedReason ?? 'Termin wrócił do puli. Jeśli trzeba, utwórz nową rezerwację i zgłoś wpłatę ponownie.'
                         : 'Jeśli przed chwilą opłaciłeś konsultację online, odśwież tę stronę za chwilę. Jeśli płatność nie doszła, wróć do wyboru metody i spróbuj ponownie.'}
               </p>
 
               <div className="summary-grid">
+                <div className="summary-card tree-backed-card">
+                  <div className="stat-label">Usługa</div>
+                  <div className="summary-value">Szybka konsultacja 15 min</div>
+                </div>
                 <div className="summary-card tree-backed-card">
                   <div className="stat-label">Temat rozmowy</div>
                   <div className="summary-value">{getProblemLabel(booking.problemType)}</div>
@@ -151,20 +175,43 @@ export default async function ConfirmationPage({
 
               {isWaitingManual ? (
                 <div className="info-box top-gap">
-                  Tytuł wpłaty: <strong>{booking.paymentReference ?? booking.id}</strong>. Gdy tylko płatność zostanie zatwierdzona, wyślemy link do rozmowy na {booking.email}.
+                  Tytuł wpłaty: <strong>{booking.paymentReference ?? booking.id}</strong>. Gdy tylko płatność zostanie zatwierdzona, wyślemy link do rozmowy na {booking.email} i odblokujemy dodawanie materiałów.
                 </div>
               ) : null}
 
               {!isSelfCancelled ? (
                 <div className="stack-gap top-gap">
-                  <div className="list-card tree-backed-card">
-                    <strong>Jak przygotować się do rozmowy</strong>
-                    <span>Znajdź spokojne miejsce, miej pod ręką najważniejsze obserwacje i przygotuj 1-2 pytania, od których chcesz zacząć. Jeśli chcesz, poniżej dodasz nagranie, link lub notatki.</span>
-                  </div>
-                  <div className="list-card accent-outline tree-backed-card">
-                    <strong>Co dalej po tym etapie</strong>
-                    <span>Jeśli sytuacja wymaga szerszej pracy, kolejnym krokiem może być konsultacja 30 min, pełna konsultacja online, wizyta domowa, terapia albo dalsze wsparcie.</span>
-                  </div>
+                  {isConfirmed ? (
+                    <>
+                      <div className="list-card tree-backed-card">
+                        <strong>{smsPanel.title}</strong>
+                        <span>{smsPanel.body}</span>
+                      </div>
+                      <div className="prep-checklist tree-backed-card">
+                        <strong>Co dalej</strong>
+                        <ul>
+                          <li>Zachowaj termin i wróć do tego linku przed rozmową audio.</li>
+                          <li>Jeśli chcesz, dodaj teraz nagranie MP4, link do zdjęć lub krótki opis sytuacji.</li>
+                          <li>Po pierwszym kroku wskażemy, czy potrzebna jest szersza konsultacja, dalsza terapia albo inna ścieżka wsparcia.</li>
+                        </ul>
+                      </div>
+                      <div className="list-card accent-outline tree-backed-card">
+                        <strong>Dodaj materiały do sprawy</strong>
+                        <span>To nie jest obowiązkowe. Jeśli chcesz, możesz teraz dodać nagranie, link do materiałów albo krótki opis sytuacji, żeby lepiej przygotować dalszą pracę.</span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="list-card tree-backed-card">
+                        <strong>Co odblokuje się po płatności</strong>
+                        <span>Po statusie paid zobaczysz finalne potwierdzenie, status SMS, instrukcję co dalej i sekcję do dodania materiałów do sprawy.</span>
+                      </div>
+                      <div className="list-card accent-outline tree-backed-card">
+                        <strong>Co dalej po tym etapie</strong>
+                        <span>Jeśli sytuacja wymaga szerszej pracy, kolejnym krokiem może być konsultacja 30 min, pełna konsultacja online, wizyta domowa, terapia albo dalsze wsparcie.</span>
+                      </div>
+                    </>
+                  )}
                 </div>
               ) : (
                 <div className="list-card accent-outline top-gap tree-backed-card">
@@ -179,12 +226,17 @@ export default async function ConfirmationPage({
                     Wybierz nowy termin
                   </Link>
                 ) : isConfirmed ? (
-                  <Link
-                    href={`/call/${booking.id}${accessToken ? `?access=${encodeURIComponent(accessToken)}` : ''}`}
-                    className="button button-primary big-button"
-                  >
-                    Dołącz do rozmowy audio
-                  </Link>
+                  <>
+                    <Link
+                      href={`/call/${booking.id}${accessToken ? `?access=${encodeURIComponent(accessToken)}` : ''}`}
+                      className="button button-primary big-button"
+                    >
+                      Dołącz do rozmowy audio
+                    </Link>
+                    <Link href="#materialy-do-sprawy" className="button button-ghost big-button">
+                      Dodaj materiały
+                    </Link>
+                  </>
                 ) : (
                   <Link
                     href={`/payment?bookingId=${booking.id}${accessToken ? `&access=${encodeURIComponent(accessToken)}` : ''}`}
@@ -198,22 +250,20 @@ export default async function ConfirmationPage({
                 </Link>
               </div>
 
-              {!isSelfCancelled ? (
-                <PreparationMaterialsCard
-                  bookingId={booking.id}
-                  accessToken={accessToken ?? ''}
-                  canEdit={
-                    booking.bookingStatus === 'pending' ||
-                    booking.bookingStatus === 'pending_manual_payment' ||
-                    booking.bookingStatus === 'confirmed'
-                  }
-                  hasVideo={Boolean(booking.prepVideoPath)}
-                  prepVideoFilename={booking.prepVideoFilename ?? null}
-                  prepVideoSizeBytes={booking.prepVideoSizeBytes ?? null}
-                  prepLinkUrl={booking.prepLinkUrl ?? null}
-                  prepNotes={booking.prepNotes ?? null}
-                  prepUploadedAt={booking.prepUploadedAt ?? null}
-                />
+              {isConfirmed ? (
+                <div id="materialy-do-sprawy">
+                  <PreparationMaterialsCard
+                    bookingId={booking.id}
+                    accessToken={accessToken ?? ''}
+                    canEdit={true}
+                    hasVideo={Boolean(booking.prepVideoPath)}
+                    prepVideoFilename={booking.prepVideoFilename ?? null}
+                    prepVideoSizeBytes={booking.prepVideoSizeBytes ?? null}
+                    prepLinkUrl={booking.prepLinkUrl ?? null}
+                    prepNotes={booking.prepNotes ?? null}
+                    prepUploadedAt={booking.prepUploadedAt ?? null}
+                  />
+                </div>
               ) : null}
             </>
           ) : (

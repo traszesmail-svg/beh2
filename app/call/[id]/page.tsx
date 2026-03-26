@@ -4,6 +4,7 @@ import { headers } from 'next/headers'
 import { CallRoom } from '@/components/CallRoom'
 import { Header } from '@/components/Header'
 import { PreparationMaterialsCard } from '@/components/PreparationMaterialsCard'
+import { canEditPreparationMaterials } from '@/lib/preparation'
 import { getProblemLabel } from '@/lib/data'
 import { getBookingForViewer } from '@/lib/server/db'
 import { getDataModeStatus } from '@/lib/server/env'
@@ -69,7 +70,9 @@ export default async function CallPage({
             <div className="panel section-panel">
               <div className="section-eyebrow">Twoja rozmowa</div>
               <h2>{getProblemLabel(booking.problemType)}</h2>
-              <p className="muted paragraph-gap">To jest podsumowanie sprawy, z którą przychodzisz na rozmowę. W razie potrzeby uzupełnij jeszcze materiały przygotowawcze poniżej.</p>
+              <p className="muted paragraph-gap">
+                To jest podsumowanie sprawy, z którą przychodzisz na rozmowę. Jeśli po opłaceniu chcesz jeszcze coś doprecyzować, materiały do sprawy pozostają poniżej.
+              </p>
               <div className="list-card top-gap">
                 <strong>Opis zgłoszenia</strong>
                 <span>{booking.description}</span>
@@ -79,11 +82,7 @@ export default async function CallPage({
             <PreparationMaterialsCard
               bookingId={booking.id}
               accessToken={accessToken ?? ''}
-              canEdit={
-                booking.bookingStatus === 'pending' ||
-                booking.bookingStatus === 'pending_manual_payment' ||
-                booking.bookingStatus === 'confirmed'
-              }
+              canEdit={canEditPreparationMaterials(booking)}
               hasVideo={Boolean(booking.prepVideoPath)}
               prepVideoFilename={booking.prepVideoFilename ?? null}
               prepVideoSizeBytes={booking.prepVideoSizeBytes ?? null}

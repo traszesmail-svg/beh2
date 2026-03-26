@@ -13,7 +13,12 @@ import {
   validatePreparationVideoMeta,
 } from '@/lib/preparation'
 import { getBookingForViewer, updateBookingPreparation } from '@/lib/server/db'
-import { ConfigurationError, getDataModeStatus, getPublicFeatureUnavailableMessage, getSupabaseServerConfig } from '@/lib/server/env'
+import {
+  ConfigurationError,
+  getDataModeStatus,
+  getPublicFeatureUnavailableMessage,
+  getSupabaseServerConfig,
+} from '@/lib/server/env'
 import { BookingPreparationPatch, BookingRecord } from '@/lib/types'
 
 export const runtime = 'nodejs'
@@ -65,6 +70,13 @@ function getErrorMessage(error: unknown): string {
   return 'Nie udało się zapisać materiałów przygotowawczych.'
 }
 
+function buildLockedResponse() {
+  return NextResponse.json(
+    { error: 'Materiały można dodać albo zmienić dopiero po potwierdzonej płatności i aktywnej rezerwacji.' },
+    { status: 409 },
+  )
+}
+
 export async function POST(
   request: Request,
   { params }: { params: { id: string } },
@@ -77,10 +89,7 @@ export async function POST(
     }
 
     if (!canEditPreparationMaterials(booking)) {
-      return NextResponse.json(
-        { error: 'Materiały można dodawać lub zmieniać tylko przed rozpoczęciem albo w trakcie aktywnej rezerwacji.' },
-        { status: 409 },
-      )
+      return buildLockedResponse()
     }
 
     const contentType = request.headers.get('content-type') ?? ''
@@ -193,10 +202,7 @@ export async function PATCH(
     }
 
     if (!canEditPreparationMaterials(booking)) {
-      return NextResponse.json(
-        { error: 'Materiały można zmieniać tylko dla aktywnej rezerwacji lub potwierdzonej rozmowy.' },
-        { status: 409 },
-      )
+      return buildLockedResponse()
     }
 
     const body = (await request.json()) as {

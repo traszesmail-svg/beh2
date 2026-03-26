@@ -3,7 +3,6 @@ import { unstable_noStore as noStore } from 'next/cache'
 import { headers } from 'next/headers'
 import { Header } from '@/components/Header'
 import { PaymentActions } from '@/components/PaymentActions'
-import { PreparationMaterialsCard } from '@/components/PreparationMaterialsCard'
 import { formatDateTimeLabel, getProblemLabel } from '@/lib/data'
 import { formatPricePln } from '@/lib/pricing'
 import { getBookingForViewer } from '@/lib/server/db'
@@ -59,6 +58,14 @@ export default async function PaymentPage({
     booking?.paymentStatus === 'failed' ||
     booking?.paymentStatus === 'rejected'
 
+  const postPaymentMaterialsCopy = isConfirmed
+    ? 'Sekcja materialow jest juz gotowa na ekranie potwierdzenia platnosci.'
+    : isWaitingManual
+      ? 'Sekcja materialow odblokuje sie od razu po potwierdzeniu wplaty.'
+      : isClosed
+        ? 'Materialy nie sa dostepne dla zamknietej rezerwacji.'
+        : 'Nagranie MP4, link do zdjec albo krotki opis sytuacji dodasz dopiero po potwierdzonej platnosci, juz w kontekscie oplaconej sprawy.'
+
   return (
     <main className="page-wrap">
       <div className="container">
@@ -70,8 +77,8 @@ export default async function PaymentPage({
           <h1>{isWaitingManual ? 'Wpłata została zgłoszona' : 'Wybierz sposób płatności za szybki pierwszy krok'}</h1>
           <p className="hero-text small-width center-text">
             {isWaitingManual
-              ? 'Sprawdzimy wpłatę ręcznie. Gdy status zmieni się na opłacona, klient dostanie mail z linkiem do pokoju rozmowy.'
-              : 'Najpierw zobaczysz prostą wpłatę BLIK/przelewem, a niżej PayU. Obie opcje pokazują tę samą cenę publiczną i prowadzą do tego samego linku do rozmowy.'}
+              ? 'Sprawdzimy wpłatę ręcznie. Gdy status zmieni się na opłacona, klient dostanie mail z linkiem do pokoju rozmowy i odblokuje się etap po zakupie.'
+              : 'Najpierw zobaczysz prostą wpłatę BLIK/przelewem, a niżej PayU. Obie opcje pokazują tę samą cenę publiczną i prowadzą do tego samego, dopracowanego etapu po płatności.'}
           </p>
 
           {flowError ? (
@@ -98,6 +105,10 @@ export default async function PaymentPage({
 
               <div className="summary-grid top-gap">
                 <div className="summary-card tree-backed-card">
+                  <div className="stat-label">Usługa</div>
+                  <div className="summary-value">Szybka konsultacja 15 min</div>
+                </div>
+                <div className="summary-card tree-backed-card">
                   <div className="stat-label">Temat rozmowy</div>
                   <div className="summary-value">{getProblemLabel(booking.problemType)}</div>
                 </div>
@@ -122,8 +133,8 @@ export default async function PaymentPage({
                     <span>BLIK i karta w nowoczesnym checkoutcie, z automatycznym potwierdzeniem po sukcesie.</span>
                   </div>
                   <div className="summary-card trust-card tree-backed-card">
-                    <strong>Ten sam link do pokoju</strong>
-                    <span>Pokój odblokowuje się dopiero po statusie paid: ręcznie przy opcji 1 albo automatycznie po PayU.</span>
+                    <strong>Etap po płatności</strong>
+                    <span>Po statusie paid zobaczysz potwierdzenie, status SMS i sekcję do dodania materiałów do sprawy.</span>
                   </div>
                 </div>
 
@@ -132,6 +143,11 @@ export default async function PaymentPage({
                   <span>
                     15-minutową konsultację głosową online, która ma uporządkować sytuację i pomóc zdecydować, czy wystarczy ten pierwszy krok, czy potrzebna będzie szersza forma pracy. Po płatności online nadal masz 1 minutę na samodzielne anulowanie zakupu.
                   </span>
+                </div>
+
+                <div className="list-card accent-outline tree-backed-card">
+                  <strong>Dodawanie materiałów dopiero po płatności</strong>
+                  <span>{postPaymentMaterialsCopy}</span>
                 </div>
               </div>
 
@@ -180,22 +196,6 @@ export default async function PaymentPage({
                   payuSummary={payuOption.summary}
                 />
               )}
-
-              <PreparationMaterialsCard
-                bookingId={booking.id}
-                accessToken={accessToken ?? ''}
-                canEdit={
-                  booking.bookingStatus === 'pending' ||
-                  booking.bookingStatus === 'pending_manual_payment' ||
-                  booking.bookingStatus === 'confirmed'
-                }
-                hasVideo={Boolean(booking.prepVideoPath)}
-                prepVideoFilename={booking.prepVideoFilename ?? null}
-                prepVideoSizeBytes={booking.prepVideoSizeBytes ?? null}
-                prepLinkUrl={booking.prepLinkUrl ?? null}
-                prepNotes={booking.prepNotes ?? null}
-                prepUploadedAt={booking.prepUploadedAt ?? null}
-              />
             </>
           )}
         </section>

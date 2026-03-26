@@ -139,10 +139,13 @@ async function main() {
     assert.equal(await publicPage.getByText(/Zapłać online PayU/i).isVisible(), true)
     assert.equal(await publicPage.getByText(/1111 2222 3333 4444 5555 6666 77/i).isVisible(), true)
     assert.equal(await publicPage.getByText(/500 600 700/i).isVisible(), true)
+    assert.equal(await publicPage.getByText(/Dodawanie materiałów dopiero po płatności/i).isVisible(), true)
+    assert.equal(await publicPage.getByRole('heading', { name: /Nagranie, link lub krótki opis/i }).count(), 0)
 
     await publicPage.getByRole('button', { name: /Zapłaciłem, czekam na potwierdzenie/i }).click()
     await publicPage.waitForURL(/\/confirmation\?bookingId=.*manual=reported/, { timeout: 10000 })
     await publicPage.getByRole('heading', { name: /Wpłata czeka na ręczne sprawdzenie/i }).waitFor()
+    assert.equal(await publicPage.getByRole('heading', { name: /Nagranie, link lub krótki opis/i }).count(), 0)
 
     await publicPage.goto(`${appUrl}/call/${bookingId}?access=${encodeURIComponent(accessToken)}`, {
       waitUntil: 'domcontentloaded',
@@ -163,13 +166,19 @@ async function main() {
       `${appUrl}/confirmation?bookingId=${bookingId}&access=${encodeURIComponent(accessToken)}`,
       { waitUntil: 'domcontentloaded' },
     )
-    await publicPage.getByRole('heading', { name: /Masz potwierdzoną rozmowę głosową/i }).waitFor()
+    await publicPage.getByRole('heading', { name: /Płatność za konsultację została potwierdzona/i }).waitFor()
     assert.equal(
       await publicPage
-        .getByText(/Platnosc potwierdzona\. Potwierdzenie rezerwacji jest zapisane\./i)
+        .getByText(/Jeśli nie otrzymasz SMS, skontaktujemy się na podstawie danych z rezerwacji\./i)
         .isVisible(),
       true,
     )
+    await publicPage.locator('textarea').fill('Krótki opis do smoke testu po potwierdzonej płatności.')
+    await publicPage.getByRole('button', { name: /Zapisz materiały do sprawy/i }).click()
+    await publicPage.getByText(/Zapisano materiały do sprawy\./i).waitFor({ timeout: 10000 })
+    await publicPage.reload({ waitUntil: 'domcontentloaded' })
+    await publicPage.getByRole('heading', { name: /Płatność za konsultację została potwierdzona/i }).waitFor()
+    assert.equal(await publicPage.locator('textarea').inputValue(), 'Krótki opis do smoke testu po potwierdzonej płatności.')
     assert.equal((await publicPage.getByRole('button', { name: /Anuluj zakup w 1 minutę/i }).count()) === 0, true)
 
     await publicPage.getByRole('link', { name: /Dołącz do rozmowy audio/i }).click()
@@ -189,11 +198,14 @@ async function main() {
           homeVisible: true,
           bookingFlowStarted: true,
           paymentPageShowsTwoMethods: true,
+          paymentPageKeepsPreparationLocked: true,
           manualPaymentReported: true,
           roomBlockedBeforeApproval: true,
           adminApprovedManualPayment: true,
           confirmationUnlocked: true,
           confirmationSmsFallbackVisible: true,
+          preparationMaterialsUnlockedAfterPayment: true,
+          preparationMaterialsSavedAfterPayment: true,
           roomIframeHasMeetingConfig,
           payuCardVisible: true,
         },

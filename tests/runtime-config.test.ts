@@ -7,6 +7,7 @@ import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import robots from '@/app/robots'
 import sitemap from '@/app/sitemap'
+import { PATCH as bookingPreparationPatchRoute, POST as bookingPreparationPostRoute } from '@/app/api/bookings/[id]/prep/route'
 import { GET as manualPaymentReviewRoute } from '@/app/manual-payment/review/route'
 import { ADMIN_BASIC_AUTH_USERNAME, hasValidAdminAuthorization } from '@/lib/admin-auth'
 import { POST as submitTestimonialRoute } from '@/app/api/testimonials/route'
@@ -48,6 +49,9 @@ import {
   toStripeUnitAmount,
 } from '@/lib/pricing'
 import {
+  buildPreparationVideoStoragePath,
+  canAccessPreparationMaterials,
+  canEditPreparationMaterials,
   normalizePreparationLinkUrl,
   normalizePreparationNotes,
   PREPARATION_NOTES_MAX_LENGTH,
@@ -626,6 +630,141 @@ test('normalizes notes and rejects overly long preparation notes', () => {
   assert.equal(normalizePreparationNotes('  krotki opis  '), 'krotki opis')
   assert.equal(validatePreparationNotes('opis sytuacji'), null)
   assert.match(validatePreparationNotes('x'.repeat(PREPARATION_NOTES_MAX_LENGTH + 1)) ?? '', /maksymalnie/)
+})
+
+test('unlocks preparation materials only after a paid booking', () => {
+  assert.equal(canAccessPreparationMaterials({ bookingStatus: 'pending', paymentStatus: 'unpaid' }), false)
+  assert.equal(
+    canAccessPreparationMaterials({ bookingStatus: 'pending_manual_payment', paymentStatus: 'pending_manual_review' }),
+    false,
+  )
+  assert.equal(canAccessPreparationMaterials({ bookingStatus: 'confirmed', paymentStatus: 'paid' }), true)
+  assert.equal(canEditPreparationMaterials({ bookingStatus: 'done', paymentStatus: 'paid' }), true)
+})
+
+test('preparation route blocks unpaid bookings and saves materials only after payment', async () => {
+  process.env.APP_DATA_MODE = 'local'
+  process.env.NEXT_PUBLIC_APP_URL = 'http://localhost'
+  process.env.RESEND_API_KEY = ''
+  process.env.SMS_PROVIDER = 'disabled'
+
+  const backups = await backupLocalStoreFiles()
+  const prepMaterialsDir = path.join(localStoreDataDir, 'prep-materials')
+
+  try {
+    await Promise.all(trackedLocalStoreFiles.map((fileName) => rm(path.join(localStoreDataDir, fileName), { force: true })))
+    await rm(prepMaterialsDir, { recursive: true, force: true })
+
+    const availability = await listLocalAvailability()
+    const [slot] = availability.flatMap((group) => group.slots)
+    assert.ok(slot, 'Expected one slot for preparation route test.')
+
+    const booking = await createLocalPendingBooking({
+      ownerName: 'Prep Route',
+      problemType: 'szczeniak',
+      animalType: 'Pies',
+      petAge: '2 lata',
+      durationNotes: 'Od tygodnia',
+      description: 'Test odblokowania materiałów dopiero po płatności.',
+      phone: '500600700',
+      email: 'prep-route@example.com',
+      slotId: slot.id,
+    })
+
+    const deniedResponse = await bookingPreparationPatchRoute(
+      new Request(`http://localhost/api/bookings/${booking.booking.id}/prep?access=${booking.accessToken}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prepNotes: 'To nie powinno przejść przed płatnością.',
+        }),
+      }),
+      { params: { id: booking.booking.id } },
+    )
+
+    assert.equal(deniedResponse.status, 409)
+    assert.match(((await deniedResponse.json()) as { error?: string }).error ?? '', /potwierdzonej płatności/i)
+
+    await markLocalBookingPaid(booking.booking.id, {
+      paymentMethod: 'mock',
+      triggerPaymentConfirmationSms: false,
+    })
+
+    const invalidUploadResponse = await bookingPreparationPostRoute(
+      new Request(`http://localhost/api/bookings/${booking.booking.id}/prep?access=${booking.accessToken}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'get-upload-target',
+          fileName: 'zachowanie.mov',
+          fileSize: 2048,
+          contentType: 'video/quicktime',
+        }),
+      }),
+      { params: { id: booking.booking.id } },
+    )
+
+    assert.equal(invalidUploadResponse.status, 400)
+    assert.match(((await invalidUploadResponse.json()) as { error?: string }).error ?? '', /MP4/)
+
+    const formData = new FormData()
+    formData.append('file', new File([new Uint8Array([1, 2, 3, 4])], 'zachowanie.mp4', { type: 'video/mp4' }))
+
+    const uploadResponse = await bookingPreparationPostRoute(
+      new Request(`http://localhost/api/bookings/${booking.booking.id}/prep?access=${booking.accessToken}`, {
+        method: 'POST',
+        body: formData,
+      }),
+      { params: { id: booking.booking.id } },
+    )
+
+    assert.equal(uploadResponse.status, 200)
+
+    const uploadPayload = (await uploadResponse.json()) as {
+      ok?: boolean
+      prep?: {
+        hasVideo: boolean
+        prepVideoFilename: string | null
+      }
+    }
+
+    assert.equal(uploadPayload.ok, true)
+    assert.equal(uploadPayload.prep?.hasVideo, true)
+    assert.equal(uploadPayload.prep?.prepVideoFilename, 'zachowanie.mp4')
+
+    const metadataResponse = await bookingPreparationPatchRoute(
+      new Request(`http://localhost/api/bookings/${booking.booking.id}/prep?access=${booking.accessToken}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prepLinkUrl: 'https://example.com/materialy',
+          prepNotes: 'Krótki opis sytuacji.',
+        }),
+      }),
+      { params: { id: booking.booking.id } },
+    )
+
+    assert.equal(metadataResponse.status, 200)
+
+    const storedBooking = await getLocalBookingById(booking.booking.id)
+    assert.equal(storedBooking?.prepVideoPath, buildPreparationVideoStoragePath(booking.booking.id))
+    assert.equal(storedBooking?.prepLinkUrl, 'https://example.com/materialy')
+    assert.equal(storedBooking?.prepNotes, 'Krótki opis sytuacji.')
+
+    const storedVideo = await readFile(
+      path.join(prepMaterialsDir, ...buildPreparationVideoStoragePath(booking.booking.id).split('/')),
+    )
+    assert.equal(storedVideo.length, 4)
+  } finally {
+    await rm(prepMaterialsDir, { recursive: true, force: true })
+    await restoreLocalStoreFiles(backups)
+  }
 })
 
 test('creates and verifies opaque customer access tokens', () => {
