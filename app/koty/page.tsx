@@ -51,8 +51,8 @@ export default function CatsPage() {
 
           <div className="panel section-panel image-panel">
             <Image
-              src="/branding/hero-krzysztof-cat.jpg"
-              alt="Krzysztof Regulski pracujący z kotem"
+              src="/branding/specialist-krzysztof-vet.jpg"
+              alt="Krzysztof Regulski podczas pracy z kotem"
               width={1200}
               height={900}
               sizes="(max-width: 980px) 100vw, 42vw"

@@ -19,7 +19,16 @@ Rebrand and rebuild `https://beh2.vercel.app/` from the product-first landing `B
   - home / travel consultation
   - individual therapy
   - socialization-therapeutic stays
-  - PDF guides
+- PDF guides
+
+## Follow-up change
+
+- Removed the previous cat hero asset from the tracked public branding files.
+- Replaced all current references to that image in:
+  - `app/page.tsx`
+  - `app/koty/page.tsx`
+  - `lib/offers.ts`
+- Purpose: ensure the asset is no longer used by the current branch or the current production build after redeploy.
 
 ## Implemented so far
 

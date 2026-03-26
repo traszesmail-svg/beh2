@@ -306,8 +306,8 @@ export default async function HomePage() {
         <section className="two-col-section" id="koty">
           <div className="panel section-panel image-panel">
             <Image
-              src="/branding/hero-krzysztof-cat.jpg"
-              alt="Krzysztof Regulski w kontakcie z kotem jako ilustracja terapii kotów"
+              src="/branding/case-cat-sofa.jpg"
+              alt="Kot odpoczywający w spokojnym domowym otoczeniu jako ilustracja terapii kotów"
               width={1200}
               height={900}
               sizes="(max-width: 980px) 100vw, 42vw"

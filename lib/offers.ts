@@ -191,8 +191,8 @@ export const OFFERS: Offer[] = [
     primaryHref: '/kontakt?service=indywidualna-terapia-behawioralna',
     secondaryCtaLabel: 'Umów pierwszy krok',
     secondaryHref: '/book',
-    imageSrc: '/branding/hero-krzysztof-cat.jpg',
-    imageAlt: 'Krzysztof Regulski w kontakcie z kotem jako ilustracja prowadzonej terapii behawioralnej',
+    imageSrc: '/branding/specialist-krzysztof-vet.jpg',
+    imageAlt: 'Krzysztof Regulski podczas spokojnej pracy z kotem jako ilustracja prowadzonej terapii behawioralnej',
   },
   {
     slug: 'pobyty-socjalizacyjno-terapeutyczne',
