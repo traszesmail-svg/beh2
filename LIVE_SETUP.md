@@ -31,7 +31,31 @@ Aby dzialaly maile:
 Domyslny publiczny adres kontaktowy w aplikacji:
 - `coapebehawiorysta@gmail.com`
 
-## 4. Reminder 1h przed konsultacja
+## 4. SMS po potwierdzonej platnosci
+Uruchom migracje:
+
+- `supabase/migrations/20260326_sms_payment_confirmation.sql`
+
+Ustaw po stronie aplikacji:
+
+- `SMS_PROVIDER=smsapi`
+- `SMS_API_KEY`
+- `SMS_SENDER`
+- opcjonalnie `SMS_API_BASE_URL` jesli korzystasz z innego endpointu niz domyslny `https://api.smsapi.com`
+
+Fallback zgodnosci:
+
+- `SMS_NOTIFICATION_WEBHOOK_URL`
+- `SMS_NOTIFICATION_WEBHOOK_TOKEN`
+
+Zasada dzialania:
+
+- SMS jest wysylany tylko po potwierdzonym sukcesie platnosci po stronie serwera
+- webhook / finalny backend success oznacza booking jako `processing`, potem zapisuje `sent` albo blad / skip
+- confirmation page nie inicjuje drugiej wysylki
+- duplikat webhooka nie powinien wyslac drugiego SMS, bo booking po pierwszej probie ma juz zapisany status `sms_confirmation_status`
+
+## 5. Reminder 1h przed konsultacja
 Scheduler nie korzysta juz z Vercel Cron.
 Run remindera jest wykonywany przez Supabase `pg_cron + pg_net`, ktore wywoluje chroniony endpoint aplikacji:
 - `GET/POST /api/reminders/run`
@@ -54,7 +78,7 @@ Manualny smoke trigger:
 - `POST /api/reminders/run`
 - `Authorization: Bearer <CRON_SECRET>`
 
-## 5. Admin
+## 6. Admin
 Ustaw:
 - `ADMIN_ACCESS_SECRET`
 

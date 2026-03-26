@@ -20,7 +20,9 @@ export async function POST(request: Request) {
     const event = stripe.webhooks.constructEvent(payload, signature, webhookSecret!)
 
     if (event.type === 'checkout.session.completed') {
-      await finalizeStripeCheckoutSession(event.data.object.id)
+      await finalizeStripeCheckoutSession(event.data.object.id, {
+        triggerPaymentConfirmationSms: true,
+      })
     }
 
     if (event.type === 'checkout.session.expired') {

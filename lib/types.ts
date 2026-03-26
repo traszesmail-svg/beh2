@@ -15,6 +15,14 @@ export type PaymentStatus = 'unpaid' | 'pending_manual_review' | 'paid' | 'faile
 
 export type PaymentMethod = 'manual' | 'payu' | 'stripe' | 'mock'
 
+export type SmsConfirmationStatus =
+  | 'processing'
+  | 'sent'
+  | 'failed'
+  | 'skipped_missing_phone'
+  | 'skipped_invalid_phone'
+  | 'skipped_not_configured'
+
 export interface ProblemOption {
   id: ProblemType
   icon: string
@@ -95,6 +103,12 @@ export interface BookingRecord {
   paymentIntentId?: string | null
   payuOrderId?: string | null
   payuOrderStatus?: string | null
+  customerPhoneNormalized?: string | null
+  smsConfirmationStatus?: SmsConfirmationStatus | null
+  smsConfirmationSentAt?: string | null
+  smsProviderMessageId?: string | null
+  smsErrorCode?: string | null
+  smsErrorMessage?: string | null
   recommendedNextStep?: string | null
   reminderSent?: boolean
   prepVideoPath?: string | null

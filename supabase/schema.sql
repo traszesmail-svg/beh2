@@ -38,6 +38,21 @@ create table if not exists public.bookings (
   payment_intent_id text,
   payu_order_id text,
   payu_order_status text,
+  customer_phone_normalized text,
+  sms_confirmation_status text check (
+    sms_confirmation_status in (
+      'processing',
+      'sent',
+      'failed',
+      'skipped_missing_phone',
+      'skipped_invalid_phone',
+      'skipped_not_configured'
+    )
+  ),
+  sms_confirmation_sent_at timestamptz,
+  sms_provider_message_id text,
+  sms_error_code text,
+  sms_error_message text,
   paid_at timestamptz,
   payment_reported_at timestamptz,
   payment_rejected_at timestamptz,
@@ -74,6 +89,7 @@ create index if not exists bookings_created_at_idx on public.bookings(created_at
 create index if not exists bookings_slot_idx on public.bookings(slot_id);
 create index if not exists bookings_payment_method_idx on public.bookings(payment_method);
 create index if not exists bookings_payu_order_id_idx on public.bookings(payu_order_id);
+create index if not exists bookings_sms_confirmation_status_idx on public.bookings(sms_confirmation_status);
 create index if not exists bookings_customer_access_hash_idx on public.bookings(customer_access_token_hash);
 create index if not exists availability_date_idx on public.availability(booking_date, booking_time);
 create index if not exists availability_booked_idx on public.availability(is_booked);

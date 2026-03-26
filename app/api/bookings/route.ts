@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { isProblemType } from '@/lib/data'
+import { isValidPolishPhone } from '@/lib/phone'
 import { createPendingBooking } from '@/lib/server/db'
 import { ConfigurationError, getPublicFeatureUnavailableMessage } from '@/lib/server/env'
 import { AnimalType } from '@/lib/types'
@@ -10,10 +11,6 @@ function isAnimalType(value: unknown): value is AnimalType {
 
 function isEmailValid(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
-}
-
-function isPhoneValid(value: string): boolean {
-  return value.replace(/\D/g, '').length >= 9
 }
 
 function getErrorMessage(error: unknown): string {
@@ -76,8 +73,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Podaj poprawny adres e-mail do potwierdzenia konsultacji.' }, { status: 400 })
     }
 
-    if (!isPhoneValid(phone.trim())) {
-      return NextResponse.json({ error: 'Podaj poprawny numer telefonu. Wystarczy co najmniej 9 cyfr.' }, { status: 400 })
+    if (!isValidPolishPhone(phone.trim())) {
+      return NextResponse.json(
+        { error: 'Podaj poprawny polski numer telefonu, np. 500 600 700 albo +48 500 600 700.' },
+        { status: 400 },
+      )
     }
 
     if (description.trim().length < 20) {

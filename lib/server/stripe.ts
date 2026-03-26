@@ -118,7 +118,12 @@ export async function createCheckoutSession(
   return session
 }
 
-export async function finalizeStripeCheckoutSession(sessionId: string) {
+export async function finalizeStripeCheckoutSession(
+  sessionId: string,
+  options?: {
+    triggerPaymentConfirmationSms?: boolean
+  },
+) {
   const stripe = getStripeClient()
   const session = await stripe.checkout.sessions.retrieve(sessionId, {
     expand: ['payment_intent'],
@@ -141,6 +146,7 @@ export async function finalizeStripeCheckoutSession(sessionId: string) {
         ? session.payment_intent
         : session.payment_intent?.id ?? null,
     paymentMethod: 'stripe',
+    triggerPaymentConfirmationSms: options?.triggerPaymentConfirmationSms ?? false,
   })
 }
 

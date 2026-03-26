@@ -57,6 +57,7 @@ async function main() {
   process.env.BEHAVIOR15_CONTACT_PHONE = '500600700'
   process.env.MANUAL_PAYMENT_BANK_ACCOUNT = '11112222333344445555666677'
   process.env.MANUAL_PAYMENT_ACCOUNT_NAME = 'Krzysztof Regulski'
+  process.env.SMS_PROVIDER = 'disabled'
   delete process.env.PAYU_CLIENT_ID
   delete process.env.PAYU_CLIENT_SECRET
   delete process.env.PAYU_POS_ID
@@ -163,6 +164,12 @@ async function main() {
       { waitUntil: 'domcontentloaded' },
     )
     await publicPage.getByRole('heading', { name: /Masz potwierdzoną rozmowę głosową/i }).waitFor()
+    assert.equal(
+      await publicPage
+        .getByText(/Platnosc potwierdzona\. Potwierdzenie rezerwacji jest zapisane\./i)
+        .isVisible(),
+      true,
+    )
     assert.equal((await publicPage.getByRole('button', { name: /Anuluj zakup w 1 minutę/i }).count()) === 0, true)
 
     await publicPage.getByRole('link', { name: /Dołącz do rozmowy audio/i }).click()
@@ -186,6 +193,7 @@ async function main() {
           roomBlockedBeforeApproval: true,
           adminApprovedManualPayment: true,
           confirmationUnlocked: true,
+          confirmationSmsFallbackVisible: true,
           roomIframeHasMeetingConfig,
           payuCardVisible: true,
         },

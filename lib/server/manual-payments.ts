@@ -2,7 +2,6 @@ import { getBookingById, getBookingForViewer, markBookingManualPaymentPending, m
 import { buildManualPaymentReviewUrl } from '@/lib/server/manual-payment-review'
 import { sendManualPaymentReportedAdminEmail } from '@/lib/server/notifications'
 import { getManualPaymentConfig, getManualPaymentReference } from '@/lib/server/payment-options'
-import { sendPaymentApprovedSms } from '@/lib/server/sms'
 
 export async function reportManualPayment(
   bookingId: string,
@@ -51,13 +50,12 @@ export async function approveManualPayment(bookingId: string) {
   const updatedBooking = await markBookingPaid(booking.id, {
     paymentMethod: 'manual',
     paymentReference: booking.paymentReference ?? getManualPaymentReference(booking.id),
+    triggerPaymentConfirmationSms: true,
   })
 
   if (!updatedBooking) {
     throw new Error('Nie udało się potwierdzić płatności.')
   }
-
-  await sendPaymentApprovedSms(updatedBooking)
   return updatedBooking
 }
 

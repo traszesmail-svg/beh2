@@ -8,7 +8,8 @@ Lekka aplikacja Next.js dla jednego specjalisty prowadzacego 15-minutowe konsult
 - panel `/admin` z zarzadzaniem cena, terminami i podgladem rezerwacji
 - materialy przed rozmowa: MP4, link, notatki
 - przypomnienia mailowe i flow maili przez Resend
-- Stripe Checkout i Supabase jako tryb live
+- PayU + manual review jako aktywny flow platnosci live, z legacy Stripe/mock zachowanym do zgodnosci i QA
+- serwerowe potwierdzenia platnosci SMS z idempotencja po webhooku / finalnym sukcesie po stronie backendu
 - lokalny fallback JSON do developmentu, ktory tworzy katalog `data/` runtime tylko wtedy, gdy pracujesz w trybie local
 
 ## Wymagania
@@ -34,10 +35,15 @@ Najwazniejsze zmienne:
 - `ADMIN_ACCESS_SECRET`
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `SUPABASE_SERVICE_ROLE_KEY`
-- `STRIPE_SECRET_KEY`
-- `STRIPE_WEBHOOK_SECRET`
+- `PAYU_CLIENT_ID`
+- `PAYU_CLIENT_SECRET`
+- `PAYU_POS_ID`
+- `PAYU_SECOND_KEY`
 - `RESEND_API_KEY`
 - `CRON_SECRET`
+- `SMS_PROVIDER`
+- `SMS_API_KEY`
+- `SMS_SENDER`
 
 Uwaga:
 
@@ -54,6 +60,7 @@ Uruchom w Supabase:
 - `supabase/migrations/20260321_pricing_settings.sql`
 - `supabase/migrations/20260321_booking_preparation_materials.sql`
 - `supabase/migrations/20260321_supabase_reminder_scheduler.sql`
+- `supabase/migrations/20260326_sms_payment_confirmation.sql`
 
 Nastepnie wykonaj setup scheduler:
 
@@ -120,4 +127,6 @@ Po deployu sprawdz:
 - `app/api/reminders/run/route.ts`
 - `lib/server/db.ts`
 - `lib/server/reminder-runner.ts`
+- `lib/server/payu.ts`
+- `lib/server/sms.ts`
 - `lib/server/stripe.ts`

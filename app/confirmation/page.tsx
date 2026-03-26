@@ -43,7 +43,9 @@ export default async function ConfirmationPage({
 
   if (!flowError && bookingId && sessionId) {
     try {
-      await finalizeStripeCheckoutSession(sessionId)
+      await finalizeStripeCheckoutSession(sessionId, {
+        triggerPaymentConfirmationSms: false,
+      })
     } catch {
       // Legacy Stripe flow may already be updated by webhook.
     }
@@ -71,6 +73,7 @@ export default async function ConfirmationPage({
     booking?.bookingStatus === 'pending_manual_payment' && booking.paymentStatus === 'pending_manual_review'
   const isRejected = booking?.paymentStatus === 'rejected' && booking.bookingStatus === 'cancelled'
   const isSelfCancelled = booking?.paymentStatus === 'refunded' && booking.bookingStatus === 'cancelled'
+  const confirmationSmsSent = booking?.smsConfirmationStatus === 'sent'
   const canSelfCancel = Boolean(booking && accessToken && canSelfCancelBooking(booking))
   const initialRemainingSeconds = booking ? getRemainingSelfCancellationSeconds(booking) : 0
 
@@ -109,7 +112,9 @@ export default async function ConfirmationPage({
                 {isSelfCancelled
                   ? 'Termin wrócił do kalendarza, a płatność została cofnięta. Jeśli chcesz, możesz od razu wybrać nowy termin albo wrócić później.'
                   : isConfirmed
-                    ? 'Termin jest zapisany, a link do rozmowy audio czeka już przy rezerwacji. Wystarczy wejść kilka minut przed konsultacją i mieć pod ręką najważniejsze obserwacje.'
+                    ? confirmationSmsSent
+                      ? 'Platnosc potwierdzona. Wyslalismy SMS z potwierdzeniem na podany numer telefonu. Termin jest zapisany, a link do rozmowy audio czeka juz przy rezerwacji.'
+                      : 'Platnosc potwierdzona. Potwierdzenie rezerwacji jest zapisane. Jesli nie otrzymasz SMS, skontaktujemy sie na podstawie danych z rezerwacji.'
                     : isWaitingManual
                       ? 'Po ręcznym potwierdzeniu wpłaty od razu wyślemy mail z linkiem do pokoju rozmowy. Do tego czasu pokój pozostaje zablokowany.'
                       : isRejected

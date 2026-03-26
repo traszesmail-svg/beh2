@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
+import { mkdir, readFile, rm, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { afterEach, test } from 'node:test'
 import { createElement } from 'react'
@@ -22,7 +23,14 @@ import {
   normalizeReleaseSmokeText,
 } from '@/lib/release-smoke'
 import { buildRollingAvailabilitySeed, getProblemLabel, isFutureAvailabilitySlot, isProblemType } from '@/lib/data'
+import { normalizePolishPhone } from '@/lib/phone'
 import { getDataModeStatus, getPaymentModeStatus, getSupabaseServiceRoleKeyIssue } from '@/lib/server/env'
+import {
+  createPendingBooking as createLocalPendingBooking,
+  getBookingById as getLocalBookingById,
+  listAvailability as listLocalAvailability,
+  markBookingPaid as markLocalBookingPaid,
+} from '@/lib/server/local-store'
 import { buildSeedAvailabilitySlots, hasFutureAvailabilitySlots } from '@/lib/server/availability-seed'
 import {
   BLOCKED_CONSULTATION_PRICE_PLN,
@@ -50,6 +58,7 @@ import { createCustomerAccessToken, hasValidCustomerAccessToken, hashCustomerAcc
 import { shouldSendBookingConfirmationAfterPayment } from '@/lib/server/notifications'
 import { getReminderAuthorizationError, runBookingReminderSweep } from '@/lib/server/reminder-runner'
 import { getWarsawDateTime, shouldSendReminderForBooking } from '@/lib/server/reminders'
+import { buildPaymentConfirmationSmsMessage, sendPaymentConfirmationSms } from '@/lib/server/sms'
 import { assertStripeCheckoutAmountSupported, buildCheckoutSessionParams, isStripeTestMode } from '@/lib/server/stripe'
 import { getContactDetails } from '@/lib/site'
 import { TESTIMONIALS } from '@/lib/testimonials'
@@ -67,6 +76,15 @@ const originalResendApiKey = process.env.RESEND_API_KEY
 const originalResendFromEmail = process.env.RESEND_FROM_EMAIL
 const originalContactEmail = process.env.BEHAVIOR15_CONTACT_EMAIL
 const originalContactPhone = process.env.BEHAVIOR15_CONTACT_PHONE
+const originalSmsProvider = process.env.SMS_PROVIDER
+const originalSmsApiKey = process.env.SMS_API_KEY
+const originalSmsSender = process.env.SMS_SENDER
+const originalSmsApiBaseUrl = process.env.SMS_API_BASE_URL
+const originalSmsWebhookUrl = process.env.SMS_NOTIFICATION_WEBHOOK_URL
+const originalSmsWebhookToken = process.env.SMS_NOTIFICATION_WEBHOOK_TOKEN
+const originalFetch = globalThis.fetch
+const localStoreDataDir = path.join(process.cwd(), 'data')
+const trackedLocalStoreFiles = ['availability.json', 'bookings.json', 'users.json', 'pricing-settings.json'] as const
 
 afterEach(() => {
   if (typeof originalStripeSecret === 'string') {
@@ -146,10 +164,78 @@ afterEach(() => {
   } else {
     delete process.env.BEHAVIOR15_CONTACT_PHONE
   }
+
+  if (typeof originalSmsProvider === 'string') {
+    process.env.SMS_PROVIDER = originalSmsProvider
+  } else {
+    delete process.env.SMS_PROVIDER
+  }
+
+  if (typeof originalSmsApiKey === 'string') {
+    process.env.SMS_API_KEY = originalSmsApiKey
+  } else {
+    delete process.env.SMS_API_KEY
+  }
+
+  if (typeof originalSmsSender === 'string') {
+    process.env.SMS_SENDER = originalSmsSender
+  } else {
+    delete process.env.SMS_SENDER
+  }
+
+  if (typeof originalSmsApiBaseUrl === 'string') {
+    process.env.SMS_API_BASE_URL = originalSmsApiBaseUrl
+  } else {
+    delete process.env.SMS_API_BASE_URL
+  }
+
+  if (typeof originalSmsWebhookUrl === 'string') {
+    process.env.SMS_NOTIFICATION_WEBHOOK_URL = originalSmsWebhookUrl
+  } else {
+    delete process.env.SMS_NOTIFICATION_WEBHOOK_URL
+  }
+
+  if (typeof originalSmsWebhookToken === 'string') {
+    process.env.SMS_NOTIFICATION_WEBHOOK_TOKEN = originalSmsWebhookToken
+  } else {
+    delete process.env.SMS_NOTIFICATION_WEBHOOK_TOKEN
+  }
+
+  globalThis.fetch = originalFetch
 })
 
 function buildBasicHeader(username: string, password: string): string {
   return `Basic ${Buffer.from(`${username}:${password}`).toString('base64')}`
+}
+
+async function backupLocalStoreFiles() {
+  await mkdir(localStoreDataDir, { recursive: true })
+
+  return Promise.all(
+    trackedLocalStoreFiles.map(async (fileName) => {
+      const filePath = path.join(localStoreDataDir, fileName)
+
+      try {
+        const content = await readFile(filePath, 'utf8')
+        return { fileName, content, existed: true }
+      } catch {
+        return { fileName, content: '', existed: false }
+      }
+    }),
+  )
+}
+
+async function restoreLocalStoreFiles(backups: Awaited<ReturnType<typeof backupLocalStoreFiles>>) {
+  for (const backup of backups) {
+    const filePath = path.join(localStoreDataDir, backup.fileName)
+
+    if (!backup.existed) {
+      await rm(filePath, { force: true })
+      continue
+    }
+
+    await writeFile(filePath, backup.content, 'utf8')
+  }
 }
 
 function extractUnitAmount(lineItem: unknown): number | null {
@@ -599,6 +685,181 @@ test('allows self-cancellation only during the first minute after payment', () =
     ),
     false,
   )
+})
+
+test('normalizes common Polish phone input variants to E.164', () => {
+  assert.equal(normalizePolishPhone('500600700')?.e164, '+48500600700')
+  assert.equal(normalizePolishPhone('500 600 700')?.e164, '+48500600700')
+  assert.equal(normalizePolishPhone('+48 500 600 700')?.e164, '+48500600700')
+  assert.equal(normalizePolishPhone('48 500 600 700')?.e164, '+48500600700')
+  assert.equal(normalizePolishPhone('0048 500 600 700')?.e164, '+48500600700')
+  assert.equal(normalizePolishPhone('12345'), null)
+})
+
+test('builds a short ASCII SMS confirmation message', () => {
+  const message = buildPaymentConfirmationSmsMessage({
+    bookingDate: '2026-03-27',
+    bookingTime: '11:00',
+  })
+
+  assert.ok(message.length <= 160)
+  assert.equal(/[^\x00-\x7F]/.test(message), false)
+  assert.match(message, /Potwierdzenie platnosci/)
+  assert.match(message, /27\.03 11:00/)
+})
+
+test('skips SMS sending when booking phone is missing or invalid', async () => {
+  const missingPhoneResult = await sendPaymentConfirmationSms({
+    id: 'booking-missing-phone',
+    phone: '',
+    customerPhoneNormalized: null,
+    bookingDate: '2026-03-27',
+    bookingTime: '11:00',
+  })
+
+  assert.equal(missingPhoneResult.status, 'skipped_missing_phone')
+  assert.equal(missingPhoneResult.errorCode, 'PHONE_MISSING')
+
+  const invalidPhoneResult = await sendPaymentConfirmationSms({
+    id: 'booking-invalid-phone',
+    phone: '12345',
+    customerPhoneNormalized: null,
+    bookingDate: '2026-03-27',
+    bookingTime: '11:00',
+  })
+
+  assert.equal(invalidPhoneResult.status, 'skipped_invalid_phone')
+  assert.equal(invalidPhoneResult.errorCode, 'PHONE_INVALID')
+})
+
+test('marks paid bookings as confirmed while handling SMS success, duplicates, invalid phone and provider failure', async () => {
+  process.env.RESEND_API_KEY = ''
+  process.env.BEHAVIOR15_CONTACT_PHONE = '500600700'
+  process.env.SMS_PROVIDER = 'webhook'
+  process.env.SMS_NOTIFICATION_WEBHOOK_URL = 'https://sms.example.test/hook'
+  process.env.SMS_NOTIFICATION_WEBHOOK_TOKEN = 'sms-test-token'
+
+  const backups = await backupLocalStoreFiles()
+
+  try {
+    await Promise.all(
+      trackedLocalStoreFiles.map((fileName) => rm(path.join(localStoreDataDir, fileName), { force: true })),
+    )
+
+    const availability = await listLocalAvailability()
+    const [successSlot, invalidPhoneSlot, failureSlot] = availability.flatMap((group) => group.slots).slice(0, 3)
+
+    assert.ok(successSlot)
+    assert.ok(invalidPhoneSlot)
+    assert.ok(failureSlot)
+
+    const fetchCalls: Array<{ url: string; body: string }> = []
+
+    globalThis.fetch = async (input, init) => {
+      fetchCalls.push({
+        url: String(input),
+        body: typeof init?.body === 'string' ? init.body : '',
+      })
+
+      return new Response('{}', { status: 200, headers: { 'Content-Type': 'application/json' } })
+    }
+
+    const successBooking = await createLocalPendingBooking({
+      ownerName: 'SMS Success',
+      problemType: 'szczeniak',
+      animalType: 'Pies',
+      petAge: '8 miesiecy',
+      durationNotes: '2 tygodnie',
+      description: 'Happy path SMS after payment success.',
+      phone: '500 600 700',
+      email: 'sms-success@example.com',
+      slotId: successSlot!.id,
+    })
+
+    const successPaid = await markLocalBookingPaid(successBooking.booking.id, {
+      paymentMethod: 'payu',
+      payuOrderId: 'payu-order-success',
+      payuOrderStatus: 'COMPLETED',
+      triggerPaymentConfirmationSms: true,
+    })
+
+    assert.equal(successPaid?.bookingStatus, 'confirmed')
+    assert.equal(successPaid?.paymentStatus, 'paid')
+    assert.equal(successPaid?.smsConfirmationStatus, 'sent')
+    assert.equal(successPaid?.customerPhoneNormalized, '+48500600700')
+    assert.equal(fetchCalls.length, 1)
+    assert.equal(fetchCalls[0]?.url, 'https://sms.example.test/hook')
+    assert.match(fetchCalls[0]?.body ?? '', /"bookingId":"[^"]+"/)
+    assert.match(fetchCalls[0]?.body ?? '', /"phone":"\+48500600700"/)
+
+    const duplicatePaid = await markLocalBookingPaid(successBooking.booking.id, {
+      paymentMethod: 'payu',
+      payuOrderId: 'payu-order-success',
+      payuOrderStatus: 'COMPLETED',
+      triggerPaymentConfirmationSms: true,
+    })
+
+    assert.equal(duplicatePaid?.smsConfirmationStatus, 'sent')
+    assert.equal(fetchCalls.length, 1)
+
+    const invalidPhoneBooking = await createLocalPendingBooking({
+      ownerName: 'SMS Invalid',
+      problemType: 'kot',
+      animalType: 'Kot',
+      petAge: '2 lata',
+      durationNotes: '3 dni',
+      description: 'Payment succeeds even when stored phone is invalid.',
+      phone: '12345',
+      email: 'sms-invalid@example.com',
+      slotId: invalidPhoneSlot!.id,
+    })
+
+    const invalidPhonePaid = await markLocalBookingPaid(invalidPhoneBooking.booking.id, {
+      paymentMethod: 'manual',
+      paymentReference: 'invalid-phone-payment',
+      triggerPaymentConfirmationSms: true,
+    })
+
+    assert.equal(invalidPhonePaid?.paymentStatus, 'paid')
+    assert.equal(invalidPhonePaid?.bookingStatus, 'confirmed')
+    assert.equal(invalidPhonePaid?.smsConfirmationStatus, 'skipped_invalid_phone')
+    assert.equal(fetchCalls.length, 1)
+
+    globalThis.fetch = async () =>
+      new Response('provider temporary failure', {
+        status: 503,
+        headers: { 'Content-Type': 'text/plain' },
+      })
+
+    const failureBooking = await createLocalPendingBooking({
+      ownerName: 'SMS Failure',
+      problemType: 'separacja',
+      animalType: 'Pies',
+      petAge: '4 lata',
+      durationNotes: 'Od miesiaca',
+      description: 'Payment should remain successful after SMS provider failure.',
+      phone: '500700800',
+      email: 'sms-failure@example.com',
+      slotId: failureSlot!.id,
+    })
+
+    const failurePaid = await markLocalBookingPaid(failureBooking.booking.id, {
+      paymentMethod: 'payu',
+      payuOrderId: 'payu-order-failure',
+      payuOrderStatus: 'COMPLETED',
+      triggerPaymentConfirmationSms: true,
+    })
+
+    assert.equal(failurePaid?.paymentStatus, 'paid')
+    assert.equal(failurePaid?.bookingStatus, 'confirmed')
+    assert.equal(failurePaid?.smsConfirmationStatus, 'failed')
+    assert.match(failurePaid?.smsErrorCode ?? '', /WEBHOOK_HTTP_503/)
+
+    const storedFailureBooking = await getLocalBookingById(failureBooking.booking.id)
+    assert.equal(storedFailureBooking?.smsConfirmationStatus, 'failed')
+  } finally {
+    await restoreLocalStoreFiles(backups)
+  }
 })
 
 test('build marker includes the expected branch and short commit when Vercel env is present', () => {

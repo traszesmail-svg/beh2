@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { compareDateAndTime, formatDateLabel, isFutureAvailabilitySlot } from '@/lib/data'
 import { createActiveConsultationPrice, DEFAULT_PRICE_PLN, parseConsultationPriceInput } from '@/lib/pricing'
+import { normalizePolishPhone } from '@/lib/phone'
 import { buildSeedAvailabilitySlots, hasFutureAvailabilitySlots } from '@/lib/server/availability-seed'
 import { createCustomerAccessToken, hashCustomerAccessToken } from '@/lib/server/customer-access'
 import { getReservationWindowMinutes, getSupabaseServerConfig } from '@/lib/server/env'
@@ -11,6 +12,7 @@ import {
   sendBookingReservationCreatedEmail,
   shouldSendBookingConfirmationAfterPayment,
 } from '@/lib/server/notifications'
+import { sendPaymentConfirmationSms } from '@/lib/server/sms'
 import {
   AvailabilitySlot,
   BookingCreateResult,
@@ -66,6 +68,12 @@ type BookingRow = {
   payment_intent_id: string | null
   payu_order_id: string | null
   payu_order_status: string | null
+  customer_phone_normalized: string | null
+  sms_confirmation_status: string | null
+  sms_confirmation_sent_at: string | null
+  sms_provider_message_id: string | null
+  sms_error_code: string | null
+  sms_error_message: string | null
   recommended_next_step: string | null
   reminder_sent: boolean | null
   prep_video_path: string | null
@@ -112,9 +120,23 @@ const LEGACY_PAYMENT_COLUMN_NAMES = [
 ] as const
 
 let paymentSchemaMode: 'unknown' | 'modern' | 'legacy' = 'unknown'
+const LEGACY_SMS_COLUMN_NAMES = [
+  'customer_phone_normalized',
+  'sms_confirmation_status',
+  'sms_confirmation_sent_at',
+  'sms_provider_message_id',
+  'sms_error_code',
+  'sms_error_message',
+] as const
+
+let smsSchemaMode: 'unknown' | 'modern' | 'legacy' = 'unknown'
 
 function setPaymentSchemaMode(mode: typeof paymentSchemaMode) {
   paymentSchemaMode = mode
+}
+
+function setSmsSchemaMode(mode: typeof smsSchemaMode) {
+  smsSchemaMode = mode
 }
 
 function getErrorText(error: unknown): string {
@@ -138,6 +160,12 @@ function isLegacyPaymentColumnError(error: unknown): boolean {
   return LEGACY_PAYMENT_COLUMN_NAMES.some((column) => text.includes(column))
 }
 
+function isLegacySmsColumnError(error: unknown): boolean {
+  const text = getErrorText(error)
+
+  return LEGACY_SMS_COLUMN_NAMES.some((column) => text.includes(column))
+}
+
 function isLegacyManualStatusError(error: unknown): boolean {
   const text = getErrorText(error)
 
@@ -158,6 +186,15 @@ function shouldRetryWithLegacyPaymentSchema(error: unknown, includeManualStatuse
 
   if (includeManualStatuses && isLegacyManualStatusError(error)) {
     setPaymentSchemaMode('legacy')
+    return true
+  }
+
+  return false
+}
+
+function shouldRetryWithLegacySmsSchema(error: unknown): boolean {
+  if (isLegacySmsColumnError(error)) {
+    setSmsSchemaMode('legacy')
     return true
   }
 
@@ -317,6 +354,12 @@ function mapBookingRow(row: BookingRow): BookingRecord {
     paymentIntentId: row.payment_intent_id,
     payuOrderId,
     payuOrderStatus,
+    customerPhoneNormalized: row.customer_phone_normalized ?? normalizePolishPhone(row.phone)?.e164 ?? null,
+    smsConfirmationStatus: row.sms_confirmation_status as BookingRecord['smsConfirmationStatus'] | null,
+    smsConfirmationSentAt: row.sms_confirmation_sent_at,
+    smsProviderMessageId: row.sms_provider_message_id,
+    smsErrorCode: row.sms_error_code,
+    smsErrorMessage: row.sms_error_message,
     recommendedNextStep: legacyPaymentMeta ? null : row.recommended_next_step,
     reminderSent: row.reminder_sent ?? false,
     prepVideoPath: row.prep_video_path,
@@ -668,7 +711,7 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
     amount: pricing.amount,
     summary: pricing.summary,
   })
-  const baseInsertPayload = {
+  const commonInsertPayload = {
     id: bookingId,
     user_id: user.id,
     customer_access_token_hash: accessToken.tokenHash,
@@ -697,8 +740,17 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
     created_at: nowIso,
     updated_at: nowIso,
   }
-  const modernInsertPayload = {
-    ...baseInsertPayload,
+  const smsInsertPayload = {
+    ...commonInsertPayload,
+    customer_phone_normalized: normalizePolishPhone(form.phone)?.e164 ?? null,
+    sms_confirmation_status: null,
+    sms_confirmation_sent_at: null,
+    sms_provider_message_id: null,
+    sms_error_code: null,
+    sms_error_message: null,
+  }
+  const paymentOnlyInsertPayload = {
+    ...commonInsertPayload,
     payment_method: null,
     payment_reference: null,
     payment_reported_at: null,
@@ -707,17 +759,56 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
     payu_order_id: null,
     payu_order_status: null,
   }
+  const paymentModernInsertPayload = {
+    ...paymentOnlyInsertPayload,
+    customer_phone_normalized: normalizePolishPhone(form.phone)?.e164 ?? null,
+    sms_confirmation_status: null,
+    sms_confirmation_sent_at: null,
+    sms_provider_message_id: null,
+    sms_error_code: null,
+    sms_error_message: null,
+  }
+  const legacyInsertPayload = {
+    ...commonInsertPayload,
+  }
   let inserted
 
-  if (paymentSchemaMode === 'legacy') {
-    inserted = await supabase.from('bookings').insert(baseInsertPayload).select('*').single()
-  } else {
-    inserted = await supabase.from('bookings').insert(modernInsertPayload).select('*').single()
+  if (paymentSchemaMode === 'legacy' && smsSchemaMode === 'legacy') {
+    inserted = await supabase.from('bookings').insert(legacyInsertPayload).select('*').single()
+  } else if (paymentSchemaMode === 'legacy') {
+    inserted = await supabase.from('bookings').insert(smsInsertPayload).select('*').single()
+
+    if (inserted.error && shouldRetryWithLegacySmsSchema(inserted.error)) {
+      inserted = await supabase.from('bookings').insert(legacyInsertPayload).select('*').single()
+    } else if (!inserted.error) {
+      setSmsSchemaMode('modern')
+    }
+  } else if (smsSchemaMode === 'legacy') {
+    inserted = await supabase.from('bookings').insert(paymentOnlyInsertPayload).select('*').single()
 
     if (inserted.error && shouldRetryWithLegacyPaymentSchema(inserted.error)) {
-      inserted = await supabase.from('bookings').insert(baseInsertPayload).select('*').single()
+      inserted = await supabase.from('bookings').insert(legacyInsertPayload).select('*').single()
     } else if (!inserted.error) {
       setPaymentSchemaMode('modern')
+    }
+  } else {
+    inserted = await supabase.from('bookings').insert({
+      ...paymentModernInsertPayload,
+    }).select('*').single()
+
+    if (inserted.error && shouldRetryWithLegacySmsSchema(inserted.error)) {
+      inserted = await supabase.from('bookings').insert(paymentOnlyInsertPayload).select('*').single()
+
+      if (inserted.error && shouldRetryWithLegacyPaymentSchema(inserted.error)) {
+        inserted = await supabase.from('bookings').insert(legacyInsertPayload).select('*').single()
+      } else if (!inserted.error) {
+        setPaymentSchemaMode('modern')
+      }
+    } else if (inserted.error && shouldRetryWithLegacyPaymentSchema(inserted.error)) {
+      inserted = await supabase.from('bookings').insert(legacyInsertPayload).select('*').single()
+    } else if (!inserted.error) {
+      setPaymentSchemaMode('modern')
+      setSmsSchemaMode('modern')
     }
   }
 
@@ -1051,6 +1142,7 @@ export async function markBookingPaid(
     paymentReference?: string | null
     payuOrderId?: string | null
     payuOrderStatus?: string | null
+    triggerPaymentConfirmationSms?: boolean
   },
 ): Promise<BookingRecord | null> {
   const supabase = getSupabaseAdmin()
@@ -1073,7 +1165,9 @@ export async function markBookingPaid(
 
   const nowIso = new Date().toISOString()
   const shouldSendConfirmation = shouldSendBookingConfirmationAfterPayment(current)
+  const shouldAttemptSms = Boolean(paymentData?.triggerPaymentConfirmationSms) && !current.smsConfirmationStatus
   const paymentMethod = paymentData?.paymentMethod ?? current.paymentMethod ?? null
+  const customerPhoneNormalized = current.customerPhoneNormalized ?? normalizePolishPhone(current.phone)?.e164 ?? null
   const legacyMeta =
     paymentMethod === 'manual'
       ? encodeLegacyPaymentMeta({
@@ -1088,46 +1182,86 @@ export async function markBookingPaid(
             method: 'payu',
             payuOrderId: paymentData?.payuOrderId ?? current.payuOrderId ?? null,
             payuOrderStatus: paymentData?.payuOrderStatus ?? current.payuOrderStatus ?? 'COMPLETED',
-          })
-        : null
+        })
+      : null
+  const smsProcessingUpdate = shouldAttemptSms
+    ? {
+        customer_phone_normalized: customerPhoneNormalized,
+        sms_confirmation_status: 'processing',
+        sms_confirmation_sent_at: null,
+        sms_provider_message_id: null,
+        sms_error_code: null,
+        sms_error_message: null,
+      }
+    : {
+        customer_phone_normalized: customerPhoneNormalized,
+      }
+  const basePaymentUpdate = {
+    booking_status: current.bookingStatus === 'done' ? 'done' : 'confirmed',
+    payment_status: 'paid',
+    paid_at: nowIso,
+    cancelled_at: null,
+    expired_at: null,
+    updated_at: nowIso,
+    checkout_session_id: paymentData?.checkoutSessionId ?? current.checkoutSessionId ?? null,
+    payment_intent_id: paymentData?.paymentIntentId ?? current.paymentIntentId ?? null,
+  }
+  const paymentModernUpdate = {
+    ...basePaymentUpdate,
+    payment_method: paymentMethod,
+    payment_reference: paymentData?.paymentReference ?? current.paymentReference ?? null,
+    payment_rejected_at: null,
+    payment_rejected_reason: null,
+    payu_order_id: paymentData?.payuOrderId ?? current.payuOrderId ?? null,
+    payu_order_status: paymentData?.payuOrderStatus ?? current.payuOrderStatus ?? null,
+  }
+  const legacyPaymentUpdate = {
+    ...basePaymentUpdate,
+    recommended_next_step: legacyMeta,
+  }
+  const paymentModernWithSmsUpdate = {
+    ...paymentModernUpdate,
+    ...smsProcessingUpdate,
+  }
+  const legacyPaymentWithSmsUpdate = {
+    ...legacyPaymentUpdate,
+    ...smsProcessingUpdate,
+  }
   let bookingUpdate
 
-  if (paymentSchemaMode === 'legacy') {
+  if (paymentSchemaMode === 'legacy' && smsSchemaMode === 'legacy') {
     bookingUpdate = await supabase
       .from('bookings')
-      .update({
-        booking_status: current.bookingStatus === 'done' ? 'done' : 'confirmed',
-        payment_status: 'paid',
-        paid_at: nowIso,
-        cancelled_at: null,
-        expired_at: null,
-        updated_at: nowIso,
-        checkout_session_id: paymentData?.checkoutSessionId ?? current.checkoutSessionId ?? null,
-        payment_intent_id: paymentData?.paymentIntentId ?? current.paymentIntentId ?? null,
-        recommended_next_step: legacyMeta,
-      })
+      .update(legacyPaymentUpdate)
       .eq('id', bookingId)
       .select('*')
       .maybeSingle()
-  } else {
+  } else if (paymentSchemaMode === 'legacy') {
     bookingUpdate = await supabase
       .from('bookings')
-      .update({
-        booking_status: current.bookingStatus === 'done' ? 'done' : 'confirmed',
-        payment_status: 'paid',
-        paid_at: nowIso,
-        cancelled_at: null,
-        expired_at: null,
-        payment_method: paymentMethod,
-        payment_reference: paymentData?.paymentReference ?? current.paymentReference ?? null,
-        payment_rejected_at: null,
-        payment_rejected_reason: null,
-        updated_at: nowIso,
-        checkout_session_id: paymentData?.checkoutSessionId ?? current.checkoutSessionId ?? null,
-        payment_intent_id: paymentData?.paymentIntentId ?? current.paymentIntentId ?? null,
-        payu_order_id: paymentData?.payuOrderId ?? current.payuOrderId ?? null,
-        payu_order_status: paymentData?.payuOrderStatus ?? current.payuOrderStatus ?? null,
-      })
+      .update(legacyPaymentWithSmsUpdate)
+      .eq('id', bookingId)
+      .select('*')
+      .maybeSingle()
+
+    if (bookingUpdate.error && shouldRetryWithLegacySmsSchema(bookingUpdate.error)) {
+      bookingUpdate = await supabase
+        .from('bookings')
+        .update(legacyPaymentUpdate)
+        .eq('id', bookingId)
+        .select('*')
+        .maybeSingle()
+
+      if (!bookingUpdate.error) {
+        setSmsSchemaMode('legacy')
+      }
+    } else if (!bookingUpdate.error) {
+      setSmsSchemaMode('modern')
+    }
+  } else if (smsSchemaMode === 'legacy') {
+    bookingUpdate = await supabase
+      .from('bookings')
+      .update(paymentModernUpdate)
       .eq('id', bookingId)
       .select('*')
       .maybeSingle()
@@ -1135,22 +1269,50 @@ export async function markBookingPaid(
     if (bookingUpdate.error && shouldRetryWithLegacyPaymentSchema(bookingUpdate.error)) {
       bookingUpdate = await supabase
         .from('bookings')
-        .update({
-          booking_status: current.bookingStatus === 'done' ? 'done' : 'confirmed',
-          payment_status: 'paid',
-          paid_at: nowIso,
-          cancelled_at: null,
-          expired_at: null,
-          updated_at: nowIso,
-          checkout_session_id: paymentData?.checkoutSessionId ?? current.checkoutSessionId ?? null,
-          payment_intent_id: paymentData?.paymentIntentId ?? current.paymentIntentId ?? null,
-          recommended_next_step: legacyMeta,
-        })
+        .update(legacyPaymentUpdate)
         .eq('id', bookingId)
         .select('*')
         .maybeSingle()
     } else if (!bookingUpdate.error) {
       setPaymentSchemaMode('modern')
+    }
+  } else {
+    bookingUpdate = await supabase
+      .from('bookings')
+      .update(paymentModernWithSmsUpdate)
+      .eq('id', bookingId)
+      .select('*')
+      .maybeSingle()
+
+    if (bookingUpdate.error && shouldRetryWithLegacySmsSchema(bookingUpdate.error)) {
+      bookingUpdate = await supabase
+        .from('bookings')
+        .update(paymentModernUpdate)
+        .eq('id', bookingId)
+        .select('*')
+        .maybeSingle()
+
+      if (bookingUpdate.error && shouldRetryWithLegacyPaymentSchema(bookingUpdate.error)) {
+        bookingUpdate = await supabase
+          .from('bookings')
+          .update(legacyPaymentUpdate)
+          .eq('id', bookingId)
+          .select('*')
+          .maybeSingle()
+      } else if (!bookingUpdate.error) {
+        setPaymentSchemaMode('modern')
+        setSmsSchemaMode('legacy')
+      }
+    } else if (bookingUpdate.error && shouldRetryWithLegacyPaymentSchema(bookingUpdate.error)) {
+      bookingUpdate = await supabase
+        .from('bookings')
+        .update(legacyPaymentUpdate)
+        .eq('id', bookingId)
+        .select('*')
+        .maybeSingle()
+    } else if (!bookingUpdate.error) {
+      setPaymentSchemaMode('modern')
+      setSmsSchemaMode('modern')
     }
   }
 
@@ -1172,7 +1334,43 @@ export async function markBookingPaid(
     await sendBookingConfirmationEmail(mapBookingRow(bookingUpdate.data as BookingRow))
   }
 
-  return bookingUpdate.data ? mapBookingRow(bookingUpdate.data as BookingRow) : null
+  let booking = bookingUpdate.data ? mapBookingRow(bookingUpdate.data as BookingRow) : null
+
+  if (shouldAttemptSms && booking && smsSchemaMode !== 'legacy') {
+    const smsResult = await sendPaymentConfirmationSms(booking)
+    const smsUpdatePayload = {
+      customer_phone_normalized: smsResult.normalizedPhone ?? booking.customerPhoneNormalized ?? null,
+      sms_confirmation_status: smsResult.status,
+      sms_confirmation_sent_at: smsResult.status === 'sent' ? new Date().toISOString() : null,
+      sms_provider_message_id: smsResult.providerMessageId ?? null,
+      sms_error_code: smsResult.errorCode ?? null,
+      sms_error_message: smsResult.errorMessage ?? null,
+      updated_at: new Date().toISOString(),
+    }
+    const smsUpdate = await supabase
+      .from('bookings')
+      .update(smsUpdatePayload)
+      .eq('id', bookingId)
+      .select('*')
+      .maybeSingle()
+    let smsUpdateData = smsUpdate.data
+    let smsUpdateError = smsUpdate.error
+
+    if (smsUpdateError && shouldRetryWithLegacySmsSchema(smsUpdateError)) {
+      smsUpdateData = bookingUpdate.data
+      smsUpdateError = null
+    } else if (!smsUpdateError) {
+      setSmsSchemaMode('modern')
+    }
+
+    if (smsUpdateError) {
+      throw smsUpdateError
+    }
+
+    booking = smsUpdateData ? mapBookingRow(smsUpdateData as BookingRow) : booking
+  }
+
+  return booking
 }
 
 export async function markBookingPaymentFailed(bookingId: string): Promise<BookingRecord | null> {

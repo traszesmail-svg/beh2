@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { getProblemLabel } from '@/lib/data'
+import { isValidPolishPhone } from '@/lib/phone'
 import { CONSULTATION_PRICE_COMPARE_COPY } from '@/lib/site'
 import { AnimalType, ProblemType } from '@/lib/types'
 
@@ -53,11 +54,6 @@ export function BookingForm({ problemType, slotId, slotLabel }: BookingFormProps
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
   }
 
-  function isPhoneValid(value: string): boolean {
-    const digits = value.replace(/\D/g, '')
-    return digits.length >= 9
-  }
-
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setError('')
@@ -72,8 +68,8 @@ export function BookingForm({ problemType, slotId, slotLabel }: BookingFormProps
       return
     }
 
-    if (!isPhoneValid(phone.trim())) {
-      setError('Podaj numer telefonu w poprawnym formacie. Wystarczy co najmniej 9 cyfr.')
+    if (!isValidPolishPhone(phone.trim())) {
+      setError('Podaj poprawny polski numer telefonu, np. 500 600 700 albo +48 500 600 700.')
       return
     }
 

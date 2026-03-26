@@ -61,6 +61,7 @@ async function main() {
   process.env.RESEND_API_KEY = ''
   process.env.BEHAVIOR15_CONTACT_PHONE = '500600700'
   process.env.MANUAL_PAYMENT_BANK_ACCOUNT = '11112222333344445555666677'
+  process.env.SMS_PROVIDER = 'disabled'
   const backups = await backupFiles()
 
   try {
@@ -103,11 +104,16 @@ async function main() {
     const manualPaid = await markBookingPaid(manualBooking.booking.id, {
       paymentMethod: 'manual',
       paymentReference: getManualPaymentReference(manualBooking.booking.id),
+      triggerPaymentConfirmationSms: true,
     })
 
     assert(manualPaid?.bookingStatus === 'confirmed', 'Booking po recznej akceptacji nie przeszedl do statusu confirmed.')
     assert(manualPaid?.paymentStatus === 'paid', 'Booking po recznej akceptacji nie ma statusu paid.')
     assert(manualPaid?.meetingUrl.startsWith('https://meet.jit.si/behawior15-'), 'Nie wygenerowano linku Jitsi.')
+    assert(
+      manualPaid?.smsConfirmationStatus === 'skipped_not_configured',
+      'Manual payment success powinien zapisac kontrolowany status SMS przy braku providera.',
+    )
 
     const rejectedBooking = await createPendingBooking({
       ownerName: 'Manual Reject',
@@ -155,10 +161,15 @@ async function main() {
       paymentMethod: 'payu',
       payuOrderId: 'payu-order-test-001',
       payuOrderStatus: 'COMPLETED',
+      triggerPaymentConfirmationSms: true,
     })
 
     assert(payuPaid?.bookingStatus === 'confirmed', 'Booking po sukcesie PayU nie przeszedl do confirmed.')
     assert(payuPaid?.paymentStatus === 'paid', 'Booking po sukcesie PayU nie ma statusu paid.')
+    assert(
+      payuPaid?.smsConfirmationStatus === 'skipped_not_configured',
+      'PayU success powinien zapisac kontrolowany status SMS przy braku providera.',
+    )
 
     const doneBooking = await markBookingDone(manualBooking.booking.id, 'Pelna konsultacja')
     assert(doneBooking?.bookingStatus === 'done', 'Booking nie przeszedl do statusu done.')

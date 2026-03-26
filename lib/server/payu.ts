@@ -223,12 +223,20 @@ export async function fetchPayuOrder(orderId: string) {
   return parseJson<PayuRetrieveOrderResponse>(raw)
 }
 
-async function syncPayuStateForBooking(booking: BookingRecord, orderId: string, orderStatus: string) {
+async function syncPayuStateForBooking(
+  booking: BookingRecord,
+  orderId: string,
+  orderStatus: string,
+  options?: {
+    triggerPaymentConfirmationSms?: boolean
+  },
+) {
   if (orderStatus === 'COMPLETED') {
     return markBookingPaid(booking.id, {
       paymentMethod: 'payu',
       payuOrderId: orderId,
       payuOrderStatus: orderStatus,
+      triggerPaymentConfirmationSms: options?.triggerPaymentConfirmationSms ?? false,
     })
   }
 
@@ -258,7 +266,9 @@ export async function syncPayuBookingByBookingId(bookingId: string) {
     return booking
   }
 
-  return syncPayuStateForBooking(booking, order.orderId, order.status)
+  return syncPayuStateForBooking(booking, order.orderId, order.status, {
+    triggerPaymentConfirmationSms: false,
+  })
 }
 
 function extractPayuSignature(headerValue: string | null): string | null {
@@ -298,7 +308,9 @@ export async function handlePayuNotification(payload: PayuNotificationPayload) {
     return null
   }
 
-  return syncPayuStateForBooking(booking, orderId, orderStatus)
+  return syncPayuStateForBooking(booking, orderId, orderStatus, {
+    triggerPaymentConfirmationSms: true,
+  })
 }
 
 export async function refundPayuBooking(booking: Pick<BookingRecord, 'id' | 'payuOrderId'>) {

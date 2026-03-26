@@ -1,6 +1,7 @@
 import { mkdir, readFile, writeFile } from 'fs/promises'
 import path from 'path'
 import { compareDateAndTime, formatDateLabel, isFutureAvailabilitySlot } from '@/lib/data'
+import { normalizePolishPhone } from '@/lib/phone'
 import { createActiveConsultationPrice, DEFAULT_PRICE_PLN, parseConsultationPriceInput } from '@/lib/pricing'
 import { buildSeedAvailabilitySlots } from '@/lib/server/availability-seed'
 import { createCustomerAccessToken, hasValidCustomerAccessToken } from '@/lib/server/customer-access'
@@ -12,6 +13,7 @@ import {
   sendBookingReservationCreatedEmail,
   shouldSendBookingConfirmationAfterPayment,
 } from '@/lib/server/notifications'
+import { sendPaymentConfirmationSms } from '@/lib/server/sms'
 import {
   AvailabilitySlot,
   BookingCreateResult,
@@ -97,6 +99,12 @@ function normalizeBookingRecord(booking: BookingRecord): BookingRecord {
     paymentRejectedReason: booking.paymentRejectedReason ?? null,
     payuOrderId: booking.payuOrderId ?? null,
     payuOrderStatus: booking.payuOrderStatus ?? null,
+    customerPhoneNormalized: booking.customerPhoneNormalized ?? normalizePolishPhone(booking.phone)?.e164 ?? null,
+    smsConfirmationStatus: booking.smsConfirmationStatus ?? null,
+    smsConfirmationSentAt: booking.smsConfirmationSentAt ?? null,
+    smsProviderMessageId: booking.smsProviderMessageId ?? null,
+    smsErrorCode: booking.smsErrorCode ?? null,
+    smsErrorMessage: booking.smsErrorMessage ?? null,
     reminderSent: booking.reminderSent ?? false,
     prepVideoPath: booking.prepVideoPath ?? null,
     prepVideoFilename: booking.prepVideoFilename ?? null,
@@ -365,6 +373,7 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
       durationNotes: form.durationNotes,
       description: form.description,
       phone: form.phone,
+      customerPhoneNormalized: normalizePolishPhone(form.phone)?.e164 ?? null,
       email: form.email,
       bookingDate: slot.bookingDate,
       bookingTime: slot.bookingTime,
@@ -381,6 +390,11 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
       paymentIntentId: null,
       payuOrderId: null,
       payuOrderStatus: null,
+      smsConfirmationStatus: null,
+      smsConfirmationSentAt: null,
+      smsProviderMessageId: null,
+      smsErrorCode: null,
+      smsErrorMessage: null,
       paidAt: null,
       paymentReportedAt: null,
       paymentRejectedAt: null,
@@ -577,6 +591,7 @@ export async function markBookingPaid(
     paymentReference?: string | null
     payuOrderId?: string | null
     payuOrderStatus?: string | null
+    triggerPaymentConfirmationSms?: boolean
   },
 ): Promise<BookingRecord | null> {
   return withLock(async () => {
@@ -601,6 +616,7 @@ export async function markBookingPaid(
     const slot = store.availability.find((item) => item.id === booking.slotId)
     const nowIso = new Date().toISOString()
     const shouldSendConfirmation = shouldSendBookingConfirmationAfterPayment(booking)
+    const shouldAttemptSms = Boolean(paymentData?.triggerPaymentConfirmationSms) && !booking.smsConfirmationStatus
 
     booking.bookingStatus = booking.bookingStatus === 'done' ? 'done' : 'confirmed'
     booking.paymentStatus = 'paid'
@@ -616,7 +632,16 @@ export async function markBookingPaid(
     booking.paymentIntentId = paymentData?.paymentIntentId ?? booking.paymentIntentId ?? null
     booking.payuOrderId = paymentData?.payuOrderId ?? booking.payuOrderId ?? null
     booking.payuOrderStatus = paymentData?.payuOrderStatus ?? booking.payuOrderStatus ?? null
+    booking.customerPhoneNormalized = booking.customerPhoneNormalized ?? normalizePolishPhone(booking.phone)?.e164 ?? null
     booking.updatedAt = nowIso
+
+    if (shouldAttemptSms) {
+      booking.smsConfirmationStatus = 'processing'
+      booking.smsConfirmationSentAt = null
+      booking.smsProviderMessageId = null
+      booking.smsErrorCode = null
+      booking.smsErrorMessage = null
+    }
 
     if (slot) {
       slot.isBooked = true
@@ -629,6 +654,18 @@ export async function markBookingPaid(
 
     if (shouldSendConfirmation) {
       await sendBookingConfirmationEmail(booking)
+    }
+
+    if (shouldAttemptSms) {
+      const smsResult = await sendPaymentConfirmationSms(booking)
+      booking.smsConfirmationStatus = smsResult.status
+      booking.customerPhoneNormalized = smsResult.normalizedPhone ?? booking.customerPhoneNormalized ?? null
+      booking.smsConfirmationSentAt = smsResult.status === 'sent' ? new Date().toISOString() : null
+      booking.smsProviderMessageId = smsResult.providerMessageId ?? null
+      booking.smsErrorCode = smsResult.errorCode ?? null
+      booking.smsErrorMessage = smsResult.errorMessage ?? null
+      booking.updatedAt = new Date().toISOString()
+      await persistStore(store)
     }
 
     return booking
