@@ -118,7 +118,7 @@ export function PaymentActions({
       <div className="list-card accent-outline payment-next-card tree-backed-card">
         <strong>Wybierz metodę płatności</strong>
         <span>
-          Możesz zgłosić prostą wpłatę BLIK/przelewem i poczekać na ręczne potwierdzenie albo przejść do PayU, które potwierdzi płatność automatycznie.
+          Możesz zgłosić prostą wpłatę BLIK/przelewem z potwierdzeniem do 60 minut albo przejść do PayU, które potwierdzi płatność automatycznie.
         </span>
       </div>
 
@@ -130,9 +130,9 @@ export function PaymentActions({
         >
           <div className="payment-method-card-copy">
             <strong>BLIK na telefon / przelew</strong>
-            <span>Najprostsza opcja. Po kliknięciu „Zapłaciłem” sprawdzimy wpłatę ręcznie i dopiero wtedy wyślemy link do rozmowy.</span>
+            <span>Najprostsza opcja. Po kliknięciu „Zapłaciłem” sprawdzimy wpłatę i potwierdzimy ją do 60 minut. Wtedy wyślemy link do rozmowy.</span>
           </div>
-          <span className="payment-method-badge">{manualAvailable ? 'Domyślna opcja' : 'Brak konfiguracji'}</span>
+          <span className="payment-method-badge">{manualAvailable ? 'Potwierdzenie do 60 min' : 'Brak konfiguracji'}</span>
         </button>
 
         <button
@@ -161,7 +161,7 @@ export function PaymentActions({
             </div>
             <div className="summary-card tree-backed-card">
               <div className="stat-label">Potwierdzenie</div>
-              <div className="summary-value payment-summary-value">Ręczne</div>
+              <div className="summary-value payment-summary-value">Do 60 min</div>
             </div>
           </div>
 
@@ -183,7 +183,7 @@ export function PaymentActions({
           <div className="list-card tree-backed-card">
             <strong>Co stanie się dalej</strong>
             <span>
-              Wyślij wpłatę z tytułem <strong>{paymentReference}</strong>, kliknij przycisk poniżej i poczekaj na ręczne potwierdzenie. Po akceptacji dostaniesz mail z linkiem do pokoju.
+              Wyślij wpłatę z tytułem <strong>{paymentReference}</strong>, kliknij przycisk poniżej i poczekaj na potwierdzenie do 60 minut. Po akceptacji dostaniesz mail z linkiem do pokoju.
             </span>
           </div>
 
@@ -206,7 +206,7 @@ export function PaymentActions({
           </div>
 
           <div className="disclaimer">
-            {manualSummary} Link do pokoju odblokuje się dopiero po ręcznym potwierdzeniu płatności.
+            {manualSummary} Link do pokoju odblokuje się dopiero po potwierdzeniu płatności.
           </div>
         </div>
       ) : (
@@ -214,11 +214,11 @@ export function PaymentActions({
           <div className="summary-grid trust-grid payment-logo-grid">
             <div className="summary-card trust-card tree-backed-card">
               <strong>BLIK i karta</strong>
-              <span>PayU pokaże standardowy checkout z metodami online. Cena pozostaje taka sama jak przy wpłacie ręcznej.</span>
+              <span>PayU pokaże standardowy checkout z metodami online. Cena pozostaje taka sama jak przy wpłacie BLIK/przelewem.</span>
             </div>
             <div className="summary-card trust-card tree-backed-card">
               <strong>Automatyczne potwierdzenie</strong>
-              <span>Po sukcesie booking przejdzie do statusu paid, a link do pokoju rozmowy odblokuje się bez czekania na ręczną decyzję.</span>
+              <span>Po sukcesie booking przejdzie do statusu paid, a link do pokoju rozmowy odblokuje się bez czekania na dodatkowe potwierdzenie.</span>
             </div>
             <div className="summary-card trust-card tree-backed-card">
               <strong>Ten sam link do pokoju</strong>

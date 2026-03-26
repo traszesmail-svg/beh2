@@ -77,8 +77,8 @@ export default async function PaymentPage({
           <h1>{isWaitingManual ? 'Wpłata została zgłoszona' : 'Wybierz sposób płatności za szybki pierwszy krok'}</h1>
           <p className="hero-text small-width center-text">
             {isWaitingManual
-              ? 'Sprawdzimy wpłatę ręcznie. Gdy status zmieni się na opłacona, klient dostanie mail z linkiem do pokoju rozmowy i odblokuje się etap po zakupie.'
-              : 'Najpierw zobaczysz prostą wpłatę BLIK/przelewem, a niżej PayU. Obie opcje pokazują tę samą cenę publiczną i prowadzą do tego samego, dopracowanego etapu po płatności.'}
+              ? 'Sprawdzimy wpłatę i potwierdzimy ją do 60 minut. Gdy status zmieni się na opłacona, klient dostanie mail z linkiem do pokoju rozmowy i odblokuje się etap po zakupie.'
+              : 'Najpierw zobaczysz prostą wpłatę BLIK/przelewem z potwierdzeniem do 60 minut, a niżej PayU. Obie opcje pokazują tę samą cenę publiczną i prowadzą do tego samego, dopracowanego etapu po płatności.'}
           </p>
 
           {flowError ? (
@@ -125,7 +125,7 @@ export default async function PaymentPage({
               <div className="stack-gap top-gap">
                 <div className="summary-grid trust-grid">
                   <div className="summary-card trust-card tree-backed-card">
-                    <strong>Manualna wpłata</strong>
+                    <strong>BLIK / przelew z potwierdzeniem do 60 min</strong>
                     <span>Najprostszy start: BLIK na telefon albo zwykły przelew z tytułem bookingu.</span>
                   </div>
                   <div className="summary-card trust-card tree-backed-card">
@@ -163,7 +163,7 @@ export default async function PaymentPage({
               ) : isWaitingManual ? (
                 <div className="stack-gap top-gap">
                   <div className="info-box">
-                    Zgłoszenie wpłaty jest zapisane pod tytułem <strong>{booking.paymentReference ?? getManualPaymentReference(booking.id)}</strong>. Po ręcznym potwierdzeniu wyślemy link do pokoju na adres {booking.email}.
+                    Zgłoszenie wpłaty jest zapisane pod tytułem <strong>{booking.paymentReference ?? getManualPaymentReference(booking.id)}</strong>. Po potwierdzeniu wyślemy link do pokoju na adres {booking.email}.
                   </div>
                   <div className="hero-actions centered-actions">
                     <Link

@@ -34,7 +34,7 @@ export default function TermsPage() {
             <div className="list-card">
               <strong>Rezerwacja i płatność</strong>
               <span>
-                Termin jest blokowany na czas płatności. Ostateczne potwierdzenie rezerwacji następuje po skutecznym opłaceniu konsultacji. Jeśli płatność nie zostanie dokończona, slot wraca do puli dostępnych terminów. Publicznie dostępne metody płatności to wpłata ręczna oraz PayU.
+                Termin jest blokowany na czas płatności. Ostateczne potwierdzenie rezerwacji następuje po skutecznym opłaceniu konsultacji. Jeśli płatność nie zostanie dokończona, slot wraca do puli dostępnych terminów. Publicznie dostępne metody płatności to wpłata BLIK/przelewem potwierdzana do 60 minut oraz PayU.
               </span>
             </div>
 

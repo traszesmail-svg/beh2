@@ -93,7 +93,7 @@ export default async function CallPage({
           </>
         ) : (
           <section className="panel centered-panel">
-            <div className="error-box">Dostęp do pokoju rozmowy odblokowuje się dopiero po statusie paid: po ręcznym potwierdzeniu wpłaty albo po sukcesie PayU.</div>
+            <div className="error-box">Dostęp do pokoju rozmowy odblokowuje się dopiero po statusie paid: po potwierdzeniu wpłaty albo po sukcesie PayU.</div>
             <div className="hero-actions centered-actions">
               <Link
                 href={`/payment?bookingId=${booking.id}${accessToken ? `&access=${encodeURIComponent(accessToken)}` : ''}`}

@@ -91,7 +91,7 @@ export function getManualPaymentConfig(): ManualPaymentConfig {
       accountName,
       instructions,
       holdMinutes,
-      summary: 'Manualna płatność wymaga przynajmniej numeru telefonu do BLIK lub numeru konta do przelewu.',
+      summary: 'Wpłata BLIK/przelewem wymaga przynajmniej numeru telefonu do BLIK lub numeru konta do przelewu.',
     }
   }
 
@@ -112,7 +112,7 @@ export function getManualPaymentConfig(): ManualPaymentConfig {
     accountName,
     instructions,
     holdMinutes,
-    summary: `Manualna płatność jest dostępna: ${parts.join(' i ')}.`,
+    summary: `Wpłata BLIK/przelewem jest dostępna: ${parts.join(' i ')}.`,
   }
 }
 

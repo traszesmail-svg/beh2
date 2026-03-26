@@ -299,10 +299,10 @@ export async function sendManualPaymentReportedAdminEmail(
     }
   }
 
-  const subject = `Manualna płatność do weryfikacji - Behawior 15 - ${buildBookingSummary(booking)}`
+  const subject = `Płatność do potwierdzenia do 60 min - Behawior 15 - ${buildBookingSummary(booking)}`
   const html = renderEmailShell(
     'Wpłata czeka na decyzję',
-    'Klient kliknął "Zapłaciłem" dla manualnej płatności BLIK/przelewem. Sprawdź wpłatę i kliknij właściwą decyzję.',
+    'Klient kliknął "Zapłaciłem". Sprawdź wpływ i kliknij właściwą decyzję.',
     `
       <p><strong>Booking ID:</strong> ${escapeHtml(booking.id)}</p>
       <p><strong>Tytuł płatności:</strong> ${escapeHtml(booking.paymentReference ?? booking.id)}</p>
@@ -316,10 +316,10 @@ export async function sendManualPaymentReportedAdminEmail(
         <a href="${links.rejectUrl}" style="display:inline-block;padding:12px 18px;border-radius:999px;background:#8a3022;color:#ffffff;text-decoration:none;font-weight:700;">Nie ma wpłaty</a>
       </div>
     `,
-    'Po potwierdzeniu klient automatycznie dostanie mail z linkiem do pokoju rozmowy, a po odrzuceniu wróci do płatności.',
+    'Po potwierdzeniu klient automatycznie dostanie mail z linkiem do pokoju rozmowy, a przy braku wpłaty wróci do płatności.',
   )
   const text = [
-    'Manualna płatność czeka na weryfikację.',
+    'Płatność czeka na potwierdzenie do 60 min.',
     `Booking ID: ${booking.id}`,
     `Tytuł płatności: ${booking.paymentReference ?? booking.id}`,
     `Termin: ${formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}`,

@@ -17,7 +17,7 @@ export const revalidate = 0
 function getPaymentMethodLabel(value: string | null | undefined) {
   switch (value) {
     case 'manual':
-      return 'BLIK / przelew ręczny'
+      return 'BLIK / przelew do potwierdzenia'
     case 'payu':
       return 'PayU'
     case 'stripe':
@@ -80,7 +80,7 @@ export default async function AdminPage() {
               </div>
             </div>
             <div className="summary-card">
-              <div className="stat-label">Ręczne płatności do weryfikacji</div>
+              <div className="stat-label">Wpłaty do potwierdzenia</div>
               <div className="summary-value">{manualPendingCount}</div>
             </div>
           </div>
@@ -95,7 +95,7 @@ export default async function AdminPage() {
               <span>{runtime.payment.summary}</span>
             </div>
             <div className="list-card">
-              <strong>Manualna płatność i PayU</strong>
+              <strong>BLIK / przelew i PayU</strong>
               <span>{paymentOptions.summary}</span>
             </div>
             <div className="list-card">

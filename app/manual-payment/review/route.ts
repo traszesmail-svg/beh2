@@ -1,6 +1,7 @@
 import { approveManualPayment, rejectManualPayment } from '@/lib/server/manual-payments'
-import { verifyManualPaymentReviewToken } from '@/lib/server/manual-payment-review'
 import { getBookingById } from '@/lib/server/db'
+import { verifyManualPaymentReviewToken } from '@/lib/server/manual-payment-review'
+import { BookingRecord } from '@/lib/types'
 
 type HtmlOptions = {
   actionHref?: string
@@ -37,7 +38,7 @@ function buildHtml(title: string, message: string, status: 'success' | 'error', 
         <body>
           <main>
             <article>
-              <div class="badge">Behawior 15</div>
+              <div class="badge">Regulski | Terapia behawioralna</div>
               <h1>${title}</h1>
               <p>${message}</p>
               ${actionLink}
@@ -53,6 +54,59 @@ function buildHtml(title: string, message: string, status: 'success' | 'error', 
       status: status === 'success' ? 200 : 400,
     },
   )
+}
+
+function isApprovedBooking(booking: BookingRecord) {
+  return booking.paymentStatus === 'paid' && (booking.bookingStatus === 'confirmed' || booking.bookingStatus === 'done')
+}
+
+function isRejectedBooking(booking: BookingRecord) {
+  return booking.paymentStatus === 'rejected' || booking.bookingStatus === 'cancelled'
+}
+
+function isPendingReviewBooking(booking: BookingRecord) {
+  return booking.bookingStatus === 'pending_manual_payment' && booking.paymentStatus === 'pending_manual_review'
+}
+
+function buildApprovedResponse(booking: BookingRecord) {
+  return buildHtml(
+    'Wpłata potwierdzona',
+    `Rezerwacja ${booking.id} jest opłacona. Otwieramy pokój rozmowy.`,
+    'success',
+    {
+      redirectUrl: booking.meetingUrl,
+      actionHref: booking.meetingUrl,
+      actionLabel: 'Otwórz pokój rozmowy',
+    },
+  )
+}
+
+function buildRejectedResponse(booking: BookingRecord) {
+  return buildHtml(
+    'Nie ma wpłaty - wróć do płatności',
+    `Dla rezerwacji ${booking.id} nie znaleziono wpłaty. Klient musi wrócić do płatności.`,
+    'success',
+  )
+}
+
+function buildResolvedResponse(booking: BookingRecord, action: 'approve' | 'reject'): Response | null {
+  if (isApprovedBooking(booking)) {
+    return buildApprovedResponse(booking)
+  }
+
+  if (isRejectedBooking(booking)) {
+    return buildRejectedResponse(booking)
+  }
+
+  if (!isPendingReviewBooking(booking)) {
+    return buildHtml(
+      action === 'approve' ? 'Zgłoszenie jest już zamknięte' : 'To zgłoszenie nie czeka już na decyzję',
+      'Otwórz najnowszą wiadomość, jeśli klient zgłosił nową wpłatę do potwierdzenia.',
+      'success',
+    )
+  }
+
+  return null
 }
 
 export async function GET(request: Request) {
@@ -75,30 +129,30 @@ export async function GET(request: Request) {
     return buildHtml('Link jest nieprawidłowy', 'Ten link wygasł albo nie pasuje do ostatniego zgłoszenia wpłaty.', 'error')
   }
 
+  const resolvedBeforeAction = buildResolvedResponse(booking, action)
+
+  if (resolvedBeforeAction) {
+    return resolvedBeforeAction
+  }
+
   try {
     if (action === 'approve') {
       const updated = await approveManualPayment(booking.id)
-      return buildHtml(
-        'Wpłata potwierdzona',
-        `Rezerwacja ${updated.id} jest już opłacona. Otwieramy pokój rozmowy.`,
-        'success',
-        {
-          redirectUrl: updated.meetingUrl,
-          actionHref: updated.meetingUrl,
-          actionLabel: 'Otwórz pokój rozmowy',
-        },
-      )
+      return buildApprovedResponse(updated)
     }
 
     const updated = await rejectManualPayment(booking.id)
-    return buildHtml(
-      'Nie ma wpłaty',
-      `Dla rezerwacji ${updated.id} nie znaleziono wpłaty. Klient musi wrócić do płatności.`,
-      'success',
-    )
+    return buildRejectedResponse(updated)
   } catch (error) {
+    const latestBooking = await getBookingById(booking.id)
+    const resolvedAfterRace = latestBooking ? buildResolvedResponse(latestBooking, action) : null
+
+    if (resolvedAfterRace) {
+      return resolvedAfterRace
+    }
+
     return buildHtml(
-      'Akcja nie powiodła się',
+      action === 'approve' ? 'Nie udało się potwierdzić wpłaty' : 'Nie udało się zamknąć zgłoszenia',
       error instanceof Error ? error.message : 'Nie udało się wykonać decyzji o płatności.',
       'error',
     )

@@ -455,7 +455,7 @@ async function cleanupExpiredReservations() {
           booking_status: 'expired',
           payment_status: 'rejected',
           payment_rejected_at: nowIso,
-          payment_rejected_reason: 'Upłynął czas na ręczne potwierdzenie wpłaty.',
+          payment_rejected_reason: 'Upłynął czas na potwierdzenie wpłaty.',
           expired_at: nowIso,
           updated_at: nowIso,
         })
@@ -1046,7 +1046,7 @@ export async function markBookingManualPaymentPending(
       (current.bookingStatus === 'pending_manual_payment' && current.paymentStatus === 'pending_manual_review')
     )
   ) {
-    throw new Error('Tę rezerwację można zgłosić do ręcznego potwierdzenia tylko przed opłaceniem.')
+    throw new Error('Tę rezerwację można zgłosić do potwierdzenia wpłaty tylko przed opłaceniem.')
   }
 
   const nowIso = new Date().toISOString()
@@ -1566,7 +1566,7 @@ export async function markBookingExpired(bookingId: string): Promise<BookingReco
   }
 
   const nowIso = new Date().toISOString()
-  const manualExpiryReason = current.paymentRejectedReason ?? 'Upłynął czas na ręczne potwierdzenie wpłaty.'
+  const manualExpiryReason = current.paymentRejectedReason ?? 'Upłynął czas na potwierdzenie wpłaty.'
   const legacyMeta =
     current.paymentStatus === 'pending_manual_review'
       ? encodeLegacyPaymentMeta({

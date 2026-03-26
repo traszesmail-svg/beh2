@@ -1004,7 +1004,7 @@ test('marks paid bookings as confirmed while handling SMS success, duplicates, i
   }
 })
 
-test('sends manual payment verification emails to ADMIN_NOTIFICATION_EMAIL', async () => {
+test('sends payment confirmation request emails to ADMIN_NOTIFICATION_EMAIL', async () => {
   process.env.RESEND_API_KEY = 'resend-test-key'
   process.env.RESEND_FROM_EMAIL = 'Behawior 15 <powiadomienia@example.com>'
   process.env.ADMIN_NOTIFICATION_EMAIL = 'krzyre@gmail.com'
@@ -1024,7 +1024,7 @@ test('sends manual payment verification emails to ADMIN_NOTIFICATION_EMAIL', asy
       animalType: 'Pies',
       petAge: '8 miesiecy',
       durationNotes: '2 tygodnie',
-      description: 'Test manualnej wplaty.',
+      description: 'Test wplaty do potwierdzenia.',
       phone: '500600700',
       email: 'client@example.com',
       bookingDate: '2026-03-27',
@@ -1046,11 +1046,12 @@ test('sends manual payment verification emails to ADMIN_NOTIFICATION_EMAIL', asy
 
   assert.equal(result.status, 'sent')
   assert.match(requestBody, /krzyre@gmail\.com/)
+  assert.match(requestBody, /Płatność do potwierdzenia do 60 min/)
   assert.match(requestBody, /Jest wpłata - potwierdź i otwórz pokój/)
   assert.match(requestBody, /Nie ma wpłaty/)
 })
 
-test('manual payment review approve opens the room and reject says client must return to payment', async () => {
+test('payment review approve opens the room and reject says client must return to payment', async () => {
   process.env.APP_DATA_MODE = 'local'
   process.env.RESEND_API_KEY = ''
   process.env.MANUAL_PAYMENT_REVIEW_SECRET = 'review-secret'
@@ -1070,7 +1071,7 @@ test('manual payment review approve opens the room and reject says client must r
     assert.ok(rejectSlot)
 
     const approveBooking = await createLocalPendingBooking({
-      ownerName: 'Approve Manual',
+      ownerName: 'Approve Payment',
       problemType: 'szczeniak',
       animalType: 'Pies',
       petAge: '1 rok',
@@ -1108,7 +1109,7 @@ test('manual payment review approve opens the room and reject says client must r
     assert.match(approveHtml, /http-equiv="refresh"/)
 
     const rejectBooking = await createLocalPendingBooking({
-      ownerName: 'Reject Manual',
+      ownerName: 'Reject Payment',
       problemType: 'kot',
       animalType: 'Kot',
       petAge: '2 lata',
@@ -1143,6 +1144,64 @@ test('manual payment review approve opens the room and reject says client must r
     assert.equal(rejectStored?.bookingStatus, 'cancelled')
     assert.match(rejectHtml, /Nie ma wpłaty/)
     assert.match(rejectHtml, /Klient musi wrócić do płatności/)
+  } finally {
+    await restoreLocalStoreFiles(backups)
+  }
+})
+
+test('payment review does not show a generic failure after a stale approve click on a rejected booking', async () => {
+  process.env.APP_DATA_MODE = 'local'
+  process.env.RESEND_API_KEY = ''
+  process.env.MANUAL_PAYMENT_REVIEW_SECRET = 'review-secret'
+  process.env.SMS_PROVIDER = 'disabled'
+
+  const backups = await backupLocalStoreFiles()
+
+  try {
+    await Promise.all(
+      trackedLocalStoreFiles.map((fileName) => rm(path.join(localStoreDataDir, fileName), { force: true })),
+    )
+
+    const availability = await listLocalAvailability()
+    const [slot] = availability.flatMap((group) => group.slots)
+
+    assert.ok(slot)
+
+    const booking = await createLocalPendingBooking({
+      ownerName: 'Stale Approve',
+      problemType: 'kot',
+      animalType: 'Kot',
+      petAge: '3 lata',
+      durationNotes: 'Od tygodnia',
+      description: 'Approve link after reject should not show generic failure.',
+      phone: '500900800',
+      email: 'stale@example.com',
+      slotId: slot!.id,
+    })
+
+    const pending = await markLocalBookingManualPaymentPending(booking.booking.id, {
+      paymentReference: 'STALE-REF',
+    })
+
+    assert.ok(pending?.paymentReportedAt)
+
+    const approveToken = createManualPaymentReviewToken(booking.booking.id, 'approve', pending?.paymentReportedAt)
+    await manualPaymentReviewRoute(
+      new Request(
+        `http://localhost/manual-payment/review?bookingId=${booking.booking.id}&action=reject&token=${createManualPaymentReviewToken(booking.booking.id, 'reject', pending?.paymentReportedAt)}`,
+      ),
+    )
+
+    const staleApproveResponse = await manualPaymentReviewRoute(
+      new Request(
+        `http://localhost/manual-payment/review?bookingId=${booking.booking.id}&action=approve&token=${approveToken}`,
+      ),
+    )
+    const staleApproveHtml = await staleApproveResponse.text()
+
+    assert.equal(staleApproveResponse.status, 200)
+    assert.match(staleApproveHtml, /Nie ma wpłaty - wróć do płatności/)
+    assert.doesNotMatch(staleApproveHtml, /Akcja nie powiodła się/)
   } finally {
     await restoreLocalStoreFiles(backups)
   }

@@ -94,7 +94,7 @@ export const steps = [
   {
     n: '03',
     title: 'Dostajesz potwierdzenie i link do rozmowy',
-    desc: 'Po opłaceniu lub ręcznym potwierdzeniu wpłaty widzisz link do rozmowy, materiały przygotowawcze i dalsze kroki.',
+    desc: 'Po opłaceniu lub potwierdzeniu wpłaty widzisz link do rozmowy, materiały przygotowawcze i dalsze kroki.',
   },
 ]
 
@@ -109,7 +109,7 @@ export const faq = [
   },
   {
     q: 'Czy mogę anulować zakup?',
-    a: 'Płatność online potwierdzona automatycznie nadal daje krótkie okno na samodzielną rezygnację. Przy wpłacie ręcznej ewentualny zwrot wymaga kontaktu i ręcznej decyzji.',
+    a: 'Płatność online potwierdzona automatycznie nadal daje krótkie okno na samodzielną rezygnację. Przy wpłacie BLIK/przelewem potwierdzanej do 60 minut ewentualny zwrot wymaga kontaktu i indywidualnej decyzji.',
   },
   {
     q: 'Co dostaję po rozmowie?',
@@ -182,7 +182,7 @@ export function getBookingStatusLabel(
     case 'pending':
       return 'Oczekuje na płatność'
     case 'pending_manual_payment':
-      return 'Czeka na ręczne potwierdzenie'
+      return 'Czeka na potwierdzenie wpłaty'
     case 'confirmed':
       return 'Potwierdzona'
     case 'done':
@@ -203,7 +203,7 @@ export function getPaymentStatusLabel(
     case 'unpaid':
       return 'Nieopłacona'
     case 'pending_manual_review':
-      return 'Zgłoszona, czeka na weryfikację'
+      return 'Zgłoszona, potwierdzenie do 60 min'
     case 'paid':
       return 'Opłacona'
     case 'failed':

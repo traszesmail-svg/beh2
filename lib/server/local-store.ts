@@ -153,7 +153,7 @@ function normalizeExpiredReservations(store: LocalStoreData): LocalStoreData {
     booking.paymentRejectedAt = booking.paymentStatus === 'rejected' ? nowIso : booking.paymentRejectedAt ?? null
     booking.paymentRejectedReason =
       booking.paymentStatus === 'rejected'
-        ? booking.paymentRejectedReason ?? 'Upłynął czas na ręczne potwierdzenie wpłaty.'
+        ? booking.paymentRejectedReason ?? 'Upłynął czas na potwierdzenie wpłaty.'
         : booking.paymentRejectedReason ?? null
     booking.updatedAt = nowIso
   }
@@ -552,7 +552,7 @@ export async function markBookingManualPaymentPending(
         (booking.bookingStatus === 'pending_manual_payment' && booking.paymentStatus === 'pending_manual_review')
       )
     ) {
-      throw new Error('Tę rezerwację można zgłosić do ręcznego potwierdzenia tylko przed opłaceniem.')
+      throw new Error('Tę rezerwację można zgłosić do potwierdzenia wpłaty tylko przed opłaceniem.')
     }
 
     const slot = store.availability.find((item) => item.id === booking.slotId)
@@ -788,7 +788,7 @@ export async function markBookingExpired(bookingId: string): Promise<BookingReco
     booking.paymentRejectedAt = booking.paymentStatus === 'rejected' ? nowIso : booking.paymentRejectedAt ?? null
     booking.paymentRejectedReason =
       booking.paymentStatus === 'rejected'
-        ? booking.paymentRejectedReason ?? 'Upłynął czas na ręczne potwierdzenie wpłaty.'
+        ? booking.paymentRejectedReason ?? 'Upłynął czas na potwierdzenie wpłaty.'
         : booking.paymentRejectedReason ?? null
     booking.updatedAt = nowIso
 

@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { unstable_noStore as noStore } from 'next/cache'
 import { headers } from 'next/headers'
 import { Header } from '@/components/Header'
+import { ConfirmationStatusWatcher } from '@/components/ConfirmationStatusWatcher'
 import { PreparationMaterialsCard } from '@/components/PreparationMaterialsCard'
 import { SelfCancellationActions } from '@/components/SelfCancellationActions'
 import { formatDateTimeLabel, getProblemLabel } from '@/lib/data'
@@ -114,7 +115,7 @@ export default async function ConfirmationPage({
                   : isConfirmed
                     ? 'Płatność potwierdzona'
                     : isWaitingManual
-                      ? 'Czekamy na ręczne potwierdzenie'
+                      ? 'Czekamy na potwierdzenie wpłaty'
                       : isRejected
                         ? 'Wpłata niepotwierdzona'
                         : 'Sprawdzamy status płatności'}
@@ -125,7 +126,7 @@ export default async function ConfirmationPage({
                   : isConfirmed
                     ? 'Płatność za konsultację została potwierdzona'
                     : isWaitingManual
-                      ? 'Wpłata czeka na ręczne sprawdzenie'
+                      ? 'Wpłata czeka na potwierdzenie do 60 min'
                       : isRejected
                         ? 'Nie znaleziono wpłaty do tej rezerwacji'
                         : 'Płatność nie została jeszcze potwierdzona'}
@@ -136,7 +137,7 @@ export default async function ConfirmationPage({
                   : isConfirmed
                     ? 'Opłacona rezerwacja jest już zapisana. Poniżej masz podsumowanie zakupu, status SMS i kolejny krok po płatności.'
                     : isWaitingManual
-                      ? 'Po ręcznym potwierdzeniu wpłaty od razu odblokujemy ekran po zakupie, link do rozmowy i sekcję materiałów do sprawy.'
+                      ? 'Sprawdzamy wpłatę i potwierdzimy ją do 60 minut. Gdy status zmieni się na opłacona, ta strona sama pokaże pokój rozmowy i sekcję materiałów.'
                       : isRejected
                         ? booking.paymentRejectedReason ?? 'Termin wrócił do puli. Jeśli trzeba, utwórz nową rezerwację i zgłoś wpłatę ponownie.'
                         : 'Jeśli przed chwilą opłaciłeś konsultację online, odśwież tę stronę za chwilę. Jeśli płatność nie doszła, wróć do wyboru metody i spróbuj ponownie.'}
@@ -173,9 +174,11 @@ export default async function ConfirmationPage({
                 />
               ) : null}
 
+              <ConfirmationStatusWatcher active={isWaitingManual} />
+
               {isWaitingManual ? (
                 <div className="info-box top-gap">
-                  Tytuł wpłaty: <strong>{booking.paymentReference ?? booking.id}</strong>. Gdy tylko płatność zostanie zatwierdzona, wyślemy link do rozmowy na {booking.email} i odblokujemy dodawanie materiałów.
+                  Tytuł wpłaty: <strong>{booking.paymentReference ?? booking.id}</strong>. Gdy tylko potwierdzimy wpłatę, wyślemy link do rozmowy na {booking.email}, odblokujemy materiały i pokażemy nowy stan na tej stronie.
                 </div>
               ) : null}
 

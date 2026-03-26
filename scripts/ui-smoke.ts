@@ -9,7 +9,7 @@ const rootDir = process.cwd()
 const dataDir = path.join(rootDir, 'data')
 const backupDir = path.join(rootDir, '.tmp-ui-data-backup')
 const port = 3210 + Math.floor(Math.random() * 200)
-const appUrl = `http://127.0.0.1:${port}`
+const appUrl = `http://localhost:${port}`
 const adminSecret = 'codex-admin-secret'
 
 async function backupData() {
@@ -144,29 +144,27 @@ async function main() {
 
     await publicPage.getByRole('button', { name: /Zapłaciłem, czekam na potwierdzenie/i }).click()
     await publicPage.waitForURL(/\/confirmation\?bookingId=.*manual=reported/, { timeout: 10000 })
-    await publicPage.getByRole('heading', { name: /Wpłata czeka na ręczne sprawdzenie/i }).waitFor()
+    await publicPage.getByRole('heading', { name: /Wpłata czeka na potwierdzenie do 60 min/i }).waitFor()
     assert.equal(await publicPage.getByRole('heading', { name: /Nagranie, link lub krótki opis/i }).count(), 0)
 
-    await publicPage.goto(`${appUrl}/call/${bookingId}?access=${encodeURIComponent(accessToken)}`, {
+    const roomCheckPage = await publicContext.newPage()
+    await roomCheckPage.goto(`${appUrl}/call/${bookingId}?access=${encodeURIComponent(accessToken)}`, {
       waitUntil: 'domcontentloaded',
     })
     assert.equal(
-      await publicPage.getByText(/Dostęp do pokoju rozmowy odblokowuje się dopiero po statusie paid/i).isVisible(),
+      await roomCheckPage.getByText(/Dostęp do pokoju rozmowy odblokowuje się dopiero po statusie paid/i).isVisible(),
       true,
     )
+    await roomCheckPage.close()
 
     const adminPage = await adminContext.newPage()
     await adminPage.goto(`${appUrl}/admin`, { waitUntil: 'domcontentloaded' })
     await adminPage.getByRole('heading', { name: /Rezerwacje, płatności i terminy/i }).waitFor()
-    await adminPage.getByText(/Ręczne płatności do weryfikacji/i).waitFor()
+    await adminPage.getByText(/Wpłaty do potwierdzenia/i).waitFor()
     await adminPage.getByRole('button', { name: /Potwierdź płatność/i }).first().click()
     await adminPage.getByRole('button', { name: /Oznacz jako zakończoną/i }).first().waitFor({ timeout: 10000 })
 
-    await publicPage.goto(
-      `${appUrl}/confirmation?bookingId=${bookingId}&access=${encodeURIComponent(accessToken)}`,
-      { waitUntil: 'domcontentloaded' },
-    )
-    await publicPage.getByRole('heading', { name: /Płatność za konsultację została potwierdzona/i }).waitFor()
+    await publicPage.getByRole('heading', { name: /Płatność za konsultację została potwierdzona/i }).waitFor({ timeout: 15000 })
     assert.equal(
       await publicPage
         .getByText(/Jeśli nie otrzymasz SMS, skontaktujemy się na podstawie danych z rezerwacji\./i)
@@ -202,6 +200,7 @@ async function main() {
           manualPaymentReported: true,
           roomBlockedBeforeApproval: true,
           adminApprovedManualPayment: true,
+          confirmationAutoRefreshedAfterApproval: true,
           confirmationUnlocked: true,
           confirmationSmsFallbackVisible: true,
           preparationMaterialsUnlockedAfterPayment: true,
