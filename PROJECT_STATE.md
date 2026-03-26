@@ -66,10 +66,33 @@ Rebrand and rebuild `https://beh2.vercel.app/` from the product-first landing `B
 - `lib/seo.ts`
 - `lib/offers.ts`
 
-## Still pending
+## Verification completed
 
-- TypeScript/build verification after the rebrand changes.
-- Update smoke checks and tests to the new visible copy and new public architecture.
-- Local visual verification of the rebuilt homepage and new subpages.
-- Git commit, push, and deploy.
-- Live post-deploy verification against the new version.
+- `npm run build` PASS
+- `npm test` PASS
+- `npm run ui-smoke` PASS
+- `npm run pricing-smoke` PASS
+- `npm run verify-flow` PASS
+- `npm run live-smoke` PASS
+
+## Git and deploy
+
+- Commit created: `7fc98d5` - `Rebrand site into expert behavioral therapy brand`
+- Pushed to: `origin/main`
+- Production deploy completed through Vercel CLI
+- Production alias confirmed: `https://beh2.vercel.app/`
+- Live smoke confirmed build marker: `CLEAN_START_REPO_V1:main:7fc98d5`
+
+## Live vs previous live
+
+Before deploy, live still showed the old product-first version around `Behawior 15` with visible footer marker `main / 0332fce`.
+
+After deploy, live smoke confirmed the new brand-first architecture is active, including:
+
+- `Regulski | Terapia behawioralna`
+- `Jak mogę pomóc`
+- `Formy współpracy`
+- `Pobyty socjalizacyjno-terapeutyczne`
+- `Terapia kotów`
+
+It also confirmed that the old visible footer version marker is no longer exposed on the public pages.
