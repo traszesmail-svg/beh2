@@ -84,13 +84,24 @@ Rebrand and rebuild `https://beh2.vercel.app/` from the product-first landing `B
 - `npm run verify-flow` PASS
 - `npm run live-smoke` PASS
 
+## Reconfirmed on current HEAD
+
+- Reconfirmed on `2026-03-26` for current `HEAD` / `origin/main`: `7575030`
+- `npm test` PASS
+- `npm run build` PASS
+- `npm run verify-flow` PASS
+- `npm run ui-smoke` PASS
+- `npm run live-smoke -- --expected-branch main --expected-commit 7575030` PASS
+
 ## Git and deploy
 
-- Commit created: `7fc98d5` - `Rebrand site into expert behavioral therapy brand`
+- Primary rebrand commit: `6cb62b5` - `Rebrand site into expert behavioral therapy brand`
+- Follow-up verification note: `675520a` - `Record deploy and verification state`
+- Current live follow-up commit: `7575030` - `Remove deprecated cat hero image asset`
 - Pushed to: `origin/main`
 - Production deploy completed through Vercel CLI
 - Production alias confirmed: `https://beh2.vercel.app/`
-- Live smoke confirmed build marker: `CLEAN_START_REPO_V1:main:7fc98d5`
+- Live smoke confirmed build marker: `CLEAN_START_REPO_V1:main:7575030`
 
 ## Live vs previous live
 
@@ -105,3 +116,5 @@ After deploy, live smoke confirmed the new brand-first architecture is active, i
 - `Terapia kotów`
 
 It also confirmed that the old visible footer version marker is no longer exposed on the public pages.
+
+Current live verification on `2026-03-26` confirmed that `https://beh2.vercel.app/` serves build marker `CLEAN_START_REPO_V1:main:7575030`.
