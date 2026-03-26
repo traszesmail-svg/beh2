@@ -6,6 +6,10 @@ AKTUALNY STAN
 1. Kod pod SMS jest juz wdrozony na live.
 2. Live jest na commicie dd68f55.
 3. Mail o manualnej wplacie idzie juz na krzyre@gmail.com.
+3a. Po poprawce z 2026-03-26 produkcyjny env ma:
+   - ADMIN_NOTIFICATION_EMAIL=traszesmail@gmail.com
+3b. Powod poprawki:
+   - Resend testowy `onboarding@resend.dev` nie wysle maila adminowego na obcy adres i zwraca 403
 4. SMS jeszcze nie dziala produkcyjnie, bo brakuje:
    - migracji SQL w Supabase
    - konta / klucza providera SMS

@@ -51,6 +51,7 @@ Uwaga:
 - `SUPABASE_SERVICE_ROLE_KEY` musi byc prawdziwym kluczem service role (`sb_secret_...` albo legacy JWT z rola `service_role`).
 - Klucz `sb_publishable_...` nie wystarczy do zapisu ceny, bookingow ani adminowych operacji.
 - `ADMIN_NOTIFICATION_EMAIL` odbiera maile o kliknieciu `Zaplacilem, czekam na potwierdzenie` dla manualnych wplat.
+- Jesli `RESEND_FROM_EMAIL` nadal korzysta z testowego nadawcy `onboarding@resend.dev`, `ADMIN_NOTIFICATION_EMAIL` musi byc Twoim wlasnym adresem testowym Resend albo wysylka adminowa skonczy sie `403`.
 
 Pelna lista znajduje sie w `.env.example`.
 

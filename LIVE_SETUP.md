@@ -29,6 +29,11 @@ Aby dzialaly maile:
 - opcjonalnie `BEHAVIOR15_CONTACT_EMAIL` jesli chcesz nadpisac publiczny adres kontaktowy
 - opcjonalnie `BEHAVIOR15_CONTACT_PHONE`
 
+Wazne:
+- jesli wysylasz jeszcze z `onboarding@resend.dev`, `ADMIN_NOTIFICATION_EMAIL` musi byc Twoim adresem testowym Resend
+- dla `beh2` na 2026-03-26 ustawiono produkcyjnie:
+  - `ADMIN_NOTIFICATION_EMAIL=traszesmail@gmail.com`
+
 Domyslny publiczny adres kontaktowy w aplikacji:
 - `coapebehawiorysta@gmail.com`
 
