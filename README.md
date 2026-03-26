@@ -40,6 +40,7 @@ Najwazniejsze zmienne:
 - `PAYU_POS_ID`
 - `PAYU_SECOND_KEY`
 - `RESEND_API_KEY`
+- `ADMIN_NOTIFICATION_EMAIL`
 - `CRON_SECRET`
 - `SMS_PROVIDER`
 - `SMS_API_KEY`
@@ -49,6 +50,7 @@ Uwaga:
 
 - `SUPABASE_SERVICE_ROLE_KEY` musi byc prawdziwym kluczem service role (`sb_secret_...` albo legacy JWT z rola `service_role`).
 - Klucz `sb_publishable_...` nie wystarczy do zapisu ceny, bookingow ani adminowych operacji.
+- `ADMIN_NOTIFICATION_EMAIL` odbiera maile o kliknieciu `Zaplacilem, czekam na potwierdzenie` dla manualnych wplat.
 
 Pelna lista znajduje sie w `.env.example`.
 

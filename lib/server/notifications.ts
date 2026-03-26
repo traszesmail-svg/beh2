@@ -312,11 +312,11 @@ export async function sendManualPaymentReportedAdminEmail(
       <p><strong>Klient:</strong> ${escapeHtml(booking.ownerName)} | <a href="mailto:${escapeHtml(booking.email)}">${escapeHtml(booking.email)}</a> | ${escapeHtml(booking.phone)}</p>
       <p><strong>Opis:</strong> ${formatMultilineHtml(booking.description)}</p>
       <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:20px;">
-        <a href="${links.approveUrl}" style="display:inline-block;padding:12px 18px;border-radius:999px;background:#0a5c36;color:#ffffff;text-decoration:none;font-weight:700;">Potwierdź płatność</a>
-        <a href="${links.rejectUrl}" style="display:inline-block;padding:12px 18px;border-radius:999px;background:#8a3022;color:#ffffff;text-decoration:none;font-weight:700;">Odrzuć / nie znaleziono wpłaty</a>
+        <a href="${links.approveUrl}" style="display:inline-block;padding:12px 18px;border-radius:999px;background:#0a5c36;color:#ffffff;text-decoration:none;font-weight:700;">Jest wpłata - potwierdź i otwórz pokój</a>
+        <a href="${links.rejectUrl}" style="display:inline-block;padding:12px 18px;border-radius:999px;background:#8a3022;color:#ffffff;text-decoration:none;font-weight:700;">Nie ma wpłaty</a>
       </div>
     `,
-    'Po potwierdzeniu klient automatycznie dostanie mail z linkiem do pokoju rozmowy.',
+    'Po potwierdzeniu klient automatycznie dostanie mail z linkiem do pokoju rozmowy, a po odrzuceniu wróci do płatności.',
   )
   const text = [
     'Manualna płatność czeka na weryfikację.',
@@ -327,8 +327,8 @@ export async function sendManualPaymentReportedAdminEmail(
     `Kwota: ${formatPricePln(booking.amount)}`,
     `Klient: ${booking.ownerName} | ${booking.email} | ${booking.phone}`,
     `Opis: ${booking.description}`,
-    `Potwierdź: ${links.approveUrl}`,
-    `Odrzuć: ${links.rejectUrl}`,
+    `Jest wpłata: ${links.approveUrl}`,
+    `Nie ma wpłaty: ${links.rejectUrl}`,
   ].join('\n')
 
   return deliverEmail({ to: recipient, subject, html, text })

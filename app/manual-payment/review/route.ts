@@ -2,8 +2,20 @@ import { approveManualPayment, rejectManualPayment } from '@/lib/server/manual-p
 import { verifyManualPaymentReviewToken } from '@/lib/server/manual-payment-review'
 import { getBookingById } from '@/lib/server/db'
 
-function buildHtml(title: string, message: string, status: 'success' | 'error') {
+type HtmlOptions = {
+  actionHref?: string
+  actionLabel?: string
+  redirectUrl?: string
+}
+
+function buildHtml(title: string, message: string, status: 'success' | 'error', options?: HtmlOptions) {
   const accent = status === 'success' ? '#0a5c36' : '#8a3022'
+  const redirectTag = options?.redirectUrl
+    ? `<meta http-equiv="refresh" content="0;url=${options.redirectUrl}" />`
+    : ''
+  const actionLink = options?.actionHref && options?.actionLabel
+    ? `<p style="margin-top:24px;"><a href="${options.actionHref}" style="display:inline-block;padding:12px 18px;border-radius:999px;background:${accent};color:#ffffff;text-decoration:none;font-weight:700;">${options.actionLabel}</a></p>`
+    : ''
 
   return new Response(
     `<!doctype html>
@@ -12,6 +24,7 @@ function buildHtml(title: string, message: string, status: 'success' | 'error') 
           <meta charset="utf-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <title>${title}</title>
+          ${redirectTag}
           <style>
             body { margin:0; font-family: Arial, sans-serif; background:#f8f4eb; color:#1f1a17; }
             main { min-height:100vh; display:grid; place-items:center; padding:24px; }
@@ -27,6 +40,7 @@ function buildHtml(title: string, message: string, status: 'success' | 'error') 
               <div class="badge">Behawior 15</div>
               <h1>${title}</h1>
               <p>${message}</p>
+              ${actionLink}
             </article>
           </main>
         </body>
@@ -65,16 +79,21 @@ export async function GET(request: Request) {
     if (action === 'approve') {
       const updated = await approveManualPayment(booking.id)
       return buildHtml(
-        'Płatność potwierdzona',
-        `Rezerwacja ${updated.id} jest już opłacona. Klient dostał mail z linkiem do pokoju rozmowy.`,
+        'Wpłata potwierdzona',
+        `Rezerwacja ${updated.id} jest już opłacona. Otwieramy pokój rozmowy.`,
         'success',
+        {
+          redirectUrl: updated.meetingUrl,
+          actionHref: updated.meetingUrl,
+          actionLabel: 'Otwórz pokój rozmowy',
+        },
       )
     }
 
     const updated = await rejectManualPayment(booking.id)
     return buildHtml(
-      'Wpłata odrzucona',
-      `Rezerwacja ${updated.id} nie przeszła do statusu paid. Termin wrócił do puli.`,
+      'Nie ma wpłaty',
+      `Dla rezerwacji ${updated.id} nie znaleziono wpłaty. Klient musi wrócić do płatności.`,
       'success',
     )
   } catch (error) {

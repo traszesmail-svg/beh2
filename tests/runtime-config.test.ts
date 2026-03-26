@@ -7,6 +7,7 @@ import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import robots from '@/app/robots'
 import sitemap from '@/app/sitemap'
+import { GET as manualPaymentReviewRoute } from '@/app/manual-payment/review/route'
 import { ADMIN_BASIC_AUTH_USERNAME, hasValidAdminAuthorization } from '@/lib/admin-auth'
 import { POST as submitTestimonialRoute } from '@/app/api/testimonials/route'
 import { BookingStageEyebrow } from '@/components/BookingStageEyebrow'
@@ -29,9 +30,11 @@ import {
   createPendingBooking as createLocalPendingBooking,
   getBookingById as getLocalBookingById,
   listAvailability as listLocalAvailability,
+  markBookingManualPaymentPending as markLocalBookingManualPaymentPending,
   markBookingPaid as markLocalBookingPaid,
 } from '@/lib/server/local-store'
 import { buildSeedAvailabilitySlots, hasFutureAvailabilitySlots } from '@/lib/server/availability-seed'
+import { createManualPaymentReviewToken } from '@/lib/server/manual-payment-review'
 import {
   BLOCKED_CONSULTATION_PRICE_PLN,
   buildPublicPricingDisclosureMessage,
@@ -55,7 +58,7 @@ import {
 } from '@/lib/preparation'
 import { canSelfCancelBooking, getRemainingSelfCancellationSeconds, SELF_CANCELLATION_WINDOW_MS } from '@/lib/self-cancellation'
 import { createCustomerAccessToken, hasValidCustomerAccessToken, hashCustomerAccessToken } from '@/lib/server/customer-access'
-import { shouldSendBookingConfirmationAfterPayment } from '@/lib/server/notifications'
+import { sendManualPaymentReportedAdminEmail, shouldSendBookingConfirmationAfterPayment } from '@/lib/server/notifications'
 import { getReminderAuthorizationError, runBookingReminderSweep } from '@/lib/server/reminder-runner'
 import { getWarsawDateTime, shouldSendReminderForBooking } from '@/lib/server/reminders'
 import { buildPaymentConfirmationSmsMessage, sendPaymentConfirmationSms } from '@/lib/server/sms'
@@ -857,6 +860,150 @@ test('marks paid bookings as confirmed while handling SMS success, duplicates, i
 
     const storedFailureBooking = await getLocalBookingById(failureBooking.booking.id)
     assert.equal(storedFailureBooking?.smsConfirmationStatus, 'failed')
+  } finally {
+    await restoreLocalStoreFiles(backups)
+  }
+})
+
+test('sends manual payment verification emails to ADMIN_NOTIFICATION_EMAIL', async () => {
+  process.env.RESEND_API_KEY = 'resend-test-key'
+  process.env.RESEND_FROM_EMAIL = 'Behawior 15 <powiadomienia@example.com>'
+  process.env.ADMIN_NOTIFICATION_EMAIL = 'krzyre@gmail.com'
+
+  let requestBody = ''
+
+  globalThis.fetch = async (_input, init) => {
+    requestBody = typeof init?.body === 'string' ? init.body : ''
+    return new Response('{}', { status: 200, headers: { 'Content-Type': 'application/json' } })
+  }
+
+  const result = await sendManualPaymentReportedAdminEmail(
+    {
+      id: 'booking-admin-email',
+      ownerName: 'Jan Testowy',
+      problemType: 'szczeniak',
+      animalType: 'Pies',
+      petAge: '8 miesiecy',
+      durationNotes: '2 tygodnie',
+      description: 'Test manualnej wplaty.',
+      phone: '500600700',
+      email: 'client@example.com',
+      bookingDate: '2026-03-27',
+      bookingTime: '11:00',
+      slotId: 'slot-1',
+      amount: 39,
+      bookingStatus: 'pending_manual_payment',
+      paymentStatus: 'pending_manual_review',
+      meetingUrl: 'https://meet.jit.si/behawior15-test-room',
+      createdAt: '2026-03-26T10:00:00.000Z',
+      updatedAt: '2026-03-26T10:00:00.000Z',
+      paymentReference: 'MANUAL-BOOKING-1',
+    },
+    {
+      approveUrl: 'https://beh2.vercel.app/manual-payment/review?bookingId=booking-admin-email&action=approve',
+      rejectUrl: 'https://beh2.vercel.app/manual-payment/review?bookingId=booking-admin-email&action=reject',
+    },
+  )
+
+  assert.equal(result.status, 'sent')
+  assert.match(requestBody, /krzyre@gmail\.com/)
+  assert.match(requestBody, /Jest wpłata - potwierdź i otwórz pokój/)
+  assert.match(requestBody, /Nie ma wpłaty/)
+})
+
+test('manual payment review approve opens the room and reject says client must return to payment', async () => {
+  process.env.APP_DATA_MODE = 'local'
+  process.env.RESEND_API_KEY = ''
+  process.env.MANUAL_PAYMENT_REVIEW_SECRET = 'review-secret'
+  process.env.SMS_PROVIDER = 'disabled'
+
+  const backups = await backupLocalStoreFiles()
+
+  try {
+    await Promise.all(
+      trackedLocalStoreFiles.map((fileName) => rm(path.join(localStoreDataDir, fileName), { force: true })),
+    )
+
+    const availability = await listLocalAvailability()
+    const [approveSlot, rejectSlot] = availability.flatMap((group) => group.slots).slice(0, 2)
+
+    assert.ok(approveSlot)
+    assert.ok(rejectSlot)
+
+    const approveBooking = await createLocalPendingBooking({
+      ownerName: 'Approve Manual',
+      problemType: 'szczeniak',
+      animalType: 'Pies',
+      petAge: '1 rok',
+      durationNotes: 'Od tygodnia',
+      description: 'Approve route should open the room.',
+      phone: '500600700',
+      email: 'approve@example.com',
+      slotId: approveSlot!.id,
+    })
+
+    const approvePending = await markLocalBookingManualPaymentPending(approveBooking.booking.id, {
+      paymentReference: 'APPROVE-REF',
+    })
+
+    assert.ok(approvePending?.paymentReportedAt)
+
+    const approveToken = createManualPaymentReviewToken(
+      approveBooking.booking.id,
+      'approve',
+      approvePending?.paymentReportedAt,
+    )
+    const approveResponse = await manualPaymentReviewRoute(
+      new Request(
+        `http://localhost/manual-payment/review?bookingId=${approveBooking.booking.id}&action=approve&token=${approveToken}`,
+      ),
+    )
+    const approveHtml = await approveResponse.text()
+    const approveStored = await getLocalBookingById(approveBooking.booking.id)
+
+    assert.equal(approveResponse.status, 200)
+    assert.equal(approveStored?.paymentStatus, 'paid')
+    assert.equal(approveStored?.bookingStatus, 'confirmed')
+    assert.match(approveHtml, /Otwórz pokój rozmowy/)
+    assert.equal(approveHtml.includes(approveStored?.meetingUrl ?? ''), true)
+    assert.match(approveHtml, /http-equiv="refresh"/)
+
+    const rejectBooking = await createLocalPendingBooking({
+      ownerName: 'Reject Manual',
+      problemType: 'kot',
+      animalType: 'Kot',
+      petAge: '2 lata',
+      durationNotes: 'Od kilku dni',
+      description: 'Reject route should tell that client must return to payment.',
+      phone: '500700800',
+      email: 'reject@example.com',
+      slotId: rejectSlot!.id,
+    })
+
+    const rejectPending = await markLocalBookingManualPaymentPending(rejectBooking.booking.id, {
+      paymentReference: 'REJECT-REF',
+    })
+
+    assert.ok(rejectPending?.paymentReportedAt)
+
+    const rejectToken = createManualPaymentReviewToken(
+      rejectBooking.booking.id,
+      'reject',
+      rejectPending?.paymentReportedAt,
+    )
+    const rejectResponse = await manualPaymentReviewRoute(
+      new Request(
+        `http://localhost/manual-payment/review?bookingId=${rejectBooking.booking.id}&action=reject&token=${rejectToken}`,
+      ),
+    )
+    const rejectHtml = await rejectResponse.text()
+    const rejectStored = await getLocalBookingById(rejectBooking.booking.id)
+
+    assert.equal(rejectResponse.status, 200)
+    assert.equal(rejectStored?.paymentStatus, 'rejected')
+    assert.equal(rejectStored?.bookingStatus, 'cancelled')
+    assert.match(rejectHtml, /Nie ma wpłaty/)
+    assert.match(rejectHtml, /Klient musi wrócić do płatności/)
   } finally {
     await restoreLocalStoreFiles(backups)
   }

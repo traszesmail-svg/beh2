@@ -25,6 +25,7 @@ Zawiera:
 Aby dzialaly maile:
 - `RESEND_API_KEY`
 - `RESEND_FROM_EMAIL` jako techniczny adres nadawcy
+- `ADMIN_NOTIFICATION_EMAIL` jako prywatny adres do maili o manualnych wplatach i linkow `jest / nie ma wplaty`
 - opcjonalnie `BEHAVIOR15_CONTACT_EMAIL` jesli chcesz nadpisac publiczny adres kontaktowy
 - opcjonalnie `BEHAVIOR15_CONTACT_PHONE`
 
