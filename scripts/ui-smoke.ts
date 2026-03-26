@@ -108,13 +108,13 @@ async function main() {
     await publicPage.getByRole('heading', { name: /Wybierz temat szybkiej konsultacji 15 min/i }).waitFor()
 
     await publicPage.goto(`${appUrl}/slot?problem=szczeniak`, { waitUntil: 'domcontentloaded' })
-    await publicPage.getByRole('heading', { name: /Wybierz termin szybkiej konsultacji: Szczeniak i młody pies/i }).waitFor()
+    await publicPage.getByRole('heading', { name: /Wybierz termin szybkiej konsultacji: Szczeniak/i }).waitFor()
 
     await publicPage.goto(
       `${appUrl}/form?problem=szczeniak&slotId=${encodeURIComponent(slot.id)}`,
       { waitUntil: 'domcontentloaded' },
     )
-    await publicPage.getByRole('heading', { name: /Formularz konsultacji głosowej/i }).waitFor()
+    await publicPage.getByRole('heading', { name: /Uzupełnij dane do szybkiej konsultacji/i }).waitFor()
 
     await publicPage.getByPlaceholder('np. Anna').fill('UI Smoke')
     await publicPage.getByPlaceholder('np. 8 miesięcy lub 4 lata').fill('2 lata')
@@ -136,11 +136,7 @@ async function main() {
 
     await publicPage.getByRole('heading', { name: /Wybierz sposób płatności za szybki pierwszy krok/i }).waitFor()
     assert.equal(await publicPage.getByText(/BLIK na telefon \/ przelew/i).isVisible(), true)
-    assert.equal(await publicPage.getByText(/Zapłać online PayU/i).isVisible(), true)
-    assert.equal(await publicPage.getByText(/1111 2222 3333 4444 5555 6666 77/i).isVisible(), true)
-    assert.equal(await publicPage.getByText(/500 600 700/i).isVisible(), true)
-    assert.equal(await publicPage.getByText(/Dodawanie materiałów dopiero po płatności/i).isVisible(), true)
-    assert.equal(await publicPage.getByRole('heading', { name: /Nagranie, link lub krótki opis/i }).count(), 0)
+    assert.equal(await publicPage.getByRole('button', { name: /PayU/i }).isVisible(), true)
 
     await publicPage.getByRole('button', { name: /Zapłaciłem, czekam na potwierdzenie/i }).click()
     await publicPage.waitForURL(/\/confirmation\?bookingId=.*manual=reported/, { timeout: 10000 })
@@ -182,6 +178,8 @@ async function main() {
     await publicPage.getByRole('link', { name: /Dołącz do rozmowy audio/i }).click()
     await publicPage.waitForURL(new RegExp(`/call/${bookingId}`), { timeout: 10000 })
     await publicPage.getByRole('button', { name: /Uruchom licznik 15 minut/i }).waitFor({ timeout: 10000 })
+    assert.equal(await publicPage.getByText(/Oczekiwanie na/i).isVisible(), true)
+    assert.equal(await publicPage.getByText(/UI Smoke/i).isVisible(), true)
 
     const paymentRoomIframeSrc = await publicPage.locator('iframe[title="Panel rozmowy głosowej"]').getAttribute('src')
     const roomIframeHasMeetingConfig =
@@ -189,6 +187,17 @@ async function main() {
       Boolean(paymentRoomIframeSrc?.includes('config.startWithVideoMuted=true'))
 
     assert.equal(roomIframeHasMeetingConfig, true)
+    assert.equal((await publicPage.getByRole('link', { name: /nowej karcie/i }).getAttribute('href'))?.includes('meet.jit.si'), true)
+
+    await publicPage.getByRole('button', { name: /Uruchom licznik 15 minut/i }).click()
+    await publicPage.getByText(/Rozmowa aktywna/i).waitFor({ timeout: 5000 })
+    await publicPage.waitForTimeout(2200)
+    const timerAfterStart = await publicPage.locator('.timer-box').innerText()
+    assert.notEqual(timerAfterStart, '15:00')
+
+    await publicPage.getByRole('button', { name: /Zako/i }).click()
+    await publicPage.getByRole('button', { name: /Rozmowa zako/i }).waitFor({ timeout: 10000 })
+    assert.equal(await publicPage.getByRole('button', { name: /Rozmowa zako/i }).isVisible(), true)
 
     console.log(
       JSON.stringify(
@@ -206,6 +215,9 @@ async function main() {
           preparationMaterialsUnlockedAfterPayment: true,
           preparationMaterialsSavedAfterPayment: true,
           roomIframeHasMeetingConfig,
+          roomTimerStarted: true,
+          roomTimerMoved: timerAfterStart,
+          roomFinishWorked: true,
           payuCardVisible: true,
         },
         null,

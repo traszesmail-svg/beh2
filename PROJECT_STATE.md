@@ -3,118 +3,88 @@
 Date: 2026-03-26
 Repo: `C:\Projekt\behawior15-mvp-full\beh2`
 Branch: `main`
-Base commit before rebrand work: `0332fce`
+Current HEAD: `dd68f55`
+Base rebrand commit: `6cb62b5`
 
-## Scope of this session
+## Product state on current HEAD
 
-Rebrand and rebuild `https://beh2.vercel.app/` from the product-first landing `Behawior 15` into the broader expert brand:
+The public site still runs on the broader expert brand:
 
 - `Regulski | Terapia behawioralna`
 - dogs and cats as full pillars
-- low-friction entry preserved through the 15-minute flow
-- broader service architecture:
-  - 15 min
-  - 30 min
-  - behavioral consultation online
-  - home / travel consultation
-  - individual therapy
-  - socialization-therapeutic stays
-- PDF guides
+- separate low-friction 15-minute booking flow preserved under `/book`
 
-## Follow-up change
+The latest work moved from branding into payment-flow hardening.
 
-- Removed the previous cat hero asset from the tracked public branding files.
-- Replaced all current references to that image in:
-  - `app/page.tsx`
-  - `app/koty/page.tsx`
-  - `lib/offers.ts`
-- Purpose: ensure the asset is no longer used by the current branch or the current production build after redeploy.
+## Latest payment-flow hardening
 
-## Implemented so far
+- manual payment review handles approve / reject states more safely
+- stale approval clicks no longer fall back to a generic error state
+- preparation materials stay locked until booking payment is actually confirmed
+- room access stays blocked before payment confirmation
+- confirmation page auto-refreshes while the booking is waiting for admin approval
+- after approval the confirmation page unlocks:
+  - room entry
+  - preparation materials
+- confirmation view keeps the customer-facing SMS fallback copy
+- runtime tests now cover:
+  - SMS success
+  - invalid phone
+  - provider failure
+  - duplicate / repeated transitions
+  - stale manual review actions
 
-- Reworked global branding constants, layout metadata, and SEO copy.
-- Replaced homepage content with a brand-first structure:
-  - hero
-  - how I help
-  - forms of collaboration
-  - stays
-  - cats
-  - process
-  - trust
-  - FAQ
-  - final CTA
-- Added new route structure:
-  - `/oferta`
-  - `/oferta/[slug]`
-  - `/koty`
-  - `/kontakt`
-- Preserved `/book` as the separate booking flow for the 15-minute consultation and updated its copy to frame it as the first step rather than the whole brand.
-- Updated customer-facing legal copy to better match the new brand and visible payment communication.
-- Removed the visible public build marker from the footer while keeping a hidden `data-build-marker` in DOM for smoke verification.
+## Key files touched in the current payment workstream
 
-## Key files touched
-
-- `app/layout.tsx`
-- `app/page.tsx`
-- `app/book/page.tsx`
-- `app/slot/page.tsx`
-- `app/form/page.tsx`
-- `app/payment/page.tsx`
+- `app/manual-payment/review/route.ts`
 - `app/confirmation/page.tsx`
-- `app/kontakt/page.tsx`
-- `app/koty/page.tsx`
-- `app/oferta/page.tsx`
-- `app/oferta/[slug]/page.tsx`
-- `app/polityka-prywatnosci/page.tsx`
-- `app/regulamin/page.tsx`
-- `app/sitemap.ts`
-- `components/Header.tsx`
-- `components/Footer.tsx`
-- `app/globals.css`
-- `lib/site.ts`
-- `lib/seo.ts`
-- `lib/offers.ts`
+- `app/payment/page.tsx`
+- `app/call/[id]/page.tsx`
+- `components/ConfirmationStatusWatcher.tsx`
+- `app/api/bookings/[id]/prep/route.ts`
+- `app/api/bookings/[id]/prep/video/route.ts`
+- `components/PreparationMaterialsCard.tsx`
+- `lib/server/notifications.ts`
+- `lib/server/payment-options.ts`
+- `lib/server/local-store.ts`
+- `lib/server/supabase-store.ts`
+- `lib/data.ts`
+- `scripts/ui-smoke.ts`
+- `tests/runtime-config.test.ts`
 
-## Verification completed
+## Verification on current HEAD
 
-- `npm run build` PASS
+Reconfirmed on `2026-03-26` for `dd68f55`:
+
+- `git status --short` clean
 - `npm test` PASS
-- `npm run ui-smoke` PASS
+- `npm run build` PASS
+- `npm run verify-flow` PASS
 - `npm run pricing-smoke` PASS
-- `npm run verify-flow` PASS
-- `npm run live-smoke` PASS
-
-## Reconfirmed on current HEAD
-
-- Reconfirmed on `2026-03-26` for current `HEAD` / `origin/main`: `7575030`
-- `npm test` PASS
-- `npm run build` PASS
-- `npm run verify-flow` PASS
 - `npm run ui-smoke` PASS
-- `npm run live-smoke -- --expected-branch main --expected-commit 7575030` PASS
+- `npm run live-smoke -- --expected-branch main --expected-commit dd68f55` PASS
 
-## Git and deploy
+Local smoke explicitly confirmed:
 
-- Primary rebrand commit: `6cb62b5` - `Rebrand site into expert behavioral therapy brand`
-- Follow-up verification note: `675520a` - `Record deploy and verification state`
-- Current live follow-up commit: `7575030` - `Remove deprecated cat hero image asset`
-- Pushed to: `origin/main`
-- Production deploy completed through Vercel CLI
-- Production alias confirmed: `https://beh2.vercel.app/`
-- Live smoke confirmed build marker: `CLEAN_START_REPO_V1:main:7575030`
+- homepage visible
+- booking flow starts
+- payment page shows both payment methods
+- manual payment can be reported
+- call room stays blocked before approval
+- admin approval unlocks the booking
+- confirmation auto-refresh works
+- preparation materials can be saved only after payment confirmation
+- room iframe keeps the expected audio-only config
 
-## Live vs previous live
+## Git state
 
-Before deploy, live still showed the old product-first version around `Behawior 15` with visible footer marker `main / 0332fce`.
+- branch: `main`
+- local `HEAD`: `dd68f55`
+- `origin/main`: `dd68f55`
+- latest commit message: `Auto-refresh pending payment confirmation flow`
 
-After deploy, live smoke confirmed the new brand-first architecture is active, including:
+## Open external items
 
-- `Regulski | Terapia behawioralna`
-- `Jak mogę pomóc`
-- `Formy współpracy`
-- `Pobyty socjalizacyjno-terapeutyczne`
-- `Terapia kotów`
-
-It also confirmed that the old visible footer version marker is no longer exposed on the public pages.
-
-Current live verification on `2026-03-26` confirmed that `https://beh2.vercel.app/` serves build marker `CLEAN_START_REPO_V1:main:7575030`.
+- real production SMS provider configuration: `nie potwierdzilem`
+- production Vercel currently has no `SMS_PROVIDER`, `SMS_API_KEY`, `SMS_SENDER`
+- production Supabase is missing SMS migration columns; direct check returned `42703` for `bookings.sms_confirmation_status`

@@ -1,6 +1,12 @@
 import { NextResponse } from 'next/server'
-import { markBookingDone } from '@/lib/server/db'
+import { getBookingForViewer, markBookingDone } from '@/lib/server/db'
 import { ConfigurationError } from '@/lib/server/env'
+
+export const runtime = 'nodejs'
+
+function resolveAccessToken(request: Request): string | null {
+  return new URL(request.url).searchParams.get('access')
+}
 
 export async function POST(
   request: Request,
@@ -8,6 +14,27 @@ export async function POST(
 ) {
   try {
     const body = (await request.json()) as { recommendedNextStep?: string }
+    const viewerBooking = await getBookingForViewer(
+      params.id,
+      resolveAccessToken(request),
+      request.headers.get('authorization'),
+    )
+
+    if (!viewerBooking) {
+      return NextResponse.json({ error: 'Ten link do rozmowy jest nieprawidłowy albo wygasł.' }, { status: 403 })
+    }
+
+    const canComplete =
+      viewerBooking.paymentStatus === 'paid' &&
+      (viewerBooking.bookingStatus === 'confirmed' || viewerBooking.bookingStatus === 'done')
+
+    if (!canComplete) {
+      return NextResponse.json(
+        { error: 'Pokój można zamknąć dopiero po potwierdzonej płatności i aktywnej rezerwacji.' },
+        { status: 409 },
+      )
+    }
+
     const booking = await markBookingDone(params.id, body.recommendedNextStep)
 
     if (!booking) {

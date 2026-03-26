@@ -12,17 +12,25 @@ function formatTime(seconds: number): string {
 
 interface CallRoomProps {
   bookingId: string
+  accessToken: string | null
   meetingUrl: string
   ownerName: string
 }
 
-export function CallRoom({ bookingId, meetingUrl, ownerName }: CallRoomProps) {
+export function CallRoom({ bookingId, accessToken, meetingUrl, ownerName }: CallRoomProps) {
   const router = useRouter()
   const [secondsLeft, setSecondsLeft] = useState(15 * 60)
   const [running, setRunning] = useState(false)
   const [finished, setFinished] = useState(false)
   const [error, setError] = useState('')
   const embedUrl = useMemo(() => createMeetingEmbedUrl(meetingUrl), [meetingUrl])
+  const completeUrl = useMemo(
+    () =>
+      accessToken
+        ? `/api/bookings/${bookingId}/complete?access=${encodeURIComponent(accessToken)}`
+        : `/api/bookings/${bookingId}/complete`,
+    [accessToken, bookingId],
+  )
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -48,7 +56,7 @@ export function CallRoom({ bookingId, meetingUrl, ownerName }: CallRoomProps) {
     setError('')
 
     try {
-      const response = await fetch(`/api/bookings/${bookingId}/complete`, {
+      const response = await fetch(completeUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -97,7 +105,7 @@ export function CallRoom({ bookingId, meetingUrl, ownerName }: CallRoomProps) {
           <a href={meetingUrl} target="_blank" rel="noopener noreferrer" className="button button-ghost big-button">
             Otwórz rozmowę w nowej karcie
           </a>
-          <button type="button" onClick={handleFinish} className="button button-ghost big-button">
+          <button type="button" onClick={handleFinish} className="button button-ghost big-button" disabled={finished}>
             Zakończ rozmowę
           </button>
         </div>

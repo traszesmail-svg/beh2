@@ -7,6 +7,7 @@ import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import robots from '@/app/robots'
 import sitemap from '@/app/sitemap'
+import { POST as bookingCompleteRoute } from '@/app/api/bookings/[id]/complete/route'
 import { PATCH as bookingPreparationPatchRoute, POST as bookingPreparationPostRoute } from '@/app/api/bookings/[id]/prep/route'
 import { GET as manualPaymentReviewRoute } from '@/app/manual-payment/review/route'
 import { ADMIN_BASIC_AUTH_USERNAME, hasValidAdminAuthorization } from '@/lib/admin-auth'
@@ -827,6 +828,80 @@ test('allows self-cancellation only during the first minute after payment', () =
     ),
     false,
   )
+})
+
+test('complete route requires viewer access and only closes paid active bookings', async () => {
+  process.env.APP_DATA_MODE = 'local'
+  process.env.RESEND_API_KEY = ''
+  process.env.SMS_PROVIDER = 'disabled'
+
+  const backups = await backupLocalStoreFiles()
+
+  try {
+    await Promise.all(
+      trackedLocalStoreFiles.map((fileName) => rm(path.join(localStoreDataDir, fileName), { force: true })),
+    )
+
+    const availability = await listLocalAvailability()
+    const [slot] = availability.flatMap((group) => group.slots)
+
+    assert.ok(slot)
+
+    const created = await createLocalPendingBooking({
+      ownerName: 'Room Finish',
+      problemType: 'szczeniak',
+      animalType: 'Pies',
+      petAge: '2 lata',
+      durationNotes: 'Od tygodnia',
+      description: 'Closing the room should require a paid active booking and a valid viewer token.',
+      phone: '500700800',
+      email: 'room-finish@example.com',
+      slotId: slot!.id,
+    })
+
+    const deniedResponse = await bookingCompleteRoute(
+      new Request(`http://localhost/api/bookings/${created.booking.id}/complete`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ recommendedNextStep: 'Nie powinno przejÅ›Ä‡ bez dostÄ™pu.' }),
+      }),
+      { params: { id: created.booking.id } },
+    )
+
+    assert.equal(deniedResponse.status, 403)
+    assert.match(((await deniedResponse.json()) as { error?: string }).error ?? '', /link do rozmowy/i)
+
+    const unpaidResponse = await bookingCompleteRoute(
+      new Request(`http://localhost/api/bookings/${created.booking.id}/complete?access=${created.accessToken}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ recommendedNextStep: 'Za wczeÅ›nie na zamkniÄ™cie.' }),
+      }),
+      { params: { id: created.booking.id } },
+    )
+
+    assert.equal(unpaidResponse.status, 409)
+    assert.match(((await unpaidResponse.json()) as { error?: string }).error ?? '', /potwierdzonej|platnosci|płatności/i)
+
+    await markLocalBookingPaid(created.booking.id)
+
+    const successResponse = await bookingCompleteRoute(
+      new Request(`http://localhost/api/bookings/${created.booking.id}/complete?access=${created.accessToken}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ recommendedNextStep: 'PeÅ‚na konsultacja po pierwszej rozmowie.' }),
+      }),
+      { params: { id: created.booking.id } },
+    )
+
+    const stored = await getLocalBookingById(created.booking.id)
+
+    assert.equal(successResponse.status, 200)
+    assert.equal(stored?.bookingStatus, 'done')
+    assert.match(stored?.recommendedNextStep ?? '', /PeÅ‚na konsultacja/)
+  } finally {
+    await restoreLocalStoreFiles(backups)
+  }
 })
 
 test('normalizes common Polish phone input variants to E.164', () => {

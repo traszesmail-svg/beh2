@@ -78,7 +78,12 @@ export default async function CallPage({
                 <span>{booking.description}</span>
               </div>
             </div>
-            <CallRoom bookingId={booking.id} meetingUrl={booking.meetingUrl} ownerName={booking.ownerName} />
+            <CallRoom
+              bookingId={booking.id}
+              accessToken={accessToken ?? null}
+              meetingUrl={booking.meetingUrl}
+              ownerName={booking.ownerName}
+            />
             <PreparationMaterialsCard
               bookingId={booking.id}
               accessToken={accessToken ?? ''}

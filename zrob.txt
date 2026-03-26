@@ -4,12 +4,24 @@ Projekt: https://beh2.vercel.app
 
 AKTUALNY STAN
 1. Kod pod SMS jest juz wdrozony na live.
-2. Live jest na commicie 7b6c71f.
+2. Live jest na commicie dd68f55.
 3. Mail o manualnej wplacie idzie juz na krzyre@gmail.com.
 4. SMS jeszcze nie dziala produkcyjnie, bo brakuje:
    - migracji SQL w Supabase
    - konta / klucza providera SMS
    - env SMS na Vercel
+5. Live smoke na 2026-03-26 przeszedl dla:
+   - https://beh2.vercel.app/
+   - build marker: CLEAN_START_REPO_V1:main:dd68f55
+6. Potwierdzone technicznie na 2026-03-26:
+   - Vercel production nie ma env:
+     - SMS_PROVIDER
+     - SMS_API_KEY
+     - SMS_SENDER
+   - Supabase production nie ma jeszcze kolumn po migracji SMS
+   - bezposredni check zwrocil:
+     - 42703
+     - column bookings.sms_confirmation_status does not exist
 
 NAJPROSTSZY WYBOR
 1. Provider SMS: SMSAPI
