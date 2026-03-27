@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict'
-import { cp, mkdir, rm } from 'fs/promises'
+import { access, cp, mkdir, rm } from 'fs/promises'
 import path from 'path'
 import { execFileSync, spawn } from 'child_process'
 import { loadEnvConfig } from '@next/env'
@@ -72,6 +72,23 @@ async function waitForServer() {
   throw new Error('Local server did not become ready in time.')
 }
 
+async function resolveBrowserExecutablePath() {
+  const candidates = [
+    'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+    'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
+    'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe',
+  ]
+
+  for (const candidate of candidates) {
+    try {
+      await access(candidate)
+      return candidate
+    } catch {}
+  }
+
+  throw new Error('Nie znaleziono lokalnej przeglądarki Chromium (Chrome lub Edge) do ui-smoke.')
+}
+
 async function main() {
   loadEnvConfig(rootDir)
   process.env.APP_DATA_MODE = 'local'
@@ -112,7 +129,7 @@ async function main() {
 
     browser = await chromium.launch({
       headless: true,
-      executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+      executablePath: await resolveBrowserExecutablePath(),
     })
 
     const publicContext = await browser.newContext({
@@ -135,11 +152,13 @@ async function main() {
     await publicPage.goto(`${appUrl}/slot?problem=szczeniak`, { waitUntil: 'domcontentloaded' })
     await publicPage.getByRole('heading', { name: /Wybierz termin szybkiej konsultacji: Szczeniak/i }).waitFor()
 
-    await publicPage.goto(
-      `${appUrl}/form?problem=szczeniak&slotId=${encodeURIComponent(slot.id)}`,
-      { waitUntil: 'domcontentloaded' },
-    )
+    const slotLink = publicPage.locator(`a[href="/form?problem=szczeniak&slotId=${encodeURIComponent(slot.id)}"]`).first()
+    await slotLink.waitFor()
+    assert.equal((await slotLink.getAttribute('href'))?.includes('%3A'), true)
+    await slotLink.click()
+    await publicPage.waitForURL(/\/form\?problem=szczeniak&slotId=/, { timeout: 10000 })
     await publicPage.getByRole('heading', { name: /Uzupełnij dane do szybkiej konsultacji/i }).waitFor()
+    assert.equal(new URL(publicPage.url()).searchParams.get('slotId'), slot.id)
 
     await publicPage.getByPlaceholder('np. Anna').fill('UI Smoke')
     await publicPage.getByPlaceholder('np. 8 miesięcy lub 4 lata').fill('2 lata')
@@ -161,7 +180,8 @@ async function main() {
 
     await publicPage.getByRole('heading', { name: /Wybierz sposób płatności za szybki pierwszy krok/i }).waitFor()
     assert.equal(await publicPage.getByText(/BLIK na telefon \/ przelew/i).isVisible(), true)
-    assert.equal(await publicPage.getByRole('button', { name: /PayU/i }).isVisible(), true)
+    assert.equal(await publicPage.getByRole('button', { name: /PayU/i }).count(), 0)
+    assert.equal(await publicPage.getByText(/BLIK\/przelewem z potwierdzeniem do 60 minut/i).first().isVisible(), true)
 
     await publicPage.getByRole('button', { name: /Zapłaciłem, czekam na potwierdzenie/i }).click()
     await publicPage.waitForURL(/\/confirmation\?bookingId=.*manual=reported/, { timeout: 10000 })
@@ -229,7 +249,7 @@ async function main() {
         {
           homeVisible: true,
           bookingFlowStarted: true,
-          paymentPageShowsTwoMethods: true,
+          paymentPageShowsTwoMethods: false,
           paymentPageKeepsPreparationLocked: true,
           manualPaymentReported: true,
           roomBlockedBeforeApproval: true,
@@ -243,7 +263,8 @@ async function main() {
           roomTimerStarted: true,
           roomTimerMoved: timerAfterStart,
           roomFinishWorked: true,
-          payuCardVisible: true,
+          payuCardVisible: false,
+          manualOnlyFallbackVisible: true,
         },
         null,
         2,
