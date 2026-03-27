@@ -84,6 +84,8 @@ npm run lint
 npm test
 npm run build
 node --import tsx scripts/verify-flow.ts
+node --import tsx scripts/slot-form-matrix.ts
+node --import tsx scripts/payu-smoke.ts
 node --import tsx scripts/pricing-smoke.ts
 node --import tsx scripts/ui-smoke.ts
 node --import tsx scripts/reminder-smoke.ts

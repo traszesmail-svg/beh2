@@ -9,6 +9,8 @@
     "lint": "next lint --no-cache",
     "test": "node --import tsx --test tests/runtime-config.test.ts",
     "verify-flow": "node --import tsx scripts/verify-flow.ts",
+    "slot-form-matrix": "node --import tsx scripts/slot-form-matrix.ts",
+    "payu-smoke": "node --import tsx scripts/payu-smoke.ts",
     "pricing-smoke": "node --import tsx scripts/pricing-smoke.ts",
     "ui-smoke": "node --import tsx scripts/ui-smoke.ts",
     "live-smoke": "node --import tsx scripts/live-smoke.ts",
