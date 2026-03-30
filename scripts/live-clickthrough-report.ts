@@ -455,7 +455,9 @@ async function main() {
     await runStep(results, 'Header: Kontakt + href mailto/tel', publicPage, async (step) => {
       await gotoAndWaitForHeading(publicPage, `${baseUrl}/`, /Regulski\s+\|\s+Terapia behawioralna/i)
       await clickAndWaitForUrl(publicPage, publicPage.locator('a.header-link[href="/kontakt"]').first(), /\/kontakt$/)
-      await publicPage.getByRole('heading', { level: 1, name: /Opisz swoją sytuację i dobierz formę współpracy/i }).waitFor({ timeout: 20000 })
+      await publicPage
+        .getByRole('heading', { level: 1, name: /Opisz sytuację i dobierz pierwszy krok|Opisz swoją sytuację i dobierz formę współpracy/i })
+        .waitFor({ timeout: 20000 })
       mailtoHref = await readHref(publicPage.locator('a[href^="mailto:"]'))
       telHref = await readHref(publicPage.locator('a[href^="tel:"]'))
       step.notes.push(`mailto ok: ${mailtoHref}`)
@@ -512,7 +514,11 @@ async function main() {
       await clickAndWaitForUrl(publicPage, bundleLink, /\/oferta\/poradniki-pdf\/pakiety\/.+/)
       await publicPage.getByRole('heading', { level: 1 }).waitFor({ timeout: 20000 })
       const bundleTitle = cleanText(await publicPage.getByRole('heading', { level: 1 }).innerText())
-      await clickAndWaitForUrl(publicPage, publicPage.getByRole('link', { name: /Zapytaj o ten pakiet|Napisz w sprawie tego pakietu/i }).first(), /\/kontakt\?service=poradniki-pdf&bundle=/)
+      await clickAndWaitForUrl(
+        publicPage,
+        publicPage.getByRole('link', { name: /Zapytaj o ten pakiet|Napisz w sprawie (tego )?pakietu/i }).first(),
+        /\/kontakt\?service=poradniki-pdf&bundle=/,
+      )
       await publicPage.getByRole('heading', { level: 1, name: /Zapytanie o: Poradniki PDF/i }).waitFor({ timeout: 20000 })
       step.notes.push(`Pakiet: ${bundleTitle} (${bundleHref})`)
     })
