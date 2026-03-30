@@ -1,12 +1,11 @@
 import assert from 'node:assert/strict'
-import { cp, mkdir, readFile, rm } from 'fs/promises'
+import { readFile, rm } from 'fs/promises'
 import path from 'path'
 import { loadEnvConfig } from '@next/env'
 import { DEFAULT_PRICE_PLN, toStripeUnitAmount } from '../lib/pricing'
+import { createLocalDataSandbox } from './lib/local-data-sandbox'
 
 const rootDir = process.cwd()
-const dataDir = path.join(rootDir, 'data')
-const backupDir = path.join(rootDir, '.tmp-pricing-data-backup')
 
 function extractUnitAmount(lineItem: unknown): number | null {
   if (!lineItem || typeof lineItem !== 'object' || !('price_data' in lineItem)) {
@@ -36,34 +35,14 @@ function testBookingPayload(slotId: string, index: number) {
   }
 }
 
-async function backupData() {
-  await rm(backupDir, { recursive: true, force: true })
-  try {
-    await cp(dataDir, backupDir, { recursive: true, force: true })
-  } catch {
-    // Fresh repo may not have runtime-local data yet.
-  }
-}
-
-async function restoreData() {
-  await rm(dataDir, { recursive: true, force: true })
-  try {
-    await mkdir(rootDir, { recursive: true })
-    await cp(backupDir, dataDir, { recursive: true, force: true })
-  } catch {
-    // Nothing to restore when there was no local runtime data before the smoke test.
-  }
-  await rm(backupDir, { recursive: true, force: true })
-}
-
-async function cleanLocalData() {
+async function cleanLocalData(dataDir: string) {
   await rm(path.join(dataDir, 'availability.json'), { force: true })
   await rm(path.join(dataDir, 'pricing-settings.json'), { force: true })
   await rm(path.join(dataDir, 'bookings.json'), { force: true })
   await rm(path.join(dataDir, 'users.json'), { force: true })
 }
 
-async function readBookingsFile() {
+async function readBookingsFile(dataDir: string) {
   const raw = await readFile(path.join(dataDir, 'bookings.json'), 'utf8')
   return JSON.parse(raw) as Array<{ id: string; amount: number; checkoutSessionId?: string | null }>
 }
@@ -74,15 +53,16 @@ async function main() {
   process.env.APP_PAYMENT_MODE = 'mock'
   process.env.NEXT_PUBLIC_APP_URL = 'http://127.0.0.1:3101'
   process.env.RESEND_API_KEY = ''
+  const updatedAdminPrice = DEFAULT_PRICE_PLN + 8
+  const sandbox = await createLocalDataSandbox('pricing-smoke', rootDir)
+  const { dataDir } = sandbox
 
   const { getActiveConsultationPrice, listAvailability, createPendingBooking, getBookingById } = await import('../lib/server/db')
   const { buildCheckoutSessionParams } = await import('../lib/server/stripe')
   const { POST: updatePricingRoute } = await import('../app/api/admin/pricing/route')
 
-  await backupData()
-
   try {
-    await cleanLocalData()
+    await cleanLocalData(dataDir)
 
     const initialPrice = await getActiveConsultationPrice()
     assert.equal(initialPrice.amount, DEFAULT_PRICE_PLN)
@@ -104,24 +84,24 @@ async function main() {
       new Request('http://localhost/api/admin/pricing', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: '47' }),
+        body: JSON.stringify({ amount: String(updatedAdminPrice) }),
       }),
     )
     assert.equal(routeUpdateResponse.status, 200)
     const routeUpdatePayload = await routeUpdateResponse.json()
-    assert.equal(routeUpdatePayload.price.amount, 47)
+    assert.equal(routeUpdatePayload.price.amount, updatedAdminPrice)
 
     const updatedPrice = await getActiveConsultationPrice()
-    assert.equal(updatedPrice.amount, 47)
+    assert.equal(updatedPrice.amount, updatedAdminPrice)
 
     const bookingTwoCreate = await createPendingBooking(testBookingPayload(firstThreeSlots[1].id, 2))
-    assert.equal(bookingTwoCreate.booking.amount, 47)
+    assert.equal(bookingTwoCreate.booking.amount, updatedAdminPrice)
     const checkoutTwo = buildCheckoutSessionParams(bookingTwoCreate.booking, {
       accessToken: bookingTwoCreate.accessToken,
       baseUrl: process.env.NEXT_PUBLIC_APP_URL,
     })
     const checkoutTwoLineItem = checkoutTwo.line_items?.[0]
-    assert.equal(extractUnitAmount(checkoutTwoLineItem), 4700)
+    assert.equal(extractUnitAmount(checkoutTwoLineItem), toStripeUnitAmount(updatedAdminPrice))
 
     const bookingOneSnapshot = await getBookingById(bookingOneCreate.booking.id)
     assert.equal(bookingOneSnapshot?.amount, DEFAULT_PRICE_PLN)
@@ -141,7 +121,7 @@ async function main() {
     const bookingThreeCreate = await createPendingBooking(testBookingPayload(firstThreeSlots[2].id, 3))
     assert.equal(bookingThreeCreate.booking.amount, DEFAULT_PRICE_PLN)
 
-    const bookingsFile = await readBookingsFile()
+    const bookingsFile = await readBookingsFile(dataDir)
 
     console.log(
       JSON.stringify(
@@ -157,7 +137,7 @@ async function main() {
           bookingTwo: {
             id: bookingTwoCreate.booking.id,
             amount: bookingTwoCreate.booking.amount,
-            checkoutUnitAmount: 4700,
+            checkoutUnitAmount: toStripeUnitAmount(updatedAdminPrice),
           },
           bookingThree: {
             id: bookingThreeCreate.booking.id,
@@ -171,7 +151,7 @@ async function main() {
       ),
     )
   } finally {
-    await restoreData()
+    await sandbox.cleanup()
   }
 }
 

@@ -2,6 +2,10 @@
 const nextConfig = {
   experimental: {
     typedRoutes: false,
+    webpackBuildWorker: false,
+    outputFileTracingIncludes: {
+      '/*': ['./qa-reports/latest-report.md'],
+    },
   },
 }
 

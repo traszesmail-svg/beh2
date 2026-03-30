@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Poradniki PDF | Regulski</title>
+  <meta name="description" content="Seria praktycznych poradników PDF dla opiekunów psów i kotów, którzy chcą zacząć od spokojnego, konkretnego planu działania albo potrzebują uporządkowanego materiału po konsultacji.">
+  <style>
+    :root { --bg:#f7f1ea; --panel:#fffdfa; --ink:#201a16; --muted:#6b635b; --line:#ddd2c6; --accent:#8a5e3c; --shadow:0 18px 44px rgba(60,40,20,.08); }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:Georgia, serif; color:var(--ink); background:radial-gradient(circle at top right, rgba(176,127,83,.16), transparent 24%), linear-gradient(180deg, #fbf7f2 0%, var(--bg) 100%); }
+    a { color:inherit; }
+    main { width:min(1180px, calc(100% - 40px)); margin:0 auto; padding:28px 0 72px; }
+    h1,h2,h3 { font-family:"Segoe UI", Arial, sans-serif; margin:0; }
+    h1 { font-size:clamp(36px, 5vw, 62px); line-height:1.02; }
+    h2 { font-size:clamp(26px, 3vw, 36px); margin-bottom:12px; }
+    h3 { font-size:22px; margin-bottom:10px; }
+    p { margin:0; }
+    .back { display:inline-flex; align-items:center; gap:8px; text-decoration:none; color:var(--muted); margin-bottom:22px; font:600 14px/1 "Segoe UI", Arial, sans-serif; }
+    .hero { display:grid; grid-template-columns:1.25fr .9fr; gap:24px; align-items:center; margin-bottom:26px; }
+    .hero-copy, .hero-side { background:rgba(255,255,255,.88); border:1px solid var(--line); border-radius:28px; padding:28px; box-shadow:var(--shadow); }
+    .lead { font-size:18px; line-height:1.65; color:var(--muted); margin-top:16px; }
+    .eyebrow { display:inline-block; margin-bottom:14px; padding:7px 12px; border-radius:999px; background:color-mix(in srgb, var(--accent) 14%, white); color:var(--accent); font:700 12px/1 "Segoe UI", Arial, sans-serif; letter-spacing:1.2px; text-transform:uppercase; }
+    .tag-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; }
+    .tag { display:inline-flex; align-items:center; padding:7px 11px; border-radius:999px; background:#f0e7dc; color:var(--ink); font:600 12px/1 "Segoe UI", Arial, sans-serif; }
+    .actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; padding:13px 18px; border-radius:999px; background:var(--accent); color:white; text-decoration:none; font:700 14px/1 "Segoe UI", Arial, sans-serif; }
+    .btn.ghost { background:transparent; color:var(--accent); border:1px solid color-mix(in srgb, var(--accent) 40%, white); }
+    .cover-panel { display:flex; justify-content:center; align-items:center; min-height:100%; }
+    .cover-panel img { width:min(100%, 340px); border-radius:22px; box-shadow:0 26px 48px rgba(40, 22, 8, .15); border:1px solid rgba(0,0,0,.06); }
+    .section { margin-top:32px; }
+    .section-head { margin-bottom:16px; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:18px; }
+    .card { background:rgba(255,255,255,.92); border:1px solid var(--line); border-radius:24px; overflow:hidden; box-shadow:var(--shadow); }
+    .card-body { padding:22px; }
+    .product-card .cover-thumb { display:block; width:100%; aspect-ratio:1.08 / 1.35; object-fit:cover; background:#f6efe7; }
+    .subtitle { color:var(--muted); line-height:1.55; margin-bottom:12px; }
+    .meta-list, .bullet-list, .toc-list { margin:0; padding-left:18px; color:var(--muted); line-height:1.6; }
+    .bullet-list li + li, .meta-list li + li, .toc-list li + li { margin-top:6px; }
+    .card-copy { color:var(--muted); line-height:1.6; margin-top:14px; }
+    .info-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px; }
+    .info-box { background:rgba(255,255,255,.9); border:1px solid var(--line); border-radius:22px; padding:20px; box-shadow:var(--shadow); }
+    .info-box h3 { font-size:18px; margin-bottom:10px; }
+    .info-box p, .info-box li { color:var(--muted); line-height:1.65; }
+    .rich-copy { display:grid; gap:14px; }
+    .faq-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:18px; }
+    .faq-item { background:rgba(255,255,255,.9); border:1px solid var(--line); border-radius:22px; padding:20px; box-shadow:var(--shadow); }
+    .faq-item p { color:var(--muted); line-height:1.6; margin-top:10px; }
+    .cta-band { background:linear-gradient(135deg, color-mix(in srgb, var(--accent) 88%, #1d140f) 0%, color-mix(in srgb, var(--accent) 62%, #ffffff) 100%); color:white; border-radius:28px; padding:28px; box-shadow:var(--shadow); }
+    .cta-band p { max-width:760px; line-height:1.65; margin-top:10px; }
+    @media (max-width: 860px) { .hero { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Regulski | Terapia behawioralna</p>
+        <h1>Seria poradników gotowa do wdrożenia na stronę</h1>
+        <p class="lead">Seria praktycznych poradników PDF dla opiekunów psów i kotów, którzy chcą zacząć od spokojnego, konkretnego planu działania albo potrzebują uporządkowanego materiału po konsultacji.</p>
+        <div class="tag-row">
+          <span class="tag">10 poradników</span>
+          <span class="tag">5 pakietów</span>
+          <span class="tag">Lejek pies + kot</span>
+        </div>
+        <div class="actions">
+          <a class="btn" href="../../catalog/index.html">Katalog pobrań</a>
+          <a class="btn ghost" href="https://beh2.vercel.app">Strona marki</a>
+        </div>
+      </div>
+      <div class="hero-side">
+        <h2>Nie wiesz, od czego zacząć?</h2>
+        <p class="lead">Zacznij od materiału wejściowego albo szybkiej konsultacji 15 min. To najprostszy sposób, żeby dobrać poradnik lub pakiet bez zgadywania.</p>
+        <div class="tag-row">
+          <span class="tag">Szybka konsultacja 15 min</span>
+          <span class="tag">Wybierz poradnik problemowy</span>
+        </div>
+      </div>
+    </section>
+    
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">Poradniki dla opiekunów psów</p>
+        <h2>Poradniki dla opiekunów psów</h2>
+      </div>
+      <div class="grid">
+        
+  <article class="card product-card">
+    <img class="cover-thumb" src="../../covers/pies-zostaje-sam-plan-pierwszych-krokow.svg" alt="Okładka poradnika Pies zostaje sam">
+    <div class="card-body">
+      <p class="eyebrow">Produkt płatny</p>
+      <h3>Pies zostaje sam</h3>
+      <p class="subtitle">Plan pierwszych kroków przy szczekaniu, wyciu i napięciu po wyjściu opiekuna</p>
+      <ul class="meta-list">
+        <li>Poradnik główny</li>
+        <li>13 stron</li>
+        <li>ok. 24 min</li>
+        <li>49 zł albo bonus po konsultacji 30 min</li>
+      </ul>
+      <div class="tag-row">
+        <span class="tag">Pies</span>
+        <span class="tag">szybka konsultacja 15 min lub konsultacja 30 min</span>
+      </div>
+      <p class="card-copy">Praktyczny poradnik dla opiekuna, który chce zacząć działać spokojnie, a nie losowo testować kolejne pomysły.</p>
+      <div class="actions">
+        <a class="btn" href="guides/pies-zostaje-sam-plan-pierwszych-krokow.html">Karta produktu</a>
+        <a class="btn ghost" href="../../pdf/pies-zostaje-sam-plan-pierwszych-krokow.pdf">PDF</a>
+      </div>
+    </div>
+  </article>
+
+  <article class="card product-card">
+    <img class="cover-thumb" src="../../covers/szczeniak-pierwsze-30-dni.svg" alt="Okładka poradnika Szczeniak: pierwsze 30 dni">
+    <div class="card-body">
+      <p class="eyebrow">Produkt płatny</p>
+      <h3>Szczeniak: pierwsze 30 dni</h3>
+      <p class="subtitle">Profilaktyka chaosu, gryzienia, przebodźcowania i złych nawyków od pierwszego tygodnia</p>
+      <ul class="meta-list">
+        <li>Poradnik główny</li>
+        <li>11 stron</li>
+        <li>ok. 28 min</li>
+        <li>59 zł albo pakiet startowy po zakupie konsultacji</li>
+      </ul>
+      <div class="tag-row">
+        <span class="tag">Pies</span>
+        <span class="tag">konsultacja 30 min lub konsultacja behawioralna online</span>
+      </div>
+      <p class="card-copy">Kompletny plan dla pierwszego miesiąca ze szczeniakiem: środowisko, sen, aktywność, nauka i pierwsze czerwone flagi.</p>
+      <div class="actions">
+        <a class="btn" href="guides/szczeniak-pierwsze-30-dni.html">Karta produktu</a>
+        <a class="btn ghost" href="../../pdf/szczeniak-pierwsze-30-dni.pdf">PDF</a>
+      </div>
+    </div>
+  </article>
+
+  <article class="card product-card">
+    <img class="cover-thumb" src="../../covers/pies-reaktywny-na-spacerze.svg" alt="Okładka poradnika Pies reaktywny na spacerze">
+    <div class="card-body">
+      <p class="eyebrow">Produkt płatny</p>
+      <h3>Pies reaktywny na spacerze</h3>
+      <p class="subtitle">Pierwszy plan pracy przy szczekaniu, spinaniu się i trudnych mijankach</p>
+      <ul class="meta-list">
+        <li>Szybki poradnik</li>
+        <li>8 stron</li>
+        <li>ok. 13 min</li>
+        <li>59 zł albo element pakietu spacerowego</li>
+      </ul>
+      <div class="tag-row">
+        <span class="tag">Pies</span>
+        <span class="tag">szybka konsultacja 15 min lub konsultacja behawioralna online</span>
+      </div>
+      <p class="card-copy">Krótki poradnik porządkujący pierwsze decyzje przy reaktywności spacerowej.</p>
+      <div class="actions">
+        <a class="btn" href="guides/pies-reaktywny-na-spacerze.html">Karta produktu</a>
+        <a class="btn ghost" href="../../pdf/pies-reaktywny-na-spacerze.pdf">PDF</a>
+      </div>
+    </div>
+  </article>
+
+  <article class="card product-card">
+    <img class="cover-thumb" src="../../covers/pies-boi-sie-gosci-i-dzwiekow.svg" alt="Okładka poradnika Pies boi się gości i dźwięków">
+    <div class="card-body">
+      <p class="eyebrow">Lead magnet</p>
+      <h3>Pies boi się gości i dźwięków</h3>
+      <p class="subtitle">Jak ustawić bezpieczny plan przy lęku domowym, dzwonku i trudnych wizytach</p>
+      <ul class="meta-list">
+        <li>Szybki poradnik</li>
+        <li>8 stron</li>
+        <li>ok. 12 min</li>
+        <li>0 zł po zapisie lub jako pre-konsultacyjny starter</li>
+      </ul>
+      <div class="tag-row">
+        <span class="tag">Pies</span>
+        <span class="tag">szybka konsultacja 15 min lub konsultacja 30 min</span>
+      </div>
+      <p class="card-copy">Mini-poradnik dla opiekunów psów lękowych przy gościach, dźwiękach i codziennym ruchu.</p>
+      <div class="actions">
+        <a class="btn" href="guides/pies-boi-sie-gosci-i-dzwiekow.html">Karta produktu</a>
+        <a class="btn ghost" href="../../pdf/pies-boi-sie-gosci-i-dzwiekow.pdf">PDF</a>
+      </div>
+    </div>
+  </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">Poradniki dla opiekunów kotów</p>
+        <h2>Poradniki dla opiekunów kotów</h2>
+      </div>
+      <div class="grid">
+        
+  <article class="card product-card">
+    <img class="cover-thumb" src="../../covers/kot-stres-srodowisko-i-bledy-opiekuna.svg" alt="Okładka poradnika Kot: stres i środowisko">
+    <div class="card-body">
+      <p class="eyebrow">Lead magnet</p>
+      <h3>Kot: stres i środowisko</h3>
+      <p class="subtitle">Jak rozpoznać napięcie, poprawić dom i nie utrwalać problemów codziennymi błędami</p>
+      <ul class="meta-list">
+        <li>Poradnik główny</li>
+        <li>11 stron</li>
+        <li>ok. 23 min</li>
+        <li>0 zł po zapisie na listę lub jako materiał po pierwszym kontakcie</li>
+      </ul>
+      <div class="tag-row">
+        <span class="tag">Kot</span>
+        <span class="tag">szybka konsultacja 15 min lub konsultacja dla kota</span>
+      </div>
+      <p class="card-copy">Przewodnik po najczęstszych źródłach kociego stresu, subtelnych sygnałach napięcia i prostych zmianach środowiskowych.</p>
+      <div class="actions">
+        <a class="btn" href="guides/kot-stres-srodowisko-i-bledy-opiekuna.html">Karta produktu</a>
+        <a class="btn ghost" href="../../pdf/kot-stres-srodowisko-i-bledy-opiekuna.pdf">PDF</a>
+      </div>
+    </div>
+  </article>
+
+  <article class="card product-card">
+    <img class="cover-thumb" src="../../covers/kot-i-kuweta-pierwszy-plan-dzialania.svg" alt="Okładka poradnika Kot i kuweta">
+    <div class="card-body">
+      <p class="eyebrow">Produkt płatny</p>
+      <h3>Kot i kuweta</h3>
+      <p class="subtitle">Pierwszy plan działania przy sikaniu lub załatwianiu się poza kuwetą</p>
+      <ul class="meta-list">
+        <li>Poradnik główny</li>
+        <li>11 stron</li>
+        <li>ok. 25 min</li>
+        <li>59 zł albo bonus po konsultacji dla kota</li>
+      </ul>
+      <div class="tag-row">
+        <span class="tag">Kot</span>
+        <span class="tag">konsultacja dla kota lub konsultacja behawioralna online</span>
+      </div>
+      <p class="card-copy">Szczegółowy poradnik porządkujący diagnozę wstępną, środowisko, kuwetę, lokalizacje i plan monitorowania.</p>
+      <div class="actions">
+        <a class="btn" href="guides/kot-i-kuweta-pierwszy-plan-dzialania.html">Karta produktu</a>
+        <a class="btn ghost" href="../../pdf/kot-i-kuweta-pierwszy-plan-dzialania.pdf">PDF</a>
+      </div>
+    </div>
+  </article>
+
+  <article class="card product-card">
+    <img class="cover-thumb" src="../../covers/konflikt-miedzy-kotami-w-domu.svg" alt="Okładka poradnika Konflikt między kotami">
+    <div class="card-body">
+      <p class="eyebrow">Produkt płatny</p>
+      <h3>Konflikt między kotami</h3>
+      <p class="subtitle">Jak rozpoznać cichy konflikt, blokady i napięcie w domu wielokotowym</p>
+      <ul class="meta-list">
+        <li>Szybki poradnik</li>
+        <li>8 stron</li>
+        <li>ok. 13 min</li>
+        <li>59 zł albo część pakietu kociego</li>
+      </ul>
+      <div class="tag-row">
+        <span class="tag">Kot</span>
+        <span class="tag">konsultacja dla kota lub konsultacja behawioralna online</span>
+      </div>
+      <p class="card-copy">Praktyczny mini-poradnik o subtelnym konflikcie, zasobach i bezpieczeństwie w domu wielokotowym.</p>
+      <div class="actions">
+        <a class="btn" href="guides/konflikt-miedzy-kotami-w-domu.html">Karta produktu</a>
+        <a class="btn ghost" href="../../pdf/konflikt-miedzy-kotami-w-domu.pdf">PDF</a>
+      </div>
+    </div>
+  </article>
+
+  <article class="card product-card">
+    <img class="cover-thumb" src="../../covers/kot-dotyk-pielegnacja-i-obrona.svg" alt="Okładka poradnika Kot: dotyk i pielęgnacja">
+    <div class="card-body">
+      <p class="eyebrow">Bonus po konsultacji</p>
+      <h3>Kot: dotyk i pielęgnacja</h3>
+      <p class="subtitle">Pierwszy plan przy obronie, napięciu i trudnych procedurach codziennych</p>
+      <ul class="meta-list">
+        <li>Szybki poradnik</li>
+        <li>8 stron</li>
+        <li>ok. 11 min</li>
+        <li>bonus po konsultacji dla kota lub 29 zł jako dodatek</li>
+      </ul>
+      <div class="tag-row">
+        <span class="tag">Kot</span>
+        <span class="tag">konsultacja dla kota</span>
+      </div>
+      <p class="card-copy">Krótki poradnik o sygnałach granicy kota i bezpieczniejszej pielęgnacji.</p>
+      <div class="actions">
+        <a class="btn" href="guides/kot-dotyk-pielegnacja-i-obrona.html">Karta produktu</a>
+        <a class="btn ghost" href="../../pdf/kot-dotyk-pielegnacja-i-obrona.pdf">PDF</a>
+      </div>
+    </div>
+  </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">Materiały wspólne i wejściowe</p>
+        <h2>Materiały wspólne i wejściowe</h2>
+      </div>
+      <div class="grid">
+        
+  <article class="card product-card">
+    <img class="cover-thumb" src="../../covers/domowy-enrichment-plan-na-14-dni.svg" alt="Okładka poradnika Domowy enrichment">
+    <div class="card-body">
+      <p class="eyebrow">Lead magnet</p>
+      <h3>Domowy enrichment</h3>
+      <p class="subtitle">14-dniowy plan aktywności i regulacji pobudzenia dla psa lub kota mieszkającego w domu</p>
+      <ul class="meta-list">
+        <li>Szybki poradnik</li>
+        <li>10 stron</li>
+        <li>ok. 14 min</li>
+        <li>0 zł po zapisie lub jako materiał po zakupie konsultacji 15 min</li>
+      </ul>
+      <div class="tag-row">
+        <span class="tag">Pies i kot</span>
+        <span class="tag">szybka konsultacja 15 min</span>
+      </div>
+      <p class="card-copy">Krótki, checklistowy materiał z gotowym planem aktywności, odpoczynku i notowania reakcji psa lub kota.</p>
+      <div class="actions">
+        <a class="btn" href="guides/domowy-enrichment-plan-na-14-dni.html">Karta produktu</a>
+        <a class="btn ghost" href="../../pdf/domowy-enrichment-plan-na-14-dni.pdf">PDF</a>
+      </div>
+    </div>
+  </article>
+
+  <article class="card product-card">
+    <img class="cover-thumb" src="../../covers/pierwsze-dni-po-adopcji-psa-lub-kota.svg" alt="Okładka poradnika Pierwsze dni po adopcji">
+    <div class="card-body">
+      <p class="eyebrow">Bonus po konsultacji</p>
+      <h3>Pierwsze dni po adopcji</h3>
+      <p class="subtitle">Bezpieczne wdrożenie psa lub kota do domu bez przeciążania, pośpiechu i złych interpretacji</p>
+      <ul class="meta-list">
+        <li>Szybki poradnik</li>
+        <li>9 stron</li>
+        <li>ok. 15 min</li>
+        <li>bonus do konsultacji lub gratis po zapytaniu o dobór ścieżki</li>
+      </ul>
+      <div class="tag-row">
+        <span class="tag">Pies i kot</span>
+        <span class="tag">kontakt w sprawie doboru ścieżki lub konsultacja 15 min</span>
+      </div>
+      <p class="card-copy">Krótki poradnik wdrożeniowy dla opiekunów po adopcji: pierwszy dzień, pierwszy tydzień i sygnały, które wymagają zmiany planu.</p>
+      <div class="actions">
+        <a class="btn" href="guides/pierwsze-dni-po-adopcji-psa-lub-kota.html">Karta produktu</a>
+        <a class="btn ghost" href="../../pdf/pierwsze-dni-po-adopcji-psa-lub-kota.pdf">PDF</a>
+      </div>
+    </div>
+  </article>
+      </div>
+    </section>
+    
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">Pakiety</p>
+        <h2>Pakiety i ścieżki wejścia do konsultacji</h2>
+      </div>
+      <div class="grid">
+        
+  <article class="card bundle-card">
+    <div class="card-body">
+      <p class="eyebrow">PAKIET</p>
+      <h3>Pakiet Startowy Psa</h3>
+      <p class="subtitle">Spokojny start, lepszy rytm dnia i mniej chaosu w pierwszych tygodniach.</p>
+      <ul class="meta-list">
+        <li>89 zł</li>
+        <li>3 materiały</li>
+        <li>Pies i kot</li>
+      </ul>
+      <p class="card-copy">Dla kogo: nowy opiekun psa lub szczeniaka</p>
+      <ul class="bullet-list"><li>Szczeniak: pierwsze 30 dni</li><li>Domowy enrichment</li><li>Pierwsze dni po adopcji</li></ul>
+      <div class="actions">
+        <a class="btn" href="bundles/pakiet-startowy-psa.html">Zobacz pakiet</a>
+      </div>
+    </div>
+  </article>
+
+  <article class="card bundle-card">
+    <div class="card-body">
+      <p class="eyebrow">PAKIET</p>
+      <h3>Pakiet Spokojny Dom: pies</h3>
+      <p class="subtitle">Mniej przeciążenia, lepszy plan domowy i niższy próg wejścia do konsultacji.</p>
+      <ul class="meta-list">
+        <li>99 zł</li>
+        <li>3 materiały</li>
+        <li>Pies i kot</li>
+      </ul>
+      <p class="card-copy">Dla kogo: opiekun psa z napięciem w domu i przy rozłące</p>
+      <ul class="bullet-list"><li>Pies zostaje sam</li><li>Pies boi się gości i dźwięków</li><li>Domowy enrichment</li></ul>
+      <div class="actions">
+        <a class="btn" href="bundles/pakiet-spokojny-dom-pies.html">Zobacz pakiet</a>
+      </div>
+    </div>
+  </article>
+
+  <article class="card bundle-card">
+    <div class="card-body">
+      <p class="eyebrow">PAKIET</p>
+      <h3>Pakiet Spacery Bez Napięcia</h3>
+      <p class="subtitle">Pierwszy plan pracy na spacerze i lepsza kontrola bodźców codziennych.</p>
+      <ul class="meta-list">
+        <li>69 zł</li>
+        <li>2 materiały</li>
+        <li>Pies</li>
+      </ul>
+      <p class="card-copy">Dla kogo: opiekun psa reaktywnego lub lękowego na spacerze</p>
+      <ul class="bullet-list"><li>Pies reaktywny na spacerze</li><li>Pies boi się gości i dźwięków</li></ul>
+      <div class="actions">
+        <a class="btn" href="bundles/pakiet-spacerowy-pies.html">Zobacz pakiet</a>
+      </div>
+    </div>
+  </article>
+
+  <article class="card bundle-card">
+    <div class="card-body">
+      <p class="eyebrow">PAKIET</p>
+      <h3>Pakiet Kota Domowego</h3>
+      <p class="subtitle">Środowisko, kuweta i relacje domowe spięte w jeden sensowny plan.</p>
+      <ul class="meta-list">
+        <li>99 zł</li>
+        <li>3 materiały</li>
+        <li>Kot</li>
+      </ul>
+      <p class="card-copy">Dla kogo: opiekun kota w napięciu środowiskowym</p>
+      <ul class="bullet-list"><li>Kot: stres i środowisko</li><li>Kot i kuweta</li><li>Konflikt między kotami</li></ul>
+      <div class="actions">
+        <a class="btn" href="bundles/pakiet-kota-domowego.html">Zobacz pakiet</a>
+      </div>
+    </div>
+  </article>
+
+  <article class="card bundle-card">
+    <div class="card-body">
+      <p class="eyebrow">PAKIET</p>
+      <h3>Pakiet Kot Bez Napięcia</h3>
+      <p class="subtitle">Lepsze bezpieczeństwo kota, mniej obrony i czytelniejsza praca z domem.</p>
+      <ul class="meta-list">
+        <li>79 zł</li>
+        <li>3 materiały</li>
+        <li>Kot</li>
+      </ul>
+      <p class="card-copy">Dla kogo: opiekun kota lękowego lub łatwo przeciążającego się</p>
+      <ul class="bullet-list"><li>Kot: stres i środowisko</li><li>Kot: dotyk i pielęgnacja</li><li>Konflikt między kotami</li></ul>
+      <div class="actions">
+        <a class="btn" href="bundles/pakiet-kot-bez-napiecia.html">Zobacz pakiet</a>
+      </div>
+    </div>
+  </article>
+      </div>
+    </section>
+    
+  <section class="section">
+    <div class="section-head">
+      <p class="eyebrow">FAQ</p>
+      <h2>Najczęstsze pytania przed wyborem poradnika</h2>
+    </div>
+    <div class="faq-grid">
+    <article class="faq-item">
+      <h3>Czy poradnik zastępuje konsultację?</h3>
+      <p>Nie. To pierwszy sensowny plan i materiał wdrożeniowy. Jeśli problem jest szerszy, poradnik skraca drogę do konsultacji, ale jej nie zastępuje.</p>
+    </article>
+
+    <article class="faq-item">
+      <h3>Czy poradniki nadają się dla początkujących?</h3>
+      <p>Tak, ale nie są banalne. Początkujący opiekun dostaje porządek i jasne kroki, a bardziej świadomy klient dostaje materiał do wdrożenia bez chaosu.</p>
+    </article>
+
+    <article class="faq-item">
+      <h3>Od którego materiału zacząć?</h3>
+      <p>Jeśli problem jest pilny i konkretny, wybierz temat główny. Jeśli dopiero porządkujesz sytuację, zacznij od materiału darmowego, pakietu albo szybkiej konsultacji 15 min.</p>
+    </article></div>
+  </section>
+    <section class="section cta-band">
+      <p class="eyebrow" style="background:rgba(255,255,255,.15); color:white;">Dalej</p>
+      <h2>Najbliższy krok po wdrożeniu materiałów</h2>
+      <p>Jeśli po przejściu przez poradnik lub pakiet nadal nie wiadomo, od czego zacząć dalej, najniższym progiem wejścia pozostaje szybka konsultacja 15 min. To dobry most między samodzielnym wdrożeniem a głębszą konsultacją.</p>
+      <div class="actions">
+        <a class="btn ghost" href="https://beh2.vercel.app">Przejdź do marki</a>
+      </div>
+    </section></main>
+</body>
+</html>

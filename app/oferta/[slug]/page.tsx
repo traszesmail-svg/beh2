@@ -1,3 +1,4 @@
+import React from 'react'
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -16,7 +17,7 @@ type OfferDetailPageProps = {
 export const dynamic = 'force-dynamic'
 
 export function generateStaticParams() {
-  return OFFERS.map((offer) => ({
+  return OFFERS.filter((offer) => offer.slug !== 'poradniki-pdf').map((offer) => ({
     slug: offer.slug,
   }))
 }
@@ -85,11 +86,11 @@ export default function OfferDetailPage({ params }: OfferDetailPageProps) {
             ) : null}
 
             <div className="hero-actions top-gap">
-              <Link href={offer.primaryHref} className="button button-primary big-button">
+              <Link href={offer.primaryHref} prefetch={false} className="button button-primary big-button">
                 {offer.primaryCtaLabel}
               </Link>
               {offer.secondaryHref && offer.secondaryCtaLabel ? (
-                <Link href={offer.secondaryHref} className="button button-ghost big-button">
+                <Link href={offer.secondaryHref} prefetch={false} className="button button-ghost big-button">
                   {offer.secondaryCtaLabel}
                 </Link>
               ) : null}
@@ -138,16 +139,16 @@ export default function OfferDetailPage({ params }: OfferDetailPageProps) {
 
         <section className="panel cta-panel compact-sales-cta">
           <div className="section-eyebrow">Dalszy krok</div>
-          <h2>Jeśli nie masz pewności, która ścieżka będzie właściwa, zacznij od kontaktu.</h2>
+          <h2>Nie jesteś pewien, która ścieżka ma sens? Napisz do mnie zamiast zgadywać.</h2>
           <p className="hero-text">
             Możesz przejść do kontaktu albo wrócić do przeglądu całej oferty. Najważniejsze jest dobranie pomocy do
             sytuacji, a nie odwrotnie.
           </p>
           <div className="hero-actions top-gap">
-            <Link href="/kontakt" className="button button-primary big-button">
-              Przejdź do kontaktu
+            <Link href="/kontakt" prefetch={false} className="button button-primary big-button">
+              Napisz i dobierz formę współpracy
             </Link>
-            <Link href="/oferta" className="button button-ghost big-button">
+            <Link href="/oferta" prefetch={false} className="button button-ghost big-button">
               Wróć do form współpracy
             </Link>
           </div>

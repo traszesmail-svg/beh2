@@ -1,6 +1,7 @@
-import { mkdir, readFile, rm, writeFile } from 'fs/promises'
+import { rm } from 'fs/promises'
 import path from 'path'
 import { isFutureAvailabilitySlot } from '../lib/data'
+import { createLocalDataSandbox } from './lib/local-data-sandbox'
 import {
   attachPayuOrder,
   createAvailabilitySlot,
@@ -17,7 +18,6 @@ import {
 import { getManualPaymentReference } from '../lib/server/payment-options'
 
 const rootDir = process.cwd()
-const dataDir = path.join(rootDir, 'data')
 const trackedFiles = ['availability.json', 'bookings.json', 'users.json', 'pricing-settings.json']
 
 function assert(condition: unknown, message: string): asserts condition {
@@ -26,43 +26,13 @@ function assert(condition: unknown, message: string): asserts condition {
   }
 }
 
-async function backupFiles() {
-  await mkdir(dataDir, { recursive: true })
-
-  const backups = await Promise.all(
-    trackedFiles.map(async (fileName) => {
-      const filePath = path.join(dataDir, fileName)
-
-      try {
-        const content = await readFile(filePath, 'utf8')
-        return { fileName, content, existed: true }
-      } catch {
-        return { fileName, content: '', existed: false }
-      }
-    }),
-  )
-
-  return backups
-}
-
-async function restoreFiles(backups: Awaited<ReturnType<typeof backupFiles>>) {
-  for (const backup of backups) {
-    const filePath = path.join(dataDir, backup.fileName)
-    if (!backup.existed) {
-      await rm(filePath, { force: true })
-      continue
-    }
-
-    await writeFile(filePath, backup.content, 'utf8')
-  }
-}
-
 async function main() {
   process.env.RESEND_API_KEY = ''
   process.env.BEHAVIOR15_CONTACT_PHONE = '500600700'
   process.env.MANUAL_PAYMENT_BANK_ACCOUNT = '11112222333344445555666677'
   process.env.SMS_PROVIDER = 'disabled'
-  const backups = await backupFiles()
+  const sandbox = await createLocalDataSandbox('verify-flow', rootDir)
+  const { dataDir } = sandbox
 
   try {
     await Promise.all(trackedFiles.map((fileName) => rm(path.join(dataDir, fileName), { force: true })))
@@ -220,7 +190,7 @@ async function main() {
       ),
     )
   } finally {
-    await restoreFiles(backups)
+    await sandbox.cleanup()
   }
 }
 

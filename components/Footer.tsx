@@ -28,7 +28,7 @@ export function Footer() {
     <footer className="site-footer" id="kontakt">
       <div className="site-footer-grid">
         <div className="footer-card">
-          <div className="section-eyebrow">Kontakt końcowy</div>
+          <div className="section-eyebrow">Marka i kontakt</div>
           <h2 className="footer-title">{SITE_NAME}</h2>
           <p className="muted footer-copy">
             {SITE_TAGLINE}. {SPECIALIST_NAME}, {SPECIALIST_CREDENTIALS}.
@@ -52,9 +52,9 @@ export function Footer() {
               </a>
             ) : null}
 
-            <Link href="/kontakt" className="contact-item">
-              <span className="contact-label">Zapytanie</span>
-              <span>Dobierz formę współpracy</span>
+            <Link href="/kontakt" prefetch={false} className="contact-item">
+              <span className="contact-label">Kontakt</span>
+              <span>Napisz i dobierz pierwszy krok</span>
             </Link>
           </div>
         </div>
@@ -62,14 +62,14 @@ export function Footer() {
         <div className="footer-card">
           <div className="footer-label">Skróty</div>
           <div className="footer-links">
-            <Link href="/oferta">Formy współpracy</Link>
-            <Link href="/koty">Terapia kotów</Link>
-            <Link href="/oferta/pobyty-socjalizacyjno-terapeutyczne">Pobyty</Link>
-            <Link href="/book" data-analytics-event="reserve_click" data-analytics-location="footer">
+            <Link href="/oferta" prefetch={false}>Formy współpracy</Link>
+            <Link href="/koty" prefetch={false}>Terapia kotów</Link>
+            <Link href="/oferta/pobyty-socjalizacyjno-terapeutyczne" prefetch={false}>Pobyty</Link>
+            <Link href="/book" prefetch={false} data-analytics-event="cta_click" data-analytics-location="footer">
               Umów konsultację 15 min
             </Link>
-            <Link href="/polityka-prywatnosci">Polityka prywatności</Link>
-            <Link href="/regulamin">Regulamin</Link>
+            <Link href="/polityka-prywatnosci" prefetch={false}>Polityka prywatności</Link>
+            <Link href="/regulamin" prefetch={false}>Regulamin</Link>
           </div>
         </div>
       </div>
@@ -78,9 +78,9 @@ export function Footer() {
         <div className="footer-certification-copy">
           <span className="footer-label">Zaufanie</span>
           <span>
-            COAPE / CAPBT jako sygnał kwalifikacji.{' '}
+            COAPE / CAPBT jako potwierdzenie kwalifikacji.{' '}
             <a href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="inline-link">
-              Zobacz publiczny profil specjalisty
+              Zobacz publiczny profil specjalisty w CAPBT
             </a>
           </span>
         </div>

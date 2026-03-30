@@ -42,7 +42,7 @@ export function Header() {
       <header className="header-shell">
         <div className="header-main">
           <div className="header-branding">
-            <Link href="/" className="brand-link">
+            <Link href="/" prefetch={false} className="brand-link">
               <span className="brand-mark" aria-hidden="true" />
               <div>
                 <div className="eyebrow">{SITE_TAGLINE}</div>
@@ -57,7 +57,7 @@ export function Header() {
           <div className="header-nav">
             <nav className="header-links" aria-label="Główna nawigacja">
               {headerLinks.map((link) => (
-                <Link key={link.href} href={link.href} className="header-link">
+                <Link key={link.href} href={link.href} prefetch={false} className="header-link">
                   {link.label}
                 </Link>
               ))}
@@ -65,8 +65,9 @@ export function Header() {
 
             <Link
               href="/book"
+              prefetch={false}
               className="button button-primary header-cta"
-              data-analytics-event="reserve_click"
+              data-analytics-event="cta_click"
               data-analytics-location="header"
             >
               Umów konsultację

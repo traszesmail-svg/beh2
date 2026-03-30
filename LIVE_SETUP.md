@@ -30,9 +30,9 @@ Aby dzialaly maile:
 - opcjonalnie `BEHAVIOR15_CONTACT_PHONE`
 
 Wazne:
-- jesli wysylasz jeszcze z `onboarding@resend.dev`, `ADMIN_NOTIFICATION_EMAIL` musi byc Twoim adresem testowym Resend
-- dla `beh2` na 2026-03-26 ustawiono produkcyjnie:
-  - `ADMIN_NOTIFICATION_EMAIL=traszesmail@gmail.com`
+- jesli wysylasz jeszcze z `onboarding@resend.dev`, customer maile do zewnetrznych adresow beda blokowane do czasu weryfikacji domeny w Resend
+- w tym trybie `ADMIN_NOTIFICATION_EMAIL` musi wskazywac adres konta Resend, inaczej powiadomienie adminowe tez moze skonczyc sie `403`
+- dla `beh2` na 2026-03-28 potwierdzony pozostaje tylko zewnetrzny blocker po stronie Resend: brak zweryfikowanej domeny nadawcy dla realnych customer maili
 
 Domyslny publiczny adres kontaktowy w aplikacji:
 - `coapebehawiorysta@gmail.com`
@@ -91,3 +91,18 @@ Ustaw:
 Login w basic auth:
 - `admin`
 - haslo = `ADMIN_ACCESS_SECRET`
+
+## 7. PayU smoke przed deployem
+Przed deployem mozesz odpalic:
+
+- `npm run payu-smoke`
+
+Skrypt:
+
+- startuje aplikacje lokalnie na losowym porcie
+- tworzy testowy booking w `APP_DATA_MODE=local`
+- uruchamia prawdziwy checkout PayU sandbox przez `/api/payments/payu/checkout`
+- sprawdza, czy booking zapisuje `paymentMethod=payu`, `payuOrderId` i `payuOrderStatus`
+
+Jesli lokalnie nie masz jeszcze swoich sekretow sandbox, skrypt korzysta z oficjalnego publicznego POS testowego PayU dostepnego w dokumentacji sandbox.
+Nie uzywaj tych publicznych danych do produkcji.

@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { isProblemType } from '@/lib/data'
 import { isValidPolishPhone } from '@/lib/phone'
 import { createPendingBooking } from '@/lib/server/db'
-import { ConfigurationError, getPublicFeatureUnavailableMessage } from '@/lib/server/env'
+import { getBookingApiErrorSnapshot } from '@/lib/server/booking-api-errors'
 import { AnimalType } from '@/lib/types'
 
 function isAnimalType(value: unknown): value is AnimalType {
@@ -11,18 +11,6 @@ function isAnimalType(value: unknown): value is AnimalType {
 
 function isEmailValid(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
-}
-
-function getErrorMessage(error: unknown): string {
-  if (error instanceof Error) {
-    return error.message
-  }
-
-  if (typeof error === 'object' && error !== null && 'message' in error && typeof error.message === 'string') {
-    return error.message
-  }
-
-  return 'Nie udało się utworzyć bookingu.'
 }
 
 export async function POST(request: Request) {
@@ -55,15 +43,7 @@ export async function POST(request: Request) {
     const email = body.email
     const slotId = body.slotId
 
-    const fields = [
-      ownerName,
-      petAge,
-      durationNotes,
-      description,
-      phone,
-      email,
-      slotId,
-    ]
+    const fields = [ownerName, petAge, durationNotes, description, phone, email, slotId]
 
     if (fields.some((value) => value.trim().length === 0)) {
       return NextResponse.json({ error: 'Uzupełnij wszystkie pola formularza.' }, { status: 400 })
@@ -102,7 +82,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ bookingId: result.booking.id, accessToken: result.accessToken })
   } catch (error) {
     console.error('[behawior15][booking-api] create failed', error)
-    const message = error instanceof ConfigurationError ? getPublicFeatureUnavailableMessage('booking') : getErrorMessage(error)
-    return NextResponse.json({ error: message }, { status: error instanceof ConfigurationError ? 503 : 409 })
+    const failure = getBookingApiErrorSnapshot(error)
+    return NextResponse.json({ error: failure.message }, { status: failure.status })
   }
 }

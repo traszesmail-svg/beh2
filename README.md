@@ -7,10 +7,11 @@ Lekka aplikacja Next.js dla jednego specjalisty prowadzacego 15-minutowe konsult
 - flow klienta: `problem -> slot -> form -> payment -> confirmation -> call`
 - panel `/admin` z zarzadzaniem cena, terminami i podgladem rezerwacji
 - materialy przed rozmowa: MP4, link, notatki
+- zintegrowany katalog poradnikow PDF trzymany w `content/guides/`
 - przypomnienia mailowe i flow maili przez Resend
 - PayU + manual review jako aktywny flow platnosci live, z legacy Stripe/mock zachowanym do zgodnosci i QA
 - serwerowe potwierdzenia platnosci SMS z idempotencja po webhooku / finalnym sukcesie po stronie backendu
-- lokalny fallback JSON do developmentu, ktory tworzy katalog `data/` runtime tylko wtedy, gdy pracujesz w trybie local
+- lokalny fallback JSON do developmentu, ktory tworzy katalog `data/` runtime tylko wtedy, gdy pracujesz w trybie local; statyczne tresci produktowe nie powinny byc tam trzymane
 
 ## Wymagania
 
@@ -51,7 +52,7 @@ Uwaga:
 - `SUPABASE_SERVICE_ROLE_KEY` musi byc prawdziwym kluczem service role (`sb_secret_...` albo legacy JWT z rola `service_role`).
 - Klucz `sb_publishable_...` nie wystarczy do zapisu ceny, bookingow ani adminowych operacji.
 - `ADMIN_NOTIFICATION_EMAIL` odbiera maile o kliknieciu `Zaplacilem, czekam na potwierdzenie` dla manualnych wplat.
-- Jesli `RESEND_FROM_EMAIL` nadal korzysta z testowego nadawcy `onboarding@resend.dev`, `ADMIN_NOTIFICATION_EMAIL` musi byc Twoim wlasnym adresem testowym Resend albo wysylka adminowa skonczy sie `403`.
+- Jesli `RESEND_FROM_EMAIL` nadal korzysta z testowego nadawcy `onboarding@resend.dev`, customer maile do zewnetrznych adresow pozostaja zablokowane do czasu weryfikacji domeny w Resend. W tym trybie `ADMIN_NOTIFICATION_EMAIL` powinien wskazywac adres konta Resend, inaczej powiadomienie adminowe tez moze skonczyc sie `403`.
 
 Pelna lista znajduje sie w `.env.example`.
 

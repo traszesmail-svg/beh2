@@ -1,16 +1,43 @@
 import assert from 'node:assert/strict'
-import { access, cp, mkdir, rm } from 'node:fs/promises'
+import { access, mkdir, rm, writeFile } from 'node:fs/promises'
 import path from 'node:path'
+import { createRequire } from 'node:module'
 import { execFileSync, spawn } from 'node:child_process'
 import { loadEnvConfig } from '@next/env'
 import { chromium } from 'playwright-core'
 import { problemOptions } from '../lib/data'
+import { createLocalDataSandbox } from './lib/local-data-sandbox'
 
+const require = createRequire(import.meta.url)
 const rootDir = process.cwd()
-const dataDir = path.join(rootDir, 'data')
-const backupDir = path.join(rootDir, '.tmp-slot-form-matrix-backup')
 const port = 3410 + Math.floor(Math.random() * 200)
 const appUrl = `http://localhost:${port}`
+const nextBinPath = require.resolve('next/dist/bin/next')
+
+function getWarsawTimestamp() {
+  const formatter = new Intl.DateTimeFormat('sv-SE', {
+    timeZone: 'Europe/Warsaw',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  })
+  const values: Record<string, string> = {}
+
+  for (const part of formatter.formatToParts(new Date())) {
+    if (part.type !== 'literal') {
+      values[part.type] = part.value
+    }
+  }
+
+  return {
+    isoLike: `${values.year}-${values.month}-${values.day} ${values.hour}:${values.minute}:${values.second} Europe/Warsaw`,
+    compact: `${values.year}${values.month}${values.day}-${values.hour}${values.minute}${values.second}`,
+  }
+}
 
 function getWarsawSlotInMinutes(offsetMinutes: number) {
   const target = new Date(Date.now() + offsetMinutes * 60 * 1000)
@@ -37,31 +64,18 @@ function getWarsawSlotInMinutes(offsetMinutes: number) {
   }
 }
 
-async function backupData() {
-  await rm(backupDir, { recursive: true, force: true })
-  try {
-    await cp(dataDir, backupDir, { recursive: true, force: true })
-  } catch {}
-}
-
-async function restoreData() {
-  await rm(dataDir, { recursive: true, force: true })
-  try {
-    await mkdir(rootDir, { recursive: true })
-    await cp(backupDir, dataDir, { recursive: true, force: true })
-  } catch {}
-  await rm(backupDir, { recursive: true, force: true })
-}
-
-async function cleanLocalData() {
+async function cleanLocalData(dataDir: string) {
   await rm(path.join(dataDir, 'availability.json'), { force: true })
   await rm(path.join(dataDir, 'pricing-settings.json'), { force: true })
   await rm(path.join(dataDir, 'bookings.json'), { force: true })
   await rm(path.join(dataDir, 'users.json'), { force: true })
 }
 
-async function waitForServer() {
-  for (let attempt = 0; attempt < 120; attempt += 1) {
+async function waitForServer(server: ReturnType<typeof spawn>, startupLogs: string[]) {
+  for (let attempt = 0; attempt < 180; attempt += 1) {
+    if (server.exitCode !== null) {
+      break
+    }
     try {
       const response = await fetch(appUrl, { cache: 'no-store' })
       if (response.status > 0) {
@@ -72,7 +86,8 @@ async function waitForServer() {
     await new Promise((resolve) => setTimeout(resolve, 1000))
   }
 
-  throw new Error('Local server did not become ready in time.')
+  const serverLogs = startupLogs.length > 0 ? `\nServer logs:\n${startupLogs.join('\n')}` : ''
+  throw new Error(`Local server did not become ready in time.${serverLogs}`)
 }
 
 async function resolveBrowserExecutablePath() {
@@ -92,6 +107,64 @@ async function resolveBrowserExecutablePath() {
   throw new Error('Nie znaleziono lokalnej przegladarki Chromium (Chrome lub Edge) do slot-form-matrix.')
 }
 
+async function resolveServerCommand() {
+  try {
+    await access(path.join(rootDir, '.next', 'BUILD_ID'))
+    return {
+      mode: 'start' as const,
+      args: ['start', '--hostname', '127.0.0.1', '--port', String(port)],
+    }
+  } catch {
+    return {
+      mode: 'dev' as const,
+      args: ['dev', '--hostname', '127.0.0.1', '--port', String(port)],
+    }
+  }
+}
+
+function buildReportMarkdown({
+  timestamp,
+  serverMode,
+  results,
+}: {
+  timestamp: string
+  serverMode: 'start' | 'dev'
+  results: Array<{
+    topic: string
+    label: string
+    slots: Array<{
+      slotId: string
+      slotLabel: string
+      url: string
+    }>
+  }>
+}) {
+  const lines = [
+    '# Raport QA Booking Matrix',
+    '',
+    `- Data: ${timestamp}`,
+    `- Tryb lokalnego serwera: next ${serverMode}`,
+    `- URL: ${appUrl}`,
+    `- Topics z kodu: ${results.length}`,
+    '- Wynik: PASS',
+    '',
+    '## Zakres',
+    '- Każdy topic z `lib/data.ts` został sprawdzony przez ścieżkę `/slot -> /form`.',
+    '- Dla każdego topicu potwierdzono 2 przyszłe sloty.',
+    '- W każdej kombinacji formularz załadował się bez błędów RSC i bez pageerrorów.',
+    '',
+    '## Wyniki',
+  ]
+
+  for (const topic of results) {
+    lines.push(`### PASS - ${topic.topic}`)
+    lines.push(`- Label: ${topic.label}`)
+    lines.push(...topic.slots.map((slot, index) => `- Slot ${index + 1}: ${slot.slotLabel} | ${slot.url}`))
+    lines.push('')
+  }
+
+  return lines.join('\n')
+}
 async function main() {
   loadEnvConfig(rootDir)
   process.env.APP_DATA_MODE = 'local'
@@ -103,15 +176,14 @@ async function main() {
   process.env.MANUAL_PAYMENT_ACCOUNT_NAME = 'Krzysztof Regulski'
   process.env.SMS_PROVIDER = 'disabled'
 
+  const sandbox = await createLocalDataSandbox('slot-form-matrix', rootDir)
+  const { dataDir } = sandbox
   const localStore = await import('../lib/server/local-store')
-
-  await backupData()
-
   let server: ReturnType<typeof spawn> | null = null
   let browser: Awaited<ReturnType<typeof chromium.launch>> | null = null
 
   try {
-    await cleanLocalData()
+    await cleanLocalData(dataDir)
 
     const seededSlots = await Promise.all(
       [120, 140].map(async (offsetMinutes) => {
@@ -120,14 +192,29 @@ async function main() {
       }),
     )
 
-    server = spawn('cmd.exe', ['/c', 'npm', 'run', 'start', '--', '--port', String(port)], {
+    const startupLogs: string[] = []
+    const serverCommand = await resolveServerCommand()
+
+    server = spawn(process.execPath, [nextBinPath, ...serverCommand.args], {
       cwd: rootDir,
       env: process.env,
-      stdio: 'ignore',
+      stdio: ['ignore', 'pipe', 'pipe'],
       windowsHide: true,
     })
 
-    await waitForServer()
+    const captureServerLog = (chunk: string | Buffer) => {
+      const text = chunk.toString().trim()
+      if (text.length === 0) {
+        return
+      }
+
+      startupLogs.push(text)
+    }
+
+    server.stdout?.on('data', captureServerLog)
+    server.stderr?.on('data', captureServerLog)
+
+    await waitForServer(server, startupLogs)
 
     browser = await chromium.launch({
       headless: true,
@@ -204,11 +291,27 @@ async function main() {
       await page.close()
     }
 
+    const timestamp = getWarsawTimestamp()
+    const reportDir = path.join(rootDir, 'qa-reports')
+    const archivePath = path.join(reportDir, `booking-matrix-${timestamp.compact}.md`)
+    const latestPath = path.join(reportDir, 'latest-booking-matrix.md')
+    const report = buildReportMarkdown({
+      timestamp: timestamp.isoLike,
+      serverMode: serverCommand.mode,
+      results,
+    })
+
+    await mkdir(reportDir, { recursive: true })
+    await writeFile(archivePath, report, 'utf8')
+    await writeFile(latestPath, report, 'utf8')
     console.log(
       JSON.stringify(
         {
           appUrl,
+          serverMode: serverCommand.mode,
           topicCount: results.length,
+          archivePath,
+          latestPath,
           topics: results,
         },
         null,
@@ -228,7 +331,7 @@ async function main() {
       } catch {}
     }
 
-    await restoreData()
+    await sandbox.cleanup()
   }
 }
 

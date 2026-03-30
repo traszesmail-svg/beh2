@@ -1,5 +1,7 @@
 # Project State
 
+> Historical project snapshot from 2026-03-26. For the current cross-session status, use `C:\Projekt\behawior15-mvp-full\MASTER_HANDOFF.md` and `C:\Projekt\behawior15-mvp-full\CURRENT_WORK.md`.
+
 Date: 2026-03-26
 Repo: `C:\Projekt\behawior15-mvp-full\beh2`
 Branch: `main`

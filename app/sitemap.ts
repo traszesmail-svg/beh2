@@ -1,11 +1,11 @@
 import type { MetadataRoute } from 'next'
+import { listPdfRoutePaths } from '@/lib/pdf-guides'
 import { getBaseUrl } from '@/lib/server/env'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = getBaseUrl()
   const lastModified = new Date()
-
-  return [
+  const paths = [
     '/',
     '/oferta',
     '/oferta/szybka-konsultacja-15-min',
@@ -14,13 +14,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/oferta/konsultacja-domowa-wyjazdowa',
     '/oferta/indywidualna-terapia-behawioralna',
     '/oferta/pobyty-socjalizacyjno-terapeutyczne',
-    '/oferta/poradniki-pdf',
+    ...listPdfRoutePaths(),
     '/koty',
     '/kontakt',
     '/book',
     '/polityka-prywatnosci',
     '/regulamin',
-  ].map((path) => ({
+  ]
+
+  return paths.map((path) => ({
     url: `${baseUrl}${path}`,
     lastModified,
     changeFrequency:

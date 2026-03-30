@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pakiet Kot Bez Napięcia | Regulski</title>
+  <meta name="description" content="Lepsze bezpieczeństwo kota, mniej obrony i czytelniejsza praca z domem.">
+  <style>
+    :root { --bg:#f7f1ea; --panel:#fffdfa; --ink:#201a16; --muted:#6b635b; --line:#ddd2c6; --accent:#2F5665; --shadow:0 18px 44px rgba(60,40,20,.08); }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:Georgia, serif; color:var(--ink); background:radial-gradient(circle at top right, rgba(176,127,83,.16), transparent 24%), linear-gradient(180deg, #fbf7f2 0%, var(--bg) 100%); }
+    a { color:inherit; }
+    main { width:min(1180px, calc(100% - 40px)); margin:0 auto; padding:28px 0 72px; }
+    h1,h2,h3 { font-family:"Segoe UI", Arial, sans-serif; margin:0; }
+    h1 { font-size:clamp(36px, 5vw, 62px); line-height:1.02; }
+    h2 { font-size:clamp(26px, 3vw, 36px); margin-bottom:12px; }
+    h3 { font-size:22px; margin-bottom:10px; }
+    p { margin:0; }
+    .back { display:inline-flex; align-items:center; gap:8px; text-decoration:none; color:var(--muted); margin-bottom:22px; font:600 14px/1 "Segoe UI", Arial, sans-serif; }
+    .hero { display:grid; grid-template-columns:1.25fr .9fr; gap:24px; align-items:center; margin-bottom:26px; }
+    .hero-copy, .hero-side { background:rgba(255,255,255,.88); border:1px solid var(--line); border-radius:28px; padding:28px; box-shadow:var(--shadow); }
+    .lead { font-size:18px; line-height:1.65; color:var(--muted); margin-top:16px; }
+    .eyebrow { display:inline-block; margin-bottom:14px; padding:7px 12px; border-radius:999px; background:color-mix(in srgb, var(--accent) 14%, white); color:var(--accent); font:700 12px/1 "Segoe UI", Arial, sans-serif; letter-spacing:1.2px; text-transform:uppercase; }
+    .tag-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; }
+    .tag { display:inline-flex; align-items:center; padding:7px 11px; border-radius:999px; background:#f0e7dc; color:var(--ink); font:600 12px/1 "Segoe UI", Arial, sans-serif; }
+    .actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; padding:13px 18px; border-radius:999px; background:var(--accent); color:white; text-decoration:none; font:700 14px/1 "Segoe UI", Arial, sans-serif; }
+    .btn.ghost { background:transparent; color:var(--accent); border:1px solid color-mix(in srgb, var(--accent) 40%, white); }
+    .cover-panel { display:flex; justify-content:center; align-items:center; min-height:100%; }
+    .cover-panel img { width:min(100%, 340px); border-radius:22px; box-shadow:0 26px 48px rgba(40, 22, 8, .15); border:1px solid rgba(0,0,0,.06); }
+    .section { margin-top:32px; }
+    .section-head { margin-bottom:16px; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:18px; }
+    .card { background:rgba(255,255,255,.92); border:1px solid var(--line); border-radius:24px; overflow:hidden; box-shadow:var(--shadow); }
+    .card-body { padding:22px; }
+    .product-card .cover-thumb { display:block; width:100%; aspect-ratio:1.08 / 1.35; object-fit:cover; background:#f6efe7; }
+    .subtitle { color:var(--muted); line-height:1.55; margin-bottom:12px; }
+    .meta-list, .bullet-list, .toc-list { margin:0; padding-left:18px; color:var(--muted); line-height:1.6; }
+    .bullet-list li + li, .meta-list li + li, .toc-list li + li { margin-top:6px; }
+    .card-copy { color:var(--muted); line-height:1.6; margin-top:14px; }
+    .info-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px; }
+    .info-box { background:rgba(255,255,255,.9); border:1px solid var(--line); border-radius:22px; padding:20px; box-shadow:var(--shadow); }
+    .info-box h3 { font-size:18px; margin-bottom:10px; }
+    .info-box p, .info-box li { color:var(--muted); line-height:1.65; }
+    .rich-copy { display:grid; gap:14px; }
+    .faq-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:18px; }
+    .faq-item { background:rgba(255,255,255,.9); border:1px solid var(--line); border-radius:22px; padding:20px; box-shadow:var(--shadow); }
+    .faq-item p { color:var(--muted); line-height:1.6; margin-top:10px; }
+    .cta-band { background:linear-gradient(135deg, color-mix(in srgb, var(--accent) 88%, #1d140f) 0%, color-mix(in srgb, var(--accent) 62%, #ffffff) 100%); color:white; border-radius:28px; padding:28px; box-shadow:var(--shadow); }
+    .cta-band p { max-width:760px; line-height:1.65; margin-top:10px; }
+    @media (max-width: 860px) { .hero { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <main>
+      <a class="back" href="../index.html">← Wróć do listy poradników</a>
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Pakiet</p>
+          <h1>Pakiet Kot Bez Napięcia</h1>
+          <p class="lead">Lepsze bezpieczeństwo kota, mniej obrony i czytelniejsza praca z domem.</p>
+          <div class="tag-row">
+            <span class="tag">Kot</span>
+            <span class="tag">3 materiały</span>
+            <span class="tag">79 zł</span>
+          </div>
+          <div class="actions">
+            <a class="btn" href="../index.html">Wybierz poradnik z pakietu</a>
+            <a class="btn ghost" href="https://beh2.vercel.app">Przejdź do marki</a>
+          </div>
+        </div>
+        <div class="hero-side">
+          <h2>Dla kogo ten pakiet</h2>
+          <p class="lead">opiekun kota lękowego lub łatwo przeciążającego się</p>
+          <p class="lead" style="margin-top:16px;">Pakiet jest przygotowany jako logiczny następny krok po materiale wejściowym albo jako prostszy start przed konsultacją.</p>
+        </div>
+      </section>
+      <section class="section">
+        <div class="section-head">
+          <p class="eyebrow">Skład pakietu</p>
+          <h2>Materiały, które składają się na ten zestaw</h2>
+        </div>
+        <div class="grid">
+          
+  <article class="card product-card">
+    <img class="cover-thumb" src="../../../covers/kot-stres-srodowisko-i-bledy-opiekuna.svg" alt="Okładka poradnika Kot: stres i środowisko">
+    <div class="card-body">
+      <p class="eyebrow">Lead magnet</p>
+      <h3>Kot: stres i środowisko</h3>
+      <p class="subtitle">Jak rozpoznać napięcie, poprawić dom i nie utrwalać problemów codziennymi błędami</p>
+      <ul class="meta-list">
+        <li>Poradnik główny</li>
+        <li>11 stron</li>
+        <li>ok. 23 min</li>
+        <li>0 zł po zapisie na listę lub jako materiał po pierwszym kontakcie</li>
+      </ul>
+      <div class="tag-row">
+        <span class="tag">Kot</span>
+        <span class="tag">szybka konsultacja 15 min lub konsultacja dla kota</span>
+      </div>
+      <p class="card-copy">Przewodnik po najczęstszych źródłach kociego stresu, subtelnych sygnałach napięcia i prostych zmianach środowiskowych.</p>
+      <div class="actions">
+        <a class="btn" href="../guides/kot-stres-srodowisko-i-bledy-opiekuna.html">Karta produktu</a>
+        <a class="btn ghost" href="../../../pdf/kot-stres-srodowisko-i-bledy-opiekuna.pdf">PDF</a>
+      </div>
+    </div>
+  </article>
+
+  <article class="card product-card">
+    <img class="cover-thumb" src="../../../covers/kot-dotyk-pielegnacja-i-obrona.svg" alt="Okładka poradnika Kot: dotyk i pielęgnacja">
+    <div class="card-body">
+      <p class="eyebrow">Bonus po konsultacji</p>
+      <h3>Kot: dotyk i pielęgnacja</h3>
+      <p class="subtitle">Pierwszy plan przy obronie, napięciu i trudnych procedurach codziennych</p>
+      <ul class="meta-list">
+        <li>Szybki poradnik</li>
+        <li>8 stron</li>
+        <li>ok. 11 min</li>
+        <li>bonus po konsultacji dla kota lub 29 zł jako dodatek</li>
+      </ul>
+      <div class="tag-row">
+        <span class="tag">Kot</span>
+        <span class="tag">konsultacja dla kota</span>
+      </div>
+      <p class="card-copy">Krótki poradnik o sygnałach granicy kota i bezpieczniejszej pielęgnacji.</p>
+      <div class="actions">
+        <a class="btn" href="../guides/kot-dotyk-pielegnacja-i-obrona.html">Karta produktu</a>
+        <a class="btn ghost" href="../../../pdf/kot-dotyk-pielegnacja-i-obrona.pdf">PDF</a>
+      </div>
+    </div>
+  </article>
+
+  <article class="card product-card">
+    <img class="cover-thumb" src="../../../covers/konflikt-miedzy-kotami-w-domu.svg" alt="Okładka poradnika Konflikt między kotami">
+    <div class="card-body">
+      <p class="eyebrow">Produkt płatny</p>
+      <h3>Konflikt między kotami</h3>
+      <p class="subtitle">Jak rozpoznać cichy konflikt, blokady i napięcie w domu wielokotowym</p>
+      <ul class="meta-list">
+        <li>Szybki poradnik</li>
+        <li>8 stron</li>
+        <li>ok. 13 min</li>
+        <li>59 zł albo część pakietu kociego</li>
+      </ul>
+      <div class="tag-row">
+        <span class="tag">Kot</span>
+        <span class="tag">konsultacja dla kota lub konsultacja behawioralna online</span>
+      </div>
+      <p class="card-copy">Praktyczny mini-poradnik o subtelnym konflikcie, zasobach i bezpieczeństwie w domu wielokotowym.</p>
+      <div class="actions">
+        <a class="btn" href="../guides/konflikt-miedzy-kotami-w-domu.html">Karta produktu</a>
+        <a class="btn ghost" href="../../../pdf/konflikt-miedzy-kotami-w-domu.pdf">PDF</a>
+      </div>
+    </div>
+  </article>
+        </div>
+      </section>
+      <section class="section info-grid">
+        <article class="info-box">
+          <h3>Logika pakietu</h3>
+          <p>Lepsze bezpieczeństwo kota, mniej obrony i czytelniejsza praca z domem.</p>
+        </article>
+        <article class="info-box">
+          <h3>Model dostępu</h3>
+          <p>79 zł</p>
+        </article>
+        <article class="info-box">
+          <h3>Następne konsultacje</h3>
+          <ul class="bullet-list"><li>szybka konsultacja 15 min</li><li>konsultacja dla kota</li><li>konsultacja behawioralna online</li></ul>
+        </article>
+      </section>
+      <section class="section cta-band">
+        <p class="eyebrow" style="background:rgba(255,255,255,.15); color:white;">Lejek</p>
+        <h2>Pakiet jako most do dalszej pracy</h2>
+        <p>Ten zestaw jest gotowy do wykorzystania jako osobny produkt, upsell po lead magnecie albo bonus po konsultacji. W integracji ze stroną najlepiej działa jako osobna karta produktowa z prostym CTA do zakupu lub do doboru ścieżki.</p>
+        <div class="actions">
+          <a class="btn ghost" href="https://beh2.vercel.app">Przejdź do marki</a>
+        </div>
+      </section></main>
+</body>
+</html>

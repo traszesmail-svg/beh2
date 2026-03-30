@@ -36,7 +36,10 @@ export async function POST(
 
     if (!canSelfCancelBooking(booking)) {
       return NextResponse.json(
-        { error: 'Minuta na samodzielną anulację już minęła albo rezerwacja nie kwalifikuje się do automatycznego zwrotu.' },
+        {
+          error:
+            '24-godzinne okno na bezpłatną rezygnację już minęło albo ta rezerwacja nie kwalifikuje się do automatycznego zwrotu.',
+        },
         { status: 409 },
       )
     }

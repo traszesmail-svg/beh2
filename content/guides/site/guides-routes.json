@@ -1,0 +1,194 @@
+{
+  "listing": {
+    "routePath": "/oferta/poradniki-pdf",
+    "pagePath": "content/guides/site/pages/index.html"
+  },
+  "guides": [
+    {
+      "slug": "pies-zostaje-sam-plan-pierwszych-krokow",
+      "title": "Pies zostaje sam",
+      "routePath": "/oferta/poradniki-pdf/pies-zostaje-sam-plan-pierwszych-krokow",
+      "pagePath": "content/guides/site/pages/guides/pies-zostaje-sam-plan-pierwszych-krokow.html",
+      "pdfPath": "content/guides/pdf/pies-zostaje-sam-plan-pierwszych-krokow.pdf",
+      "accessType": "low-ticket",
+      "category": "dog",
+      "kind": "main"
+    },
+    {
+      "slug": "szczeniak-pierwsze-30-dni",
+      "title": "Szczeniak: pierwsze 30 dni",
+      "routePath": "/oferta/poradniki-pdf/szczeniak-pierwsze-30-dni",
+      "pagePath": "content/guides/site/pages/guides/szczeniak-pierwsze-30-dni.html",
+      "pdfPath": "content/guides/pdf/szczeniak-pierwsze-30-dni.pdf",
+      "accessType": "low-ticket",
+      "category": "dog",
+      "kind": "main"
+    },
+    {
+      "slug": "kot-stres-srodowisko-i-bledy-opiekuna",
+      "title": "Kot: stres i środowisko",
+      "routePath": "/oferta/poradniki-pdf/kot-stres-srodowisko-i-bledy-opiekuna",
+      "pagePath": "content/guides/site/pages/guides/kot-stres-srodowisko-i-bledy-opiekuna.html",
+      "pdfPath": "content/guides/pdf/kot-stres-srodowisko-i-bledy-opiekuna.pdf",
+      "accessType": "lead magnet",
+      "category": "cat",
+      "kind": "main"
+    },
+    {
+      "slug": "kot-i-kuweta-pierwszy-plan-dzialania",
+      "title": "Kot i kuweta",
+      "routePath": "/oferta/poradniki-pdf/kot-i-kuweta-pierwszy-plan-dzialania",
+      "pagePath": "content/guides/site/pages/guides/kot-i-kuweta-pierwszy-plan-dzialania.html",
+      "pdfPath": "content/guides/pdf/kot-i-kuweta-pierwszy-plan-dzialania.pdf",
+      "accessType": "low-ticket",
+      "category": "cat",
+      "kind": "main"
+    },
+    {
+      "slug": "domowy-enrichment-plan-na-14-dni",
+      "title": "Domowy enrichment",
+      "routePath": "/oferta/poradniki-pdf/domowy-enrichment-plan-na-14-dni",
+      "pagePath": "content/guides/site/pages/guides/domowy-enrichment-plan-na-14-dni.html",
+      "pdfPath": "content/guides/pdf/domowy-enrichment-plan-na-14-dni.pdf",
+      "accessType": "lead magnet",
+      "category": "mixed",
+      "kind": "quick"
+    },
+    {
+      "slug": "pierwsze-dni-po-adopcji-psa-lub-kota",
+      "title": "Pierwsze dni po adopcji",
+      "routePath": "/oferta/poradniki-pdf/pierwsze-dni-po-adopcji-psa-lub-kota",
+      "pagePath": "content/guides/site/pages/guides/pierwsze-dni-po-adopcji-psa-lub-kota.html",
+      "pdfPath": "content/guides/pdf/pierwsze-dni-po-adopcji-psa-lub-kota.pdf",
+      "accessType": "bonus",
+      "category": "mixed",
+      "kind": "quick"
+    },
+    {
+      "slug": "pies-reaktywny-na-spacerze",
+      "title": "Pies reaktywny na spacerze",
+      "routePath": "/oferta/poradniki-pdf/pies-reaktywny-na-spacerze",
+      "pagePath": "content/guides/site/pages/guides/pies-reaktywny-na-spacerze.html",
+      "pdfPath": "content/guides/pdf/pies-reaktywny-na-spacerze.pdf",
+      "accessType": "low-ticket",
+      "category": "dog",
+      "kind": "quick"
+    },
+    {
+      "slug": "pies-boi-sie-gosci-i-dzwiekow",
+      "title": "Pies boi się gości i dźwięków",
+      "routePath": "/oferta/poradniki-pdf/pies-boi-sie-gosci-i-dzwiekow",
+      "pagePath": "content/guides/site/pages/guides/pies-boi-sie-gosci-i-dzwiekow.html",
+      "pdfPath": "content/guides/pdf/pies-boi-sie-gosci-i-dzwiekow.pdf",
+      "accessType": "lead magnet",
+      "category": "dog",
+      "kind": "quick"
+    },
+    {
+      "slug": "konflikt-miedzy-kotami-w-domu",
+      "title": "Konflikt między kotami",
+      "routePath": "/oferta/poradniki-pdf/konflikt-miedzy-kotami-w-domu",
+      "pagePath": "content/guides/site/pages/guides/konflikt-miedzy-kotami-w-domu.html",
+      "pdfPath": "content/guides/pdf/konflikt-miedzy-kotami-w-domu.pdf",
+      "accessType": "low-ticket",
+      "category": "cat",
+      "kind": "quick"
+    },
+    {
+      "slug": "kot-dotyk-pielegnacja-i-obrona",
+      "title": "Kot: dotyk i pielęgnacja",
+      "routePath": "/oferta/poradniki-pdf/kot-dotyk-pielegnacja-i-obrona",
+      "pagePath": "content/guides/site/pages/guides/kot-dotyk-pielegnacja-i-obrona.html",
+      "pdfPath": "content/guides/pdf/kot-dotyk-pielegnacja-i-obrona.pdf",
+      "accessType": "bonus",
+      "category": "cat",
+      "kind": "quick"
+    }
+  ],
+  "bundles": [
+    {
+      "slug": "pakiet-startowy-psa",
+      "title": "Pakiet Startowy Psa",
+      "routePath": "/oferta/poradniki-pdf/pakiety/pakiet-startowy-psa",
+      "pagePath": "content/guides/site/pages/bundles/pakiet-startowy-psa.html",
+      "pricing": "89 zł",
+      "guideSlugs": [
+        "szczeniak-pierwsze-30-dni",
+        "domowy-enrichment-plan-na-14-dni",
+        "pierwsze-dni-po-adopcji-psa-lub-kota"
+      ],
+      "consult": [
+        "szybka konsultacja 15 min",
+        "konsultacja 30 min",
+        "konsultacja behawioralna online"
+      ]
+    },
+    {
+      "slug": "pakiet-spokojny-dom-pies",
+      "title": "Pakiet Spokojny Dom: pies",
+      "routePath": "/oferta/poradniki-pdf/pakiety/pakiet-spokojny-dom-pies",
+      "pagePath": "content/guides/site/pages/bundles/pakiet-spokojny-dom-pies.html",
+      "pricing": "99 zł",
+      "guideSlugs": [
+        "pies-zostaje-sam-plan-pierwszych-krokow",
+        "pies-boi-sie-gosci-i-dzwiekow",
+        "domowy-enrichment-plan-na-14-dni"
+      ],
+      "consult": [
+        "szybka konsultacja 15 min",
+        "konsultacja 30 min",
+        "konsultacja behawioralna online"
+      ]
+    },
+    {
+      "slug": "pakiet-spacerowy-pies",
+      "title": "Pakiet Spacery Bez Napięcia",
+      "routePath": "/oferta/poradniki-pdf/pakiety/pakiet-spacerowy-pies",
+      "pagePath": "content/guides/site/pages/bundles/pakiet-spacerowy-pies.html",
+      "pricing": "69 zł",
+      "guideSlugs": [
+        "pies-reaktywny-na-spacerze",
+        "pies-boi-sie-gosci-i-dzwiekow"
+      ],
+      "consult": [
+        "szybka konsultacja 15 min",
+        "konsultacja 30 min",
+        "konsultacja behawioralna online"
+      ]
+    },
+    {
+      "slug": "pakiet-kota-domowego",
+      "title": "Pakiet Kota Domowego",
+      "routePath": "/oferta/poradniki-pdf/pakiety/pakiet-kota-domowego",
+      "pagePath": "content/guides/site/pages/bundles/pakiet-kota-domowego.html",
+      "pricing": "99 zł",
+      "guideSlugs": [
+        "kot-stres-srodowisko-i-bledy-opiekuna",
+        "kot-i-kuweta-pierwszy-plan-dzialania",
+        "konflikt-miedzy-kotami-w-domu"
+      ],
+      "consult": [
+        "szybka konsultacja 15 min",
+        "konsultacja dla kota",
+        "konsultacja behawioralna online"
+      ]
+    },
+    {
+      "slug": "pakiet-kot-bez-napiecia",
+      "title": "Pakiet Kot Bez Napięcia",
+      "routePath": "/oferta/poradniki-pdf/pakiety/pakiet-kot-bez-napiecia",
+      "pagePath": "content/guides/site/pages/bundles/pakiet-kot-bez-napiecia.html",
+      "pricing": "79 zł",
+      "guideSlugs": [
+        "kot-stres-srodowisko-i-bledy-opiekuna",
+        "kot-dotyk-pielegnacja-i-obrona",
+        "konflikt-miedzy-kotami-w-domu"
+      ],
+      "consult": [
+        "szybka konsultacja 15 min",
+        "konsultacja dla kota",
+        "konsultacja behawioralna online"
+      ]
+    }
+  ]
+}

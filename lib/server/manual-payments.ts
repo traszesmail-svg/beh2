@@ -28,12 +28,23 @@ export async function reportManualPayment(
     throw new Error('Nie udało się zapisać zgłoszenia wpłaty.')
   }
 
-  await sendManualPaymentReportedAdminEmail(updatedBooking, {
+  const adminNotification = await sendManualPaymentReportedAdminEmail(updatedBooking, {
     approveUrl: buildManualPaymentReviewUrl(updatedBooking.id, 'approve', updatedBooking.paymentReportedAt),
     rejectUrl: buildManualPaymentReviewUrl(updatedBooking.id, 'reject', updatedBooking.paymentReportedAt),
   })
 
-  return updatedBooking
+  if (adminNotification.status !== 'sent') {
+    console.warn('[behawior15][manual-payment] admin notification not sent', {
+      bookingId: updatedBooking.id,
+      status: adminNotification.status,
+      reason: adminNotification.reason ?? null,
+    })
+  }
+
+  return {
+    booking: updatedBooking,
+    adminNotification,
+  }
 }
 
 export async function approveManualPayment(bookingId: string) {

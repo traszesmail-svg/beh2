@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1240" height="1754" viewBox="0 0 1240 1754" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1240" height="1754" fill="#F6EFF3"/>
+  <rect x="0" y="0" width="1240" height="540" fill="#5A4753"/>
+  <rect x="72" y="108" width="1096" height="1.5" fill="#F6EFF3" fill-opacity="0.4"/>
+  <circle cx="1020" cy="210" r="260" fill="#8C7080" fill-opacity="0.18"/>
+  <circle cx="230" cy="1540" r="310" fill="#C8A6B7" fill-opacity="0.11"/>
+  <rect x="72" y="1220" width="1096" height="366" rx="36" fill="white"/>
+  <text x="72" y="182" fill="#F6EFF3" font-family="Arial" font-size="34" letter-spacing="3">REGULSKI | TERAPIA BEHAWIORALNA</text>
+  <text x="72" y="320" fill="#F6EFF3" font-family="Arial" font-size="86" font-weight="700">Konflikt między kotami</text>
+  <text x="72" y="425" fill="#F6EFF3" font-family="Georgia" font-size="34">Jak rozpoznać cichy konflikt, blokady i napięcie w domu wielokotowym</text>
+  <text x="72" y="1298" fill="#241B21" font-family="Arial" font-size="26" letter-spacing="2">DLA KOGO</text>
+  <text x="72" y="1360" fill="#241B21" font-family="Georgia" font-size="34">Opiekunowie dwóch lub więcej kotów, którzy widzą blokowanie, napięcie, pościgi albo wycofanie jednego z kotów.</text>
+  <text x="72" y="1480" fill="#241B21" font-family="Arial" font-size="26" letter-spacing="2">OBIETNICA</text>
+  <text x="72" y="1542" fill="#241B21" font-family="Georgia" font-size="34">Pomaga zobaczyć konflikt wcześniej i poprawić układ zasobów oraz przestrzeni bez zgadywania.</text>
+  <rect x="72" y="1650" width="220" height="40" rx="20" fill="#C8A6B7"/>
+  <text x="104" y="1677" fill="#F6EFF3" font-family="Arial" font-size="24" font-weight="700">SZYBKI PORADNIK</text>
+</svg>

@@ -10,6 +10,8 @@ import {
   HOME_FAQ,
   HOME_HELP_AREAS,
   HOME_PROCESS_STEPS,
+  getOfferDetailCtaLabel,
+  getOfferDetailHref,
   OFFERS,
   TRUST_SIGNAL_ITEMS,
 } from '@/lib/offers'
@@ -20,6 +22,7 @@ import {
   CAPBT_LOGO,
   CAPBT_ORG_URL,
   CAPBT_PROFILE_URL,
+  CAT_HOME_PHOTO,
   COAPE_LOGO,
   COAPE_ORG_URL,
   SITE_NAME,
@@ -39,16 +42,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const heroSummary = [
-  'Pomagam psom, kotom i ich opiekunom w trudnych sytuacjach związanych z zachowaniem - od pierwszej konsultacji po indywidualną pracę terapeutyczną i pobyty socjalizacyjno-terapeutyczne.',
-  'Nie kończę pracy na jednej poradzie, jeśli problem wymaga czegoś więcej. Pomagam przejść od rozpoznania sytuacji do realnej, prowadzonej pracy nad zmianą.',
+  'Pomagam psom i kotom w trudnościach związanych z zachowaniem: od pierwszej rozmowy po terapię i pobyty.',
+  'Jeśli potrzeba więcej, od razu wskazuję kolejny krok.',
 ] as const
 
-const heroSignals = [
-  'psy i koty',
-  'niski próg wejścia',
-  'dalsza ścieżka pracy',
-  'spokojna, ekspercka pomoc',
-] as const
+const heroSignals = ['psy i koty', 'niski próg wejścia', 'dalszy plan pracy', 'spokojna, ekspercka pomoc'] as const
 
 const dogIssues = [
   'reaktywność i trudne spacery',
@@ -57,25 +55,20 @@ const dogIssues = [
   'pobudzenie, pogoń i zachowania obronne',
 ] as const
 
-const catIssues = [
-  'problemy kuwetowe',
-  'stres, wycofanie i napięcie',
-  'konflikty między kotami',
-  'trudności przy dotyku i pielęgnacji',
-] as const
+const catIssues = ['problemy kuwetowe', 'stres, wycofanie i napięcie', 'konflikty między kotami', 'trudności przy dotyku i pielęgnacji'] as const
 
 export default async function HomePage() {
   const dataMode = getDataModeStatus()
   const baseUrl = getBaseUrl()
-  let availabilityLabel = 'Terminy dla szybkiej konsultacji zobaczysz po wejściu do osobnego flow rezerwacji.'
+  let availabilityLabel = 'Aktualne terminy sprawdzisz po wejściu do rezerwacji.'
 
   if (dataMode.isValid) {
     try {
       const availability = await listAvailability()
       availabilityLabel =
         availability.length > 0
-          ? 'Szybka konsultacja 15 min ma aktywne terminy i osobny flow rezerwacji.'
-          : 'Szybka konsultacja 15 min jest aktywna, ale w tej chwili nie ma wolnych terminów.'
+          ? 'Aktualne terminy zobaczysz od razu po wejściu do rezerwacji.'
+          : 'Terminy odświeżają się na bieżąco. Wejdź do rezerwacji albo napisz, jeśli chcesz dobrać pierwszy krok.'
     } catch (error) {
       console.warn('[beh2][home] nie udalo sie pobrac dostepnosci na home', error)
     }
@@ -127,7 +120,7 @@ export default async function HomePage() {
         <section className="hero-grid brand-hero-grid" id="start">
           <div className="panel hero-panel hero-surface brand-home-panel">
             <div className="pill subtle-pill">Konsultacje, terapia i pobyty dla psów i kotów</div>
-            <div className="hero-topline">Mały krok na start. Szersza ścieżka pracy, gdy sytuacja tego wymaga.</div>
+            <div className="hero-topline">Mały krok na start. Szersza praca, gdy sytuacja tego wymaga.</div>
             <h1>{SITE_NAME}</h1>
 
             <p className="hero-text brand-subtitle">{SITE_TAGLINE}</p>
@@ -159,20 +152,21 @@ export default async function HomePage() {
               </div>
               <div className="list-card tree-backed-card">
                 <strong>Jak zaczynać</strong>
-                <span>Od szybkiej konsultacji 15 min, konsultacji 30 min albo pełnej konsultacji online.</span>
+                <span>Od 15 lub 30 minut albo pełnej konsultacji online.</span>
               </div>
             </div>
 
             <div className="hero-actions top-gap">
               <Link
                 href="/book"
+                prefetch={false}
                 className="button button-primary big-button"
-                data-analytics-event="reserve_click"
+                data-analytics-event="cta_click"
                 data-analytics-location="hero"
               >
                 Umów konsultację
               </Link>
-              <Link href="/oferta" className="button button-ghost big-button">
+              <Link href="/oferta" prefetch={false} className="button button-ghost big-button">
                 Zobacz formy pracy
               </Link>
             </div>
@@ -193,14 +187,11 @@ export default async function HomePage() {
 
             <div className="hero-spotlight-card tree-backed-card">
               <div className="section-eyebrow">Jak wygląda pierwszy krok</div>
-              <h2>Pomoc ma być adekwatna do sytuacji</h2>
+              <h2>Pomoc ma być dopasowana do sytuacji</h2>
 
               <div className="hero-spotlight-meta">
                 <strong>{availabilityLabel}</strong>
-                <span>
-                  Zaczynasz od formy, która ułatwia kontakt. Jeśli problem wymaga czegoś więcej niż jednej rozmowy,
-                  przechodzimy dalej odpowiednią ścieżką.
-                </span>
+                <span>Zaczynasz od formy, która ułatwia pierwszy kontakt. Jeśli trzeba, dobieramy kolejny etap.</span>
               </div>
 
               <div className="hero-proof-column">
@@ -215,11 +206,8 @@ export default async function HomePage() {
 
         <section className="panel section-panel" id="jak-moge-pomoc">
           <div className="section-eyebrow">Jak mogę pomóc</div>
-          <h2>Nie sprzedaję przypadkowych porad. Dobieram właściwą formę pomocy.</h2>
-          <p className="hero-text">
-            Punkt wyjścia może być lekki i prosty, ale od początku ma być jasne, że trafiasz do specjalisty, który
-            potrafi ocenić sytuację i poprowadzić ją dalej, jeśli wymaga czegoś więcej.
-          </p>
+          <h2>Dobieram formę pomocy do sytuacji</h2>
+          <p className="hero-text">Najpierw porządkujemy problem, potem wybieramy pierwszy krok.</p>
 
           <div className="summary-grid trust-grid top-gap offer-help-grid">
             {HOME_HELP_AREAS.map((item) => (
@@ -233,11 +221,8 @@ export default async function HomePage() {
 
         <section className="panel section-panel" id="formy-wspolpracy">
           <div className="section-eyebrow">Formy współpracy</div>
-          <h2>Jak zacząć i jak wygląda dalsza ścieżka</h2>
-          <p className="hero-text">
-            Ceny pokazuję tam, gdzie ścieżka jest z góry zdefiniowana. Głębsza praca, wizyty i pobyty są ustalane po
-            rozpoznaniu sytuacji.
-          </p>
+          <h2>Jak zacząć i co może być dalej</h2>
+          <p className="hero-text">Ceny pokazuję tam, gdzie ścieżka jest z góry określona. Resztę dobieramy po rozpoznaniu sytuacji.</p>
 
           <div className="offer-grid top-gap">
             {OFFERS.map((offer) => (
@@ -251,10 +236,10 @@ export default async function HomePage() {
                 </div>
                 <p>{offer.cardSummary}</p>
                 <div className="offer-card-actions">
-                  <Link href={`/oferta/${offer.slug}`} className="button button-ghost">
-                    Szczegóły
+                  <Link href={getOfferDetailHref(offer)} prefetch={false} className="button button-ghost">
+                    {getOfferDetailCtaLabel(offer)}
                   </Link>
-                  <Link href={offer.primaryHref} className="button button-primary">
+                  <Link href={offer.primaryHref} prefetch={false} className="button button-primary">
                     {offer.primaryCtaLabel}
                   </Link>
                 </div>
@@ -266,27 +251,24 @@ export default async function HomePage() {
         <section className="two-col-section" id="pobyty">
           <div className="panel section-panel">
             <div className="section-eyebrow">Pobyty socjalizacyjno-terapeutyczne</div>
-            <h2>To jeden z filarów marki, a nie dodatek do konsultacji.</h2>
-            <p className="hero-text">
-              Pobyt jest rozważany wtedy, gdy taka forma realnie wspiera proces pracy ze zwierzęciem. Nie jest prostym
-              produktem z półki ani „hotelowym obejściem” problemu.
-            </p>
+            <h2>To osobna forma pracy, nie dodatek.</h2>
+            <p className="hero-text">Pobyt rozważam wtedy, gdy realnie wspiera proces. To nie hotel i nie skrót.</p>
             <div className="stack-gap top-gap">
               <div className="list-card tree-backed-card">
                 <strong>Najpierw kwalifikacja</strong>
-                <span>Najpierw trzeba ocenić, czy pobyt jest właściwą formą pomocy dla konkretnego przypadku.</span>
+                <span>Najpierw sprawdzamy, czy pobyt jest właściwą formą pomocy.</span>
               </div>
               <div className="list-card tree-backed-card">
                 <strong>Spójność procesu</strong>
-                <span>Pobyt może stać się kolejnym etapem po konsultacji lub terapii, jeśli taka organizacja ma sens.</span>
+                <span>Pobyt może być kolejnym etapem po konsultacji lub terapii, jeśli ma to sens.</span>
               </div>
             </div>
             <div className="hero-actions top-gap">
-              <Link href="/oferta/pobyty-socjalizacyjno-terapeutyczne" className="button button-ghost big-button">
-                Czytaj o pobytach
+              <Link href="/oferta/pobyty-socjalizacyjno-terapeutyczne" prefetch={false} className="button button-ghost big-button">
+                Zobacz pobyty
               </Link>
-              <Link href="/kontakt?service=pobyty-socjalizacyjno-terapeutyczne" className="button button-primary big-button">
-                Zapytaj o pobyt
+              <Link href="/kontakt?service=pobyty-socjalizacyjno-terapeutyczne" prefetch={false} className="button button-primary big-button">
+                Napisz w sprawie pobytu
               </Link>
             </div>
           </div>
@@ -306,8 +288,8 @@ export default async function HomePage() {
         <section className="two-col-section" id="koty">
           <div className="panel section-panel image-panel">
             <Image
-              src="/branding/case-cat-sofa.jpg"
-              alt="Kot odpoczywający w spokojnym domowym otoczeniu jako ilustracja terapii kotów"
+              src={CAT_HOME_PHOTO.src}
+              alt={CAT_HOME_PHOTO.alt}
               width={1200}
               height={900}
               sizes="(max-width: 980px) 100vw, 42vw"
@@ -317,17 +299,14 @@ export default async function HomePage() {
 
           <div className="panel section-panel">
             <div className="section-eyebrow">Terapia kotów</div>
-            <h2>Koty są tu od pierwszego ekranu i pozostają osobnym filarem pracy.</h2>
-            <p className="hero-text">
-              Nie są dopiskiem do psów. Problemy kocie wymagają osobnego rozpoznania, osobnego języka opisu i często
-              ścisłej współpracy z lekarzem weterynarii.
-            </p>
+            <h2>Koty są osobnym obszarem pracy.</h2>
+            <p className="hero-text">Koty wymagają osobnego rozpoznania i często współpracy z lekarzem weterynarii.</p>
 
             <div className="stack-gap top-gap">
               {CAT_SUPPORT_AREAS.map((item) => (
                 <div key={item} className="list-card tree-backed-card">
                   <strong>{item}</strong>
-                  <span>To obszar, który może wymagać konsultacji, terapii lub dalszego planu pracy.</span>
+                  <span>To temat, który może wymagać konsultacji albo dalszego planu pracy.</span>
                 </div>
               ))}
             </div>
@@ -341,11 +320,11 @@ export default async function HomePage() {
             </div>
 
             <div className="hero-actions top-gap">
-              <Link href="/koty" className="button button-ghost big-button">
+              <Link href="/koty" prefetch={false} className="button button-ghost big-button">
                 Zobacz stronę o kotach
               </Link>
-              <Link href="/kontakt" className="button button-primary big-button">
-                Zapytaj o konsultację dla kota
+              <Link href="/kontakt" prefetch={false} className="button button-primary big-button">
+                Napisz i opisz sytuację kota
               </Link>
             </div>
           </div>
@@ -353,7 +332,7 @@ export default async function HomePage() {
 
         <section className="panel section-panel" id="jak-pracuje">
           <div className="section-eyebrow">Jak pracuję</div>
-          <h2>Od rozpoznania sytuacji do realnej, prowadzonej pracy nad zmianą.</h2>
+          <h2>Od rozpoznania do dalszej pracy</h2>
 
           <div className="process-grid top-gap">
             {HOME_PROCESS_STEPS.map((item) => (
@@ -367,20 +346,14 @@ export default async function HomePage() {
 
           <div className="list-card accent-outline tree-backed-card top-gap">
             <strong>Współpraca z lekarzem weterynarii i wsparcie farmakologiczne</strong>
-            <span>
-              Jeśli bez wsparcia farmakologicznego trudno o realną poprawę i skuteczną pracę, konsultacja może być
-              prowadzona we współpracy z lekarzem weterynarii. Farmakoterapia ma wspierać proces, a nie zastępować
-              terapię.
-            </span>
+            <span>Jeśli sytuacja tego wymaga, pracuję z lekarzem weterynarii. Farmakoterapia ma wspierać proces, nie go zastępować.</span>
           </div>
         </section>
 
         <section className="panel section-panel" id="zaufanie">
           <div className="section-eyebrow">Zaufanie i kwalifikacje</div>
-          <h2>COAPE jest ważne, ale jeszcze ważniejsze jest to, jak prowadzona jest sprawa.</h2>
-          <p className="hero-text">
-            Dlatego kwalifikacje pokazuję niżej jako sygnał wiarygodności, bez budowania z nich całej historii marki.
-          </p>
+          <h2>Kwalifikacje są ważne, ale liczy się sposób prowadzenia sprawy.</h2>
+          <p className="hero-text">Pokazuję je jako sygnał wiarygodności, nie całą historię marki.</p>
 
           <div className="summary-grid trust-grid top-gap">
             {TRUST_SIGNAL_ITEMS.map((item) => (
@@ -410,7 +383,7 @@ export default async function HomePage() {
               aria-label="Otwórz profil Krzysztofa Regulskiego w CAPBT"
             >
               <Image src={CAPBT_LOGO.src} alt={CAPBT_LOGO.alt} width={442} height={104} className="credential-logo" />
-              <span className="credential-logo-label">Publiczny profil specjalisty</span>
+              <span className="credential-logo-label">Publiczny profil specjalisty w CAPBT</span>
             </a>
           </div>
         </section>
@@ -424,22 +397,20 @@ export default async function HomePage() {
 
           <div className="panel cta-panel compact-sales-cta">
             <div className="section-eyebrow">Kontakt</div>
-            <h2>Możesz zacząć małym krokiem i nadal trafić do poważnej, odpowiedzialnej pracy.</h2>
-            <p className="hero-text">
-              Jeśli wiesz, że chcesz wejść przez szybki booking, przejdź od razu do konsultacji 15 min. Jeśli potrzebujesz
-              pomocy z doborem ścieżki, przejdź do kontaktu i opisz swoją sytuację.
-            </p>
+            <h2>Możesz zacząć małym krokiem albo po prostu napisać.</h2>
+            <p className="hero-text">Jeśli chcesz wejść przez szybki booking, przejdź do 15 minut. Jeśli nie wiesz, co wybrać, napisz.</p>
             <div className="hero-actions top-gap">
               <Link
                 href="/book"
+                prefetch={false}
                 className="button button-primary big-button"
-                data-analytics-event="reserve_click"
+                data-analytics-event="cta_click"
                 data-analytics-location="home-final-cta"
               >
                 Umów konsultację
               </Link>
-              <Link href="/kontakt" className="button button-ghost big-button">
-                Przejdź do kontaktu
+              <Link href="/kontakt" prefetch={false} className="button button-ghost big-button">
+                Napisz i dobierz pierwszy krok
               </Link>
             </div>
           </div>

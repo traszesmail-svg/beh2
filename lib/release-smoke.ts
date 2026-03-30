@@ -19,7 +19,7 @@ export type ReleaseSmokeResult = {
   orderFailures: string[]
 }
 
-function decodeHtmlEntities(input: string): string {
+function decodeHtmlEntities(input: string) {
   return input
     .replace(/&nbsp;|&#160;/gi, ' ')
     .replace(/&amp;/gi, '&')
@@ -29,11 +29,11 @@ function decodeHtmlEntities(input: string): string {
     .replace(/&gt;/gi, '>')
 }
 
-export function normalizeReleaseSmokeText(input: string): string {
+export function normalizeReleaseSmokeText(input: string) {
   return decodeHtmlEntities(input).replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim()
 }
 
-export function extractVisibleTextFromHtml(html: string): string {
+export function extractVisibleTextFromHtml(html: string) {
   const withoutNoise = html
     .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
     .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, ' ')
@@ -44,7 +44,7 @@ export function extractVisibleTextFromHtml(html: string): string {
   return normalizeReleaseSmokeText(withoutNoise)
 }
 
-export function extractBuildMarkerFromHtml(html: string): string | null {
+export function extractBuildMarkerFromHtml(html: string) {
   const doubleQuoted = html.match(/data-build-marker="([^"]+)"/i)
   if (doubleQuoted?.[1]) {
     return doubleQuoted[1]
@@ -131,7 +131,7 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
       required: [
         'Etap rezerwacji: wybór tematu',
         'Wybierz temat szybkiej konsultacji 15 min',
-        'Od 39 zł. Dokładną kwotę potwierdzisz po wyborze tematu konsultacji.',
+        'Od 59 zł. Dokładną kwotę potwierdzisz po wyborze tematu konsultacji.',
       ],
       forbidden: [
         'Cena konsultacji',

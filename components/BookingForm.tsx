@@ -1,7 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { trackAnalyticsEvent } from '@/lib/analytics'
+import { buildPaymentHref } from '@/lib/booking-routing'
 import { getProblemLabel } from '@/lib/data'
 import { isValidPolishPhone } from '@/lib/phone'
 import { CONSULTATION_PRICE_COMPARE_COPY } from '@/lib/site'
@@ -40,6 +42,7 @@ function getProblemFormCopy(problemType: ProblemType) {
 export function BookingForm({ problemType, slotId, slotLabel }: BookingFormProps) {
   const router = useRouter()
   const formCopy = getProblemFormCopy(problemType)
+  const trackedStartRef = useRef(false)
   const [ownerName, setOwnerName] = useState('')
   const [animalType, setAnimalType] = useState<AnimalType>(formCopy.animalType)
   const [petAge, setPetAge] = useState('')
@@ -49,6 +52,19 @@ export function BookingForm({ problemType, slotId, slotLabel }: BookingFormProps
   const [email, setEmail] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    if (trackedStartRef.current) {
+      return
+    }
+
+    trackedStartRef.current = true
+    trackAnalyticsEvent('form_started', {
+      problem: problemType,
+      slot_id: slotId,
+      slot_label: slotLabel,
+    })
+  }, [problemType, slotId, slotLabel])
 
   function isEmailValid(value: string): boolean {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
@@ -105,8 +121,9 @@ export function BookingForm({ problemType, slotId, slotLabel }: BookingFormProps
         throw new Error(payload.error ?? 'Nie udało się zapisać rezerwacji. Sprawdź dane lub wybierz inny termin.')
       }
 
-      router.push(`/payment?bookingId=${payload.bookingId}&access=${encodeURIComponent(payload.accessToken)}`)
+      router.push(buildPaymentHref(payload.bookingId, payload.accessToken))
     } catch (submissionError) {
+      console.error('[behawior15][booking-form] submit failed', submissionError)
       const message = submissionError instanceof Error ? submissionError.message : 'Wystąpił błąd formularza.'
       if (message.includes('nie jest już dostępny') || message.includes('zostal przed chwila zajety')) {
         setError('Ten termin został właśnie zajęty. Wróć do listy terminów i wybierz inną godzinę rozmowy.')
@@ -181,10 +198,10 @@ export function BookingForm({ problemType, slotId, slotLabel }: BookingFormProps
 
       <div className="checkout-box full-width tree-backed-card">
         <div>
-          <div className="muted">Po zapisaniu danych termin zostanie chwilowo zablokowany, żeby nikt nie przejął go przed Tobą.</div>
+          <div className="muted">Po zapisaniu danych termin zostanie chwilowo zablokowany, żeby nikt nie zajął go w trakcie płatności.</div>
           <div className="checkout-title">Następny krok: wybór płatności</div>
           <div className="muted">
-            Na kolejnym ekranie wybierzesz prostą wpłatę BLIK/przelewem albo PayU. Dokładną kwotę zobaczysz jeszcze raz przy obu metodach.
+            Na kolejnym ekranie wybierzesz wpłatę BLIK/przelewem albo PayU. Dokładną kwotę potwierdzisz jeszcze raz przy obu metodach.
           </div>
           <div className="price-compare-text">{CONSULTATION_PRICE_COMPARE_COPY}</div>
         </div>

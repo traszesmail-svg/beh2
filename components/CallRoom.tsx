@@ -1,8 +1,9 @@
 'use client'
 
 import Image from 'next/image'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { trackAnalyticsEvent } from '@/lib/analytics'
 import { formatDateTimeLabel, getSecondsUntilRoomUnlock } from '@/lib/data'
 import { createMeetingEmbedUrl } from '@/lib/server/jitsi'
 import { CAPBT_LOGO, COAPE_LOGO, SITE_NAME } from '@/lib/site'
@@ -51,6 +52,7 @@ export function CallRoom({
   bookingStatus,
 }: CallRoomProps) {
   const router = useRouter()
+  const trackedEntryRef = useRef(false)
   const [secondsLeft, setSecondsLeft] = useState(15 * 60)
   const [running, setRunning] = useState(false)
   const [finished, setFinished] = useState(bookingStatus === 'done')
@@ -76,6 +78,19 @@ export function CallRoom({
         : `/api/bookings/${bookingId}/complete`,
     [accessToken, bookingId],
   )
+
+  useEffect(() => {
+    if (trackedEntryRef.current) {
+      return
+    }
+
+    trackedEntryRef.current = true
+    trackAnalyticsEvent('room_entered', {
+      booking_id: bookingId,
+      booking_status: bookingStatus,
+      room_unlocked: roomUnlocked,
+    })
+  }, [bookingId, bookingStatus, roomUnlocked])
 
   useEffect(() => {
     if (bookingStatus === 'done') {
@@ -203,6 +218,7 @@ export function CallRoom({
       setFinished(true)
       router.refresh()
     } catch (finishError) {
+      console.error('[behawior15][room] finish failed', finishError)
       setError(finishError instanceof Error ? finishError.message : 'Wystąpił błąd podczas zamykania konsultacji.')
     }
   }

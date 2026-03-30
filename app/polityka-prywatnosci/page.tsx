@@ -1,7 +1,8 @@
+import React from 'react'
 import type { Metadata } from 'next'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
-import { SPECIALIST_CREDENTIALS, SPECIALIST_NAME, getContactDetails } from '@/lib/site'
+import { SPECIALIST_CREDENTIALS, SPECIALIST_NAME, buildMailtoHref, getContactDetails } from '@/lib/site'
 import { buildLegalMetadata } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
@@ -14,6 +15,9 @@ export const metadata: Metadata = buildLegalMetadata(
 
 export default function PrivacyPolicyPage() {
   const contact = getContactDetails()
+  const contactMailtoHref = contact.email
+    ? buildMailtoHref(contact.email, 'Prywatność i dane - Regulski | Terapia behawioralna')
+    : null
 
   return (
     <main className="page-wrap">
@@ -48,7 +52,7 @@ export default function PrivacyPolicyPage() {
             <div className="list-card">
               <strong>Operatorzy zewnętrzni i odbiorcy danych</strong>
               <span>
-                Do działania serwisu wykorzystujemy usługi Supabase, PayU oraz Resend, a także pomocnicze rozwiązania techniczne niezbędne do działania płatności i bezpieczeństwa strony. Dane są przekazywane wyłącznie w zakresie potrzebnym do obsługi rezerwacji, płatności, wysyłki wiadomości i bezpieczeństwa działania serwisu.
+                Do działania serwisu wykorzystujemy usługi Supabase, PayU, Resend oraz Jitsi, a po wyrażeniu zgody także Google Analytics. Jeśli włączona jest wysyłka SMS po płatności, dane kontaktowe są przekazywane również do operatora SMS. Dane są przekazywane wyłącznie w zakresie potrzebnym do obsługi rezerwacji, płatności, wiadomości, pokoju rozmowy i bezpieczeństwa działania serwisu.
               </span>
             </div>
 
@@ -69,9 +73,17 @@ export default function PrivacyPolicyPage() {
             <div className="list-card">
               <strong>Kontakt w sprawie danych</strong>
               <span>
-                {contact.email ? `E-mail: ${contact.email}. ` : ''}
-                {contact.phoneDisplay ? `Telefon: ${contact.phoneDisplay}. ` : ''}
-                Jeśli wygodniej, możesz też skorzystać z publicznego profilu Facebook widocznego w stopce serwisu.
+                {contact.email && contactMailtoHref ? (
+                  <>
+                    E-mail: <a href={contactMailtoHref}>{contact.email}</a>.{' '}
+                  </>
+                ) : null}
+                {contact.phoneDisplay && contact.phoneHref ? (
+                  <>
+                    Telefon: <a href={`tel:${contact.phoneHref}`}>{contact.phoneDisplay}</a>.{' '}
+                  </>
+                ) : null}
+                Kontakt w sprawie danych prowadzony jest przez te dane kontaktowe. Publiczny profil specjalisty w CAPBT, widoczny w stopce serwisu, służy wyłącznie weryfikacji kwalifikacji.
               </span>
             </div>
           </div>

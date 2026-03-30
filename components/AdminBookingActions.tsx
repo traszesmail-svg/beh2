@@ -1,6 +1,5 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { BookingStatus, PaymentStatus } from '@/lib/types'
 
@@ -17,9 +16,12 @@ export function AdminBookingActions({
   paymentStatus,
   meetingUrl,
 }: AdminBookingActionsProps) {
-  const router = useRouter()
   const [error, setError] = useState('')
   const [loadingAction, setLoadingAction] = useState<'approve' | 'reject' | 'done' | null>(null)
+
+  function refreshAdminPage() {
+    window.location.reload()
+  }
 
   async function handleMarkDone() {
     setError('')
@@ -41,7 +43,7 @@ export function AdminBookingActions({
         throw new Error(payload.error ?? 'Nie udało się oznaczyć konsultacji jako done.')
       }
 
-      router.refresh()
+      refreshAdminPage()
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : 'Wystąpił błąd akcji admina.')
     } finally {
@@ -70,7 +72,7 @@ export function AdminBookingActions({
         throw new Error(payload.error ?? 'Nie udało się zaktualizować płatności.')
       }
 
-      router.refresh()
+      refreshAdminPage()
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : 'Wystąpił błąd akcji admina.')
     } finally {

@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Fraunces, Manrope } from 'next/font/google'
 import { AnalyticsConsent } from '@/components/AnalyticsConsent'
-import { SITE_DESCRIPTION, SITE_NAME, SITE_SHORT_NAME, SITE_TAGLINE } from '@/lib/site'
+import { SITE_DESCRIPTION, SITE_NAME, SITE_OG_IMAGE, SITE_SHORT_NAME, SITE_TAGLINE } from '@/lib/site'
 import './globals.css'
 
 const manrope = Manrope({
@@ -37,20 +37,13 @@ export const metadata: Metadata = {
     locale: 'pl_PL',
     siteName: SITE_NAME,
     url: '/',
-    images: [
-      {
-        url: '/images/hero-main.png',
-        width: 1200,
-        height: 1778,
-        alt: 'Krzysztof Regulski na portretowym zdjęciu do marki Regulski Terapia behawioralna',
-      },
-    ],
+    images: [SITE_OG_IMAGE],
   },
   twitter: {
     card: 'summary_large_image',
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
-    images: ['/images/hero-main.png'],
+    images: [SITE_OG_IMAGE.url],
   },
 }
 

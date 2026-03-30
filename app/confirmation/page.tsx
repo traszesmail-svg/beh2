@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { unstable_noStore as noStore } from 'next/cache'
 import { headers } from 'next/headers'
+import { AnalyticsEventOnMount } from '@/components/AnalyticsEventOnMount'
 import { Header } from '@/components/Header'
 import { ConfirmationStatusWatcher } from '@/components/ConfirmationStatusWatcher'
 import { PreparationMaterialsCard } from '@/components/PreparationMaterialsCard'
@@ -10,6 +11,7 @@ import { formatPricePln } from '@/lib/pricing'
 import { canSelfCancelBooking, getRemainingSelfCancellationSeconds } from '@/lib/self-cancellation'
 import { getBookingForViewer } from '@/lib/server/db'
 import { getDataModeStatus } from '@/lib/server/env'
+import { getCustomerEmailDeliveryConfigIssue } from '@/lib/server/notifications'
 import { syncPayuBookingByBookingId } from '@/lib/server/payu'
 import { finalizeStripeCheckoutSession } from '@/lib/server/stripe'
 import { SmsConfirmationStatus } from '@/lib/types'
@@ -56,9 +58,13 @@ export default async function ConfirmationPage({
   const accessToken = readSearchParam(searchParams?.access)
   const sessionId = readSearchParam(searchParams?.session_id)
   const payuReturn = readSearchParam(searchParams?.payu)
+  const manualReported = readSearchParam(searchParams?.manual)
+  const adminNotice = readSearchParam(searchParams?.adminNotice)
   const dataMode = getDataModeStatus()
+  const returnedFromOnlineCheckout = Boolean(sessionId || payuReturn)
   let booking: Awaited<ReturnType<typeof getBookingForViewer>> = null
   let flowError: string | null = null
+  let onlineSyncWarning: string | null = null
 
   if (!dataMode.isValid) {
     flowError = 'Potwierdzenie chwilowo nie jest dostępne. Spróbuj ponownie za kilka minut.'
@@ -69,23 +75,40 @@ export default async function ConfirmationPage({
       await finalizeStripeCheckoutSession(sessionId, {
         triggerPaymentConfirmationSms: false,
       })
-    } catch {
-      // Legacy Stripe flow may already be updated by webhook.
+    } catch (error) {
+      console.warn('[behawior15][confirmation] stripe return finalize failed', {
+        bookingId,
+        sessionId,
+        error,
+      })
+      onlineSyncWarning =
+        'Wrocilismy z platnosci online, ale nie udal sie teraz zapis finalnego statusu. Ta strona sprobuje ponownie sama za chwile.'
     }
   }
 
   if (!flowError && bookingId && payuReturn) {
     try {
       await syncPayuBookingByBookingId(bookingId)
-    } catch {
-      // If webhook has not arrived yet, the page below will show a waiting state.
+    } catch (error) {
+      console.warn('[behawior15][confirmation] payu return sync failed', {
+        bookingId,
+        payuReturn,
+        error,
+      })
+      onlineSyncWarning =
+        'Wrocilismy z PayU, ale nie udal sie teraz zapis finalnego statusu. Ta strona sprobuje ponownie sama za chwile.'
     }
   }
 
   if (!flowError && bookingId) {
     try {
       booking = await getBookingForViewer(bookingId, accessToken, headers().get('authorization'))
-    } catch {
+    } catch (error) {
+      console.warn('[behawior15][confirmation] failed to load booking', {
+        bookingId,
+        hasAccessToken: Boolean(accessToken),
+        error,
+      })
       flowError = 'Nie udało się wczytać potwierdzenia. Spróbuj ponownie za moment.'
     }
   }
@@ -96,9 +119,22 @@ export default async function ConfirmationPage({
     booking?.bookingStatus === 'pending_manual_payment' && booking.paymentStatus === 'pending_manual_review'
   const isRejected = booking?.paymentStatus === 'rejected' && booking.bookingStatus === 'cancelled'
   const isSelfCancelled = booking?.paymentStatus === 'refunded' && booking.bookingStatus === 'cancelled'
+  const isClosed =
+    !isSelfCancelled &&
+    !isRejected &&
+    (booking?.bookingStatus === 'cancelled' ||
+      booking?.bookingStatus === 'expired' ||
+      booking?.paymentStatus === 'failed')
+  const isAwaitingOnlineConfirmation =
+    returnedFromOnlineCheckout && Boolean(booking) && !isConfirmed && !isWaitingManual && !isRejected && !isSelfCancelled && !isClosed
   const canSelfCancel = Boolean(booking && accessToken && canSelfCancelBooking(booking))
   const initialRemainingSeconds = booking ? getRemainingSelfCancellationSeconds(booking) : 0
   const smsPanel = getSmsPanelContent(booking?.smsConfirmationStatus)
+  const customerEmailAvailable = booking ? !getCustomerEmailDeliveryConfigIssue(booking.email) : false
+  const showAdminNoticeWarning =
+    isWaitingManual &&
+    manualReported === 'reported' &&
+    (adminNotice === 'failed' || adminNotice === 'skipped')
 
   return (
     <main className="page-wrap">
@@ -120,6 +156,15 @@ export default async function ConfirmationPage({
                         ? 'Wpłata niepotwierdzona'
                         : 'Sprawdzamy status płatności'}
               </div>
+              {isConfirmed ? (
+                <AnalyticsEventOnMount
+                  eventName="payment_success"
+                  params={{
+                    booking_id: booking.id,
+                    payment_method: booking.paymentMethod ?? 'unknown',
+                  }}
+                />
+              ) : null}
               <h1>
                 {isSelfCancelled
                   ? 'Rezerwacja została anulowana'
@@ -139,7 +184,8 @@ export default async function ConfirmationPage({
                     : isWaitingManual
                       ? 'Sprawdzamy wpłatę i potwierdzimy ją do 60 minut. Gdy status zmieni się na opłacona, ta strona sama pokaże pokój rozmowy i sekcję materiałów.'
                       : isRejected
-                        ? booking.paymentRejectedReason ?? 'Termin wrócił do puli. Jeśli trzeba, utwórz nową rezerwację i zgłoś wpłatę ponownie.'
+                        ? booking?.paymentRejectedReason ??
+                          'Termin wrócił do puli. Jeśli trzeba, utwórz nową rezerwację i zgłoś wpłatę ponownie.'
                         : 'Jeśli przed chwilą opłaciłeś konsultację online, odśwież tę stronę za chwilę. Jeśli płatność nie doszła, wróć do wyboru metody i spróbuj ponownie.'}
               </p>
 
@@ -171,18 +217,44 @@ export default async function ConfirmationPage({
                   bookingId={booking.id}
                   accessToken={accessToken ?? ''}
                   initialRemainingSeconds={initialRemainingSeconds}
+                  contactHref={`/kontakt?service=szybka-konsultacja-15-min&intent=reschedule&bookingId=${encodeURIComponent(booking.id)}`}
                 />
               ) : null}
 
-              <ConfirmationStatusWatcher active={isWaitingManual} />
+              <ConfirmationStatusWatcher active={isWaitingManual || isAwaitingOnlineConfirmation} />
 
-              {isWaitingManual ? (
+              {showAdminNoticeWarning ? (
                 <div className="info-box top-gap">
-                  Tytuł wpłaty: <strong>{booking.paymentReference ?? booking.id}</strong>. Gdy tylko potwierdzimy wpłatę, wyślemy link do rozmowy na {booking.email}, odblokujemy materiały i pokażemy nowy stan na tej stronie.
+                  Zgłoszenie wpłaty zostało zapisane, ale automatyczne powiadomienie obsługi o tej wpłacie nie zostało teraz dostarczone. Zachowaj ten link. Jeśli status nie zmieni się w ciągu 60 minut, skontaktuj się bezpośrednio przez dane kontaktowe na stronie.
                 </div>
               ) : null}
 
-              {!isSelfCancelled ? (
+              {isAwaitingOnlineConfirmation ? (
+                <div className="info-box top-gap">
+                  Wrocilos przekierowanie z checkoutu online. Jesli operator jeszcze konczy potwierdzenie, ta strona sama sprawdzi status ponownie i odblokuje pokoj rozmowy bez dodatkowego klikania.
+                </div>
+              ) : null}
+
+              {onlineSyncWarning ? <div className="info-box top-gap">{onlineSyncWarning}</div> : null}
+
+              {isClosed ? (
+                <div className="error-box top-gap">
+                  {booking.paymentStatus === 'failed'
+                    ? 'Platnosc online nie zostala potwierdzona, a termin wrocil do kalendarza.'
+                    : 'Ta rezerwacja nie jest juz aktywna. Jesli chcesz, wybierz nowy termin.'}
+                </div>
+              ) : null}
+
+              {isWaitingManual ? (
+                <div className="info-box top-gap">
+                  Tytuł wpłaty: <strong>{booking.paymentReference ?? booking.id}</strong>.{' '}
+                  {customerEmailAvailable
+                    ? `Gdy tylko potwierdzimy wpłatę, wyślemy link do rozmowy na ${booking.email}, odblokujemy materiały i pokażemy nowy stan na tej stronie.`
+                    : 'Gdy tylko potwierdzimy wpłatę, odblokujemy materiały i pokażemy aktywny link do rozmowy bezpośrednio na tej stronie.'}
+                </div>
+              ) : null}
+
+              {!isSelfCancelled && !isClosed ? (
                 <div className="stack-gap top-gap">
                   {isConfirmed ? (
                     <>
@@ -224,7 +296,7 @@ export default async function ConfirmationPage({
               )}
 
               <div className="hero-actions centered-actions">
-                {isSelfCancelled || isRejected ? (
+                {isSelfCancelled || isRejected || isClosed ? (
                   <Link href="/book" className="button button-primary big-button">
                     Wybierz nowy termin
                   </Link>

@@ -5,21 +5,14 @@ import { BookingStageEyebrow } from '@/components/BookingStageEyebrow'
 import { BookingForm } from '@/components/BookingForm'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
+import { buildSlotHref, readProblemTypeSearchParam, readSearchParam } from '@/lib/booking-routing'
 import { PricingDisclosure } from '@/components/PricingDisclosure'
-import { formatDateTimeLabel, getProblemLabel, isFutureAvailabilitySlot, isProblemType } from '@/lib/data'
+import { formatDateTimeLabel, getProblemLabel, isFutureAvailabilitySlot } from '@/lib/data'
 import { getAvailabilitySlot } from '@/lib/server/db'
 import { getDataModeStatus } from '@/lib/server/env'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
-
-function readSearchParam(value: string | string[] | undefined): string | null {
-  if (Array.isArray(value)) {
-    return value[0] ?? null
-  }
-
-  return value ?? null
-}
 
 export default async function FormPage({
   searchParams,
@@ -27,10 +20,10 @@ export default async function FormPage({
   searchParams?: Record<string, string | string[] | undefined>
 }) {
   noStore()
-  const problem = readSearchParam(searchParams?.problem)
+  const problem = readProblemTypeSearchParam(searchParams?.problem)
   const slotId = readSearchParam(searchParams?.slotId)
 
-  if (!isProblemType(problem) || !slotId) {
+  if (!problem || !slotId) {
     redirect('/book')
   }
 
@@ -61,7 +54,7 @@ export default async function FormPage({
             <BookingStageEyebrow stage="details" className="section-eyebrow" />
             <h1>Uzupełnij dane do szybkiej konsultacji</h1>
             <p className="muted paragraph-gap">
-              Po zapisaniu formularza termin zostanie tymczasowo zablokowany. Na kolejnym ekranie wybierzesz prostą wpłatę BLIK/przelewem albo PayU.
+              Po zapisaniu formularza termin zostanie tymczasowo zablokowany. Na kolejnym ekranie wybierzesz wpłatę BLIK/przelewem z potwierdzeniem albo PayU.
             </p>
 
             <div className="stack-gap top-gap">
@@ -75,7 +68,7 @@ export default async function FormPage({
               </div>
               <div className="list-card accent-outline tree-backed-card">
                 <strong>Format</strong>
-                <span>15-minutowa konsultacja głosowa online. To pierwszy krok w systemie pracy. Kamera nie jest potrzebna.</span>
+                <span>15-minutowa konsultacja głosowa online. To pierwszy krok w całej ścieżce pracy. Kamera nie jest potrzebna.</span>
               </div>
               <div className="list-card tree-backed-card">
                 <PricingDisclosure stage="pre-payment" labelAs="strong" />
@@ -88,7 +81,7 @@ export default async function FormPage({
               <>
                 <div className="info-box">{flowError}</div>
                 <div className="hero-actions top-gap">
-                  <Link href={`/slot?problem=${problem}`} className="button button-primary big-button">
+                  <Link href={buildSlotHref(problem)} prefetch={false} className="button button-primary big-button">
                     Wróć do terminów
                   </Link>
                 </div>
@@ -107,7 +100,7 @@ export default async function FormPage({
               <>
                 <div className="error-box">Ten termin nie jest już dostępny. Wróć do listy i wybierz inną godzinę rozmowy.</div>
                 <div className="hero-actions top-gap">
-                  <Link href={`/slot?problem=${problem}`} className="button button-primary big-button">
+                  <Link href={buildSlotHref(problem)} prefetch={false} className="button button-primary big-button">
                     Wróć do terminów
                   </Link>
                 </div>

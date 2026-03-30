@@ -3,7 +3,6 @@ import { ProblemType } from './types'
 export const SITE_NAME = 'Regulski | Terapia behawioralna'
 export const SITE_SHORT_NAME = 'Regulski'
 export const SITE_URL_FALLBACK = 'http://localhost:3000'
-export const FACEBOOK_PROFILE_URL = 'https://www.facebook.com/krzysztof.regulski.148/'
 export const PUBLIC_CONTACT_EMAIL_FALLBACK = 'coapebehawiorysta@gmail.com'
 export const SITE_TAGLINE =
   'Konsultacje dla psów i kotów, terapia problemów w zachowaniu oraz pobyty socjalizacyjno-terapeutyczne'
@@ -31,22 +30,74 @@ export const CONSULTATION_PRICE_COMPARE_COPY =
   'To pierwszy krok w szerszym systemie pracy, jeśli problem wymaga czegoś więcej niż jednej rozmowy.'
 
 export const LANDING_SPECIALIST_PHOTO = {
-  src: '/images/hero-main.png',
+  src: '/branding/specialist-krzysztof-portrait.jpg',
   alt: 'Krzysztof Regulski na portretowym zdjęciu do marki Regulski Terapia behawioralna',
 }
 
 export const SPECIALIST_PHOTO = LANDING_SPECIALIST_PHOTO
 
+export const SPECIALIST_WIDE_PHOTO = {
+  src: '/branding/specialist-krzysztof-wide.jpg',
+  alt: 'Krzysztof Regulski trzymający kota w jasnym wnętrzu gabinetowym',
+}
+
+export const SPECIALIST_EXTENDED_START_PHOTO = {
+  src: '/branding/specialist-krzysztof-about.png',
+  alt: 'Krzysztof Regulski w spokojnym kadrze jako ilustracja rozszerzonej konsultacji 30 min',
+}
+
+export const SPECIALIST_ONLINE_PHOTO = {
+  src: '/branding/specialist-krzysztof-social.jpg',
+  alt: 'Krzysztof Regulski z kotem na szerokim kadrze jako ilustracja konsultacji online',
+}
+
+export const SITE_OG_IMAGE = {
+  url: '/branding/specialist-krzysztof-social.jpg',
+  width: 1200,
+  height: 630,
+  alt: 'Krzysztof Regulski z kotem na szerokim zdjęciu do udostępnień marki Regulski Terapia behawioralna',
+} as const
+
 export const SUPPORTING_SPECIALIST_PHOTO = {
+  src: '/branding/case-dog-rest.jpg',
+  alt: 'Spokojny pies odpoczywający w domowym otoczeniu',
+}
+
+export const CAT_HOME_PHOTO = {
+  src: '/branding/case-cat-sofa.jpg',
+  alt: 'Kot odpoczywający w spokojnym domowym otoczeniu jako ilustracja pracy z kuwetą, stresem i relacją w domu',
+}
+
+export const CATS_PAGE_PHOTO = {
   src: '/branding/specialist-krzysztof-vet.jpg',
-  alt: 'Krzysztof Regulski podczas pracy z kotem',
+  alt: 'Krzysztof Regulski podczas spokojnej pracy z kotem jako ilustracja osobnej sciezki terapii kotow',
+}
+
+export const SPECIALIST_CAT_PHOTO = {
+  src: '/branding/specialist-krzysztof-vet.jpg',
+  alt: 'Krzysztof Regulski podczas spokojnej pracy z kotem jako ilustracja konsultacji behawioralnej i terapii kotów',
+}
+
+export const THERAPY_PROCESS_PHOTO = {
+  src: '/branding/specialist-krzysztof-vet.jpg',
+  alt: 'Krzysztof Regulski podczas spokojnej pracy z kotem jako ilustracja dluzszego procesu terapeutycznego',
+}
+
+export const HOME_VISIT_PHOTO = {
+  src: '/branding/case-dog-home.jpg',
+  alt: 'Pies w swoim domowym otoczeniu jako ilustracja konsultacji prowadzonej w miejscu codziennego funkcjonowania',
+}
+
+export const STAYS_PHOTO = {
+  src: '/branding/case-dog-rest.jpg',
+  alt: 'Spokojny pies odpoczywajacy w uporzadkowanej przestrzeni jako ilustracja pobytow socjalizacyjno-terapeutycznych',
 }
 
 export const HERO_SUPPORT_IMAGES = [
   {
     id: 'hero-dog',
-    src: '/branding/case-dog-home.jpg',
-    alt: 'Spokojny pies w jasnym, domowym otoczeniu',
+    src: '/branding/case-dog-rest.jpg',
+    alt: 'Spokojny pies odpoczywający w jasnym, domowym otoczeniu',
     label: 'Pies w domowym środowisku',
   },
   {
@@ -63,12 +114,12 @@ export const TOPIC_VISUALS: Record<ProblemType, { src: string; alt: string }> = 
     alt: 'Szczeniak przy dłoni opiekuna jako ilustracja gryzienia rąk i nauki wyciszenia',
   },
   kot: {
-    src: '/branding/topic-cards/cat-veterinarian.jpg',
-    alt: 'Kot podczas badania w gabinecie jako ilustracja problemów z kuwetą, stresem i zachowaniem',
+    src: '/branding/case-cat-sofa.jpg',
+    alt: 'Kot odpoczywający w domowym otoczeniu jako ilustracja pracy z kuwetą, stresem i zachowaniem',
   },
   separacja: {
     src: '/branding/topic-cards/dog-window-alone.jpg',
-    alt: 'Pies patrzący przez okno jako ilustracja zostawania samemu i napięcia po wyjściu opiekuna',
+    alt: 'Pies odpoczywający w domu jako ilustracja zostawania samemu, wyciszenia i pracy nad napięciem',
   },
   agresja: {
     src: '/branding/topic-cards/french-bulldog-leash.jpg',
@@ -79,12 +130,12 @@ export const TOPIC_VISUALS: Record<ProblemType, { src: string; alt: string }> = 
     alt: 'Border collie w biegu jako ilustracja pogoni za ruchem i silnego pobudzenia',
   },
   dogoterapia: {
-    src: '/branding/topic-cards/dog-checkup.jpg',
-    alt: 'Specjalista badający psa jako ilustracja przygotowania psa do pracy i bezpiecznego planu',
+    src: HOME_VISIT_PHOTO.src,
+    alt: 'Spokojny pies w domowym otoczeniu jako ilustracja przygotowania psa do pracy i bezpiecznego planu dogoterapii',
   },
   inne: {
-    src: '/branding/topic-cards/cat-in-arms.jpg',
-    alt: 'Opiekunka trzymająca kota jako ilustracja mieszanego lub nietypowego tematu konsultacji',
+    src: SPECIALIST_EXTENDED_START_PHOTO.src,
+    alt: 'Krzysztof Regulski w spokojnym kadrze jako ilustracja konsultacji przy mieszanym lub nietypowym temacie',
   },
 }
 
@@ -102,8 +153,8 @@ export type RealCaseStudy = {
 export const REAL_CASE_STUDIES: RealCaseStudy[] = [
   {
     id: 'fear-dog',
-    imageSrc: '/branding/case-dog-home.jpg',
-    imageAlt: 'Spokojny pies w domowym otoczeniu',
+    imageSrc: '/branding/case-dog-rest.jpg',
+    imageAlt: 'Spokojny pies odpoczywający w domowym otoczeniu',
     sourceLabel: 'Najczęstszy start: napięcie i zostawanie samemu',
     problem: 'Pies szczeka, nie wycisza się i trudno mu zostać samemu.',
     summary:
@@ -228,7 +279,6 @@ export function getContactDetails() {
     email: emailCandidate,
     phoneDisplay: phone.display,
     phoneHref: phone.href,
-    facebookUrl: FACEBOOK_PROFILE_URL,
   }
 }
 

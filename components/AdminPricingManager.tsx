@@ -68,12 +68,12 @@ export function AdminPricingManager({ currentAmount, currentLabel, updatedAtLabe
           <label>Nowa cena konsultacji (PLN)</label>
           <input
             type="number"
-            min="39"
+            min="59"
             step="0.01"
             inputMode="decimal"
             value={amount}
             onChange={(event) => setAmount(event.target.value)}
-            placeholder="np. 39"
+            placeholder="np. 59"
             required
           />
         </div>

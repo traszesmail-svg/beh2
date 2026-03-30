@@ -1,5 +1,5 @@
-export const DEFAULT_PRICE_PLN = 39
-export const MIN_CONSULTATION_PRICE_PLN = 39
+export const DEFAULT_PRICE_PLN = 59
+export const MIN_CONSULTATION_PRICE_PLN = 59
 export const BLOCKED_CONSULTATION_PRICE_PLN = DEFAULT_PRICE_PLN + 30
 export const PRE_TOPIC_PRICE_CONFIRMATION_COPY = 'Dokładną kwotę potwierdzisz po wyborze tematu konsultacji.'
 
@@ -64,7 +64,7 @@ export function parseConsultationPriceInput(rawValue: string | number): number {
   const normalized = raw.replace(',', '.')
 
   if (!normalized || !/^\d+(\.\d{1,2})?$/.test(normalized)) {
-    throw new Error('Podaj poprawną kwotę konsultacji w PLN, np. 39 albo 49.50.')
+    throw new Error('Podaj poprawną kwotę konsultacji w PLN, np. 59 albo 69.50.')
   }
 
   const amount = Number(normalized)

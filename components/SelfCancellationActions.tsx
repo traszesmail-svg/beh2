@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useEffect, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 
@@ -7,12 +8,33 @@ interface SelfCancellationActionsProps {
   bookingId: string
   accessToken: string
   initialRemainingSeconds: number
+  contactHref?: string
+}
+
+function formatRemainingWindow(remainingSeconds: number) {
+  if (remainingSeconds >= 3600) {
+    const hours = Math.floor(remainingSeconds / 3600)
+    const minutes = Math.ceil((remainingSeconds % 3600) / 60)
+
+    if (minutes <= 0) {
+      return `${hours} godz.`
+    }
+
+    return `${hours} godz. ${minutes} min`
+  }
+
+  if (remainingSeconds >= 60) {
+    return `${Math.ceil(remainingSeconds / 60)} min`
+  }
+
+  return `${remainingSeconds} s`
 }
 
 export function SelfCancellationActions({
   bookingId,
   accessToken,
   initialRemainingSeconds,
+  contactHref = '/kontakt?service=szybka-konsultacja-15-min&intent=reschedule',
 }: SelfCancellationActionsProps) {
   const router = useRouter()
   const [remainingSeconds, setRemainingSeconds] = useState(initialRemainingSeconds)
@@ -62,16 +84,20 @@ export function SelfCancellationActions({
 
   return (
     <div className="list-card accent-outline top-gap">
-      <strong>Masz {remainingSeconds} s na anulację po zakupie</strong>
+      <strong>Masz jeszcze około {formatRemainingWindow(remainingSeconds)} na bezpłatną rezygnację</strong>
       <span>
         Jeśli klikniesz teraz, termin wróci do kalendarza, a płatność zostanie cofnięta zgodnie z aktywnym trybem płatności.
+        Jeśli chcesz zamiast tego zmienić termin, napisz do mnie w tym samym 24-godzinnym oknie.
       </span>
       {error ? <div className="error-box top-gap-small">{error}</div> : null}
       {message ? <div className="info-box top-gap-small">{message}</div> : null}
       <div className="hero-actions top-gap-small">
         <button type="button" className="button button-ghost big-button" onClick={handleCancel} disabled={isPending}>
-          {isPending ? 'Anuluję rezerwację...' : 'Anuluj zakup w 1 minutę'}
+          {isPending ? 'Anuluję rezerwację...' : 'Anuluj rezerwację w 24h'}
         </button>
+        <Link href={contactHref} className="button button-ghost big-button">
+          Napisz w sprawie zmiany terminu
+        </Link>
       </div>
     </div>
   )

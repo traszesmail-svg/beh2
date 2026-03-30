@@ -6,6 +6,7 @@ import { unstable_noStore as noStore } from 'next/cache'
 import { BookingStageEyebrow } from '@/components/BookingStageEyebrow'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
+import { buildSlotHref, readProblemTypeSearchParam } from '@/lib/booking-routing'
 import { PricingDisclosure } from '@/components/PricingDisclosure'
 import { problemOptions } from '@/lib/data'
 import { buildBookMetadata } from '@/lib/seo'
@@ -19,14 +20,6 @@ export const revalidate = 0
 
 export async function generateMetadata(): Promise<Metadata> {
   return buildBookMetadata()
-}
-
-function readSearchParam(value: string | string[] | undefined): string | null {
-  if (Array.isArray(value)) {
-    return value[0] ?? null
-  }
-
-  return value ?? null
 }
 
 function renderProblemIcon(problem: ProblemType) {
@@ -102,12 +95,14 @@ export default async function BookPage({
   searchParams?: Record<string, string | string[] | undefined>
 }) {
   noStore()
-  const problem = readSearchParam(searchParams?.problem)
+  const problem = readProblemTypeSearchParam(searchParams?.problem)
   const dataMode = getDataModeStatus()
-  let availabilityLabel = 'Najbliższe realnie dostępne terminy zobaczysz po kliknięciu w wybrany temat.'
+  const mainProblemOptions = problemOptions.filter((item) => item.id !== 'inne')
+  const mixedProblemOption = problemOptions.find((item) => item.id === 'inne') ?? null
+  let availabilityLabel = 'Terminy zobaczysz po wyborze tematu.'
 
   if (problem) {
-    redirect(`/slot?problem=${problem}`)
+    redirect(buildSlotHref(problem))
   }
 
   if (dataMode.isValid) {
@@ -115,12 +110,11 @@ export default async function BookPage({
       const availability = await listAvailability()
       availabilityLabel =
         availability.length > 0
-          ? 'Wolne terminy są dostępne i pokażą się od razu po wyborze tematu.'
-          : 'Brak wolnych terminów'
+          ? 'Terminy pokażą się od razu po wyborze tematu.'
+          : 'Jeśli dziś nie widzisz terminu, wróć później albo napisz.'
     } catch (error) {
       console.warn('[behawior15][book] nie udalo sie wczytac dostepnosci', error)
     }
-
   }
 
   return (
@@ -128,26 +122,24 @@ export default async function BookPage({
       <div className="container">
         <Header />
 
-        <section className="booking-layout sales-book-layout">
+        <section className="booking-layout sales-book-layout book-layout-balanced">
           <div className="panel section-panel">
             <BookingStageEyebrow stage="topic" className="section-eyebrow" />
             <h1>Wybierz temat szybkiej konsultacji 15 min</h1>
             <p className="hero-text">
-              To osobny flow dla pierwszego, lekkiego kroku. Zacznij od karty, która najlepiej przypomina to, co dzieje
-              się u Ciebie. Nie chodzi o idealną etykietę, tylko o dobry punkt wejścia w rozmowę.
+              Wybierz kartę najbliższą sytuacji. Nie musi być idealna. To ma być dobry start, a dalszy krok dobierzemy
+              później, jeśli temat okaże się szerszy.
             </p>
-            <div className="topic-selection-note top-gap-small">
-              Jeśli po drodze okaże się, że sprawa wymaga szerszej pracy, dalszy etap dobierzemy już po rozpoznaniu sytuacji.
-            </div>
+            <div className="topic-selection-note top-gap-small">Nie wiesz, który temat wybrać? Napisz zamiast zgadywać.</div>
 
             <div className="booking-note-grid top-gap">
               <div className="list-card tree-backed-card">
-                <strong>Jak wygląda flow</strong>
-                <span>Temat - termin - dane - płatność - potwierdzenie rozmowy.</span>
+                <strong>Jak wygląda rezerwacja</strong>
+                <span>Wybierasz temat i termin, podajesz dane, płacisz i przechodzisz do potwierdzenia.</span>
               </div>
               <div className="list-card tree-backed-card">
                 <strong>Płatność i anulacja</strong>
-                <span>Po opłaceniu masz 1 minutę na samodzielną rezygnację przyciskiem anulacji na ekranie potwierdzenia.</span>
+                <span>Po opłaceniu masz 24 godziny na bezpłatną rezygnację. Jeśli chcesz zmienić termin, napisz.</span>
               </div>
               <div className="list-card tree-backed-card">
                 <strong>Dostępność</strong>
@@ -155,8 +147,8 @@ export default async function BookPage({
               </div>
             </div>
 
-            <div className="card-grid three-up top-gap" id="tematy">
-              {problemOptions.map((item) => {
+            <div className="card-grid three-up top-gap book-topics-grid" id="tematy">
+              {mainProblemOptions.map((item) => {
                 const topicVisual = TOPIC_VISUALS[item.id]
                 const cardTitle = item.marketingTitle ?? item.title
                 const cardDescription = item.marketingDesc ?? item.desc
@@ -164,10 +156,11 @@ export default async function BookPage({
                 return (
                   <Link
                     key={item.id}
-                    href={`/slot?problem=${item.id}`}
+                    href={buildSlotHref(item.id)}
+                    prefetch={false}
                     className="topic-card tree-backed-card"
                     data-problem={item.id}
-                    data-analytics-event="topic_select"
+                    data-analytics-event="cta_click"
                     data-analytics-location="book-topics"
                     data-analytics-problem={item.id}
                   >
@@ -200,6 +193,33 @@ export default async function BookPage({
                 )
               })}
             </div>
+
+            <div className="book-helper-grid top-gap">
+              {mixedProblemOption ? (
+                <div className="list-card tree-backed-card book-helper-card">
+                  <strong>{mixedProblemOption.marketingTitle ?? mixedProblemOption.title}</strong>
+                  <span>{mixedProblemOption.marketingDesc ?? mixedProblemOption.desc}</span>
+                  <div className="offer-card-actions top-gap-small">
+                    <Link href={buildSlotHref(mixedProblemOption.id)} prefetch={false} className="button button-primary">
+                      Wybierz temat mieszany
+                    </Link>
+                  </div>
+                </div>
+              ) : null}
+
+              <div className="list-card accent-outline tree-backed-card book-helper-card">
+                <strong>Nie jesteś pewien?</strong>
+                <span>
+                  Jeśli temat jest mieszany albo wolisz najpierw opisać sytuację, przejdź do kontaktu. Lepiej dobrać
+                  pierwszy krok niż zgadywać.
+                </span>
+                <div className="offer-card-actions top-gap-small">
+                  <Link href="/kontakt" prefetch={false} className="button button-ghost">
+                    Napisz do mnie
+                  </Link>
+                </div>
+              </div>
+            </div>
           </div>
 
           <aside className="panel side-panel booking-side-panel sales-book-side">
@@ -222,14 +242,14 @@ export default async function BookPage({
 
             <div className="list-card tree-backed-card top-gap">
               <strong>Co kupujesz na tym etapie</strong>
-              <span>Wejście do osobnego flow szybkiej konsultacji 15 min, która ma uporządkować sytuację i wskazać właściwy dalszy krok.</span>
+              <span>15-minutową konsultację głosową online, która porządkuje sytuację i wskazuje najbliższy krok.</span>
             </div>
 
             <div className="list-card tree-backed-card top-gap">
               <strong>Jeśli potrzebujesz czegoś więcej</strong>
-              <span>W każdej chwili możesz wrócić do pełnego przeglądu oferty i sprawdzić konsultację 30 min, konsultację online, terapię albo pobyty.</span>
+              <span>Możesz wrócić do pełnej oferty i porównać 30 min, konsultację online, terapię albo pobyty.</span>
               <div className="offer-card-actions top-gap-small">
-                <Link href="/oferta" className="button button-ghost">
+                <Link href="/oferta" prefetch={false} className="button button-ghost">
                   Zobacz formy współpracy
                 </Link>
               </div>

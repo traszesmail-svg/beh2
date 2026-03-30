@@ -26,6 +26,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ url: session.url })
   } catch (error) {
+    console.error('[behawior15][payment-api] payu checkout failed', error)
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Nie udało się uruchomić PayU.' },
       { status: 500 },

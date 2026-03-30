@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from 'fs/promises'
+import { mkdir, readFile, rename, rm, writeFile } from 'fs/promises'
 import path from 'path'
 import { compareDateAndTime, formatDateLabel, isFutureAvailabilitySlot } from '@/lib/data'
 import { normalizePolishPhone } from '@/lib/phone'
@@ -7,6 +7,7 @@ import { buildSeedAvailabilitySlots } from '@/lib/server/availability-seed'
 import { createCustomerAccessToken, hasValidCustomerAccessToken } from '@/lib/server/customer-access'
 import { getReservationWindowMinutes } from '@/lib/server/env'
 import { createMeetingUrl } from '@/lib/server/jitsi'
+import { getLocalStoreDataDir } from '@/lib/server/local-store-path'
 import { getManualPaymentConfig } from '@/lib/server/payment-options'
 import {
   sendBookingConfirmationEmail,
@@ -34,12 +35,6 @@ interface LocalStoreData {
   users: UserRecord[]
 }
 
-const dataDir = path.join(process.cwd(), 'data')
-const availabilityFile = path.join(dataDir, 'availability.json')
-const bookingsFile = path.join(dataDir, 'bookings.json')
-const pricingSettingsFile = path.join(dataDir, 'pricing-settings.json')
-const usersFile = path.join(dataDir, 'users.json')
-
 let queue = Promise.resolve()
 
 function withLock<T>(work: () => Promise<T>): Promise<T> {
@@ -49,6 +44,18 @@ function withLock<T>(work: () => Promise<T>): Promise<T> {
     () => undefined,
   )
   return next
+}
+
+function getStorePaths() {
+  const dataDir = getLocalStoreDataDir()
+
+  return {
+    dataDir,
+    availabilityFile: path.join(dataDir, 'availability.json'),
+    bookingsFile: path.join(dataDir, 'bookings.json'),
+    pricingSettingsFile: path.join(dataDir, 'pricing-settings.json'),
+    usersFile: path.join(dataDir, 'users.json'),
+  }
 }
 
 function createSeedAvailability(nowIso: string): AvailabilitySlot[] {
@@ -65,6 +72,7 @@ async function ensureFile(filePath: string, fallbackValue: unknown) {
 
 async function ensureStoreFiles() {
   const nowIso = new Date().toISOString()
+  const { dataDir, availabilityFile, bookingsFile, pricingSettingsFile, usersFile } = getStorePaths()
   await mkdir(dataDir, { recursive: true })
   await ensureFile(availabilityFile, createSeedAvailability(nowIso))
   await ensureFile(bookingsFile, [])
@@ -72,13 +80,42 @@ async function ensureStoreFiles() {
   await ensureFile(usersFile, [])
 }
 
+function isTransientLocalStoreReadError(error: unknown) {
+  if (error instanceof SyntaxError) {
+    return true
+  }
+
+  return Boolean(typeof error === 'object' && error && 'code' in error && error.code === 'ENOENT')
+}
+
 async function readJson<T>(filePath: string): Promise<T> {
-  const raw = await readFile(filePath, 'utf8')
-  return JSON.parse(raw) as T
+  for (let attempt = 0; attempt < 5; attempt += 1) {
+    try {
+      const raw = await readFile(filePath, 'utf8')
+      return JSON.parse(raw) as T
+    } catch (error) {
+      if (!isTransientLocalStoreReadError(error) || attempt === 4) {
+        throw error
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, 25 * (attempt + 1)))
+    }
+  }
+
+  throw new Error(`Unable to read local store file: ${filePath}`)
 }
 
 async function writeJson(filePath: string, value: unknown) {
-  await writeFile(filePath, JSON.stringify(value, null, 2), 'utf8')
+  await mkdir(path.dirname(filePath), { recursive: true })
+  const tempFilePath = `${filePath}.${process.pid}.${Date.now()}.tmp`
+
+  await writeFile(tempFilePath, JSON.stringify(value, null, 2), 'utf8')
+
+  try {
+    await rename(tempFilePath, filePath)
+  } finally {
+    await rm(tempFilePath, { force: true })
+  }
 }
 
 function releaseSlot(slot: AvailabilitySlot, nowIso: string) {
@@ -162,6 +199,7 @@ function normalizeExpiredReservations(store: LocalStoreData): LocalStoreData {
 }
 
 async function readStore(): Promise<LocalStoreData> {
+  const { availabilityFile, bookingsFile, pricingSettingsFile, usersFile } = getStorePaths()
   await ensureStoreFiles()
 
   const [availability, bookings, pricingSettings, users] = await Promise.all([
@@ -184,6 +222,7 @@ async function readStore(): Promise<LocalStoreData> {
 }
 
 async function persistStore(store: LocalStoreData) {
+  const { availabilityFile, bookingsFile, pricingSettingsFile, usersFile } = getStorePaths()
   await Promise.all([
     writeJson(availabilityFile, store.availability),
     writeJson(bookingsFile, store.bookings),

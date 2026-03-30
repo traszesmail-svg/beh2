@@ -1,23 +1,15 @@
 import { redirect } from 'next/navigation'
-import { isProblemType } from '@/lib/data'
-
-function readSearchParam(value: string | string[] | undefined): string | null {
-  if (Array.isArray(value)) {
-    return value[0] ?? null
-  }
-
-  return value ?? null
-}
+import { buildSlotHref, readProblemTypeSearchParam } from '@/lib/booking-routing'
 
 export default function LegacyProblemPage({
   searchParams,
 }: {
   searchParams?: Record<string, string | string[] | undefined>
 }) {
-  const problem = readSearchParam(searchParams?.problem)
+  const problem = readProblemTypeSearchParam(searchParams?.problem)
 
-  if (isProblemType(problem)) {
-    redirect(`/book?problem=${problem}`)
+  if (problem) {
+    redirect(buildSlotHref(problem))
   }
 
   redirect('/book')

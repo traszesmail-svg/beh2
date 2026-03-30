@@ -2,22 +2,15 @@ import Link from 'next/link'
 import { unstable_noStore as noStore } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { BookingStageEyebrow } from '@/components/BookingStageEyebrow'
+import { buildFormHref, buildSlotHref, readProblemTypeSearchParam } from '@/lib/booking-routing'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
-import { getProblemLabel, isProblemType } from '@/lib/data'
+import { getProblemLabel } from '@/lib/data'
 import { listAvailability } from '@/lib/server/db'
 import { getDataModeStatus } from '@/lib/server/env'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
-
-function readSearchParam(value: string | string[] | undefined): string | null {
-  if (Array.isArray(value)) {
-    return value[0] ?? null
-  }
-
-  return value ?? null
-}
 
 export default async function SlotPage({
   searchParams,
@@ -25,9 +18,9 @@ export default async function SlotPage({
   searchParams?: Record<string, string | string[] | undefined>
 }) {
   noStore()
-  const problem = readSearchParam(searchParams?.problem)
+  const problem = readProblemTypeSearchParam(searchParams?.problem)
 
-  if (!isProblemType(problem)) {
+  if (!problem) {
     redirect('/book')
   }
 
@@ -62,10 +55,10 @@ export default async function SlotPage({
             <div className="stack-gap top-gap">
               <div className="info-box">{publicFlowMessage}</div>
               <div className="hero-actions">
-                <Link href={`/slot?problem=${problem}`} className="button button-primary big-button" aria-label="Spróbuj ponownie wczytać listę terminów">
+                <Link href={buildSlotHref(problem)} prefetch={false} className="button button-primary big-button" aria-label="Spróbuj ponownie wczytać listę terminów">
                   Spróbuj ponownie
                 </Link>
-                <Link href="/book" className="button button-ghost" aria-label="Wróć do wyboru tematu konsultacji">
+                <Link href="/book" prefetch={false} className="button button-ghost" aria-label="Wróć do wyboru tematu konsultacji">
                   Wróć do wyboru tematu
                 </Link>
               </div>
@@ -73,13 +66,13 @@ export default async function SlotPage({
           ) : groupedAvailability.length === 0 ? (
             <div className="stack-gap top-gap">
               <div className="empty-box">
-                W tej chwili nie ma wolnych terminów dla tego flow rezerwacji. Sprawdź ponownie za jakiś czas albo wróć do wyboru tematu.
+                W tej chwili nie ma wolnych terminów dla tego tematu. Sprawdź ponownie za jakiś czas albo wróć do wyboru tematu i wybierz inną ścieżkę wejścia.
               </div>
               <div className="hero-actions">
-                <Link href={`/slot?problem=${problem}`} className="button button-primary big-button" aria-label="Odśwież listę terminów dla wybranego tematu">
+                <Link href={buildSlotHref(problem)} prefetch={false} className="button button-primary big-button" aria-label="Odśwież listę terminów dla wybranego tematu">
                   Odśwież terminy
                 </Link>
-                <Link href="/book" className="button button-ghost" aria-label="Wróć do wyboru tematu konsultacji">
+                <Link href="/book" prefetch={false} className="button button-ghost" aria-label="Wróć do wyboru tematu konsultacji">
                   Wróć do wyboru tematu
                 </Link>
               </div>
@@ -94,10 +87,11 @@ export default async function SlotPage({
                     {group.slots.map((slot) => (
                       <Link
                         key={slot.id}
-                        href={`/form?problem=${problem}&slotId=${slot.id}`}
+                        href={buildFormHref(problem, slot.id)}
+                        prefetch={false}
                         className="slot-button slot-link"
                         aria-label={`Wybierz termin ${group.label} o ${slot.bookingTime} dla tematu ${getProblemLabel(problem)}`}
-                        data-analytics-event="slot_select"
+                        data-analytics-event="slot_selected"
                         data-analytics-location="slot-list"
                         data-analytics-problem={problem}
                         data-analytics-slot={`${group.label} ${slot.bookingTime}`}

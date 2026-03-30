@@ -9,13 +9,25 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Brak bookingId.' }, { status: 400 })
     }
 
-    const booking = await reportManualPayment(body.bookingId, body.accessToken ?? null, request.headers.get('authorization'))
-    const accessQuery = body.accessToken ? `&access=${encodeURIComponent(body.accessToken)}` : ''
+    const result = await reportManualPayment(body.bookingId, body.accessToken ?? null, request.headers.get('authorization'))
+    const redirectParams = new URLSearchParams({
+      bookingId: result.booking.id,
+      manual: 'reported',
+    })
+
+    if (body.accessToken) {
+      redirectParams.set('access', body.accessToken)
+    }
+
+    if (result.adminNotification.status !== 'sent') {
+      redirectParams.set('adminNotice', result.adminNotification.status)
+    }
 
     return NextResponse.json({
-      redirectTo: `/confirmation?bookingId=${booking.id}${accessQuery}&manual=reported`,
+      redirectTo: `/confirmation?${redirectParams.toString()}`,
     })
   } catch (error) {
+    console.error('[behawior15][payment-api] manual report failed', error)
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Nie udało się zgłosić płatności.' },
       { status: 500 },

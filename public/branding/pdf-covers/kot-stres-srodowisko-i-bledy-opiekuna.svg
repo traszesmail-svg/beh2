@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1240" height="1754" viewBox="0 0 1240 1754" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1240" height="1754" fill="#F0F5F6"/>
+  <rect x="0" y="0" width="1240" height="540" fill="#2F5665"/>
+  <rect x="72" y="108" width="1096" height="1.5" fill="#F0F5F6" fill-opacity="0.4"/>
+  <circle cx="1020" cy="210" r="260" fill="#5B8390" fill-opacity="0.18"/>
+  <circle cx="230" cy="1540" r="310" fill="#80B5BF" fill-opacity="0.11"/>
+  <rect x="72" y="1220" width="1096" height="366" rx="36" fill="white"/>
+  <text x="72" y="182" fill="#F0F5F6" font-family="Arial" font-size="34" letter-spacing="3">REGULSKI | TERAPIA BEHAWIORALNA</text>
+  <text x="72" y="320" fill="#F0F5F6" font-family="Arial" font-size="86" font-weight="700">Kot: stres i środowisko</text>
+  <text x="72" y="425" fill="#F0F5F6" font-family="Georgia" font-size="34">Jak rozpoznać napięcie, poprawić dom i nie utrwalać problemów codziennymi błędami</text>
+  <text x="72" y="1298" fill="#1A262C" font-family="Arial" font-size="26" letter-spacing="2">DLA KOGO</text>
+  <text x="72" y="1360" fill="#1A262C" font-family="Georgia" font-size="34">Opiekunowie kotów lękowych, wycofanych, łatwo przeciążających się lub funkcjonujących w stałym napięciu.</text>
+  <text x="72" y="1480" fill="#1A262C" font-family="Arial" font-size="26" letter-spacing="2">OBIETNICA</text>
+  <text x="72" y="1542" fill="#1A262C" font-family="Georgia" font-size="34">Pomaga zobaczyć dom oczami kota i uporządkować środowisko, zanim problem rozwinie się w konflikt, unikanie albo zachowania obronne.</text>
+  <rect x="72" y="1650" width="220" height="40" rx="20" fill="#80B5BF"/>
+  <text x="104" y="1677" fill="#F0F5F6" font-family="Arial" font-size="24" font-weight="700">PORADNIK GĹĂ“WNY</text>
+</svg>

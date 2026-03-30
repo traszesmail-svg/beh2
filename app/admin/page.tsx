@@ -64,7 +64,7 @@ export default async function AdminPage() {
               <h1>Rezerwacje, płatności i terminy</h1>
             </div>
             <Link href="/book" className="button button-primary">
-              Przejdź do flow klienta
+              Przejdź do ścieżki klienta
             </Link>
           </div>
 
@@ -121,7 +121,7 @@ export default async function AdminPage() {
             ) : null}
 
             {bookings.length === 0 ? (
-              <div className="empty-box">Nie ma jeszcze rezerwacji. Przejdź przez flow klienta, aby utworzyć pierwszą konsultację.</div>
+              <div className="empty-box">Nie ma jeszcze rezerwacji. Przejdź przez ścieżkę klienta, aby utworzyć pierwszą konsultację.</div>
             ) : (
               <div className="booking-list">
                 {bookings.map((booking) => (

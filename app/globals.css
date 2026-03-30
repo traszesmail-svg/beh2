@@ -445,6 +445,16 @@ h1 span {
   padding: 20px;
 }
 
+.list-card {
+  display: grid;
+  gap: 8px;
+}
+
+.list-card strong,
+.list-card span {
+  display: block;
+}
+
 .testimonial-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -3260,6 +3270,21 @@ select:focus-visible {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
+.offer-page-stack {
+  display: grid;
+  gap: 28px;
+}
+
+.offer-section-block {
+  display: grid;
+  align-content: start;
+}
+
+.offer-section-intro {
+  max-width: 760px;
+  margin-top: 14px;
+}
+
 .offer-grid,
 .process-grid {
   display: grid;
@@ -3282,6 +3307,170 @@ select:focus-visible {
   padding: 24px;
 }
 
+.pdf-guide-card {
+  align-content: start;
+}
+
+.offer-card-media,
+.contact-visual-shell {
+  overflow: hidden;
+  border-radius: 24px;
+  background: rgba(10, 92, 54, 0.08);
+  box-shadow: 0 16px 34px rgba(10, 92, 54, 0.08);
+}
+
+.offer-card-media {
+  aspect-ratio: 4 / 3;
+}
+
+.offer-card-image,
+.contact-feature-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.contact-feature-image {
+  object-position: center 18%;
+}
+
+.pdf-card-cover-link {
+  display: block;
+}
+
+.pdf-cover-shell {
+  overflow: hidden;
+  width: 100%;
+  border-radius: 24px;
+  aspect-ratio: 620 / 877;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 16px 34px rgba(10, 92, 54, 0.1);
+}
+
+.pdf-cover-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pdf-cover-stack {
+  position: relative;
+  min-height: 264px;
+  padding: 10px 20px 4px;
+}
+
+.pdf-cover-stack-item {
+  position: absolute;
+  bottom: 10px;
+  width: clamp(118px, 34%, 176px);
+}
+
+.pdf-cover-stack-item-1 {
+  left: 12%;
+  z-index: 1;
+  transform: rotate(-10deg);
+}
+
+.pdf-cover-stack-item-2 {
+  left: 50%;
+  z-index: 3;
+  transform: translateX(-50%);
+}
+
+.pdf-cover-stack-item-3 {
+  right: 12%;
+  z-index: 2;
+  transform: rotate(10deg);
+}
+
+.pdf-cover-stack-shell {
+  border-radius: 22px;
+}
+
+.pdf-cover-stack-group {
+  display: grid;
+  gap: 14px;
+}
+
+.pdf-cover-stack-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 18px 20px;
+}
+
+.pdf-cover-stack-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(10, 92, 54, 0.16);
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--muted-strong);
+  font-size: 0.83rem;
+  font-weight: 700;
+  line-height: 1.35;
+  box-shadow: 0 10px 22px rgba(10, 92, 54, 0.08);
+}
+
+.pdf-bundle-card-stack,
+.offer-card-stack {
+  min-height: 228px;
+  padding-top: 0;
+}
+
+.pdf-listing-visual {
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+  border: 1px solid rgba(10, 92, 54, 0.1);
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.96), transparent 58%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(248, 244, 235, 0.9));
+}
+
+.pdf-listing-stack {
+  min-height: 320px;
+}
+
+.pdf-entry-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.pdf-entry-card {
+  min-height: 100%;
+  align-content: start;
+}
+
+.pdf-entry-card strong {
+  color: var(--muted-strong);
+}
+
+.pdf-detail-cover {
+  max-width: min(100%, 340px);
+  margin-inline: auto;
+}
+
+.pdf-detail-stack {
+  min-height: 310px;
+}
+
+.pdf-card-accent {
+  height: 8px;
+  margin: -24px -24px 6px;
+  border-radius: 28px 28px 14px 14px;
+}
+
+.pdf-card-accent-bundle {
+  background: linear-gradient(90deg, rgba(10, 92, 54, 0.95), rgba(255, 107, 0, 0.9));
+}
+
 .offer-card-head {
   display: flex;
   align-items: flex-start;
@@ -3300,6 +3489,28 @@ select:focus-visible {
   margin: 0;
   color: var(--muted);
   line-height: 1.7;
+}
+
+.pdf-card-subtitle {
+  color: var(--muted-strong);
+  font-weight: 700;
+}
+
+.pdf-guide-card-compact {
+  gap: 12px;
+  padding: 20px;
+}
+
+.pdf-guide-card-compact .pdf-card-accent {
+  margin: -20px -20px 2px;
+}
+
+.pdf-guide-card-compact h3 {
+  font-size: clamp(21px, 2.4vw, 26px);
+}
+
+.pdf-guide-card-compact .offer-card-actions {
+  margin-top: auto;
 }
 
 .offer-price {
@@ -3322,6 +3533,232 @@ select:focus-visible {
 
 .offer-card-actions .button {
   min-height: 44px;
+}
+
+.offer-page-panel .offer-grid,
+.book-topics-grid,
+.contact-shortcut-grid {
+  align-items: stretch;
+}
+
+.offer-feature-card {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.82fr) minmax(0, 1.18fr);
+  gap: 20px;
+  padding: 24px;
+  border-radius: 28px;
+  border: 1px solid rgba(10, 92, 54, 0.1);
+  background: rgba(255, 255, 255, 0.84);
+}
+
+.offer-feature-media {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 24px;
+  border: 1px solid rgba(10, 92, 54, 0.08);
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.96), transparent 62%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(248, 244, 235, 0.92));
+}
+
+.offer-feature-media-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.offer-feature-pill {
+  min-height: 32px;
+  font-weight: 700;
+}
+
+.offer-feature-content {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+}
+
+.offer-feature-content h2 {
+  margin: 0;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(28px, 3.2vw, 36px);
+  line-height: 1.08;
+  color: var(--muted-strong);
+}
+
+.offer-feature-content p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.72;
+}
+
+.offer-feature-note {
+  gap: 6px;
+}
+
+.offer-feature-stack {
+  min-height: 100%;
+}
+
+.offer-page-panel .offer-card {
+  grid-template-rows: auto auto 1fr auto;
+  min-height: 100%;
+}
+
+.offer-page-panel .offer-card-actions {
+  padding-top: 4px;
+}
+
+.book-helper-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.book-helper-card {
+  align-content: start;
+  min-height: 100%;
+}
+
+.book-topics-grid > .topic-card,
+.contact-shortcut-card {
+  min-height: 100%;
+}
+
+.contact-layout .hero-actions {
+  margin-top: 28px;
+}
+
+.contact-support-panel {
+  display: grid;
+  align-content: start;
+}
+
+.contact-side-panel > .top-gap {
+  margin-top: 18px;
+}
+
+.contact-side-panel .contact-visual-shell {
+  aspect-ratio: 16 / 10;
+}
+
+.contact-side-panel .contact-feature-image {
+  object-position: center 22%;
+}
+
+.contact-shortcut-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.contact-shortcut-card {
+  grid-template-rows: auto 1fr auto;
+  align-content: start;
+  padding: 18px;
+  gap: 10px;
+}
+
+.contact-shortcut-card .offer-card-actions {
+  margin-top: 4px;
+}
+
+.contact-shortcut-summary {
+  align-content: start;
+}
+
+.pdf-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pdf-bundle-guide-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pdf-bundle-guide-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(10, 92, 54, 0.06);
+  color: var(--muted-strong);
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.pdf-category-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.pdf-category-grid > :last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+.pdf-category-block {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  border-radius: 28px;
+  padding: 20px;
+  border: 1px solid rgba(10, 92, 54, 0.1);
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.pdf-category-block h3 {
+  margin: 0;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(25px, 3vw, 32px);
+  line-height: 1.1;
+  color: var(--muted-strong);
+}
+
+.pdf-category-block p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.68;
+}
+
+.pdf-category-block .offer-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.pdf-back-link {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 14px;
+  color: var(--accent-2);
+  font-weight: 700;
+}
+
+.pdf-back-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.pdf-stat-card strong {
+  display: block;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(26px, 3vw, 34px);
+  line-height: 1.05;
+  color: var(--accent-2);
+}
+
+.pdf-stat-card span {
+  display: block;
+  margin-top: 10px;
+  color: var(--muted);
+  line-height: 1.6;
 }
 
 .offer-detail-layout {
@@ -3386,19 +3823,63 @@ select:focus-visible {
   .offer-help-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .pdf-category-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pdf-category-grid > :last-child:nth-child(odd) {
+    grid-column: auto;
+  }
+
+  .offer-feature-card {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 760px) {
   .offer-grid,
   .process-grid,
   .offer-help-grid,
-  .hero-proof-column {
+  .hero-proof-column,
+  .pdf-entry-grid,
+  .pdf-category-block .offer-grid {
     grid-template-columns: 1fr;
   }
 
   .offer-card,
   .process-card {
     padding: 20px;
+  }
+
+  .offer-feature-card {
+    padding: 20px;
+    gap: 16px;
+  }
+
+  .pdf-card-accent {
+    margin: -20px -20px 6px;
+  }
+
+  .pdf-cover-stack,
+  .pdf-detail-stack,
+  .pdf-listing-stack,
+  .offer-card-stack,
+  .pdf-bundle-card-stack {
+    min-height: 238px;
+    padding-inline: 12px;
+  }
+
+  .pdf-cover-stack-item {
+    width: clamp(106px, 36%, 150px);
+  }
+
+  .pdf-cover-stack-item-1 {
+    left: 6%;
+  }
+
+  .pdf-cover-stack-item-3 {
+    right: 6%;
   }
 
   .offer-card-actions {
@@ -3411,5 +3892,32 @@ select:focus-visible {
 
   .section-feature-image {
     min-height: 280px;
+  }
+
+  .book-helper-grid,
+  .contact-shortcut-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 981px) {
+  .book-layout-balanced {
+    grid-template-columns: minmax(0, 1.24fr) minmax(300px, 0.76fr);
+    gap: 22px;
+  }
+
+  .contact-layout {
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+    gap: 22px;
+  }
+
+  .book-topics-grid > :last-child:nth-child(3n + 1) {
+    grid-column: 2;
+  }
+}
+
+@media (min-width: 1101px) {
+  .offer-grid-balanced > :last-child:nth-child(3n + 1) {
+    grid-column: 2;
   }
 }

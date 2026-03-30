@@ -31,13 +31,39 @@ export default async function CallPage({
   const accessToken = readSearchParam(searchParams?.access)
   const dataMode = getDataModeStatus()
   let booking: Awaited<ReturnType<typeof getBookingForViewer>> = null
+  let flowError: string | null = null
 
-  if (dataMode.isValid) {
+  if (!dataMode.isValid) {
+    flowError = 'Pokoj rozmowy chwilowo nie jest dostepny. Sprobuj ponownie za kilka minut.'
+  } else {
     try {
       booking = await getBookingForViewer(params.id, accessToken, headers().get('authorization'))
-    } catch {
-      booking = null
+    } catch (error) {
+      console.warn('[behawior15][call] failed to load booking', {
+        bookingId: params.id,
+        hasAccessToken: Boolean(accessToken),
+        error,
+      })
+      flowError = 'Nie udalo sie wczytac pokoju rozmowy. Sprobuj ponownie za moment.'
     }
+  }
+
+  if (flowError) {
+    return (
+      <main className="page-wrap">
+        <div className="container">
+          <Header />
+          <section className="panel centered-panel">
+            <div className="error-box">{flowError}</div>
+            <div className="hero-actions centered-actions">
+              <Link href="/book" className="button button-primary big-button">
+                Wroc do rezerwacji
+              </Link>
+            </div>
+          </section>
+        </div>
+      </main>
+    )
   }
 
   if (!booking) {

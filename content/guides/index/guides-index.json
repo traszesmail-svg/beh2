@@ -1,0 +1,410 @@
+{
+  "series": {
+    "brand": "Regulski | Terapia behawioralna",
+    "specialist": "Krzysztof Regulski, behawiorysta COAPE / CAPBT, technik weterynarii",
+    "siteUrl": "https://beh2.vercel.app",
+    "contactEmail": "coapebehawiorysta@gmail.com",
+    "contactPhone": "512 992 026",
+    "generatedAt": "2026-03-28T04:10:15.926Z",
+    "summary": "Seria praktycznych poradników PDF dla opiekunów psów i kotów, którzy chcą zacząć od spokojnego, konkretnego planu działania albo potrzebują uporządkowanego materiału po konsultacji."
+  },
+  "guides": [
+    {
+      "slug": "pies-zostaje-sam-plan-pierwszych-krokow",
+      "title": "Pies zostaje sam",
+      "subtitle": "Plan pierwszych kroków przy szczekaniu, wyciu i napięciu po wyjściu opiekuna",
+      "audience": "Opiekunowie psów, które źle znoszą rozłąkę lub zaczynają panikować, wokalizować albo niszczyć po wyjściu człowieka.",
+      "valuePromise": "Pomaga odróżnić trudne zostawanie samemu od zwykłej nudy i ułożyć pierwszy bezpieczny plan pracy bez pogarszania problemu.",
+      "format": "PDF A4, druk domowy, kolor",
+      "accessType": "low-ticket",
+      "pricing": "49 zł albo bonus po konsultacji 30 min",
+      "mainPromise": "Porządek w obserwacji, środowisku i pierwszym treningu rozłąki.",
+      "status": "ready",
+      "relatedService": "szybka konsultacja 15 min lub konsultacja 30 min",
+      "difficulty": "początkujący / średnio zaawansowany",
+      "estimatedReadingTime": 24,
+      "pageCount": 13,
+      "description": "Praktyczny poradnik dla opiekuna, który chce zacząć działać spokojnie, a nie losowo testować kolejne pomysły.",
+      "sourcePath": "content/guides/items/pies-zostaje-sam-plan-pierwszych-krokow/guide.md",
+      "pdfPath": "content/guides/pdf/pies-zostaje-sam-plan-pierwszych-krokow.pdf",
+      "coverPath": "content/guides/covers/pies-zostaje-sam-plan-pierwszych-krokow.svg",
+      "category": "dog",
+      "kind": "main",
+      "palette": {
+        "primary": "#5B3A29",
+        "secondary": "#A56A43",
+        "accent": "#D88F5A",
+        "ink": "#251B16",
+        "paper": "#F7F1E9"
+      }
+    },
+    {
+      "slug": "szczeniak-pierwsze-30-dni",
+      "title": "Szczeniak: pierwsze 30 dni",
+      "subtitle": "Profilaktyka chaosu, gryzienia, przebodźcowania i złych nawyków od pierwszego tygodnia",
+      "audience": "Nowi opiekunowie młodego psa, którzy chcą ułożyć pierwszy miesiąc mądrze i bez przeciążenia siebie ani szczeniaka.",
+      "valuePromise": "Daje plan dnia, priorytety i granice na pierwszy miesiąc, zanim drobne trudności staną się stałym problemem.",
+      "format": "PDF A4, druk domowy, kolor",
+      "accessType": "low-ticket",
+      "pricing": "59 zł albo pakiet startowy po zakupie konsultacji",
+      "mainPromise": "Mniej chaosu, lepsza rutyna i bardziej przewidywalny początek życia ze szczeniakiem.",
+      "status": "ready",
+      "relatedService": "konsultacja 30 min lub konsultacja behawioralna online",
+      "difficulty": "początkujący",
+      "estimatedReadingTime": 28,
+      "pageCount": 11,
+      "description": "Kompletny plan dla pierwszego miesiąca ze szczeniakiem: środowisko, sen, aktywność, nauka i pierwsze czerwone flagi.",
+      "sourcePath": "content/guides/clean-szczeniak-pierwsze-30-dni/guide.md",
+      "pdfPath": "content/guides/pdf/szczeniak-pierwsze-30-dni.pdf",
+      "coverPath": "content/guides/covers/szczeniak-pierwsze-30-dni.svg",
+      "category": "dog",
+      "kind": "main",
+      "palette": {
+        "primary": "#405B37",
+        "secondary": "#6F8A53",
+        "accent": "#8DAE6E",
+        "ink": "#1D2418",
+        "paper": "#F4F4EE"
+      }
+    },
+    {
+      "slug": "kot-stres-srodowisko-i-bledy-opiekuna",
+      "title": "Kot: stres i środowisko",
+      "subtitle": "Jak rozpoznać napięcie, poprawić dom i nie utrwalać problemów codziennymi błędami",
+      "audience": "Opiekunowie kotów lękowych, wycofanych, łatwo przeciążających się lub funkcjonujących w stałym napięciu.",
+      "valuePromise": "Pomaga zobaczyć dom oczami kota i uporządkować środowisko, zanim problem rozwinie się w konflikt, unikanie albo zachowania obronne.",
+      "format": "PDF A4, druk domowy, kolor",
+      "accessType": "lead magnet",
+      "pricing": "0 zł po zapisie na listę lub jako materiał po pierwszym kontakcie",
+      "mainPromise": "Lepsze poczucie bezpieczeństwa kota dzięki zmianom środowiska i organizacji dnia.",
+      "status": "ready",
+      "relatedService": "szybka konsultacja 15 min lub konsultacja dla kota",
+      "difficulty": "początkujący / średnio zaawansowany",
+      "estimatedReadingTime": 23,
+      "pageCount": 11,
+      "description": "Przewodnik po najczęstszych źródłach kociego stresu, subtelnych sygnałach napięcia i prostych zmianach środowiskowych.",
+      "sourcePath": "content/guides/clean-kot-stres-srodowisko-i-bledy-opiekuna/guide.md",
+      "pdfPath": "content/guides/pdf/kot-stres-srodowisko-i-bledy-opiekuna.pdf",
+      "coverPath": "content/guides/covers/kot-stres-srodowisko-i-bledy-opiekuna.svg",
+      "category": "cat",
+      "kind": "main",
+      "palette": {
+        "primary": "#2F5665",
+        "secondary": "#5B8390",
+        "accent": "#80B5BF",
+        "ink": "#1A262C",
+        "paper": "#F0F5F6"
+      }
+    },
+    {
+      "slug": "kot-i-kuweta-pierwszy-plan-dzialania",
+      "title": "Kot i kuweta",
+      "subtitle": "Pierwszy plan działania przy sikaniu lub załatwianiu się poza kuwetą",
+      "audience": "Opiekunowie kotów z problemami około-kuwetowymi, którzy chcą uporządkować temat bez przypadkowych rad z internetu.",
+      "valuePromise": "Oddziela porządek weterynaryjny od środowiskowego i pokazuje, co sprawdzić natychmiast, a co wdrażać krok po kroku.",
+      "format": "PDF A4, druk domowy, kolor",
+      "accessType": "low-ticket",
+      "pricing": "59 zł albo bonus po konsultacji dla kota",
+      "mainPromise": "Mniej chaosu, szybsze wychwycenie czerwonych flag i lepiej ustawione środowisko kuwetowe.",
+      "status": "ready",
+      "relatedService": "konsultacja dla kota lub konsultacja behawioralna online",
+      "difficulty": "początkujący / średnio zaawansowany",
+      "estimatedReadingTime": 25,
+      "pageCount": 11,
+      "description": "Szczegółowy poradnik porządkujący diagnozę wstępną, środowisko, kuwetę, lokalizacje i plan monitorowania.",
+      "sourcePath": "content/guides/clean-kot-i-kuweta-pierwszy-plan-dzialania/guide.md",
+      "pdfPath": "content/guides/pdf/kot-i-kuweta-pierwszy-plan-dzialania.pdf",
+      "coverPath": "content/guides/covers/kot-i-kuweta-pierwszy-plan-dzialania.svg",
+      "category": "cat",
+      "kind": "main",
+      "palette": {
+        "primary": "#6A3E46",
+        "secondary": "#A06A73",
+        "accent": "#D29AA1",
+        "ink": "#24181B",
+        "paper": "#F8EFF1"
+      }
+    },
+    {
+      "slug": "domowy-enrichment-plan-na-14-dni",
+      "title": "Domowy enrichment",
+      "subtitle": "14-dniowy plan aktywności i regulacji pobudzenia dla psa lub kota mieszkającego w domu",
+      "audience": "Opiekunowie psów i kotów, którzy chcą ograniczyć nudę, rozkręcanie się zachowań problemowych i żyć z bardziej przewidywalną rutyną.",
+      "valuePromise": "Daje prosty plan aktywności domowych, odpoczynku i obserwacji sygnałów przeciążenia bez przerabiania domu w tor przeszkód.",
+      "format": "PDF A4, druk domowy, kolor",
+      "accessType": "lead magnet",
+      "pricing": "0 zł po zapisie lub jako materiał po zakupie konsultacji 15 min",
+      "mainPromise": "Lepsza regulacja dnia i sensowniejsza aktywność zamiast losowego męczenia zwierzęcia.",
+      "status": "ready",
+      "relatedService": "szybka konsultacja 15 min",
+      "difficulty": "początkujący",
+      "estimatedReadingTime": 14,
+      "pageCount": 10,
+      "description": "Krótki, checklistowy materiał z gotowym planem aktywności, odpoczynku i notowania reakcji psa lub kota.",
+      "sourcePath": "content/guides/clean-domowy-enrichment-plan-na-14-dni/guide.md",
+      "pdfPath": "content/guides/pdf/domowy-enrichment-plan-na-14-dni.pdf",
+      "coverPath": "content/guides/covers/domowy-enrichment-plan-na-14-dni.svg",
+      "category": "mixed",
+      "kind": "quick",
+      "palette": {
+        "primary": "#70512C",
+        "secondary": "#A37A48",
+        "accent": "#D8AE73",
+        "ink": "#241A10",
+        "paper": "#F8F3EA"
+      }
+    },
+    {
+      "slug": "pierwsze-dni-po-adopcji-psa-lub-kota",
+      "title": "Pierwsze dni po adopcji",
+      "subtitle": "Bezpieczne wdrożenie psa lub kota do domu bez przeciążania, pośpiechu i złych interpretacji",
+      "audience": "Opiekunowie świeżo adoptowanych psów lub kotów, którzy chcą przejść pierwszy tydzień spokojnie i bez zbędnych błędów.",
+      "valuePromise": "Porządkuje pierwszy tydzień po adopcji: środowisko, oczekiwania, obserwację i decyzję, kiedy potrzebne jest dalsze wsparcie.",
+      "format": "PDF A4, druk domowy, kolor",
+      "accessType": "bonus",
+      "pricing": "bonus do konsultacji lub gratis po zapytaniu o dobór ścieżki",
+      "mainPromise": "Spokojniejsze wejście do domu, mniejsze ryzyko błędów wynikających z pośpiechu i nadinterpretacji.",
+      "status": "ready",
+      "relatedService": "kontakt w sprawie doboru ścieżki lub konsultacja 15 min",
+      "difficulty": "początkujący",
+      "estimatedReadingTime": 15,
+      "pageCount": 9,
+      "description": "Krótki poradnik wdrożeniowy dla opiekunów po adopcji: pierwszy dzień, pierwszy tydzień i sygnały, które wymagają zmiany planu.",
+      "sourcePath": "content/guides/clean-pierwsze-dni-po-adopcji-psa-lub-kota/guide.md",
+      "pdfPath": "content/guides/pdf/pierwsze-dni-po-adopcji-psa-lub-kota.pdf",
+      "coverPath": "content/guides/covers/pierwsze-dni-po-adopcji-psa-lub-kota.svg",
+      "category": "mixed",
+      "kind": "quick",
+      "palette": {
+        "primary": "#4E4A66",
+        "secondary": "#7A7596",
+        "accent": "#AAA5C8",
+        "ink": "#1F1D2A",
+        "paper": "#F2F0F7"
+      }
+    },
+    {
+      "slug": "pies-reaktywny-na-spacerze",
+      "title": "Pies reaktywny na spacerze",
+      "subtitle": "Pierwszy plan pracy przy szczekaniu, spinaniu się i trudnych mijankach",
+      "audience": "Opiekunowie psów, które źle znoszą mijanie psów, ludzi albo innych bodźców na spacerze.",
+      "valuePromise": "Pomaga uporządkować dystans, trasy spacerowe i pierwszą procedurę pracy bez dokładania chaosu.",
+      "format": "PDF A4, druk domowy, kolor",
+      "accessType": "low-ticket",
+      "pricing": "59 zł albo element pakietu spacerowego",
+      "mainPromise": "Mniej chaosu na spacerze i lepszy punkt startu do dalszej pracy.",
+      "status": "ready",
+      "relatedService": "szybka konsultacja 15 min lub konsultacja behawioralna online",
+      "difficulty": "początkujący / średnio zaawansowany",
+      "estimatedReadingTime": 13,
+      "pageCount": 8,
+      "description": "Krótki poradnik porządkujący pierwsze decyzje przy reaktywności spacerowej.",
+      "sourcePath": "content/guides/final-pies-reaktywny-na-spacerze/guide.md",
+      "pdfPath": "content/guides/pdf/pies-reaktywny-na-spacerze.pdf",
+      "coverPath": "content/guides/covers/pies-reaktywny-na-spacerze.svg",
+      "category": "dog",
+      "kind": "quick",
+      "palette": {
+        "primary": "#6C4330",
+        "secondary": "#9E6B4D",
+        "accent": "#D89A63",
+        "ink": "#261A13",
+        "paper": "#F8F0E8"
+      }
+    },
+    {
+      "slug": "pies-boi-sie-gosci-i-dzwiekow",
+      "title": "Pies boi się gości i dźwięków",
+      "subtitle": "Jak ustawić bezpieczny plan przy lęku domowym, dzwonku i trudnych wizytach",
+      "audience": "Opiekunowie psów, które źle znoszą gości, dźwięki, ruch na klatce albo nagłe bodźce.",
+      "valuePromise": "Pomaga odróżnić zwykłą czujność od przeciążenia lękowego i ustawić prosty plan awaryjny.",
+      "format": "PDF A4, druk domowy, kolor",
+      "accessType": "lead magnet",
+      "pricing": "0 zł po zapisie lub jako pre-konsultacyjny starter",
+      "mainPromise": "Mniej chaosu przy bodźcach domowych i lepiej ustawiona bezpieczna strefa.",
+      "status": "ready",
+      "relatedService": "szybka konsultacja 15 min lub konsultacja 30 min",
+      "difficulty": "początkujący",
+      "estimatedReadingTime": 12,
+      "pageCount": 8,
+      "description": "Mini-poradnik dla opiekunów psów lękowych przy gościach, dźwiękach i codziennym ruchu.",
+      "sourcePath": "content/guides/final-pies-boi-sie-gosci-i-dzwiekow/guide.md",
+      "pdfPath": "content/guides/pdf/pies-boi-sie-gosci-i-dzwiekow.pdf",
+      "coverPath": "content/guides/covers/pies-boi-sie-gosci-i-dzwiekow.svg",
+      "category": "dog",
+      "kind": "quick",
+      "palette": {
+        "primary": "#4B4F68",
+        "secondary": "#747A99",
+        "accent": "#A5ACCB",
+        "ink": "#1D1F2A",
+        "paper": "#F1F2F7"
+      }
+    },
+    {
+      "slug": "konflikt-miedzy-kotami-w-domu",
+      "title": "Konflikt między kotami",
+      "subtitle": "Jak rozpoznać cichy konflikt, blokady i napięcie w domu wielokotowym",
+      "audience": "Opiekunowie dwóch lub więcej kotów, którzy widzą blokowanie, napięcie, pościgi albo wycofanie jednego z kotów.",
+      "valuePromise": "Pomaga zobaczyć konflikt wcześniej i poprawić układ zasobów oraz przestrzeni bez zgadywania.",
+      "format": "PDF A4, druk domowy, kolor",
+      "accessType": "low-ticket",
+      "pricing": "59 zł albo część pakietu kociego",
+      "mainPromise": "Lepsza mapa napięcia i prostszy plan środowiskowy dla domu wielokotowego.",
+      "status": "ready",
+      "relatedService": "konsultacja dla kota lub konsultacja behawioralna online",
+      "difficulty": "początkujący / średnio zaawansowany",
+      "estimatedReadingTime": 13,
+      "pageCount": 8,
+      "description": "Praktyczny mini-poradnik o subtelnym konflikcie, zasobach i bezpieczeństwie w domu wielokotowym.",
+      "sourcePath": "content/guides/final-konflikt-miedzy-kotami-w-domu/guide.md",
+      "pdfPath": "content/guides/pdf/konflikt-miedzy-kotami-w-domu.pdf",
+      "coverPath": "content/guides/covers/konflikt-miedzy-kotami-w-domu.svg",
+      "category": "cat",
+      "kind": "quick",
+      "palette": {
+        "primary": "#5A4753",
+        "secondary": "#8C7080",
+        "accent": "#C8A6B7",
+        "ink": "#241B21",
+        "paper": "#F6EFF3"
+      }
+    },
+    {
+      "slug": "kot-dotyk-pielegnacja-i-obrona",
+      "title": "Kot: dotyk i pielęgnacja",
+      "subtitle": "Pierwszy plan przy obronie, napięciu i trudnych procedurach codziennych",
+      "audience": "Opiekunowie kotów, które źle znoszą chwytanie, podnoszenie, czesanie albo inne proste procedury.",
+      "valuePromise": "Pomaga odróżnić niechęć do konkretnego dotyku od szerszego stresu albo bólu i ustawić bezpieczniejszy kontakt.",
+      "format": "PDF A4, druk domowy, kolor",
+      "accessType": "bonus",
+      "pricing": "bonus po konsultacji dla kota lub 29 zł jako dodatek",
+      "mainPromise": "Mniej siłowych prób i lepsze rozumienie granic kota przy dotyku.",
+      "status": "ready",
+      "relatedService": "konsultacja dla kota",
+      "difficulty": "początkujący",
+      "estimatedReadingTime": 11,
+      "pageCount": 8,
+      "description": "Krótki poradnik o sygnałach granicy kota i bezpieczniejszej pielęgnacji.",
+      "sourcePath": "content/guides/final-kot-dotyk-pielegnacja-i-obrona/guide.md",
+      "pdfPath": "content/guides/pdf/kot-dotyk-pielegnacja-i-obrona.pdf",
+      "coverPath": "content/guides/covers/kot-dotyk-pielegnacja-i-obrona.svg",
+      "category": "cat",
+      "kind": "quick",
+      "palette": {
+        "primary": "#355E56",
+        "secondary": "#56847A",
+        "accent": "#88B5AA",
+        "ink": "#182522",
+        "paper": "#EEF6F4"
+      }
+    }
+  ],
+  "bundles": [
+    {
+      "slug": "pakiet-startowy-psa",
+      "title": "Pakiet Startowy Psa",
+      "audience": "nowy opiekun psa lub szczeniaka",
+      "accessType": "bundle",
+      "pricing": "89 zł",
+      "guideSlugs": [
+        "szczeniak-pierwsze-30-dni",
+        "domowy-enrichment-plan-na-14-dni",
+        "pierwsze-dni-po-adopcji-psa-lub-kota"
+      ],
+      "promise": "Spokojny start, lepszy rytm dnia i mniej chaosu w pierwszych tygodniach."
+    },
+    {
+      "slug": "pakiet-spokojny-dom-pies",
+      "title": "Pakiet Spokojny Dom: pies",
+      "audience": "opiekun psa z napięciem w domu i przy rozłące",
+      "accessType": "bundle",
+      "pricing": "99 zł",
+      "guideSlugs": [
+        "pies-zostaje-sam-plan-pierwszych-krokow",
+        "pies-boi-sie-gosci-i-dzwiekow",
+        "domowy-enrichment-plan-na-14-dni"
+      ],
+      "promise": "Mniej przeciążenia, lepszy plan domowy i niższy próg wejścia do konsultacji."
+    },
+    {
+      "slug": "pakiet-spacerowy-pies",
+      "title": "Pakiet Spacery Bez Napięcia",
+      "audience": "opiekun psa reaktywnego lub lękowego na spacerze",
+      "accessType": "bundle",
+      "pricing": "69 zł",
+      "guideSlugs": [
+        "pies-reaktywny-na-spacerze",
+        "pies-boi-sie-gosci-i-dzwiekow"
+      ],
+      "promise": "Pierwszy plan pracy na spacerze i lepsza kontrola bodźców codziennych."
+    },
+    {
+      "slug": "pakiet-kota-domowego",
+      "title": "Pakiet Kota Domowego",
+      "audience": "opiekun kota w napięciu środowiskowym",
+      "accessType": "bundle",
+      "pricing": "99 zł",
+      "guideSlugs": [
+        "kot-stres-srodowisko-i-bledy-opiekuna",
+        "kot-i-kuweta-pierwszy-plan-dzialania",
+        "konflikt-miedzy-kotami-w-domu"
+      ],
+      "promise": "Środowisko, kuweta i relacje domowe spięte w jeden sensowny plan."
+    },
+    {
+      "slug": "pakiet-kot-bez-napiecia",
+      "title": "Pakiet Kot Bez Napięcia",
+      "audience": "opiekun kota lękowego lub łatwo przeciążającego się",
+      "accessType": "bundle",
+      "pricing": "79 zł",
+      "guideSlugs": [
+        "kot-stres-srodowisko-i-bledy-opiekuna",
+        "kot-dotyk-pielegnacja-i-obrona",
+        "konflikt-miedzy-kotami-w-domu"
+      ],
+      "promise": "Lepsze bezpieczeństwo kota, mniej obrony i czytelniejsza praca z domem."
+    }
+  ],
+  "funnels": {
+    "dog": {
+      "entry": [
+        "domowy-enrichment-plan-na-14-dni",
+        "pies-boi-sie-gosci-i-dzwiekow"
+      ],
+      "lowTicket": [
+        "pies-zostaje-sam-plan-pierwszych-krokow",
+        "szczeniak-pierwsze-30-dni",
+        "pies-reaktywny-na-spacerze"
+      ],
+      "bundle": [
+        "pakiet-startowy-psa",
+        "pakiet-spokojny-dom-pies",
+        "pakiet-spacerowy-pies"
+      ],
+      "consult": [
+        "szybka konsultacja 15 min",
+        "konsultacja 30 min",
+        "konsultacja behawioralna online"
+      ]
+    },
+    "cat": {
+      "entry": [
+        "kot-stres-srodowisko-i-bledy-opiekuna"
+      ],
+      "lowTicket": [
+        "kot-i-kuweta-pierwszy-plan-dzialania",
+        "konflikt-miedzy-kotami-w-domu"
+      ],
+      "bundle": [
+        "pakiet-kota-domowego",
+        "pakiet-kot-bez-napiecia"
+      ],
+      "consult": [
+        "szybka konsultacja 15 min",
+        "konsultacja dla kota",
+        "konsultacja behawioralna online"
+      ]
+    }
+  }
+}

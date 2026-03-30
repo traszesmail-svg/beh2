@@ -5,10 +5,18 @@ import path from 'node:path'
 import { afterEach, test } from 'node:test'
 import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
+import ContactPage from '@/app/kontakt/page'
+import PdfGuideDetailPage from '@/app/oferta/poradniki-pdf/[guideSlug]/page'
+import PdfBundleDetailPage from '@/app/oferta/poradniki-pdf/pakiety/[bundleSlug]/page'
+import PdfGuidesListingPage from '@/app/oferta/poradniki-pdf/page'
+import PrivacyPolicyPage from '@/app/polityka-prywatnosci/page'
+import TermsPage from '@/app/regulamin/page'
 import robots from '@/app/robots'
 import sitemap from '@/app/sitemap'
+import { getBookingApiErrorSnapshot } from '@/lib/server/booking-api-errors'
 import { POST as bookingCompleteRoute } from '@/app/api/bookings/[id]/complete/route'
 import { PATCH as bookingPreparationPatchRoute, POST as bookingPreparationPostRoute } from '@/app/api/bookings/[id]/prep/route'
+import { POST as manualPaymentRoute } from '@/app/api/payments/manual/route'
 import { GET as manualPaymentReviewRoute } from '@/app/manual-payment/review/route'
 import { ADMIN_BASIC_AUTH_USERNAME, hasValidAdminAuthorization } from '@/lib/admin-auth'
 import { POST as submitTestimonialRoute } from '@/app/api/testimonials/route'
@@ -18,6 +26,12 @@ import { Header } from '@/components/Header'
 import { PricingDisclosure } from '@/components/PricingDisclosure'
 import { SocialProofSection } from '@/components/SocialProofSection'
 import { BUILD_MARKER_KEY, getBuildMarkerSnapshot } from '@/lib/build-marker'
+import {
+  buildFormHref,
+  buildPaymentHref,
+  buildSlotHref,
+  readProblemTypeSearchParam,
+} from '@/lib/booking-routing'
 import {
   buildExpectedMarker,
   evaluateReleaseSmokePage,
@@ -35,6 +49,7 @@ import {
 } from '@/lib/data'
 import { normalizePolishPhone } from '@/lib/phone'
 import { getDataModeStatus, getPaymentModeStatus, getSupabaseServiceRoleKeyIssue } from '@/lib/server/env'
+import { getLocalStoreDataDir } from '@/lib/server/local-store-path'
 import {
   createPendingBooking as createLocalPendingBooking,
   getBookingById as getLocalBookingById,
@@ -70,13 +85,23 @@ import {
 } from '@/lib/preparation'
 import { canSelfCancelBooking, getRemainingSelfCancellationSeconds, SELF_CANCELLATION_WINDOW_MS } from '@/lib/self-cancellation'
 import { createCustomerAccessToken, hasValidCustomerAccessToken, hashCustomerAccessToken } from '@/lib/server/customer-access'
-import { sendManualPaymentReportedAdminEmail, shouldSendBookingConfirmationAfterPayment } from '@/lib/server/notifications'
+import {
+  getCustomerEmailDeliveryConfigIssue,
+  sendBookingReservationCreatedEmail,
+  sendManualPaymentReportedAdminEmail,
+  shouldSendBookingConfirmationAfterPayment,
+} from '@/lib/server/notifications'
 import { getReminderAuthorizationError, runBookingReminderSweep } from '@/lib/server/reminder-runner'
 import { getWarsawDateTime, shouldSendReminderForBooking } from '@/lib/server/reminders'
+import { getLatestQaReportPath, readLatestQaReport } from '@/lib/server/qa-report'
 import { buildPaymentConfirmationSmsMessage, sendPaymentConfirmationSms } from '@/lib/server/sms'
 import { assertStripeCheckoutAmountSupported, buildCheckoutSessionParams, isStripeTestMode } from '@/lib/server/stripe'
-import { getContactDetails } from '@/lib/site'
+import { getOfferByServiceSlug, getOfferBySlug, getOfferDetailCtaLabel, getOfferDetailHref } from '@/lib/offers'
+import { getPdfGuideBySlug, getPdfGuideCoverSrc, getPdfPricingBadge, listPdfRoutePaths } from '@/lib/pdf-guides'
+import { getManualPaymentDetailCards, getManualPaymentDisplayCopy } from '@/lib/manual-payment'
+import { CATS_PAGE_PHOTO, SPECIALIST_CAT_PHOTO, SPECIALIST_EXTENDED_START_PHOTO, TOPIC_VISUALS, getContactDetails } from '@/lib/site'
 import { TESTIMONIALS } from '@/lib/testimonials'
+import { getPayuOptionStatus } from '@/lib/server/payment-options'
 
 const originalStripeSecret = process.env.STRIPE_SECRET_KEY
 const originalVercelEnv = process.env.VERCEL_ENV
@@ -98,7 +123,7 @@ const originalSmsApiBaseUrl = process.env.SMS_API_BASE_URL
 const originalSmsWebhookUrl = process.env.SMS_NOTIFICATION_WEBHOOK_URL
 const originalSmsWebhookToken = process.env.SMS_NOTIFICATION_WEBHOOK_TOKEN
 const originalFetch = globalThis.fetch
-const localStoreDataDir = path.join(process.cwd(), 'data')
+const localStoreDataDir = getLocalStoreDataDir()
 const trackedLocalStoreFiles = ['availability.json', 'bookings.json', 'users.json', 'pricing-settings.json'] as const
 
 afterEach(() => {
@@ -289,10 +314,10 @@ test('uses the default consultation price presentation when no admin change was 
 })
 
 test('parses an admin-entered consultation price and converts it consistently for Stripe', () => {
-  const amount = parseConsultationPriceInput('49,50')
+  const amount = parseConsultationPriceInput('69,50')
 
-  assert.equal(amount, 49.5)
-  assert.equal(toStripeUnitAmount(amount), 4950)
+  assert.equal(amount, 69.5)
+  assert.equal(toStripeUnitAmount(amount), 6950)
 })
 
 test('builds the public pricing disclosure from the stable project baseline and ignores legacy values', () => {
@@ -309,7 +334,7 @@ test('rejects invalid consultation price values', () => {
 })
 
 test('rejects consultation prices below the project minimum and blocks the legacy cross-project amount', () => {
-  assert.throws(() => parseConsultationPriceInput('38.99'), /39/)
+  assert.throws(() => parseConsultationPriceInput('58.99'), /59/)
   assert.throws(
     () => parseConsultationPriceInput(String(BLOCKED_CONSULTATION_PRICE_PLN)),
     /innego projektu/,
@@ -328,6 +353,22 @@ test('rejects a publishable Supabase key as an admin data source', () => {
   assert.equal(status.isValid, false)
   assert.equal(status.active, null)
   assert.match(status.summary, /service role|publishable/i)
+})
+
+test('maps upstream booking gateway failures to a controlled unavailable response', () => {
+  const failure = getBookingApiErrorSnapshot(
+    new Error('<!DOCTYPE html><title>502: Bad gateway</title><div>Cloudflare</div><div>Error code 502</div>'),
+  )
+
+  assert.equal(failure.status, 503)
+  assert.match(failure.message, /Rezerwacja chwilowo jest niedostępna/i)
+})
+
+test('keeps slot-conflict booking errors user-correctable', () => {
+  const failure = getBookingApiErrorSnapshot(new Error('Wybrany termin nie jest już dostępny.'))
+
+  assert.equal(failure.status, 409)
+  assert.match(failure.message, /termin/i)
 })
 
 test('builds rolling local availability without past slots', () => {
@@ -357,6 +398,14 @@ test('backfills future availability only when the current calendar has no future
 test('keeps dogoterapia as a standard public topic label', () => {
   assert.equal(isProblemType('dogoterapia'), true)
   assert.equal(getProblemLabel('dogoterapia'), 'Dogoterapia')
+})
+
+test('booking routing helpers keep canonical query urls and validate problem params', () => {
+  assert.equal(buildSlotHref('dogoterapia'), '/slot?problem=dogoterapia')
+  assert.equal(buildFormHref('szczeniak', '2026-03-28-08:10'), '/form?problem=szczeniak&slotId=2026-03-28-08%3A10')
+  assert.equal(buildPaymentHref('booking-123', 'opaque token'), '/payment?bookingId=booking-123&access=opaque+token')
+  assert.equal(readProblemTypeSearchParam(['kot', 'inne']), 'kot')
+  assert.equal(readProblemTypeSearchParam('nie-ma-takiego'), null)
 })
 
 test('keeps the room locked until exactly 15 minutes before the consultation', () => {
@@ -421,7 +470,7 @@ test('builds Stripe checkout params from the immutable booking snapshot amount',
       problemType: 'szczeniak',
       bookingDate: '2026-03-22',
       bookingTime: '10:40',
-      amount: 47,
+      amount: 67,
     } as const,
     {
       accessToken: 'opaque-token',
@@ -432,7 +481,7 @@ test('builds Stripe checkout params from the immutable booking snapshot amount',
 
   assert.equal(params.success_url, 'https://behawior15.test/confirmation?bookingId=booking-123&access=opaque-token&session_id={CHECKOUT_SESSION_ID}')
   assert.equal(params.cancel_url, 'https://behawior15.test/payment?bookingId=booking-123&access=opaque-token&cancelled=1')
-  assert.equal(extractUnitAmount(lineItem), 4700)
+  assert.equal(extractUnitAmount(lineItem), 6700)
 })
 
 test('sends the payment confirmation only for the first pending to paid transition', () => {
@@ -793,7 +842,7 @@ test('creates and verifies opaque customer access tokens', () => {
   assert.equal(hasValidCustomerAccessToken('zly-token', token.tokenHash), false)
 })
 
-test('allows self-cancellation only during the first minute after payment', () => {
+test('allows self-cancellation only during the first 24 hours after payment', () => {
   const paidAt = '2026-03-24T10:00:00.000Z'
 
   assert.equal(
@@ -804,7 +853,7 @@ test('allows self-cancellation only during the first minute after payment', () =
         paymentMethod: 'payu',
         paidAt,
       },
-      new Date(Date.parse(paidAt) + 15 * 1000),
+      new Date(Date.parse(paidAt) + 2 * 60 * 60 * 1000),
     ),
     true,
   )
@@ -827,7 +876,7 @@ test('allows self-cancellation only during the first minute after payment', () =
         paymentMethod: 'payu',
         paidAt,
       },
-      new Date(Date.parse(paidAt) + 15 * 1000),
+      new Date(Date.parse(paidAt) + 2 * 60 * 60 * 1000),
     ),
     false,
   )
@@ -840,7 +889,7 @@ test('allows self-cancellation only during the first minute after payment', () =
         paymentMethod: 'manual',
         paidAt,
       },
-      new Date(Date.parse(paidAt) + 15 * 1000),
+      new Date(Date.parse(paidAt) + 2 * 60 * 60 * 1000),
     ),
     false,
   )
@@ -1142,6 +1191,157 @@ test('sends payment confirmation request emails to ADMIN_NOTIFICATION_EMAIL', as
   assert.match(requestBody, /Nie ma wpłaty/)
 })
 
+test('manual payment route keeps the booking pending and redirects with a warning when admin notification is not sent', async () => {
+  process.env.APP_DATA_MODE = 'local'
+  process.env.NEXT_PUBLIC_APP_URL = 'http://localhost'
+  process.env.RESEND_API_KEY = ''
+  process.env.ADMIN_NOTIFICATION_EMAIL = 'ops@example.com'
+  process.env.BEHAVIOR15_CONTACT_PHONE = '500600700'
+  process.env.MANUAL_PAYMENT_REVIEW_SECRET = 'review-secret'
+  process.env.SMS_PROVIDER = 'disabled'
+
+  const backups = await backupLocalStoreFiles()
+
+  try {
+    await Promise.all(trackedLocalStoreFiles.map((fileName) => rm(path.join(localStoreDataDir, fileName), { force: true })))
+
+    const availability = await listLocalAvailability()
+    const [slot] = availability.flatMap((group) => group.slots)
+    assert.ok(slot, 'Expected one slot for manual payment route test.')
+
+    const booking = await createLocalPendingBooking({
+      ownerName: 'Manual Route',
+      problemType: 'szczeniak',
+      animalType: 'Pies',
+      petAge: '2 lata',
+      durationNotes: 'Od tygodnia',
+      description: 'Test ostrzezenia o niedostarczonym mailu do obslugi po zgloszeniu wplaty.',
+      phone: '500600700',
+      email: 'manual-route@example.com',
+      slotId: slot.id,
+    })
+
+    const response = await manualPaymentRoute(
+      new Request('http://localhost/api/payments/manual', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          bookingId: booking.booking.id,
+          accessToken: booking.accessToken,
+        }),
+      }),
+    )
+
+    assert.equal(response.status, 200)
+
+    const payload = (await response.json()) as { redirectTo?: string }
+    assert.match(payload.redirectTo ?? '', /manual=reported/)
+    assert.match(payload.redirectTo ?? '', /adminNotice=skipped/)
+
+    const updated = await getLocalBookingById(booking.booking.id)
+    assert.equal(updated?.bookingStatus, 'pending_manual_payment')
+    assert.equal(updated?.paymentStatus, 'pending_manual_review')
+  } finally {
+    await restoreLocalStoreFiles(backups)
+  }
+})
+
+test('marks resend.dev customer delivery as restricted until a domain is verified', () => {
+  process.env.RESEND_API_KEY = 'resend-test-key'
+  process.env.RESEND_FROM_EMAIL = 'Behawior 15 <onboarding@resend.dev>'
+  process.env.BEHAVIOR15_CONTACT_EMAIL = 'coapebehawiorysta@gmail.com'
+
+  assert.match(
+    getCustomerEmailDeliveryConfigIssue('klient@example.com') ?? '',
+    /resend\.dev testing mode|verify a domain/i,
+  )
+  assert.equal(getCustomerEmailDeliveryConfigIssue('coapebehawiorysta@gmail.com'), null)
+})
+
+test('reports an invalid configured resend sender instead of masking it as resend testing mode', () => {
+  process.env.RESEND_API_KEY = 'resend-test-key'
+  process.env.RESEND_FROM_EMAIL = 'Behawior 15 <mail.behawiorystacoape.com>'
+  process.env.BEHAVIOR15_CONTACT_EMAIL = 'coapebehawiorysta@gmail.com'
+
+  assert.equal(getCustomerEmailDeliveryConfigIssue('klient@example.com'), 'RESEND_FROM_EMAIL missing or invalid')
+})
+
+test('skips customer booking emails for external recipients when resend is still in testing mode', async () => {
+  process.env.RESEND_API_KEY = 'resend-test-key'
+  process.env.RESEND_FROM_EMAIL = 'Behawior 15 <onboarding@resend.dev>'
+  process.env.BEHAVIOR15_CONTACT_EMAIL = 'coapebehawiorysta@gmail.com'
+
+  let fetchCalled = false
+  globalThis.fetch = async () => {
+    fetchCalled = true
+    throw new Error('fetch should not be called for blocked testing-mode customer emails')
+  }
+
+  const result = await sendBookingReservationCreatedEmail({
+    id: 'booking-customer-email-skip',
+    ownerName: 'Jan Testowy',
+    problemType: 'szczeniak',
+    animalType: 'Pies',
+    petAge: '8 miesiecy',
+    durationNotes: '2 tygodnie',
+    description: 'Test blokady wysylki do zewnetrznego adresu.',
+    phone: '500600700',
+    email: 'klient@example.com',
+    bookingDate: '2026-03-27',
+    bookingTime: '11:00',
+    slotId: 'slot-1',
+    amount: 39,
+    bookingStatus: 'pending',
+    paymentStatus: 'unpaid',
+    meetingUrl: 'https://meet.jit.si/behawior15-test-room',
+    createdAt: '2026-03-26T10:00:00.000Z',
+    updatedAt: '2026-03-26T10:00:00.000Z',
+  })
+
+  assert.equal(fetchCalled, false)
+  assert.equal(result.status, 'skipped')
+  assert.match(result.reason ?? '', /resend\.dev testing mode|verify a domain/i)
+})
+
+test('skips customer booking emails when RESEND_FROM_EMAIL is malformed', async () => {
+  process.env.RESEND_API_KEY = 'resend-test-key'
+  process.env.RESEND_FROM_EMAIL = 'Behawior 15 <mail.behawiorystacoape.com>'
+  process.env.BEHAVIOR15_CONTACT_EMAIL = 'coapebehawiorysta@gmail.com'
+
+  let fetchCalled = false
+  globalThis.fetch = async () => {
+    fetchCalled = true
+    throw new Error('fetch should not be called for malformed resend sender config')
+  }
+
+  const result = await sendBookingReservationCreatedEmail({
+    id: 'booking-customer-email-invalid-from',
+    ownerName: 'Jan Testowy',
+    problemType: 'szczeniak',
+    animalType: 'Pies',
+    petAge: '8 miesiecy',
+    durationNotes: '2 tygodnie',
+    description: 'Test blokady wysylki przy niepoprawnym nadawcy Resend.',
+    phone: '500600700',
+    email: 'klient@example.com',
+    bookingDate: '2026-03-27',
+    bookingTime: '11:00',
+    slotId: 'slot-1',
+    amount: 39,
+    bookingStatus: 'pending',
+    paymentStatus: 'unpaid',
+    meetingUrl: 'https://meet.jit.si/behawior15-test-room',
+    createdAt: '2026-03-26T10:00:00.000Z',
+    updatedAt: '2026-03-26T10:00:00.000Z',
+  })
+
+  assert.equal(fetchCalled, false)
+  assert.equal(result.status, 'skipped')
+  assert.equal(result.reason, 'RESEND_FROM_EMAIL missing or invalid')
+})
+
 test('payment review approve opens the room and reject says client must return to payment', async () => {
   process.env.APP_DATA_MODE = 'local'
   process.env.RESEND_API_KEY = ''
@@ -1319,7 +1519,6 @@ test('does not expose the default resend onboarding address as public contact da
     email: 'coapebehawiorysta@gmail.com',
     phoneDisplay: null,
     phoneHref: null,
-    facebookUrl: 'https://www.facebook.com/krzysztof.regulski.148/',
   })
 })
 
@@ -1331,7 +1530,6 @@ test('ignores invalid public contact email values', () => {
     email: 'coapebehawiorysta@gmail.com',
     phoneDisplay: null,
     phoneHref: null,
-    facebookUrl: 'https://www.facebook.com/krzysztof.regulski.148/',
   })
 })
 
@@ -1343,7 +1541,6 @@ test('formats public phone details for the footer and legal pages', () => {
     email: 'coapebehawiorysta@gmail.com',
     phoneDisplay: '500 600 700',
     phoneHref: '500600700',
-    facebookUrl: 'https://www.facebook.com/krzysztof.regulski.148/',
   })
 })
 
@@ -1355,8 +1552,154 @@ test('prefers a valid configured public email over the fallback address', () => 
     email: 'kontakt@behawior15.pl',
     phoneDisplay: null,
     phoneHref: null,
-    facebookUrl: 'https://www.facebook.com/krzysztof.regulski.148/',
   })
+})
+
+test('normalizes public PDF pricing badges for cards and detail headers', () => {
+  assert.equal(getPdfPricingBadge('49 zł albo dostęp po konsultacji 30 min'), '49 zł')
+  assert.equal(getPdfPricingBadge('0 zł po zapisie na listę lub jako materiał po pierwszym kontakcie'), '0 zł')
+  assert.equal(getPdfPricingBadge('dostęp po konsultacji dla kota lub 29 zł jako dodatek'), '29 zł jako dodatek')
+  assert.equal(getPdfPricingBadge('79 zł'), '79 zł')
+})
+
+test('resolves offer contact routes from canonical and alias service slugs', () => {
+  assert.equal(getOfferByServiceSlug('poradniki-pdf')?.slug, 'poradniki-pdf')
+  assert.equal(getOfferByServiceSlug('pdf')?.slug, 'poradniki-pdf')
+  assert.equal(getOfferByServiceSlug('poradnik-pdf')?.slug, 'poradniki-pdf')
+  assert.equal(getOfferByServiceSlug('konsultacja-behawioralna-online')?.slug, 'konsultacja-behawioralna-online')
+})
+
+test('pdf offer routes distinguish the listing from the inquiry action', () => {
+  const pdfOffer = getOfferBySlug('poradniki-pdf')
+
+  assert.equal(pdfOffer?.primaryHref, '/kontakt?service=poradniki-pdf')
+  assert.equal(pdfOffer?.primaryCtaLabel, 'Napisz w sprawie poradnika lub pakietu')
+  assert.equal(getOfferDetailHref(pdfOffer!), '/oferta/poradniki-pdf')
+  assert.equal(getOfferDetailCtaLabel(pdfOffer!), 'Zobacz listę PDF')
+  assert.equal(pdfOffer?.secondaryHref, '/oferta/poradniki-pdf')
+  assert.equal(pdfOffer?.secondaryCtaLabel, 'Zobacz listę poradników PDF')
+  assert.doesNotMatch(pdfOffer?.descriptions.join(' ') ?? '', /lejka marki/i)
+})
+
+test('offer imagery keeps adjacent service tiers visually distinct', () => {
+  const quickStart = getOfferBySlug('szybka-konsultacja-15-min')
+  const extendedStart = getOfferBySlug('konsultacja-30-min')
+  const online = getOfferBySlug('konsultacja-behawioralna-online')
+  const therapy = getOfferBySlug('indywidualna-terapia-behawioralna')
+  const homeVisit = getOfferBySlug('konsultacja-domowa-wyjazdowa')
+  const stays = getOfferBySlug('pobyty-socjalizacyjno-terapeutyczne')
+
+  assert.notEqual(quickStart?.imageSrc, extendedStart?.imageSrc)
+  assert.notEqual(online?.imageSrc, therapy?.imageSrc)
+  assert.notEqual(homeVisit?.imageSrc, stays?.imageSrc)
+})
+
+test('topic visuals keep the weakest topic cards on the updated, better-fitting local assets', () => {
+  assert.equal(TOPIC_VISUALS.separacja.src, '/branding/topic-cards/dog-window-alone.jpg')
+  assert.equal(TOPIC_VISUALS.dogoterapia.src, '/branding/case-dog-home.jpg')
+  assert.equal(TOPIC_VISUALS.inne.src, SPECIALIST_EXTENDED_START_PHOTO.src)
+  assert.notEqual(TOPIC_VISUALS.dogoterapia.src, '/branding/topic-cards/dog-checkup.jpg')
+  assert.notEqual(TOPIC_VISUALS.inne.src, '/branding/topic-cards/cat-in-arms.jpg')
+})
+
+test('contact page adapts copy for pdf inquiries and accepts alias service slugs', () => {
+  const markup = renderToStaticMarkup(
+    createElement(ContactPage, {
+      searchParams: {
+        service: 'pdf',
+      },
+    }),
+  )
+
+  assert.match(markup, /Zapytanie o: Poradniki PDF/)
+  assert.match(markup, /Przejdź do listy poradników PDF/)
+  assert.match(markup, /poradnik PDF|materiał czy konsultacja/i)
+})
+
+test('contact page keeps context for a specific pdf guide inquiry', () => {
+  const markup = renderToStaticMarkup(
+    createElement(ContactPage, {
+      searchParams: {
+        service: 'pdf',
+        guide: 'pies-zostaje-sam-plan-pierwszych-krokow',
+      },
+    }),
+  )
+
+  assert.match(markup, /Wybrany poradnik PDF/)
+  assert.match(markup, /Pies zostaje sam/)
+  assert.match(markup, /Wróć do poradnika PDF/)
+  assert.match(markup, /mailto:.*Pies\+zostaje\+sam/)
+})
+
+test('contact page shortcut cards use direct mail actions instead of looping back into kontakt routes', () => {
+  const markup = renderToStaticMarkup(createElement(ContactPage))
+
+  assert.match(markup, /mailto:.*Zapytanie\+-\+Konsultacja\+30\+min/)
+  assert.match(markup, /Napisz w sprawie tej usługi/)
+  assert.doesNotMatch(markup, /href="\/kontakt\?service=konsultacja-30-min"/)
+})
+
+test('pdf listing page renders generated guide and bundle sections from the snapshot data', () => {
+  const markup = renderToStaticMarkup(createElement(PdfGuidesListingPage))
+
+  assert.match(markup, /Gotowe materiały dla opiekunów psów i kotów/)
+  assert.match(markup, /Napisz w sprawie poradnika lub pakietu/)
+  assert.match(markup, /Umów konsultację 15 min/)
+  assert.match(markup, /Pojedyncze poradniki, od których najłatwiej zacząć/)
+  assert.match(markup, /Pakiety, gdy jeden PDF to za mało/)
+  assert.match(markup, /Pozostałe tematy według obszaru/)
+  assert.match(markup, /Co wybrać na start/)
+  assert.match(markup, /Przejdź do pojedynczych poradników/)
+  assert.match(markup, /Pies zostaje sam/)
+  assert.match(markup, /Pakiet Startowy Psa/)
+  assert.match(markup, /href="\/oferta\/poradniki-pdf#poradniki-startowe"/)
+  assert.match(markup, /href="\/oferta\/poradniki-pdf#pakiety-pdf"/)
+  assert.doesNotMatch(markup, /Tematy, od których najłatwiej zacząć/)
+  assert.doesNotMatch(markup, /Jak wybrać między listą, kontaktem i konsultacją/)
+  assert.doesNotMatch(markup, /Zobacz szczegóły/)
+  assert.doesNotMatch(markup, /lead magnet/i)
+  assert.doesNotMatch(markup, /bonus po konsultacji/i)
+  assert.doesNotMatch(markup, /lejka marki/i)
+  assert.doesNotMatch(markup, /wpiętych do oferty/i)
+  assert.doesNotMatch(markup, /wydmuszk/i)
+})
+
+test('pdf guide and bundle detail pages render public offer routes from the integrated snapshot', () => {
+  const guideMarkup = renderToStaticMarkup(
+    createElement(PdfGuideDetailPage, {
+      params: {
+        guideSlug: 'pies-zostaje-sam-plan-pierwszych-krokow',
+      },
+    }),
+  )
+  const bundleMarkup = renderToStaticMarkup(
+    createElement(PdfBundleDetailPage, {
+      params: {
+        bundleSlug: 'pakiet-startowy-psa',
+      },
+    }),
+  )
+
+  assert.match(guideMarkup, /Wróć do listingu poradników PDF/)
+  assert.match(guideMarkup, /Napisz w sprawie zakupu i dostępu/)
+  assert.match(guideMarkup, /Powiązana ścieżka pracy/)
+  assert.match(bundleMarkup, /Pakiet Startowy Psa/)
+  assert.match(bundleMarkup, /Napisz w sprawie tego pakietu/)
+  assert.match(bundleMarkup, /Szczeniak: pierwsze 30 dni/)
+})
+
+test('legal pages render clickable public contact links', () => {
+  process.env.BEHAVIOR15_CONTACT_EMAIL = 'kontakt@behawior15.pl'
+  process.env.BEHAVIOR15_CONTACT_PHONE = '500600700'
+
+  const privacyMarkup = renderToStaticMarkup(createElement(PrivacyPolicyPage))
+  const termsMarkup = renderToStaticMarkup(createElement(TermsPage))
+
+  assert.match(privacyMarkup, /href="mailto:kontakt@behawior15\.pl\?subject=/)
+  assert.match(privacyMarkup, /href="tel:500600700"/)
+  assert.match(termsMarkup, /href="mailto:kontakt@behawior15\.pl\?subject=/)
+  assert.match(termsMarkup, /href="tel:500600700"/)
 })
 
 test('header keeps the sales CTA and the updated trust strip', () => {
@@ -1372,8 +1715,8 @@ test('header keeps the sales CTA and the updated trust strip', () => {
 test('homepage copy stays sales-first and removes legacy secondary sections', () => {
   const source = readFileSync(path.join(process.cwd(), 'app', 'page.tsx'), 'utf8')
 
-  assert.match(source, /Mały krok na start\. Szersza ścieżka pracy, gdy sytuacja tego wymaga\./)
-  assert.match(source, /Nie sprzedaję przypadkowych porad\. Dobieram właściwą formę pomocy\./)
+  assert.match(source, /Mały krok na start\. Szersza praca, gdy sytuacja tego wymaga\./)
+  assert.match(source, /Dobieram formę pomocy do sytuacji/)
   assert.match(source, /Jak mogę pomóc/)
   assert.match(source, /Formy współpracy/)
   assert.match(source, /Pobyty socjalizacyjno-terapeutyczne/)
@@ -1387,14 +1730,132 @@ test('homepage copy stays sales-first and removes legacy secondary sections', ()
   assert.doesNotMatch(source, /Ma być prosto, uczciwie i bez niepewności/)
 })
 
-test('payment page does not expose the public test-mode banner copy', () => {
+test('cats page copy avoids internal architecture language', () => {
+  const source = readFileSync(path.join(process.cwd(), 'app', 'koty', 'page.tsx'), 'utf8')
+
+  assert.match(source, /Najczęstsze tematy/)
+  assert.match(source, /Najważniejsze obszary pracy z kotami są już jasno rozpisane\./)
+  assert.doesNotMatch(source, /landing pages/i)
+  assert.doesNotMatch(source, /architekturze marki/i)
+})
+
+test('cats page keeps the route-level hero image mapped to the dedicated specialist-with-cat asset', () => {
+  const source = readFileSync(path.join(process.cwd(), 'app', 'koty', 'page.tsx'), 'utf8')
+
+  assert.match(source, /CATS_PAGE_PHOTO/)
+  assert.equal(CATS_PAGE_PHOTO.src, SPECIALIST_CAT_PHOTO.src)
+})
+
+test('offer page pdf block exposes product-style catalog cues around the cover stack', () => {
+  const source = readFileSync(path.join(process.cwd(), 'app', 'oferta', 'page.tsx'), 'utf8')
+
+  assert.match(source, /showLegend/)
+  assert.match(source, /pdfGuideCount/)
+  assert.match(source, /pdfBundleCount/)
+  assert.match(source, /tematów PDF|tematow PDF/)
+  assert.match(source, /pakietów|pakietow/)
+})
+
+test('payment page does not expose the public test-mode banner copy and keeps the 24-hour cancellation promise', () => {
   const source = readFileSync(path.join(process.cwd(), 'app', 'payment', 'page.tsx'), 'utf8')
 
   assert.doesNotMatch(source, /To środowisko testowe płatności/)
-  assert.match(source, /1 minutę na samodzielne anulowanie zakupu/)
+  assert.match(source, /24 godziny na bezpłatną rezygnację/)
 })
 
-test('public pricing disclosure stays fixed at the 39 zl baseline on public steps and keeps generic checkout copy', () => {
+test('reports PayU as unavailable when required production config is missing', () => {
+  delete process.env.PAYU_CLIENT_ID
+  delete process.env.PAYU_CLIENT_SECRET
+  delete process.env.PAYU_POS_ID
+  delete process.env.PAYU_SECOND_KEY
+
+  const status = getPayuOptionStatus()
+
+  assert.equal(status.isAvailable, false)
+  assert.match(status.summary, /PAYU_CLIENT_ID/i)
+  assert.match(status.summary, /PAYU_CLIENT_SECRET/i)
+})
+
+test('payment source falls back to manual-only copy when PayU is unavailable', () => {
+  const paymentPageSource = readFileSync(path.join(process.cwd(), 'app', 'payment', 'page.tsx'), 'utf8')
+  const paymentActionsSource = readFileSync(path.join(process.cwd(), 'components', 'PaymentActions.tsx'), 'utf8')
+
+  assert.match(paymentPageSource, /payuAvailable\s*\?/)
+  assert.match(paymentPageSource, /Chwilowo dostępna jest ręczna wpłata/)
+  assert.match(paymentActionsSource, /payuAvailable\s*\?/)
+  assert.match(paymentActionsSource, /Obecnie dostępna jest ręczna wpłata/)
+})
+
+test('manual payment copy reflects the actually configured methods without promising missing details', () => {
+  const phoneOnlyCopy = getManualPaymentDisplayCopy({
+    phoneDisplay: '512 992 026',
+    bankAccountDisplay: null,
+  })
+  const phoneOnlyCards = getManualPaymentDetailCards({
+    phoneDisplay: '512 992 026',
+    bankAccountDisplay: null,
+    accountName: 'Regulski',
+  })
+  const bankOnlyCopy = getManualPaymentDisplayCopy({
+    phoneDisplay: null,
+    bankAccountDisplay: '12 3456 7890 1234 5678 9012 3456',
+  })
+  const bankOnlyCards = getManualPaymentDetailCards({
+    phoneDisplay: null,
+    bankAccountDisplay: '12 3456 7890 1234 5678 9012 3456',
+    accountName: 'Regulski',
+  })
+
+  assert.equal(phoneOnlyCopy.selectionTitle, 'BLIK na telefon')
+  assert.equal(phoneOnlyCards.some((card) => card.label === 'Numer konta do przelewu'), false)
+  assert.equal(bankOnlyCopy.selectionTitle, 'Przelew tradycyjny')
+  assert.equal(bankOnlyCards.some((card) => card.label === 'BLIK na telefon'), false)
+})
+
+test('payment and confirmation source avoid promising customer emails when resend is still in testing mode', () => {
+  const paymentPageSource = readFileSync(path.join(process.cwd(), 'app', 'payment', 'page.tsx'), 'utf8')
+  const paymentActionsSource = readFileSync(path.join(process.cwd(), 'components', 'PaymentActions.tsx'), 'utf8')
+  const confirmationSource = readFileSync(path.join(process.cwd(), 'app', 'confirmation', 'page.tsx'), 'utf8')
+
+  assert.match(paymentPageSource, /customerEmailAvailable/)
+  assert.match(paymentActionsSource, /customerEmailAvailable/)
+  assert.match(confirmationSource, /customerEmailAvailable/)
+  assert.match(paymentActionsSource, /zachowaj ten link/i)
+  assert.match(paymentPageSource, /pokażemy link do pokoju bezpośrednio na stronie potwierdzenia/i)
+  assert.match(confirmationSource, /pokażemy aktywny link do rozmowy bezpośrednio na tej stronie/i)
+})
+
+test('manual payment confirmation source surfaces admin notification delivery issues to the customer', () => {
+  const manualPaymentRouteSource = readFileSync(path.join(process.cwd(), 'app', 'api', 'payments', 'manual', 'route.ts'), 'utf8')
+  const confirmationSource = readFileSync(path.join(process.cwd(), 'app', 'confirmation', 'page.tsx'), 'utf8')
+
+  assert.match(manualPaymentRouteSource, /adminNotice/)
+  assert.match(confirmationSource, /adminNotice/)
+  assert.match(confirmationSource, /automatyczne powiadomienie obsługi/i)
+})
+
+test('confirmation source auto-refreshes online checkout returns and logs sync failures', () => {
+  const confirmationSource = readFileSync(path.join(process.cwd(), 'app', 'confirmation', 'page.tsx'), 'utf8')
+
+  assert.match(confirmationSource, /returnedFromOnlineCheckout/)
+  assert.match(confirmationSource, /isAwaitingOnlineConfirmation/)
+  assert.match(confirmationSource, /ConfirmationStatusWatcher active=\{isWaitingManual \|\| isAwaitingOnlineConfirmation\}/)
+  assert.match(confirmationSource, /onlineSyncWarning/)
+  assert.match(confirmationSource, /\[behawior15\]\[confirmation\] stripe return finalize failed/)
+  assert.match(confirmationSource, /\[behawior15\]\[confirmation\] payu return sync failed/)
+  assert.match(confirmationSource, /booking\.paymentStatus === 'failed'/)
+})
+
+test('call page source distinguishes runtime load failures from an invalid room link', () => {
+  const callPageSource = readFileSync(path.join(process.cwd(), 'app', 'call', '[id]', 'page.tsx'), 'utf8')
+
+  assert.match(callPageSource, /flowError/)
+  assert.match(callPageSource, /\[behawior15\]\[call\] failed to load booking/)
+  assert.match(callPageSource, /Nie udalo sie wczytac pokoju rozmowy/)
+  assert.match(callPageSource, /Ten link do rozmowy jest nieprawid/)
+})
+
+test('public pricing disclosure stays fixed at the 59 zl baseline on public steps and keeps generic checkout copy', () => {
   const homeSource = readFileSync(path.join(process.cwd(), 'app', 'page.tsx'), 'utf8')
   const bookSource = readFileSync(path.join(process.cwd(), 'app', 'book', 'page.tsx'), 'utf8')
   const formSource = readFileSync(path.join(process.cwd(), 'app', 'form', 'page.tsx'), 'utf8')
@@ -1434,6 +1895,7 @@ test('public pricing disclosure stays fixed at the 39 zl baseline on public step
   assert.equal(dynamicTopicMarkup.includes(expectedMessage), true)
   assert.doesNotMatch(homeSource, /getActiveConsultationPrice/)
   assert.doesNotMatch(bookSource, /getActiveConsultationPrice/)
+  assert.doesNotMatch(homeSource, /jest aktywna, ale w tej chwili nie ma wolnych terminów/i)
 })
 
 test('booking flow uses neutral stage labels instead of a conflicting six-step counter', () => {
@@ -1465,7 +1927,7 @@ test('homepage keeps the simplified section order for the sales flow', () => {
   const processIndex = homeSource.indexOf('id="jak-pracuje"')
   const trustIndex = homeSource.indexOf('id="zaufanie"')
   const faqIndex = homeSource.indexOf('id="faq"')
-  const ctaIndex = homeSource.indexOf('Przejdź do kontaktu')
+  const ctaIndex = homeSource.indexOf('compact-sales-cta')
 
   assert.ok(heroIndex > -1)
   assert.ok(helpIndex > heroIndex)
@@ -1478,11 +1940,45 @@ test('homepage keeps the simplified section order for the sales flow', () => {
   assert.ok(ctaIndex > faqIndex)
 })
 
-test('book page exposes the updated 1-minute self-cancel promise instead of the old disclaimer', () => {
+test('book page exposes the updated 24-hour cancellation promise instead of the old disclaimer', () => {
   const bookSource = readFileSync(path.join(process.cwd(), 'app', 'book', 'page.tsx'), 'utf8')
 
-  assert.match(bookSource, /Po opłaceniu masz 1 minutę na samodzielną rezygnację/)
+  assert.match(bookSource, /Po opłaceniu masz 24 godziny na bezpłatną rezygnację/)
   assert.doesNotMatch(bookSource, /automatycznego anulowania w 60 sekund/)
+})
+
+test('booking funnel source keeps encoded slot links and standardized analytics events', () => {
+  const slotSource = readFileSync(path.join(process.cwd(), 'app', 'slot', 'page.tsx'), 'utf8')
+  const bookSource = readFileSync(path.join(process.cwd(), 'app', 'book', 'page.tsx'), 'utf8')
+  const formSource = readFileSync(path.join(process.cwd(), 'app', 'form', 'page.tsx'), 'utf8')
+  const legacyProblemSource = readFileSync(path.join(process.cwd(), 'app', 'problem', 'page.tsx'), 'utf8')
+  const headerSource = readFileSync(path.join(process.cwd(), 'components', 'Header.tsx'), 'utf8')
+  const footerSource = readFileSync(path.join(process.cwd(), 'components', 'Footer.tsx'), 'utf8')
+  const bookingFormSource = readFileSync(path.join(process.cwd(), 'components', 'BookingForm.tsx'), 'utf8')
+  const paymentActionsSource = readFileSync(path.join(process.cwd(), 'components', 'PaymentActions.tsx'), 'utf8')
+  const callRoomSource = readFileSync(path.join(process.cwd(), 'components', 'CallRoom.tsx'), 'utf8')
+  const confirmationSource = readFileSync(path.join(process.cwd(), 'app', 'confirmation', 'page.tsx'), 'utf8')
+
+  assert.match(slotSource, /buildFormHref\(problem, slot\.id\)/)
+  assert.match(slotSource, /prefetch=\{false\}/)
+  assert.match(bookSource, /buildSlotHref\(item\.id\)/)
+  assert.match(bookSource, /prefetch=\{false\}/)
+  assert.match(formSource, /buildSlotHref\(problem\)/)
+  assert.match(legacyProblemSource, /buildSlotHref\(problem\)/)
+  assert.doesNotMatch(legacyProblemSource, /\/book\?problem=/)
+  assert.match(slotSource, /data-analytics-event="slot_selected"/)
+  assert.doesNotMatch(slotSource, /data-analytics-event="slot_select"/)
+  assert.match(bookSource, /data-analytics-event="cta_click"/)
+  assert.doesNotMatch(bookSource, /data-analytics-event="topic_select"/)
+  assert.match(headerSource, /data-analytics-event="cta_click"/)
+  assert.match(footerSource, /data-analytics-event="cta_click"/)
+  assert.doesNotMatch(headerSource, /data-analytics-event="reserve_click"/)
+  assert.doesNotMatch(footerSource, /data-analytics-event="reserve_click"/)
+  assert.match(bookingFormSource, /form_started/)
+  assert.match(paymentActionsSource, /payment_started/)
+  assert.doesNotMatch(paymentActionsSource, /'payment_start'/)
+  assert.match(confirmationSource, /payment_success/)
+  assert.match(callRoomSource, /room_entered/)
 })
 
 test('footer keeps a hidden build marker without exposing technical copy to the client', () => {
@@ -1546,9 +2042,51 @@ test('builds a robots response that points to the sitemap', () => {
   process.env.NEXT_PUBLIC_APP_URL = 'https://beh2.vercel.app'
 
   const config = robots()
+  const rules = Array.isArray(config.rules) ? config.rules : [config.rules]
+  const publicRule = rules[0]
 
   assert.equal(config.host, 'https://beh2.vercel.app')
   assert.equal(config.sitemap, 'https://beh2.vercel.app/sitemap.xml')
+  assert.equal(rules.length, 1)
+  assert.equal(publicRule.userAgent, '*')
+  assert.equal(publicRule.allow, '/')
+  assert.ok(Array.isArray(publicRule.disallow))
+  assert.ok(publicRule.disallow.includes('/admin/'))
+  assert.ok(publicRule.disallow.includes('/__internal/'))
+  assert.ok(publicRule.disallow.some((path) => path.startsWith('/qa-share-')))
+})
+
+test('qa report helper reads the internal markdown artifact from the repo path', async () => {
+  const tempRoot = path.join(process.cwd(), '.tmp-qa-report-helper')
+  const reportPath = getLatestQaReportPath(tempRoot)
+
+  await rm(tempRoot, { recursive: true, force: true })
+  await mkdir(path.dirname(reportPath), { recursive: true })
+  await writeFile(reportPath, '# Test QA\n\nprivate', 'utf8')
+
+  try {
+    const report = await readLatestQaReport(tempRoot)
+
+    assert.equal(report.exists, true)
+    assert.equal(report.filePath, reportPath)
+    assert.equal(report.content, '# Test QA\n\nprivate')
+    assert.equal(Boolean(report.updatedAt), true)
+  } finally {
+    await rm(tempRoot, { recursive: true, force: true })
+  }
+})
+
+test('qa report helper returns a controlled fallback when the internal artifact is missing', async () => {
+  const tempRoot = path.join(process.cwd(), '.tmp-qa-report-helper-missing')
+
+  await rm(tempRoot, { recursive: true, force: true })
+
+  const report = await readLatestQaReport(tempRoot)
+
+  assert.equal(report.exists, false)
+  assert.equal(report.filePath, getLatestQaReportPath(tempRoot))
+  assert.match(report.content, /Brak raportu QA/i)
+  assert.equal(report.updatedAt, null)
 })
 
 test('builds a sitemap with the core public routes', () => {
@@ -1556,6 +2094,7 @@ test('builds a sitemap with the core public routes', () => {
 
   const entries = sitemap()
   const urls = entries.map((entry) => entry.url)
+  const pdfUrls = listPdfRoutePaths().map((routePath) => `https://beh2.vercel.app${routePath}`)
 
   assert.deepEqual(urls, [
     'https://beh2.vercel.app/',
@@ -1566,7 +2105,7 @@ test('builds a sitemap with the core public routes', () => {
     'https://beh2.vercel.app/oferta/konsultacja-domowa-wyjazdowa',
     'https://beh2.vercel.app/oferta/indywidualna-terapia-behawioralna',
     'https://beh2.vercel.app/oferta/pobyty-socjalizacyjno-terapeutyczne',
-    'https://beh2.vercel.app/oferta/poradniki-pdf',
+    ...pdfUrls,
     'https://beh2.vercel.app/koty',
     'https://beh2.vercel.app/kontakt',
     'https://beh2.vercel.app/book',
@@ -1668,4 +2207,33 @@ test('returns a controlled unavailable message when testimonial mail env is miss
 
   assert.equal(response.status, 503)
   assert.match(payload.error ?? '', /Formularz opinii jest chwilowo niedostępny/i)
+})
+
+test('contact page keeps the specialist trust visual next to the contact shortcuts', () => {
+  const markup = renderToStaticMarkup(createElement(ContactPage, { searchParams: {} }))
+
+  assert.equal(markup.includes('Kto odpowiada'), true)
+  assert.equal(markup.includes('Odpowiadam osobiście'), true)
+  assert.equal(markup.includes('Najczęstsze wejścia'), true)
+  assert.equal(markup.includes('specialist-krzysztof-wide.jpg'), true)
+})
+test('public PDF pages render copied cover assets from the branding directory', () => {
+  const guide = getPdfGuideBySlug('pies-zostaje-sam-plan-pierwszych-krokow')
+  const listingMarkup = renderToStaticMarkup(createElement(PdfGuidesListingPage))
+  const guideMarkup = renderToStaticMarkup(
+    createElement(PdfGuideDetailPage, {
+      params: { guideSlug: 'pies-zostaje-sam-plan-pierwszych-krokow' },
+    }),
+  )
+  const bundleMarkup = renderToStaticMarkup(
+    createElement(PdfBundleDetailPage, {
+      params: { bundleSlug: 'pakiet-spokojny-dom-pies' },
+    }),
+  )
+
+  assert.ok(guide)
+  assert.equal(getPdfGuideCoverSrc(guide), '/branding/pdf-covers/pies-zostaje-sam-plan-pierwszych-krokow.svg')
+  assert.match(listingMarkup, /\/branding\/pdf-covers\//)
+  assert.match(guideMarkup, /\/branding\/pdf-covers\//)
+  assert.match(bundleMarkup, /\/branding\/pdf-covers\//)
 })

@@ -17,6 +17,8 @@ type DeliveryResult = {
   reason?: string
 }
 
+type EmailAudience = 'customer' | 'internal'
+
 type ManualPaymentReviewLinks = {
   approveUrl: string
   rejectUrl: string
@@ -34,11 +36,14 @@ export type TestimonialSubmission = {
 function getResendConfig() {
   const apiKey = process.env.RESEND_API_KEY?.trim() || null
   const configuredFrom = process.env.RESEND_FROM_EMAIL?.trim() || null
-  const from = isValidResendFrom(configuredFrom) ? configuredFrom : DEFAULT_RESEND_FROM_EMAIL
+  const configuredFromStatus = !configuredFrom ? 'missing' : isValidResendFrom(configuredFrom) ? 'valid' : 'invalid'
+  const from = configuredFromStatus === 'valid' ? configuredFrom : DEFAULT_RESEND_FROM_EMAIL
 
   return {
     apiKey,
     from,
+    configuredFrom,
+    configuredFromStatus,
   }
 }
 
@@ -55,6 +60,15 @@ function isValidResendFrom(value: string | null): value is string {
   const candidate = match?.[1]?.trim() ?? value.trim()
 
   return isValidPublicEmail(candidate)
+}
+
+function extractEmailAddress(value: string): string {
+  const match = value.match(/<([^>]+)>/)
+  return (match?.[1]?.trim() ?? value.trim()).toLowerCase()
+}
+
+function isResendTestingSender(value: string): boolean {
+  return extractEmailAddress(value).endsWith('@resend.dev')
 }
 
 function escapeHtml(value: string): string {
@@ -79,11 +93,13 @@ function getAdminNotificationRecipientEmail(): string | null {
 }
 
 export function getTestimonialSubmissionConfigIssue(): string | null {
-  if (!(process.env.RESEND_API_KEY?.trim() || null)) {
+  const resend = getResendConfig()
+
+  if (!resend.apiKey) {
     return 'RESEND_API_KEY missing'
   }
 
-  if (!isValidResendFrom(process.env.RESEND_FROM_EMAIL?.trim() || null)) {
+  if (resend.configuredFromStatus !== 'valid') {
     return 'RESEND_FROM_EMAIL missing or invalid'
   }
 
@@ -92,6 +108,37 @@ export function getTestimonialSubmissionConfigIssue(): string | null {
   }
 
   return null
+}
+
+export function getCustomerEmailDeliveryConfigIssue(recipientEmail?: string | null): string | null {
+  const resend = getResendConfig()
+
+  if (!resend.apiKey) {
+    return 'RESEND_API_KEY missing'
+  }
+
+  if (resend.configuredFromStatus === 'invalid') {
+    return 'RESEND_FROM_EMAIL missing or invalid'
+  }
+
+  if (!isValidResendFrom(resend.from)) {
+    return 'RESEND_FROM_EMAIL missing or invalid'
+  }
+
+  if (!isResendTestingSender(resend.from)) {
+    return null
+  }
+
+  const allowedRecipient = getNotificationRecipientEmail()?.toLowerCase() ?? null
+  const normalizedRecipient = recipientEmail?.trim().toLowerCase() ?? null
+
+  if (allowedRecipient && normalizedRecipient === allowedRecipient) {
+    return null
+  }
+
+  return allowedRecipient
+    ? `RESEND_FROM_EMAIL uses resend.dev testing mode. Verify a domain to send customer emails to recipients other than ${allowedRecipient}.`
+    : 'RESEND_FROM_EMAIL uses resend.dev testing mode. Verify a domain to send customer emails to external recipients.'
 }
 
 function buildBookingSummary(booking: BookingRecord): string {
@@ -164,7 +211,7 @@ export function shouldSendBookingConfirmationAfterPayment(
   )
 }
 
-async function deliverEmail(payload: SendEmailPayload): Promise<DeliveryResult> {
+async function deliverEmail(payload: SendEmailPayload, audience: EmailAudience = 'internal'): Promise<DeliveryResult> {
   const resend = getResendConfig()
 
   if (!resend.apiKey) {
@@ -176,6 +223,30 @@ async function deliverEmail(payload: SendEmailPayload): Promise<DeliveryResult> 
     return {
       status: 'skipped',
       reason: 'RESEND_API_KEY missing',
+    }
+  }
+
+  if (audience === 'internal' && resend.configuredFromStatus === 'invalid') {
+    console.warn('[behawior15][email] invalid RESEND_FROM_EMAIL, using resend.dev fallback for internal delivery only', {
+      configuredFrom: resend.configuredFrom,
+      to: payload.to,
+      subject: payload.subject,
+    })
+  }
+
+  if (audience === 'customer') {
+    const configIssue = getCustomerEmailDeliveryConfigIssue(payload.to)
+
+    if (configIssue) {
+      console.warn('[behawior15][email] skip', {
+        reason: configIssue,
+        to: payload.to,
+        subject: payload.subject,
+      })
+      return {
+        status: 'skipped',
+        reason: configIssue,
+      }
     }
   }
 
@@ -254,7 +325,7 @@ export async function sendBookingReservationCreatedEmail(booking: BookingRecord)
     renderContactBlockText(),
   ].join('\n')
 
-  return deliverEmail({ to: booking.email, subject, html, text })
+  return deliverEmail({ to: booking.email, subject, html, text }, 'customer')
 }
 
 export async function sendBookingConfirmationEmail(booking: BookingRecord): Promise<DeliveryResult> {
@@ -283,7 +354,7 @@ export async function sendBookingConfirmationEmail(booking: BookingRecord): Prom
     renderContactBlockText(),
   ].join('\n')
 
-  return deliverEmail({ to: booking.email, subject, html, text })
+  return deliverEmail({ to: booking.email, subject, html, text }, 'customer')
 }
 
 export async function sendManualPaymentReportedAdminEmail(
@@ -291,6 +362,7 @@ export async function sendManualPaymentReportedAdminEmail(
   links: ManualPaymentReviewLinks,
 ): Promise<DeliveryResult> {
   const recipient = getAdminNotificationRecipientEmail()
+  const customerEmailIssue = getCustomerEmailDeliveryConfigIssue(booking.email)
 
   if (!recipient) {
     return {
@@ -316,7 +388,9 @@ export async function sendManualPaymentReportedAdminEmail(
         <a href="${links.rejectUrl}" style="display:inline-block;padding:12px 18px;border-radius:999px;background:#8a3022;color:#ffffff;text-decoration:none;font-weight:700;">Nie ma wpłaty</a>
       </div>
     `,
-    'Po potwierdzeniu klient automatycznie dostanie mail z linkiem do pokoju rozmowy, a przy braku wpłaty wróci do płatności.',
+    customerEmailIssue
+      ? 'Po potwierdzeniu klient od razu zobaczy aktywne potwierdzenie i pokój na swojej stronie rezerwacji. Wysyłka maili do innych adresów ruszy po weryfikacji domeny nadawcy w Resend.'
+      : 'Po potwierdzeniu klient automatycznie dostanie mail z linkiem do pokoju rozmowy, a przy braku wpłaty wróci do płatności.',
   )
   const text = [
     'Płatność czeka na potwierdzenie do 60 min.',
@@ -331,7 +405,7 @@ export async function sendManualPaymentReportedAdminEmail(
     `Nie ma wpłaty: ${links.rejectUrl}`,
   ].join('\n')
 
-  return deliverEmail({ to: recipient, subject, html, text })
+  return deliverEmail({ to: recipient, subject, html, text }, 'internal')
 }
 
 export async function sendBookingReminderEmail(booking: BookingRecord): Promise<DeliveryResult> {
@@ -357,7 +431,7 @@ export async function sendBookingReminderEmail(booking: BookingRecord): Promise<
     renderContactBlockText(),
   ].join('\n')
 
-  return deliverEmail({ to: booking.email, subject, html, text })
+  return deliverEmail({ to: booking.email, subject, html, text }, 'customer')
 }
 
 export async function sendTestimonialSubmissionEmail(submission: TestimonialSubmission): Promise<DeliveryResult> {
@@ -400,5 +474,5 @@ export async function sendTestimonialSubmissionEmail(submission: TestimonialSubm
     'Status: wpis nadal wymaga ręcznej akceptacji i ręcznego dodania do statycznej listy opinii.',
   ].join('\n')
 
-  return deliverEmail({ to: recipient, subject, html, text })
+  return deliverEmail({ to: recipient, subject, html, text }, 'internal')
 }

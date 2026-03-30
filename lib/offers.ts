@@ -1,9 +1,20 @@
+import { buildPdfInquiryHref } from './pdf-guides'
 import { DEFAULT_PRICE_PLN, formatPricePln } from './pricing'
+import {
+  CAT_HOME_PHOTO,
+  HOME_VISIT_PHOTO,
+  SPECIALIST_EXTENDED_START_PHOTO,
+  SPECIALIST_ONLINE_PHOTO,
+  SPECIALIST_WIDE_PHOTO,
+  STAYS_PHOTO,
+  THERAPY_PROCESS_PHOTO,
+} from './site'
 
 export type OfferKind = 'booking' | 'inquiry' | 'resource'
 
 export type Offer = {
   slug: string
+  contactServiceSlugs?: string[]
   title: string
   shortTitle: string
   eyebrow: string
@@ -16,6 +27,8 @@ export type Offer = {
   outcomes: string[]
   primaryCtaLabel: string
   primaryHref: string
+  detailCtaLabel?: string
+  detailHref?: string
   secondaryCtaLabel?: string
   secondaryHref?: string
   imageSrc: string
@@ -41,30 +54,29 @@ export const OFFERS: Offer[] = [
     kind: 'booking',
     priceLabel: quickStartPriceLabel,
     cardSummary:
-      'Najniższy próg wejścia. Krótka rozmowa audio dla psów i kotów, kiedy chcesz zacząć bez presji wideo i bez rozbudowanego procesu.',
-    heroSummary:
-      'To nadal ważna, fachowa rozmowa. Forma audio ma ułatwić start, a nie spłycać pomoc. Jeśli problem okaże się szerszy, kolejnym krokiem będzie lepiej dobrana forma pracy.',
+      'Krótka rozmowa audio dla psa lub kota, żeby szybko uporządkować sytuację i dostać pierwszy kierunek.',
+    heroSummary: 'Krótka rozmowa audio na start. Jeśli trzeba więcej, od razu wskażę kolejny krok.',
     descriptions: [
-      'Szybka konsultacja 15 min została w systemie jako lekki start dla opiekunów, którzy chcą najpierw spokojnie opisać sytuację i usłyszeć pierwszy sensowny kierunek działania.',
-      'To dobra ścieżka wtedy, gdy potrzebujesz fachowego spojrzenia bez pełnej rozmowy wideo, bez rozbudowanego przygotowania i bez dużego ryzyka po stronie opiekuna.',
+      'Dobry start, gdy chcesz spokojnie opisać sytuację i dostać pierwszy plan bez długiego przygotowania.',
+      'Niski próg wejścia: bez pełnej konsultacji wideo i bez wchodzenia od razu w większy proces.',
     ],
     bestFor: [
       'gdy chcesz zacząć od małego kroku i szybko sprawdzić kierunek dalszej pracy',
-      'gdy forma audio jest dla Ciebie wygodniejsza niż pełna konsultacja wideo',
+      'gdy audio jest dla Ciebie wygodniejsze niż pełna konsultacja wideo',
       'gdy problem trzeba uporządkować, ale jeszcze nie wiesz, czy potrzebna będzie szersza terapia',
     ],
     outcomes: [
       'wstępne rozpoznanie sytuacji',
       'pierwszy plan działania na najbliższe dni',
-      'jasną decyzję, czy wystarczy praca domowa, czy potrzebna jest kolejna ścieżka wsparcia',
+      'jasną decyzję, czy wystarczy praca domowa, czy potrzebna jest kolejna forma wsparcia',
     ],
     primaryCtaLabel: 'Umów konsultację 15 min',
     primaryHref: '/book',
     secondaryCtaLabel: 'Zobacz pozostałe formy pracy',
     secondaryHref: '/oferta',
-    imageSrc: '/images/hero-main.png',
-    imageAlt: 'Krzysztof Regulski na zdjęciu portretowym do strony marki Regulski Terapia behawioralna',
-    note: 'Osobny landing i osobny flow bookingowy pozostają oparte o aktualny proces rezerwacji.',
+    imageSrc: SPECIALIST_WIDE_PHOTO.src,
+    imageAlt: SPECIALIST_WIDE_PHOTO.alt,
+    note: 'Rezerwacja prowadzi przez prostą ścieżkę: temat, termin, dane, płatność, potwierdzenie.',
   },
   {
     slug: 'konsultacja-30-min',
@@ -73,17 +85,15 @@ export const OFFERS: Offer[] = [
     eyebrow: 'Rozszerzony start',
     kind: 'inquiry',
     priceLabel: '119 zł',
-    cardSummary:
-      'Rozszerzona konsultacja wstępna dla sytuacji, w których 15 minut może być zbyt małym oknem, ale nie potrzebujesz jeszcze pełnej konsultacji behawioralnej.',
-    heroSummary:
-      'To pomost między lekkim wejściem a pełną konsultacją online. Daje więcej przestrzeni na uporządkowanie wątku, ale nadal pozostaje czytelnym pierwszym etapem pracy.',
+    cardSummary: 'Dłuższy start, gdy 15 minut to za mało, ale pełna konsultacja nie jest jeszcze potrzebna.',
+    heroSummary: 'Więcej czasu na uporządkowanie sytuacji niż w 15 minut, bez wchodzenia od razu w pełną konsultację.',
     descriptions: [
-      'Konsultacja 30 min nie jest „tańszą wersją” pełnej konsultacji. Jej rolą jest spokojniejsze wejście w sytuacje, które wymagają nieco więcej czasu na opis i rozpoznanie.',
-      'Ten format sprawdza się, kiedy potrzebujesz dokładniejszego startu niż w 15 minut, ale nadal chcesz zacząć od zwięzłej, konkretnej rozmowy.',
+      'To osobny format na spokojniejsze opisanie sytuacji, a nie tańsza wersja pełnej konsultacji.',
+      'Sprawdza się, gdy potrzebujesz dokładniejszego startu, ale nadal chcesz zacząć od zwartej rozmowy.',
     ],
     bestFor: [
       'gdy problem jest mieszany i trudno go opisać w bardzo krótkiej formule',
-      'gdy potrzebujesz rozszerzonej konsultacji wstępnej przed dalszą terapią',
+      'gdy potrzebujesz rozszerzonej konsultacji wstępnej przed dalszą pracą',
       'gdy zależy Ci na spokojniejszym tempie rozmowy bez wchodzenia od razu w pełną konsultację',
     ],
     outcomes: [
@@ -91,12 +101,12 @@ export const OFFERS: Offer[] = [
       'wstępną ocenę, czy kolejnym krokiem ma być konsultacja online, terapia, wizyta domowa czy pobyt',
       'konkretny plan pierwszych działań i obserwacji',
     ],
-    primaryCtaLabel: 'Zapytaj o konsultację 30 min',
+    primaryCtaLabel: 'Napisz w sprawie konsultacji 30 min',
     primaryHref: '/kontakt?service=konsultacja-30-min',
     secondaryCtaLabel: 'Porównaj formy współpracy',
     secondaryHref: '/oferta',
-    imageSrc: '/branding/specialist-krzysztof-about.png',
-    imageAlt: 'Krzysztof Regulski podczas pracy z psem jako ilustracja rozszerzonej konsultacji wstępnej',
+    imageSrc: SPECIALIST_EXTENDED_START_PHOTO.src,
+    imageAlt: SPECIALIST_EXTENDED_START_PHOTO.alt,
   },
   {
     slug: 'konsultacja-behawioralna-online',
@@ -105,13 +115,11 @@ export const OFFERS: Offer[] = [
     eyebrow: 'Pogłębiona konsultacja',
     kind: 'inquiry',
     priceLabel: '350 zł',
-    cardSummary:
-      'Pełniejsza konsultacja wideo bez sztywnego limitu czasu, prowadzona tak długo, jak wymaga tego przypadek i realne rozpoznanie problemu.',
-    heroSummary:
-      'To ścieżka dla sytuacji, w których potrzebna jest pełniejsza analiza tła, historii problemu, materiałów wideo i organizacji pracy domowej.',
+    cardSummary: 'Pełniejsza konsultacja wideo dla spraw, które wymagają szerszego rozpoznania.',
+    heroSummary: 'Dla spraw, w których trzeba przeanalizować historię problemu, materiały i plan dalszej pracy.',
     descriptions: [
-      'Konsultacja behawioralna online jest wyraźnie inną formą pracy niż szybki start. Służy do pogłębionego rozpoznania problemu i zaplanowania dalszej terapii, jeśli jest potrzebna.',
-      'Spotkanie odbywa się w formule wideo i ma osobny terminarz, aby czas był dopasowany do przypadku, a nie odwrotnie.',
+      'To inna forma pracy niż szybki start. Służy do pogłębionego rozpoznania problemu i zaplanowania dalszej terapii.',
+      'Spotkanie odbywa się w formule wideo i ma osobny terminarz dopasowany do przypadku.',
     ],
     bestFor: [
       'gdy problem trwa dłużej, wraca albo dotyczy kilku obszarów jednocześnie',
@@ -123,12 +131,12 @@ export const OFFERS: Offer[] = [
       'plan dalszej pracy domowej lub terapeutycznej',
       'jasne wskazanie, czy potrzebna jest wizyta domowa, terapia ciągła albo konsultacja weterynaryjna',
     ],
-    primaryCtaLabel: 'Umów konsultację online',
+    primaryCtaLabel: 'Napisz w sprawie konsultacji online',
     primaryHref: '/kontakt?service=konsultacja-behawioralna-online',
     secondaryCtaLabel: 'Zacznij od 15 minut',
     secondaryHref: '/book',
-    imageSrc: '/branding/specialist-krzysztof-vet.jpg',
-    imageAlt: 'Krzysztof Regulski pracujący z kotem przy stole jako ilustracja pełnej konsultacji behawioralnej online',
+    imageSrc: SPECIALIST_ONLINE_PHOTO.src,
+    imageAlt: SPECIALIST_ONLINE_PHOTO.alt,
   },
   {
     slug: 'konsultacja-domowa-wyjazdowa',
@@ -137,13 +145,11 @@ export const OFFERS: Offer[] = [
     eyebrow: 'Praca w środowisku zwierzęcia',
     kind: 'inquiry',
     priceLabel: null,
-    cardSummary:
-      'Wizyta prowadzona wtedy, gdy kontekst miejsca ma znaczenie dla oceny sytuacji albo gdy przypadek wymaga pracy poza standardową konsultacją online.',
-    heroSummary:
-      'Ta forma jest ustalana indywidualnie. Obejmuje konsultacje na miejscu oraz wyjazdy organizowane według realnych potrzeb przypadku i możliwości dojazdu.',
+    cardSummary: 'Wizyta wtedy, gdy miejsce i codzienne warunki są ważne dla oceny problemu.',
+    heroSummary: 'Forma ustalana indywidualnie, gdy trzeba pracować w środowisku zwierzęcia.',
     descriptions: [
-      'Konsultacja domowa lub wyjazdowa jest możliwa w Olsztynie i po ustaleniu także na terenie Polski. Nie jest to usługa katalogowa z jedną sztywną ceną, bo zakres pracy i logistyka zależą od przypadku.',
-      'Jeśli problem najlepiej ocenić w środowisku zwierzęcia, ta ścieżka pozwala pracować na tym, co dzieje się realnie w domu lub w konkretnej przestrzeni.',
+      'Możliwa w Olsztynie i po ustaleniu także w innych lokalizacjach. Zakres i logistyka zależą od przypadku.',
+      'Sprawdza się, gdy problem najlepiej ocenić w domu, ogrodzie albo innej konkretnej przestrzeni.',
     ],
     bestFor: [
       'gdy kluczowe znaczenie ma układ mieszkania, ogrodu lub spacerów',
@@ -155,12 +161,12 @@ export const OFFERS: Offer[] = [
       'dopasowane zalecenia środowiskowe i organizacyjne',
       'ustalenie dalszej ścieżki terapii lub pracy domowej',
     ],
-    primaryCtaLabel: 'Zapytaj o konsultację domową',
+    primaryCtaLabel: 'Napisz w sprawie konsultacji domowej',
     primaryHref: '/kontakt?service=konsultacja-domowa-wyjazdowa',
     secondaryCtaLabel: 'Zobacz formy pracy',
     secondaryHref: '/oferta',
-    imageSrc: '/branding/case-dog-home.jpg',
-    imageAlt: 'Pies w domowym otoczeniu jako ilustracja konsultacji prowadzonej w środowisku zwierzęcia',
+    imageSrc: HOME_VISIT_PHOTO.src,
+    imageAlt: HOME_VISIT_PHOTO.alt,
   },
   {
     slug: 'indywidualna-terapia-behawioralna',
@@ -169,13 +175,11 @@ export const OFFERS: Offer[] = [
     eyebrow: 'Dalsza praca',
     kind: 'inquiry',
     priceLabel: null,
-    cardSummary:
-      'Dalsza, prowadzona indywidualnie praca wtedy, gdy problem wymaga więcej niż jednej konsultacji i potrzebuje spokojnego procesu, a nie pojedynczej porady.',
-    heroSummary:
-      'Zakres, forma i organizacja terapii są ustalane po rozpoznaniu sytuacji. To nie jest pakiet z półki, ale dalsza praca dopasowana do konkretnego przypadku.',
+    cardSummary: 'Dalsza praca, gdy jedna konsultacja nie wystarcza i potrzebny jest spokojny proces.',
+    heroSummary: 'Zakres i tempo terapii ustalam po rozpoznaniu sytuacji.',
     descriptions: [
-      'Indywidualna terapia behawioralna pojawia się wtedy, gdy po konsultacji widać, że problem wymaga dłuższej pracy, monitorowania postępów lub etapowego wprowadzania zmian.',
-      'Forma terapii jest dobierana po rozpoznaniu sytuacji. Dzięki temu opiekun nie kupuje w ciemno „pakietu”, tylko adekwatną ścieżkę pomocy.',
+      'Pojawia się wtedy, gdy po konsultacji widać potrzebę dłuższej pracy i monitorowania postępów.',
+      'Plan terapii ustalam indywidualnie, żeby tempo i forma były adekwatne do przypadku.',
     ],
     bestFor: [
       'gdy problem jest utrwalony albo złożony',
@@ -187,12 +191,12 @@ export const OFFERS: Offer[] = [
       'ciągłość opieki i prowadzenia procesu',
       'większą spójność działań opiekuna, specjalisty i w razie potrzeby lekarza weterynarii',
     ],
-    primaryCtaLabel: 'Zapytaj o terapię',
+    primaryCtaLabel: 'Napisz w sprawie terapii',
     primaryHref: '/kontakt?service=indywidualna-terapia-behawioralna',
     secondaryCtaLabel: 'Umów pierwszy krok',
     secondaryHref: '/book',
-    imageSrc: '/branding/specialist-krzysztof-vet.jpg',
-    imageAlt: 'Krzysztof Regulski podczas spokojnej pracy z kotem jako ilustracja prowadzonej terapii behawioralnej',
+    imageSrc: THERAPY_PROCESS_PHOTO.src,
+    imageAlt: THERAPY_PROCESS_PHOTO.alt,
   },
   {
     slug: 'pobyty-socjalizacyjno-terapeutyczne',
@@ -201,13 +205,11 @@ export const OFFERS: Offer[] = [
     eyebrow: 'Wyróżnik marki',
     kind: 'inquiry',
     priceLabel: null,
-    cardSummary:
-      'Jedna z kluczowych form pracy w marce. Pobyty są organizowane po kwalifikacji i służą wtedy, gdy taka forma naprawdę wspiera proces socjalizacji lub terapii.',
-    heroSummary:
-      'Pobyt nie jest przechowaniem ani „produktem hotelowym”. To element pracy prowadzonej wtedy, gdy sytuacja zwierzęcia uzasadnia taką organizację wsparcia.',
+    cardSummary: 'Dalsza forma pracy po kwalifikacji, gdy pobyt realnie wspiera socjalizację, regulację lub terapię.',
+    heroSummary: 'Pobyt nie jest przechowaniem. To element procesu, gdy naprawdę pomaga.',
     descriptions: [
-      'Pobyty socjalizacyjno-terapeutyczne są ważnym filarem marki i wyraźnym wyróżnikiem oferty. Kwalifikacja pozwala ustalić, czy ta ścieżka ma realny sens dla konkretnego psa, a w przyszłości także dla kolejnych obszarów pracy.',
-      'To rozwiązanie dla przypadków, w których sama konsultacja nie wystarcza i potrzebna jest bardziej zorganizowana forma prowadzenia procesu.',
+      'Kwalifikacja pozwala ocenić, czy pobyt ma sens dla konkretnego psa i wspiera cały proces.',
+      'To rozwiązanie dla sytuacji, w których sama konsultacja nie wystarcza i potrzeba bardziej zorganizowanego wsparcia.',
     ],
     bestFor: [
       'gdy potrzebna jest intensywniejsza organizacja pracy lub socjalizacji',
@@ -219,28 +221,27 @@ export const OFFERS: Offer[] = [
       'plan organizacyjny pobytu i kolejnych kroków',
       'spójną ścieżkę między konsultacją, terapią a dalszą opieką',
     ],
-    primaryCtaLabel: 'Zapytaj o pobyt',
+    primaryCtaLabel: 'Napisz w sprawie pobytu',
     primaryHref: '/kontakt?service=pobyty-socjalizacyjno-terapeutyczne',
-    secondaryCtaLabel: 'Przeczytaj o całym systemie pracy',
+    secondaryCtaLabel: 'Zobacz wszystkie formy pracy',
     secondaryHref: '/oferta',
-    imageSrc: '/branding/case-dog-home.jpg',
-    imageAlt: 'Pies odpoczywający w spokojnym otoczeniu jako ilustracja pobytów socjalizacyjno-terapeutycznych',
+    imageSrc: STAYS_PHOTO.src,
+    imageAlt: STAYS_PHOTO.alt,
     note: 'Kwalifikacja do pobytu odbywa się po rozmowie i ocenie sytuacji.',
   },
   {
     slug: 'poradniki-pdf',
+    contactServiceSlugs: ['poradniki-pdf', 'poradnik-pdf', 'pdf', 'poradniki'],
     title: 'Poradniki PDF',
     shortTitle: 'PDF',
     eyebrow: 'Materiały wspierające',
     kind: 'resource',
     priceLabel: null,
-    cardSummary:
-      'Praktyczne materiały dla opiekunów psów i kotów, którzy chcą zacząć od konkretnego planu działania albo potrzebują uzupełnienia po konsultacji.',
-    heroSummary:
-      'Poradniki PDF nie zastępują diagnozy ani terapii, ale mogą być dobrym pierwszym materiałem porządkującym temat lub spokojnym uzupełnieniem po konsultacji.',
+    cardSummary: 'Praktyczne materiały dla opiekunów psów i kotów: na start albo po konsultacji.',
+    heroSummary: 'PDF pomaga uporządkować temat i zrobić pierwszy krok, ale nie zastępuje diagnozy ani terapii.',
     descriptions: [
-      'Sekcja PDF jest częścią lejka marki. Daje miejsce dla osób, które nie są jeszcze gotowe na konsultację albo po pierwszej rozmowie potrzebują materiału uporządkowanego pod konkretny temat.',
-      'To realny element ścieżki pomocy, a nie dodatek dekoracyjny. Tematy obejmują zarówno psy, jak i koty.',
+      'To katalog materiałów dla opiekunów, którzy chcą zacząć od jednego konkretnego tematu albo dobrać pakiet.',
+      'Każdy poradnik jasno pokazuje, czy to dobry pierwszy krok, uzupełnienie po konsultacji czy temat do dalszej rozmowy.',
     ],
     bestFor: [
       'gdy chcesz zacząć od uporządkowanego materiału w jednym temacie',
@@ -250,92 +251,82 @@ export const OFFERS: Offer[] = [
     outcomes: [
       'czytelny plan pierwszych działań w konkretnym problemie',
       'materiał wspierający rozmowę lub pracę domową',
-      'subtelne przejście do konsultacji, jeśli temat okaże się szerszy',
+      'jasny wybór między poradnikiem, pakietem a konsultacją, jeśli temat okaże się szerszy',
     ],
-    primaryCtaLabel: 'Zobacz tematy PDF',
-    primaryHref: '/oferta/poradniki-pdf',
-    secondaryCtaLabel: 'Skontaktuj się w sprawie PDF',
-    secondaryHref: '/kontakt?service=poradniki-pdf',
-    imageSrc: '/branding/topic-cards/cat-in-arms.jpg',
-    imageAlt: 'Kot na rękach opiekunki jako ilustracja materiałów edukacyjnych dla opiekunów zwierząt',
+    primaryCtaLabel: 'Napisz w sprawie poradnika lub pakietu',
+    primaryHref: buildPdfInquiryHref(),
+    detailCtaLabel: 'Zobacz listę PDF',
+    detailHref: '/oferta/poradniki-pdf',
+    secondaryCtaLabel: 'Zobacz listę poradników PDF',
+    secondaryHref: '/oferta/poradniki-pdf',
+    imageSrc: CAT_HOME_PHOTO.src,
+    imageAlt: CAT_HOME_PHOTO.alt,
   },
 ]
 
 export const HOME_HELP_AREAS = [
   {
-    title: 'Problemy psów w codziennym życiu',
-    description:
-      'Reaktywność na spacerze, trudne zostawanie samemu, pobudzenie, szczenięcy chaos, zachowania obronne i trudności w wyciszeniu.',
+    title: 'Problemy psów',
+    description: 'Reaktywność, zostawanie samemu, pobudzenie, szczenięcy chaos i trudne spacery.',
   },
   {
-    title: 'Problemy kotów jako pełnoprawny obszar pracy',
-    description:
-      'Problemy kuwetowe, stres, wycofanie, konfliktowość, relacje między kotami oraz trudne zachowania przy dotyku lub pielęgnacji.',
+    title: 'Problemy kotów',
+    description: 'Problemy kuwetowe, stres, wycofanie, konflikty między kotami i trudny dotyk.',
   },
   {
-    title: 'Sytuacje wymagające szerszego rozpoznania',
-    description:
-      'Przypadki, w których objaw nie wyjaśnia wszystkiego i trzeba połączyć zachowanie, środowisko domowe oraz tło weterynaryjne.',
+    title: 'Szersze rozpoznanie',
+    description: 'Sprawy, w których trzeba połączyć zachowanie, warunki domowe i tło weterynaryjne.',
   },
   {
-    title: 'Dalsza praca i ciągłość opieki',
-    description:
-      'Od pierwszej konsultacji po terapię indywidualną, pobyty socjalizacyjno-terapeutyczne i materiały wspierające pracę opiekuna.',
+    title: 'Dalsza praca',
+    description: 'Od pierwszej konsultacji po terapię, pobyty i materiały do pracy domowej.',
   },
 ] as const
 
 export const HOME_PROCESS_STEPS = [
   {
     step: '01',
-    title: 'Zaczynamy od właściwego progu wejścia',
-    description:
-      'Możesz wejść małym krokiem: przez 15 minut, konsultację 30 min albo pełniejszą konsultację online, zależnie od sytuacji.',
+    title: 'Dobry próg wejścia',
+    description: 'Możesz zacząć od 15 min, 30 min albo pełniejszej konsultacji online.',
   },
   {
     step: '02',
-    title: 'Rozpoznaję, czego naprawdę wymaga przypadek',
-    description:
-      'Nie chodzi o sprzedaż przypadkowej porady. Najpierw trzeba ustalić, czy wystarczy pierwszy plan, czy temat wymaga dalszej pracy.',
+    title: 'Rozpoznaję, czego wymaga sprawa',
+    description: 'Najpierw ustalamy, czy wystarczy pierwszy plan, czy potrzeba dalszej pracy.',
   },
   {
     step: '03',
-    title: 'Dobieramy dalszą ścieżkę pomocy',
-    description:
-      'Jeśli potrzeba więcej niż jednej rozmowy, przechodzimy do konsultacji pogłębionej, terapii, wizyty domowej albo pobytu.',
+    title: 'Dobieramy dalszy krok',
+    description: 'Jeśli potrzeba więcej niż jednej rozmowy, przechodzimy do konsultacji pogłębionej, terapii, wizyty albo pobytu.',
   },
   {
     step: '04',
-    title: 'Prowadzę proces spokojnie i odpowiedzialnie',
-    description:
-      'W uzasadnionych przypadkach pracuję także we współpracy z lekarzem weterynarii, aby nie rozdzielać zachowania od zdrowia i dobrostanu zwierzęcia.',
+    title: 'Spokojny i odpowiedzialny proces',
+    description: 'W uzasadnionych przypadkach uwzględniam też tło medyczne i współpracę z lekarzem weterynarii.',
   },
 ] as const
 
 export const TRUST_SIGNAL_ITEMS = [
   {
     title: 'COAPE i kwalifikacje',
-    description:
-      'COAPE pokazuję jako ważny sygnał wiarygodności, ale nie jako tani slogan. Najpierw ma być widoczna jakość pracy i sposób prowadzenia sprawy.',
+    description: 'COAPE pokazuję jako sygnał jakości pracy, nie cały przekaz marki.',
   },
   {
     title: 'Współpraca z lekarzem weterynarii',
-    description:
-      'Jeśli przypadek tego wymaga, terapia jest prowadzona z uwzględnieniem tła medycznego i we współpracy z lekarzem weterynarii.',
+    description: 'Jeśli przypadek tego wymaga, terapia uwzględnia tło medyczne i współpracę z lekarzem weterynarii.',
   },
   {
     title: 'Psychofarmakologia tylko jako wsparcie procesu',
-    description:
-      'W uzasadnionych przypadkach farmakoterapia może wspierać terapię, ale nie zastępuje pracy behawioralnej ani nie jest rozwiązaniem sama w sobie.',
+    description: 'W uzasadnionych przypadkach farmakoterapia może wspierać terapię, ale jej nie zastępuje.',
   },
   {
     title: 'Jasne zasady i spokojny ton',
-    description:
-      'Bez obiecywania cudów, bez agresywnego marketingu i bez tonu taniego infoproduktu. Klient ma wiedzieć, czego się spodziewać.',
+    description: 'Bez obiecywania cudów i bez agresywnego marketingu. Ma być jasno, czego się spodziewać.',
   },
 ] as const
 
 export const CAT_SUPPORT_AREAS = [
-  'problemy kuwetowe i house soiling',
+  'problemy kuwetowe i załatwianie się poza kuwetą',
   'napięcie, stres i wycofanie',
   'konflikty między kotami w domu',
   'trudności w codziennym funkcjonowaniu domowym',
@@ -431,7 +422,7 @@ export const PDF_TOPICS: PdfTopic[] = [
 export const HOME_FAQ = [
   {
     q: 'Czy nadal mogę zacząć od krótkiej konsultacji 15 min?',
-    a: 'Tak. Szybka konsultacja 15 min zostaje w systemie jako pierwszy krok o niskim progu wejścia. Różnica polega na tym, że nie jest już jedyną osią marki, tylko częścią szerszego systemu pracy.',
+    a: 'Tak. Szybka konsultacja 15 min nadal jest pierwszym krokiem o niskim progu wejścia. To część szerszego systemu pracy, nie jedyna oś strony.',
   },
   {
     q: 'Czy pracujesz także z kotami?',
@@ -439,22 +430,41 @@ export const HOME_FAQ = [
   },
   {
     q: 'Skąd mam wiedzieć, którą formę współpracy wybrać?',
-    a: 'Najbezpieczniej zacząć od progu, który jest adekwatny do Twojej sytuacji i gotowości. Jeśli po pierwszym etapie okaże się, że temat wymaga więcej, wskażę kolejną ścieżkę zamiast zostawiać Cię z przypadkową poradą.',
+    a: 'Najbezpieczniej zacząć od progu adekwatnego do sytuacji i gotowości. Jeśli po pierwszym etapie okaże się, że temat wymaga więcej, wskażę kolejny krok zamiast zostawiać Cię z przypadkową poradą.',
   },
   {
     q: 'Czy każda sprawa kończy się terapią albo pobytem?',
-    a: 'Nie. Część spraw wymaga tylko dobrego rozpoznania i pierwszego planu działania. Dalsza terapia, konsultacja domowa albo pobyt pojawiają się dopiero wtedy, gdy mają realny sens dla przypadku.',
+    a: 'Nie. Część spraw wymaga tylko dobrego rozpoznania i pierwszego planu. Dalsza terapia, konsultacja domowa albo pobyt pojawiają się dopiero wtedy, gdy mają realny sens.',
   },
   {
     q: 'Jak wygląda kwestia farmakoterapii?',
-    a: 'Jeśli sytuacja tego wymaga, pracuję we współpracy z lekarzem weterynarii. Farmakoterapia może wspierać proces, ale nie zastępuje terapii behawioralnej ani nie jest rozwiązaniem sama w sobie.',
+    a: 'Jeśli sytuacja tego wymaga, pracuję we współpracy z lekarzem weterynarii. Farmakoterapia może wspierać proces, ale nie zastępuje terapii behawioralnej.',
   },
   {
     q: 'Czy ceny są jawne?',
-    a: 'Publicznie pokazuję ceny dla ścieżek startowych i konsultacji online: szybka konsultacja 15 min, konsultacja 30 min oraz konsultacja behawioralna online. Wizyty domowe, terapia indywidualna i pobyty są ustalane po rozpoznaniu sytuacji.',
+    a: 'Publicznie pokazuję ceny dla ścieżek startowych i konsultacji online: 15 min, 30 min oraz konsultacji behawioralnej online. Wizyty domowe, terapia i pobyty ustalam po rozpoznaniu sytuacji.',
   },
 ] as const
 
 export function getOfferBySlug(slug: string) {
   return OFFERS.find((offer) => offer.slug === slug) ?? null
+}
+
+export function getOfferDetailHref(offer: Pick<Offer, 'slug' | 'detailHref'>) {
+  return offer.detailHref ?? `/oferta/${offer.slug}`
+}
+
+export function getOfferDetailCtaLabel(offer: Pick<Offer, 'detailCtaLabel'>) {
+  return offer.detailCtaLabel ?? 'Zobacz szczegóły'
+}
+
+export function getOfferByServiceSlug(serviceSlug: string) {
+  const normalizedServiceSlug = serviceSlug.trim().toLowerCase()
+
+  return (
+    OFFERS.find((offer) => {
+      const aliases = [offer.slug, ...(offer.contactServiceSlugs ?? [])].map((value) => value.trim().toLowerCase())
+      return aliases.includes(normalizedServiceSlug)
+    }) ?? null
+  )
 }

@@ -1,7 +1,8 @@
+import React from 'react'
 import type { Metadata } from 'next'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
-import { SPECIALIST_CREDENTIALS, SPECIALIST_NAME, getContactDetails } from '@/lib/site'
+import { SPECIALIST_CREDENTIALS, SPECIALIST_NAME, buildMailtoHref, getContactDetails } from '@/lib/site'
 import { buildLegalMetadata } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
@@ -14,6 +15,9 @@ export const metadata: Metadata = buildLegalMetadata(
 
 export default function TermsPage() {
   const contact = getContactDetails()
+  const contactMailtoHref = contact.email
+    ? buildMailtoHref(contact.email, 'Rezerwacja i regulamin - Regulski | Terapia behawioralna')
+    : null
 
   return (
     <main className="page-wrap">
@@ -41,7 +45,7 @@ export default function TermsPage() {
             <div className="list-card">
               <strong>Przełożenie terminu i anulacja</strong>
               <span>
-                Po skutecznym opłaceniu rezerwacji klient ma 1 minutę na samodzielne anulowanie zakupu przyciskiem dostępnym na ekranie potwierdzenia. W tym czasie termin wraca do kalendarza, a płatność jest cofana zgodnie z aktywnym trybem płatności. Jeśli wiesz wcześniej, że nie możesz pojawić się na rozmowie po upływie tej minuty, skontaktuj się przed rozpoczęciem terminu. Zmiana terminu zależy od dostępności innych slotów.
+                Po skutecznym opłaceniu rezerwacji klient ma 24 godziny na bezpłatną rezygnację. Przy płatności online można zrobić to samodzielnie z ekranu potwierdzenia, a przy wpłacie manualnej zmiana terminu lub rezygnacja odbywa się przez kontakt. Jeśli chcesz przełożyć konsultację, napisz w tym samym 24-godzinnym oknie. Zmiana terminu zależy od dostępności innych slotów.
               </span>
             </div>
 
@@ -55,14 +59,14 @@ export default function TermsPage() {
             <div className="list-card">
               <strong>Zwrot i reklamacja</strong>
               <span>
-                Po upływie pierwszej minuty od zakupu nadal możesz złożyć reklamację albo wniosek o zwrot, jeśli konsultacja nie spełni swojej roli jako pierwszy krok do uporządkowania problemu. Każda sprawa jest rozpatrywana indywidualnie na podstawie przebiegu usługi i zgłoszenia przesłanego przez kanał kontaktowy.
+                Po upływie 24 godzin od zakupu nadal możesz złożyć reklamację albo wniosek o zwrot, jeśli konsultacja nie spełni swojej roli jako pierwszy krok do uporządkowania problemu. Każda sprawa jest rozpatrywana indywidualnie na podstawie przebiegu usługi i zgłoszenia przesłanego przez kanał kontaktowy.
               </span>
             </div>
 
             <div className="list-card">
               <strong>Materiały przed rozmową</strong>
               <span>
-                MP4, linki i notatki są opcjonalne. Służą wyłącznie lepszemu przygotowaniu konsultacji i nie są wymagane do przejścia przez flow rezerwacji.
+                MP4, linki i notatki są opcjonalne. Służą wyłącznie lepszemu przygotowaniu konsultacji i nie są wymagane do przejścia przez rezerwację.
               </span>
             </div>
 
@@ -76,9 +80,17 @@ export default function TermsPage() {
             <div className="list-card">
               <strong>Kontakt</strong>
               <span>
-                {contact.email ? `E-mail: ${contact.email}. ` : ''}
-                {contact.phoneDisplay ? `Telefon: ${contact.phoneDisplay}. ` : ''}
-                W sprawach rezerwacji, płatności, reklamacji i przełożenia terminu możesz też skorzystać z publicznego profilu Facebook podanego w stopce.
+                {contact.email && contactMailtoHref ? (
+                  <>
+                    E-mail: <a href={contactMailtoHref}>{contact.email}</a>.{' '}
+                  </>
+                ) : null}
+                {contact.phoneDisplay && contact.phoneHref ? (
+                  <>
+                    Telefon: <a href={`tel:${contact.phoneHref}`}>{contact.phoneDisplay}</a>.{' '}
+                  </>
+                ) : null}
+                W sprawach rezerwacji, płatności, reklamacji i przełożenia terminu kontakt odbywa się przez te dane kontaktowe. Publiczny profil specjalisty w CAPBT podany w stopce służy wyłącznie weryfikacji kwalifikacji.
               </span>
             </div>
           </div>

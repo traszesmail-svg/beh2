@@ -1,0 +1,70 @@
+{
+  "title": "Pobyty socjalizacyjno-terapeutyczne | Regulski",
+  "url": "http://127.0.0.1:3331/oferta/pobyty-socjalizacyjno-terapeutyczne",
+  "h1": "Pobyty socjalizacyjno-terapeutyczne",
+  "text": "Psy i koty COAPE / CAPBT Spokojny pierwszy krok Dalsza ścieżka pracy, jeśli potrzeba KONSULTACJE DLA PSÓW I KOTÓW, TERAPIA PROBLEMÓW W ZACHOWANIU ORAZ POBYTY SOCJALIZACYJNO-TERAPEUTYCZNE Regulski | Terapia behawioralna Forma kontaktu ma ułatwiać otrzymanie pomocy, a nie ją spłycać. Oferta Koty Pobyty Kontakt Umów konsultację WYRÓŻNIK MARKI Pobyty socjalizacyjno-terapeutyczne Pobyt nie jest przechowaniem ani „produktem hotelowym”. To element pracy planowany wtedy, gdy sytuacja zwierzęcia naprawdę uzasadnia taką organizację wsparcia. Zakres ustalany indywidualnie Ta forma pracy jest dobierana po rozpoznaniu sytuacji i nie ma jednej publicznej ceny dla każdego przypadku. Kwalifikacja pozwala ustalić, czy pobyt ma realny sens dla konkretnego psa i czy ta forma będzie wzmacniać cały proces, a nie tylko zastępować pojedynczą konsultację. To rozwiązanie dla przypadków, w których sama konsultacja nie wystarcza i potrzebna jest bardziej zorganizowana forma prowadzenia procesu. Ważna uwaga Kwalifikacja do pobytu odbywa się po rozmowie i ocenie sytuacji. Napisz w sprawie pobytu Zobacz wszystkie formy pracy DLA KOGO Kiedy ta ścieżka ma najwięcej sensu gdy potrzebna jest intensywniejsza organizacja pracy lub socjalizacji To dobry sygnał, że właśnie ta forma może być właściwym następnym krokiem. gdy sytuacja wymaga dalszego prowadzenia po rozpoznaniu konsultacyjnym To dobry sygnał, że właśnie ta forma może być właściwym następnym krokiem. gdy opiekun potrzebuje bezpiecznej, jasno opisanej ścieżki dalszego wsparcia To dobry sygnał, że właśnie ta forma może być właściwym następnym krokiem. REZULTAT Co ma dać ten etap pracy ustalenie, czy pobyt jest właściwą formą pomocy Efektem ma być większy porządek, lepsze rozpoznanie i adekwatna decyzja o dalszych krokach. plan organizacyjny pobytu i kolejnych kroków Efektem ma być większy porządek, lepsze rozpoznanie i adekwatna decyzja o dalszych krokach. spójną ścieżkę między konsultacją, terapią a dalszą opieką Efektem ma być większy porządek, lepsze rozpoznanie i adekwatna decyzja o dalszych krokach. DALSZY KROK Nie jesteś pewien, która ścieżka ma sens? Napisz do mnie zamiast zgadywać. Możesz przejść do kontaktu albo wrócić do przeglądu całej oferty. Najważniejsze jest dobranie pomocy do sytuacji, a nie odwrotnie. Napisz i dobierz formę współpracy Wróć do form współpracy MARKA I KONTAKT Regulski | Terapia behawioralna Konsultacje dla psów i kotów, terapia problemów w zachowaniu oraz pobyty socjalizacyjno-terapeutyczne. Krzysztof Regulski, behawiorysta COAPE / CAPBT, technik weterynarii, dogoterapeuta, dietetyk. KONTAKT E-MAIL coapebehawiorysta@gmail.com TELEFON 512 992 026 KONTAKT Napisz i dobierz pierwszy krok SKRÓTY Formy współpracy Terapia kotów Pobyty Umów konsultację 15 min Polityka prywatności Regulamin ZAUFANIE COAPE / CAPBT jako potwierdzenie kwalifikacji. Zobacz publiczny profil specjalisty w CAPBT",
+  "headings": [
+    {
+      "tag": "h1",
+      "text": "Pobyty socjalizacyjno-terapeutyczne"
+    },
+    {
+      "tag": "h2",
+      "text": "Kiedy ta ścieżka ma najwięcej sensu"
+    },
+    {
+      "tag": "h2",
+      "text": "Co ma dać ten etap pracy"
+    },
+    {
+      "tag": "h2",
+      "text": "Nie jesteś pewien, która ścieżka ma sens? Napisz do mnie zamiast zgadywać."
+    },
+    {
+      "tag": "h2",
+      "text": "Regulski | Terapia behawioralna"
+    }
+  ],
+  "ctas": [
+    "Konsultacje dla psów i kotów, terapia problemów w zachowaniu oraz pobyty socjalizacyjno-terapeutyczneRegulski | Terapia behawioralna",
+    "Oferta",
+    "Koty",
+    "Pobyty",
+    "Kontakt",
+    "Umów konsultację",
+    "Napisz w sprawie pobytu",
+    "Zobacz wszystkie formy pracy",
+    "Napisz i dobierz formę współpracy",
+    "Wróć do form współpracy",
+    "E-mailcoapebehawiorysta@gmail.com",
+    "Telefon512 992 026",
+    "KontaktNapisz i dobierz pierwszy krok",
+    "Formy współpracy",
+    "Terapia kotów",
+    "Pobyty",
+    "Umów konsultację 15 min",
+    "Polityka prywatności",
+    "Regulamin",
+    "Zobacz publiczny profil specjalisty w CAPBT"
+  ],
+  "images": [
+    {
+      "src": "http://127.0.0.1:3331/_next/image?url=%2Fbranding%2Fcase-dog-rest.jpg&w=640&q=75",
+      "alt": "Spokojny pies odpoczywający w domowym otoczeniu jako ilustracja pobytów socjalizacyjno-terapeutycznych",
+      "width": 423,
+      "height": 806,
+      "naturalWidth": 604,
+      "naturalHeight": 453,
+      "objectFit": "cover"
+    },
+    {
+      "src": "http://127.0.0.1:3331/_next/image?url=%2Fbranding%2Fcoape-polska.png&w=640&q=75",
+      "alt": "Logo COAPE Polska",
+      "width": 150,
+      "height": 35,
+      "naturalWidth": 442,
+      "naturalHeight": 104,
+      "objectFit": "fill"
+    }
+  ]
+}

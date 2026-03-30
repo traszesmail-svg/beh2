@@ -1,12 +1,7 @@
 import type { Metadata } from 'next'
-import { SITE_NAME, SITE_SHORT_NAME, SITE_TAGLINE, SPECIALIST_NAME } from '@/lib/site'
+import { SITE_NAME, SITE_OG_IMAGE, SITE_SHORT_NAME, SITE_TAGLINE, SPECIALIST_NAME } from '@/lib/site'
 
-const DEFAULT_OG_IMAGE = {
-  url: '/images/hero-main.png',
-  width: 1200,
-  height: 1778,
-  alt: 'Krzysztof Regulski na portretowym zdjęciu do marki Regulski Terapia behawioralna',
-} as const
+const DEFAULT_OG_IMAGE = SITE_OG_IMAGE
 
 type MarketingMetadataInput = {
   title: string

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1240" height="1754" viewBox="0 0 1240 1754" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1240" height="1754" fill="#EEF6F4"/>
+  <rect x="0" y="0" width="1240" height="540" fill="#355E56"/>
+  <rect x="72" y="108" width="1096" height="1.5" fill="#EEF6F4" fill-opacity="0.4"/>
+  <circle cx="1020" cy="210" r="260" fill="#56847A" fill-opacity="0.18"/>
+  <circle cx="230" cy="1540" r="310" fill="#88B5AA" fill-opacity="0.11"/>
+  <rect x="72" y="1220" width="1096" height="366" rx="36" fill="white"/>
+  <text x="72" y="182" fill="#EEF6F4" font-family="Arial" font-size="34" letter-spacing="3">REGULSKI | TERAPIA BEHAWIORALNA</text>
+  <text x="72" y="320" fill="#EEF6F4" font-family="Arial" font-size="86" font-weight="700">Kot: dotyk i pielęgnacja</text>
+  <text x="72" y="425" fill="#EEF6F4" font-family="Georgia" font-size="34">Pierwszy plan przy obronie, napięciu i trudnych procedurach codziennych</text>
+  <text x="72" y="1298" fill="#182522" font-family="Arial" font-size="26" letter-spacing="2">DLA KOGO</text>
+  <text x="72" y="1360" fill="#182522" font-family="Georgia" font-size="34">Opiekunowie kotów, które źle znoszą chwytanie, podnoszenie, czesanie albo inne proste procedury.</text>
+  <text x="72" y="1480" fill="#182522" font-family="Arial" font-size="26" letter-spacing="2">OBIETNICA</text>
+  <text x="72" y="1542" fill="#182522" font-family="Georgia" font-size="34">Pomaga odróżnić niechęć do konkretnego dotyku od szerszego stresu albo bólu i ustawić bezpieczniejszy kontakt.</text>
+  <rect x="72" y="1650" width="220" height="40" rx="20" fill="#88B5AA"/>
+  <text x="104" y="1677" fill="#EEF6F4" font-family="Arial" font-size="24" font-weight="700">SZYBKI PORADNIK</text>
+</svg>
