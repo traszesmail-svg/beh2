@@ -78,7 +78,7 @@ export default function PdfBundleDetailPage({ params }: PdfBundleDetailPageProps
 
             <div className="stack-gap top-gap">
               <div className="list-card tree-backed-card">
-                <strong>Dla kogo</strong>
+                <strong>Na jaki temat</strong>
                 <span>{bundle.audience}</span>
               </div>
               <div className="list-card tree-backed-card">
@@ -86,10 +86,9 @@ export default function PdfBundleDetailPage({ params }: PdfBundleDetailPageProps
                 <span>{getPdfCategoryLabel(bundle.category)}</span>
               </div>
               <div className="list-card tree-backed-card">
-                <strong>Co daje pakiet</strong>
+                <strong>Po co</strong>
                 <span>
-                  Zamiast pojedynczego PDF-u dostajesz spójną ścieżkę przez {bundle.guides.length} materiały dobrane do
-                  jednego problemu lub etapu współpracy.
+                  Zamiast jednego PDF-u dostajesz {bundle.guides.length} materiały do jednego tematu.
                 </span>
               </div>
             </div>
@@ -106,7 +105,7 @@ export default function PdfBundleDetailPage({ params }: PdfBundleDetailPageProps
 
           <div className="panel section-panel">
             <div className="section-eyebrow">Co wchodzi w skład</div>
-            <h2>Zakres pakietu</h2>
+            <h2>Co jest w pakiecie</h2>
 
             <div className="top-gap">
               <PdfGuideCoverStack guides={bundle.guides} title={bundle.title} className="pdf-detail-stack" />
@@ -123,7 +122,7 @@ export default function PdfBundleDetailPage({ params }: PdfBundleDetailPageProps
               </div>
               <div className="stat-card tree-backed-card pdf-stat-card">
                 <strong>{bundle.consult.length}</strong>
-                <span>ścieżki konsultacyjne, do których pakiet naturalnie prowadzi</span>
+                <span>formy konsultacji, które ten pakiet najczęściej wspiera</span>
               </div>
             </div>
 
@@ -142,8 +141,7 @@ export default function PdfBundleDetailPage({ params }: PdfBundleDetailPageProps
           <div className="section-eyebrow">Poradniki w pakiecie</div>
           <h2>Każdy materiał możesz też obejrzeć osobno</h2>
           <p className="hero-text">
-            Pakiet daje szybszą ścieżkę dla jednego obszaru problemowego, ale każda karta poradnika nadal pokazuje dokładniej,
-            jaki fragment pracy porządkuje.
+            Pakiet porządkuje jeden temat, ale każdą kartę możesz też sprawdzić osobno.
           </p>
 
           <div className="offer-grid top-gap">
@@ -159,11 +157,10 @@ export default function PdfBundleDetailPage({ params }: PdfBundleDetailPageProps
         </section>
 
         <section className="panel cta-panel compact-sales-cta">
-          <div className="section-eyebrow">Dalszy krok</div>
-          <h2>Jeśli wolisz najpierw dobrać pakiet z człowiekiem, przejdź przez kontakt.</h2>
+          <div className="section-eyebrow">Jeśli nie wiesz</div>
+          <h2>Najpierw napisz.</h2>
           <p className="hero-text">
-            To bezpieczniejszy ruch niż przypadkowe kupowanie materiału nie z tego etapu. W odpowiedzi dopasuję, czy lepszy
-            będzie ten pakiet, pojedynczy PDF czy od razu konsultacja.
+            W odpowiedzi dopasuję, czy lepszy będzie ten pakiet, pojedynczy poradnik czy konsultacja.
           </p>
           <div className="hero-actions top-gap">
             <Link href={buildPdfInquiryHref({ bundleSlug: bundle.slug })} prefetch={false} className="button button-primary big-button">

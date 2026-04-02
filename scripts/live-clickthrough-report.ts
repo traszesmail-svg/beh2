@@ -1,4 +1,4 @@
-import { access, mkdir, writeFile } from 'node:fs/promises'
+﻿import { access, mkdir, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { loadEnvConfig } from '@next/env'
 import { chromium, type BrowserContext, type Locator, type Page } from 'playwright-core'
@@ -105,7 +105,7 @@ async function resolveBrowserExecutablePath() {
     } catch {}
   }
 
-  throw new Error('Nie znaleziono lokalnej przeglądarki Chromium (Chrome lub Edge) do live-clickthrough-report.')
+  throw new Error('Nie znaleziono lokalnej przeglÄ…darki Chromium (Chrome lub Edge) do live-clickthrough-report.')
 }
 
 function pushIssue(issues: Issue[], issue: Issue, seen: Set<string>) {
@@ -222,7 +222,7 @@ async function gotoAndWaitForHeading(page: Page, url: string, heading: RegExp) {
 }
 
 async function clickAndWaitForUrl(page: Page, locator: Locator, urlPattern: RegExp) {
-  await Promise.all([page.waitForURL(urlPattern, { timeout: 20000 }), locator.click()])
+  await Promise.all([page.waitForURL(urlPattern, { timeout: 20000, waitUntil: 'domcontentloaded' }), locator.click()])
 }
 
 async function readHref(locator: Locator) {
@@ -233,6 +233,56 @@ async function readHref(locator: Locator) {
   }
 
   return href
+}
+
+async function waitForVisible(locator: Locator, timeout: number) {
+  try {
+    await locator.waitFor({ timeout })
+    return true
+  } catch {
+    return false
+  }
+}
+
+async function rejectManualPaymentWithRetry(page: Page, bookingId: string, bookingEmail: string) {
+  const deadline = Date.now() + 90000
+  let lastError = ''
+
+  while (Date.now() < deadline) {
+    await page.waitForLoadState('domcontentloaded', { timeout: 15000 }).catch(() => {})
+    const bookingRow = page.locator('.booking-row', { hasText: bookingEmail }).first()
+    await bookingRow.waitFor({ timeout: 15000 })
+
+    const rejectButton = bookingRow.getByRole('button', { name: /OdrzuĂ„â€ˇ wpÄąâ€šatĂ„â„˘/i })
+    if (await waitForVisible(rejectButton, 4000)) {
+      try {
+        await rejectButton.scrollIntoViewIfNeeded()
+        const responsePromise = page.waitForResponse(
+          (response) =>
+            response.url().includes(`/api/admin/bookings/${bookingId}/manual-payment`) &&
+            response.request().method() === 'POST',
+          { timeout: 20000 },
+        )
+        await rejectButton.click({ force: true })
+        const response = await responsePromise
+
+        if (response.ok()) {
+          return
+        }
+
+        lastError = `Admin reject POST zwrÄ‚Ĺ‚ciÄąâ€š ${response.status()}.`
+      } catch (error) {
+        lastError = error instanceof Error ? error.message : String(error)
+      }
+    } else {
+      lastError = 'Reject button nie byÄąâ€š jeszcze widoczny w wierszu bookingu.'
+    }
+
+    await page.reload({ waitUntil: 'domcontentloaded' }).catch(() => {})
+    await page.waitForTimeout(1500)
+  }
+
+  throw new Error(`Admin reject nie doszedÄąâ€š do skutku na czas.${lastError ? ` Last issue: ${lastError}` : ''}`)
 }
 
 type DeepServiceRoute = {
@@ -261,14 +311,14 @@ function buildReportMarkdown({
   const failed = results.filter((result) => result.status === 'failed').length
   const overall = failed === 0 ? 'PASS' : 'FAIL'
   const pendingStepPassed = results.some(
-    (result) => result.name === 'Booking live: zgłoszenie manual payment -> pending' && result.status === 'passed',
+    (result) => result.name === 'Booking live: zgĹ‚oszenie manual payment -> pending' && result.status === 'passed',
   )
   const rejectStepPassed = results.some(
-    (result) => result.name === 'Admin live: odrzucenie testowej wpłaty QA' && result.status === 'passed',
+    (result) => result.name === 'Admin live: odrzucenie testowej wpĹ‚aty QA' && result.status === 'passed',
   )
   const findings =
     failed === 0
-      ? ['Brak krytycznych błędów w przeklikanej ścieżce live przy zachowanym bezpiecznym wariancie bez fałszywego potwierdzania płatności.']
+      ? ['Brak krytycznych bĹ‚Ä™dĂłw w przeklikanej Ĺ›cieĹĽce live przy zachowanym bezpiecznym wariancie bez faĹ‚szywego potwierdzania pĹ‚atnoĹ›ci.']
       : results.filter((result) => result.status === 'failed').map((result) => `${result.name}: ${result.notes.join(' | ')}`)
 
   const lines = [
@@ -276,13 +326,13 @@ function buildReportMarkdown({
     '',
     `- Data: ${timestamp}`,
     `- URL: ${baseUrl}`,
-    `- Wynik ogólny: ${overall}`,
+    `- Wynik ogĂłlny: ${overall}`,
     `- Kroki zaliczone: ${passed}/${results.length}`,
     `- Liczba zebranych issue z runtime: ${issues.length}`,
     `- Booking QA identity: ${qaIdentity.ownerName} / ${qaIdentity.email}`,
-    `- Bezpiecznik płatności: ${paymentModeNote}`,
+    `- Bezpiecznik pĹ‚atnoĹ›ci: ${paymentModeNote}`,
     '',
-    '## Najważniejsze ustalenia',
+    '## NajwaĹĽniejsze ustalenia',
     ...findings.map((finding) => `- ${finding}`),
     '',
     '## Kroki',
@@ -305,7 +355,7 @@ function buildReportMarkdown({
   ]
 
   if (issues.length === 0) {
-    lines.push('- Brak zebranych błędów konsoli, pageerrorów i same-origin request failures/HTTP >= 400.')
+    lines.push('- Brak zebranych bĹ‚Ä™dĂłw konsoli, pageerrorĂłw i same-origin request failures/HTTP >= 400.')
   } else {
     lines.push(
       ...issues.map((issue) => {
@@ -315,13 +365,13 @@ function buildReportMarkdown({
     )
   }
 
-  lines.push('', '## Uwagi', '- `mailto:` i `tel:` zostały zweryfikowane po href-ach; nie otwierałem zewnętrznego klienta poczty ani dialera.')
+  lines.push('', '## Uwagi', '- `mailto:` zostaĹ‚o zweryfikowane po href-ie; nie otwieraĹ‚em zewnÄ™trznego klienta poczty.')
   if (pendingStepPassed && rejectStepPassed) {
-    lines.push('- Ścieżka rezerwacji na produkcji została doprowadzona do `pending manual review`, a następnie odrzucona w adminie, żeby nie zostawić sztucznie opłaconej rezerwacji.')
+    lines.push('- ĹšcieĹĽka rezerwacji na produkcji zostaĹ‚a doprowadzona do `pending manual review`, a nastÄ™pnie odrzucona w adminie, ĹĽeby nie zostawiÄ‡ sztucznie opĹ‚aconej rezerwacji.')
   } else {
-    lines.push('- Ścieżka rezerwacji na produkcji nie została doprowadzona do końca bezpiecznej sekwencji manual review/reject w tym przebiegu.')
+    lines.push('- ĹšcieĹĽka rezerwacji na produkcji nie zostaĹ‚a doprowadzona do koĹ„ca bezpiecznej sekwencji manual review/reject w tym przebiegu.')
   }
-  lines.push('- Nie wykonywałem realnej płatności PayU ani fałszywego potwierdzenia wpłaty na live.')
+  lines.push('- Nie wykonywaĹ‚em realnej pĹ‚atnoĹ›ci PayU ani faĹ‚szywego potwierdzenia wpĹ‚aty na live.')
   lines.push('')
 
   return lines.join('\n')
@@ -334,7 +384,7 @@ async function main() {
   const baseUrl = resolveBaseUrl()
   const adminSecret = process.env.ADMIN_ACCESS_SECRET?.trim()
   if (!adminSecret) {
-    throw new Error('Brak ADMIN_ACCESS_SECRET w środowisku lokalnym.')
+    throw new Error('Brak ADMIN_ACCESS_SECRET w Ĺ›rodowisku lokalnym.')
   }
 
   const timestamp = getWarsawTimestamp()
@@ -375,7 +425,6 @@ async function main() {
     let payuVisible = false
     let manualVisible = false
     let mailtoHref: string | null = null
-    let telHref: string | null = null
     const deepServiceRoutes: DeepServiceRoute[] = [
       {
         detailPath: '/oferta/szybka-konsultacja-15-min',
@@ -413,58 +462,69 @@ async function main() {
       },
     ]
 
-    await runStep(results, 'Home hero + CTA do oferty', publicPage, async (step) => {
-      await gotoAndWaitForHeading(publicPage, `${baseUrl}/`, /Regulski\s+\|\s+Terapia behawioralna/i)
-      await clickAndWaitForUrl(publicPage, publicPage.getByRole('link', { name: /Zobacz formy pracy/i }), /\/oferta$/)
-      await publicPage.getByRole('heading', { level: 1, name: /Dobierz formę pomocy do sytuacji/i }).waitFor({ timeout: 20000 })
-      step.notes.push('CTA hero "Zobacz formy pracy" prowadzi poprawnie do /oferta.')
+    await runStep(results, 'Home hero + CTA do wyboru pierwszego kroku', publicPage, async (step) => {
+      await gotoAndWaitForHeading(publicPage, `${baseUrl}/`, /Masz problem z psem lub kotem\? (Dobierz|Wybierz) pierwszy krok(?: w 1 minutÄ™)?/i)
+      await Promise.all([
+        publicPage.waitForURL(/#pierwszy-krok$/, { timeout: 20000 }),
+        publicPage.locator('a[data-home-cta="match"]').first().click(),
+      ])
+      await publicPage.locator('section#pierwszy-krok').waitFor({ timeout: 20000 })
+      step.notes.push('CTA hero "Dobierz pierwszy krok" przewija poprawnie do sekcji wyboru.')
     })
 
-    await runStep(results, 'Home hero + CTA do bookingu', publicPage, async (step) => {
-      await gotoAndWaitForHeading(publicPage, `${baseUrl}/`, /Regulski\s+\|\s+Terapia behawioralna/i)
-      await clickAndWaitForUrl(publicPage, publicPage.getByRole('link', { name: /^Umów konsultację$/i }).first(), /\/book$/)
-      await publicPage.getByRole('heading', { level: 1, name: /Wybierz temat szybkiej konsultacji 15 min/i }).waitFor({ timeout: 20000 })
-      step.notes.push('CTA hero "Umów konsultację" otwiera osobną ścieżkę rezerwacji.')
+    await runStep(results, 'Home szybki wybĂłr psa -> booking', publicPage, async (step) => {
+      await gotoAndWaitForHeading(publicPage, `${baseUrl}/`, /Masz problem z psem lub kotem\? (Dobierz|Wybierz) pierwszy krok(?: w 1 minutÄ™)?/i)
+      await clickAndWaitForUrl(publicPage, publicPage.locator('a[data-home-quick-choice="dog"]').first(), /\/book$/)
+      await publicPage.getByRole('heading', { level: 1, name: /Wybierz temat na 15 min/i }).waitFor({ timeout: 20000 })
+      step.notes.push('Szybki wybĂłr "Mam psa" otwiera Ĺ›cieĹĽkÄ™ rezerwacji.')
     })
 
     await runStep(results, 'Header: Oferta', publicPage, async (step) => {
-      await gotoAndWaitForHeading(publicPage, `${baseUrl}/`, /Regulski\s+\|\s+Terapia behawioralna/i)
+      await gotoAndWaitForHeading(publicPage, `${baseUrl}/`, /Masz problem z psem lub kotem\? (Dobierz|Wybierz) pierwszy krok(?: w 1 minutÄ™)?/i)
       await clickAndWaitForUrl(publicPage, publicPage.locator('a.header-link[href="/oferta"]').first(), /\/oferta$/)
-      await publicPage.getByRole('heading', { level: 1, name: /Dobierz formę pomocy do sytuacji/i }).waitFor({ timeout: 20000 })
-      step.notes.push('Link w headerze działa.')
+      await publicPage.getByRole('heading', { level: 1, name: /Wybierz(?:, od czego zaczÄ…Ä‡| start dla swojej sytuacji)/i }).waitFor({ timeout: 20000 })
+      step.notes.push('Link w headerze dziaĹ‚a.')
     })
 
-    await runStep(results, 'Header: Koty', publicPage, async (step) => {
-      await gotoAndWaitForHeading(publicPage, `${baseUrl}/`, /Regulski\s+\|\s+Terapia behawioralna/i)
-      await clickAndWaitForUrl(publicPage, publicPage.locator('a.header-link[href="/koty"]').first(), /\/koty$/)
-      await publicPage.getByRole('heading', { level: 1, name: /Terapia kotów wymaga osobnego spojrzenia/i }).waitFor({ timeout: 20000 })
-      step.notes.push('Link w headerze działa.')
+    await runStep(results, 'Header: Koty ukryte', publicPage, async (step) => {
+      await gotoAndWaitForHeading(publicPage, `${baseUrl}/`, /Masz problem z psem lub kotem\? (Dobierz|Wybierz) pierwszy krok(?: w 1 minutÄ™)?/i)
+      const catHeaderLinkCount = await publicPage.locator('a.header-link[href="/koty"]').count()
+      if (catHeaderLinkCount > 0) {
+        throw new Error('Link "Koty" nadal jest widoczny w gĹ‚Ăłwnym pasku.')
+      }
+      step.notes.push('Link "Koty" nie jest juĹĽ pokazywany w gĹ‚Ăłwnym pasku.')
     })
 
-    await runStep(results, 'Header: Pobyty', publicPage, async (step) => {
-      await gotoAndWaitForHeading(publicPage, `${baseUrl}/`, /Regulski\s+\|\s+Terapia behawioralna/i)
-      await clickAndWaitForUrl(
-        publicPage,
-        publicPage.locator('a.header-link[href="/oferta/pobyty-socjalizacyjno-terapeutyczne"]').first(),
-        /\/oferta\/pobyty-socjalizacyjno-terapeutyczne$/,
-      )
-      await publicPage.getByRole('heading', { level: 1, name: /Pobyty socjalizacyjno-terapeutyczne/i }).waitFor({ timeout: 20000 })
-      step.notes.push('Link w headerze działa.')
+    await runStep(results, 'Header: Pobyty ukryte', publicPage, async (step) => {
+      await gotoAndWaitForHeading(publicPage, `${baseUrl}/`, /Masz problem z psem lub kotem\? (Dobierz|Wybierz) pierwszy krok(?: w 1 minutÄ™)?/i)
+      const staysHeaderLinkCount = await publicPage
+        .locator('a.header-link[href="/oferta/pobyty-socjalizacyjno-terapeutyczne"]')
+        .count()
+      if (staysHeaderLinkCount > 0) {
+        throw new Error('Link "Pobyty" nadal jest widoczny w gĹ‚Ăłwnym pasku.')
+      }
+      step.notes.push('Link "Pobyty" nie jest juĹĽ pokazywany w gĹ‚Ăłwnym pasku.')
     })
 
-    await runStep(results, 'Header: Kontakt + href mailto/tel', publicPage, async (step) => {
-      await gotoAndWaitForHeading(publicPage, `${baseUrl}/`, /Regulski\s+\|\s+Terapia behawioralna/i)
+    await runStep(results, 'Header: Kontakt + href mailto', publicPage, async (step) => {
+      await gotoAndWaitForHeading(publicPage, `${baseUrl}/`, /Masz problem z psem lub kotem\? (Dobierz|Wybierz) pierwszy krok(?: w 1 minutÄ™)?/i)
       await clickAndWaitForUrl(publicPage, publicPage.locator('a.header-link[href="/kontakt"]').first(), /\/kontakt$/)
       await publicPage
-        .getByRole('heading', { level: 1, name: /Opisz sytuację i dobierz pierwszy krok|Opisz swoją sytuację i dobierz formę współpracy/i })
+        .getByRole('heading', {
+          level: 1,
+          name: /Napisz albo umĂłw 15 min|Napisz i dobierz pierwszy krok|Opisz sytuacjÄ™ i dobierz pierwszy krok|Opisz swojÄ… sytuacjÄ™ i dobierz formÄ™ wspĂłĹ‚pracy/i,
+        })
         .waitFor({ timeout: 20000 })
       mailtoHref = await readHref(publicPage.locator('a[href^="mailto:"]'))
-      telHref = await readHref(publicPage.locator('a[href^="tel:"]'))
       step.notes.push(`mailto ok: ${mailtoHref}`)
-      step.notes.push(`tel ok: ${telHref}`)
+      const telLinkCount = await publicPage.locator('a[href^="tel:"]').count()
+      if (telLinkCount > 0) {
+        throw new Error('Publiczny link tel: nadal jest widoczny na /kontakt.')
+      }
+      step.notes.push('brak publicznego tel: ok')
     })
 
-    await runStep(results, 'Deep routes usług: bezpośrednie wejścia do detali i kontaktu', publicPage, async (step) => {
+    await runStep(results, 'Deep routes usĹ‚ug: bezpoĹ›rednie wejĹ›cia do detali i kontaktu', publicPage, async (step) => {
       for (const route of deepServiceRoutes) {
         await gotoAndWaitForHeading(publicPage, `${baseUrl}${route.detailPath}`, route.detailHeading)
         step.notes.push(`detail ok: ${route.detailPath}`)
@@ -477,7 +537,7 @@ async function main() {
     })
 
     await runStep(results, 'Oferta -> detal konsultacji 30 min -> kontakt', publicPage, async (step) => {
-      await gotoAndWaitForHeading(publicPage, `${baseUrl}/oferta`, /Dobierz formę pomocy do sytuacji/i)
+      await gotoAndWaitForHeading(publicPage, `${baseUrl}/oferta`, /Wybierz(?:, od czego zaczÄ…Ä‡| start dla swojej sytuacji)/i)
       await clickAndWaitForUrl(
         publicPage,
         publicPage.locator('a[href="/oferta/konsultacja-30-min"]').first(),
@@ -486,11 +546,11 @@ async function main() {
       await publicPage.getByRole('heading', { level: 1, name: /Konsultacja 30 min/i }).waitFor({ timeout: 20000 })
       await clickAndWaitForUrl(
         publicPage,
-        publicPage.getByRole('link', { name: /Zapytaj o konsultację 30 min|Napisz w sprawie konsultacji 30 min/i }).first(),
+        publicPage.getByRole('link', { name: /Zapytaj o konsultacjÄ™ 30 min|Napisz w sprawie konsultacji 30 min/i }).first(),
         /\/kontakt\?service=konsultacja-30-min$/,
       )
       await publicPage.getByRole('heading', { level: 1, name: /Zapytanie o: Konsultacja 30 min/i }).waitFor({ timeout: 20000 })
-      step.notes.push('Detail page i CTA do /kontakt działają poprawnie.')
+      step.notes.push('Detail page i CTA do /kontakt dziaĹ‚ajÄ… poprawnie.')
     })
 
     await runStep(results, 'PDF listing -> poradnik -> kontakt', publicPage, async (step) => {
@@ -501,7 +561,7 @@ async function main() {
       await clickAndWaitForUrl(publicPage, guideLink, /\/oferta\/poradniki-pdf\/(?!pakiety\/).+/)
       await publicPage.getByRole('heading', { level: 1 }).waitFor({ timeout: 20000 })
       const guideTitle = cleanText(await publicPage.getByRole('heading', { level: 1 }).innerText())
-      await clickAndWaitForUrl(publicPage, publicPage.getByRole('link', { name: /Napisz w sprawie tego poradnika|Napisz w sprawie zakupu i dostępu|Napisz w sprawie tego materiału|Napisz w sprawie dostępu po konsultacji|Zapytaj o/i }).first(), /\/kontakt\?service=poradniki-pdf&guide=/)
+      await clickAndWaitForUrl(publicPage, publicPage.getByRole('link', { name: /Napisz w sprawie tego poradnika|Napisz w sprawie zakupu i dostÄ™pu|Napisz w sprawie tego materiaĹ‚u|Napisz w sprawie dostÄ™pu po konsultacji|Zapytaj o/i }).first(), /\/kontakt\?service=poradniki-pdf&guide=/)
       await publicPage.getByRole('heading', { level: 1, name: /Zapytanie o: Poradniki PDF/i }).waitFor({ timeout: 20000 })
       step.notes.push(`Poradnik: ${guideTitle} (${guideHref})`)
     })
@@ -523,15 +583,15 @@ async function main() {
       step.notes.push(`Pakiet: ${bundleTitle} (${bundleHref})`)
     })
 
-    await runStep(results, 'Footer: polityka prywatności i regulamin', publicPage, async (step) => {
-      await gotoAndWaitForHeading(publicPage, `${baseUrl}/`, /Regulski\s+\|\s+Terapia behawioralna/i)
+    await runStep(results, 'Footer: polityka prywatnoĹ›ci i regulamin', publicPage, async (step) => {
+      await gotoAndWaitForHeading(publicPage, `${baseUrl}/`, /Masz problem z psem lub kotem\? (Dobierz|Wybierz) pierwszy krok(?: w 1 minutÄ™)?/i)
       await publicPage.locator('footer').scrollIntoViewIfNeeded()
       await clickAndWaitForUrl(publicPage, publicPage.locator('footer a[href="/polityka-prywatnosci"]').first(), /\/polityka-prywatnosci$/)
       await publicPage.getByRole('heading', { level: 1 }).waitFor({ timeout: 20000 })
       const privacyTitle = cleanText(await publicPage.getByRole('heading', { level: 1 }).innerText())
       const privacyBody = cleanText(await publicPage.locator('main').innerText())
       if (/Facebook/i.test(privacyBody)) {
-        throw new Error('Polityka prywatności nadal zawiera publiczne odniesienie do Facebooka.')
+        throw new Error('Polityka prywatnoĹ›ci nadal zawiera publiczne odniesienie do Facebooka.')
       }
       await publicPage.goto(`${baseUrl}/`, { waitUntil: 'domcontentloaded' })
       await publicPage.locator('footer').scrollIntoViewIfNeeded()
@@ -542,19 +602,19 @@ async function main() {
       if (/Facebook/i.test(termsBody)) {
         throw new Error('Regulamin nadal zawiera publiczne odniesienie do Facebooka.')
       }
-      step.notes.push(`Polityka prywatności: ${privacyTitle}`)
+      step.notes.push(`Polityka prywatnoĹ›ci: ${privacyTitle}`)
       step.notes.push(`Regulamin: ${termsTitle}`)
     })
 
-    await runStep(results, 'Booking live: wybór tematu i slotu', publicPage, async (step) => {
-      await gotoAndWaitForHeading(publicPage, `${baseUrl}/book`, /Wybierz temat szybkiej konsultacji 15 min/i)
+    await runStep(results, 'Booking live: wybĂłr tematu i slotu', publicPage, async (step) => {
+      await gotoAndWaitForHeading(publicPage, `${baseUrl}/book`, /Wybierz temat na 15 min/i)
       await clickAndWaitForUrl(publicPage, publicPage.locator('a.topic-card[data-problem="kot"]').first(), /\/slot\?problem=kot$/)
       await publicPage.getByRole('heading', { level: 1, name: /Wybierz termin szybkiej konsultacji: Kot/i }).waitFor({ timeout: 20000 })
       const firstSlot = publicPage.locator('a.slot-link').first()
       await firstSlot.waitFor({ timeout: 20000 })
       const slotLabel = cleanText(await firstSlot.innerText())
       await clickAndWaitForUrl(publicPage, firstSlot, /\/form\?problem=kot&slotId=/)
-      await publicPage.getByRole('button', { name: /Zablokuj termin i przejdź do płatności/i }).waitFor({ timeout: 20000 })
+      await publicPage.getByRole('button', { name: /Zablokuj termin i przejdĹş do pĹ‚atnoĹ›ci/i }).waitFor({ timeout: 20000 })
       step.notes.push(`Wybrany temat: kot`)
       step.notes.push(`Wybrany slot: ${slotLabel}`)
     })
@@ -562,21 +622,21 @@ async function main() {
     await runStep(results, 'Booking live: formularz -> payment', publicPage, async (step) => {
       await publicPage.getByPlaceholder('np. Anna').fill(qaIdentity.ownerName)
       await publicPage.locator('select').first().selectOption('Kot')
-      await publicPage.getByPlaceholder('np. 8 miesięcy lub 4 lata').fill('4 lata')
-      await publicPage.getByPlaceholder('np. od 3 tygodni').fill('od około dwóch tygodni')
+      await publicPage.getByPlaceholder('np. 8 miesiÄ™cy lub 4 lata').fill('4 lata')
+      await publicPage.getByPlaceholder('np. od 3 tygodni').fill('od okoĹ‚o dwĂłch tygodni')
       await publicPage
-        .getByPlaceholder('Napisz, co się dzieje, kiedy problem występuje i co jest dla Ciebie najtrudniejsze.')
-        .fill('Test QA live. Kot napina się przy gościach, długo nie wraca do równowagi i chcę sprawdzić pierwszy kierunek pracy.')
+        .getByPlaceholder('Napisz, co siÄ™ dzieje, kiedy problem wystÄ™puje i co jest dla Ciebie najtrudniejsze.')
+        .fill('Test QA live. Kot napina siÄ™ przy goĹ›ciach, dĹ‚ugo nie wraca do rĂłwnowagi i chcÄ™ sprawdziÄ‡ pierwszy kierunek pracy.')
       await publicPage.getByPlaceholder('np. 500 000 000').fill('500600700')
       await publicPage.getByPlaceholder('np. klient@email.pl').fill(qaIdentity.email)
-      const submitButton = publicPage.getByRole('button', { name: /Zablokuj termin i przejdź do płatności/i })
+      const submitButton = publicPage.getByRole('button', { name: /Zablokuj termin i przejdĹş do pĹ‚atnoĹ›ci/i })
       const bookingResponse = publicPage.waitForResponse(
         (response) => response.url().includes('/api/bookings') && response.request().method() === 'POST',
       )
       await submitButton.click()
       const response = await bookingResponse
       if (!response.ok()) {
-        throw new Error(`POST /api/bookings zwrócił ${response.status()}.`)
+        throw new Error(`POST /api/bookings zwrĂłciĹ‚ ${response.status()}.`)
       }
       await publicPage.waitForURL(/\/payment\?bookingId=/, { timeout: 20000 })
       const paymentUrl = new URL(publicPage.url())
@@ -587,16 +647,16 @@ async function main() {
         throw new Error('Brak bookingId lub access token w URL payment.')
       }
 
-      await publicPage.getByRole('heading', { level: 1, name: /Wybierz sposób płatności za szybki pierwszy krok/i }).waitFor({ timeout: 20000 })
+      await publicPage.getByRole('heading', { level: 1, name: /Wybierz sposĂłb pĹ‚atnoĹ›ci za szybki pierwszy krok/i }).waitFor({ timeout: 20000 })
       manualVisible =
-        (await publicPage.getByRole('button', { name: /BLIK na telefon|Wpłata manualna/i }).count()) > 0 ||
-        (await publicPage.getByText(/BLIK na telefon|BLIK \/ przelew|wpłata manualna/i).count()) > 0
-      payuVisible = (await publicPage.getByText(/PayU jako druga opcja|Zapłać online PayU/i).count()) > 0
+        (await publicPage.getByRole('button', { name: /Przelew tradycyjny|WpĹ‚ata manualna/i }).count()) > 0 ||
+        (await publicPage.getByText(/Przelew tradycyjny|przelew z rÄ™cznym potwierdzeniem|wpĹ‚ata manualna/i).count()) > 0
+      payuVisible = (await publicPage.getByText(/PayU jako druga opcja|ZapĹ‚aÄ‡ online PayU/i).count()) > 0
       step.notes.push(`manualVisible=${manualVisible}`)
       step.notes.push(`payuVisible=${payuVisible}`)
     })
 
-    await runStep(results, 'Booking live: pokój zablokowany przed paid', publicPage, async (step) => {
+    await runStep(results, 'Booking live: pokĂłj zablokowany przed paid', publicPage, async (step) => {
       if (!bookingId || !accessToken) {
         throw new Error('Brak bookingId/accessToken do testu pokoju.')
       }
@@ -606,27 +666,48 @@ async function main() {
         await roomPage.goto(`${baseUrl}/call/${bookingId}?access=${encodeURIComponent(accessToken)}`, {
           waitUntil: 'domcontentloaded',
         })
-        await roomPage.getByText(/Dostęp do pokoju rozmowy odblokowuje się dopiero po statusie paid/i).waitFor({ timeout: 20000 })
+        await roomPage.getByText(/DostÄ™p do pokoju rozmowy odblokowuje siÄ™ dopiero po statusie paid/i).waitFor({ timeout: 20000 })
       } finally {
         await roomPage.close()
       }
 
-      step.notes.push('Pokój nie wpuszcza przed statusem paid.')
+      step.notes.push('PokĂłj nie wpuszcza przed statusem paid.')
     })
 
-    await runStep(results, 'Booking live: zgłoszenie manual payment -> pending', publicPage, async (step) => {
-      await publicPage.getByRole('button', { name: /BLIK na telefon|Wpłata manualna/i }).first().click()
-      const manualSubmitButton = publicPage.getByRole('button', { name: /Zapłaciłem, czekam na potwierdzenie/i })
+    await runStep(results, 'Booking live: zgĹ‚oszenie manual payment -> pending', publicPage, async (step) => {
+      
+      const manualSubmitButton = publicPage.getByRole('button', { name: /ZapĹ‚aciĹ‚em, czekam na potwierdzenie/i })
+      if (!(await waitForVisible(manualSubmitButton, 2000))) {
+        const manualMethodButton = publicPage
+          .getByRole('button', { name: /BLIK na telefon \/ przelew|BLIK na telefon|Przelew tradycyjny|Wpłata manualna/i })
+          .first()
+        await manualMethodButton.waitFor({ timeout: 20000 })
+        await manualMethodButton.click({ force: true })
+      }
       await manualSubmitButton.waitFor({ timeout: 20000 })
+      if (!(await manualSubmitButton.isEnabled())) {
+        throw new Error('Manual payment jest widoczna na ekranie, ale akcja zgĹ‚oszenia wpĹ‚aty pozostaje nieaktywna.')
+      }
       await manualSubmitButton.scrollIntoViewIfNeeded()
+      const manualSubmitResponsePromise = publicPage.waitForResponse(
+        (response) => response.url().includes('/api/payments/manual') && response.request().method() === 'POST',
+        { timeout: 60000 },
+      )
       await manualSubmitButton.click({ force: true })
-      await publicPage.waitForURL(/\/confirmation\?bookingId=.*manual=reported/, { timeout: 20000 })
-      await publicPage.getByRole('heading', { level: 1, name: /Wpłata czeka na potwierdzenie do 60 min/i }).waitFor({ timeout: 20000 })
+      const manualSubmitResponse = await manualSubmitResponsePromise
+      if (!manualSubmitResponse.ok()) {
+        throw new Error(`POST /api/payments/manual zwrĂłciĹ‚ ${manualSubmitResponse.status()}.`)
+      }
+      await publicPage.waitForURL(/\/confirmation\?bookingId=.*manual=reported/, {
+        timeout: 60000,
+        waitUntil: 'domcontentloaded',
+      })
+      await publicPage.getByRole('heading', { level: 1, name: /WpĹ‚ata czeka na potwierdzenie do 60 min/i }).waitFor({ timeout: 20000 })
       confirmationUrl = publicPage.url()
-      step.notes.push('Rezerwacja przeszła do pending manual review.')
+      step.notes.push('Rezerwacja przeszĹ‚a do pending manual review.')
     })
 
-    await runStep(results, 'Admin live: odrzucenie testowej wpłaty QA', publicPage, async (step) => {
+    await runStep(results, 'Admin live: odrzucenie testowej wpĹ‚aty QA', publicPage, async (step) => {
       if (!bookingId) {
         throw new Error('Brak bookingId do akcji admina.')
       }
@@ -634,40 +715,41 @@ async function main() {
       const adminPage = await createPage(adminContext, 'admin', baseUrl, issues, seenIssues)
       try {
         await adminPage.goto(`${baseUrl}/admin`, { waitUntil: 'domcontentloaded' })
-        await adminPage.getByRole('heading', { level: 1, name: /Rezerwacje, płatności i terminy/i }).waitFor({ timeout: 20000 })
+        await adminPage.getByRole('heading', { level: 1, name: /Rezerwacje, pĹ‚atnoĹ›ci i terminy/i }).waitFor({ timeout: 20000 })
         const bookingRow = adminPage.locator('.booking-row', { hasText: qaIdentity.email }).first()
-        await bookingRow.waitFor({ timeout: 20000 })
-        const rejectButton = bookingRow.getByRole('button', { name: /Odrzuć wpłatę/i })
-        await rejectButton.waitFor({ timeout: 20000 })
+        await bookingRow.waitFor({ timeout: 60000 })
+        const rejectButton = bookingRow.getByRole('button', { name: /OdrzuÄ‡ wpĹ‚atÄ™/i })
+        await rejectButton.waitFor({ timeout: 60000 })
         await rejectButton.scrollIntoViewIfNeeded()
         const rejectResponsePromise = adminPage.waitForResponse(
           (response) =>
             response.url().includes(`/api/admin/bookings/${bookingId}/manual-payment`) &&
             response.request().method() === 'POST',
+          { timeout: 60000 },
         )
         await rejectButton.click({ force: true })
         const rejectResponse = await rejectResponsePromise
         if (!rejectResponse.ok()) {
-          throw new Error(`Admin reject POST zwrócił ${rejectResponse.status()}.`)
+          throw new Error(`Admin reject POST zwrĂłciĹ‚ ${rejectResponse.status()}.`)
         }
         await adminPage.waitForLoadState('domcontentloaded', { timeout: 20000 }).catch(() => {})
-        await adminPage.getByRole('heading', { level: 1, name: /Rezerwacje, płatności i terminy/i }).waitFor({ timeout: 20000 })
+        await adminPage.getByRole('heading', { level: 1, name: /Rezerwacje, pĹ‚atnoĹ›ci i terminy/i }).waitFor({ timeout: 20000 })
         await adminPage.locator('.booking-row', { hasText: qaIdentity.email }).first().waitFor({ timeout: 20000 })
       } finally {
         await adminPage.close()
       }
 
-      step.notes.push('Testowa wpłata została odrzucona zamiast potwierdzenia, żeby nie zostawić sztucznie opłaconej rezerwacji.')
+      step.notes.push('Testowa wpĹ‚ata zostaĹ‚a odrzucona zamiast potwierdzenia, ĹĽeby nie zostawiÄ‡ sztucznie opĹ‚aconej rezerwacji.')
     })
 
     await runStep(results, 'Confirmation live: stan po odrzuceniu', publicPage, async (step) => {
       if (!confirmationUrl) {
-        throw new Error('Brak URL confirmation do odświeżenia.')
+        throw new Error('Brak URL confirmation do odĹ›wieĹĽenia.')
       }
 
       await publicPage.goto(confirmationUrl, { waitUntil: 'domcontentloaded' })
-      const rejectedHeading = publicPage.getByRole('heading', { level: 1, name: /Nie znaleziono wpłaty do tej rezerwacji/i })
-      const waitingHeading = publicPage.getByRole('heading', { level: 1, name: /Wpłata czeka na potwierdzenie do 60 min/i })
+      const rejectedHeading = publicPage.getByRole('heading', { level: 1, name: /Nie znaleziono wpĹ‚aty do tej rezerwacji/i })
+      const waitingHeading = publicPage.getByRole('heading', { level: 1, name: /WpĹ‚ata czeka na potwierdzenie do 60 min/i })
       let rejectedVisible = false
 
       for (let attempt = 0; attempt < 5; attempt += 1) {
@@ -691,10 +773,10 @@ async function main() {
       }
 
       if (!rejectedVisible) {
-        throw new Error('Confirmation nie pokazał stanu odrzuconej wpłaty po adminowym reject.')
+        throw new Error('Confirmation nie pokazaĹ‚ stanu odrzuconej wpĹ‚aty po adminowym reject.')
       }
       await publicPage.getByRole('link', { name: /Wybierz nowy termin/i }).waitFor({ timeout: 20000 })
-      step.notes.push('Publiczny ekran poprawnie pokazuje stan odrzuconej wpłaty.')
+      step.notes.push('Publiczny ekran poprawnie pokazuje stan odrzuconej wpĹ‚aty.')
     })
 
     const report = buildReportMarkdown({
@@ -703,7 +785,7 @@ async function main() {
       results,
       issues,
       qaIdentity,
-      paymentModeNote: 'bez realnej płatności PayU i bez fałszywego approve na produkcji; test manual zakończony reject w adminie',
+      paymentModeNote: 'bez realnej pĹ‚atnoĹ›ci PayU i bez faĹ‚szywego approve na produkcji; test manual zakoĹ„czony reject w adminie',
     })
 
     await writeFile(archivePath, report, 'utf8')
@@ -720,7 +802,6 @@ async function main() {
           payuVisible,
           manualVisible,
           mailtoHref,
-          telHref,
           bookingId,
         },
         null,

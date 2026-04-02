@@ -66,7 +66,7 @@ export default async function SlotPage({
           ) : groupedAvailability.length === 0 ? (
             <div className="stack-gap top-gap">
               <div className="empty-box">
-                W tej chwili nie ma wolnych terminów dla tego tematu. Sprawdź ponownie za jakiś czas albo wróć do wyboru tematu i wybierz inną ścieżkę wejścia.
+                W tej chwili nie ma wolnych terminów dla tego tematu. Sprawdź ponownie za jakiś czas albo wróć do wyboru tematu i wybierz inny temat.
               </div>
               <div className="hero-actions">
                 <Link href={buildSlotHref(problem)} prefetch={false} className="button button-primary big-button" aria-label="Odśwież listę terminów dla wybranego tematu">
@@ -82,7 +82,7 @@ export default async function SlotPage({
               {groupedAvailability.map((group) => (
                 <div key={group.date} className="list-card tree-backed-card">
                   <strong>{group.label}</strong>
-                  <span>Wybierasz 15-minutową rozmowę głosową online jako pierwszy etap pracy.</span>
+                  <span>Wybierasz 15-minutową rozmowę głosową online. To prosty start.</span>
                   <div className="time-grid top-gap-small">
                     {group.slots.map((slot) => (
                       <Link

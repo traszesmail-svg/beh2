@@ -243,7 +243,7 @@ export function getPdfCategoryLabel(category: PdfGuideCategory): string {
       return 'Kot'
     case 'mixed':
     default:
-      return 'Pies i kot'
+      return 'Start'
   }
 }
 

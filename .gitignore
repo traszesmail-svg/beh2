@@ -13,7 +13,10 @@ stripe-*.png
 *.log
 *.zip
 *.tmp
+.tmp-*
 .tmp-*/
+*.tsbuildinfo
+qa-artifacts/
 
 .DS_Store
 Thumbs.db

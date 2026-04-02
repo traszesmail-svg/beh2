@@ -40,7 +40,8 @@ export function PaymentActions({
 }: PaymentActionsProps) {
   const router = useRouter()
   const [error, setError] = useState('')
-  const [selectedMethod, setSelectedMethod] = useState<SelectedMethod>('manual')
+  const defaultSelectedMethod: SelectedMethod = manualAvailable || !payuAvailable ? 'manual' : 'payu'
+  const [selectedMethod, setSelectedMethod] = useState<SelectedMethod>(defaultSelectedMethod)
   const [loadingMethod, setLoadingMethod] = useState<SelectedMethod | null>(null)
   const manualPaymentCopy = getManualPaymentDisplayCopy({
     phoneDisplay: manualPhoneDisplay,
@@ -133,8 +134,12 @@ export function PaymentActions({
         <strong>Wybierz metodę płatności</strong>
         <span>
           {payuAvailable
-            ? 'Możesz zgłosić ręczną wpłatę z potwierdzeniem do 60 minut albo przejść do PayU, które potwierdzi płatność automatycznie.'
-            : 'Obecnie dostępna jest ręczna wpłata z potwierdzeniem do 60 minut. Gdy płatność online PayU wróci, pokażemy ją tutaj.'}
+            ? manualAvailable
+              ? 'Możesz wybrać przelew z potwierdzeniem do 60 minut albo przejść do PayU, które potwierdzi płatność automatycznie.'
+              : 'Ręczna wpłata jest chwilowo niedostępna. Możesz przejść do PayU, które potwierdzi płatność automatycznie.'
+            : manualAvailable
+              ? 'Obecnie dostępny jest przelew z potwierdzeniem do 60 minut. Gdy płatność online PayU wróci, pokażemy ją tutaj.'
+              : 'Płatność jest chwilowo niedostępna. Napisz wiadomość, a podpowiem dalszy krok.'}
         </span>
       </div>
 
@@ -142,18 +147,25 @@ export function PaymentActions({
         <button
           type="button"
           className={`payment-method-card tree-backed-card ${manualActive ? 'payment-method-card-active' : ''}`}
-          onClick={() => setSelectedMethod('manual')}
+          onClick={() => {
+            if (manualAvailable) {
+              setSelectedMethod('manual')
+            }
+          }}
+          disabled={!manualAvailable}
         >
           <div className="payment-method-card-copy">
             <strong>{manualPaymentCopy.selectionTitle}</strong>
             <span>
-              {payuAvailable
-                ? customerEmailAvailable
-                  ? 'Najprostsza opcja, jeśli chcesz potwierdzić wpłatę ręcznie. Po kliknięciu „Zapłaciłem” sprawdzimy przelew i potwierdzimy go do 60 minut. Wtedy wyślemy link do rozmowy.'
-                  : 'Najprostsza opcja, jeśli chcesz potwierdzić wpłatę ręcznie. Po kliknięciu „Zapłaciłem” sprawdzimy przelew i potwierdzimy go do 60 minut. Link do rozmowy i dalsze kroki będą od razu dostępne na stronie potwierdzenia.'
-                : customerEmailAvailable
-                  ? 'Aktualnie to dostępna metoda płatności. Po kliknięciu „Zapłaciłem” sprawdzimy przelew i potwierdzimy go do 60 minut. Wtedy wyślemy link do rozmowy.'
-                  : 'Aktualnie to dostępna metoda płatności. Po kliknięciu „Zapłaciłem” sprawdzimy przelew i potwierdzimy go do 60 minut. Link do rozmowy i dalsze kroki będą od razu dostępne na stronie potwierdzenia.'}
+              {manualAvailable
+                ? payuAvailable
+                  ? customerEmailAvailable
+                    ? 'Najprostsza opcja, jeśli chcesz potwierdzić wpłatę ręcznie. Po kliknięciu „Zapłaciłem” sprawdzimy przelew i potwierdzimy go do 60 minut. Wtedy wyślemy link do rozmowy.'
+                    : 'Najprostsza opcja, jeśli chcesz potwierdzić wpłatę ręcznie. Po kliknięciu „Zapłaciłem” sprawdzimy przelew i potwierdzimy go do 60 minut. Link do rozmowy i dalsze kroki będą od razu dostępne na stronie potwierdzenia.'
+                  : customerEmailAvailable
+                    ? 'Aktualnie to dostępna metoda płatności. Po kliknięciu „Zapłaciłem” sprawdzimy przelew i potwierdzimy go do 60 minut. Wtedy wyślemy link do rozmowy.'
+                    : 'Aktualnie to dostępna metoda płatności. Po kliknięciu „Zapłaciłem” sprawdzimy przelew i potwierdzimy go do 60 minut. Link do rozmowy i dalsze kroki będą od razu dostępne na stronie potwierdzenia.'
+                : 'Ta opcja wróci, gdy będzie dostępny numer konta do przelewu. Do tego czasu wybierz PayU albo napisz wiadomość.'}
             </span>
           </div>
           <span className="payment-method-badge">

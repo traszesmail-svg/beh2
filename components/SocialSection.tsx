@@ -28,7 +28,7 @@ export function SocialSection() {
             </svg>
           </span>
           <strong>CAPBT</strong>
-          <span>Publiczny profil specjalisty do weryfikacji kwalifikacji i spokojnego przekazania strony dalej.</span>
+          <span>Publiczny profil specjalisty do sprawdzenia profilu zawodowego i spokojnego przekazania strony dalej.</span>
         </a>
       </div>
     </section>

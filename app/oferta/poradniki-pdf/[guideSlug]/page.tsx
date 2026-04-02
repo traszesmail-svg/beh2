@@ -114,7 +114,7 @@ export default function PdfGuideDetailPage({ params }: PdfGuideDetailPageProps) 
           </div>
 
           <div className="panel section-panel">
-            <div className="section-eyebrow">Zakres materiału</div>
+            <div className="section-eyebrow">W środku</div>
             <h2>Co znajdziesz w poradniku</h2>
 
             <PdfGuideCover guide={guide} className="pdf-detail-cover top-gap" priority />
@@ -150,7 +150,7 @@ export default function PdfGuideDetailPage({ params }: PdfGuideDetailPageProps) 
         <section className="two-col-section">
           <div className="panel section-panel">
             <div className="section-eyebrow">Fragment i kontekst</div>
-            <h2>Jak ten materiał pracuje z problemem</h2>
+            <h2>Jak to pomaga</h2>
             <p className="hero-text">{guide.description}</p>
 
             <div className="stack-gap top-gap">
@@ -163,12 +163,12 @@ export default function PdfGuideDetailPage({ params }: PdfGuideDetailPageProps) 
           </div>
 
           <div className="panel section-panel">
-            <div className="section-eyebrow">Dalszy krok</div>
+            <div className="section-eyebrow">Jeśli trzeba więcej</div>
             <h2>Jeśli temat okaże się szerszy niż jeden PDF</h2>
 
             <div className="stack-gap top-gap">
               <div className="list-card tree-backed-card">
-                <strong>Powiązana ścieżka pracy</strong>
+                <strong>Najbliższa forma pomocy</strong>
                 <span>{guide.relatedService}</span>
               </div>
               <div className="list-card tree-backed-card">
@@ -191,11 +191,10 @@ export default function PdfGuideDetailPage({ params }: PdfGuideDetailPageProps) 
         </section>
 
         <section className="panel cta-panel compact-sales-cta">
-          <div className="section-eyebrow">Dobór ścieżki</div>
-          <h2>Jeśli nie masz pewności, czy lepszy będzie PDF czy rozmowa, zacznij od kontaktu.</h2>
+          <div className="section-eyebrow">Jeśli nie wiesz</div>
+          <h2>Napisz.</h2>
           <p className="hero-text">
-            Ten temat możesz dobrać mailowo albo wejść od razu przez szybką konsultację, jeśli problem miesza kilka obszarów
-            i wymaga krótszego rozpoznania na żywo.
+            Jeśli problem miesza kilka tematów, szybciej zacząć od kontaktu albo 15 min.
           </p>
           <div className="hero-actions top-gap">
             <Link href={buildPdfInquiryHref({ guideSlug: guide.slug })} prefetch={false} className="button button-primary big-button">

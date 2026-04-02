@@ -4,12 +4,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
-import { type Offer, getOfferByServiceSlug, getOfferDetailCtaLabel, getOfferDetailHref, OFFERS } from '@/lib/offers'
+import { type Offer, getOfferByServiceSlug } from '@/lib/offers'
 import { getPdfAccessLabel, getPdfBundleBySlug, getPdfGuideBySlug, getPdfPricingBadge } from '@/lib/pdf-guides'
 import { buildMarketingMetadata } from '@/lib/seo'
 import {
   buildMailtoHref,
-  getContactDetails,
+  getPublicContactDetails,
   SPECIALIST_CREDENTIALS,
   SPECIALIST_NAME,
   SPECIALIST_TRUST_STATEMENT,
@@ -21,8 +21,7 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = buildMarketingMetadata({
   title: 'Kontakt',
   path: '/kontakt',
-  description:
-    'Kontakt do marki Regulski | Terapia behawioralna. Opisz sytuację psa lub kota i dobierz odpowiednią formę współpracy.',
+  description: 'Kontakt do marki Regulski | Terapia behawioralna. Opisz sytuację psa lub kota i wybierz dobry start.',
 })
 
 function readSearchParam(value: string | string[] | undefined): string | null {
@@ -31,18 +30,6 @@ function readSearchParam(value: string | string[] | undefined): string | null {
   }
 
   return value ?? null
-}
-
-function buildOfferMailtoHref(offer: Offer, email: string | null) {
-  if (!email) {
-    return offer.primaryHref
-  }
-
-  return buildMailtoHref(
-    email,
-    `Zapytanie - ${offer.title}`,
-    `Dzień dobry,\n\nopisuję krótko swoją sytuację:\n\n- gatunek:\n- problem:\n- od kiedy trwa:\n- interesująca mnie forma pracy: ${offer.title}\n\nNajwygodniejsza forma kontaktu zwrotnego:\n`,
-  )
 }
 
 type PdfInquirySelection = {
@@ -55,12 +42,6 @@ type PdfInquirySelection = {
 }
 
 type ContactIntent = 'general' | 'reschedule'
-const CONTACT_SHORTCUT_PRIORITY = [
-  'szybka-konsultacja-15-min',
-  'konsultacja-30-min',
-  'konsultacja-behawioralna-online',
-  'pobyty-socjalizacyjno-terapeutyczne',
-] as const
 
 function buildContactMailtoHref(
   email: string,
@@ -86,7 +67,7 @@ function buildContactMailtoHref(
           'piszę w sprawie zmiany terminu albo rezygnacji:',
           '',
           bookingId ? `- numer rezerwacji: ${bookingId}` : '- numer rezerwacji:',
-          `- forma pracy: ${offer?.title ?? 'Szybka konsultacja 15 min'}`,
+          `- wybrana usługa: ${offer?.title ?? 'Szybka konsultacja 15 min'}`,
           '- czy chodzi o zmianę terminu czy rezygnację:',
           '- preferowany nowy termin:',
           '- dodatkowe informacje:',
@@ -103,7 +84,7 @@ function buildContactMailtoHref(
           '- problem:',
           '- od kiedy trwa:',
           pdfInquiry ? `- interesujący mnie materiał PDF: ${pdfInquiry.title}` : '- interesujący mnie materiał PDF:',
-          `- interesująca mnie forma pracy: ${offer?.title ?? ''}`,
+          `- chcę zacząć od: ${offer?.title ?? ''}`,
           '',
           'Najwygodniejsza forma kontaktu zwrotnego:',
           '',
@@ -147,37 +128,30 @@ export default function ContactPage({
   const isResourceInquiry = selectedOffer?.kind === 'resource'
   const isRescheduleIntent = intentParam === 'reschedule'
   const contactIntent: ContactIntent = isRescheduleIntent ? 'reschedule' : 'general'
-  const shortcutCandidates = OFFERS.filter((offer) => offer.kind !== 'resource')
-  let featuredShortcutOffers = shortcutCandidates.filter((offer) => CONTACT_SHORTCUT_PRIORITY.includes(offer.slug as (typeof CONTACT_SHORTCUT_PRIORITY)[number]))
-  if (selectedOffer && selectedOffer.kind !== 'resource' && !featuredShortcutOffers.some((offer) => offer.slug === selectedOffer.slug)) {
-    featuredShortcutOffers = [...featuredShortcutOffers.slice(0, 3), selectedOffer]
-  }
-  const remainingShortcutCount = Math.max(0, shortcutCandidates.length - featuredShortcutOffers.length)
-  const contact = getContactDetails()
+  const contact = getPublicContactDetails()
   const mailtoHref = contact.email
     ? buildContactMailtoHref(contact.email, selectedOffer, selectedPdfInquiry, contactIntent, bookingId)
     : null
+  const pageHeading = isRescheduleIntent
+    ? 'Napisz w sprawie zmiany terminu lub rezygnacji'
+    : selectedOffer
+      ? `Zapytanie o: ${selectedOffer.title}`
+      : 'Napisz albo umów 15 min'
   const contactIntro = isRescheduleIntent
-    ? 'Jeśli chcesz zmienić termin albo zrezygnować z opłaconej konsultacji, napisz. Sprawdzę możliwe terminy i dalszy krok.'
+    ? 'Napisz, jeśli chcesz zmienić termin albo zrezygnować.'
     : isResourceInquiry
       ? selectedPdfInquiry
-        ? `Jeśli chcesz zapytać o materiał „${selectedPdfInquiry.title}”, napisz krótko o sytuacji. Odpowiem, czy to dobry start, czy lepiej od razu przejść do konsultacji.`
-        : 'Jeśli szukasz poradnika PDF albo pakietu, napisz krótko o sytuacji. Odpowiem, czy lepszy będzie materiał czy konsultacja.'
-      : 'Jeśli nie wiesz, od czego zacząć, napisz kilka zdań o sytuacji psa lub kota. Lepiej dobrać pierwszy krok niż zgadywać usługę.'
-  const whatToWriteCopy = isRescheduleIntent
-    ? `W wiadomości podaj numer rezerwacji${bookingId ? ` (${bookingId})` : ''}, informację, czy chodzi o zmianę terminu czy rezygnację, oraz preferowany nowy termin.`
+        ? `Napisz krótko o sytuacji i o materiale „${selectedPdfInquiry.title}”. Powiem, czy to dobry start.`
+        : 'Napisz krótko o sytuacji. Powiem, czy lepiej zacząć od poradnika czy rozmowy.'
+      : 'Opisz krótko sytuację psa albo kota. Wskażę start.'
+  const actionCardTitle = 'Co napisać'
+  const actionCardCopy = isRescheduleIntent
+    ? `Podaj numer rezerwacji${bookingId ? ` (${bookingId})` : ''}, czy chodzi o zmianę terminu czy rezygnację, i nowy termin, jeśli go masz.`
     : isResourceInquiry
       ? selectedPdfInquiry
-        ? `W wiadomości napisz o gatunku, głównym problemie, czasie trwania trudności i czego oczekujesz po materiale „${selectedPdfInquiry.title}”.`
-        : 'W wiadomości napisz o gatunku, głównym problemie, czasie trwania trudności i czy PDF ma być pierwszym krokiem czy wsparciem po konsultacji.'
-      : 'W wiadomości napisz o gatunku, głównym problemie, czasie trwania trudności i o tym, co jest dziś najtrudniejsze.'
-  const responseCopy = isRescheduleIntent
-    ? 'W odpowiedzi napiszę, czy zmiana terminu jest możliwa, jakie sloty są dostępne i co dalej.'
-    : isResourceInquiry
-      ? selectedPdfInquiry
-        ? `W odpowiedzi napiszę, czy „${selectedPdfInquiry.title}” ma sens na teraz, jak wygląda dostęp i czy lepiej przejść do rozmowy.`
-        : 'W odpowiedzi napiszę, jaki materiał ma największy sens na start i czy lepiej przejść do konsultacji.'
-      : 'W odpowiedzi zaproponuję najlepszy kolejny krok: konsultację startową, pogłębioną, terapię, wizytę albo pobyt.'
+        ? `Napisz gatunek, problem i czego szukasz w materiale „${selectedPdfInquiry.title}”.`
+        : 'Napisz gatunek, problem i czy wolisz poradnik czy rozmowę.'
+      : 'Napisz gatunek, problem i od kiedy to trwa.'
   const followupHref = selectedPdfInquiry?.routePath ?? (isResourceInquiry ? '/oferta/poradniki-pdf' : '/book')
   const followupLabel = selectedPdfInquiry
     ? selectedPdfInquiry.kind === 'bundle'
@@ -185,7 +159,19 @@ export default function ContactPage({
       : 'Wróć do poradnika PDF'
     : isResourceInquiry
       ? 'Przejdź do listy poradników PDF'
-      : 'Umów pierwszy krok'
+      : 'Umów 15 min'
+  const primaryAnalyticsLocation = isRescheduleIntent
+    ? 'contact-primary-reschedule'
+    : isResourceInquiry
+      ? 'contact-primary-resource'
+      : 'contact-primary-message'
+  const followupAnalyticsLocation = selectedPdfInquiry
+    ? selectedPdfInquiry.kind === 'bundle'
+      ? 'contact-followup-bundle'
+      : 'contact-followup-guide'
+    : isResourceInquiry
+      ? 'contact-followup-resource'
+      : 'contact-followup-book'
 
   return (
     <main className="page-wrap">
@@ -194,56 +180,40 @@ export default function ContactPage({
 
         <section className="two-col-section contact-layout">
           <div className="panel section-panel contact-side-panel">
-            <div className="section-eyebrow">Kontakt i dobór formy</div>
-            <h1>
-              {isRescheduleIntent
-                ? 'Napisz w sprawie zmiany terminu lub rezygnacji'
-                : selectedOffer
-                  ? `Zapytanie o: ${selectedOffer.title}`
-                  : 'Opisz sytuację i dobierz pierwszy krok'}
-            </h1>
+            <div className="section-eyebrow">Kontakt</div>
+            <h1>{pageHeading}</h1>
             <p className="hero-text">{contactIntro}</p>
 
-            {selectedOffer ? (
+            {selectedOffer || selectedPdfInquiry ? (
               <div className="list-card accent-outline tree-backed-card top-gap">
-                <strong>Wybrana forma</strong>
-                <span>{selectedOffer.heroSummary}</span>
+                <strong>Piszesz o</strong>
+                <span>{selectedPdfInquiry?.title ?? selectedOffer?.title}</span>
               </div>
             ) : null}
 
-            {selectedPdfInquiry ? (
-              <div className="list-card tree-backed-card top-gap">
-                <strong>{selectedPdfInquiry.kind === 'bundle' ? 'Wybrany pakiet PDF' : 'Wybrany poradnik PDF'}</strong>
-                <span>{selectedPdfInquiry.summary}</span>
-                <span>
-                  {selectedPdfInquiry.accessLabel}. {getPdfPricingBadge(selectedPdfInquiry.pricing)}
-                </span>
-              </div>
-            ) : null}
-
-            <div className="stack-gap top-gap">
-              <div className="list-card tree-backed-card">
-                <strong>Co warto napisać</strong>
-                <span>{whatToWriteCopy}</span>
-              </div>
-              <div className="list-card tree-backed-card">
-                <strong>Jak odpowiadam</strong>
-                <span>{responseCopy}</span>
-              </div>
+            <div className="list-card tree-backed-card top-gap">
+              <strong>{actionCardTitle}</strong>
+              <span>{actionCardCopy}</span>
             </div>
 
             <div className="hero-actions top-gap">
               {mailtoHref ? (
-                <a href={mailtoHref} className="button button-primary big-button">
-                  Wyślij e-mail
+                <a
+                  href={mailtoHref}
+                  className="button button-primary big-button"
+                  data-analytics-event="cta_click"
+                  data-analytics-location={primaryAnalyticsLocation}
+                >
+                  Napisz wiadomość
                 </a>
               ) : null}
-              {contact.phoneDisplay && contact.phoneHref ? (
-                <a href={`tel:${contact.phoneHref}`} className="button button-ghost big-button">
-                  Zadzwoń
-                </a>
-              ) : null}
-              <Link href={followupHref} prefetch={false} className="button button-ghost big-button">
+              <Link
+                href={followupHref}
+                prefetch={false}
+                className="button button-ghost big-button"
+                data-analytics-event="cta_click"
+                data-analytics-location={followupAnalyticsLocation}
+              >
                 {followupLabel}
               </Link>
             </div>
@@ -251,7 +221,7 @@ export default function ContactPage({
 
           <div className="panel section-panel contact-support-panel">
             <div className="section-eyebrow">Kto odpowiada</div>
-            <h2>Odpowiadam osobiście</h2>
+            <h2>Piszesz do mnie</h2>
 
             <div className="contact-visual-shell top-gap">
               <Image
@@ -270,36 +240,49 @@ export default function ContactPage({
               <span>{SPECIALIST_TRUST_STATEMENT}</span>
             </div>
 
-            <div className="section-eyebrow top-gap">Skróty do ścieżek</div>
-            <h2>Najczęstsze wejścia</h2>
+            <h2 className="top-gap">Wybierz</h2>
             <div className="contact-shortcut-grid top-gap">
-              {featuredShortcutOffers.map((offer) => (
-                <div key={offer.slug} className="list-card tree-backed-card contact-shortcut-card">
-                  <strong>{offer.title}</strong>
-                  <span>{offer.cardSummary}</span>
-                  <div className="offer-card-actions top-gap-small">
-                    <Link href={getOfferDetailHref(offer)} prefetch={false} className="button button-ghost">
-                      {getOfferDetailCtaLabel(offer)}
-                    </Link>
-                    <a href={buildOfferMailtoHref(offer, contact.email)} className="button button-primary">
-                      Napisz w sprawie tej usługi
-                    </a>
-                  </div>
+              <div className="list-card tree-backed-card contact-shortcut-card">
+                <strong>Umów 15 min</strong>
+                <span>Jeśli chcesz od razu wejść w termin.</span>
+                <div className="offer-card-actions top-gap-small">
+                  <Link
+                    href="/book"
+                    prefetch={false}
+                    className="button button-ghost"
+                    data-analytics-event="cta_click"
+                    data-analytics-location="contact-shortcut-book"
+                  >
+                    Umów 15 min
+                  </Link>
                 </div>
-              ))}
-            </div>
+              </div>
 
-            <div className="list-card accent-outline tree-backed-card top-gap contact-shortcut-summary">
-              <strong>Potrzebujesz innej formy pracy?</strong>
-              <span>
-                {remainingShortcutCount > 0
-                  ? `Pozostałe ${remainingShortcutCount} formy pracy są w pełnej ofercie. Jeśli nie chcesz wybierać samodzielnie, napisz od razu.`
-                  : 'Pełną ofertę znajdziesz niżej i w zakładce oferta. Jeśli nie chcesz wybierać samodzielnie, napisz od razu.'}
-              </span>
-              <div className="offer-card-actions top-gap-small">
-                <Link href="/oferta" prefetch={false} className="button button-ghost">
-                  Zobacz całą ofertę
-                </Link>
+              <div className="list-card tree-backed-card contact-shortcut-card">
+                <strong>Napisz wiadomość</strong>
+                <span>Jeśli temat jest pilny albo mieszany.</span>
+                <div className="offer-card-actions top-gap-small">
+                  {mailtoHref ? (
+                    <a
+                      href={mailtoHref}
+                      className="button button-primary"
+                      data-analytics-event="cta_click"
+                      data-analytics-location="contact-shortcut-message"
+                    >
+                      Napisz wiadomość
+                    </a>
+                  ) : (
+                    <Link
+                      href="/kontakt"
+                      prefetch={false}
+                      className="button button-primary"
+                      data-analytics-event="cta_click"
+                      data-analytics-location="contact-shortcut-message"
+                    >
+                      Napisz wiadomość
+                    </Link>
+                  )}
+                </div>
               </div>
             </div>
           </div>

@@ -7,12 +7,12 @@ import { BookingStageEyebrow } from '@/components/BookingStageEyebrow'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { buildSlotHref, readProblemTypeSearchParam } from '@/lib/booking-routing'
-import { PricingDisclosure } from '@/components/PricingDisclosure'
 import { problemOptions } from '@/lib/data'
+import { buildPublicPricingDisclosureMessage } from '@/lib/pricing'
 import { buildBookMetadata } from '@/lib/seo'
 import { listAvailability } from '@/lib/server/db'
 import { getDataModeStatus } from '@/lib/server/env'
-import { SPECIALIST_CREDENTIALS, SPECIALIST_NAME, SPECIALIST_PHOTO, TOPIC_VISUALS } from '@/lib/site'
+import { TOPIC_VISUALS } from '@/lib/site'
 import { ProblemType } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
@@ -99,6 +99,7 @@ export default async function BookPage({
   const dataMode = getDataModeStatus()
   const mainProblemOptions = problemOptions.filter((item) => item.id !== 'inne')
   const mixedProblemOption = problemOptions.find((item) => item.id === 'inne') ?? null
+  const pricingLabel = buildPublicPricingDisclosureMessage(null)
   let availabilityLabel = 'Terminy zobaczysz po wyborze tematu.'
 
   if (problem) {
@@ -110,8 +111,8 @@ export default async function BookPage({
       const availability = await listAvailability()
       availabilityLabel =
         availability.length > 0
-          ? 'Terminy pokażą się od razu po wyborze tematu.'
-          : 'Jeśli dziś nie widzisz terminu, wróć później albo napisz.'
+          ? 'Terminy pokażą się po wyborze.'
+          : 'Jeśli dziś nie ma terminu, napisz.'
     } catch (error) {
       console.warn('[behawior15][book] nie udalo sie wczytac dostepnosci', error)
     }
@@ -122,152 +123,66 @@ export default async function BookPage({
       <div className="container">
         <Header />
 
-        <section className="booking-layout sales-book-layout book-layout-balanced">
-          <div className="panel section-panel">
-            <BookingStageEyebrow stage="topic" className="section-eyebrow" />
-            <h1>Wybierz temat szybkiej konsultacji 15 min</h1>
-            <p className="hero-text">
-              Wybierz kartę najbliższą sytuacji. Nie musi być idealna. To ma być dobry start, a dalszy krok dobierzemy
-              później, jeśli temat okaże się szerszy.
-            </p>
-            <div className="topic-selection-note top-gap-small">Nie wiesz, który temat wybrać? Napisz zamiast zgadywać.</div>
-
-            <div className="booking-note-grid top-gap">
-              <div className="list-card tree-backed-card">
-                <strong>Jak wygląda rezerwacja</strong>
-                <span>Wybierasz temat i termin, podajesz dane, płacisz i przechodzisz do potwierdzenia.</span>
-              </div>
-              <div className="list-card tree-backed-card">
-                <strong>Płatność i anulacja</strong>
-                <span>Po opłaceniu masz 24 godziny na bezpłatną rezygnację. Jeśli chcesz zmienić termin, napisz.</span>
-              </div>
-              <div className="list-card tree-backed-card">
-                <strong>Dostępność</strong>
-                <span>{availabilityLabel}</span>
-              </div>
-            </div>
-
-            <div className="card-grid three-up top-gap book-topics-grid" id="tematy">
-              {mainProblemOptions.map((item) => {
-                const topicVisual = TOPIC_VISUALS[item.id]
-                const cardTitle = item.marketingTitle ?? item.title
-                const cardDescription = item.marketingDesc ?? item.desc
-
-                return (
-                  <Link
-                    key={item.id}
-                    href={buildSlotHref(item.id)}
-                    prefetch={false}
-                    className="topic-card tree-backed-card"
-                    data-problem={item.id}
-                    data-analytics-event="cta_click"
-                    data-analytics-location="book-topics"
-                    data-analytics-problem={item.id}
-                  >
-                    <div className="topic-media-shell">
-                      <Image
-                        src={topicVisual.src}
-                        alt={topicVisual.alt}
-                        width={1200}
-                        height={900}
-                        sizes="(max-width: 680px) 100vw, (max-width: 980px) 50vw, 33vw"
-                        className="topic-media-image"
-                      />
-                      <div className="topic-media-overlay" aria-hidden="true" />
-                      {item.visualLabel ? <div className="topic-media-badge">{item.visualLabel}</div> : null}
-                    </div>
-                    <span className="topic-icon-shell">{renderProblemIcon(item.id)}</span>
-                    <div className="topic-title">{cardTitle}</div>
-                    <div className="topic-desc">{cardDescription}</div>
-                    {item.examples?.length ? (
-                      <div className="topic-examples" aria-label={`Przykładowe sytuacje dla tematu ${item.title}`}>
-                        {item.examples.slice(0, 3).map((example) => (
-                          <span key={example} className="topic-example-chip">
-                            {example}
-                          </span>
-                        ))}
-                      </div>
-                    ) : null}
-                    <div className="topic-link">Wybierz ten temat</div>
-                  </Link>
-                )
-              })}
-            </div>
-
-            <div className="book-helper-grid top-gap">
-              {mixedProblemOption ? (
-                <div className="list-card tree-backed-card book-helper-card">
-                  <strong>{mixedProblemOption.marketingTitle ?? mixedProblemOption.title}</strong>
-                  <span>{mixedProblemOption.marketingDesc ?? mixedProblemOption.desc}</span>
-                  <div className="offer-card-actions top-gap-small">
-                    <Link href={buildSlotHref(mixedProblemOption.id)} prefetch={false} className="button button-primary">
-                      Wybierz temat mieszany
-                    </Link>
-                  </div>
-                </div>
-              ) : null}
-
-              <div className="list-card accent-outline tree-backed-card book-helper-card">
-                <strong>Nie jesteś pewien?</strong>
-                <span>
-                  Jeśli temat jest mieszany albo wolisz najpierw opisać sytuację, przejdź do kontaktu. Lepiej dobrać
-                  pierwszy krok niż zgadywać.
-                </span>
-                <div className="offer-card-actions top-gap-small">
-                  <Link href="/kontakt" prefetch={false} className="button button-ghost">
-                    Napisz do mnie
-                  </Link>
-                </div>
-              </div>
-            </div>
+        <section className="panel section-panel">
+          <BookingStageEyebrow stage="topic" className="section-eyebrow" />
+          <h1>Wybierz temat na 15 min</h1>
+          <p className="hero-text">Kliknij temat najbliższy sytuacji.</p>
+          <div className="topic-selection-note top-gap-small">
+            <strong>{availabilityLabel}</strong> {pricingLabel}
           </div>
 
-          <aside className="panel side-panel booking-side-panel sales-book-side">
-            <div className="booking-photo-shell top-gap-small tree-panel-card">
-              <Image
-                src={SPECIALIST_PHOTO.src}
-                alt={SPECIALIST_PHOTO.alt}
-                width={1200}
-                height={1600}
-                sizes="(max-width: 980px) 88vw, 30vw"
-                className="booking-photo"
-                priority
-              />
-            </div>
+          <div className="card-grid three-up top-gap book-topics-grid" id="tematy">
+            {mainProblemOptions.map((item) => {
+              const topicVisual = TOPIC_VISUALS[item.id]
 
-            <div className="list-card tree-backed-card top-gap">
-              <strong>{SPECIALIST_NAME}</strong>
-              <span>{SPECIALIST_CREDENTIALS}</span>
-            </div>
-
-            <div className="list-card tree-backed-card top-gap">
-              <strong>Co kupujesz na tym etapie</strong>
-              <span>15-minutową konsultację głosową online, która porządkuje sytuację i wskazuje najbliższy krok.</span>
-            </div>
-
-            <div className="list-card tree-backed-card top-gap">
-              <strong>Jeśli potrzebujesz czegoś więcej</strong>
-              <span>Możesz wrócić do pełnej oferty i porównać 30 min, konsultację online, terapię albo pobyty.</span>
-              <div className="offer-card-actions top-gap-small">
-                <Link href="/oferta" prefetch={false} className="button button-ghost">
-                  Zobacz formy współpracy
+              return (
+                <Link
+                  key={item.id}
+                  href={buildSlotHref(item.id)}
+                  prefetch={false}
+                  className="topic-card tree-backed-card book-topic-card"
+                  data-problem={item.id}
+                  data-analytics-event="cta_click"
+                  data-analytics-location="book-topics"
+                  data-analytics-problem={item.id}
+                >
+                  <div className="topic-media-shell">
+                    <Image
+                      src={topicVisual.src}
+                      alt={topicVisual.alt}
+                      width={1200}
+                      height={900}
+                      sizes="(max-width: 680px) 100vw, (max-width: 980px) 50vw, 33vw"
+                      className="topic-media-image"
+                    />
+                    <div className="topic-media-overlay" aria-hidden="true" />
+                    {item.visualLabel ? <div className="topic-media-badge">{item.visualLabel}</div> : null}
+                  </div>
+                  <span className="topic-icon-shell">{renderProblemIcon(item.id)}</span>
+                  <div className="topic-title">{item.title}</div>
+                  <div className="topic-desc">{item.desc}</div>
+                  <div className="topic-link">Wybierz temat</div>
                 </Link>
-              </div>
-            </div>
+              )
+            })}
+          </div>
 
-            <div className="list-card tree-backed-card top-gap">
-              <PricingDisclosure
-                stage="pre-topic"
-                labelAs="strong"
-                noteClassName="muted top-gap-small"
-                compareClassName="price-compare-text"
-                showLabel={false}
-                showMessage
-                showNote
-                showCompare
-              />
-            </div>
-          </aside>
+          <p className="marketing-note top-gap">
+            {mixedProblemOption ? (
+              <>
+                Temat mieszany?{' '}
+                <Link href={buildSlotHref(mixedProblemOption.id)} prefetch={false} className="inline-link">
+                  Wybierz inny temat
+                </Link>
+                .{' '}
+              </>
+            ) : null}
+            Jeśli nadal nie wiesz,{' '}
+            <Link href="/kontakt" prefetch={false} className="inline-link">
+              napisz
+            </Link>
+            .
+          </p>
         </section>
 
         <Footer />

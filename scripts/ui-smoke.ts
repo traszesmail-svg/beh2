@@ -218,10 +218,13 @@ async function approveManualPaymentWithRetry(page: Page, bookingId: string, book
 function isRetryableUiSmokeError(error: unknown) {
   const message = error instanceof Error ? `${error.name}: ${error.message}` : String(error)
   return (
+    message.includes('fetch failed') ||
+    message.includes('ECONNREFUSED') ||
     message.includes('ERR_CONNECTION_REFUSED') ||
     message.includes('ERR_CONNECTION_RESET') ||
     message.includes('Local server did not become ready') ||
     message.includes('Page crashed') ||
+    message.includes('Target crashed') ||
     message.includes('Target page, context or browser has been closed')
   )
 }
@@ -281,10 +284,13 @@ async function runUiSmokeOnce() {
 
     const publicPage = await publicContext.newPage()
     await publicPage.goto(appUrl, { waitUntil: 'domcontentloaded' })
-    await publicPage.locator('main').getByRole('heading', { level: 1, name: /Regulski\s+\|\s+Terapia behawioralna/i }).waitFor()
+    await publicPage
+      .locator('main')
+      .getByRole('heading', { level: 1, name: /Masz problem z psem lub kotem\? (Dobierz|Wybierz) pierwszy krok(?: w 1 minutę)?/i })
+      .waitFor()
 
     await publicPage.goto(`${appUrl}/book`, { waitUntil: 'domcontentloaded' })
-    await publicPage.getByRole('heading', { name: /Wybierz temat szybkiej konsultacji 15 min/i }).waitFor()
+    await publicPage.getByRole('heading', { name: /Wybierz temat na 15 min/i }).waitFor()
 
     await publicPage.goto(`${appUrl}/slot?problem=szczeniak`, { waitUntil: 'domcontentloaded' })
     await publicPage.getByRole('heading', { name: /Wybierz termin szybkiej konsultacji: Szczeniak/i }).waitFor()
@@ -318,9 +324,9 @@ async function runUiSmokeOnce() {
     assert.ok(accessToken, 'Expected access token in payment URL.')
 
     await publicPage.getByRole('heading', { name: /Wybierz sposób płatności za szybki pierwszy krok/i }).waitFor()
-    assert.equal(await publicPage.getByText(/BLIK na telefon \/ przelew/i).isVisible(), true)
+    assert.equal(await publicPage.getByText(/Przelew tradycyjny/i).first().isVisible(), true)
     assert.equal(await publicPage.getByRole('button', { name: /PayU/i }).count(), 0)
-    assert.equal(await publicPage.getByText(/ręczna wpłata z potwierdzeniem do 60 minut/i).first().isVisible(), true)
+    assert.equal(await publicPage.getByText(/przelew z potwierdzeniem do 60 minut/i).first().isVisible(), true)
 
     await publicPage.getByRole('button', { name: /Zapłaciłem, czekam na potwierdzenie/i }).click()
     await publicPage.waitForURL(/\/confirmation\?bookingId=.*manual=reported/, { timeout: routeNavigationTimeoutMs })

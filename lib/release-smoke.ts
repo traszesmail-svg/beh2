@@ -107,10 +107,11 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
       path: '/',
       required: [
         'Regulski | Terapia behawioralna',
-        'Jak mogę pomóc',
-        'Formy współpracy',
-        'Pobyty socjalizacyjno-terapeutyczne',
-        'Terapia kotów',
+        'Masz problem z psem lub kotem? Wybierz pierwszy krok.',
+        'Szybki wybór',
+        'Wybierz start',
+        'Piszesz do mnie',
+        'Napisz wiadomość',
       ],
       forbidden: [
         'Historie opiekunów i efekty konsultacji',
@@ -120,9 +121,9 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
       ],
       ordered: [
         'Regulski | Terapia behawioralna',
-        'Jak mogę pomóc',
-        'Formy współpracy',
-        'Pytania przed pierwszym kontaktem',
+        'Masz problem z psem lub kotem? Wybierz pierwszy krok.',
+        'Wybierz start',
+        'Piszesz do mnie',
       ],
       requireBuildMarker: true,
     },
@@ -130,7 +131,7 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
       path: '/book',
       required: [
         'Etap rezerwacji: wybór tematu',
-        'Wybierz temat szybkiej konsultacji 15 min',
+        'Wybierz temat na 15 min',
         'Od 59 zł. Dokładną kwotę potwierdzisz po wyborze tematu konsultacji.',
       ],
       forbidden: [

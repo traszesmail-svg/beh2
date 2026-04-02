@@ -2,7 +2,7 @@ import React from 'react'
 import type { Metadata } from 'next'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
-import { SPECIALIST_CREDENTIALS, SPECIALIST_NAME, buildMailtoHref, getContactDetails } from '@/lib/site'
+import { SPECIALIST_CREDENTIALS, SPECIALIST_NAME, buildMailtoHref, getPublicContactDetails } from '@/lib/site'
 import { buildLegalMetadata } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
@@ -14,7 +14,7 @@ export const metadata: Metadata = buildLegalMetadata(
 )
 
 export default function TermsPage() {
-  const contact = getContactDetails()
+  const contact = getPublicContactDetails()
   const contactMailtoHref = contact.email
     ? buildMailtoHref(contact.email, 'Rezerwacja i regulamin - Regulski | Terapia behawioralna')
     : null
@@ -71,9 +71,9 @@ export default function TermsPage() {
             </div>
 
             <div className="list-card">
-              <strong>Zakres konsultacji i ograniczenia</strong>
+              <strong>Jak działa konsultacja</strong>
               <span>
-                Konsultacja pomaga szybko uporządkować sytuację i ustalić pierwszy sensowny krok. W zależności od problemu może prowadzić do dalszej pracy behawioralnej, konsultacji weterynaryjnej albo szerszego planu działania. Usługa nie zastępuje badania lekarskiego ani pełnej diagnostyki.
+                Konsultacja pomaga szybko uporządkować sytuację i ustalić pierwszy sensowny krok. W zależności od problemu może prowadzić do kolejnej rozmowy, konsultacji weterynaryjnej albo wizyty. Usługa nie zastępuje badania lekarskiego ani pełnej diagnostyki.
               </span>
             </div>
 
@@ -85,12 +85,7 @@ export default function TermsPage() {
                     E-mail: <a href={contactMailtoHref}>{contact.email}</a>.{' '}
                   </>
                 ) : null}
-                {contact.phoneDisplay && contact.phoneHref ? (
-                  <>
-                    Telefon: <a href={`tel:${contact.phoneHref}`}>{contact.phoneDisplay}</a>.{' '}
-                  </>
-                ) : null}
-                W sprawach rezerwacji, płatności, reklamacji i przełożenia terminu kontakt odbywa się przez te dane kontaktowe. Publiczny profil specjalisty w CAPBT podany w stopce służy wyłącznie weryfikacji kwalifikacji.
+                W sprawach rezerwacji, płatności, reklamacji i przełożenia terminu kontakt odbywa się mailowo przez ten adres. Rozmowa telefoniczna odbywa się wyłącznie w ramach umówionej konsultacji. Publiczny profil specjalisty w CAPBT podany w stopce służy wyłącznie do sprawdzenia profilu zawodowego.
               </span>
             </div>
           </div>

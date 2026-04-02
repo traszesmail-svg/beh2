@@ -1,6 +1,6 @@
 import { formatDateTimeLabel, getProblemLabel } from '@/lib/data'
 import { formatPricePln } from '@/lib/pricing'
-import { getContactDetails } from '@/lib/site'
+import { getContactDetails, getPublicContactDetails } from '@/lib/site'
 import { BookingRecord } from '@/lib/types'
 
 const DEFAULT_RESEND_FROM_EMAIL = 'Behawior 15 <onboarding@resend.dev>'
@@ -146,15 +146,11 @@ function buildBookingSummary(booking: BookingRecord): string {
 }
 
 function renderContactBlockHtml() {
-  const contact = getContactDetails()
+  const contact = getPublicContactDetails()
   const parts = []
 
   if (contact.email) {
     parts.push(`<p><strong>Kontakt:</strong> <a href="mailto:${contact.email}">${contact.email}</a></p>`)
-  }
-
-  if (contact.phoneDisplay) {
-    parts.push(`<p><strong>Telefon:</strong> ${contact.phoneDisplay}</p>`)
   }
 
   if (!parts.length) {
@@ -165,15 +161,11 @@ function renderContactBlockHtml() {
 }
 
 function renderContactBlockText() {
-  const contact = getContactDetails()
+  const contact = getPublicContactDetails()
   const lines = []
 
   if (contact.email) {
     lines.push(`Kontakt: ${contact.email}`)
-  }
-
-  if (contact.phoneDisplay) {
-    lines.push(`Telefon: ${contact.phoneDisplay}`)
   }
 
   if (!lines.length) {

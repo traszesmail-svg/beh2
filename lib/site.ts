@@ -1,13 +1,21 @@
 import { ProblemType } from './types'
 
+export const HOME_DOG_QUICK_CHOICE_PHOTO = {
+  src: '/images/case-dog-black.jpg',
+  alt: 'Czarny pies siedzÄ…cy w uporzÄ…dkowanym domowym wnÄ™trzu jako szybki wybĂłr Ĺ›cieĹĽki dla opiekuna psa',
+}
+
+export const HOME_CAT_QUICK_CHOICE_PHOTO = {
+  src: '/images/case-cat-scratcher.jpg',
+  alt: 'Kot przy drapaku w domowym kadrze jako szybki wybĂłr Ĺ›cieĹĽki dla opiekuna kota',
+}
+
 export const SITE_NAME = 'Regulski | Terapia behawioralna'
 export const SITE_SHORT_NAME = 'Regulski'
 export const SITE_URL_FALLBACK = 'http://localhost:3000'
 export const PUBLIC_CONTACT_EMAIL_FALLBACK = 'coapebehawiorysta@gmail.com'
-export const SITE_TAGLINE =
-  'Konsultacje dla psów i kotów, terapia problemów w zachowaniu oraz pobyty socjalizacyjno-terapeutyczne'
-export const SITE_DESCRIPTION =
-  'Marka ekspercka Krzysztofa Regulskiego. Konsultacje dla psów i kotów, terapia problemów w zachowaniu oraz pobyty socjalizacyjno-terapeutyczne.'
+export const SITE_TAGLINE = 'Pomoc dla psów i kotów z trudnym zachowaniem'
+export const SITE_DESCRIPTION = 'Pomoc dla psów i kotów z trudnym zachowaniem: konsultacje, pobyty i spokojny start.'
 
 export const SPECIALIST_NAME = 'Krzysztof Regulski'
 export const SPECIALIST_CREDENTIALS =
@@ -24,8 +32,7 @@ export const CAPBT_LOGO = {
   src: '/branding/capbt-polska.png',
   alt: 'Logo CAPBT Polska, Stowarzyszenie Behawiorystów i Trenerów COAPE',
 }
-export const SPECIALIST_TRUST_STATEMENT =
-  'Pomagam przejść od rozpoznania sytuacji do właściwej formy pracy: od pierwszej konsultacji po terapię, wizytę domową lub pobyt.'
+export const SPECIALIST_TRUST_STATEMENT = 'Pomagam spokojnie uporządkować sytuację i wybrać dobry następny krok.'
 export const CONSULTATION_PRICE_COMPARE_COPY =
   'To pierwszy krok w szerszym systemie pracy, jeśli problem wymaga czegoś więcej niż jednej rozmowy.'
 
@@ -70,7 +77,7 @@ export const CAT_HOME_PHOTO = {
 
 export const CATS_PAGE_PHOTO = {
   src: '/branding/specialist-krzysztof-vet.jpg',
-  alt: 'Krzysztof Regulski podczas spokojnej pracy z kotem jako ilustracja osobnej sciezki terapii kotow',
+  alt: 'Krzysztof Regulski podczas spokojnej pracy z kotem jako ilustracja konsultacji dla kotow',
 }
 
 export const SPECIALIST_CAT_PHOTO = {
@@ -80,7 +87,7 @@ export const SPECIALIST_CAT_PHOTO = {
 
 export const THERAPY_PROCESS_PHOTO = {
   src: '/branding/specialist-krzysztof-vet.jpg',
-  alt: 'Krzysztof Regulski podczas spokojnej pracy z kotem jako ilustracja dluzszego procesu terapeutycznego',
+  alt: 'Krzysztof Regulski podczas spokojnej pracy z kotem jako ilustracja dluzszego wsparcia',
 }
 
 export const HOME_VISIT_PHOTO = {
@@ -160,7 +167,7 @@ export const REAL_CASE_STUDIES: RealCaseStudy[] = [
     summary:
       'To typowa sprawa na pierwszą rozmowę: trzeba odróżnić przeciążenie, brak rutyny i możliwy lęk separacyjny od zwykłego pobudzenia.',
     effect:
-      'Po 15 minutach opiekun wie, co wdrożyć od razu w domu, czego nie dokładać i czy temat wymaga spokojniejszej, szerszej pracy.',
+      'Po 15 minutach opiekun wie, co wdrożyć od razu w domu, czego nie dokładać i czy lepsza będzie dłuższa rozmowa.',
   },
   {
     id: 'litter-box-cat',
@@ -182,7 +189,7 @@ export const REAL_CASE_STUDIES: RealCaseStudy[] = [
     summary:
       'Pierwsza konsultacja pomaga oddzielić sygnały ostrzegawcze od codziennych napięć i ustalić, co trzeba zabezpieczyć natychmiast.',
     effect:
-      'Opiekun wychodzi z konkretem: co uspokoić dziś, jak zarządzić przestrzenią i kiedy potrzebna będzie dalsza praca.',
+      'Opiekun wychodzi z konkretem: co uspokoić dziś, jak zarządzić przestrzenią i czy trzeba umówić dłuższą rozmowę.',
   },
 ]
 
@@ -279,6 +286,16 @@ export function getContactDetails() {
     email: emailCandidate,
     phoneDisplay: phone.display,
     phoneHref: phone.href,
+  }
+}
+
+export function getPublicContactDetails() {
+  const contact = getContactDetails()
+
+  return {
+    email: contact.email,
+    phoneDisplay: null,
+    phoneHref: null,
   }
 }
 

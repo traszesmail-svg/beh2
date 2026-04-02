@@ -1,23 +1,15 @@
 # Raport QA Live Clickthrough
 
-- Data: 2026-04-01 07:59:44 Europe/Warsaw
+- Data: 2026-03-31 13:45:58 Europe/Warsaw
 - URL: https://beh2.vercel.app
-- Wynik ogólny: FAIL
-- Kroki zaliczone: 14/17
+- Wynik ogólny: PASS
+- Kroki zaliczone: 17/17
 - Liczba zebranych issue z runtime: 0
-- Booking QA identity: QA LIVE 20260401-075944 / qa-live-20260401-075944@example.com
+- Booking QA identity: QA LIVE 20260331-134558 / qa-live-20260331-134558@example.com
 - Bezpiecznik płatności: bez realnej płatności PayU i bez fałszywego approve na produkcji; test manual zakończony reject w adminie
 
 ## Najważniejsze ustalenia
-- Booking live: zgłoszenie manual payment -> pending: locator.click: Timeout 30000ms exceeded.
-Call log:
-[2m  - waiting for getByRole('button', { name: /Przelew tradycyjny|Wpłata manualna/i }).first()[22m
-
-- Admin live: odrzucenie testowej wpłaty QA: locator.waitFor: Timeout 60000ms exceeded.
-Call log:
-[2m  - waiting for locator('.booking-row').filter({ hasText: 'qa-live-20260401-075944@example.com' }).first().getByRole('button', { name: /Odrzuć wpłatę/i }) to be visible[22m
-
-- Confirmation live: stan po odrzuceniu: Brak URL confirmation do odświeżenia.
+- Brak krytycznych błędów w przeklikanej ścieżce live przy zachowanym bezpiecznym wariancie bez fałszywego potwierdzania płatności.
 
 ## Kroki
 ### PASS - Home hero + CTA do wyboru pierwszego kroku
@@ -25,31 +17,31 @@ Call log:
 - End URL: https://beh2.vercel.app/#pierwszy-krok
 - Note: CTA hero "Dobierz pierwszy krok" przewija poprawnie do sekcji wyboru.
 
-### PASS - Home szybki wybór psa -> booking
+### PASS - Home hero + CTA do bookingu
 - Start URL: https://beh2.vercel.app/#pierwszy-krok
 - End URL: https://beh2.vercel.app/book
-- Note: Szybki wybór "Mam psa" otwiera ścieżkę rezerwacji.
+- Note: CTA hero "Umów 15 min" otwiera osobną ścieżkę rezerwacji.
 
 ### PASS - Header: Oferta
 - Start URL: https://beh2.vercel.app/book
 - End URL: https://beh2.vercel.app/oferta
 - Note: Link w headerze działa.
 
-### PASS - Header: Koty ukryte
+### PASS - Header: Koty
 - Start URL: https://beh2.vercel.app/oferta
-- End URL: https://beh2.vercel.app/
-- Note: Link "Koty" nie jest już pokazywany w głównym pasku.
+- End URL: https://beh2.vercel.app/koty
+- Note: Link w headerze działa.
 
-### PASS - Header: Pobyty ukryte
-- Start URL: https://beh2.vercel.app/
-- End URL: https://beh2.vercel.app/
-- Note: Link "Pobyty" nie jest już pokazywany w głównym pasku.
+### PASS - Header: Pobyty
+- Start URL: https://beh2.vercel.app/koty
+- End URL: https://beh2.vercel.app/oferta/pobyty-socjalizacyjno-terapeutyczne
+- Note: Link w headerze działa.
 
-### PASS - Header: Kontakt + href mailto
-- Start URL: https://beh2.vercel.app/
+### PASS - Header: Kontakt + href mailto/tel
+- Start URL: https://beh2.vercel.app/oferta/pobyty-socjalizacyjno-terapeutyczne
 - End URL: https://beh2.vercel.app/kontakt
 - Note: mailto ok: mailto:coapebehawiorysta@gmail.com?subject=Zapytanie+-+Regulski+%7C+Terapia+behawioralna&body=Dzie%C5%84+dobry%2C%0A%0Aopisuj%C4%99+kr%C3%B3tko+swoj%C4%85+sytuacj%C4%99%3A%0A%0A-+gatunek%3A%0A-+problem%3A%0A-+od+kiedy+trwa%3A%0A-+interesuj%C4%85cy+mnie+materia%C5%82+PDF%3A%0A-+chc%C4%99+zacz%C4%85%C4%87+od%3A+%0A%0ANajwygodniejsza+forma+kontaktu+zwrotnego%3A%0A
-- Note: brak publicznego tel: ok
+- Note: tel ok: tel:512992026
 
 ### PASS - Deep routes usług: bezpośrednie wejścia do detali i kontaktu
 - Start URL: https://beh2.vercel.app/kontakt
@@ -89,46 +81,40 @@ Call log:
 
 ### PASS - Booking live: wybór tematu i slotu
 - Start URL: https://beh2.vercel.app/regulamin
-- End URL: https://beh2.vercel.app/form?problem=kot&slotId=2026-04-01-09%3A00
+- End URL: https://beh2.vercel.app/form?problem=kot&slotId=2026-03-31-18%3A00
 - Note: Wybrany temat: kot
-- Note: Wybrany slot: 09:00
+- Note: Wybrany slot: 18:00
 
 ### PASS - Booking live: formularz -> payment
-- Start URL: https://beh2.vercel.app/form?problem=kot&slotId=2026-04-01-09%3A00
-- End URL: https://beh2.vercel.app/payment?bookingId=db423e8f-9223-4180-a21a-287492e0d19c&access=uyj8ujn0rJ6qvA9JsT4hpygih8GiFu_r
+- Start URL: https://beh2.vercel.app/form?problem=kot&slotId=2026-03-31-18%3A00
+- End URL: https://beh2.vercel.app/payment?bookingId=9da87ca8-f493-455c-b77c-905563f0aefe&access=hJlhtAbJa5LwwWcMG85kKqoF7kEbO56I
 - Note: manualVisible=true
 - Note: payuVisible=true
 
 ### PASS - Booking live: pokój zablokowany przed paid
-- Start URL: https://beh2.vercel.app/payment?bookingId=db423e8f-9223-4180-a21a-287492e0d19c&access=uyj8ujn0rJ6qvA9JsT4hpygih8GiFu_r
-- End URL: https://beh2.vercel.app/payment?bookingId=db423e8f-9223-4180-a21a-287492e0d19c&access=uyj8ujn0rJ6qvA9JsT4hpygih8GiFu_r
+- Start URL: https://beh2.vercel.app/payment?bookingId=9da87ca8-f493-455c-b77c-905563f0aefe&access=hJlhtAbJa5LwwWcMG85kKqoF7kEbO56I
+- End URL: https://beh2.vercel.app/payment?bookingId=9da87ca8-f493-455c-b77c-905563f0aefe&access=hJlhtAbJa5LwwWcMG85kKqoF7kEbO56I
 - Note: Pokój nie wpuszcza przed statusem paid.
 
-### FAIL - Booking live: zgłoszenie manual payment -> pending
-- Start URL: https://beh2.vercel.app/payment?bookingId=db423e8f-9223-4180-a21a-287492e0d19c&access=uyj8ujn0rJ6qvA9JsT4hpygih8GiFu_r
-- End URL: https://beh2.vercel.app/payment?bookingId=db423e8f-9223-4180-a21a-287492e0d19c&access=uyj8ujn0rJ6qvA9JsT4hpygih8GiFu_r
-- Note: locator.click: Timeout 30000ms exceeded.
-Call log:
-[2m  - waiting for getByRole('button', { name: /Przelew tradycyjny|Wpłata manualna/i }).first()[22m
+### PASS - Booking live: zgłoszenie manual payment -> pending
+- Start URL: https://beh2.vercel.app/payment?bookingId=9da87ca8-f493-455c-b77c-905563f0aefe&access=hJlhtAbJa5LwwWcMG85kKqoF7kEbO56I
+- End URL: https://beh2.vercel.app/confirmation?bookingId=9da87ca8-f493-455c-b77c-905563f0aefe&manual=reported&access=hJlhtAbJa5LwwWcMG85kKqoF7kEbO56I
+- Note: Rezerwacja przeszła do pending manual review.
 
+### PASS - Admin live: odrzucenie testowej wpłaty QA
+- Start URL: https://beh2.vercel.app/confirmation?bookingId=9da87ca8-f493-455c-b77c-905563f0aefe&manual=reported&access=hJlhtAbJa5LwwWcMG85kKqoF7kEbO56I
+- End URL: https://beh2.vercel.app/confirmation?bookingId=9da87ca8-f493-455c-b77c-905563f0aefe&manual=reported&access=hJlhtAbJa5LwwWcMG85kKqoF7kEbO56I
+- Note: Testowa wpłata została odrzucona zamiast potwierdzenia, żeby nie zostawić sztucznie opłaconej rezerwacji.
 
-### FAIL - Admin live: odrzucenie testowej wpłaty QA
-- Start URL: https://beh2.vercel.app/payment?bookingId=db423e8f-9223-4180-a21a-287492e0d19c&access=uyj8ujn0rJ6qvA9JsT4hpygih8GiFu_r
-- End URL: https://beh2.vercel.app/payment?bookingId=db423e8f-9223-4180-a21a-287492e0d19c&access=uyj8ujn0rJ6qvA9JsT4hpygih8GiFu_r
-- Note: locator.waitFor: Timeout 60000ms exceeded.
-Call log:
-[2m  - waiting for locator('.booking-row').filter({ hasText: 'qa-live-20260401-075944@example.com' }).first().getByRole('button', { name: /Odrzuć wpłatę/i }) to be visible[22m
-
-
-### FAIL - Confirmation live: stan po odrzuceniu
-- Start URL: https://beh2.vercel.app/payment?bookingId=db423e8f-9223-4180-a21a-287492e0d19c&access=uyj8ujn0rJ6qvA9JsT4hpygih8GiFu_r
-- End URL: https://beh2.vercel.app/payment?bookingId=db423e8f-9223-4180-a21a-287492e0d19c&access=uyj8ujn0rJ6qvA9JsT4hpygih8GiFu_r
-- Note: Brak URL confirmation do odświeżenia.
+### PASS - Confirmation live: stan po odrzuceniu
+- Start URL: https://beh2.vercel.app/confirmation?bookingId=9da87ca8-f493-455c-b77c-905563f0aefe&manual=reported&access=hJlhtAbJa5LwwWcMG85kKqoF7kEbO56I
+- End URL: https://beh2.vercel.app/confirmation?bookingId=9da87ca8-f493-455c-b77c-905563f0aefe&manual=reported&access=hJlhtAbJa5LwwWcMG85kKqoF7kEbO56I
+- Note: Publiczny ekran poprawnie pokazuje stan odrzuconej wpłaty.
 
 ## Runtime issues
 - Brak zebranych błędów konsoli, pageerrorów i same-origin request failures/HTTP >= 400.
 
 ## Uwagi
-- `mailto:` zostało zweryfikowane po href-ie; nie otwierałem zewnętrznego klienta poczty.
-- Ścieżka rezerwacji na produkcji nie została doprowadzona do końca bezpiecznej sekwencji manual review/reject w tym przebiegu.
+- `mailto:` i `tel:` zostały zweryfikowane po href-ach; nie otwierałem zewnętrznego klienta poczty ani dialera.
+- Ścieżka rezerwacji na produkcji została doprowadzona do `pending manual review`, a następnie odrzucona w adminie, żeby nie zostawić sztucznie opłaconej rezerwacji.
 - Nie wykonywałem realnej płatności PayU ani fałszywego potwierdzenia wpłaty na live.

@@ -205,7 +205,7 @@ export function CallRoom({
         },
         body: JSON.stringify({
           recommendedNextStep:
-            'W razie potrzeby kolejnym krokiem może być pełna konsultacja, wizyta domowa albo dalsza praca według ustalonego planu.',
+            'W razie potrzeby kolejnym krokiem może być pełna konsultacja, wizyta domowa albo kolejna rozmowa.',
         }),
       })
 
@@ -334,7 +334,7 @@ export function CallRoom({
             <strong>{roomUnlocked ? 'Po rozmowie' : 'Co stanie się dalej'}</strong>
             <span>
               {roomUnlocked
-                ? 'Po tej konsultacji można zaplanować pełną konsultację, wizytę domową albo dalsze wsparcie, jeśli sytuacja wymaga szerszej pracy.'
+                ? 'Po tej rozmowie można zaplanować pełną konsultację, wizytę domową albo terapię, jeśli temat wymaga więcej.'
                 : 'Gdy wybije okno wejścia, warstwa szkła zniknie, pokój audio zrobi się aktywny i będzie można uruchomić licznik 15 minut.'}
             </span>
           </div>

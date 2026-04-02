@@ -263,27 +263,27 @@ export default async function ConfirmationPage({
                         <span>{smsPanel.body}</span>
                       </div>
                       <div className="prep-checklist tree-backed-card">
-                        <strong>Co dalej</strong>
+                        <strong>Przed rozmową</strong>
                         <ul>
                           <li>Zachowaj termin i wróć do tego linku przed rozmową audio.</li>
                           <li>Jeśli chcesz, dodaj teraz nagranie MP4, link do zdjęć lub krótki opis sytuacji.</li>
-                          <li>Po pierwszym kroku wskażemy, czy potrzebna jest szersza konsultacja, dalsza terapia albo inna ścieżka wsparcia.</li>
+                          <li>Po rozmowie wskażemy, czy wystarczy domowy start, czy lepsza będzie dłuższa konsultacja albo terapia.</li>
                         </ul>
                       </div>
                       <div className="list-card accent-outline tree-backed-card">
                         <strong>Dodaj materiały do sprawy</strong>
-                        <span>To nie jest obowiązkowe. Jeśli chcesz, możesz teraz dodać nagranie, link do materiałów albo krótki opis sytuacji, żeby lepiej przygotować dalszą pracę.</span>
+                        <span>To nie jest obowiązkowe. Jeśli chcesz, możesz teraz dodać nagranie, link do materiałów albo krótki opis sytuacji, żeby lepiej przygotować rozmowę.</span>
                       </div>
                     </>
                   ) : (
                     <>
                       <div className="list-card tree-backed-card">
-                        <strong>Co odblokuje się po płatności</strong>
-                        <span>Po statusie paid zobaczysz finalne potwierdzenie, status SMS, instrukcję co dalej i sekcję do dodania materiałów do sprawy.</span>
+                        <strong>Po płatności zobaczysz</strong>
+                        <span>Po statusie paid zobaczysz finalne potwierdzenie, status SMS i sekcję do dodania materiałów do sprawy.</span>
                       </div>
                       <div className="list-card accent-outline tree-backed-card">
-                        <strong>Co dalej po tym etapie</strong>
-                        <span>Jeśli sytuacja wymaga szerszej pracy, kolejnym krokiem może być konsultacja 30 min, pełna konsultacja online, wizyta domowa, terapia albo dalsze wsparcie.</span>
+                        <strong>Jeśli temat okaże się szerszy</strong>
+                        <span>Można wtedy przejść do konsultacji 30 min, pełnej konsultacji online, wizyty domowej albo terapii.</span>
                       </div>
                     </>
                   )}

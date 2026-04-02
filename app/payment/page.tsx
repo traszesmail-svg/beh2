@@ -10,7 +10,7 @@ import { formatPricePln } from '@/lib/pricing'
 import { getBookingForViewer } from '@/lib/server/db'
 import { getDataModeStatus, getPublicFeatureUnavailableMessage } from '@/lib/server/env'
 import { getCustomerEmailDeliveryConfigIssue } from '@/lib/server/notifications'
-import { getManualPaymentConfig, getManualPaymentReference, getPayuOptionStatus } from '@/lib/server/payment-options'
+import { getManualPaymentReference, getPayuOptionStatus, getPublicManualPaymentConfig } from '@/lib/server/payment-options'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -26,7 +26,7 @@ export default async function PaymentPage({
   const cancelled = readSearchParam(searchParams?.cancelled)
   const dataMode = getDataModeStatus()
   const authorizationHeader = headers().get('authorization')
-  const manualPayment = getManualPaymentConfig()
+  const manualPayment = getPublicManualPaymentConfig()
   const payuOption = getPayuOptionStatus()
   const payuAvailable = payuOption.isAvailable
   const manualPaymentCopy = getManualPaymentDisplayCopy({
@@ -81,9 +81,13 @@ export default async function PaymentPage({
               ? customerEmailAvailable
                 ? 'Sprawdzimy wpłatę i potwierdzimy ją do 60 minut. Gdy status zmieni się na opłacona, klient dostanie mail z linkiem do pokoju rozmowy i odblokuje się dalszy etap sprawy.'
                 : 'Sprawdzimy wpłatę i potwierdzimy ją do 60 minut. Gdy status zmieni się na opłacona, ta strona pokaże pokój rozmowy i dalszy etap sprawy, więc zachowaj ten link.'
-              : payuAvailable
-                ? 'Najpierw zobaczysz ręczną wpłatę z potwierdzeniem do 60 minut, a niżej PayU. Obie opcje pokazują tę samą cenę i prowadzą do tego samego etapu po płatności.'
-                : 'Chwilowo dostępna jest ręczna wpłata z potwierdzeniem do 60 minut. Po potwierdzeniu płatności przejdziesz do tego samego etapu po zakupie.'}
+              : payuAvailable && manualPayment.isAvailable
+                ? 'Możesz wybrać przelew z ręcznym potwierdzeniem do 60 minut albo PayU. Obie opcje pokazują tę samą cenę i prowadzą do tego samego etapu po płatności.'
+                : payuAvailable
+                  ? 'PayU jest dostępne od razu. Ręczna wpłata wróci, gdy będzie dostępny numer konta do przelewu.'
+                  : manualPayment.isAvailable
+                    ? 'Chwilowo dostępny jest przelew z ręcznym potwierdzeniem do 60 minut. Po potwierdzeniu płatności przejdziesz do tego samego etapu po zakupie.'
+                    : 'Płatność jest chwilowo niedostępna. Napisz wiadomość, a podpowiem najprostszy dalszy krok.'}
           </p>
 
           {flowError ? (
@@ -148,7 +152,7 @@ export default async function PaymentPage({
                 <div className="list-card tree-backed-card">
                   <strong>Co kupujesz</strong>
                   <span>
-                    Kupujesz 15-minutową konsultację głosową online, która ma uporządkować sytuację i pomóc zdecydować, czy wystarczy ten pierwszy krok, czy potrzebna będzie szersza forma pracy. Po płatności online masz 24 godziny na bezpłatną rezygnację, a zmianę terminu ustalimy przez kontakt w tym samym oknie.
+                    Kupujesz 15-minutową konsultację głosową online, która ma uporządkować sytuację i pomóc zdecydować, czy ten start wystarczy, czy lepsza będzie dłuższa rozmowa. Po płatności online masz 24 godziny na bezpłatną rezygnację, a zmianę terminu ustalimy przez kontakt w tym samym oknie.
                   </span>
                 </div>
 

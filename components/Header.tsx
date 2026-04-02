@@ -2,26 +2,17 @@ import React from 'react'
 import Link from 'next/link'
 import { SITE_NAME, SITE_TAGLINE } from '@/lib/site'
 
-export function Header() {
-  const trustItems = [
-    'Psy i koty',
-    'COAPE / CAPBT',
-    'Spokojny pierwszy krok',
-    'Dalsza ścieżka pracy, jeśli potrzeba',
-  ]
+type HeaderProps = {
+  compactHome?: boolean
+}
+
+export function Header({ compactHome = false }: HeaderProps) {
+  const trustItems = ['Psy i koty', 'COAPE / CAPBT', 'Spokojny start', 'Bez zgadywania']
 
   const headerLinks = [
     {
       href: '/oferta',
       label: 'Oferta',
-    },
-    {
-      href: '/koty',
-      label: 'Koty',
-    },
-    {
-      href: '/oferta/pobyty-socjalizacyjno-terapeutyczne',
-      label: 'Pobyty',
     },
     {
       href: '/kontakt',
@@ -31,7 +22,10 @@ export function Header() {
 
   return (
     <>
-      <div className="header-trust-strip" aria-label="Zakres i wiarygodność marki">
+      <div
+        className={`header-trust-strip${compactHome ? ' header-trust-strip-home-compact' : ''}`}
+        aria-label="Wiarygodność marki"
+      >
         {trustItems.map((item) => (
           <span key={item} className="header-trust-item">
             {item}
@@ -39,22 +33,19 @@ export function Header() {
         ))}
       </div>
 
-      <header className="header-shell">
+      <header className={`header-shell${compactHome ? ' header-shell-home-compact' : ''}`}>
         <div className="header-main">
           <div className="header-branding">
             <Link href="/" prefetch={false} className="brand-link">
               <span className="brand-mark" aria-hidden="true" />
               <div>
-                <div className="eyebrow">{SITE_TAGLINE}</div>
                 <div className="brand">{SITE_NAME}</div>
               </div>
             </Link>
-            <div className="header-subtitle">
-              Forma kontaktu ma ułatwiać otrzymanie pomocy, a nie ją spłycać.
-            </div>
+            <div className="header-subtitle">{SITE_TAGLINE}</div>
           </div>
 
-          <div className="header-nav">
+          <div className={`header-nav${compactHome ? ' header-nav-home-compact' : ''}`}>
             <nav className="header-links" aria-label="Główna nawigacja">
               {headerLinks.map((link) => (
                 <Link key={link.href} href={link.href} prefetch={false} className="header-link">
@@ -66,11 +57,11 @@ export function Header() {
             <Link
               href="/book"
               prefetch={false}
-              className="button button-primary header-cta"
+              className={`button button-primary header-cta${compactHome ? ' header-cta-home-compact' : ''}`}
               data-analytics-event="cta_click"
               data-analytics-location="header"
             >
-              Umów konsultację
+              Umów 15 min
             </Link>
           </div>
         </div>

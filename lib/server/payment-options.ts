@@ -116,6 +116,33 @@ export function getManualPaymentConfig(): ManualPaymentConfig {
   }
 }
 
+export function getPublicManualPaymentConfig(): ManualPaymentConfig {
+  const manual = getManualPaymentConfig()
+
+  if (!manual.isAvailable) {
+    return manual
+  }
+
+  if (manual.phone && manual.bankAccount) {
+    return {
+      ...manual,
+      summary: 'BLIK na telefon i przelew tradycyjny są dostępne z ręcznym potwierdzeniem do 60 minut.',
+    }
+  }
+
+  if (manual.bankAccount) {
+    return {
+      ...manual,
+      summary: 'Przelew tradycyjny jest dostępny z ręcznym potwierdzeniem do 60 minut.',
+    }
+  }
+
+  return {
+    ...manual,
+    summary: 'BLIK na telefon jest dostępny z ręcznym potwierdzeniem do 60 minut.',
+  }
+}
+
 export function getPayuOptionStatus(): PayuOptionStatus {
   const environment = readEnv('PAYU_ENVIRONMENT') === 'sandbox' ? 'sandbox' : 'production'
   const apiBaseUrl = environment === 'sandbox' ? 'https://secure.snd.payu.com' : 'https://secure.payu.com'

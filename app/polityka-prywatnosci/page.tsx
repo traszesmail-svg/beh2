@@ -2,7 +2,7 @@ import React from 'react'
 import type { Metadata } from 'next'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
-import { SPECIALIST_CREDENTIALS, SPECIALIST_NAME, buildMailtoHref, getContactDetails } from '@/lib/site'
+import { SPECIALIST_CREDENTIALS, SPECIALIST_NAME, buildMailtoHref, getPublicContactDetails } from '@/lib/site'
 import { buildLegalMetadata } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
@@ -14,7 +14,7 @@ export const metadata: Metadata = buildLegalMetadata(
 )
 
 export default function PrivacyPolicyPage() {
-  const contact = getContactDetails()
+  const contact = getPublicContactDetails()
   const contactMailtoHref = contact.email
     ? buildMailtoHref(contact.email, 'Prywatność i dane - Regulski | Terapia behawioralna')
     : null
@@ -78,12 +78,7 @@ export default function PrivacyPolicyPage() {
                     E-mail: <a href={contactMailtoHref}>{contact.email}</a>.{' '}
                   </>
                 ) : null}
-                {contact.phoneDisplay && contact.phoneHref ? (
-                  <>
-                    Telefon: <a href={`tel:${contact.phoneHref}`}>{contact.phoneDisplay}</a>.{' '}
-                  </>
-                ) : null}
-                Kontakt w sprawie danych prowadzony jest przez te dane kontaktowe. Publiczny profil specjalisty w CAPBT, widoczny w stopce serwisu, służy wyłącznie weryfikacji kwalifikacji.
+                Kontakt w sprawie danych prowadzony jest mailowo przez ten adres. Publiczny profil specjalisty w CAPBT, widoczny w stopce serwisu, służy wyłącznie do sprawdzenia profilu zawodowego.
               </span>
             </div>
           </div>

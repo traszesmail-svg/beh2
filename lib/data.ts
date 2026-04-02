@@ -5,7 +5,7 @@ export const problemOptions: ProblemOption[] = [
     id: 'szczeniak',
     icon: 'puppy',
     title: 'Szczeniak i młody pies',
-    desc: 'gryzienie, nauka czystości, pobudzenie i pierwsze zasady w domu',
+    desc: 'gryzie, skacze i trudno mu się wyciszyć',
     marketingTitle: 'Szczeniak gryzie ręce, skacze i trudno mu się wyciszyć',
     marketingDesc:
       'Podgryza dłonie, łapie za nogawki, skacze i w sekundę wkręca się na 200%. To dobry start, gdy w domu zrobiło się za głośno i trudno wrócić do spokoju.',
@@ -16,7 +16,7 @@ export const problemOptions: ProblemOption[] = [
     id: 'kot',
     icon: 'cat',
     title: 'Kot i trudne zachowania',
-    desc: 'problemy z kuwetą, napięcie, wokalizacja i trudności w domu',
+    desc: 'kuweta, napięcie, wokalizacja i trudny kontakt',
     marketingTitle: 'Kot omija kuwetę, gryzie albo budzi dom po nocy',
     marketingDesc:
       'Kuweta, napięcie w domu, trudny dotyk albo konflikt między kotami. Najpierw porządkujemy sygnały i możliwe przyczyny, zamiast zgadywać.',
@@ -27,7 +27,7 @@ export const problemOptions: ProblemOption[] = [
     id: 'separacja',
     icon: 'home',
     title: 'Lęk separacyjny',
-    desc: 'wycie, niszczenie, trudność zostawania samemu i napięcie po wyjściu opiekuna',
+    desc: 'wyje, niszczy i źle znosi zostawanie samemu',
     marketingTitle: 'Gdy zostaje sam, wyje, szczeka albo niszczy',
     marketingDesc:
       'Jeśli pies nie radzi sobie po Twoim wyjściu, tu najłatwiej zacząć. Uporządkujemy, co jest napięciem, co rutyną, a co wygląda już jak lęk separacyjny.',
@@ -38,7 +38,7 @@ export const problemOptions: ProblemOption[] = [
     id: 'agresja',
     icon: 'shield',
     title: 'Agresja i reakcje obronne',
-    desc: 'trudne zachowania wobec ludzi, zwierząt lub w codziennych sytuacjach',
+    desc: 'warczy, rzuca się albo broni zasobów',
     marketingTitle: 'Na spacerze napina się, warczy albo rzuca do psów',
     marketingDesc:
       'Szczeka, lunguje, warczy albo odpala się przy mijaniu. To kategoria dla reaktywności spacerowej, obrony zasobów i trudnych zachowań wobec ludzi lub zwierząt.',
@@ -49,7 +49,7 @@ export const problemOptions: ProblemOption[] = [
     id: 'niszczenie',
     icon: 'spark',
     title: 'Pobudzenie, pogoń i niszczenie',
-    desc: 'hałas, rozregulowanie i trudność z wyciszeniem lub kontrolą emocji',
+    desc: 'goni, demoluje i trudno mu się zatrzymać',
     marketingTitle: 'Goni auta, rowery i trudno mu się zatrzymać',
     marketingDesc:
       'Ruch, pogoń, demolka, ciągłe pobudzenie albo szczekanie z frustracji. Dobry wybór, gdy problemem jest nakręcanie się i brak wyciszenia.',
@@ -60,7 +60,7 @@ export const problemOptions: ProblemOption[] = [
     id: 'dogoterapia',
     icon: 'heart-paw',
     title: 'Dogoterapia',
-    desc: 'wstępna rozmowa o celu spotkania, odbiorcach, przygotowaniu psa i dalszym planie',
+    desc: 'rozmowa o celu, bezpieczeństwie i starcie z psem',
     marketingTitle: 'Dogoterapia i przygotowanie psa do spokojnej pracy',
     marketingDesc:
       'Pierwsza rozmowa o celu spotkań, odbiorcach, bezpieczeństwie i tym, jak ułożyć sensowny plan bez przeciążania psa.',
@@ -71,7 +71,7 @@ export const problemOptions: ProblemOption[] = [
     id: 'inne',
     icon: 'compass',
     title: 'Inny temat do omówienia',
-    desc: 'nietypowa sytuacja, którą chcesz szybko uporządkować i dobrze opisać w formularzu',
+    desc: 'temat mieszany albo nietypowy',
     marketingTitle: 'Nie widzisz tu swojego przypadku?',
     marketingDesc:
       'Wybierz to, jeśli temat jest mieszany, zmienia się w czasie albo po prostu chcesz opisać go po swojemu przed rozmową.',
@@ -113,7 +113,7 @@ export const faq = [
   },
   {
     q: 'Co dostaję po rozmowie?',
-    a: 'Jasny pierwszy plan: co zrobić od razu, co obserwować dalej i czy potrzebna będzie szersza konsultacja, plan pracy albo diagnostyka weterynaryjna.',
+    a: 'Jasny pierwszy plan: co zrobić od razu, co obserwować dalej i czy wystarczy ten start, czy lepsza będzie dłuższa konsultacja albo diagnostyka weterynaryjna.',
   },
 ]
 

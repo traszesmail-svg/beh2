@@ -29,7 +29,7 @@ export function generateMetadata({ params }: OfferDetailPageProps): Metadata {
     return buildMarketingMetadata({
       title: 'Oferta',
       path: '/oferta',
-      description: 'Przegląd aktualnych form współpracy w marce Regulski.',
+      description: 'Przegląd aktualnej oferty w marce Regulski.',
     })
   }
 
@@ -61,26 +61,25 @@ export default function OfferDetailPage({ params }: OfferDetailPageProps) {
             {offer.priceLabel ? (
               <div className="hero-price-badge offer-price-box tree-backed-card">
                 <strong>{offer.priceLabel}</strong>
-                <span>Cena jawna dla tej ścieżki startowej lub konsultacyjnej.</span>
               </div>
             ) : (
               <div className="list-card tree-backed-card top-gap">
-                <strong>Zakres ustalany indywidualnie</strong>
-                <span>Ta forma pracy jest dobierana po rozpoznaniu sytuacji i nie ma jednej publicznej ceny dla każdego przypadku.</span>
+                <strong>Cena po wiadomości</strong>
+                <span>Najpierw napisz.</span>
               </div>
             )}
 
             <div className="stack-gap top-gap">
               {offer.descriptions.map((paragraph) => (
-                <p key={paragraph} className="hero-text hero-text-tight compact-paragraph">
-                  {paragraph}
-                </p>
+                <div key={paragraph} className="list-card tree-backed-card">
+                  <span>{paragraph}</span>
+                </div>
               ))}
             </div>
 
             {offer.note ? (
               <div className="list-card accent-outline tree-backed-card top-gap">
-                <strong>Ważna uwaga</strong>
+                <strong>Ważne</strong>
                 <span>{offer.note}</span>
               </div>
             ) : null}
@@ -111,26 +110,32 @@ export default function OfferDetailPage({ params }: OfferDetailPageProps) {
 
         <section className="two-col-section">
           <div className="panel section-panel">
-            <div className="section-eyebrow">Dla kogo</div>
-            <h2>Kiedy ta ścieżka ma najwięcej sensu</h2>
+            <div className="section-eyebrow">Kiedy to wybrać</div>
+            <h2>Sprawdź szybko</h2>
             <div className="stack-gap top-gap">
+              <div className="list-card tree-backed-card">
+                <strong>Kiedy</strong>
+                <span>{offer.whenToChoose}</span>
+              </div>
               {offer.bestFor.map((item) => (
                 <div key={item} className="list-card tree-backed-card">
-                  <strong>{item}</strong>
-                  <span>To dobry sygnał, że właśnie ta forma może być właściwym następnym krokiem.</span>
+                  <span>{item}</span>
                 </div>
               ))}
             </div>
           </div>
 
           <div className="panel section-panel">
-            <div className="section-eyebrow">Rezultat</div>
-            <h2>Co ma dać ten etap pracy</h2>
+            <div className="section-eyebrow">Co potem</div>
+            <h2>Po tym wiesz, co robić</h2>
             <div className="stack-gap top-gap">
+              <div className="list-card tree-backed-card">
+                <strong>Dalej</strong>
+                <span>{offer.nextStep}</span>
+              </div>
               {offer.outcomes.map((item) => (
                 <div key={item} className="list-card tree-backed-card">
-                  <strong>{item}</strong>
-                  <span>Efektem ma być większy porządek, lepsze rozpoznanie i adekwatna decyzja o dalszych krokach.</span>
+                  <span>{item}</span>
                 </div>
               ))}
             </div>
@@ -138,18 +143,15 @@ export default function OfferDetailPage({ params }: OfferDetailPageProps) {
         </section>
 
         <section className="panel cta-panel compact-sales-cta">
-          <div className="section-eyebrow">Dalszy krok</div>
-          <h2>Nie jesteś pewien, która ścieżka ma sens? Napisz do mnie zamiast zgadywać.</h2>
-          <p className="hero-text">
-            Możesz przejść do kontaktu albo wrócić do przeglądu całej oferty. Najważniejsze jest dobranie pomocy do
-            sytuacji, a nie odwrotnie.
-          </p>
+          <div className="section-eyebrow">Nie wiesz?</div>
+          <h2>Napisz.</h2>
+          <p className="hero-text">Krótki opis wystarczy.</p>
           <div className="hero-actions top-gap">
             <Link href="/kontakt" prefetch={false} className="button button-primary big-button">
-              Napisz i dobierz formę współpracy
+              Napisz wiadomość
             </Link>
-            <Link href="/oferta" prefetch={false} className="button button-ghost big-button">
-              Wróć do form współpracy
+            <Link href="/book" prefetch={false} className="button button-ghost big-button">
+              Umów 15 min
             </Link>
           </div>
         </section>

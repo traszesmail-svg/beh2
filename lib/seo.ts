@@ -33,7 +33,7 @@ export function buildMarketingMetadata({ title, path, description }: MarketingMe
 
 export async function buildHomeMetadata(): Promise<Metadata> {
   const description =
-    `${SITE_NAME}. ${SITE_TAGLINE}. Spokojny, ekspercki system pracy dla opiekunów psów i kotów: od pierwszej konsultacji po terapię, wizyty domowe i pobyty.`
+    `${SITE_NAME}. ${SITE_TAGLINE}. Spokojna, ekspercka pomoc dla opiekunów psów i kotów: od pierwszej konsultacji po terapię, wizyty domowe i pobyty.`
 
   return {
     description,
@@ -60,7 +60,7 @@ export async function buildBookMetadata(): Promise<Metadata> {
     title: 'Szybka konsultacja 15 min',
     path: '/book',
     description:
-      `Umów pierwszy krok w marce ${SITE_SHORT_NAME}. Krótka konsultacja audio dla psa lub kota pomaga uporządkować sytuację i zdecydować, czy potrzebna jest dalsza praca ze specjalistą ${SPECIALIST_NAME}.`,
+      `Umów 15 min w marce ${SITE_SHORT_NAME}. Krótka konsultacja audio dla psa lub kota pomaga uporządkować sytuację i zdecydować, co zrobić dalej ze specjalistą ${SPECIALIST_NAME}.`,
   })
 }
 

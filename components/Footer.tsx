@@ -10,17 +10,17 @@ import {
   SPECIALIST_CREDENTIALS,
   SPECIALIST_NAME,
   buildMailtoHref,
-  getContactDetails,
+  getPublicContactDetails,
 } from '@/lib/site'
 
 export function Footer() {
-  const contact = getContactDetails()
+  const contact = getPublicContactDetails()
   const buildMarker = getBuildMarkerSnapshot()
   const mailtoHref = contact.email
     ? buildMailtoHref(
         contact.email,
         'Zapytanie - Regulski | Terapia behawioralna',
-        'Dzień dobry,\n\nopisuję krótko swoją sytuację:\n\n- gatunek:\n- problem:\n- od kiedy trwa:\n- jaka forma pracy mnie interesuje:\n',
+        'Dzień dobry,\n\nopisuję krótko swoją sytuację:\n\n- gatunek:\n- problem:\n- od kiedy trwa:\n- od czego chcę zacząć:\n',
       )
     : null
 
@@ -45,16 +45,9 @@ export function Footer() {
               </a>
             ) : null}
 
-            {contact.phoneDisplay && contact.phoneHref ? (
-              <a href={`tel:${contact.phoneHref}`} className="contact-item">
-                <span className="contact-label">Telefon</span>
-                <span>{contact.phoneDisplay}</span>
-              </a>
-            ) : null}
-
             <Link href="/kontakt" prefetch={false} className="contact-item">
               <span className="contact-label">Kontakt</span>
-              <span>Napisz i dobierz pierwszy krok</span>
+              <span>Napisz wiadomość</span>
             </Link>
           </div>
         </div>
@@ -62,14 +55,24 @@ export function Footer() {
         <div className="footer-card">
           <div className="footer-label">Skróty</div>
           <div className="footer-links">
-            <Link href="/oferta" prefetch={false}>Formy współpracy</Link>
-            <Link href="/koty" prefetch={false}>Terapia kotów</Link>
-            <Link href="/oferta/pobyty-socjalizacyjno-terapeutyczne" prefetch={false}>Pobyty</Link>
-            <Link href="/book" prefetch={false} data-analytics-event="cta_click" data-analytics-location="footer">
-              Umów konsultację 15 min
+            <Link href="/oferta" prefetch={false}>
+              Oferta
             </Link>
-            <Link href="/polityka-prywatnosci" prefetch={false}>Polityka prywatności</Link>
-            <Link href="/regulamin" prefetch={false}>Regulamin</Link>
+            <Link href="/koty" prefetch={false}>
+              Terapia kotów
+            </Link>
+            <Link href="/oferta/pobyty-socjalizacyjno-terapeutyczne" prefetch={false}>
+              Pobyty
+            </Link>
+            <Link href="/book" prefetch={false} data-analytics-event="cta_click" data-analytics-location="footer">
+              Umów 15 min
+            </Link>
+            <Link href="/polityka-prywatnosci" prefetch={false}>
+              Polityka prywatności
+            </Link>
+            <Link href="/regulamin" prefetch={false}>
+              Regulamin
+            </Link>
           </div>
         </div>
       </div>
@@ -78,7 +81,7 @@ export function Footer() {
         <div className="footer-certification-copy">
           <span className="footer-label">Zaufanie</span>
           <span>
-            COAPE / CAPBT jako potwierdzenie kwalifikacji.{' '}
+            COAPE / CAPBT.{' '}
             <a href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="inline-link">
               Zobacz publiczny profil specjalisty w CAPBT
             </a>

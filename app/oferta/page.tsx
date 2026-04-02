@@ -5,22 +5,24 @@ import { PdfGuideCoverStack } from '@/components/PdfGuideCoverStack'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { getOfferDetailCtaLabel, getOfferDetailHref, OFFERS } from '@/lib/offers'
-import { listFeaturedPdfGuides, listPdfBundles, listPdfGuides } from '@/lib/pdf-guides'
+import { listFeaturedPdfGuides, listPdfBundles, listPdfGuides, listPdfGuidesByCategory } from '@/lib/pdf-guides'
 import { buildMarketingMetadata } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: 'Formy współpracy',
+  title: 'Oferta',
   path: '/oferta',
-  description:
-    'Przegląd ścieżek pracy w marce Regulski: szybka konsultacja 15 min, konsultacja 30 min, konsultacja online, wizyty domowe, terapia, pobyty i poradniki PDF.',
+  description: 'Wybierz pierwszy krok: 15 min, 30 min, konsultacja online, wizyta, terapia, pobyt albo PDF.',
 })
 
 function renderOfferCard(offer: (typeof OFFERS)[number]) {
+  const primaryLabel =
+    offer.kind === 'booking' ? 'Umów 15 min' : offer.kind === 'resource' ? 'Napisz o PDF' : 'Napisz'
+
   return (
     <article key={offer.slug} className="offer-card tree-backed-card">
-      <div className="offer-card-media">
+      <Link href={getOfferDetailHref(offer)} prefetch={false} className="offer-card-media">
         <Image
           src={offer.imageSrc}
           alt={offer.imageAlt}
@@ -29,22 +31,35 @@ function renderOfferCard(offer: (typeof OFFERS)[number]) {
           sizes="(max-width: 1100px) 100vw, 30vw"
           className="offer-card-image"
         />
-      </div>
+      </Link>
 
       <div className="offer-card-head">
         <div>
           <div className="section-eyebrow">{offer.eyebrow}</div>
-          <h3>{offer.title}</h3>
+          <Link href={getOfferDetailHref(offer)} prefetch={false} className="inline-link">
+            <h3>{offer.title}</h3>
+          </Link>
         </div>
         {offer.priceLabel ? <span className="offer-price">{offer.priceLabel}</span> : null}
       </div>
-      <p>{offer.cardSummary}</p>
+
+      <div className="stack-gap top-gap-small">
+        <div className="list-card tree-backed-card">
+          <strong>Kiedy to wybrać</strong>
+          <span>{offer.whenToChoose}</span>
+        </div>
+        <div className="list-card tree-backed-card">
+          <strong>Co dalej</strong>
+          <span>{offer.nextStep}</span>
+        </div>
+      </div>
+
       <div className="offer-card-actions">
         <Link href={getOfferDetailHref(offer)} prefetch={false} className="button button-ghost">
           {getOfferDetailCtaLabel(offer)}
         </Link>
         <Link href={offer.primaryHref} prefetch={false} className="button button-primary">
-          {offer.primaryCtaLabel}
+          {primaryLabel}
         </Link>
       </div>
     </article>
@@ -55,6 +70,8 @@ export default function OfferPage() {
   const featuredPdfGuides = listFeaturedPdfGuides()
   const pdfGuideCount = listPdfGuides().length
   const pdfBundleCount = listPdfBundles().length
+  const dogPdfCount = listPdfGuidesByCategory('dog').length
+  const catPdfCount = listPdfGuidesByCategory('cat').length
   const startOffers = OFFERS.filter((offer) =>
     ['szybka-konsultacja-15-min', 'konsultacja-30-min', 'konsultacja-behawioralna-online'].includes(offer.slug),
   )
@@ -71,20 +88,14 @@ export default function OfferPage() {
         <Header />
 
         <section className="panel section-panel offer-page-panel">
-          <div className="section-eyebrow">Formy współpracy</div>
-          <h1>Dobierz formę pomocy do sytuacji, a nie odwrotnie.</h1>
-          <p className="hero-text">
-            To nie jest zwykły cennik. Każda ścieżka ma inną rolę: od małego kroku na start po terapię, wizyty domowe
-            i pobyty socjalizacyjno-terapeutyczne.
-          </p>
+          <div className="section-eyebrow">Oferta</div>
+          <h1>Wybierz, od czego zacząć.</h1>
+          <p className="hero-text">Na każdej karcie: kiedy to wybrać i co dalej.</p>
 
           <div className="offer-page-stack top-gap">
             <section className="offer-section-block">
               <div className="section-eyebrow">Na start</div>
-              <h2>Najpierw dobry próg wejścia</h2>
-              <p className="hero-text offer-section-intro">
-                Te formy pomagają wejść w temat bez zgadywania, czy od razu potrzebna jest większa praca.
-              </p>
+              <h2>Najprostszy start</h2>
 
               <div className="offer-grid top-gap offer-grid-balanced">
                 {startOffers.map((offer) => renderOfferCard(offer))}
@@ -92,11 +103,8 @@ export default function OfferPage() {
             </section>
 
             <section className="offer-section-block">
-              <div className="section-eyebrow">Dalsza praca</div>
-              <h2>Gdy potrzeba więcej niż jednej rozmowy</h2>
-              <p className="hero-text offer-section-intro">
-                Te ścieżki uruchamiamy wtedy, gdy po rozpoznaniu widać potrzebę terapii, pracy w środowisku albo pobytu.
-              </p>
+              <div className="section-eyebrow">Gdy trzeba więcej</div>
+              <h2>Więcej niż szybki start</h2>
 
               <div className="offer-grid top-gap offer-grid-balanced">
                 {deeperOffers.map((offer) => renderOfferCard(offer))}
@@ -113,19 +121,25 @@ export default function OfferPage() {
                     showLegend
                   />
                   <div className="offer-feature-media-meta">
-                    <span className="pill subtle-pill offer-feature-pill">{pdfGuideCount} tematów PDF</span>
+                    <span className="pill subtle-pill offer-feature-pill">{pdfGuideCount} PDF</span>
                     <span className="pill subtle-pill offer-feature-pill">{pdfBundleCount} pakietów</span>
-                    <span className="pill subtle-pill offer-feature-pill">Pies i kot</span>
+                    <span className="pill subtle-pill offer-feature-pill">{dogPdfCount} dla psów</span>
+                    <span className="pill subtle-pill offer-feature-pill">{catPdfCount} dla kotów</span>
                   </div>
                 </div>
 
                 <div className="offer-feature-content">
                   <div className="section-eyebrow">{pdfOffer.eyebrow}</div>
                   <h2>{pdfOffer.title}</h2>
-                  <p>{pdfOffer.cardSummary}</p>
-                  <div className="list-card tree-backed-card offer-feature-note">
-                    <strong>Dobry wybór, gdy chcesz zacząć spokojniej</strong>
-                    <span>PDF porządkuje jeden temat i pomaga wejść w pracę bez rezerwowania rozmowy od razu.</span>
+                  <div className="stack-gap top-gap-small">
+                    <div className="list-card tree-backed-card">
+                      <strong>Kiedy to wybrać</strong>
+                      <span>{pdfOffer.whenToChoose}</span>
+                    </div>
+                    <div className="list-card tree-backed-card">
+                      <strong>Co dalej</strong>
+                      <span>{pdfOffer.nextStep}</span>
+                    </div>
                   </div>
                   <div className="offer-card-actions">
                     <Link href={getOfferDetailHref(pdfOffer)} prefetch={false} className="button button-ghost">

@@ -45,6 +45,8 @@ export default function PdfGuidesListingPage() {
   const featuredGuides = listFeaturedPdfGuides()
   const bundles = listPdfBundles()
   const guides = listPdfGuides()
+  const dogGuides = listPdfGuidesByCategory('dog')
+  const catGuides = listPdfGuidesByCategory('cat')
   const featuredGuideSlugs = new Set(featuredGuides.map((guide) => guide.slug))
   const categoryGroups = (Object.keys(categorySections) as PdfGuideCategory[])
     .map((category) => {
@@ -87,11 +89,15 @@ export default function PdfGuidesListingPage() {
             </div>
             <div className="stat-card tree-backed-card pdf-stat-card">
               <strong>{bundles.length}</strong>
-              <span>pakietów dla najczęstszych obszarów problemowych</span>
+              <span>pakietów na częste tematy</span>
             </div>
             <div className="stat-card tree-backed-card pdf-stat-card">
-              <strong>Pies i kot</strong>
-              <span>materiały dla obu ścieżek, od prostego startu po pakiet</span>
+              <strong>{dogGuides.length}</strong>
+              <span>PDF-y dla psów</span>
+            </div>
+            <div className="stat-card tree-backed-card pdf-stat-card">
+              <strong>{catGuides.length}</strong>
+              <span>PDF-y dla kotów</span>
             </div>
           </div>
 
@@ -116,8 +122,8 @@ export default function PdfGuidesListingPage() {
 
             <div className="list-card tree-backed-card pdf-entry-card">
               <div className="section-eyebrow">Pakiet PDF</div>
-              <strong>Lepszy, gdy temat rozchodzi się na kilka obszarów</strong>
-              <span>Pakiet skraca zgadywanie, który materiał wybrać pierwszy, kiedy potrzebujesz środowiska, startu i dalszego kroku naraz.</span>
+              <strong>Lepszy, gdy temat ma kilka części</strong>
+              <span>Pakiet pomaga, gdy temat dotyczy kilku spraw i trudno wybrać jeden materiał na start.</span>
               <Link href={`${PDF_GUIDES_LISTING_ROUTE}#pakiety-pdf`} prefetch={false} className="inline-link">
                 Przejdź do pakietów PDF
               </Link>
@@ -125,8 +131,8 @@ export default function PdfGuidesListingPage() {
 
             <div className="list-card tree-backed-card pdf-entry-card">
               <div className="section-eyebrow">Kontakt</div>
-              <strong>Dla doboru materiału, zakupu i dostępu</strong>
-              <span>To dobry wybór, jeśli chcesz napisać o konkretnym poradniku albo sprawdzić, czy lepszy będzie pakiet czy pojedynczy PDF.</span>
+              <strong>Gdy chcesz dopytać przed wyborem</strong>
+              <span>Napisz, jeśli chcesz sprawdzić, czy lepszy będzie pakiet czy jeden poradnik.</span>
               <Link href={buildPdfInquiryHref()} prefetch={false} className="inline-link">
                 Napisz w sprawie poradnika lub pakietu
               </Link>
@@ -171,8 +177,8 @@ export default function PdfGuidesListingPage() {
           <div className="section-eyebrow">Pakiety</div>
           <h2>Pakiety, gdy jeden PDF to za mało</h2>
           <p className="hero-text">
-            To bardziej uporządkowana ścieżka dla szerszego tematu. Pakiet od razu pokazuje, co wchodzi w skład i kiedy lepiej
-            pisać o zestawie niż o jednym poradniku.
+            To dobry wybór przy szerszym temacie. Pakiet od razu pokazuje, co zawiera i czy lepiej pisać o zestawie niż o
+            jednym poradniku.
           </p>
 
           <div className="offer-grid top-gap">
@@ -183,12 +189,9 @@ export default function PdfGuidesListingPage() {
         </section>
 
         <section className="panel section-panel" id="katalog-pdf">
-          <div className="section-eyebrow">Cały katalog</div>
-          <h2>Pozostałe tematy według obszaru</h2>
-          <p className="hero-text">
-            Najczęściej wybierane materiały są wyżej. Tutaj zostaje reszta katalogu w krótszym układzie, już bez powtarzania tych
-            samych kart drugi raz.
-          </p>
+          <div className="section-eyebrow">Więcej tematów</div>
+          <h2>Pozostałe poradniki</h2>
+          <p className="hero-text">Najczęściej wybierane materiały są wyżej. Tutaj jest reszta tematów w krótszym układzie.</p>
 
           <div className="pdf-category-grid top-gap">
             {categoryGroups.map(({ category, section, guides: groupedGuides }) => (
@@ -223,7 +226,7 @@ export default function PdfGuidesListingPage() {
           </div>
 
           <div className="panel section-panel">
-            <div className="section-eyebrow">Wybór ścieżki</div>
+            <div className="section-eyebrow">Jak wybrać</div>
             <h2>Co wybrać na start</h2>
 
             <div className="stack-gap top-gap">
@@ -233,7 +236,7 @@ export default function PdfGuidesListingPage() {
               </div>
               <div className="list-card tree-backed-card">
                 <strong>Pakiet PDF</strong>
-                <span>Lepszy, gdy temat obejmuje kilka obszarów i chcesz dostać gotowy zestaw zamiast składać go samodzielnie.</span>
+                <span>Lepszy, gdy temat obejmuje kilka spraw i chcesz dostać gotowy zestaw zamiast składać go samodzielnie.</span>
               </div>
               <div className="list-card tree-backed-card">
                 <strong>Kontakt</strong>

@@ -1,21 +1,18 @@
 # Raport QA Live Clickthrough
 
-- Data: 2026-04-01 07:59:44 Europe/Warsaw
+- Data: 2026-03-31 20:32:17 Europe/Warsaw
 - URL: https://beh2.vercel.app
 - Wynik ogólny: FAIL
 - Kroki zaliczone: 14/17
-- Liczba zebranych issue z runtime: 0
-- Booking QA identity: QA LIVE 20260401-075944 / qa-live-20260401-075944@example.com
+- Liczba zebranych issue z runtime: 1
+- Booking QA identity: QA LIVE 20260331-203217 / qa-live-20260331-203217@example.com
 - Bezpiecznik płatności: bez realnej płatności PayU i bez fałszywego approve na produkcji; test manual zakończony reject w adminie
 
 ## Najważniejsze ustalenia
-- Booking live: zgłoszenie manual payment -> pending: locator.click: Timeout 30000ms exceeded.
-Call log:
-[2m  - waiting for getByRole('button', { name: /Przelew tradycyjny|Wpłata manualna/i }).first()[22m
-
+- Booking live: zgłoszenie manual payment -> pending: page.waitForResponse: Timeout 60000ms exceeded while waiting for event "response"
 - Admin live: odrzucenie testowej wpłaty QA: locator.waitFor: Timeout 60000ms exceeded.
 Call log:
-[2m  - waiting for locator('.booking-row').filter({ hasText: 'qa-live-20260401-075944@example.com' }).first().getByRole('button', { name: /Odrzuć wpłatę/i }) to be visible[22m
+[2m  - waiting for locator('.booking-row').filter({ hasText: 'qa-live-20260331-203217@example.com' }).first().getByRole('button', { name: /Odrzuć wpłatę/i }) to be visible[22m
 
 - Confirmation live: stan po odrzuceniu: Brak URL confirmation do odświeżenia.
 
@@ -89,44 +86,41 @@ Call log:
 
 ### PASS - Booking live: wybór tematu i slotu
 - Start URL: https://beh2.vercel.app/regulamin
-- End URL: https://beh2.vercel.app/form?problem=kot&slotId=2026-04-01-09%3A00
+- End URL: https://beh2.vercel.app/form?problem=kot&slotId=2026-04-01-09%3A20
 - Note: Wybrany temat: kot
-- Note: Wybrany slot: 09:00
+- Note: Wybrany slot: 09:20
 
 ### PASS - Booking live: formularz -> payment
-- Start URL: https://beh2.vercel.app/form?problem=kot&slotId=2026-04-01-09%3A00
-- End URL: https://beh2.vercel.app/payment?bookingId=db423e8f-9223-4180-a21a-287492e0d19c&access=uyj8ujn0rJ6qvA9JsT4hpygih8GiFu_r
+- Start URL: https://beh2.vercel.app/form?problem=kot&slotId=2026-04-01-09%3A20
+- End URL: https://beh2.vercel.app/payment?bookingId=54c33fa2-6798-4195-b612-ba585be710c6&access=Bbbz4qFXfU04UEpAle4FUN06XYuU1pop
 - Note: manualVisible=true
 - Note: payuVisible=true
 
 ### PASS - Booking live: pokój zablokowany przed paid
-- Start URL: https://beh2.vercel.app/payment?bookingId=db423e8f-9223-4180-a21a-287492e0d19c&access=uyj8ujn0rJ6qvA9JsT4hpygih8GiFu_r
-- End URL: https://beh2.vercel.app/payment?bookingId=db423e8f-9223-4180-a21a-287492e0d19c&access=uyj8ujn0rJ6qvA9JsT4hpygih8GiFu_r
+- Start URL: https://beh2.vercel.app/payment?bookingId=54c33fa2-6798-4195-b612-ba585be710c6&access=Bbbz4qFXfU04UEpAle4FUN06XYuU1pop
+- End URL: https://beh2.vercel.app/payment?bookingId=54c33fa2-6798-4195-b612-ba585be710c6&access=Bbbz4qFXfU04UEpAle4FUN06XYuU1pop
 - Note: Pokój nie wpuszcza przed statusem paid.
 
 ### FAIL - Booking live: zgłoszenie manual payment -> pending
-- Start URL: https://beh2.vercel.app/payment?bookingId=db423e8f-9223-4180-a21a-287492e0d19c&access=uyj8ujn0rJ6qvA9JsT4hpygih8GiFu_r
-- End URL: https://beh2.vercel.app/payment?bookingId=db423e8f-9223-4180-a21a-287492e0d19c&access=uyj8ujn0rJ6qvA9JsT4hpygih8GiFu_r
-- Note: locator.click: Timeout 30000ms exceeded.
-Call log:
-[2m  - waiting for getByRole('button', { name: /Przelew tradycyjny|Wpłata manualna/i }).first()[22m
-
+- Start URL: https://beh2.vercel.app/payment?bookingId=54c33fa2-6798-4195-b612-ba585be710c6&access=Bbbz4qFXfU04UEpAle4FUN06XYuU1pop
+- End URL: https://beh2.vercel.app/payment?bookingId=54c33fa2-6798-4195-b612-ba585be710c6&access=Bbbz4qFXfU04UEpAle4FUN06XYuU1pop
+- Note: page.waitForResponse: Timeout 60000ms exceeded while waiting for event "response"
 
 ### FAIL - Admin live: odrzucenie testowej wpłaty QA
-- Start URL: https://beh2.vercel.app/payment?bookingId=db423e8f-9223-4180-a21a-287492e0d19c&access=uyj8ujn0rJ6qvA9JsT4hpygih8GiFu_r
-- End URL: https://beh2.vercel.app/payment?bookingId=db423e8f-9223-4180-a21a-287492e0d19c&access=uyj8ujn0rJ6qvA9JsT4hpygih8GiFu_r
+- Start URL: https://beh2.vercel.app/payment?bookingId=54c33fa2-6798-4195-b612-ba585be710c6&access=Bbbz4qFXfU04UEpAle4FUN06XYuU1pop
+- End URL: https://beh2.vercel.app/payment?bookingId=54c33fa2-6798-4195-b612-ba585be710c6&access=Bbbz4qFXfU04UEpAle4FUN06XYuU1pop
 - Note: locator.waitFor: Timeout 60000ms exceeded.
 Call log:
-[2m  - waiting for locator('.booking-row').filter({ hasText: 'qa-live-20260401-075944@example.com' }).first().getByRole('button', { name: /Odrzuć wpłatę/i }) to be visible[22m
+[2m  - waiting for locator('.booking-row').filter({ hasText: 'qa-live-20260331-203217@example.com' }).first().getByRole('button', { name: /Odrzuć wpłatę/i }) to be visible[22m
 
 
 ### FAIL - Confirmation live: stan po odrzuceniu
-- Start URL: https://beh2.vercel.app/payment?bookingId=db423e8f-9223-4180-a21a-287492e0d19c&access=uyj8ujn0rJ6qvA9JsT4hpygih8GiFu_r
-- End URL: https://beh2.vercel.app/payment?bookingId=db423e8f-9223-4180-a21a-287492e0d19c&access=uyj8ujn0rJ6qvA9JsT4hpygih8GiFu_r
+- Start URL: https://beh2.vercel.app/payment?bookingId=54c33fa2-6798-4195-b612-ba585be710c6&access=Bbbz4qFXfU04UEpAle4FUN06XYuU1pop
+- End URL: https://beh2.vercel.app/payment?bookingId=54c33fa2-6798-4195-b612-ba585be710c6&access=Bbbz4qFXfU04UEpAle4FUN06XYuU1pop
 - Note: Brak URL confirmation do odświeżenia.
 
 ## Runtime issues
-- Brak zebranych błędów konsoli, pageerrorów i same-origin request failures/HTTP >= 400.
+- [requestfailed] public | https://beh2.vercel.app/icon.svg?e417696e978f29c3 | net::ERR_ABORTED
 
 ## Uwagi
 - `mailto:` zostało zweryfikowane po href-ie; nie otwierałem zewnętrznego klienta poczty.

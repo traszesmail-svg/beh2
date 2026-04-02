@@ -25,7 +25,7 @@ export function getManualPaymentDisplayCopy({
 
   if (hasPhone && hasBankAccount) {
     return {
-      selectionTitle: 'BLIK na telefon / przelew',
+      selectionTitle: 'Przelew tradycyjny / BLIK na telefon',
       summaryTitle: 'BLIK / przelew z potwierdzeniem do 60 min',
       description: 'Najprostszy start: BLIK na telefon albo zwykły przelew z tytułem bookingu.',
     }
