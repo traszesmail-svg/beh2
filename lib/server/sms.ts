@@ -1,4 +1,6 @@
-import { normalizePolishPhone, maskPhoneForLogs } from '@/lib/phone'
+import { getBookingServiceTitle, resolveBookingServiceType } from '@/lib/booking-services'
+import { maskPhoneForLogs, normalizePolishPhone } from '@/lib/phone'
+import { SITE_PRODUCTION_URL } from '@/lib/site'
 import { BookingRecord, SmsConfirmationStatus } from '@/lib/types'
 
 type SmsProvider = 'smsapi' | 'webhook'
@@ -117,8 +119,8 @@ function getSmsProviderConfig(): SmsProviderConfig {
   }
 }
 
-function getPaymentServiceName(): string {
-  return 'Szybka konsultacja 15 min'
+function getPaymentServiceName(booking: Pick<BookingRecord, 'serviceType' | 'amount'>): string {
+  return getBookingServiceTitle(resolveBookingServiceType(booking.serviceType, booking.amount))
 }
 
 function formatBookingDateTimeForSms(bookingDate: string, bookingTime: string): string {
@@ -133,18 +135,19 @@ function formatBookingDateTimeForSms(bookingDate: string, bookingTime: string): 
 }
 
 export function buildPaymentConfirmationSmsMessage(
-  booking: Pick<BookingRecord, 'bookingDate' | 'bookingTime'>,
+  booking: Pick<BookingRecord, 'bookingDate' | 'bookingTime' | 'serviceType' | 'amount'>,
 ): string {
-  const withDetails = `Potwierdzenie platnosci: ${getPaymentServiceName()}, termin: ${formatBookingDateTimeForSms(
+  const serviceName = getPaymentServiceName(booking)
+  const withDetails = `Potwierdzenie platnosci: ${serviceName}, termin: ${formatBookingDateTimeForSms(
     booking.bookingDate,
     booking.bookingTime,
-  )}. Szczegoly: beh2.vercel.app. Dziekuje, Krzysztof Regulski`
+  )}. Szczegoly: ${SITE_PRODUCTION_URL}. Dziekuje, Krzysztof Regulski`
 
   if (withDetails.length <= 160) {
     return withDetails
   }
 
-  return `Potwierdzenie platnosci: ${getPaymentServiceName()}, termin: ${formatBookingDateTimeForSms(
+  return `Potwierdzenie platnosci: ${serviceName}, termin: ${formatBookingDateTimeForSms(
     booking.bookingDate,
     booking.bookingTime,
   )}. Dziekuje, Krzysztof Regulski`
@@ -261,7 +264,7 @@ async function sendViaWebhook(
 }
 
 export async function sendPaymentConfirmationSms(
-  booking: Pick<BookingRecord, 'id' | 'phone' | 'customerPhoneNormalized' | 'bookingDate' | 'bookingTime'>,
+  booking: Pick<BookingRecord, 'id' | 'phone' | 'customerPhoneNormalized' | 'bookingDate' | 'bookingTime' | 'serviceType' | 'amount'>,
 ): Promise<PaymentConfirmationSmsResult> {
   const hasPhone = Boolean(booking.customerPhoneNormalized?.trim() || booking.phone?.trim())
 

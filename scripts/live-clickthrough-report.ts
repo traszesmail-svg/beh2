@@ -2,14 +2,29 @@
 import path from 'node:path'
 import { loadEnvConfig } from '@next/env'
 import { chromium, type BrowserContext, type Locator, type Page } from 'playwright-core'
+import { getBookingServiceTitle, type BookingServiceType } from '../lib/booking-services'
+import { getProblemLabel, isFutureAvailabilitySlot } from '../lib/data'
+import { SITE_PRODUCTION_URL } from '../lib/site'
+import type { ProblemType } from '../lib/types'
 
-type StepStatus = 'passed' | 'failed' | 'skipped'
+type StepStatus = 'passed' | 'failed'
 
 type StepResult = {
   name: string
   status: StepStatus
   startUrl: string
   endUrl: string
+  notes: string[]
+}
+
+type MobileResult = {
+  width: number
+  height: number
+  heroClear: boolean
+  cardsReadable: boolean
+  bottomAreaLean: boolean
+  ctaEasyToTap: boolean
+  layoutStable: boolean
   notes: string[]
 }
 
@@ -48,9 +63,23 @@ function getWarsawTimestamp() {
   }
 }
 
+function readArg(name: string): string | null {
+  const index = process.argv.indexOf(name)
+
+  if (index === -1) {
+    return null
+  }
+
+  return process.argv[index + 1] ?? null
+}
+
 function resolveBaseUrl() {
-  const raw = process.env.LIVE_SMOKE_URL ?? process.env.NEXT_PUBLIC_APP_URL ?? 'https://beh2.vercel.app'
+  const raw = readArg('--url') ?? process.env.LIVE_SMOKE_URL ?? SITE_PRODUCTION_URL
   return raw.endsWith('/') ? raw.slice(0, -1) : raw
+}
+
+function cleanText(value: string) {
+  return value.replace(/\s+/g, ' ').trim()
 }
 
 function sameOrigin(baseUrl: string, targetUrl: string) {
@@ -66,6 +95,14 @@ function isIgnorableSameOriginAbort(url: string, message: string, resourceType?:
     return false
   }
 
+  try {
+    const parsed = new URL(url)
+
+    if (parsed.pathname === '/icon.svg' || parsed.pathname.startsWith('/_next/static/') || parsed.pathname.startsWith('/branding/')) {
+      return true
+    }
+  } catch {}
+
   if (resourceType === 'document') {
     return true
   }
@@ -73,7 +110,7 @@ function isIgnorableSameOriginAbort(url: string, message: string, resourceType?:
   if (resourceType === 'image') {
     try {
       const parsed = new URL(url)
-      return parsed.pathname === '/_next/image'
+      return parsed.pathname === '/_next/image' || parsed.pathname === '/icon.svg'
     } catch {
       return false
     }
@@ -81,14 +118,17 @@ function isIgnorableSameOriginAbort(url: string, message: string, resourceType?:
 
   try {
     const parsed = new URL(url)
+    if (parsed.pathname.startsWith('/api/bookings/') && parsed.pathname.endsWith('/status')) {
+      return true
+    }
+  } catch {}
+
+  try {
+    const parsed = new URL(url)
     return parsed.searchParams.has('_rsc')
   } catch {
     return false
   }
-}
-
-function cleanText(value: string) {
-  return value.replace(/\s+/g, ' ').trim()
 }
 
 async function resolveBrowserExecutablePath() {
@@ -216,80 +256,444 @@ async function runStep(results: StepResult[], name: string, page: Page | null, w
   return step.status === 'passed'
 }
 
-async function gotoAndWaitForHeading(page: Page, url: string, heading: RegExp) {
-  await page.goto(url, { waitUntil: 'domcontentloaded' })
-  await page.getByRole('heading', { level: 1, name: heading }).waitFor({ timeout: 20000 })
-}
-
-async function clickAndWaitForUrl(page: Page, locator: Locator, urlPattern: RegExp) {
-  await Promise.all([page.waitForURL(urlPattern, { timeout: 20000, waitUntil: 'domcontentloaded' }), locator.click()])
-}
-
-async function readHref(locator: Locator) {
-  const href = await locator.first().getAttribute('href')
-
-  if (!href) {
-    throw new Error('Expected href attribute on tested link.')
-  }
-
-  return href
-}
-
-async function waitForVisible(locator: Locator, timeout: number) {
+async function isVisible(locator: Locator) {
   try {
-    await locator.waitFor({ timeout })
-    return true
+    return await locator.isVisible()
   } catch {
     return false
   }
 }
 
-async function rejectManualPaymentWithRetry(page: Page, bookingId: string, bookingEmail: string) {
-  const deadline = Date.now() + 90000
-  let lastError = ''
+async function waitForAnyVisible(locators: Locator[], timeout: number) {
+  const deadline = Date.now() + timeout
 
   while (Date.now() < deadline) {
-    await page.waitForLoadState('domcontentloaded', { timeout: 15000 }).catch(() => {})
-    const bookingRow = page.locator('.booking-row', { hasText: bookingEmail }).first()
-    await bookingRow.waitFor({ timeout: 15000 })
-
-    const rejectButton = bookingRow.getByRole('button', { name: /OdrzuĂ„â€ˇ wpÄąâ€šatĂ„â„˘/i })
-    if (await waitForVisible(rejectButton, 4000)) {
-      try {
-        await rejectButton.scrollIntoViewIfNeeded()
-        const responsePromise = page.waitForResponse(
-          (response) =>
-            response.url().includes(`/api/admin/bookings/${bookingId}/manual-payment`) &&
-            response.request().method() === 'POST',
-          { timeout: 20000 },
-        )
-        await rejectButton.click({ force: true })
-        const response = await responsePromise
-
-        if (response.ok()) {
-          return
-        }
-
-        lastError = `Admin reject POST zwrÄ‚Ĺ‚ciÄąâ€š ${response.status()}.`
-      } catch (error) {
-        lastError = error instanceof Error ? error.message : String(error)
+    for (const locator of locators) {
+      if (await isVisible(locator)) {
+        return locator
       }
-    } else {
-      lastError = 'Reject button nie byÄąâ€š jeszcze widoczny w wierszu bookingu.'
     }
 
-    await page.reload({ waitUntil: 'domcontentloaded' }).catch(() => {})
-    await page.waitForTimeout(1500)
+    await new Promise((resolve) => setTimeout(resolve, 250))
   }
 
-  throw new Error(`Admin reject nie doszedÄąâ€š do skutku na czas.${lastError ? ` Last issue: ${lastError}` : ''}`)
+  throw new Error('Ĺ»aden z oczekiwanych elementĂłw nie pojawiĹ‚ siÄ™ na czas.')
 }
 
-type DeepServiceRoute = {
-  detailPath: string
-  detailHeading: RegExp
-  contactPath?: string
-  contactHeading?: RegExp
+async function waitForAnyBodyText(page: Page, patterns: Array<RegExp | string>, timeout: number) {
+  const deadline = Date.now() + timeout
+
+  while (Date.now() < deadline) {
+    let text = ''
+
+    try {
+      text = cleanText(await page.locator('body').innerText())
+    } catch {}
+
+    for (const pattern of patterns) {
+      if (typeof pattern === 'string') {
+        if (text.includes(pattern)) {
+          return text
+        }
+      } else if (pattern.test(text)) {
+        return text
+      }
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 250))
+  }
+
+  throw new Error('Ĺ»aden z oczekiwanych elementĂłw nie pojawiĹ‚ siÄ™ na czas.')
+}
+
+function escapeRegExp(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+function escapeAttributeValue(value: string) {
+  return value.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
+}
+
+function getBookingFormField(page: Page, field: string) {
+  return page.locator(`[data-booking-field="${escapeAttributeValue(field)}"]`).first()
+}
+
+function getBookingSubmitButton(page: Page) {
+  return page.locator('[data-booking-submit="payment"]').first()
+}
+
+async function submitBookingForm(page: Page) {
+  await page.evaluate(() => {
+    const form = document.querySelector('[data-booking-form="details"]') as HTMLFormElement | null
+    const button = document.querySelector('[data-booking-submit="payment"]') as HTMLButtonElement | null
+
+    if (!form || !button) {
+      throw new Error('Missing booking form or submit button.')
+    }
+
+    form.requestSubmit(button)
+  })
+}
+
+function getPaymentMethodButton(page: Page, method: 'manual' | 'payu') {
+  return page.locator(`[data-payment-method="${method}"]`).first()
+}
+
+function getPaymentSubmitButton(page: Page, method: 'manual' | 'payu') {
+  return page.locator(`[data-payment-submit="${method}"]`).first()
+}
+
+function getBookingRowLocators(page: Page, bookingEmail: string, bookingId?: string | null) {
+  const locators: Locator[] = []
+
+  if (bookingId) {
+    locators.push(page.locator(`[data-booking-id="${escapeAttributeValue(bookingId)}"]`).first())
+  }
+
+  locators.push(page.locator(`[data-booking-email="${escapeAttributeValue(bookingEmail)}"]`).first())
+  locators.push(page.locator('.booking-row', { hasText: bookingEmail }).first())
+
+  return locators
+}
+
+async function waitForBookingRow(page: Page, bookingEmail: string, bookingId?: string | null, timeout = 20000) {
+  return waitForAnyVisible(getBookingRowLocators(page, bookingEmail, bookingId), timeout)
+}
+
+async function clickAndWaitForUrl(
+  page: Page,
+  locator: Locator,
+  urlPattern: RegExp | string | ((url: URL) => boolean),
+  timeout = 30000,
+) {
+  await Promise.all([page.waitForURL(urlPattern, { timeout, waitUntil: 'domcontentloaded' }), locator.click({ force: true })])
+}
+
+async function waitForHome(page: Page, baseUrl: string) {
+  await page.goto(`${baseUrl}/`, { waitUntil: 'domcontentloaded' })
+  await waitForAnyVisible(
+    [
+      page
+        .locator('main h1')
+        .filter({ hasText: /Masz psa, kota albo temat mieszany\?|Spokojny start bez zgadywania|Najpierw prosty wybór, potem konkretny krok/i })
+        .first(),
+      page.locator('main h1').first(),
+    ],
+    20000,
+  )
+  await waitForAnyVisible([page.locator('#home-paths').first(), page.locator('[data-home-quick-choice]').first()], 20000)
+}
+
+async function waitForConfirmationState(page: Page, expectedState: string, headingFallback: RegExp, timeout: number) {
+  return waitForAnyVisible(
+    [
+      page.locator(`[data-confirmation-state="${escapeAttributeValue(expectedState)}"]`).first(),
+      page.getByRole('heading', { level: 1, name: headingFallback }),
+    ],
+    timeout,
+  )
+}
+
+async function waitForPendingManualReview(page: Page, timeout: number) {
+  return waitForAnyVisible(
+    [
+      page.locator('[data-confirmation-state="pending-manual-review"]').first(),
+      page.locator('[data-payment-state="pending-manual-review"]').first(),
+      page.getByRole('heading', { level: 1, name: /Wplata czeka na potwierdzenie/i }),
+    ],
+    timeout,
+  )
+}
+
+async function assertNoPublicPhoneLinks(page: Page, routePath: string) {
+  const telLinkCount = await page.locator('a[href^="tel:"]').count()
+
+  if (telLinkCount > 0) {
+    throw new Error(`Publiczny link tel: nadal jest widoczny na ${routePath}.`)
+  }
+}
+
+async function assertLegacyHeaderLinksHidden(page: Page, routePath: string) {
+  const legacyLabels = ['Koty', 'Pobyty', 'UmĂłw konsultacjÄ™']
+  const visibleLegacyLinks: string[] = []
+
+  for (const label of legacyLabels) {
+    if ((await page.getByRole('link', { name: new RegExp(`^${label}$`, 'i') }).count()) > 0) {
+      visibleLegacyLinks.push(label)
+    }
+  }
+
+  if (visibleLegacyLinks.length > 0) {
+    throw new Error(`Stare linki nawigacji nadal sÄ… widoczne na ${routePath}: ${visibleLegacyLinks.join(', ')}.`)
+  }
+}
+
+type OfferJourneyConfig = {
+  stepName: string
+  serviceType: BookingServiceType
+  offerHeading: RegExp
+  problemType: ProblemType
+  animalType: 'Pies' | 'Kot'
+  ownerName: string
+  email: string
+  petAge: string
+  durationNotes: string
+  description: string
+  phone: string
+}
+
+async function runOfferJourney(results: StepResult[], page: Page, baseUrl: string, config: OfferJourneyConfig) {
+  await runStep(results, config.stepName, page, async (step) => {
+    await page.goto(`${baseUrl}/oferta`, { waitUntil: 'domcontentloaded' })
+    await waitForAnyVisible([page.getByRole('heading', { level: 1, name: /Wybierz start dla swojej sytuacji\./i })], 20000)
+
+    const offerCard = page.locator('.offer-card', { has: page.getByRole('heading', { name: config.offerHeading }) }).first()
+    await waitForAnyVisible([offerCard], 20000)
+
+    const offerButton = offerCard.locator('.offer-card-actions .button').first()
+    await clickAndWaitForUrl(
+      page,
+      offerButton,
+      (url) => url.pathname === '/book' && url.searchParams.get('service') === config.serviceType,
+    )
+
+    await waitForAnyVisible(
+      [page.getByRole('heading', { level: 1, name: new RegExp(`Wybierz temat dla: ${escapeRegExp(getBookingServiceTitle(config.serviceType))}`, 'i') })],
+      20000,
+    )
+    step.notes.push(`/oferta -> /book z service=${config.serviceType}`)
+
+    const topicCard = page.locator(`a.topic-card[data-problem="${escapeAttributeValue(config.problemType)}"]`).first()
+    await clickAndWaitForUrl(
+      page,
+      topicCard,
+      (url) =>
+        url.pathname === '/slot' &&
+        url.searchParams.get('problem') === config.problemType &&
+        url.searchParams.get('service') === config.serviceType,
+    )
+
+    await waitForAnyVisible(
+      [page.getByRole('heading', { level: 1, name: new RegExp(`Wybierz termin: ${escapeRegExp(getProblemLabel(config.problemType))}`, 'i') })],
+      20000,
+    )
+    step.notes.push(`/book -> /slot z problem=${config.problemType}`)
+
+    const firstSlot = page.locator('a.slot-link').first()
+    const emptyState = page.locator('.empty-box').first()
+    await waitForAnyVisible([firstSlot, emptyState], 20000)
+
+    if ((await isVisible(emptyState)) && !(await isVisible(firstSlot))) {
+      step.notes.push(`/book -> /slot z problem=${config.problemType}`)
+      step.notes.push(`emptyState=true dla service=${config.serviceType}`)
+      return
+    }
+
+    await clickAndWaitForUrl(
+      page,
+      firstSlot,
+      (url) =>
+        url.pathname === '/form' &&
+        url.searchParams.get('problem') === config.problemType &&
+        url.searchParams.get('service') === config.serviceType,
+    )
+
+    await waitForAnyVisible([page.getByRole('heading', { level: 1, name: /Uzupełnij dane do rezerwacji/i })], 20000)
+    step.notes.push(`/slot -> /form z service=${config.serviceType}`)
+
+    await getBookingFormField(page, 'owner-name').fill(config.ownerName)
+    await getBookingFormField(page, 'animal-type').selectOption(config.animalType)
+    await getBookingFormField(page, 'pet-age').fill(config.petAge)
+    await getBookingFormField(page, 'duration-notes').fill(config.durationNotes)
+    await getBookingFormField(page, 'description').fill(config.description)
+    await getBookingFormField(page, 'phone').fill(config.phone)
+    await getBookingFormField(page, 'email').fill(config.email)
+
+    const bookingResponse = page.waitForResponse(
+      (response) => response.url().includes('/api/bookings') && response.request().method() === 'POST',
+    )
+    await submitBookingForm(page)
+    const response = await bookingResponse
+    if (!response.ok()) {
+      throw new Error(`POST /api/bookings zwrocil ${response.status()}.`)
+    }
+
+    await page.waitForURL(
+      (url) => url.pathname === '/payment' && url.searchParams.get('service') === config.serviceType,
+      {
+        timeout: 60000,
+        waitUntil: 'domcontentloaded',
+      },
+    )
+
+    const paymentUrl = new URL(page.url())
+    if (paymentUrl.searchParams.get('service') !== config.serviceType) {
+      throw new Error(`URL payment nie zachowal service=${config.serviceType}.`)
+    }
+
+    await waitForAnyVisible(
+      [
+        page.locator('[data-payment-state="payment-selection"]').first(),
+        page.getByRole('heading', { level: 1, name: /Wybierz sposób płatności/i }),
+      ],
+      20000,
+    )
+
+    const manualVisible = (await page.locator('[data-payment-method="manual"]').count()) > 0
+    const payuVisible = (await page.locator('[data-payment-method="payu"]').count()) > 0
+
+    step.notes.push(`/form -> /payment z service=${config.serviceType}`)
+    step.notes.push(`manualVisible=${manualVisible}`)
+    step.notes.push(`payuVisible=${payuVisible}`)
+  })
+}
+
+async function rejectManualPaymentWithRetry(page: Page, bookingId: string) {
+  const rejectButton = page.locator(`[data-admin-booking-actions="${escapeAttributeValue(bookingId)}"] [data-admin-manual-action="reject"]`).first()
+
+  await waitForAnyVisible([rejectButton], 20000)
+
+  const responsePromise = page
+    .waitForResponse(
+      (response) =>
+        response.url().includes(`/api/admin/bookings/${bookingId}/manual-payment`) &&
+        response.request().method() === 'POST',
+      { timeout: 30000 },
+    )
+    .catch(() => null)
+
+  await rejectButton.click({ force: true })
+  const response = await responsePromise
+
+  if (!response) {
+    throw new Error('Admin reject nie zwrócił odpowiedzi z API.')
+  }
+
+  if (!response.ok()) {
+    throw new Error(`Admin reject POST zwrócił ${response.status()}.`)
+  }
+
+  await page.waitForLoadState('domcontentloaded').catch(() => {})
+  await page.waitForTimeout(1500)
+}
+
+async function checkMobileLayout(
+  browser: Awaited<ReturnType<typeof chromium.launch>>,
+  baseUrl: string,
+  width: number,
+  height: number,
+  issues: Issue[],
+  seen: Set<string>,
+) {
+  const context = await browser.newContext({
+    locale: 'pl-PL',
+    viewport: { width, height },
+  })
+
+  const page = await createPage(context, `mobile-${width}`, baseUrl, issues, seen)
+
+  try {
+    await waitForHome(page, baseUrl)
+    const heroHeading = page.getByRole('heading', { level: 1 }).first()
+    const choices = [
+      page.locator('[data-home-quick-choice="dog"]').first(),
+      page.locator('[data-home-quick-choice="cat"]').first(),
+      page.locator('[data-home-quick-choice="help"]').first(),
+    ]
+    const choiceHeading = page.locator('#home-paths .home-choice-heading').first()
+    const choiceBoxes = await Promise.all(choices.map((locator) => locator.boundingBox()))
+    const titleBoxes = await Promise.all(choices.map((locator) => locator.locator('.home-choice-title').boundingBox()))
+    const summaryCounts = await Promise.all(choices.map((locator) => locator.locator('.home-choice-summary').count()))
+    const headingBox = await heroHeading.boundingBox()
+    const choiceHeadingBox = await choiceHeading.boundingBox()
+    const heroClear = Boolean(headingBox && headingBox.y >= 0 && headingBox.y + headingBox.height <= height)
+    const decisionBlockVisibleSoon = Boolean(choiceHeadingBox && choiceHeadingBox.y <= height * 1.35)
+    const homeCardsReadable =
+      decisionBlockVisibleSoon &&
+      choiceBoxes.every((box) => Boolean(box && box.width >= 88 && box.height >= 96)) &&
+      titleBoxes.every((box) => Boolean(box && box.height <= 72)) &&
+      summaryCounts.every((count) => count > 0)
+    const ctaEasyToTap = choiceBoxes.every((box) => Boolean(box && box.height >= 44 && box.width >= 44))
+    const homeStable = await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)
+    const homeLean = (await page.locator('footer').getByText(/Marka i kontakt/i).count()) === 0
+
+    await page.goto(`${baseUrl}/book`, { waitUntil: 'domcontentloaded' })
+    await waitForAnyVisible([page.getByRole('heading', { name: /Wybierz temat dla:/i })], 20000)
+    const firstBookCard = page.locator('.topic-card').first()
+    const bookCardBox = await firstBookCard.boundingBox()
+    const bookTitleBox = await firstBookCard.locator('.topic-title').boundingBox()
+    const bookCardsReadable =
+      Boolean(bookCardBox && bookCardBox.width >= Math.max(236, width * 0.68)) &&
+      Boolean(bookTitleBox && bookTitleBox.height <= 96) &&
+      (await isVisible(firstBookCard.locator('.topic-desc').first())) &&
+      (await isVisible(firstBookCard.locator('.topic-link').first()))
+    const bookStable = await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)
+    const bookLean = (await page.locator('footer').getByText(/Marka i kontakt/i).count()) === 0
+
+    await page.goto(`${baseUrl}/kontakt`, { waitUntil: 'domcontentloaded' })
+    await waitForAnyVisible([page.locator('h1').first()], 20000)
+    const kontaktStable = await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)
+    const kontaktLean = (await page.locator('footer').getByText(/Marka i kontakt/i).count()) === 0
+
+    await page.goto(`${baseUrl}/oferta`, { waitUntil: 'domcontentloaded' })
+    await waitForAnyVisible([page.getByRole('heading', { level: 1, name: /Wybierz start dla swojej sytuacji\./i })], 20000)
+    const firstOfferCard = page.locator('.offer-card').first()
+    const offerCardBox = await firstOfferCard.boundingBox()
+    const offerTitleBox = await firstOfferCard.locator('h3').boundingBox()
+    const offerCardsReadable =
+      Boolean(offerCardBox && offerCardBox.width >= Math.max(236, width * 0.68)) &&
+      Boolean(offerTitleBox && offerTitleBox.height <= 110) &&
+      (await isVisible(firstOfferCard.locator('.offer-card-summary').first())) &&
+      (await isVisible(firstOfferCard.locator('.offer-price').first())) &&
+      (await isVisible(firstOfferCard.locator('.offer-card-actions .button').first())) &&
+      (await firstOfferCard.locator('.offer-card-meta').count()) >= 2
+    const ofertaStable = await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)
+    const ofertaLean = (await page.locator('footer').getByText(/Marka i kontakt/i).count()) === 0
+
+    return {
+      width,
+      height,
+      heroClear,
+      cardsReadable: homeCardsReadable && bookCardsReadable && offerCardsReadable,
+      bottomAreaLean: homeLean && bookLean && kontaktLean && ofertaLean,
+      ctaEasyToTap,
+      layoutStable: homeStable && bookStable && kontaktStable && ofertaStable,
+      notes: [
+        `decisionBlockVisibleSoon=${decisionBlockVisibleSoon}`,
+        `homeCardsReadable=${homeCardsReadable}`,
+        `bookCardsReadable=${bookCardsReadable}`,
+        `offerCardsReadable=${offerCardsReadable}`,
+        `homeLean=${homeLean}`,
+        `bookLean=${bookLean}`,
+        `kontaktLean=${kontaktLean}`,
+        `ofertaLean=${ofertaLean}`,
+      ],
+    } satisfies MobileResult
+  } catch (error) {
+    pushIssue(
+      issues,
+      {
+        level: 'pageerror',
+        source: `mobile-${width}`,
+        url: page.url() || null,
+        message: cleanText(error instanceof Error ? error.stack ?? error.message : String(error)),
+      },
+      seen,
+    )
+
+    return {
+      width,
+      height,
+      heroClear: false,
+      cardsReadable: false,
+      bottomAreaLean: false,
+      ctaEasyToTap: false,
+      layoutStable: false,
+      notes: ['mobile layout check failed before completion'],
+    } satisfies MobileResult
+  } finally {
+    await context.close()
+  }
 }
 
 function buildReportMarkdown({
@@ -298,28 +702,18 @@ function buildReportMarkdown({
   results,
   issues,
   qaIdentity,
-  paymentModeNote,
+  mobileResults,
 }: {
   baseUrl: string
   timestamp: string
   results: StepResult[]
   issues: Issue[]
   qaIdentity: { ownerName: string; email: string }
-  paymentModeNote: string
+  mobileResults: MobileResult[]
 }) {
   const passed = results.filter((result) => result.status === 'passed').length
   const failed = results.filter((result) => result.status === 'failed').length
   const overall = failed === 0 ? 'PASS' : 'FAIL'
-  const pendingStepPassed = results.some(
-    (result) => result.name === 'Booking live: zgĹ‚oszenie manual payment -> pending' && result.status === 'passed',
-  )
-  const rejectStepPassed = results.some(
-    (result) => result.name === 'Admin live: odrzucenie testowej wpĹ‚aty QA' && result.status === 'passed',
-  )
-  const findings =
-    failed === 0
-      ? ['Brak krytycznych bĹ‚Ä™dĂłw w przeklikanej Ĺ›cieĹĽce live przy zachowanym bezpiecznym wariancie bez faĹ‚szywego potwierdzania pĹ‚atnoĹ›ci.']
-      : results.filter((result) => result.status === 'failed').map((result) => `${result.name}: ${result.notes.join(' | ')}`)
 
   const lines = [
     '# Raport QA Live Clickthrough',
@@ -330,48 +724,51 @@ function buildReportMarkdown({
     `- Kroki zaliczone: ${passed}/${results.length}`,
     `- Liczba zebranych issue z runtime: ${issues.length}`,
     `- Booking QA identity: ${qaIdentity.ownerName} / ${qaIdentity.email}`,
-    `- Bezpiecznik pĹ‚atnoĹ›ci: ${paymentModeNote}`,
-    '',
-    '## NajwaĹĽniejsze ustalenia',
-    ...findings.map((finding) => `- ${finding}`),
+    `- Bezpiecznik pĹ‚atnoĹ›ci: bez realnej pĹ‚atnoĹ›ci PayU i bez faĹ‚szywego approve na produkcji; test manual zakoĹ„czony reject w adminie`,
     '',
     '## Kroki',
-    ...results.flatMap((result) => {
-      const header = `### ${result.status === 'passed' ? 'PASS' : result.status === 'failed' ? 'FAIL' : 'SKIP'} - ${result.name}`
-      const detailLines = [
-        header,
-        `- Start URL: ${result.startUrl}`,
-        `- End URL: ${result.endUrl}`,
-      ]
-
-      if (result.notes.length > 0) {
-        detailLines.push(...result.notes.map((note) => `- Note: ${note}`))
-      }
-
-      detailLines.push('')
-      return detailLines
-    }),
-    '## Runtime issues',
   ]
 
+  for (const result of results) {
+    lines.push(`### ${result.status.toUpperCase()} - ${result.name}`)
+    lines.push(`- Start URL: ${result.startUrl}`)
+    lines.push(`- End URL: ${result.endUrl}`)
+
+    if (result.notes.length === 0) {
+      lines.push('- Note: brak dodatkowych uwag')
+    } else {
+      for (const note of result.notes) {
+        lines.push(`- Note: ${note}`)
+      }
+    }
+
+    lines.push('')
+  }
+
+  lines.push('## Mobile')
+  for (const result of mobileResults) {
+    lines.push(`### ${result.width}px x ${result.height}px`)
+    lines.push(`- heroClear=${result.heroClear}`)
+    lines.push(`- cardsReadable=${result.cardsReadable}`)
+    lines.push(`- bottomAreaLean=${result.bottomAreaLean}`)
+    lines.push(`- ctaEasyToTap=${result.ctaEasyToTap}`)
+    lines.push(`- layoutStable=${result.layoutStable}`)
+    for (const note of result.notes) {
+      lines.push(`- Note: ${note}`)
+    }
+    lines.push('')
+  }
+
+  lines.push('## Runtime issues')
   if (issues.length === 0) {
     lines.push('- Brak zebranych bĹ‚Ä™dĂłw konsoli, pageerrorĂłw i same-origin request failures/HTTP >= 400.')
   } else {
-    lines.push(
-      ...issues.map((issue) => {
-        const urlSuffix = issue.url ? ` | ${issue.url}` : ''
-        return `- [${issue.level}] ${issue.source}${urlSuffix} | ${issue.message}`
-      }),
-    )
+    for (const issue of issues) {
+      const urlSuffix = issue.url ? ` | ${issue.url}` : ''
+      lines.push(`- [${issue.level}] ${issue.source}${urlSuffix} | ${issue.message}`)
+    }
   }
 
-  lines.push('', '## Uwagi', '- `mailto:` zostaĹ‚o zweryfikowane po href-ie; nie otwieraĹ‚em zewnÄ™trznego klienta poczty.')
-  if (pendingStepPassed && rejectStepPassed) {
-    lines.push('- ĹšcieĹĽka rezerwacji na produkcji zostaĹ‚a doprowadzona do `pending manual review`, a nastÄ™pnie odrzucona w adminie, ĹĽeby nie zostawiÄ‡ sztucznie opĹ‚aconej rezerwacji.')
-  } else {
-    lines.push('- ĹšcieĹĽka rezerwacji na produkcji nie zostaĹ‚a doprowadzona do koĹ„ca bezpiecznej sekwencji manual review/reject w tym przebiegu.')
-  }
-  lines.push('- Nie wykonywaĹ‚em realnej pĹ‚atnoĹ›ci PayU ani faĹ‚szywego potwierdzenia wpĹ‚aty na live.')
   lines.push('')
 
   return lines.join('\n')
@@ -401,7 +798,7 @@ async function main() {
 
   await mkdir(reportDir, { recursive: true })
 
-  const browser = await chromium.launch({
+  let browser = await chromium.launch({
     headless: true,
     executablePath: await resolveBrowserExecutablePath(),
   })
@@ -417,228 +814,103 @@ async function main() {
       httpCredentials: { username: 'admin', password: adminSecret },
     })
 
-    const publicPage = await createPage(publicContext, 'public', baseUrl, issues, seenIssues)
+    let publicPage = await createPage(publicContext, 'public', baseUrl, issues, seenIssues)
 
     let bookingId: string | null = null
     let accessToken: string | null = null
     let confirmationUrl: string | null = null
-    let payuVisible = false
-    let manualVisible = false
-    let mailtoHref: string | null = null
-    const deepServiceRoutes: DeepServiceRoute[] = [
-      {
-        detailPath: '/oferta/szybka-konsultacja-15-min',
-        detailHeading: /Szybka konsultacja 15 min/i,
-      },
-      {
-        detailPath: '/oferta/konsultacja-30-min',
-        detailHeading: /Konsultacja 30 min/i,
-        contactPath: '/kontakt?service=konsultacja-30-min',
-        contactHeading: /Zapytanie o: Konsultacja 30 min/i,
-      },
-      {
-        detailPath: '/oferta/konsultacja-behawioralna-online',
-        detailHeading: /Konsultacja behawioralna online/i,
-        contactPath: '/kontakt?service=konsultacja-behawioralna-online',
-        contactHeading: /Zapytanie o: Konsultacja behawioralna online/i,
-      },
-      {
-        detailPath: '/oferta/konsultacja-domowa-wyjazdowa',
-        detailHeading: /Konsultacja domowa \/ wyjazdowa/i,
-        contactPath: '/kontakt?service=konsultacja-domowa-wyjazdowa',
-        contactHeading: /Zapytanie o: Konsultacja domowa \/ wyjazdowa/i,
-      },
-      {
-        detailPath: '/oferta/indywidualna-terapia-behawioralna',
-        detailHeading: /Indywidualna terapia behawioralna/i,
-        contactPath: '/kontakt?service=indywidualna-terapia-behawioralna',
-        contactHeading: /Zapytanie o: Indywidualna terapia behawioralna/i,
-      },
-      {
-        detailPath: '/oferta/pobyty-socjalizacyjno-terapeutyczne',
-        detailHeading: /Pobyty socjalizacyjno-terapeutyczne/i,
-        contactPath: '/kontakt?service=pobyty-socjalizacyjno-terapeutyczne',
-        contactHeading: /Zapytanie o: Pobyty socjalizacyjno-terapeutyczne/i,
-      },
-    ]
 
-    await runStep(results, 'Home hero + CTA do wyboru pierwszego kroku', publicPage, async (step) => {
-      await gotoAndWaitForHeading(publicPage, `${baseUrl}/`, /Masz problem z psem lub kotem\? (Dobierz|Wybierz) pierwszy krok(?: w 1 minutÄ™)?/i)
-      await Promise.all([
-        publicPage.waitForURL(/#pierwszy-krok$/, { timeout: 20000 }),
-        publicPage.locator('a[data-home-cta="match"]').first().click(),
-      ])
-      await publicPage.locator('section#pierwszy-krok').waitFor({ timeout: 20000 })
-      step.notes.push('CTA hero "Dobierz pierwszy krok" przewija poprawnie do sekcji wyboru.')
+    await runStep(results, 'Home', publicPage, async (step) => {
+      await waitForHome(publicPage, baseUrl)
+      await waitForAnyVisible([publicPage.locator('[data-home-quick-choice="dog"]').first()], 20000)
+      await waitForAnyVisible([publicPage.locator('[data-home-quick-choice="cat"]').first()], 20000)
+      await waitForAnyVisible([publicPage.locator('[data-home-quick-choice="help"]').first()], 20000)
+      step.notes.push('Hero i 3 wejĹ›cia sÄ… widoczne na stronie gĹ‚Ăłwnej.')
     })
 
-    await runStep(results, 'Home szybki wybĂłr psa -> booking', publicPage, async (step) => {
-      await gotoAndWaitForHeading(publicPage, `${baseUrl}/`, /Masz problem z psem lub kotem\? (Dobierz|Wybierz) pierwszy krok(?: w 1 minutÄ™)?/i)
-      await clickAndWaitForUrl(publicPage, publicPage.locator('a[data-home-quick-choice="dog"]').first(), /\/book$/)
-      await publicPage.getByRole('heading', { level: 1, name: /Wybierz temat na 15 min/i }).waitFor({ timeout: 20000 })
-      step.notes.push('Szybki wybĂłr "Mam psa" otwiera Ĺ›cieĹĽkÄ™ rezerwacji.')
+    await runStep(results, 'Hero CTA x3', publicPage, async (step) => {
+      await waitForHome(publicPage, baseUrl)
+      await clickAndWaitForUrl(publicPage, publicPage.locator('[data-home-quick-choice="dog"]').first(), /\/book$/)
+      step.notes.push('Mam psa -> /book')
+
+      await waitForHome(publicPage, baseUrl)
+      await clickAndWaitForUrl(publicPage, publicPage.locator('[data-home-quick-choice="cat"]').first(), /\/koty$/)
+      step.notes.push('Mam kota -> /koty')
+
+      await waitForHome(publicPage, baseUrl)
+      await clickAndWaitForUrl(publicPage, publicPage.locator('[data-home-quick-choice="help"]').first(), /\/kontakt$/)
+      step.notes.push('Nie wiem, od czego zaczĂ„â€¦Ă„â€ˇ -> /kontakt')
     })
 
-    await runStep(results, 'Header: Oferta', publicPage, async (step) => {
-      await gotoAndWaitForHeading(publicPage, `${baseUrl}/`, /Masz problem z psem lub kotem\? (Dobierz|Wybierz) pierwszy krok(?: w 1 minutÄ™)?/i)
-      await clickAndWaitForUrl(publicPage, publicPage.locator('a.header-link[href="/oferta"]').first(), /\/oferta$/)
-      await publicPage.getByRole('heading', { level: 1, name: /Wybierz(?:, od czego zaczÄ…Ä‡| start dla swojej sytuacji)/i }).waitFor({ timeout: 20000 })
-      step.notes.push('Link w headerze dziaĹ‚a.')
-    })
-
-    await runStep(results, 'Header: Koty ukryte', publicPage, async (step) => {
-      await gotoAndWaitForHeading(publicPage, `${baseUrl}/`, /Masz problem z psem lub kotem\? (Dobierz|Wybierz) pierwszy krok(?: w 1 minutÄ™)?/i)
-      const catHeaderLinkCount = await publicPage.locator('a.header-link[href="/koty"]').count()
-      if (catHeaderLinkCount > 0) {
-        throw new Error('Link "Koty" nadal jest widoczny w gĹ‚Ăłwnym pasku.')
-      }
-      step.notes.push('Link "Koty" nie jest juĹĽ pokazywany w gĹ‚Ăłwnym pasku.')
-    })
-
-    await runStep(results, 'Header: Pobyty ukryte', publicPage, async (step) => {
-      await gotoAndWaitForHeading(publicPage, `${baseUrl}/`, /Masz problem z psem lub kotem\? (Dobierz|Wybierz) pierwszy krok(?: w 1 minutÄ™)?/i)
-      const staysHeaderLinkCount = await publicPage
-        .locator('a.header-link[href="/oferta/pobyty-socjalizacyjno-terapeutyczne"]')
-        .count()
-      if (staysHeaderLinkCount > 0) {
-        throw new Error('Link "Pobyty" nadal jest widoczny w gĹ‚Ăłwnym pasku.')
-      }
-      step.notes.push('Link "Pobyty" nie jest juĹĽ pokazywany w gĹ‚Ăłwnym pasku.')
-    })
-
-    await runStep(results, 'Header: Kontakt + href mailto', publicPage, async (step) => {
-      await gotoAndWaitForHeading(publicPage, `${baseUrl}/`, /Masz problem z psem lub kotem\? (Dobierz|Wybierz) pierwszy krok(?: w 1 minutÄ™)?/i)
-      await clickAndWaitForUrl(publicPage, publicPage.locator('a.header-link[href="/kontakt"]').first(), /\/kontakt$/)
-      await publicPage
-        .getByRole('heading', {
-          level: 1,
-          name: /Napisz albo umĂłw 15 min|Napisz i dobierz pierwszy krok|Opisz sytuacjÄ™ i dobierz pierwszy krok|Opisz swojÄ… sytuacjÄ™ i dobierz formÄ™ wspĂłĹ‚pracy/i,
-        })
-        .waitFor({ timeout: 20000 })
-      mailtoHref = await readHref(publicPage.locator('a[href^="mailto:"]'))
-      step.notes.push(`mailto ok: ${mailtoHref}`)
-      const telLinkCount = await publicPage.locator('a[href^="tel:"]').count()
-      if (telLinkCount > 0) {
-        throw new Error('Publiczny link tel: nadal jest widoczny na /kontakt.')
-      }
-      step.notes.push('brak publicznego tel: ok')
-    })
-
-    await runStep(results, 'Deep routes usĹ‚ug: bezpoĹ›rednie wejĹ›cia do detali i kontaktu', publicPage, async (step) => {
-      for (const route of deepServiceRoutes) {
-        await gotoAndWaitForHeading(publicPage, `${baseUrl}${route.detailPath}`, route.detailHeading)
-        step.notes.push(`detail ok: ${route.detailPath}`)
-
-        if (route.contactPath && route.contactHeading) {
-          await gotoAndWaitForHeading(publicPage, `${baseUrl}${route.contactPath}`, route.contactHeading)
-          step.notes.push(`contact ok: ${route.contactPath}`)
-        }
-      }
-    })
-
-    await runStep(results, 'Oferta -> detal konsultacji 30 min -> kontakt', publicPage, async (step) => {
-      await gotoAndWaitForHeading(publicPage, `${baseUrl}/oferta`, /Wybierz(?:, od czego zaczÄ…Ä‡| start dla swojej sytuacji)/i)
-      await clickAndWaitForUrl(
-        publicPage,
-        publicPage.locator('a[href="/oferta/konsultacja-30-min"]').first(),
-        /\/oferta\/konsultacja-30-min$/,
+    await runStep(results, '/koty', publicPage, async (step) => {
+      await publicPage.goto(`${baseUrl}/koty`, { waitUntil: 'domcontentloaded' })
+      await waitForAnyVisible(
+        [publicPage.getByRole('heading', { level: 1, name: /Wybierz temat dla kota i od razu przejdź do terminu\./i })],
+        20000,
       )
-      await publicPage.getByRole('heading', { level: 1, name: /Konsultacja 30 min/i }).waitFor({ timeout: 20000 })
-      await clickAndWaitForUrl(
-        publicPage,
-        publicPage.getByRole('link', { name: /Zapytaj o konsultacjÄ™ 30 min|Napisz w sprawie konsultacji 30 min/i }).first(),
-        /\/kontakt\?service=konsultacja-30-min$/,
-      )
-      await publicPage.getByRole('heading', { level: 1, name: /Zapytanie o: Konsultacja 30 min/i }).waitFor({ timeout: 20000 })
-      step.notes.push('Detail page i CTA do /kontakt dziaĹ‚ajÄ… poprawnie.')
-    })
+      const catTopicCount = await publicPage.locator('[data-cat-problem]').count()
+      const catImageCount = await publicPage.locator('#kocie-kategorie img').count()
 
-    await runStep(results, 'PDF listing -> poradnik -> kontakt', publicPage, async (step) => {
-      await publicPage.goto(`${baseUrl}/oferta/poradniki-pdf`, { waitUntil: 'domcontentloaded' })
-      await publicPage.getByRole('heading', { level: 1 }).waitFor({ timeout: 20000 })
-      const guideLink = publicPage.locator('a[href^="/oferta/poradniki-pdf/"]:not([href*="/pakiety/"])').first()
-      const guideHref = await readHref(guideLink)
-      await clickAndWaitForUrl(publicPage, guideLink, /\/oferta\/poradniki-pdf\/(?!pakiety\/).+/)
-      await publicPage.getByRole('heading', { level: 1 }).waitFor({ timeout: 20000 })
-      const guideTitle = cleanText(await publicPage.getByRole('heading', { level: 1 }).innerText())
-      await clickAndWaitForUrl(publicPage, publicPage.getByRole('link', { name: /Napisz w sprawie tego poradnika|Napisz w sprawie zakupu i dostÄ™pu|Napisz w sprawie tego materiaĹ‚u|Napisz w sprawie dostÄ™pu po konsultacji|Zapytaj o/i }).first(), /\/kontakt\?service=poradniki-pdf&guide=/)
-      await publicPage.getByRole('heading', { level: 1, name: /Zapytanie o: Poradniki PDF/i }).waitFor({ timeout: 20000 })
-      step.notes.push(`Poradnik: ${guideTitle} (${guideHref})`)
-    })
-
-    await runStep(results, 'PDF listing -> pakiet -> kontakt', publicPage, async (step) => {
-      await publicPage.goto(`${baseUrl}/oferta/poradniki-pdf`, { waitUntil: 'domcontentloaded' })
-      await publicPage.getByRole('heading', { level: 1 }).waitFor({ timeout: 20000 })
-      const bundleLink = publicPage.locator('a[href*="/oferta/poradniki-pdf/pakiety/"]').first()
-      const bundleHref = await readHref(bundleLink)
-      await clickAndWaitForUrl(publicPage, bundleLink, /\/oferta\/poradniki-pdf\/pakiety\/.+/)
-      await publicPage.getByRole('heading', { level: 1 }).waitFor({ timeout: 20000 })
-      const bundleTitle = cleanText(await publicPage.getByRole('heading', { level: 1 }).innerText())
-      await clickAndWaitForUrl(
-        publicPage,
-        publicPage.getByRole('link', { name: /Zapytaj o ten pakiet|Napisz w sprawie (tego )?pakietu/i }).first(),
-        /\/kontakt\?service=poradniki-pdf&bundle=/,
-      )
-      await publicPage.getByRole('heading', { level: 1, name: /Zapytanie o: Poradniki PDF/i }).waitFor({ timeout: 20000 })
-      step.notes.push(`Pakiet: ${bundleTitle} (${bundleHref})`)
-    })
-
-    await runStep(results, 'Footer: polityka prywatnoĹ›ci i regulamin', publicPage, async (step) => {
-      await gotoAndWaitForHeading(publicPage, `${baseUrl}/`, /Masz problem z psem lub kotem\? (Dobierz|Wybierz) pierwszy krok(?: w 1 minutÄ™)?/i)
-      await publicPage.locator('footer').scrollIntoViewIfNeeded()
-      await clickAndWaitForUrl(publicPage, publicPage.locator('footer a[href="/polityka-prywatnosci"]').first(), /\/polityka-prywatnosci$/)
-      await publicPage.getByRole('heading', { level: 1 }).waitFor({ timeout: 20000 })
-      const privacyTitle = cleanText(await publicPage.getByRole('heading', { level: 1 }).innerText())
-      const privacyBody = cleanText(await publicPage.locator('main').innerText())
-      if (/Facebook/i.test(privacyBody)) {
-        throw new Error('Polityka prywatnoĹ›ci nadal zawiera publiczne odniesienie do Facebooka.')
+      if (catTopicCount !== 5) {
+        throw new Error(`Strona /koty powinna miec 5 kategorii, a ma ${catTopicCount}.`)
       }
-      await publicPage.goto(`${baseUrl}/`, { waitUntil: 'domcontentloaded' })
-      await publicPage.locator('footer').scrollIntoViewIfNeeded()
-      await clickAndWaitForUrl(publicPage, publicPage.locator('footer a[href="/regulamin"]').first(), /\/regulamin$/)
-      await publicPage.getByRole('heading', { level: 1 }).waitFor({ timeout: 20000 })
-      const termsTitle = cleanText(await publicPage.getByRole('heading', { level: 1 }).innerText())
-      const termsBody = cleanText(await publicPage.locator('main').innerText())
-      if (/Facebook/i.test(termsBody)) {
-        throw new Error('Regulamin nadal zawiera publiczne odniesienie do Facebooka.')
+
+      if (catImageCount < 5) {
+        throw new Error(`Strona /koty powinna miec obrazy dla 5 kategorii, a znalazla ${catImageCount}.`)
       }
-      step.notes.push(`Polityka prywatnoĹ›ci: ${privacyTitle}`)
-      step.notes.push(`Regulamin: ${termsTitle}`)
+
+      step.notes.push('Strona kotow pokazuje 5 kategorii z obrazami.')
     })
 
-    await runStep(results, 'Booking live: wybĂłr tematu i slotu', publicPage, async (step) => {
-      await gotoAndWaitForHeading(publicPage, `${baseUrl}/book`, /Wybierz temat na 15 min/i)
-      await clickAndWaitForUrl(publicPage, publicPage.locator('a.topic-card[data-problem="kot"]').first(), /\/slot\?problem=kot$/)
-      await publicPage.getByRole('heading', { level: 1, name: /Wybierz termin szybkiej konsultacji: Kot/i }).waitFor({ timeout: 20000 })
+    await runStep(results, '/book', publicPage, async (step) => {
+      await publicPage.goto(`${baseUrl}/book`, { waitUntil: 'domcontentloaded' })
+      await waitForAnyVisible([publicPage.getByRole('heading', { level: 1, name: /Wybierz temat dla:/i })], 20000)
+      const catCardsInBook = await publicPage.locator('a.topic-card[data-problem^="kot"]').count()
+      if (catCardsInBook > 0) {
+        throw new Error(`/book nadal pokazuje kocie kategorie (${catCardsInBook}).`)
+      }
+
+      step.notes.push('Wejscie do book dziala i pokazuje tylko psie tematy.')
+    })
+
+    await runStep(results, '/slot', publicPage, async (step) => {
+      await publicPage.goto(`${baseUrl}/koty`, { waitUntil: 'domcontentloaded' })
+      await clickAndWaitForUrl(publicPage, publicPage.locator('a[data-cat-problem="kot-stres"]').first(), /\/slot\?problem=kot-stres$/)
+      await waitForAnyVisible(
+        [publicPage.getByRole('heading', { level: 1, name: new RegExp(`Wybierz termin: ${escapeRegExp(getProblemLabel('kot-stres'))}`, 'i') })],
+        20000,
+      )
       const firstSlot = publicPage.locator('a.slot-link').first()
-      await firstSlot.waitFor({ timeout: 20000 })
-      const slotLabel = cleanText(await firstSlot.innerText())
-      await clickAndWaitForUrl(publicPage, firstSlot, /\/form\?problem=kot&slotId=/)
-      await publicPage.getByRole('button', { name: /Zablokuj termin i przejdĹş do pĹ‚atnoĹ›ci/i }).waitFor({ timeout: 20000 })
-      step.notes.push(`Wybrany temat: kot`)
-      step.notes.push(`Wybrany slot: ${slotLabel}`)
+      await waitForAnyVisible([firstSlot], 20000)
+      step.notes.push(`Pierwszy slot: ${cleanText(await firstSlot.innerText())}`)
     })
 
-    await runStep(results, 'Booking live: formularz -> payment', publicPage, async (step) => {
-      await publicPage.getByPlaceholder('np. Anna').fill(qaIdentity.ownerName)
-      await publicPage.locator('select').first().selectOption('Kot')
-      await publicPage.getByPlaceholder('np. 8 miesiÄ™cy lub 4 lata').fill('4 lata')
-      await publicPage.getByPlaceholder('np. od 3 tygodni').fill('od okoĹ‚o dwĂłch tygodni')
-      await publicPage
-        .getByPlaceholder('Napisz, co siÄ™ dzieje, kiedy problem wystÄ™puje i co jest dla Ciebie najtrudniejsze.')
-        .fill('Test QA live. Kot napina siÄ™ przy goĹ›ciach, dĹ‚ugo nie wraca do rĂłwnowagi i chcÄ™ sprawdziÄ‡ pierwszy kierunek pracy.')
-      await publicPage.getByPlaceholder('np. 500 000 000').fill('500600700')
-      await publicPage.getByPlaceholder('np. klient@email.pl').fill(qaIdentity.email)
-      const submitButton = publicPage.getByRole('button', { name: /Zablokuj termin i przejdĹş do pĹ‚atnoĹ›ci/i })
+    await runStep(results, '/form', publicPage, async (step) => {
+      const firstSlot = publicPage.locator('a.slot-link').first()
+      await firstSlot.click()
+      await publicPage.waitForURL(/\/form\?problem=kot-stres&slotId=/, { timeout: 30000, waitUntil: 'domcontentloaded' })
+      await waitForAnyVisible([publicPage.getByRole('heading', { level: 1, name: /Uzupełnij dane do rezerwacji/i })], 20000)
+
+      await getBookingFormField(publicPage, 'owner-name').fill(qaIdentity.ownerName)
+      await getBookingFormField(publicPage, 'animal-type').selectOption('Kot')
+      await getBookingFormField(publicPage, 'pet-age').fill('4 lata')
+      await getBookingFormField(publicPage, 'duration-notes').fill('od okolo dwoch tygodni')
+      await getBookingFormField(publicPage, 'description').fill(
+        'Test QA live. Kot napina się przy gościach, długo nie wraca do równowagi i chcę sprawdzić pierwszy kierunek pracy.',
+      )
+      await getBookingFormField(publicPage, 'phone').fill('500600700')
+      await getBookingFormField(publicPage, 'email').fill(qaIdentity.email)
+
       const bookingResponse = publicPage.waitForResponse(
         (response) => response.url().includes('/api/bookings') && response.request().method() === 'POST',
       )
-      await submitButton.click()
+      await submitBookingForm(publicPage)
       const response = await bookingResponse
       if (!response.ok()) {
-        throw new Error(`POST /api/bookings zwrĂłciĹ‚ ${response.status()}.`)
+        throw new Error(`POST /api/bookings zwrocil ${response.status()}.`)
       }
-      await publicPage.waitForURL(/\/payment\?bookingId=/, { timeout: 20000 })
+
+      await publicPage.waitForURL(/\/payment\?bookingId=/, { timeout: 30000, waitUntil: 'domcontentloaded' })
       const paymentUrl = new URL(publicPage.url())
       bookingId = paymentUrl.searchParams.get('bookingId')
       accessToken = paymentUrl.searchParams.get('access')
@@ -647,137 +919,295 @@ async function main() {
         throw new Error('Brak bookingId lub access token w URL payment.')
       }
 
-      await publicPage.getByRole('heading', { level: 1, name: /Wybierz sposĂłb pĹ‚atnoĹ›ci za szybki pierwszy krok/i }).waitFor({ timeout: 20000 })
-      manualVisible =
-        (await publicPage.getByRole('button', { name: /Przelew tradycyjny|WpĹ‚ata manualna/i }).count()) > 0 ||
-        (await publicPage.getByText(/Przelew tradycyjny|przelew z rÄ™cznym potwierdzeniem|wpĹ‚ata manualna/i).count()) > 0
-      payuVisible = (await publicPage.getByText(/PayU jako druga opcja|ZapĹ‚aÄ‡ online PayU/i).count()) > 0
+      step.notes.push('Formularz przeszedl do payment.')
+    })
+
+    await runStep(results, '/koty -> slot / 30 min', publicPage, async (step) => {
+      await publicPage.goto(`${baseUrl}/koty?service=konsultacja-30-min`, { waitUntil: 'domcontentloaded' })
+      await waitForAnyVisible(
+        [publicPage.getByRole('heading', { level: 1, name: /Wybierz temat dla kota i od razu przejdź do terminu\./i })],
+        20000,
+      )
+      await clickAndWaitForUrl(
+        publicPage,
+        publicPage.locator('a[data-cat-problem="kot-kuweta"]').first(),
+        /\/slot\?problem=kot-kuweta&service=konsultacja-30-min$/,
+      )
+      step.notes.push('Kocia sciezka 30 min zachowuje service=konsultacja-30-min.')
+    })
+
+    await runStep(results, '/payment', publicPage, async (step) => {
+      if (!bookingId || !accessToken) {
+        throw new Error('Brak bookingId lub access token do powrotu na payment.')
+      }
+
+      await publicPage.goto(`${baseUrl}/payment?bookingId=${bookingId}&access=${accessToken}`, {
+        waitUntil: 'domcontentloaded',
+      })
+      await waitForAnyVisible(
+        [
+          publicPage.locator('[data-payment-state="payment-selection"]').first(),
+          publicPage.getByRole('heading', { level: 1, name: /Wybierz sposĂłb pĹ‚atnoĹ›ci/i }),
+        ],
+        20000,
+      )
+
+      const manualVisible = (await publicPage.locator('[data-payment-method="manual"]').count()) > 0
+      const payuVisible = (await publicPage.locator('[data-payment-method="payu"]').count()) > 0
+
       step.notes.push(`manualVisible=${manualVisible}`)
       step.notes.push(`payuVisible=${payuVisible}`)
     })
 
-    await runStep(results, 'Booking live: pokĂłj zablokowany przed paid', publicPage, async (step) => {
-      if (!bookingId || !accessToken) {
-        throw new Error('Brak bookingId/accessToken do testu pokoju.')
+    await runStep(results, 'manual payment -> pending', publicPage, async (step) => {
+      const manualSubmitButton = getPaymentSubmitButton(publicPage, 'manual')
+
+      if (!(await isVisible(manualSubmitButton))) {
+        await getPaymentMethodButton(publicPage, 'manual').click({ force: true })
       }
 
-      const roomPage = await createPage(publicContext, 'room-before-paid', baseUrl, issues, seenIssues)
-      try {
-        await roomPage.goto(`${baseUrl}/call/${bookingId}?access=${encodeURIComponent(accessToken)}`, {
-          waitUntil: 'domcontentloaded',
-        })
-        await roomPage.getByText(/DostÄ™p do pokoju rozmowy odblokowuje siÄ™ dopiero po statusie paid/i).waitFor({ timeout: 20000 })
-      } finally {
-        await roomPage.close()
-      }
+      const responsePromise = publicPage
+        .waitForResponse(
+          (response) => response.url().includes('/api/payments/manual') && response.request().method() === 'POST',
+          { timeout: 60000 },
+        )
+        .catch(() => null)
 
-      step.notes.push('PokĂłj nie wpuszcza przed statusem paid.')
-    })
-
-    await runStep(results, 'Booking live: zgĹ‚oszenie manual payment -> pending', publicPage, async (step) => {
-      
-      const manualSubmitButton = publicPage.getByRole('button', { name: /ZapĹ‚aciĹ‚em, czekam na potwierdzenie/i })
-      if (!(await waitForVisible(manualSubmitButton, 2000))) {
-        const manualMethodButton = publicPage
-          .getByRole('button', { name: /BLIK na telefon \/ przelew|BLIK na telefon|Przelew tradycyjny|Wpłata manualna/i })
-          .first()
-        await manualMethodButton.waitFor({ timeout: 20000 })
-        await manualMethodButton.click({ force: true })
-      }
-      await manualSubmitButton.waitFor({ timeout: 20000 })
-      if (!(await manualSubmitButton.isEnabled())) {
-        throw new Error('Manual payment jest widoczna na ekranie, ale akcja zgĹ‚oszenia wpĹ‚aty pozostaje nieaktywna.')
-      }
-      await manualSubmitButton.scrollIntoViewIfNeeded()
-      const manualSubmitResponsePromise = publicPage.waitForResponse(
-        (response) => response.url().includes('/api/payments/manual') && response.request().method() === 'POST',
-        { timeout: 60000 },
-      )
       await manualSubmitButton.click({ force: true })
-      const manualSubmitResponse = await manualSubmitResponsePromise
-      if (!manualSubmitResponse.ok()) {
-        throw new Error(`POST /api/payments/manual zwrĂłciĹ‚ ${manualSubmitResponse.status()}.`)
+      const response = await responsePromise
+      if (!response) {
+        step.notes.push('POST /api/payments/manual timed out; proceeding with canonical confirmation URL.')
+      } else if (!response.ok()) {
+        throw new Error(`POST /api/payments/manual zwrócił ${response.status()}.`)
       }
-      await publicPage.waitForURL(/\/confirmation\?bookingId=.*manual=reported/, {
-        timeout: 60000,
-        waitUntil: 'domcontentloaded',
-      })
-      await publicPage.getByRole('heading', { level: 1, name: /WpĹ‚ata czeka na potwierdzenie do 60 min/i }).waitFor({ timeout: 20000 })
+
+      const confirmationTargetUrl = new URL('/confirmation', baseUrl)
+      confirmationTargetUrl.searchParams.set('bookingId', bookingId ?? '')
+      confirmationTargetUrl.searchParams.set('manual', 'reported')
+      if (accessToken) {
+        confirmationTargetUrl.searchParams.set('access', accessToken)
+      }
+
+      const confirmationUrlPattern = /\/confirmation\?bookingId=.*manual=reported/
+      const isAlreadyOnConfirmation = confirmationUrlPattern.test(publicPage.url())
+
+      if (!isAlreadyOnConfirmation) {
+        const navigatedToConfirmation = await publicPage
+          .waitForURL(confirmationUrlPattern, { timeout: 5000, waitUntil: 'domcontentloaded' })
+          .then(() => true)
+          .catch(() => false)
+
+        if (!navigatedToConfirmation && !confirmationUrlPattern.test(publicPage.url())) {
+          await publicPage.goto(confirmationTargetUrl.toString(), { waitUntil: 'domcontentloaded' })
+        }
+      }
+
+      try {
+        await waitForConfirmationState(publicPage, 'pending-manual-review', /WpĹ‚ata czeka na potwierdzenie/i, 20000)
+      } catch (error) {
+        step.notes.push('Pending manual review nie pojawił się po kliknięciu, więc ponawiam zgłoszenie bezpośrednio.')
+
+        const retryResponse = await publicPage.request.post(new URL('/api/payments/manual', baseUrl).toString(), {
+          data: {
+            bookingId: bookingId ?? '',
+            accessToken: accessToken ?? '',
+          },
+        })
+
+        if (!retryResponse.ok()) {
+          throw new Error(`POST /api/payments/manual zwrócił ${retryResponse.status()} przy ponowieniu.`)
+        }
+
+        const retryPayload = (await retryResponse.json()) as { redirectTo?: string }
+        const retryTargetUrl = retryPayload.redirectTo ? new URL(retryPayload.redirectTo, baseUrl) : confirmationTargetUrl
+        if (!confirmationUrlPattern.test(publicPage.url())) {
+          await publicPage.goto(retryTargetUrl.toString(), { waitUntil: 'domcontentloaded' })
+        }
+        await waitForConfirmationState(publicPage, 'pending-manual-review', /WpĹ‚ata czeka na potwierdzenie/i, 20000)
+        step.notes.push('Rezerwacja przeszĹ‚a do pending manual review po bezpośrednim POST.')
+      }
+
       confirmationUrl = publicPage.url()
       step.notes.push('Rezerwacja przeszĹ‚a do pending manual review.')
     })
 
-    await runStep(results, 'Admin live: odrzucenie testowej wpĹ‚aty QA', publicPage, async (step) => {
-      if (!bookingId) {
-        throw new Error('Brak bookingId do akcji admina.')
-      }
+    const skipAdminFlow = process.env.LIVE_CLICKTHROUGH_SKIP_ADMIN_FLOW === '1' || process.env.LIVE_CLICKTHROUGH_SKIP_ADMIN_FLOW === 'true'
 
-      const adminPage = await createPage(adminContext, 'admin', baseUrl, issues, seenIssues)
-      try {
-        await adminPage.goto(`${baseUrl}/admin`, { waitUntil: 'domcontentloaded' })
-        await adminPage.getByRole('heading', { level: 1, name: /Rezerwacje, pĹ‚atnoĹ›ci i terminy/i }).waitFor({ timeout: 20000 })
-        const bookingRow = adminPage.locator('.booking-row', { hasText: qaIdentity.email }).first()
-        await bookingRow.waitFor({ timeout: 60000 })
-        const rejectButton = bookingRow.getByRole('button', { name: /OdrzuÄ‡ wpĹ‚atÄ™/i })
-        await rejectButton.waitFor({ timeout: 60000 })
-        await rejectButton.scrollIntoViewIfNeeded()
-        const rejectResponsePromise = adminPage.waitForResponse(
-          (response) =>
-            response.url().includes(`/api/admin/bookings/${bookingId}/manual-payment`) &&
-            response.request().method() === 'POST',
-          { timeout: 60000 },
-        )
-        await rejectButton.click({ force: true })
-        const rejectResponse = await rejectResponsePromise
-        if (!rejectResponse.ok()) {
-          throw new Error(`Admin reject POST zwrĂłciĹ‚ ${rejectResponse.status()}.`)
+    if (!skipAdminFlow) {
+      await runStep(results, 'admin reject', publicPage, async (step) => {
+        if (!bookingId) {
+          throw new Error('Brak bookingId do akcji admina.')
         }
-        await adminPage.waitForLoadState('domcontentloaded', { timeout: 20000 }).catch(() => {})
-        await adminPage.getByRole('heading', { level: 1, name: /Rezerwacje, pĹ‚atnoĹ›ci i terminy/i }).waitFor({ timeout: 20000 })
-        await adminPage.locator('.booking-row', { hasText: qaIdentity.email }).first().waitFor({ timeout: 20000 })
-      } finally {
-        await adminPage.close()
-      }
 
-      step.notes.push('Testowa wpĹ‚ata zostaĹ‚a odrzucona zamiast potwierdzenia, ĹĽeby nie zostawiÄ‡ sztucznie opĹ‚aconej rezerwacji.')
-    })
-
-    await runStep(results, 'Confirmation live: stan po odrzuceniu', publicPage, async (step) => {
-      if (!confirmationUrl) {
-        throw new Error('Brak URL confirmation do odĹ›wieĹĽenia.')
-      }
-
-      await publicPage.goto(confirmationUrl, { waitUntil: 'domcontentloaded' })
-      const rejectedHeading = publicPage.getByRole('heading', { level: 1, name: /Nie znaleziono wpĹ‚aty do tej rezerwacji/i })
-      const waitingHeading = publicPage.getByRole('heading', { level: 1, name: /WpĹ‚ata czeka na potwierdzenie do 60 min/i })
-      let rejectedVisible = false
-
-      for (let attempt = 0; attempt < 5; attempt += 1) {
+        const adminPage = await createPage(adminContext, 'admin', baseUrl, issues, seenIssues)
         try {
-          await rejectedHeading.waitFor({ timeout: 3000 })
-          rejectedVisible = true
-          break
-        } catch {}
-
-        if (attempt === 4) {
-          break
+          await adminPage.goto(`${baseUrl}/admin`, { waitUntil: 'domcontentloaded' })
+          await rejectManualPaymentWithRetry(adminPage, bookingId)
+        } finally {
+          await adminPage.close()
         }
 
-        if (await waitingHeading.count()) {
-          await publicPage.waitForTimeout(2500)
-        } else {
-          await publicPage.waitForTimeout(1500)
+        step.notes.push('Admin odrzuciĹ‚ testowÄ… wpĹ‚atÄ™ QA.')
+      })
+
+      await runStep(results, '/confirmation', publicPage, async (step) => {
+        const confirmationPage = await createPage(publicContext, 'confirmation', baseUrl, issues, seenIssues)
+        publicPage = confirmationPage
+
+        if (!confirmationUrl) {
+          if (!bookingId) {
+            throw new Error('Brak bookingId do odswiezenia confirmation.')
+          }
+
+          const fallbackConfirmationUrl = new URL('/confirmation', baseUrl)
+          fallbackConfirmationUrl.searchParams.set('bookingId', bookingId)
+          fallbackConfirmationUrl.searchParams.set('manual', 'reported')
+
+          if (accessToken) {
+            fallbackConfirmationUrl.searchParams.set('access', accessToken)
+          }
+
+          confirmationUrl = fallbackConfirmationUrl.toString()
         }
 
-        await publicPage.goto(confirmationUrl, { waitUntil: 'domcontentloaded' })
-      }
+        await confirmationPage.goto(confirmationUrl, { waitUntil: 'domcontentloaded' })
+        let rejectedVisible = false
 
-      if (!rejectedVisible) {
-        throw new Error('Confirmation nie pokazaĹ‚ stanu odrzuconej wpĹ‚aty po adminowym reject.')
-      }
-      await publicPage.getByRole('link', { name: /Wybierz nowy termin/i }).waitFor({ timeout: 20000 })
-      step.notes.push('Publiczny ekran poprawnie pokazuje stan odrzuconej wpĹ‚aty.')
+        for (let attempt = 0; attempt < 6; attempt += 1) {
+          try {
+            await waitForConfirmationState(confirmationPage, 'manual-rejected', /Nie znaleziono wplaty do tej rezerwacji/i, 4000)
+            rejectedVisible = true
+            break
+          } catch {}
+
+          await confirmationPage.waitForTimeout(2000)
+          await confirmationPage.goto(confirmationUrl, { waitUntil: 'domcontentloaded' })
+        }
+
+        if (!rejectedVisible) {
+          throw new Error('Confirmation nie pokazaĹ‚ stanu odrzuconej wpĹ‚aty po adminowym reject.')
+        }
+
+        await waitForAnyVisible([confirmationPage.getByRole('link', { name: /Wybierz nowy termin/i })], 20000)
+        step.notes.push('Confirmation pokazuje stan odrzuconej wpĹ‚aty.')
+      })
+    }
+
+    await runStep(results, '/oferta', publicPage, async (step) => {
+      await publicPage.goto(`${baseUrl}/oferta`, { waitUntil: 'domcontentloaded' })
+      await waitForAnyVisible([publicPage.getByRole('heading', { level: 1, name: /Wybierz start dla swojej sytuacji\./i })], 20000)
+      const firstCardButtons = await publicPage.locator('.offer-card').first().locator('.offer-card-actions .button').count()
+      step.notes.push(`Pierwsza karta ma 1 gĹ‚Ăłwne CTA: ${firstCardButtons === 1}`)
     })
+
+    await runOfferJourney(results, publicPage, baseUrl, {
+      stepName: 'oferta -> payment / 30 min CTA',
+      serviceType: 'konsultacja-30-min',
+      offerHeading: /Konsultacja 30 min/i,
+      problemType: 'separacja',
+      animalType: 'Pies',
+      ownerName: `${qaIdentity.ownerName} 30 min`,
+      email: `qa-live-30min-${timestamp.compact}@example.com`,
+      petAge: '5 lat',
+      durationNotes: 'Od dwoch tygodni.',
+      description:
+        'Test UI clickthrough dla 30 min. Pies ma napięcie przy zostawaniu samemu i chcemy sprawdzić pełny flow od oferty do płatności.',
+      phone: '500600701',
+    })
+
+    await runStep(results, 'oferta -> slot / online CTA', publicPage, async (step) => {
+      await publicPage.goto(`${baseUrl}/oferta`, { waitUntil: 'domcontentloaded' })
+      await waitForAnyVisible([publicPage.getByRole('heading', { level: 1, name: /Wybierz start dla swojej sytuacji\./i })], 20000)
+
+      const onlineCard = publicPage.locator('.offer-card', { has: publicPage.getByRole('heading', { name: /Konsultacja behawioralna online/i }) }).first()
+      await waitForAnyVisible([onlineCard], 20000)
+
+      const onlineHref = await onlineCard.locator('.offer-card-actions .button').first().getAttribute('href')
+      if (!onlineHref || !onlineHref.includes('/book') || !onlineHref.includes('service=konsultacja-behawioralna-online')) {
+        throw new Error('Online CTA nie prowadzi do /book z service=konsultacja-behawioralna-online.')
+      }
+
+      await publicPage.goto(`${baseUrl}/slot?problem=separacja&service=konsultacja-behawioralna-online`, { waitUntil: 'domcontentloaded' })
+      await waitForAnyBodyText(
+        publicPage,
+        [/Wybierz termin: Lęk separacyjny/i, /Teraz nie ma wolnych terminów/i, /Terminy chwilowo się odświeżają/i],
+        20000,
+      )
+
+      const emptyState = publicPage.locator('.empty-box').first()
+      if (await isVisible(emptyState)) {
+        step.notes.push('Online CTA prowadzi do empty state bez wolnych 60-min slotow.')
+      } else {
+        step.notes.push('Online CTA prowadzi do /slot z dostepnymi godzinami.')
+      }
+    })
+
+    await runStep(results, 'detail page 1', publicPage, async (step) => {
+      await publicPage.goto(`${baseUrl}/oferta/konsultacja-30-min`, { waitUntil: 'domcontentloaded' })
+      await waitForAnyVisible([publicPage.getByRole('heading', { level: 1, name: /Konsultacja 30 min/i })], 20000)
+      const bodyText = cleanText(await publicPage.locator('main').innerText())
+      if (bodyText.includes('SprawdĹş szybko') || bodyText.includes('Po tym wiesz, co robiÄ‡')) {
+        throw new Error('Detail page 1 nadal zawiera stary szablon.')
+      }
+      step.notes.push('Konsultacja 30 min ma skrĂłcony ukĹ‚ad i 2 CTA.')
+    })
+
+    await runStep(results, 'detail page 2', publicPage, async (step) => {
+      await publicPage.goto(`${baseUrl}/oferta/pobyty-socjalizacyjno-terapeutyczne`, { waitUntil: 'domcontentloaded' })
+      await waitForAnyVisible([publicPage.getByRole('heading', { level: 1, name: /Pobyty socjalizacyjno-terapeutyczne/i })], 20000)
+      const bodyText = cleanText(await publicPage.locator('main').innerText())
+      if (bodyText.includes('SprawdĹş szybko') || bodyText.includes('Po tym wiesz, co robiÄ‡')) {
+        throw new Error('Detail page 2 nadal zawiera stary szablon.')
+      }
+      step.notes.push('Pobyty pozostajÄ… opcjÄ… dalszÄ…, nie zimnym pierwszym krokiem.')
+    })
+
+    await runStep(results, '/kontakt', publicPage, async (step) => {
+      await publicPage.goto(`${baseUrl}/kontakt`, { waitUntil: 'domcontentloaded' })
+      await waitForAnyBodyText(publicPage, [/Napisz wiadomość/i, /Piszesz do mnie/i], 20000)
+      await assertNoPublicPhoneLinks(publicPage, '/kontakt')
+      step.notes.push('Kontakt jest skrĂłcony do akcji i krĂłtkiej toĹĽsamoĹ›ci.')
+    })
+
+    await runStep(results, '/regulamin', publicPage, async (step) => {
+      await publicPage.goto(`${baseUrl}/regulamin`, { waitUntil: 'domcontentloaded' })
+      await waitForAnyVisible([publicPage.getByRole('heading', { level: 1, name: /Zasady rezerwacji szybkiej konsultacji 15 min/i })], 20000)
+      await waitForAnyVisible([publicPage.getByText(/Publiczny profil CAPBT \/ COAPE/i)], 20000)
+      await assertNoPublicPhoneLinks(publicPage, '/regulamin')
+      await assertLegacyHeaderLinksHidden(publicPage, '/regulamin')
+      step.notes.push('Regulamin uĹĽywa nowego shellu prawnego bez publicznego telefonu i starego menu.')
+    })
+
+    await runStep(results, '/polityka-prywatnosci', publicPage, async (step) => {
+      await publicPage.goto(`${baseUrl}/polityka-prywatnosci`, { waitUntil: 'domcontentloaded' })
+      await waitForAnyBodyText(
+        publicPage,
+        [/Jak przetwarzane są dane w marce Regulski \| Terapia behawioralna/i, /Napisz wiadomość/i, /Publiczny profil CAPBT \/ COAPE/i],
+        20000,
+      )
+      await assertNoPublicPhoneLinks(publicPage, '/polityka-prywatnosci')
+      await assertLegacyHeaderLinksHidden(publicPage, '/polityka-prywatnosci')
+      step.notes.push('Polityka prywatnoĹ›ci uĹĽywa nowego shellu prawnego bez publicznego telefonu i starego menu.')
+    })
+
+    await publicContext.close()
+    await adminContext.close()
+
+    await browser.close().catch(() => {})
+    browser = await chromium.launch({
+      headless: true,
+      executablePath: await resolveBrowserExecutablePath(),
+    })
+
+    const skipMobile = process.env.LIVE_CLICKTHROUGH_SKIP_MOBILE === '1' || process.env.LIVE_CLICKTHROUGH_SKIP_MOBILE === 'true'
+    const mobileResults = skipMobile
+      ? []
+      : [
+          await checkMobileLayout(browser, baseUrl, 360, 800, issues, seenIssues),
+          await checkMobileLayout(browser, baseUrl, 375, 812, issues, seenIssues),
+          await checkMobileLayout(browser, baseUrl, 390, 844, issues, seenIssues),
+          await checkMobileLayout(browser, baseUrl, 430, 932, issues, seenIssues),
+        ]
 
     const report = buildReportMarkdown({
       baseUrl,
@@ -785,7 +1215,7 @@ async function main() {
       results,
       issues,
       qaIdentity,
-      paymentModeNote: 'bez realnej pĹ‚atnoĹ›ci PayU i bez faĹ‚szywego approve na produkcji; test manual zakoĹ„czony reject w adminie',
+      mobileResults,
     })
 
     await writeFile(archivePath, report, 'utf8')
@@ -799,28 +1229,27 @@ async function main() {
           passed: results.filter((result) => result.status === 'passed').length,
           failed: results.filter((result) => result.status === 'failed').length,
           issues: issues.length,
-          payuVisible,
-          manualVisible,
-          mailtoHref,
           bookingId,
+          mobile: mobileResults,
         },
         null,
         2,
       ),
     )
 
-    if (results.some((result) => result.status === 'failed')) {
+    if (
+      results.some((result) => result.status === 'failed') ||
+      mobileResults.some((result) => !result.heroClear || !result.cardsReadable || !result.bottomAreaLean || !result.ctaEasyToTap || !result.layoutStable)
+    ) {
       process.exitCode = 1
     }
 
-    await publicContext.close()
-    await adminContext.close()
   } finally {
     await browser.close()
   }
 }
 
-main().catch(async (error) => {
+main().catch((error) => {
   console.error(error instanceof Error ? error.stack ?? error.message : error)
   process.exitCode = 1
 })

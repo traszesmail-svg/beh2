@@ -1,9 +1,10 @@
-import { BUILD_MARKER_KEY } from '@/lib/build-marker'
+﻿import { BUILD_MARKER_KEY } from '@/lib/build-marker'
 
 export type ReleaseSmokeRule = {
   path: string
   required?: string[]
   forbidden?: string[]
+  forbiddenRaw?: string[]
   ordered?: string[]
   requireBuildMarker?: boolean
 }
@@ -16,6 +17,7 @@ export type ReleaseSmokeResult = {
   buildMarker: string | null
   missing: string[]
   forbiddenFound: string[]
+  forbiddenRawFound: string[]
   orderFailures: string[]
 }
 
@@ -58,6 +60,10 @@ function findPhraseIndex(text: string, phrase: string): number {
   return normalizeReleaseSmokeText(text).indexOf(normalizeReleaseSmokeText(phrase))
 }
 
+function findRawPhraseIndex(text: string, phrase: string): number {
+  return text.toLowerCase().indexOf(phrase.toLowerCase())
+}
+
 export function buildExpectedMarker(branch: string, commit: string) {
   return `${BUILD_MARKER_KEY}:${branch}:${commit}`
 }
@@ -67,6 +73,7 @@ export function evaluateReleaseSmokePage(html: string, baseUrl: string, rule: Re
   const buildMarker = extractBuildMarkerFromHtml(html)
   const missing = (rule.required ?? []).filter((phrase) => findPhraseIndex(visibleText, phrase) === -1)
   const forbiddenFound = (rule.forbidden ?? []).filter((phrase) => findPhraseIndex(visibleText, phrase) > -1)
+  const forbiddenRawFound = (rule.forbiddenRaw ?? []).filter((phrase) => findRawPhraseIndex(html, phrase) > -1)
   const orderFailures: string[] = []
 
   let lastIndex = -1
@@ -92,11 +99,12 @@ export function evaluateReleaseSmokePage(html: string, baseUrl: string, rule: Re
   return {
     rule,
     url: new URL(rule.path, baseUrl).toString(),
-    ok: missing.length === 0 && forbiddenFound.length === 0 && orderFailures.length === 0,
+    ok: missing.length === 0 && forbiddenFound.length === 0 && forbiddenRawFound.length === 0 && orderFailures.length === 0,
     visibleText,
     buildMarker,
     missing,
     forbiddenFound,
+    forbiddenRawFound,
     orderFailures,
   }
 }
@@ -107,23 +115,23 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
       path: '/',
       required: [
         'Regulski | Terapia behawioralna',
-        'Masz problem z psem lub kotem? Wybierz pierwszy krok.',
-        'Szybki wybór',
-        'Wybierz start',
-        'Piszesz do mnie',
-        'Napisz wiadomość',
+        'Masz psa, kota albo temat mieszany? Zacznij od prostego wyboru.',
+        'Prowadzę konsultacje osobiście',
+        '3 r\u00f3wne wej\u015bcia',
+        'Mam psa',
+        'Mam kota',
+        'Nie wiem, od czego zacz\u0105\u0107',
       ],
       forbidden: [
-        'Historie opiekunów i efekty konsultacji',
-        'Udostępnij znajomemu',
+        'Historie opiekun\u00f3w i efekty konsultacji',
+        'Udost\u0119pnij znajomemu',
         'Social media',
         'Wersja serwisu',
       ],
       ordered: [
         'Regulski | Terapia behawioralna',
-        'Masz problem z psem lub kotem? Wybierz pierwszy krok.',
-        'Wybierz start',
-        'Piszesz do mnie',
+        'Masz psa, kota albo temat mieszany? Zacznij od prostego wyboru.',
+        '3 r\u00f3wne wej\u015bcia',
       ],
       requireBuildMarker: true,
     },
@@ -131,20 +139,35 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
       path: '/book',
       required: [
         'Etap rezerwacji: wybór tematu',
-        'Wybierz temat na 15 min',
-        'Od 59 zł. Dokładną kwotę potwierdzisz po wyborze tematu konsultacji.',
+        'Wybierz temat dla:',
+        'Temat mieszany?',
+        'Wybierz temat mieszany',
       ],
       forbidden: [
         'Cena konsultacji',
         'Podeślij tę stronę komuś, kto też potrzebuje szybkiego wsparcia dla pupila',
+        'Kot i trudne zachowania',
       ],
+      requireBuildMarker: true,
+    },
+    {
+      path: '/koty',
+      required: [
+        'Wybierz temat dla kota i od razu przejdź do terminu.',
+        'Kot i kuweta',
+        'Konflikt miedzy kotami',
+        'Dotyk, gryzienie i pielegnacja',
+        'Kot lekowy, napiety albo wycofany',
+        'Budzi dom po nocy / nocna wokalizacja',
+      ],
+      forbidden: ['Masz problem z kotem? Wybierz start.'],
       requireBuildMarker: true,
     },
     {
       path: '/slot?problem=szczeniak',
       required: [
-        'Etap rezerwacji: wybór terminu',
-        'Wybierz termin szybkiej konsultacji: Szczeniak i młody pies',
+        'Etap rezerwacji: wyb\u00f3r terminu',
+        'Wybierz termin: Szczeniak i m\u0142ody pies',
       ],
       forbidden: ['Krok 2 z 6'],
       requireBuildMarker: true,
@@ -153,10 +176,32 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
       path: '/form?problem=szczeniak&slotId=2026-03-24-11%3A20',
       required: [
         'Etap rezerwacji: dane do konsultacji',
-        'Uzupełnij dane do szybkiej konsultacji',
-        'Kwotę potwierdzisz na ekranie płatności po zapisaniu rezerwacji i zablokowaniu terminu.',
+        'Uzupełnij dane do rezerwacji',
+        'To finalna kwota dla tej usługi przed przejściem do wpłaty ręcznej.',
       ],
       forbidden: ['Krok 3 z 6'],
+      requireBuildMarker: true,
+    },
+    {
+      path: '/regulamin',
+      required: [
+        'Zasady rezerwacji szybkiej konsultacji 15 min',
+        'Napisz wiadomo\u015b\u0107',
+        'Publiczny profil CAPBT / COAPE',
+      ],
+      forbidden: ['Koty', 'Pobyty', 'Telefon', 'Um\u00f3w konsultacj\u0119'],
+      forbiddenRaw: ['tel:'],
+      requireBuildMarker: true,
+    },
+    {
+      path: '/polityka-prywatnosci',
+      required: [
+        'Jak przetwarzane s\u0105 dane w marce Regulski | Terapia behawioralna',
+        'Napisz wiadomo\u015b\u0107',
+        'Publiczny profil CAPBT / COAPE',
+      ],
+      forbidden: ['Koty', 'Pobyty', 'Telefon', 'Um\u00f3w konsultacj\u0119'],
+      forbiddenRaw: ['tel:'],
       requireBuildMarker: true,
     },
   ]

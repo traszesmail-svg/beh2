@@ -1,4 +1,5 @@
 import Stripe from 'stripe'
+import { getBookingServiceTitle, resolveBookingServiceType } from '@/lib/booking-services'
 import { getProblemLabel } from '@/lib/data'
 import { formatPricePln, MIN_CONSULTATION_PRICE_PLN, toStripeUnitAmount } from '@/lib/pricing'
 import { attachCheckoutSession, getBookingForViewer, markBookingPaid } from '@/lib/server/db'
@@ -32,14 +33,14 @@ export function assertStripeCheckoutAmountSupported(amount: number) {
     throw new Error(
       `Stripe Checkout w PLN wymaga kwoty co najmniej ${formatPricePln(
         MIN_STRIPE_CHECKOUT_AMOUNT_PLN,
-      )}. Ustaw wyższą cenę konsultacji w panelu specjalisty, zanim włączysz płatność Stripe.`,
+      )}. Ustaw wyzsza cene konsultacji w panelu specjalisty, zanim wlaczysz platnosc Stripe.`,
     )
   }
 }
 
 type CheckoutBookingSnapshot = Pick<
   BookingRecord,
-  'id' | 'email' | 'problemType' | 'bookingDate' | 'bookingTime' | 'amount'
+  'id' | 'email' | 'problemType' | 'bookingDate' | 'bookingTime' | 'amount' | 'serviceType'
 >
 
 type RefundableBookingSnapshot = Pick<BookingRecord, 'id' | 'paymentIntentId' | 'checkoutSessionId'>
@@ -54,6 +55,7 @@ export function buildCheckoutSessionParams(
   const stripeUnitAmount = toStripeUnitAmount(booking.amount)
   const accessQuery = options?.accessToken ? `&access=${encodeURIComponent(options.accessToken)}` : ''
   const baseUrl = options?.baseUrl ?? getBaseUrl()
+  const serviceTitle = getBookingServiceTitle(resolveBookingServiceType(booking.serviceType, booking.amount))
 
   assertStripeCheckoutAmountSupported(booking.amount)
 
@@ -72,7 +74,7 @@ export function buildCheckoutSessionParams(
           currency: 'pln',
           unit_amount: stripeUnitAmount,
           product_data: {
-            name: 'Behawior 15 - 15-minutowa konsultacja głosowa',
+            name: `Regulski - ${serviceTitle}`,
             description: `${getProblemLabel(booking.problemType)} | ${booking.bookingDate} ${booking.bookingTime} | ${formatPricePln(
               booking.amount,
             )}`,
@@ -91,11 +93,11 @@ export async function createCheckoutSession(
   const booking = await getBookingForViewer(bookingId, accessToken, authorizationHeader)
 
   if (!booking) {
-    throw new Error('Nie znaleziono rezerwacji do płatności.')
+    throw new Error('Nie znaleziono rezerwacji do platnosci.')
   }
 
   if (!(booking.bookingStatus === 'pending' && booking.paymentStatus === 'unpaid')) {
-    throw new Error('Stripe Checkout można uruchomić tylko dla bookingu oczekującego na płatność.')
+    throw new Error('Stripe Checkout mozna uruchomic tylko dla bookingu oczekujacego na platnosc.')
   }
 
   const stripe = getStripeClient()
@@ -169,7 +171,7 @@ async function resolveStripePaymentIntentId(booking: RefundableBookingSnapshot):
       : session.payment_intent?.id ?? null
 
   if (!paymentIntentId) {
-    throw new Error('Nie udało się ustalić payment intent dla tej płatności Stripe.')
+    throw new Error('Nie udalo sie ustalic payment intent dla tej platnosci Stripe.')
   }
 
   return paymentIntentId

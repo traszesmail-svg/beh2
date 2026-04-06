@@ -21,13 +21,13 @@ export function HomeMobileStickyCta() {
   return (
     <div className={`mobile-sticky-cta home-mobile-sticky-cta${isVisible ? ' is-visible' : ''}`}>
       <a
-        href="#pierwszy-krok"
+        href="#home-paths"
         className="button button-primary"
-        data-home-sticky-cta="match"
+        data-home-sticky-cta="start"
         data-analytics-event="cta_click"
-        data-analytics-location="home-sticky-match"
+        data-analytics-location="home-sticky-start"
       >
-        Dobierz pierwszy krok
+        Wybierz ścieżkę
       </a>
     </div>
   )

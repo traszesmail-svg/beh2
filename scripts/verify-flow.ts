@@ -1,7 +1,8 @@
 import { rm } from 'fs/promises'
 import path from 'path'
-import { isFutureAvailabilitySlot } from '../lib/data'
+import { getProblemLabel, isFutureAvailabilitySlot } from '../lib/data'
 import { createLocalDataSandbox } from './lib/local-data-sandbox'
+import { BOOKING_SERVICE_30_PRICE, BOOKING_SERVICE_ONLINE_PRICE } from '../lib/booking-services'
 import {
   attachPayuOrder,
   createAvailabilitySlot,
@@ -18,12 +19,21 @@ import {
 import { getManualPaymentReference } from '../lib/server/payment-options'
 
 const rootDir = process.cwd()
-const trackedFiles = ['availability.json', 'bookings.json', 'users.json', 'pricing-settings.json']
+const trackedFiles = ['availability.json', 'bookings.json', 'users.json', 'pricing-settings.json', 'funnel-events.json']
 
 function assert(condition: unknown, message: string): asserts condition {
   if (!condition) {
     throw new Error(message)
   }
+}
+
+function createFutureWarsawDate(yearsAhead: number) {
+  return new Intl.DateTimeFormat('sv-SE', {
+    timeZone: 'Europe/Warsaw',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(new Date(Date.now() + yearsAhead * 365 * 24 * 60 * 60 * 1000))
 }
 
 async function main() {
@@ -71,6 +81,23 @@ async function main() {
     assert(manualPending?.bookingStatus === 'pending_manual_payment', 'Booking nie przeszedl do statusu pending_manual_payment.')
     assert(manualPending?.paymentStatus === 'pending_manual_review', 'Payment status nie przeszedl do pending_manual_review.')
 
+    const manualPendingRetry = await markBookingManualPaymentPending(manualBooking.booking.id, {
+      paymentReference: getManualPaymentReference(manualBooking.booking.id),
+    })
+
+    assert(
+      manualPendingRetry?.bookingStatus === 'pending_manual_payment',
+      'Ponowne zgloszenie manualnej platnosci nie powinno zmieniac statusu bookingu.',
+    )
+    assert(
+      manualPendingRetry?.paymentStatus === 'pending_manual_review',
+      'Ponowne zgloszenie manualnej platnosci nie powinno zmieniac payment status.',
+    )
+    assert(
+      manualPendingRetry?.paymentReportedAt === manualPending?.paymentReportedAt,
+      'Ponowne zgloszenie manualnej platnosci nie powinno nadpisywac paymentReportedAt.',
+    )
+
     const manualPaid = await markBookingPaid(manualBooking.booking.id, {
       paymentMethod: 'manual',
       paymentReference: getManualPaymentReference(manualBooking.booking.id),
@@ -85,9 +112,121 @@ async function main() {
       'Manual payment success powinien zapisac kontrolowany status SMS przy braku providera.',
     )
 
+    const futureBookingDate = createFutureWarsawDate(5)
+    const thirtyMinuteFirstSlot = await createAvailabilitySlot(futureBookingDate, '10:00')
+    const thirtyMinuteSecondSlot = await createAvailabilitySlot(futureBookingDate, '10:20')
+
+    assert(thirtyMinuteFirstSlot.id !== thirtyMinuteSecondSlot.id, '30 min slots musza byc osobnymi, kolejnymi slotami.')
+
+    const thirtyMinuteBooking = await createPendingBooking({
+      ownerName: 'Thirty Minute Success',
+      problemType: 'kot-stres',
+      animalType: 'Kot',
+      petAge: '5 lat',
+      durationNotes: 'Od dwóch tygodni',
+      description: 'Test osobnego flow dla konsultacji 30 min.',
+      phone: '503000000',
+      email: 'thirty-minute@example.com',
+      slotId: thirtyMinuteFirstSlot.id,
+      serviceType: 'konsultacja-30-min',
+    })
+
+    assert(
+      thirtyMinuteBooking.booking.serviceType === 'konsultacja-30-min',
+      'Booking 30 min nie zachowal serviceType.',
+    )
+    assert(
+      thirtyMinuteBooking.booking.amount === BOOKING_SERVICE_30_PRICE,
+      'Booking 30 min nie dostal stalej ceny 119 zl.',
+    )
+
+    const thirtyMinutePending = await markBookingManualPaymentPending(thirtyMinuteBooking.booking.id, {
+      paymentReference: getManualPaymentReference(thirtyMinuteBooking.booking.id),
+    })
+
+    assert(
+      thirtyMinutePending?.bookingStatus === 'pending_manual_payment',
+      'Booking 30 min nie przeszedl do statusu pending_manual_payment.',
+    )
+    assert(
+      thirtyMinutePending?.paymentStatus === 'pending_manual_review',
+      'Booking 30 min nie przeszedl do statusu pending_manual_review.',
+    )
+
+    const thirtyMinutePaid = await markBookingPaid(thirtyMinuteBooking.booking.id, {
+      paymentMethod: 'manual',
+      paymentReference: getManualPaymentReference(thirtyMinuteBooking.booking.id),
+      triggerPaymentConfirmationSms: true,
+    })
+
+    assert(thirtyMinutePaid?.bookingStatus === 'confirmed', 'Booking 30 min po akceptacji nie przeszedl do confirmed.')
+    assert(thirtyMinutePaid?.paymentStatus === 'paid', 'Booking 30 min po akceptacji nie ma statusu paid.')
+
+    const onlineFirstSlot = await createAvailabilitySlot(futureBookingDate, '12:00')
+    const onlineSecondSlot = await createAvailabilitySlot(futureBookingDate, '12:20')
+    const onlineThirdSlot = await createAvailabilitySlot(futureBookingDate, '12:40')
+    const onlineFourthSlot = await createAvailabilitySlot(futureBookingDate, '13:00')
+
+    assert(
+      new Set([onlineFirstSlot.id, onlineSecondSlot.id, onlineThirdSlot.id, onlineFourthSlot.id]).size === 4,
+      'Online slots musza byc osobnymi, kolejnymi slotami.',
+    )
+
+    const onlineBooking = await createPendingBooking({
+      ownerName: 'Online Success',
+      problemType: 'separacja',
+      animalType: 'Pies',
+      petAge: '6 lat',
+      durationNotes: 'Od kilku miesiecy',
+      description: 'Test osobnego flow dla konsultacji behawioralnej online.',
+      phone: '504000000',
+      email: 'online-success@example.com',
+      slotId: onlineFirstSlot.id,
+      serviceType: 'konsultacja-behawioralna-online',
+    })
+
+    assert(
+      onlineBooking.booking.serviceType === 'konsultacja-behawioralna-online',
+      'Booking online nie zachowal serviceType.',
+    )
+    assert(
+      onlineBooking.booking.amount === BOOKING_SERVICE_ONLINE_PRICE,
+      'Booking online nie dostal stalej ceny 350 zl.',
+    )
+
+    const onlinePending = await markBookingManualPaymentPending(onlineBooking.booking.id, {
+      paymentReference: getManualPaymentReference(onlineBooking.booking.id),
+    })
+
+    assert(
+      onlinePending?.bookingStatus === 'pending_manual_payment',
+      'Booking online nie przeszedl do statusu pending_manual_payment.',
+    )
+    assert(
+      onlinePending?.paymentStatus === 'pending_manual_review',
+      'Booking online nie przeszedl do statusu pending_manual_review.',
+    )
+
+    const onlinePaid = await markBookingPaid(onlineBooking.booking.id, {
+      paymentMethod: 'manual',
+      paymentReference: getManualPaymentReference(onlineBooking.booking.id),
+      triggerPaymentConfirmationSms: true,
+    })
+
+    assert(onlinePaid?.bookingStatus === 'confirmed', 'Booking online po akceptacji nie przeszedl do confirmed.')
+    assert(onlinePaid?.paymentStatus === 'paid', 'Booking online po akceptacji nie ma statusu paid.')
+    assert(
+      onlinePaid?.smsConfirmationStatus === 'skipped_not_configured',
+      'Booking online powinien zapisac kontrolowany status SMS przy braku providera.',
+    )
+    assert(
+      onlinePaid?.meetingUrl.startsWith('https://meet.jit.si/behawior15-'),
+      'Booking online nie wygenerowal linku Jitsi.',
+    )
+
     const rejectedBooking = await createPendingBooking({
       ownerName: 'Manual Reject',
-      problemType: 'kot',
+      problemType: 'kot-konflikt',
       animalType: 'Kot',
       petAge: '2 lata',
       durationNotes: '3 dni',
@@ -104,6 +243,7 @@ async function main() {
 
     assert(rejectedResult?.bookingStatus === 'cancelled', 'Booking po odrzuceniu wplaty nie ma statusu cancelled.')
     assert(rejectedResult?.paymentStatus === 'rejected', 'Booking po odrzuceniu wplaty nie ma payment status rejected.')
+    assert(getProblemLabel('kot') === 'Kot i trudne zachowania', 'Legacy label dla starych bookingow kota zniknal.')
 
     const availabilityAfterReject = await listAvailability()
     const rejectedSlotVisibleAgain = availabilityAfterReject.some((group) =>
@@ -169,6 +309,17 @@ async function main() {
             pendingPaymentStatus: manualPending?.paymentStatus ?? null,
             finalBookingStatus: manualPaid?.bookingStatus ?? null,
             finalPaymentStatus: manualPaid?.paymentStatus ?? null,
+          },
+          thirtyMinuteFlow: {
+            bookingStatus: thirtyMinutePaid?.bookingStatus ?? null,
+            paymentStatus: thirtyMinutePaid?.paymentStatus ?? null,
+            amount: thirtyMinutePaid?.amount ?? null,
+          },
+          onlineFlow: {
+            bookingStatus: onlinePaid?.bookingStatus ?? null,
+            paymentStatus: onlinePaid?.paymentStatus ?? null,
+            amount: onlinePaid?.amount ?? null,
+            meetingUrl: onlinePaid?.meetingUrl ?? null,
           },
           manualRejectFlow: {
             bookingStatus: rejectedResult?.bookingStatus ?? null,

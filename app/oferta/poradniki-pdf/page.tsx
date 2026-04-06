@@ -4,8 +4,8 @@ import Link from 'next/link'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { PdfBundleCard } from '@/components/PdfBundleCard'
-import { PdfGuideCoverStack } from '@/components/PdfGuideCoverStack'
 import { PdfGuideCard } from '@/components/PdfGuideCard'
+import { PdfGuideCoverStack } from '@/components/PdfGuideCoverStack'
 import {
   buildPdfInquiryHref,
   getPdfCategoryLabel,
@@ -21,24 +21,58 @@ import { buildMarketingMetadata } from '@/lib/seo'
 
 const categorySections: Record<PdfGuideCategory, { title: string; lead: string }> = {
   dog: {
-    title: 'Tematy dla opiekunów psów',
-    lead: 'Materiały dla sytuacji startowych, spacerowych, domowych i dla pierwszych tygodni ze szczeniakiem.',
+    title: 'PDF-y dla psów',
+    lead: 'Materiały na tematy spacerowe, domowe, startowe i dla pierwszych tygodni ze szczeniakiem.',
   },
   cat: {
-    title: 'Tematy dla opiekunów kotów',
-    lead: 'Materiały dla problemów kuwetowych, stresu środowiskowego, konfliktu między kotami i trudnych procedur pielęgnacyjnych.',
+    title: 'PDF-y dla kotów',
+    lead: 'Materiały dla problemów kuwetowych, napięcia środowiskowego, konfliktu i trudnych procedur.',
   },
   mixed: {
-    title: 'Materiały startowe i uniwersalne',
-    lead: 'Krótsze PDF-y, które pomagają spokojnie wejść w temat albo uporządkować pierwszy tydzień po zmianie w domu.',
+    title: 'PDF-y startowe',
+    lead: 'Krótsze materiały, gdy chcesz spokojnie wejść w temat albo uporządkować pierwszy tydzień po zmianie w domu.',
   },
 }
+
+const entryChoices = [
+  {
+    step: '01',
+    eyebrow: '1 poradnik PDF',
+    title: 'Jeden konkretny temat',
+    summary: 'Dobry wybór, gdy problem jest wąski i chcesz wejść od razu w jeden plan działania.',
+    href: `${PDF_GUIDES_LISTING_ROUTE}#poradniki-startowe`,
+    cta: 'Zobacz pojedyncze PDF-y',
+  },
+  {
+    step: '02',
+    eyebrow: 'Pakiet PDF',
+    title: 'Kilka części jednego problemu',
+    summary: 'Lepszy, gdy temat ma kilka warstw i jeden materiał byłby za krótki na spokojny start.',
+    href: `${PDF_GUIDES_LISTING_ROUTE}#pakiety-pdf`,
+    cta: 'Zobacz pakiety PDF',
+  },
+  {
+    step: '03',
+    eyebrow: 'Kontakt',
+    title: 'Chcę najpierw dopytać',
+    summary: 'Napisz, jeśli nie chcesz zgadywać między pojedynczym poradnikiem, pakietem i rozmową.',
+    href: buildPdfInquiryHref(),
+    cta: 'Napisz o PDF',
+  },
+  {
+    step: '04',
+    eyebrow: 'Konsultacja 15 min',
+    title: 'Temat jest mieszany',
+    summary: 'Szybsza droga, gdy problem nie mieści się w jednym PDF-ie albo trzeba najpierw poukładać sytuację.',
+    href: '/book',
+    cta: 'Umów 15 min',
+  },
+] as const
 
 export const metadata: Metadata = buildMarketingMetadata({
   title: 'Poradniki PDF',
   path: PDF_GUIDES_LISTING_ROUTE,
-  description:
-    'Listing poradników PDF dla opiekunów psów i kotów: tematy problemowe, materiały wejściowe i pakiety dobierane do konsultacji.',
+  description: 'Poradniki PDF dla opiekunów psów i kotów: pojedyncze materiały, pakiety i spokojny start bez zgadywania.',
 })
 
 export default function PdfGuidesListingPage() {
@@ -77,94 +111,88 @@ export default function PdfGuidesListingPage() {
       <div className="container">
         <Header />
 
-        <section className="panel section-panel">
-          <div className="section-eyebrow">{PDF_GUIDES_SITE_DATA.hero.badge}</div>
-          <h1>{PDF_GUIDES_SITE_DATA.hero.title}</h1>
-          <p className="hero-text">{PDF_GUIDES_SITE_DATA.hero.lead}</p>
+        <section className="panel section-panel hero-surface pdf-stage-shell pdf-listing-shell">
+          <div className="pdf-stage-hero-grid">
+            <div className="pdf-stage-hero-copy">
+              <div className="section-eyebrow">{PDF_GUIDES_SITE_DATA.hero.badge}</div>
+              <h1>{PDF_GUIDES_SITE_DATA.hero.title}</h1>
+              <p className="hero-text">{PDF_GUIDES_SITE_DATA.hero.lead}</p>
 
-          <div className="stats-grid top-gap">
-            <div className="stat-card tree-backed-card pdf-stat-card">
-              <strong>{guides.length}</strong>
-              <span>tematów PDF do wyboru</span>
+              <div className="pdf-stage-pill-row" aria-label="Rodzaje wejścia">
+                <span className="hero-proof-pill">1 poradnik PDF</span>
+                <span className="hero-proof-pill">Pakiet PDF</span>
+                <span className="hero-proof-pill">Kontakt</span>
+                <span className="hero-proof-pill">Konsultacja 15 min</span>
+              </div>
             </div>
-            <div className="stat-card tree-backed-card pdf-stat-card">
-              <strong>{bundles.length}</strong>
-              <span>pakietów na częste tematy</span>
-            </div>
-            <div className="stat-card tree-backed-card pdf-stat-card">
-              <strong>{dogGuides.length}</strong>
-              <span>PDF-y dla psów</span>
-            </div>
-            <div className="stat-card tree-backed-card pdf-stat-card">
-              <strong>{catGuides.length}</strong>
-              <span>PDF-y dla kotów</span>
-            </div>
+
+            <aside className="pdf-stage-hero-card tree-backed-card">
+              <span className="pdf-stage-hero-label">Najpierw wybierz typ wejścia</span>
+              <strong>Jeden poradnik, pakiet, wiadomość albo konsultacja 15 min.</strong>
+              <p>Najkrótsza ścieżka, jeśli chcesz zacząć od materiału zamiast od rozmowy, ale bez płaskiej ściany podobnych kart.</p>
+
+              <div className="pdf-stage-hero-stats">
+                <div className="pdf-stage-hero-stat">
+                  <span>Poradniki</span>
+                  <strong>{guides.length}</strong>
+                </div>
+                <div className="pdf-stage-hero-stat">
+                  <span>Pakiety</span>
+                  <strong>{bundles.length}</strong>
+                </div>
+                <div className="pdf-stage-hero-stat">
+                  <span>Psy</span>
+                  <strong>{dogGuides.length}</strong>
+                </div>
+                <div className="pdf-stage-hero-stat">
+                  <span>Koty</span>
+                  <strong>{catGuides.length}</strong>
+                </div>
+              </div>
+
+              <PdfGuideCoverStack
+                guides={featuredGuides}
+                title="Najczęściej wybierane poradniki PDF"
+                className="pdf-stage-hero-stack"
+                showLegend
+              />
+            </aside>
           </div>
 
-          <div className="hero-actions top-gap">
-            <Link href={buildPdfInquiryHref()} prefetch={false} className="button button-primary big-button">
-              Napisz w sprawie poradnika lub pakietu
-            </Link>
-            <Link href="/book" prefetch={false} className="button button-ghost big-button">
-              Umów konsultację 15 min
-            </Link>
-          </div>
-
-          <div className="pdf-entry-grid top-gap">
-            <div className="list-card tree-backed-card pdf-entry-card">
-              <div className="section-eyebrow">1 poradnik PDF</div>
-              <strong>Najlepszy przy jednym konkretnym temacie</strong>
-              <span>Zacznij od najczęściej wybieranych poradników, jeśli problem jest wąski i chcesz wejść od razu w jeden plan działania.</span>
-              <Link href={`${PDF_GUIDES_LISTING_ROUTE}#poradniki-startowe`} prefetch={false} className="inline-link">
-                Przejdź do pojedynczych poradników
-              </Link>
-            </div>
-
-            <div className="list-card tree-backed-card pdf-entry-card">
-              <div className="section-eyebrow">Pakiet PDF</div>
-              <strong>Lepszy, gdy temat ma kilka części</strong>
-              <span>Pakiet pomaga, gdy temat dotyczy kilku spraw i trudno wybrać jeden materiał na start.</span>
-              <Link href={`${PDF_GUIDES_LISTING_ROUTE}#pakiety-pdf`} prefetch={false} className="inline-link">
-                Przejdź do pakietów PDF
-              </Link>
-            </div>
-
-            <div className="list-card tree-backed-card pdf-entry-card">
-              <div className="section-eyebrow">Kontakt</div>
-              <strong>Gdy chcesz dopytać przed wyborem</strong>
-              <span>Napisz, jeśli chcesz sprawdzić, czy lepszy będzie pakiet czy jeden poradnik.</span>
-              <Link href={buildPdfInquiryHref()} prefetch={false} className="inline-link">
-                Napisz w sprawie poradnika lub pakietu
-              </Link>
-            </div>
-
-            <div className="list-card tree-backed-card pdf-entry-card">
-              <div className="section-eyebrow">Konsultacja 15 min</div>
-              <strong>Lepsza przy mieszanych albo szerszych tematach</strong>
-              <span>Jeśli problem nie mieści się w jednym PDF-ie, szybciej będzie zacząć od rozmowy i dopiero potem dobrać materiał uzupełniający.</span>
-              <Link href="/book" prefetch={false} className="inline-link">
-                Umów konsultację 15 min
-              </Link>
-            </div>
-          </div>
-
-          <div className="pdf-listing-visual top-gap">
-            <PdfGuideCoverStack
-              guides={featuredGuides}
-              title="Najczęściej wybierane poradniki PDF"
-              className="pdf-listing-stack"
-              showLegend
-            />
+          <div className="pdf-stage-entry-grid top-gap">
+            {entryChoices.map((choice) => (
+              <article key={choice.step} className="list-card tree-backed-card pdf-stage-entry-card">
+                <div className="pdf-stage-entry-topline">
+                  <span className="pdf-stage-entry-step" aria-hidden="true">
+                    {choice.step}
+                  </span>
+                  <span className="section-eyebrow">{choice.eyebrow}</span>
+                </div>
+                <strong>{choice.title}</strong>
+                <span>{choice.summary}</span>
+                <Link href={choice.href} prefetch={false} className="inline-link">
+                  {choice.cta}
+                </Link>
+              </article>
+            ))}
           </div>
         </section>
 
-        <section className="panel section-panel" id="poradniki-startowe">
-          <div className="section-eyebrow">Najczęściej wybierane</div>
-          <h2>Pojedyncze poradniki, od których najłatwiej zacząć</h2>
-          <p className="hero-text">
-            To najszybszy punkt wejścia, jeśli temat jest już dość czytelny. Każda karta prowadzi do jednego poradnika i osobnego
-            kontaktu w sprawie zakupu albo dostępu.
-          </p>
+        <section className="offer-section-block offer-section-block-start" id="poradniki-startowe">
+          <div className="offer-section-head">
+            <div className="offer-section-title-block">
+              <span className="offer-section-marker" aria-hidden="true">
+                01
+              </span>
+              <div>
+                <div className="section-eyebrow offer-section-eyebrow">1 poradnik PDF</div>
+                <h2>Najprostszy start od jednego materiału</h2>
+              </div>
+            </div>
+            <p className="offer-section-intro">
+              Dobre wejście, jeśli temat jest już czytelny i chcesz od razu przejść do jednego planu działania.
+            </p>
+          </div>
 
           <div className="offer-grid top-gap">
             {featuredGuides.map((guide) => (
@@ -173,13 +201,21 @@ export default function PdfGuidesListingPage() {
           </div>
         </section>
 
-        <section className="panel section-panel" id="pakiety-pdf">
-          <div className="section-eyebrow">Pakiety</div>
-          <h2>Pakiety, gdy jeden PDF to za mało</h2>
-          <p className="hero-text">
-            To dobry wybór przy szerszym temacie. Pakiet od razu pokazuje, co zawiera i czy lepiej pisać o zestawie niż o
-            jednym poradniku.
-          </p>
+        <section className="offer-section-block offer-section-block-moretime" id="pakiety-pdf">
+          <div className="offer-section-head">
+            <div className="offer-section-title-block">
+              <span className="offer-section-marker" aria-hidden="true">
+                02
+              </span>
+              <div>
+                <div className="section-eyebrow offer-section-eyebrow">Pakiety PDF</div>
+                <h2>Gdy jeden poradnik to za mało</h2>
+              </div>
+            </div>
+            <p className="offer-section-intro">
+              Pakiet porządkuje kilka części tego samego problemu, zanim zdecydujesz, czy potrzebna jest rozmowa.
+            </p>
+          </div>
 
           <div className="offer-grid top-gap">
             {bundles.map((bundle) => (
@@ -188,10 +224,21 @@ export default function PdfGuidesListingPage() {
           </div>
         </section>
 
-        <section className="panel section-panel" id="katalog-pdf">
-          <div className="section-eyebrow">Więcej tematów</div>
-          <h2>Pozostałe poradniki</h2>
-          <p className="hero-text">Najczęściej wybierane materiały są wyżej. Tutaj jest reszta tematów w krótszym układzie.</p>
+        <section className="offer-section-block offer-section-block-further" id="katalog-pdf">
+          <div className="offer-section-head">
+            <div className="offer-section-title-block">
+              <span className="offer-section-marker" aria-hidden="true">
+                03
+              </span>
+              <div>
+                <div className="section-eyebrow offer-section-eyebrow">Pozostałe tematy</div>
+                <h2>Reszta katalogu po grupach</h2>
+              </div>
+            </div>
+            <p className="offer-section-intro">
+              Najczęściej wybierane materiały są wyżej. Tu jest dalsza część katalogu w krótszym, porządkującym układzie.
+            </p>
+          </div>
 
           <div className="pdf-category-grid top-gap">
             {categoryGroups.map(({ category, section, guides: groupedGuides }) => (
@@ -210,10 +257,10 @@ export default function PdfGuidesListingPage() {
           </div>
         </section>
 
-        <section className="two-col-section">
+        <section className="two-col-section pdf-stage-faq-grid">
           <div className="panel section-panel">
             <div className="section-eyebrow">FAQ</div>
-            <h2>Najczęstsze pytania przed wyborem materiału</h2>
+            <h2>Najczęstsze pytania przed wyborem PDF</h2>
 
             <div className="stack-gap top-gap">
               {PDF_GUIDES_SITE_DATA.faq.map((item) => (
@@ -225,18 +272,19 @@ export default function PdfGuidesListingPage() {
             </div>
           </div>
 
-          <div className="panel section-panel">
+          <div className="panel section-panel hero-surface">
             <div className="section-eyebrow">Jak wybrać</div>
             <h2>Co wybrać na start</h2>
+            <p className="hero-text">{PDF_GUIDES_SITE_DATA.cta.body}</p>
 
             <div className="stack-gap top-gap">
               <div className="list-card tree-backed-card">
                 <strong>1 poradnik PDF</strong>
-                <span>Najlepszy przy jednym konkretnym problemie, kiedy chcesz wejść od razu w temat i plan działania.</span>
+                <span>Najlepszy przy jednym konkretnym problemie i chęci wejścia od razu w jeden plan działania.</span>
               </div>
               <div className="list-card tree-backed-card">
                 <strong>Pakiet PDF</strong>
-                <span>Lepszy, gdy temat obejmuje kilka spraw i chcesz dostać gotowy zestaw zamiast składać go samodzielnie.</span>
+                <span>Lepszy, gdy temat obejmuje kilka spraw i chcesz dostać gotowy zestaw materiałów.</span>
               </div>
               <div className="list-card tree-backed-card">
                 <strong>Kontakt</strong>
@@ -259,7 +307,7 @@ export default function PdfGuidesListingPage() {
           </div>
         </section>
 
-        <Footer />
+        <Footer variant="full" ctaHref={buildPdfInquiryHref()} ctaLabel="Napisz o PDF" />
       </div>
     </main>
   )

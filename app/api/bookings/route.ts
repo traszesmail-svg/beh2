@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server'
+import { isBookingServiceType } from '@/lib/booking-services'
 import { isProblemType } from '@/lib/data'
 import { isValidPolishPhone } from '@/lib/phone'
 import { createPendingBooking } from '@/lib/server/db'
 import { getBookingApiErrorSnapshot } from '@/lib/server/booking-api-errors'
+import { getQaCheckoutEligibility } from '@/lib/server/payment-options'
 import { AnimalType } from '@/lib/types'
 
 function isAnimalType(value: unknown): value is AnimalType {
@@ -18,10 +20,13 @@ export async function POST(request: Request) {
     const body = (await request.json()) as Record<string, unknown>
     const rawProblemType = typeof body.problemType === 'string' ? body.problemType : null
     const rawAnimalType = body.animalType
+    const rawServiceType = typeof body.serviceType === 'string' ? body.serviceType : null
+    const qaBooking = body.qaBooking === true
 
     if (
       typeof body.ownerName !== 'string' ||
       !isProblemType(rawProblemType) ||
+      (rawServiceType !== null && !isBookingServiceType(rawServiceType)) ||
       !isAnimalType(rawAnimalType) ||
       typeof body.petAge !== 'string' ||
       typeof body.durationNotes !== 'string' ||
@@ -36,6 +41,7 @@ export async function POST(request: Request) {
     const ownerName = body.ownerName
     const problemType = rawProblemType
     const animalType = rawAnimalType
+    const serviceType = rawServiceType
     const petAge = body.petAge
     const durationNotes = body.durationNotes
     const description = body.description
@@ -43,10 +49,23 @@ export async function POST(request: Request) {
     const email = body.email
     const slotId = body.slotId
 
+    if (qaBooking) {
+      const qaEligibility = getQaCheckoutEligibility({
+        id: 'pending',
+        qaBooking: true,
+        email,
+        phone,
+      })
+
+      if (!qaEligibility.isAllowed) {
+        return NextResponse.json({ error: qaEligibility.reason ?? qaEligibility.summary }, { status: 403 })
+      }
+    }
+
     const fields = [ownerName, petAge, durationNotes, description, phone, email, slotId]
 
     if (fields.some((value) => value.trim().length === 0)) {
-      return NextResponse.json({ error: 'Uzupełnij wszystkie pola formularza.' }, { status: 400 })
+      return NextResponse.json({ error: 'UzupeĹ‚nij wszystkie pola formularza.' }, { status: 400 })
     }
 
     if (!isEmailValid(email.trim())) {
@@ -62,13 +81,14 @@ export async function POST(request: Request) {
 
     if (description.trim().length < 20) {
       return NextResponse.json(
-        { error: 'Dodaj krótki, ale konkretny opis sytuacji, aby dobrze wykorzystać 15 minut rozmowy.' },
+        { error: 'Dodaj krótki, ale konkretny opis sytuacji, aby dobrze wykorzystać wybrany czas rozmowy.' },
         { status: 400 },
       )
     }
 
     const result = await createPendingBooking({
       ownerName,
+      serviceType: serviceType ?? undefined,
       problemType,
       animalType,
       petAge,
@@ -77,6 +97,7 @@ export async function POST(request: Request) {
       phone,
       email,
       slotId,
+      qaBooking,
     })
 
     return NextResponse.json({ bookingId: result.booking.id, accessToken: result.accessToken })

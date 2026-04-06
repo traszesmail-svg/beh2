@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto'
+import { getBookingServiceTitle, resolveBookingServiceType } from '@/lib/booking-services'
 import { getProblemLabel } from '@/lib/data'
 import { toStripeUnitAmount } from '@/lib/pricing'
 import {
@@ -127,8 +128,9 @@ function buildPayuHeaders(token: string) {
   }
 }
 
-function getOrderDescription(booking: Pick<BookingRecord, 'problemType' | 'bookingDate' | 'bookingTime' | 'amount'>) {
-  return `Behawior 15 - ${getProblemLabel(booking.problemType)} - ${booking.bookingDate} ${booking.bookingTime} - ${booking.amount.toFixed(2)} PLN`
+function getOrderDescription(booking: Pick<BookingRecord, 'problemType' | 'bookingDate' | 'bookingTime' | 'amount' | 'serviceType'>) {
+  const serviceTitle = getBookingServiceTitle(resolveBookingServiceType(booking.serviceType, booking.amount))
+  return `Regulski - ${serviceTitle} - ${getProblemLabel(booking.problemType)} - ${booking.bookingDate} ${booking.bookingTime} - ${booking.amount.toFixed(2)} PLN`
 }
 
 export async function createPayuCheckout(
@@ -153,20 +155,21 @@ export async function createPayuCheckout(
   const accessQuery = accessToken ? `&access=${encodeURIComponent(accessToken)}` : ''
   const continueUrl = `${baseUrl}/confirmation?bookingId=${booking.id}${accessQuery}&payu=1`
   const notifyUrl = `${baseUrl}/api/payu/notify`
+  const serviceTitle = getBookingServiceTitle(resolveBookingServiceType(booking.serviceType, booking.amount))
   const payload = {
     notifyUrl,
     continueUrl,
     customerIp: customerIp || '127.0.0.1',
     merchantPosId: config.posId,
     description: getOrderDescription(booking),
-    visibleDescription: 'Konsultacja Behawior 15',
+    visibleDescription: serviceTitle,
     extOrderId: booking.id,
     currencyCode: 'PLN',
     totalAmount: String(toStripeUnitAmount(booking.amount)),
     buyer: buildPayuBuyer(booking.ownerName, booking.email, booking.phone),
     products: [
       {
-        name: 'Behawior 15 - konsultacja 15 minut',
+        name: `Regulski - ${serviceTitle}`,
         unitPrice: String(toStripeUnitAmount(booking.amount)),
         quantity: '1',
       },

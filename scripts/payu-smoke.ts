@@ -6,7 +6,7 @@ import { createLocalDataSandbox } from './lib/local-data-sandbox'
 import { createAvailabilitySlot, getBookingById } from '../lib/server/local-store'
 
 const rootDir = process.cwd()
-const trackedFiles = ['availability.json', 'bookings.json', 'users.json', 'pricing-settings.json']
+const trackedFiles = ['availability.json', 'bookings.json', 'users.json', 'pricing-settings.json', 'funnel-events.json']
 const port = 3230 + Math.floor(Math.random() * 100)
 const appUrl = `http://localhost:${port}`
 
@@ -18,7 +18,17 @@ const PUBLIC_PAYU_SANDBOX = {
   secondKey: 'b6ca15b0d1020e8094d9b5f8d163db54',
 } as const
 
+type PayuSmokeEnvironment = 'sandbox' | 'production'
+
 const ALLOWED_PAYU_SANDBOX_HOSTS = new Set(['secure.snd.payu.com', 'merch-prod.snd.payu.com'])
+
+function getPayuSmokeEnvironment(): PayuSmokeEnvironment {
+  if (process.argv.includes('--production') || process.env.PAYU_SMOKE_ENVIRONMENT?.trim().toLowerCase() === 'production') {
+    return 'production'
+  }
+
+  return process.env.PAYU_ENVIRONMENT?.trim().toLowerCase() === 'production' ? 'production' : 'sandbox'
+}
 
 function assert(condition: unknown, message: string): asserts condition {
   if (!condition) {
@@ -110,9 +120,9 @@ async function createBooking(slotId: string) {
       animalType: 'Pies',
       petAge: '3 lata',
       durationNotes: 'Od wczoraj',
-      description: 'Test server-side checkoutu PayU sandbox dla predeploy smoke.',
+      description: 'Test server-side checkoutu PayU dla predeploy smoke.',
       phone: '500700800',
-      email: 'payu-sandbox@example.com',
+      email: 'payu-smoke@example.com',
       slotId,
     }),
   })
@@ -161,6 +171,7 @@ async function startPayuCheckout(bookingId: string, accessToken: string) {
 
 async function main() {
   loadEnvConfig(rootDir)
+  const smokeEnvironment = getPayuSmokeEnvironment()
   process.env.APP_DATA_MODE = 'local'
   process.env.APP_PAYMENT_MODE = 'auto'
   process.env.NEXT_PUBLIC_APP_URL = appUrl
@@ -169,11 +180,14 @@ async function main() {
   process.env.BEHAVIOR15_CONTACT_PHONE = '500600700'
   process.env.MANUAL_PAYMENT_BANK_ACCOUNT = '11112222333344445555666677'
   process.env.MANUAL_PAYMENT_ACCOUNT_NAME = 'Krzysztof Regulski'
-  process.env.PAYU_ENVIRONMENT = process.env.PAYU_ENVIRONMENT?.trim() || PUBLIC_PAYU_SANDBOX.environment
-  process.env.PAYU_CLIENT_ID = process.env.PAYU_CLIENT_ID?.trim() || PUBLIC_PAYU_SANDBOX.clientId
-  process.env.PAYU_CLIENT_SECRET = process.env.PAYU_CLIENT_SECRET?.trim() || PUBLIC_PAYU_SANDBOX.clientSecret
-  process.env.PAYU_POS_ID = process.env.PAYU_POS_ID?.trim() || PUBLIC_PAYU_SANDBOX.posId
-  process.env.PAYU_SECOND_KEY = process.env.PAYU_SECOND_KEY?.trim() || PUBLIC_PAYU_SANDBOX.secondKey
+  process.env.PAYU_ENVIRONMENT = smokeEnvironment === 'production' ? 'production' : PUBLIC_PAYU_SANDBOX.environment
+
+  if (smokeEnvironment === 'sandbox') {
+    process.env.PAYU_CLIENT_ID = process.env.PAYU_CLIENT_ID?.trim() || PUBLIC_PAYU_SANDBOX.clientId
+    process.env.PAYU_CLIENT_SECRET = process.env.PAYU_CLIENT_SECRET?.trim() || PUBLIC_PAYU_SANDBOX.clientSecret
+    process.env.PAYU_POS_ID = process.env.PAYU_POS_ID?.trim() || PUBLIC_PAYU_SANDBOX.posId
+    process.env.PAYU_SECOND_KEY = process.env.PAYU_SECOND_KEY?.trim() || PUBLIC_PAYU_SANDBOX.secondKey
+  }
 
   const sandbox = await createLocalDataSandbox('payu-smoke', rootDir)
   const { dataDir } = sandbox
@@ -220,8 +234,13 @@ async function main() {
     const checkout = await startPayuCheckout(booking.bookingId, booking.accessToken)
     const redirectUrl = new URL(checkout.url)
     const storedBooking = await getBookingById(booking.bookingId)
+    const isProductionRedirectHost = /^(?!.*\.snd\.)[a-z0-9-]+(?:\.[a-z0-9-]+)*\.payu\.com$/i.test(redirectUrl.hostname)
 
-    assert(ALLOWED_PAYU_SANDBOX_HOSTS.has(redirectUrl.hostname), `Nieoczekiwany host PayU redirect: ${redirectUrl.hostname}`)
+    if (smokeEnvironment === 'production') {
+      assert(isProductionRedirectHost, `Nieoczekiwany host PayU redirect dla production: ${redirectUrl.hostname}`)
+    } else {
+      assert(ALLOWED_PAYU_SANDBOX_HOSTS.has(redirectUrl.hostname), `Nieoczekiwany host PayU redirect: ${redirectUrl.hostname}`)
+    }
     assert(storedBooking, 'Nie znaleziono bookingu po uruchomieniu checkoutu PayU.')
     assert(storedBooking.paymentMethod === 'payu', 'Booking nie zapisał paymentMethod=payu.')
     assert(Boolean(storedBooking.payuOrderId), 'Booking nie zapisał payuOrderId.')
@@ -233,8 +252,10 @@ async function main() {
       JSON.stringify(
         {
           ok: true,
+          smokeEnvironment,
           environment: process.env.PAYU_ENVIRONMENT,
           usedPublicSandboxDefaults:
+            smokeEnvironment === 'sandbox' &&
             process.env.PAYU_CLIENT_ID === PUBLIC_PAYU_SANDBOX.clientId &&
             process.env.PAYU_POS_ID === PUBLIC_PAYU_SANDBOX.posId,
           bookingId: storedBooking.id,

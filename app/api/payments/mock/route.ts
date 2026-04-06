@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getBookingForViewer, markBookingPaid, markBookingPaymentFailed } from '@/lib/server/db'
 import { ConfigurationError, assertMockPaymentAllowed, getPublicFeatureUnavailableMessage } from '@/lib/server/env'
+import { getQaCheckoutEligibility } from '@/lib/server/payment-options'
 
 export async function POST(request: Request) {
   try {
@@ -18,21 +19,29 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Nie znaleziono rezerwacji albo link wygasł.' }, { status: 403 })
     }
 
+    const qaEligibility = getQaCheckoutEligibility(booking)
+
+    if (!qaEligibility.isAllowed) {
+      return NextResponse.json({ error: qaEligibility.reason ?? qaEligibility.summary }, { status: 403 })
+    }
+
     const accessQuery = body.accessToken ? `&access=${encodeURIComponent(body.accessToken)}` : ''
+    const qaQuery = '&qa=1'
 
     if (body.outcome === 'failed') {
       await markBookingPaymentFailed(body.bookingId)
-      return NextResponse.json({ redirectTo: `/payment?bookingId=${body.bookingId}${accessQuery}&failed=1` })
+      return NextResponse.json({ redirectTo: `/payment?bookingId=${body.bookingId}${accessQuery}${qaQuery}&failed=1` })
     }
 
     await markBookingPaid(body.bookingId, {
-      checkoutSessionId: 'mock-checkout-session',
-      paymentIntentId: 'mock-payment-intent',
+      checkoutSessionId: 'qa-mock-checkout-session',
+      paymentIntentId: 'qa-mock-payment-intent',
       paymentMethod: 'mock',
-      triggerPaymentConfirmationSms: true,
+      paymentReference: qaEligibility.paymentReference,
+      triggerPaymentConfirmationSms: false,
     })
 
-    return NextResponse.json({ redirectTo: `/confirmation?bookingId=${body.bookingId}${accessQuery}` })
+    return NextResponse.json({ redirectTo: `/confirmation?bookingId=${body.bookingId}${accessQuery}${qaQuery}` })
   } catch (error) {
     const message = error instanceof ConfigurationError
       ? getPublicFeatureUnavailableMessage('payment')

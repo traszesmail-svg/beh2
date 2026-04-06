@@ -1,22 +1,11 @@
-import { BookingStageEyebrow } from '@/components/BookingStageEyebrow'
-import { Header } from '@/components/Header'
+import { FunnelLoadingPage } from '@/components/FunnelLoadingPage'
 
-export default function FormLoading() {
+export default function Loading() {
   return (
-    <main className="page-wrap">
-      <div className="container">
-        <Header />
-
-        <section className="two-col-section booking-layout">
-          <div className="panel section-panel">
-            <BookingStageEyebrow stage="details" className="section-eyebrow" />
-            <h1>Ładuję formularz konsultacji</h1>
-            <div className="info-box top-gap">
-              Sprawdzamy wybrany termin i przygotowujemy formularz, żebyś mógł spokojnie przejść do kolejnego kroku.
-            </div>
-          </div>
-        </section>
-      </div>
-    </main>
+    <FunnelLoadingPage
+      eyebrow="Etap rezerwacji: dane do konsultacji"
+      title="Ładuję formularz"
+      message="Sprawdzam wybrany termin i przygotowuję pola do rezerwacji."
+    />
   )
 }

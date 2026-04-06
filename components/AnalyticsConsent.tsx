@@ -36,6 +36,10 @@ export function AnalyticsConsent({ measurementId }: AnalyticsConsentProps) {
         return
       }
 
+      if (target.closest('[data-analytics-disabled="true"]')) {
+        return
+      }
+
       const eventName = target.dataset.analyticsEvent
       if (!eventName) {
         return

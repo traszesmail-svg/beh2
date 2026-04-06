@@ -1,20 +1,11 @@
-import { BookingStageEyebrow } from '@/components/BookingStageEyebrow'
-import { Header } from '@/components/Header'
+import { FunnelLoadingPage } from '@/components/FunnelLoadingPage'
 
-export default function SlotLoading() {
+export default function Loading() {
   return (
-    <main className="page-wrap">
-      <div className="container">
-        <Header />
-
-        <section className="panel section-panel">
-          <BookingStageEyebrow stage="slot" className="section-eyebrow" />
-          <h1>Ładuję aktualne terminy rozmowy</h1>
-          <div className="info-box top-gap">
-            Sprawdzamy dostępność w kalendarzu. Jeśli termin jest wolny, pokażemy go tutaj za chwilę.
-          </div>
-        </section>
-      </div>
-    </main>
+    <FunnelLoadingPage
+      eyebrow="Etap rezerwacji: wybór terminu"
+      title="Ładuję terminy"
+      message="Sprawdzam aktualne godziny rozmowy i przygotowuję listę terminów."
+    />
   )
 }

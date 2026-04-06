@@ -40,6 +40,7 @@ async function cleanLocalData(dataDir: string) {
   await rm(path.join(dataDir, 'pricing-settings.json'), { force: true })
   await rm(path.join(dataDir, 'bookings.json'), { force: true })
   await rm(path.join(dataDir, 'users.json'), { force: true })
+  await rm(path.join(dataDir, 'funnel-events.json'), { force: true })
 }
 
 async function readBookingsFile(dataDir: string) {

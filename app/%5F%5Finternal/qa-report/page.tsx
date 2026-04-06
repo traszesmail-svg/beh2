@@ -24,7 +24,7 @@ export default async function InternalQaReportPage() {
   const report = await readLatestQaReport()
 
   return (
-    <main className="page-wrap">
+    <main className="page-wrap" data-analytics-disabled="true">
       <div className="container">
         <section className="panel section-panel">
           <div className="section-head">

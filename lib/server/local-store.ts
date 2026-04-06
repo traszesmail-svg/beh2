@@ -1,5 +1,12 @@
 import { mkdir, readFile, rename, rm, writeFile } from 'fs/promises'
 import path from 'path'
+import {
+  getBookableServiceAvailabilityWindow,
+  getBookingServicePrice,
+  getServiceAvailabilityWindow,
+  normalizeBookingServiceType,
+  resolveBookingServiceType,
+} from '@/lib/booking-services'
 import { compareDateAndTime, formatDateLabel, isFutureAvailabilitySlot } from '@/lib/data'
 import { normalizePolishPhone } from '@/lib/phone'
 import { createActiveConsultationPrice, DEFAULT_PRICE_PLN, parseConsultationPriceInput } from '@/lib/pricing'
@@ -9,9 +16,12 @@ import { getReservationWindowMinutes } from '@/lib/server/env'
 import { createMeetingUrl } from '@/lib/server/jitsi'
 import { getLocalStoreDataDir } from '@/lib/server/local-store-path'
 import { getManualPaymentConfig } from '@/lib/server/payment-options'
+import { createFunnelEventRecord, normalizeFunnelEventProperties } from '@/lib/server/funnel-events'
 import {
   sendBookingConfirmationEmail,
   sendBookingReservationCreatedEmail,
+  sendBookingManualPaymentPendingEmail,
+  sendBookingStatusOutcomeEmail,
   shouldSendBookingConfirmationAfterPayment,
 } from '@/lib/server/notifications'
 import { sendPaymentConfirmationSms } from '@/lib/server/sms'
@@ -21,6 +31,8 @@ import {
   BookingFormData,
   BookingPreparationPatch,
   BookingRecord,
+  FunnelEventInput,
+  FunnelEventRecord,
   GroupedAvailability,
   UserRecord,
 } from '@/lib/types'
@@ -28,6 +40,7 @@ import {
 interface LocalStoreData {
   availability: AvailabilitySlot[]
   bookings: BookingRecord[]
+  funnelEvents: FunnelEventRecord[]
   pricingSettings: {
     amount: number
     updatedAt: string | null
@@ -53,6 +66,7 @@ function getStorePaths() {
     dataDir,
     availabilityFile: path.join(dataDir, 'availability.json'),
     bookingsFile: path.join(dataDir, 'bookings.json'),
+    funnelEventsFile: path.join(dataDir, 'funnel-events.json'),
     pricingSettingsFile: path.join(dataDir, 'pricing-settings.json'),
     usersFile: path.join(dataDir, 'users.json'),
   }
@@ -64,7 +78,14 @@ function createSeedAvailability(nowIso: string): AvailabilitySlot[] {
 
 async function ensureFile(filePath: string, fallbackValue: unknown) {
   try {
-    await readFile(filePath, 'utf8')
+    const raw = await readFile(filePath, 'utf8')
+
+    if (!raw.trim()) {
+      await writeJson(filePath, fallbackValue)
+      return
+    }
+
+    JSON.parse(raw)
   } catch {
     await writeJson(filePath, fallbackValue)
   }
@@ -72,10 +93,11 @@ async function ensureFile(filePath: string, fallbackValue: unknown) {
 
 async function ensureStoreFiles() {
   const nowIso = new Date().toISOString()
-  const { dataDir, availabilityFile, bookingsFile, pricingSettingsFile, usersFile } = getStorePaths()
+  const { dataDir, availabilityFile, bookingsFile, funnelEventsFile, pricingSettingsFile, usersFile } = getStorePaths()
   await mkdir(dataDir, { recursive: true })
   await ensureFile(availabilityFile, createSeedAvailability(nowIso))
   await ensureFile(bookingsFile, [])
+  await ensureFile(funnelEventsFile, [])
   await ensureFile(pricingSettingsFile, { amount: DEFAULT_PRICE_PLN, updatedAt: null })
   await ensureFile(usersFile, [])
 }
@@ -128,9 +150,11 @@ function releaseSlot(slot: AvailabilitySlot, nowIso: string) {
 function normalizeBookingRecord(booking: BookingRecord): BookingRecord {
   return {
     ...booking,
+    serviceType: resolveBookingServiceType(booking.serviceType, booking.amount),
     customerAccessTokenHash: booking.customerAccessTokenHash ?? '',
     paymentMethod: booking.paymentMethod ?? null,
     paymentReference: booking.paymentReference ?? null,
+    qaBooking: booking.qaBooking ?? false,
     paymentReportedAt: booking.paymentReportedAt ?? null,
     paymentRejectedAt: booking.paymentRejectedAt ?? null,
     paymentRejectedReason: booking.paymentRejectedReason ?? null,
@@ -157,6 +181,10 @@ function normalizeExpiredReservations(store: LocalStoreData): LocalStoreData {
   let changed = false
 
   const bookings = store.bookings.map(normalizeBookingRecord)
+  const funnelEvents = store.funnelEvents.map((event) => ({
+    ...event,
+    properties: { ...event.properties },
+  }))
   const availability = store.availability.map((slot) => ({ ...slot }))
   const pricingSettings = {
     amount: Number.isFinite(store.pricingSettings.amount) ? store.pricingSettings.amount : DEFAULT_PRICE_PLN,
@@ -195,25 +223,27 @@ function normalizeExpiredReservations(store: LocalStoreData): LocalStoreData {
     booking.updatedAt = nowIso
   }
 
-  return changed ? { availability, bookings, pricingSettings, users } : { ...store, pricingSettings }
+  return changed ? { availability, bookings, funnelEvents, pricingSettings, users } : { ...store, pricingSettings, funnelEvents }
 }
 
 async function readStore(): Promise<LocalStoreData> {
-  const { availabilityFile, bookingsFile, pricingSettingsFile, usersFile } = getStorePaths()
+  const { availabilityFile, bookingsFile, funnelEventsFile, pricingSettingsFile, usersFile } = getStorePaths()
   await ensureStoreFiles()
 
-  const [availability, bookings, pricingSettings, users] = await Promise.all([
+  const [availability, bookings, funnelEvents, pricingSettings, users] = await Promise.all([
     readJson<AvailabilitySlot[]>(availabilityFile),
     readJson<BookingRecord[]>(bookingsFile),
+    readJson<FunnelEventRecord[]>(funnelEventsFile),
     readJson<{ amount: number; updatedAt: string | null }>(pricingSettingsFile),
     readJson<UserRecord[]>(usersFile),
   ])
 
-  const normalized = normalizeExpiredReservations({ availability, bookings, pricingSettings, users })
+  const normalized = normalizeExpiredReservations({ availability, bookings, funnelEvents, pricingSettings, users })
 
   await Promise.all([
     writeJson(availabilityFile, normalized.availability),
     writeJson(bookingsFile, normalized.bookings),
+    writeJson(funnelEventsFile, normalized.funnelEvents),
     writeJson(pricingSettingsFile, normalized.pricingSettings),
     writeJson(usersFile, normalized.users),
   ])
@@ -222,13 +252,24 @@ async function readStore(): Promise<LocalStoreData> {
 }
 
 async function persistStore(store: LocalStoreData) {
-  const { availabilityFile, bookingsFile, pricingSettingsFile, usersFile } = getStorePaths()
+  const { availabilityFile, bookingsFile, funnelEventsFile, pricingSettingsFile, usersFile } = getStorePaths()
   await Promise.all([
     writeJson(availabilityFile, store.availability),
     writeJson(bookingsFile, store.bookings),
+    writeJson(funnelEventsFile, store.funnelEvents),
     writeJson(pricingSettingsFile, store.pricingSettings),
     writeJson(usersFile, store.users),
   ])
+}
+
+function appendFunnelEvent(store: LocalStoreData, input: FunnelEventInput) {
+  const record = createFunnelEventRecord({
+    ...input,
+    properties: normalizeFunnelEventProperties(input.properties ?? null),
+  })
+
+  store.funnelEvents.unshift(record)
+  return record
 }
 
 function sortAvailability(left: AvailabilitySlot, right: AvailabilitySlot): number {
@@ -255,6 +296,42 @@ function groupAvailability(slots: AvailabilitySlot[]): GroupedAvailability[] {
       label: formatDateLabel(date),
       slots: dateSlots.sort(sortAvailability),
     }))
+}
+
+function resolveBookingSlots(availability: AvailabilitySlot[], booking: Pick<BookingRecord, 'slotId' | 'serviceType' | 'amount'>) {
+  const serviceType = resolveBookingServiceType(booking.serviceType, booking.amount)
+  const window = getServiceAvailabilityWindow(availability, booking.slotId, serviceType)
+
+  if (window?.length) {
+    return window
+  }
+
+  const slot = availability.find((item) => item.id === booking.slotId)
+  return slot ? [slot] : []
+}
+
+function holdSlots(slots: AvailabilitySlot[], bookingId: string, lockUntil: string, nowIso: string) {
+  for (const slot of slots) {
+    slot.isBooked = false
+    slot.lockedByBookingId = bookingId
+    slot.lockedUntil = lockUntil
+    slot.updatedAt = nowIso
+  }
+}
+
+function bookSlots(slots: AvailabilitySlot[], bookingId: string, nowIso: string) {
+  for (const slot of slots) {
+    slot.isBooked = true
+    slot.lockedByBookingId = bookingId
+    slot.lockedUntil = null
+    slot.updatedAt = nowIso
+  }
+}
+
+function releaseBookingSlots(slots: AvailabilitySlot[], nowIso: string) {
+  for (const slot of slots) {
+    releaseSlot(slot, nowIso)
+  }
 }
 
 function findOrCreateUser(store: LocalStoreData, email: string, nowIso: string): UserRecord {
@@ -380,9 +457,11 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
   return withLock(async () => {
     const store = await readStore()
     const pricing = createActiveConsultationPrice(store.pricingSettings.amount, store.pricingSettings.updatedAt)
-    const slot = store.availability.find((item) => item.id === form.slotId)
+    const serviceType = normalizeBookingServiceType(form.serviceType)
+    const slotWindow = getBookableServiceAvailabilityWindow(store.availability, form.slotId, serviceType)
+    const slot = slotWindow?.[0] ?? null
 
-    if (!slot || slot.isBooked || slot.lockedByBookingId) {
+    if (!slotWindow || !slot || slot.isBooked || slot.lockedByBookingId) {
       throw new Error('Wybrany termin nie jest już dostępny.')
     }
 
@@ -397,8 +476,8 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
     const reservationExpiresAt = new Date(Date.now() + getReservationWindowMinutes() * 60 * 1000).toISOString()
     console.info('[behawior15][pricing] booking-created', {
       bookingId,
-      amount: pricing.amount,
-      summary: pricing.summary,
+      amount: getBookingServicePrice(serviceType, pricing.amount),
+      summary: `${pricing.summary} Service: ${serviceType}`,
     })
 
     const booking: BookingRecord = {
@@ -406,18 +485,20 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
       userId: user.id,
       customerAccessTokenHash: accessToken.tokenHash,
       ownerName: form.ownerName,
+      serviceType,
       problemType: form.problemType,
       animalType: form.animalType,
       petAge: form.petAge,
       durationNotes: form.durationNotes,
       description: form.description,
       phone: form.phone,
+      qaBooking: form.qaBooking ?? false,
       customerPhoneNormalized: normalizePolishPhone(form.phone)?.e164 ?? null,
       email: form.email,
       bookingDate: slot.bookingDate,
       bookingTime: slot.bookingTime,
       slotId: slot.id,
-      amount: pricing.amount,
+      amount: getBookingServicePrice(serviceType, pricing.amount),
       bookingStatus: 'pending',
       paymentStatus: 'unpaid',
       paymentMethod: null,
@@ -451,9 +532,7 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
       prepUploadedAt: null,
     }
 
-    slot.lockedByBookingId = booking.id
-    slot.lockedUntil = reservationExpiresAt
-    slot.updatedAt = nowIso
+    holdSlots(slotWindow, booking.id, reservationExpiresAt, nowIso)
 
     store.bookings.unshift(booking)
     await persistStore(store)
@@ -491,6 +570,22 @@ export async function listBookings(): Promise<BookingRecord[]> {
   return withLock(async () => {
     const store = await readStore()
     return [...store.bookings].sort((left, right) => right.createdAt.localeCompare(left.createdAt))
+  })
+}
+
+export async function listFunnelEvents(): Promise<FunnelEventRecord[]> {
+  return withLock(async () => {
+    const store = await readStore()
+    return [...store.funnelEvents].sort((left, right) => right.createdAt.localeCompare(left.createdAt))
+  })
+}
+
+export async function recordFunnelEvent(input: FunnelEventInput): Promise<FunnelEventRecord> {
+  return withLock(async () => {
+    const store = await readStore()
+    const event = appendFunnelEvent(store, input)
+    await persistStore(store)
+    return event
   })
 }
 
@@ -594,29 +689,49 @@ export async function markBookingManualPaymentPending(
       throw new Error('Tę rezerwację można zgłosić do potwierdzenia wpłaty tylko przed opłaceniem.')
     }
 
-    const slot = store.availability.find((item) => item.id === booking.slotId)
     const nowIso = new Date().toISOString()
     const holdUntil = new Date(Date.now() + getManualPaymentConfig().holdMinutes * 60 * 1000).toISOString()
+    const paymentReportedAt = booking.paymentReportedAt ?? nowIso
+    const slots = resolveBookingSlots(store.availability, booking)
+    const shouldSendManualReviewEmail =
+      booking.bookingStatus !== 'pending_manual_payment' || booking.paymentStatus !== 'pending_manual_review'
 
     booking.bookingStatus = 'pending_manual_payment'
     booking.paymentStatus = 'pending_manual_review'
     booking.paymentMethod = 'manual'
     booking.paymentReference = paymentData?.paymentReference ?? booking.paymentReference ?? null
-    booking.paymentReportedAt = nowIso
+    booking.paymentReportedAt = paymentReportedAt
     booking.paymentRejectedAt = null
     booking.paymentRejectedReason = null
     booking.cancelledAt = null
     booking.expiredAt = null
     booking.updatedAt = nowIso
 
-    if (slot) {
-      slot.isBooked = false
-      slot.lockedByBookingId = booking.id
-      slot.lockedUntil = holdUntil
-      slot.updatedAt = nowIso
+    if (slots.length > 0) {
+      holdSlots(slots, booking.id, holdUntil, nowIso)
+    }
+
+    if (shouldSendManualReviewEmail) {
+      appendFunnelEvent(store, {
+        eventType: 'manual_pending',
+        bookingId: booking.id,
+        qaBooking: Boolean(booking.qaBooking),
+        source: 'server',
+        properties: {
+          payment_reference: booking.paymentReference ?? null,
+          payment_status: booking.paymentStatus,
+          booking_status: booking.bookingStatus,
+          hold_until: holdUntil,
+        },
+      })
     }
 
     await persistStore(store)
+
+    if (shouldSendManualReviewEmail) {
+      await sendBookingManualPaymentPendingEmail(booking)
+    }
+
     return booking
   })
 }
@@ -652,10 +767,12 @@ export async function markBookingPaid(
       throw new Error('Ten booking nie może już zostać opłacony.')
     }
 
-    const slot = store.availability.find((item) => item.id === booking.slotId)
     const nowIso = new Date().toISOString()
+    const shouldRecordPaidEvent = booking.paymentStatus !== 'paid'
+    const shouldRecordConfirmedEvent = booking.bookingStatus !== 'confirmed' && booking.bookingStatus !== 'done'
     const shouldSendConfirmation = shouldSendBookingConfirmationAfterPayment(booking)
     const shouldAttemptSms = Boolean(paymentData?.triggerPaymentConfirmationSms) && !booking.smsConfirmationStatus
+    const slots = resolveBookingSlots(store.availability, booking)
 
     booking.bookingStatus = booking.bookingStatus === 'done' ? 'done' : 'confirmed'
     booking.paymentStatus = 'paid'
@@ -682,11 +799,38 @@ export async function markBookingPaid(
       booking.smsErrorMessage = null
     }
 
-    if (slot) {
-      slot.isBooked = true
-      slot.lockedByBookingId = booking.id
-      slot.lockedUntil = null
-      slot.updatedAt = nowIso
+    if (slots.length > 0) {
+      bookSlots(slots, booking.id, nowIso)
+    }
+
+    if (shouldRecordPaidEvent) {
+      appendFunnelEvent(store, {
+        eventType: 'paid',
+        bookingId: booking.id,
+        qaBooking: Boolean(booking.qaBooking),
+        source: 'server',
+        properties: {
+          payment_method: booking.paymentMethod ?? null,
+          payment_reference: booking.paymentReference ?? null,
+          payu_order_id: booking.payuOrderId ?? null,
+          payu_order_status: booking.payuOrderStatus ?? null,
+          payment_status: booking.paymentStatus,
+        },
+      })
+    }
+
+    if (shouldRecordConfirmedEvent) {
+      appendFunnelEvent(store, {
+        eventType: 'confirmed',
+        bookingId: booking.id,
+        qaBooking: Boolean(booking.qaBooking),
+        source: 'server',
+        properties: {
+          payment_method: booking.paymentMethod ?? null,
+          payment_status: booking.paymentStatus,
+          booking_status: booking.bookingStatus,
+        },
+      })
     }
 
     await persistStore(store)
@@ -724,8 +868,10 @@ export async function markBookingPaymentFailed(bookingId: string): Promise<Booki
       throw new Error('Nie można oznaczyć opłaconego bookingu jako nieudany.')
     }
 
-    const slot = store.availability.find((item) => item.id === booking.slotId)
     const nowIso = new Date().toISOString()
+    const slots = resolveBookingSlots(store.availability, booking)
+    const shouldSendOutcomeEmail = booking.bookingStatus !== 'cancelled' || booking.paymentStatus !== 'failed'
+    const shouldRecordRejectCancelEvent = booking.bookingStatus !== 'cancelled' || booking.paymentStatus !== 'failed'
 
     booking.bookingStatus = 'cancelled'
     booking.paymentStatus = 'failed'
@@ -733,11 +879,30 @@ export async function markBookingPaymentFailed(bookingId: string): Promise<Booki
     booking.payuOrderStatus = booking.payuOrderStatus ?? null
     booking.updatedAt = nowIso
 
-    if (slot) {
-      releaseSlot(slot, nowIso)
+    if (slots.length > 0) {
+      releaseBookingSlots(slots, nowIso)
+    }
+
+    if (shouldRecordRejectCancelEvent) {
+      appendFunnelEvent(store, {
+        eventType: 'reject_cancel',
+        bookingId: booking.id,
+        qaBooking: Boolean(booking.qaBooking),
+        source: 'server',
+        properties: {
+          reason: 'payment_failed',
+          payment_status: booking.paymentStatus,
+          booking_status: booking.bookingStatus,
+        },
+      })
     }
 
     await persistStore(store)
+
+    if (shouldSendOutcomeEmail) {
+      await sendBookingStatusOutcomeEmail(booking)
+    }
+
     return booking
   })
 }
@@ -758,8 +923,10 @@ export async function markBookingManualPaymentRejected(
       throw new Error('Nie można odrzucić wpłaty dla opłaconej konsultacji.')
     }
 
-    const slot = store.availability.find((item) => item.id === booking.slotId)
     const nowIso = new Date().toISOString()
+    const slots = resolveBookingSlots(store.availability, booking)
+    const shouldSendOutcomeEmail = booking.bookingStatus !== 'cancelled' || booking.paymentStatus !== 'rejected'
+    const shouldRecordRejectCancelEvent = booking.bookingStatus !== 'cancelled' || booking.paymentStatus !== 'rejected'
 
     booking.bookingStatus = 'cancelled'
     booking.paymentStatus = 'rejected'
@@ -769,11 +936,30 @@ export async function markBookingManualPaymentRejected(
     booking.cancelledAt = nowIso
     booking.updatedAt = nowIso
 
-    if (slot) {
-      releaseSlot(slot, nowIso)
+    if (slots.length > 0) {
+      releaseBookingSlots(slots, nowIso)
+    }
+
+    if (shouldRecordRejectCancelEvent) {
+      appendFunnelEvent(store, {
+        eventType: 'reject_cancel',
+        bookingId: booking.id,
+        qaBooking: Boolean(booking.qaBooking),
+        source: 'server',
+        properties: {
+          reason: booking.paymentRejectedReason,
+          payment_status: booking.paymentStatus,
+          booking_status: booking.bookingStatus,
+        },
+      })
     }
 
     await persistStore(store)
+
+    if (shouldSendOutcomeEmail) {
+      await sendBookingStatusOutcomeEmail(booking)
+    }
+
     return booking
   })
 }
@@ -791,8 +977,9 @@ export async function markBookingRefunded(bookingId: string): Promise<BookingRec
       throw new Error('Tylko świeżo opłacona, potwierdzona rezerwacja może zostać anulowana z automatycznym zwrotem.')
     }
 
-    const slot = store.availability.find((item) => item.id === booking.slotId)
     const nowIso = new Date().toISOString()
+    const slots = resolveBookingSlots(store.availability, booking)
+    const shouldSendOutcomeEmail = true
 
     booking.bookingStatus = 'cancelled'
     booking.paymentStatus = 'refunded'
@@ -800,11 +987,28 @@ export async function markBookingRefunded(bookingId: string): Promise<BookingRec
     booking.refundedAt = nowIso
     booking.updatedAt = nowIso
 
-    if (slot) {
-      releaseSlot(slot, nowIso)
+    if (slots.length > 0) {
+      releaseBookingSlots(slots, nowIso)
     }
 
+    appendFunnelEvent(store, {
+      eventType: 'reject_cancel',
+      bookingId: booking.id,
+      qaBooking: Boolean(booking.qaBooking),
+      source: 'server',
+      properties: {
+        reason: 'refunded',
+        payment_status: booking.paymentStatus,
+        booking_status: booking.bookingStatus,
+      },
+    })
+
     await persistStore(store)
+
+    if (shouldSendOutcomeEmail) {
+      await sendBookingStatusOutcomeEmail(booking)
+    }
+
     return booking
   })
 }
@@ -818,8 +1022,10 @@ export async function markBookingExpired(bookingId: string): Promise<BookingReco
       return null
     }
 
-    const slot = store.availability.find((item) => item.id === booking.slotId)
     const nowIso = new Date().toISOString()
+    const slots = resolveBookingSlots(store.availability, booking)
+    const shouldSendOutcomeEmail = booking.bookingStatus !== 'expired'
+    const shouldRecordRejectCancelEvent = booking.bookingStatus !== 'expired'
 
     booking.bookingStatus = 'expired'
     booking.paymentStatus = booking.paymentStatus === 'pending_manual_review' ? 'rejected' : 'unpaid'
@@ -831,11 +1037,30 @@ export async function markBookingExpired(bookingId: string): Promise<BookingReco
         : booking.paymentRejectedReason ?? null
     booking.updatedAt = nowIso
 
-    if (slot) {
-      releaseSlot(slot, nowIso)
+    if (slots.length > 0) {
+      releaseBookingSlots(slots, nowIso)
+    }
+
+    if (shouldRecordRejectCancelEvent) {
+      appendFunnelEvent(store, {
+        eventType: 'reject_cancel',
+        bookingId: booking.id,
+        qaBooking: Boolean(booking.qaBooking),
+        source: 'server',
+        properties: {
+          reason: booking.paymentStatus === 'rejected' ? booking.paymentRejectedReason : 'expired',
+          payment_status: booking.paymentStatus,
+          booking_status: booking.bookingStatus,
+        },
+      })
     }
 
     await persistStore(store)
+
+    if (shouldSendOutcomeEmail) {
+      await sendBookingStatusOutcomeEmail(booking)
+    }
+
     return booking
   })
 }

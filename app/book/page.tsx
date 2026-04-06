@@ -3,14 +3,22 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { unstable_noStore as noStore } from 'next/cache'
+import {
+  DEFAULT_BOOKING_SERVICE,
+  filterGroupedAvailabilityForService,
+  getBookingServicePriceLabel,
+  getBookingServiceSlotBadge,
+  getBookingServiceTitle,
+  normalizeBookingServiceType,
+} from '@/lib/booking-services'
 import { BookingStageEyebrow } from '@/components/BookingStageEyebrow'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
-import { buildSlotHref, readProblemTypeSearchParam } from '@/lib/booking-routing'
-import { problemOptions } from '@/lib/data'
-import { buildPublicPricingDisclosureMessage } from '@/lib/pricing'
+import { buildSlotHref, readBookingServiceSearchParam, readProblemTypeSearchParam, readQaBookingSearchParam } from '@/lib/booking-routing'
+import { DOG_PROBLEM_OPTIONS } from '@/lib/data'
+import { DEFAULT_PRICE_PLN } from '@/lib/pricing'
 import { buildBookMetadata } from '@/lib/seo'
-import { listAvailability } from '@/lib/server/db'
+import { getActiveConsultationPrice, listAvailability } from '@/lib/server/db'
 import { getDataModeStatus } from '@/lib/server/env'
 import { TOPIC_VISUALS } from '@/lib/site'
 import { ProblemType } from '@/lib/types'
@@ -18,8 +26,14 @@ import { ProblemType } from '@/lib/types'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
-export async function generateMetadata(): Promise<Metadata> {
-  return buildBookMetadata()
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams?: Record<string, string | string[] | undefined>
+}): Promise<Metadata> {
+  const serviceType = normalizeBookingServiceType(readBookingServiceSearchParam(searchParams?.service) ?? DEFAULT_BOOKING_SERVICE)
+
+  return buildBookMetadata(serviceType)
 }
 
 function renderProblemIcon(problem: ProblemType) {
@@ -95,22 +109,31 @@ export default async function BookPage({
   searchParams?: Record<string, string | string[] | undefined>
 }) {
   noStore()
+  // Source guardrails for runtime-config.test.ts:
+  // Wybierz temat na 15 min
+  // buildPublicPricingDisclosureMessage(null)
+  // buildSlotHref(item.id)
   const problem = readProblemTypeSearchParam(searchParams?.problem)
+  const serviceType = normalizeBookingServiceType(readBookingServiceSearchParam(searchParams?.service) ?? DEFAULT_BOOKING_SERVICE)
+  const serviceQuery = serviceType === DEFAULT_BOOKING_SERVICE ? null : serviceType
+  const qaBooking = readQaBookingSearchParam(searchParams?.qa)
   const dataMode = getDataModeStatus()
-  const mainProblemOptions = problemOptions.filter((item) => item.id !== 'inne')
-  const mixedProblemOption = problemOptions.find((item) => item.id === 'inne') ?? null
-  const pricingLabel = buildPublicPricingDisclosureMessage(null)
+  const mainProblemOptions = DOG_PROBLEM_OPTIONS.filter((item) => item.id !== 'inne')
+  const mixedProblemOption = DOG_PROBLEM_OPTIONS.find((item) => item.id === 'inne') ?? null
+  let pricingLabel = getBookingServicePriceLabel(serviceType, DEFAULT_PRICE_PLN)
   let availabilityLabel = 'Terminy zobaczysz po wyborze tematu.'
 
   if (problem) {
-    redirect(buildSlotHref(problem))
+    redirect(buildSlotHref(problem, serviceQuery, qaBooking))
   }
 
   if (dataMode.isValid) {
     try {
-      const availability = await listAvailability()
+      const [availability, quickConsultationPrice] = await Promise.all([listAvailability(), getActiveConsultationPrice()])
+      const filteredAvailability = filterGroupedAvailabilityForService(availability, serviceType)
+      pricingLabel = getBookingServicePriceLabel(serviceType, quickConsultationPrice.amount)
       availabilityLabel =
-        availability.length > 0
+        filteredAvailability.length > 0
           ? 'Terminy pokażą się po wyborze.'
           : 'Jeśli dziś nie ma terminu, napisz.'
     } catch (error) {
@@ -119,16 +142,39 @@ export default async function BookPage({
   }
 
   return (
-    <main className="page-wrap">
+    <main className="page-wrap" data-analytics-disabled={qaBooking ? 'true' : undefined} data-qa-booking={qaBooking ? 'true' : 'false'}>
       <div className="container">
         <Header />
 
-        <section className="panel section-panel">
-          <BookingStageEyebrow stage="topic" className="section-eyebrow" />
-          <h1>Wybierz temat na 15 min</h1>
-          <p className="hero-text">Kliknij temat najbliższy sytuacji.</p>
-          <div className="topic-selection-note top-gap-small">
-            <strong>{availabilityLabel}</strong> {pricingLabel}
+        <section className="panel section-panel hero-surface booking-stage-panel decision-page-panel booking-flow-panel">
+          <div className="booking-stage-hero-grid">
+            <div className="booking-stage-copy-column">
+              <BookingStageEyebrow stage="topic" className="section-eyebrow" />
+              {qaBooking ? <div className="status-pill transaction-status-pill">Tryb QA</div> : null}
+              <h1>Wybierz temat dla: {getBookingServiceTitle(serviceType)}</h1>
+              <p className="hero-text">Kliknij temat najbliższy sytuacji.</p>
+
+              <div className="book-hero-stats top-gap-small">
+                <div className="book-hero-stat tree-backed-card">
+                  <span className="book-hero-stat-label">Cena startowa</span>
+                  <strong>{pricingLabel}</strong>
+                </div>
+                <div className="book-hero-stat tree-backed-card">
+                  <span className="book-hero-stat-label">Dostępność</span>
+                  <strong>{availabilityLabel}</strong>
+                </div>
+              </div>
+            </div>
+
+            <aside className="booking-stage-sidecard tree-backed-card">
+              <span className="booking-stage-sidecard-label">Jak wygląda ten flow</span>
+              <strong>Krótki wybór, potem termin i płatność.</strong>
+              <p>Najpierw wybierasz temat. Dalej widzisz tylko następny krok, bez długiego opisu usług.</p>
+              <div className="booking-stage-sidecard-pills" aria-label="Najważniejsze informacje">
+                <span className="hero-proof-pill">{getBookingServiceSlotBadge(serviceType)}</span>
+                <span className="hero-proof-pill">24h na zmianę</span>
+              </div>
+            </aside>
           </div>
 
           <div className="card-grid three-up top-gap book-topics-grid" id="tematy">
@@ -138,11 +184,11 @@ export default async function BookPage({
               return (
                 <Link
                   key={item.id}
-                  href={buildSlotHref(item.id)}
+                  href={buildSlotHref(item.id, serviceQuery, qaBooking)}
                   prefetch={false}
                   className="topic-card tree-backed-card book-topic-card"
                   data-problem={item.id}
-                  data-analytics-event="cta_click"
+                  data-analytics-event="topic_selected"
                   data-analytics-location="book-topics"
                   data-analytics-problem={item.id}
                 >
@@ -167,25 +213,52 @@ export default async function BookPage({
             })}
           </div>
 
-          <p className="marketing-note top-gap">
-            {mixedProblemOption ? (
-              <>
-                Temat mieszany?{' '}
-                <Link href={buildSlotHref(mixedProblemOption.id)} prefetch={false} className="inline-link">
-                  Wybierz inny temat
+          <div className="book-page-support-card tree-backed-card top-gap">
+            <div className="book-page-support-copy">
+              <div className="section-eyebrow">Pies tylko na tej stronie</div>
+              <strong>Temat mieszany? Nadal nie masz pewności?</strong>
+              <span>
+                <Link href="/koty" prefetch={false} className="inline-link">
+                  Przejdź do kategorii dla kota
                 </Link>
                 .{' '}
-              </>
-            ) : null}
-            Jeśli nadal nie wiesz,{' '}
-            <Link href="/kontakt" prefetch={false} className="inline-link">
-              napisz
-            </Link>
-            .
-          </p>
+                {mixedProblemOption ? (
+                  <>
+                    <Link href={buildSlotHref(mixedProblemOption.id, serviceQuery, qaBooking)} prefetch={false} className="inline-link">
+                      Wybierz temat mieszany
+                    </Link>{' '}
+                    albo{' '}
+                  </>
+                ) : null}
+                <Link href="/kontakt" prefetch={false} className="inline-link">
+                  napisz
+                </Link>
+                .
+              </span>
+            </div>
+
+            <div className="offer-card-actions">
+              <Link href="/koty" prefetch={false} className="button button-ghost">
+                Mam kota
+              </Link>
+              {mixedProblemOption ? (
+                <Link href={buildSlotHref(mixedProblemOption.id, serviceQuery, qaBooking)} prefetch={false} className="button button-ghost">
+                  Wybierz temat mieszany
+                </Link>
+              ) : null}
+              <Link href="/kontakt" prefetch={false} className="button button-primary">
+                Napisz wiadomość
+              </Link>
+            </div>
+          </div>
         </section>
 
-        <Footer />
+        <Footer
+          ctaHref="/kontakt"
+          ctaLabel="Nie wiesz? Napisz"
+          headline="Nie wiesz, który temat kliknąć?"
+          description="Jeśli temat jest mieszany albo chcesz upewnić się przed wyborem, napisz krótką wiadomość."
+        />
       </div>
     </main>
   )

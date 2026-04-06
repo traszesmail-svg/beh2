@@ -69,6 +69,7 @@ async function cleanLocalData(dataDir: string) {
   await rm(path.join(dataDir, 'pricing-settings.json'), { force: true })
   await rm(path.join(dataDir, 'bookings.json'), { force: true })
   await rm(path.join(dataDir, 'users.json'), { force: true })
+  await rm(path.join(dataDir, 'funnel-events.json'), { force: true })
 }
 
 async function waitForServer(server: ReturnType<typeof spawn>, startupLogs: string[]) {
@@ -259,8 +260,7 @@ async function main() {
       const slotResults: Array<{ slotId: string; slotLabel: string; url: string }> = []
 
       for (const slot of seededSlots) {
-        const slotHref = `/form?problem=${encodeURIComponent(topic.id)}&slotId=${encodeURIComponent(slot.id)}`
-        const slotLink = page.locator(`a[href="${slotHref}"]`)
+        const slotLink = page.locator(`a.slot-link[data-slot-id="${slot.id}"]`)
 
         await slotLink.waitFor()
         await slotLink.click()

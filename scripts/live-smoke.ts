@@ -6,6 +6,7 @@ import {
   evaluateReleaseSmokePage,
   getDefaultReleaseSmokeRules,
 } from '../lib/release-smoke'
+import { SITE_PRODUCTION_URL } from '../lib/site'
 
 type CliOptions = {
   url: string
@@ -37,7 +38,8 @@ function readGit(args: string[]): string | null {
 function getCliOptions(): CliOptions {
   loadEnvConfig(process.cwd())
 
-  const url = readArg('--url') ?? process.env.LIVE_SMOKE_URL ?? process.env.NEXT_PUBLIC_APP_URL ?? 'https://beh2.vercel.app'
+  const url =
+    readArg('--url') ?? process.env.LIVE_SMOKE_URL ?? SITE_PRODUCTION_URL
   const expectedBranch =
     readArg('--expected-branch') ??
     process.env.LIVE_SMOKE_EXPECTED_BRANCH ??
@@ -120,6 +122,10 @@ async function main() {
 
     if (result.forbiddenFound.length > 0) {
       console.log(`forbidden-found: ${result.forbiddenFound.join(' | ')}`)
+    }
+
+    if (result.forbiddenRawFound.length > 0) {
+      console.log(`forbidden-raw-found: ${result.forbiddenRawFound.join(' | ')}`)
     }
 
     if (result.orderFailures.length > 0) {

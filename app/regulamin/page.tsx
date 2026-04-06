@@ -1,8 +1,5 @@
-import React from 'react'
 import type { Metadata } from 'next'
-import { Footer } from '@/components/Footer'
-import { Header } from '@/components/Header'
-import { SPECIALIST_CREDENTIALS, SPECIALIST_NAME, buildMailtoHref, getPublicContactDetails } from '@/lib/site'
+import { LegalPageLayout, type LegalSection, type LegalSummaryItem } from '@/components/LegalPageLayout'
 import { buildLegalMetadata } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
@@ -13,86 +10,70 @@ export const metadata: Metadata = buildLegalMetadata(
   'Zasady rezerwacji, płatności, konsultacji audio, zwrotów, reklamacji i kontaktu dla szybkiej konsultacji 15 min w marce Regulski | Terapia behawioralna.',
 )
 
+const summaryItems: LegalSummaryItem[] = [
+  {
+    label: 'Forma',
+    value: '15 minut rozmowy głosowej online jako pierwszy sensowny krok dla psa albo kota.',
+  },
+  {
+    label: 'Płatność',
+    value: 'Termin blokuje się na czas wpłaty ręcznej. Potwierdzenie następuje po skutecznym zgłoszeniu wpłaty.',
+  },
+  {
+    label: 'Zmiana lub rezygnacja',
+    value: 'Po opłaceniu masz 24 godziny na bezpłatną rezygnację albo wiadomość o zmianie terminu.',
+  },
+]
+
+const sections: LegalSection[] = [
+  {
+    title: 'Forma usługi',
+    body: 'Szybka konsultacja 15 min to 15-minutowa konsultacja głosowa online. To pierwszy krok w szerszym systemie pracy, a nie konsultacja wideo ani pełna terapia behawioralna.',
+  },
+  {
+    title: 'Rezerwacja i płatność',
+    body: 'Termin jest blokowany na czas wpłaty. Jeśli płatność nie zostanie dokończona, slot wraca do puli. Publicznie dostępna metoda płatności to wpłata BLIK lub przelewem potwierdzana do 60 minut.',
+  },
+  {
+    title: 'Zmiana terminu i anulacja',
+    body: 'Przy wpłacie ręcznej można skorzystać z samodzielnej rezygnacji na ekranie potwierdzenia. Zmiana terminu lub rezygnacja odbywa się przez wiadomość w tym samym 24-godzinnym oknie.',
+  },
+  {
+    title: 'No-show i nieopłacone rezerwacje',
+    body: 'Nieopłacona rezerwacja wygasa i termin wraca do kalendarza. Jeśli klient nie stawi się na opłaconą rozmowę bez wcześniejszego kontaktu, konsultacja może zostać uznana za zrealizowaną.',
+  },
+  {
+    title: 'Zwrot i reklamacja',
+    body: 'Po upływie 24 godzin nadal możesz zgłosić reklamację albo wniosek o zwrot, jeśli konsultacja nie spełniła swojej roli jako pierwszy krok. Każda sprawa jest rozpatrywana indywidualnie.',
+  },
+  {
+    title: 'Materiały przed rozmową',
+    body: 'MP4, linki i notatki są opcjonalne. Pomagają lepiej przygotować rozmowę, ale nie są wymagane do przejścia przez rezerwację.',
+  },
+  {
+    title: 'Jak działa konsultacja',
+    body: 'Rozmowa pomaga szybko uporządkować sytuację i ustalić pierwszy kolejny ruch. W zależności od problemu może prowadzić do dalszej konsultacji, wizyty albo konsultacji weterynaryjnej.',
+  },
+]
+
 export default function TermsPage() {
-  const contact = getPublicContactDetails()
-  const contactMailtoHref = contact.email
-    ? buildMailtoHref(contact.email, 'Rezerwacja i regulamin - Regulski | Terapia behawioralna')
-    : null
-
   return (
-    <main className="page-wrap">
-      <div className="container">
-        <Header />
-
-        <section className="panel section-panel legal-panel">
-          <div className="section-eyebrow">Regulamin</div>
-          <h1>Zasady rezerwacji szybkiej konsultacji 15 min</h1>
-          <div className="stack-gap top-gap">
-            <div className="list-card">
-              <strong>Forma usługi</strong>
-              <span>
-                Szybka konsultacja 15 min to 15-minutowa konsultacja głosowa online prowadzona przez {SPECIALIST_NAME}, {SPECIALIST_CREDENTIALS}. To pierwszy krok w szerszym systemie pracy, a nie konsultacja wideo ani pełna terapia behawioralna.
-              </span>
-            </div>
-
-            <div className="list-card">
-              <strong>Rezerwacja i płatność</strong>
-              <span>
-                Termin jest blokowany na czas płatności. Ostateczne potwierdzenie rezerwacji następuje po skutecznym opłaceniu konsultacji. Jeśli płatność nie zostanie dokończona, slot wraca do puli dostępnych terminów. Publicznie dostępne metody płatności to wpłata BLIK/przelewem potwierdzana do 60 minut oraz PayU.
-              </span>
-            </div>
-
-            <div className="list-card">
-              <strong>Przełożenie terminu i anulacja</strong>
-              <span>
-                Po skutecznym opłaceniu rezerwacji klient ma 24 godziny na bezpłatną rezygnację. Przy płatności online można zrobić to samodzielnie z ekranu potwierdzenia, a przy wpłacie manualnej zmiana terminu lub rezygnacja odbywa się przez kontakt. Jeśli chcesz przełożyć konsultację, napisz w tym samym 24-godzinnym oknie. Zmiana terminu zależy od dostępności innych slotów.
-              </span>
-            </div>
-
-            <div className="list-card">
-              <strong>No-show i nieopłacone rezerwacje</strong>
-              <span>
-                Jeśli płatność nie zostanie ukończona, rezerwacja wygasa i termin wraca do kalendarza. Jeśli klient nie stawi się na opłaconą rozmowę bez wcześniejszego kontaktu, konsultacja może zostać uznana za zrealizowaną.
-              </span>
-            </div>
-
-            <div className="list-card">
-              <strong>Zwrot i reklamacja</strong>
-              <span>
-                Po upływie 24 godzin od zakupu nadal możesz złożyć reklamację albo wniosek o zwrot, jeśli konsultacja nie spełni swojej roli jako pierwszy krok do uporządkowania problemu. Każda sprawa jest rozpatrywana indywidualnie na podstawie przebiegu usługi i zgłoszenia przesłanego przez kanał kontaktowy.
-              </span>
-            </div>
-
-            <div className="list-card">
-              <strong>Materiały przed rozmową</strong>
-              <span>
-                MP4, linki i notatki są opcjonalne. Służą wyłącznie lepszemu przygotowaniu konsultacji i nie są wymagane do przejścia przez rezerwację.
-              </span>
-            </div>
-
-            <div className="list-card">
-              <strong>Jak działa konsultacja</strong>
-              <span>
-                Konsultacja pomaga szybko uporządkować sytuację i ustalić pierwszy sensowny krok. W zależności od problemu może prowadzić do kolejnej rozmowy, konsultacji weterynaryjnej albo wizyty. Usługa nie zastępuje badania lekarskiego ani pełnej diagnostyki.
-              </span>
-            </div>
-
-            <div className="list-card">
-              <strong>Kontakt</strong>
-              <span>
-                {contact.email && contactMailtoHref ? (
-                  <>
-                    E-mail: <a href={contactMailtoHref}>{contact.email}</a>.{' '}
-                  </>
-                ) : null}
-                W sprawach rezerwacji, płatności, reklamacji i przełożenia terminu kontakt odbywa się mailowo przez ten adres. Rozmowa telefoniczna odbywa się wyłącznie w ramach umówionej konsultacji. Publiczny profil specjalisty w CAPBT podany w stopce służy wyłącznie do sprawdzenia profilu zawodowego.
-              </span>
-            </div>
-          </div>
-        </section>
-
-        <Footer />
-      </div>
-    </main>
+    <LegalPageLayout
+      eyebrow="Regulamin"
+      title="Zasady rezerwacji szybkiej konsultacji 15 min"
+      intro="Najważniejsze zasady rezerwacji, płatności, rozmowy i zmian terminu dla szybkiej konsultacji 15 min."
+      contactSubject="Pytanie o regulamin - Regulski | Terapia behawioralna"
+      summaryItems={summaryItems}
+      sections={sections}
+      supportText="Kontakt w sprawach rezerwacji, płatności, reklamacji i zmian terminu prowadzę mailowo. Rozmowa telefoniczna odbywa się wyłącznie w ramach umówionej konsultacji."
+      supportNoteTitle="Najkrótsza ścieżka"
+      supportNoteText="Jeśli nie wiesz, czy lepsza będzie wiadomość, 15 minut czy dłuższa praca, napisz krótko o sytuacji. Wskażę najprostszy kolejny ruch."
+      ctaTitle="Napisz w sprawie rezerwacji albo płatności"
+      ctaText="W wiadomości wystarczy krótko opisać, czy pytanie dotyczy terminu, płatności, rezygnacji, zwrotu albo przebiegu rozmowy."
+      secondaryCtaHref="/book"
+      secondaryCtaLabel="Umów 15 min"
+      footerCtaHref="/book"
+      footerCtaLabel="Umów 15 min"
+    />
   )
 }

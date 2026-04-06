@@ -1,8 +1,5 @@
-import React from 'react'
 import type { Metadata } from 'next'
-import { Footer } from '@/components/Footer'
-import { Header } from '@/components/Header'
-import { SPECIALIST_CREDENTIALS, SPECIALIST_NAME, buildMailtoHref, getPublicContactDetails } from '@/lib/site'
+import { LegalPageLayout, type LegalSection, type LegalSummaryItem } from '@/components/LegalPageLayout'
 import { buildLegalMetadata } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
@@ -13,79 +10,68 @@ export const metadata: Metadata = buildLegalMetadata(
   'Informacje o przetwarzaniu danych, kontakcie, operatorach technicznych i zasadach prywatności w marce Regulski | Terapia behawioralna.',
 )
 
+const summaryItems: LegalSummaryItem[] = [
+  {
+    label: 'Zakres danych',
+    value: 'Przetwarzane są tylko dane potrzebne do rezerwacji, płatności, kontaktu i przygotowania rozmowy.',
+  },
+  {
+    label: 'Operatorzy',
+    value: 'Supabase, Resend, Jitsi oraz Google Analytics po wyrażeniu zgody.',
+  },
+  {
+    label: 'Kontakt',
+    value: 'W sprawie danych kontakt prowadzony jest mailowo, bez publicznej ścieżki telefonicznej.',
+  },
+]
+
+const sections: LegalSection[] = [
+  {
+    title: 'Administrator danych',
+    body: 'Administratorem danych związanych z serwisem, kontaktem i rezerwacją konsultacji jest Krzysztof Regulski, behawiorysta COAPE / CAPBT, technik weterynarii, dogoterapeuta, dietetyk.',
+  },
+  {
+    title: 'Jakie dane przetwarzamy',
+    body: 'Przetwarzamy imię opiekuna, dane kontaktowe, opis problemu, wybrany termin, status płatności oraz opcjonalne materiały dodane przed rozmową.',
+  },
+  {
+    title: 'Cele i podstawy przetwarzania',
+    body: 'Dane służą przyjęciu rezerwacji, przeprowadzeniu konsultacji, obsłudze płatności, wysyłce potwierdzeń i przypomnień, przygotowaniu specjalisty do rozmowy oraz obsłudze reklamacji, zwrotów i kontaktu posprzedażowego.',
+  },
+  {
+    title: 'Operatorzy i odbiorcy danych',
+    body: 'Do działania serwisu wykorzystywane są usługi Supabase, Resend oraz Jitsi, a po wyrażeniu zgody także Google Analytics. Jeśli włączona jest wysyłka SMS po płatności, dane kontaktowe są przekazywane również do operatora SMS.',
+  },
+  {
+    title: 'Jak długo przechowujemy dane',
+    body: 'Dane rezerwacyjne i rozliczeniowe są przechowywane tak długo, jak jest to potrzebne do realizacji usługi, rozliczeń, kontaktu posprzedażowego oraz spełnienia obowiązków prawnych i podatkowych.',
+  },
+  {
+    title: 'Twoje prawa',
+    body: 'Możesz poprosić o dostęp do danych, ich sprostowanie, ograniczenie przetwarzania lub usunięcie, o ile nie koliduje to z obowiązkami rozliczeniowymi albo bezpieczeństwem obsługi rezerwacji.',
+  },
+  {
+    title: 'Bezpieczeństwo kontaktu',
+    body: 'Dane są przekazywane wyłącznie w zakresie potrzebnym do obsługi rezerwacji, płatności, wiadomości, pokoju rozmowy i bezpieczeństwa działania serwisu.',
+  },
+]
+
 export default function PrivacyPolicyPage() {
-  const contact = getPublicContactDetails()
-  const contactMailtoHref = contact.email
-    ? buildMailtoHref(contact.email, 'Prywatność i dane - Regulski | Terapia behawioralna')
-    : null
-
   return (
-    <main className="page-wrap">
-      <div className="container">
-        <Header />
-
-        <section className="panel section-panel legal-panel">
-          <div className="section-eyebrow">Polityka prywatności</div>
-          <h1>Jak przetwarzane są dane w marce Regulski | Terapia behawioralna</h1>
-          <div className="stack-gap top-gap">
-            <div className="list-card">
-              <strong>Administrator danych</strong>
-              <span>
-                Administratorem danych związanych z serwisem, kontaktem i rezerwacją konsultacji jest {SPECIALIST_NAME}, {SPECIALIST_CREDENTIALS}.
-              </span>
-            </div>
-
-            <div className="list-card">
-              <strong>Jakie dane przetwarzamy</strong>
-              <span>
-                Przetwarzamy dane niezbędne do obsługi konsultacji: imię opiekuna, dane kontaktowe, opis problemu, wybrany termin, status płatności oraz opcjonalne materiały dodane przed rozmową.
-              </span>
-            </div>
-
-            <div className="list-card">
-              <strong>Cele i podstawy przetwarzania</strong>
-              <span>
-                Dane przetwarzamy w celu przyjęcia rezerwacji, przeprowadzenia konsultacji, obsługi płatności, wysłania potwierdzeń i przypomnień, przygotowania specjalisty do rozmowy oraz obsługi reklamacji, zwrotów i kontaktu posprzedażowego.
-              </span>
-            </div>
-
-            <div className="list-card">
-              <strong>Operatorzy zewnętrzni i odbiorcy danych</strong>
-              <span>
-                Do działania serwisu wykorzystujemy usługi Supabase, PayU, Resend oraz Jitsi, a po wyrażeniu zgody także Google Analytics. Jeśli włączona jest wysyłka SMS po płatności, dane kontaktowe są przekazywane również do operatora SMS. Dane są przekazywane wyłącznie w zakresie potrzebnym do obsługi rezerwacji, płatności, wiadomości, pokoju rozmowy i bezpieczeństwa działania serwisu.
-              </span>
-            </div>
-
-            <div className="list-card">
-              <strong>Jak długo przechowujemy dane</strong>
-              <span>
-                Dane rezerwacyjne i rozliczeniowe przechowujemy tak długo, jak jest to potrzebne do realizacji usługi, rozliczeń, kontaktu posprzedażowego oraz spełnienia obowiązków prawnych i podatkowych.
-              </span>
-            </div>
-
-            <div className="list-card">
-              <strong>Twoje prawa</strong>
-              <span>
-                Możesz poprosić o dostęp do danych, ich sprostowanie, ograniczenie przetwarzania lub usunięcie, o ile nie koliduje to z obowiązkami rozliczeniowymi albo bezpieczeństwem obsługi rezerwacji.
-              </span>
-            </div>
-
-            <div className="list-card">
-              <strong>Kontakt w sprawie danych</strong>
-              <span>
-                {contact.email && contactMailtoHref ? (
-                  <>
-                    E-mail: <a href={contactMailtoHref}>{contact.email}</a>.{' '}
-                  </>
-                ) : null}
-                Kontakt w sprawie danych prowadzony jest mailowo przez ten adres. Publiczny profil specjalisty w CAPBT, widoczny w stopce serwisu, służy wyłącznie do sprawdzenia profilu zawodowego.
-              </span>
-            </div>
-          </div>
-        </section>
-
-        <Footer />
-      </div>
-    </main>
+    <LegalPageLayout
+      eyebrow="Polityka prywatności"
+      title="Jak przetwarzane są dane w marce Regulski | Terapia behawioralna"
+      intro="Tu jest skrót tego, jakie dane są potrzebne do rezerwacji i kto pomaga obsługiwać płatność, wiadomości oraz pokój rozmowy."
+      contactSubject="Prywatność i dane - Regulski | Terapia behawioralna"
+      summaryItems={summaryItems}
+      sections={sections}
+      supportText="Dane służą obsłudze rezerwacji, płatności, kontaktu z opiekunem psa albo kota oraz bezpiecznemu przygotowaniu konsultacji."
+      supportNoteTitle="Pytanie o dane"
+      supportNoteText="Jeśli chcesz poprawić dane, dopytać o zakres przetwarzania albo zgłosić żądanie, napisz mailowo. To jest główna ścieżka kontaktu także w sprawach prywatności."
+      ctaTitle="Napisz w sprawie danych albo prywatności"
+      ctaText="W wiadomości wystarczy krótko wskazać, czy pytanie dotyczy danych kontaktowych, operatorów technicznych, zgody analitycznej albo obsługi rezerwacji."
+      secondaryCtaHref="/kontakt"
+      secondaryCtaLabel="Przejdź do kontaktu"
+    />
   )
 }

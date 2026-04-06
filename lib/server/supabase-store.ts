@@ -1,7 +1,15 @@
 import { createClient } from '@supabase/supabase-js'
+import {
+  getBookableServiceAvailabilityWindow,
+  getBookingServicePrice,
+  getServiceAvailabilityWindow,
+  normalizeBookingServiceType,
+  resolveBookingServiceType,
+} from '@/lib/booking-services'
 import { compareDateAndTime, formatDateLabel, isFutureAvailabilitySlot } from '@/lib/data'
 import { createActiveConsultationPrice, DEFAULT_PRICE_PLN, parseConsultationPriceInput } from '@/lib/pricing'
 import { normalizePolishPhone } from '@/lib/phone'
+import { createFunnelEventRecord, normalizeFunnelEventProperties } from '@/lib/server/funnel-events'
 import { buildSeedAvailabilitySlots, hasFutureAvailabilitySlots } from '@/lib/server/availability-seed'
 import { createCustomerAccessToken, hashCustomerAccessToken } from '@/lib/server/customer-access'
 import { getReservationWindowMinutes, getSupabaseServerConfig } from '@/lib/server/env'
@@ -10,6 +18,8 @@ import { getManualPaymentConfig } from '@/lib/server/payment-options'
 import {
   sendBookingConfirmationEmail,
   sendBookingReservationCreatedEmail,
+  sendBookingManualPaymentPendingEmail,
+  sendBookingStatusOutcomeEmail,
   shouldSendBookingConfirmationAfterPayment,
 } from '@/lib/server/notifications'
 import { sendPaymentConfirmationSms } from '@/lib/server/sms'
@@ -19,6 +29,11 @@ import {
   BookingFormData,
   BookingPreparationPatch,
   BookingRecord,
+  FunnelEventInput,
+  FunnelEventProperties,
+  FunnelEventRecord,
+  FunnelEventSource,
+  FunnelEventType,
   GroupedAvailability,
   UserRecord,
 } from '@/lib/types'
@@ -49,6 +64,8 @@ type BookingRow = {
   booking_date: string
   booking_time: string
   slot_id: string
+  qa_booking: boolean | null
+  service_type?: string | null
   booking_status: string
   payment_status: string
   payment_method: string | null
@@ -82,6 +99,18 @@ type BookingRow = {
   prep_link_url: string | null
   prep_notes: string | null
   prep_uploaded_at: string | null
+}
+
+type FunnelEventRow = {
+  id: string
+  event_type: FunnelEventType
+  booking_id: string | null
+  qa_booking: boolean
+  source: FunnelEventSource
+  page_path: string | null
+  location: string | null
+  properties: FunnelEventProperties | null
+  created_at: string
 }
 
 type UserRow = {
@@ -300,9 +329,12 @@ function mapAvailabilitySlotToRow(slot: AvailabilitySlot): AvailabilityRow {
 function mapBookingRow(row: BookingRow): BookingRecord {
   const legacyPaymentMeta = decodeLegacyPaymentMeta(row.recommended_next_step)
   const paymentMethod = inferPaymentMethod(row, legacyPaymentMeta)
+  const amount = typeof row.amount === 'string' ? Number(row.amount) : row.amount
+  const serviceType = resolveBookingServiceType(row.service_type ?? null, amount)
   let bookingStatus = row.booking_status as BookingRecord['bookingStatus']
   let paymentStatus = row.payment_status as BookingRecord['paymentStatus']
   const paymentReference = row.payment_reference ?? legacyPaymentMeta?.paymentReference ?? null
+  const qaBooking = row.qa_booking ?? false
   const paymentReportedAt = row.payment_reported_at ?? legacyPaymentMeta?.paymentReportedAt ?? null
   const paymentRejectedAt = row.payment_rejected_at ?? legacyPaymentMeta?.paymentRejectedAt ?? null
   const paymentRejectedReason = row.payment_rejected_reason ?? legacyPaymentMeta?.paymentRejectedReason ?? null
@@ -325,6 +357,7 @@ function mapBookingRow(row: BookingRow): BookingRecord {
     userId: row.user_id,
     customerAccessTokenHash: row.customer_access_token_hash ?? '',
     ownerName: row.owner_name,
+    serviceType,
     animalType: row.animal_type as BookingRecord['animalType'],
     problemType: row.problem_type as BookingRecord['problemType'],
     petAge: row.pet_age,
@@ -335,11 +368,12 @@ function mapBookingRow(row: BookingRow): BookingRecord {
     bookingDate: row.booking_date,
     bookingTime: row.booking_time,
     slotId: row.slot_id,
+    qaBooking,
     bookingStatus,
     paymentStatus,
     paymentMethod,
     paymentReference,
-    amount: typeof row.amount === 'string' ? Number(row.amount) : row.amount,
+    amount,
     meetingUrl: row.meeting_url,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
@@ -371,11 +405,77 @@ function mapBookingRow(row: BookingRow): BookingRecord {
   }
 }
 
+function mapFunnelEventRow(row: FunnelEventRow): FunnelEventRecord {
+  return {
+    id: row.id,
+    eventType: row.event_type,
+    bookingId: row.booking_id,
+    qaBooking: row.qa_booking ?? false,
+    source: row.source,
+    pagePath: row.page_path,
+    location: row.location,
+    properties: normalizeFunnelEventProperties(row.properties ?? null),
+    createdAt: row.created_at,
+  }
+}
+
+function mapFunnelEventRecordToRow(record: FunnelEventRecord): FunnelEventRow {
+  return {
+    id: record.id,
+    event_type: record.eventType,
+    booking_id: record.bookingId ?? null,
+    qa_booking: record.qaBooking,
+    source: record.source,
+    page_path: record.pagePath ?? null,
+    location: record.location ?? null,
+    properties: record.properties,
+    created_at: record.createdAt,
+  }
+}
+
 function mapPricingSettingsRow(row: PricingSettingsRow) {
   return createActiveConsultationPrice(
     typeof row.consultation_price === 'string' ? Number(row.consultation_price) : row.consultation_price,
     row.updated_at,
   )
+}
+
+async function insertFunnelEvent(
+  supabase: ReturnType<typeof getSupabaseAdmin>,
+  input: FunnelEventInput,
+): Promise<FunnelEventRecord> {
+  const record = createFunnelEventRecord({
+    ...input,
+    properties: normalizeFunnelEventProperties(input.properties ?? null),
+  })
+
+  const { data, error } = await supabase
+    .from('funnel_events')
+    .insert(mapFunnelEventRecordToRow(record))
+    .select('*')
+    .single()
+
+  if (error) {
+    throw error
+  }
+
+  return mapFunnelEventRow(data as FunnelEventRow)
+}
+
+async function recordServerFunnelEvent(supabase: ReturnType<typeof getSupabaseAdmin>, input: FunnelEventInput) {
+  try {
+    await insertFunnelEvent(supabase, input)
+  } catch (error) {
+    console.error(
+      JSON.stringify({
+        level: 'error',
+        msg: 'funnel event record failed',
+        eventType: input.eventType,
+        bookingId: input.bookingId ?? null,
+        error: error instanceof Error ? error.message : String(error),
+      }),
+    )
+  }
 }
 
 function sortAvailability(left: AvailabilitySlot, right: AvailabilitySlot): number {
@@ -402,6 +502,68 @@ function groupAvailability(rows: AvailabilitySlot[]): GroupedAvailability[] {
       label: formatDateLabel(date),
       slots: slots.sort(sortAvailability),
     }))
+}
+
+async function listAvailabilityRowsForDate(bookingDate: string): Promise<AvailabilityRow[]> {
+  const supabase = getSupabaseAdmin()
+  const { data, error } = await supabase
+    .from('availability')
+    .select('*')
+    .eq('booking_date', bookingDate)
+    .order('booking_time', { ascending: true })
+
+  if (error) {
+    throw error
+  }
+
+  return (data as AvailabilityRow[]) ?? []
+}
+
+async function resolveBookingAvailabilityWindow(
+  booking: Pick<BookingRecord, 'slotId' | 'serviceType' | 'amount' | 'bookingDate'>,
+): Promise<AvailabilitySlot[]> {
+  const availability = (await listAvailabilityRowsForDate(booking.bookingDate)).map(mapAvailabilityRow)
+  const serviceType = resolveBookingServiceType(booking.serviceType, booking.amount)
+  const window = getServiceAvailabilityWindow(availability, booking.slotId, serviceType)
+
+  if (window?.length) {
+    return window
+  }
+
+  const slot = availability.find((item) => item.id === booking.slotId)
+  return slot ? [slot] : []
+}
+
+async function updateBookingAvailabilityWindow(
+  booking: Pick<BookingRecord, 'id' | 'slotId' | 'serviceType' | 'amount' | 'bookingDate'>,
+  patch: {
+    isBooked: boolean
+    lockedByBookingId: string | null
+    lockedUntil: string | null
+    updatedAt: string
+  },
+) {
+  const supabase = getSupabaseAdmin()
+  const window = await resolveBookingAvailabilityWindow(booking)
+  const slotIds = window.map((slot) => slot.id)
+
+  if (!slotIds.length) {
+    return
+  }
+
+  const { error } = await supabase
+    .from('availability')
+    .update({
+      is_booked: patch.isBooked,
+      locked_by_booking_id: patch.lockedByBookingId,
+      locked_until: patch.lockedUntil,
+      updated_at: patch.updatedAt,
+    })
+    .in('id', slotIds)
+
+  if (error) {
+    throw error
+  }
 }
 
 async function cleanupExpiredReservations() {
@@ -697,9 +859,17 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
   }
 
   const slot = mapAvailabilityRow(slotData as AvailabilityRow)
+  const serviceType = normalizeBookingServiceType(form.serviceType)
 
   if (!isFutureAvailabilitySlot(slot.bookingDate, slot.bookingTime)) {
     throw new Error('Wybrany termin jest już przeszły. Wybierz nową godzinę rozmowy.')
+  }
+
+  const dayAvailability = (await listAvailabilityRowsForDate(slot.bookingDate)).map(mapAvailabilityRow)
+  const slotWindow = getBookableServiceAvailabilityWindow(dayAvailability, form.slotId, serviceType)
+
+  if (!slotWindow?.length) {
+    throw new Error('Wybrany termin nie jest juĹĽ dostÄ™pny.')
   }
 
   const user = await findOrCreateUser(form.email)
@@ -708,8 +878,8 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
   const reservationExpiresAt = new Date(Date.now() + getReservationWindowMinutes() * 60 * 1000).toISOString()
   console.info('[behawior15][pricing] booking-created', {
     bookingId,
-    amount: pricing.amount,
-    summary: pricing.summary,
+    amount: getBookingServicePrice(serviceType, pricing.amount),
+    summary: `${pricing.summary} Service: ${serviceType}`,
   })
   const commonInsertPayload = {
     id: bookingId,
@@ -726,9 +896,10 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
     booking_date: slot.bookingDate,
     booking_time: slot.bookingTime,
     slot_id: slot.id,
+    qa_booking: form.qaBooking ?? false,
     booking_status: 'pending',
     payment_status: 'unpaid',
-    amount: pricing.amount,
+    amount: getBookingServicePrice(serviceType, pricing.amount),
     meeting_url: createMeetingUrl(bookingId),
     recommended_next_step: null,
     prep_video_path: null,
@@ -816,25 +987,38 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
     throw inserted.error
   }
 
-  const claimedSlot = await supabase
+  const claimedSlots = await supabase
     .from('availability')
     .update({
       locked_by_booking_id: bookingId,
       locked_until: reservationExpiresAt,
       updated_at: nowIso,
     })
-    .eq('id', form.slotId)
+    .in('id', slotWindow.map((windowSlot) => windowSlot.id))
     .eq('is_booked', false)
     .is('locked_by_booking_id', null)
     .select('*')
-    .maybeSingle()
 
-  if (claimedSlot.error) {
+  if (claimedSlots.error) {
     await supabase.from('bookings').delete().eq('id', bookingId)
-    throw claimedSlot.error
+    throw claimedSlots.error
   }
 
-  if (!claimedSlot.data) {
+  if (!claimedSlots.data || claimedSlots.data.length !== slotWindow.length) {
+    const claimedSlotIds = ((claimedSlots.data as AvailabilityRow[] | null) ?? []).map((row) => row.id)
+
+    if (claimedSlotIds.length > 0) {
+      await supabase
+        .from('availability')
+        .update({
+          locked_by_booking_id: null,
+          locked_until: null,
+          updated_at: nowIso,
+        })
+        .in('id', claimedSlotIds)
+        .eq('locked_by_booking_id', bookingId)
+    }
+
     await supabase.from('bookings').delete().eq('id', bookingId)
     throw new Error('Wybrany termin zostal przed chwila zajety.')
   }
@@ -844,7 +1028,7 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
 
   return {
     booking,
-    slot: mapAvailabilityRow(claimedSlot.data as AvailabilityRow),
+    slot: mapAvailabilityRow((claimedSlots.data as AvailabilityRow[])[0]!),
     accessToken: accessToken.rawToken,
   }
 }
@@ -902,6 +1086,25 @@ export async function listBookings(): Promise<BookingRecord[]> {
   }
 
   return (data as BookingRow[]).map(mapBookingRow)
+}
+
+export async function listFunnelEvents(): Promise<FunnelEventRecord[]> {
+  const supabase = getSupabaseAdmin()
+  const { data, error } = await supabase
+    .from('funnel_events')
+    .select('*')
+    .order('created_at', { ascending: false })
+
+  if (error) {
+    throw error
+  }
+
+  return (data as FunnelEventRow[]).map(mapFunnelEventRow)
+}
+
+export async function recordFunnelEvent(input: FunnelEventInput): Promise<FunnelEventRecord> {
+  const supabase = getSupabaseAdmin()
+  return insertFunnelEvent(supabase, input)
 }
 
 export async function updateBookingPreparation(
@@ -1052,11 +1255,14 @@ export async function markBookingManualPaymentPending(
   const nowIso = new Date().toISOString()
   const holdUntil = new Date(Date.now() + getManualPaymentConfig().holdMinutes * 60 * 1000).toISOString()
   const paymentReference = paymentData?.paymentReference ?? current.paymentReference ?? null
+  const paymentReportedAt = current.paymentReportedAt ?? nowIso
+  const shouldSendManualReviewEmail =
+    current.bookingStatus !== 'pending_manual_payment' || current.paymentStatus !== 'pending_manual_review'
   const legacyMeta = encodeLegacyPaymentMeta({
     version: 1,
     method: 'manual',
     paymentReference,
-    paymentReportedAt: nowIso,
+    paymentReportedAt,
   })
   let bookingUpdate
 
@@ -1082,7 +1288,7 @@ export async function markBookingManualPaymentPending(
         payment_status: 'pending_manual_review',
         payment_method: 'manual',
         payment_reference: paymentReference,
-        payment_reported_at: nowIso,
+        payment_reported_at: paymentReportedAt,
         payment_rejected_at: null,
         payment_rejected_reason: null,
         cancelled_at: null,
@@ -1116,21 +1322,40 @@ export async function markBookingManualPaymentPending(
     throw bookingUpdate.error
   }
 
-  const slotUpdate = await supabase
-    .from('availability')
-    .update({
-      is_booked: false,
-      locked_by_booking_id: bookingId,
-      locked_until: holdUntil,
-      updated_at: nowIso,
-    })
-    .eq('id', current.slotId)
+  const updatedBooking = bookingUpdate.data ? mapBookingRow(bookingUpdate.data as BookingRow) : null
 
-  if (slotUpdate.error) {
-    throw slotUpdate.error
+  await updateBookingAvailabilityWindow(current, {
+    isBooked: false,
+    lockedByBookingId: bookingId,
+    lockedUntil: holdUntil,
+    updatedAt: nowIso,
+  })
+
+  if (
+    shouldSendManualReviewEmail &&
+    updatedBooking &&
+    updatedBooking.bookingStatus === 'pending_manual_payment' &&
+    updatedBooking.paymentStatus === 'pending_manual_review'
+  ) {
+    await recordServerFunnelEvent(supabase, {
+      eventType: 'manual_pending',
+      bookingId: updatedBooking.id,
+      qaBooking: Boolean(updatedBooking.qaBooking),
+      source: 'server',
+      properties: {
+        payment_reference: updatedBooking.paymentReference ?? null,
+        payment_status: updatedBooking.paymentStatus,
+        booking_status: updatedBooking.bookingStatus,
+        hold_until: holdUntil,
+      },
+    })
   }
 
-  return bookingUpdate.data ? mapBookingRow(bookingUpdate.data as BookingRow) : null
+  if (shouldSendManualReviewEmail && updatedBooking) {
+    await sendBookingManualPaymentPendingEmail(updatedBooking)
+  }
+
+  return updatedBooking
 }
 
 export async function markBookingPaid(
@@ -1166,6 +1391,8 @@ export async function markBookingPaid(
   const nowIso = new Date().toISOString()
   const shouldSendConfirmation = shouldSendBookingConfirmationAfterPayment(current)
   const shouldAttemptSms = Boolean(paymentData?.triggerPaymentConfirmationSms) && !current.smsConfirmationStatus
+  const shouldRecordPaidEvent = current.paymentStatus !== 'paid'
+  const shouldRecordConfirmedEvent = current.bookingStatus !== 'confirmed' && current.bookingStatus !== 'done'
   const paymentMethod = paymentData?.paymentMethod ?? current.paymentMethod ?? null
   const customerPhoneNormalized = current.customerPhoneNormalized ?? normalizePolishPhone(current.phone)?.e164 ?? null
   const legacyMeta =
@@ -1320,21 +1547,48 @@ export async function markBookingPaid(
     throw bookingUpdate.error
   }
 
-  await supabase
-    .from('availability')
-    .update({
-      is_booked: true,
-      locked_by_booking_id: bookingId,
-      locked_until: null,
-      updated_at: nowIso,
-    })
-    .eq('id', current.slotId)
+  let booking = bookingUpdate.data ? mapBookingRow(bookingUpdate.data as BookingRow) : null
 
-  if (shouldSendConfirmation && bookingUpdate.data) {
-    await sendBookingConfirmationEmail(mapBookingRow(bookingUpdate.data as BookingRow))
+  await updateBookingAvailabilityWindow(current, {
+    isBooked: true,
+    lockedByBookingId: bookingId,
+    lockedUntil: null,
+    updatedAt: nowIso,
+  })
+
+  if (booking && shouldRecordPaidEvent && booking.paymentStatus === 'paid') {
+    await recordServerFunnelEvent(supabase, {
+      eventType: 'paid',
+      bookingId: booking.id,
+      qaBooking: Boolean(booking.qaBooking),
+      source: 'server',
+      properties: {
+        payment_method: booking.paymentMethod ?? null,
+        payment_reference: booking.paymentReference ?? null,
+        payu_order_id: booking.payuOrderId ?? null,
+        payu_order_status: booking.payuOrderStatus ?? null,
+        payment_status: booking.paymentStatus,
+      },
+    })
   }
 
-  let booking = bookingUpdate.data ? mapBookingRow(bookingUpdate.data as BookingRow) : null
+  if (booking && shouldRecordConfirmedEvent && booking.bookingStatus === 'confirmed') {
+    await recordServerFunnelEvent(supabase, {
+      eventType: 'confirmed',
+      bookingId: booking.id,
+      qaBooking: Boolean(booking.qaBooking),
+      source: 'server',
+      properties: {
+        payment_method: booking.paymentMethod ?? null,
+        payment_status: booking.paymentStatus,
+        booking_status: booking.bookingStatus,
+      },
+    })
+  }
+
+  if (shouldSendConfirmation && booking) {
+    await sendBookingConfirmationEmail(booking)
+  }
 
   if (shouldAttemptSms && booking && smsSchemaMode !== 'legacy') {
     const smsResult = await sendPaymentConfirmationSms(booking)
@@ -1386,6 +1640,8 @@ export async function markBookingPaymentFailed(bookingId: string): Promise<Booki
   }
 
   const nowIso = new Date().toISOString()
+  const shouldSendOutcomeEmail = current.bookingStatus !== 'cancelled' || current.paymentStatus !== 'failed'
+  const shouldRecordRejectCancelEvent = current.bookingStatus !== 'cancelled' || current.paymentStatus !== 'failed'
   const bookingUpdate = await supabase
     .from('bookings')
     .update({
@@ -1402,17 +1658,34 @@ export async function markBookingPaymentFailed(bookingId: string): Promise<Booki
     throw bookingUpdate.error
   }
 
-  await supabase
-    .from('availability')
-    .update({
-      is_booked: false,
-      locked_by_booking_id: null,
-      locked_until: null,
-      updated_at: nowIso,
-    })
-    .eq('id', current.slotId)
+  await updateBookingAvailabilityWindow(current, {
+    isBooked: false,
+    lockedByBookingId: null,
+    lockedUntil: null,
+    updatedAt: nowIso,
+  })
 
-  return bookingUpdate.data ? mapBookingRow(bookingUpdate.data as BookingRow) : null
+  const updatedBooking = bookingUpdate.data ? mapBookingRow(bookingUpdate.data as BookingRow) : null
+
+  if (updatedBooking && shouldRecordRejectCancelEvent) {
+    await recordServerFunnelEvent(supabase, {
+      eventType: 'reject_cancel',
+      bookingId: updatedBooking.id,
+      qaBooking: Boolean(updatedBooking.qaBooking),
+      source: 'server',
+      properties: {
+        reason: 'payment_failed',
+        payment_status: updatedBooking.paymentStatus,
+        booking_status: updatedBooking.bookingStatus,
+      },
+    })
+  }
+
+  if (shouldSendOutcomeEmail && updatedBooking) {
+    await sendBookingStatusOutcomeEmail(updatedBooking)
+  }
+
+  return updatedBooking
 }
 
 export async function markBookingManualPaymentRejected(
@@ -1432,6 +1705,8 @@ export async function markBookingManualPaymentRejected(
 
   const nowIso = new Date().toISOString()
   const rejectionReason = reason ?? 'Nie znaleziono wpłaty.'
+  const shouldSendOutcomeEmail = current.bookingStatus !== 'cancelled' || current.paymentStatus !== 'rejected'
+  const shouldRecordRejectCancelEvent = current.bookingStatus !== 'cancelled' || current.paymentStatus !== 'rejected'
   const legacyMeta = encodeLegacyPaymentMeta({
     version: 1,
     method: 'manual',
@@ -1493,21 +1768,34 @@ export async function markBookingManualPaymentRejected(
     throw bookingUpdate.error
   }
 
-  const slotUpdate = await supabase
-    .from('availability')
-    .update({
-      is_booked: false,
-      locked_by_booking_id: null,
-      locked_until: null,
-      updated_at: nowIso,
-    })
-    .eq('id', current.slotId)
+  const updatedBooking = bookingUpdate.data ? mapBookingRow(bookingUpdate.data as BookingRow) : null
 
-  if (slotUpdate.error) {
-    throw slotUpdate.error
+  await updateBookingAvailabilityWindow(current, {
+    isBooked: false,
+    lockedByBookingId: null,
+    lockedUntil: null,
+    updatedAt: nowIso,
+  })
+
+  if (updatedBooking && shouldRecordRejectCancelEvent) {
+    await recordServerFunnelEvent(supabase, {
+      eventType: 'reject_cancel',
+      bookingId: updatedBooking.id,
+      qaBooking: Boolean(updatedBooking.qaBooking),
+      source: 'server',
+      properties: {
+        reason: updatedBooking.paymentRejectedReason ?? rejectionReason,
+        payment_status: updatedBooking.paymentStatus,
+        booking_status: updatedBooking.bookingStatus,
+      },
+    })
   }
 
-  return bookingUpdate.data ? mapBookingRow(bookingUpdate.data as BookingRow) : null
+  if (shouldSendOutcomeEmail && updatedBooking) {
+    await sendBookingStatusOutcomeEmail(updatedBooking)
+  }
+
+  return updatedBooking
 }
 
 export async function markBookingRefunded(bookingId: string): Promise<BookingRecord | null> {
@@ -1523,6 +1811,7 @@ export async function markBookingRefunded(bookingId: string): Promise<BookingRec
   }
 
   const nowIso = new Date().toISOString()
+  const shouldSendOutcomeEmail = true
   const bookingUpdate = await supabase
     .from('bookings')
     .update({
@@ -1540,21 +1829,34 @@ export async function markBookingRefunded(bookingId: string): Promise<BookingRec
     throw bookingUpdate.error
   }
 
-  const slotUpdate = await supabase
-    .from('availability')
-    .update({
-      is_booked: false,
-      locked_by_booking_id: null,
-      locked_until: null,
-      updated_at: nowIso,
-    })
-    .eq('id', current.slotId)
+  const updatedBooking = bookingUpdate.data ? mapBookingRow(bookingUpdate.data as BookingRow) : null
 
-  if (slotUpdate.error) {
-    throw slotUpdate.error
+  await updateBookingAvailabilityWindow(current, {
+    isBooked: false,
+    lockedByBookingId: null,
+    lockedUntil: null,
+    updatedAt: nowIso,
+  })
+
+  if (updatedBooking) {
+    await recordServerFunnelEvent(supabase, {
+      eventType: 'reject_cancel',
+      bookingId: updatedBooking.id,
+      qaBooking: Boolean(updatedBooking.qaBooking),
+      source: 'server',
+      properties: {
+        reason: 'refunded',
+        payment_status: updatedBooking.paymentStatus,
+        booking_status: updatedBooking.bookingStatus,
+      },
+    })
   }
 
-  return bookingUpdate.data ? mapBookingRow(bookingUpdate.data as BookingRow) : null
+  if (shouldSendOutcomeEmail && updatedBooking) {
+    await sendBookingStatusOutcomeEmail(updatedBooking)
+  }
+
+  return updatedBooking
 }
 
 export async function markBookingExpired(bookingId: string): Promise<BookingRecord | null> {
@@ -1566,6 +1868,8 @@ export async function markBookingExpired(bookingId: string): Promise<BookingReco
   }
 
   const nowIso = new Date().toISOString()
+  const shouldSendOutcomeEmail = current.bookingStatus !== 'expired'
+  const shouldRecordRejectCancelEvent = current.bookingStatus !== 'expired'
   const manualExpiryReason = current.paymentRejectedReason ?? 'Upłynął czas na potwierdzenie wpłaty.'
   const legacyMeta =
     current.paymentStatus === 'pending_manual_review'
@@ -1640,17 +1944,34 @@ export async function markBookingExpired(bookingId: string): Promise<BookingReco
     throw bookingUpdate.error
   }
 
-  await supabase
-    .from('availability')
-    .update({
-      is_booked: false,
-      locked_by_booking_id: null,
-      locked_until: null,
-      updated_at: nowIso,
-    })
-    .eq('id', current.slotId)
+  const updatedBooking = bookingUpdate.data ? mapBookingRow(bookingUpdate.data as BookingRow) : null
 
-  return bookingUpdate.data ? mapBookingRow(bookingUpdate.data as BookingRow) : null
+  await updateBookingAvailabilityWindow(current, {
+    isBooked: false,
+    lockedByBookingId: null,
+    lockedUntil: null,
+    updatedAt: nowIso,
+  })
+
+  if (updatedBooking && shouldRecordRejectCancelEvent) {
+    await recordServerFunnelEvent(supabase, {
+      eventType: 'reject_cancel',
+      bookingId: updatedBooking.id,
+      qaBooking: Boolean(updatedBooking.qaBooking),
+      source: 'server',
+      properties: {
+        reason: updatedBooking.paymentStatus === 'rejected' ? updatedBooking.paymentRejectedReason ?? manualExpiryReason : 'expired',
+        payment_status: updatedBooking.paymentStatus,
+        booking_status: updatedBooking.bookingStatus,
+      },
+    })
+  }
+
+  if (shouldSendOutcomeEmail && updatedBooking) {
+    await sendBookingStatusOutcomeEmail(updatedBooking)
+  }
+
+  return updatedBooking
 }
 
 export async function markBookingDone(bookingId: string, recommendedNextStep?: string): Promise<BookingRecord | null> {

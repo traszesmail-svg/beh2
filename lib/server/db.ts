@@ -85,6 +85,16 @@ export async function listBookings() {
   return getProvider().listBookings()
 }
 
+export async function listFunnelEvents() {
+  return getProvider().listFunnelEvents()
+}
+
+export async function recordFunnelEvent(
+  input: Parameters<StoreProvider['recordFunnelEvent']>[0],
+) {
+  return getProvider().recordFunnelEvent(input)
+}
+
 export async function updateBookingPreparation(
   bookingId: string,
   patch: Parameters<StoreProvider['updateBookingPreparation']>[1],

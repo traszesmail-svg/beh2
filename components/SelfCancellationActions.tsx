@@ -1,8 +1,8 @@
 'use client'
 
-import Link from 'next/link'
 import { useEffect, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
+import { HardNavLink } from '@/components/HardNavLink'
 
 interface SelfCancellationActionsProps {
   bookingId: string
@@ -95,9 +95,9 @@ export function SelfCancellationActions({
         <button type="button" className="button button-ghost big-button" onClick={handleCancel} disabled={isPending}>
           {isPending ? 'Anuluję rezerwację...' : 'Anuluj rezerwację w 24h'}
         </button>
-        <Link href={contactHref} className="button button-ghost big-button">
+        <HardNavLink href={contactHref} className="button button-ghost big-button">
           Napisz w sprawie zmiany terminu
-        </Link>
+        </HardNavLink>
       </div>
     </div>
   )

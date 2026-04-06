@@ -3,6 +3,41 @@ import { buildManualPaymentReviewUrl } from '@/lib/server/manual-payment-review'
 import { sendManualPaymentReportedAdminEmail } from '@/lib/server/notifications'
 import { getManualPaymentConfig, getManualPaymentReference } from '@/lib/server/payment-options'
 
+const MANUAL_PAYMENT_ADMIN_NOTIFICATION_TIMEOUT_MS = 3_000
+
+type ManualPaymentAdminNotification =
+  | Awaited<ReturnType<typeof sendManualPaymentReportedAdminEmail>>
+  | {
+      status: 'queued'
+      reason?: string
+    }
+
+async function sendManualPaymentReportedAdminEmailWithTimeout(
+  booking: Parameters<typeof sendManualPaymentReportedAdminEmail>[0],
+  links: Parameters<typeof sendManualPaymentReportedAdminEmail>[1],
+  timeoutMs = MANUAL_PAYMENT_ADMIN_NOTIFICATION_TIMEOUT_MS,
+): Promise<ManualPaymentAdminNotification> {
+  const timeoutResult: ManualPaymentAdminNotification = {
+    status: 'queued',
+    reason: `ADMIN_NOTIFICATION_EMAIL still pending after ${timeoutMs}ms`,
+  }
+
+  let timeoutHandle: ReturnType<typeof setTimeout> | null = null
+
+  try {
+    return await Promise.race([
+      sendManualPaymentReportedAdminEmail(booking, links),
+      new Promise<ManualPaymentAdminNotification>((resolve) => {
+        timeoutHandle = setTimeout(() => resolve(timeoutResult), timeoutMs)
+      }),
+    ])
+  } finally {
+    if (timeoutHandle) {
+      clearTimeout(timeoutHandle)
+    }
+  }
+}
+
 export async function reportManualPayment(
   bookingId: string,
   accessToken?: string | null,
@@ -28,12 +63,18 @@ export async function reportManualPayment(
     throw new Error('Nie udało się zapisać zgłoszenia wpłaty.')
   }
 
-  const adminNotification = await sendManualPaymentReportedAdminEmail(updatedBooking, {
+  const adminNotification = await sendManualPaymentReportedAdminEmailWithTimeout(updatedBooking, {
     approveUrl: buildManualPaymentReviewUrl(updatedBooking.id, 'approve', updatedBooking.paymentReportedAt),
     rejectUrl: buildManualPaymentReviewUrl(updatedBooking.id, 'reject', updatedBooking.paymentReportedAt),
   })
 
-  if (adminNotification.status !== 'sent') {
+  if (adminNotification.status === 'queued') {
+    console.info('[behawior15][manual-payment] admin notification still pending', {
+      bookingId: updatedBooking.id,
+      reason: adminNotification.reason ?? null,
+      timeoutMs: MANUAL_PAYMENT_ADMIN_NOTIFICATION_TIMEOUT_MS,
+    })
+  } else if (adminNotification.status !== 'sent') {
     console.warn('[behawior15][manual-payment] admin notification not sent', {
       bookingId: updatedBooking.id,
       status: adminNotification.status,

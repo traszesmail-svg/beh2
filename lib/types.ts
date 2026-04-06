@@ -1,11 +1,19 @@
-export type ProblemType =
-  | 'szczeniak'
-  | 'kot'
-  | 'separacja'
-  | 'agresja'
-  | 'niszczenie'
-  | 'dogoterapia'
-  | 'inne'
+import type { BookingServiceType } from './booking-services'
+
+export type DogProblemType = 'szczeniak' | 'separacja' | 'agresja' | 'niszczenie' | 'dogoterapia'
+
+export type PublicCatProblemType =
+  | 'kot-kuweta'
+  | 'kot-konflikt'
+  | 'kot-dotyk'
+  | 'kot-stres'
+  | 'kot-nocna-wokalizacja'
+
+export type LegacyCatProblemType = 'kot'
+
+export type CatProblemType = LegacyCatProblemType | PublicCatProblemType
+
+export type ProblemType = DogProblemType | CatProblemType | 'inne'
 
 export type AnimalType = 'Pies' | 'Kot'
 
@@ -14,6 +22,51 @@ export type BookingStatus = 'pending' | 'pending_manual_payment' | 'confirmed' |
 export type PaymentStatus = 'unpaid' | 'pending_manual_review' | 'paid' | 'failed' | 'rejected' | 'refunded'
 
 export type PaymentMethod = 'manual' | 'payu' | 'stripe' | 'mock'
+
+export type FunnelEventType =
+  | 'home_view'
+  | 'cta_click'
+  | 'topic_selected'
+  | 'slot_selected'
+  | 'form_started'
+  | 'payment_opened'
+  | 'manual_pending'
+  | 'paid'
+  | 'confirmed'
+  | 'reject_cancel'
+  | 'payment_started'
+  | 'payment_success'
+  | 'payment_failed'
+  | 'faq_open'
+  | 'opinion_add'
+  | 'room_entered'
+
+export type FunnelEventSource = 'client' | 'server'
+
+export type FunnelEventProperties = Record<string, string | number | boolean | null>
+
+export interface FunnelEventInput {
+  eventType: FunnelEventType
+  bookingId?: string | null
+  qaBooking?: boolean
+  source?: FunnelEventSource
+  pagePath?: string | null
+  location?: string | null
+  properties?: FunnelEventProperties
+  createdAt?: string
+}
+
+export interface FunnelEventRecord {
+  id: string
+  eventType: FunnelEventType
+  bookingId?: string | null
+  qaBooking: boolean
+  source: FunnelEventSource
+  pagePath?: string | null
+  location?: string | null
+  properties: FunnelEventProperties
+  createdAt: string
+}
 
 export type SmsConfirmationStatus =
   | 'processing'
@@ -52,6 +105,7 @@ export interface AvailabilitySlot {
 
 export interface BookingFormData {
   ownerName: string
+  serviceType?: BookingServiceType
   problemType: ProblemType
   animalType: AnimalType
   petAge: string
@@ -60,6 +114,7 @@ export interface BookingFormData {
   phone: string
   email: string
   slotId: string
+  qaBooking?: boolean
 }
 
 export interface UserRecord {
@@ -74,6 +129,7 @@ export interface BookingRecord {
   userId?: string | null
   customerAccessTokenHash?: string | null
   ownerName: string
+  serviceType?: BookingServiceType
   problemType: ProblemType
   animalType: AnimalType
   petAge: string
@@ -84,6 +140,7 @@ export interface BookingRecord {
   bookingDate: string
   bookingTime: string
   slotId: string
+  qaBooking?: boolean
   amount: number
   bookingStatus: BookingStatus
   paymentStatus: PaymentStatus
@@ -123,6 +180,13 @@ export interface BookingCreateResult {
   booking: BookingRecord
   slot: AvailabilitySlot
   accessToken: string
+}
+
+export interface QaCheckoutEligibility {
+  isAllowed: boolean
+  reason: string | null
+  summary: string
+  paymentReference: string
 }
 
 export interface BookingPreparationPatch {

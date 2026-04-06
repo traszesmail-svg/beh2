@@ -5,15 +5,14 @@ import Link from 'next/link'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { type Offer, getOfferByServiceSlug } from '@/lib/offers'
-import { getPdfAccessLabel, getPdfBundleBySlug, getPdfGuideBySlug, getPdfPricingBadge } from '@/lib/pdf-guides'
+import { getPdfAccessLabel, getPdfBundleBySlug, getPdfGuideBySlug } from '@/lib/pdf-guides'
 import { buildMarketingMetadata } from '@/lib/seo'
 import {
+  SPECIALIST_ONLINE_PHOTO,
   buildMailtoHref,
   getPublicContactDetails,
   SPECIALIST_CREDENTIALS,
   SPECIALIST_NAME,
-  SPECIALIST_TRUST_STATEMENT,
-  SPECIALIST_WIDE_PHOTO,
 } from '@/lib/site'
 
 export const dynamic = 'force-dynamic'
@@ -136,21 +135,20 @@ export default function ContactPage({
     ? 'Napisz w sprawie zmiany terminu lub rezygnacji'
     : selectedOffer
       ? `Zapytanie o: ${selectedOffer.title}`
-      : 'Napisz albo umów 15 min'
+      : 'Napisz wiadomość'
   const contactIntro = isRescheduleIntent
-    ? 'Napisz, jeśli chcesz zmienić termin albo zrezygnować.'
+    ? 'Napisz krótko, jeśli chcesz zmienić termin albo zrezygnować.'
     : isResourceInquiry
       ? selectedPdfInquiry
         ? `Napisz krótko o sytuacji i o materiale „${selectedPdfInquiry.title}”. Powiem, czy to dobry start.`
-        : 'Napisz krótko o sytuacji. Powiem, czy lepiej zacząć od poradnika czy rozmowy.'
-      : 'Opisz krótko sytuację psa albo kota. Wskażę start.'
-  const actionCardTitle = 'Co napisać'
+        : 'Napisz krótko o sytuacji. Powiem, czy lepiej zacząć od PDF czy rozmowy.'
+      : 'Napisz krótko, co się dzieje. Podpowiem najprostszy start.'
   const actionCardCopy = isRescheduleIntent
     ? `Podaj numer rezerwacji${bookingId ? ` (${bookingId})` : ''}, czy chodzi o zmianę terminu czy rezygnację, i nowy termin, jeśli go masz.`
     : isResourceInquiry
       ? selectedPdfInquiry
         ? `Napisz gatunek, problem i czego szukasz w materiale „${selectedPdfInquiry.title}”.`
-        : 'Napisz gatunek, problem i czy wolisz poradnik czy rozmowę.'
+        : 'Napisz gatunek, problem i czy wolisz PDF czy rozmowę.'
       : 'Napisz gatunek, problem i od kiedy to trwa.'
   const followupHref = selectedPdfInquiry?.routePath ?? (isResourceInquiry ? '/oferta/poradniki-pdf' : '/book')
   const followupLabel = selectedPdfInquiry
@@ -158,7 +156,7 @@ export default function ContactPage({
       ? 'Wróć do pakietu PDF'
       : 'Wróć do poradnika PDF'
     : isResourceInquiry
-      ? 'Przejdź do listy poradników PDF'
+      ? 'Przejdź do PDF'
       : 'Umów 15 min'
   const primaryAnalyticsLocation = isRescheduleIntent
     ? 'contact-primary-reschedule'
@@ -179,7 +177,7 @@ export default function ContactPage({
         <Header />
 
         <section className="two-col-section contact-layout">
-          <div className="panel section-panel contact-side-panel">
+          <div className="panel section-panel hero-surface contact-side-panel">
             <div className="section-eyebrow">Kontakt</div>
             <h1>{pageHeading}</h1>
             <p className="hero-text">{contactIntro}</p>
@@ -192,7 +190,7 @@ export default function ContactPage({
             ) : null}
 
             <div className="list-card tree-backed-card top-gap">
-              <strong>{actionCardTitle}</strong>
+              <strong>Co napisać</strong>
               <span>{actionCardCopy}</span>
             </div>
 
@@ -220,75 +218,32 @@ export default function ContactPage({
           </div>
 
           <div className="panel section-panel contact-support-panel">
-            <div className="section-eyebrow">Kto odpowiada</div>
-            <h2>Piszesz do mnie</h2>
-
-            <div className="contact-visual-shell top-gap">
+            <div className="contact-visual-shell">
               <Image
-                src={SPECIALIST_WIDE_PHOTO.src}
-                alt={SPECIALIST_WIDE_PHOTO.alt}
+                src={SPECIALIST_ONLINE_PHOTO.src}
+                alt={SPECIALIST_ONLINE_PHOTO.alt}
                 width={1200}
-                height={900}
-                sizes="(max-width: 980px) 100vw, 42vw"
+                height={630}
+                sizes="(max-width: 980px) 100vw, 40vw"
                 className="contact-feature-image"
               />
             </div>
+            <div className="section-eyebrow">Piszesz do mnie</div>
+            <h2>{SPECIALIST_NAME}</h2>
+            <p className="hero-text">
+              {SPECIALIST_CREDENTIALS}. Odpowiadam osobiście i pomagam wybrać prosty start dla psa albo kota.
+            </p>
 
-            <div className="list-card accent-outline tree-backed-card top-gap">
-              <strong>{SPECIALIST_NAME}</strong>
-              <span>{SPECIALIST_CREDENTIALS}</span>
-              <span>{SPECIALIST_TRUST_STATEMENT}</span>
-            </div>
-
-            <h2 className="top-gap">Wybierz</h2>
-            <div className="contact-shortcut-grid top-gap">
-              <div className="list-card tree-backed-card contact-shortcut-card">
-                <strong>Umów 15 min</strong>
-                <span>Jeśli chcesz od razu wejść w termin.</span>
-                <div className="offer-card-actions top-gap-small">
-                  <Link
-                    href="/book"
-                    prefetch={false}
-                    className="button button-ghost"
-                    data-analytics-event="cta_click"
-                    data-analytics-location="contact-shortcut-book"
-                  >
-                    Umów 15 min
-                  </Link>
-                </div>
+            {contact.email ? (
+              <div className="list-card tree-backed-card top-gap">
+                <strong>E-mail</strong>
+                <span>{contact.email}</span>
               </div>
-
-              <div className="list-card tree-backed-card contact-shortcut-card">
-                <strong>Napisz wiadomość</strong>
-                <span>Jeśli temat jest pilny albo mieszany.</span>
-                <div className="offer-card-actions top-gap-small">
-                  {mailtoHref ? (
-                    <a
-                      href={mailtoHref}
-                      className="button button-primary"
-                      data-analytics-event="cta_click"
-                      data-analytics-location="contact-shortcut-message"
-                    >
-                      Napisz wiadomość
-                    </a>
-                  ) : (
-                    <Link
-                      href="/kontakt"
-                      prefetch={false}
-                      className="button button-primary"
-                      data-analytics-event="cta_click"
-                      data-analytics-location="contact-shortcut-message"
-                    >
-                      Napisz wiadomość
-                    </Link>
-                  )}
-                </div>
-              </div>
-            </div>
+            ) : null}
           </div>
         </section>
 
-        <Footer />
+        <Footer variant="full" ctaHref="/book" ctaLabel="Umów 15 min" />
       </div>
     </main>
   )

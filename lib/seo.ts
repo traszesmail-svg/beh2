@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { DEFAULT_BOOKING_SERVICE, getBookingServiceRoomSummary, getBookingServiceTitle, type BookingServiceType } from '@/lib/booking-services'
 import { SITE_NAME, SITE_OG_IMAGE, SITE_SHORT_NAME, SITE_TAGLINE, SPECIALIST_NAME } from '@/lib/site'
 
 const DEFAULT_OG_IMAGE = SITE_OG_IMAGE
@@ -55,12 +56,15 @@ export async function buildHomeMetadata(): Promise<Metadata> {
   }
 }
 
-export async function buildBookMetadata(): Promise<Metadata> {
+export async function buildBookMetadata(serviceType: BookingServiceType = DEFAULT_BOOKING_SERVICE): Promise<Metadata> {
+  const serviceTitle = getBookingServiceTitle(serviceType)
+  const serviceSummary = getBookingServiceRoomSummary(serviceType)
+
   return buildMarketingMetadata({
-    title: 'Szybka konsultacja 15 min',
+    title: serviceTitle,
     path: '/book',
     description:
-      `Umów 15 min w marce ${SITE_SHORT_NAME}. Krótka konsultacja audio dla psa lub kota pomaga uporządkować sytuację i zdecydować, co zrobić dalej ze specjalistą ${SPECIALIST_NAME}.`,
+      `${serviceTitle} w marce ${SITE_SHORT_NAME}. ${serviceSummary} Pomaga uporządkować sytuację i zdecydować, co zrobić dalej ze specjalistą ${SPECIALIST_NAME}.`,
   })
 }
 

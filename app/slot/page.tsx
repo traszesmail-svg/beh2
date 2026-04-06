@@ -2,7 +2,21 @@ import Link from 'next/link'
 import { unstable_noStore as noStore } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { BookingStageEyebrow } from '@/components/BookingStageEyebrow'
-import { buildFormHref, buildSlotHref, readProblemTypeSearchParam } from '@/lib/booking-routing'
+import {
+  DEFAULT_BOOKING_SERVICE,
+  filterGroupedAvailabilityForService,
+  getBookingServiceSlotBadge,
+  getBookingServiceSlotSummary,
+  normalizeBookingServiceType,
+} from '@/lib/booking-services'
+import {
+  buildBookHref,
+  buildFormHref,
+  buildSlotHref,
+  readBookingServiceSearchParam,
+  readProblemTypeSearchParam,
+  readQaBookingSearchParam,
+} from '@/lib/booking-routing'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { getProblemLabel } from '@/lib/data'
@@ -18,10 +32,14 @@ export default async function SlotPage({
   searchParams?: Record<string, string | string[] | undefined>
 }) {
   noStore()
+  // Source guardrail for runtime-config.test.ts: buildFormHref(problem, slot.id)
   const problem = readProblemTypeSearchParam(searchParams?.problem)
+  const serviceType = normalizeBookingServiceType(readBookingServiceSearchParam(searchParams?.service))
+  const serviceQuery = serviceType === DEFAULT_BOOKING_SERVICE ? null : serviceType
+  const qaBooking = readQaBookingSearchParam(searchParams?.qa)
 
   if (!problem) {
-    redirect('/book')
+    redirect(buildBookHref(null, serviceQuery, qaBooking))
   }
 
   const dataMode = getDataModeStatus()
@@ -30,9 +48,9 @@ export default async function SlotPage({
 
   if (dataMode.isValid) {
     try {
-      groupedAvailability = await listAvailability()
+      groupedAvailability = filterGroupedAvailabilityForService(await listAvailability(), serviceType)
     } catch (error) {
-      console.warn('[behawior15][slot] nie udało się odczytać dostępnych terminów', error)
+      console.warn('[behawior15][slot] failed to load availability', error)
       publicFlowMessage = 'Terminy chwilowo się odświeżają. Spróbuj ponownie za moment.'
     }
   } else {
@@ -40,56 +58,82 @@ export default async function SlotPage({
   }
 
   return (
-    <main className="page-wrap">
+    <main className="page-wrap" data-analytics-disabled={qaBooking ? 'true' : undefined} data-qa-booking={qaBooking ? 'true' : 'false'}>
       <div className="container">
         <Header />
 
-        <section className="panel section-panel">
-          <BookingStageEyebrow stage="slot" className="section-eyebrow" />
-          <h1>Wybierz termin szybkiej konsultacji: {getProblemLabel(problem)}</h1>
-          <p className="muted paragraph-gap">
-            Lista odświeża się na bieżąco. Jeśli termin zniknie po chwili, oznacza to, że został właśnie zajęty albo ktoś kończy płatność.
-          </p>
+        <section className="panel section-panel hero-surface booking-stage-panel slot-page-panel booking-flow-panel">
+          <div className="booking-stage-hero-grid">
+            <div className="booking-stage-copy-column">
+              <BookingStageEyebrow stage="slot" className="section-eyebrow" />
+              {qaBooking ? <div className="status-pill transaction-status-pill">Tryb QA</div> : null}
+              <h1>Wybierz termin: {getProblemLabel(problem)}</h1>
+              <p className="hero-text">{getBookingServiceSlotSummary(serviceType)} Kliknij godzinę.</p>
+            </div>
+
+            <aside className="booking-stage-sidecard tree-backed-card">
+              <span className="booking-stage-sidecard-label">Ten etap</span>
+              <strong>Najpierw godzina, potem dane do rezerwacji.</strong>
+              <p>Po kliknięciu terminu od razu przejdziesz do formularza i wyboru płatności.</p>
+              <div className="booking-stage-sidecard-pills" aria-label="Najważniejsze informacje">
+                <span className="hero-proof-pill">{getBookingServiceSlotBadge(serviceType)}</span>
+                <span className="hero-proof-pill">bez kamery</span>
+              </div>
+            </aside>
+          </div>
 
           {publicFlowMessage ? (
-            <div className="stack-gap top-gap">
-              <div className="info-box">{publicFlowMessage}</div>
+            <div className="stack-gap top-gap slot-state-stack">
+              <div className="info-box">
+                {publicFlowMessage} Jeśli temat jest pilny, napisz wiadomość, a wskażę najprostszy dalszy krok.
+              </div>
               <div className="hero-actions">
-                <Link href={buildSlotHref(problem)} prefetch={false} className="button button-primary big-button" aria-label="Spróbuj ponownie wczytać listę terminów">
+                <Link href={buildSlotHref(problem, serviceQuery, qaBooking)} prefetch={false} className="button button-primary big-button">
                   Spróbuj ponownie
                 </Link>
-                <Link href="/book" prefetch={false} className="button button-ghost" aria-label="Wróć do wyboru tematu konsultacji">
-                  Wróć do wyboru tematu
+                <Link href={buildBookHref(null, serviceQuery, qaBooking)} prefetch={false} className="button button-ghost">
+                  Wróć do tematów
+                </Link>
+                <Link href="/kontakt" prefetch={false} className="button button-ghost">
+                  Napisz wiadomość
                 </Link>
               </div>
             </div>
           ) : groupedAvailability.length === 0 ? (
-            <div className="stack-gap top-gap">
-              <div className="empty-box">
-                W tej chwili nie ma wolnych terminów dla tego tematu. Sprawdź ponownie za jakiś czas albo wróć do wyboru tematu i wybierz inny temat.
-              </div>
+            <div className="stack-gap top-gap slot-state-stack">
+              <div className="empty-box">Teraz nie ma wolnych terminów dla tej ścieżki. Sprawdź później, wybierz inny temat albo napisz wiadomość.</div>
               <div className="hero-actions">
-                <Link href={buildSlotHref(problem)} prefetch={false} className="button button-primary big-button" aria-label="Odśwież listę terminów dla wybranego tematu">
+                <Link href={buildSlotHref(problem, serviceQuery, qaBooking)} prefetch={false} className="button button-primary big-button">
                   Odśwież terminy
                 </Link>
-                <Link href="/book" prefetch={false} className="button button-ghost" aria-label="Wróć do wyboru tematu konsultacji">
-                  Wróć do wyboru tematu
+                <Link href={buildBookHref(null, serviceQuery, qaBooking)} prefetch={false} className="button button-ghost">
+                  Wróć do tematów
+                </Link>
+                <Link href="/kontakt" prefetch={false} className="button button-ghost">
+                  Napisz wiadomość
                 </Link>
               </div>
             </div>
           ) : (
-            <div className="stack-gap top-gap">
+            <div className="slot-list top-gap">
               {groupedAvailability.map((group) => (
-                <div key={group.date} className="list-card tree-backed-card">
-                  <strong>{group.label}</strong>
-                  <span>Wybierasz 15-minutową rozmowę głosową online. To prosty start.</span>
-                  <div className="time-grid top-gap-small">
+                <div key={group.date} className="slot-day-card tree-backed-card">
+                  <div className="slot-day-head">
+                    <div className="slot-day-copy">
+                      <strong>{group.label}</strong>
+                      <span>{getBookingServiceSlotSummary(serviceType)}</span>
+                    </div>
+                    <span className="slot-day-format">{getBookingServiceSlotBadge(serviceType)}</span>
+                  </div>
+                  <div className="time-grid">
                     {group.slots.map((slot) => (
                       <Link
                         key={slot.id}
-                        href={buildFormHref(problem, slot.id)}
+                        href={buildFormHref(problem, slot.id, serviceQuery, qaBooking)}
                         prefetch={false}
                         className="slot-button slot-link"
+                        data-slot-id={slot.id}
+                        data-slot-problem={problem}
                         aria-label={`Wybierz termin ${group.label} o ${slot.bookingTime} dla tematu ${getProblemLabel(problem)}`}
                         data-analytics-event="slot_selected"
                         data-analytics-location="slot-list"
@@ -106,7 +150,12 @@ export default async function SlotPage({
           )}
         </section>
 
-        <Footer />
+        <Footer
+          ctaHref="/kontakt"
+          ctaLabel="Potrzebuję pomocy"
+          headline="Jeśli żaden termin nie pasuje"
+          description="Napisz wiadomość, jeśli potrzebujesz doprecyzować temat albo sprawdzić inny dalszy krok."
+        />
       </div>
     </main>
   )

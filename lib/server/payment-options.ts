@@ -1,10 +1,32 @@
 import { SPECIALIST_NAME, getContactDetails } from '@/lib/site'
+import { normalizePolishPhone } from '@/lib/phone'
+import type { BookingRecord, QaCheckoutEligibility } from '@/lib/types'
+import { getPaymentModeStatus } from '@/lib/server/env'
 
 const DEFAULT_MANUAL_PAYMENT_HOLD_MINUTES = 12 * 60
 
 function readEnv(name: string): string | null {
   const value = process.env[name]?.trim()
   return value ? value : null
+}
+
+function readBooleanEnv(name: string): boolean {
+  const value = readEnv(name)?.toLowerCase() ?? null
+
+  return value === '1' || value === 'true' || value === 'yes' || value === 'on'
+}
+
+function readListEnv(name: string): string[] {
+  const raw = readEnv(name)
+
+  if (!raw) {
+    return []
+  }
+
+  return raw
+    .split(/[\n,;]+/)
+    .map((value) => value.trim())
+    .filter(Boolean)
 }
 
 function formatBankAccount(value: string | null): string | null {
@@ -52,9 +74,11 @@ export type ManualPaymentConfig = {
 }
 
 export type PayuEnvironment = 'production' | 'sandbox'
+export type PayuMode = 'auto' | 'disabled'
 
 export type PayuOptionStatus = {
   isAvailable: boolean
+  mode: PayuMode
   environment: PayuEnvironment
   apiBaseUrl: string
   oauthUrl: string
@@ -64,6 +88,148 @@ export type PayuOptionStatus = {
   secondKey: string | null
   summary: string
   missing: string[]
+}
+
+export function getQaCheckoutPaymentReference(bookingId: string): string {
+  const compactId = bookingId.replace(/-/g, '').slice(0, 12).toUpperCase()
+  return `QA-${compactId}`
+}
+
+function getQaCheckoutModeSummary(): string {
+  const paymentMode = getPaymentModeStatus()
+  const qaEnabled = readBooleanEnv('TEST_CHECKOUT_ENABLED')
+  const emailAllowlist = readListEnv('QA_CHECKOUT_EMAIL_ALLOWLIST')
+  const phoneAllowlist = readListEnv('QA_CHECKOUT_PHONE_ALLOWLIST')
+  const hasAllowlist = emailAllowlist.length > 0 || phoneAllowlist.length > 0
+
+  if (paymentMode.active !== 'mock') {
+    return `Testowy checkout QA jest zablokowany, bo APP_PAYMENT_MODE nie wskazuje mock. ${paymentMode.summary}`
+  }
+
+  if (!qaEnabled) {
+    return 'Testowy checkout QA jest wylaczony. Ustaw TEST_CHECKOUT_ENABLED=true, aby odblokowac jawny testowy flow.'
+  }
+
+  if (hasAllowlist) {
+    return `Testowy checkout QA jest ograniczony do allowlisty kontaktow (${emailAllowlist.length} emaili, ${phoneAllowlist.length} telefonow) i jawnej flagi QA.`
+  }
+
+  if (process.env.VERCEL_ENV === 'production') {
+    return 'Testowy checkout QA jest zablokowany w produkcji, bo nie ustawiono allowlisty emaili lub telefonow.'
+  }
+
+  return 'Testowy checkout QA jest aktywny poza produkcja i wymaga jawnej flagi QA.'
+}
+
+function normalizeEmail(value: string | null | undefined): string | null {
+  const normalized = value?.trim().toLowerCase() ?? ''
+  return normalized || null
+}
+
+function getQaCheckoutContactGateStatus(email: string, phone: string): { isAllowed: boolean; reason: string | null } {
+  const qaEnabled = readBooleanEnv('TEST_CHECKOUT_ENABLED')
+
+  if (!qaEnabled) {
+    return {
+      isAllowed: false,
+      reason: 'Testowy checkout QA jest wylaczony. Ustaw TEST_CHECKOUT_ENABLED=true.',
+    }
+  }
+
+  const emailAllowlist = readListEnv('QA_CHECKOUT_EMAIL_ALLOWLIST').map((entry) => entry.toLowerCase())
+  const phoneAllowlist = readListEnv('QA_CHECKOUT_PHONE_ALLOWLIST').flatMap((entry) => {
+    const normalized = normalizePolishPhone(entry)
+    if (normalized) {
+      return [normalized.e164, normalized.digits]
+    }
+
+    const compact = entry.replace(/\s+/g, '')
+    return compact ? [compact] : []
+  })
+
+  const normalizedEmail = normalizeEmail(email)
+  const normalizedPhone = normalizePolishPhone(phone)
+  const emailMatches = normalizedEmail ? emailAllowlist.includes(normalizedEmail) : false
+  const phoneMatches = Boolean(
+    normalizedPhone && (phoneAllowlist.includes(normalizedPhone.e164) || phoneAllowlist.includes(normalizedPhone.digits)),
+  )
+
+  if (emailAllowlist.length === 0 && phoneAllowlist.length === 0) {
+    if (process.env.VERCEL_ENV === 'production') {
+      return {
+        isAllowed: false,
+        reason: 'Testowy checkout QA jest zablokowany w produkcji, bo nie ustawiono allowlisty emaili lub telefonow.',
+      }
+    }
+
+    return {
+      isAllowed: true,
+      reason: null,
+    }
+  }
+
+  if (emailMatches || phoneMatches) {
+    return {
+      isAllowed: true,
+      reason: null,
+    }
+  }
+
+  return {
+    isAllowed: false,
+    reason: 'Testowy checkout QA jest ograniczony do allowlisty emaili lub telefonow.',
+  }
+}
+
+export function getQaCheckoutEligibility(
+  booking: Pick<BookingRecord, 'id' | 'qaBooking' | 'email' | 'phone'>,
+): QaCheckoutEligibility {
+  const payment = getPaymentModeStatus()
+  const paymentReference = getQaCheckoutPaymentReference(booking.id)
+
+  if (payment.active !== 'mock') {
+    return {
+      isAllowed: false,
+      reason: `Testowy checkout QA wymaga aktywnego trybu mock. ${payment.summary}`,
+      summary: 'Testowy checkout QA jest wylaczony, bo aktywny tryb platnosci nie jest mock.',
+      paymentReference,
+    }
+  }
+
+  if (!booking.qaBooking) {
+    return {
+      isAllowed: false,
+      reason: 'Booking nie ma jawnej flagi QA.',
+      summary: 'Testowy checkout QA jest dostepny tylko dla bookingow oznaczonych jako QA.',
+      paymentReference,
+    }
+  }
+
+  const contactGate = getQaCheckoutContactGateStatus(booking.email, booking.phone)
+
+  if (!contactGate.isAllowed) {
+    return {
+      isAllowed: false,
+      reason: contactGate.reason,
+      summary: contactGate.reason ?? 'Testowy checkout QA jest zablokowany dla tego kontaktu.',
+      paymentReference,
+    }
+  }
+
+  return {
+    isAllowed: true,
+    reason: null,
+    summary: getQaCheckoutModeSummary(),
+    paymentReference,
+  }
+}
+
+export function getQaCheckoutPolicySummary(): string {
+  return getQaCheckoutModeSummary()
+}
+
+function readPayuMode(): PayuMode {
+  return readEnv('PAYU_MODE') === 'disabled' ? 'disabled' : 'auto'
 }
 
 export function getManualPaymentReference(bookingId: string): string {
@@ -144,6 +310,7 @@ export function getPublicManualPaymentConfig(): ManualPaymentConfig {
 }
 
 export function getPayuOptionStatus(): PayuOptionStatus {
+  const mode = readPayuMode()
   const environment = readEnv('PAYU_ENVIRONMENT') === 'sandbox' ? 'sandbox' : 'production'
   const apiBaseUrl = environment === 'sandbox' ? 'https://secure.snd.payu.com' : 'https://secure.payu.com'
   const oauthUrl = `${apiBaseUrl}/pl/standard/user/oauth/authorize`
@@ -159,9 +326,26 @@ export function getPayuOptionStatus(): PayuOptionStatus {
 
   const dedupedMissing = Array.from(new Set(missing))
 
+  if (mode === 'disabled') {
+    return {
+      isAvailable: false,
+      mode,
+      environment,
+      apiBaseUrl,
+      oauthUrl,
+      posId,
+      clientId,
+      clientSecret,
+      secondKey,
+      summary: 'PayU online jest swiadomie wylaczone. Sprzedaz dziala przez wplate reczna z potwierdzeniem na stronie.',
+      missing: [],
+    }
+  }
+
   if (dedupedMissing.length > 0) {
     return {
       isAvailable: false,
+      mode,
       environment,
       apiBaseUrl,
       oauthUrl,
@@ -176,6 +360,7 @@ export function getPayuOptionStatus(): PayuOptionStatus {
 
   return {
     isAvailable: true,
+    mode,
     environment,
     apiBaseUrl,
     oauthUrl,
@@ -191,10 +376,12 @@ export function getPayuOptionStatus(): PayuOptionStatus {
 export function getPaymentOptionsSummary() {
   const manual = getManualPaymentConfig()
   const payu = getPayuOptionStatus()
+  const qa = getQaCheckoutPolicySummary()
 
   return {
     manual,
     payu,
-    summary: [manual.summary, payu.summary].join(' '),
+    qa,
+    summary: [manual.summary, payu.summary, qa].join(' '),
   }
 }

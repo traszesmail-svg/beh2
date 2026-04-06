@@ -24,6 +24,61 @@ export const problemOptions: ProblemOption[] = [
     visualLabel: 'Kot i dom',
   },
   {
+    id: 'kot-kuweta',
+    icon: 'cat',
+    title: 'Kot i kuweta',
+    desc: 'sikanie obok kuwety, omijanie jej albo napiecie przy kuwecie',
+    marketingTitle: 'Kot i kuweta: sikanie poza kuweta albo nagla zmiana nawyku',
+    marketingDesc:
+      'Najczestszy start przy kuwecie: omijanie kuwety, napiecie przy zasobach albo sygnaly, ktore trzeba szybko odroznic od alarmu weterynaryjnego.',
+    examples: ['kot sika poza kuweta', 'kot omija kuwete', 'nagla zmiana korzystania z kuwety'],
+    visualLabel: 'Kuweta i dom',
+  },
+  {
+    id: 'kot-konflikt',
+    icon: 'cat',
+    title: 'Konflikt miedzy kotami',
+    desc: 'gonitwy, blokowanie przejsc, napiecie przy zasobach i rozjazd relacji',
+    marketingTitle: 'Konflikt miedzy kotami w domu',
+    marketingDesc:
+      'Dla napiecia miedzy kotami, blokowania przejsc, gonitw i sygnalow, ze wspolne mieszkanie przestaje byc spokojne.',
+    examples: ['kot atakuje drugiego kota', 'gonitwy po domu', 'blokowanie kuwety lub miski'],
+    visualLabel: 'Relacja i przestrzen',
+  },
+  {
+    id: 'kot-dotyk',
+    icon: 'cat',
+    title: 'Dotyk, gryzienie i pielegnacja',
+    desc: 'gryzie przy glaskaniu, noszeniu, pielegnacji albo prostych zabiegach',
+    marketingTitle: 'Dotyk, gryzienie i pielegnacja',
+    marketingDesc:
+      'Na start przy trudnym dotyku, obronie przy glaskaniu, noszeniu albo domowych zabiegach pielegnacyjnych.',
+    examples: ['kot gryzie przy glaskaniu', 'kot nie daje obciac pazurow', 'kot atakuje przy noszeniu'],
+    visualLabel: 'Dotyk i obrona',
+  },
+  {
+    id: 'kot-stres',
+    icon: 'cat',
+    title: 'Kot lekowy, napiety albo wycofany',
+    desc: 'chowa sie, zyje w napieciu albo trudno mu wracac do rownowagi',
+    marketingTitle: 'Kot lekowy, napiety albo wycofany',
+    marketingDesc:
+      'Dla kota, ktory zyje w napieciu, duzo sie chowa, zle znosi zmiany albo stale wysyla sygnaly przeciazenia.',
+    examples: ['kot chowa sie caly dzien', 'kot boi sie gosci', 'kot po zmianie nie wraca do rownowagi'],
+    visualLabel: 'Stres i wycofanie',
+  },
+  {
+    id: 'kot-nocna-wokalizacja',
+    icon: 'cat',
+    title: 'Budzi dom po nocy / nocna wokalizacja',
+    desc: 'miauczy w nocy, budzi dom albo nie potrafi wyhamowac po ciemku',
+    marketingTitle: 'Budzi dom po nocy / nocna wokalizacja',
+    marketingDesc:
+      'Nowa kategoria startowa dla nocnego miauczenia, pobudki o swicie i rytmu dnia, ktory rozsypuje spokoj w domu.',
+    examples: ['kot miauczy po nocy', 'kot budzi dom o 4 rano', 'nocne gonitwy i wokalizacja'],
+    visualLabel: 'Noc i rytm dnia',
+  },
+  {
     id: 'separacja',
     icon: 'home',
     title: 'Lęk separacyjny',
@@ -80,6 +135,12 @@ export const problemOptions: ProblemOption[] = [
   },
 ]
 
+export const CAT_PROBLEM_OPTIONS: ProblemOption[] = problemOptions.filter((option) => option.id.startsWith('kot-'))
+
+export const DOG_PROBLEM_OPTIONS: ProblemOption[] = problemOptions.filter(
+  (option) => option.id !== 'kot' && !option.id.startsWith('kot-'),
+)
+
 export const steps = [
   {
     n: '01',
@@ -105,7 +166,7 @@ export const faq = [
   },
   {
     q: 'Czy zakup jest bezpieczny?',
-    a: 'Tak. Możesz wybrać prostą wpłatę BLIK/przelewem albo checkout PayU, a link do rozmowy odblokowuje się dopiero po potwierdzeniu płatności.',
+    a: 'Tak. Możesz wybrać prostą wpłatę BLIK/przelewem, a link do rozmowy odblokowuje się dopiero po potwierdzeniu wpłaty.',
   },
   {
     q: 'Czy mogę anulować zakup?',
@@ -234,6 +295,10 @@ export function isCallRoomUnlocked(
 
 export function getProblemLabel(problem: ProblemType): string {
   return problemOptions.find((item) => item.id === problem)?.title ?? 'Konsultacja'
+}
+
+export function isCatProblemType(value: ProblemType | null | undefined): value is ProblemType {
+  return value === 'kot' || CAT_PROBLEM_OPTIONS.some((option) => option.id === value)
 }
 
 export function getBookingStatusLabel(

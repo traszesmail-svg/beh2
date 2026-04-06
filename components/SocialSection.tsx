@@ -1,4 +1,5 @@
-import { CAPBT_PROFILE_URL } from '@/lib/site'
+import React from 'react'
+import { CAPBT_PROFILE_URL, INSTAGRAM_PROFILE_URL } from '@/lib/site'
 
 export function SocialSection() {
   return (
@@ -29,6 +30,24 @@ export function SocialSection() {
           </span>
           <strong>CAPBT</strong>
           <span>Publiczny profil specjalisty do sprawdzenia profilu zawodowego i spokojnego przekazania strony dalej.</span>
+        </a>
+
+        <a
+          href={INSTAGRAM_PROFILE_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="social-card social-card-link"
+          aria-label="Otwórz publiczny profil Krzysztofa Regulskiego na Instagramie"
+        >
+          <span className="social-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" className="social-svg">
+              <rect x="3.5" y="3.5" width="17" height="17" rx="4.5" fill="none" stroke="currentColor" strokeWidth="1.8" />
+              <circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" strokeWidth="1.8" />
+              <circle cx="17.4" cy="6.6" r="1.15" fill="currentColor" />
+            </svg>
+          </span>
+          <strong>Instagram</strong>
+          <span>Publiczny profil marki z dodatkowymi zdjęciami, krótkimi aktualnościami i spokojnym przekazaniem strony dalej.</span>
         </a>
       </div>
     </section>
