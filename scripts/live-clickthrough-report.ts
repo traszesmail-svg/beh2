@@ -28,6 +28,13 @@ type MobileResult = {
   notes: string[]
 }
 
+type DesktopResult = {
+  bookCardsReadable: boolean
+  catsCardsReadable: boolean
+  layoutStable: boolean
+  notes: string[]
+}
+
 type IssueLevel = 'console' | 'pageerror' | 'requestfailed' | 'http'
 
 type Issue = {
@@ -696,6 +703,112 @@ async function checkMobileLayout(
   }
 }
 
+async function checkDesktopLayout(
+  browser: Awaited<ReturnType<typeof chromium.launch>>,
+  baseUrl: string,
+  issues: Issue[],
+  seen: Set<string>,
+) {
+  const context = await browser.newContext({
+    locale: 'pl-PL',
+    viewport: { width: 1366, height: 768 },
+  })
+
+  const page = await createPage(context, 'desktop', baseUrl, issues, seen)
+
+  try {
+    await page.goto(`${baseUrl}/book`, { waitUntil: 'domcontentloaded' })
+    await waitForAnyVisible([page.getByRole('heading', { name: /Wybierz temat dla:/i })], 20000)
+
+    const bookGrid = page.locator('#tematy').first()
+    const bookCard = page.locator('#tematy .topic-card').first()
+    const bookGridBox = await bookGrid.boundingBox()
+    const bookCardBox = await bookCard.boundingBox()
+    const bookCardsReadable = Boolean(bookGridBox && bookGridBox.y <= 720) && Boolean(bookCardBox && bookCardBox.width >= 300 && bookCardBox.width <= 420)
+
+    await page.goto(`${baseUrl}/koty`, { waitUntil: 'domcontentloaded' })
+    await waitForAnyVisible([page.getByRole('heading', { name: /Wybierz temat dla kota/i })], 20000)
+
+    const catsGrid = page.locator('#kocie-kategorie').first()
+    const catsCard = page.locator('#kocie-kategorie .topic-card').first()
+    const catsGridBox = await catsGrid.boundingBox()
+    const catsCardBox = await catsCard.boundingBox()
+    const catsCardsReadable = Boolean(catsGridBox && catsGridBox.y <= 720) && Boolean(catsCardBox && catsCardBox.width >= 300 && catsCardBox.width <= 420)
+
+    const layoutStable = await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)
+
+    if (!bookCardsReadable) {
+      pushIssue(
+        issues,
+        {
+          level: 'pageerror',
+          source: 'desktop-book',
+          url: page.url() || null,
+          message: 'Desktop booking cards are not readable or start too low on /book.',
+        },
+        seen,
+      )
+    }
+
+    if (!catsCardsReadable) {
+      pushIssue(
+        issues,
+        {
+          level: 'pageerror',
+          source: 'desktop-cats',
+          url: page.url() || null,
+          message: 'Desktop cat cards are not readable or start too low on /koty.',
+        },
+        seen,
+      )
+    }
+
+    if (!layoutStable) {
+      pushIssue(
+        issues,
+        {
+          level: 'pageerror',
+          source: 'desktop-layout',
+          url: page.url() || null,
+          message: 'Desktop layout overflowed the viewport on the booking pages.',
+        },
+        seen,
+      )
+    }
+
+    return {
+      bookCardsReadable,
+      catsCardsReadable,
+      layoutStable,
+      notes: [
+        `bookCardsReadable=${bookCardsReadable}`,
+        `catsCardsReadable=${catsCardsReadable}`,
+        `layoutStable=${layoutStable}`,
+      ],
+    } satisfies DesktopResult
+  } catch (error) {
+    pushIssue(
+      issues,
+      {
+        level: 'pageerror',
+        source: 'desktop',
+        url: page.url() || null,
+        message: cleanText(error instanceof Error ? error.stack ?? error.message : String(error)),
+      },
+      seen,
+    )
+
+    return {
+      bookCardsReadable: false,
+      catsCardsReadable: false,
+      layoutStable: false,
+      notes: ['desktop layout check failed before completion'],
+    } satisfies DesktopResult
+  } finally {
+    await context.close()
+  }
+}
+
 function buildReportMarkdown({
   baseUrl,
   timestamp,
@@ -1178,6 +1291,7 @@ async function main() {
     })
 
     const skipMobile = process.env.LIVE_CLICKTHROUGH_SKIP_MOBILE === '1' || process.env.LIVE_CLICKTHROUGH_SKIP_MOBILE === 'true'
+    const desktopResult = await checkDesktopLayout(browser, baseUrl, issues, seenIssues)
     const mobileResults = skipMobile
       ? []
       : [
@@ -1208,6 +1322,7 @@ async function main() {
           failed: results.filter((result) => result.status === 'failed').length,
           issues: issues.length,
           bookingId,
+          desktop: desktopResult,
           mobile: mobileResults,
         },
         null,
@@ -1217,6 +1332,9 @@ async function main() {
 
     if (
       results.some((result) => result.status === 'failed') ||
+      !desktopResult.bookCardsReadable ||
+      !desktopResult.catsCardsReadable ||
+      !desktopResult.layoutStable ||
       mobileResults.some((result) => !result.heroClear || !result.cardsReadable || !result.bottomAreaLean || !result.ctaEasyToTap || !result.layoutStable)
     ) {
       process.exitCode = 1
