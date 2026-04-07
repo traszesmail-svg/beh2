@@ -346,6 +346,19 @@ test('qa booking schema fallback keeps public booking inserts alive', () => {
   assert.match(supabaseStoreSource, /legacyPaymentInsertPayload/)
 })
 
+test('booking form shows normalized slot conflict copy instead of raw api errors', () => {
+  const bookingFormSource = readSource('components', 'BookingForm.tsx')
+  const bookingApiErrorsSource = readSource('lib', 'server', 'booking-api-errors.ts')
+  const bookingRouteSource = readSource('app', 'api', 'bookings', 'route.ts')
+
+  assert.match(bookingFormSource, /normalizeBookingErrorMessage/)
+  assert.match(bookingFormSource, /isSlotUnavailableBookingMessage/)
+  assert.match(bookingFormSource, /Ten termin został właśnie zajęty/)
+  assert.match(bookingApiErrorsSource, /SLOT_UNAVAILABLE_MESSAGE/)
+  assert.match(bookingApiErrorsSource, /getPublicFeatureUnavailableMessage\('booking'\)/)
+  assert.match(bookingRouteSource, /errorCode: failure\.code/)
+})
+
 test('cat topic images exist in the dedicated catalog', () => {
   const assetPaths = [
     ['public', 'branding', 'topic-cards', 'cats', 'cat-litter-box.jpg'],

@@ -1,5 +1,13 @@
 import { ConfigurationError, getPublicFeatureUnavailableMessage } from '@/lib/server/env'
 
+export type BookingApiErrorCode = 'slot_unavailable' | 'booking_unavailable'
+
+export type BookingApiErrorSnapshot = {
+  code: BookingApiErrorCode
+  message: string
+  status: 409 | 503
+}
+
 function getErrorMessage(error: unknown): string {
   if (error instanceof Error) {
     return error.message
@@ -10,6 +18,16 @@ function getErrorMessage(error: unknown): string {
   }
 
   return 'Nie udało się utworzyć bookingu.'
+}
+
+function normalizeErrorMessage(error: unknown): string {
+  return getErrorMessage(error)
+    .normalize('NFKD')
+    .replace(/\p{Diacritic}/gu, '')
+    .replace(/[łŁ]/g, 'l')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase()
 }
 
 function getNumericErrorStatus(error: unknown): number | null {
@@ -56,16 +74,47 @@ function isTransientBookingInfrastructureError(error: unknown): boolean {
   )
 }
 
-export function getBookingApiErrorSnapshot(error: unknown): { message: string; status: 409 | 503 } {
+function isSlotUnavailableBookingError(error: unknown): boolean {
+  const normalizedMessage = normalizeErrorMessage(error)
+
+  return (
+    normalizedMessage.includes('wybrany termin') &&
+    (
+      normalizedMessage.includes('nie jest juz dostepny') ||
+      normalizedMessage.includes('nie jest dostepny') ||
+      normalizedMessage.includes('zostal przed chwila zajety') ||
+      normalizedMessage.includes('zostal zajety') ||
+      normalizedMessage.includes('slot no longer available') ||
+      normalizedMessage.includes('already booked') ||
+      normalizedMessage.includes('already reserved') ||
+      normalizedMessage.includes('locked by booking id')
+    )
+  )
+}
+
+const SLOT_UNAVAILABLE_MESSAGE =
+  'Ten termin został właśnie zajęty. Wróć do listy terminów i wybierz inny.'
+
+export function getBookingApiErrorSnapshot(error: unknown): BookingApiErrorSnapshot {
   if (error instanceof ConfigurationError || isTransientBookingInfrastructureError(error)) {
     return {
       message: getPublicFeatureUnavailableMessage('booking'),
       status: 503,
+      code: 'booking_unavailable',
+    }
+  }
+
+  if (isSlotUnavailableBookingError(error)) {
+    return {
+      message: SLOT_UNAVAILABLE_MESSAGE,
+      status: 409,
+      code: 'slot_unavailable',
     }
   }
 
   return {
-    message: getErrorMessage(error),
-    status: 409,
+    message: getPublicFeatureUnavailableMessage('booking'),
+    status: 503,
+    code: 'booking_unavailable',
   }
 }

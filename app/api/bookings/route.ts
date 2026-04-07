@@ -100,10 +100,13 @@ export async function POST(request: Request) {
       qaBooking,
     })
 
-    return NextResponse.json({ bookingId: result.booking.id, accessToken: result.accessToken })
+    return NextResponse.json({
+      bookingId: result.booking.id,
+      accessToken: result.accessToken,
+    })
   } catch (error) {
     console.error('[behawior15][booking-api] create failed', error)
     const failure = getBookingApiErrorSnapshot(error)
-    return NextResponse.json({ error: failure.message }, { status: failure.status })
+    return NextResponse.json({ error: failure.message, errorCode: failure.code }, { status: failure.status })
   }
 }

@@ -24,6 +24,8 @@ interface BookingFormProps {
   qaBooking?: boolean
 }
 
+type BookingApiErrorCode = 'slot_unavailable' | 'booking_unavailable'
+
 function getProblemFormCopy(problemType: ProblemType) {
   if (problemType === 'dogoterapia') {
     return {
@@ -46,6 +48,32 @@ function getProblemFormCopy(problemType: ProblemType) {
     descriptionPlaceholder: 'Napisz, co sie dzieje, kiedy problem wystepuje i co jest dla Ciebie najtrudniejsze.',
     helperText: null,
   }
+}
+
+function normalizeBookingErrorMessage(value: string) {
+  return value
+    .normalize('NFKD')
+    .replace(/\p{Diacritic}/gu, '')
+    .replace(/[łŁ]/g, 'l')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase()
+}
+
+function isSlotUnavailableBookingMessage(value: string) {
+  const normalized = normalizeBookingErrorMessage(value)
+
+  return (
+    normalized.includes('wybrany termin') &&
+    (normalized.includes('nie jest juz dostepny') ||
+      normalized.includes('nie jest dostepny') ||
+      normalized.includes('zostal przed chwila zajety') ||
+      normalized.includes('zostal zajety') ||
+      normalized.includes('slot no longer available') ||
+      normalized.includes('already booked') ||
+      normalized.includes('already reserved') ||
+      normalized.includes('locked by booking id'))
+  )
 }
 
 export function BookingForm({
@@ -134,10 +162,21 @@ export function BookingForm({
         }),
       })
 
-      const payload = (await response.json()) as { bookingId?: string; accessToken?: string; error?: string }
+      const payload = (await response.json()) as {
+        bookingId?: string
+        accessToken?: string
+        error?: string
+        errorCode?: BookingApiErrorCode
+      }
 
       if (!response.ok || !payload.bookingId || !payload.accessToken) {
-        throw new Error(payload.error ?? 'Nie udało się zapisać rezerwacji. Sprawdź dane lub wybierz inny termin.')
+        if (payload.errorCode === 'slot_unavailable' || (typeof payload.error === 'string' && isSlotUnavailableBookingMessage(payload.error))) {
+          setError('Ten termin został właśnie zajęty. Wróć do listy terminów i wybierz inną godzinę rozmowy.')
+        } else {
+          setError(payload.error ?? 'Rezerwacja chwilowo jest niedostępna. Odśwież stronę za moment i spróbuj ponownie.')
+        }
+        setIsSubmitting(false)
+        return
       }
 
       router.push(
@@ -151,7 +190,7 @@ export function BookingForm({
     } catch (submissionError) {
       console.error('[behawior15][booking-form] submit failed', submissionError)
       const message = submissionError instanceof Error ? submissionError.message : 'Wystąpił błąd formularza.'
-      if (message.includes('nie jest juz dostepny') || message.includes('zostal przed chwila zajety')) {
+      if (isSlotUnavailableBookingMessage(message)) {
         setError('Ten termin został właśnie zajęty. Wróć do listy terminów i wybierz inną godzinę rozmowy.')
       } else {
         setError(message)
