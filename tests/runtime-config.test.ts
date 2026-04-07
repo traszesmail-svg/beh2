@@ -115,6 +115,13 @@ test('home and opinions pages surface real social proof and local SEO', async ()
   assert.match(socialFullMarkup, /Publiczne źródła/)
 })
 
+test('root layout metadata base is derived from the runtime base url helper', () => {
+  const layoutSource = readSource('app', 'layout.tsx')
+
+  assert.match(layoutSource, /getBaseUrl\(\)/)
+  assert.doesNotMatch(layoutSource, /http:\/\/localhost:3000/)
+})
+
 test('offer and booking pages keep quick-scan language', () => {
   const offerPage = readSource('app', 'oferta', 'page.tsx')
   const pdfListingPage = readSource('app', 'oferta', 'poradniki-pdf', 'page.tsx')

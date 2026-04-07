@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Fraunces, Manrope } from 'next/font/google'
 import { AnalyticsConsent } from '@/components/AnalyticsConsent'
+import { getBaseUrl } from '@/lib/server/env'
 import { SITE_DESCRIPTION, SITE_NAME, SITE_OG_IMAGE, SITE_SHORT_NAME, SITE_TAGLINE } from '@/lib/site'
 import './globals.css'
 
@@ -14,7 +15,7 @@ const fraunces = Fraunces({
   variable: '--font-display',
 })
 
-const metadataBase = new URL(process.env.NEXT_PUBLIC_APP_URL?.trim() || 'http://localhost:3000')
+const metadataBase = new URL(getBaseUrl())
 
 export const metadata: Metadata = {
   metadataBase,
