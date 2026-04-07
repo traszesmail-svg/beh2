@@ -16,8 +16,8 @@ export const HOME_HELP_CHOICE_PHOTO = {
 }
 
 export const HOME_HERO_PHOTO = {
-  src: '/branding/omnie-hero.webp',
-  alt: 'Krzysztof Regulski trzyma kota i ciastko w dloni w jasnym gabinecie',
+  src: '/branding/specialist-krzysztof-portrait.jpg',
+  alt: 'Krzysztof Regulski na portretowym zdjeciu w jasnym gabinecie',
 }
 
 export const SITE_NAME = 'Regulski | Terapia behawioralna'
