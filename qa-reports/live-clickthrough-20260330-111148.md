@@ -1,7 +1,7 @@
 # Raport QA Live Clickthrough
 
 - Data: 2026-03-30 11:11:48 Europe/Warsaw
-- URL: https://beh2.vercel.app
+- URL: https://coapebehawiorysta.vercel.app
 - Wynik ogólny: FAIL
 - Kroki zaliczone: 12/17
 - Liczba zebranych issue z runtime: 9
@@ -21,38 +21,38 @@ Call log:
 ## Kroki
 ### PASS - Home hero + CTA do oferty
 - Start URL: about:blank
-- End URL: https://beh2.vercel.app/oferta
+- End URL: https://coapebehawiorysta.vercel.app/oferta
 - Note: CTA hero "Zobacz formy pracy" prowadzi poprawnie do /oferta.
 
 ### PASS - Home hero + CTA do bookingu
-- Start URL: https://beh2.vercel.app/oferta
-- End URL: https://beh2.vercel.app/book
+- Start URL: https://coapebehawiorysta.vercel.app/oferta
+- End URL: https://coapebehawiorysta.vercel.app/book
 - Note: CTA hero "Umów konsultację" otwiera osobną ścieżkę rezerwacji.
 
 ### PASS - Header: Oferta
-- Start URL: https://beh2.vercel.app/book
-- End URL: https://beh2.vercel.app/oferta
+- Start URL: https://coapebehawiorysta.vercel.app/book
+- End URL: https://coapebehawiorysta.vercel.app/oferta
 - Note: Link w headerze działa.
 
 ### PASS - Header: Koty
-- Start URL: https://beh2.vercel.app/oferta
-- End URL: https://beh2.vercel.app/koty
+- Start URL: https://coapebehawiorysta.vercel.app/oferta
+- End URL: https://coapebehawiorysta.vercel.app/koty
 - Note: Link w headerze działa.
 
 ### PASS - Header: Pobyty
-- Start URL: https://beh2.vercel.app/koty
-- End URL: https://beh2.vercel.app/oferta/pobyty-socjalizacyjno-terapeutyczne
+- Start URL: https://coapebehawiorysta.vercel.app/koty
+- End URL: https://coapebehawiorysta.vercel.app/oferta/pobyty-socjalizacyjno-terapeutyczne
 - Note: Link w headerze działa.
 
 ### PASS - Header: Kontakt + href mailto/tel
-- Start URL: https://beh2.vercel.app/oferta/pobyty-socjalizacyjno-terapeutyczne
-- End URL: https://beh2.vercel.app/kontakt
+- Start URL: https://coapebehawiorysta.vercel.app/oferta/pobyty-socjalizacyjno-terapeutyczne
+- End URL: https://coapebehawiorysta.vercel.app/kontakt
 - Note: mailto ok: mailto:coapebehawiorysta@gmail.com?subject=Zapytanie+-+Regulski+%7C+Terapia+behawioralna&body=Dzie%C5%84+dobry%2C%0A%0Aopisuj%C4%99+kr%C3%B3tko+swoj%C4%85+sytuacj%C4%99%3A%0A%0A-+gatunek%3A%0A-+problem%3A%0A-+od+kiedy+trwa%3A%0A-+interesuj%C4%85cy+mnie+materia%C5%82+PDF%3A%0A-+interesuj%C4%85ca+mnie+forma+pracy%3A+%0A%0ANajwygodniejsza+forma+kontaktu+zwrotnego%3A%0A
 - Note: tel ok: tel:512992026
 
 ### PASS - Deep routes usług: bezpośrednie wejścia do detali i kontaktu
-- Start URL: https://beh2.vercel.app/kontakt
-- End URL: https://beh2.vercel.app/kontakt?service=pobyty-socjalizacyjno-terapeutyczne
+- Start URL: https://coapebehawiorysta.vercel.app/kontakt
+- End URL: https://coapebehawiorysta.vercel.app/kontakt?service=pobyty-socjalizacyjno-terapeutyczne
 - Note: detail ok: /oferta/szybka-konsultacja-15-min
 - Note: detail ok: /oferta/konsultacja-30-min
 - Note: contact ok: /kontakt?service=konsultacja-30-min
@@ -66,70 +66,70 @@ Call log:
 - Note: contact ok: /kontakt?service=pobyty-socjalizacyjno-terapeutyczne
 
 ### PASS - Oferta -> detal konsultacji 30 min -> kontakt
-- Start URL: https://beh2.vercel.app/kontakt?service=pobyty-socjalizacyjno-terapeutyczne
-- End URL: https://beh2.vercel.app/kontakt?service=konsultacja-30-min
+- Start URL: https://coapebehawiorysta.vercel.app/kontakt?service=pobyty-socjalizacyjno-terapeutyczne
+- End URL: https://coapebehawiorysta.vercel.app/kontakt?service=konsultacja-30-min
 - Note: Detail page i CTA do /kontakt działają poprawnie.
 
 ### PASS - PDF listing -> poradnik -> kontakt
-- Start URL: https://beh2.vercel.app/kontakt?service=konsultacja-30-min
-- End URL: https://beh2.vercel.app/kontakt?service=poradniki-pdf&guide=pies-zostaje-sam-plan-pierwszych-krokow
+- Start URL: https://coapebehawiorysta.vercel.app/kontakt?service=konsultacja-30-min
+- End URL: https://coapebehawiorysta.vercel.app/kontakt?service=poradniki-pdf&guide=pies-zostaje-sam-plan-pierwszych-krokow
 - Note: Poradnik: Pies zostaje sam (/oferta/poradniki-pdf/pies-zostaje-sam-plan-pierwszych-krokow)
 
 ### PASS - PDF listing -> pakiet -> kontakt
-- Start URL: https://beh2.vercel.app/kontakt?service=poradniki-pdf&guide=pies-zostaje-sam-plan-pierwszych-krokow
-- End URL: https://beh2.vercel.app/kontakt?service=poradniki-pdf&bundle=pakiet-startowy-psa
+- Start URL: https://coapebehawiorysta.vercel.app/kontakt?service=poradniki-pdf&guide=pies-zostaje-sam-plan-pierwszych-krokow
+- End URL: https://coapebehawiorysta.vercel.app/kontakt?service=poradniki-pdf&bundle=pakiet-startowy-psa
 - Note: Pakiet: Pakiet Startowy Psa (/oferta/poradniki-pdf/pakiety/pakiet-startowy-psa)
 
 ### PASS - Footer: polityka prywatności i regulamin
-- Start URL: https://beh2.vercel.app/kontakt?service=poradniki-pdf&bundle=pakiet-startowy-psa
-- End URL: https://beh2.vercel.app/regulamin
+- Start URL: https://coapebehawiorysta.vercel.app/kontakt?service=poradniki-pdf&bundle=pakiet-startowy-psa
+- End URL: https://coapebehawiorysta.vercel.app/regulamin
 - Note: Polityka prywatności: Jak przetwarzane są dane w marce Regulski | Terapia behawioralna
 - Note: Regulamin: Zasady rezerwacji szybkiej konsultacji 15 min
 
 ### PASS - Booking live: wybór tematu i slotu
-- Start URL: https://beh2.vercel.app/regulamin
-- End URL: https://beh2.vercel.app/form?problem=kot&slotId=2026-03-30-17%3A00
+- Start URL: https://coapebehawiorysta.vercel.app/regulamin
+- End URL: https://coapebehawiorysta.vercel.app/form?problem=kot&slotId=2026-03-30-17%3A00
 - Note: Wybrany temat: kot
 - Note: Wybrany slot: 17:00
 
 ### FAIL - Booking live: formularz -> payment
-- Start URL: https://beh2.vercel.app/form?problem=kot&slotId=2026-03-30-17%3A00
-- End URL: https://beh2.vercel.app/form?problem=kot&slotId=2026-03-30-17%3A00
+- Start URL: https://coapebehawiorysta.vercel.app/form?problem=kot&slotId=2026-03-30-17%3A00
+- End URL: https://coapebehawiorysta.vercel.app/form?problem=kot&slotId=2026-03-30-17%3A00
 - Note: POST /api/bookings zwrócił 409.
 
 ### FAIL - Booking live: pokój zablokowany przed paid
-- Start URL: https://beh2.vercel.app/form?problem=kot&slotId=2026-03-30-17%3A00
-- End URL: https://beh2.vercel.app/form?problem=kot&slotId=2026-03-30-17%3A00
+- Start URL: https://coapebehawiorysta.vercel.app/form?problem=kot&slotId=2026-03-30-17%3A00
+- End URL: https://coapebehawiorysta.vercel.app/form?problem=kot&slotId=2026-03-30-17%3A00
 - Note: Brak bookingId/accessToken do testu pokoju.
 
 ### FAIL - Booking live: zgłoszenie manual payment -> pending
-- Start URL: https://beh2.vercel.app/form?problem=kot&slotId=2026-03-30-17%3A00
-- End URL: https://beh2.vercel.app/form?problem=kot&slotId=2026-03-30-17%3A00
+- Start URL: https://coapebehawiorysta.vercel.app/form?problem=kot&slotId=2026-03-30-17%3A00
+- End URL: https://coapebehawiorysta.vercel.app/form?problem=kot&slotId=2026-03-30-17%3A00
 - Note: locator.click: Timeout 30000ms exceeded.
 Call log:
 [2m  - waiting for getByRole('button', { name: /BLIK na telefon|Wpłata manualna/i }).first()[22m
 
 
 ### FAIL - Admin live: odrzucenie testowej wpłaty QA
-- Start URL: https://beh2.vercel.app/form?problem=kot&slotId=2026-03-30-17%3A00
-- End URL: https://beh2.vercel.app/form?problem=kot&slotId=2026-03-30-17%3A00
+- Start URL: https://coapebehawiorysta.vercel.app/form?problem=kot&slotId=2026-03-30-17%3A00
+- End URL: https://coapebehawiorysta.vercel.app/form?problem=kot&slotId=2026-03-30-17%3A00
 - Note: Brak bookingId do akcji admina.
 
 ### FAIL - Confirmation live: stan po odrzuceniu
-- Start URL: https://beh2.vercel.app/form?problem=kot&slotId=2026-03-30-17%3A00
-- End URL: https://beh2.vercel.app/form?problem=kot&slotId=2026-03-30-17%3A00
+- Start URL: https://coapebehawiorysta.vercel.app/form?problem=kot&slotId=2026-03-30-17%3A00
+- End URL: https://coapebehawiorysta.vercel.app/form?problem=kot&slotId=2026-03-30-17%3A00
 - Note: Brak URL confirmation do odświeżenia.
 
 ## Runtime issues
-- [requestfailed] public | https://beh2.vercel.app/_next/image?url=%2Fbranding%2Fspecialist-krzysztof-wide.jpg&w=640&q=75 | net::ERR_ABORTED
-- [requestfailed] public | https://beh2.vercel.app/_next/image?url=%2Fbranding%2Ftopic-cards%2Fborder-collie-running.jpg&w=640&q=75 | net::ERR_ABORTED
-- [requestfailed] public | https://beh2.vercel.app/_next/image?url=%2Fbranding%2Ftopic-cards%2Fpuppy-hands.jpg&w=640&q=75 | net::ERR_ABORTED
-- [requestfailed] public | https://beh2.vercel.app/_next/image?url=%2Fbranding%2Ftopic-cards%2Ffrench-bulldog-leash.jpg&w=640&q=75 | net::ERR_ABORTED
-- [requestfailed] public | https://beh2.vercel.app/_next/image?url=%2Fbranding%2Ftopic-cards%2Fdog-checkup.jpg&w=640&q=75 | net::ERR_ABORTED
-- [requestfailed] public | https://beh2.vercel.app/_next/image?url=%2Fbranding%2Ftopic-cards%2Fdog-resting-home.jpg&w=640&q=75 | net::ERR_ABORTED
-- [http] public | https://beh2.vercel.app/api/bookings | HTTP 409 
-- [console] public | https://beh2.vercel.app/form?problem=kot&slotId=2026-03-30-17%3A00 | Failed to load resource: the server responded with a status of 409 ()
-- [console] public | https://beh2.vercel.app/form?problem=kot&slotId=2026-03-30-17%3A00 | [behawior15][booking-form] submit failed Error: <!DOCTYPE html> <!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]--> <!--[if IE 7]> <html class="no-js ie7 oldie" lang="en-US"> <![endif]--> <!--[if IE 8]> <html class="no-js ie8 oldie" lang="en-US"> <![endif]--> <!--[if gt IE 8]><!--> <html class="no-js" lang="en-US"> <!--<![endif]--> <head> <title> | 502: Bad gateway</title> <meta charset="UTF-8" /> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> <meta http-equiv="X-UA-Compatible" content="IE=Edge" /> <meta name="robots" content="noindex, nofollow" /> <meta name="viewport" content="width=device-width,initial-scale=1" /> <link rel="stylesheet" id="cf_styles-css" href="/cdn-cgi/styles/main.css" /> </head> <body> <div id="cf-wrapper"> <div id="cf-error-details" class="p-0"> <header class="mx-auto pt-10 lg:pt-6 lg:px-8 w-240 lg:w-full mb-8"> <h1 class="inline-block sm:block sm:mb-2 font-light text-60 lg:text-4xl text-black-dark leading-tight mr-2"> <span class="inline-block">Bad gateway</span> <span class="code-label">Error code 502</span> </h1> <div> Visit <a href="https://www.cloudflare.com/5xx-error-landing?utm_source=errorcode_502&utm_campaign=uogrlryjlucfvrugdvpx.supabase.co" target="_blank" rel="noopener noreferrer">cloudflare.com</a> for more information. </div> <div class="mt-3">2026-03-30 09:12:16 UTC</div> </header> <div class="my-8 bg-gradient-gray"> <div class="w-240 lg:w-full mx-auto"> <div class="clearfix md:px-8"> <div id="cf-browser-status" class=" relative w-1/3 md:w-full py-15 md:p-0 md:py-8 md:text-left md:border-solid md:border-0 md:border-b md:border-gray-400 overflow-hidden float-left md:float-none text-center"> <div class="relative mb-10 md:m-0"> <span class="cf-icon-browser block md:hidden h-20 bg-center bg-no-repeat"></span> <span class="cf-icon-ok w-12 h-12 absolute left-1/2 md:left-auto md:right-0 md:top-0 -ml-6 -bottom-4"></span> </div> <span class="md:block w-full truncate">You</span> <h3 class="md:inline-block mt-3 md:mt-0 text-2xl text-gray-600 font-light leading-1.3"> Browser </h3> <span class="leading-1.3 text-2xl text-green-success">Working</span> </div> <div id="cf-cloudflare-status" class=" relative w-1/3 md:w-full py-15 md:p-0 md:py-8 md:text-left md:border-solid md:border-0 md:border-b md:border-gray-400 overflow-hidden float-left md:float-none text-center"> <div class="relative mb-10 md:m-0"> <a href="https://www.cloudflare.com/5xx-error-landing?utm_source=errorcode_502&#38;utm_campaign=uogrlryjlucfvrugdvpx.supabase.co" target="_blank" rel="noopener noreferrer"> <span class="cf-icon-cloud block md:hidden h-20 bg-center bg-no-repeat"></span> <span class="cf-icon-ok w-12 h-12 absolute left-1/2 md:left-auto md:right-0 md:top-0 -ml-6 -bottom-4"></span> </a> </div> <span class="md:block w-full truncate">Ashburn</span> <h3 class="md:inline-block mt-3 md:mt-0 text-2xl text-gray-600 font-light leading-1.3"> <a href="https://www.cloudflare.com/5xx-error-landing?utm_source=errorcode_502&utm_campaign=uogrlryjlucfvrugdvpx.supabase.co" target="_blank" rel="noopener noreferrer"> Cloudflare </a> </h3> <span class="leading-1.3 text-2xl text-green-success">Working</span> </div> <div id="cf-host-status" class="cf-error-source relative w-1/3 md:w-full py-15 md:p-0 md:py-8 md:text-left md:border-solid md:border-0 md:border-b md:border-gray-400 overflow-hidden float-left md:float-none text-center"> <div class="relative mb-10 md:m-0"> <span class="cf-icon-server block md:hidden h-20 bg-center bg-no-repeat"></span> <span class="cf-icon-error w-12 h-12 absolute left-1/2 md:left-auto md:right-0 md:top-0 -ml-6 -bottom-4"></span> </div> <span class="md:block w-full truncate">uogrlryjlucfvrugdvpx.supabase.co</span> <h3 class="md:inline-block mt-3 md:mt-0 text-2xl text-gray-600 font-light leading-1.3"> Host </h3> <span class="leading-1.3 text-2xl text-red-error">Error</span> </div> </div> </div> </div> <div class="w-240 lg:w-full mx-auto mb-8 lg:px-8"> <div class="clearfix"> <div class="w-1/2 md:w-full float-left pr-6 md:pb-10 md:pr-0 leading-relaxed"> <h2 class="text-3xl font-normal leading-1.3 mb-4">What happened?</h2> <p>The web server reported a bad gateway error.</p> </div> <div class="w-1/2 md:w-full float-left leading-relaxed"> <h2 class="text-3xl font-normal leading-1.3 mb-4">What can I do?</h2> <p class="mb-6">Please try again in a few minutes.</p> </div> </div> </div> <div class="cf-error-footer cf-wrapper w-240 lg:w-full py-10 sm:py-4 sm:px-8 mx-auto text-center sm:text-left border-solid border-0 border-t border-gray-300"> <p class="text-13"> <span class="cf-footer-item sm:block sm:mb-1">Cloudflare Ray ID: <strong class="font-semibold">9e45fde0d9dd05b7</strong></span> <span class="cf-footer-separator sm:hidden">&bull;</span> <span id="cf-footer-item-ip" class="cf-footer-item hidden sm:block sm:mb-1"> Your IP: <button type="button" id="cf-footer-ip-reveal" class="cf-footer-ip-reveal-btn">Click to reveal</button> <span class="hidden" id="cf-footer-ip">50.17.97.69</span> <span class="cf-footer-separator sm:hidden">&bull;</span> </span> <span class="cf-footer-item sm:block sm:mb-1"><span>Performance &amp; security by</span> <a rel="noopener noreferrer" href="https://www.cloudflare.com/5xx-error-landing?utm_source=errorcode_502&#38;utm_campaign=uogrlryjlucfvrugdvpx.supabase.co" id="brand_link" target="_blank">Cloudflare</a></span> </p> <script>(function(){function d(){var b=a.getElementById("cf-footer-item-ip"),c=a.getElementById("cf-footer-ip-reveal");b&&"classList"in b&&(b.classList.remove("hidden"),c.addEventListener("click",function(){c.classList.add("hidden");a.getElementById("cf-footer-ip").classList.remove("hidden")}))}var a=document;document.addEventListener&&a.addEventListener("DOMContentLoaded",d)})();</script> </div><!-- /.error-footer --> </div> </div> </body> </html> at E (https://beh2.vercel.app/_next/static/chunks/app/form/page-f752346cc7c0ec08.js:1:2699)
+- [requestfailed] public | https://coapebehawiorysta.vercel.app/_next/image?url=%2Fbranding%2Fspecialist-krzysztof-wide.jpg&w=640&q=75 | net::ERR_ABORTED
+- [requestfailed] public | https://coapebehawiorysta.vercel.app/_next/image?url=%2Fbranding%2Ftopic-cards%2Fborder-collie-running.jpg&w=640&q=75 | net::ERR_ABORTED
+- [requestfailed] public | https://coapebehawiorysta.vercel.app/_next/image?url=%2Fbranding%2Ftopic-cards%2Fpuppy-hands.jpg&w=640&q=75 | net::ERR_ABORTED
+- [requestfailed] public | https://coapebehawiorysta.vercel.app/_next/image?url=%2Fbranding%2Ftopic-cards%2Ffrench-bulldog-leash.jpg&w=640&q=75 | net::ERR_ABORTED
+- [requestfailed] public | https://coapebehawiorysta.vercel.app/_next/image?url=%2Fbranding%2Ftopic-cards%2Fdog-checkup.jpg&w=640&q=75 | net::ERR_ABORTED
+- [requestfailed] public | https://coapebehawiorysta.vercel.app/_next/image?url=%2Fbranding%2Ftopic-cards%2Fdog-resting-home.jpg&w=640&q=75 | net::ERR_ABORTED
+- [http] public | https://coapebehawiorysta.vercel.app/api/bookings | HTTP 409 
+- [console] public | https://coapebehawiorysta.vercel.app/form?problem=kot&slotId=2026-03-30-17%3A00 | Failed to load resource: the server responded with a status of 409 ()
+- [console] public | https://coapebehawiorysta.vercel.app/form?problem=kot&slotId=2026-03-30-17%3A00 | [behawior15][booking-form] submit failed Error: <!DOCTYPE html> <!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]--> <!--[if IE 7]> <html class="no-js ie7 oldie" lang="en-US"> <![endif]--> <!--[if IE 8]> <html class="no-js ie8 oldie" lang="en-US"> <![endif]--> <!--[if gt IE 8]><!--> <html class="no-js" lang="en-US"> <!--<![endif]--> <head> <title> | 502: Bad gateway</title> <meta charset="UTF-8" /> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> <meta http-equiv="X-UA-Compatible" content="IE=Edge" /> <meta name="robots" content="noindex, nofollow" /> <meta name="viewport" content="width=device-width,initial-scale=1" /> <link rel="stylesheet" id="cf_styles-css" href="/cdn-cgi/styles/main.css" /> </head> <body> <div id="cf-wrapper"> <div id="cf-error-details" class="p-0"> <header class="mx-auto pt-10 lg:pt-6 lg:px-8 w-240 lg:w-full mb-8"> <h1 class="inline-block sm:block sm:mb-2 font-light text-60 lg:text-4xl text-black-dark leading-tight mr-2"> <span class="inline-block">Bad gateway</span> <span class="code-label">Error code 502</span> </h1> <div> Visit <a href="https://www.cloudflare.com/5xx-error-landing?utm_source=errorcode_502&utm_campaign=uogrlryjlucfvrugdvpx.supabase.co" target="_blank" rel="noopener noreferrer">cloudflare.com</a> for more information. </div> <div class="mt-3">2026-03-30 09:12:16 UTC</div> </header> <div class="my-8 bg-gradient-gray"> <div class="w-240 lg:w-full mx-auto"> <div class="clearfix md:px-8"> <div id="cf-browser-status" class=" relative w-1/3 md:w-full py-15 md:p-0 md:py-8 md:text-left md:border-solid md:border-0 md:border-b md:border-gray-400 overflow-hidden float-left md:float-none text-center"> <div class="relative mb-10 md:m-0"> <span class="cf-icon-browser block md:hidden h-20 bg-center bg-no-repeat"></span> <span class="cf-icon-ok w-12 h-12 absolute left-1/2 md:left-auto md:right-0 md:top-0 -ml-6 -bottom-4"></span> </div> <span class="md:block w-full truncate">You</span> <h3 class="md:inline-block mt-3 md:mt-0 text-2xl text-gray-600 font-light leading-1.3"> Browser </h3> <span class="leading-1.3 text-2xl text-green-success">Working</span> </div> <div id="cf-cloudflare-status" class=" relative w-1/3 md:w-full py-15 md:p-0 md:py-8 md:text-left md:border-solid md:border-0 md:border-b md:border-gray-400 overflow-hidden float-left md:float-none text-center"> <div class="relative mb-10 md:m-0"> <a href="https://www.cloudflare.com/5xx-error-landing?utm_source=errorcode_502&#38;utm_campaign=uogrlryjlucfvrugdvpx.supabase.co" target="_blank" rel="noopener noreferrer"> <span class="cf-icon-cloud block md:hidden h-20 bg-center bg-no-repeat"></span> <span class="cf-icon-ok w-12 h-12 absolute left-1/2 md:left-auto md:right-0 md:top-0 -ml-6 -bottom-4"></span> </a> </div> <span class="md:block w-full truncate">Ashburn</span> <h3 class="md:inline-block mt-3 md:mt-0 text-2xl text-gray-600 font-light leading-1.3"> <a href="https://www.cloudflare.com/5xx-error-landing?utm_source=errorcode_502&utm_campaign=uogrlryjlucfvrugdvpx.supabase.co" target="_blank" rel="noopener noreferrer"> Cloudflare </a> </h3> <span class="leading-1.3 text-2xl text-green-success">Working</span> </div> <div id="cf-host-status" class="cf-error-source relative w-1/3 md:w-full py-15 md:p-0 md:py-8 md:text-left md:border-solid md:border-0 md:border-b md:border-gray-400 overflow-hidden float-left md:float-none text-center"> <div class="relative mb-10 md:m-0"> <span class="cf-icon-server block md:hidden h-20 bg-center bg-no-repeat"></span> <span class="cf-icon-error w-12 h-12 absolute left-1/2 md:left-auto md:right-0 md:top-0 -ml-6 -bottom-4"></span> </div> <span class="md:block w-full truncate">uogrlryjlucfvrugdvpx.supabase.co</span> <h3 class="md:inline-block mt-3 md:mt-0 text-2xl text-gray-600 font-light leading-1.3"> Host </h3> <span class="leading-1.3 text-2xl text-red-error">Error</span> </div> </div> </div> </div> <div class="w-240 lg:w-full mx-auto mb-8 lg:px-8"> <div class="clearfix"> <div class="w-1/2 md:w-full float-left pr-6 md:pb-10 md:pr-0 leading-relaxed"> <h2 class="text-3xl font-normal leading-1.3 mb-4">What happened?</h2> <p>The web server reported a bad gateway error.</p> </div> <div class="w-1/2 md:w-full float-left leading-relaxed"> <h2 class="text-3xl font-normal leading-1.3 mb-4">What can I do?</h2> <p class="mb-6">Please try again in a few minutes.</p> </div> </div> </div> <div class="cf-error-footer cf-wrapper w-240 lg:w-full py-10 sm:py-4 sm:px-8 mx-auto text-center sm:text-left border-solid border-0 border-t border-gray-300"> <p class="text-13"> <span class="cf-footer-item sm:block sm:mb-1">Cloudflare Ray ID: <strong class="font-semibold">9e45fde0d9dd05b7</strong></span> <span class="cf-footer-separator sm:hidden">&bull;</span> <span id="cf-footer-item-ip" class="cf-footer-item hidden sm:block sm:mb-1"> Your IP: <button type="button" id="cf-footer-ip-reveal" class="cf-footer-ip-reveal-btn">Click to reveal</button> <span class="hidden" id="cf-footer-ip">50.17.97.69</span> <span class="cf-footer-separator sm:hidden">&bull;</span> </span> <span class="cf-footer-item sm:block sm:mb-1"><span>Performance &amp; security by</span> <a rel="noopener noreferrer" href="https://www.cloudflare.com/5xx-error-landing?utm_source=errorcode_502&#38;utm_campaign=uogrlryjlucfvrugdvpx.supabase.co" id="brand_link" target="_blank">Cloudflare</a></span> </p> <script>(function(){function d(){var b=a.getElementById("cf-footer-item-ip"),c=a.getElementById("cf-footer-ip-reveal");b&&"classList"in b&&(b.classList.remove("hidden"),c.addEventListener("click",function(){c.classList.add("hidden");a.getElementById("cf-footer-ip").classList.remove("hidden")}))}var a=document;document.addEventListener&&a.addEventListener("DOMContentLoaded",d)})();</script> </div><!-- /.error-footer --> </div> </div> </body> </html> at E (https://coapebehawiorysta.vercel.app/_next/static/chunks/app/form/page-f752346cc7c0ec08.js:1:2699)
 
 ## Uwagi
 - `mailto:` i `tel:` zostały zweryfikowane po href-ach; nie otwierałem zewnętrznego klienta poczty ani dialera.

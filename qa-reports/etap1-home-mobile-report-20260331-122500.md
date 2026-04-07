@@ -4,7 +4,7 @@ DONE
 
 2. LIVE URL
 
-https://beh2.vercel.app
+https://coapebehawiorysta.vercel.app
 
 3. CO ZMIENIŁEM
 

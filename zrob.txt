@@ -1,6 +1,6 @@
 ZROB - uruchomienie SMS na live krok po kroku
 Data: 2026-03-26
-Projekt: https://beh2.vercel.app
+Projekt: https://coapebehawiorysta.vercel.app
 
 AKTUALNY STAN
 1. Kod pod SMS jest juz wdrozony na live.
@@ -15,7 +15,7 @@ AKTUALNY STAN
    - konta / klucza providera SMS
    - env SMS na Vercel
 5. Live smoke na 2026-03-26 przeszedl dla:
-   - https://beh2.vercel.app/
+   - https://coapebehawiorysta.vercel.app/
    - build marker: CLEAN_START_REPO_V1:main:dd68f55
 6. Potwierdzone technicznie na 2026-03-26:
    - Vercel production nie ma env:

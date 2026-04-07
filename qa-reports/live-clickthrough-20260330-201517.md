@@ -1,7 +1,7 @@
 # Raport QA Live Clickthrough
 
 - Data: 2026-03-30 20:15:17 Europe/Warsaw
-- URL: https://beh2.vercel.app
+- URL: https://coapebehawiorysta.vercel.app
 - Wynik ogólny: FAIL
 - Kroki zaliczone: 16/17
 - Liczba zebranych issue z runtime: 0
@@ -17,40 +17,40 @@ Call log:
 ## Kroki
 ### PASS - Home hero + CTA do oferty
 - Start URL: about:blank
-- End URL: https://beh2.vercel.app/oferta
+- End URL: https://coapebehawiorysta.vercel.app/oferta
 - Note: CTA hero "Zobacz formy pracy" prowadzi poprawnie do /oferta.
 
 ### PASS - Home hero + CTA do bookingu
-- Start URL: https://beh2.vercel.app/oferta
-- End URL: https://beh2.vercel.app/book
+- Start URL: https://coapebehawiorysta.vercel.app/oferta
+- End URL: https://coapebehawiorysta.vercel.app/book
 - Note: CTA hero "Umów konsultację" otwiera osobną ścieżkę rezerwacji.
 
 ### PASS - Header: Oferta
-- Start URL: https://beh2.vercel.app/book
-- End URL: https://beh2.vercel.app/oferta
+- Start URL: https://coapebehawiorysta.vercel.app/book
+- End URL: https://coapebehawiorysta.vercel.app/oferta
 - Note: Link w headerze działa.
 
 ### PASS - Header: Koty
-- Start URL: https://beh2.vercel.app/oferta
-- End URL: https://beh2.vercel.app/koty
+- Start URL: https://coapebehawiorysta.vercel.app/oferta
+- End URL: https://coapebehawiorysta.vercel.app/koty
 - Note: Link w headerze działa.
 
 ### PASS - Header: Pobyty
-- Start URL: https://beh2.vercel.app/koty
-- End URL: https://beh2.vercel.app/oferta/pobyty-socjalizacyjno-terapeutyczne
+- Start URL: https://coapebehawiorysta.vercel.app/koty
+- End URL: https://coapebehawiorysta.vercel.app/oferta/pobyty-socjalizacyjno-terapeutyczne
 - Note: Link w headerze działa.
 
 ### FAIL - Header: Kontakt + href mailto/tel
-- Start URL: https://beh2.vercel.app/oferta/pobyty-socjalizacyjno-terapeutyczne
-- End URL: https://beh2.vercel.app/kontakt
+- Start URL: https://coapebehawiorysta.vercel.app/oferta/pobyty-socjalizacyjno-terapeutyczne
+- End URL: https://coapebehawiorysta.vercel.app/kontakt
 - Note: locator.waitFor: Timeout 20000ms exceeded.
 Call log:
 [2m  - waiting for getByRole('heading', { name: /Opisz swoją sytuację i dobierz formę współpracy/i, level: 1 }) to be visible[22m
 
 
 ### PASS - Deep routes usług: bezpośrednie wejścia do detali i kontaktu
-- Start URL: https://beh2.vercel.app/kontakt
-- End URL: https://beh2.vercel.app/kontakt?service=pobyty-socjalizacyjno-terapeutyczne
+- Start URL: https://coapebehawiorysta.vercel.app/kontakt
+- End URL: https://coapebehawiorysta.vercel.app/kontakt?service=pobyty-socjalizacyjno-terapeutyczne
 - Note: detail ok: /oferta/szybka-konsultacja-15-min
 - Note: detail ok: /oferta/konsultacja-30-min
 - Note: contact ok: /kontakt?service=konsultacja-30-min
@@ -64,56 +64,56 @@ Call log:
 - Note: contact ok: /kontakt?service=pobyty-socjalizacyjno-terapeutyczne
 
 ### PASS - Oferta -> detal konsultacji 30 min -> kontakt
-- Start URL: https://beh2.vercel.app/kontakt?service=pobyty-socjalizacyjno-terapeutyczne
-- End URL: https://beh2.vercel.app/kontakt?service=konsultacja-30-min
+- Start URL: https://coapebehawiorysta.vercel.app/kontakt?service=pobyty-socjalizacyjno-terapeutyczne
+- End URL: https://coapebehawiorysta.vercel.app/kontakt?service=konsultacja-30-min
 - Note: Detail page i CTA do /kontakt działają poprawnie.
 
 ### PASS - PDF listing -> poradnik -> kontakt
-- Start URL: https://beh2.vercel.app/kontakt?service=konsultacja-30-min
-- End URL: https://beh2.vercel.app/kontakt?service=poradniki-pdf&guide=pies-zostaje-sam-plan-pierwszych-krokow
+- Start URL: https://coapebehawiorysta.vercel.app/kontakt?service=konsultacja-30-min
+- End URL: https://coapebehawiorysta.vercel.app/kontakt?service=poradniki-pdf&guide=pies-zostaje-sam-plan-pierwszych-krokow
 - Note: Poradnik: Pies zostaje sam (/oferta/poradniki-pdf/pies-zostaje-sam-plan-pierwszych-krokow)
 
 ### PASS - PDF listing -> pakiet -> kontakt
-- Start URL: https://beh2.vercel.app/kontakt?service=poradniki-pdf&guide=pies-zostaje-sam-plan-pierwszych-krokow
-- End URL: https://beh2.vercel.app/kontakt?service=poradniki-pdf&bundle=pakiet-startowy-psa
+- Start URL: https://coapebehawiorysta.vercel.app/kontakt?service=poradniki-pdf&guide=pies-zostaje-sam-plan-pierwszych-krokow
+- End URL: https://coapebehawiorysta.vercel.app/kontakt?service=poradniki-pdf&bundle=pakiet-startowy-psa
 - Note: Pakiet: Pakiet Startowy Psa (/oferta/poradniki-pdf/pakiety/pakiet-startowy-psa)
 
 ### PASS - Footer: polityka prywatności i regulamin
-- Start URL: https://beh2.vercel.app/kontakt?service=poradniki-pdf&bundle=pakiet-startowy-psa
-- End URL: https://beh2.vercel.app/regulamin
+- Start URL: https://coapebehawiorysta.vercel.app/kontakt?service=poradniki-pdf&bundle=pakiet-startowy-psa
+- End URL: https://coapebehawiorysta.vercel.app/regulamin
 - Note: Polityka prywatności: Jak przetwarzane są dane w marce Regulski | Terapia behawioralna
 - Note: Regulamin: Zasady rezerwacji szybkiej konsultacji 15 min
 
 ### PASS - Booking live: wybór tematu i slotu
-- Start URL: https://beh2.vercel.app/regulamin
-- End URL: https://beh2.vercel.app/form?problem=kot&slotId=2026-03-31-10%3A00
+- Start URL: https://coapebehawiorysta.vercel.app/regulamin
+- End URL: https://coapebehawiorysta.vercel.app/form?problem=kot&slotId=2026-03-31-10%3A00
 - Note: Wybrany temat: kot
 - Note: Wybrany slot: 10:00
 
 ### PASS - Booking live: formularz -> payment
-- Start URL: https://beh2.vercel.app/form?problem=kot&slotId=2026-03-31-10%3A00
-- End URL: https://beh2.vercel.app/payment?bookingId=9014efbf-de0d-4798-8a4c-c430fac430ed&access=VDP1m0aLsskkrB1OclsBuaiwppwCd6yK
+- Start URL: https://coapebehawiorysta.vercel.app/form?problem=kot&slotId=2026-03-31-10%3A00
+- End URL: https://coapebehawiorysta.vercel.app/payment?bookingId=9014efbf-de0d-4798-8a4c-c430fac430ed&access=VDP1m0aLsskkrB1OclsBuaiwppwCd6yK
 - Note: manualVisible=true
 - Note: payuVisible=true
 
 ### PASS - Booking live: pokój zablokowany przed paid
-- Start URL: https://beh2.vercel.app/payment?bookingId=9014efbf-de0d-4798-8a4c-c430fac430ed&access=VDP1m0aLsskkrB1OclsBuaiwppwCd6yK
-- End URL: https://beh2.vercel.app/payment?bookingId=9014efbf-de0d-4798-8a4c-c430fac430ed&access=VDP1m0aLsskkrB1OclsBuaiwppwCd6yK
+- Start URL: https://coapebehawiorysta.vercel.app/payment?bookingId=9014efbf-de0d-4798-8a4c-c430fac430ed&access=VDP1m0aLsskkrB1OclsBuaiwppwCd6yK
+- End URL: https://coapebehawiorysta.vercel.app/payment?bookingId=9014efbf-de0d-4798-8a4c-c430fac430ed&access=VDP1m0aLsskkrB1OclsBuaiwppwCd6yK
 - Note: Pokój nie wpuszcza przed statusem paid.
 
 ### PASS - Booking live: zgłoszenie manual payment -> pending
-- Start URL: https://beh2.vercel.app/payment?bookingId=9014efbf-de0d-4798-8a4c-c430fac430ed&access=VDP1m0aLsskkrB1OclsBuaiwppwCd6yK
-- End URL: https://beh2.vercel.app/confirmation?bookingId=9014efbf-de0d-4798-8a4c-c430fac430ed&manual=reported&access=VDP1m0aLsskkrB1OclsBuaiwppwCd6yK
+- Start URL: https://coapebehawiorysta.vercel.app/payment?bookingId=9014efbf-de0d-4798-8a4c-c430fac430ed&access=VDP1m0aLsskkrB1OclsBuaiwppwCd6yK
+- End URL: https://coapebehawiorysta.vercel.app/confirmation?bookingId=9014efbf-de0d-4798-8a4c-c430fac430ed&manual=reported&access=VDP1m0aLsskkrB1OclsBuaiwppwCd6yK
 - Note: Rezerwacja przeszła do pending manual review.
 
 ### PASS - Admin live: odrzucenie testowej wpłaty QA
-- Start URL: https://beh2.vercel.app/confirmation?bookingId=9014efbf-de0d-4798-8a4c-c430fac430ed&manual=reported&access=VDP1m0aLsskkrB1OclsBuaiwppwCd6yK
-- End URL: https://beh2.vercel.app/confirmation?bookingId=9014efbf-de0d-4798-8a4c-c430fac430ed&manual=reported&access=VDP1m0aLsskkrB1OclsBuaiwppwCd6yK
+- Start URL: https://coapebehawiorysta.vercel.app/confirmation?bookingId=9014efbf-de0d-4798-8a4c-c430fac430ed&manual=reported&access=VDP1m0aLsskkrB1OclsBuaiwppwCd6yK
+- End URL: https://coapebehawiorysta.vercel.app/confirmation?bookingId=9014efbf-de0d-4798-8a4c-c430fac430ed&manual=reported&access=VDP1m0aLsskkrB1OclsBuaiwppwCd6yK
 - Note: Testowa wpłata została odrzucona zamiast potwierdzenia, żeby nie zostawić sztucznie opłaconej rezerwacji.
 
 ### PASS - Confirmation live: stan po odrzuceniu
-- Start URL: https://beh2.vercel.app/confirmation?bookingId=9014efbf-de0d-4798-8a4c-c430fac430ed&manual=reported&access=VDP1m0aLsskkrB1OclsBuaiwppwCd6yK
-- End URL: https://beh2.vercel.app/confirmation?bookingId=9014efbf-de0d-4798-8a4c-c430fac430ed&manual=reported&access=VDP1m0aLsskkrB1OclsBuaiwppwCd6yK
+- Start URL: https://coapebehawiorysta.vercel.app/confirmation?bookingId=9014efbf-de0d-4798-8a4c-c430fac430ed&manual=reported&access=VDP1m0aLsskkrB1OclsBuaiwppwCd6yK
+- End URL: https://coapebehawiorysta.vercel.app/confirmation?bookingId=9014efbf-de0d-4798-8a4c-c430fac430ed&manual=reported&access=VDP1m0aLsskkrB1OclsBuaiwppwCd6yK
 - Note: Publiczny ekran poprawnie pokazuje stan odrzuconej wpłaty.
 
 ## Runtime issues
