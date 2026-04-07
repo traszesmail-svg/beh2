@@ -33,8 +33,9 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
           <h2 id="historie-heading">Historie opiekunów i efekty konsultacji</h2>
         </div>
         <div className="muted">
-          Krótko pokazujemy punkt wyjścia, pierwszy krok i dalszą ścieżkę. Obok są publiczne źródła i zweryfikowane
-          wpisy.
+          Krótko pokazujemy punkt wyjścia, pierwszy krok i dalszą ścieżkę.
+          <br />
+          Obok są publiczne źródła i zweryfikowane wpisy.
         </div>
       </div>
 
@@ -85,8 +86,7 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
           <h3>Gdzie można sprawdzić profil i publikacje</h3>
         </div>
         <div className="muted">
-          CAPBT, Instagram i publikacje branżowe są tu po to, żeby szybko sprawdzić profil przed przekazaniem strony
-          dalej.
+          CAPBT, Instagram i publikacje branżowe pomagają szybko sprawdzić profil przed przekazaniem strony dalej.
         </div>
       </div>
 
@@ -170,7 +170,8 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
         <div className="offer-detail-cta-band top-gap">
           <div className="offer-detail-cta-copy">
             <span className="section-eyebrow">Dalszy krok</span>
-            <strong>Chcesz przejść do pełnej sekcji opinii albo napisać wiadomość?</strong>
+            <strong>Chcesz zobaczyć pełną sekcję opinii?</strong>
+            <span>Możesz też napisać wiadomość, jeśli chcesz zacząć od kontaktu.</span>
             <span>Pełny formularz publikacji i dodatkowe wskazówki są na osobnej podstronie.</span>
           </div>
 
