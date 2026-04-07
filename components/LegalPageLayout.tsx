@@ -109,7 +109,7 @@ export function LegalPageLayout({
 
             <div className="offer-detail-cta-band legal-stage-cta top-gap">
               <div className="offer-detail-cta-copy">
-                <span className="section-eyebrow">Masz pytanie?</span>
+                <span className="section-eyebrow">Masz pytanie?</span>{' '}
                 <strong>{ctaTitle}</strong>
                 <span>{ctaText}</span>
               </div>

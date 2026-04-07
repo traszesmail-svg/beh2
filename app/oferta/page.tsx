@@ -34,10 +34,15 @@ function getOfferCardAction(offer: (typeof OFFERS)[number]) {
   }
 }
 
-function renderOfferCard(offer: (typeof OFFERS)[number], tone: 'primary' | 'secondary' | 'tertiary' = 'secondary') {
+function renderOfferCard(
+  offer: (typeof OFFERS)[number],
+  tone: 'primary' | 'secondary' | 'tertiary' = 'secondary',
+  priceAmountOverride?: number,
+) {
   const action = getOfferCardAction(offer)
+  const effectivePriceAmount = priceAmountOverride ?? offer.priceAmount
   const priceLabel =
-    offer.priceAmount !== null ? <PriceDisplay amount={offer.priceAmount} prefix="Od" /> : offer.priceLabel ?? 'Po wiadomości'
+    effectivePriceAmount !== null ? <PriceDisplay amount={effectivePriceAmount} prefix="Od" /> : offer.priceLabel ?? 'Po wiadomości'
   const whatYouGet = offer.outcomes.slice(0, 3).join(' · ')
 
   return (
@@ -184,7 +189,7 @@ export default async function OfferPage() {
                   <p className="offer-section-intro">To najkrótsza droga, jeśli chcesz wejść od razu w termin i sprawdzić, czy szybki start wystarczy.</p>
                 </div>
 
-                <div className="offer-grid offer-grid-featured top-gap">{renderOfferCard(quickStartOffer, 'primary')}</div>
+                <div className="offer-grid offer-grid-featured top-gap">{renderOfferCard(quickStartOffer, 'primary', quickStartPriceAmount)}</div>
               </section>
             ) : null}
 

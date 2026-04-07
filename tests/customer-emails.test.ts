@@ -11,6 +11,7 @@ type ResendEmailPayload = {
   subject?: string
   html?: string
   text?: string
+  reply_to?: string
 }
 
 function withEnv(

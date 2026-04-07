@@ -197,7 +197,7 @@ export default async function BookPage({
             <aside className="booking-stage-sidecard tree-backed-card">
               <span className="booking-stage-sidecard-label">Jak to działa</span>
               <strong>Wybierz temat. Potem pokażę terminy.</strong>
-              <p>Najpierw zaznaczasz temat, potem widzisz kolejny krok i płatność. Bez długiego opisu usług.</p>
+              <p>Najpierw wybierasz temat, potem widzisz terminy i kolejny krok.</p>
               <div className="booking-stage-sidecard-pills" aria-label="Najważniejsze informacje">
                 <span className="hero-proof-pill">{getBookingServiceSlotBadge(serviceType)}</span>
                 <span className="hero-proof-pill">24h na zmianę</span>

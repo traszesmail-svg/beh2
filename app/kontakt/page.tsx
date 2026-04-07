@@ -148,8 +148,11 @@ export default function ContactPage({
             </div>
 
             <div className="list-card tree-backed-card top-gap">
-              <strong>Kiedy pisać zamiast rezerwować?</strong>
-              <span>Pisz, jeśli temat jest mieszany, chcesz sprawdzić PDF, potrzebujesz doprecyzować kierunek albo nie wiesz, czy lepiej zacząć od 15 min.</span>
+              <strong>Kiedy pisać zamiast rezerwować?</strong>{' '}
+              <span>
+                Pisz, jeśli temat jest mieszany, chcesz sprawdzić PDF, potrzebujesz doprecyzować kierunek albo nie wiesz,
+                czy lepiej zacząć od 15 min.
+              </span>
             </div>
 
             <div className="list-card tree-backed-card top-gap">

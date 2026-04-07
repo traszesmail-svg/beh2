@@ -223,7 +223,7 @@ export default async function HomePage() {
                   ))}
                 </div>
                 <strong>{SPECIALIST_TRUST_STATEMENT}</strong>
-                <span>Prowadzę konsultacje osobiście w {SPECIALIST_LOCATION} i online.</span>
+                <span>Prowadzę konsultacje osobiście w Olsztynie i online.</span>
                 <span>
                   Zobacz też{' '}
                   <a href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="inline-link">
