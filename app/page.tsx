@@ -5,6 +5,7 @@ import { AnalyticsEventOnMount } from '@/components/AnalyticsEventOnMount'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { HomeMobileStickyCta } from '@/components/HomeMobileStickyCta'
+import { SocialProofSection } from '@/components/SocialProofSection'
 import { DEFAULT_PRICE_PLN, formatPricePln } from '@/lib/pricing'
 import { buildHomeMetadata } from '@/lib/seo'
 import { getActiveConsultationPrice, listAvailability } from '@/lib/server/db'
@@ -111,29 +112,51 @@ export default async function HomePage() {
       '@context': 'https://schema.org',
       '@type': 'ProfessionalService',
       name: SITE_NAME,
-      description: SITE_TAGLINE,
+      description: `${SITE_TAGLINE}. Olsztyn, woj. warmińsko-mazurskie i online.`,
       url: baseUrl,
-      areaServed: {
-        '@type': 'Country',
-        name: 'Polska',
-      },
+      areaServed: [
+        {
+          '@type': 'City',
+          name: 'Olsztyn',
+        },
+        {
+          '@type': 'AdministrativeArea',
+          name: 'woj. warmińsko-mazurskie',
+        },
+        {
+          '@type': 'Country',
+          name: 'Polska',
+        },
+      ],
       serviceType: [
         'Konsultacje behawioralne dla psów i kotów',
         'Terapia problemów w zachowaniu',
         'Pobyty socjalizacyjno-terapeutyczne',
       ],
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Olsztyn',
+        addressRegion: 'woj. warmińsko-mazurskie',
+        addressCountry: 'PL',
+      },
       provider: {
         '@type': 'Person',
         name: SPECIALIST_NAME,
         jobTitle: SPECIALIST_CREDENTIALS,
         image: new URL(SPECIALIST_PHOTO.src, baseUrl).toString(),
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: 'Olsztyn',
+          addressRegion: 'woj. warmińsko-mazurskie',
+          addressCountry: 'PL',
+        },
       },
     },
     {
       '@context': 'https://schema.org',
       '@type': 'Person',
       name: SPECIALIST_NAME,
-      description: SITE_TAGLINE,
+      description: `${SITE_TAGLINE}. Olsztyn, woj. warmińsko-mazurskie i online.`,
       image: new URL(SPECIALIST_PHOTO.src, baseUrl).toString(),
       homeLocation: {
         '@type': 'Place',
@@ -154,7 +177,7 @@ export default async function HomePage() {
           <div className="home-hero-grid">
             <div className="home-hero-panel">
               <div className="home-hero-topline">
-                <div className="pill subtle-pill">Pies lub kot</div>
+                <div className="pill subtle-pill">Krzysztof Regulski</div>
                 <div className="home-hero-availability-pill">{availabilityLabel}</div>
               </div>
 
@@ -162,8 +185,8 @@ export default async function HomePage() {
                 <span className="home-hero-kicker">Spokojny start bez zgadywania</span>
                 <h1>Masz psa, kota albo temat mieszany? Zacznij od prostego wyboru.</h1>
                 <p className="hero-text home-hero-text">
-                  Prowadzę konsultacje osobiście. Najpierw wybierasz ścieżkę, potem termin i płatność. Po statusie paid
-                  dostajesz confirmation i link do pokoju.
+                  Krzysztof Regulski prowadzi konsultacje osobiście. Najpierw wybierasz ścieżkę, potem termin i płatność.
+                  Po statusie paid dostajesz confirmation i link do pokoju.
                 </p>
               </div>
 
@@ -312,6 +335,8 @@ export default async function HomePage() {
             </p>
           </div>
         </section>
+
+        <SocialProofSection showSubmissionForm={false} />
 
         <HomeMobileStickyCta />
 

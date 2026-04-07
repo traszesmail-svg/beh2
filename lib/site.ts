@@ -16,8 +16,8 @@ export const HOME_HELP_CHOICE_PHOTO = {
 }
 
 export const HOME_HERO_PHOTO = {
-  src: '/branding/specialist-krzysztof-portrait.jpg',
-  alt: 'Krzysztof Regulski na portretowym zdjeciu w jasnym gabinecie',
+  src: '/branding/omnie-hero.webp',
+  alt: 'Krzysztof Regulski w niebieskim kitlu z kotem na rekach jako glowne zdjecie strony glownej',
 }
 
 export const SITE_NAME = 'Regulski | Terapia behawioralna'
@@ -52,8 +52,8 @@ export const CONSULTATION_PRICE_COMPARE_COPY =
   'To pierwszy krok w szerszym systemie pracy, jesli problem wymaga czegos wiecej niz jednej rozmowy.'
 
 export const LANDING_SPECIALIST_PHOTO = {
-  src: '/branding/specialist-krzysztof-portrait.jpg',
-  alt: 'Krzysztof Regulski na portretowym zdjeciu do marki Regulski Terapia behawioralna',
+  src: '/branding/omnie-hero.webp',
+  alt: 'Krzysztof Regulski w niebieskim kitlu z kotem na rekach jako glowne zdjecie marki Regulski Terapia behawioralna',
 }
 
 export const SPECIALIST_PHOTO = LANDING_SPECIALIST_PHOTO

@@ -1,349 +1,451 @@
-﻿# PLAN GPT MINI - PUBLIKACJA I NAPRAWY
+﻿# PLAN PUBLIKACJA I FINISZ
 
-Data audytu: 2026-04-06
-Status tego etapu: analiza tylko, bez dalszych poprawek produktu
-Ten dokument zastępuje wczesniejsze plany i handoffy.
+Data audytu: 2026-04-07
+Status tego etapu: analiza i plan only, bez zmian w kodzie aplikacji
+Ten dokument zastepuje poprzedni plan z 2026-04-06.
 
-## 1. Executive Summary
+## 1. Decyzja na dzis
 
-Najwazniejsze ustalenia:
-- Live dziala i zostal przeklikany end-to-end. Wynik QA live to 18/19 krokow zaliczonych.
-- Jedyny realny blad produkcyjny wykryty w przeplywie klienta dotyczy przejscia `manual payment -> pending manual review`.
-- Live readiness jest `READY 4/4`, ale w praktyce oznacza to start na platnosci recznej. PayU jest celowo wylaczone, a maile klienta sa celowo wylaczone.
-- Lokalny projekt nie jest obecnie wiarygodnym odpowiednikiem produkcji: `npm run build` pada, a `GET /` lokalnie zwraca `500`, bo `app/globals.css` jest uszkodzony i zaczyna sie od bajtow `NUL`.
-- Na live hero nadal nie jest ustawione zdjecie z ciastkiem w rece. W lokalnej konfiguracji `lib/site.ts` hero wskazuje juz `public/branding/omnie.png`, ale ten stan nie jest obecnie opublikowany live.
-- Najwieksze blokery zarabiania to nie layout, tylko: niestabilny reczny checkout, brak bezpiecznej sciezki testowej platnosci, brak maili klienta i brak zdrowego lokalnego repo do dalszej pracy.
+Nie puszczac jeszcze mocniejszego ruchu na te strone.
 
-## 2. Dowody i zrodla prawdy
+Powod jest prosty:
+- 2026-04-07 publiczny funnel nie domyka nawet tworzenia rezerwacji.
+- `POST /api/bookings` na live zwraca `409`.
+- runtime report pokazuje blad produkcyjny: brak kolumny `qa_booking` w schemacie `bookings`.
+- to jest nowy, twardszy blocker niz wczorajszy problem `manual payment -> pending`.
 
-Glowne zrodla:
-- Live QA report: `qa-reports/live-clickthrough-20260406-061636.md`
-- Latest live QA snapshot: `qa-reports/latest-report.md`
-- Live readiness report: `qa-reports/live-readiness-20260406-062006.md`
-- Hero config lokalnie: `lib/site.ts:18-20`
-- Home hero render lokalnie: `app/page.tsx:212-218` oraz `app/page.tsx:298-303`
-- Manual payment UI: `components/PaymentActions.tsx:57-88` i `components/PaymentActions.tsx:279-289`
-- Confirmation state for manual review: `app/confirmation/page.tsx:126-156`
-- PayU disabled intentionally: `lib/server/payment-options.ts:180` oraz `lib/server/go-live.ts:208-215`
-- Prawny/copy mismatch o PayU: `app/regulamin/page.tsx:34-35` oraz `lib/data.ts:167-169`
-- Krytyczny lokalny blocker: `app/globals.css`
+Najwazniejszy wniosek biznesowy:
+- wczoraj problemem byl niestabilny etap platnosci recznej,
+- dzisiaj problemem numer 1 jest to, ze klient moze odbic sie juz na tworzeniu rezerwacji,
+- dopiero po przywroceniu tworzenia bookingow ma sens dyskusja o hero, copy, social proof i redesignie.
 
-Twarde fakty z audytu:
-- Live QA: `18/19` krokow zaliczonych, runtime issues `0`.
-- Krok failujacy na live: `manual payment -> pending`.
-- W raporcie live zapisano:
-  - `POST /api/payments/manual timed out; proceeding with canonical confirmation URL.`
-  - `Pending manual review nie pojawil sie po kliknieciu...`
-- Live readiness raport mowi wprost:
-  - PayU online jest swiadomie wylaczone.
-  - Checkout dziala przez wplate reczna i potwierdzenie na stronie.
-  - Maile klienta sa swiadomie wylaczone.
-- Lokalnie:
-  - `npm run build` failuje na `app/globals.css Unknown word`.
-  - `npm run dev` startuje, ale `GET /` konczy sie `500` z tym samym bledem CSS.
-  - Pierwsze 64 bajty `app/globals.css` to `00`, czyli plik jest realnie uszkodzony.
+## 2. Co sprawdzilem
 
-## 3. Porownanie Live vs Local
+Twarde dowody z dzisiejszego audytu:
+- live readiness: `qa-reports/live-readiness-20260407-061919.md`
+- live clickthrough: `qa-reports/live-clickthrough-20260407-061928.md`
+- poprzedni live clickthrough do porownania: `qa-reports/live-clickthrough-20260406-061636.md`
+- screenshoty produkcyjne:
+  - `qa-artifacts/review-20260407/home-desktop.png`
+  - `qa-artifacts/review-20260407/home-mobile.png`
+  - `qa-artifacts/review-20260407/koty-desktop.png`
+  - `qa-artifacts/review-20260407/oferta-desktop.png`
+  - `qa-artifacts/review-20260407/regulamin-desktop.png`
+  - `qa-artifacts/review-20260407/kontakt-desktop.png`
+- lokalne checki:
+  - `npm test`
+  - `npm run build`
+  - `npm run ui-smoke`
+  - `npm run payu-smoke`
 
-| Obszar | Live | Local | Wniosek |
-|---|---|---|---|
-| Dostepnosc strony glownej | dziala | `500` | lokalne repo jest aktualnie zablokowane |
-| Build produkcyjny | live dziala | `npm run build` fail | najpierw naprawic repo, potem wdrazac UX |
-| Hero photo | nadal nie to zdjecie co chcesz | config wskazuje `omnie.png` | lokalne zmiany nie sa wiarygodnie gotowe do deployu bez recovery repo |
-| Checkout | dziala, ale reczna platnosc ma niestabilne przejscie do `pending` | nie da sie rzetelnie odtworzyc przez broken CSS | analiza platnosci musi byc kontynuowana po naprawie repo |
-| PayU | wylaczone celowo | logika jest w kodzie | uruchamiac dopiero po ustabilizowaniu manual payment |
-| Maile klienta | wylaczone celowo | kod istnieje, ale stan lokalny jest niesprawny | po naprawie repo trzeba domknac trust layer |
+Wyniki:
+- live readiness: `3/4`, blockerem sa nadal maile klienta
+- live clickthrough 2026-04-07: `10/19`, fail
+- live clickthrough 2026-04-06: `18/19`, fail tylko na `manual payment -> pending`
+- `npm run build`: PASS
+- `npm run ui-smoke`: PASS
+- `npm run payu-smoke`: PASS w sandboxie PayU
+- `npm test`: 32/33 PASS, jedyny fail dotyczy hero assetu oczekiwanego przez test
 
-Praktyczny wniosek:
-- Dzisiaj produkcja jest bardziej uzywalna niz lokalne repo.
-- GPT Mini ma zaczac nie od kosmetyki, tylko od odblokowania lokalnej bazy pracy.
+## 3. Co udalo sie GPT Mini realnie dowiezc
 
-## 4. Lista bledow i ryzyk do poprawy
+To trzeba oddzielic od rzeczy, ktore tylko wygladaly na dowiezione.
 
-### P0 - krytyczne
+### Dowiezione lub prawie dowiezione
 
-1. Lokalny projekt jest uszkodzony i nie przechodzi builda.
-- Objaw: `app/globals.css` zawiera bajty `NUL` i psuje kazda strone.
-- Skutek biznesowy: nie da sie bezpiecznie rozwijac, testowac ani porownywac local vs live.
-- Pliki: `app/globals.css`
-- Akceptacja naprawy:
-  - `npm run build` przechodzi
-  - `GET /` lokalnie daje `200`
-  - home, payment, confirmation, oferta ladują sie bez 500
+1. Lokalny repo recovery juz nie jest dzis glownym problemem.
+- W poprzednim planie recovery repo bylo P0.
+- Dzis `npm run build` przechodzi.
+- `npm run ui-smoke` przechodzi.
+- lokalna sciezka room/payment/manual approval jest testowalna.
 
-2. Live manual payment nie daje stabilnego przejscia do `pending manual review`.
-- Objaw: klikniecie `Zaplacilem, czekam na potwierdzenie` nie daje stabilnego efektu, API timeoutuje albo UI nie pokazuje oczekiwanego stanu.
-- Skutek biznesowy: klient traci zaufanie dokladnie w miejscu, gdzie ma zaplacic.
-- Pliki do analizy:
-  - `components/PaymentActions.tsx`
-  - `app/api/payments/manual/route.ts`
-  - `lib/server/manual-payments.ts`
-  - `app/confirmation/page.tsx`
-  - `components/AdminBookingActions.tsx`
-- Akceptacja naprawy:
-  - 10/10 prob recznej platnosci konczy sie czytelnym statusem w max 5 s
-  - brak duplikatow zgloszen po odswiezeniu lub ponownym kliknieciu
-  - admin approve/reject zawsze odbija sie na confirmation
+2. Sciezka pokoju rozmowy jest przygotowana sensownie po stronie kodu.
+- room jest blokowany przed `paid`
+- po potwierdzeniu ma waiting room, iframe i room state
+- lokalny smoke sprawdza blokade przed approval, wejscie po approval i iframe config
 
-### P1 - bardzo wazne dla publikacji i sprzedazy
+3. QA checkout jako architektura zostal juz zrobiony w kodzie.
+- istnieje flaga QA
+- istnieje allowlista
+- istnieje adminowa akcja `Potwierdz QA`
+- istnieje osobna sciezka `/api/payments/mock`
+- istnieje migracja `supabase/migrations/20260406_qa_checkout.sql`
 
-3. Brak bezpiecznej, kontrolowanej sciezki testowania platnosci.
-- Uzytkownik slusznie chce testowac bez realnego placenia.
-- Nie wolno dawac publicznego `0 zl` bez zabezpieczen.
-- Rekomendacja biznesowa:
-  - wariant zalecany: `TEST-0ZL` albo `QA-100` tylko dla allowlisty emaili/telefonow albo tylko przy `TEST_CHECKOUT_ENABLED=true`
-  - wariant zapasowy: ukryta akcja admina `mark as paid for QA` tylko dla rezerwacji z etykieta/testowym emailem
-  - wariant najmniej ryzykowny na juz: testy recznej platnosci + reczne potwierdzenie przez Ciebie na stagingu lub na zamknietej allowliscie
-- Akceptacja naprawy:
-  - da sie przejsc caly funnel bez realnego obciazenia klienta
-  - sciezka testowa nie jest publicznie widoczna dla zwyklego ruchu
-  - kazdy test jest oznaczony jako QA i mozna go odfiltrowac w adminie
+4. PayU jako integracja nie jest martwe.
+- produkcyjnie jest nadal OFF
+- ale `npm run payu-smoke` przechodzi w sandboxie i zwraca order `SUCCESS`
+- to znaczy: kod integracji zyje, problemem nie jest dzis sandboxowy flow, tylko kolejnosc rolloutu
 
-4. Hero na live nie uzywa zdjecia z ciastkiem w rece.
-- Wymaganie biznesowe od Ciebie jest jasne: glowny hero ma byc zdjeciem `omnie.png`.
-- Lokalny config juz wskazuje `public/branding/omnie.png`, ale live nadal pokazuje szeroki kadr z kotem.
-- Dodatkowo `omnie.png` ma duzy rozmiar (~2.46 MB), wiec przed publikacja trzeba zrobic wersje zoptymalizowana.
-- Pliki:
-  - `lib/site.ts:18-20`
-  - `app/page.tsx:212-218`
-  - `app/page.tsx:298-303`
-  - asset: `public/branding/omnie.png`
-- Akceptacja naprawy:
-  - home desktop i mobile pokazuja to samo, wlasciwe zdjecie
-  - alt opisuje Krzysztofa z kotem i ciastkiem
-  - asset jest odchudzony (WebP/AVIF albo zoptymalizowany PNG/JPG)
+5. Operacyjna warstwa KPI i admin jest bardziej dojrzala niz wczesniej.
+- jest admin
+- jest funnel ledger
+- jest live readiness
+- jest live clickthrough
+- sa raporty QA
 
-5. Trust layer po zakupie jest oslabiony, bo maile klienta sa wylaczone.
-- Dzis klient po platnosci zalezy tylko od ekranu confirmation.
-- To jest dopuszczalne tymczasowo, ale zle dla zarabiania i support loadu.
-- Pliki / obszary:
-  - konfiguracja maili klienta
-  - confirmation flow
-  - ewentualne szablony powiadomien
-- Akceptacja naprawy:
-  - klient dostaje minimum: potwierdzenie rezerwacji, status platnosci, link do pokoju po paid
+### Zrobione tylko czesciowo albo niedowiezione do produkcji
 
-6. Teksty prawne i FAQ nadal sprzedaja PayU jako aktywne, mimo ze live jest manual-only.
-- To jest mismatch obietnicy z realnym checkoutem.
-- Pliki:
-  - `app/regulamin/page.tsx:34-35`
-  - `lib/data.ts:167-169`
-- Akceptacja naprawy:
-  - copy zalezy od realnie dostepnych metod platnosci
-  - gdy PayU off, strona nie sugeruje klientowi, ze PayU jest teraz dostepne
+6. QA bypass jest wdrozony w kodzie, ale nie zostal poprawnie dowieziony na production.
+- w kodzie booking API przyjmuje `qaBooking`
+- store zapisuje `qa_booking`
+- migracja dodaje kolumne `qa_booking`
+- live runtime wali sie na braku tej kolumny
 
-### P2 - wazne porzadkowanie i przygotowanie do wzrostu
+Wniosek:
+- to nie jest brak implementacji
+- to jest zly rollout: kod juz zaklada nowy schema shape, a production DB nie jest z nim zsynchronizowana
 
-7. Audit assetow jest nieuporzadkowany.
-- `public/branding/specialist-krzysztof-about.png` nie odpowiada temu, czym sugeruje nazwa; to mylacy asset i nie powinien trafic na strone przez przypadek.
-- Trzeba zrobic przeglad nazw, przeznaczenia i cropow wszystkich zdjec w `public/branding`.
-- Akceptacja naprawy:
-  - kazdy asset ma zgodna nazwe i przeznaczenie
-  - nie ma plikow mylacych do przyszlego reuse
+7. Manual payment nie zostal zamkniety jako stabilny live flow.
+- 2026-04-06 byl jedynym wykrytym publicznym fail
+- 2026-04-07 nie dalo sie nawet dojsc do tego kroku, bo funnel peka wczesniej
+- lokalnie smoke przechodzi, wiec produkcja nie daje jeszcze wiarygodnosci
 
-8. Platnosci sa gotowe operacyjnie tylko w modelu pol-manualnym.
-- Obecny model jest akceptowalny na start, ale musi miec SLA i czytelne statusy.
-- Potrzebne:
-  - powtarzalny admin workflow
-  - czytelne komunikaty pending/rejected/confirmed
-  - monitoring duplikatow i timeoutow
+8. Hero nie zostal dowieziony tak, jak chcesz.
+- test lokalny oczekuje `omnie-hero.webp`
+- aktualny config dalej wskazuje `specialist-krzysztof-portrait.jpg`
+- live nie odzwierciedla Twojego wymagania: specjalista z kotem na rekach, niebieski kitel, mocny hero kadr
 
-9. QA powinno miec jedna prawde i zero falszywych odczytow.
-- Wczesniejszy raport potrafil falszywie oznaczyc `payuVisible=true` na podstawie tekstu, nie realnego przycisku.
-- GPT Mini powinien sprawdzic, czy finalny skrypt QA wykrywa metody platnosci tylko po realnych selektorach UI.
-- Plik: `scripts/live-clickthrough-report.ts`
+9. Maile klienta nadal nie sa wlaczone na live.
+- readiness raport wprost trzyma to jako blocker
+- dzis klient nadal zalezy od confirmation page
 
-### P3 - wzrost i optymalizacja po odblokowaniu P0/P1
+## 4. Co jest nowym albo wiekszym problemem niz wczoraj
 
-10. Brak domknietego planu mierzenia konwersji.
-- Po naprawie checkoutu trzeba mierzyc co najmniej:
-  - wejscie na home
-  - klik CTA
-  - wejscie na slot
-  - wejscie na form
-  - wejscie na payment
-  - sukces pending manual / paid / confirmed
-  - porzucenie na kazdym etapie
+### P0 - blocker zarabiania
 
-11. Po wdrozeniu poprawki potrzebna jest codzienna mini-regresja.
-- Minimum: home, /koty, /book, /slot, /form, /payment, /confirmation, /oferta, /kontakt, /regulamin, /polityka-prywatnosci, admin manual payment approve/reject.
+1. Produkcyjna baza nie nadaza za wdrozonym kodem.
+- Dowod:
+  - live report 2026-04-07
+  - `POST /api/bookings` = `409`
+  - blad: `Could not find the 'qa_booking' column of 'bookings' in the schema cache`
+- Skutek:
+  - publiczny klient nie przejdzie pewnie z `/form` do `/payment`
+  - nie da sie rzetelnie sprawdzic pokoju i platnosci na production, bo funnel peka za wczesnie
 
-## 5. Plan pracy etapami dla GPT Mini
+2. Produkcja cofnela sie wzgledem 2026-04-06.
+- Wczoraj: `18/19`
+- Dzisiaj: `10/19`
+- To nie jest kosmetyka. To jest regres wdrozeniowy.
 
-### ETAP 0 - Recovery repo i freeze stanu
-Cel: przywrocic lokalne srodowisko do stanu, w ktorym ma sens dalsza praca.
+### P1 - nadal bardzo wazne
 
-Zakres:
-1. Odtworzyc `app/globals.css` z poprawnego zrodla.
-2. Uruchomic:
-- `npm run build`
-- lokalny smoke home/payment/confirmation
-3. Zweryfikowac, ktore lokalne diffy sa intencjonalne, a ktore sa efektem uszkodzenia repo.
-4. Dopiero po tym zrobic nowy `local vs live`.
+3. Customer email dalej OFF.
+- readiness nadal to blokuje
+- confirmation page wciaz nosi zbyt duzy ciezar zaufania
 
-Definition of done:
-- brak `NUL` w `app/globals.css`
-- build green
-- local home i payment bez 500
+4. Hero nadal jest niezgodny z Twoja decyzja i z testem.
+- technicznie: asset mismatch
+- biznesowo: nie ta twarz, nie ten kadr, nie to pierwsze wrazenie
 
-### ETAP 1 - Stabilizacja platnosci recznej
-Cel: usunac jedyny realny live blocker w funnelu.
+5. Polish/copy quality nadal ciagnie strone w dol.
+- `119 zl`, `350 zl`
+- `Krotki opis sytuacji`
+- `Ty i zwierz?`
+- `sika poza kuweta`
+- `zyje w napieciu`
+- `pielegnacji`
+- to nie sa drobiazgi, bo stoja dokladnie na sciezce decyzji zakupowej
 
-Zakres:
-1. Rozbic problem na granice:
-- klik w UI
-- `POST /api/payments/manual`
-- zapis statusu bookingu
-- redirect
-- render `pending-manual-review`
-2. Dodac idempotencje dla ponownego zgloszenia.
-3. Dodac jasny fallback UI, jesli admin notification opoznia odpowiedz.
-4. Dodac polling albo pewny refresh stanu na confirmation.
-5. Przetestowac approve i reject w adminie.
+6. Kontakt nadal jest tarciem.
+- publiczna strona kontaktowa prowadzi przez `mailto:`
+- brak normalnego formularza leadowego
 
-Definition of done:
-- live i local przechodza manual payment -> pending -> approve/reject bez niejasnych timeoutow
+### P2 - wazne, ale dopiero po P0/P1
 
-### ETAP 2 - Test checkout bez realnego placenia
-Cel: dac bezpieczna sciezke QA i demo.
+7. Home wymaga skrocenia i lepszego tempa czytania.
+- CTA juz jest
+- gorne menu juz jest
+- zdjecia juz sa
+- ale komunikat nadal jest za szeroki i miejscami dubluje zaufanie / prowadzenie / proof
 
-Rekomendacja glowna:
-1. Wprowadzic kontrolowany tryb testowy:
-- env gated
-- allowlista emaili/telefonow
-- jawne oznaczenie bookingu jako QA
-2. Dodac kod promocyjny 100 procent tylko dla allowlisty lub tylko poza produkcyjnym ruchem publicznym.
-3. Dodac adminowa akcje do recznego potwierdzania bookingow QA.
+8. Social proof istnieje w kodzie, ale nie pracuje na glowna konwersje.
+- komponent opinii istnieje
+- komponent/formularz opinii istnieje
+- ale to trzeba sensownie wpuscic na publiczna sciezke, nie jako ozdobnik
 
-Czego nie robic:
-- nie wystawiac publicznego `0 zl` bez zabezpieczen
-- nie mieszac bookingow testowych z prawdziwa sprzedaza bez flagi QA
+9. SEO jest obecne, ale nie domkniete lokalnie.
+- meta description nie jest puste
+- ale opis i title nie wykorzystuja mocno lokalizacji `Olsztyn`
+- nadal wisi problem domeny `vercel.app`
 
-Definition of done:
-- mozna odpalic pelny test funnelu bez realnej platnosci i bez ryzyka dla klienta
+## 5. Uwagi Gemini - co biore, co odrzucam jako priorytet
 
-### ETAP 3 - Hero, zdjecia i warstwa zaufania
-Cel: poprawic pierwsze 5 sekund strony i zgodnosc z Twoja wizja.
+Uwagi Gemini, ktore biore do planu:
+- skrocic i uproscic copy
+- ujednolicic ceny i zapis waluty
+- poprawic proofreading i polskie znaki
+- mocniej pokazac twarz specjalisty i zaufanie
+- dodac lub wyeksponowac social proof
+- rozwazyc prosty formularz kontaktowy zamiast samego `mailto:`
+- przejsc na wlasna domene
+- dopiac lokalne SEO
+
+Uwagi Gemini, ktore sa dzis niepelne albo wtorne:
+- `brak CTA` - nieaktualne, CTA juz jest na home
+- `brak menu` - nieprecyzyjne, menu juz istnieje, tylko nie jest idealne
+- `zero zdjec` - nieaktualne, zdjecia sa; problemem jest dobor i hero, nie ich calkowity brak
+
+Wniosek:
+- Gemini dobrze czuje warstwe marketingowa,
+- ale nie widzi najwazniejszego P0:
+  - production booking regression
+  - migration gap
+  - rollout mismatch miedzy kodem a DB
+
+## 6. Nowy plan etapowy do finiszu
+
+Kolejnosc jest twarda. Nie skakac od razu do redesignu.
+
+### ETAP 0 - Freeze i prawda o stanie production
+
+Cel:
+- przestac zgadywac, co jest "w kodzie", a co realnie dziala publicznie
 
 Zakres:
-1. Opublikowac hero z `omnie.png` jako glowny kadr.
-2. Zoptymalizowac plik hero pod performance.
-3. Sprawdzic crop desktop/mobile.
-4. Uporzadkowac branding assets.
-5. Dodac mocniejszy trust block blisko CTA i checkoutu:
-- kto prowadzi konsultacje
-- jak wyglada proces
-- kiedy klient dostaje pokoj
-- co sie dzieje po wplacie recznej
+1. Zamrozic nowe publiczne wdrozenia do czasu zielonego funnelu.
+2. Sprawdzic i zapisac:
+   - aktualny commit live
+   - aktualny schema state produkcyjnej bazy
+   - ktore migracje sa wykonane, a ktore nie
+3. Potwierdzic brakujace migracje dla QA checkoutu i funnel events.
+4. Po kazdym kroku uruchomic:
+   - `npm run live-readiness -- --report-only`
+   - `npm run live-clickthrough-report -- --url https://coapebehawiorysta.vercel.app`
 
 Definition of done:
-- live home uzywa wlasciwego zdjecia i szybciej sie laduje
-- klient w 5 sekund rozumie kto, co, za ile i co dalej
+- production DB i produkcyjny kod sa zsynchronizowane
+- `POST /api/bookings` nie zwraca juz `409`
+- nowy live report nie ma bledu `qa_booking`
 
-### ETAP 4 - Copy i legal zgodne z realna platnoscia
-Cel: zero rozjazdu miedzy obietnica a checkoutem.
+### ETAP 1 - Odblokowanie monetizacji: booking creation
+
+Cel:
+- przywrocic dzialanie publicznego funnelu do poziomu minimum sprzedazowego
 
 Zakres:
-1. Ukryc / warunkowac wzmianki o PayU tam, gdzie PayU jest off.
-2. Dopasowac FAQ i regulamin do realnie dostepnych metod.
-3. Ujednolicic komunikaty manual payment w home, payment, confirmation, regulaminie i FAQ.
+1. Naprawic `form -> POST /api/bookings -> payment`.
+2. Dolozyc jawne user-visible error states, jesli schema albo zapis znow sie rozjedzie.
+3. Zweryfikowac slot locking i conflict path.
+4. Sprawdzic 10 prob publicznego bookingu na production.
 
 Definition of done:
-- klient nigdzie nie czyta o opcji, ktorej teraz nie moze uzyc
+- `/form` przechodzi do `/payment` 10/10
+- brak `409` przy poprawnym flow
+- klient widzi jasny komunikat, jesli termin zostal zajety lub zapis padl
 
-### ETAP 5 - Wlaczenie maili klienta
-Cel: obnizyc niepokoj po zakupie i liczbę wiadomosci supportowych.
+### ETAP 2 - Stabilizacja manual payment na production
+
+Cel:
+- domknac najblizsza sciezke do zarabiania bez wlaczania PayU
 
 Zakres:
-1. Potwierdzenie rezerwacji.
-2. Potwierdzenie `pending manual review`.
-3. Potwierdzenie `paid/confirmed`.
-4. Komunikat po reject/cancel.
+1. Zweryfikowac na production:
+   - klik CTA manual
+   - `POST /api/payments/manual`
+   - redirect
+   - confirmation pending
+   - admin reject
+   - admin approve
+2. Sprawdzic timeouty, admin notice, auto-refresh statusu i duplicate click.
+3. Wymusic czytelne fallbacki dla klienta, bez cichych failow.
 
 Definition of done:
-- klient nie jest zalezny tylko od jednej strony confirmation
+- manual `payment -> pending -> approve/reject` dziala stabilnie
+- ten etap jest zrozumialy dla klienta bez kontaktu awaryjnego
 
-### ETAP 6 - PayU production go-live
-Cel: dopiero po ustabilizowaniu recznej platnosci uruchomic online checkout.
+### ETAP 3 - Bezpieczny QA bypass bez realnej platnosci
+
+Cel:
+- miec pelna sciezke testowa bez publicznego `0 zl`
 
 Zakres:
-1. Produkcyjne klucze PayU.
-2. Smoke checkout bez expose dla wszystkich, jesli to mozliwe.
-3. Webhook notify, return URL, final status sync.
-4. Manual payment zostaje jako backup.
+1. Dowozyc do production to, co juz jest w kodzie:
+   - flaga QA
+   - env gate
+   - allowlista emaili/telefonow
+   - admin `Potwierdz QA`
+2. Jesli potrzebny jest kod promocyjny 100 procent, to tylko:
+   - dla QA allowlisty
+   - poza ruchem publicznym
+   - z jawna etykieta QA
+3. Odetchnac z testami pokoju, confirmation i prep materials przez QA path, a nie przez realna platnosc.
 
 Definition of done:
-- co najmniej jeden poprawny checkout PayU produkcyjny potwierdzony end-to-end
-- manual payment dalej dziala jako fallback
+- da sie przejsc caly funnel bez realnego obciazenia klienta
+- bookingi QA nie mieszaja sie z prawdziwa sprzedaza
+- da sie przetestowac pokoj i confirmation end-to-end bez kombinowania
 
-### ETAP 7 - Analityka i operacje
-Cel: wiedziec, gdzie znika kasa.
+### ETAP 4 - Warstwa zaufania po platnosci
 
-Zakres:
-1. Funnel analytics.
-2. Dashboard prostych KPI:
-- wejscia na home
-- CTA clicks
-- slot selected
-- payment opened
-- manual pending
-- paid
-- confirmed
-- rejects/cancels
-3. Prosty rytual QA przed kazdym deployem.
-
-### ETAP 8 - Finalny szlif wizualny
-Cel: przestac wygladac jak stockowy szablon i domknac spójny brand feel.
+Cel:
+- klient ma miec pewnosc po zaplacie, a nie tylko jedna strone z linkiem
 
 Zakres:
-1. Dopracowanie hierarchii typografii i spacingu na home, payment i confirmation.
-2. Ostatni pass po hero, trust cards, CTA oraz kartach ofertowych.
-3. Usuniecie ostatnich "templateowych" komponentow i zastapienie ich wyrazniejszym jezykiem wizualnym.
-4. Sprawdzenie mobile i desktop screenshots przed finalnym deployem.
+1. Wlaczyc customer email delivery.
+2. Zweryfikowac:
+   - reservation received
+   - payment pending manual review
+   - payment confirmed
+   - reject / cancel
+3. Dopiac sendera, domene i operacyjny fallback.
 
 Definition of done:
-- kluczowe strony nie wygladaja juz jak generyczny layout z 2005
-- finalne screenshoty trafiaja do qa-reports jako before/after
-- status wizualny jest jednoznacznie lepszy bez psucia flow i konwersji
+- readiness nie blokuje juz przez customer email
+- klient dostaje potwierdzenie poza confirmation page
 
-## 6. Kolejnosc wdrazania bez dyskusji
+### ETAP 5 - Hero, brand i pierwsze 5 sekund
 
-Rekomendowana kolejnosc prac:
-1. `app/globals.css` recovery i zdrowy build
-2. manual payment reliability
-3. bezpieczny test checkout / QA bypass
-4. hero z ciastkiem + optymalizacja assetu
-5. copy/legal zgodne z realna platnoscia
-6. maile klienta
-7. PayU production
-8. analytics i operacje
-9. finalny szlif wizualny
+Cel:
+- dopiero teraz wejsc w mocniejsze poprawki marketingowe
 
-## 7. Konkretne zadania dla GPT Mini na pierwszy sprint
+Wymaganie wlasciciela:
+- hero ma pokazac specjaliste z kotem na rekach w niebieskim kitlu
 
-Sprint 1 ma dowiezc tylko to:
-1. Naprawic `app/globals.css` i przywrocic zielony build.
-2. Powtorzyc local smoke i porownanie z live.
-3. Naprawic manual payment -> pending.
-4. Dodac bezpieczna sciezke testowa platnosci QA.
-5. Spisac co z lokalnych diffow idzie do deployu, a co wymaga osobnej decyzji.
+Zakres:
+1. Podmienic hero asset na docelowy, zoptymalizowany plik, zgodny z testem i decyzja wlasciciela.
+2. Uporzadkowac asset pipeline:
+   - jeden glowny hero asset
+   - jasne nazwy
+   - mobilny i desktopowy crop
+3. Skrocic hero copy i wywalic powtorzenia typu `bez zgadywania`.
+4. Zostawic jedna mocna sekcje zaufania zamiast duplikowania podobnych blokow.
+5. Finalnie doprowadzic do zgodnosci testu hero i realnego live assetu.
 
-Nie rozpraszac sprintu 1 na pelny redesign.
-Najpierw ma byc stabilny funnel i zdrowe repo.
+Definition of done:
+- live home pokazuje wlasciwe zdjecie
+- local test dla hero przechodzi
+- mobile i desktop maja dobry kadr
 
-## 8. Decyzje biznesowe, ktore warto przyjac od razu
+### ETAP 6 - Proofreading, ceny, legal i kontakt
 
-1. Start publiczny moze isc na manual payment, ale tylko jesli pending state jest niezawodny.
-2. PayU wlaczac dopiero po odblokowaniu testow i po stabilnym local buildzie.
-3. Hero z `omnie.png` jest decyzja zatwierdzona przez wlasciciela i ma trafic live po recovery repo.
-4. Publiczne `0 zl` bez guardow odrzucic. Tylko allowlista / env gate / admin QA.
+Cel:
+- zlikwidowac wrazenie "prawie gotowe"
 
-## 9. Koncowa ocena stanu na 2026-04-06
+Zakres:
+1. Jeden pass po publicznym copy:
+   - polskie znaki
+   - ortografia
+   - interpunkcja
+   - krotsze teksty
+2. Jeden formatter cen we wszystkich komponentach.
+3. Poprawic:
+   - `119 zl`, `350 zl`
+   - `Ty i zwierz?`
+   - `Krotki opis sytuacji`
+   - kocie i psie copy w `lib/data.ts` i `lib/offers.ts`
+4. Dopiac legal i payment copy do realnie aktywnych metod.
+5. Zmienic kontakt z samego `mailto:` na prosty formularz leadowy albo przynajmniej wyzszy quality action panel.
 
-- Produkcja: prawie gotowa do sprzedaży, ale ma jeden bardzo niebezpieczny blad w manual payment transition.
-- Repo lokalne: obecnie niezdrowe, nie nadaje sie do wiarygodnego wdrazania bez recovery.
-- Najblizsza droga do zarabiania:
-  1. odblokowac lokalne repo
-  2. naprawic reczna platnosc
-  3. dodac bezpieczne testy checkoutu
-  4. dopiero potem domykac hero, maile i PayU
+Definition of done:
+- nie ma juz widocznych tekstowych fuszerek na publicznej sciezce
+- ceny wszedzie sa z jednego formattera
+- kontakt nie wymaga klientowi klepania maila recznie
+
+### ETAP 7 - Social proof, SEO i domena
+
+Cel:
+- podniesc wiarygodnosc i jakosc ruchu
+
+Zakres:
+1. Wyeksponowac prawdziwy social proof.
+2. Wpiac lub wykorzystac juz istniejace komponenty opinii.
+3. Ustawic wlasna domene `.pl`.
+4. Dopisac lokalne SEO:
+   - `Olsztyn`
+   - miasto / region w meta
+   - spojny opis og i title
+
+Definition of done:
+- strona nie wyglada jak tymczasowy deploy
+- lokalny ruch i brand trust maja lepszy fundament
+
+### ETAP 8 - PayU production rollout
+
+Cel:
+- wlaczyc online checkout dopiero wtedy, gdy manual i QA sa juz zielone
+
+Zakres:
+1. Zostawic PayU OFF do czasu ukonczenia etapow 0-7.
+2. Wykonac produkcyjne przygotowanie:
+   - klucze
+   - webhook
+   - return flow
+   - idempotencja
+   - final status sync
+3. Przed publicznym wlaczeniem:
+   - `npm run payu-smoke`
+   - finalny controlled validation path po stronie wlasciciela, nie agenta
+4. Manual payment zostaje backupem.
+
+Definition of done:
+- PayU mozna wlaczyc bez rozwalenia manual fallbacku
+- status po checkoutcie odbija sie poprawnie w confirmation i pokoju
+
+### ETAP 9 - Guard synchronizacji schematu
+
+Cel:
+- pilnowac, zeby canonical Supabase schema i kluczowe migracje nie odjechaly od aktualnego code path
+
+Zakres:
+1. Dodac audyt `supabase/schema.sql` i rollout migracji do checklisty release.
+2. Zapisac prosty wynik `schema-audit` w repo.
+3. Miec jawny krok w docs przed kolejnym rolloutem DB.
+
+Definition of done:
+- `npm run schema-audit` przechodzi
+- brak rozjazdu booking/payment/QA columns
+- live readiness pozostaje zielony
+
+### ETAP 10 - Readiness gate dla schema sync
+
+Cel:
+- zrobic z audytu schematu formalny release gate, a nie tylko osobny skrypt diagnostyczny
+
+Zakres:
+1. Wpiac `schema-sync` do `getGoLiveChecks()`.
+2. Pokazac schema status w `/admin` i w raportach readiness.
+3. Utrzymac `schema-audit` jako osobny szybki check dla operatora.
+
+Definition of done:
+- `npm run live-readiness -- --report-only` uwzglednia schema sync
+- `schema-sync` blokuje release przy dryfie schema/migracji
+- admin pokazuje jednoznaczny status schema
+
+## 7. Priorytet na najblizszy sprint
+
+Jeden sprint ma dowiezc tylko to:
+1. produkcyjny sync kod + migracje
+2. powrot `form -> payment` na live
+3. stabilny manual pending na live
+4. end-to-end QA bypass bez realnej platnosci
+5. swiezy zielony live report po naprawie
+
+W tym sprincie nie robic jeszcze:
+- duzego redesignu
+- pelnego przepisywania home
+- wlaczania publicznego PayU
+
+## 8. Konkretna ocena stanu na 2026-04-07
+
+### Produkcja
+- dzis nie jest gotowa na mocniejszy ruch
+- ma regres wzgledem 2026-04-06
+- glowny blocker: booking creation
+
+### Repo lokalne
+- jest w duzo lepszym stanie niz w poprzednim planie
+- build, ui smoke i sandbox PayU daja podstawe do dalszej pracy
+- jedyny czerwony test dotyczy hero assetu, co zgadza sie z Twoim zarzutem biznesowym
+
+### Pokoj rozmowy
+- po stronie kodu i lokalnego smoke wyglada sensownie
+- produkcyjnie nie dalo sie go dzis rzetelnie przetestowac, bo funnel peka za wczesnie
+- po naprawie booking + QA bypass pokoj powinien byc sprawdzany jako jeden z pierwszych dowodow gotowosci
+
+### Najkrotsza droga do zarabiania
+1. naprawic production DB / migration mismatch
+2. przywrocic live booking creation
+3. ustabilizowac manual payment
+4. dowiezc QA bypass bez realnej platnosci
+5. wlaczyc customer email
+6. dopiero potem dopieszczac hero, copy, SEO i social proof

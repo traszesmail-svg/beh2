@@ -3,6 +3,7 @@ import { DEFAULT_BOOKING_SERVICE, getBookingServiceRoomSummary, getBookingServic
 import { SITE_NAME, SITE_OG_IMAGE, SITE_SHORT_NAME, SITE_TAGLINE, SPECIALIST_NAME } from '@/lib/site'
 
 const DEFAULT_OG_IMAGE = SITE_OG_IMAGE
+const LOCAL_SEO_CONTEXT = 'Działam w Olsztynie, woj. warmińsko-mazurskim i online.'
 
 type MarketingMetadataInput = {
   title: string
@@ -10,31 +11,45 @@ type MarketingMetadataInput = {
   description: string
 }
 
+function appendLocalSeoContext(description: string) {
+  if (/Olsztyn/i.test(description)) {
+    return description
+  }
+
+  return `${description} ${LOCAL_SEO_CONTEXT}`
+}
+
 export function buildMarketingMetadata({ title, path, description }: MarketingMetadataInput): Metadata {
+  const localizedDescription = appendLocalSeoContext(description)
+
   return {
     title,
-    description,
+    description: localizedDescription,
     alternates: {
       canonical: path,
     },
     openGraph: {
       title: `${title} | ${SITE_SHORT_NAME}`,
-      description,
+      description: localizedDescription,
+      siteName: SITE_NAME,
+      type: 'website',
+      locale: 'pl_PL',
       url: path,
       images: [DEFAULT_OG_IMAGE],
     },
     twitter: {
       card: 'summary_large_image',
       title: `${title} | ${SITE_SHORT_NAME}`,
-      description,
+      description: localizedDescription,
       images: [DEFAULT_OG_IMAGE.url],
     },
   }
 }
 
 export async function buildHomeMetadata(): Promise<Metadata> {
-  const description =
+  const description = appendLocalSeoContext(
     `${SITE_NAME}. ${SITE_TAGLINE}. Spokojna, ekspercka pomoc dla opiekunów psów i kotów: od pierwszej konsultacji po terapię, wizyty domowe i pobyty.`
+  )
 
   return {
     description,
@@ -44,6 +59,9 @@ export async function buildHomeMetadata(): Promise<Metadata> {
     openGraph: {
       title: SITE_NAME,
       description,
+      siteName: SITE_NAME,
+      type: 'website',
+      locale: 'pl_PL',
       url: '/',
       images: [DEFAULT_OG_IMAGE],
     },

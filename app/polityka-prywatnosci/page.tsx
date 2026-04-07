@@ -21,7 +21,7 @@ const summaryItems: LegalSummaryItem[] = [
   },
   {
     label: 'Kontakt',
-    value: 'W sprawie danych kontakt prowadzony jest mailowo, bez publicznej ścieżki telefonicznej.',
+    value: 'W sprawie danych kontakt prowadzony jest przez formularz lub mailowo, bez publicznej ścieżki telefonicznej.',
   },
 ]
 
@@ -65,9 +65,9 @@ export default function PrivacyPolicyPage() {
       contactSubject="Prywatność i dane - Regulski | Terapia behawioralna"
       summaryItems={summaryItems}
       sections={sections}
-      supportText="Dane służą obsłudze rezerwacji, płatności, kontaktu z opiekunem psa albo kota oraz bezpiecznemu przygotowaniu konsultacji."
+      supportText="Dane służą obsłudze rezerwacji, płatności, formularza kontaktowego, kontaktu z opiekunem psa albo kota oraz bezpiecznemu przygotowaniu konsultacji."
       supportNoteTitle="Pytanie o dane"
-      supportNoteText="Jeśli chcesz poprawić dane, dopytać o zakres przetwarzania albo zgłosić żądanie, napisz mailowo. To jest główna ścieżka kontaktu także w sprawach prywatności."
+      supportNoteText="Jeśli chcesz poprawić dane, dopytać o zakres przetwarzania albo zgłosić żądanie, napisz przez formularz kontaktowy albo mailowo. To jest główna ścieżka kontaktu także w sprawach prywatności."
       ctaTitle="Napisz w sprawie danych albo prywatności"
       ctaText="W wiadomości wystarczy krótko wskazać, czy pytanie dotyczy danych kontaktowych, operatorów technicznych, zgody analitycznej albo obsługi rezerwacji."
       secondaryCtaHref="/kontakt"

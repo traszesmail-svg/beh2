@@ -76,7 +76,7 @@ export function LegalPageLayout({
 }: LegalPageLayoutProps) {
   const contact = getPublicContactDetails()
   const contactMailtoHref = contact.email ? buildMailtoHref(contact.email, contactSubject) : null
-  const primaryHref = contactMailtoHref ?? '/kontakt'
+  const primaryHref = '/kontakt'
 
   return (
     <main className="page-wrap">

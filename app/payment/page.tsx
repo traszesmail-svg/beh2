@@ -3,6 +3,7 @@ import { unstable_noStore as noStore } from 'next/cache'
 import { headers } from 'next/headers'
 import { AnalyticsEventOnMount } from '@/components/AnalyticsEventOnMount'
 import { BookingStageEyebrow } from '@/components/BookingStageEyebrow'
+import { CustomerEmailStatusNotice } from '@/components/CustomerEmailStatusNotice'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { PaymentActions } from '@/components/PaymentActions'
@@ -13,7 +14,7 @@ import { getManualPaymentDisplayCopy } from '@/lib/manual-payment'
 import { formatPricePln } from '@/lib/pricing'
 import { getBookingForViewer } from '@/lib/server/db'
 import { getDataModeStatus, getPublicFeatureUnavailableMessage } from '@/lib/server/env'
-import { getCustomerEmailDeliveryConfigIssue } from '@/lib/server/notifications'
+import { getCustomerEmailDeliveryStatus } from '@/lib/server/notifications'
 import {
   getManualPaymentReference,
   getPayuOptionStatus,
@@ -70,7 +71,8 @@ export default async function PaymentPage({
   const bookingServiceType = booking ? resolveBookingServiceType(booking.serviceType, booking.amount) : null
   const bookingServiceTitle = bookingServiceType ? getBookingServiceTitle(bookingServiceType) : null
   const bookingServiceSummary = bookingServiceType ? getBookingServiceRoomSummary(bookingServiceType) : null
-  const customerEmailAvailable = booking ? !getCustomerEmailDeliveryConfigIssue(booking.email) : false
+  const customerEmailStatus = booking ? getCustomerEmailDeliveryStatus(booking.email) : null
+  const customerEmailAvailable = customerEmailStatus?.state === 'ready'
   const isConfirmed =
     booking?.paymentStatus === 'paid' && (booking.bookingStatus === 'confirmed' || booking.bookingStatus === 'done')
   const isWaitingManual =
@@ -110,6 +112,7 @@ export default async function PaymentPage({
           }
           data-analytics-disabled={qaBooking ? 'true' : undefined}
           data-qa-booking={qaBooking ? 'true' : 'false'}
+          data-customer-email-state={customerEmailStatus?.state ?? 'unknown'}
         >
           {booking && !flowError ? (
             <AnalyticsEventOnMount
@@ -190,6 +193,15 @@ export default async function PaymentPage({
                 <div className="info-box top-gap">
                   Checkout online został przerwany. Możesz wrócić do wyboru metody i dokończyć płatność później.
                 </div>
+              ) : null}
+
+              {!qaBooking && customerEmailStatus && !isClosed ? (
+                <CustomerEmailStatusNotice
+                  status={customerEmailStatus}
+                  recipientEmail={booking.email}
+                  context="payment"
+                  className="top-gap"
+                />
               ) : null}
 
               {isClosed ? (

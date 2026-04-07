@@ -1,15 +1,19 @@
 import { getBaseUrl, getDataModeStatus } from '@/lib/server/env'
 import { getCustomerEmailDeliveryStatus } from '@/lib/server/notifications'
 import { getPayuOptionStatus } from '@/lib/server/payment-options'
+import { getSupabaseSchemaAudit } from '@/scripts/lib/schema-audit'
 
 const EXTERNAL_CUSTOMER_SMOKE_EMAIL = 'customer@example.com'
 
 export type GoLiveCheckTone = 'ready' | 'attention'
 
+export type GoLiveCheckState = 'ready' | 'disabled' | 'blocked'
+
 export type GoLiveCheck = {
-  id: 'data-runtime' | 'app-url' | 'customer-email' | 'payu-online'
+  id: 'data-runtime' | 'schema-sync' | 'app-url' | 'customer-email' | 'payu-online'
   label: string
   statusLabel: string
+  state: GoLiveCheckState
   tone: GoLiveCheckTone
   summary: string
   nextStep: string
@@ -29,6 +33,7 @@ function getDataRuntimeGoLiveCheck(): GoLiveCheck {
       id: 'data-runtime',
       label: 'Warstwa danych',
       statusLabel: 'Gotowe',
+      state: 'ready',
       tone: 'ready',
       summary: 'Warstwa danych jest gotowa do ruchu live i korzysta z Supabase zamiast lokalnego fallbacku JSON.',
       nextStep: 'Brak blokera po stronie runtime danych.',
@@ -38,10 +43,37 @@ function getDataRuntimeGoLiveCheck(): GoLiveCheck {
   return {
     id: 'data-runtime',
     label: 'Warstwa danych',
-    statusLabel: 'Bloker',
+    statusLabel: 'Zablokowane',
+    state: 'blocked',
     tone: 'attention',
     summary: `Warstwa danych nie jest gotowa do ruchu live: ${data.summary}`,
     nextStep: 'Ustaw prawidlowy runtime Supabase dla srodowiska live i potwierdz zapis bookingow oraz admina poza local fallback.',
+  }
+}
+
+function getSchemaSyncGoLiveCheck(): GoLiveCheck {
+  const audit = getSupabaseSchemaAudit()
+
+  if (audit.ok) {
+    return {
+      id: 'schema-sync',
+      label: 'Schema Supabase',
+      statusLabel: 'Gotowe',
+      state: 'ready',
+      tone: 'ready',
+      summary: 'Canonical Supabase schema i rollout migrations sa zsynchronizowane z aktualnym code path.',
+      nextStep: 'Brak blokera po stronie booking/payment/QA schema.',
+    }
+  }
+
+  return {
+    id: 'schema-sync',
+    label: 'Schema Supabase',
+    statusLabel: 'Zablokowane',
+    state: 'blocked',
+    tone: 'attention',
+    summary: audit.summary,
+    nextStep: 'Uruchom npm run schema-audit i doprowadz supabase/schema.sql oraz rollout migracje do zgodnosci.',
   }
 }
 
@@ -61,6 +93,7 @@ function getAppUrlGoLiveCheck(): GoLiveCheck {
       id: 'app-url',
       label: 'Publiczny URL',
       statusLabel: 'Gotowe',
+      state: 'ready',
       tone: 'ready',
       summary: `Publiczny URL aplikacji jest gotowy do linkow zwrotnych i maili: ${baseUrl}.`,
       nextStep: 'Brak blokera po stronie publicznego URL.',
@@ -70,7 +103,8 @@ function getAppUrlGoLiveCheck(): GoLiveCheck {
   return {
     id: 'app-url',
     label: 'Publiczny URL',
-    statusLabel: 'Bloker',
+    statusLabel: 'Zablokowane',
+    state: 'blocked',
     tone: 'attention',
     summary: `Publiczny URL nie wyglada na produkcyjny HTTPS endpoint: ${baseUrl}.`,
     nextStep: 'Ustaw NEXT_PUBLIC_APP_URL na docelowy adres HTTPS uzywany w linkach mailowych i powrotach z platnosci.',
@@ -146,6 +180,7 @@ export async function getVerifiedDeployReadinessChecks(): Promise<GoLiveCheck[]>
     id: 'app-url',
     label: 'Publiczny URL',
     statusLabel: 'Bloker',
+    state: 'blocked',
     tone: 'attention',
     summary: `Publiczny URL nie odpowiada poprawnie dla ruchu zewnetrznego: ${baseUrl} (${probe.details}).`,
     nextStep: 'Ustaw NEXT_PUBLIC_APP_URL na faktycznie publiczny adres HTTPS bez ochrony 401/SSO i potwierdz go przez npm run live-smoke.',
@@ -162,6 +197,7 @@ function getCustomerEmailGoLiveCheck(): GoLiveCheck {
       id: 'customer-email',
       label: 'Maile klienta',
       statusLabel: 'Gotowe',
+      state: 'ready',
       tone: 'ready',
       summary: status.summary,
       nextStep: status.nextStep,
@@ -172,7 +208,8 @@ function getCustomerEmailGoLiveCheck(): GoLiveCheck {
     return {
       id: 'customer-email',
       label: 'Maile klienta',
-      statusLabel: 'Uwaga',
+      statusLabel: 'Wyłączone',
+      state: 'disabled',
       tone: 'attention',
       summary: 'Maile klienta sa swiadomie wylaczone. Klient bedzie zalezal tylko od strony potwierdzenia.',
       nextStep: 'Wlacz CUSTOMER_EMAIL_MODE=auto i ustaw zweryfikowany RESEND_FROM_EMAIL, zeby klient dostawal maile poza confirmation page.',
@@ -185,7 +222,8 @@ function getCustomerEmailGoLiveCheck(): GoLiveCheck {
     return {
       id: 'customer-email',
       label: 'Maile klienta',
-      statusLabel: 'Bloker',
+      statusLabel: 'Zablokowane',
+      state: 'blocked',
       tone: 'attention',
       summary: 'Wysylka maili do klientow zewnetrznych jest zablokowana, bo RESEND_FROM_EMAIL nadal korzysta z resend.dev testing mode.',
       nextStep: 'Zweryfikuj domene nadawcy w Resend i ustaw RESEND_FROM_EMAIL na adres z tej domeny.',
@@ -195,7 +233,8 @@ function getCustomerEmailGoLiveCheck(): GoLiveCheck {
   return {
     id: 'customer-email',
     label: 'Maile klienta',
-    statusLabel: 'Bloker',
+    statusLabel: 'Zablokowane',
+    state: 'blocked',
     tone: 'attention',
     summary: `Wysylka maili do klientow zewnetrznych jest zablokowana: ${issue}.`,
     nextStep: 'Uzupelnij konfiguracje Resend i powtorz probe wysylki na zewnetrzny adres testowy.',
@@ -210,6 +249,7 @@ function getPayuGoLiveCheck(): GoLiveCheck {
       id: 'payu-online',
       label: 'PayU online',
       statusLabel: 'Gotowe',
+      state: 'ready',
       tone: 'ready',
       summary: 'PayU online jest swiadomie wylaczone. Checkout dziala przez wplate reczna i potwierdzenie na stronie.',
       nextStep: 'Mozesz wystartowac na platnosci recznej. Po aktywacji produkcyjnego PayU ustaw PAYU_MODE=auto.',
@@ -220,7 +260,8 @@ function getPayuGoLiveCheck(): GoLiveCheck {
     return {
       id: 'payu-online',
       label: 'PayU online',
-      statusLabel: 'Bloker',
+      statusLabel: 'Zablokowane',
+      state: 'blocked',
       tone: 'attention',
       summary: `Platnosc online PayU jest zablokowana: ${payu.summary}`,
       nextStep: 'Uzupelnij brakujace zmienne PayU i uruchom npm run payu-smoke.',
@@ -231,7 +272,8 @@ function getPayuGoLiveCheck(): GoLiveCheck {
     return {
       id: 'payu-online',
       label: 'PayU online',
-      statusLabel: 'Bloker',
+      statusLabel: 'Zablokowane',
+      state: 'blocked',
       tone: 'attention',
       summary: 'Platnosc online PayU nadal dziala w trybie testowym, bo PAYU_ENVIRONMENT=sandbox.',
       nextStep: 'Przelacz PayU na produkcyjne klucze i potwierdz live checkout przez npm run payu-smoke:production przed ruchem live.',
@@ -242,6 +284,7 @@ function getPayuGoLiveCheck(): GoLiveCheck {
     id: 'payu-online',
     label: 'PayU online',
     statusLabel: 'Gotowe',
+    state: 'ready',
     tone: 'ready',
     summary: 'Platnosc online PayU jest skonfigurowana dla srodowiska production.',
     nextStep: 'Brak blokera po stronie konfiguracji PayU.',
@@ -249,7 +292,7 @@ function getPayuGoLiveCheck(): GoLiveCheck {
 }
 
 export function getGoLiveChecks(): GoLiveCheck[] {
-  return [getCustomerEmailGoLiveCheck(), getPayuGoLiveCheck()]
+  return [getSchemaSyncGoLiveCheck(), getCustomerEmailGoLiveCheck(), getPayuGoLiveCheck()]
 }
 
 export function getDeployReadinessChecks(): GoLiveCheck[] {
@@ -257,5 +300,5 @@ export function getDeployReadinessChecks(): GoLiveCheck[] {
 }
 
 export function hasBlockingGoLiveChecks(checks: GoLiveCheck[]): boolean {
-  return checks.some((check) => check.tone === 'attention')
+  return checks.some((check) => check.state !== 'ready')
 }

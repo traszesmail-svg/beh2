@@ -14,6 +14,8 @@
     "payu-smoke:production": "node --import tsx scripts/payu-smoke.ts --production",
     "pricing-smoke": "node --import tsx scripts/pricing-smoke.ts",
     "ui-smoke": "node --import tsx scripts/ui-smoke.ts",
+    "qa-smoke": "node --import tsx scripts/qa-bypass-smoke.ts",
+    "schema-audit": "node scripts/schema-audit.js",
     "live-readiness": "node --import tsx scripts/live-readiness.ts",
     "live-smoke": "node --import tsx scripts/live-smoke.ts",
     "live-clickthrough-report": "node --import tsx scripts/live-clickthrough-report.ts",

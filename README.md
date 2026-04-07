@@ -103,6 +103,8 @@ node --import tsx scripts/payu-smoke.ts
 node --import tsx scripts/payu-smoke.ts --production
 node --import tsx scripts/pricing-smoke.ts
 node --import tsx scripts/ui-smoke.ts
+node --import tsx scripts/qa-bypass-smoke.ts
+npm run schema-audit
 node --import tsx scripts/reminder-smoke.ts
 node --import tsx scripts/funnel-metrics.ts
 node --import tsx scripts/live-readiness.ts --report-only
@@ -114,6 +116,8 @@ node --import tsx scripts/live-clickthrough-report.ts
 Warianty PayU smoke:
 - sandbox: `npm run payu-smoke`
 - production: `npm run payu-smoke:production`
+
+`npm run schema-audit` sprawdza, czy kanoniczny plik `supabase/schema.sql` i wymagane migracje dla booking/payment/QA rollout nadal sa spójne z aktualnym kodem.
 
 ## Build produkcyjny
 

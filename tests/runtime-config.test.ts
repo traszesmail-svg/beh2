@@ -6,14 +6,18 @@ import { test } from 'node:test'
 import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import ContactPage from '@/app/kontakt/page'
+import OpinionsPage from '@/app/opinie/page'
 import { Footer } from '@/components/Footer'
 import { SocialSection } from '@/components/SocialSection'
+import { SocialProofSection } from '@/components/SocialProofSection'
 import { buildBookHref, buildFormHref, buildPaymentHref, buildSlotHref, readQaBookingSearchParam } from '@/lib/booking-routing'
 import { BUILD_MARKER_KEY } from '@/lib/build-marker'
 import { getDefaultReleaseSmokeRules } from '@/lib/release-smoke'
 import { INSTAGRAM_PROFILE_URL, SITE_PRODUCTION_URL } from '@/lib/site'
+import { buildHomeMetadata } from '@/lib/seo'
 import { getDeployReadinessChecks, getGoLiveChecks, getVerifiedDeployReadinessChecks } from '@/lib/server/go-live'
 import { getQaCheckoutEligibility, getQaCheckoutPaymentReference, getPublicManualPaymentConfig } from '@/lib/server/payment-options'
+import { auditSupabaseSchemaText, getSupabaseSchemaAudit } from '@/scripts/lib/schema-audit'
 import { getDefaultProductionEnvSnapshotPath } from '@/scripts/lib/env-file'
 
 function readSource(...parts: string[]) {
@@ -58,7 +62,7 @@ test('home hero stays short and decision-first', () => {
   const source = readSource('app', 'page.tsx')
 
   assert.match(source, /Masz psa, kota albo temat mieszany\? Zacznij od prostego wyboru\./)
-  assert.match(source, /Prowadzę konsultacje osobiście/)
+  assert.match(source, /Krzysztof Regulski prowadzi konsultacje osobiście/)
   assert.match(source, /confirmation i link do pokoju/)
   assert.match(source, /3 r.*wne wej.*cia/)
   assert.match(source, /Mam psa/)
@@ -71,18 +75,44 @@ test('home hero stays short and decision-first', () => {
   assert.doesNotMatch(source, /Jak pracujÄ™/)
 })
 
-test('home hero uses the optimized portrait asset', () => {
+test('home hero uses the approved cat-in-arms portrait', () => {
   const homeSource = readSource('app', 'page.tsx')
   const siteSource = readSource('lib', 'site.ts')
 
   assert.match(siteSource, /HOME_HERO_PHOTO/)
-  assert.match(siteSource, /specialist-krzysztof-portrait\.jpg/)
-  assert.doesNotMatch(siteSource, /omnie-hero\.webp/)
+  assert.match(siteSource, /omnie-hero\.webp/)
+  assert.doesNotMatch(siteSource, /specialist-krzysztof-portrait\.jpg/)
   assert.match(siteSource, /cat-in-arms\.jpg/)
   assert.match(siteSource, /HOME_HELP_CHOICE_PHOTO/)
   assert.match(homeSource, /HOME_HERO_PHOTO/)
   assert.match(homeSource, /HOME_HERO_PHOTO\.src/)
   assert.doesNotMatch(homeSource, /SPECIALIST_WIDE_PHOTO\.src/)
+  assert.match(homeSource, /Krzysztof Regulski prowadzi konsultacje osobiście/)
+})
+
+test('home and opinions pages surface real social proof and local SEO', async () => {
+  const homeSource = readSource('app', 'page.tsx')
+  const opinionsSource = readSource('app', 'opinie', 'page.tsx')
+  const homeMetadata = await buildHomeMetadata()
+  const opinionsMarkup = renderToStaticMarkup(createElement(OpinionsPage))
+  const socialPreviewMarkup = renderToStaticMarkup(createElement(SocialProofSection, { showSubmissionForm: false }))
+  const socialFullMarkup = renderToStaticMarkup(createElement(SocialProofSection))
+
+  assert.match(homeSource, /SocialProofSection/)
+  assert.match(homeSource, /showSubmissionForm=\{false\}/)
+  assert.match(opinionsSource, /SocialProofSection/)
+  assert.match(opinionsSource, /buildMarketingMetadata/)
+  assert.match(String(homeMetadata.description ?? ''), /Olsztyn/)
+  assert.match(String(homeMetadata.openGraph?.description ?? ''), /Olsztyn/)
+  assert.match(String(homeMetadata.openGraph?.siteName ?? ''), /Regulski \| Terapia behawioralna/)
+  assert.match(opinionsMarkup, /Historie opiekunów i efekty konsultacji/)
+  assert.match(opinionsMarkup, /Dodaj swoją opinię do ręcznej weryfikacji/)
+  assert.match(socialPreviewMarkup, /Historie opiekunów i efekty konsultacji/)
+  assert.match(socialPreviewMarkup, /Publiczne źródła/)
+  assert.match(socialPreviewMarkup, /Magazyn Weterynaryjny/)
+  assert.match(socialPreviewMarkup, /Zobacz pełną sekcję opinii/)
+  assert.match(socialFullMarkup, /Dodaj swoją opinię do ręcznej weryfikacji/)
+  assert.match(socialFullMarkup, /Publiczne źródła/)
 })
 
 test('offer and booking pages keep quick-scan language', () => {
@@ -118,6 +148,8 @@ test('offer and booking pages keep quick-scan language', () => {
   assert.match(offersSource, /return offer\.detailCtaLabel \?\? 'Szczegóły'/)
   assert.match(offersSource, /primaryCtaLabel: 'Umów 15 min'/)
   assert.match(offersSource, /primaryCtaLabel: 'Napisz'/)
+  assert.match(offersSource, /priceLabel: formatPricePln\(119\)/)
+  assert.match(offersSource, /priceLabel: formatPricePln\(350\)/)
   assert.doesNotMatch(offersSource, /Czy to dla Ciebie\?/)
   assert.doesNotMatch(offersSource, /Szerszy start/)
   assert.doesNotMatch(offersSource, /kwalifikacja/)
@@ -136,8 +168,13 @@ test('offer, slot and form copy stay accented', () => {
   assert.match(offersSource, /Gdy problem trwa długo, dotyczy kilku obszarów albo chcesz od razu wejść w pełniejszą analizę\./)
   assert.match(offersSource, /Od razu rezerwujesz dłuższy termin online zamiast zaczynać od samego formularza kontaktowego\./)
   assert.match(offersSource, /Gdy chcesz zacząć od materiału bez rezerwacji rozmowy\./)
+  assert.match(offersSource, /priceLabel: formatPricePln\(119\)/)
+  assert.match(offersSource, /priceLabel: formatPricePln\(350\)/)
   assert.match(slotPage, /Potrzebuję pomocy/)
   assert.match(bookingForm, /To pomoże lepiej wykorzystać/)
+  assert.match(bookingForm, /Krótki opis celu rozmowy/)
+  assert.match(bookingForm, /Krótki opis sytuacji/)
+  assert.match(bookingForm, /Ty i zwierzak\?/)
   assert.doesNotMatch(bookingForm, /albo PayU/)
 })
 
@@ -167,6 +204,7 @@ test('pdf surfaces keep the staged decision layout', () => {
 
 test('contact, header, footer and legal pages stay message-first without public phone', () => {
   const contactSource = readSource('app', 'kontakt', 'page.tsx')
+  const contactFormSource = readSource('components', 'ContactLeadForm.tsx')
   const headerSource = readSource('components', 'Header.tsx')
   const footerSource = readSource('components', 'Footer.tsx')
   const legalLayoutSource = readSource('components', 'LegalPageLayout.tsx')
@@ -178,6 +216,11 @@ test('contact, header, footer and legal pages stay message-first without public 
   assert.match(contactSource, /Napisz wiadomo.*./)
   assert.match(contactSource, /Napisz kr.*tko, co si.* dzieje\. Podpowiem najprostszy start\./)
   assert.match(contactSource, /Piszesz do mnie/)
+  assert.match(contactSource, /ContactLeadForm/)
+  assert.doesNotMatch(contactSource, /buildContactMailtoHref/)
+  assert.match(contactFormSource, /\/api\/contact/)
+  assert.match(contactFormSource, /form_started/)
+  assert.match(contactMarkup, /Wiadomość dotyczy/)
   assert.doesNotMatch(contactSource, /Wybierz<\/h2>/)
   assert.match(contactSource, /contact-feature-image/)
   assert.doesNotMatch(contactSource, /contact-shortcut-grid/)
@@ -193,6 +236,7 @@ test('contact, header, footer and legal pages stay message-first without public 
   assert.match(legalLayoutSource, /legal-summary-grid/)
   assert.match(legalLayoutSource, /legal-section-grid/)
   assert.match(legalLayoutSource, /legal-support-panel/)
+  assert.match(legalLayoutSource, /primaryHref = '\/kontakt'/)
   assert.doesNotMatch(privacySource, /legal-panel/)
   assert.doesNotMatch(termsSource, /legal-panel/)
 
@@ -408,9 +452,11 @@ test('booking funnel sources keep canonical routing and standardized analytics e
   assert.match(homeSource, /data-analytics-event="cta_click"/)
   assert.match(stickyCtaSource, /data-analytics-event="cta_click"/)
   assert.match(stickyCtaSource, /home-sticky-start/)
-  assert.match(contactSource, /contact-primary-message/)
-  assert.match(contactSource, /contact-primary-resource/)
-  assert.match(contactSource, /contact-primary-reschedule/)
+  assert.match(contactSource, /contact-lead-general/)
+  assert.match(contactSource, /contact-lead-resource/)
+  assert.match(contactSource, /contact-lead-reschedule/)
+  assert.match(contactSource, /contact-lead-guide/)
+  assert.match(contactSource, /contact-lead-bundle/)
 
   assert.match(slotSource, /data-analytics-event="slot_selected"/)
   assert.doesNotMatch(slotSource, /data-analytics-event="slot_select"/)
@@ -438,10 +484,15 @@ test('payment, confirmation and call sources keep visible fallbacks instead of s
   const callPageSource = readSource('app', 'call', '[id]', 'page.tsx')
 
   assert.match(paymentPageSource, /customerEmailAvailable/)
+  assert.match(paymentPageSource, /customerEmailStatus/)
   assert.match(paymentPageSource, /payment_opened/)
   assert.match(paymentPageSource, /AnalyticsEventOnMount/)
   assert.match(paymentActionsSource, /customerEmailAvailable/)
-  assert.match(confirmationSource, /customerEmailAvailable/)
+  assert.match(confirmationSource, /customerEmailStatus/)
+  assert.match(paymentPageSource, /CustomerEmailStatusNotice/)
+  assert.match(confirmationSource, /CustomerEmailStatusNotice/)
+  assert.match(paymentPageSource, /data-customer-email-state/)
+  assert.match(confirmationSource, /data-customer-email-state/)
   assert.match(paymentPageSource, /wpłaty ręcznej/)
   assert.doesNotMatch(paymentPageSource, /PayU jest dostępne od razu|Gdy płatność online PayU wróci|albo PayU/)
   assert.match(paymentActionsSource, /zachowaj ten link/i)
@@ -490,12 +541,14 @@ test('public manual payment stays available when only BLIK phone is configured',
 test('release smoke rules track the current home and booking copy', () => {
   const rules = getDefaultReleaseSmokeRules()
   const homeRule = rules.find((rule) => rule.path === '/')
+  const opinionsRule = rules.find((rule) => rule.path === '/opinie')
   const bookRule = rules.find((rule) => rule.path === '/book')
   const catsRule = rules.find((rule) => rule.path === '/koty')
   const termsRule = rules.find((rule) => rule.path === '/regulamin')
   const privacyRule = rules.find((rule) => rule.path === '/polityka-prywatnosci')
 
   assert.ok(homeRule)
+  assert.ok(opinionsRule)
   assert.ok(bookRule)
   assert.ok(catsRule)
   assert.ok(termsRule)
@@ -504,6 +557,10 @@ test('release smoke rules track the current home and booking copy', () => {
   assert.equal(homeRule?.required?.includes('Masz psa, kota albo temat mieszany? Zacznij od prostego wyboru.'), true)
   assert.equal(homeRule?.required?.includes('Prowadzę konsultacje osobiście'), true)
   assert.equal(homeRule?.required?.includes('3 r\u00f3wne wej\u015bcia'), true)
+  assert.equal(homeRule?.required?.includes('Historie opiekunów i efekty konsultacji'), true)
+  assert.equal(homeRule?.required?.includes('Publiczne źródła'), true)
+  assert.equal(homeRule?.required?.includes('Magazyn Weterynaryjny'), true)
+  assert.equal(homeRule?.required?.includes('Zobacz pełną sekcję opinii'), true)
   assert.equal(homeRule?.required?.includes('Nie wiem, od czego zacz\u0105\u0107'), true)
   assert.equal(homeRule?.forbidden?.includes('Udost\u0119pnij znajomemu'), true)
   assert.deepEqual(homeRule?.ordered, [
@@ -511,6 +568,12 @@ test('release smoke rules track the current home and booking copy', () => {
     'Masz psa, kota albo temat mieszany? Zacznij od prostego wyboru.',
     '3 r\u00f3wne wej\u015bcia',
   ])
+
+  assert.equal(opinionsRule?.required?.includes('Historie opiekunów i efekty konsultacji'), true)
+  assert.equal(opinionsRule?.required?.includes('Publiczne źródła'), true)
+  assert.equal(opinionsRule?.required?.includes('Zweryfikowane opinie pojawią się po ręcznej akceptacji'), true)
+  assert.equal(opinionsRule?.required?.includes('Dodaj swoją opinię do ręcznej weryfikacji'), true)
+  assert.equal(opinionsRule?.forbidden?.includes('Udost\u0119pnij znajomemu'), true)
 
   assert.equal(bookRule?.required?.includes('Wybierz temat dla:'), true)
   assert.equal(bookRule?.required?.includes('Temat mieszany?'), true)
@@ -555,10 +618,12 @@ test('go-live checks expose external blockers for Resend testing mode and PayU s
       const emailCheck = checks.find((check) => check.id === 'customer-email')
       const payuCheck = checks.find((check) => check.id === 'payu-online')
 
+      assert.equal(emailCheck?.state, 'blocked')
       assert.equal(emailCheck?.tone, 'attention')
       assert.match(emailCheck?.summary ?? '', /resend\.dev testing mode/i)
       assert.match(emailCheck?.nextStep ?? '', /Zweryfikuj domene nadawcy w Resend/i)
 
+      assert.equal(payuCheck?.state, 'blocked')
       assert.equal(payuCheck?.tone, 'attention')
       assert.match(payuCheck?.summary ?? '', /PAYU_ENVIRONMENT=sandbox/)
       assert.match(payuCheck?.nextStep ?? '', /produkcyjne klucze/i)
@@ -584,9 +649,11 @@ test('go-live checks mark verified Resend and production PayU as ready', () => {
       const emailCheck = checks.find((check) => check.id === 'customer-email')
       const payuCheck = checks.find((check) => check.id === 'payu-online')
 
+      assert.equal(emailCheck?.state, 'ready')
       assert.equal(emailCheck?.tone, 'ready')
       assert.match(emailCheck?.summary ?? '', /gotowa z aktualnej konfiguracji Resend/i)
 
+      assert.equal(payuCheck?.state, 'ready')
       assert.equal(payuCheck?.tone, 'ready')
       assert.match(payuCheck?.summary ?? '', /srodowiska production/i)
     },
@@ -611,10 +678,21 @@ test('go-live checks mark Gmail SMTP customer email delivery as ready', () => {
       const checks = getGoLiveChecks()
       const emailCheck = checks.find((check) => check.id === 'customer-email')
 
+      assert.equal(emailCheck?.state, 'ready')
       assert.equal(emailCheck?.tone, 'ready')
       assert.match(emailCheck?.summary ?? '', /Gmail SMTP/i)
     },
   )
+})
+
+test('go-live checks include schema sync as a release gate', () => {
+  const checks = getGoLiveChecks()
+  const schemaCheck = checks.find((check) => check.id === 'schema-sync')
+
+  assert.equal(schemaCheck?.state, 'ready')
+  assert.equal(schemaCheck?.tone, 'ready')
+  assert.match(schemaCheck?.summary ?? '', /Canonical Supabase schema/i)
+  assert.match(schemaCheck?.nextStep ?? '', /booking\/payment\/QA schema/i)
 })
 
 test('go-live checks flag disabled customer emails as attention while PayU disabled stays ready', () => {
@@ -634,10 +712,12 @@ test('go-live checks flag disabled customer emails as attention while PayU disab
       const emailCheck = checks.find((check) => check.id === 'customer-email')
       const payuCheck = checks.find((check) => check.id === 'payu-online')
 
+      assert.equal(emailCheck?.state, 'disabled')
       assert.equal(emailCheck?.tone, 'attention')
       assert.match(emailCheck?.summary ?? '', /swiadomie wylaczone/i)
       assert.match(emailCheck?.nextStep ?? '', /CUSTOMER_EMAIL_MODE=auto/i)
 
+      assert.equal(payuCheck?.state, 'ready')
       assert.equal(payuCheck?.tone, 'ready')
       assert.match(payuCheck?.summary ?? '', /PayU online jest swiadomie wylaczone/i)
     },
@@ -695,7 +775,7 @@ test('deploy readiness checks pass for live-like runtime, url, Resend and PayU',
       const blockingChecks = checks.filter((check) => check.tone === 'attention')
 
       assert.equal(blockingChecks.length, 0)
-      assert.equal(checks.length >= 4, true)
+      assert.equal(checks.length >= 5, true)
     },
   )
 })
@@ -801,6 +881,7 @@ test('admin page renders explicit go-live status cards', () => {
   assert.match(adminSource, /Go-live/)
   assert.match(adminSource, /Stan go-live/)
   assert.match(adminSource, /goLiveChecks\.map/)
+  assert.match(adminSource, /Stan: \{check\.state\}/)
   assert.match(adminSource, /Dalej: \{check\.nextStep\}/)
   assert.match(adminSource, /Analityka i operacje/)
   assert.match(adminSource, /funnelMetricsSnapshot/)
@@ -821,6 +902,7 @@ test('build script keeps explicit no-cache lint before next build', () => {
   assert.equal(packageJson.scripts?.['live-booking-matrix'], 'node --import tsx scripts/live-booking-matrix.ts')
   assert.equal(packageJson.scripts?.['live-readiness'], 'node --import tsx scripts/live-readiness.ts')
   assert.equal(packageJson.scripts?.['payu-smoke:production'], 'node --import tsx scripts/payu-smoke.ts --production')
+  assert.equal(packageJson.scripts?.['schema-audit'], 'node scripts/schema-audit.js')
 })
 
 test('live booking matrix keeps a ten-attempt production report', () => {
@@ -836,10 +918,27 @@ test('payu smoke script supports a production checkout target without sandbox de
 
   assert.match(source, /--production/)
   assert.match(source, /PAYU_SMOKE_ENVIRONMENT/)
+  assert.match(source, /PAYU_SMOKE_URL/)
+  assert.match(source, /readArg\('--url'\)/)
+  assert.match(source, /resolvePayuSmokeTargetUrl/)
   assert.match(source, /smokeEnvironment === 'production'/)
+  assert.match(source, /Tryb production wymaga publicznego URL/)
   assert.match(source, /ALLOWED_PAYU_SANDBOX_HOSTS/)
   assert.match(source, /isProductionRedirectHost/)
   assert.match(source, /secure\.snd\.payu\.com/)
+  assert.match(source, /\/api\/bookings\/\$\{bookingId\}\/status/)
+  assert.match(source, /paymentMethod === 'payu'/)
+  assert.match(source, /payuOrderId/)
+  assert.match(source, /payuOrderStatus/)
+})
+
+test('booking status api exposes payu metadata for controlled rollout smoke', () => {
+  const source = readSource('app', 'api', 'bookings', '[id]', 'status', 'route.ts')
+
+  assert.match(source, /paymentMethod: booking\.paymentMethod \?\? null/)
+  assert.match(source, /paymentReference: booking\.paymentReference \?\? null/)
+  assert.match(source, /payuOrderId: booking\.payuOrderId \?\? null/)
+  assert.match(source, /payuOrderStatus: booking\.payuOrderStatus \?\? null/)
 })
 
 test('live readiness script writes the expected QA artifact and supports report-only mode', () => {
@@ -851,6 +950,7 @@ test('live readiness script writes the expected QA artifact and supports report-
   assert.match(source, /Applied default production env snapshot/)
   assert.match(source, /Zrodlo env:/)
   assert.match(source, /Go-live readiness detected blockers/)
+  assert.match(source, /Stan: \$\{check\.state\}/)
 })
 
 test('go-live source keeps the verified external URL probe path', () => {
@@ -860,6 +960,20 @@ test('go-live source keeps the verified external URL probe path', () => {
   assert.match(source, /getVerifiedDeployReadinessChecks/)
   assert.match(source, /Publiczny URL nie odpowiada poprawnie dla ruchu zewnetrznego/)
   assert.match(source, /npm run live-smoke/)
+})
+
+test('schema audit keeps the canonical production schema shape in sync', () => {
+  const audit = getSupabaseSchemaAudit()
+  const schemaSource = readSource('supabase', 'schema.sql')
+  const brokenAudit = auditSupabaseSchemaText(
+    schemaSource.replace('qa_booking boolean not null default false', 'qa_booking boolean not null'),
+  )
+
+  assert.equal(audit.ok, true)
+  assert.equal(audit.missingFiles.length, 0)
+  assert.equal(audit.missingMarkers.length, 0)
+  assert.equal(brokenAudit.ok, false)
+  assert.match(brokenAudit.summary, /qa_booking/)
 })
 
 test('default production env snapshot path prefers the current production snapshot', () => {

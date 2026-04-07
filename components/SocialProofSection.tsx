@@ -1,7 +1,8 @@
 import React from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { AddTestimonialForm } from '@/components/AddTestimonialForm'
-import { REAL_CASE_STUDIES } from '@/lib/site'
+import { MEDIA_MENTIONS, REAL_CASE_STUDIES } from '@/lib/site'
 import { TESTIMONIALS, getTestimonialIssueLabel } from '@/lib/testimonials'
 
 function getInitials(displayName: string): string {
@@ -17,7 +18,11 @@ function shouldRenderLocalPhoto(photoSrc?: string | null): photoSrc is string {
   return typeof photoSrc === 'string' && photoSrc.startsWith('/')
 }
 
-export function SocialProofSection() {
+type SocialProofSectionProps = {
+  showSubmissionForm?: boolean
+}
+
+export function SocialProofSection({ showSubmissionForm = true }: SocialProofSectionProps) {
   const hasTestimonials = TESTIMONIALS.length > 0
 
   return (
@@ -28,23 +33,23 @@ export function SocialProofSection() {
           <h2 id="historie-heading">Historie opiekunów i efekty konsultacji</h2>
         </div>
         <div className="muted">
-          W jednym miejscu pokazujemy typowe punkty wyjścia, pierwszy krok po rozmowie i tylko takie materiały, które
-          da się obronić spokojnie i wiarygodnie.
+          W jednym miejscu pokazujemy typowe punkty wyjścia, publiczne źródła i tylko takie materiały, które da się
+          obronić spokojnie i wiarygodnie.
         </div>
       </div>
 
-      <div className="social-proof-strip top-gap">
-        <div className="social-proof-point">
-          <strong>Typowe sytuacje z życia domu</strong>
+      <div className="summary-grid trust-grid top-gap">
+        <div className="summary-card tree-backed-card">
+          <div className="stat-label">Typowe sytuacje z życia domu</div>
           <span>Pokazujemy sprawy, z którymi opiekunowie naprawdę przychodzą na pierwszy, szybki kontakt.</span>
         </div>
-        <div className="social-proof-point">
-          <strong>Pierwszy krok, nie chaos</strong>
-          <span>Każda karta pokazuje, co porządkuje rozmowa i z jakim konkretem można wyjść po 15 minutach.</span>
+        <div className="summary-card tree-backed-card">
+          <div className="stat-label">Publiczne źródła</div>
+          <span>Łączymy case studies, profil zawodowy i publikacje, żeby łatwo sprawdzić wiarygodność.</span>
         </div>
-        <div className="social-proof-point">
-          <strong>Wiarygodność przed ozdobnikami</strong>
-          <span>Opinie trafiają tu dopiero po ręcznej weryfikacji, a sekcja nie udaje setek recenzji bez pokrycia.</span>
+        <div className="summary-card tree-backed-card">
+          <div className="stat-label">Ręczna weryfikacja</div>
+          <span>Opinie trafiają na stronę dopiero po akceptacji właściciela projektu.</span>
         </div>
       </div>
 
@@ -74,61 +79,111 @@ export function SocialProofSection() {
         ))}
       </div>
 
-      {hasTestimonials ? (
-        <div className="testimonial-grid top-gap">
-          {TESTIMONIALS.map((testimonial) => (
-            <article key={testimonial.id} className="testimonial-card">
-              <div className="testimonial-head">
-                {shouldRenderLocalPhoto(testimonial.photoSrc) ? (
-                  <div className="testimonial-photo-shell">
-                    <Image
-                      src={testimonial.photoSrc}
-                      alt={`Zdjęcie powiązane z opinią ${testimonial.displayName}`}
-                      width={112}
-                      height={112}
-                      sizes="112px"
-                      className="testimonial-photo"
-                    />
-                  </div>
-                ) : (
-                  <div className="testimonial-avatar" aria-hidden="true">
-                    {getInitials(testimonial.displayName)}
-                  </div>
-                )}
-
-                <div className="testimonial-meta">
-                  <strong>{testimonial.displayName}</strong>
-                  <span>{testimonial.dateLabel}</span>
-                  <span className="testimonial-category">{getTestimonialIssueLabel(testimonial.issueCategory)}</span>
-                </div>
-              </div>
-
-              <p className="testimonial-opinion">„{testimonial.opinion}”</p>
-              <div className="testimonial-change">
-                <strong>Co się zmieniło</strong>
-                <span>{testimonial.beforeAfter}</span>
-              </div>
-            </article>
-          ))}
+      <div className="section-head top-gap">
+        <div>
+          <div className="section-eyebrow">Publiczne źródła</div>
+          <h3>Gdzie można sprawdzić profil i publikacje</h3>
         </div>
+        <div className="muted">
+          CAPBT, Instagram i publikacje branżowe są tu po to, żeby ktoś mógł sprawdzić profil przed przekazaniem strony
+          dalej.
+        </div>
+      </div>
+
+      <div className="media-grid top-gap">
+        {MEDIA_MENTIONS.map((mention) => (
+          <article key={mention.id} className="media-card">
+            <div className="section-eyebrow">{mention.label}</div>
+            <h3>{mention.title}</h3>
+            <p>{mention.summary}</p>
+            <div className="offer-card-actions">
+              <a href={mention.href} target="_blank" rel="noopener noreferrer" className="button button-ghost small-button">
+                {mention.cta}
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      {hasTestimonials ? (
+        <>
+          <div className="section-head top-gap">
+            <div>
+              <div className="section-eyebrow">Zweryfikowane opinie</div>
+              <h3>Akceptowane wpisy klientów</h3>
+            </div>
+            <div className="muted">Opinie pojawiają się dopiero po ręcznej akceptacji właściciela projektu.</div>
+          </div>
+
+          <div className="summary-grid top-gap">
+            {TESTIMONIALS.map((testimonial) => (
+              <article key={testimonial.id} className="summary-card tree-backed-card">
+                <div className="testimonial-head">
+                  {shouldRenderLocalPhoto(testimonial.photoSrc) ? (
+                    <div className="testimonial-avatar" aria-hidden="true">
+                      <Image
+                        src={testimonial.photoSrc}
+                        alt={`Zdjęcie powiązane z opinią ${testimonial.displayName}`}
+                        width={72}
+                        height={72}
+                        sizes="72px"
+                        className="testimonial-photo"
+                      />
+                    </div>
+                  ) : (
+                    <div className="testimonial-avatar" aria-hidden="true">
+                      {getInitials(testimonial.displayName)}
+                    </div>
+                  )}
+
+                  <div className="testimonial-meta">
+                    <strong>{testimonial.displayName}</strong>
+                    <span>{testimonial.dateLabel}</span>
+                    <span>{getTestimonialIssueLabel(testimonial.issueCategory)}</span>
+                  </div>
+                </div>
+                <strong>{testimonial.opinion}</strong>
+                <span>{testimonial.beforeAfter}</span>
+              </article>
+            ))}
+          </div>
+        </>
       ) : (
-        <div className="social-proof-summary top-gap">
-          <strong>To miejsce zbiera realne opisy efektów pierwszej konsultacji.</strong>
-          <span>
-            Zamiast sztucznie pompować sekcję opinii, pokazujemy tylko takie historie i recenzje, które realnie pomagają
-            innym opiekunom rozpoznać problem, pierwszy krok i efekt rozmowy.
-          </span>
+        <div className="real-case-empty top-gap">
+          <strong>Zweryfikowane opinie pojawią się po ręcznej akceptacji.</strong>
+          <p>
+            Na ten moment pokazujemy przede wszystkim realne przypadki, publiczne profile i publikacje. Dzięki temu
+            sekcja nie opiera się na pustych deklaracjach.
+          </p>
         </div>
       )}
 
-      <div className="testimonial-disclaimer">
-        Publikujemy wyłącznie opinie zaakceptowane po weryfikacji. Dane kontaktowe i linki przesłane w formularzu nie są
-        publikowane automatycznie.
+      <div className="info-box top-gap">
+        Opinie i dane kontaktowe z formularza są weryfikowane ręcznie. Nic nie trafia na stronę automatycznie.
       </div>
 
-      <div className="top-gap">
-        <AddTestimonialForm />
-      </div>
+      {showSubmissionForm ? (
+        <div className="top-gap">
+          <AddTestimonialForm />
+        </div>
+      ) : (
+        <div className="offer-detail-cta-band top-gap">
+          <div className="offer-detail-cta-copy">
+            <span className="section-eyebrow">Dalszy krok</span>
+            <strong>Chcesz przejść do pełnej sekcji opinii albo napisać wiadomość?</strong>
+            <span>Pełny formularz publikacji i dodatkowe wskazówki są na osobnej podstronie.</span>
+          </div>
+
+          <div className="hero-actions offer-detail-actions">
+            <Link href="/opinie" prefetch={false} className="button button-primary big-button">
+              Zobacz pełną sekcję opinii
+            </Link>
+            <Link href="/kontakt" prefetch={false} className="button button-ghost big-button">
+              Napisz wiadomość
+            </Link>
+          </div>
+        </div>
+      )}
     </section>
   )
 }

@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
+import { POST as postContactLead } from '@/app/api/contact/route'
 import { createAvailabilitySlot, createPendingBooking, markBookingManualPaymentPending, markBookingManualPaymentRejected, markBookingPaid, markBookingPaymentFailed } from '@/lib/server/local-store'
+import { getCustomerEmailDeliveryStatus } from '@/lib/server/notifications'
 import { createLocalDataSandbox } from '@/scripts/lib/local-data-sandbox'
 
 type ResendEmailPayload = {
@@ -66,6 +68,18 @@ function makeBookingForm(slotId: string) {
     email: 'klient@example.com',
     slotId,
     qaBooking: true,
+  }
+}
+
+function makeContactLeadPayload() {
+  return {
+    name: 'Anna Nowak',
+    email: 'klient@example.com',
+    topic: 'Ogólne pytanie',
+    contextLabel: 'Kontakt ogólny',
+    message: 'Potrzebuję pomocy z kotem i chcę ustalić prosty start.',
+    bookingId: 'booking-123',
+    website: '',
   }
 }
 
@@ -166,5 +180,123 @@ test('customer emails cover reservation, review, confirmation and cancel outcome
   } finally {
     ;(globalThis as typeof globalThis & { fetch: typeof fetch }).fetch = originalFetch
     await sandbox.cleanup()
+  }
+})
+
+test('customer emails stay on the confirmation page when disabled', async () => {
+  const sentEmails: ResendEmailPayload[] = []
+  const originalFetch = globalThis.fetch
+  const sandbox = await createLocalDataSandbox('customer-emails-disabled', process.cwd())
+
+  try {
+    const mockFetch = async (_input: RequestInfo | URL, init?: RequestInit) => {
+      const body = typeof init?.body === 'string' ? JSON.parse(init.body) : {}
+      sentEmails.push(body)
+      return new Response('{}', {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      })
+    }
+
+    ;(globalThis as typeof globalThis & { fetch: typeof fetch }).fetch = mockFetch as typeof fetch
+
+    await withEnv(
+      {
+        MAIL_PROVIDER: 'resend',
+        RESEND_API_KEY: 're_test_key',
+        RESEND_FROM_EMAIL: 'Behawior 15 <kontakt@behawior15.pl>',
+        CUSTOMER_EMAIL_MODE: 'disabled',
+        BEHAVIOR15_CONTACT_EMAIL: 'kontakt@behawior15.pl',
+      },
+      async () => {
+        const bookingDate = '2030-01-16'
+
+        await createAvailabilitySlot(bookingDate, '11:00')
+
+        const booking = await createPendingBooking(makeBookingForm(`${bookingDate}-11:00`))
+        const status = getCustomerEmailDeliveryStatus(booking.booking.email)
+
+        assert.equal(status.state, 'disabled')
+        assert.match(status.summary, /swiadomie wylaczone/i)
+        assert.match(status.nextStep, /CUSTOMER_EMAIL_MODE=auto/i)
+        assert.equal(sentEmails.length, 0)
+
+        const pendingBooking = await markBookingManualPaymentPending(booking.booking.id, {
+          paymentReference: 'MANUAL-DISABLED',
+        })
+
+        assert.equal(pendingBooking?.bookingStatus, 'pending_manual_payment')
+        assert.equal(pendingBooking?.paymentStatus, 'pending_manual_review')
+        assert.equal(sentEmails.length, 0)
+
+        const paidBooking = await markBookingPaid(booking.booking.id, {
+          paymentMethod: 'manual',
+          paymentReference: 'MANUAL-DISABLED',
+        })
+
+        assert.equal(paidBooking?.bookingStatus, 'confirmed')
+        assert.equal(paidBooking?.paymentStatus, 'paid')
+        assert.equal(sentEmails.length, 0)
+      },
+    )
+  } finally {
+    ;(globalThis as typeof globalThis & { fetch: typeof fetch }).fetch = originalFetch
+    await sandbox.cleanup()
+  }
+})
+
+test('contact route sends leads to the public inbox and replies to the sender', async () => {
+  const sentEmails: ResendEmailPayload[] = []
+  const originalFetch = globalThis.fetch
+
+  try {
+    const mockFetch = async (_input: RequestInfo | URL, init?: RequestInit) => {
+      const body = typeof init?.body === 'string' ? JSON.parse(init.body) : {}
+      sentEmails.push(body)
+      return new Response('{}', {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      })
+    }
+
+    ;(globalThis as typeof globalThis & { fetch: typeof fetch }).fetch = mockFetch as typeof fetch
+
+    await withEnv(
+      {
+        MAIL_PROVIDER: 'resend',
+        RESEND_API_KEY: 're_test_key',
+        RESEND_FROM_EMAIL: 'Behawior 15 <kontakt@behawior15.pl>',
+        BEHAVIOR15_CONTACT_EMAIL: 'coapebehawiorysta@gmail.com',
+      },
+      async () => {
+        const response = await postContactLead(
+          new Request('https://example.test/api/contact', {
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json',
+            },
+            body: JSON.stringify(makeContactLeadPayload()),
+          }),
+        )
+
+        const payload = (await response.json()) as { ok?: boolean; message?: string; error?: string }
+
+        assert.equal(response.status, 200)
+        assert.equal(payload.ok, true)
+        assert.match(payload.message ?? '', /Wiadomość trafiła do weryfikacji/i)
+        assert.equal(sentEmails.length, 1)
+        assert.equal(sentEmails[0].to?.[0], 'coapebehawiorysta@gmail.com')
+        assert.equal(sentEmails[0].reply_to, 'klient@example.com')
+        assert.match(sentEmails[0].subject ?? '', /Kontakt - Ogólne pytanie - Anna Nowak/)
+        assert.match(sentEmails[0].text ?? '', /Kontekst: Kontakt ogólny/)
+        assert.match(sentEmails[0].text ?? '', /Numer rezerwacji: booking-123/)
+      },
+    )
+  } finally {
+    ;(globalThis as typeof globalThis & { fetch: typeof fetch }).fetch = originalFetch
   }
 })

@@ -65,9 +65,9 @@ export default function TermsPage() {
       contactSubject="Pytanie o regulamin - Regulski | Terapia behawioralna"
       summaryItems={summaryItems}
       sections={sections}
-      supportText="Kontakt w sprawach rezerwacji, płatności, reklamacji i zmian terminu prowadzę mailowo. Rozmowa telefoniczna odbywa się wyłącznie w ramach umówionej konsultacji."
+      supportText="Kontakt w sprawach rezerwacji, płatności, reklamacji i zmian terminu prowadzę przez formularz kontaktowy albo mailowo. Rozmowa telefoniczna odbywa się wyłącznie w ramach umówionej konsultacji."
       supportNoteTitle="Najkrótsza ścieżka"
-      supportNoteText="Jeśli nie wiesz, czy lepsza będzie wiadomość, 15 minut czy dłuższa praca, napisz krótko o sytuacji. Wskażę najprostszy kolejny ruch."
+      supportNoteText="Jeśli nie wiesz, czy lepsza będzie wiadomość, 15 minut czy dłuższa praca, napisz krótko o sytuacji przez formularz. Wskażę najprostszy kolejny ruch."
       ctaTitle="Napisz w sprawie rezerwacji albo płatności"
       ctaText="W wiadomości wystarczy krótko opisać, czy pytanie dotyczy terminu, płatności, rezygnacji, zwrotu albo przebiegu rozmowy."
       secondaryCtaHref="/book"

@@ -12,6 +12,7 @@ type SendEmailPayload = {
   subject: string
   html: string
   text: string
+  replyTo?: string
 }
 
 type DeliveryResult = {
@@ -535,7 +536,7 @@ async function deliverEmail(payload: SendEmailPayload, audience: EmailAudience =
         })
       }
 
-      const replyTo = getPublicContactDetails().email || undefined
+      const replyTo = payload.replyTo ?? getPublicContactDetails().email ?? undefined
 
       await gmailTransport.sendMail({
         from: mail.from,
@@ -568,6 +569,7 @@ async function deliverEmail(payload: SendEmailPayload, audience: EmailAudience =
         subject: payload.subject,
         html: payload.html,
         text: payload.text,
+        reply_to: payload.replyTo,
       }),
     })
 
@@ -640,6 +642,67 @@ export async function sendBookingReservationCreatedEmail(booking: BookingRecord)
   ].join('\n')
 
   return deliverEmail({ to: booking.email, subject, html, text }, 'customer')
+}
+
+export type ContactLeadSubmission = {
+  name: string
+  email: string
+  topic: string
+  message: string
+  contextLabel: string
+  bookingId?: string | null
+}
+
+export async function sendContactLeadEmail(submission: ContactLeadSubmission): Promise<DeliveryResult> {
+  const recipient = getPublicContactDetails().email
+
+  if (!recipient) {
+    return {
+      status: 'skipped',
+      reason: 'public contact email missing or invalid',
+    }
+  }
+
+  const subject = `Kontakt - ${submission.topic} - ${submission.name}`
+  const contextBlock = submission.bookingId
+    ? `<p><strong>Numer rezerwacji:</strong> ${escapeHtml(submission.bookingId)}</p>`
+    : ''
+  const html = renderEmailShell(
+    'Nowa wiadomosc z formularza kontaktu',
+    'Ktos wyslal wiadomosc przez formularz kontaktowy. To jest pierwszy krok do odpowiedzi i uporzadkowania kolejnego ruchu.',
+    `
+      <p><strong>Imie:</strong> ${escapeHtml(submission.name)}</p>
+      <p><strong>Email:</strong> <a href="mailto:${escapeHtml(submission.email)}">${escapeHtml(submission.email)}</a></p>
+      <p><strong>Temat:</strong> ${escapeHtml(submission.topic)}</p>
+      <p><strong>Kontekst:</strong> ${escapeHtml(submission.contextLabel)}</p>
+      ${contextBlock}
+      <p><strong>Wiadomosc:</strong><br />${formatMultilineHtml(submission.message)}</p>
+    `,
+    'Odpowiedz na podany adres e-mail albo wroc do kontaktu, jesli potrzebujesz doprecyzowac szczegoly.',
+  )
+  const text = [
+    'Nowa wiadomosc z formularza kontaktu.',
+    `Imie: ${submission.name}`,
+    `Email: ${submission.email}`,
+    `Temat: ${submission.topic}`,
+    `Kontekst: ${submission.contextLabel}`,
+    submission.bookingId ? `Numer rezerwacji: ${submission.bookingId}` : null,
+    `Wiadomosc: ${submission.message}`,
+    'Odpowiedz na podany adres e-mail albo wroc do kontaktu, jesli potrzebujesz doprecyzowac szczegoly.',
+  ]
+    .filter((line): line is string => typeof line === 'string' && line.length > 0)
+    .join('\n')
+
+  return deliverEmail(
+    {
+      to: recipient,
+      subject,
+      html,
+      text,
+      replyTo: submission.email,
+    },
+    'internal',
+  )
 }
 
 export async function sendBookingConfirmationEmail(booking: BookingRecord): Promise<DeliveryResult> {

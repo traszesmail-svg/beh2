@@ -3,6 +3,7 @@ import { unstable_noStore as noStore } from 'next/cache'
 import { headers } from 'next/headers'
 import { AnalyticsEventOnMount } from '@/components/AnalyticsEventOnMount'
 import { BookingStageEyebrow } from '@/components/BookingStageEyebrow'
+import { CustomerEmailStatusNotice } from '@/components/CustomerEmailStatusNotice'
 import { ConfirmationStatusWatcher } from '@/components/ConfirmationStatusWatcher'
 import { HardNavLink } from '@/components/HardNavLink'
 import { Footer } from '@/components/Footer'
@@ -15,7 +16,7 @@ import { formatPricePln } from '@/lib/pricing'
 import { canSelfCancelBooking, getRemainingSelfCancellationSeconds } from '@/lib/self-cancellation'
 import { getBookingForViewer } from '@/lib/server/db'
 import { getDataModeStatus } from '@/lib/server/env'
-import { getCustomerEmailDeliveryConfigIssue } from '@/lib/server/notifications'
+import { getCustomerEmailDeliveryStatus } from '@/lib/server/notifications'
 import { syncPayuBookingByBookingId } from '@/lib/server/payu'
 import { finalizeStripeCheckoutSession } from '@/lib/server/stripe'
 import { SmsConfirmationStatus } from '@/lib/types'
@@ -137,7 +138,7 @@ export default async function ConfirmationPage({
   const canSelfCancel = Boolean(booking && accessToken && canSelfCancelBooking(booking))
   const initialRemainingSeconds = booking ? getRemainingSelfCancellationSeconds(booking) : 0
   const smsPanel = getSmsPanelContent(booking?.smsConfirmationStatus)
-  const customerEmailAvailable = booking ? !getCustomerEmailDeliveryConfigIssue(booking.email) : false
+  const customerEmailStatus = booking ? getCustomerEmailDeliveryStatus(booking.email) : null
   const bookingServiceType = booking ? resolveBookingServiceType(booking.serviceType, booking.amount) : null
   const bookingServiceTitle = bookingServiceType ? getBookingServiceTitle(bookingServiceType) : null
   const qaBooking = Boolean(booking?.qaBooking)
@@ -163,7 +164,12 @@ export default async function ConfirmationPage({
                 : 'invalid'
 
   return (
-    <main className="page-wrap" data-analytics-disabled={qaBooking ? 'true' : undefined} data-qa-booking={qaBooking ? 'true' : 'false'}>
+    <main
+      className="page-wrap"
+      data-analytics-disabled={qaBooking ? 'true' : undefined}
+      data-qa-booking={qaBooking ? 'true' : 'false'}
+      data-customer-email-state={customerEmailStatus?.state ?? 'unknown'}
+    >
       <div className="container">
         <Header />
         <section
@@ -266,6 +272,15 @@ export default async function ConfirmationPage({
                 </div>
               </div>
 
+              {!qaBooking && customerEmailStatus && !isClosed ? (
+                <CustomerEmailStatusNotice
+                  status={customerEmailStatus}
+                  recipientEmail={booking.email}
+                  context="confirmation"
+                  className="top-gap"
+                />
+              ) : null}
+
               {canSelfCancel ? (
                 <SelfCancellationActions
                   bookingId={booking.id}
@@ -313,9 +328,11 @@ export default async function ConfirmationPage({
               {isWaitingManual ? (
                 <div className="info-box top-gap">
                   Tytul wplaty: <strong>{booking.paymentReference ?? booking.id}</strong>.{' '}
-                  {customerEmailAvailable
+                  {customerEmailStatus?.state === 'ready'
                     ? `Gdy tylko potwierdzimy wplate, wyslemy link do rozmowy na ${booking.email}, odblokujemy materialy i pokazemy nowy stan na tej stronie.`
-                    : 'Gdy tylko potwierdzimy wplate, odblokujemy materialy i pokazemy aktywny link do rozmowy bezposrednio na tej stronie.'}
+                    : customerEmailStatus?.state === 'disabled'
+                      ? 'Gdy tylko potwierdzimy wplate, odblokujemy materialy i pokazemy aktywny link do rozmowy bezposrednio na tej stronie. Maile klienta sa swiadomie wylaczone, wiec ten link pozostaje fallbackiem.'
+                      : 'Gdy tylko potwierdzimy wplate, odblokujemy materialy i pokazemy aktywny link do rozmowy bezposrednio na tej stronie. Maile klienta sa teraz zablokowane, wiec ten link pozostaje fallbackiem.'}
                 </div>
               ) : null}
 

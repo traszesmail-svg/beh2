@@ -203,6 +203,7 @@ export default async function AdminPage() {
                 >
                   <span className={`status-pill ${check.tone === 'ready' ? 'status-paid' : 'status-pending'}`}>{check.statusLabel}</span>
                   <strong>{check.label}</strong>
+                  <span>Stan: {check.state}</span>
                   <span>{check.summary}</span>
                   <span>Dalej: {check.nextStep}</span>
                 </div>

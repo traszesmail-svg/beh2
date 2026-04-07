@@ -3,12 +3,11 @@ import path from 'path'
 import { execFileSync, spawn } from 'child_process'
 import { loadEnvConfig } from '@next/env'
 import { createLocalDataSandbox } from './lib/local-data-sandbox'
-import { createAvailabilitySlot, getBookingById } from '../lib/server/local-store'
 
 const rootDir = process.cwd()
 const trackedFiles = ['availability.json', 'bookings.json', 'users.json', 'pricing-settings.json', 'funnel-events.json']
-const port = 3230 + Math.floor(Math.random() * 100)
-const appUrl = `http://localhost:${port}`
+const localPort = 3230 + Math.floor(Math.random() * 100)
+const localAppUrl = `http://localhost:${localPort}`
 
 const PUBLIC_PAYU_SANDBOX = {
   environment: 'sandbox',
@@ -19,8 +18,60 @@ const PUBLIC_PAYU_SANDBOX = {
 } as const
 
 type PayuSmokeEnvironment = 'sandbox' | 'production'
+type PayuSmokeTarget = 'local' | 'remote'
+
+type BookingStatusPayload = {
+  bookingId?: string
+  bookingStatus?: string
+  paymentStatus?: string
+  paymentMethod?: string | null
+  paymentReference?: string | null
+  payuOrderId?: string | null
+  payuOrderStatus?: string | null
+  smsConfirmationStatus?: string | null
+  updatedAt?: string
+  error?: string
+}
 
 const ALLOWED_PAYU_SANDBOX_HOSTS = new Set(['secure.snd.payu.com', 'merch-prod.snd.payu.com'])
+
+function readArg(name: string): string | null {
+  const index = process.argv.indexOf(name)
+
+  if (index === -1) {
+    return null
+  }
+
+  const value = process.argv[index + 1]
+  if (!value || value.startsWith('--')) {
+    return null
+  }
+
+  return value.trim()
+}
+
+function normalizeTargetUrl(rawUrl: string): string {
+  const parsed = new URL(rawUrl.trim())
+  return parsed.toString().replace(/\/$/, '')
+}
+
+function resolvePayuSmokeTargetUrl(): string | null {
+  const rawTarget = readArg('--url') ?? process.env.PAYU_SMOKE_URL?.trim() ?? process.env.LIVE_SMOKE_URL?.trim() ?? null
+
+  if (!rawTarget) {
+    return null
+  }
+
+  return normalizeTargetUrl(rawTarget)
+}
+
+function buildAdminAuthHeader(secret: string | null): string | null {
+  if (!secret) {
+    return null
+  }
+
+  return `Basic ${Buffer.from(`admin:${secret}`).toString('base64')}`
+}
 
 function getPayuSmokeEnvironment(): PayuSmokeEnvironment {
   if (process.argv.includes('--production') || process.env.PAYU_SMOKE_ENVIRONMENT?.trim().toLowerCase() === 'production') {
@@ -61,10 +112,10 @@ function getWarsawSlotInMinutes(offsetMinutes: number) {
   }
 }
 
-async function waitForServer() {
+async function waitForServer(baseUrl: string) {
   for (let attempt = 0; attempt < 120; attempt += 1) {
     try {
-      const response = await fetchWithTimeout(appUrl, { cache: 'no-store' }, 5_000)
+      const response = await fetchWithTimeout(baseUrl, { cache: 'no-store' }, 5_000)
       if (response.status > 0) {
         return
       }
@@ -108,8 +159,57 @@ function killProcessTree(server: ReturnType<typeof spawn> | null) {
   } catch {}
 }
 
-async function createBooking(slotId: string) {
-  const response = await fetchWithTimeout(`${appUrl}/api/bookings`, {
+async function requestJson<T>(url: string, init: RequestInit, timeoutMs = 60_000): Promise<T> {
+  const response = await fetchWithTimeout(url, init, timeoutMs)
+  const rawBody = await response.text()
+
+  if (!response.ok) {
+    let message = rawBody || `HTTP ${response.status}`
+
+    try {
+      const parsed = JSON.parse(rawBody) as { error?: string }
+      message = parsed.error ?? message
+    } catch {}
+
+    throw new Error(message)
+  }
+
+  if (!rawBody) {
+    return {} as T
+  }
+
+  return JSON.parse(rawBody) as T
+}
+
+async function createAvailabilitySlot(baseUrl: string, bookingDate: string, bookingTime: string): Promise<{ id: string }> {
+  const adminAuthHeader = buildAdminAuthHeader(process.env.ADMIN_ACCESS_SECRET?.trim() ?? null)
+
+  const payload = await requestJson<{ slot?: { id?: string } }>(`${baseUrl}/api/availability`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(adminAuthHeader ? { authorization: adminAuthHeader } : {}),
+    },
+    body: JSON.stringify({
+      bookingDate,
+      bookingTime,
+    }),
+  })
+
+  if (!payload.slot?.id) {
+    throw new Error('Nie udało się utworzyć slotu do testu PayU.')
+  }
+
+  return {
+    id: payload.slot.id,
+  }
+}
+
+async function createBooking(baseUrl: string, slotId: string) {
+  const payload = await requestJson<{
+    bookingId?: string
+    accessToken?: string
+  }>(`${baseUrl}/api/bookings`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -127,14 +227,8 @@ async function createBooking(slotId: string) {
     }),
   })
 
-  const payload = (await response.json()) as {
-    bookingId?: string
-    accessToken?: string
-    error?: string
-  }
-
-  if (!response.ok || !payload.bookingId || !payload.accessToken) {
-    throw new Error(payload.error ?? 'Nie udało się utworzyć testowego bookingu PayU.')
+  if (!payload.bookingId || !payload.accessToken) {
+    throw new Error('Nie udało się utworzyć testowego bookingu PayU.')
   }
 
   return {
@@ -143,8 +237,8 @@ async function createBooking(slotId: string) {
   }
 }
 
-async function startPayuCheckout(bookingId: string, accessToken: string) {
-  const response = await fetchWithTimeout(`${appUrl}/api/payments/payu/checkout`, {
+async function startPayuCheckout(baseUrl: string, bookingId: string, accessToken: string) {
+  const payload = await requestJson<{ url?: string }>(`${baseUrl}/api/payments/payu/checkout`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -155,13 +249,8 @@ async function startPayuCheckout(bookingId: string, accessToken: string) {
     }),
   })
 
-  const payload = (await response.json()) as {
-    url?: string
-    error?: string
-  }
-
-  if (!response.ok || !payload.url) {
-    throw new Error(payload.error ?? 'Nie udało się uruchomić checkoutu PayU.')
+  if (!payload.url) {
+    throw new Error('Nie udało się uruchomić checkoutu PayU.')
   }
 
   return {
@@ -169,40 +258,54 @@ async function startPayuCheckout(bookingId: string, accessToken: string) {
   }
 }
 
+async function readBookingStatus(baseUrl: string, bookingId: string, accessToken: string) {
+  return requestJson<BookingStatusPayload>(
+    `${baseUrl}/api/bookings/${bookingId}/status?access=${encodeURIComponent(accessToken)}`,
+    {
+      method: 'GET',
+      cache: 'no-store',
+    },
+  )
+}
+
 async function main() {
   loadEnvConfig(rootDir)
   const smokeEnvironment = getPayuSmokeEnvironment()
-  process.env.APP_DATA_MODE = 'local'
-  process.env.APP_PAYMENT_MODE = 'auto'
-  process.env.NEXT_PUBLIC_APP_URL = appUrl
-  process.env.RESEND_API_KEY = ''
-  process.env.SMS_PROVIDER = 'disabled'
-  process.env.BEHAVIOR15_CONTACT_PHONE = '500600700'
-  process.env.MANUAL_PAYMENT_BANK_ACCOUNT = '11112222333344445555666677'
-  process.env.MANUAL_PAYMENT_ACCOUNT_NAME = 'Krzysztof Regulski'
-  process.env.PAYU_ENVIRONMENT = smokeEnvironment === 'production' ? 'production' : PUBLIC_PAYU_SANDBOX.environment
+  const targetUrl = resolvePayuSmokeTargetUrl()
+  const targetMode: PayuSmokeTarget = targetUrl ? 'remote' : 'local'
 
-  if (smokeEnvironment === 'sandbox') {
-    process.env.PAYU_CLIENT_ID = process.env.PAYU_CLIENT_ID?.trim() || PUBLIC_PAYU_SANDBOX.clientId
-    process.env.PAYU_CLIENT_SECRET = process.env.PAYU_CLIENT_SECRET?.trim() || PUBLIC_PAYU_SANDBOX.clientSecret
-    process.env.PAYU_POS_ID = process.env.PAYU_POS_ID?.trim() || PUBLIC_PAYU_SANDBOX.posId
-    process.env.PAYU_SECOND_KEY = process.env.PAYU_SECOND_KEY?.trim() || PUBLIC_PAYU_SANDBOX.secondKey
+  if (smokeEnvironment === 'production' && !targetUrl) {
+    throw new Error('Tryb production wymaga publicznego URL przez --url albo PAYU_SMOKE_URL.')
   }
 
-  const sandbox = await createLocalDataSandbox('payu-smoke', rootDir)
-  const { dataDir } = sandbox
+  const baseUrl = targetUrl ?? localAppUrl
+  let sandbox: Awaited<ReturnType<typeof createLocalDataSandbox>> | null = null
   let server: ReturnType<typeof spawn> | null = null
   let serverStdout = ''
   let serverStderr = ''
 
-  try {
+  if (targetMode === 'local') {
+    process.env.APP_DATA_MODE = 'local'
+    process.env.APP_PAYMENT_MODE = 'auto'
+    process.env.NEXT_PUBLIC_APP_URL = baseUrl
+    process.env.RESEND_API_KEY = ''
+    process.env.SMS_PROVIDER = 'disabled'
+    process.env.ADMIN_ACCESS_SECRET = process.env.ADMIN_ACCESS_SECRET?.trim() || 'payu-smoke-admin'
+    process.env.BEHAVIOR15_CONTACT_PHONE = '500600700'
+    process.env.MANUAL_PAYMENT_BANK_ACCOUNT = '11112222333344445555666677'
+    process.env.MANUAL_PAYMENT_ACCOUNT_NAME = 'Krzysztof Regulski'
+    process.env.PAYU_ENVIRONMENT = PUBLIC_PAYU_SANDBOX.environment
+    process.env.PAYU_CLIENT_ID = process.env.PAYU_CLIENT_ID?.trim() || PUBLIC_PAYU_SANDBOX.clientId
+    process.env.PAYU_CLIENT_SECRET = process.env.PAYU_CLIENT_SECRET?.trim() || PUBLIC_PAYU_SANDBOX.clientSecret
+    process.env.PAYU_POS_ID = process.env.PAYU_POS_ID?.trim() || PUBLIC_PAYU_SANDBOX.posId
+    process.env.PAYU_SECOND_KEY = process.env.PAYU_SECOND_KEY?.trim() || PUBLIC_PAYU_SANDBOX.secondKey
+
+    sandbox = await createLocalDataSandbox('payu-smoke', rootDir)
+    const { dataDir } = sandbox
+
     await Promise.all(trackedFiles.map((fileName) => rm(path.join(dataDir, fileName), { force: true })))
 
-    const slotTime = getWarsawSlotInMinutes(45)
-    const slot = await createAvailabilitySlot(slotTime.date, slotTime.time)
-    assert(slot, 'Nie udało się utworzyć slotu do testu PayU.')
-
-    server = spawn('cmd.exe', ['/c', 'npm', 'run', 'dev', '--', '--hostname', '127.0.0.1', '--port', String(port)], {
+    server = spawn('cmd.exe', ['/c', 'npm', 'run', 'dev', '--', '--hostname', '127.0.0.1', '--port', String(localPort)], {
       cwd: rootDir,
       env: process.env,
       stdio: ['ignore', 'pipe', 'pipe'],
@@ -217,7 +320,7 @@ async function main() {
     })
 
     try {
-      await waitForServer()
+      await waitForServer(baseUrl)
     } catch (error) {
       throw new Error(
         [
@@ -229,11 +332,17 @@ async function main() {
           .join('\n\n'),
       )
     }
+  }
 
-    const booking = await createBooking(slot.id)
-    const checkout = await startPayuCheckout(booking.bookingId, booking.accessToken)
+  try {
+    const slotTime = getWarsawSlotInMinutes(45)
+    const slot = await createAvailabilitySlot(baseUrl, slotTime.date, slotTime.time)
+    assert(slot, 'Nie udało się utworzyć slotu do testu PayU.')
+
+    const booking = await createBooking(baseUrl, slot.id)
+    const checkout = await startPayuCheckout(baseUrl, booking.bookingId, booking.accessToken)
     const redirectUrl = new URL(checkout.url)
-    const storedBooking = await getBookingById(booking.bookingId)
+    const bookingStatus = await readBookingStatus(baseUrl, booking.bookingId, booking.accessToken)
     const isProductionRedirectHost = /^(?!.*\.snd\.)[a-z0-9-]+(?:\.[a-z0-9-]+)*\.payu\.com$/i.test(redirectUrl.hostname)
 
     if (smokeEnvironment === 'production') {
@@ -241,26 +350,31 @@ async function main() {
     } else {
       assert(ALLOWED_PAYU_SANDBOX_HOSTS.has(redirectUrl.hostname), `Nieoczekiwany host PayU redirect: ${redirectUrl.hostname}`)
     }
-    assert(storedBooking, 'Nie znaleziono bookingu po uruchomieniu checkoutu PayU.')
-    assert(storedBooking.paymentMethod === 'payu', 'Booking nie zapisał paymentMethod=payu.')
-    assert(Boolean(storedBooking.payuOrderId), 'Booking nie zapisał payuOrderId.')
-    assert(Boolean(storedBooking.payuOrderStatus), 'Booking nie zapisał payuOrderStatus.')
-    assert(storedBooking.bookingStatus === 'pending', 'Booking po starcie checkoutu PayU nie powinien zmieniać bookingStatus.')
-    assert(storedBooking.paymentStatus === 'unpaid', 'Booking po starcie checkoutu PayU nie powinien mieć statusu paid.')
+
+    assert(bookingStatus.bookingStatus === 'pending', 'Booking po starcie checkoutu PayU nie powinien zmieniać bookingStatus.')
+    assert(bookingStatus.paymentStatus === 'unpaid', 'Booking po starcie checkoutu PayU nie powinien mieć statusu paid.')
+    assert(bookingStatus.paymentMethod === 'payu', 'Booking nie zapisał paymentMethod=payu.')
+    assert(Boolean(bookingStatus.payuOrderId), 'Booking nie zapisał payuOrderId.')
+    assert(Boolean(bookingStatus.payuOrderStatus), 'Booking nie zapisał payuOrderStatus.')
 
     console.log(
       JSON.stringify(
         {
           ok: true,
+          mode: targetMode,
           smokeEnvironment,
-          environment: process.env.PAYU_ENVIRONMENT,
+          targetUrl: baseUrl,
           usedPublicSandboxDefaults:
+            targetMode === 'local' &&
             smokeEnvironment === 'sandbox' &&
             process.env.PAYU_CLIENT_ID === PUBLIC_PAYU_SANDBOX.clientId &&
             process.env.PAYU_POS_ID === PUBLIC_PAYU_SANDBOX.posId,
-          bookingId: storedBooking.id,
-          payuOrderId: storedBooking.payuOrderId,
-          payuOrderStatus: storedBooking.payuOrderStatus,
+          bookingId: bookingStatus.bookingId ?? booking.bookingId,
+          bookingStatus: bookingStatus.bookingStatus,
+          paymentStatus: bookingStatus.paymentStatus,
+          paymentMethod: bookingStatus.paymentMethod,
+          payuOrderId: bookingStatus.payuOrderId,
+          payuOrderStatus: bookingStatus.payuOrderStatus,
           redirectHost: redirectUrl.hostname,
           redirectPath: redirectUrl.pathname,
         },
@@ -273,7 +387,7 @@ async function main() {
     server?.stdout?.destroy()
     server?.stderr?.destroy()
 
-    await sandbox.cleanup()
+    await sandbox?.cleanup()
   }
 }
 

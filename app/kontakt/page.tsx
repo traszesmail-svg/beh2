@@ -1,15 +1,14 @@
 import React from 'react'
 import type { Metadata } from 'next'
 import Image from 'next/image'
-import Link from 'next/link'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
-import { type Offer, getOfferByServiceSlug } from '@/lib/offers'
+import { ContactLeadForm } from '@/components/ContactLeadForm'
+import { getOfferByServiceSlug } from '@/lib/offers'
 import { getPdfAccessLabel, getPdfBundleBySlug, getPdfGuideBySlug } from '@/lib/pdf-guides'
 import { buildMarketingMetadata } from '@/lib/seo'
 import {
   SPECIALIST_ONLINE_PHOTO,
-  buildMailtoHref,
   getPublicContactDetails,
   SPECIALIST_CREDENTIALS,
   SPECIALIST_NAME,
@@ -38,58 +37,6 @@ type PdfInquirySelection = {
   pricing: string
   accessLabel: string
   routePath: string
-}
-
-type ContactIntent = 'general' | 'reschedule'
-
-function buildContactMailtoHref(
-  email: string,
-  offer: Offer | null,
-  pdfInquiry: PdfInquirySelection | null,
-  intent: ContactIntent,
-  bookingId: string | null,
-) {
-  const subjectParts =
-    intent === 'reschedule'
-      ? ['Zmiana terminu lub rezygnacja', offer?.title ?? 'Rezerwacja']
-      : [offer?.title ?? 'Regulski | Terapia behawioralna']
-
-  if (pdfInquiry) {
-    subjectParts.push(pdfInquiry.title)
-  }
-
-  const bodyLines =
-    intent === 'reschedule'
-      ? [
-          'Dzień dobry,',
-          '',
-          'piszę w sprawie zmiany terminu albo rezygnacji:',
-          '',
-          bookingId ? `- numer rezerwacji: ${bookingId}` : '- numer rezerwacji:',
-          `- wybrana usługa: ${offer?.title ?? 'Szybka konsultacja 15 min'}`,
-          '- czy chodzi o zmianę terminu czy rezygnację:',
-          '- preferowany nowy termin:',
-          '- dodatkowe informacje:',
-          '',
-          'Najwygodniejsza forma kontaktu zwrotnego:',
-          '',
-        ]
-      : [
-          'Dzień dobry,',
-          '',
-          'opisuję krótko swoją sytuację:',
-          '',
-          '- gatunek:',
-          '- problem:',
-          '- od kiedy trwa:',
-          pdfInquiry ? `- interesujący mnie materiał PDF: ${pdfInquiry.title}` : '- interesujący mnie materiał PDF:',
-          `- chcę zacząć od: ${offer?.title ?? ''}`,
-          '',
-          'Najwygodniejsza forma kontaktu zwrotnego:',
-          '',
-        ]
-
-  return buildMailtoHref(email, `Zapytanie - ${subjectParts.join(' - ')}`, bodyLines.join('\n'))
 }
 
 export default function ContactPage({
@@ -126,11 +73,7 @@ export default function ContactPage({
       : null
   const isResourceInquiry = selectedOffer?.kind === 'resource'
   const isRescheduleIntent = intentParam === 'reschedule'
-  const contactIntent: ContactIntent = isRescheduleIntent ? 'reschedule' : 'general'
   const contact = getPublicContactDetails()
-  const mailtoHref = contact.email
-    ? buildContactMailtoHref(contact.email, selectedOffer, selectedPdfInquiry, contactIntent, bookingId)
-    : null
   const pageHeading = isRescheduleIntent
     ? 'Napisz w sprawie zmiany terminu lub rezygnacji'
     : selectedOffer
@@ -150,6 +93,18 @@ export default function ContactPage({
         ? `Napisz gatunek, problem i czego szukasz w materiale „${selectedPdfInquiry.title}”.`
         : 'Napisz gatunek, problem i czy wolisz PDF czy rozmowę.'
       : 'Napisz gatunek, problem i od kiedy to trwa.'
+  const leadTopic = isRescheduleIntent
+    ? 'Zmiana terminu lub rezygnacja'
+    : selectedPdfInquiry?.title ?? selectedOffer?.title ?? 'Ogólne pytanie'
+  const leadContextLabel = isRescheduleIntent
+    ? `Rezerwacja${bookingId ? ` #${bookingId}` : ''}`
+    : selectedPdfInquiry
+      ? selectedPdfInquiry.kind === 'bundle'
+        ? `Pakiet PDF: ${selectedPdfInquiry.title}`
+        : `Poradnik PDF: ${selectedPdfInquiry.title}`
+      : selectedOffer
+        ? `Oferta: ${selectedOffer.title}`
+        : 'Kontakt ogólny'
   const followupHref = selectedPdfInquiry?.routePath ?? (isResourceInquiry ? '/oferta/poradniki-pdf' : '/book')
   const followupLabel = selectedPdfInquiry
     ? selectedPdfInquiry.kind === 'bundle'
@@ -157,19 +112,18 @@ export default function ContactPage({
       : 'Wróć do poradnika PDF'
     : isResourceInquiry
       ? 'Przejdź do PDF'
-      : 'Umów 15 min'
-  const primaryAnalyticsLocation = isRescheduleIntent
-    ? 'contact-primary-reschedule'
-    : isResourceInquiry
-      ? 'contact-primary-resource'
-      : 'contact-primary-message'
-  const followupAnalyticsLocation = selectedPdfInquiry
-    ? selectedPdfInquiry.kind === 'bundle'
-      ? 'contact-followup-bundle'
-      : 'contact-followup-guide'
-    : isResourceInquiry
-      ? 'contact-followup-resource'
-      : 'contact-followup-book'
+      : isRescheduleIntent
+        ? 'Wróć do rezerwacji'
+        : 'Umów 15 min'
+  const contactFormAnalyticsLocation = isRescheduleIntent
+    ? 'contact-lead-reschedule'
+    : selectedPdfInquiry
+      ? selectedPdfInquiry.kind === 'bundle'
+        ? 'contact-lead-bundle'
+        : 'contact-lead-guide'
+      : isResourceInquiry
+        ? 'contact-lead-resource'
+        : 'contact-lead-general'
 
   return (
     <main className="page-wrap">
@@ -194,27 +148,14 @@ export default function ContactPage({
               <span>{actionCardCopy}</span>
             </div>
 
-            <div className="hero-actions top-gap">
-              {mailtoHref ? (
-                <a
-                  href={mailtoHref}
-                  className="button button-primary big-button"
-                  data-analytics-event="cta_click"
-                  data-analytics-location={primaryAnalyticsLocation}
-                >
-                  Napisz wiadomość
-                </a>
-              ) : null}
-              <Link
-                href={followupHref}
-                prefetch={false}
-                className="button button-ghost big-button"
-                data-analytics-event="cta_click"
-                data-analytics-location={followupAnalyticsLocation}
-              >
-                {followupLabel}
-              </Link>
-            </div>
+            <ContactLeadForm
+              topic={leadTopic}
+              contextLabel={leadContextLabel}
+              bookingId={bookingId}
+              followupHref={followupHref}
+              followupLabel={followupLabel}
+              analyticsLocation={contactFormAnalyticsLocation}
+            />
           </div>
 
           <div className="panel section-panel contact-support-panel">

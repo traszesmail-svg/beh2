@@ -23,6 +23,12 @@ Zawiera:
 - dodanie `bookings.reminder_sent`
 - dodanie `public.pricing_settings`
 
+Po zmianach w booking/payment schema odpal tez:
+
+- `npm run schema-audit`
+
+To sprawdza, czy kanoniczny plik `supabase/schema.sql` i kluczowe migracje rolloutowe nadal pasuja do aktualnego kodu.
+
 ## 3. Email
 Aby dzialaly maile:
 - `RESEND_API_KEY`
@@ -35,12 +41,16 @@ Wazne:
 - jesli wysylasz jeszcze z `onboarding@resend.dev`, customer maile do zewnetrznych adresow beda blokowane do czasu weryfikacji domeny w Resend
 - w tym trybie `ADMIN_NOTIFICATION_EMAIL` musi wskazywac adres konta Resend, inaczej powiadomienie adminowe tez moze skonczyc sie `403`
 - dla obecnego launch mode manual payment `CUSTOMER_EMAIL_MODE=auto` i `PAYU_MODE=disabled` sa oczekiwanym stanem live; `CUSTOMER_EMAIL_MODE=disabled` traktuj tylko jako tymczasowy override
+- dla finalnego readiness 4/4 customer email musi byc aktywny: `CUSTOMER_EMAIL_MODE=auto` oraz zweryfikowany `RESEND_FROM_EMAIL`
+- jesli `CUSTOMER_EMAIL_MODE=disabled` albo `RESEND_FROM_EMAIL` nadal wskazuje `onboarding@resend.dev`, readiness zostaje zablokowany, a confirmation page staje sie jedynym fallbackiem
 
 Domyslny publiczny adres kontaktowy w aplikacji:
 - `coapebehawiorysta@gmail.com`
 
 Domyslny publiczny adres aplikacji:
 - `https://coapebehawiorysta.vercel.app`
+
+Jesli podlaczysz wlasna domene `.pl`, ustaw `NEXT_PUBLIC_APP_URL` na jej produkcyjny HTTPS adres i zostaw ten sam adres jako canonical dla linkow, maili i powrotow z platnosci.
 
 ## 4. SMS po potwierdzonej platnosci
 Uruchom migracje:
@@ -112,27 +122,32 @@ Wazne:
 Przed deployem mozesz odpalic:
 
 - `npm run payu-smoke`
-- `npm run payu-smoke:production`
+- `npm run payu-smoke:production -- --url https://coapebehawiorysta.vercel.app`
 - `npm run funnel-metrics`
 - `npm run live-readiness`
 
 Skrypt:
 
-- startuje aplikacje lokalnie na losowym porcie
-- tworzy testowy booking w `APP_DATA_MODE=local`
+- w trybie sandbox startuje aplikacje lokalnie na losowym porcie i tworzy testowy booking w `APP_DATA_MODE=local`
+- w trybie production / controlled rollout odpala sie na publicznym URL przekazanym przez `--url` albo `PAYU_SMOKE_URL`
 - uruchamia prawdziwy checkout PayU sandbox albo production przez `/api/payments/payu/checkout`
-- sprawdza, czy booking zapisuje `paymentMethod=payu`, `payuOrderId` i `payuOrderStatus`
-- tryb production wymaga rzeczywistych kluczy PayU i `PAYU_ENVIRONMENT=production`
+- sprawdza, czy booking zapisuje `paymentMethod=payu`, `payuOrderId` i `payuOrderStatus` przez `/api/bookings/:id/status`
+- tryb production wymaga rzeczywistych kluczy PayU, `PAYU_ENVIRONMENT=production` i publicznego URL
+- `npm run payu-smoke:production` bez `--url` / `PAYU_SMOKE_URL` konczy sie szybkim bledem zamiast zgadywac target
 
 `npm run live-readiness`:
 
 - sprawdza, czy runtime danych nie jest juz na local fallback
+- sprawdza schema sync dla booking/payment/QA rollout przez `schema-audit`
 - sprawdza, czy publiczny URL wyglada na produkcyjny HTTPS endpoint
 - domyslnie czyta current production snapshot z `.vercel/.env.production.current`, jesli plik istnieje
 - traktuje `CUSTOMER_EMAIL_MODE=auto` i `PAYU_MODE=disabled` jako swiadomy launch mode manual payment; `disabled` to tylko tymczasowy override
 - failuje na `RESEND_FROM_EMAIL` w trybie `resend.dev` testing mode tylko wtedy, gdy customer email jest aktywnie wlaczony
 - failuje na `PAYU_ENVIRONMENT=sandbox` tylko wtedy, gdy PayU jest aktywnie wlaczone
 - zapisuje raport do `qa-reports/latest-live-readiness.md`
+
+Po podlaczeniu wlasnej domeny `.pl` odpal ponownie `npm run live-readiness -- --report-only`, zeby sprawdzic canonicale, publiczny URL i linki mailowe na nowym adresie.
+Jesli chcesz zrobic controlled rollout PayU na publicznym Vercel URL, ustaw `PAYU_SMOKE_URL` albo podaj `--url` i dopiero wtedy uruchom `npm run payu-smoke:production`.
 
 Jesli lokalnie nie masz jeszcze swoich sekretow sandbox, skrypt korzysta z oficjalnego publicznego POS testowego PayU dostepnego w dokumentacji sandbox.
 Nie uzywaj tych publicznych danych do produkcji.

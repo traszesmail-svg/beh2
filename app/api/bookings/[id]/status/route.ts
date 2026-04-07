@@ -24,6 +24,10 @@ export async function GET(request: Request, { params }: RouteContext) {
       bookingId: booking.id,
       bookingStatus: booking.bookingStatus,
       paymentStatus: booking.paymentStatus,
+      paymentMethod: booking.paymentMethod ?? null,
+      paymentReference: booking.paymentReference ?? null,
+      payuOrderId: booking.payuOrderId ?? null,
+      payuOrderStatus: booking.payuOrderStatus ?? null,
       smsConfirmationStatus: booking.smsConfirmationStatus ?? null,
       updatedAt: booking.updatedAt,
     })

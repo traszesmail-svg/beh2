@@ -32,7 +32,7 @@ function getProblemFormCopy(problemType: ProblemType) {
       animalType: 'Pies' as AnimalType,
       durationLabel: 'Na jakim etapie jest temat',
       durationPlaceholder: 'np. chce ustalic plan pierwszego spotkania w tym miesiacu',
-      descriptionLabel: 'Krotki opis celu rozmowy',
+      descriptionLabel: 'Krótki opis celu rozmowy',
       descriptionPlaceholder:
         'Napisz, dla kogo ma byc przygotowane spotkanie, jaki jest cel dogoterapii i co chcesz uporzadkowac na poczatku.',
       helperText:
@@ -44,7 +44,7 @@ function getProblemFormCopy(problemType: ProblemType) {
     animalType: isCatProblemType(problemType) ? ('Kot' as AnimalType) : ('Pies' as AnimalType),
     durationLabel: 'Od kiedy trwa problem',
     durationPlaceholder: 'np. od 3 tygodni',
-    descriptionLabel: 'Krotki opis sytuacji',
+    descriptionLabel: 'Krótki opis sytuacji',
     descriptionPlaceholder: 'Napisz, co sie dzieje, kiedy problem wystepuje i co jest dla Ciebie najtrudniejsze.',
     helperText: null,
   }
@@ -210,7 +210,7 @@ export function BookingForm({
       <div className="form-section-card tree-backed-card form-section-card-owner">
         <div className="form-section-heading">
           <span className="section-eyebrow">1. Dane podstawowe</span>
-          <strong>Ty i zwierz?</strong>
+          <strong>Ty i zwierzak?</strong>
         </div>
 
         <div className="form-section-grid">

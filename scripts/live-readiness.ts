@@ -31,7 +31,15 @@ function getReportFileStamp(date: Date) {
 }
 
 function getCheckHeading(check: GoLiveCheck) {
-  return check.tone === 'ready' ? 'GOTOWE' : 'BLOKER'
+  if (check.state === 'ready') {
+    return 'GOTOWE'
+  }
+
+  if (check.state === 'disabled') {
+    return 'WYŁĄCZONE'
+  }
+
+  return 'ZABLOKOWANE'
 }
 
 function getModeLabel(reportOnly: boolean) {
@@ -58,6 +66,7 @@ function renderReport(checks: GoLiveCheck[], createdAt: Date, reportOnly: boolea
   const hasBlockers = blockingCount > 0
   const sections = checks.flatMap((check) => [
     `### ${getCheckHeading(check)} - ${check.label}`,
+    `- Stan: ${check.state}`,
     `- Summary: ${check.summary}`,
     `- Next: ${check.nextStep}`,
     '',
@@ -133,7 +142,7 @@ async function main() {
   console.log(`Blocking checks: ${blockingCount}`)
 
   for (const check of checks) {
-    console.log(`- ${getCheckHeading(check)} | ${check.label}: ${check.summary}`)
+    console.log(`- ${getCheckHeading(check)} | ${check.label} [${check.state}]: ${check.summary}`)
   }
 
   if (hasBlockers) {
