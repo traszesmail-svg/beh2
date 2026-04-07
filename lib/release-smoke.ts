@@ -157,7 +157,9 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
         'Wybierz temat najbliższy sytuacji.',
         'Temat mieszany?',
         'Wybierz temat mieszany',
-        'Jak to działa',
+        'Następny krok',
+        'Najpierw wybierasz temat.',
+        'Potem pokazuję terminy i kolejny krok.',
       ],
       forbidden: [
         'Cena konsultacji',

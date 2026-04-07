@@ -62,6 +62,11 @@ export const SPECIALIST_WIDE_PHOTO = {
   alt: 'Krzysztof Regulski trzymający kota na rękach w jasnym wnętrzu gabinetowym',
 }
 
+export const SPECIALIST_CAT_SUPPORT_PHOTO = {
+  src: '/branding/specialist-cat-support.jpg',
+  alt: 'Krzysztof Regulski w gabinecie podczas spokojnej pracy z kotem',
+}
+
 export const SPECIALIST_EXTENDED_START_PHOTO = {
   src: '/branding/specialist-krzysztof-social.jpg',
   alt: 'Krzysztof Regulski z kotem w szerokim kadrze jako ilustracja spokojniejszego, rozszerzonego startu',

@@ -72,7 +72,7 @@ export const OFFERS: Offer[] = [
     outcomes: ['co zrobić dziś', 'co obserwować przez najbliższe dni', 'czy zostać przy 15 min czy wejść głębiej'],
     primaryCtaLabel: 'Umów 15 min',
     primaryHref: buildBookHref(),
-    secondaryCtaLabel: 'Napisz',
+    secondaryCtaLabel: 'Napisz wiadomość',
     secondaryHref: '/kontakt',
     imageSrc: SPECIALIST_WIDE_PHOTO.src,
     imageAlt: SPECIALIST_WIDE_PHOTO.alt,
@@ -151,7 +151,7 @@ export const OFFERS: Offer[] = [
     ],
     bestFor: ['problem w konkretnym miejscu', 'dom, ogród albo spacer', 'gdy sam opis nie wystarcza'],
     outcomes: ['widzimy sytuację na miejscu', 'proste zmiany do wdrożenia', 'wiadomo, co robić dalej'],
-    primaryCtaLabel: 'Napisz',
+    primaryCtaLabel: 'Napisz wiadomość',
     primaryHref: '/kontakt?service=konsultacja-domowa-wyjazdowa',
     secondaryCtaLabel: 'Umów 15 min',
     secondaryHref: '/book',
@@ -177,7 +177,7 @@ export const OFFERS: Offer[] = [
     ],
     bestFor: ['problem wraca', 'trzeba wracać do tematu', 'jedna rozmowa to za mało'],
     outcomes: ['jasny kierunek', 'mniej chaosu', 'kolejne kroki dopasowane do sytuacji'],
-    primaryCtaLabel: 'Napisz',
+    primaryCtaLabel: 'Napisz wiadomość',
     primaryHref: '/kontakt?service=indywidualna-terapia-behawioralna',
     secondaryCtaLabel: 'Umów 15 min',
     secondaryHref: '/book',
@@ -203,7 +203,7 @@ export const OFFERS: Offer[] = [
     ],
     bestFor: ['pies potrzebuje spokojniejszego rytmu', 'po rozmowie widać sens pobytu', 'to nie jest hotel'],
     outcomes: ['czy pobyt ma sens dla tego psa', 'jasne zasady przebiegu', 'co opiekun dostaje po pobycie i jak wdrożyć dalszą pracę'],
-    primaryCtaLabel: 'Napisz',
+    primaryCtaLabel: 'Napisz wiadomość',
     primaryHref: '/kontakt?service=pobyty-socjalizacyjno-terapeutyczne',
     secondaryCtaLabel: 'Umów 15 min',
     secondaryHref: '/book',
@@ -231,7 +231,7 @@ export const OFFERS: Offer[] = [
     ],
     bestFor: ['jeden temat', 'materiał do domu', 'gdy nie chcesz jeszcze rezerwować rozmowy'],
     outcomes: ['prosty materiał', 'mniej chaosu na starcie', 'czy wystarczy poradnik'],
-    primaryCtaLabel: 'Napisz',
+    primaryCtaLabel: 'Napisz wiadomość',
     primaryHref: buildPdfInquiryHref(),
     detailCtaLabel: 'Zobacz PDF',
     detailHref: '/oferta/poradniki-pdf',
@@ -341,7 +341,7 @@ export function getOfferDetailHref(offer: Pick<Offer, 'slug' | 'detailHref'>) {
 }
 
 export function getOfferDetailCtaLabel(offer: Pick<Offer, 'detailCtaLabel'>) {
-  return offer.detailCtaLabel ?? 'Szczegóły'
+  return offer.detailCtaLabel ?? 'Zobacz szczegóły'
 }
 
 export function getOfferByServiceSlug(serviceSlug: string) {

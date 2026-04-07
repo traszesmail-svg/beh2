@@ -11,6 +11,7 @@ import { listFeaturedPdfGuides, listPdfBundles, listPdfGuides } from '@/lib/pdf-
 import { buildMarketingMetadata } from '@/lib/seo'
 import { getActiveConsultationPrice } from '@/lib/server/db'
 import { getDataModeStatus } from '@/lib/server/env'
+import { SPECIALIST_CAT_SUPPORT_PHOTO } from '@/lib/site'
 
 export const dynamic = 'force-dynamic'
 
@@ -30,7 +31,7 @@ function getOfferCardAction(offer: (typeof OFFERS)[number]) {
 
   return {
     href: getOfferDetailHref(offer),
-    label: offer.detailCtaLabel ?? 'Szczegóły',
+    label: offer.detailCtaLabel ?? 'Zobacz szczegóły',
   }
 }
 
@@ -174,6 +175,41 @@ export default async function OfferPage() {
           </div>
 
           <div className="offer-page-stack top-gap">
+            <section className="offer-feature-card tree-backed-card offer-feature-card-support">
+              <div className="offer-feature-media">
+                <Image
+                  src={SPECIALIST_CAT_SUPPORT_PHOTO.src}
+                  alt={SPECIALIST_CAT_SUPPORT_PHOTO.alt}
+                  width={1200}
+                  height={900}
+                  sizes="(max-width: 980px) 100vw, 42vw"
+                  className="section-feature-image"
+                />
+              </div>
+
+              <div className="offer-feature-content">
+                <div className="section-eyebrow">Spokojny start</div>
+                <h2>Najpierw porządkujemy sytuację, potem wybierasz format.</h2>
+                <p className="offer-feature-summary">
+                  Jeśli temat wymaga doprecyzowania, najkrótszy start pokazuje, czy wystarczy 15 min, czy lepiej wejść szerzej.
+                </p>
+                <div className="offer-card-meta-stack">
+                  <div className="offer-card-meta">
+                    <span className="offer-card-meta-label">Dla kogo</span>
+                    <span>Dla osób, które chcą spokojnie wybrać pierwszy sensowny krok.</span>
+                  </div>
+                  <div className="offer-card-meta">
+                    <span className="offer-card-meta-label">Co dostajesz</span>
+                    <span>Krótki, czytelny punkt startu i prostszy wybór dalszej ścieżki.</span>
+                  </div>
+                  <div className="offer-card-meta offer-card-meta-muted">
+                    <span className="offer-card-meta-label">Dalej</span>
+                    <span>Jeśli trzeba, przechodzisz do dłuższej konsultacji albo kontaktu.</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
             {quickStartOffer ? (
               <section className="offer-section-block offer-section-block-start">
                 <div className="offer-section-head">
@@ -275,7 +311,7 @@ export default async function OfferPage() {
                   </div>
                   <div className="offer-card-actions">
                     <Link href={getOfferDetailHref(pdfOffer)} prefetch={false} className="button button-primary">
-                      {pdfOffer.detailCtaLabel ?? 'Szczegóły'}
+                      {pdfOffer.detailCtaLabel ?? 'Zobacz szczegóły'}
                     </Link>
                   </div>
                 </div>

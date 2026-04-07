@@ -195,9 +195,9 @@ export default async function BookPage({
             </div>
 
             <aside className="booking-stage-sidecard tree-backed-card">
-              <span className="booking-stage-sidecard-label">Jak to działa</span>
-              <strong>Wybierz temat. Potem pokażę terminy.</strong>
-              <p>Najpierw wybierasz temat, potem widzisz terminy i kolejny krok.</p>
+              <span className="booking-stage-sidecard-label">Następny krok</span>
+              <strong>Najpierw wybierasz temat.</strong>
+              <p>Potem pokazuję terminy i kolejny krok.</p>
               <div className="booking-stage-sidecard-pills" aria-label="Najważniejsze informacje">
                 <span className="hero-proof-pill">{getBookingServiceSlotBadge(serviceType)}</span>
                 <span className="hero-proof-pill">24h na zmianę</span>
@@ -255,10 +255,6 @@ export default async function BookPage({
                     albo{' '}
                   </>
                 ) : null}
-                <Link href="/koty" prefetch={false} className="inline-link">
-                  przejdź do kategorii dla kota
-                </Link>{' '}
-                lub{' '}
                 <Link href="/kontakt" prefetch={false} className="inline-link">
                   napisz wiadomość
                 </Link>
@@ -267,9 +263,6 @@ export default async function BookPage({
             </div>
 
             <div className="offer-card-actions">
-              <Link href="/koty" prefetch={false} className="button button-ghost">
-                Mam kota
-              </Link>
               {mixedProblemOption ? (
                 <Link href={buildSlotHref(mixedProblemOption.id, serviceQuery, qaBooking)} prefetch={false} className="button button-ghost">
                   Wybierz temat mieszany
