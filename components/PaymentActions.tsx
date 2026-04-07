@@ -84,7 +84,7 @@ export function PaymentActions({
       const payload = (await response.json()) as { redirectTo?: string; error?: string }
 
       if (!response.ok || !payload.redirectTo) {
-        throw new Error(payload.error ?? 'Nie udało się zgłosić płatności.')
+        throw new Error(payload.error ?? 'Nie udało się zgłosić wpłaty.')
       }
 
       window.location.assign(payload.redirectTo)
@@ -125,14 +125,14 @@ export function PaymentActions({
       window.location.href = payload.url
     } catch (paymentError) {
       console.error('[behawior15][payment] payu checkout start failed', paymentError)
-      setError(paymentError instanceof Error ? paymentError.message : 'Wystąpił błąd checkoutu online.')
+      setError(paymentError instanceof Error ? paymentError.message : 'Wystąpił błąd płatności online.')
       setLoadingMethod(null)
     }
   }
 
   async function handleQaSubmit() {
     if (!qaAvailable) {
-      setError(qaEligibility?.reason ?? qaEligibility?.summary ?? 'Testowy checkout QA jest chwilowo niedostępny.')
+      setError(qaEligibility?.reason ?? qaEligibility?.summary ?? 'Testowa płatność jest chwilowo niedostępna.')
       return
     }
 
@@ -153,13 +153,13 @@ export function PaymentActions({
       const payload = (await response.json()) as { redirectTo?: string; error?: string }
 
       if (!response.ok || !payload.redirectTo) {
-        throw new Error(payload.error ?? 'Nie udało się uruchomić testowego checkoutu QA.')
+        throw new Error(payload.error ?? 'Nie udało się uruchomić testowej płatności.')
       }
 
       window.location.assign(payload.redirectTo)
     } catch (paymentError) {
       console.error('[behawior15][payment] qa checkout failed', paymentError)
-      setError(paymentError instanceof Error ? paymentError.message : 'Wystąpił błąd testowego checkoutu QA.')
+      setError(paymentError instanceof Error ? paymentError.message : 'Wystąpił błąd testowej płatności.')
     } finally {
       setQaLoading(false)
     }
@@ -174,10 +174,10 @@ export function PaymentActions({
         {error ? <div className="error-box">{error}</div> : null}
 
         <div className="list-card accent-outline payment-next-card tree-backed-card">
-          <strong>Kontrolowany checkout QA</strong>
+          <strong>Kontrolowany test płatności</strong>
           <span>
             {qaEligibility?.summary ??
-              'To jest booking testowy QA. Przejdziesz przez checkout bez realnego obciążenia i bez mieszania z produkcyjną sprzedażą.'}
+              'To jest rezerwacja testowa. Przejdziesz przez płatność bez realnego obciążenia i bez mieszania z produkcyjną sprzedażą.'}
           </span>
         </div>
 
@@ -187,7 +187,7 @@ export function PaymentActions({
             <div className="summary-value">{amountLabel}</div>
           </div>
           <div className="summary-card tree-backed-card">
-            <div className="stat-label">Referencja QA</div>
+            <div className="stat-label">Referencja testowa</div>
             <div className="summary-value payment-reference-value">{qaEligibility?.paymentReference ?? paymentReference}</div>
           </div>
           <div className="summary-card tree-backed-card">
@@ -198,16 +198,16 @@ export function PaymentActions({
 
         <div className="summary-grid trust-grid">
           <div className="summary-card trust-card tree-backed-card">
-            <strong>Jawna flaga QA</strong>
-            <span>Ten flow działa tylko dla rezerwacji oznaczonych jako testowe.</span>
+            <strong>Jawny tryb testowy</strong>
+            <span>Ta ścieżka działa tylko dla rezerwacji oznaczonych jako testowe.</span>
           </div>
           <div className="summary-card trust-card tree-backed-card">
-            <strong>Env gate i allowlista</strong>
-            <span>TEST_CHECKOUT_ENABLED oraz allowlista emaili lub telefonów chronią przed publicznym 0 zł.</span>
+            <strong>Blokada środowiskowa</strong>
+            <span>TEST_CHECKOUT_ENABLED oraz allowlista kontaktów chronią przed publicznym 0 zł od prawdziwego ruchu.</span>
           </div>
           <div className="summary-card trust-card tree-backed-card">
             <strong>Panel admina</strong>
-            <span>W panelu masz osobną akcję do ręcznego potwierdzania bookingów QA.</span>
+            <span>W panelu masz osobną akcję do ręcznego potwierdzania rezerwacji testowych.</span>
           </div>
         </div>
 
@@ -220,17 +220,15 @@ export function PaymentActions({
               onClick={handleQaSubmit}
               disabled={qaLoading}
             >
-              {qaLoading ? 'Uruchamiam testowy checkout QA...' : 'Uruchom testowy checkout QA'}
+              {qaLoading ? 'Uruchamiam testową płatność...' : 'Uruchom testową płatność'}
             </button>
           </div>
         ) : (
-          <div className="error-box">
-            {qaEligibility?.reason ?? qaEligibility?.summary ?? 'Testowy checkout QA jest chwilowo zablokowany.'}
-          </div>
+          <div className="error-box">{qaEligibility?.reason ?? qaEligibility?.summary ?? 'Testowa płatność jest chwilowo zablokowana.'}</div>
         )}
 
         <div className="disclaimer">
-          Ten flow pozostaje odseparowany od normalnej sprzedaży. Jeśli to ma być test, sprawdź flagę QA, TEST_CHECKOUT_ENABLED i allowlistę kontaktu.
+          Ta ścieżka pozostaje odseparowana od normalnej sprzedaży. Jeśli to ma być test, sprawdź flagę QA, TEST_CHECKOUT_ENABLED i allowlistę kontaktu.
         </div>
       </div>
     )
@@ -255,7 +253,7 @@ export function PaymentActions({
 
         <div className="list-card tree-backed-card">
           <strong>Co dalej</strong>
-          <span>Napisz wiadomość, a wskażę najprostszy dalszy krok albo pomożemy wrócić do płatności, gdy konfiguracja znów będzie gotowa.</span>
+          <span>Napisz wiadomość, a wskażę najprostszy dalszy krok albo pomogę wrócić do płatności, gdy konfiguracja znów będzie gotowa.</span>
         </div>
 
         <div className="hero-actions">
@@ -274,8 +272,8 @@ export function PaymentActions({
     <div className="stack-gap top-gap" data-payment-method-selected={selectedMethod}>
       {error ? <div className="error-box">{error}</div> : null}
 
-        <div className="list-card accent-outline payment-next-card tree-backed-card">
-          <strong>Wybierz metodę płatności</strong>
+      <div className="list-card accent-outline payment-next-card tree-backed-card">
+        <strong>Wybierz metodę płatności</strong>
         <span>
           {payuAvailable
             ? manualAvailable
@@ -313,9 +311,7 @@ export function PaymentActions({
                 : 'Ta opcja wróci, gdy numer do wpłaty będzie znowu aktywny. Do tego czasu napisz wiadomość.'}
             </span>
           </div>
-          <span className="payment-method-badge">
-            {manualAvailable ? (payuAvailable ? 'Do 60 min' : 'Dostępne teraz') : 'Chwilowo niedostępne'}
-          </span>
+          <span className="payment-method-badge">{manualAvailable ? (payuAvailable ? 'Do 60 min' : 'Dostępne teraz') : 'Chwilowo niedostępne'}</span>
         </button>
 
         {payuAvailable ? (
@@ -327,7 +323,7 @@ export function PaymentActions({
           >
             <div className="payment-method-card-copy">
               <strong>Zapłać online</strong>
-              <span>Płatność online pokaże standardowy checkout z metodami online. Po sukcesie status potwierdzi się automatycznie, a pokój odblokuje się od razu.</span>
+              <span>Płatność online pokaże standardową stronę z metodami online. Po sukcesie status potwierdzi się automatycznie, a pokój odblokuje się od razu.</span>
             </div>
             <span className="payment-method-badge">Automatyczne potwierdzenie</span>
           </button>
@@ -406,11 +402,11 @@ export function PaymentActions({
           <div className="summary-grid trust-grid payment-logo-grid">
             <div className="summary-card trust-card tree-backed-card">
               <strong>BLIK i karta</strong>
-              <span>Płatność online pokaże standardowy checkout z metodami online. Cena pozostaje taka sama jak przy wpłacie BLIK/przelewem.</span>
+              <span>Płatność online pokaże standardową stronę z metodami online. Cena pozostaje taka sama jak przy wpłacie BLIK/przelewem.</span>
             </div>
             <div className="summary-card trust-card tree-backed-card">
               <strong>Automatyczne potwierdzenie</strong>
-              <span>Po sukcesie booking przejdzie do statusu paid, a link do pokoju rozmowy odblokuje się bez czekania na dodatkowe potwierdzenie.</span>
+              <span>Po sukcesie rezerwacja przejdzie do statusu opłacona, a link do pokoju odblokuje się bez czekania na dodatkowe potwierdzenie.</span>
             </div>
             <div className="summary-card trust-card tree-backed-card">
               <strong>Ten sam link do pokoju</strong>
@@ -420,7 +416,7 @@ export function PaymentActions({
 
           <div className="list-card tree-backed-card">
             <strong>Co stanie się dalej</strong>
-            <span>Przejdziesz do płatności online. Po zakończeniu checkoutu wrócisz na potwierdzenie rezerwacji, a pokój odblokuje się automatycznie po statusie paid.</span>
+            <span>Przejdziesz do płatności online. Po zakończeniu płatności wrócisz na potwierdzenie rezerwacji, a pokój odblokuje się automatycznie po statusie opłacona.</span>
           </div>
 
           <div className="hero-actions">

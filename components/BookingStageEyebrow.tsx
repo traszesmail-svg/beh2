@@ -31,8 +31,7 @@ export function BookingStageEyebrow({ stage, className }: BookingStageEyebrowPro
       <div className={className}>{BOOKING_STAGE_LABELS[stage]}</div>
       <div className="booking-flow-track" aria-hidden="true">
         {BOOKING_STAGE_PROGRESS.map((item, index) => {
-          const state =
-            index < currentStageIndex ? 'done' : index === currentStageIndex ? 'current' : 'upcoming'
+          const state = index < currentStageIndex ? 'done' : index === currentStageIndex ? 'current' : 'upcoming'
 
           return (
             <span key={item.id} className={`booking-flow-pill booking-flow-pill-${state}`}>

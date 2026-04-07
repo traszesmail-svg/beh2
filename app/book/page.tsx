@@ -6,14 +6,14 @@ import { unstable_noStore as noStore } from 'next/cache'
 import {
   DEFAULT_BOOKING_SERVICE,
   filterGroupedAvailabilityForService,
-  getBookingServicePriceLabel,
+  getBookingServicePrice,
   getBookingServiceSlotBadge,
-  getBookingServiceTitle,
   normalizeBookingServiceType,
 } from '@/lib/booking-services'
 import { BookingStageEyebrow } from '@/components/BookingStageEyebrow'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
+import { PriceDisplay } from '@/components/PriceDisplay'
 import { buildSlotHref, readBookingServiceSearchParam, readProblemTypeSearchParam, readQaBookingSearchParam } from '@/lib/booking-routing'
 import { DOG_PROBLEM_OPTIONS } from '@/lib/data'
 import { DEFAULT_PRICE_PLN } from '@/lib/pricing'
@@ -103,16 +103,43 @@ function renderProblemIcon(problem: ProblemType) {
   }
 }
 
+const BOOK_TOPIC_COPY: Record<string, { title: string; desc: string }> = {
+  szczeniak: {
+    title: 'Szczeniak i młody pies',
+    desc: 'Gryzienie, skakanie i trudność z wyciszeniem.',
+  },
+  kot: {
+    title: 'Kot i trudne zachowania',
+    desc: 'Kuweta, napięcie, wokalizacja i trudny kontakt.',
+  },
+  separacja: {
+    title: 'Lęk separacyjny',
+    desc: 'Wycie, niszczenie i trudność z zostawaniem samemu.',
+  },
+  agresja: {
+    title: 'Agresja i reakcje obronne',
+    desc: 'Warknięcia, rzucanie się i obrona zasobów.',
+  },
+  niszczenie: {
+    title: 'Pobudzenie, pogoń i niszczenie',
+    desc: 'Nakręcanie się, pogoń za ruchem i demolowanie otoczenia.',
+  },
+  dogoterapia: {
+    title: 'Dogoterapia',
+    desc: 'Rozmowa o celu, bezpieczeństwie i starcie z psem.',
+  },
+  inne: {
+    title: 'Inny temat do omówienia',
+    desc: 'Temat mieszany albo nietypowy, który chcesz opisać po swojemu.',
+  },
+}
+
 export default async function BookPage({
   searchParams,
 }: {
   searchParams?: Record<string, string | string[] | undefined>
 }) {
   noStore()
-  // Source guardrails for runtime-config.test.ts:
-  // Wybierz temat na 15 min
-  // buildPublicPricingDisclosureMessage(null)
-  // buildSlotHref(item.id)
   const problem = readProblemTypeSearchParam(searchParams?.problem)
   const serviceType = normalizeBookingServiceType(readBookingServiceSearchParam(searchParams?.service) ?? DEFAULT_BOOKING_SERVICE)
   const serviceQuery = serviceType === DEFAULT_BOOKING_SERVICE ? null : serviceType
@@ -120,7 +147,7 @@ export default async function BookPage({
   const dataMode = getDataModeStatus()
   const mainProblemOptions = DOG_PROBLEM_OPTIONS.filter((item) => item.id !== 'inne')
   const mixedProblemOption = DOG_PROBLEM_OPTIONS.find((item) => item.id === 'inne') ?? null
-  let pricingLabel = getBookingServicePriceLabel(serviceType, DEFAULT_PRICE_PLN)
+  let pricingAmount = DEFAULT_PRICE_PLN
   let availabilityLabel = 'Terminy zobaczysz po wyborze tematu.'
 
   if (problem) {
@@ -131,14 +158,13 @@ export default async function BookPage({
     try {
       const [availability, quickConsultationPrice] = await Promise.all([listAvailability(), getActiveConsultationPrice()])
       const filteredAvailability = filterGroupedAvailabilityForService(availability, serviceType)
-      pricingLabel = getBookingServicePriceLabel(serviceType, quickConsultationPrice.amount)
-      availabilityLabel =
-        filteredAvailability.length > 0
-          ? 'Terminy pokażą się po wyborze.'
-          : 'Jeśli dziś nie ma terminu, napisz.'
+      pricingAmount = getBookingServicePrice(serviceType, quickConsultationPrice.amount)
+      availabilityLabel = filteredAvailability.length > 0 ? 'Terminy pokażą się po wyborze.' : 'Jeśli dziś nie ma terminu, napisz.'
     } catch (error) {
-      console.warn('[behawior15][book] nie udalo sie wczytac dostepnosci', error)
+      console.warn('[behawior15][book] nie udało się wczytać dostępności', error)
     }
+  } else {
+    pricingAmount = getBookingServicePrice(serviceType, DEFAULT_PRICE_PLN)
   }
 
   return (
@@ -150,14 +176,16 @@ export default async function BookPage({
           <div className="booking-stage-hero-grid">
             <div className="booking-stage-copy-column">
               <BookingStageEyebrow stage="topic" className="section-eyebrow" />
-              {qaBooking ? <div className="status-pill transaction-status-pill">Tryb QA</div> : null}
-              <h1>Wybierz temat dla: {getBookingServiceTitle(serviceType)}</h1>
-              <p className="hero-text">Kliknij temat najbliższy sytuacji.</p>
+              {qaBooking ? <div className="status-pill transaction-status-pill">Tryb testowy</div> : null}
+              <h1>Wybierz temat na 15 min</h1>
+              <p className="hero-text">Wybierz temat najbliższy sytuacji. Potem pokażę Ci terminy.</p>
 
               <div className="book-hero-stats top-gap-small">
                 <div className="book-hero-stat tree-backed-card">
                   <span className="book-hero-stat-label">Cena startowa</span>
-                  <strong>{pricingLabel}</strong>
+                  <strong>
+                    <PriceDisplay amount={pricingAmount} prefix="Od" />
+                  </strong>
                 </div>
                 <div className="book-hero-stat tree-backed-card">
                   <span className="book-hero-stat-label">Dostępność</span>
@@ -167,9 +195,9 @@ export default async function BookPage({
             </div>
 
             <aside className="booking-stage-sidecard tree-backed-card">
-              <span className="booking-stage-sidecard-label">Jak wygląda ten flow</span>
-              <strong>Krótki wybór, potem termin i płatność.</strong>
-              <p>Najpierw wybierasz temat. Dalej widzisz tylko następny krok, bez długiego opisu usług.</p>
+              <span className="booking-stage-sidecard-label">Jak to działa</span>
+              <strong>Wybierz temat. Potem pokażę terminy.</strong>
+              <p>Najpierw zaznaczasz temat, potem widzisz kolejny krok i płatność. Bez długiego opisu usług.</p>
               <div className="booking-stage-sidecard-pills" aria-label="Najważniejsze informacje">
                 <span className="hero-proof-pill">{getBookingServiceSlotBadge(serviceType)}</span>
                 <span className="hero-proof-pill">24h na zmianę</span>
@@ -180,6 +208,7 @@ export default async function BookPage({
           <div className="card-grid three-up top-gap book-topics-grid" id="tematy">
             {mainProblemOptions.map((item) => {
               const topicVisual = TOPIC_VISUALS[item.id]
+              const topicCopy = BOOK_TOPIC_COPY[item.id as ProblemType]
 
               return (
                 <Link
@@ -205,8 +234,8 @@ export default async function BookPage({
                     {item.visualLabel ? <div className="topic-media-badge">{item.visualLabel}</div> : null}
                   </div>
                   <span className="topic-icon-shell">{renderProblemIcon(item.id)}</span>
-                  <div className="topic-title">{item.title}</div>
-                  <div className="topic-desc">{item.desc}</div>
+                  <div className="topic-title">{topicCopy.title}</div>
+                  <div className="topic-desc">{topicCopy.desc}</div>
                   <div className="topic-link">Wybierz temat</div>
                 </Link>
               )
@@ -215,13 +244,9 @@ export default async function BookPage({
 
           <div className="book-page-support-card tree-backed-card top-gap">
             <div className="book-page-support-copy">
-              <div className="section-eyebrow">Pies tylko na tej stronie</div>
-              <strong>Temat mieszany? Nadal nie masz pewności?</strong>
+              <div className="section-eyebrow">Temat mieszany?</div>
+              <strong>Nie musisz znać nazwy problemu.</strong>
               <span>
-                <Link href="/koty" prefetch={false} className="inline-link">
-                  Przejdź do kategorii dla kota
-                </Link>
-                .{' '}
                 {mixedProblemOption ? (
                   <>
                     <Link href={buildSlotHref(mixedProblemOption.id, serviceQuery, qaBooking)} prefetch={false} className="inline-link">
@@ -230,8 +255,12 @@ export default async function BookPage({
                     albo{' '}
                   </>
                 ) : null}
+                <Link href="/koty" prefetch={false} className="inline-link">
+                  przejdź do kategorii dla kota
+                </Link>{' '}
+                lub{' '}
                 <Link href="/kontakt" prefetch={false} className="inline-link">
-                  napisz
+                  napisz wiadomość
                 </Link>
                 .
               </span>

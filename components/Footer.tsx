@@ -37,7 +37,7 @@ export function Footer({
     ? buildMailtoHref(
         contact.email,
         'Zapytanie - Regulski | Terapia behawioralna',
-        'Dzień dobry,\n\nopisuję krótko swoją sytuację:\n\n- gatunek:\n- problem:\n- od kiedy trwa:\n- od czego chcę zacząć:\n',
+        'Dzień dobry,\n\nkrótko opisuję swoją sytuację:\n\n- gatunek:\n- problem:\n- od kiedy trwa:\n- od czego chcę zacząć:\n',
       )
     : null
   const effectiveSecondaryHref = secondaryHref ?? (mailtoHref ? mailtoHref : '/kontakt')
@@ -82,7 +82,7 @@ export function Footer({
             <div className="footer-landing-note tree-backed-card">
               <strong>{SITE_NAME}</strong>
               <span>
-                {SITE_TAGLINE}. {SPECIALIST_NAME}, {SPECIALIST_CREDENTIALS}.
+                {SITE_TAGLINE}. {SPECIALIST_NAME}, {SPECIALIST_CREDENTIALS}. Konsultacje prowadzę osobiście w Olsztynie i online.
               </span>
             </div>
           </div>
@@ -182,7 +182,7 @@ export function Footer({
           <div className="section-eyebrow">Regulski</div>
           <h2 className="footer-title">{SITE_NAME}</h2>
           <p className="muted footer-copy">
-            {SITE_TAGLINE}. {SPECIALIST_NAME}, {SPECIALIST_CREDENTIALS}.
+            {SITE_TAGLINE}. {SPECIALIST_NAME}, {SPECIALIST_CREDENTIALS}. Konsultacje prowadzę osobiście w Olsztynie i online.
           </p>
         </div>
 

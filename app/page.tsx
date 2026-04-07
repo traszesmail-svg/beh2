@@ -5,8 +5,9 @@ import { AnalyticsEventOnMount } from '@/components/AnalyticsEventOnMount'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { HomeMobileStickyCta } from '@/components/HomeMobileStickyCta'
+import { PriceDisplay } from '@/components/PriceDisplay'
 import { SocialProofSection } from '@/components/SocialProofSection'
-import { DEFAULT_PRICE_PLN, formatPricePln } from '@/lib/pricing'
+import { DEFAULT_PRICE_PLN } from '@/lib/pricing'
 import { buildHomeMetadata } from '@/lib/seo'
 import { getActiveConsultationPrice, listAvailability } from '@/lib/server/db'
 import { getBaseUrl, getDataModeStatus } from '@/lib/server/env'
@@ -14,11 +15,11 @@ import {
   CAPBT_ORG_URL,
   CAPBT_PROFILE_URL,
   COAPE_ORG_URL,
-  INSTAGRAM_PROFILE_URL,
   HOME_CAT_QUICK_CHOICE_PHOTO,
   HOME_DOG_QUICK_CHOICE_PHOTO,
   HOME_HELP_CHOICE_PHOTO,
   HOME_HERO_PHOTO,
+  INSTAGRAM_PROFILE_URL,
   SITE_NAME,
   SITE_TAGLINE,
   SPECIALIST_CREDENTIALS,
@@ -27,6 +28,7 @@ import {
   SPECIALIST_PHOTO,
   SPECIALIST_TRUST_STATEMENT,
 } from '@/lib/site'
+import { OFFERS, getOfferDetailHref } from '@/lib/offers'
 
 export const dynamic = 'force-dynamic'
 
@@ -70,42 +72,48 @@ const quickChoiceLinks = [
   },
 ] as const
 
-const trustPills = ['Prowadzę osobiście', 'Olsztyn / online', 'COAPE / CAPBT'] as const
+const trustBadges = ['COAPE / CAPBT', 'Technik weterynarii', 'Psy i koty', 'Olsztyn + online', 'Prowadzę osobiście'] as const
 
-function buildHeroHighlights(consultationPriceLabel: string) {
-  return [
-    {
-      label: `Start od ${consultationPriceLabel}`,
-      value: '15 min na pierwszy spokojny krok',
-    },
-    {
-      label: 'Kto prowadzi',
-      value: SPECIALIST_NAME,
-    },
-    {
-      label: 'Po płatności',
-      value: 'confirmation i link do pokoju',
-    },
-  ] as const
-}
+const homeSteps = [
+  {
+    n: '01',
+    title: 'Wybierasz temat',
+    desc: 'Dzięki prostym wejściom nie musisz zgadywać, od czego zacząć.',
+  },
+  {
+    n: '02',
+    title: 'Widzisz następny krok',
+    desc: 'Zostajesz przy jednym prostym ruchu: termin, wiadomość albo materiał PDF.',
+  },
+  {
+    n: '03',
+    title: 'Dostajesz potwierdzenie',
+    desc: 'Po opłaceniu lub kontakcie masz jasny dalszy ruch i mniej chaosu.',
+  },
+] as const
 
 export default async function HomePage() {
   const dataMode = getDataModeStatus()
   const baseUrl = getBaseUrl()
   let availabilityLabel = 'Terminy zobaczysz po wejściu do rezerwacji.'
-  let consultationPriceLabel = formatPricePln(DEFAULT_PRICE_PLN)
+  let consultationPriceAmount = DEFAULT_PRICE_PLN
 
   if (dataMode.isValid) {
     try {
       const [availability, quickConsultationPrice] = await Promise.all([listAvailability(), getActiveConsultationPrice()])
       availabilityLabel = availability.length > 0 ? 'Terminy są w rezerwacji.' : 'Jeśli dziś nie ma terminu, napisz.'
-      consultationPriceLabel = formatPricePln(quickConsultationPrice.amount)
+      consultationPriceAmount = quickConsultationPrice.amount
     } catch (error) {
-      console.warn('[beh2][home] nie udalo sie pobrac dostepnosci na home', error)
+      console.warn('[beh2][home] nie udało się pobrać dostępności na home', error)
     }
   }
 
-  const heroHighlights = buildHeroHighlights(consultationPriceLabel)
+  const featuredOffers = [
+    OFFERS.find((offer) => offer.slug === 'szybka-konsultacja-15-min'),
+    OFFERS.find((offer) => offer.slug === 'konsultacja-30-min'),
+    OFFERS.find((offer) => offer.slug === 'konsultacja-behawioralna-online'),
+    OFFERS.find((offer) => offer.slug === 'poradniki-pdf'),
+  ].filter((offer): offer is NonNullable<typeof offer> => offer != null)
 
   const structuredData = [
     {
@@ -128,11 +136,7 @@ export default async function HomePage() {
           name: 'Polska',
         },
       ],
-      serviceType: [
-        'Konsultacje behawioralne dla psów i kotów',
-        'Terapia problemów w zachowaniu',
-        'Pobyty socjalizacyjno-terapeutyczne',
-      ],
+      serviceType: ['Konsultacje behawioralne dla psów i kotów', 'Terapia problemów w zachowaniu', 'Pobyty socjalizacyjno-terapeutyczne'],
       address: {
         '@type': 'PostalAddress',
         addressLocality: 'Olsztyn',
@@ -186,17 +190,8 @@ export default async function HomePage() {
                 <h1>Masz psa, kota albo temat mieszany? Zacznij od prostego wyboru.</h1>
                 <p className="hero-text home-hero-text">
                   Krzysztof Regulski prowadzi konsultacje osobiście. Najpierw wybierasz ścieżkę, potem termin i płatność.
-                  Po statusie paid dostajesz confirmation i link do pokoju.
+                  Po opłaceniu dostajesz potwierdzenie i link do pokoju.
                 </p>
-              </div>
-
-              <div className="home-hero-highlight-grid">
-                {heroHighlights.map((item) => (
-                  <div key={item.label} className="home-hero-highlight-card tree-backed-card">
-                    <span className="home-hero-highlight-label">{item.label}</span>
-                    <strong>{item.value}</strong>
-                  </div>
-                ))}
               </div>
 
               <div className="hero-actions home-hero-actions">
@@ -219,20 +214,26 @@ export default async function HomePage() {
                 </Link>
               </div>
 
-              <div className="home-hero-proof-grid home-hero-proof-grid-inline">
-                {trustPills.map((pill) => (
-                  <span key={pill} className="hero-proof-pill home-hero-proof-pill">
-                    {pill}
-                  </span>
-                ))}
-              </div>
-
               <div className="home-hero-trust-bar tree-backed-card">
+                <div className="home-hero-proof-grid home-hero-proof-grid-inline">
+                  {trustBadges.map((pill) => (
+                    <span key={pill} className="hero-proof-pill home-hero-proof-pill">
+                      {pill}
+                    </span>
+                  ))}
+                </div>
                 <strong>{SPECIALIST_TRUST_STATEMENT}</strong>
                 <span>Prowadzę konsultacje osobiście w {SPECIALIST_LOCATION} i online.</span>
                 <span>
-                  Zobacz też <a href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="inline-link">profil CAPBT</a>{' '}
-                  i <a href={INSTAGRAM_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="inline-link">Instagram @coapebehawiorysta</a>.
+                  Zobacz też{' '}
+                  <a href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="inline-link">
+                    profil CAPBT
+                  </a>{' '}
+                  i{' '}
+                  <a href={INSTAGRAM_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="inline-link">
+                    Instagram @coapebehawiorysta
+                  </a>
+                  .
                 </span>
               </div>
             </div>
@@ -262,18 +263,11 @@ export default async function HomePage() {
                 </div>
 
                 <div className="home-hero-meta home-hero-meta-accent">
-                  <span className="home-hero-meta-label">Start od {consultationPriceLabel}</span>
+                  <span className="home-hero-meta-label">
+                    Start od <PriceDisplay amount={consultationPriceAmount} />
+                  </span>
                   <strong>15 min na pierwszy spokojny krok.</strong>
                   <span>{availabilityLabel}</span>
-                </div>
-
-                <div className="home-hero-process-card tree-backed-card">
-                  <span className="home-hero-meta-label">Jak wygląda flow</span>
-                  <ol className="home-hero-process-list">
-                    <li>Wybierasz psa, kota albo temat mieszany.</li>
-                    <li>Rezerwujesz termin i kończysz płatność.</li>
-                    <li>Po paid dostajesz confirmation i link do pokoju.</li>
-                  </ol>
                 </div>
               </div>
             </aside>
@@ -324,15 +318,50 @@ export default async function HomePage() {
               ))}
             </div>
           </div>
+        </section>
 
-          <div className="home-trust-band">
-            <p className="marketing-note home-hero-note">
-              {SPECIALIST_NAME}, {SPECIALIST_CREDENTIALS}. Zobacz też{' '}
-              <a href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="inline-link">
-                profil CAPBT
-              </a>{' '}
-              i <a href={INSTAGRAM_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="inline-link">Instagram @coapebehawiorysta</a>.
-            </p>
+        <section className="panel section-panel top-gap">
+          <div className="section-head">
+            <div>
+              <div className="section-eyebrow">Jak to działa</div>
+              <h2>Trzy proste kroki.</h2>
+            </div>
+            <div className="muted">Bez długiego formularza i bez zgadywania.</div>
+          </div>
+
+          <div className="summary-grid top-gap">
+            {homeSteps.map((step) => (
+              <div key={step.n} className="summary-card tree-backed-card">
+                <div className="stat-label">{step.n}</div>
+                <strong>{step.title}</strong>
+                <span>{step.desc}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="panel section-panel hero-surface top-gap">
+          <div className="section-head">
+            <div>
+              <div className="section-eyebrow">Skrót oferty</div>
+              <h2>Najważniejsze kierunki w jednym miejscu.</h2>
+            </div>
+            <div className="muted">Z tych kart przechodzisz do oferty albo bezpośrednio dalej.</div>
+          </div>
+
+          <div className="summary-grid top-gap">
+            {featuredOffers.map((offer) => (
+              <article key={offer.slug} className="summary-card tree-backed-card">
+                <div className="stat-label">{offer.shortTitle}</div>
+                <strong>{offer.title}</strong>
+                <span>{offer.cardSummary}</span>
+                <div className="offer-card-actions top-gap-small">
+                  <Link href={getOfferDetailHref(offer)} prefetch={false} className="button button-ghost small-button">
+                    Zobacz więcej
+                  </Link>
+                </div>
+              </article>
+            ))}
           </div>
         </section>
 
@@ -344,6 +373,8 @@ export default async function HomePage() {
           variant="landing"
           ctaHref="/book"
           ctaLabel="Umów 15 min"
+          secondaryHref="/kontakt"
+          secondaryLabel="Napisz wiadomość"
           headline="Najpierw prosty wybór, potem konkretny krok"
           description="Jeśli chcesz wejść od razu w rezerwację, wybierz ścieżkę. Jeśli temat jest mieszany, napisz wiadomość. Prowadzę to osobiście."
         />

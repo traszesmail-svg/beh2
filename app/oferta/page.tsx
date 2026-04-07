@@ -4,8 +4,9 @@ import Link from 'next/link'
 import { PdfGuideCoverStack } from '@/components/PdfGuideCoverStack'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
+import { PriceDisplay } from '@/components/PriceDisplay'
 import { getOfferDetailHref, OFFERS } from '@/lib/offers'
-import { DEFAULT_PRICE_PLN, formatPricePln } from '@/lib/pricing'
+import { DEFAULT_PRICE_PLN } from '@/lib/pricing'
 import { listFeaturedPdfGuides, listPdfBundles, listPdfGuides } from '@/lib/pdf-guides'
 import { buildMarketingMetadata } from '@/lib/seo'
 import { getActiveConsultationPrice } from '@/lib/server/db'
@@ -28,19 +29,16 @@ function getOfferCardAction(offer: (typeof OFFERS)[number]) {
   }
 
   return {
-    href: offer.kind === 'resource' ? getOfferDetailHref(offer) : getOfferDetailHref(offer),
+    href: getOfferDetailHref(offer),
     label: offer.detailCtaLabel ?? 'Szczegóły',
   }
 }
 
-function renderOfferCard(
-  offer: (typeof OFFERS)[number],
-  tone: 'primary' | 'secondary' | 'tertiary' = 'secondary',
-  quickStartPriceLabel: string | null = null,
-) {
+function renderOfferCard(offer: (typeof OFFERS)[number], tone: 'primary' | 'secondary' | 'tertiary' = 'secondary') {
   const action = getOfferCardAction(offer)
   const priceLabel =
-    offer.slug === 'szybka-konsultacja-15-min' ? quickStartPriceLabel ?? offer.priceLabel ?? 'Po wiadomości' : offer.priceLabel ?? 'Po wiadomości'
+    offer.priceAmount !== null ? <PriceDisplay amount={offer.priceAmount} prefix="Od" /> : offer.priceLabel ?? 'Po wiadomości'
+  const whatYouGet = offer.outcomes.slice(0, 3).join(' · ')
 
   return (
     <article key={offer.slug} className={`offer-card tree-backed-card offer-card-${tone}`} data-offer-tone={tone}>
@@ -59,7 +57,7 @@ function renderOfferCard(
         <div className="offer-card-copy-block">
           <div className="offer-card-kicker-row">
             <span className="offer-card-kicker">{offer.shortTitle}</span>
-            <span className={`offer-price${offer.priceLabel ? '' : ' offer-price-muted'}`}>{priceLabel}</span>
+            <span className={`offer-price${offer.priceAmount !== null ? '' : ' offer-price-muted'}`}>{priceLabel}</span>
           </div>
           <Link href={getOfferDetailHref(offer)} prefetch={false} className="inline-link">
             <h3>{offer.title}</h3>
@@ -71,8 +69,16 @@ function renderOfferCard(
 
       <div className="offer-card-meta-stack">
         <div className="offer-card-meta">
-          <span className="offer-card-meta-label">Kiedy</span>
+          <span className="offer-card-meta-label">Dla kogo</span>
+          <span>{offer.forWho}</span>
+        </div>
+        <div className="offer-card-meta">
+          <span className="offer-card-meta-label">Kiedy wybrać</span>
           <span>{offer.whenToChoose}</span>
+        </div>
+        <div className="offer-card-meta">
+          <span className="offer-card-meta-label">Co dostajesz</span>
+          <span>{whatYouGet}</span>
         </div>
         <div className="offer-card-meta offer-card-meta-muted">
           <span className="offer-card-meta-label">Dalej</span>
@@ -95,19 +101,18 @@ export default async function OfferPage() {
   const pdfBundleCount = listPdfBundles().length
   const quickStartOffer = OFFERS.find((offer) => offer.slug === 'szybka-konsultacja-15-min') ?? null
   const dataMode = getDataModeStatus()
-  let quickStartPriceLabel = `Od ${formatPricePln(DEFAULT_PRICE_PLN)}`
+  let quickStartPriceAmount = DEFAULT_PRICE_PLN
 
   if (dataMode.isValid) {
     try {
       const quickConsultationPrice = await getActiveConsultationPrice()
-      quickStartPriceLabel = `Od ${formatPricePln(quickConsultationPrice.amount)}`
+      quickStartPriceAmount = quickConsultationPrice.amount
     } catch (error) {
-      console.warn('[behawior15][oferta] nie udalo sie pobrac aktywnej ceny konsultacji', error)
+      console.warn('[behawior15][oferta] nie udało się pobrać aktywnej ceny konsultacji', error)
     }
   }
-  const moreTimeOffers = OFFERS.filter((offer) =>
-    ['konsultacja-30-min', 'konsultacja-behawioralna-online'].includes(offer.slug),
-  )
+
+  const moreTimeOffers = OFFERS.filter((offer) => ['konsultacja-30-min', 'konsultacja-behawioralna-online'].includes(offer.slug))
   const furtherOffers = OFFERS.filter((offer) =>
     ['konsultacja-domowa-wyjazdowa', 'indywidualna-terapia-behawioralna', 'pobyty-socjalizacyjno-terapeutyczne'].includes(
       offer.slug,
@@ -125,7 +130,7 @@ export default async function OfferPage() {
             <div className="offer-page-hero-copy">
               <div className="section-eyebrow">Oferta</div>
               <h1>Wybierz start dla swojej sytuacji.</h1>
-              <p className="hero-text">Na każdej karcie tylko: kiedy to wybrać i co dalej.</p>
+              <p className="hero-text">Każda karta pokazuje: dla kogo, kiedy wybrać, co dostajesz i co dalej.</p>
 
               <div className="offer-page-hero-pills" aria-label="Poziomy wejścia">
                 <span className="hero-proof-pill">Start szybki</span>
@@ -141,7 +146,9 @@ export default async function OfferPage() {
               <div className="offer-page-hero-stats">
                 <div className="offer-page-hero-stat">
                   <span>Start szybki</span>
-                  <strong>1 karta</strong>
+                  <strong>
+                    <PriceDisplay amount={quickStartPriceAmount} prefix="Od" />
+                  </strong>
                 </div>
                 <div className="offer-page-hero-stat">
                   <span>Więcej czasu</span>
@@ -174,12 +181,10 @@ export default async function OfferPage() {
                       <h2>Najprostszy pierwszy ruch</h2>
                     </div>
                   </div>
-                  <p className="offer-section-intro">
-                    To najkrótsza droga, jeśli chcesz od razu wejść w termin i sprawdzić, czy szybki start wystarczy.
-                  </p>
+                  <p className="offer-section-intro">To najkrótsza droga, jeśli chcesz wejść od razu w termin i sprawdzić, czy szybki start wystarczy.</p>
                 </div>
 
-                <div className="offer-grid offer-grid-featured top-gap">{renderOfferCard(quickStartOffer, 'primary', quickStartPriceLabel)}</div>
+                <div className="offer-grid offer-grid-featured top-gap">{renderOfferCard(quickStartOffer, 'primary')}</div>
               </section>
             ) : null}
 
@@ -194,9 +199,7 @@ export default async function OfferPage() {
                     <h2>Gdy temat nie mieści się w szybkim wejściu</h2>
                   </div>
                 </div>
-                <p className="offer-section-intro">
-                  Tu obie droższe usługi prowadzą już do realnej rezerwacji, a nie tylko do samego kontaktu.
-                </p>
+                <p className="offer-section-intro">Tu obie dłuższe usługi prowadzą już do realnej rezerwacji, a nie tylko do samego kontaktu.</p>
               </div>
 
               <div className="offer-grid top-gap offer-grid-balanced">
@@ -215,9 +218,7 @@ export default async function OfferPage() {
                     <h2>Jeśli sytuacja wymaga kolejnego poziomu wsparcia</h2>
                   </div>
                 </div>
-                <p className="offer-section-intro">
-                  To ścieżki na dalszy etap: praca na miejscu, terapia albo pobyt, gdy widać sens takiego kroku.
-                </p>
+                <p className="offer-section-intro">To ścieżki na dalszy etap: praca na miejscu, terapia albo pobyt, gdy widać sens takiego kroku.</p>
               </div>
 
               <div className="offer-grid top-gap offer-grid-balanced">
@@ -246,13 +247,21 @@ export default async function OfferPage() {
                   </div>
                   <h2>{pdfOffer.title}</h2>
                   <p className="offer-feature-summary">
-                    {pdfGuideCount} poradników i {pdfBundleCount} pakietów. To osobna ścieżka, jeśli chcesz zacząć od materiału, a nie
-                    od rozmowy.
+                    {pdfGuideCount} poradników i {pdfBundleCount} pakietów. To osobna ścieżka, jeśli chcesz zacząć od materiału, a nie od
+                    rozmowy.
                   </p>
                   <div className="offer-card-meta-stack">
                     <div className="offer-card-meta">
-                      <span className="offer-card-meta-label">Kiedy</span>
+                      <span className="offer-card-meta-label">Dla kogo</span>
+                      <span>{pdfOffer.forWho}</span>
+                    </div>
+                    <div className="offer-card-meta">
+                      <span className="offer-card-meta-label">Kiedy wybrać</span>
                       <span>{pdfOffer.whenToChoose}</span>
+                    </div>
+                    <div className="offer-card-meta">
+                      <span className="offer-card-meta-label">Co dostajesz</span>
+                      <span>{pdfOffer.outcomes.join(' · ')}</span>
                     </div>
                     <div className="offer-card-meta offer-card-meta-muted">
                       <span className="offer-card-meta-label">Dalej</span>

@@ -31,12 +31,12 @@ function getProblemFormCopy(problemType: ProblemType) {
     return {
       animalType: 'Pies' as AnimalType,
       durationLabel: 'Na jakim etapie jest temat',
-      durationPlaceholder: 'np. chce ustalic plan pierwszego spotkania w tym miesiacu',
+      durationPlaceholder: 'np. chcę ustalić plan pierwszego spotkania w tym miesiącu',
       descriptionLabel: 'Krótki opis celu rozmowy',
       descriptionPlaceholder:
-        'Napisz, dla kogo ma byc przygotowane spotkanie, jaki jest cel dogoterapii i co chcesz uporzadkowac na poczatku.',
+        'Napisz, dla kogo ma być przygotowane spotkanie, jaki jest cel dogoterapii i co chcesz uporządkować na początku.',
       helperText:
-        'W tym polu najlepiej od razu dopisac kontekst spotkania, grupe odbiorcow i to, czego potrzebujesz po pierwszej rozmowie.',
+        'W tym polu najlepiej od razu dopisz kontekst spotkania, grupę odbiorców i to, czego potrzebujesz po pierwszej rozmowie.',
     }
   }
 
@@ -45,7 +45,7 @@ function getProblemFormCopy(problemType: ProblemType) {
     durationLabel: 'Od kiedy trwa problem',
     durationPlaceholder: 'np. od 3 tygodni',
     descriptionLabel: 'Krótki opis sytuacji',
-    descriptionPlaceholder: 'Napisz, co sie dzieje, kiedy problem wystepuje i co jest dla Ciebie najtrudniejsze.',
+    descriptionPlaceholder: 'Napisz, co się dzieje, kiedy problem występuje i co jest dla Ciebie najtrudniejsze.',
     helperText: null,
   }
 }
@@ -202,9 +202,7 @@ export function BookingForm({
   return (
     <form className="form-grid top-gap" onSubmit={handleSubmit} data-booking-form="details" data-qa-booking={qaBooking ? 'true' : 'false'}>
       {qaBooking ? (
-        <div className="info-box full-width">
-          To jest booking testowy QA. Przejdziesz przez kontrolowany checkout bez realnego obciążenia klienta.
-        </div>
+        <div className="info-box full-width">To jest rezerwacja testowa. Przejdziesz przez kontrolowaną płatność bez realnego obciążenia klienta.</div>
       ) : null}
 
       <div className="form-section-card tree-backed-card form-section-card-owner">
@@ -216,16 +214,11 @@ export function BookingForm({
         <div className="form-section-grid">
           <div className="form-field">
             <label>Imię opiekuna</label>
-            <input
-              value={ownerName}
-              onChange={(event) => setOwnerName(event.target.value)}
-              placeholder="np. Anna"
-              data-booking-field="owner-name"
-            />
+            <input value={ownerName} onChange={(event) => setOwnerName(event.target.value)} placeholder="np. Anna" data-booking-field="owner-name" />
           </div>
 
           <div className="form-field">
-            <label>Zwierzę</label>
+            <label>Zwierzak</label>
             <select value={animalType} onChange={(event) => setAnimalType(event.target.value as AnimalType)} data-booking-field="animal-type">
               <option value="Pies">Pies</option>
               <option value="Kot">Kot</option>
@@ -234,12 +227,7 @@ export function BookingForm({
 
           <div className="form-field">
             <label>Wiek zwierzęcia</label>
-            <input
-              value={petAge}
-              onChange={(event) => setPetAge(event.target.value)}
-              placeholder="np. 8 miesięcy lub 4 lata"
-              data-booking-field="pet-age"
-            />
+            <input value={petAge} onChange={(event) => setPetAge(event.target.value)} placeholder="np. 8 miesięcy lub 4 lata" data-booking-field="pet-age" />
           </div>
         </div>
       </div>
@@ -327,29 +315,20 @@ export function BookingForm({
         <div>
           <div className="muted">
             {qaBooking
-              ? 'Po zapisaniu danych blokujemy termin tylko dla Ciebie na czas testowego checkoutu QA.'
+              ? 'Po zapisaniu danych blokujemy termin tylko dla Ciebie na czas testowej płatności.'
               : 'Po zapisaniu danych blokujemy termin tylko dla Ciebie na czas płatności.'}
           </div>
-          <div className="checkout-title">{qaBooking ? 'Dalej: testowy checkout QA' : 'Dalej: wybór płatności'}</div>
+          <div className="checkout-title">{qaBooking ? 'Dalej: testowa płatność' : 'Dalej: wybór płatności'}</div>
           <div className="muted">
             {qaBooking
-              ? 'Na kolejnym ekranie zobaczysz kontrolowany checkout QA bez realnej platnosci.'
+              ? 'Na kolejnym ekranie zobaczysz kontrolowaną płatność testową bez realnego obciążenia.'
               : `Na kolejnym ekranie przejdziesz do wpłaty ręcznej. Do zapłaty: ${amountLabel}. Tę samą kwotę zobaczysz jeszcze raz przed kliknięciem.`}
           </div>
           <div className="price-compare-text">{CONSULTATION_PRICE_COMPARE_COPY}</div>
         </div>
         <div className="checkout-right">
-          <button
-            type="submit"
-            className="button button-primary big-button"
-            disabled={isSubmitting}
-            data-booking-submit="payment"
-          >
-            {isSubmitting
-              ? 'Zapisuję dane...'
-              : qaBooking
-                ? 'Zablokuj termin i przejdź do testowego checkoutu'
-                : 'Zablokuj termin i przejdź do płatności'}
+          <button type="submit" className="button button-primary big-button" disabled={isSubmitting} data-booking-submit="payment">
+            {isSubmitting ? 'Zapisuję dane...' : qaBooking ? 'Zablokuj termin i przejdź do testowej płatności' : 'Zablokuj termin i przejdź do płatności'}
           </button>
         </div>
       </div>

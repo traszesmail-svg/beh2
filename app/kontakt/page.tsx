@@ -7,12 +7,7 @@ import { ContactLeadForm } from '@/components/ContactLeadForm'
 import { getOfferByServiceSlug } from '@/lib/offers'
 import { getPdfAccessLabel, getPdfBundleBySlug, getPdfGuideBySlug } from '@/lib/pdf-guides'
 import { buildMarketingMetadata } from '@/lib/seo'
-import {
-  SPECIALIST_ONLINE_PHOTO,
-  getPublicContactDetails,
-  SPECIALIST_CREDENTIALS,
-  SPECIALIST_NAME,
-} from '@/lib/site'
+import { SPECIALIST_ONLINE_PHOTO, getPublicContactDetails, SPECIALIST_CREDENTIALS, SPECIALIST_NAME } from '@/lib/site'
 
 export const dynamic = 'force-dynamic'
 
@@ -38,6 +33,12 @@ type PdfInquirySelection = {
   accessLabel: string
   routePath: string
 }
+
+const exampleStarts = [
+  'Kot sika poza kuwetą od kilku dni.',
+  'Pies źle znosi zostawanie samemu i wyje po wyjściu.',
+  'Nie wiem, czy lepiej zacząć od PDF, 15 min czy kontaktu.',
+]
 
 export default function ContactPage({
   searchParams,
@@ -81,21 +82,19 @@ export default function ContactPage({
       : 'Napisz wiadomość'
   const contactIntro = isRescheduleIntent
     ? 'Napisz krótko, jeśli chcesz zmienić termin albo zrezygnować.'
-    : isResourceInquiry
-      ? selectedPdfInquiry
-        ? `Napisz krótko o sytuacji i o materiale „${selectedPdfInquiry.title}”. Powiem, czy to dobry start.`
-        : 'Napisz krótko o sytuacji. Powiem, czy lepiej zacząć od PDF czy rozmowy.'
-      : 'Napisz krótko, co się dzieje. Podpowiem najprostszy start.'
+    : selectedPdfInquiry
+      ? `Napisz krótko o sytuacji i o materiale „${selectedPdfInquiry.title}”. Powiem, czy to dobry start.`
+      : isResourceInquiry
+        ? 'Napisz krótko o sytuacji. Powiem, czy lepiej zacząć od PDF czy rozmowy.'
+        : 'Napisz krótko, co się dzieje. Podpowiem najprostszy start.'
   const actionCardCopy = isRescheduleIntent
-    ? `Podaj numer rezerwacji${bookingId ? ` (${bookingId})` : ''}, czy chodzi o zmianę terminu czy rezygnację, i nowy termin, jeśli go masz.`
-    : isResourceInquiry
-      ? selectedPdfInquiry
-        ? `Napisz gatunek, problem i czego szukasz w materiale „${selectedPdfInquiry.title}”.`
-        : 'Napisz gatunek, problem i czy wolisz PDF czy rozmowę.'
-      : 'Napisz gatunek, problem i od kiedy to trwa.'
-  const leadTopic = isRescheduleIntent
-    ? 'Zmiana terminu lub rezygnacja'
-    : selectedPdfInquiry?.title ?? selectedOffer?.title ?? 'Ogólne pytanie'
+    ? `Podaj numer rezerwacji${bookingId ? ` (${bookingId})` : ''}, napisz czy chodzi o zmianę terminu czy rezygnację i dodaj nowy termin, jeśli go masz.`
+    : selectedPdfInquiry
+      ? `Napisz gatunek, problem i czego szukasz w materiale „${selectedPdfInquiry.title}”.`
+      : isResourceInquiry
+        ? 'Napisz gatunek, problem i czy wolisz PDF czy rozmowę.'
+        : 'Napisz gatunek, problem i od kiedy to trwa.'
+  const leadTopic = isRescheduleIntent ? 'Zmiana terminu lub rezygnacja' : selectedPdfInquiry?.title ?? selectedOffer?.title ?? 'Ogólne pytanie'
   const leadContextLabel = isRescheduleIntent
     ? `Rezerwacja${bookingId ? ` #${bookingId}` : ''}`
     : selectedPdfInquiry
@@ -148,6 +147,20 @@ export default function ContactPage({
               <span>{actionCardCopy}</span>
             </div>
 
+            <div className="list-card tree-backed-card top-gap">
+              <strong>Kiedy pisać zamiast rezerwować?</strong>
+              <span>Pisz, jeśli temat jest mieszany, chcesz sprawdzić PDF, potrzebujesz doprecyzować kierunek albo nie wiesz, czy lepiej zacząć od 15 min.</span>
+            </div>
+
+            <div className="list-card tree-backed-card top-gap">
+              <strong>Przykładowy początek wiadomości</strong>
+              <div className="stack-gap top-gap-small">
+                {exampleStarts.map((item) => (
+                  <span key={item}>{item}</span>
+                ))}
+              </div>
+            </div>
+
             <ContactLeadForm
               topic={leadTopic}
               contextLabel={leadContextLabel}
@@ -172,7 +185,7 @@ export default function ContactPage({
             <div className="section-eyebrow">Piszesz do mnie</div>
             <h2>{SPECIALIST_NAME}</h2>
             <p className="hero-text">
-              {SPECIALIST_CREDENTIALS}. Odpowiadam osobiście i pomagam wybrać prosty start dla psa albo kota.
+              {SPECIALIST_CREDENTIALS}. Odpowiadam osobiście i pomagam wybrać najprostszy start dla psa albo kota.
             </p>
 
             {contact.email ? (

@@ -32,7 +32,6 @@ export default async function SlotPage({
   searchParams?: Record<string, string | string[] | undefined>
 }) {
   noStore()
-  // Source guardrail for runtime-config.test.ts: buildFormHref(problem, slot.id)
   const problem = readProblemTypeSearchParam(searchParams?.problem)
   const serviceType = normalizeBookingServiceType(readBookingServiceSearchParam(searchParams?.service))
   const serviceQuery = serviceType === DEFAULT_BOOKING_SERVICE ? null : serviceType
@@ -66,7 +65,7 @@ export default async function SlotPage({
           <div className="booking-stage-hero-grid">
             <div className="booking-stage-copy-column">
               <BookingStageEyebrow stage="slot" className="section-eyebrow" />
-              {qaBooking ? <div className="status-pill transaction-status-pill">Tryb QA</div> : null}
+              {qaBooking ? <div className="status-pill transaction-status-pill">Tryb testowy</div> : null}
               <h1>Wybierz termin: {getProblemLabel(problem)}</h1>
               <p className="hero-text">{getBookingServiceSlotSummary(serviceType)} Kliknij godzinę.</p>
             </div>

@@ -31,8 +31,6 @@ export default async function PaymentPage({
   searchParams?: Record<string, string | string[] | undefined>
 }) {
   noStore()
-  // Source guardrail for runtime-config.test.ts:
-  // pokażemy link do pokoju bezpośrednio na stronie potwierdzenia
   const bookingId = readSearchParam(searchParams?.bookingId)
   const accessToken = readSearchParam(searchParams?.access)
   const cancelled = readSearchParam(searchParams?.cancelled)
@@ -73,10 +71,8 @@ export default async function PaymentPage({
   const bookingServiceSummary = bookingServiceType ? getBookingServiceRoomSummary(bookingServiceType) : null
   const customerEmailStatus = booking ? getCustomerEmailDeliveryStatus(booking.email) : null
   const customerEmailAvailable = customerEmailStatus?.state === 'ready'
-  const isConfirmed =
-    booking?.paymentStatus === 'paid' && (booking.bookingStatus === 'confirmed' || booking.bookingStatus === 'done')
-  const isWaitingManual =
-    booking?.bookingStatus === 'pending_manual_payment' && booking.paymentStatus === 'pending_manual_review'
+  const isConfirmed = booking?.paymentStatus === 'paid' && (booking.bookingStatus === 'confirmed' || booking.bookingStatus === 'done')
+  const isWaitingManual = booking?.bookingStatus === 'pending_manual_payment' && booking.paymentStatus === 'pending_manual_review'
   const isClosed =
     booking?.bookingStatus === 'cancelled' ||
     booking?.bookingStatus === 'expired' ||
@@ -84,9 +80,9 @@ export default async function PaymentPage({
     booking?.paymentStatus === 'rejected'
 
   const postPaymentMaterialsCopy = qaBooking
-    ? 'To jest booking testowy QA. Po potwierdzeniu zobaczysz standardowe potwierdzenie bez realnej płatności.'
+    ? 'To jest rezerwacja testowa. Po potwierdzeniu zobaczysz standardowe potwierdzenie bez realnej płatności.'
     : isConfirmed
-      ? 'Na ekranie potwierdzenia możesz już dodać materiał do sprawy.'
+      ? 'Na ekranie potwierdzenia możesz już dodać materiały do sprawy.'
       : isWaitingManual
         ? 'Dodawanie materiałów odblokuje się od razu po potwierdzeniu wpłaty.'
         : isClosed
@@ -127,26 +123,16 @@ export default async function PaymentPage({
           ) : null}
           <BookingStageEyebrow stage={isConfirmed ? 'confirmation' : 'payment'} className="section-eyebrow" />
           <div className="status-pill transaction-status-pill">
-            {qaBooking
-              ? 'Tryb QA'
-              : isWaitingManual
-                ? 'Czekamy na potwierdzenie wpłaty'
-                : 'Wybór płatności'}
+            {qaBooking ? 'Tryb testowy' : isWaitingManual ? 'Czekamy na potwierdzenie wpłaty' : 'Wybór płatności'}
           </div>
-          <h1>
-            {qaBooking
-              ? 'Kontrolowany checkout testowy'
-              : isWaitingManual
-                ? 'Wpłata została zgłoszona'
-                : 'Wybierz sposób płatności za rezerwację'}
-          </h1>
+          <h1>{qaBooking ? 'Kontrolowany test płatności' : isWaitingManual ? 'Wpłata została zgłoszona' : 'Wybierz sposób płatności za rezerwację'}</h1>
           <p className="hero-text small-width center-text">
             {qaBooking
-              ? 'Ta rezerwacja jest oznaczona jako QA i przejdzie przez bezpieczny testowy flow bez realnego obciążenia klienta.'
+              ? 'Ta rezerwacja jest oznaczona jako testowa i przejdzie przez bezpieczną ścieżkę bez realnego obciążenia klienta.'
               : isWaitingManual
                 ? customerEmailAvailable
-                  ? 'Sprawdzimy wpłatę i potwierdzimy ją do 60 minut. Gdy status zmieni się na opłaconą, klient dostanie mail z linkiem do pokoju rozmowy i odblokuje się dalszy etap sprawy.'
-                  : 'Sprawdzimy wpłatę i potwierdzimy ją do 60 minut. Gdy status zmieni się na opłaconą, ta strona pokaże pokój rozmowy i dalszy etap sprawy, więc zachowaj ten link.'
+                  ? 'Sprawdzimy wpłatę i potwierdzimy ją do 60 minut. Gdy status zmieni się na opłacony, klient dostanie mail z linkiem do pokoju rozmowy i odblokuje się dalszy etap sprawy.'
+                  : 'Sprawdzimy wpłatę i potwierdzimy ją do 60 minut. Gdy status zmieni się na opłacony, ta strona pokaże pokój rozmowy i dalszy etap sprawy, więc zachowaj ten link.'
                 : payuAvailable && manualPayment.isAvailable
                   ? 'Możesz wybrać wpłatę ręczną z potwierdzeniem do 60 minut albo płatność online. Obie opcje pokazują tę samą cenę i prowadzą do tego samego etapu po płatności.'
                   : payuAvailable
@@ -161,7 +147,7 @@ export default async function PaymentPage({
               <div className="error-box">
                 {flowError}{' '}
                 {qaBooking
-                  ? 'To jest booking testowy QA. Sprawdź TEST_CHECKOUT_ENABLED, allowlistę kontaktu albo użyj akcji "Potwierdź QA" w panelu admina.'
+                  ? 'To jest rezerwacja testowa. Sprawdź TEST_CHECKOUT_ENABLED, allowlistę kontaktu albo użyj akcji „Potwierdź QA” w panelu admina.'
                   : 'Jeśli chcesz, napisz wiadomość i wróć do rezerwacji, gdy będziesz gotowy.'}
               </div>
               <div className="hero-actions">
@@ -175,9 +161,7 @@ export default async function PaymentPage({
             </div>
           ) : !booking ? (
             <div className="stack-gap top-gap">
-              <div className="error-box">
-                Ten link do płatności jest nieprawidłowy albo wygasł. Wróć do wyboru tematu, wybierz termin ponownie albo napisz wiadomość.
-              </div>
+              <div className="error-box">Ten link do płatności jest nieprawidłowy albo wygasł. Wróć do wyboru tematu, wybierz termin ponownie albo napisz wiadomość.</div>
               <div className="hero-actions">
                 <Link href="/book" className="button button-primary big-button">
                   Wróć do wyboru tematu
@@ -189,11 +173,7 @@ export default async function PaymentPage({
             </div>
           ) : (
             <>
-              {cancelled ? (
-                <div className="info-box top-gap">
-                  Checkout online został przerwany. Możesz wrócić do wyboru metody i dokończyć płatność później.
-                </div>
-              ) : null}
+              {cancelled ? <div className="info-box top-gap">Płatność online została przerwana. Możesz wrócić do wyboru metody i dokończyć płatność później.</div> : null}
 
               {!qaBooking && customerEmailStatus && !isClosed ? (
                 <CustomerEmailStatusNotice
@@ -235,11 +215,11 @@ export default async function PaymentPage({
                 {qaBooking ? (
                   <div className="summary-grid trust-grid">
                     <div className="summary-card trust-card tree-backed-card">
-                      <strong>Kontrolowany test QA</strong>
+                      <strong>Kontrolowany test</strong>
                       <span>Ta rezerwacja jest jawnie oznaczona jako testowa i nie trafia do publicznej ścieżki sprzedaży.</span>
                     </div>
                     <div className="summary-card trust-card tree-backed-card">
-                      <strong>Env gate</strong>
+                      <strong>Blokada środowiskowa</strong>
                       <span>TEST_CHECKOUT_ENABLED i allowlista kontaktu odcinają publiczne 0 zł od prawdziwego ruchu.</span>
                     </div>
                     <div className="summary-card trust-card tree-backed-card">
@@ -256,12 +236,12 @@ export default async function PaymentPage({
                     {payuAvailable ? (
                       <div className="summary-card trust-card tree-backed-card">
                         <strong>Płatność online jako druga opcja</strong>
-                        <span>BLIK i karta w nowoczesnym checkoutcie online, z automatycznym potwierdzeniem po sukcesie.</span>
+                        <span>BLIK i karta w nowoczesnej płatności online, z automatycznym potwierdzeniem po sukcesie.</span>
                       </div>
                     ) : null}
                     <div className="summary-card trust-card tree-backed-card">
                       <strong>Etap po płatności</strong>
-                      <span>Po statusie paid zobaczysz potwierdzenie, status SMS i sekcję do dodania materiałów do sprawy.</span>
+                      <span>Po statusie opłacone zobaczysz potwierdzenie, status SMS i sekcję do dodania materiałów do sprawy.</span>
                     </div>
                   </div>
                 )}
@@ -331,7 +311,10 @@ export default async function PaymentPage({
                   bookingId={booking.id}
                   accessToken={accessToken ?? ''}
                   amountLabel={bookingPriceLabel ?? ''}
-                  paymentReference={booking.paymentReference ?? (qaBooking ? qaEligibility?.paymentReference ?? getQaCheckoutEligibility(booking).paymentReference : getManualPaymentReference(booking.id))}
+                  paymentReference={
+                    booking.paymentReference ??
+                    (qaBooking ? qaEligibility?.paymentReference ?? getQaCheckoutEligibility(booking).paymentReference : getManualPaymentReference(booking.id))
+                  }
                   manualAvailable={manualPayment.isAvailable}
                   manualPhoneDisplay={manualPayment.phoneDisplay}
                   manualBankAccountDisplay={manualPayment.bankAccountDisplay}

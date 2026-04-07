@@ -93,7 +93,7 @@ export function LegalPageLayout({
               {summaryItems.map((item) => (
                 <div key={item.label} className="list-card tree-backed-card legal-summary-card">
                   <strong>{item.label}</strong>
-                  <span>{item.value}</span>
+                  <div>{item.value}</div>
                 </div>
               ))}
             </div>
@@ -102,7 +102,7 @@ export function LegalPageLayout({
               {sections.map((section) => (
                 <article key={section.title} className="list-card tree-backed-card legal-section-card">
                   <strong>{section.title}</strong>
-                  <span>{section.body}</span>
+                  <div className="legal-section-body">{section.body}</div>
                 </article>
               ))}
             </div>
@@ -167,7 +167,9 @@ export function LegalPageLayout({
 
               <div className="list-card tree-backed-card">
                 <strong>Kto odpowiada</strong>
-                <span>{SPECIALIST_CREDENTIALS}. Odpowiadam osobiście.</span>
+                <span>
+                  {SPECIALIST_CREDENTIALS}. Odpowiadam osobiście.
+                </span>
               </div>
             </div>
           </aside>

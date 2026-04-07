@@ -1,4 +1,4 @@
-'use client'
+ 'use client'
 
 import React from 'react'
 import Link from 'next/link'
@@ -138,11 +138,7 @@ export function ContactLeadForm({
   }
 
   const submitLabel =
-    status === 'loading'
-      ? 'Wysyłam wiadomość...'
-      : status === 'success'
-        ? 'Wyślij kolejną wiadomość'
-        : 'Wyślij wiadomość'
+    status === 'loading' ? 'Wysyłam wiadomość...' : status === 'success' ? 'Wyślij kolejną wiadomość' : 'Wyślij wiadomość'
 
   return (
     <section className="top-gap" aria-labelledby="contact-lead-heading">
@@ -151,9 +147,7 @@ export function ContactLeadForm({
           <div className="section-eyebrow">Napisz wiadomość</div>
           <h2 id="contact-lead-heading">Wyślij krótki opis sytuacji</h2>
         </div>
-        <div className="muted">
-          Formularz trafia bezpośrednio do mnie. Odpowiadam osobiście na podany adres e-mail.
-        </div>
+        <div className="muted">Formularz trafia bezpośrednio do mnie. Odpowiadam osobiście na podany adres e-mail.</div>
       </div>
 
       <form className="form-grid top-gap" onSubmit={handleSubmit} noValidate>

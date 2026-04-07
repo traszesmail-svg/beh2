@@ -33,23 +33,23 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
           <h2 id="historie-heading">Historie opiekunów i efekty konsultacji</h2>
         </div>
         <div className="muted">
-          W jednym miejscu pokazujemy typowe punkty wyjścia, publiczne źródła i tylko takie materiały, które da się
-          obronić spokojnie i wiarygodnie.
+          Krótko pokazujemy punkt wyjścia, pierwszy krok i dalszą ścieżkę. Obok są publiczne źródła i zweryfikowane
+          wpisy.
         </div>
       </div>
 
       <div className="summary-grid trust-grid top-gap">
         <div className="summary-card tree-backed-card">
-          <div className="stat-label">Typowe sytuacje z życia domu</div>
-          <span>Pokazujemy sprawy, z którymi opiekunowie naprawdę przychodzą na pierwszy, szybki kontakt.</span>
+          <div className="stat-label">Typowe starty</div>
+          <span>Sprawy, z którymi opiekunowie przychodzą na pierwszy kontakt.</span>
         </div>
         <div className="summary-card tree-backed-card">
           <div className="stat-label">Publiczne źródła</div>
-          <span>Łączymy case studies, profil zawodowy i publikacje, żeby łatwo sprawdzić wiarygodność.</span>
+          <span>Łączymy case studies, profil zawodowy i publikacje w jednym miejscu.</span>
         </div>
         <div className="summary-card tree-backed-card">
           <div className="stat-label">Ręczna weryfikacja</div>
-          <span>Opinie trafiają na stronę dopiero po akceptacji właściciela projektu.</span>
+          <span>Nic nie trafia na stronę automatycznie.</span>
         </div>
       </div>
 
@@ -71,7 +71,7 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
               <h3>{caseStudy.problem}</h3>
               <p>{caseStudy.summary}</p>
               <div className="real-case-result">
-                <strong>Po pierwszej konsultacji</strong>
+                <strong>Pierwszy krok</strong>
                 <span>{caseStudy.effect}</span>
               </div>
             </div>
@@ -85,7 +85,7 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
           <h3>Gdzie można sprawdzić profil i publikacje</h3>
         </div>
         <div className="muted">
-          CAPBT, Instagram i publikacje branżowe są tu po to, żeby ktoś mógł sprawdzić profil przed przekazaniem strony
+          CAPBT, Instagram i publikacje branżowe są tu po to, żeby szybko sprawdzić profil przed przekazaniem strony
           dalej.
         </div>
       </div>
@@ -107,13 +107,13 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
 
       {hasTestimonials ? (
         <>
-          <div className="section-head top-gap">
-            <div>
-              <div className="section-eyebrow">Zweryfikowane opinie</div>
-              <h3>Akceptowane wpisy klientów</h3>
-            </div>
-            <div className="muted">Opinie pojawiają się dopiero po ręcznej akceptacji właściciela projektu.</div>
+        <div className="section-head top-gap">
+          <div>
+            <div className="section-eyebrow">Zweryfikowane opinie</div>
+            <h3>Akceptowane wpisy klientów</h3>
           </div>
+          <div className="muted">Opinie pojawiają się dopiero po ręcznej akceptacji.</div>
+        </div>
 
           <div className="summary-grid top-gap">
             {TESTIMONIALS.map((testimonial) => (

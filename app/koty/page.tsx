@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next'
+import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Footer } from '@/components/Footer'
@@ -31,6 +31,41 @@ function buildCatsServiceHref(serviceType?: BookingServiceType | null, qaBooking
   return qaBooking ? `/koty?service=${serviceType}&qa=1#kocie-kategorie` : `/koty?service=${serviceType}#kocie-kategorie`
 }
 
+const CAT_TOPIC_COPY: Record<
+  string,
+  {
+    title: string
+    desc: string
+    visualLabel: string
+  }
+> = {
+  'kot-kuweta': {
+    title: 'Kot i kuweta',
+    desc: 'Sikanie poza kuwetą, omijanie kuwety albo napięcie wokół toalety.',
+    visualLabel: 'Kuweta i dom',
+  },
+  'kot-konflikt': {
+    title: 'Konflikt między kotami',
+    desc: 'Gonitwy, blokowanie przejść i napięcie przy zasobach.',
+    visualLabel: 'Relacja i przestrzeń',
+  },
+  'kot-dotyk': {
+    title: 'Dotyk, gryzienie i pielęgnacja',
+    desc: 'Trudny kontakt, obrona przy głaskaniu i zachowanie przy zabiegach.',
+    visualLabel: 'Dotyk i obrona',
+  },
+  'kot-stres': {
+    title: 'Kot lękowy, napięty albo wycofany',
+    desc: 'Chowanie się, napięcie po zmianach i trudność z powrotem do spokoju.',
+    visualLabel: 'Stres i wycofanie',
+  },
+  'kot-nocna-wokalizacja': {
+    title: 'Budzi dom po nocy',
+    desc: 'Miauczenie, pobudki o świcie i nocny rytm, który rozsypuje spokój.',
+    visualLabel: 'Noc i rytm dnia',
+  },
+}
+
 function getTopicCtaLabel(serviceType: BookingServiceType) {
   switch (serviceType) {
     case 'konsultacja-30-min':
@@ -47,7 +82,7 @@ function getCatStartOptions(selectedServiceType: BookingServiceType, qaBooking?:
     {
       eyebrow: 'Szybki start',
       title: 'Umów 15 min',
-      summary: 'Po kliknięciu kategorii przejdziesz od razu do terminów 15 min.',
+      summary: 'Po kliknięciu kategorii od razu przejdziesz do terminów 15 min.',
       href: buildCatsServiceHref(DEFAULT_BOOKING_SERVICE, qaBooking),
       cta: 'Umów 15 min',
       isActive: selectedServiceType === DEFAULT_BOOKING_SERVICE,
@@ -63,7 +98,7 @@ function getCatStartOptions(selectedServiceType: BookingServiceType, qaBooking?:
     {
       eyebrow: 'Pełniejszy obraz',
       title: 'Umów konsultację online',
-      summary: 'Dla szerszego tematu. Kategorie niżej otwierają kalendarz dla konsultacji online.',
+      summary: 'Gdy temat jest szerszy, a rozmowa ma objąć więcej niż jeden wątek.',
       href: buildCatsServiceHref('konsultacja-behawioralna-online', qaBooking),
       cta: 'Umów konsultację online',
       isActive: selectedServiceType === 'konsultacja-behawioralna-online',
@@ -90,6 +125,7 @@ export default function CatsPage({
   const selectedServiceTitle = getBookingServiceTitle(selectedServiceType)
   const selectedTopicCta = getTopicCtaLabel(selectedServiceType)
   const catStartOptions = getCatStartOptions(selectedServiceType, qaBooking)
+  const supportAreas = CAT_SUPPORT_AREAS
 
   return (
     <main className="page-wrap" data-analytics-disabled={qaBooking ? 'true' : undefined} data-qa-booking={qaBooking ? 'true' : 'false'}>
@@ -102,10 +138,10 @@ export default function CatsPage({
               <div className="section-eyebrow">Koty</div>
               {qaBooking ? <div className="status-pill transaction-status-pill">Tryb QA</div> : null}
               <h1>Wybierz temat dla kota i od razu przejdź do terminu.</h1>
-              <p className="hero-text">Kuweta, konflikt, trudny dotyk, stres albo nocna wokalizacja. Najpierw zaznacz format startu, potem kliknij kategorie.</p>
+              <p className="hero-text">Najpierw wybierasz format startu, potem klikasz kategorię. Bez technicznego języka i bez zgadywania.</p>
 
               <div className="home-trust-pills top-gap" aria-label="Najczęstsze tematy">
-                {CAT_SUPPORT_AREAS.map((item) => (
+                {supportAreas.map((item) => (
                   <span key={item} className="hero-proof-pill">
                     {item}
                   </span>
@@ -114,7 +150,12 @@ export default function CatsPage({
 
               <div className="cats-intro-card tree-backed-card">
                 <strong>Wybrany format: {selectedServiceTitle}</strong>
-                <span>Kategorie niżej prowadzą od razu do /slot z odpowiednim problemType i aktualnym formatem rozmowy.</span>
+                <span>Wybierz temat najbliższy temu, co dzieje się dziś. Kategorie niżej prowadzą prosto do terminu dla wybranego formatu.</span>
+              </div>
+
+              <div className="list-card accent-outline tree-backed-card">
+                <strong>Jak wybrać?</strong>
+                <span>Jeśli nie masz pewności, zacznij od kuwety, konfliktu, stresu albo trudnego dotyku. To najczęstsze wejścia.</span>
               </div>
             </div>
 
@@ -133,6 +174,11 @@ export default function CatsPage({
           <div className="card-grid three-up top-gap book-topics-grid" id="kocie-kategorie">
             {CAT_PROBLEM_OPTIONS.map((category) => {
               const topicVisual = CAT_TOPIC_VISUALS[category.id as keyof typeof CAT_TOPIC_VISUALS]
+              const topicCopy = CAT_TOPIC_COPY[category.id] ?? {
+                title: category.title,
+                desc: category.desc,
+                visualLabel: category.visualLabel ?? 'Kot',
+              }
 
               return (
                 <Link
@@ -156,7 +202,7 @@ export default function CatsPage({
                       className="topic-media-image"
                     />
                     <div className="topic-media-overlay" aria-hidden="true" />
-                    {category.visualLabel ? <div className="topic-media-badge">{category.visualLabel}</div> : null}
+                    {topicCopy.visualLabel ? <div className="topic-media-badge">{topicCopy.visualLabel}</div> : null}
                   </div>
                   <span className="topic-icon-shell" aria-hidden="true">
                     <svg viewBox="0 0 48 48" className="topic-svg">
@@ -167,8 +213,8 @@ export default function CatsPage({
                       <path d="M24 25.5v3.5m-7 0l5-1.5m9 1.5l-5-1.5" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" />
                     </svg>
                   </span>
-                  <div className="topic-title">{category.title}</div>
-                  <div className="topic-desc">{category.desc}</div>
+                  <div className="topic-title">{topicCopy.title}</div>
+                  <div className="topic-desc">{topicCopy.desc}</div>
                   <div className="topic-link">{selectedTopicCta}</div>
                 </Link>
               )

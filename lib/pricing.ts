@@ -1,7 +1,7 @@
 export const DEFAULT_PRICE_PLN = 59
 export const MIN_CONSULTATION_PRICE_PLN = 59
 export const BLOCKED_CONSULTATION_PRICE_PLN = DEFAULT_PRICE_PLN + 30
-export const PRE_TOPIC_PRICE_CONFIRMATION_COPY = 'Dokładną kwotę potwierdzisz po wyborze tematu konsultacji.'
+export const PRE_TOPIC_PRICE_CONFIRMATION_COPY = 'Dokładną kwotę poznasz po wyborze tematu konsultacji.'
 
 export type ActiveConsultationPrice = {
   amount: number

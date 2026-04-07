@@ -58,13 +58,13 @@ export default async function OfferDetailPage({ params }: OfferDetailPageProps) 
       const quickConsultationPrice = await getActiveConsultationPrice()
       priceLabel = `Od ${formatPricePln(quickConsultationPrice.amount)}`
     } catch (error) {
-      console.warn('[behawior15][oferta-detail] nie udalo sie pobrac aktywnej ceny konsultacji', error)
+      console.warn('[behawior15][oferta-detail] nie udało się pobrać aktywnej ceny konsultacji', error)
       priceLabel = `Od ${formatPricePln(DEFAULT_PRICE_PLN)}`
     }
   }
 
   const detailPoints = offer.outcomes.slice(0, 3)
-  const secondarySentence = offer.descriptions[0] ?? offer.nextStep
+  const secondarySentence = offer.heroSummary
 
   return (
     <main className="page-wrap">
@@ -85,6 +85,25 @@ export default async function OfferDetailPage({ params }: OfferDetailPageProps) 
               <h1>{offer.title}</h1>
               <p className="hero-text">{offer.whenToChoose}</p>
               <p className="muted paragraph-gap">{secondarySentence}</p>
+            </div>
+
+            <div className="summary-grid top-gap">
+              <div className="summary-card tree-backed-card">
+                <div className="stat-label">Dla kogo</div>
+                <div className="summary-value">{offer.forWho}</div>
+              </div>
+              <div className="summary-card tree-backed-card">
+                <div className="stat-label">Kiedy wybrać</div>
+                <div className="summary-value">{offer.whenToChoose}</div>
+              </div>
+              <div className="summary-card tree-backed-card">
+                <div className="stat-label">Co dostajesz</div>
+                <div className="summary-value">{offer.outcomes[0] ?? offer.nextStep}</div>
+              </div>
+              <div className="summary-card tree-backed-card">
+                <div className="stat-label">Dalej</div>
+                <div className="summary-value">{offer.nextStep}</div>
+              </div>
             </div>
 
             <div className="offer-detail-highlight-row top-gap">
@@ -113,23 +132,8 @@ export default async function OfferDetailPage({ params }: OfferDetailPageProps) 
               ))}
             </ul>
 
-            <div className="summary-grid top-gap">
-              <div className="summary-card tree-backed-card">
-                <div className="stat-label">Najlepsze dla</div>
-                <div className="summary-value">{offer.bestFor[0] ?? offer.forWho}</div>
-              </div>
-              <div className="summary-card tree-backed-card">
-                <div className="stat-label">Na tym etapie</div>
-                <div className="summary-value">{offer.bestFor[1] ?? offer.whenToChoose}</div>
-              </div>
-              <div className="summary-card tree-backed-card">
-                <div className="stat-label">Po rozmowie</div>
-                <div className="summary-value">{offer.outcomes[0] ?? offer.nextStep}</div>
-              </div>
-            </div>
-
             <div className="stack-gap top-gap">
-              {offer.descriptions.slice(1).map((item) => (
+              {offer.descriptions.map((item) => (
                 <div key={item} className="list-card tree-backed-card">
                   <strong>Co to daje</strong>
                   <span>{item}</span>

@@ -35,7 +35,6 @@ export default async function FormPage({
   searchParams?: Record<string, string | string[] | undefined>
 }) {
   noStore()
-  // Source guardrail for runtime-config.test.ts: buildSlotHref(problem)
   const problem = readProblemTypeSearchParam(searchParams?.problem)
   const serviceType = normalizeBookingServiceType(readBookingServiceSearchParam(searchParams?.service))
   const serviceQuery = serviceType === DEFAULT_BOOKING_SERVICE ? null : serviceType
@@ -86,7 +85,7 @@ export default async function FormPage({
         <section className="two-col-section booking-layout booking-stage-layout">
           <div className="panel section-panel hero-surface booking-stage-panel booking-stage-summary-panel booking-flow-panel">
             <BookingStageEyebrow stage="details" className="section-eyebrow" />
-            {qaBooking ? <div className="status-pill transaction-status-pill">Tryb QA</div> : null}
+            {qaBooking ? <div className="status-pill transaction-status-pill">Tryb testowy</div> : null}
             <h1>Uzupełnij dane do rezerwacji</h1>
             <p className="hero-text compact-panel-text">
               Wypełnij krótko dane. Po zapisaniu formularza termin zostanie chwilowo zablokowany, a na kolejnym ekranie przejdziesz do wpłaty ręcznej.
@@ -120,8 +119,8 @@ export default async function FormPage({
           </div>
 
           <div className="panel section-panel booking-stage-panel booking-stage-form-panel booking-flow-panel">
-          {flowError ? (
-            <>
+            {flowError ? (
+              <>
                 <div className="info-box">
                   {flowError} Jeśli temat jest pilny, napisz wiadomość i wróć do terminów, gdy będziesz gotowy.
                 </div>

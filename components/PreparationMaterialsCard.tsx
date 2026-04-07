@@ -194,7 +194,7 @@ export function PreparationMaterialsCard({
       }
 
       if (!prepResponse.ok || !prepPayload.mode) {
-        throw new Error(prepPayload.error ?? 'Nie udało się przygotować uploadu nagrania.')
+        throw new Error(prepPayload.error ?? 'Nie udało się przygotować przesłania nagrania.')
       }
 
       if (prepPayload.mode === 'local') {
@@ -222,7 +222,7 @@ export function PreparationMaterialsCard({
         })
       } else {
         if (!prepPayload.signedUrl || !prepPayload.storagePath) {
-          throw new Error('Brakuje bezpiecznego adresu uploadu do magazynu plików.')
+          throw new Error('Brakuje bezpiecznego adresu przesłania pliku.')
         }
 
         const uploadBody = new FormData()
@@ -262,8 +262,8 @@ export function PreparationMaterialsCard({
       <div className="section-eyebrow">Dodaj materiały do sprawy</div>
       <h2>Nagranie, link lub krótki opis</h2>
       <p className="muted paragraph-gap prep-copy">
-        To nie jest obowiązkowe. Jeśli chcesz, możesz po płatności dodać nagranie MP4, link do zdjęć albo krótki opis
-        sytuacji. To pomoże lepiej przygotować rozmowę i dalszą pracę.
+        To nie jest obowiązkowe. Jeśli chcesz, możesz po płatności dodać nagranie MP4, link do zdjęć albo krótki opis sytuacji.
+        To pomoże lepiej przygotować rozmowę i dalszą pracę.
       </p>
 
       <div className="prep-grid top-gap">
@@ -328,8 +328,8 @@ export function PreparationMaterialsCard({
           placeholder="Napisz, co dokładnie widać, kiedy problem się pojawia i co chcesz omówić podczas rozmowy."
         />
         <div className="disclaimer top-gap-small">
-          Maksymalnie {PREPARATION_NOTES_MAX_LENGTH} znaków. Wystarczy kilka konkretów: co widać, kiedy to się dzieje,
-          od kiedy trwa i co chcesz omówić na rozmowie.
+          Maksymalnie {PREPARATION_NOTES_MAX_LENGTH} znaków. Wystarczy kilka konkretów: co widać, kiedy to się dzieje, od kiedy trwa
+          i co chcesz omówić na rozmowie.
         </div>
       </div>
 

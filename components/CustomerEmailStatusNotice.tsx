@@ -32,7 +32,7 @@ function getBody(status: CustomerEmailDeliveryStatus, recipientEmail: string, co
 
   if (status.state === 'disabled') {
     if (context === 'payment') {
-      return 'Po potwierdzeniu wpłaty pokażemy aktywne potwierdzenie i link do pokoju bezpośrednio na tej stronie. To świadomy fallback, dopóki CUSTOMER_EMAIL_MODE pozostaje wyłączony.'
+      return 'Po potwierdzeniu wpłaty pokażemy aktywne potwierdzenie i link do pokoju bezpośrednio na tej stronie. To świadomy fallback, dopóki wysyłka maili klienta pozostaje wyłączona w konfiguracji.'
     }
 
     return 'Ta strona pozostaje pełnym fallbackiem: potwierdzenie, status SMS i link do pokoju są zapisane tutaj, nawet gdy maile klienta są wyłączone.'
