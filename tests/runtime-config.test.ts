@@ -738,6 +738,7 @@ test('live clickthrough keeps legal pages inside public production QA', () => {
   assert.match(liveClickthroughSource, /\/polityka-prywatnosci/)
   assert.match(liveClickthroughSource, /oferta -> payment \/ 30 min CTA/)
   assert.match(liveClickthroughSource, /oferta -> slot \/ online CTA/)
+  assert.match(liveClickthroughSource, /api\/payments\/manual/)
   assert.match(liveClickthroughSource, /konsultacja-30-min/)
   assert.match(liveClickthroughSource, /konsultacja-behawioralna-online/)
   assert.match(liveClickthroughSource, /CAPBT/)
@@ -803,6 +804,8 @@ test('admin page renders explicit go-live status cards', () => {
   assert.match(adminSource, /Dalej: \{check\.nextStep\}/)
   assert.match(adminSource, /Analityka i operacje/)
   assert.match(adminSource, /funnelMetricsSnapshot/)
+  assert.match(adminSource, /Promise\.allSettled/)
+  assert.match(adminSource, /dataLoadErrors/)
   assert.match(adminSource, /data-analytics-disabled="true"/)
   assert.match(qaReportSource, /data-analytics-disabled="true"/)
   assert.match(qaReportSource, /readLatestQaReport/)
@@ -815,8 +818,17 @@ test('build script keeps explicit no-cache lint before next build', () => {
 
   assert.equal(packageJson.scripts?.build, 'next lint --no-cache && next build --no-lint')
   assert.equal(packageJson.scripts?.['funnel-metrics'], 'node --import tsx scripts/funnel-metrics.ts')
+  assert.equal(packageJson.scripts?.['live-booking-matrix'], 'node --import tsx scripts/live-booking-matrix.ts')
   assert.equal(packageJson.scripts?.['live-readiness'], 'node --import tsx scripts/live-readiness.ts')
   assert.equal(packageJson.scripts?.['payu-smoke:production'], 'node --import tsx scripts/payu-smoke.ts --production')
+})
+
+test('live booking matrix keeps a ten-attempt production report', () => {
+  const source = readSource('scripts', 'live-booking-matrix.ts')
+
+  assert.match(source, /MATRIX_ATTEMPTS/)
+  assert.match(source, /latest-live-booking-matrix\.md/)
+  assert.match(source, /Proby zaliczone/)
 })
 
 test('payu smoke script supports a production checkout target without sandbox defaults', () => {

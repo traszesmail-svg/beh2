@@ -32,6 +32,11 @@ function getPaymentMethodLabel(value: string | null | undefined) {
   }
 }
 
+function formatDataLoadError(label: string, error: unknown) {
+  const message = error instanceof Error ? error.message : String(error)
+  return `${label}: ${message}`
+}
+
 export default async function AdminPage() {
   noStore()
   const runtime = getRuntimeModeSnapshot()
@@ -44,14 +49,40 @@ export default async function AdminPage() {
   let funnelEvents: Awaited<ReturnType<typeof listFunnelEvents>> = []
   let price: Awaited<ReturnType<typeof getActiveConsultationPrice>> | null = null
   let funnelMetricsSnapshot: ReturnType<typeof buildFunnelMetricsSnapshot> | null = null
+  const dataLoadErrors: string[] = []
 
   if (runtime.data.isValid) {
-    ;[bookings, availability, funnelEvents, price] = await Promise.all([
+    const [bookingsResult, availabilityResult, funnelEventsResult, priceResult] = await Promise.allSettled([
       listBookings(),
       listAvailabilityAdmin(),
       listFunnelEvents(),
       getActiveConsultationPrice(),
     ])
+
+    if (bookingsResult.status === 'fulfilled') {
+      bookings = bookingsResult.value
+    } else {
+      dataLoadErrors.push(formatDataLoadError('bookings', bookingsResult.reason))
+    }
+
+    if (availabilityResult.status === 'fulfilled') {
+      availability = availabilityResult.value
+    } else {
+      dataLoadErrors.push(formatDataLoadError('availability', availabilityResult.reason))
+    }
+
+    if (funnelEventsResult.status === 'fulfilled') {
+      funnelEvents = funnelEventsResult.value
+    } else {
+      dataLoadErrors.push(formatDataLoadError('funnel_events', funnelEventsResult.reason))
+    }
+
+    if (priceResult.status === 'fulfilled') {
+      price = priceResult.value
+    } else {
+      dataLoadErrors.push(formatDataLoadError('pricing', priceResult.reason))
+    }
+
     funnelMetricsSnapshot = buildFunnelMetricsSnapshot({
       events: funnelEvents,
       bookings,
@@ -79,6 +110,10 @@ export default async function AdminPage() {
   const priceUpdatedAtLabel = price?.updatedAt
     ? `${formatDateLabel(price.updatedAt.slice(0, 10))}, ${price.updatedAt.slice(11, 16)}`
     : null
+  const dataLoadIssue =
+    dataLoadErrors.length > 0
+      ? `Nie wszystkie dane panelu mogly sie zaladowac: ${dataLoadErrors.join(' | ')}`
+      : null
 
   return (
     <main className="page-wrap" data-analytics-disabled="true">
@@ -151,6 +186,8 @@ export default async function AdminPage() {
               <span>{buildMarker.value}</span>
             </div>
           </div>
+
+          {dataLoadIssue ? <div className="error-box top-gap">{dataLoadIssue}</div> : null}
 
           <div className="top-gap">
             <div className="section-eyebrow">Go-live</div>

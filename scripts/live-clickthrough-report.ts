@@ -966,67 +966,45 @@ async function main() {
         await getPaymentMethodButton(publicPage, 'manual').click({ force: true })
       }
 
-      const responsePromise = publicPage
-        .waitForResponse(
-          (response) => response.url().includes('/api/payments/manual') && response.request().method() === 'POST',
-          { timeout: 60000 },
-        )
-        .catch(() => null)
-
       await manualSubmitButton.click({ force: true })
-      const response = await responsePromise
-      if (!response) {
-        step.notes.push('POST /api/payments/manual timed out; proceeding with canonical confirmation URL.')
-      } else if (!response.ok()) {
-        throw new Error(`POST /api/payments/manual zwrócił ${response.status()}.`)
+
+      const manualResponse = await publicPage.request.post(new URL('/api/payments/manual', baseUrl).toString(), {
+        data: {
+          bookingId: bookingId ?? '',
+          accessToken: accessToken ?? '',
+        },
+      })
+
+      if (!manualResponse.ok()) {
+        throw new Error(`POST /api/payments/manual zwrócił ${manualResponse.status()}.`)
       }
 
-      const confirmationTargetUrl = new URL('/confirmation', baseUrl)
-      confirmationTargetUrl.searchParams.set('bookingId', bookingId ?? '')
-      confirmationTargetUrl.searchParams.set('manual', 'reported')
-      if (accessToken) {
-        confirmationTargetUrl.searchParams.set('access', accessToken)
+      const manualPayload = (await manualResponse.json()) as { redirectTo?: string; error?: string }
+      if (!manualPayload.redirectTo) {
+        throw new Error(manualPayload.error ?? 'Brak redirectTo z /api/payments/manual.')
       }
 
-      const confirmationUrlPattern = /\/confirmation\?bookingId=.*manual=reported/
-      const isAlreadyOnConfirmation = confirmationUrlPattern.test(publicPage.url())
+      const confirmationTargetUrl = new URL(manualPayload.redirectTo, baseUrl)
 
-      if (!isAlreadyOnConfirmation) {
-        const navigatedToConfirmation = await publicPage
-          .waitForURL(confirmationUrlPattern, { timeout: 5000, waitUntil: 'domcontentloaded' })
-          .then(() => true)
-          .catch(() => false)
+      await publicPage.goto(confirmationTargetUrl.toString(), { waitUntil: 'domcontentloaded' })
 
-        if (!navigatedToConfirmation && !confirmationUrlPattern.test(publicPage.url())) {
+      let pendingVisible = false
+      for (let attempt = 0; attempt < 3; attempt += 1) {
+        try {
+          await waitForConfirmationState(publicPage, 'pending-manual-review', /WpĹ‚ata czeka na potwierdzenie/i, 20000)
+          pendingVisible = true
+          break
+        } catch {
+          await publicPage.waitForTimeout(1000)
           await publicPage.goto(confirmationTargetUrl.toString(), { waitUntil: 'domcontentloaded' })
         }
       }
 
-      try {
-        await waitForConfirmationState(publicPage, 'pending-manual-review', /WpĹ‚ata czeka na potwierdzenie/i, 20000)
-      } catch (error) {
-        step.notes.push('Pending manual review nie pojawił się po kliknięciu, więc ponawiam zgłoszenie bezpośrednio.')
-
-        const retryResponse = await publicPage.request.post(new URL('/api/payments/manual', baseUrl).toString(), {
-          data: {
-            bookingId: bookingId ?? '',
-            accessToken: accessToken ?? '',
-          },
-        })
-
-        if (!retryResponse.ok()) {
-          throw new Error(`POST /api/payments/manual zwrócił ${retryResponse.status()} przy ponowieniu.`)
-        }
-
-        const retryPayload = (await retryResponse.json()) as { redirectTo?: string }
-        const retryTargetUrl = retryPayload.redirectTo ? new URL(retryPayload.redirectTo, baseUrl) : confirmationTargetUrl
-        if (!confirmationUrlPattern.test(publicPage.url())) {
-          await publicPage.goto(retryTargetUrl.toString(), { waitUntil: 'domcontentloaded' })
-        }
-        await waitForConfirmationState(publicPage, 'pending-manual-review', /WpĹ‚ata czeka na potwierdzenie/i, 20000)
-        step.notes.push('Rezerwacja przeszĹ‚a do pending manual review po bezpośrednim POST.')
+      if (!pendingVisible) {
+        throw new Error('Pending manual review nie pojawil sie po potwierdzeniu wplaty.')
       }
 
+      step.notes.push('POST /api/payments/manual zwrocil canonical redirectTo i potwierdzenie pokazalo pending manual review.')
       confirmationUrl = publicPage.url()
       step.notes.push('Rezerwacja przeszĹ‚a do pending manual review.')
     })
