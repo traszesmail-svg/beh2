@@ -258,7 +258,7 @@ textarea::placeholder {
 .two-col-section,
 .booking-layout {
   display: grid;
-  grid-template-columns: 1.14fr 0.86fr;
+  grid-template-columns: minmax(0, 1.14fr) minmax(0, 0.86fr);
   gap: 24px;
 }
 
@@ -267,6 +267,7 @@ textarea::placeholder {
 .room-panel,
 .centered-panel,
 .cta-panel {
+  min-width: 0;
   padding: 36px;
 }
 
@@ -879,6 +880,34 @@ h1 span {
   height: 100%;
   object-fit: cover;
   object-position: center 16%;
+}
+
+.offer-card-media,
+.offer-detail-media-top,
+.contact-visual-shell {
+  display: block;
+  overflow: hidden;
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.76), rgba(247, 240, 230, 0.94));
+}
+
+.offer-card-media {
+  aspect-ratio: 4 / 3;
+}
+
+.offer-detail-media-top,
+.contact-visual-shell {
+  aspect-ratio: 4 / 3;
+}
+
+.offer-card-image,
+.section-feature-image,
+.contact-feature-image {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100%;
+  object-fit: cover;
 }
 
 .home-hero-photo-badge {
@@ -2321,10 +2350,6 @@ select:focus-visible {
     font-size: 18px;
   }
 
-  .home-hero-panel {
-    padding: 22px 18px 20px;
-  }
-
   .home-hero-panel::before {
     inset: 18px auto 18px 12px;
   }
@@ -2335,18 +2360,43 @@ select:focus-visible {
     height: 184px;
   }
 
+  .home-hero-highlight-grid,
+  .home-hero-proof-grid,
+  .home-hero-trust-bar,
+  .home-hero-aside {
+    display: none;
+  }
+
   .home-hero-copy h1 {
-    font-size: clamp(36px, 11vw, 52px);
+    font-size: clamp(32px, 10vw, 46px);
+    line-height: 0.92;
     max-width: none;
   }
 
   .home-hero-text {
-    font-size: 16px;
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  .home-hero-panel {
+    padding: 18px 16px 16px;
+  }
+
+  .home-hero-topline {
+    gap: 6px;
+  }
+
+  .home-hero-availability-pill {
+    display: none;
   }
 
   .home-hero-aside {
-    order: -1;
+    order: 0;
     padding: 14px;
+  }
+
+  .home-hero-aside-stack {
+    display: none;
   }
 
   .home-choice-title {
@@ -2354,7 +2404,7 @@ select:focus-visible {
   }
 
   .home-hero-photo-shell {
-    min-height: 340px;
+    min-height: 240px;
   }
 
   .big-button,
