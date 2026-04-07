@@ -76,7 +76,8 @@ test('home hero uses the optimized portrait asset', () => {
   const siteSource = readSource('lib', 'site.ts')
 
   assert.match(siteSource, /HOME_HERO_PHOTO/)
-  assert.match(siteSource, /omnie-hero\.webp/)
+  assert.match(siteSource, /specialist-krzysztof-portrait\.jpg/)
+  assert.doesNotMatch(siteSource, /omnie-hero\.webp/)
   assert.match(siteSource, /cat-in-arms\.jpg/)
   assert.match(siteSource, /HOME_HELP_CHOICE_PHOTO/)
   assert.match(homeSource, /HOME_HERO_PHOTO/)
@@ -334,6 +335,15 @@ test('qa checkout routing stays isolated and allowlist-gated', () => {
       assert.match(blocked.reason ?? '', /produkcji/)
     },
   )
+})
+
+test('qa booking schema fallback keeps public booking inserts alive', () => {
+  const supabaseStoreSource = readSource('lib', 'server', 'supabase-store.ts')
+
+  assert.match(supabaseStoreSource, /qaSchemaMode/)
+  assert.match(supabaseStoreSource, /shouldRetryWithoutQaBooking/)
+  assert.match(supabaseStoreSource, /withoutQaBooking/)
+  assert.match(supabaseStoreSource, /legacyPaymentInsertPayload/)
 })
 
 test('cat topic images exist in the dedicated catalog', () => {

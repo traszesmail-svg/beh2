@@ -159,6 +159,9 @@ const LEGACY_SMS_COLUMN_NAMES = [
 ] as const
 
 let smsSchemaMode: 'unknown' | 'modern' | 'legacy' = 'unknown'
+const LEGACY_QA_BOOKING_COLUMN_NAMES = ['qa_booking'] as const
+
+let qaSchemaMode: 'unknown' | 'modern' | 'legacy' = 'unknown'
 
 function setPaymentSchemaMode(mode: typeof paymentSchemaMode) {
   paymentSchemaMode = mode
@@ -166,6 +169,10 @@ function setPaymentSchemaMode(mode: typeof paymentSchemaMode) {
 
 function setSmsSchemaMode(mode: typeof smsSchemaMode) {
   smsSchemaMode = mode
+}
+
+function setQaSchemaMode(mode: typeof qaSchemaMode) {
+  qaSchemaMode = mode
 }
 
 function getErrorText(error: unknown): string {
@@ -195,6 +202,12 @@ function isLegacySmsColumnError(error: unknown): boolean {
   return LEGACY_SMS_COLUMN_NAMES.some((column) => text.includes(column))
 }
 
+function isLegacyQaBookingColumnError(error: unknown): boolean {
+  const text = getErrorText(error)
+
+  return LEGACY_QA_BOOKING_COLUMN_NAMES.some((column) => text.includes(column))
+}
+
 function isLegacyManualStatusError(error: unknown): boolean {
   const text = getErrorText(error)
 
@@ -219,6 +232,20 @@ function shouldRetryWithLegacyPaymentSchema(error: unknown, includeManualStatuse
   }
 
   return false
+}
+
+function shouldRetryWithoutQaBooking(error: unknown): boolean {
+  if (isLegacyQaBookingColumnError(error)) {
+    setQaSchemaMode('legacy')
+    return true
+  }
+
+  return false
+}
+
+function withoutQaBooking<T extends { qa_booking?: boolean }>(row: T): Omit<T, 'qa_booking'> {
+  const { qa_booking: _qaBooking, ...rest } = row
+  return rest
 }
 
 function shouldRetryWithLegacySmsSchema(error: unknown): boolean {
@@ -448,18 +475,27 @@ async function insertFunnelEvent(
     ...input,
     properties: normalizeFunnelEventProperties(input.properties ?? null),
   })
+  const modernInsertPayload = mapFunnelEventRecordToRow(record)
+  const legacyInsertPayload = withoutQaBooking(modernInsertPayload)
+  const insertPayload = qaSchemaMode === 'legacy' ? legacyInsertPayload : modernInsertPayload
 
-  const { data, error } = await supabase
+  let inserted = await supabase
     .from('funnel_events')
-    .insert(mapFunnelEventRecordToRow(record))
+    .insert(insertPayload)
     .select('*')
     .single()
 
-  if (error) {
-    throw error
+  if (inserted.error && shouldRetryWithoutQaBooking(inserted.error)) {
+    inserted = await supabase.from('funnel_events').insert(legacyInsertPayload).select('*').single()
+  } else if (!inserted.error && qaSchemaMode !== 'legacy') {
+    setQaSchemaMode('modern')
   }
 
-  return mapFunnelEventRow(data as FunnelEventRow)
+  if (inserted.error) {
+    throw inserted.error
+  }
+
+  return mapFunnelEventRow(inserted.data as FunnelEventRow)
 }
 
 async function recordServerFunnelEvent(supabase: ReturnType<typeof getSupabaseAdmin>, input: FunnelEventInput) {
@@ -911,8 +947,14 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
     created_at: nowIso,
     updated_at: nowIso,
   }
-  const smsInsertPayload = {
+  const qaBooking = form.qaBooking ?? false
+  const bookingInsertPayload = {
     ...commonInsertPayload,
+    qa_booking: qaBooking,
+  }
+  const legacyBookingInsertPayload = withoutQaBooking(bookingInsertPayload)
+  const smsInsertPayload = {
+    ...bookingInsertPayload,
     customer_phone_normalized: normalizePolishPhone(form.phone)?.e164 ?? null,
     sms_confirmation_status: null,
     sms_confirmation_sent_at: null,
@@ -920,8 +962,9 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
     sms_error_code: null,
     sms_error_message: null,
   }
+  const legacySmsInsertPayload = withoutQaBooking(smsInsertPayload)
   const paymentOnlyInsertPayload = {
-    ...commonInsertPayload,
+    ...bookingInsertPayload,
     payment_method: null,
     payment_reference: null,
     payment_reported_at: null,
@@ -930,6 +973,7 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
     payu_order_id: null,
     payu_order_status: null,
   }
+  const legacyPaymentOnlyInsertPayload = withoutQaBooking(paymentOnlyInsertPayload)
   const paymentModernInsertPayload = {
     ...paymentOnlyInsertPayload,
     customer_phone_normalized: normalizePolishPhone(form.phone)?.e164 ?? null,
@@ -939,45 +983,63 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
     sms_error_code: null,
     sms_error_message: null,
   }
-  const legacyInsertPayload = {
-    ...commonInsertPayload,
-  }
+  const legacyPaymentInsertPayload = withoutQaBooking(paymentModernInsertPayload)
   let inserted
 
   if (paymentSchemaMode === 'legacy' && smsSchemaMode === 'legacy') {
-    inserted = await supabase.from('bookings').insert(legacyInsertPayload).select('*').single()
+    inserted = await supabase.from('bookings').insert(legacyBookingInsertPayload).select('*').single()
   } else if (paymentSchemaMode === 'legacy') {
-    inserted = await supabase.from('bookings').insert(smsInsertPayload).select('*').single()
+    inserted = await supabase
+      .from('bookings')
+      .insert(qaSchemaMode === 'legacy' ? legacySmsInsertPayload : smsInsertPayload)
+      .select('*')
+      .single()
 
     if (inserted.error && shouldRetryWithLegacySmsSchema(inserted.error)) {
-      inserted = await supabase.from('bookings').insert(legacyInsertPayload).select('*').single()
+      inserted = await supabase.from('bookings').insert(legacyBookingInsertPayload).select('*').single()
     } else if (!inserted.error) {
       setSmsSchemaMode('modern')
     }
   } else if (smsSchemaMode === 'legacy') {
-    inserted = await supabase.from('bookings').insert(paymentOnlyInsertPayload).select('*').single()
+    inserted = await supabase
+      .from('bookings')
+      .insert(qaSchemaMode === 'legacy' ? legacyPaymentOnlyInsertPayload : paymentOnlyInsertPayload)
+      .select('*')
+      .single()
 
     if (inserted.error && shouldRetryWithLegacyPaymentSchema(inserted.error)) {
-      inserted = await supabase.from('bookings').insert(legacyInsertPayload).select('*').single()
+      inserted = await supabase.from('bookings').insert(legacyBookingInsertPayload).select('*').single()
     } else if (!inserted.error) {
       setPaymentSchemaMode('modern')
     }
   } else {
-    inserted = await supabase.from('bookings').insert({
-      ...paymentModernInsertPayload,
-    }).select('*').single()
+    inserted = await supabase
+      .from('bookings')
+      .insert(qaSchemaMode === 'legacy' ? legacyPaymentInsertPayload : paymentModernInsertPayload)
+      .select('*')
+      .single()
 
-    if (inserted.error && shouldRetryWithLegacySmsSchema(inserted.error)) {
-      inserted = await supabase.from('bookings').insert(paymentOnlyInsertPayload).select('*').single()
+    if (inserted.error && shouldRetryWithoutQaBooking(inserted.error)) {
+      setQaSchemaMode('legacy')
+      inserted = await supabase.from('bookings').insert(legacyPaymentInsertPayload).select('*').single()
+    } else if (inserted.error && shouldRetryWithLegacySmsSchema(inserted.error)) {
+      inserted = await supabase
+        .from('bookings')
+        .insert(qaSchemaMode === 'legacy' ? legacyPaymentOnlyInsertPayload : paymentOnlyInsertPayload)
+        .select('*')
+        .single()
 
       if (inserted.error && shouldRetryWithLegacyPaymentSchema(inserted.error)) {
-        inserted = await supabase.from('bookings').insert(legacyInsertPayload).select('*').single()
+        inserted = await supabase.from('bookings').insert(legacyBookingInsertPayload).select('*').single()
       } else if (!inserted.error) {
         setPaymentSchemaMode('modern')
       }
     } else if (inserted.error && shouldRetryWithLegacyPaymentSchema(inserted.error)) {
-      inserted = await supabase.from('bookings').insert(legacyInsertPayload).select('*').single()
+      inserted = await supabase.from('bookings').insert(legacyBookingInsertPayload).select('*').single()
     } else if (!inserted.error) {
+      if (qaSchemaMode !== 'legacy') {
+        setQaSchemaMode('modern')
+      }
       setPaymentSchemaMode('modern')
       setSmsSchemaMode('modern')
     }
