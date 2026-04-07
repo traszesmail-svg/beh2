@@ -581,17 +581,18 @@ test('release smoke rules track the current home and booking copy', () => {
   assert.equal(opinionsRule?.required?.includes('Dodaj swoją opinię do ręcznej weryfikacji'), true)
   assert.equal(opinionsRule?.forbidden?.includes('Udost\u0119pnij znajomemu'), true)
 
-  assert.equal(bookRule?.required?.includes('Wybierz temat dla:'), true)
+  assert.equal(bookRule?.required?.includes('Wybierz temat na 15 min'), true)
+  assert.equal(bookRule?.required?.includes('Wybierz temat najbliższy sytuacji.'), true)
   assert.equal(bookRule?.required?.includes('Temat mieszany?'), true)
   assert.equal(bookRule?.required?.includes('Wybierz temat mieszany'), true)
   assert.equal(bookRule?.forbidden?.includes('Kot i trudne zachowania'), true)
 
   assert.equal(catsRule?.required?.includes('Wybierz temat dla kota i od razu przejdź do terminu.'), true)
   assert.equal(catsRule?.required?.includes('Kot i kuweta'), true)
-  assert.equal(catsRule?.required?.includes('Konflikt miedzy kotami'), true)
-  assert.equal(catsRule?.required?.includes('Dotyk, gryzienie i pielegnacja'), true)
-  assert.equal(catsRule?.required?.includes('Kot lekowy, napiety albo wycofany'), true)
-  assert.equal(catsRule?.required?.includes('Budzi dom po nocy / nocna wokalizacja'), true)
+  assert.equal(catsRule?.required?.includes('Konflikt między kotami'), true)
+  assert.equal(catsRule?.required?.includes('Dotyk, gryzienie i pielęgnacja'), true)
+  assert.equal(catsRule?.required?.includes('Kot lękowy, napięty albo wycofany'), true)
+  assert.equal(catsRule?.required?.includes('Budzi dom po nocy'), true)
   assert.equal(catsRule?.forbidden?.includes('Masz problem z kotem? Wybierz start.'), true)
 
   assert.equal(termsRule?.required?.includes('Zasady rezerwacji szybkiej konsultacji 15 min'), true)

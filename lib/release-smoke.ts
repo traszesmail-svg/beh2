@@ -153,9 +153,11 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
       path: '/book',
       required: [
         'Etap rezerwacji: wybór tematu',
-        'Wybierz temat dla:',
+        'Wybierz temat na 15 min',
+        'Wybierz temat najbliższy sytuacji.',
         'Temat mieszany?',
         'Wybierz temat mieszany',
+        'Jak to działa',
       ],
       forbidden: [
         'Cena konsultacji',
@@ -169,10 +171,10 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
       required: [
         'Wybierz temat dla kota i od razu przejdź do terminu.',
         'Kot i kuweta',
-        'Konflikt miedzy kotami',
-        'Dotyk, gryzienie i pielegnacja',
-        'Kot lekowy, napiety albo wycofany',
-        'Budzi dom po nocy / nocna wokalizacja',
+        'Konflikt między kotami',
+        'Dotyk, gryzienie i pielęgnacja',
+        'Kot lękowy, napięty albo wycofany',
+        'Budzi dom po nocy',
       ],
       forbidden: ['Masz problem z kotem? Wybierz start.'],
       requireBuildMarker: true,
