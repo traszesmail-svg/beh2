@@ -314,7 +314,7 @@ test('cat entry stays short and decision-led', () => {
   assert.match(catPage, /Dotyk, gryzienie i pielęgnacja/)
   assert.match(catPage, /Kot lękowy, napięty albo wycofany/)
   assert.match(catPage, /Budzi dom po nocy/)
-  assert.match(siteSource, /cat-litter-box\.jpg/)
+  assert.match(siteSource, /cat-bed-peeing\.png/)
   assert.match(siteSource, /cat-intercat-conflict\.jpg/)
   assert.match(siteSource, /cat-touch-defensive\.jpg/)
   assert.match(siteSource, /cat-anxious-hiding\.jpg/)
@@ -415,7 +415,7 @@ test('booking form shows normalized slot conflict copy instead of raw api errors
 
 test('cat topic images exist in the dedicated catalog', () => {
   const assetPaths = [
-    ['public', 'branding', 'topic-cards', 'cats', 'cat-litter-box.jpg'],
+    ['public', 'branding', 'topic-cards', 'cats', 'cat-bed-peeing.png'],
     ['public', 'branding', 'topic-cards', 'cats', 'cat-intercat-conflict.jpg'],
     ['public', 'branding', 'topic-cards', 'cats', 'cat-touch-defensive.jpg'],
     ['public', 'branding', 'topic-cards', 'cats', 'cat-anxious-hiding.jpg'],

@@ -136,8 +136,8 @@ export const HERO_SUPPORT_IMAGES = [
 
 export const CAT_TOPIC_VISUALS = {
   'kot-kuweta': {
-    src: '/branding/topic-cards/cats/cat-litter-box.jpg',
-    alt: 'Kot obok kuwety w spokojnym domowym kadrze jako ilustracja problemów z kuwetą',
+    src: '/branding/topic-cards/cats/cat-bed-peeing.png',
+    alt: 'Kot sikający na łóżko jako ilustracja oddawania moczu poza kuwetą',
   },
   'kot-konflikt': {
     src: '/branding/topic-cards/cats/cat-intercat-conflict.jpg',
