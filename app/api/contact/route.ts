@@ -1,24 +1,14 @@
 import { NextResponse } from 'next/server'
 import { ConfigurationError } from '@/lib/server/env'
-import { getPublicContactDetails } from '@/lib/site'
 import { sendContactLeadEmail } from '@/lib/server/notifications'
+import { getContactDetails } from '@/lib/site'
 
-const SUCCESS_MESSAGE = 'Dziękujemy. Wiadomość trafiła do weryfikacji. Odpowiem na podany adres e-mail.'
-const UNAVAILABLE_MESSAGE = 'Formularz kontaktowy jest chwilowo niedostępny. Spróbuj później lub skontaktuj się bezpośrednio.'
+const SUCCESS_MESSAGE = 'Dziękuję. Wiadomość trafiła do weryfikacji. Odpowiem na podany kontakt.'
+const UNAVAILABLE_MESSAGE = 'Formularz kontaktowy jest chwilowo niedostępny. Spróbuj później lub napisz bezpośrednio.'
 const GENERIC_ERROR_MESSAGE = 'Nie udało się wysłać wiadomości. Spróbuj ponownie później.'
 
-type Payload = {
-  name: string
-  email: string
-  topic: string
-  contextLabel: string
-  message: string
-  bookingId: string | null
-  website: string
-}
-
 function getUnavailableMessage(): string {
-  const contact = getPublicContactDetails()
+  const contact = getContactDetails()
 
   if (contact.email) {
     return `Formularz kontaktowy jest chwilowo niedostępny. Spróbuj później albo napisz na ${contact.email}.`
@@ -27,17 +17,13 @@ function getUnavailableMessage(): string {
   return UNAVAILABLE_MESSAGE
 }
 
-function isEmailValid(value: string): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
-}
-
 function normalizeSingleLine(value: unknown, maxLength: number): string | null {
   if (typeof value !== 'string') {
     return null
   }
 
   const normalized = value.trim().replace(/\s+/g, ' ')
-  return normalized.length <= maxLength ? normalized : normalized.slice(0, maxLength)
+  return normalized.length > 0 ? normalized.slice(0, maxLength) : null
 }
 
 function normalizeLongText(value: unknown, maxLength: number): string | null {
@@ -46,38 +32,59 @@ function normalizeLongText(value: unknown, maxLength: number): string | null {
   }
 
   const normalized = value.replace(/\r\n/g, '\n').trim()
-  return normalized.length <= maxLength ? normalized : normalized.slice(0, maxLength)
+  return normalized.length > 0 ? normalized.slice(0, maxLength) : null
 }
 
-function validatePayload(body: Record<string, unknown>): { payload?: Payload; error?: string } {
-  const name = normalizeSingleLine(body.name, 120)
-  const email = normalizeSingleLine(body.email, 254)
-  const topic = normalizeSingleLine(body.topic ?? '', 120) ?? 'Ogólne pytanie'
-  const contextLabel = normalizeSingleLine(body.contextLabel ?? '', 200) ?? 'Kontakt ogólny'
+function pickContactCandidate(body: Record<string, unknown>): string | null {
+  return (
+    normalizeSingleLine(body.email, 160) ??
+    normalizeSingleLine(body.contact, 160) ??
+    normalizeSingleLine(body.phone, 160)
+  )
+}
+
+function normalizeSpeciesLabel(value: unknown): string | null {
+  const species = normalizeSingleLine(value, 32)?.toLowerCase() ?? null
+
+  if (species === 'pies') {
+    return 'Pies'
+  }
+
+  if (species === 'kot') {
+    return 'Kot'
+  }
+
+  return normalizeSingleLine(value, 32)
+}
+
+function validatePayload(body: Record<string, unknown>): { payload?: Parameters<typeof sendContactLeadEmail>[0]; error?: string } {
+  const name = normalizeSingleLine(body.name ?? body.displayName, 120)
+  const contact = pickContactCandidate(body)
+  const topic = normalizeSingleLine(body.topic, 120) ?? 'Kontakt i rezerwacja'
+  const contextLabel =
+    normalizeSingleLine(body.contextLabel, 120) ??
+    normalizeSpeciesLabel(body.species) ??
+    'Kontakt ogólny'
   const message = normalizeLongText(body.message, 4000)
-  const bookingId = normalizeSingleLine(body.bookingId ?? '', 80)
-  const website = normalizeSingleLine(body.website ?? '', 120) ?? ''
+  const bookingId = normalizeSingleLine(body.bookingId, 120) ?? null
+  const website = normalizeSingleLine(body.website, 120) ?? ''
 
-  if (!name || !email || !message) {
-    return { error: 'Uzupełnij wszystkie wymagane pola formularza kontaktowego.' }
+  if (!name || !contact || !message) {
+    return { error: 'Uzupełnij imię, kontakt i krótki opis sytuacji.' }
   }
 
-  if (!isEmailValid(email)) {
-    return { error: 'Podaj poprawny adres e-mail, aby otrzymać odpowiedź.' }
-  }
-
-  if (message.length < 20) {
-    return { error: 'Napisz kilka zdań o sytuacji, aby łatwiej było wybrać kolejny krok.' }
+  if (message.length < 12) {
+    return { error: 'Napisz kilka zdań o sytuacji, żeby łatwiej było zacząć.' }
   }
 
   return {
     payload: {
       name,
-      email,
+      email: contact,
       topic,
-      contextLabel,
       message,
-      bookingId: bookingId || null,
+      contextLabel,
+      bookingId,
       website,
     },
   }
@@ -90,11 +97,7 @@ export async function POST(request: Request) {
     try {
       body = (await request.json()) as Record<string, unknown>
     } catch {
-      return NextResponse.json({ error: 'Nie udało się odczytać formularza kontaktowego.' }, { status: 400 })
-    }
-
-    if (typeof body.website === 'string' && body.website.trim().length > 0) {
-      return NextResponse.json({ ok: true, message: SUCCESS_MESSAGE })
+      return NextResponse.json({ error: 'Nie udało się odczytać formularza kontaktu.' }, { status: 400 })
     }
 
     const { payload, error } = validatePayload(body)
@@ -103,14 +106,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: error ?? GENERIC_ERROR_MESSAGE }, { status: 400 })
     }
 
-    const delivery = await sendContactLeadEmail({
-      name: payload.name,
-      email: payload.email,
-      topic: payload.topic,
-      contextLabel: payload.contextLabel,
-      message: payload.message,
-      bookingId: payload.bookingId,
-    })
+    if (payload.website) {
+      return NextResponse.json({ ok: true, message: SUCCESS_MESSAGE })
+    }
+
+    const delivery = await sendContactLeadEmail(payload)
 
     if (delivery.status === 'sent') {
       return NextResponse.json({ ok: true, message: SUCCESS_MESSAGE })

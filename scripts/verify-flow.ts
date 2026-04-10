@@ -243,7 +243,7 @@ async function main() {
 
     assert(rejectedResult?.bookingStatus === 'cancelled', 'Booking po odrzuceniu wplaty nie ma statusu cancelled.')
     assert(rejectedResult?.paymentStatus === 'rejected', 'Booking po odrzuceniu wplaty nie ma payment status rejected.')
-    assert(getProblemLabel('kot') === 'Kot i trudne zachowania', 'Legacy label dla starych bookingow kota zniknal.')
+    assert(getProblemLabel('kot') === 'Kot', 'Legacy label dla starych bookingow kota zostal uproszczony.')
 
     const availabilityAfterReject = await listAvailability()
     const rejectedSlotVisibleAgain = availabilityAfterReject.some((group) =>

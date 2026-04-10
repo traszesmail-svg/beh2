@@ -35,7 +35,7 @@ export default async function CallPage({
   let flowError: string | null = null
 
   if (!dataMode.isValid) {
-    flowError = 'Pokoj rozmowy chwilowo nie jest dostepny. Sprobuj ponownie za kilka minut.'
+      flowError = 'Pokój rozmowy chwilowo nie jest dostępny. Spróbuj ponownie za kilka minut.'
   } else {
     try {
       booking = await getBookingForViewer(params.id, accessToken, headers().get('authorization'))
@@ -45,7 +45,7 @@ export default async function CallPage({
         hasAccessToken: Boolean(accessToken),
         error,
       })
-      flowError = 'Nie udalo sie wczytac pokoju rozmowy. Sprobuj ponownie za moment.'
+      flowError = 'Nie udało się wczytać pokoju rozmowy. Spróbuj ponownie za moment.'
     }
   }
 
@@ -57,11 +57,11 @@ export default async function CallPage({
           <section className="panel centered-panel">
             <div className="stack-gap">
               <div className="error-box">
-                {flowError} Jesli chcesz, napisz wiadomość i wroc do rezerwacji, gdy bedzie to wygodniejsze.
+                {flowError} Jeśli chcesz, napisz wiadomość i wróć do rezerwacji później.
               </div>
               <div className="hero-actions centered-actions">
                 <Link href="/book" className="button button-primary big-button">
-                  Wroc do rezerwacji
+                  Wróć do rezerwacji
                 </Link>
                 <Link href="/kontakt" className="button button-ghost big-button">
                   Napisz wiadomość
@@ -81,10 +81,10 @@ export default async function CallPage({
           <Header />
           <section className="panel centered-panel">
             <div className="stack-gap">
-              <div className="error-box">Ten link do rozmowy jest nieprawidlowy albo wygasl.</div>
+              <div className="error-box">Ten link do rozmowy jest nieprawidłowy albo wygasł.</div>
               <div className="hero-actions centered-actions">
                 <Link href="/book" className="button button-primary big-button">
-                  Wroc do rezerwacji
+                  Wróć do rezerwacji
                 </Link>
                 <Link href="/kontakt" className="button button-ghost big-button">
                   Napisz wiadomość
@@ -112,7 +112,7 @@ export default async function CallPage({
               <div className="section-eyebrow">Twoja rozmowa</div>
               <h2>{getProblemLabel(booking.problemType)}</h2>
               <p className="muted paragraph-gap">
-                {getBookingServiceTitle(serviceType)}. To jest podsumowanie sprawy, z ktora przychodzisz na rozmowe. Jesli po oplaceniu chcesz jeszcze cos doprecyzowac, materialy do sprawy pozostaja ponizej.
+                {getBookingServiceTitle(serviceType)}. To podsumowanie sprawy, z którą przychodzisz na rozmowę. Jeśli po opłaceniu chcesz coś doprecyzować, materiały do sprawy są poniżej.
               </p>
               <div className="list-card top-gap">
                 <strong>Opis zgloszenia</strong>
@@ -145,13 +145,13 @@ export default async function CallPage({
         ) : (
           <section className="panel centered-panel">
             <div className="stack-gap">
-              <div className="error-box">Dostep do pokoju rozmowy odblokowuje sie dopiero po statusie paid: po potwierdzeniu wplaty albo po sukcesie PayU.</div>
+              <div className="error-box">Dostęp do pokoju rozmowy odblokowuje się dopiero po statusie paid: po potwierdzeniu wpłaty albo po sukcesie PayU.</div>
               <div className="hero-actions centered-actions">
                 <Link
                   href={`/payment?bookingId=${booking.id}${accessToken ? `&access=${encodeURIComponent(accessToken)}` : ''}`}
                   className="button button-primary big-button"
                 >
-                  Wroc do platnosci
+                  Wróć do płatności
                 </Link>
                 <Link href="/kontakt" className="button button-ghost big-button">
                   Napisz wiadomość

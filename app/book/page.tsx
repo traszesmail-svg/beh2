@@ -48,16 +48,6 @@ function renderProblemIcon(problem: ProblemType) {
           <path d="M21 29c2.2 1.8 3.8 1.8 6 0" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
         </svg>
       )
-    case 'kot':
-      return (
-        <svg viewBox="0 0 48 48" className="topic-svg" aria-hidden="true">
-          <path d="M13 34c0-9 4.5-15 11-15s11 6 11 15" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
-          <path d="M18 17l-4-7 7 4m6 3l7-4-4 7" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinejoin="round" />
-          <circle cx="21" cy="24" r="1.5" fill="currentColor" />
-          <circle cx="27" cy="24" r="1.5" fill="currentColor" />
-          <path d="M24 25.5v3.5m-7 0l5-1.5m9 1.5l-5-1.5" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" />
-        </svg>
-      )
     case 'separacja':
       return (
         <svg viewBox="0 0 48 48" className="topic-svg" aria-hidden="true">
@@ -66,29 +56,20 @@ function renderProblemIcon(problem: ProblemType) {
           <path d="M10 36c3-4.3 7.7-6 14-6" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
         </svg>
       )
-    case 'agresja':
+    case 'spacer':
       return (
         <svg viewBox="0 0 48 48" className="topic-svg" aria-hidden="true">
-          <path d="M24 10l12 5v8c0 8.3-4.5 13.6-12 15-7.5-1.4-12-6.7-12-15v-8Z" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinejoin="round" />
-          <path d="M18 25h12m-9 4h6" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
+          <path d="M10 29c5.2-6.4 10.6-9.4 18-9.4 4.8 0 8.7 1.6 12 4.8" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
+          <path d="M30 14.5l8.5 2.2-3 7.5" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinejoin="round" />
+          <path d="M18 18.5l-5.5-3.2 2.2 8" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinejoin="round" />
         </svg>
       )
-    case 'niszczenie':
+    case 'pobudzenie':
       return (
         <svg viewBox="0 0 48 48" className="topic-svg" aria-hidden="true">
-          <path d="M15 31c0-6.6 3.8-12 9-12 4.7 0 9 4.2 9 10.8" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
-          <path d="M18 17c.8-3.4 3-5 6-5 2.8 0 5 1.4 6 4.6" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
-          <path d="M14 34h20" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
-          <path d="m20 26 2 2 6-6" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      )
-    case 'dogoterapia':
-      return (
-        <svg viewBox="0 0 48 48" className="topic-svg" aria-hidden="true">
-          <path d="M15 30c0-6 3.6-11 9-11 5.1 0 9 4 9 10.5" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
-          <path d="M18 18c.6-3.4 2.7-5 6-5 3.2 0 5.2 1.6 6 4.8" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
-          <path d="M16 35c2.2-3 5-4.5 8-4.5s5.8 1.5 8 4.5" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
-          <path d="m24 22.5 1.8 2.4 2.9-.9-1.8 2.4 1.8 2.4-2.9-.9-1.8 2.4-1.8-2.4-2.9.9 1.8-2.4-1.8-2.4 2.9.9Z" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinejoin="round" />
+          <path d="M24 9 17 23h7l-2 16 10-17h-7Z" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinejoin="round" />
+          <path d="M12 18c1.7-1.8 3.3-2.6 5.5-2.6" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
+          <path d="M30.5 12.5c2 0 3.8.8 5.5 2.5" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
         </svg>
       )
     case 'inne':
@@ -106,31 +87,27 @@ function renderProblemIcon(problem: ProblemType) {
 const BOOK_TOPIC_COPY: Record<string, { title: string; desc: string }> = {
   szczeniak: {
     title: 'Szczeniak i młody pies',
-    desc: 'Gryzienie, skakanie i trudność z wyciszeniem.',
-  },
-  kot: {
-    title: 'Kot i trudne zachowania',
-    desc: 'Kuweta, napięcie, wokalizacja i trudny kontakt.',
+    desc: 'Gryzienie, skakanie, pobudzenie i trudność z wyciszeniem.',
   },
   separacja: {
-    title: 'Lęk separacyjny',
-    desc: 'Wycie, niszczenie i trudność z zostawaniem samemu.',
+    title: 'Problemy separacyjne',
+    desc: 'Wycie, niszczenie, napięcie przy wyjściu i trudność z zostawaniem samemu.',
+  },
+  spacer: {
+    title: 'Spacer i reakcje',
+    desc: 'Ciągnięcie, szczekanie, rzucanie się i trudne mijanki.',
   },
   agresja: {
-    title: 'Agresja i reakcje obronne',
-    desc: 'Warknięcia, rzucanie się i obrona zasobów.',
+    title: 'Agresja i obrona zasobów',
+    desc: 'Warknięcia, obrona jedzenia, legowiska, zabawek albo przestrzeni.',
   },
-  niszczenie: {
-    title: 'Pobudzenie, pogoń i niszczenie',
-    desc: 'Nakręcanie się, pogoń za ruchem i demolowanie otoczenia.',
-  },
-  dogoterapia: {
-    title: 'Dogoterapia',
-    desc: 'Rozmowa o celu, bezpieczeństwie i starcie z psem.',
+  pobudzenie: {
+    title: 'Pobudzenie i pogoń',
+    desc: 'Nakręcanie się, pogoń za ruchem i trudność z wyhamowaniem.',
   },
   inne: {
-    title: 'Inny temat do omówienia',
-    desc: 'Temat mieszany albo nietypowy, który chcesz opisać po swojemu.',
+    title: 'Inny problem lub temat pokrewny',
+    desc: 'Jeśli temat nie pasuje dokładnie do powyższych kategorii.',
   },
 }
 
@@ -168,7 +145,11 @@ export default async function BookPage({
   }
 
   return (
-    <main className="page-wrap" data-analytics-disabled={qaBooking ? 'true' : undefined} data-qa-booking={qaBooking ? 'true' : 'false'}>
+    <main
+      className="page-wrap marketing-page"
+      data-analytics-disabled={qaBooking ? 'true' : undefined}
+      data-qa-booking={qaBooking ? 'true' : 'false'}
+    >
       <div className="container">
         <Header />
 
@@ -244,13 +225,13 @@ export default async function BookPage({
 
           <div className="book-page-support-card tree-backed-card top-gap">
             <div className="book-page-support-copy">
-              <div className="section-eyebrow">Temat mieszany?</div>
-              <strong>Nie musisz znać nazwy problemu.</strong>
+              <div className="section-eyebrow">{mixedProblemOption?.title ?? 'Inny problem lub temat pokrewny'}</div>
+              <strong>Nie musisz znać dokładnej nazwy problemu.</strong>
               <span>
                 {mixedProblemOption ? (
                   <>
                     <Link href={buildSlotHref(mixedProblemOption.id, serviceQuery, qaBooking)} prefetch={false} className="inline-link">
-                      Wybierz temat mieszany
+                      {mixedProblemOption.title}
                     </Link>{' '}
                     albo{' '}
                   </>
@@ -265,7 +246,7 @@ export default async function BookPage({
             <div className="offer-card-actions">
               {mixedProblemOption ? (
                 <Link href={buildSlotHref(mixedProblemOption.id, serviceQuery, qaBooking)} prefetch={false} className="button button-ghost">
-                  Wybierz temat mieszany
+                  {mixedProblemOption.title}
                 </Link>
               ) : null}
               <Link href="/kontakt" prefetch={false} className="button button-primary">
@@ -277,9 +258,9 @@ export default async function BookPage({
 
         <Footer
           ctaHref="/kontakt"
-          ctaLabel="Nie wiesz? Napisz"
-          headline="Nie wiesz, który temat kliknąć?"
-          description="Jeśli temat jest mieszany albo chcesz upewnić się przed wyborem, napisz krótką wiadomość."
+          ctaLabel="Napisz wiadomość"
+          headline="Nie widzisz dokładnego tematu?"
+          description="Jeśli temat jest szerszy albo chcesz opisać go własnymi słowami, napisz krótką wiadomość."
         />
       </div>
     </main>

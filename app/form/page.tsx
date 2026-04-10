@@ -23,6 +23,7 @@ import {
   readSearchParam,
 } from '@/lib/booking-routing'
 import { formatDateTimeLabel, getProblemLabel, isFutureAvailabilitySlot } from '@/lib/data'
+import { DEFAULT_PRICE_PLN } from '@/lib/pricing'
 import { getActiveConsultationPrice, getAvailabilitySlot, listAvailability } from '@/lib/server/db'
 import { getDataModeStatus } from '@/lib/server/env'
 
@@ -49,7 +50,7 @@ export default async function FormPage({
   let slot: Awaited<ReturnType<typeof getAvailabilitySlot>> = null
   let flowError: string | null = null
   let slotWindowAvailable = false
-  let amountLabel = getBookingServicePriceLabel(serviceType, 59)
+  let amountLabel = getBookingServicePriceLabel(serviceType, DEFAULT_PRICE_PLN)
 
   if (dataMode.isValid) {
     try {
@@ -86,9 +87,9 @@ export default async function FormPage({
           <div className="panel section-panel hero-surface booking-stage-panel booking-stage-summary-panel booking-flow-panel">
             <BookingStageEyebrow stage="details" className="section-eyebrow" />
             {qaBooking ? <div className="status-pill transaction-status-pill">Tryb testowy</div> : null}
-            <h1>Uzupełnij dane do rezerwacji</h1>
+            <h1>Uzupełnij dane</h1>
             <p className="hero-text compact-panel-text">
-              Wypełnij krótko dane. Po zapisaniu formularza termin zostanie chwilowo zablokowany, a na kolejnym ekranie przejdziesz do wpłaty ręcznej.
+              Wpisz tylko to, co potrzebne do rezerwacji. Po zapisaniu formularza termin chwilowo się zablokuje.
             </p>
 
             <div className="stack-gap top-gap booking-facts-stack">
@@ -122,7 +123,7 @@ export default async function FormPage({
             {flowError ? (
               <>
                 <div className="info-box">
-                  {flowError} Jeśli temat jest pilny, napisz wiadomość i wróć do terminów, gdy będziesz gotowy.
+                  {flowError} Jeśli temat jest pilny, napisz wiadomość i wróć do terminów później.
                 </div>
                 <div className="hero-actions top-gap">
                   <Link href={buildSlotHref(problem, serviceQuery, qaBooking)} prefetch={false} className="button button-primary big-button">
@@ -150,7 +151,7 @@ export default async function FormPage({
             ) : (
               <>
                 <div className="error-box">
-                  Ten termin nie jest już dostępny dla wybranej usługi. Wróć do listy, wybierz inną godzinę albo napisz wiadomość.
+                  Ten termin nie jest już dostępny dla wybranej usługi. Wróć do listy albo napisz wiadomość.
                 </div>
                 <div className="hero-actions top-gap">
                   <Link href={buildSlotHref(problem, serviceQuery, qaBooking)} prefetch={false} className="button button-primary big-button">
@@ -169,7 +170,7 @@ export default async function FormPage({
           ctaHref="/kontakt"
           ctaLabel="Masz pytanie? Napisz"
           headline="Masz pytanie przed płatnością?"
-          description="Jeśli chcesz doprecyzować rezerwację albo opisać temat w dwóch linijkach, napisz wiadomość."
+          description="Jeśli chcesz doprecyzować rezerwację, napisz wiadomość."
         />
       </div>
     </main>

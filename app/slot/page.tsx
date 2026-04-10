@@ -67,7 +67,7 @@ export default async function SlotPage({
               <BookingStageEyebrow stage="slot" className="section-eyebrow" />
               {qaBooking ? <div className="status-pill transaction-status-pill">Tryb testowy</div> : null}
               <h1>Wybierz termin: {getProblemLabel(problem)}</h1>
-              <p className="hero-text">{getBookingServiceSlotSummary(serviceType)} Kliknij godzinę.</p>
+              <p className="hero-text">{getBookingServiceSlotSummary(serviceType)} Wybierz godzinę.</p>
             </div>
 
             <aside className="booking-stage-sidecard tree-backed-card">
@@ -84,7 +84,7 @@ export default async function SlotPage({
           {publicFlowMessage ? (
             <div className="stack-gap top-gap slot-state-stack">
               <div className="info-box">
-                {publicFlowMessage} Jeśli temat jest pilny, napisz wiadomość, a wskażę najprostszy dalszy krok.
+                {publicFlowMessage} Jeśli temat jest pilny, napisz wiadomość, a wskażę najprostszy krok.
               </div>
               <div className="hero-actions">
                 <Link href={buildSlotHref(problem, serviceQuery, qaBooking)} prefetch={false} className="button button-primary big-button">
@@ -100,7 +100,7 @@ export default async function SlotPage({
             </div>
           ) : groupedAvailability.length === 0 ? (
             <div className="stack-gap top-gap slot-state-stack">
-              <div className="empty-box">Teraz nie ma wolnych terminów dla tej ścieżki. Sprawdź później, wybierz inny temat albo napisz wiadomość.</div>
+              <div className="empty-box">Teraz nie ma wolnych terminów dla tej ścieżki. Sprawdź później albo napisz wiadomość.</div>
               <div className="hero-actions">
                 <Link href={buildSlotHref(problem, serviceQuery, qaBooking)} prefetch={false} className="button button-primary big-button">
                   Odśwież terminy
@@ -153,7 +153,7 @@ export default async function SlotPage({
           ctaHref="/kontakt"
           ctaLabel="Potrzebuję pomocy"
           headline="Jeśli żaden termin nie pasuje"
-          description="Napisz wiadomość, jeśli potrzebujesz doprecyzować temat albo sprawdzić inny dalszy krok."
+          description="Napisz wiadomość, jeśli potrzebujesz doprecyzować temat albo sprawdzić kolejny krok."
         />
       </div>
     </main>

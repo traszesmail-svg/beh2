@@ -67,7 +67,7 @@ export default async function OfferDetailPage({ params }: OfferDetailPageProps) 
   const secondarySentence = offer.heroSummary
 
   return (
-    <main className="page-wrap">
+    <main className="page-wrap marketing-page">
       <div className="container">
         <Header />
 

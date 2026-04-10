@@ -1,23 +1,23 @@
 import { ProblemType } from './types'
 
 export const HOME_DOG_QUICK_CHOICE_PHOTO = {
-  src: '/images/case-dog-black.jpg',
-  alt: 'Czarny pies w domowym wnętrzu jako szybki wybór ścieżki dla opiekuna psa',
+  src: '/images/cutover/dog-kitchen-chaos.png',
+  alt: 'Wesoły pies w kuchennym chaosie jako szybki wybór ścieżki dla opiekuna psa',
 }
 
 export const HOME_CAT_QUICK_CHOICE_PHOTO = {
-  src: '/images/case-cat-scratcher.jpg',
-  alt: 'Kot przy drapaku w domowym kadrze jako szybki wybór ścieżki dla opiekuna kota',
+  src: '/images/cutover/home-cat-hidden.png',
+  alt: 'Ukryty kotek pod kanapą jako szybki wybór ścieżki dla opiekuna kota',
 }
 
 export const HOME_HELP_CHOICE_PHOTO = {
-  src: '/branding/topic-cards/cat-in-arms.jpg',
-  alt: 'Kot na rękach jako ilustracja kontaktu, gdy temat jest mieszany albo nie wiesz, od czego zacząć',
+  src: '/images/cutover/home-help-stress.png',
+  alt: 'Zestresowany pies schowany pod łóżkiem jako szybki wybór, gdy temat jest szerszy albo chcesz napisać wiadomość',
 }
 
 export const HOME_HERO_PHOTO = {
-  src: '/branding/omnie-hero.webp',
-  alt: 'Krzysztof Regulski w niebieskim kitlu z kotem na rękach jako główne zdjęcie strony głównej',
+  src: '/images/hero-main.png',
+  alt: 'Krzysztof Regulski trzyma kota na rękach, z ciasteczkiem w dłoni, jako główne zdjęcie strony głównej',
 }
 
 export const SITE_NAME = 'Regulski | Terapia behawioralna'
@@ -51,141 +51,137 @@ export const CONSULTATION_PRICE_COMPARE_COPY =
   'To pierwszy krok w szerszym systemie pracy, jeśli problem wymaga czegoś więcej niż jednej rozmowy.'
 
 export const LANDING_SPECIALIST_PHOTO = {
-  src: '/branding/omnie-hero.webp',
-  alt: 'Krzysztof Regulski w niebieskim kitlu z kotem na rękach jako główne zdjęcie marki Regulski Terapia behawioralna',
+  src: '/images/hero-main.png',
+  alt: 'Krzysztof Regulski trzyma kota na rękach, z ciasteczkiem w dłoni, jako główne zdjęcie marki Regulski Terapia behawioralna',
 }
 
 export const SPECIALIST_PHOTO = LANDING_SPECIALIST_PHOTO
 
 export const SPECIALIST_WIDE_PHOTO = {
-  src: '/branding/specialist-krzysztof-wide.jpg',
-  alt: 'Krzysztof Regulski trzymający kota na rękach w jasnym wnętrzu gabinetowym',
+  src: '/images/cutover/therapy-animals.png',
+  alt: 'Terapia behawioralna dla zwierząt w szerokim kadrze jako ilustracja pracy marki Regulski',
 }
 
 export const SPECIALIST_CAT_SUPPORT_PHOTO = {
-  src: '/branding/specialist-cat-support.jpg',
-  alt: 'Krzysztof Regulski w gabinecie podczas spokojnej pracy z kotem',
+  src: '/images/cutover/cat-kuweta.png',
+  alt: 'Koty w łazience z piaskiem jako ilustracja wsparcia przy kuwecie i zachowaniach toaletowych',
 }
 
 export const SPECIALIST_EXTENDED_START_PHOTO = {
-  src: '/branding/specialist-krzysztof-social.jpg',
-  alt: 'Krzysztof Regulski z kotem w szerokim kadrze jako ilustracja spokojniejszego, rozszerzonego startu',
+  src: '/images/cutover/therapy-animals.png',
+  alt: 'Terapia behawioralna dla zwierząt jako ilustracja spokojniejszego, rozszerzonego startu',
 }
 
 export const SPECIALIST_ONLINE_PHOTO = {
-  src: '/branding/specialist-krzysztof-social.jpg',
-  alt: 'Krzysztof Regulski z kotem w szerokim kadrze jako ilustracja konsultacji online',
+  src: '/images/cutover/therapy-animals.png',
+  alt: 'Terapia behawioralna dla zwierząt jako ilustracja konsultacji online',
 }
 
 export const SITE_OG_IMAGE = {
-  url: '/branding/specialist-krzysztof-social.jpg',
+  url: '/images/cutover/therapy-animals.png',
   width: 1200,
   height: 630,
-  alt: 'Krzysztof Regulski z kotem na szerokim zdjęciu do udostępnień marki Regulski Terapia behawioralna',
+  alt: 'Terapia behawioralna dla zwierząt jako obraz do udostępnień marki Regulski Terapia behawioralna',
 } as const
 
 export const SUPPORTING_SPECIALIST_PHOTO = {
-  src: '/branding/case-dog-rest.jpg',
-  alt: 'Spokojny pies odpoczywający w domowym otoczeniu',
+  src: '/images/cutover/dog-puppy-home.png',
+  alt: 'Wesoły szczeniak w przytulnym salonie jako ilustracja spokojniejszego wsparcia',
 }
 
 export const CAT_HOME_PHOTO = {
-  src: '/branding/case-cat-sofa.jpg',
-  alt: 'Kot odpoczywający w spokojnym domowym otoczeniu jako ilustracja pracy z kuwetą, stresem i relacją w domu',
+  src: '/images/cutover/home-cat-hidden.png',
+  alt: 'Ukryty kotek pod kanapą jako ilustracja pracy z kuwetą, stresem i relacją w domu',
 }
 
 export const CATS_PAGE_PHOTO = {
-  src: '/branding/specialist-krzysztof-vet.jpg',
-  alt: 'Krzysztof Regulski podczas spokojnej pracy z kotem jako ilustracja konsultacji dla kotów',
+  src: '/images/cutover/cat-stress.png',
+  alt: 'Ukryty kotek pod kanapą jako ilustracja kociego startu i wycofania',
 }
 
 export const SPECIALIST_CAT_PHOTO = {
-  src: '/branding/specialist-krzysztof-vet.jpg',
-  alt: 'Krzysztof Regulski podczas spokojnej pracy z kotem jako ilustracja konsultacji behawioralnej i terapii kotów',
+  src: '/images/cutover/cat-conflict.png',
+  alt: 'Kotki w konfliktowej konfrontacji jako ilustracja konsultacji behawioralnej i terapii kotów',
 }
 
 export const THERAPY_PROCESS_PHOTO = {
-  src: '/branding/specialist-krzysztof-vet.jpg',
-  alt: 'Krzysztof Regulski podczas spokojnej pracy z kotem jako ilustracja dłuższego wsparcia',
+  src: '/images/cutover/therapy-animals.png',
+  alt: 'Terapia behawioralna dla zwierząt jako ilustracja dłuższego wsparcia',
 }
 
 export const HOME_VISIT_PHOTO = {
-  src: '/branding/case-dog-home.jpg',
-  alt: 'Pies w swoim domowym otoczeniu jako ilustracja konsultacji prowadzonej w miejscu codziennego funkcjonowania',
+  src: '/images/cutover/dog-kitchen-chaos.png',
+  alt: 'Wesoły pies w kuchennym chaosie jako ilustracja konsultacji prowadzonej w miejscu codziennego funkcjonowania',
 }
 
 export const STAYS_PHOTO = {
-  src: '/branding/case-dog-rest.jpg',
-  alt: 'Spokojny pies odpoczywający w uporządkowanej przestrzeni jako ilustracja pobytów socjalizacyjno-terapeutycznych',
+  src: '/images/cutover/dog-puppy-home.png',
+  alt: 'Wesoły szczeniak w przytulnym salonie jako ilustracja pobytów socjalizacyjno-terapeutycznych',
 }
 
 export const HERO_SUPPORT_IMAGES = [
   {
     id: 'hero-dog',
-    src: '/branding/case-dog-rest.jpg',
-    alt: 'Spokojny pies odpoczywający w jasnym, domowym otoczeniu',
+    src: '/images/cutover/dog-puppy-home.png',
+    alt: 'Wesoły szczeniak w przytulnym salonie jako ilustracja domowego wsparcia',
     label: 'Pies w domowym środowisku',
   },
   {
     id: 'hero-cat',
-    src: '/branding/case-cat-sofa.jpg',
-    alt: 'Kot odpoczywający w jasnym wnętrzu',
+    src: '/images/cutover/home-cat-hidden.png',
+    alt: 'Ukryty kotek pod kanapą jako ilustracja spokojnego startu dla kota',
     label: 'Kot w spokojnym kadrze',
   },
 ] as const
 
 export const CAT_TOPIC_VISUALS = {
   'kot-kuweta': {
-    src: '/branding/topic-cards/cats/cat-bed-peeing.png',
-    alt: 'Kot sikający na łóżko jako ilustracja oddawania moczu poza kuwetą',
+    src: '/images/cutover/cat-kuweta.png',
+    alt: 'Koty w łazience z piaskiem jako ilustracja kuwety i zachowań toaletowych',
   },
   'kot-konflikt': {
-    src: '/branding/topic-cards/cats/cat-intercat-conflict.jpg',
-    alt: 'Dwa koty obserwujące się w napiętym domowym kadrze jako ilustracja konfliktu między kotami',
+    src: '/images/cutover/cat-conflict.png',
+    alt: 'Kotki w konfliktowej konfrontacji jako ilustracja konfliktu między kotami',
   },
   'kot-dotyk': {
-    src: '/branding/topic-cards/cats/cat-touch-defensive.jpg',
-    alt: 'Kot w kontakcie z opiekunem podczas spokojnej pielęgnacji jako ilustracja trudnego dotyku i obrony',
+    src: '/images/cutover/cat-destruction.png',
+    alt: 'Kot w zniszczonym salonie jako ilustracja trudnego dotyku, pielęgnacji i obrony',
   },
   'kot-stres': {
-    src: '/branding/topic-cards/cats/cat-anxious-hiding.jpg',
-    alt: 'Wycofany kot chowający się w domowym kadrze jako ilustracja stresu i napięcia',
+    src: '/images/cutover/cat-stress.png',
+    alt: 'Ukryty kotek pod kanapą jako ilustracja lęku, stresu i wycofania',
   },
   'kot-nocna-wokalizacja': {
-    src: '/branding/topic-cards/cats/cat-night-meowing.jpg',
-    alt: 'Kot aktywny wieczorem w domowym świetle jako ilustracja nocnej wokalizacji i pobudek',
+    src: '/images/cutover/cat-night.png',
+    alt: 'Kot w skoku na śpiącego mężczyznę jako ilustracja nocnej aktywności i rytmu dnia',
   },
 } as const
 
 export const TOPIC_VISUALS: Record<ProblemType, { src: string; alt: string }> = {
   szczeniak: {
-    src: '/branding/topic-cards/puppy-hands.jpg',
-    alt: 'Szczeniak przy dłoni opiekuna jako ilustracja gryzienia rąk i nauki wyciszenia',
-  },
-  kot: {
-    src: '/branding/case-cat-sofa.jpg',
-    alt: 'Kot odpoczywający w domowym otoczeniu jako ilustracja pracy z kuwetą, stresem i zachowaniem',
+    src: '/images/cutover/dog-puppy-home.png',
+    alt: 'Wesoły szczeniak w przytulnym salonie jako ilustracja startu ze szczeniakiem i młodym psem',
   },
   ...CAT_TOPIC_VISUALS,
   separacja: {
-    src: '/branding/topic-cards/dog-window-alone.jpg',
-    alt: 'Pies odpoczywający w domu jako ilustracja zostawania samemu, wyciszenia i pracy nad napięciem',
+    src: '/images/cutover/dog-separation.png',
+    alt: 'Zestresowany pies schowany pod łóżkiem jako ilustracja problemów separacyjnych',
+  },
+  spacer: {
+    src: '/images/cutover/dog-spacer-reactivity.png',
+    alt: 'Pies goniący rowerzystę w lesie jako ilustracja spaceru i reakcji',
   },
   agresja: {
-    src: '/branding/topic-cards/french-bulldog-leash.jpg',
-    alt: 'Buldog francuski na smyczy w napięciu jako ilustracja reaktywności i trudnych spacerów',
+    src: '/images/cutover/dog-resource-guarding.png',
+    alt: 'Pies broniący kości na kanapie jako ilustracja obrony zasobów',
   },
-  niszczenie: {
-    src: '/branding/topic-cards/border-collie-running.jpg',
-    alt: 'Border collie w biegu jako ilustracja pogoni za ruchem i silnego pobudzenia',
-  },
-  dogoterapia: {
-    src: HOME_VISIT_PHOTO.src,
-    alt: 'Spokojny pies w domowym otoczeniu jako ilustracja przygotowania psa do pracy i bezpiecznego planu dogoterapii',
+  pobudzenie: {
+    src: '/images/cutover/dog-pobudzenie.png',
+    alt: 'Piesek grzebiący w śmieciach jako ilustracja pobudzenia i pogoni',
   },
   inne: {
-    src: SPECIALIST_WIDE_PHOTO.src,
-    alt: 'Krzysztof Regulski z kotem jako ilustracja konsultacji przy mieszanym lub nietypowym temacie',
+    src: '/images/cutover/therapy-animals.png',
+    alt: 'Terapia behawioralna dla zwierząt jako ilustracja szerszego lub nietypowego tematu',
   },
 }
 

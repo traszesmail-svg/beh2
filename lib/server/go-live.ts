@@ -47,7 +47,7 @@ function getDataRuntimeGoLiveCheck(): GoLiveCheck {
     state: 'blocked',
     tone: 'attention',
     summary: `Warstwa danych nie jest gotowa do ruchu live: ${data.summary}`,
-    nextStep: 'Ustaw prawidlowy runtime Supabase dla srodowiska live i potwierdz zapis bookingow oraz admina poza local fallback.',
+    nextStep: 'Ustaw prawidłowy runtime Supabase dla środowiska live i potwierdź zapis bookingów oraz admina poza local fallback.',
   }
 }
 
@@ -61,7 +61,7 @@ function getSchemaSyncGoLiveCheck(): GoLiveCheck {
       statusLabel: 'Gotowe',
       state: 'ready',
       tone: 'ready',
-      summary: 'Canonical Supabase schema i rollout migrations sa zsynchronizowane z aktualnym code path.',
+      summary: 'Canonical Supabase schema i rollout migrations są zsynchronizowane z aktualnym code path.',
       nextStep: 'Brak blokera po stronie booking/payment/QA schema.',
     }
   }
@@ -106,8 +106,8 @@ function getAppUrlGoLiveCheck(): GoLiveCheck {
     statusLabel: 'Zablokowane',
     state: 'blocked',
     tone: 'attention',
-    summary: `Publiczny URL nie wyglada na produkcyjny HTTPS endpoint: ${baseUrl}.`,
-    nextStep: 'Ustaw NEXT_PUBLIC_APP_URL na docelowy adres HTTPS uzywany w linkach mailowych i powrotach z platnosci.',
+    summary: `Publiczny URL nie wygląda na produkcyjny HTTPS endpoint: ${baseUrl}.`,
+    nextStep: 'Ustaw NEXT_PUBLIC_APP_URL na docelowy adres HTTPS używany w linkach mailowych i powrotach z płatności.',
   }
 }
 
@@ -169,8 +169,8 @@ export async function getVerifiedDeployReadinessChecks(): Promise<GoLiveCheck[]>
   if (probe.ok) {
     checks[urlCheckIndex] = {
       ...currentUrlCheck,
-      summary: `Publiczny URL aplikacji jest gotowy do linkow zwrotnych i maili: ${baseUrl} (${probe.details}).`,
-      nextStep: 'Brak blokera po stronie publicznego URL i jego dostepnosci HTTP.',
+      summary: `Publiczny URL aplikacji jest gotowy do linków zwrotnych i maili: ${baseUrl} (${probe.details}).`,
+      nextStep: 'Brak blokera po stronie publicznego URL i jego dostępności HTTP.',
     }
 
     return checks
@@ -182,8 +182,8 @@ export async function getVerifiedDeployReadinessChecks(): Promise<GoLiveCheck[]>
     statusLabel: 'Bloker',
     state: 'blocked',
     tone: 'attention',
-    summary: `Publiczny URL nie odpowiada poprawnie dla ruchu zewnetrznego: ${baseUrl} (${probe.details}).`,
-    nextStep: 'Ustaw NEXT_PUBLIC_APP_URL na faktycznie publiczny adres HTTPS bez ochrony 401/SSO i potwierdz go przez npm run live-smoke.',
+    summary: `Publiczny URL nie odpowiada poprawnie dla ruchu zewnętrznego: ${baseUrl} (${probe.details}).`,
+    nextStep: 'Ustaw NEXT_PUBLIC_APP_URL na faktycznie publiczny adres HTTPS bez ochrony 401/SSO i potwierdź go przez npm run live-smoke.',
   }
 
   return checks
@@ -211,8 +211,8 @@ function getCustomerEmailGoLiveCheck(): GoLiveCheck {
       statusLabel: 'Wyłączone',
       state: 'disabled',
       tone: 'attention',
-      summary: 'Maile klienta sa swiadomie wylaczone. Klient bedzie zalezal tylko od strony potwierdzenia.',
-      nextStep: 'Wlacz CUSTOMER_EMAIL_MODE=auto i ustaw zweryfikowany RESEND_FROM_EMAIL, zeby klient dostawal maile poza confirmation page.',
+      summary: 'Maile klienta są świadomie wyłączone. Klient będzie zależał tylko od strony potwierdzenia.',
+      nextStep: 'Włącz CUSTOMER_EMAIL_MODE=auto i ustaw zweryfikowany RESEND_FROM_EMAIL, żeby klient dostawał maile poza confirmation page.',
     }
   }
 
@@ -225,8 +225,8 @@ function getCustomerEmailGoLiveCheck(): GoLiveCheck {
       statusLabel: 'Zablokowane',
       state: 'blocked',
       tone: 'attention',
-      summary: 'Wysylka maili do klientow zewnetrznych jest zablokowana, bo RESEND_FROM_EMAIL nadal korzysta z resend.dev testing mode.',
-      nextStep: 'Zweryfikuj domene nadawcy w Resend i ustaw RESEND_FROM_EMAIL na adres z tej domeny.',
+      summary: 'Wysyłka maili do klientów zewnętrznych jest zablokowana, bo RESEND_FROM_EMAIL nadal korzysta z resend.dev testing mode.',
+      nextStep: 'Zweryfikuj domenę nadawcy w Resend i ustaw RESEND_FROM_EMAIL na adres z tej domeny.',
     }
   }
 
@@ -236,8 +236,8 @@ function getCustomerEmailGoLiveCheck(): GoLiveCheck {
     statusLabel: 'Zablokowane',
     state: 'blocked',
     tone: 'attention',
-    summary: `Wysylka maili do klientow zewnetrznych jest zablokowana: ${issue}.`,
-    nextStep: 'Uzupelnij konfiguracje Resend i powtorz probe wysylki na zewnetrzny adres testowy.',
+    summary: `Wysyłka maili do klientów zewnętrznych jest zablokowana: ${issue}.`,
+    nextStep: 'Uzupełnij konfigurację Resend i powtórz próbę wysyłki na zewnętrzny adres testowy.',
   }
 }
 
@@ -251,8 +251,8 @@ function getPayuGoLiveCheck(): GoLiveCheck {
       statusLabel: 'Gotowe',
       state: 'ready',
       tone: 'ready',
-      summary: 'PayU online jest swiadomie wylaczone. Checkout dziala przez wplate reczna i potwierdzenie na stronie.',
-      nextStep: 'Mozesz wystartowac na platnosci recznej. Po aktywacji produkcyjnego PayU ustaw PAYU_MODE=auto.',
+      summary: 'PayU online jest świadomie wyłączone. Checkout działa przez wpłatę ręczną i potwierdzenie na stronie.',
+      nextStep: 'Możesz wystartować na płatności ręcznej. Po aktywacji produkcyjnego PayU ustaw PAYU_MODE=auto.',
     }
   }
 
@@ -263,8 +263,8 @@ function getPayuGoLiveCheck(): GoLiveCheck {
       statusLabel: 'Zablokowane',
       state: 'blocked',
       tone: 'attention',
-      summary: `Platnosc online PayU jest zablokowana: ${payu.summary}`,
-      nextStep: 'Uzupelnij brakujace zmienne PayU i uruchom npm run payu-smoke.',
+      summary: `Płatność online PayU jest zablokowana: ${payu.summary}`,
+      nextStep: 'Uzupełnij brakujące zmienne PayU i uruchom npm run payu-smoke.',
     }
   }
 
@@ -275,8 +275,8 @@ function getPayuGoLiveCheck(): GoLiveCheck {
       statusLabel: 'Zablokowane',
       state: 'blocked',
       tone: 'attention',
-      summary: 'Platnosc online PayU nadal dziala w trybie testowym, bo PAYU_ENVIRONMENT=sandbox.',
-      nextStep: 'Przelacz PayU na produkcyjne klucze i potwierdz live checkout przez npm run payu-smoke:production przed ruchem live.',
+      summary: 'Płatność online PayU nadal działa w trybie testowym, bo PAYU_ENVIRONMENT=sandbox.',
+      nextStep: 'Przełącz PayU na produkcyjne klucze i potwierdź live checkout przez npm run payu-smoke:production przed ruchem live.',
     }
   }
 
@@ -286,7 +286,7 @@ function getPayuGoLiveCheck(): GoLiveCheck {
     statusLabel: 'Gotowe',
     state: 'ready',
     tone: 'ready',
-    summary: 'Platnosc online PayU jest skonfigurowana dla srodowiska production.',
+    summary: 'Płatność online PayU jest skonfigurowana dla środowiska production.',
     nextStep: 'Brak blokera po stronie konfiguracji PayU.',
   }
 }

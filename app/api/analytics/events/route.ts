@@ -125,6 +125,6 @@ export async function POST(request: Request) {
         error: error instanceof Error ? error.message : String(error),
       }),
     )
-    return NextResponse.json({ error: 'Nie udalo sie zapisac zdarzenia.' }, { status: 500 })
+    return NextResponse.json({ error: 'Nie udało się zapisać zdarzenia.' }, { status: 500 })
   }
 }

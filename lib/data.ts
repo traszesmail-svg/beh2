@@ -1,161 +1,159 @@
 import { AvailabilitySeed, ProblemOption, ProblemType } from './types'
 
-export const problemOptions: ProblemOption[] = [
+const DOG_PROBLEM_OPTIONS_BASE: ProblemOption[] = [
   {
     id: 'szczeniak',
     icon: 'puppy',
     title: 'Szczeniak i młody pies',
-    desc: 'gryzie, skacze i trudno mu się wyciszyć',
-    marketingTitle: 'Szczeniak gryzie ręce, skacze i trudno mu się wyciszyć',
+    desc: 'Gryzienie, skakanie, pobudzenie i trudność z wyciszeniem.',
+    marketingTitle: 'Szczeniak i młody pies',
     marketingDesc:
       'Podgryza dłonie, łapie za nogawki, skacze i w sekundę wkręca się na 200%. To dobry start, gdy w domu zrobiło się za głośno i trudno wrócić do spokoju.',
-    examples: ['buldog francuski gryzie ręce', 'szczeniak łapie za nogawki', 'młody pies nie umie odpuścić'],
-    visualLabel: 'Gryzie i skacze',
-  },
-  {
-    id: 'kot',
-    icon: 'cat',
-    title: 'Kot i trudne zachowania',
-    desc: 'kuweta, napięcie, wokalizacja i trudny kontakt',
-    marketingTitle: 'Kot omija kuwetę, gryzie albo budzi dom po nocy',
-    marketingDesc:
-      'Kuweta, napięcie w domu, trudny dotyk albo konflikt między kotami. Najpierw porządkujemy sygnały i możliwe przyczyny, zamiast zgadywać.',
-    examples: ['kot sika poza kuwetą', 'kot gryzie przy głaskaniu', 'kot atakuje drugiego kota'],
-    visualLabel: 'Kot i dom',
-  },
-  {
-    id: 'kot-kuweta',
-    icon: 'cat',
-    title: 'Kot i kuweta',
-    desc: 'sikanie obok kuwety, omijanie jej albo napięcie przy kuwecie',
-    marketingTitle: 'Kot i kuweta: sikanie poza kuwetą albo nagła zmiana nawyku',
-    marketingDesc:
-      'Najczęstszy start przy kuwecie: omijanie kuwety, napięcie przy zasobach albo sygnały, które trzeba szybko odróżnić od alarmu weterynaryjnego.',
-    examples: ['kot sika poza kuwetą', 'kot omija kuwetę', 'nagła zmiana korzystania z kuwety'],
-    visualLabel: 'Kuweta i dom',
-  },
-  {
-    id: 'kot-konflikt',
-    icon: 'cat',
-    title: 'Konflikt miedzy kotami',
-    desc: 'gonitwy, blokowanie przejść, napięcie przy zasobach i rozjazd relacji',
-    marketingTitle: 'Konflikt między kotami w domu',
-    marketingDesc:
-      'Dla napięcia między kotami, blokowania przejść, gonitw i sygnałów, że wspólne mieszkanie przestaje być spokojne.',
-    examples: ['kot atakuje drugiego kota', 'gonitwy po domu', 'blokowanie kuwety lub miski'],
-    visualLabel: 'Relacja i przestrzeń',
-  },
-  {
-    id: 'kot-dotyk',
-    icon: 'cat',
-    title: 'Dotyk, gryzienie i pielegnacja',
-    desc: 'gryzie przy głaskaniu, noszeniu, pielęgnacji albo prostych zabiegach',
-    marketingTitle: 'Dotyk, gryzienie i pielęgnacja',
-    marketingDesc:
-      'Na start przy trudnym dotyku, obronie przy głaskaniu, noszeniu albo domowych zabiegach pielęgnacyjnych.',
-    examples: ['kot gryzie przy głaskaniu', 'kot nie daje obciąć pazurów', 'kot atakuje przy noszeniu'],
-    visualLabel: 'Dotyk i obrona',
-  },
-  {
-    id: 'kot-stres',
-    icon: 'cat',
-    title: 'Kot lekowy, napiety albo wycofany',
-    desc: 'chowa się, żyje w napięciu albo trudno mu wracać do równowagi',
-    marketingTitle: 'Kot lękowy, napięty albo wycofany',
-    marketingDesc:
-      'Dla kota, który żyje w napięciu, dużo się chowa, źle znosi zmiany albo stale wysyła sygnały przeciążenia.',
-    examples: ['kot chowa się cały dzień', 'kot boi się gości', 'kot po zmianie nie wraca do równowagi'],
-    visualLabel: 'Stres i wycofanie',
-  },
-  {
-    id: 'kot-nocna-wokalizacja',
-    icon: 'cat',
-    title: 'Budzi dom po nocy / nocna wokalizacja',
-    desc: 'miauczy w nocy, budzi dom albo nie potrafi wyhamować po ciemku',
-    marketingTitle: 'Budzi dom po nocy / nocna wokalizacja',
-    marketingDesc:
-      'Nowa kategoria startowa dla nocnego miauczenia, pobudki o świcie i rytmu dnia, który rozsypuje spokój w domu.',
-    examples: ['kot miauczy po nocy', 'kot budzi dom o 4 rano', 'nocne gonitwy i wokalizacja'],
-    visualLabel: 'Noc i rytm dnia',
+    examples: ['szczeniak gryzie ręce', 'szczeniak łapie za nogawki', 'młody pies nie umie odpuścić'],
+    visualLabel: 'Szczeniak',
   },
   {
     id: 'separacja',
     icon: 'home',
-    title: 'Lęk separacyjny',
-    desc: 'wyje, niszczy i źle znosi zostawanie samemu',
-    marketingTitle: 'Gdy zostaje sam, wyje, szczeka albo niszczy',
+    title: 'Problemy separacyjne',
+    desc: 'Wycie, niszczenie, napięcie przy wyjściu i trudność z zostawaniem samemu.',
+    marketingTitle: 'Problemy separacyjne',
     marketingDesc:
-      'Jeśli pies nie radzi sobie po Twoim wyjściu, tu najłatwiej zacząć. Uporządkujemy, co jest napięciem, co rutyną, a co wygląda już jak lęk separacyjny.',
+      'Jeśli pies nie radzi sobie po Twoim wyjściu, tu najłatwiej zacząć. Uporządkujemy, co jest napięciem, co rutyną, a co wygląda już jak problemy separacyjne.',
     examples: ['pies szczeka, gdy zostaje sam', 'pies drapie drzwi po wyjściu', 'nie mogę wyjść z domu bez stresu psa'],
-    visualLabel: 'Zostaje sam',
+    visualLabel: 'Separacja',
+  },
+  {
+    id: 'spacer',
+    icon: 'walking',
+    title: 'Spacer i reakcje',
+    desc: 'Ciągnięcie, szczekanie, rzucanie się i trudne mijanki.',
+    marketingTitle: 'Spacer i reakcje',
+    marketingDesc:
+      'Szczeka, lunguje, warczy albo odpala się przy mijaniu. To kategoria dla reaktywności spacerowej i trudnych spotkań z psami, ludźmi, rowerami albo ruchem ulicznym.',
+    examples: ['pies ciągnie na smyczy', 'pies szczeka na mijane psy', 'pies rzuca się do rowerów'],
+    visualLabel: 'Spacer',
+  },
+  {
+    id: 'pobudzenie',
+    icon: 'spark',
+    title: 'Pobudzenie i pogoń',
+    desc: 'Nakręcanie się, pogoń za ruchem i trudność z wyhamowaniem.',
+    marketingTitle: 'Pobudzenie i pogoń',
+    marketingDesc:
+      'Ruch, pogoń, demolka, ciągłe pobudzenie albo szczekanie z frustracji. Dobry wybór, gdy problemem jest nakręcanie się i brak wyciszenia.',
+    examples: ['border collie goni wszystko', 'pies rzuca się na rowery', 'pies demoluje dom z pobudzenia'],
+    visualLabel: 'Pogoń',
   },
   {
     id: 'agresja',
     icon: 'shield',
-    title: 'Agresja i reakcje obronne',
-    desc: 'warczy, rzuca się albo broni zasobów',
-    marketingTitle: 'Na spacerze napina się, warczy albo rzuca do psów',
+    title: 'Agresja i obrona zasobów',
+    desc: 'Warknięcia, obrona jedzenia, legowiska, zabawek albo przestrzeni.',
+    marketingTitle: 'Agresja i obrona zasobów',
     marketingDesc:
-      'Szczeka, lunguje, warczy albo odpala się przy mijaniu. To kategoria dla reaktywności spacerowej, obrony zasobów i trudnych zachowań wobec ludzi lub zwierząt.',
-    examples: ['owczarek agresywny do psów', 'pies warczy na gości', 'pies broni miski lub kanapy'],
-    visualLabel: 'Trudny spacer',
-  },
-  {
-    id: 'niszczenie',
-    icon: 'spark',
-    title: 'Pobudzenie, pogoń i niszczenie',
-    desc: 'goni, demoluje i trudno mu się zatrzymać',
-    marketingTitle: 'Goni auta, rowery i trudno mu się zatrzymać',
-    marketingDesc:
-      'Ruch, pogoń, demolka, ciągłe pobudzenie albo szczekanie z frustracji. Dobry wybór, gdy problemem jest nakręcanie się i brak wyciszenia.',
-    examples: ['border collie goni wszystko', 'pies rzuca się na rowery', 'pies demoluje dom z pobudzenia'],
-    visualLabel: 'Pogoń i pobudzenie',
-  },
-  {
-    id: 'dogoterapia',
-    icon: 'heart-paw',
-    title: 'Dogoterapia',
-    desc: 'rozmowa o celu, bezpieczeństwie i starcie z psem',
-    marketingTitle: 'Dogoterapia i przygotowanie psa do spokojnej pracy',
-    marketingDesc:
-      'Pierwsza rozmowa o celu spotkań, odbiorcach, bezpieczeństwie i tym, jak ułożyć sensowny plan bez przeciążania psa.',
-    examples: ['pierwsza rozmowa o spotkaniach', 'przygotowanie psa do pracy', 'jak ułożyć bezpieczny plan'],
-    visualLabel: 'Praca z psem',
-  },
-  {
-    id: 'inne',
-    icon: 'compass',
-    title: 'Inny temat do omówienia',
-    desc: 'temat mieszany albo nietypowy',
-    marketingTitle: 'Nie widzisz tu swojego przypadku?',
-    marketingDesc:
-      'Wybierz to, jeśli temat jest mieszany, zmienia się w czasie albo po prostu chcesz opisać go po swojemu przed rozmową.',
-    examples: ['temat mieszany', 'dziwne zachowanie w domu', 'nie wiem, od czego zacząć'],
-    visualLabel: 'Temat mieszany',
+      'Kategoria dla reakcji obronnych, ochrony jedzenia, legowiska, zabawek albo przestrzeni. Pomaga oddzielić napięcie od samego zachowania.',
+    examples: ['pies warczy przy misce', 'pies broni kanapy', 'pies rzuca się przy dotyku'],
+    visualLabel: 'Obrona',
   },
 ]
 
-export const CAT_PROBLEM_OPTIONS: ProblemOption[] = problemOptions.filter((option) => option.id.startsWith('kot-'))
+const CAT_PROBLEM_OPTIONS_BASE: ProblemOption[] = [
+  {
+    id: 'kot-kuweta',
+    icon: 'cat',
+    title: 'Kuweta i zachowania toaletowe',
+    desc: 'Sikanie poza kuwetą, omijanie kuwety albo napięcie wokół toalety.',
+    marketingTitle: 'Kuweta i zachowania toaletowe',
+    marketingDesc:
+      'Najczęstszy start przy kuwecie: omijanie kuwety, napięcie przy zasobach albo sygnały, które trzeba szybko odróżnić od alarmu weterynaryjnego.',
+    examples: ['kot sika poza kuwetą', 'kot omija kuwetę', 'nagła zmiana korzystania z kuwety'],
+    visualLabel: 'Kuweta',
+  },
+  {
+    id: 'kot-konflikt',
+    icon: 'cat',
+    title: 'Konflikt między kotami',
+    desc: 'Gonitwy, blokowanie przejść, napięcie przy zasobach i trudna relacja.',
+    marketingTitle: 'Konflikt między kotami',
+    marketingDesc:
+      'Dla napięcia między kotami, blokowania przejść, gonitw i sygnałów, że wspólne mieszkanie przestaje być spokojne.',
+    examples: ['kot atakuje drugiego kota', 'gonitwy po domu', 'blokowanie kuwety lub miski'],
+    visualLabel: 'Konflikt',
+  },
+  {
+    id: 'kot-dotyk',
+    icon: 'cat',
+    title: 'Dotyk, pielęgnacja i obrona',
+    desc: 'Gryzienie przy dotyku, obrona przy zabiegach i trudna pielęgnacja.',
+    marketingTitle: 'Dotyk, pielęgnacja i obrona',
+    marketingDesc:
+      'Na start przy trudnym dotyku, obronie przy głaskaniu, noszeniu albo domowych zabiegach pielęgnacyjnych.',
+    examples: ['kot gryzie przy głaskaniu', 'kot nie daje obciąć pazurów', 'kot atakuje przy noszeniu'],
+    visualLabel: 'Dotyk',
+  },
+  {
+    id: 'kot-stres',
+    icon: 'cat',
+    title: 'Lęk, stres i wycofanie',
+    desc: 'Chowanie się, napięcie po zmianach i trudność z powrotem do spokoju.',
+    marketingTitle: 'Lęk, stres i wycofanie',
+    marketingDesc:
+      'Dla kota, który żyje w napięciu, dużo się chowa, źle znosi zmiany albo stale wysyła sygnały przeciążenia.',
+    examples: ['kot chowa się cały dzień', 'kot boi się gości', 'kot po zmianie nie wraca do równowagi'],
+    visualLabel: 'Stres',
+  },
+  {
+    id: 'kot-nocna-wokalizacja',
+    icon: 'cat',
+    title: 'Nocna aktywność i rytm dnia',
+    desc: 'Miauczenie w nocy, pobudki o świcie i rozsypany rytm domu.',
+    marketingTitle: 'Nocna aktywność i rytm dnia',
+    marketingDesc:
+      'Dla nocnego miauczenia, pobudek o świcie i rytmu dnia, który rozsypuje spokój w domu.',
+    examples: ['kot miauczy po nocy', 'kot budzi dom o 4 rano', 'nocne gonitwy i wokalizacja'],
+    visualLabel: 'Noc',
+  },
+]
 
-export const DOG_PROBLEM_OPTIONS: ProblemOption[] = problemOptions.filter(
-  (option) => option.id !== 'kot' && !option.id.startsWith('kot-'),
-)
+const MISC_PROBLEM_OPTION: ProblemOption = {
+  id: 'inne',
+  icon: 'compass',
+  title: 'Inny problem lub temat pokrewny',
+  desc: 'Jeśli problem nie pasuje dokładnie do powyższych kategorii.',
+  marketingTitle: 'Inny problem lub temat pokrewny',
+  marketingDesc:
+    'Wybierz to, jeśli temat jest szerszy, łączy kilka wątków albo chcesz opisać go po swojemu przed rozmową.',
+  examples: ['temat szerszy', 'kilka problemów naraz', 'chcę opisać po swojemu'],
+  visualLabel: 'Temat szerszy',
+}
+
+const LEGACY_PROBLEM_LABELS: Record<string, string> = {
+  kot: 'Kot',
+  niszczenie: 'Pobudzenie i pogoń',
+}
+
+export const problemOptions: ProblemOption[] = [...DOG_PROBLEM_OPTIONS_BASE, ...CAT_PROBLEM_OPTIONS_BASE, MISC_PROBLEM_OPTION]
+
+export const CAT_PROBLEM_OPTIONS: ProblemOption[] = CAT_PROBLEM_OPTIONS_BASE
+
+export const DOG_PROBLEM_OPTIONS: ProblemOption[] = [...DOG_PROBLEM_OPTIONS_BASE, MISC_PROBLEM_OPTION]
 
 export const steps = [
   {
     n: '01',
     title: 'Wybierasz temat',
-    desc: 'Określasz, czego dotyczy trudność, i od razu przechodzisz do właściwego wejścia w rezerwację.',
+    desc: 'Na spokojnie wskazujesz, czego dotyczy sytuacja.',
   },
   {
     n: '02',
-    title: 'Wybierasz termin i finalizujesz zakup',
-    desc: 'Widzisz realne sloty, podajesz krótki opis problemu i przechodzisz do płatności lub zgłoszenia wpłaty.',
+    title: 'Widzisz, co dalej',
+    desc: 'Od razu wiesz, czy kolejnym ruchem jest termin, wiadomość czy materiał PDF.',
   },
   {
     n: '03',
-    title: 'Dostajesz potwierdzenie i link do rozmowy',
-    desc: 'Po opłaceniu lub potwierdzeniu wpłaty widzisz link do rozmowy, materiały przygotowawcze i dalsze kroki.',
+    title: 'Masz jasne potwierdzenie',
+    desc: 'Po płatności albo kontakcie zostaje czytelny punkt startu i mniej chaosu.',
   },
 ]
 
@@ -293,12 +291,12 @@ export function isCallRoomUnlocked(
   return getSecondsUntilRoomUnlock(bookingDate, bookingTime, now) <= 0
 }
 
-export function getProblemLabel(problem: ProblemType): string {
-  return problemOptions.find((item) => item.id === problem)?.title ?? 'Konsultacja'
+export function getProblemLabel(problem: string): string {
+  return problemOptions.find((item) => item.id === problem)?.title ?? LEGACY_PROBLEM_LABELS[problem] ?? 'Konsultacja'
 }
 
-export function isCatProblemType(value: ProblemType | null | undefined): value is ProblemType {
-  return value === 'kot' || CAT_PROBLEM_OPTIONS.some((option) => option.id === value)
+export function isCatProblemType(value: string | null | undefined): value is ProblemType {
+  return CAT_PROBLEM_OPTIONS.some((option) => option.id === value)
 }
 
 export function getBookingStatusLabel(

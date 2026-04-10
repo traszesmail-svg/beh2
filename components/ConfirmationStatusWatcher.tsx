@@ -109,8 +109,8 @@ export function ConfirmationStatusWatcher({
     <div className="top-gap stack-gap">
       <div className="list-card accent-outline tree-backed-card">
         <strong>Sprawdzamy status automatycznie</strong>
-        <span>Ta strona odswieza sie sama co kilka sekund. Po potwierdzeniu wplaty od razu pokaze pokoj rozmowy i kolejny krok.</span>
-        <span>{isRefreshing ? 'Aktualizuje status...' : `Kolejne sprawdzenie za ok. ${secondsUntilRefresh} s.`}</span>
+        <span>Ta strona odświeża się sama co kilka sekund. Po potwierdzeniu wpłaty od razu pokaże pokój rozmowy i kolejny krok.</span>
+        <span>{isRefreshing ? 'Aktualizuję status...' : `Kolejne sprawdzenie za ok. ${secondsUntilRefresh} s.`}</span>
       </div>
 
       {pollWarning ? (

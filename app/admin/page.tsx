@@ -193,7 +193,7 @@ export default async function AdminPage() {
             <div className="section-eyebrow">Go-live</div>
             <h2>Stan go-live</h2>
             <p className="muted paragraph-gap">
-              Te karty pokazuja, czy customer email i PayU sa aktywnie wlaczone. Gdy sa celowo wylaczone, live dziala na manual payment.
+              Te karty pokazują, czy customer email i PayU są aktywnie włączone. Gdy są celowo wyłączone, live działa na manual payment.
             </p>
             <div className="summary-grid">
               {goLiveChecks.map((check) => (

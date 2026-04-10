@@ -234,7 +234,7 @@ export function getCustomerEmailDeliveryStatus(recipientEmail?: string | null): 
       state: 'blocked',
       mode: 'invalid',
       issue: `CUSTOMER_EMAIL_MODE has invalid value "${modeConfig.raw}".`,
-      summary: 'Tryb maili klienta jest zablokowany, bo CUSTOMER_EMAIL_MODE ma nieprawidlowa wartosc.',
+      summary: 'Tryb maili klienta jest zablokowany, bo CUSTOMER_EMAIL_MODE ma nieprawidłową wartość.',
       nextStep: 'Ustaw CUSTOMER_EMAIL_MODE=auto albo CUSTOMER_EMAIL_MODE=disabled.',
     }
   }
@@ -245,9 +245,9 @@ export function getCustomerEmailDeliveryStatus(recipientEmail?: string | null): 
       mode: 'disabled',
       issue: 'CUSTOMER_EMAIL_MODE=disabled',
       summary:
-        'Maile klienta sa swiadomie wylaczone. Status platnosci, materialy i link do rozmowy pozostaja na stronie potwierdzenia rezerwacji.',
+        'Maile klienta są świadomie wyłączone. Status płatności, materiały i link do rozmowy pozostają na stronie potwierdzenia rezerwacji.',
       nextStep:
-        'Zostaw ten tryb tymczasowo albo po weryfikacji domeny nadawcy przelacz CUSTOMER_EMAIL_MODE=auto i ustaw RESEND_FROM_EMAIL na zweryfikowany adres.',
+        'Zostaw ten tryb tymczasowo albo po weryfikacji domeny nadawcy przełącz CUSTOMER_EMAIL_MODE=auto i ustaw RESEND_FROM_EMAIL na zweryfikowany adres.',
     }
   }
 
@@ -256,7 +256,7 @@ export function getCustomerEmailDeliveryStatus(recipientEmail?: string | null): 
       state: 'blocked',
       mode: 'auto',
       issue: 'MAIL_PROVIDER invalid',
-      summary: 'Wysylka maili do klientow jest zablokowana, bo MAIL_PROVIDER ma nieprawidlowa wartosc.',
+      summary: 'Wysyłka maili do klientów jest zablokowana, bo MAIL_PROVIDER ma nieprawidłową wartość.',
       nextStep: 'Ustaw MAIL_PROVIDER=resend albo MAIL_PROVIDER=gmail.',
     }
   }
@@ -267,8 +267,8 @@ export function getCustomerEmailDeliveryStatus(recipientEmail?: string | null): 
         state: 'blocked',
         mode: 'auto',
         issue: 'GMAIL_SMTP_USER missing',
-        summary: 'Wysylka maili do klientow jest zablokowana, bo brakuje GMAIL_SMTP_USER.',
-        nextStep: 'Ustaw GMAIL_SMTP_USER i powtorz probe wysylki.',
+        summary: 'Wysyłka maili do klientów jest zablokowana, bo brakuje GMAIL_SMTP_USER.',
+        nextStep: 'Ustaw GMAIL_SMTP_USER i powtórz próbę wysyłki.',
       }
     }
 
@@ -277,7 +277,7 @@ export function getCustomerEmailDeliveryStatus(recipientEmail?: string | null): 
         state: 'blocked',
         mode: 'auto',
         issue: 'GMAIL_SMTP_APP_PASSWORD missing',
-        summary: 'Wysylka maili do klientow jest zablokowana, bo brakuje GMAIL_SMTP_APP_PASSWORD.',
+        summary: 'Wysyłka maili do klientów jest zablokowana, bo brakuje GMAIL_SMTP_APP_PASSWORD.',
         nextStep: 'Wygeneruj Gmail App Password i ustaw GMAIL_SMTP_APP_PASSWORD.',
       }
     }
@@ -287,8 +287,8 @@ export function getCustomerEmailDeliveryStatus(recipientEmail?: string | null): 
         state: 'blocked',
         mode: 'auto',
         issue: 'GMAIL_FROM_EMAIL missing or invalid',
-        summary: 'Wysylka maili do klientow jest zablokowana, bo GMAIL_FROM_EMAIL jest pusty albo nieprawidlowy.',
-        nextStep: 'Ustaw poprawny adres nadawcy w GMAIL_FROM_EMAIL albo uzyj poprawnego GMAIL_SMTP_USER.',
+        summary: 'Wysyłka maili do klientów jest zablokowana, bo GMAIL_FROM_EMAIL jest pusty albo nieprawidłowy.',
+        nextStep: 'Ustaw poprawny adres nadawcy w GMAIL_FROM_EMAIL albo użyj poprawnego GMAIL_SMTP_USER.',
       }
     }
 
@@ -296,7 +296,7 @@ export function getCustomerEmailDeliveryStatus(recipientEmail?: string | null): 
       state: 'ready',
       mode: 'auto',
       issue: null,
-      summary: 'Wysylka maili do klientow zewnetrznych jest gotowa z aktualnej konfiguracji Gmail SMTP.',
+      summary: 'Wysyłka maili do klientów zewnętrznych jest gotowa z aktualnej konfiguracji Gmail SMTP.',
       nextStep: 'Brak blokera po stronie konfiguracji maili klienta.',
     }
   }
@@ -306,8 +306,8 @@ export function getCustomerEmailDeliveryStatus(recipientEmail?: string | null): 
       state: 'blocked',
       mode: 'auto',
       issue: 'RESEND_API_KEY missing',
-      summary: 'Wysylka maili do klientow jest zablokowana, bo brakuje RESEND_API_KEY.',
-      nextStep: 'Uzupelnij RESEND_API_KEY i powtorz probe wysylki na zewnetrzny adres testowy.',
+      summary: 'Wysyłka maili do klientów jest zablokowana, bo brakuje RESEND_API_KEY.',
+      nextStep: 'Uzupełnij RESEND_API_KEY i powtórz próbę wysyłki na zewnętrzny adres testowy.',
     }
   }
 
@@ -316,7 +316,7 @@ export function getCustomerEmailDeliveryStatus(recipientEmail?: string | null): 
       state: 'blocked',
       mode: 'auto',
       issue: 'RESEND_FROM_EMAIL missing or invalid',
-      summary: 'Wysylka maili do klientow jest zablokowana, bo RESEND_FROM_EMAIL jest pusty albo nieprawidlowy.',
+      summary: 'Wysyłka maili do klientów jest zablokowana, bo RESEND_FROM_EMAIL jest pusty albo nieprawidłowy.',
       nextStep: 'Ustaw poprawny adres nadawcy w RESEND_FROM_EMAIL.',
     }
   }
@@ -326,7 +326,7 @@ export function getCustomerEmailDeliveryStatus(recipientEmail?: string | null): 
       state: 'blocked',
       mode: 'auto',
       issue: 'RESEND_FROM_EMAIL missing or invalid',
-      summary: 'Wysylka maili do klientow jest zablokowana, bo RESEND_FROM_EMAIL jest pusty albo nieprawidlowy.',
+      summary: 'Wysyłka maili do klientów jest zablokowana, bo RESEND_FROM_EMAIL jest pusty albo nieprawidłowy.',
       nextStep: 'Ustaw poprawny adres nadawcy w RESEND_FROM_EMAIL.',
     }
   }
@@ -336,7 +336,7 @@ export function getCustomerEmailDeliveryStatus(recipientEmail?: string | null): 
       state: 'ready',
       mode: 'auto',
       issue: null,
-      summary: 'Wysylka maili do klientow zewnetrznych jest gotowa z aktualnej konfiguracji Resend.',
+      summary: 'Wysyłka maili do klientów zewnętrznych jest gotowa z aktualnej konfiguracji Resend.',
       nextStep: 'Brak blokera po stronie konfiguracji maili klienta.',
     }
   }
@@ -349,7 +349,7 @@ export function getCustomerEmailDeliveryStatus(recipientEmail?: string | null): 
       state: 'ready',
       mode: 'auto',
       issue: null,
-      summary: 'Wysylka maili do klientow zewnetrznych jest gotowa z aktualnej konfiguracji Resend.',
+      summary: 'Wysyłka maili do klientów zewnętrznych jest gotowa z aktualnej konfiguracji Resend.',
       nextStep: 'Brak blokera po stronie konfiguracji maili klienta.',
     }
   }
@@ -360,7 +360,7 @@ export function getCustomerEmailDeliveryStatus(recipientEmail?: string | null): 
     issue: allowedRecipient
       ? `RESEND_FROM_EMAIL uses resend.dev testing mode. Verify a domain to send customer emails to recipients other than ${allowedRecipient}.`
       : 'RESEND_FROM_EMAIL uses resend.dev testing mode. Verify a domain to send customer emails to external recipients.',
-    summary: 'Wysylka maili do klientow zewnetrznych jest zablokowana, bo RESEND_FROM_EMAIL nadal korzysta z resend.dev testing mode.',
+    summary: 'Wysyłka maili do klientów zewnętrznych jest zablokowana, bo RESEND_FROM_EMAIL nadal korzysta z resend.dev testing mode.',
     nextStep: 'Zweryfikuj domene nadawcy w Resend i ustaw RESEND_FROM_EMAIL na adres z tej domeny.',
   }
 }
@@ -417,7 +417,7 @@ function renderEmailShell(title: string, intro: string, content: string, outro: 
           <p style="margin-top:0;">${escapeHtml(intro)}</p>
           ${content}
           <p>${escapeHtml(outro)}</p>
-          <p style="margin-bottom:0;color:#6b625b;font-size:13px;">WiadomoÄąâ€şĂ„â€ˇ wysÄąâ€šana automatycznie przez Behawior 15.</p>
+          <p style="margin-bottom:0;color:#6b625b;font-size:13px;">Wiadomość wysłana automatycznie przez Behawior 15.</p>
         </div>
       </div>
     </div>
@@ -651,6 +651,7 @@ export type ContactLeadSubmission = {
   message: string
   contextLabel: string
   bookingId?: string | null
+  website?: string | null
 }
 
 export async function sendContactLeadEmail(submission: ContactLeadSubmission): Promise<DeliveryResult> {
@@ -664,6 +665,8 @@ export async function sendContactLeadEmail(submission: ContactLeadSubmission): P
   }
 
   const subject = `Kontakt - ${submission.topic} - ${submission.name}`
+  const contactValue = submission.email.trim()
+  const replyTo = isValidPublicEmail(contactValue) ? contactValue : undefined
   const contextBlock = submission.bookingId
     ? `<p><strong>Numer rezerwacji:</strong> ${escapeHtml(submission.bookingId)}</p>`
     : ''
@@ -672,23 +675,23 @@ export async function sendContactLeadEmail(submission: ContactLeadSubmission): P
     'Ktos wyslal wiadomosc przez formularz kontaktowy. To jest pierwszy krok do odpowiedzi i uporzadkowania kolejnego ruchu.',
     `
       <p><strong>Imie:</strong> ${escapeHtml(submission.name)}</p>
-      <p><strong>Email:</strong> <a href="mailto:${escapeHtml(submission.email)}">${escapeHtml(submission.email)}</a></p>
+      <p><strong>Kontakt:</strong> ${replyTo ? `<a href="mailto:${escapeHtml(contactValue)}">${escapeHtml(contactValue)}</a>` : escapeHtml(contactValue)}</p>
       <p><strong>Temat:</strong> ${escapeHtml(submission.topic)}</p>
       <p><strong>Kontekst:</strong> ${escapeHtml(submission.contextLabel)}</p>
       ${contextBlock}
       <p><strong>Wiadomosc:</strong><br />${formatMultilineHtml(submission.message)}</p>
     `,
-    'Odpowiedz na podany adres e-mail albo wroc do kontaktu, jesli potrzebujesz doprecyzowac szczegoly.',
+    'Odpowiedz na podany adres e-mail albo wróć do kontaktu, jeśli potrzebujesz doprecyzować szczegóły.',
   )
   const text = [
     'Nowa wiadomosc z formularza kontaktu.',
     `Imie: ${submission.name}`,
-    `Email: ${submission.email}`,
+    `Kontakt: ${contactValue}`,
     `Temat: ${submission.topic}`,
     `Kontekst: ${submission.contextLabel}`,
     submission.bookingId ? `Numer rezerwacji: ${submission.bookingId}` : null,
     `Wiadomosc: ${submission.message}`,
-    'Odpowiedz na podany adres e-mail albo wroc do kontaktu, jesli potrzebujesz doprecyzowac szczegoly.',
+    'Odpowiedz na podany adres e-mail albo wróć do kontaktu, jeśli potrzebujesz doprecyzować szczegóły.',
   ]
     .filter((line): line is string => typeof line === 'string' && line.length > 0)
     .join('\n')
@@ -699,7 +702,7 @@ export async function sendContactLeadEmail(submission: ContactLeadSubmission): P
       subject,
       html,
       text,
-      replyTo: submission.email,
+      replyTo,
     },
     'internal',
   )

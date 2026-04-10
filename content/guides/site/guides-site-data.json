@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-28T04:10:15.926Z",
+  "generatedAt": "2026-04-10T07:09:50.714Z",
   "listing": {
     "routePath": "/oferta/poradniki-pdf",
     "pagePath": "content/guides/site/pages/index.html"
@@ -10,17 +10,24 @@
     "lead": "Lista konkretnych tematów i pakietów dla opiekunów psów i kotów, którzy chcą zacząć od uporządkowanego materiału albo dobrać spokojny pierwszy krok przed konsultacją."
   },
   "featuredSlugs": [
-    "pies-zostaje-sam-plan-pierwszych-krokow",
-    "szczeniak-pierwsze-30-dni",
-    "kot-i-kuweta-pierwszy-plan-dzialania",
-    "kot-stres-srodowisko-i-bledy-opiekuna"
+    "czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2",
+    "szczeniak_gryzie_i_skacze_v2",
+    "pies_zostaje_sam_i_wpada_w_panike_v2",
+    "pies_do_pracy_z_ludzmi_v2"
   ],
   "guideGroups": {
     "dog": [
-      "pies-zostaje-sam-plan-pierwszych-krokow",
-      "szczeniak-pierwsze-30-dni",
-      "pies-reaktywny-na-spacerze",
-      "pies-boi-sie-gosci-i-dzwiekow"
+      "czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2",
+      "szczeniak_gryzie_i_skacze_v2",
+      "trudny_spacer_v2",
+      "pies_niszczy_w_domu_v2",
+      "pies_szczeka_na_gosci_i_dzwonek_v2",
+      "szczeniak_nie_umie_sie_wyciszyc_v2",
+      "dlaczego_pies_glupieje_na_smyczy_v2",
+      "pies_zostaje_sam_i_wpada_w_panike_v2",
+      "pies_broni_zasobow_v2",
+      "pogon_demolka_i_brak_hamulcow_v2",
+      "pies_do_pracy_z_ludzmi_v2"
     ],
     "cat": [
       "kot-stres-srodowisko-i-bledy-opiekuna",
@@ -562,6 +569,783 @@
       "excerpt": [
         "Ten poradnik jest dla opiekunów kotów, które źle znoszą głaskanie, chwytanie, podnoszenie, czesanie, obcinanie pazurów albo proste procedury pielęgnacyjne. To materiał dla osób, które chcą odróżnić niechęć do konkretnego typu kontaktu od szerszego problemu stresowego lub bólowego.",
         "Kot może lubić człowieka i jednocześnie nie tolerować pewnych form dotyku. Może sam przychodzić po kontakt, ale źle znosić zbyt długie sesje, chwytanie z góry, dotyk w konkretnym miejscu albo pielęgnację bez przygotowania. Reakcja obronna nie bierze się znikąd. Zwykle wcześniej pojawiają się subtelne sygnały: odwrócenie głowy, napięcie ciała, ruch ogona, uszu i skrócenie dystansu do ucieczki."
+      ]
+    },
+    {
+      "slug": "czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2",
+      "title": "Czy Twój pies naprawdę potrzebuje więcej ruchu?",
+      "subtitle": "Prawda o pobudzeniu, które nie schodzi po spacerze",
+      "role_in_funnel": "lead_magnet",
+      "audience": "Opiekun psa, który widzi nakręcanie po aktywności, słaby odpoczynek i trudność z zejściem z pobudzenia.",
+      "valuePromise": "Szerokie wejście do psiego lejka PDF. Materiał obala mit „więcej ruchu = rozwiązanie” i prowadzi do właściwej ścieżki.",
+      "format": "PDF A4, druk domowy, kolor",
+      "accessType": "lead magnet",
+      "pricing": "0 zł",
+      "mainPromise": "Szeroki PDF wejściowy o pobudzeniu, regeneracji i tym, kiedy więcej aktywności tylko dokręca problem.",
+      "status": "ready",
+      "relatedService": "szybka konsultacja 15 min",
+      "difficulty": "początkujący",
+      "estimatedReadingTime": 12,
+      "pageCount": 10,
+      "description": "Szerokie wejście do psiego lejka PDF. Materiał obala mit „więcej ruchu = rozwiązanie” i prowadzi do właściwej ścieżki.",
+      "sourcePath": "content/guides/items/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2/guide.md",
+      "pdfPath": "content/guides/pdf/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.pdf",
+      "coverPath": "content/guides/covers/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.svg",
+      "category": "dog",
+      "kind": "main",
+      "palette": {
+        "primary": "#5B3A29",
+        "secondary": "#A56A43",
+        "accent": "#D88F5A",
+        "ink": "#251B16",
+        "paper": "#F7F1E9"
+      },
+      "routePath": "/oferta/poradniki-pdf/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2",
+      "pagePath": "content/guides/site/pages/guides/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.html",
+      "pageHref": "guides/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.html",
+      "pdfFileName": "czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.pdf",
+      "coverFileName": "czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.svg",
+      "pdfHrefFromListing": "../../pdf/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.pdf",
+      "pdfHrefFromPage": "../../../pdf/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.pdf",
+      "coverHrefFromListing": "../../covers/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.svg",
+      "coverHrefFromPage": "../../../covers/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.svg",
+      "website_card": {
+        "eyebrow": "Darmowy start",
+        "headline": "Czy Twój pies naprawdę potrzebuje więcej ruchu?",
+        "subline": "Szeroki PDF wejściowy o pobudzeniu, regeneracji i tym, kiedy więcej aktywności tylko dokręca problem.",
+        "cta": "Pobierz darmowy PDF"
+      },
+      "next_steps": [
+        "Szczeniak gryzie i skacze?",
+        "Szczeniak nie umie się wyciszyć?",
+        "Trudny spacer",
+        "Dlaczego pies „głupieje” na smyczy?",
+        "Pogoń, demolka i brak hamulców?",
+        "Konsultacja 15 min"
+      ],
+      "must_have_blocks": [
+        "Dla kogo",
+        "Co znajdziesz w środku",
+        "Najkrócej",
+        "Kiedy ten materiał zwykle wystarcza",
+        "Kiedy lepsza będzie konsultacja",
+        "Co dalej / routing"
+      ],
+      "notes_for_offer": "Na stronie pokazuj wysoko jako darmowy start. Nie sprzedawaj go jako równorzędnego z core PDF-ami.",
+      "toc": [
+        "Dla kogo",
+        "Co znajdziesz w środku",
+        "Najkrócej",
+        "Kiedy ten materiał zwykle wystarcza",
+        "Kiedy lepsza będzie konsultacja",
+        "Co dalej / routing"
+      ],
+      "excerpt": [
+        "Ten materiał jest dla opiekunów psów, które po spacerze nie schodzą z pobudzenia, a problem wygląda bardziej na przeciążenie niż na samą potrzebę ruchu.",
+        "Jeśli po lekturze widać, że pobudzenie, samotność, spacer albo szczeniak mieszają się ze sobą, łatwiej wybrać kolejny PDF, pakiet albo konsultację bez losowego testowania wszystkiego naraz."
+      ]
+    },
+    {
+      "slug": "szczeniak_gryzie_i_skacze_v2",
+      "title": "Szczeniak gryzie i skacze?",
+      "subtitle": "Jak odróżnić typowe zachowanie rozwojowe od przeciążenia i braku planu",
+      "role_in_funnel": "starter",
+      "audience": "Opiekun szczeniaka lub młodego psa, który widzi podgryzanie, skakanie, łapanie rąk i chaos przy pobudzeniu.",
+      "valuePromise": "Pierwszy płatny PDF w ścieżce szczeniaka. Ma szybko wyjaśnić problem, dać prosty plan 14 dni i skierować dalej do core o wyciszeniu albo do konsultacji.",
+      "format": "PDF A4, druk domowy, kolor",
+      "accessType": "low-ticket",
+      "pricing": "49 zł",
+      "mainPromise": "Praktyczny PDF o podgryzaniu, skakaniu, frustracji i pierwszym domowym planie pracy.",
+      "status": "ready",
+      "relatedService": "szybka konsultacja 15 min",
+      "difficulty": "początkujący",
+      "estimatedReadingTime": 13,
+      "pageCount": 11,
+      "description": "Pierwszy płatny PDF w ścieżce szczeniaka. Ma szybko wyjaśnić problem, dać prosty plan 14 dni i skierować dalej do core o wyciszeniu albo do konsultacji.",
+      "sourcePath": "content/guides/items/szczeniak_gryzie_i_skacze_v2/guide.md",
+      "pdfPath": "content/guides/pdf/szczeniak_gryzie_i_skacze_v2.pdf",
+      "coverPath": "content/guides/covers/szczeniak_gryzie_i_skacze_v2.svg",
+      "category": "dog",
+      "kind": "main",
+      "palette": {
+        "primary": "#405B37",
+        "secondary": "#6F8A53",
+        "accent": "#8DAE6E",
+        "ink": "#1D2418",
+        "paper": "#F4F4EE"
+      },
+      "routePath": "/oferta/poradniki-pdf/szczeniak_gryzie_i_skacze_v2",
+      "pagePath": "content/guides/site/pages/guides/szczeniak_gryzie_i_skacze_v2.html",
+      "pageHref": "guides/szczeniak_gryzie_i_skacze_v2.html",
+      "pdfFileName": "szczeniak_gryzie_i_skacze_v2.pdf",
+      "coverFileName": "szczeniak_gryzie_i_skacze_v2.svg",
+      "pdfHrefFromListing": "../../pdf/szczeniak_gryzie_i_skacze_v2.pdf",
+      "pdfHrefFromPage": "../../../pdf/szczeniak_gryzie_i_skacze_v2.pdf",
+      "coverHrefFromListing": "../../covers/szczeniak_gryzie_i_skacze_v2.svg",
+      "coverHrefFromPage": "../../../covers/szczeniak_gryzie_i_skacze_v2.svg",
+      "website_card": {
+        "eyebrow": "Starter PDF",
+        "headline": "Szczeniak gryzie i skacze?",
+        "subline": "Praktyczny PDF o podgryzaniu, skakaniu, frustracji i pierwszym domowym planie pracy.",
+        "cta": "Kup PDF"
+      },
+      "next_steps": [
+        "Szczeniak nie umie się wyciszyć?",
+        "Trudny spacer",
+        "Konsultacja 15 min"
+      ],
+      "must_have_blocks": [
+        "Dla kogo",
+        "Co znajdziesz w środku",
+        "Najkrócej",
+        "Kiedy ten materiał zwykle wystarcza",
+        "Kiedy lepsza będzie konsultacja",
+        "Co dalej / routing"
+      ],
+      "notes_for_offer": "Na stronie pokazuj jako objawowy starter. Nie mieszaj go z core; ten materiał sprzedaje pierwszy, widoczny problem.",
+      "toc": [
+        "Dla kogo",
+        "Co znajdziesz w środku",
+        "Najkrócej",
+        "Kiedy ten materiał zwykle wystarcza",
+        "Kiedy lepsza będzie konsultacja",
+        "Co dalej / routing"
+      ],
+      "excerpt": [
+        "Ten poradnik jest dla opiekunów szczeniaka lub młodego psa, którzy widzą podgryzanie, skakanie, łapanie rąk i chaos przy pobudzeniu. Pomaga odróżnić rozwojową żywiołowość od przeciążenia i braku planu.",
+        "Najkrócej: jeśli problem jest świeży i widoczny, ten starter daje pierwszy porządek. Jeśli widać, że dochodzi do tego brak wyciszenia albo szersze pobudzenie, kolejnym krokiem będzie core albo konsultacja."
+      ]
+    },
+    {
+      "slug": "trudny_spacer_v2",
+      "title": "Trudny spacer",
+      "subtitle": "Dlaczego pies warczy, rzuca się albo nakręca na smyczy — i od czego zacząć",
+      "role_in_funnel": "starter",
+      "audience": "Opiekun psa, który ma problem ze spacerem przez napięcie, frustrację, lęk albo ból.",
+      "valuePromise": "Starter dla psów, których spacer rozpada się na etapie napięcia, lęku, frustracji albo bólu.",
+      "format": "PDF A4, druk domowy, kolor",
+      "accessType": "low-ticket",
+      "pricing": "49 zł",
+      "mainPromise": "Pierwszy filtr problemu spacerowego, zanim wejdziesz w głębszą analizę smyczy i dystansu.",
+      "status": "ready",
+      "relatedService": "szybka konsultacja 15 min",
+      "difficulty": "początkujący",
+      "estimatedReadingTime": 13,
+      "pageCount": 11,
+      "description": "Starter dla psów, których spacer rozpada się na etapie napięcia, lęku, frustracji albo bólu.",
+      "sourcePath": "content/guides/items/trudny_spacer_v2/guide.md",
+      "pdfPath": "content/guides/pdf/trudny_spacer_v2.pdf",
+      "coverPath": "content/guides/covers/trudny_spacer_v2.svg",
+      "category": "dog",
+      "kind": "main",
+      "palette": {
+        "primary": "#405B37",
+        "secondary": "#6F8A53",
+        "accent": "#8DAE6E",
+        "ink": "#1D2418",
+        "paper": "#F4F4EE"
+      },
+      "routePath": "/oferta/poradniki-pdf/trudny_spacer_v2",
+      "pagePath": "content/guides/site/pages/guides/trudny_spacer_v2.html",
+      "pageHref": "guides/trudny_spacer_v2.html",
+      "pdfFileName": "trudny_spacer_v2.pdf",
+      "coverFileName": "trudny_spacer_v2.svg",
+      "pdfHrefFromListing": "../../pdf/trudny_spacer_v2.pdf",
+      "pdfHrefFromPage": "../../../pdf/trudny_spacer_v2.pdf",
+      "coverHrefFromListing": "../../covers/trudny_spacer_v2.svg",
+      "coverHrefFromPage": "../../../covers/trudny_spacer_v2.svg",
+      "website_card": {
+        "eyebrow": "Starter PDF",
+        "headline": "Trudny spacer",
+        "subline": "Pierwszy filtr problemu spacerowego, zanim wejdziesz w głębszą analizę smyczy i dystansu.",
+        "cta": "Kup PDF"
+      },
+      "next_steps": [
+        "Dlaczego pies „głupieje” na smyczy?",
+        "Konsultacja 15 min"
+      ],
+      "must_have_blocks": [
+        "Dla kogo",
+        "Co znajdziesz w środku",
+        "Najkrócej",
+        "Kiedy ten materiał zwykle wystarcza",
+        "Kiedy lepsza będzie konsultacja",
+        "Co dalej / routing"
+      ],
+      "notes_for_offer": "Na stronie pokazuj jako objawowy starter. Nie mieszaj go z core; ten materiał sprzedaje pierwszy, widoczny problem.",
+      "toc": [
+        "Dla kogo",
+        "Co znajdziesz w środku",
+        "Najkrócej",
+        "Kiedy ten materiał zwykle wystarcza",
+        "Kiedy lepsza będzie konsultacja",
+        "Co dalej / routing"
+      ],
+      "excerpt": [
+        "Ten materiał jest dla opiekunów, którzy widzą, że pies nakręca się na smyczy, warczy, rzuca się albo nie może przejść kilku metrów bez napięcia.",
+        "Jeśli po lekturze widać, że spacer miesza lęk, frustrację, ograniczenie ruchu albo ból, następny krok prowadzi do core albo do konsultacji, zamiast do kolejnych przypadkowych prób."
+      ]
+    },
+    {
+      "slug": "pies_niszczy_w_domu_v2",
+      "title": "Pies niszczy w domu?",
+      "subtitle": "5 scenariuszy, które trzeba odróżnić, zanim zaczniesz naprawiać problem",
+      "role_in_funnel": "starter",
+      "audience": "Opiekun psa, który widzi niszczenie w domu i chce najpierw odróżnić scenariusze.",
+      "valuePromise": "Starter dla opiekuna, który chce najpierw zobaczyć, co naprawdę stoi za niszczeniem w domu.",
+      "format": "PDF A4, druk domowy, kolor",
+      "accessType": "low-ticket",
+      "pricing": "49 zł",
+      "mainPromise": "Starter o niszczeniu, które może wynikać z samotności, frustracji, pobudzenia albo środowiska.",
+      "status": "ready",
+      "relatedService": "szybka konsultacja 15 min",
+      "difficulty": "początkujący",
+      "estimatedReadingTime": 13,
+      "pageCount": 11,
+      "description": "Starter dla opiekuna, który chce najpierw zobaczyć, co naprawdę stoi za niszczeniem w domu.",
+      "sourcePath": "content/guides/items/pies_niszczy_w_domu_v2/guide.md",
+      "pdfPath": "content/guides/pdf/pies_niszczy_w_domu_v2.pdf",
+      "coverPath": "content/guides/covers/pies_niszczy_w_domu_v2.svg",
+      "category": "dog",
+      "kind": "main",
+      "palette": {
+        "primary": "#405B37",
+        "secondary": "#6F8A53",
+        "accent": "#8DAE6E",
+        "ink": "#1D2418",
+        "paper": "#F4F4EE"
+      },
+      "routePath": "/oferta/poradniki-pdf/pies_niszczy_w_domu_v2",
+      "pagePath": "content/guides/site/pages/guides/pies_niszczy_w_domu_v2.html",
+      "pageHref": "guides/pies_niszczy_w_domu_v2.html",
+      "pdfFileName": "pies_niszczy_w_domu_v2.pdf",
+      "coverFileName": "pies_niszczy_w_domu_v2.svg",
+      "pdfHrefFromListing": "../../pdf/pies_niszczy_w_domu_v2.pdf",
+      "pdfHrefFromPage": "../../../pdf/pies_niszczy_w_domu_v2.pdf",
+      "coverHrefFromListing": "../../covers/pies_niszczy_w_domu_v2.svg",
+      "coverHrefFromPage": "../../../covers/pies_niszczy_w_domu_v2.svg",
+      "website_card": {
+        "eyebrow": "Starter PDF",
+        "headline": "Pies niszczy w domu?",
+        "subline": "Starter o niszczeniu, które może wynikać z samotności, frustracji, pobudzenia albo środowiska.",
+        "cta": "Kup PDF"
+      },
+      "next_steps": [
+        "Pies zostaje sam i wpada w panikę?",
+        "Czy Twój pies naprawdę potrzebuje więcej ruchu?",
+        "Konsultacja 15 min"
+      ],
+      "must_have_blocks": [
+        "Dla kogo",
+        "Co znajdziesz w środku",
+        "Najkrócej",
+        "Kiedy ten materiał zwykle wystarcza",
+        "Kiedy lepsza będzie konsultacja",
+        "Co dalej / routing"
+      ],
+      "notes_for_offer": "Na stronie pokazuj jako objawowy starter. Nie mieszaj go z core; ten materiał sprzedaje pierwszy, widoczny problem.",
+      "toc": [
+        "Dla kogo",
+        "Co znajdziesz w środku",
+        "Najkrócej",
+        "Kiedy ten materiał zwykle wystarcza",
+        "Kiedy lepsza będzie konsultacja",
+        "Co dalej / routing"
+      ],
+      "excerpt": [
+        "To materiał dla opiekunów, którzy widzą pogryzione przedmioty, zniszczone miejsca odpoczynku albo chaos po wyjściu człowieka i chcą najpierw rozróżnić scenariusze.",
+        "Jeśli niszczenie łączy się z samotnością, pobudzeniem albo lękiem po wyjściu, naturalnym kolejnym krokiem jest core o samotności albo konsultacja."
+      ]
+    },
+    {
+      "slug": "pies_szczeka_na_gosci_i_dzwonek_v2",
+      "title": "Pies szczeka na gości i dzwonek?",
+      "subtitle": "Jak odróżnić alarm, ekscytację i napięcie przy wejściu do domu — i od czego zacząć",
+      "role_in_funnel": "starter-core",
+      "audience": "Opiekun psa, który reaguje przy gościach, dzwonku i wejściu do domu.",
+      "valuePromise": "Starter-core dla wejścia do domu, dzwonka i pobudzenia przy bodźcach społecznych.",
+      "format": "PDF A4, druk domowy, kolor",
+      "accessType": "low-ticket",
+      "pricing": "49 zł",
+      "mainPromise": "Jak odróżnić alarm, ekscytację i napięcie przy wejściu do domu.",
+      "status": "ready",
+      "relatedService": "szybka konsultacja 15 min",
+      "difficulty": "początkujący / średnio zaawansowany",
+      "estimatedReadingTime": 11,
+      "pageCount": 9,
+      "description": "Starter-core dla wejścia do domu, dzwonka i pobudzenia przy bodźcach społecznych.",
+      "sourcePath": "content/guides/items/pies_szczeka_na_gosci_i_dzwonek_v2/guide.md",
+      "pdfPath": "content/guides/pdf/pies_szczeka_na_gosci_i_dzwonek_v2.pdf",
+      "coverPath": "content/guides/covers/pies_szczeka_na_gosci_i_dzwonek_v2.svg",
+      "category": "dog",
+      "kind": "quick",
+      "palette": {
+        "primary": "#6A3E46",
+        "secondary": "#A06A73",
+        "accent": "#D29AA1",
+        "ink": "#24181B",
+        "paper": "#F8EFF1"
+      },
+      "routePath": "/oferta/poradniki-pdf/pies_szczeka_na_gosci_i_dzwonek_v2",
+      "pagePath": "content/guides/site/pages/guides/pies_szczeka_na_gosci_i_dzwonek_v2.html",
+      "pageHref": "guides/pies_szczeka_na_gosci_i_dzwonek_v2.html",
+      "pdfFileName": "pies_szczeka_na_gosci_i_dzwonek_v2.pdf",
+      "coverFileName": "pies_szczeka_na_gosci_i_dzwonek_v2.svg",
+      "pdfHrefFromListing": "../../pdf/pies_szczeka_na_gosci_i_dzwonek_v2.pdf",
+      "pdfHrefFromPage": "../../../pdf/pies_szczeka_na_gosci_i_dzwonek_v2.pdf",
+      "coverHrefFromListing": "../../covers/pies_szczeka_na_gosci_i_dzwonek_v2.svg",
+      "coverHrefFromPage": "../../../covers/pies_szczeka_na_gosci_i_dzwonek_v2.svg",
+      "website_card": {
+        "eyebrow": "Starter-core PDF",
+        "headline": "Pies szczeka na gości i dzwonek?",
+        "subline": "Jak odróżnić alarm, ekscytację i napięcie przy wejściu do domu.",
+        "cta": "Kup PDF"
+      },
+      "next_steps": [
+        "Pies broni zasobów?",
+        "Konsultacja 15 min"
+      ],
+      "must_have_blocks": [
+        "Dla kogo",
+        "Co znajdziesz w środku",
+        "Najkrócej",
+        "Kiedy ten materiał zwykle wystarcza",
+        "Kiedy lepsza będzie konsultacja",
+        "Co dalej / routing"
+      ],
+      "notes_for_offer": "Na stronie pokazuj jako starter-core. Nie spychaj go zbyt wysoko ponad startery, ale daj go jeszcze przed core.",
+      "toc": [
+        "Dla kogo",
+        "Co znajdziesz w środku",
+        "Najkrócej",
+        "Kiedy ten materiał zwykle wystarcza",
+        "Kiedy lepsza będzie konsultacja",
+        "Co dalej / routing"
+      ],
+      "excerpt": [
+        "Ten PDF jest dla opiekunów psów, które reagują przy gościach, dzwonku albo nagłym wejściu do domu.",
+        "Jeśli bodźce społeczne są tylko częścią większego problemu domowego, kolejnym ruchem może być konsultacja albo core po stronie samotności, pobudzenia lub obrony zasobów."
+      ]
+    },
+    {
+      "slug": "szczeniak_nie_umie_sie_wyciszyc_v2",
+      "title": "Szczeniak nie umie się wyciszyć?",
+      "subtitle": "Jak odróżnić normalny rozwój od sygnału, że trzeba mu pomóc",
+      "role_in_funnel": "core",
+      "audience": "Opiekun szczeniaka, który nie umie zejść z pobudzenia i nie odpoczywa.",
+      "valuePromise": "Core dla ścieżki szczeniaka, który nie umie zejść z pobudzenia.",
+      "format": "PDF A4, druk domowy, kolor",
+      "accessType": "low-ticket",
+      "pricing": "59 zł",
+      "mainPromise": "Core o regulacji, śnie i wyhamowaniu dla szczeniaka na wysokich obrotach.",
+      "status": "ready",
+      "relatedService": "szybka konsultacja 15 min lub konsultacja 30 min",
+      "difficulty": "początkujący / średnio zaawansowany",
+      "estimatedReadingTime": 14,
+      "pageCount": 12,
+      "description": "Core dla ścieżki szczeniaka, który nie umie zejść z pobudzenia.",
+      "sourcePath": "content/guides/items/szczeniak_nie_umie_sie_wyciszyc_v2/guide.md",
+      "pdfPath": "content/guides/pdf/szczeniak_nie_umie_sie_wyciszyc_v2.pdf",
+      "coverPath": "content/guides/covers/szczeniak_nie_umie_sie_wyciszyc_v2.svg",
+      "category": "dog",
+      "kind": "main",
+      "palette": {
+        "primary": "#2F5665",
+        "secondary": "#5B8390",
+        "accent": "#80B5BF",
+        "ink": "#1A262C",
+        "paper": "#F0F5F6"
+      },
+      "routePath": "/oferta/poradniki-pdf/szczeniak_nie_umie_sie_wyciszyc_v2",
+      "pagePath": "content/guides/site/pages/guides/szczeniak_nie_umie_sie_wyciszyc_v2.html",
+      "pageHref": "guides/szczeniak_nie_umie_sie_wyciszyc_v2.html",
+      "pdfFileName": "szczeniak_nie_umie_sie_wyciszyc_v2.pdf",
+      "coverFileName": "szczeniak_nie_umie_sie_wyciszyc_v2.svg",
+      "pdfHrefFromListing": "../../pdf/szczeniak_nie_umie_sie_wyciszyc_v2.pdf",
+      "pdfHrefFromPage": "../../../pdf/szczeniak_nie_umie_sie_wyciszyc_v2.pdf",
+      "coverHrefFromListing": "../../covers/szczeniak_nie_umie_sie_wyciszyc_v2.svg",
+      "coverHrefFromPage": "../../../covers/szczeniak_nie_umie_sie_wyciszyc_v2.svg",
+      "website_card": {
+        "eyebrow": "Core PDF",
+        "headline": "Szczeniak nie umie się wyciszyć?",
+        "subline": "Core o regulacji, śnie i wyhamowaniu dla szczeniaka na wysokich obrotach.",
+        "cta": "Kup PDF"
+      },
+      "next_steps": [
+        "Szczeniak gryzie i skacze?",
+        "Czy Twój pies naprawdę potrzebuje więcej ruchu?",
+        "Konsultacja 15 min"
+      ],
+      "must_have_blocks": [
+        "Dla kogo",
+        "Co znajdziesz w środku",
+        "Najkrócej",
+        "Kiedy ten materiał zwykle wystarcza",
+        "Kiedy lepsza będzie konsultacja",
+        "Co dalej / routing"
+      ],
+      "notes_for_offer": "Na stronie pokazuj jako core problemu. Sprzedawaj bezpieczeństwo, przewidywalność i pierwszy plan.",
+      "toc": [
+        "Dla kogo",
+        "Co znajdziesz w środku",
+        "Najkrócej",
+        "Kiedy ten materiał zwykle wystarcza",
+        "Kiedy lepsza będzie konsultacja",
+        "Co dalej / routing"
+      ],
+      "excerpt": [
+        "Ten core jest dla opiekunów szczeniaka, którzy widzą ciągłe kręcenie się, brak odpoczynku i trudność w przechodzeniu ze stanu pobudzenia do spokoju.",
+        "Jeśli wyciszenie miesza się z gryzieniem, skakaniem albo przeciążeniem dnia, ten PDF prowadzi dalej do konsultacji albo do pokrewnego materiału."
+      ]
+    },
+    {
+      "slug": "dlaczego_pies_glupieje_na_smyczy_v2",
+      "title": "Dlaczego pies „głupieje” na smyczy?",
+      "subtitle": "Jak zrozumieć mechanikę napięcia, dystansu i ograniczenia ruchu — choć w domu bywa spokojny",
+      "role_in_funnel": "core",
+      "audience": "Opiekun psa, który na smyczy reaguje inaczej niż w domu.",
+      "valuePromise": "Core po trudnym spacerze, który porządkuje ruch, dystans i fizyczne ograniczenia.",
+      "format": "PDF A4, druk domowy, kolor",
+      "accessType": "low-ticket",
+      "pricing": "59 zł",
+      "mainPromise": "Core o mechanice napięcia, dystansu i ograniczenia ruchu.",
+      "status": "ready",
+      "relatedService": "szybka konsultacja 15 min",
+      "difficulty": "początkujący / średnio zaawansowany",
+      "estimatedReadingTime": 14,
+      "pageCount": 12,
+      "description": "Core po trudnym spacerze, który porządkuje ruch, dystans i fizyczne ograniczenia.",
+      "sourcePath": "content/guides/items/dlaczego_pies_glupieje_na_smyczy_v2/guide.md",
+      "pdfPath": "content/guides/pdf/dlaczego_pies_glupieje_na_smyczy_v2.pdf",
+      "coverPath": "content/guides/covers/dlaczego_pies_glupieje_na_smyczy_v2.svg",
+      "category": "dog",
+      "kind": "main",
+      "palette": {
+        "primary": "#2F5665",
+        "secondary": "#5B8390",
+        "accent": "#80B5BF",
+        "ink": "#1A262C",
+        "paper": "#F0F5F6"
+      },
+      "routePath": "/oferta/poradniki-pdf/dlaczego_pies_glupieje_na_smyczy_v2",
+      "pagePath": "content/guides/site/pages/guides/dlaczego_pies_glupieje_na_smyczy_v2.html",
+      "pageHref": "guides/dlaczego_pies_glupieje_na_smyczy_v2.html",
+      "pdfFileName": "dlaczego_pies_glupieje_na_smyczy_v2.pdf",
+      "coverFileName": "dlaczego_pies_glupieje_na_smyczy_v2.svg",
+      "pdfHrefFromListing": "../../pdf/dlaczego_pies_glupieje_na_smyczy_v2.pdf",
+      "pdfHrefFromPage": "../../../pdf/dlaczego_pies_glupieje_na_smyczy_v2.pdf",
+      "coverHrefFromListing": "../../covers/dlaczego_pies_glupieje_na_smyczy_v2.svg",
+      "coverHrefFromPage": "../../../covers/dlaczego_pies_glupieje_na_smyczy_v2.svg",
+      "website_card": {
+        "eyebrow": "Core PDF",
+        "headline": "Dlaczego pies „głupieje” na smyczy?",
+        "subline": "Core o mechanice napięcia, dystansu i ograniczenia ruchu.",
+        "cta": "Kup PDF"
+      },
+      "next_steps": [
+        "Trudny spacer",
+        "Konsultacja 15 min"
+      ],
+      "must_have_blocks": [
+        "Dla kogo",
+        "Co znajdziesz w środku",
+        "Najkrócej",
+        "Kiedy ten materiał zwykle wystarcza",
+        "Kiedy lepsza będzie konsultacja",
+        "Co dalej / routing"
+      ],
+      "notes_for_offer": "Na stronie pokazuj jako core problemu. Sprzedawaj bezpieczeństwo, przewidywalność i pierwszy plan.",
+      "toc": [
+        "Dla kogo",
+        "Co znajdziesz w środku",
+        "Najkrócej",
+        "Kiedy ten materiał zwykle wystarcza",
+        "Kiedy lepsza będzie konsultacja",
+        "Co dalej / routing"
+      ],
+      "excerpt": [
+        "To materiał dla opiekunów, którzy widzą, że pies na smyczy zaczyna działać inaczej niż w domu: napina się, szybciej reaguje albo sprawia wrażenie, jakby „głupiał”.",
+        "Jeśli problem spacerowy łączy się ze strachem, frustracją albo bólem, ten core daje lepszy obraz sytuacji i pomaga zdecydować, czy wystarczy dalszy PDF, czy już konsultacja."
+      ]
+    },
+    {
+      "slug": "pies_zostaje_sam_i_wpada_w_panike_v2",
+      "title": "Pies zostaje sam i wpada w panikę?",
+      "subtitle": "Jak odróżnić separację od frustracji, protestu i chaosu po wyjściu — i od czego zacząć",
+      "role_in_funnel": "core",
+      "audience": "Opiekun psa, który podejrzewa, że problem z zostawaniem samemu to nie tylko nuda albo protest.",
+      "valuePromise": "Core ścieżki samotności, który pokazuje pierwsze kroki i czerwone flagi.",
+      "format": "PDF A4, druk domowy, kolor",
+      "accessType": "low-ticket",
+      "pricing": "59 zł",
+      "mainPromise": "PDF o panice separacyjnej, frustracji, nagraniu wideo, pierwszych 72 godzinach i planie 14 dni.",
+      "status": "ready",
+      "relatedService": "szybka konsultacja 15 min lub konsultacja 30 min",
+      "difficulty": "początkujący / średnio zaawansowany",
+      "estimatedReadingTime": 14,
+      "pageCount": 12,
+      "description": "Core ścieżki samotności, który pokazuje pierwsze kroki i czerwone flagi.",
+      "sourcePath": "content/guides/items/pies_zostaje_sam_i_wpada_w_panike_v2/guide.md",
+      "pdfPath": "content/guides/pdf/pies_zostaje_sam_i_wpada_w_panike_v2.pdf",
+      "coverPath": "content/guides/covers/pies_zostaje_sam_i_wpada_w_panike_v2.svg",
+      "category": "dog",
+      "kind": "main",
+      "palette": {
+        "primary": "#2F5665",
+        "secondary": "#5B8390",
+        "accent": "#80B5BF",
+        "ink": "#1A262C",
+        "paper": "#F0F5F6"
+      },
+      "routePath": "/oferta/poradniki-pdf/pies_zostaje_sam_i_wpada_w_panike_v2",
+      "pagePath": "content/guides/site/pages/guides/pies_zostaje_sam_i_wpada_w_panike_v2.html",
+      "pageHref": "guides/pies_zostaje_sam_i_wpada_w_panike_v2.html",
+      "pdfFileName": "pies_zostaje_sam_i_wpada_w_panike_v2.pdf",
+      "coverFileName": "pies_zostaje_sam_i_wpada_w_panike_v2.svg",
+      "pdfHrefFromListing": "../../pdf/pies_zostaje_sam_i_wpada_w_panike_v2.pdf",
+      "pdfHrefFromPage": "../../../pdf/pies_zostaje_sam_i_wpada_w_panike_v2.pdf",
+      "coverHrefFromListing": "../../covers/pies_zostaje_sam_i_wpada_w_panike_v2.svg",
+      "coverHrefFromPage": "../../../covers/pies_zostaje_sam_i_wpada_w_panike_v2.svg",
+      "website_card": {
+        "eyebrow": "Core PDF",
+        "headline": "Pies zostaje sam i wpada w panikę?",
+        "subline": "PDF o panice separacyjnej, frustracji, nagraniu wideo, pierwszych 72 godzinach i planie 14 dni.",
+        "cta": "Kup PDF"
+      },
+      "next_steps": [
+        "Pies niszczy w domu?",
+        "Czy Twój pies naprawdę potrzebuje więcej ruchu?",
+        "Konsultacja 15 min"
+      ],
+      "must_have_blocks": [
+        "Dla kogo",
+        "Co znajdziesz w środku",
+        "Najkrócej",
+        "Kiedy ten materiał zwykle wystarcza",
+        "Kiedy lepsza będzie konsultacja",
+        "Co dalej / routing"
+      ],
+      "notes_for_offer": "Na stronie pokazuj jako core problemu. Sprzedawaj bezpieczeństwo, przewidywalność i pierwszy plan.",
+      "toc": [
+        "Dla kogo",
+        "Co znajdziesz w środku",
+        "Najkrócej",
+        "Kiedy ten materiał zwykle wystarcza",
+        "Kiedy lepsza będzie konsultacja",
+        "Co dalej / routing"
+      ],
+      "excerpt": [
+        "Ten PDF jest dla opiekunów, którzy podejrzewają, że problem z zostawaniem samemu to nie tylko nuda, ale panika, frustracja separacyjna albo trudność z regulacją po wyjściu człowieka.",
+        "Jeśli niszczenie w domu jest jednym z objawów, ten core prowadzi do kolejnego kroku w sposób bezpieczny. Jeśli reakcja jest silna albo widać kilka objawów naraz, konsultacja staje się lepszym wyborem."
+      ]
+    },
+    {
+      "slug": "pies_broni_zasobow_v2",
+      "title": "Pies broni zasobów?",
+      "subtitle": "Jak odróżnić napięcie przy jedzeniu, zabawkach i przestrzeni od mitu „dominacji” — i od czego zacząć",
+      "role_in_funnel": "core",
+      "audience": "Opiekun psa broniącego jedzenia, zabawek, legowiska albo przejścia.",
+      "valuePromise": "Core problemu domowego o wysokiej gotowości zakupowej.",
+      "format": "PDF A4, druk domowy, kolor",
+      "accessType": "low-ticket",
+      "pricing": "59 zł",
+      "mainPromise": "Core o bezpieczeństwie, przewidywalności i pierwszym planie pracy.",
+      "status": "ready",
+      "relatedService": "szybka konsultacja 15 min",
+      "difficulty": "początkujący / średnio zaawansowany",
+      "estimatedReadingTime": 14,
+      "pageCount": 12,
+      "description": "Core problemu domowego o wysokiej gotowości zakupowej.",
+      "sourcePath": "content/guides/items/pies_broni_zasobow_v2/guide.md",
+      "pdfPath": "content/guides/pdf/pies_broni_zasobow_v2.pdf",
+      "coverPath": "content/guides/covers/pies_broni_zasobow_v2.svg",
+      "category": "dog",
+      "kind": "main",
+      "palette": {
+        "primary": "#2F5665",
+        "secondary": "#5B8390",
+        "accent": "#80B5BF",
+        "ink": "#1A262C",
+        "paper": "#F0F5F6"
+      },
+      "routePath": "/oferta/poradniki-pdf/pies_broni_zasobow_v2",
+      "pagePath": "content/guides/site/pages/guides/pies_broni_zasobow_v2.html",
+      "pageHref": "guides/pies_broni_zasobow_v2.html",
+      "pdfFileName": "pies_broni_zasobow_v2.pdf",
+      "coverFileName": "pies_broni_zasobow_v2.svg",
+      "pdfHrefFromListing": "../../pdf/pies_broni_zasobow_v2.pdf",
+      "pdfHrefFromPage": "../../../pdf/pies_broni_zasobow_v2.pdf",
+      "coverHrefFromListing": "../../covers/pies_broni_zasobow_v2.svg",
+      "coverHrefFromPage": "../../../covers/pies_broni_zasobow_v2.svg",
+      "website_card": {
+        "eyebrow": "Core PDF",
+        "headline": "Pies broni zasobów?",
+        "subline": "Core o bezpieczeństwie, przewidywalności i pierwszym planie pracy.",
+        "cta": "Kup PDF"
+      },
+      "next_steps": [
+        "Pies szczeka na gości i dzwonek?",
+        "Konsultacja 15 min"
+      ],
+      "must_have_blocks": [
+        "Dla kogo",
+        "Co znajdziesz w środku",
+        "Najkrócej",
+        "Kiedy ten materiał zwykle wystarcza",
+        "Kiedy lepsza będzie konsultacja",
+        "Co dalej / routing"
+      ],
+      "notes_for_offer": "Na stronie pokazuj jako core problemu. Sprzedawaj bezpieczeństwo, przewidywalność i pierwszy plan.",
+      "toc": [
+        "Dla kogo",
+        "Co znajdziesz w środku",
+        "Najkrócej",
+        "Kiedy ten materiał zwykle wystarcza",
+        "Kiedy lepsza będzie konsultacja",
+        "Co dalej / routing"
+      ],
+      "excerpt": [
+        "To materiał dla opiekunów, którzy widzą warczenie przy jedzeniu, zabawkach, legowisku albo przejściu obok psa i chcą przestać tłumaczyć to dominacją.",
+        "Jeśli obrona zasobów miesza się z innymi sygnałami napięcia, core daje pierwszy plan pracy i pokazuje, kiedy lepiej wejść w konsultację."
+      ]
+    },
+    {
+      "slug": "pogon_demolka_i_brak_hamulcow_v2",
+      "title": "Pogoń, demolka i brak hamulców?",
+      "subtitle": "Jak rozpoznać przewlekłe pobudzenie, frustrację i brak wyhamowania — i od czego zacząć",
+      "role_in_funnel": "core",
+      "audience": "Opiekun psa, który widzi pogoń, demolkę i brak wyhamowania w codzienności.",
+      "valuePromise": "Core ścieżki pobudzenia, które nie kończy się na samym „ma dużo energii”.",
+      "format": "PDF A4, druk domowy, kolor",
+      "accessType": "low-ticket",
+      "pricing": "59 zł",
+      "mainPromise": "Core o pobudzeniu, frustracji i braku wyhamowania.",
+      "status": "ready",
+      "relatedService": "szybka konsultacja 15 min",
+      "difficulty": "początkujący / średnio zaawansowany",
+      "estimatedReadingTime": 14,
+      "pageCount": 12,
+      "description": "Core ścieżki pobudzenia, które nie kończy się na samym „ma dużo energii”.",
+      "sourcePath": "content/guides/items/pogon_demolka_i_brak_hamulcow_v2/guide.md",
+      "pdfPath": "content/guides/pdf/pogon_demolka_i_brak_hamulcow_v2.pdf",
+      "coverPath": "content/guides/covers/pogon_demolka_i_brak_hamulcow_v2.svg",
+      "category": "dog",
+      "kind": "main",
+      "palette": {
+        "primary": "#2F5665",
+        "secondary": "#5B8390",
+        "accent": "#80B5BF",
+        "ink": "#1A262C",
+        "paper": "#F0F5F6"
+      },
+      "routePath": "/oferta/poradniki-pdf/pogon_demolka_i_brak_hamulcow_v2",
+      "pagePath": "content/guides/site/pages/guides/pogon_demolka_i_brak_hamulcow_v2.html",
+      "pageHref": "guides/pogon_demolka_i_brak_hamulcow_v2.html",
+      "pdfFileName": "pogon_demolka_i_brak_hamulcow_v2.pdf",
+      "coverFileName": "pogon_demolka_i_brak_hamulcow_v2.svg",
+      "pdfHrefFromListing": "../../pdf/pogon_demolka_i_brak_hamulcow_v2.pdf",
+      "pdfHrefFromPage": "../../../pdf/pogon_demolka_i_brak_hamulcow_v2.pdf",
+      "coverHrefFromListing": "../../covers/pogon_demolka_i_brak_hamulcow_v2.svg",
+      "coverHrefFromPage": "../../../covers/pogon_demolka_i_brak_hamulcow_v2.svg",
+      "website_card": {
+        "eyebrow": "Core PDF",
+        "headline": "Pogoń, demolka i brak hamulców?",
+        "subline": "Core o pobudzeniu, frustracji i braku wyhamowania.",
+        "cta": "Kup PDF"
+      },
+      "next_steps": [
+        "Czy Twój pies naprawdę potrzebuje więcej ruchu?",
+        "Konsultacja 15 min"
+      ],
+      "must_have_blocks": [
+        "Dla kogo",
+        "Co znajdziesz w środku",
+        "Najkrócej",
+        "Kiedy ten materiał zwykle wystarcza",
+        "Kiedy lepsza będzie konsultacja",
+        "Co dalej / routing"
+      ],
+      "notes_for_offer": "Na stronie pokazuj jako core problemu. Sprzedawaj bezpieczeństwo, przewidywalność i pierwszy plan.",
+      "toc": [
+        "Dla kogo",
+        "Co znajdziesz w środku",
+        "Najkrócej",
+        "Kiedy ten materiał zwykle wystarcza",
+        "Kiedy lepsza będzie konsultacja",
+        "Co dalej / routing"
+      ],
+      "excerpt": [
+        "Ten core jest dla opiekunów psów, które nie potrafią wyhamować, gonią, demolują dom albo wyglądają na stale nakręcone.",
+        "Gdy pobudzenie łączy się z frustracją, lękiem albo gorszym snem, ten materiał pomaga zbudować sensowny kolejny ruch: konsultację, pakiet albo pokrewny PDF."
+      ]
+    },
+    {
+      "slug": "pies_do_pracy_z_ludzmi_v2",
+      "title": "Pies do pracy z ludźmi?",
+      "subtitle": "Jak ocenić predyspozycje, regulację i bezpieczeństwo zanim pomyślisz o roli wspierającej",
+      "role_in_funnel": "specialist",
+      "audience": "Osoba myśląca o psie wspierającym, terapeutycznym albo pracującym przy ludziach.",
+      "valuePromise": "Specjalistyczny materiał dla psa do pracy z ludźmi.",
+      "format": "PDF A4, druk domowy, kolor",
+      "accessType": "low-ticket",
+      "pricing": "69 zł",
+      "mainPromise": "Specjalistyczna ocena predyspozycji, regulacji i bezpieczeństwa.",
+      "status": "ready",
+      "relatedService": "szybka konsultacja 15 min lub konsultacja behawioralna online",
+      "difficulty": "średnio zaawansowany",
+      "estimatedReadingTime": 10,
+      "pageCount": 8,
+      "description": "Specjalistyczny materiał dla psa do pracy z ludźmi.",
+      "sourcePath": "content/guides/items/pies_do_pracy_z_ludzmi_v2/guide.md",
+      "pdfPath": "content/guides/pdf/pies_do_pracy_z_ludzmi_v2.pdf",
+      "coverPath": "content/guides/covers/pies_do_pracy_z_ludzmi_v2.svg",
+      "category": "dog",
+      "kind": "quick",
+      "palette": {
+        "primary": "#355E56",
+        "secondary": "#56847A",
+        "accent": "#88B5AA",
+        "ink": "#182522",
+        "paper": "#EEF6F4"
+      },
+      "routePath": "/oferta/poradniki-pdf/pies_do_pracy_z_ludzmi_v2",
+      "pagePath": "content/guides/site/pages/guides/pies_do_pracy_z_ludzmi_v2.html",
+      "pageHref": "guides/pies_do_pracy_z_ludzmi_v2.html",
+      "pdfFileName": "pies_do_pracy_z_ludzmi_v2.pdf",
+      "coverFileName": "pies_do_pracy_z_ludzmi_v2.svg",
+      "pdfHrefFromListing": "../../pdf/pies_do_pracy_z_ludzmi_v2.pdf",
+      "pdfHrefFromPage": "../../../pdf/pies_do_pracy_z_ludzmi_v2.pdf",
+      "coverHrefFromListing": "../../covers/pies_do_pracy_z_ludzmi_v2.svg",
+      "coverHrefFromPage": "../../../covers/pies_do_pracy_z_ludzmi_v2.svg",
+      "website_card": {
+        "eyebrow": "Specjalistyczny PDF",
+        "headline": "Pies do pracy z ludźmi?",
+        "subline": "Specjalistyczna ocena predyspozycji, regulacji i bezpieczeństwa.",
+        "cta": "Kup PDF"
+      },
+      "next_steps": [
+        "Konsultacja 15 min"
+      ],
+      "must_have_blocks": [
+        "Dla kogo",
+        "Co znajdziesz w środku",
+        "Najkrócej",
+        "Kiedy ten materiał zwykle wystarcza",
+        "Kiedy lepsza będzie konsultacja",
+        "Co dalej / routing"
+      ],
+      "notes_for_offer": "Na stronie nie pokazuj wysoko w głównym sklepie obok najbardziej masowych problemów. To materiał specjalistyczny / ekspercki.",
+      "toc": [
+        "Dla kogo",
+        "Co znajdziesz w środku",
+        "Najkrócej",
+        "Kiedy ten materiał zwykle wystarcza",
+        "Kiedy lepsza będzie konsultacja",
+        "Co dalej / routing"
+      ],
+      "excerpt": [
+        "To materiał dla osób, które myślą o psie wspierającym, terapeutycznym albo pracującym przy ludziach i chcą najpierw ocenić bezpieczeństwo oraz regulację, a nie tylko ładny obrazek.",
+        "Ten PDF siedzi niżej niż masowe problemy spacerowe, szczeniakowe czy domowe. Jeśli wynik wskazuje na potrzebę dalszej oceny, naturalnym kolejnym krokiem jest konsultacja."
       ]
     }
   ],
@@ -1398,23 +2182,994 @@
         "konsultacja dla kota",
         "konsultacja behawioralna online"
       ]
+    },
+    {
+      "slug": "pakiet-spokojny-szczeniak",
+      "title": "Pakiet Spokojny szczeniak",
+      "audience": "dla opiekuna szczeniaka, który chce od razu zapanować nad gryzieniem, skakaniem i wyciszeniem",
+      "accessType": "bundle",
+      "pricing": "129 zł",
+      "guideSlugs": [
+        "czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2",
+        "szczeniak_gryzie_i_skacze_v2",
+        "szczeniak_nie_umie_sie_wyciszyc_v2"
+      ],
+      "promise": "Spokojny start, lepsza regulacja i mniej chaosu w pierwszych tygodniach.",
+      "routePath": "/oferta/poradniki-pdf/pakiety/pakiet-spokojny-szczeniak",
+      "pagePath": "content/guides/site/pages/bundles/pakiet-spokojny-szczeniak.html",
+      "pageHref": "bundles/pakiet-spokojny-szczeniak.html",
+      "category": "dog",
+      "guides": [
+        {
+          "slug": "czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2",
+          "title": "Czy Twój pies naprawdę potrzebuje więcej ruchu?",
+          "subtitle": "Prawda o pobudzeniu, które nie schodzi po spacerze",
+          "role_in_funnel": "lead_magnet",
+          "audience": "Opiekun psa, który widzi nakręcanie po aktywności, słaby odpoczynek i trudność z zejściem z pobudzenia.",
+          "valuePromise": "Szerokie wejście do psiego lejka PDF. Materiał obala mit „więcej ruchu = rozwiązanie” i prowadzi do właściwej ścieżki.",
+          "format": "PDF A4, druk domowy, kolor",
+          "accessType": "lead magnet",
+          "pricing": "0 zł",
+          "mainPromise": "Szeroki PDF wejściowy o pobudzeniu, regeneracji i tym, kiedy więcej aktywności tylko dokręca problem.",
+          "status": "ready",
+          "relatedService": "szybka konsultacja 15 min",
+          "difficulty": "początkujący",
+          "estimatedReadingTime": 12,
+          "pageCount": 10,
+          "description": "Szerokie wejście do psiego lejka PDF. Materiał obala mit „więcej ruchu = rozwiązanie” i prowadzi do właściwej ścieżki.",
+          "sourcePath": "content/guides/items/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2/guide.md",
+          "pdfPath": "content/guides/pdf/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.pdf",
+          "coverPath": "content/guides/covers/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.svg",
+          "category": "dog",
+          "kind": "main",
+          "palette": {
+            "primary": "#5B3A29",
+            "secondary": "#A56A43",
+            "accent": "#D88F5A",
+            "ink": "#251B16",
+            "paper": "#F7F1E9"
+          },
+          "routePath": "/oferta/poradniki-pdf/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2",
+          "pagePath": "content/guides/site/pages/guides/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.html",
+          "pageHref": "guides/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.html",
+          "pdfFileName": "czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.pdf",
+          "coverFileName": "czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.svg",
+          "pdfHrefFromListing": "../../pdf/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.pdf",
+          "pdfHrefFromPage": "../../../pdf/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.pdf",
+          "coverHrefFromListing": "../../covers/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.svg",
+          "coverHrefFromPage": "../../../covers/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.svg",
+          "website_card": {
+            "eyebrow": "Darmowy start",
+            "headline": "Czy Twój pies naprawdę potrzebuje więcej ruchu?",
+            "subline": "Szeroki PDF wejściowy o pobudzeniu, regeneracji i tym, kiedy więcej aktywności tylko dokręca problem.",
+            "cta": "Pobierz darmowy PDF"
+          },
+          "next_steps": [
+            "Szczeniak gryzie i skacze?",
+            "Szczeniak nie umie się wyciszyć?",
+            "Trudny spacer",
+            "Dlaczego pies „głupieje” na smyczy?",
+            "Pogoń, demolka i brak hamulców?",
+            "Konsultacja 15 min"
+          ],
+          "must_have_blocks": [
+            "Dla kogo",
+            "Co znajdziesz w środku",
+            "Najkrócej",
+            "Kiedy ten materiał zwykle wystarcza",
+            "Kiedy lepsza będzie konsultacja",
+            "Co dalej / routing"
+          ],
+          "notes_for_offer": "Na stronie pokazuj wysoko jako darmowy start. Nie sprzedawaj go jako równorzędnego z core PDF-ami.",
+          "toc": [
+            "Dla kogo",
+            "Co znajdziesz w środku",
+            "Najkrócej",
+            "Kiedy ten materiał zwykle wystarcza",
+            "Kiedy lepsza będzie konsultacja",
+            "Co dalej / routing"
+          ],
+          "excerpt": [
+            "Ten materiał jest dla opiekunów psów, które po spacerze nie schodzą z pobudzenia, a problem wygląda bardziej na przeciążenie niż na samą potrzebę ruchu.",
+            "Jeśli po lekturze widać, że pobudzenie, samotność, spacer albo szczeniak mieszają się ze sobą, łatwiej wybrać kolejny PDF, pakiet albo konsultację bez losowego testowania wszystkiego naraz."
+          ]
+        },
+        {
+          "slug": "szczeniak_gryzie_i_skacze_v2",
+          "title": "Szczeniak gryzie i skacze?",
+          "subtitle": "Jak odróżnić typowe zachowanie rozwojowe od przeciążenia i braku planu",
+          "role_in_funnel": "starter",
+          "audience": "Opiekun szczeniaka lub młodego psa, który widzi podgryzanie, skakanie, łapanie rąk i chaos przy pobudzeniu.",
+          "valuePromise": "Pierwszy płatny PDF w ścieżce szczeniaka. Ma szybko wyjaśnić problem, dać prosty plan 14 dni i skierować dalej do core o wyciszeniu albo do konsultacji.",
+          "format": "PDF A4, druk domowy, kolor",
+          "accessType": "low-ticket",
+          "pricing": "49 zł",
+          "mainPromise": "Praktyczny PDF o podgryzaniu, skakaniu, frustracji i pierwszym domowym planie pracy.",
+          "status": "ready",
+          "relatedService": "szybka konsultacja 15 min",
+          "difficulty": "początkujący",
+          "estimatedReadingTime": 13,
+          "pageCount": 11,
+          "description": "Pierwszy płatny PDF w ścieżce szczeniaka. Ma szybko wyjaśnić problem, dać prosty plan 14 dni i skierować dalej do core o wyciszeniu albo do konsultacji.",
+          "sourcePath": "content/guides/items/szczeniak_gryzie_i_skacze_v2/guide.md",
+          "pdfPath": "content/guides/pdf/szczeniak_gryzie_i_skacze_v2.pdf",
+          "coverPath": "content/guides/covers/szczeniak_gryzie_i_skacze_v2.svg",
+          "category": "dog",
+          "kind": "main",
+          "palette": {
+            "primary": "#405B37",
+            "secondary": "#6F8A53",
+            "accent": "#8DAE6E",
+            "ink": "#1D2418",
+            "paper": "#F4F4EE"
+          },
+          "routePath": "/oferta/poradniki-pdf/szczeniak_gryzie_i_skacze_v2",
+          "pagePath": "content/guides/site/pages/guides/szczeniak_gryzie_i_skacze_v2.html",
+          "pageHref": "guides/szczeniak_gryzie_i_skacze_v2.html",
+          "pdfFileName": "szczeniak_gryzie_i_skacze_v2.pdf",
+          "coverFileName": "szczeniak_gryzie_i_skacze_v2.svg",
+          "pdfHrefFromListing": "../../pdf/szczeniak_gryzie_i_skacze_v2.pdf",
+          "pdfHrefFromPage": "../../../pdf/szczeniak_gryzie_i_skacze_v2.pdf",
+          "coverHrefFromListing": "../../covers/szczeniak_gryzie_i_skacze_v2.svg",
+          "coverHrefFromPage": "../../../covers/szczeniak_gryzie_i_skacze_v2.svg",
+          "website_card": {
+            "eyebrow": "Starter PDF",
+            "headline": "Szczeniak gryzie i skacze?",
+            "subline": "Praktyczny PDF o podgryzaniu, skakaniu, frustracji i pierwszym domowym planie pracy.",
+            "cta": "Kup PDF"
+          },
+          "next_steps": [
+            "Szczeniak nie umie się wyciszyć?",
+            "Trudny spacer",
+            "Konsultacja 15 min"
+          ],
+          "must_have_blocks": [
+            "Dla kogo",
+            "Co znajdziesz w środku",
+            "Najkrócej",
+            "Kiedy ten materiał zwykle wystarcza",
+            "Kiedy lepsza będzie konsultacja",
+            "Co dalej / routing"
+          ],
+          "notes_for_offer": "Na stronie pokazuj jako objawowy starter. Nie mieszaj go z core; ten materiał sprzedaje pierwszy, widoczny problem.",
+          "toc": [
+            "Dla kogo",
+            "Co znajdziesz w środku",
+            "Najkrócej",
+            "Kiedy ten materiał zwykle wystarcza",
+            "Kiedy lepsza będzie konsultacja",
+            "Co dalej / routing"
+          ],
+          "excerpt": [
+            "Ten poradnik jest dla opiekunów szczeniaka lub młodego psa, którzy widzą podgryzanie, skakanie, łapanie rąk i chaos przy pobudzeniu. Pomaga odróżnić rozwojową żywiołowość od przeciążenia i braku planu.",
+            "Najkrócej: jeśli problem jest świeży i widoczny, ten starter daje pierwszy porządek. Jeśli widać, że dochodzi do tego brak wyciszenia albo szersze pobudzenie, kolejnym krokiem będzie core albo konsultacja."
+          ]
+        },
+        {
+          "slug": "szczeniak_nie_umie_sie_wyciszyc_v2",
+          "title": "Szczeniak nie umie się wyciszyć?",
+          "subtitle": "Jak odróżnić normalny rozwój od sygnału, że trzeba mu pomóc",
+          "role_in_funnel": "core",
+          "audience": "Opiekun szczeniaka, który nie umie zejść z pobudzenia i nie odpoczywa.",
+          "valuePromise": "Core dla ścieżki szczeniaka, który nie umie zejść z pobudzenia.",
+          "format": "PDF A4, druk domowy, kolor",
+          "accessType": "low-ticket",
+          "pricing": "59 zł",
+          "mainPromise": "Core o regulacji, śnie i wyhamowaniu dla szczeniaka na wysokich obrotach.",
+          "status": "ready",
+          "relatedService": "szybka konsultacja 15 min lub konsultacja 30 min",
+          "difficulty": "początkujący / średnio zaawansowany",
+          "estimatedReadingTime": 14,
+          "pageCount": 12,
+          "description": "Core dla ścieżki szczeniaka, który nie umie zejść z pobudzenia.",
+          "sourcePath": "content/guides/items/szczeniak_nie_umie_sie_wyciszyc_v2/guide.md",
+          "pdfPath": "content/guides/pdf/szczeniak_nie_umie_sie_wyciszyc_v2.pdf",
+          "coverPath": "content/guides/covers/szczeniak_nie_umie_sie_wyciszyc_v2.svg",
+          "category": "dog",
+          "kind": "main",
+          "palette": {
+            "primary": "#2F5665",
+            "secondary": "#5B8390",
+            "accent": "#80B5BF",
+            "ink": "#1A262C",
+            "paper": "#F0F5F6"
+          },
+          "routePath": "/oferta/poradniki-pdf/szczeniak_nie_umie_sie_wyciszyc_v2",
+          "pagePath": "content/guides/site/pages/guides/szczeniak_nie_umie_sie_wyciszyc_v2.html",
+          "pageHref": "guides/szczeniak_nie_umie_sie_wyciszyc_v2.html",
+          "pdfFileName": "szczeniak_nie_umie_sie_wyciszyc_v2.pdf",
+          "coverFileName": "szczeniak_nie_umie_sie_wyciszyc_v2.svg",
+          "pdfHrefFromListing": "../../pdf/szczeniak_nie_umie_sie_wyciszyc_v2.pdf",
+          "pdfHrefFromPage": "../../../pdf/szczeniak_nie_umie_sie_wyciszyc_v2.pdf",
+          "coverHrefFromListing": "../../covers/szczeniak_nie_umie_sie_wyciszyc_v2.svg",
+          "coverHrefFromPage": "../../../covers/szczeniak_nie_umie_sie_wyciszyc_v2.svg",
+          "website_card": {
+            "eyebrow": "Core PDF",
+            "headline": "Szczeniak nie umie się wyciszyć?",
+            "subline": "Core o regulacji, śnie i wyhamowaniu dla szczeniaka na wysokich obrotach.",
+            "cta": "Kup PDF"
+          },
+          "next_steps": [
+            "Szczeniak gryzie i skacze?",
+            "Czy Twój pies naprawdę potrzebuje więcej ruchu?",
+            "Konsultacja 15 min"
+          ],
+          "must_have_blocks": [
+            "Dla kogo",
+            "Co znajdziesz w środku",
+            "Najkrócej",
+            "Kiedy ten materiał zwykle wystarcza",
+            "Kiedy lepsza będzie konsultacja",
+            "Co dalej / routing"
+          ],
+          "notes_for_offer": "Na stronie pokazuj jako core problemu. Sprzedawaj bezpieczeństwo, przewidywalność i pierwszy plan.",
+          "toc": [
+            "Dla kogo",
+            "Co znajdziesz w środku",
+            "Najkrócej",
+            "Kiedy ten materiał zwykle wystarcza",
+            "Kiedy lepsza będzie konsultacja",
+            "Co dalej / routing"
+          ],
+          "excerpt": [
+            "Ten core jest dla opiekunów szczeniaka, którzy widzą ciągłe kręcenie się, brak odpoczynku i trudność w przechodzeniu ze stanu pobudzenia do spokoju.",
+            "Jeśli wyciszenie miesza się z gryzieniem, skakaniem albo przeciążeniem dnia, ten PDF prowadzi dalej do konsultacji albo do pokrewnego materiału."
+          ]
+        }
+      ],
+      "consult": [
+        "szybka konsultacja 15 min",
+        "konsultacja 30 min"
+      ]
+    },
+    {
+      "slug": "pakiet-spacer-bez-wybuchu",
+      "title": "Pakiet Spacer bez wybuchu",
+      "audience": "dla opiekuna psa, który chce uporządkować pobudzenie na smyczy i reakcję na bodźce",
+      "accessType": "bundle",
+      "pricing": "129 zł",
+      "guideSlugs": [
+        "czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2",
+        "trudny_spacer_v2",
+        "dlaczego_pies_glupieje_na_smyczy_v2"
+      ],
+      "promise": "Pierwszy filtr problemu spacerowego i prostszy plan pracy.",
+      "routePath": "/oferta/poradniki-pdf/pakiety/pakiet-spacer-bez-wybuchu",
+      "pagePath": "content/guides/site/pages/bundles/pakiet-spacer-bez-wybuchu.html",
+      "pageHref": "bundles/pakiet-spacer-bez-wybuchu.html",
+      "category": "dog",
+      "guides": [
+        {
+          "slug": "czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2",
+          "title": "Czy Twój pies naprawdę potrzebuje więcej ruchu?",
+          "subtitle": "Prawda o pobudzeniu, które nie schodzi po spacerze",
+          "role_in_funnel": "lead_magnet",
+          "audience": "Opiekun psa, który widzi nakręcanie po aktywności, słaby odpoczynek i trudność z zejściem z pobudzenia.",
+          "valuePromise": "Szerokie wejście do psiego lejka PDF. Materiał obala mit „więcej ruchu = rozwiązanie” i prowadzi do właściwej ścieżki.",
+          "format": "PDF A4, druk domowy, kolor",
+          "accessType": "lead magnet",
+          "pricing": "0 zł",
+          "mainPromise": "Szeroki PDF wejściowy o pobudzeniu, regeneracji i tym, kiedy więcej aktywności tylko dokręca problem.",
+          "status": "ready",
+          "relatedService": "szybka konsultacja 15 min",
+          "difficulty": "początkujący",
+          "estimatedReadingTime": 12,
+          "pageCount": 10,
+          "description": "Szerokie wejście do psiego lejka PDF. Materiał obala mit „więcej ruchu = rozwiązanie” i prowadzi do właściwej ścieżki.",
+          "sourcePath": "content/guides/items/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2/guide.md",
+          "pdfPath": "content/guides/pdf/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.pdf",
+          "coverPath": "content/guides/covers/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.svg",
+          "category": "dog",
+          "kind": "main",
+          "palette": {
+            "primary": "#5B3A29",
+            "secondary": "#A56A43",
+            "accent": "#D88F5A",
+            "ink": "#251B16",
+            "paper": "#F7F1E9"
+          },
+          "routePath": "/oferta/poradniki-pdf/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2",
+          "pagePath": "content/guides/site/pages/guides/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.html",
+          "pageHref": "guides/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.html",
+          "pdfFileName": "czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.pdf",
+          "coverFileName": "czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.svg",
+          "pdfHrefFromListing": "../../pdf/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.pdf",
+          "pdfHrefFromPage": "../../../pdf/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.pdf",
+          "coverHrefFromListing": "../../covers/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.svg",
+          "coverHrefFromPage": "../../../covers/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.svg",
+          "website_card": {
+            "eyebrow": "Darmowy start",
+            "headline": "Czy Twój pies naprawdę potrzebuje więcej ruchu?",
+            "subline": "Szeroki PDF wejściowy o pobudzeniu, regeneracji i tym, kiedy więcej aktywności tylko dokręca problem.",
+            "cta": "Pobierz darmowy PDF"
+          },
+          "next_steps": [
+            "Szczeniak gryzie i skacze?",
+            "Szczeniak nie umie się wyciszyć?",
+            "Trudny spacer",
+            "Dlaczego pies „głupieje” na smyczy?",
+            "Pogoń, demolka i brak hamulców?",
+            "Konsultacja 15 min"
+          ],
+          "must_have_blocks": [
+            "Dla kogo",
+            "Co znajdziesz w środku",
+            "Najkrócej",
+            "Kiedy ten materiał zwykle wystarcza",
+            "Kiedy lepsza będzie konsultacja",
+            "Co dalej / routing"
+          ],
+          "notes_for_offer": "Na stronie pokazuj wysoko jako darmowy start. Nie sprzedawaj go jako równorzędnego z core PDF-ami.",
+          "toc": [
+            "Dla kogo",
+            "Co znajdziesz w środku",
+            "Najkrócej",
+            "Kiedy ten materiał zwykle wystarcza",
+            "Kiedy lepsza będzie konsultacja",
+            "Co dalej / routing"
+          ],
+          "excerpt": [
+            "Ten materiał jest dla opiekunów psów, które po spacerze nie schodzą z pobudzenia, a problem wygląda bardziej na przeciążenie niż na samą potrzebę ruchu.",
+            "Jeśli po lekturze widać, że pobudzenie, samotność, spacer albo szczeniak mieszają się ze sobą, łatwiej wybrać kolejny PDF, pakiet albo konsultację bez losowego testowania wszystkiego naraz."
+          ]
+        },
+        {
+          "slug": "trudny_spacer_v2",
+          "title": "Trudny spacer",
+          "subtitle": "Dlaczego pies warczy, rzuca się albo nakręca na smyczy — i od czego zacząć",
+          "role_in_funnel": "starter",
+          "audience": "Opiekun psa, który ma problem ze spacerem przez napięcie, frustrację, lęk albo ból.",
+          "valuePromise": "Starter dla psów, których spacer rozpada się na etapie napięcia, lęku, frustracji albo bólu.",
+          "format": "PDF A4, druk domowy, kolor",
+          "accessType": "low-ticket",
+          "pricing": "49 zł",
+          "mainPromise": "Pierwszy filtr problemu spacerowego, zanim wejdziesz w głębszą analizę smyczy i dystansu.",
+          "status": "ready",
+          "relatedService": "szybka konsultacja 15 min",
+          "difficulty": "początkujący",
+          "estimatedReadingTime": 13,
+          "pageCount": 11,
+          "description": "Starter dla psów, których spacer rozpada się na etapie napięcia, lęku, frustracji albo bólu.",
+          "sourcePath": "content/guides/items/trudny_spacer_v2/guide.md",
+          "pdfPath": "content/guides/pdf/trudny_spacer_v2.pdf",
+          "coverPath": "content/guides/covers/trudny_spacer_v2.svg",
+          "category": "dog",
+          "kind": "main",
+          "palette": {
+            "primary": "#405B37",
+            "secondary": "#6F8A53",
+            "accent": "#8DAE6E",
+            "ink": "#1D2418",
+            "paper": "#F4F4EE"
+          },
+          "routePath": "/oferta/poradniki-pdf/trudny_spacer_v2",
+          "pagePath": "content/guides/site/pages/guides/trudny_spacer_v2.html",
+          "pageHref": "guides/trudny_spacer_v2.html",
+          "pdfFileName": "trudny_spacer_v2.pdf",
+          "coverFileName": "trudny_spacer_v2.svg",
+          "pdfHrefFromListing": "../../pdf/trudny_spacer_v2.pdf",
+          "pdfHrefFromPage": "../../../pdf/trudny_spacer_v2.pdf",
+          "coverHrefFromListing": "../../covers/trudny_spacer_v2.svg",
+          "coverHrefFromPage": "../../../covers/trudny_spacer_v2.svg",
+          "website_card": {
+            "eyebrow": "Starter PDF",
+            "headline": "Trudny spacer",
+            "subline": "Pierwszy filtr problemu spacerowego, zanim wejdziesz w głębszą analizę smyczy i dystansu.",
+            "cta": "Kup PDF"
+          },
+          "next_steps": [
+            "Dlaczego pies „głupieje” na smyczy?",
+            "Konsultacja 15 min"
+          ],
+          "must_have_blocks": [
+            "Dla kogo",
+            "Co znajdziesz w środku",
+            "Najkrócej",
+            "Kiedy ten materiał zwykle wystarcza",
+            "Kiedy lepsza będzie konsultacja",
+            "Co dalej / routing"
+          ],
+          "notes_for_offer": "Na stronie pokazuj jako objawowy starter. Nie mieszaj go z core; ten materiał sprzedaje pierwszy, widoczny problem.",
+          "toc": [
+            "Dla kogo",
+            "Co znajdziesz w środku",
+            "Najkrócej",
+            "Kiedy ten materiał zwykle wystarcza",
+            "Kiedy lepsza będzie konsultacja",
+            "Co dalej / routing"
+          ],
+          "excerpt": [
+            "Ten materiał jest dla opiekunów, którzy widzą, że pies nakręca się na smyczy, warczy, rzuca się albo nie może przejść kilku metrów bez napięcia.",
+            "Jeśli po lekturze widać, że spacer miesza lęk, frustrację, ograniczenie ruchu albo ból, następny krok prowadzi do core albo do konsultacji, zamiast do kolejnych przypadkowych prób."
+          ]
+        },
+        {
+          "slug": "dlaczego_pies_glupieje_na_smyczy_v2",
+          "title": "Dlaczego pies „głupieje” na smyczy?",
+          "subtitle": "Jak zrozumieć mechanikę napięcia, dystansu i ograniczenia ruchu — choć w domu bywa spokojny",
+          "role_in_funnel": "core",
+          "audience": "Opiekun psa, który na smyczy reaguje inaczej niż w domu.",
+          "valuePromise": "Core po trudnym spacerze, który porządkuje ruch, dystans i fizyczne ograniczenia.",
+          "format": "PDF A4, druk domowy, kolor",
+          "accessType": "low-ticket",
+          "pricing": "59 zł",
+          "mainPromise": "Core o mechanice napięcia, dystansu i ograniczenia ruchu.",
+          "status": "ready",
+          "relatedService": "szybka konsultacja 15 min",
+          "difficulty": "początkujący / średnio zaawansowany",
+          "estimatedReadingTime": 14,
+          "pageCount": 12,
+          "description": "Core po trudnym spacerze, który porządkuje ruch, dystans i fizyczne ograniczenia.",
+          "sourcePath": "content/guides/items/dlaczego_pies_glupieje_na_smyczy_v2/guide.md",
+          "pdfPath": "content/guides/pdf/dlaczego_pies_glupieje_na_smyczy_v2.pdf",
+          "coverPath": "content/guides/covers/dlaczego_pies_glupieje_na_smyczy_v2.svg",
+          "category": "dog",
+          "kind": "main",
+          "palette": {
+            "primary": "#2F5665",
+            "secondary": "#5B8390",
+            "accent": "#80B5BF",
+            "ink": "#1A262C",
+            "paper": "#F0F5F6"
+          },
+          "routePath": "/oferta/poradniki-pdf/dlaczego_pies_glupieje_na_smyczy_v2",
+          "pagePath": "content/guides/site/pages/guides/dlaczego_pies_glupieje_na_smyczy_v2.html",
+          "pageHref": "guides/dlaczego_pies_glupieje_na_smyczy_v2.html",
+          "pdfFileName": "dlaczego_pies_glupieje_na_smyczy_v2.pdf",
+          "coverFileName": "dlaczego_pies_glupieje_na_smyczy_v2.svg",
+          "pdfHrefFromListing": "../../pdf/dlaczego_pies_glupieje_na_smyczy_v2.pdf",
+          "pdfHrefFromPage": "../../../pdf/dlaczego_pies_glupieje_na_smyczy_v2.pdf",
+          "coverHrefFromListing": "../../covers/dlaczego_pies_glupieje_na_smyczy_v2.svg",
+          "coverHrefFromPage": "../../../covers/dlaczego_pies_glupieje_na_smyczy_v2.svg",
+          "website_card": {
+            "eyebrow": "Core PDF",
+            "headline": "Dlaczego pies „głupieje” na smyczy?",
+            "subline": "Core o mechanice napięcia, dystansu i ograniczenia ruchu.",
+            "cta": "Kup PDF"
+          },
+          "next_steps": [
+            "Trudny spacer",
+            "Konsultacja 15 min"
+          ],
+          "must_have_blocks": [
+            "Dla kogo",
+            "Co znajdziesz w środku",
+            "Najkrócej",
+            "Kiedy ten materiał zwykle wystarcza",
+            "Kiedy lepsza będzie konsultacja",
+            "Co dalej / routing"
+          ],
+          "notes_for_offer": "Na stronie pokazuj jako core problemu. Sprzedawaj bezpieczeństwo, przewidywalność i pierwszy plan.",
+          "toc": [
+            "Dla kogo",
+            "Co znajdziesz w środku",
+            "Najkrócej",
+            "Kiedy ten materiał zwykle wystarcza",
+            "Kiedy lepsza będzie konsultacja",
+            "Co dalej / routing"
+          ],
+          "excerpt": [
+            "To materiał dla opiekunów, którzy widzą, że pies na smyczy zaczyna działać inaczej niż w domu: napina się, szybciej reaguje albo sprawia wrażenie, jakby „głupiał”.",
+            "Jeśli problem spacerowy łączy się ze strachem, frustracją albo bólem, ten core daje lepszy obraz sytuacji i pomaga zdecydować, czy wystarczy dalszy PDF, czy już konsultacja."
+          ]
+        }
+      ],
+      "consult": [
+        "szybka konsultacja 15 min",
+        "konsultacja behawioralna online"
+      ]
+    },
+    {
+      "slug": "pakiet-sam-w-domu",
+      "title": "Pakiet Sam w domu",
+      "audience": "dla opiekuna psa, który chce połączyć niszczenie z problemem samotności i separacji",
+      "accessType": "bundle",
+      "pricing": "109 zł",
+      "guideSlugs": [
+        "pies_niszczy_w_domu_v2",
+        "pies_zostaje_sam_i_wpada_w_panike_v2"
+      ],
+      "promise": "Mniej chaosu wokół zostawania samemu i wyraźniejszy pierwszy plan.",
+      "routePath": "/oferta/poradniki-pdf/pakiety/pakiet-sam-w-domu",
+      "pagePath": "content/guides/site/pages/bundles/pakiet-sam-w-domu.html",
+      "pageHref": "bundles/pakiet-sam-w-domu.html",
+      "category": "dog",
+      "guides": [
+        {
+          "slug": "pies_niszczy_w_domu_v2",
+          "title": "Pies niszczy w domu?",
+          "subtitle": "5 scenariuszy, które trzeba odróżnić, zanim zaczniesz naprawiać problem",
+          "role_in_funnel": "starter",
+          "audience": "Opiekun psa, który widzi niszczenie w domu i chce najpierw odróżnić scenariusze.",
+          "valuePromise": "Starter dla opiekuna, który chce najpierw zobaczyć, co naprawdę stoi za niszczeniem w domu.",
+          "format": "PDF A4, druk domowy, kolor",
+          "accessType": "low-ticket",
+          "pricing": "49 zł",
+          "mainPromise": "Starter o niszczeniu, które może wynikać z samotności, frustracji, pobudzenia albo środowiska.",
+          "status": "ready",
+          "relatedService": "szybka konsultacja 15 min",
+          "difficulty": "początkujący",
+          "estimatedReadingTime": 13,
+          "pageCount": 11,
+          "description": "Starter dla opiekuna, który chce najpierw zobaczyć, co naprawdę stoi za niszczeniem w domu.",
+          "sourcePath": "content/guides/items/pies_niszczy_w_domu_v2/guide.md",
+          "pdfPath": "content/guides/pdf/pies_niszczy_w_domu_v2.pdf",
+          "coverPath": "content/guides/covers/pies_niszczy_w_domu_v2.svg",
+          "category": "dog",
+          "kind": "main",
+          "palette": {
+            "primary": "#405B37",
+            "secondary": "#6F8A53",
+            "accent": "#8DAE6E",
+            "ink": "#1D2418",
+            "paper": "#F4F4EE"
+          },
+          "routePath": "/oferta/poradniki-pdf/pies_niszczy_w_domu_v2",
+          "pagePath": "content/guides/site/pages/guides/pies_niszczy_w_domu_v2.html",
+          "pageHref": "guides/pies_niszczy_w_domu_v2.html",
+          "pdfFileName": "pies_niszczy_w_domu_v2.pdf",
+          "coverFileName": "pies_niszczy_w_domu_v2.svg",
+          "pdfHrefFromListing": "../../pdf/pies_niszczy_w_domu_v2.pdf",
+          "pdfHrefFromPage": "../../../pdf/pies_niszczy_w_domu_v2.pdf",
+          "coverHrefFromListing": "../../covers/pies_niszczy_w_domu_v2.svg",
+          "coverHrefFromPage": "../../../covers/pies_niszczy_w_domu_v2.svg",
+          "website_card": {
+            "eyebrow": "Starter PDF",
+            "headline": "Pies niszczy w domu?",
+            "subline": "Starter o niszczeniu, które może wynikać z samotności, frustracji, pobudzenia albo środowiska.",
+            "cta": "Kup PDF"
+          },
+          "next_steps": [
+            "Pies zostaje sam i wpada w panikę?",
+            "Czy Twój pies naprawdę potrzebuje więcej ruchu?",
+            "Konsultacja 15 min"
+          ],
+          "must_have_blocks": [
+            "Dla kogo",
+            "Co znajdziesz w środku",
+            "Najkrócej",
+            "Kiedy ten materiał zwykle wystarcza",
+            "Kiedy lepsza będzie konsultacja",
+            "Co dalej / routing"
+          ],
+          "notes_for_offer": "Na stronie pokazuj jako objawowy starter. Nie mieszaj go z core; ten materiał sprzedaje pierwszy, widoczny problem.",
+          "toc": [
+            "Dla kogo",
+            "Co znajdziesz w środku",
+            "Najkrócej",
+            "Kiedy ten materiał zwykle wystarcza",
+            "Kiedy lepsza będzie konsultacja",
+            "Co dalej / routing"
+          ],
+          "excerpt": [
+            "To materiał dla opiekunów, którzy widzą pogryzione przedmioty, zniszczone miejsca odpoczynku albo chaos po wyjściu człowieka i chcą najpierw rozróżnić scenariusze.",
+            "Jeśli niszczenie łączy się z samotnością, pobudzeniem albo lękiem po wyjściu, naturalnym kolejnym krokiem jest core o samotności albo konsultacja."
+          ]
+        },
+        {
+          "slug": "pies_zostaje_sam_i_wpada_w_panike_v2",
+          "title": "Pies zostaje sam i wpada w panikę?",
+          "subtitle": "Jak odróżnić separację od frustracji, protestu i chaosu po wyjściu — i od czego zacząć",
+          "role_in_funnel": "core",
+          "audience": "Opiekun psa, który podejrzewa, że problem z zostawaniem samemu to nie tylko nuda albo protest.",
+          "valuePromise": "Core ścieżki samotności, który pokazuje pierwsze kroki i czerwone flagi.",
+          "format": "PDF A4, druk domowy, kolor",
+          "accessType": "low-ticket",
+          "pricing": "59 zł",
+          "mainPromise": "PDF o panice separacyjnej, frustracji, nagraniu wideo, pierwszych 72 godzinach i planie 14 dni.",
+          "status": "ready",
+          "relatedService": "szybka konsultacja 15 min lub konsultacja 30 min",
+          "difficulty": "początkujący / średnio zaawansowany",
+          "estimatedReadingTime": 14,
+          "pageCount": 12,
+          "description": "Core ścieżki samotności, który pokazuje pierwsze kroki i czerwone flagi.",
+          "sourcePath": "content/guides/items/pies_zostaje_sam_i_wpada_w_panike_v2/guide.md",
+          "pdfPath": "content/guides/pdf/pies_zostaje_sam_i_wpada_w_panike_v2.pdf",
+          "coverPath": "content/guides/covers/pies_zostaje_sam_i_wpada_w_panike_v2.svg",
+          "category": "dog",
+          "kind": "main",
+          "palette": {
+            "primary": "#2F5665",
+            "secondary": "#5B8390",
+            "accent": "#80B5BF",
+            "ink": "#1A262C",
+            "paper": "#F0F5F6"
+          },
+          "routePath": "/oferta/poradniki-pdf/pies_zostaje_sam_i_wpada_w_panike_v2",
+          "pagePath": "content/guides/site/pages/guides/pies_zostaje_sam_i_wpada_w_panike_v2.html",
+          "pageHref": "guides/pies_zostaje_sam_i_wpada_w_panike_v2.html",
+          "pdfFileName": "pies_zostaje_sam_i_wpada_w_panike_v2.pdf",
+          "coverFileName": "pies_zostaje_sam_i_wpada_w_panike_v2.svg",
+          "pdfHrefFromListing": "../../pdf/pies_zostaje_sam_i_wpada_w_panike_v2.pdf",
+          "pdfHrefFromPage": "../../../pdf/pies_zostaje_sam_i_wpada_w_panike_v2.pdf",
+          "coverHrefFromListing": "../../covers/pies_zostaje_sam_i_wpada_w_panike_v2.svg",
+          "coverHrefFromPage": "../../../covers/pies_zostaje_sam_i_wpada_w_panike_v2.svg",
+          "website_card": {
+            "eyebrow": "Core PDF",
+            "headline": "Pies zostaje sam i wpada w panikę?",
+            "subline": "PDF o panice separacyjnej, frustracji, nagraniu wideo, pierwszych 72 godzinach i planie 14 dni.",
+            "cta": "Kup PDF"
+          },
+          "next_steps": [
+            "Pies niszczy w domu?",
+            "Czy Twój pies naprawdę potrzebuje więcej ruchu?",
+            "Konsultacja 15 min"
+          ],
+          "must_have_blocks": [
+            "Dla kogo",
+            "Co znajdziesz w środku",
+            "Najkrócej",
+            "Kiedy ten materiał zwykle wystarcza",
+            "Kiedy lepsza będzie konsultacja",
+            "Co dalej / routing"
+          ],
+          "notes_for_offer": "Na stronie pokazuj jako core problemu. Sprzedawaj bezpieczeństwo, przewidywalność i pierwszy plan.",
+          "toc": [
+            "Dla kogo",
+            "Co znajdziesz w środku",
+            "Najkrócej",
+            "Kiedy ten materiał zwykle wystarcza",
+            "Kiedy lepsza będzie konsultacja",
+            "Co dalej / routing"
+          ],
+          "excerpt": [
+            "Ten PDF jest dla opiekunów, którzy podejrzewają, że problem z zostawaniem samemu to nie tylko nuda, ale panika, frustracja separacyjna albo trudność z regulacją po wyjściu człowieka.",
+            "Jeśli niszczenie w domu jest jednym z objawów, ten core prowadzi do kolejnego kroku w sposób bezpieczny. Jeśli reakcja jest silna albo widać kilka objawów naraz, konsultacja staje się lepszym wyborem."
+          ]
+        }
+      ],
+      "consult": [
+        "szybka konsultacja 15 min",
+        "konsultacja 30 min",
+        "konsultacja behawioralna online"
+      ]
+    },
+    {
+      "slug": "pakiet-pobudzenie-i-hamulce",
+      "title": "Pakiet Pobudzenie i hamulce",
+      "audience": "dla opiekuna psa, który widzi pogoń, demolkę i brak wyhamowania w codzienności",
+      "accessType": "bundle",
+      "pricing": "99 zł",
+      "guideSlugs": [
+        "czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2",
+        "pogon_demolka_i_brak_hamulcow_v2"
+      ],
+      "promise": "Lepsze odczytanie pobudzenia i prostsze hamowanie codziennego nakręcenia.",
+      "routePath": "/oferta/poradniki-pdf/pakiety/pakiet-pobudzenie-i-hamulce",
+      "pagePath": "content/guides/site/pages/bundles/pakiet-pobudzenie-i-hamulce.html",
+      "pageHref": "bundles/pakiet-pobudzenie-i-hamulce.html",
+      "category": "dog",
+      "guides": [
+        {
+          "slug": "czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2",
+          "title": "Czy Twój pies naprawdę potrzebuje więcej ruchu?",
+          "subtitle": "Prawda o pobudzeniu, które nie schodzi po spacerze",
+          "role_in_funnel": "lead_magnet",
+          "audience": "Opiekun psa, który widzi nakręcanie po aktywności, słaby odpoczynek i trudność z zejściem z pobudzenia.",
+          "valuePromise": "Szerokie wejście do psiego lejka PDF. Materiał obala mit „więcej ruchu = rozwiązanie” i prowadzi do właściwej ścieżki.",
+          "format": "PDF A4, druk domowy, kolor",
+          "accessType": "lead magnet",
+          "pricing": "0 zł",
+          "mainPromise": "Szeroki PDF wejściowy o pobudzeniu, regeneracji i tym, kiedy więcej aktywności tylko dokręca problem.",
+          "status": "ready",
+          "relatedService": "szybka konsultacja 15 min",
+          "difficulty": "początkujący",
+          "estimatedReadingTime": 12,
+          "pageCount": 10,
+          "description": "Szerokie wejście do psiego lejka PDF. Materiał obala mit „więcej ruchu = rozwiązanie” i prowadzi do właściwej ścieżki.",
+          "sourcePath": "content/guides/items/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2/guide.md",
+          "pdfPath": "content/guides/pdf/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.pdf",
+          "coverPath": "content/guides/covers/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.svg",
+          "category": "dog",
+          "kind": "main",
+          "palette": {
+            "primary": "#5B3A29",
+            "secondary": "#A56A43",
+            "accent": "#D88F5A",
+            "ink": "#251B16",
+            "paper": "#F7F1E9"
+          },
+          "routePath": "/oferta/poradniki-pdf/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2",
+          "pagePath": "content/guides/site/pages/guides/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.html",
+          "pageHref": "guides/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.html",
+          "pdfFileName": "czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.pdf",
+          "coverFileName": "czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.svg",
+          "pdfHrefFromListing": "../../pdf/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.pdf",
+          "pdfHrefFromPage": "../../../pdf/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.pdf",
+          "coverHrefFromListing": "../../covers/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.svg",
+          "coverHrefFromPage": "../../../covers/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2.svg",
+          "website_card": {
+            "eyebrow": "Darmowy start",
+            "headline": "Czy Twój pies naprawdę potrzebuje więcej ruchu?",
+            "subline": "Szeroki PDF wejściowy o pobudzeniu, regeneracji i tym, kiedy więcej aktywności tylko dokręca problem.",
+            "cta": "Pobierz darmowy PDF"
+          },
+          "next_steps": [
+            "Szczeniak gryzie i skacze?",
+            "Szczeniak nie umie się wyciszyć?",
+            "Trudny spacer",
+            "Dlaczego pies „głupieje” na smyczy?",
+            "Pogoń, demolka i brak hamulców?",
+            "Konsultacja 15 min"
+          ],
+          "must_have_blocks": [
+            "Dla kogo",
+            "Co znajdziesz w środku",
+            "Najkrócej",
+            "Kiedy ten materiał zwykle wystarcza",
+            "Kiedy lepsza będzie konsultacja",
+            "Co dalej / routing"
+          ],
+          "notes_for_offer": "Na stronie pokazuj wysoko jako darmowy start. Nie sprzedawaj go jako równorzędnego z core PDF-ami.",
+          "toc": [
+            "Dla kogo",
+            "Co znajdziesz w środku",
+            "Najkrócej",
+            "Kiedy ten materiał zwykle wystarcza",
+            "Kiedy lepsza będzie konsultacja",
+            "Co dalej / routing"
+          ],
+          "excerpt": [
+            "Ten materiał jest dla opiekunów psów, które po spacerze nie schodzą z pobudzenia, a problem wygląda bardziej na przeciążenie niż na samą potrzebę ruchu.",
+            "Jeśli po lekturze widać, że pobudzenie, samotność, spacer albo szczeniak mieszają się ze sobą, łatwiej wybrać kolejny PDF, pakiet albo konsultację bez losowego testowania wszystkiego naraz."
+          ]
+        },
+        {
+          "slug": "pogon_demolka_i_brak_hamulcow_v2",
+          "title": "Pogoń, demolka i brak hamulców?",
+          "subtitle": "Jak rozpoznać przewlekłe pobudzenie, frustrację i brak wyhamowania — i od czego zacząć",
+          "role_in_funnel": "core",
+          "audience": "Opiekun psa, który widzi pogoń, demolkę i brak wyhamowania w codzienności.",
+          "valuePromise": "Core ścieżki pobudzenia, które nie kończy się na samym „ma dużo energii”.",
+          "format": "PDF A4, druk domowy, kolor",
+          "accessType": "low-ticket",
+          "pricing": "59 zł",
+          "mainPromise": "Core o pobudzeniu, frustracji i braku wyhamowania.",
+          "status": "ready",
+          "relatedService": "szybka konsultacja 15 min",
+          "difficulty": "początkujący / średnio zaawansowany",
+          "estimatedReadingTime": 14,
+          "pageCount": 12,
+          "description": "Core ścieżki pobudzenia, które nie kończy się na samym „ma dużo energii”.",
+          "sourcePath": "content/guides/items/pogon_demolka_i_brak_hamulcow_v2/guide.md",
+          "pdfPath": "content/guides/pdf/pogon_demolka_i_brak_hamulcow_v2.pdf",
+          "coverPath": "content/guides/covers/pogon_demolka_i_brak_hamulcow_v2.svg",
+          "category": "dog",
+          "kind": "main",
+          "palette": {
+            "primary": "#2F5665",
+            "secondary": "#5B8390",
+            "accent": "#80B5BF",
+            "ink": "#1A262C",
+            "paper": "#F0F5F6"
+          },
+          "routePath": "/oferta/poradniki-pdf/pogon_demolka_i_brak_hamulcow_v2",
+          "pagePath": "content/guides/site/pages/guides/pogon_demolka_i_brak_hamulcow_v2.html",
+          "pageHref": "guides/pogon_demolka_i_brak_hamulcow_v2.html",
+          "pdfFileName": "pogon_demolka_i_brak_hamulcow_v2.pdf",
+          "coverFileName": "pogon_demolka_i_brak_hamulcow_v2.svg",
+          "pdfHrefFromListing": "../../pdf/pogon_demolka_i_brak_hamulcow_v2.pdf",
+          "pdfHrefFromPage": "../../../pdf/pogon_demolka_i_brak_hamulcow_v2.pdf",
+          "coverHrefFromListing": "../../covers/pogon_demolka_i_brak_hamulcow_v2.svg",
+          "coverHrefFromPage": "../../../covers/pogon_demolka_i_brak_hamulcow_v2.svg",
+          "website_card": {
+            "eyebrow": "Core PDF",
+            "headline": "Pogoń, demolka i brak hamulców?",
+            "subline": "Core o pobudzeniu, frustracji i braku wyhamowania.",
+            "cta": "Kup PDF"
+          },
+          "next_steps": [
+            "Czy Twój pies naprawdę potrzebuje więcej ruchu?",
+            "Konsultacja 15 min"
+          ],
+          "must_have_blocks": [
+            "Dla kogo",
+            "Co znajdziesz w środku",
+            "Najkrócej",
+            "Kiedy ten materiał zwykle wystarcza",
+            "Kiedy lepsza będzie konsultacja",
+            "Co dalej / routing"
+          ],
+          "notes_for_offer": "Na stronie pokazuj jako core problemu. Sprzedawaj bezpieczeństwo, przewidywalność i pierwszy plan.",
+          "toc": [
+            "Dla kogo",
+            "Co znajdziesz w środku",
+            "Najkrócej",
+            "Kiedy ten materiał zwykle wystarcza",
+            "Kiedy lepsza będzie konsultacja",
+            "Co dalej / routing"
+          ],
+          "excerpt": [
+            "Ten core jest dla opiekunów psów, które nie potrafią wyhamować, gonią, demolują dom albo wyglądają na stale nakręcone.",
+            "Gdy pobudzenie łączy się z frustracją, lękiem albo gorszym snem, ten materiał pomaga zbudować sensowny kolejny ruch: konsultację, pakiet albo pokrewny PDF."
+          ]
+        }
+      ],
+      "consult": [
+        "szybka konsultacja 15 min",
+        "konsultacja behawioralna online"
+      ]
+    },
+    {
+      "slug": "pakiet-dom-i-bezpieczenstwo",
+      "title": "Pakiet Dom i bezpieczeństwo",
+      "audience": "dla opiekuna psa, który chce połączyć szczekanie na gości i obronę zasobów",
+      "accessType": "bundle",
+      "pricing": "99 zł",
+      "guideSlugs": [
+        "pies_szczeka_na_gosci_i_dzwonek_v2",
+        "pies_broni_zasobow_v2"
+      ],
+      "promise": "Spokojniejszy dom, czytelniejsze granice i mniej reakcji alarmowych.",
+      "routePath": "/oferta/poradniki-pdf/pakiety/pakiet-dom-i-bezpieczenstwo",
+      "pagePath": "content/guides/site/pages/bundles/pakiet-dom-i-bezpieczenstwo.html",
+      "pageHref": "bundles/pakiet-dom-i-bezpieczenstwo.html",
+      "category": "dog",
+      "guides": [
+        {
+          "slug": "pies_szczeka_na_gosci_i_dzwonek_v2",
+          "title": "Pies szczeka na gości i dzwonek?",
+          "subtitle": "Jak odróżnić alarm, ekscytację i napięcie przy wejściu do domu — i od czego zacząć",
+          "role_in_funnel": "starter-core",
+          "audience": "Opiekun psa, który reaguje przy gościach, dzwonku i wejściu do domu.",
+          "valuePromise": "Starter-core dla wejścia do domu, dzwonka i pobudzenia przy bodźcach społecznych.",
+          "format": "PDF A4, druk domowy, kolor",
+          "accessType": "low-ticket",
+          "pricing": "49 zł",
+          "mainPromise": "Jak odróżnić alarm, ekscytację i napięcie przy wejściu do domu.",
+          "status": "ready",
+          "relatedService": "szybka konsultacja 15 min",
+          "difficulty": "początkujący / średnio zaawansowany",
+          "estimatedReadingTime": 11,
+          "pageCount": 9,
+          "description": "Starter-core dla wejścia do domu, dzwonka i pobudzenia przy bodźcach społecznych.",
+          "sourcePath": "content/guides/items/pies_szczeka_na_gosci_i_dzwonek_v2/guide.md",
+          "pdfPath": "content/guides/pdf/pies_szczeka_na_gosci_i_dzwonek_v2.pdf",
+          "coverPath": "content/guides/covers/pies_szczeka_na_gosci_i_dzwonek_v2.svg",
+          "category": "dog",
+          "kind": "quick",
+          "palette": {
+            "primary": "#6A3E46",
+            "secondary": "#A06A73",
+            "accent": "#D29AA1",
+            "ink": "#24181B",
+            "paper": "#F8EFF1"
+          },
+          "routePath": "/oferta/poradniki-pdf/pies_szczeka_na_gosci_i_dzwonek_v2",
+          "pagePath": "content/guides/site/pages/guides/pies_szczeka_na_gosci_i_dzwonek_v2.html",
+          "pageHref": "guides/pies_szczeka_na_gosci_i_dzwonek_v2.html",
+          "pdfFileName": "pies_szczeka_na_gosci_i_dzwonek_v2.pdf",
+          "coverFileName": "pies_szczeka_na_gosci_i_dzwonek_v2.svg",
+          "pdfHrefFromListing": "../../pdf/pies_szczeka_na_gosci_i_dzwonek_v2.pdf",
+          "pdfHrefFromPage": "../../../pdf/pies_szczeka_na_gosci_i_dzwonek_v2.pdf",
+          "coverHrefFromListing": "../../covers/pies_szczeka_na_gosci_i_dzwonek_v2.svg",
+          "coverHrefFromPage": "../../../covers/pies_szczeka_na_gosci_i_dzwonek_v2.svg",
+          "website_card": {
+            "eyebrow": "Starter-core PDF",
+            "headline": "Pies szczeka na gości i dzwonek?",
+            "subline": "Jak odróżnić alarm, ekscytację i napięcie przy wejściu do domu.",
+            "cta": "Kup PDF"
+          },
+          "next_steps": [
+            "Pies broni zasobów?",
+            "Konsultacja 15 min"
+          ],
+          "must_have_blocks": [
+            "Dla kogo",
+            "Co znajdziesz w środku",
+            "Najkrócej",
+            "Kiedy ten materiał zwykle wystarcza",
+            "Kiedy lepsza będzie konsultacja",
+            "Co dalej / routing"
+          ],
+          "notes_for_offer": "Na stronie pokazuj jako starter-core. Nie spychaj go zbyt wysoko ponad startery, ale daj go jeszcze przed core.",
+          "toc": [
+            "Dla kogo",
+            "Co znajdziesz w środku",
+            "Najkrócej",
+            "Kiedy ten materiał zwykle wystarcza",
+            "Kiedy lepsza będzie konsultacja",
+            "Co dalej / routing"
+          ],
+          "excerpt": [
+            "Ten PDF jest dla opiekunów psów, które reagują przy gościach, dzwonku albo nagłym wejściu do domu.",
+            "Jeśli bodźce społeczne są tylko częścią większego problemu domowego, kolejnym ruchem może być konsultacja albo core po stronie samotności, pobudzenia lub obrony zasobów."
+          ]
+        },
+        {
+          "slug": "pies_broni_zasobow_v2",
+          "title": "Pies broni zasobów?",
+          "subtitle": "Jak odróżnić napięcie przy jedzeniu, zabawkach i przestrzeni od mitu „dominacji” — i od czego zacząć",
+          "role_in_funnel": "core",
+          "audience": "Opiekun psa broniącego jedzenia, zabawek, legowiska albo przejścia.",
+          "valuePromise": "Core problemu domowego o wysokiej gotowości zakupowej.",
+          "format": "PDF A4, druk domowy, kolor",
+          "accessType": "low-ticket",
+          "pricing": "59 zł",
+          "mainPromise": "Core o bezpieczeństwie, przewidywalności i pierwszym planie pracy.",
+          "status": "ready",
+          "relatedService": "szybka konsultacja 15 min",
+          "difficulty": "początkujący / średnio zaawansowany",
+          "estimatedReadingTime": 14,
+          "pageCount": 12,
+          "description": "Core problemu domowego o wysokiej gotowości zakupowej.",
+          "sourcePath": "content/guides/items/pies_broni_zasobow_v2/guide.md",
+          "pdfPath": "content/guides/pdf/pies_broni_zasobow_v2.pdf",
+          "coverPath": "content/guides/covers/pies_broni_zasobow_v2.svg",
+          "category": "dog",
+          "kind": "main",
+          "palette": {
+            "primary": "#2F5665",
+            "secondary": "#5B8390",
+            "accent": "#80B5BF",
+            "ink": "#1A262C",
+            "paper": "#F0F5F6"
+          },
+          "routePath": "/oferta/poradniki-pdf/pies_broni_zasobow_v2",
+          "pagePath": "content/guides/site/pages/guides/pies_broni_zasobow_v2.html",
+          "pageHref": "guides/pies_broni_zasobow_v2.html",
+          "pdfFileName": "pies_broni_zasobow_v2.pdf",
+          "coverFileName": "pies_broni_zasobow_v2.svg",
+          "pdfHrefFromListing": "../../pdf/pies_broni_zasobow_v2.pdf",
+          "pdfHrefFromPage": "../../../pdf/pies_broni_zasobow_v2.pdf",
+          "coverHrefFromListing": "../../covers/pies_broni_zasobow_v2.svg",
+          "coverHrefFromPage": "../../../covers/pies_broni_zasobow_v2.svg",
+          "website_card": {
+            "eyebrow": "Core PDF",
+            "headline": "Pies broni zasobów?",
+            "subline": "Core o bezpieczeństwie, przewidywalności i pierwszym planie pracy.",
+            "cta": "Kup PDF"
+          },
+          "next_steps": [
+            "Pies szczeka na gości i dzwonek?",
+            "Konsultacja 15 min"
+          ],
+          "must_have_blocks": [
+            "Dla kogo",
+            "Co znajdziesz w środku",
+            "Najkrócej",
+            "Kiedy ten materiał zwykle wystarcza",
+            "Kiedy lepsza będzie konsultacja",
+            "Co dalej / routing"
+          ],
+          "notes_for_offer": "Na stronie pokazuj jako core problemu. Sprzedawaj bezpieczeństwo, przewidywalność i pierwszy plan.",
+          "toc": [
+            "Dla kogo",
+            "Co znajdziesz w środku",
+            "Najkrócej",
+            "Kiedy ten materiał zwykle wystarcza",
+            "Kiedy lepsza będzie konsultacja",
+            "Co dalej / routing"
+          ],
+          "excerpt": [
+            "To materiał dla opiekunów, którzy widzą warczenie przy jedzeniu, zabawkach, legowisku albo przejściu obok psa i chcą przestać tłumaczyć to dominacją.",
+            "Jeśli obrona zasobów miesza się z innymi sygnałami napięcia, core daje pierwszy plan pracy i pokazuje, kiedy lepiej wejść w konsultację."
+          ]
+        }
+      ],
+      "consult": [
+        "szybka konsultacja 15 min",
+        "konsultacja behawioralna online"
+      ]
     }
   ],
   "funnels": {
     "dog": {
       "entry": [
-        "domowy-enrichment-plan-na-14-dni",
-        "pies-boi-sie-gosci-i-dzwiekow"
+        "czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2"
       ],
       "lowTicket": [
-        "pies-zostaje-sam-plan-pierwszych-krokow",
-        "szczeniak-pierwsze-30-dni",
-        "pies-reaktywny-na-spacerze"
+        "szczeniak_gryzie_i_skacze_v2",
+        "trudny_spacer_v2",
+        "pies_niszczy_w_domu_v2",
+        "pies_szczeka_na_gosci_i_dzwonek_v2"
       ],
       "bundle": [
-        "pakiet-startowy-psa",
-        "pakiet-spokojny-dom-pies",
-        "pakiet-spacerowy-pies"
+        "pakiet-spokojny-szczeniak",
+        "pakiet-spacer-bez-wybuchu",
+        "pakiet-sam-w-domu",
+        "pakiet-pobudzenie-i-hamulce",
+        "pakiet-dom-i-bezpieczenstwo"
       ],
       "consult": [
         "szybka konsultacja 15 min",

@@ -27,19 +27,6 @@ interface BookingFormProps {
 type BookingApiErrorCode = 'slot_unavailable' | 'booking_unavailable'
 
 function getProblemFormCopy(problemType: ProblemType) {
-  if (problemType === 'dogoterapia') {
-    return {
-      animalType: 'Pies' as AnimalType,
-      durationLabel: 'Na jakim etapie jest temat',
-      durationPlaceholder: 'np. chcę ustalić plan pierwszego spotkania w tym miesiącu',
-      descriptionLabel: 'Krótki opis celu rozmowy',
-      descriptionPlaceholder:
-        'Napisz, dla kogo ma być przygotowane spotkanie, jaki jest cel dogoterapii i co chcesz uporządkować na początku.',
-      helperText:
-        'W tym polu najlepiej od razu dopisz kontekst spotkania, grupę odbiorców i to, czego potrzebujesz po pierwszej rozmowie.',
-    }
-  }
-
   return {
     animalType: isCatProblemType(problemType) ? ('Kot' as AnimalType) : ('Pies' as AnimalType),
     durationLabel: 'Od kiedy trwa problem',

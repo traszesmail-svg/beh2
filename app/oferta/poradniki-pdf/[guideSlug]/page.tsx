@@ -64,7 +64,7 @@ export default function PdfGuideDetailPage({ params }: PdfGuideDetailPageProps) 
   const detailPoints = guide.toc.slice(0, 3)
 
   return (
-    <main className="page-wrap">
+    <main className="page-wrap marketing-page">
       <div className="container">
         <Header />
 
@@ -75,7 +75,7 @@ export default function PdfGuideDetailPage({ params }: PdfGuideDetailPageProps) 
             </Link>
 
             <div className="offer-detail-head">
-              <div className="section-eyebrow">{getPdfAccessLabel(guide.accessType)}</div>
+              <div className="section-eyebrow">{guide.website_card?.eyebrow ?? getPdfAccessLabel(guide.accessType)}</div>
               <div className="offer-detail-pills">
                 <span className="hero-proof-pill">{getPdfCategoryLabel(guide.category)}</span>
                 <span className="hero-proof-pill">{getPdfKindLabel(guide.kind)}</span>

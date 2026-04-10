@@ -50,6 +50,13 @@ export type PdfTopic = {
 
 const quickStartPriceLabel = `Od ${formatPricePln(DEFAULT_PRICE_PLN)}`
 
+export const FUNNEL_PRIMARY_HREF = buildBookHref()
+export const FUNNEL_PRIMARY_LABEL = 'Umów 15 min'
+export const FUNNEL_SECONDARY_HREF = '/oferta/poradniki-pdf'
+export const FUNNEL_SECONDARY_LABEL = 'Zobacz materiały PDF'
+export const FUNNEL_UPGRADE_HREF = '/oferta#wiecej-czasu'
+export const FUNNEL_UPGRADE_LABEL = 'Konsultacja 30 min / pełna'
+
 export const OFFERS: Offer[] = [
   {
     slug: 'szybka-konsultacja-15-min',
@@ -72,11 +79,11 @@ export const OFFERS: Offer[] = [
     outcomes: ['co zrobić dziś', 'co obserwować przez najbliższe dni', 'czy zostać przy 15 min czy wejść głębiej'],
     primaryCtaLabel: 'Umów 15 min',
     primaryHref: buildBookHref(),
-    secondaryCtaLabel: 'Napisz wiadomość',
-    secondaryHref: '/kontakt',
+    secondaryCtaLabel: FUNNEL_SECONDARY_LABEL,
+    secondaryHref: FUNNEL_SECONDARY_HREF,
     imageSrc: SPECIALIST_WIDE_PHOTO.src,
     imageAlt: SPECIALIST_WIDE_PHOTO.alt,
-    note: 'Jeśli temat okaże się szerszy, od razu wskażę, czy lepsze będzie 30 min, pełna konsultacja online czy inny dalszy krok.',
+    note: 'Jeśli temat okaże się szerszy, od razu wskażę, czy lepszy będzie PDF, 30 min, pełna konsultacja online albo inny dalszy krok.',
   },
   {
     slug: 'konsultacja-30-min',
@@ -221,16 +228,16 @@ export const OFFERS: Offer[] = [
     priceLabel: null,
     priceAmount: null,
     forWho: 'Dla jednego konkretnego tematu.',
-    whenToChoose: 'Gdy chcesz zacząć od materiału bez rezerwacji rozmowy.',
-    nextStep: 'Wybierasz poradnik albo pakiet. Jeśli to za mało, łatwo przechodzisz do wiadomości albo konsultacji.',
-    cardSummary: 'Na jeden temat.',
-    heroSummary: 'Poradnik albo pakiet na start.',
+    whenToChoose: 'Gdy chcesz spokojnie wrócić do tematu albo uporządkować zalecenia we własnym tempie.',
+    nextStep: 'Najpierw wracasz do materiału, a potem łatwiej wybierasz rozmowę, pakiet albo kolejny krok.',
+    cardSummary: 'Spokojny materiał do porządkowania między krokami.',
+    heroSummary: 'Poradnik albo pakiet, gdy chcesz wrócić do zaleceń we własnym tempie.',
     descriptions: [
-      'Wybierz to, jeśli chcesz ogarnąć jeden temat bez rezerwacji rozmowy.',
-      'Jeśli to za mało, łatwo przejdziesz do wiadomości albo konsultacji.',
+      'Wybierz to, jeśli chcesz uporządkować jeden temat bez pośpiechu i wracać do materiału wtedy, gdy Ci wygodnie.',
+      'Jeśli temat okaże się szerszy, łatwo przejdziesz do wiadomości, konsultacji albo następnego materiału.',
     ],
-    bestFor: ['jeden temat', 'materiał do domu', 'gdy nie chcesz jeszcze rezerwować rozmowy'],
-    outcomes: ['prosty materiał', 'mniej chaosu na starcie', 'czy wystarczy poradnik'],
+    bestFor: ['jeden temat', 'materiał do domu', 'spokojny powrót do zaleceń'],
+    outcomes: ['prosty materiał', 'mniej chaosu między krokami', 'czy wystarczy poradnik'],
     primaryCtaLabel: 'Napisz wiadomość',
     primaryHref: buildPdfInquiryHref(),
     detailCtaLabel: 'Zobacz PDF',

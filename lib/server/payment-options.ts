@@ -107,18 +107,18 @@ function getQaCheckoutModeSummary(): string {
   }
 
   if (!qaEnabled) {
-    return 'Testowy checkout QA jest wylaczony. Ustaw TEST_CHECKOUT_ENABLED=true, aby odblokowac jawny testowy flow.'
+    return 'Testowy checkout QA jest wyłączony. Ustaw TEST_CHECKOUT_ENABLED=true, aby odblokować jawny testowy flow.'
   }
 
   if (hasAllowlist) {
-    return `Testowy checkout QA jest ograniczony do allowlisty kontaktow (${emailAllowlist.length} emaili, ${phoneAllowlist.length} telefonow) i jawnej flagi QA.`
+    return `Testowy checkout QA jest ograniczony do allowlisty kontaktów (${emailAllowlist.length} emaili, ${phoneAllowlist.length} telefonów) i jawnej flagi QA.`
   }
 
   if (process.env.VERCEL_ENV === 'production') {
-    return 'Testowy checkout QA jest zablokowany w produkcji, bo nie ustawiono allowlisty emaili lub telefonow.'
+    return 'Testowy checkout QA jest zablokowany w produkcji, bo nie ustawiono allowlisty emaili lub telefonów.'
   }
 
-  return 'Testowy checkout QA jest aktywny poza produkcja i wymaga jawnej flagi QA.'
+  return 'Testowy checkout QA jest aktywny poza produkcją i wymaga jawnej flagi QA.'
 }
 
 function normalizeEmail(value: string | null | undefined): string | null {
@@ -191,7 +191,7 @@ export function getQaCheckoutEligibility(
     return {
       isAllowed: false,
       reason: `Testowy checkout QA wymaga aktywnego trybu mock. ${payment.summary}`,
-      summary: 'Testowy checkout QA jest wylaczony, bo aktywny tryb platnosci nie jest mock.',
+      summary: 'Testowy checkout QA jest wyłączony, bo aktywny tryb płatności nie jest mock.',
       paymentReference,
     }
   }
@@ -200,7 +200,7 @@ export function getQaCheckoutEligibility(
     return {
       isAllowed: false,
       reason: 'Booking nie ma jawnej flagi QA.',
-      summary: 'Testowy checkout QA jest dostepny tylko dla bookingow oznaczonych jako QA.',
+      summary: 'Testowy checkout QA jest dostępny tylko dla bookingów oznaczonych jako QA.',
       paymentReference,
     }
   }
@@ -337,7 +337,7 @@ export function getPayuOptionStatus(): PayuOptionStatus {
       clientId,
       clientSecret,
       secondKey,
-      summary: 'PayU online jest swiadomie wylaczone. Sprzedaz dziala przez wplate reczna z potwierdzeniem na stronie.',
+      summary: 'PayU online jest świadomie wyłączone. Sprzedaż działa przez wpłatę ręczną z potwierdzeniem na stronie.',
       missing: [],
     }
   }

@@ -26,13 +26,13 @@ export function RouteFallbackPage({
   description,
   highlights,
   actions,
-  footerCtaHref = '/kontakt',
-  footerCtaLabel = 'Napisz wiadomość',
+  footerCtaHref = '/book',
+  footerCtaLabel = 'Umów 15 min',
   footerHeadline = 'Potrzebujesz pomocy z tym adresem?',
-  footerDescription = 'Wróć do bezpiecznej ścieżki albo napisz, a wskażę najkrótszą drogę.',
+  footerDescription = 'Wróć do bezpiecznej ścieżki albo zobacz PDF jako materiał wspierający, jeśli temat wymaga spokojniejszego wejścia.',
 }: RouteFallbackPageProps) {
   return (
-    <main className="page-wrap">
+    <main className="page-wrap marketing-page">
       <div className="container">
         <section className="panel section-panel hero-surface">
           <div className="header-trust-strip" aria-label="Regulski">
@@ -57,7 +57,7 @@ export function RouteFallbackPage({
 
             <div className="list-card tree-backed-card">
               <strong>Najbezpieczniej teraz</strong>
-              <span>Wróć do głównej ścieżki albo napisz wiadomość, jeśli chcesz, żebym wskazał kolejny krok.</span>
+              <span>Wróć do głównej ścieżki albo zobacz PDF, jeśli chcesz spokojniejszego materiału między krokami.</span>
             </div>
           </div>
 
@@ -79,6 +79,9 @@ export function RouteFallbackPage({
             <span className="top-gap-small" style={{ display: 'block' }}>
               <a href={footerCtaHref} className="inline-link">
                 {footerCtaLabel}
+              </a>{' '}
+              <a href="/oferta/poradniki-pdf" className="inline-link">
+                Zobacz materiały PDF
               </a>
             </span>
           </div>

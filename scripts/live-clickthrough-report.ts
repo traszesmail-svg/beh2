@@ -382,7 +382,7 @@ async function waitForHome(page: Page, baseUrl: string) {
     [
       page
         .locator('main h1')
-        .filter({ hasText: /Masz psa, kota albo temat mieszany\?|Spokojny start bez zgadywania|Najpierw prosty wybór, potem konkretny krok/i })
+        .filter({ hasText: /Masz psa, kota albo sprawę złożoną\?|Spokojny start bez zgadywania|Chcę opisać sytuację/i })
         .first(),
       page.locator('main h1').first(),
     ],
@@ -952,7 +952,7 @@ async function main() {
 
       await waitForHome(publicPage, baseUrl)
       await clickAndWaitForUrl(publicPage, publicPage.locator('[data-home-quick-choice="help"]').first(), /\/kontakt$/)
-      step.notes.push('Nie wiem, od czego zaczĂ„â€¦Ă„â€ˇ -> /kontakt')
+      step.notes.push('Chcę opisać sytuację -> /kontakt')
     })
 
     await runStep(results, '/koty', publicPage, async (step) => {

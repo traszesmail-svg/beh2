@@ -378,11 +378,46 @@ async function runUiSmokeOnce() {
     const publicPage = await publicContext.newPage()
     await publicPage.goto(appUrl, { waitUntil: 'domcontentloaded' })
     await publicPage
-      .getByRole('heading', { level: 1, name: /Masz psa, kota albo temat mieszany\? Zacznij od prostego wyboru\./i })
+      .getByRole('heading', { level: 1, name: /Spokojny pierwszy krok przy problemach psa lub kota/i })
       .waitFor()
 
+    const desktopPage = await adminContext.newPage()
+
+    for (const [label, page] of [
+      ['mobile', publicPage],
+      ['desktop', desktopPage],
+    ] as const) {
+      await page.goto(`${appUrl}/koty`, { waitUntil: 'domcontentloaded' })
+      await page.getByRole('heading', { name: /Zacznij od krótkiej konsultacji i sprawdź, co będzie najlepszym kolejnym krokiem/i }).waitFor()
+      assert.equal(await page.locator('.shop-pdf-card[data-product-kind="pdf"]').count(), 23, `${label}: expected 23 cat PDF cards`)
+      assert.equal(await page.locator('.shop-pdf-card[data-product-kind="pakiet"]').count(), 23, `${label}: expected 23 cat bundle cards`)
+      assert.equal(await page.locator('.shop-book-card').count(), 24, `${label}: expected 24 cat books`)
+
+      await page.goto(`${appUrl}/psy`, { waitUntil: 'domcontentloaded' })
+      await page.getByRole('heading', { name: /Zacznij od krótkiej konsultacji i sprawdź, co będzie najlepszym kolejnym krokiem/i }).waitFor()
+      assert.equal(await page.locator('.shop-pdf-card[data-product-kind="pdf"]').count(), 23, `${label}: expected 23 dog PDF cards`)
+      assert.equal(await page.locator('.shop-pdf-card[data-product-kind="pakiet"]').count(), 23, `${label}: expected 23 dog bundle cards`)
+      assert.equal(await page.locator('.shop-book-card').count(), 24, `${label}: expected 24 dog books`)
+
+      await page.goto(`${appUrl}/oferta`, { waitUntil: 'domcontentloaded' })
+      await page.getByRole('heading', { name: /Zacznij od 15 min\. PDF zostaje drugim krokiem, a dłuższy format trzecim\./i }).waitFor()
+      assert.equal(await page.locator('.shop-entrance-card').count(), 4, `${label}: expected 4 shop entrance cards`)
+
+    await page.goto(`${appUrl}/oferta/poradniki-pdf`, { waitUntil: 'domcontentloaded' })
+    await page.getByRole('heading', { name: /Materiały PDF do uporządkowania tematu\./i }).waitFor()
+    assert.equal(await page.locator('#koty-pdf .pdf-path-card[data-product-kind="pdf"]').count(), 23, `${label}: expected 23 cat PDF listing cards`)
+    assert.equal(await page.locator('#psy-pdf .pdf-path-card[data-product-kind="pdf"]').count(), 23, `${label}: expected 23 dog PDF listing cards`)
+    assert.equal(await page.locator('#pakiety-pdf .pdf-path-card').count(), 5, `${label}: expected 5 bundle cards`)
+    assert.equal(await page.locator('#ksiazki .shop-book-card').count(), 24, `${label}: expected 24 paper book cards`)
+    }
+
+    if (process.env.UI_SMOKE_SHOP_ONLY === '1') {
+      console.log('UI_SMOKE_SHOP_OK')
+      return
+    }
+
     await publicPage.goto(`${appUrl}/book`, { waitUntil: 'domcontentloaded' })
-    await publicPage.getByRole('heading', { name: /Wybierz temat dla:/i }).waitFor()
+    await publicPage.getByRole('heading', { name: /Wybierz temat na 15 min/i }).waitFor()
 
     await publicPage.goto(`${appUrl}/slot?problem=szczeniak`, { waitUntil: 'domcontentloaded' })
     await publicPage.getByRole('heading', { name: /Wybierz termin: Szczeniak/i }).waitFor()
@@ -555,8 +590,8 @@ async function runUiSmokeOnce() {
     )
 
     await publicPage.locator('[data-confirmation-state="confirmed"]').waitFor({ timeout: 30000 })
-    await publicPage.getByRole('heading', { name: /Platnosc za konsultacje zostala potwierdzona/i }).waitFor({ timeout: 30000 })
-    assert.equal(await publicPage.getByText(/Oplacona rezerwacja jest juz zapisana/i).isVisible(), true)
+    await publicPage.getByRole('heading', { name: /(Testowa )?Płatność( za konsultację)? została potwierdzona/i }).waitFor({ timeout: 30000 })
+    assert.equal(await publicPage.getByText(/Opłacona rezerwacja jest już zapisana/i).isVisible(), true)
 
     const prepNotes = 'Krótki opis do smoke testu po potwierdzonej płatności.'
     await publicPage.locator('textarea').fill(prepNotes)
@@ -569,11 +604,11 @@ async function runUiSmokeOnce() {
     const prepSaveResponse = await prepSaveResponsePromise
     assert.equal(prepSaveResponse.ok(), true)
     await publicPage.reload({ waitUntil: 'domcontentloaded' })
-    await publicPage.getByRole('heading', { name: /Platnosc za konsultacje zostala potwierdzona/i }).waitFor()
+    await publicPage.getByRole('heading', { name: /(Testowa )?Płatność( za konsultację)? została potwierdzona/i }).waitFor()
     assert.equal(await publicPage.locator('textarea').inputValue(), prepNotes)
     assert.equal((await publicPage.getByRole('button', { name: /Anuluj zakup w 1 minutę/i }).count()) === 0, true)
 
-    const roomJoinHref = await publicPage.getByRole('link', { name: /Dolacz do rozmowy audio/i }).getAttribute('href')
+    const roomJoinHref = await publicPage.getByRole('link', { name: /Dołącz do rozmowy audio/i }).getAttribute('href')
     assert.ok(roomJoinHref, 'Expected room join href on the confirmation page.')
     await publicPage.goto(new URL(roomJoinHref, appUrl).toString(), { waitUntil: 'domcontentloaded' })
     await publicPage.waitForURL(new RegExp(`/call/${bookingId}`), { timeout: routeNavigationTimeoutMs })

@@ -14,13 +14,17 @@ export type TestimonialIssueOption = {
 }
 
 export const TESTIMONIAL_ISSUE_OPTIONS: TestimonialIssueOption[] = [
-  { value: 'szczekanie-i-pobudzenie', label: 'Szczekanie i pobudzenie' },
-  { value: 'lek-separacyjny', label: 'Lęk separacyjny' },
-  { value: 'kot-i-kuweta', label: 'Kot i kuweta' },
-  { value: 'konflikt-miedzy-zwierzetami', label: 'Konflikt między zwierzętami' },
-  { value: 'niszczenie-rzeczy', label: 'Niszczenie rzeczy' },
-  { value: 'dogoterapia', label: 'Dogoterapia' },
-  { value: 'inne', label: 'Inne' },
+  { value: 'szczeniak', label: 'Szczeniak i młody pies' },
+  { value: 'separacja', label: 'Problemy separacyjne' },
+  { value: 'spacer', label: 'Spacer i reakcje' },
+  { value: 'pobudzenie', label: 'Pobudzenie i pogoń' },
+  { value: 'agresja', label: 'Agresja i obrona zasobów' },
+  { value: 'kot-kuweta', label: 'Kuweta i zachowania toaletowe' },
+  { value: 'kot-konflikt', label: 'Konflikt między kotami' },
+  { value: 'kot-dotyk', label: 'Dotyk, pielęgnacja i obrona' },
+  { value: 'kot-stres', label: 'Lęk, stres i wycofanie' },
+  { value: 'kot-nocna-wokalizacja', label: 'Nocna aktywność i rytm dnia' },
+  { value: 'inne', label: 'Inny problem lub temat pokrewny' },
 ]
 
 export const TESTIMONIAL_FORM_LIMITS = {

@@ -14,12 +14,12 @@ export function readSearchParam(value: SearchParamValue): string | null {
 
 export function readProblemTypeSearchParam(value: SearchParamValue): ProblemType | null {
   const problem = readSearchParam(value)
-  return isProblemType(problem) ? problem : null
+  return isProblemType(problem) ? (problem as ProblemType) : null
 }
 
 export function readBookingServiceSearchParam(value: SearchParamValue): BookingServiceType | null {
   const service = readSearchParam(value)
-  return isBookingServiceType(service) ? service : null
+  return isBookingServiceType(service) ? (service as BookingServiceType) : null
 }
 
 export function readQaBookingSearchParam(value: SearchParamValue): boolean {

@@ -138,7 +138,7 @@ export function buildPaymentConfirmationSmsMessage(
   booking: Pick<BookingRecord, 'bookingDate' | 'bookingTime' | 'serviceType' | 'amount'>,
 ): string {
   const serviceName = getPaymentServiceName(booking)
-  const withDetails = `Potwierdzenie platnosci: ${serviceName}, termin: ${formatBookingDateTimeForSms(
+  const withDetails = `Potwierdzenie płatności: ${serviceName}, termin: ${formatBookingDateTimeForSms(
     booking.bookingDate,
     booking.bookingTime,
   )}. Szczegoly: ${SITE_PRODUCTION_URL}. Dziekuje, Krzysztof Regulski`
@@ -147,7 +147,7 @@ export function buildPaymentConfirmationSmsMessage(
     return withDetails
   }
 
-  return `Potwierdzenie platnosci: ${serviceName}, termin: ${formatBookingDateTimeForSms(
+  return `Potwierdzenie płatności: ${serviceName}, termin: ${formatBookingDateTimeForSms(
     booking.bookingDate,
     booking.bookingTime,
   )}. Dziekuje, Krzysztof Regulski`

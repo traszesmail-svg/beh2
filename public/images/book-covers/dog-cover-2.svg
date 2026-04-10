@@ -1,0 +1,11 @@
+<svg width="900" height="1200" viewBox="0 0 900 1200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="900" height="1200" rx="52" fill="#F7EFE5"/>
+  <rect x="58" y="58" width="784" height="1084" rx="42" fill="#EBDCC6"/>
+  <path d="M136 270H764" stroke="#D6C0A3" stroke-width="22" stroke-linecap="round"/>
+  <path d="M136 338H664" stroke="#C5976F" stroke-width="22" stroke-linecap="round"/>
+  <path d="M136 406H710" stroke="#9B8268" stroke-width="22" stroke-linecap="round"/>
+  <rect x="136" y="540" width="170" height="280" rx="34" fill="#C89E71"/>
+  <rect x="336" y="510" width="170" height="310" rx="34" fill="#DCC1A2"/>
+  <rect x="536" y="560" width="170" height="260" rx="34" fill="#9C8163"/>
+  <text x="136" y="930" fill="#684C37" font-family="Arial, Helvetica, sans-serif" font-size="72" font-weight="700" letter-spacing="3">DOG BOOKS</text>
+</svg>

@@ -35,8 +35,8 @@ function readSearchParam(value: string | string[] | undefined): string | null {
 function getSmsPanelContent(status: SmsConfirmationStatus | null | undefined) {
   if (status === 'sent') {
     return {
-      title: 'SMS z potwierdzeniem został wysłany',
-      body: 'Wysłaliśmy SMS z potwierdzeniem na numer telefonu podany w rezerwacji.',
+      title: 'SMS został wysłany',
+      body: 'Wysłaliśmy SMS z potwierdzeniem na numer telefonu z rezerwacji.',
     }
   }
 
@@ -48,8 +48,8 @@ function getSmsPanelContent(status: SmsConfirmationStatus | null | undefined) {
   }
 
   return {
-    title: 'Potwierdzenie rezerwacji jest zapisane',
-    body: 'Jeśli nie otrzymasz SMS, skontaktujemy się na podstawie danych z rezerwacji. Sukces płatności pozostaje ważny.',
+    title: 'Potwierdzenie jest zapisane',
+    body: 'Jeśli SMS nie dotrze od razu, skontaktujemy się na podstawie danych z rezerwacji.',
   }
 }
 
@@ -87,7 +87,7 @@ export default async function ConfirmationPage({
         error,
       })
       onlineSyncWarning = 'Wróciliśmy z płatności online, ale nie udał się teraz zapis finalnego statusu. Ta strona spróbuje ponownie sama za chwilę.'
-      // Wrocilismy z platnosci online
+      // Wróciliśmy z płatności online
     }
   }
 
@@ -101,7 +101,7 @@ export default async function ConfirmationPage({
         error,
       })
       onlineSyncWarning = 'Wróciliśmy z płatności online, ale nie udał się teraz zapis finalnego statusu. Ta strona spróbuje ponownie sama za chwilę.'
-      // Wrocilismy z platnosci online
+      // Wróciliśmy z płatności online
     }
   }
 

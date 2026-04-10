@@ -13,10 +13,18 @@ export type PdfGuidePalette = {
   paper: string
 }
 
+export type PdfGuideWebsiteCard = {
+  eyebrow: string
+  headline: string
+  subline: string
+  cta: string
+}
+
 export type PdfGuide = {
   slug: string
   title: string
   subtitle: string
+  role_in_funnel?: string
   audience: string
   valuePromise: string
   format: string
@@ -44,6 +52,10 @@ export type PdfGuide = {
   pdfHrefFromPage: string
   coverHrefFromListing: string
   coverHrefFromPage: string
+  website_card?: PdfGuideWebsiteCard
+  next_steps?: string[]
+  must_have_blocks?: string[]
+  notes_for_offer?: string
   toc: string[]
   excerpt: string[]
 }
@@ -198,28 +210,28 @@ export function getPdfPricingBadge(pricing: string): string {
 export function getPdfAccessLabel(accessType: PdfGuideAccessType | 'bundle'): string {
   switch (accessType) {
     case 'lead magnet':
-      return 'Materiał startowy'
+      return 'Spokojny start'
     case 'bonus':
-      return 'Dostęp po konsultacji'
+      return 'Materiał dodatkowy'
     case 'bundle':
       return 'Pakiet PDF'
     case 'low-ticket':
     default:
-      return 'Płatny poradnik'
+      return 'PDF do kupienia'
   }
 }
 
 export function getPdfAccessDescription(accessType: PdfGuideAccessType | 'bundle'): string {
   switch (accessType) {
     case 'lead magnet':
-      return 'To materiał startowy udostępniany po kontakcie albo jako spokojne wejście przed konsultacją.'
+      return 'To spokojny materiał na start, gdy chcesz najpierw uporządkować temat bez rozmowy.'
     case 'bonus':
-      return 'To materiał dostępny po konsultacji albo jako uzupełnienie dalszej pracy. Napisz, jeśli chcesz sprawdzić, czy pasuje do Twojej sytuacji.'
+      return 'To materiał uzupełniający do szerszej pracy. Jeśli temat jest bardziej złożony, możesz dopytać o dopasowanie.'
     case 'bundle':
-      return 'To pakiet kilku materiałów dobieranych do konkretnego problemu albo etapu współpracy.'
+      return 'To spójny pakiet kilku materiałów do jednego obszaru pracy.'
     case 'low-ticket':
     default:
-      return 'To materiał płatny albo dokładany po konsultacji. Dostęp ustalamy przez kontakt, a nie przez automatyczny checkout na stronie.'
+      return 'To pełnoprawny PDF do kupienia, gdy chcesz najpierw zacząć od jednego materiału.'
   }
 }
 

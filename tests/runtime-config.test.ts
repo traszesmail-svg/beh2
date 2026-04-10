@@ -13,7 +13,7 @@ import { SocialProofSection } from '@/components/SocialProofSection'
 import { buildBookHref, buildFormHref, buildPaymentHref, buildSlotHref, readQaBookingSearchParam } from '@/lib/booking-routing'
 import { BUILD_MARKER_KEY } from '@/lib/build-marker'
 import { getDefaultReleaseSmokeRules } from '@/lib/release-smoke'
-import { INSTAGRAM_PROFILE_URL, SITE_PRODUCTION_URL } from '@/lib/site'
+import { CAPBT_ORG_URL, INSTAGRAM_PROFILE_URL, SITE_PRODUCTION_URL } from '@/lib/site'
 import { buildHomeMetadata } from '@/lib/seo'
 import { getDeployReadinessChecks, getGoLiveChecks, getVerifiedDeployReadinessChecks } from '@/lib/server/go-live'
 import { getQaCheckoutEligibility, getQaCheckoutPaymentReference, getPublicManualPaymentConfig } from '@/lib/server/payment-options'
@@ -22,6 +22,10 @@ import { getDefaultProductionEnvSnapshotPath } from '@/scripts/lib/env-file'
 
 function readSource(...parts: string[]) {
   return readFileSync(path.join(process.cwd(), ...parts), 'utf8')
+}
+
+function countMatches(source: string, pattern: RegExp) {
+  return Array.from(source.matchAll(pattern)).length
 }
 
 function withEnv(
@@ -61,33 +65,51 @@ function withEnv(
 test('home hero stays short and decision-first', () => {
   const source = readSource('app', 'page.tsx')
 
-  assert.match(source, /Masz psa, kota albo temat mieszany\? Zacznij od prostego wyboru\./)
-  assert.match(source, /Krzysztof Regulski prowadzi konsultacje osobiście/)
-  assert.match(source, /potwierdzenie i link do pokoju/)
-  assert.match(source, /3 r.*wne wej.*cia/)
-  assert.match(source, /Mam psa/)
-  assert.match(source, /Mam kota/)
-  assert.match(source, /Nie wiem, od czego zacz.*ć/)
-  assert.doesNotMatch(source, /Dobierz pierwszy krok/)
-  assert.doesNotMatch(source, /Wybierz start/)
-  assert.doesNotMatch(source, /Piszesz do mnie/)
-  assert.doesNotMatch(source, /Jak mogÄ™ pomĂłc/)
-  assert.doesNotMatch(source, /Jak pracujÄ™/)
+  assert.match(source, /Najpierw porządek\. Potem zmiana\./)
+  assert.match(source, /Jedna spokojna rozmowa wystarcza/)
+  assert.match(source, /PDF będzie drugim krokiem, a nie pierwszym skrótem\./)
+  assert.match(source, /15 minut na start/)
+  assert.match(source, /PDF jako spokojny drugi krok/)
+  assert.match(source, /30 min \/ pełna jako upgrade/)
+  assert.match(source, /editorial-hero-grid/)
+  assert.match(source, /editorial-entry-grid/)
+  assert.match(source, /editorial-process-layout/)
+  assert.match(source, /editorial-final-panel/)
+  assert.match(source, /FUNNEL_PRIMARY_HREF/)
+  assert.match(source, /FUNNEL_SECONDARY_LABEL/)
+  assert.match(source, /FUNNEL_UPGRADE_LABEL/)
+  assert.doesNotMatch(source, /Zacznij od PDF/)
+  assert.doesNotMatch(source, /PDF jako nurture/)
 })
 
-test('home hero uses the approved cat-in-arms portrait', () => {
+test('home hero uses the approved cutover assets', () => {
   const homeSource = readSource('app', 'page.tsx')
+  const casesSource = JSON.parse(readSource('content', 'cases.json')) as Array<{ id: string; images: Array<{ src: string; alt: string }> }>
+  const realCasesLoaderSource = readSource('lib', 'real-case-studies.ts')
+  const headerSource = readSource('components', 'Header.tsx')
   const siteSource = readSource('lib', 'site.ts')
 
+  assert.match(homeSource, /\/branding\/omnie-hero\.webp/)
+  assert.match(homeSource, /editorial-home-page/)
+  assert.match(homeSource, /editorial-hero-grid/)
+  assert.match(homeSource, /editorial-entry-grid/)
+  assert.match(homeSource, /editorial-process-layout/)
+  assert.match(homeSource, /editorial-final-panel/)
+  assert.match(realCasesLoaderSource, /cases\.json/)
+  assert.equal(casesSource.length, 10)
+  assert.equal(casesSource.every((caseStudy) => caseStudy.images.length === 2), true)
   assert.match(siteSource, /HOME_HERO_PHOTO/)
-  assert.match(siteSource, /omnie-hero\.webp/)
+  assert.match(siteSource, /hero-main\.png/)
+  assert.match(siteSource, /dog-puppy-home\.png/)
+  assert.match(siteSource, /dog-kitchen-chaos\.png/)
+  assert.match(siteSource, /home-cat-hidden\.png/)
+  assert.match(siteSource, /home-help-stress\.png/)
   assert.doesNotMatch(siteSource, /specialist-krzysztof-portrait\.jpg/)
-  assert.match(siteSource, /cat-in-arms\.jpg/)
   assert.match(siteSource, /HOME_HELP_CHOICE_PHOTO/)
-  assert.match(homeSource, /HOME_HERO_PHOTO/)
-  assert.match(homeSource, /HOME_HERO_PHOTO\.src/)
-  assert.doesNotMatch(homeSource, /SPECIALIST_WIDE_PHOTO\.src/)
-  assert.match(homeSource, /Krzysztof Regulski prowadzi konsultacje osobiście/)
+  assert.match(headerSource, /COAPE_LOGO/)
+  assert.match(headerSource, /brand-sigil-svg/)
+  assert.doesNotMatch(headerSource, /Krzysztof Regulski/)
+  assert.match(headerSource, /brand-mark-coape/)
 })
 
 test('home and opinions pages surface real social proof and local SEO', async () => {
@@ -98,16 +120,20 @@ test('home and opinions pages surface real social proof and local SEO', async ()
   const socialPreviewMarkup = renderToStaticMarkup(createElement(SocialProofSection, { showSubmissionForm: false }))
   const socialFullMarkup = renderToStaticMarkup(createElement(SocialProofSection))
 
-  assert.match(homeSource, /SocialProofSection/)
-  assert.match(homeSource, /showSubmissionForm=\{false\}/)
+  assert.doesNotMatch(homeSource, /SocialProofSection/)
+  assert.doesNotMatch(homeSource, /showSubmissionForm=\{false\}/)
   assert.match(opinionsSource, /SocialProofSection/)
   assert.match(opinionsSource, /buildMarketingMetadata/)
   assert.match(String(homeMetadata.description ?? ''), /Olsztyn/)
   assert.match(String(homeMetadata.openGraph?.description ?? ''), /Olsztyn/)
   assert.match(String(homeMetadata.openGraph?.siteName ?? ''), /Regulski \| Terapia behawioralna/)
+  assert.match(opinionsMarkup, /real-case-grid/)
   assert.match(opinionsMarkup, /Historie opiekunów i efekty konsultacji/)
+  assert.equal(countMatches(opinionsMarkup, /real-case-card/g), 10)
+  assert.equal(countMatches(opinionsMarkup, /real-case-gallery-item/g), 20)
   assert.match(opinionsMarkup, /Dodaj swoją opinię do ręcznej weryfikacji/)
   assert.match(socialPreviewMarkup, /Historie opiekunów i efekty konsultacji/)
+  assert.equal(countMatches(socialPreviewMarkup, /real-case-card/g), 10)
   assert.match(socialPreviewMarkup, /Publiczne źródła/)
   assert.match(socialPreviewMarkup, /Magazyn Weterynaryjny/)
   assert.match(socialPreviewMarkup, /Zobacz pełną sekcję opinii/)
@@ -128,21 +154,38 @@ test('offer and booking pages keep quick-scan language', () => {
   const bookingPage = readSource('app', 'book', 'page.tsx')
   const offersSource = readSource('lib', 'offers.ts')
 
-  assert.match(offerPage, /Wybierz start dla swojej sytuacji\./)
-  assert.match(offerPage, /Każda karta pokazuje: dla kogo, kiedy wybrać, co dostajesz i co dalej\./)
-  assert.match(offerPage, /PDF osobno/)
-  assert.match(offerPage, /Zobacz szczegóły/)
-  assert.doesNotMatch(offerPage, /Czy to dla Ciebie\?/)
-  assert.doesNotMatch(offerPage, /Dobierz formę pomocy do sytuacji/)
-  assert.doesNotMatch(offerPage, /dla psów/)
-  assert.doesNotMatch(offerPage, /dla kotów/)
-  assert.match(pdfListingPage, /PDF-y dla psów/)
-  assert.match(pdfListingPage, /PDF-y dla kotów/)
+  assert.match(offerPage, /Zacznij od 15 min\. PDF zostaje drugim krokiem, a dłuższy format trzecim\./)
+  assert.match(offerPage, /Najprostszy pierwszy krok to konsultacja 15 min\./)
+  assert.match(offerPage, /PDF jako drugi krok/)
+  assert.match(offerPage, /30 min \/ pełna jako upgrade/)
+  assert.match(offerPage, /Konsultacja 15 min/)
+  assert.match(offerPage, /FUNNEL_SECONDARY_LABEL/)
+  assert.match(offerPage, /FUNNEL_UPGRADE_LABEL/)
+  assert.match(offerPage, /Najpierw 15 min\. PDF jako drugi krok\. 30 min \/ pełna konsultacja jako upgrade\./)
+  assert.doesNotMatch(offerPage, /PDF jako nurture/)
+  assert.doesNotMatch(offerPage, /Najprostszy pierwszy ruch to spokojny materiał PDF\./)
+  assert.match(pdfListingPage, /Poradniki PDF/)
+  assert.match(pdfListingPage, /Materiały PDF do uporządkowania tematu\./)
+  assert.match(pdfListingPage, /Po konsultacji 15 min/)
+  assert.match(pdfListingPage, /Między krokami/)
+  assert.match(pdfListingPage, /Pakiety gdy potrzebujesz szerzej/)
+  assert.match(pdfListingPage, /Książki jako uzupełnienie/)
+  assert.match(pdfListingPage, /Kocia półka PDF/)
+  assert.match(pdfListingPage, /Psia półka PDF/)
+  assert.match(pdfListingPage, /Pakiety dla kotów/)
+  assert.match(pdfListingPage, /Polecane książki papierowe/)
+  assert.match(pdfListingPage, /href=\"#koty-pdf\"/)
+  assert.match(pdfListingPage, /Umów 15 min/)
+  assert.match(pdfListingPage, /Zobacz materiały PDF/)
+  assert.match(offersSource, /whenToChoose: 'Gdy chcesz spokojnie wrócić do tematu albo uporządkować zalecenia we własnym tempie\.'/)
 
   assert.match(bookingPage, /Wybierz temat na 15 min/)
   assert.match(bookingPage, /Wybierz temat najbliższy sytuacji\./)
-  assert.match(bookingPage, /Temat mieszany\?/)
-  assert.match(bookingPage, /Wybierz temat mieszany/)
+  assert.match(bookingPage, /Nie musisz znać dokładnej nazwy problemu\./)
+  assert.match(bookingPage, /Inny problem lub temat pokrewny/)
+  assert.doesNotMatch(bookingPage, /Temat mieszany\?/)
+  assert.doesNotMatch(bookingPage, /Wybierz temat mieszany/)
+  assert.doesNotMatch(bookingPage, /Nie wiem, od czego zacz.*ć/)
   assert.doesNotMatch(bookingPage, /przejdź do kategorii dla kota/i)
   assert.match(bookingPage, /Następny krok/)
   assert.match(bookingPage, /Najpierw wybierasz temat\./)
@@ -158,7 +201,6 @@ test('offer and booking pages keep quick-scan language', () => {
   assert.match(offersSource, /return offer\.detailCtaLabel \?\? 'Zobacz szczegóły'/)
   assert.match(offersSource, /primaryCtaLabel: 'Umów 15 min'/)
   assert.match(offersSource, /primaryCtaLabel: 'Napisz wiadomość'/)
-  assert.match(offersSource, /secondaryCtaLabel: 'Napisz wiadomość'/)
   assert.match(offersSource, /priceLabel: formatPricePln\(119\)/)
   assert.match(offersSource, /priceLabel: formatPricePln\(350\)/)
   assert.doesNotMatch(offersSource, /Czy to dla Ciebie\?/)
@@ -178,29 +220,39 @@ test('offer, slot and form copy stay accented', () => {
   assert.match(offersSource, /Pełniejszy start dla trudniejszej sprawy\./)
   assert.match(offersSource, /Gdy problem trwa długo, dotyczy kilku obszarów albo chcesz od razu wejść w pełniejszą analizę\./)
   assert.match(offersSource, /Od razu rezerwujesz dłuższy termin online zamiast zaczynać od samego formularza kontaktowego\./)
-  assert.match(offersSource, /Gdy chcesz zacząć od materiału bez rezerwacji rozmowy\./)
+  assert.match(offersSource, /Gdy chcesz spokojnie wrócić do tematu albo uporządkować zalecenia we własnym tempie\./)
   assert.match(offersSource, /priceLabel: formatPricePln\(119\)/)
   assert.match(offersSource, /priceLabel: formatPricePln\(350\)/)
   assert.match(slotPage, /Potrzebuję pomocy/)
   assert.match(bookingForm, /To pomoże lepiej wykorzystać/)
-  assert.match(bookingForm, /Krótki opis celu rozmowy/)
   assert.match(bookingForm, /Krótki opis sytuacji/)
   assert.match(bookingForm, /Ty i zwierzak\?/)
   assert.doesNotMatch(bookingForm, /albo PayU/)
 })
 
-test('pdf surfaces keep the staged decision layout', () => {
+test('pdf listing page follows the cat problem-path architecture', () => {
   const pdfListingPage = readSource('app', 'oferta', 'poradniki-pdf', 'page.tsx')
   const pdfGuidePage = readSource('app', 'oferta', 'poradniki-pdf', '[guideSlug]', 'page.tsx')
   const pdfBundlePage = readSource('app', 'oferta', 'poradniki-pdf', 'pakiety', '[bundleSlug]', 'page.tsx')
 
-  assert.match(pdfListingPage, /pdf-stage-hero-grid/)
-  assert.match(pdfListingPage, /pdf-stage-entry-grid/)
-  assert.match(pdfListingPage, /offer-section-block-start/)
-  assert.match(pdfListingPage, /offer-section-block-moretime/)
-  assert.match(pdfListingPage, /offer-section-block-further/)
-  assert.match(pdfListingPage, /ctaHref=\{buildPdfInquiryHref\(\)\}/)
-  assert.doesNotMatch(pdfListingPage, /cta-panel compact-sales-cta/)
+  assert.match(pdfListingPage, /Poradniki PDF/)
+  assert.match(pdfListingPage, /Materiały PDF do uporządkowania tematu\./)
+  assert.match(pdfListingPage, /Po konsultacji 15 min/)
+  assert.match(pdfListingPage, /Między krokami/)
+  assert.match(pdfListingPage, /Pakiety gdy potrzebujesz szerzej/)
+  assert.match(pdfListingPage, /Książki jako uzupełnienie/)
+  assert.match(pdfListingPage, /Zobacz koty/)
+  assert.match(pdfListingPage, /Zobacz psy/)
+  assert.match(pdfListingPage, /Umów 15 min/)
+  assert.match(pdfListingPage, /Polecane książki papierowe/)
+  assert.match(pdfListingPage, /Zobacz materiały PDF/)
+  assert.doesNotMatch(pdfListingPage, /pdf-stage-hero-grid/)
+  assert.doesNotMatch(pdfListingPage, /pdf-stage-entry-grid/)
+  assert.doesNotMatch(pdfListingPage, /offer-section-block-start/)
+  assert.doesNotMatch(pdfListingPage, /offer-section-block-moretime/)
+  assert.doesNotMatch(pdfListingPage, /offer-section-block-further/)
+  assert.doesNotMatch(pdfListingPage, /PDF-y dla psów/)
+  assert.doesNotMatch(pdfListingPage, /PDF-y dla kotów/)
 
   assert.match(pdfGuidePage, /offer-detail-layout pdf-detail-layout/)
   assert.match(pdfGuidePage, /offer-detail-cta-band/)
@@ -252,7 +304,7 @@ test('contact, header, footer and legal pages stay message-first without public 
   assert.doesNotMatch(termsSource, /legal-panel/)
 
   assert.match(headerSource, /href: '\/oferta'/)
-  assert.match(headerSource, /href: '\/kontakt'/)
+  assert.match(headerSource, /href: '\/oferta\/poradniki-pdf'/)
   assert.match(headerSource, /Um.*w 15 min/)
   assert.doesNotMatch(headerSource, /label: 'Koty'/)
   assert.doesNotMatch(headerSource, /label: 'Pobyty'/)
@@ -279,7 +331,9 @@ test('social trust surfaces keep CAPBT and Instagram together', () => {
   assert.match(siteSource, /instagram\.com\/coapebehawiorysta/)
   assert.match(homeSource, /INSTAGRAM_PROFILE_URL/)
   assert.match(homeSource, /sameAs: \[COAPE_ORG_URL, CAPBT_ORG_URL, CAPBT_PROFILE_URL, INSTAGRAM_PROFILE_URL\]/)
-  assert.match(homeSource, /Instagram @coapebehawiorysta/)
+  assert.match(homeSource, /COAPE \/ CAPBT/)
+  assert.match(homeSource, /editorial-home-footer/)
+  assert.match(homeSource, /editorial-home-footer-links/)
   assert.match(footerSource, /INSTAGRAM_PROFILE_URL/)
   assert.match(socialSource, /INSTAGRAM_PROFILE_URL/)
   assert.match(legalLayoutSource, /INSTAGRAM_PROFILE_URL/)
@@ -297,31 +351,19 @@ test('cat entry stays short and decision-led', () => {
   const catPage = readSource('app', 'koty', 'page.tsx')
   const siteSource = readSource('lib', 'site.ts')
 
-  assert.match(catPage, /Wybierz temat dla kota i od razu przejdź do terminu\./)
-  assert.match(catPage, /Najpierw wybierasz format startu, potem klikasz kategorię\./)
-  assert.match(catPage, /Wybrany format:/)
-  assert.match(catPage, /data-analytics-disabled=\{qaBooking \? 'true' : undefined\}/)
-  assert.match(catPage, /Tryb QA/)
-  assert.match(catPage, /CAT_PROBLEM_OPTIONS\.map/)
-  assert.match(catPage, /data-cat-problem=\{category\.id\}/)
-  assert.match(catPage, /buildSlotHref\(category\.id, serviceQuery, qaBooking\)/)
-  assert.match(catPage, /CAT_TOPIC_VISUALS\[category\.id as keyof typeof CAT_TOPIC_VISUALS\]/)
-  assert.match(catPage, /data-analytics-event="topic_selected"/)
-  assert.match(catPage, /cats-start-step/)
-  assert.match(catPage, /Jak wybrać\?/)
-  assert.match(catPage, /Kot i kuweta/)
-  assert.match(catPage, /Konflikt między kotami/)
-  assert.match(catPage, /Dotyk, gryzienie i pielęgnacja/)
-  assert.match(catPage, /Kot lękowy, napięty albo wycofany/)
-  assert.match(catPage, /Budzi dom po nocy/)
-  assert.match(siteSource, /cat-bed-peeing\.png/)
-  assert.match(siteSource, /cat-intercat-conflict\.jpg/)
-  assert.match(siteSource, /cat-touch-defensive\.jpg/)
-  assert.match(siteSource, /cat-anxious-hiding\.jpg/)
-  assert.match(siteSource, /cat-night-meowing\.jpg/)
-  assert.doesNotMatch(catPage, /Jak zaczyna się praca z kotem/)
-  assert.doesNotMatch(catPage, /Kiedy napisać od razu/)
-  assert.doesNotMatch(catPage, /Nie wiesz\? Napisz\./)
+  assert.match(catPage, /Zacznij od krótkiej konsultacji i sprawdź, co będzie najlepszym kolejnym krokiem\./)
+  assert.match(catPage, /Spokojny pierwszy krok przy problemach kota/)
+  assert.match(catPage, /Spokojny pierwszy krok przy problemach kota\. Zacznij od 15 min, a PDF potraktuj jako drugi krok i materiał pomocniczy między etapami\./)
+  assert.match(catPage, /dynamic = 'force-dynamic'/)
+  assert.match(catPage, /path: '\/koty'/)
+  assert.match(catPage, /SpeciesShopPage/)
+  assert.match(catPage, /species=\"koty\"/)
+  assert.match(siteSource, /cat-kuweta\.png/)
+  assert.match(siteSource, /cat-conflict\.png/)
+  assert.match(siteSource, /cat-destruction\.png/)
+  assert.match(siteSource, /cat-stress\.png/)
+  assert.match(siteSource, /cat-night\.png/)
+  assert.match(siteSource, /therapy-animals\.png/)
 })
 
 test('qa checkout routing stays isolated and allowlist-gated', () => {
@@ -415,11 +457,11 @@ test('booking form shows normalized slot conflict copy instead of raw api errors
 
 test('cat topic images exist in the dedicated catalog', () => {
   const assetPaths = [
-    ['public', 'branding', 'topic-cards', 'cats', 'cat-bed-peeing.png'],
-    ['public', 'branding', 'topic-cards', 'cats', 'cat-intercat-conflict.jpg'],
-    ['public', 'branding', 'topic-cards', 'cats', 'cat-touch-defensive.jpg'],
-    ['public', 'branding', 'topic-cards', 'cats', 'cat-anxious-hiding.jpg'],
-    ['public', 'branding', 'topic-cards', 'cats', 'cat-night-meowing.jpg'],
+    ['public', 'images', 'cutover', 'cat-kuweta.png'],
+    ['public', 'images', 'cutover', 'cat-conflict.png'],
+    ['public', 'images', 'cutover', 'cat-destruction.png'],
+    ['public', 'images', 'cutover', 'cat-stress.png'],
+    ['public', 'images', 'cutover', 'cat-night.png'],
   ]
 
   for (const parts of assetPaths) {
@@ -461,7 +503,7 @@ test('booking funnel sources keep canonical routing and standardized analytics e
   assert.match(homeSource, /AnalyticsEventOnMount/)
   assert.match(homeSource, /data-analytics-event="cta_click"/)
   assert.match(stickyCtaSource, /data-analytics-event="cta_click"/)
-  assert.match(stickyCtaSource, /home-sticky-start/)
+  assert.match(stickyCtaSource, /data-home-sticky-cta="start"/)
   assert.match(contactSource, /contact-lead-general/)
   assert.match(contactSource, /contact-lead-resource/)
   assert.match(contactSource, /contact-lead-reschedule/)
@@ -482,7 +524,7 @@ test('booking funnel sources keep canonical routing and standardized analytics e
   assert.match(confirmationSource, /payment_success/)
   assert.doesNotMatch(paymentActionsSource, /PayU jako druga opcja|Zapłać online PayU|albo PayU|PayU wróci/)
   assert.doesNotMatch(confirmationSource, /Wrocilismy z PayU/)
-  assert.match(confirmationSource, /Wrocilismy z platnosci online/)
+  assert.match(confirmationSource, /Wróciliśmy z płatności online/)
   assert.match(callRoomSource, /room_entered/)
 })
 
@@ -516,7 +558,7 @@ test('payment, confirmation and call sources keep visible fallbacks instead of s
   assert.match(confirmationSource, /\[behawior15\]\[confirmation\] payu return sync failed/)
   assert.match(callPageSource, /flowError/)
   assert.match(callPageSource, /\[behawior15\]\[call\] failed to load booking/)
-  assert.match(callPageSource, /Nie udalo sie wczytac pokoju rozmowy|Nie udaĹ‚o siÄ™ wczytaÄ‡ pokoju rozmowy/)
+  assert.match(callPageSource, /Nie udało się wczytać pokoju rozmowy|Nie udało się wczytać pokoju rozmowy/)
 })
 
 test('public manual payment stays available when only BLIK phone is configured', () => {
@@ -552,6 +594,7 @@ test('release smoke rules track the current home and booking copy', () => {
   const rules = getDefaultReleaseSmokeRules()
   const homeRule = rules.find((rule) => rule.path === '/')
   const opinionsRule = rules.find((rule) => rule.path === '/opinie')
+  const offerRule = rules.find((rule) => rule.path === '/oferta')
   const bookRule = rules.find((rule) => rule.path === '/book')
   const catsRule = rules.find((rule) => rule.path === '/koty')
   const termsRule = rules.find((rule) => rule.path === '/regulamin')
@@ -559,45 +602,101 @@ test('release smoke rules track the current home and booking copy', () => {
 
   assert.ok(homeRule)
   assert.ok(opinionsRule)
+  assert.ok(offerRule)
   assert.ok(bookRule)
   assert.ok(catsRule)
   assert.ok(termsRule)
   assert.ok(privacyRule)
 
-  assert.equal(homeRule?.required?.includes('Masz psa, kota albo temat mieszany? Zacznij od prostego wyboru.'), true)
-  assert.equal(homeRule?.required?.includes('Prowadzę konsultacje osobiście'), true)
-  assert.equal(homeRule?.required?.includes('3 r\u00f3wne wej\u015bcia'), true)
-  assert.equal(homeRule?.required?.includes('Historie opiekunów i efekty konsultacji'), true)
-  assert.equal(homeRule?.required?.includes('Publiczne źródła'), true)
-  assert.equal(homeRule?.required?.includes('Magazyn Weterynaryjny'), true)
-  assert.equal(homeRule?.required?.includes('Zobacz pełną sekcję opinii'), true)
-  assert.equal(homeRule?.required?.includes('Nie wiem, od czego zacz\u0105\u0107'), true)
+  const homeRequired = homeRule?.required ?? []
+
+  assert.equal(homeRequired.some((phrase) => phrase.includes('Konsultacje')), true)
+  assert.equal(homeRequired.some((phrase) => phrase.includes('Spokojny pierwszy krok')), true)
+  assert.equal(homeRequired.some((phrase) => phrase.includes('15 minut na start')), true)
+  assert.equal(homeRequired.some((phrase) => phrase.includes('Zobacz materiały PDF')), true)
+  assert.equal(homeRequired.some((phrase) => phrase.includes('Umów 15 min')), true)
+  assert.equal(homeRequired.some((phrase) => phrase.includes('Konsultacja 30 min / pełna')), true)
+  assert.equal(homeRequired.some((phrase) => phrase.includes('COAPE / CAPBT')), true)
+  assert.equal(homeRequired.some((phrase) => phrase.includes('osobiste konsultacje')), true)
+  assert.equal(homeRequired.some((phrase) => phrase.includes('online')), true)
+  assert.equal(homeRequired.some((phrase) => phrase.includes('Dwa obrazkowe kierunki, bez napięcia')), true)
+  assert.equal(homeRequired.some((phrase) => phrase.includes('Opinie opiekunów')), true)
+  assert.equal(homeRequired.some((phrase) => phrase.includes('Kilka głosów po pierwszym kroku')), true)
+  assert.equal(homeRequired.some((phrase) => phrase.includes('Poradniki PDF')), true)
+  assert.equal(homeRequired.some((phrase) => phrase.includes('PDF będzie obok jako materiał pomocniczy.')), true)
+  assert.equal(homeRequired.some((phrase) => phrase.includes('Potrzebujesz pomocy przy problemach psa lub kota?')), true)
   assert.equal(homeRule?.forbidden?.includes('Udost\u0119pnij znajomemu'), true)
+  assert.equal(homeRule?.forbidden?.includes('Olsztyn / online'), true)
   assert.deepEqual(homeRule?.ordered, [
     'Regulski | Terapia behawioralna',
-    'Masz psa, kota albo temat mieszany? Zacznij od prostego wyboru.',
-    '3 r\u00f3wne wej\u015bcia',
+    'Konsultacje dla psów i kotów',
+    'Spokojny pierwszy krok przy problemach psa lub kota',
+    'Umów 15 min',
+    'Zobacz materiały PDF',
+    'Opinie opiekunów',
+    'Kilka głosów po pierwszym kroku',
+    'Poradniki PDF',
+    'PDF będzie obok jako materiał pomocniczy.',
+    'Potrzebujesz pomocy przy problemach psa lub kota?',
   ])
 
   assert.equal(opinionsRule?.required?.includes('Historie opiekunów i efekty konsultacji'), true)
   assert.equal(opinionsRule?.required?.includes('Publiczne źródła'), true)
   assert.equal(opinionsRule?.required?.includes('Zweryfikowane opinie pojawią się po ręcznej akceptacji'), true)
   assert.equal(opinionsRule?.required?.includes('Dodaj swoją opinię do ręcznej weryfikacji'), true)
+  assert.equal(opinionsRule?.required?.includes('Start: smycz i pobudzenie'), true)
+  assert.equal(opinionsRule?.required?.includes('Start: kuweta po zmianie'), true)
   assert.equal(opinionsRule?.forbidden?.includes('Udost\u0119pnij znajomemu'), true)
+
+  assert.equal(offerRule?.required?.includes('Zacznij od 15 min. PDF zostaje drugim krokiem, a dłuższy format trzecim.'), true)
+  assert.equal(offerRule?.required?.includes('Konsultacja 15 min'), true)
+  assert.equal(offerRule?.required?.includes('PDF jako drugi krok'), true)
+  assert.equal(offerRule?.required?.includes('30 min / pełna jako upgrade'), true)
+  assert.equal(offerRule?.required?.includes('Poradniki PDF'), true)
+  assert.equal(offerRule?.required?.includes('Najprostszy pierwszy krok to konsultacja 15 min.'), true)
+  assert.equal(offerRule?.required?.includes('Zobacz materiały PDF'), true)
+  assert.deepEqual(offerRule?.ordered, [
+    'Zacznij od 15 min. PDF zostaje drugim krokiem, a dłuższy format trzecim.',
+    'Najprostszy pierwszy krok to konsultacja 15 min.',
+    'Zobacz materiały PDF',
+    'Konsultacja 15 min',
+    '30 min / pełna jako upgrade',
+    'Dalsze opcje',
+  ])
 
   assert.equal(bookRule?.required?.includes('Wybierz temat na 15 min'), true)
   assert.equal(bookRule?.required?.includes('Wybierz temat najbliższy sytuacji.'), true)
-  assert.equal(bookRule?.required?.includes('Temat mieszany?'), true)
-  assert.equal(bookRule?.required?.includes('Wybierz temat mieszany'), true)
+  assert.equal(bookRule?.required?.includes('Szczeniak i młody pies'), true)
+  assert.equal(bookRule?.required?.includes('Problemy separacyjne'), true)
+  assert.equal(bookRule?.required?.includes('Spacer i reakcje'), true)
+  assert.equal(bookRule?.required?.includes('Pobudzenie i pogoń'), true)
+  assert.equal(bookRule?.required?.includes('Agresja i obrona zasobów'), true)
+  assert.equal(bookRule?.required?.includes('Inny problem lub temat pokrewny'), true)
+  assert.equal(bookRule?.required?.includes('Nie musisz znać dokładnej nazwy problemu.'), true)
   assert.equal(bookRule?.forbidden?.includes('Kot i trudne zachowania'), true)
+  assert.equal(bookRule?.forbidden?.includes('Wybierz temat mieszany'), true)
+  assert.equal(bookRule?.forbidden?.includes('Temat mieszany?'), true)
+  assert.equal(bookRule?.forbidden?.includes('Dogoterapia'), true)
 
-  assert.equal(catsRule?.required?.includes('Wybierz temat dla kota i od razu przejdź do terminu.'), true)
-  assert.equal(catsRule?.required?.includes('Kot i kuweta'), true)
+  assert.equal(catsRule?.required?.includes('Spokojny pierwszy krok przy problemach kota'), true)
+  assert.equal(catsRule?.required?.includes('Zacznij od krótkiej konsultacji i sprawdź, co będzie najlepszym kolejnym krokiem'), true)
+  assert.equal(catsRule?.required?.includes('Umów 15 min'), true)
+  assert.equal(catsRule?.required?.includes('Zobacz materiały PDF'), true)
+  assert.equal(catsRule?.required?.includes('Materiały PDF do spokojnego powrotu do zaleceń.'), true)
+  assert.equal(catsRule?.required?.includes('Polecane książki papierowe'), true)
+  assert.equal(catsRule?.required?.includes('Konsultacja 30 min / pełna'), true)
+  assert.equal(catsRule?.required?.includes('Kuweta i zachowania toaletowe'), true)
   assert.equal(catsRule?.required?.includes('Konflikt między kotami'), true)
-  assert.equal(catsRule?.required?.includes('Dotyk, gryzienie i pielęgnacja'), true)
-  assert.equal(catsRule?.required?.includes('Kot lękowy, napięty albo wycofany'), true)
-  assert.equal(catsRule?.required?.includes('Budzi dom po nocy'), true)
-  assert.equal(catsRule?.forbidden?.includes('Masz problem z kotem? Wybierz start.'), true)
+  assert.equal(catsRule?.required?.includes('Dotyk, pielęgnacja i obrona'), true)
+  assert.equal(catsRule?.required?.includes('Lęk, stres i wycofanie'), true)
+  assert.equal(catsRule?.required?.includes('Nocna aktywność i rytm dnia'), true)
+  assert.equal(catsRule?.forbidden?.includes('Wybierz temat dla kota i od razu przejdź do terminu.'), true)
+  assert.equal(catsRule?.forbidden?.includes('Kuweta i dom'), true)
+  assert.equal(catsRule?.forbidden?.includes('Relacja i przestrzeń'), true)
+  assert.equal(catsRule?.forbidden?.includes('Kot i kuweta'), true)
+  assert.equal(catsRule?.forbidden?.includes('Dotyk, gryzienie i pielęgnacja'), true)
+  assert.equal(catsRule?.forbidden?.includes('Kot lękowy, napięty albo wycofany'), true)
+  assert.equal(catsRule?.forbidden?.includes('Budzi dom po nocy'), true)
 
   assert.equal(termsRule?.required?.includes('Zasady rezerwacji szybkiej konsultacji 15 min'), true)
   assert.equal(termsRule?.forbidden?.includes('Koty'), true)
@@ -632,7 +731,7 @@ test('go-live checks expose external blockers for Resend testing mode and PayU s
       assert.equal(emailCheck?.state, 'blocked')
       assert.equal(emailCheck?.tone, 'attention')
       assert.match(emailCheck?.summary ?? '', /resend\.dev testing mode/i)
-      assert.match(emailCheck?.nextStep ?? '', /Zweryfikuj domene nadawcy w Resend/i)
+      assert.match(emailCheck?.nextStep ?? '', /Zweryfikuj domenę nadawcy w Resend/i)
 
       assert.equal(payuCheck?.state, 'blocked')
       assert.equal(payuCheck?.tone, 'attention')
@@ -666,7 +765,7 @@ test('go-live checks mark verified Resend and production PayU as ready', () => {
 
       assert.equal(payuCheck?.state, 'ready')
       assert.equal(payuCheck?.tone, 'ready')
-      assert.match(payuCheck?.summary ?? '', /srodowiska production/i)
+      assert.match(payuCheck?.summary ?? '', /środowiska production/i)
     },
   )
 })
@@ -725,12 +824,12 @@ test('go-live checks flag disabled customer emails as attention while PayU disab
 
       assert.equal(emailCheck?.state, 'disabled')
       assert.equal(emailCheck?.tone, 'attention')
-      assert.match(emailCheck?.summary ?? '', /swiadomie wylaczone/i)
+      assert.match(emailCheck?.summary ?? '', /świadomie wyłączone/i)
       assert.match(emailCheck?.nextStep ?? '', /CUSTOMER_EMAIL_MODE=auto/i)
 
       assert.equal(payuCheck?.state, 'ready')
       assert.equal(payuCheck?.tone, 'ready')
-      assert.match(payuCheck?.summary ?? '', /PayU online jest swiadomie wylaczone/i)
+      assert.match(payuCheck?.summary ?? '', /PayU online jest świadomie wyłączone/i)
     },
   )
 })
@@ -969,7 +1068,7 @@ test('go-live source keeps the verified external URL probe path', () => {
 
   assert.match(source, /async function probePublicAppUrl/)
   assert.match(source, /getVerifiedDeployReadinessChecks/)
-  assert.match(source, /Publiczny URL nie odpowiada poprawnie dla ruchu zewnetrznego/)
+  assert.match(source, /Publiczny URL nie odpowiada poprawnie dla ruchu zewnętrznego/)
   assert.match(source, /npm run live-smoke/)
 })
 

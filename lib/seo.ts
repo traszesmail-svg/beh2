@@ -48,7 +48,7 @@ export function buildMarketingMetadata({ title, path, description }: MarketingMe
 
 export async function buildHomeMetadata(): Promise<Metadata> {
   const description = appendLocalSeoContext(
-    `${SITE_NAME}. ${SITE_TAGLINE}. Spokojna, ekspercka pomoc dla opiekunów psów i kotów: od pierwszej konsultacji po terapię, wizyty domowe i pobyty.`
+    `${SITE_NAME}. ${SITE_TAGLINE}. Behawiorysta COAPE dla opiekunów psów i kotów: spokojna konsultacja, jasny pierwszy krok i plan działania w Olsztynie oraz online.`
   )
 
   return {

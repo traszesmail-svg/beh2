@@ -1,31 +1,26 @@
- 'use client'
+'use client'
 
 import React from 'react'
-import Link from 'next/link'
 import { useRef, useState, type FormEvent } from 'react'
 import { trackAnalyticsEvent } from '@/lib/analytics'
+import { normalizePolishPhone } from '@/lib/phone'
 
 type FormState = 'idle' | 'loading' | 'success' | 'error'
 
-type ContactLeadFormProps = {
-  topic: string
-  contextLabel: string
-  bookingId?: string | null
-  followupHref: string
-  followupLabel: string
-  analyticsLocation?: string
-}
+type Species = 'pies' | 'kot'
 
 type SubmissionPayload = {
   name: string
-  email: string
+  contact: string
+  species: Species
   message: string
   website: string
 }
 
 const INITIAL_FORM: SubmissionPayload = {
   name: '',
-  email: '',
+  contact: '',
+  species: 'pies',
   message: '',
   website: '',
 }
@@ -34,18 +29,15 @@ function isEmailValid(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
 }
 
-function normalizeText(value: string): string {
+function normalizeShortText(value: string): string {
+  return value.trim().replace(/\s+/g, ' ')
+}
+
+function normalizeLongText(value: string): string {
   return value.replace(/\r\n/g, '\n').trim()
 }
 
-export function ContactLeadForm({
-  topic,
-  contextLabel,
-  bookingId,
-  followupHref,
-  followupLabel,
-  analyticsLocation = 'contact-lead-form',
-}: ContactLeadFormProps) {
+export function ContactLeadForm() {
   const [form, setForm] = useState(INITIAL_FORM)
   const [status, setStatus] = useState<FormState>('idle')
   const [feedback, setFeedback] = useState('')
@@ -58,33 +50,45 @@ export function ContactLeadForm({
 
     startedRef.current = true
     trackAnalyticsEvent('form_started', {
-      location: analyticsLocation,
-      topic,
-      context_label: contextLabel,
-      booking_id: bookingId ?? null,
+      location: 'contact-form',
+      topic: 'Kontakt i rezerwacja',
+      context_label: 'Krótki formularz kontaktu',
+      booking_id: null,
     })
   }
 
   function updateField<K extends keyof SubmissionPayload>(key: K, value: SubmissionPayload[K]) {
     markStarted()
+
+    if (status === 'success') {
+      setStatus('idle')
+      setFeedback('')
+    }
+
     setForm((current) => ({ ...current, [key]: value }))
   }
 
   function validate(): string | null {
-    const normalizedName = normalizeText(form.name)
-    const normalizedEmail = form.email.trim()
-    const normalizedMessage = normalizeText(form.message)
+    const normalizedName = normalizeShortText(form.name)
+    const normalizedContact = normalizeShortText(form.contact)
+    const normalizedMessage = normalizeLongText(form.message)
+    const hasEmail = isEmailValid(normalizedContact)
+    const hasPhone = normalizePolishPhone(normalizedContact) !== null
 
     if (!normalizedName) {
-      return 'Podaj imię i nazwisko albo same inicjały.'
+      return 'Podaj imię.'
     }
 
-    if (!isEmailValid(normalizedEmail)) {
-      return 'Podaj poprawny adres e-mail.'
+    if (!normalizedContact || (!hasEmail && !hasPhone)) {
+      return 'Podaj e-mail albo numer telefonu.'
     }
 
-    if (normalizedMessage.length < 20) {
-      return 'Napisz kilka zdań o sytuacji, aby łatwiej było wybrać kolejny krok.'
+    if (!form.species) {
+      return 'Wybierz pies albo kot.'
+    }
+
+    if (normalizedMessage.length < 12) {
+      return 'Napisz kilka zdań o sytuacji, żeby łatwiej było zacząć.'
     }
 
     return null
@@ -112,12 +116,13 @@ export function ContactLeadForm({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          name: normalizeText(form.name),
-          email: form.email.trim(),
-          topic: normalizeText(topic) || 'Ogólne pytanie',
-          contextLabel: normalizeText(contextLabel) || 'Kontakt ogólny',
-          message: normalizeText(form.message),
-          bookingId: bookingId?.trim() ?? '',
+          name: normalizeShortText(form.name),
+          email: normalizeShortText(form.contact),
+          contact: normalizeShortText(form.contact),
+          topic: 'Kontakt i rezerwacja',
+          contextLabel: form.species === 'kot' ? 'Kot' : 'Pies',
+          species: form.species,
+          message: normalizeLongText(form.message),
           website: form.website.trim(),
         }),
       })
@@ -129,8 +134,9 @@ export function ContactLeadForm({
       }
 
       setStatus('success')
-      setFeedback(payload.message ?? 'Dziękujemy. Wiadomość została wysłana. Odpowiem na podany adres e-mail.')
+      setFeedback(payload.message ?? 'Dziękuję. Wiadomość trafiła do weryfikacji. Odpowiem na podany kontakt.')
       setForm(INITIAL_FORM)
+      startedRef.current = false
     } catch (error) {
       setStatus('error')
       setFeedback(error instanceof Error ? error.message : 'Nie udało się wysłać wiadomości. Spróbuj ponownie później.')
@@ -138,113 +144,125 @@ export function ContactLeadForm({
   }
 
   const submitLabel =
-    status === 'loading' ? 'Wysyłam wiadomość...' : status === 'success' ? 'Wyślij kolejną wiadomość' : 'Wyślij wiadomość'
+    status === 'loading'
+      ? 'Wysyłam wiadomość...'
+      : status === 'success'
+        ? 'Wyślij kolejną wiadomość'
+        : 'Wyślij wiadomość'
 
   return (
-    <section className="top-gap" aria-labelledby="contact-lead-heading">
-      <div className="section-head">
-        <div>
-          <div className="section-eyebrow">Napisz wiadomość</div>
-          <h2 id="contact-lead-heading">Wyślij krótki opis sytuacji</h2>
-        </div>
-        <div className="muted">Formularz trafia bezpośrednio do mnie. Odpowiadam osobiście na podany adres e-mail.</div>
+    <form className="form-grid top-gap" onSubmit={handleSubmit} noValidate>
+      <div className="info-box full-width">
+        Wystarczy imię, kontakt, pies / kot i krótki opis sytuacji. Formularz trafia bezpośrednio do mnie.
       </div>
 
-      <form className="form-grid top-gap" onSubmit={handleSubmit} noValidate>
-        <div className="list-card accent-outline tree-backed-card full-width">
-          <strong>Wiadomość dotyczy</strong>
-          <span>{contextLabel}</span>
-          {bookingId ? <span>Numer rezerwacji: {bookingId}</span> : null}
-        </div>
+      <div className="section-eyebrow">Wiadomość dotyczy</div>
 
-        <div className="form-field">
-          <label htmlFor="contact-name">Imię i nazwisko</label>
-          <input
-            id="contact-name"
-            value={form.name}
-            onChange={(event) => updateField('name', event.target.value)}
-            onFocus={markStarted}
-            placeholder="np. Anna Nowak"
-            autoComplete="name"
-          />
-        </div>
+      <div className="form-field">
+        <label htmlFor="contact-name">Imię</label>
+        <input
+          id="contact-name"
+          name="name"
+          value={form.name}
+          onChange={(event) => updateField('name', event.target.value)}
+          onFocus={markStarted}
+          placeholder="np. Anna"
+          autoComplete="name"
+        />
+      </div>
 
-        <div className="form-field">
-          <label htmlFor="contact-email">E-mail</label>
-          <input
-            id="contact-email"
-            type="email"
-            value={form.email}
-            onChange={(event) => updateField('email', event.target.value)}
-            onFocus={markStarted}
-            placeholder="np. klient@email.pl"
-            autoComplete="email"
-          />
+      <div className="form-field">
+        <label htmlFor="contact-contact">E-mail lub telefon</label>
+        <input
+          id="contact-contact"
+          name="contact"
+          type="text"
+          value={form.contact}
+          onChange={(event) => updateField('contact', event.target.value)}
+          onFocus={markStarted}
+          placeholder="np. anna@email.pl lub +48 500 600 700"
+          inputMode="email"
+          autoComplete="email"
+          autoCapitalize="off"
+          enterKeyHint="next"
+          spellCheck={false}
+          aria-describedby="contact-contact-help"
+        />
+        <div className="field-help" id="contact-contact-help">
+          Jeśli podasz telefon, mogę odezwać się tą drogą.
         </div>
+      </div>
 
-        <div className="full-width form-field">
-          <label htmlFor="contact-message">Wiadomość</label>
-          <textarea
-            id="contact-message"
-            rows={6}
-            value={form.message}
-            onChange={(event) => updateField('message', event.target.value)}
-            onFocus={markStarted}
-            placeholder="Napisz krótko, co się dzieje, co już próbowałaś lub próbowałeś i czego potrzebujesz teraz."
-          />
-          <div className="field-help">Im konkretniej opiszesz sytuację, tym łatwiej będzie wybrać prosty kolejny krok.</div>
-        </div>
-
-        <div
-          style={{
-            position: 'absolute',
-            left: '-9999px',
-            top: 'auto',
-            width: '1px',
-            height: '1px',
-            overflow: 'hidden',
-          }}
-          aria-hidden="true"
+      <div className="form-field">
+        <label htmlFor="contact-species">Pies / kot</label>
+        <select
+          id="contact-species"
+          name="species"
+          value={form.species}
+          onChange={(event) => updateField('species', event.target.value as Species)}
+          onFocus={markStarted}
         >
-          <label htmlFor="contact-website">Strona internetowa</label>
-          <input
-            id="contact-website"
-            tabIndex={-1}
-            autoComplete="off"
-            value={form.website}
-            onChange={(event) => updateField('website', event.target.value)}
-          />
+          <option value="pies">Pies</option>
+          <option value="kot">Kot</option>
+        </select>
+      </div>
+
+      <div className="full-width form-field">
+        <label htmlFor="contact-message">Krótki opis sytuacji</label>
+        <textarea
+          id="contact-message"
+          name="message"
+          rows={6}
+          value={form.message}
+          onChange={(event) => updateField('message', event.target.value)}
+          onFocus={markStarted}
+          placeholder="Napisz krótko, co się dzieje, od kiedy to trwa i czego potrzebujesz teraz."
+          enterKeyHint="next"
+        />
+        <div className="field-help">Krótki opis wystarczy, żeby dobrać prosty pierwszy krok.</div>
+      </div>
+
+      <div
+        style={{
+          position: 'absolute',
+          left: '-9999px',
+          top: 'auto',
+          width: '1px',
+          height: '1px',
+          overflow: 'hidden',
+        }}
+        aria-hidden="true"
+      >
+        <label htmlFor="contact-website">Strona internetowa</label>
+        <input
+          id="contact-website"
+          name="website"
+          tabIndex={-1}
+          autoComplete="off"
+          value={form.website}
+          onChange={(event) => updateField('website', event.target.value)}
+        />
+      </div>
+
+      {feedback ? (
+        <div className={status === 'success' ? 'success-inline full-width' : 'error-box full-width'} role="status" aria-live="polite">
+          {feedback}
+        </div>
+      ) : null}
+
+      <div className="checkout-box full-width tree-backed-card">
+        <div>
+          <div className="muted">Im mniej do wpisania, tym łatwiej zacząć.</div>
+          <div className="checkout-title">Krótka wiadomość wystarczy</div>
+          <div className="muted">Jeśli podasz telefon, mogę odezwać się tą drogą.</div>
         </div>
 
-        {feedback ? (
-          <div className={status === 'success' ? 'success-inline full-width' : 'error-box full-width'} role="status" aria-live="polite">
-            {feedback}
-          </div>
-        ) : null}
-
-        <div className="checkout-box full-width tree-backed-card">
-          <div>
-            <div className="muted">Jeśli wolisz najpierw wrócić do ścieżki z ofertą lub rezerwacją, masz to obok.</div>
-            <div className="checkout-title">Dalej: odpowiedź albo powrót do następnego kroku</div>
-            <div className="muted">Po wysłaniu wiadomość trafi na skrzynkę kontaktową, a ja odpiszę na wskazany adres.</div>
-          </div>
-
-          <div className="checkout-right">
-            <button type="submit" className="button button-primary big-button" disabled={status === 'loading'}>
-              {submitLabel}
-            </button>
-            <Link
-              href={followupHref}
-              prefetch={false}
-              className="button button-ghost big-button"
-              data-analytics-event="cta_click"
-              data-analytics-location={analyticsLocation}
-            >
-              {followupLabel}
-            </Link>
-          </div>
+        <div className="checkout-right">
+          <button type="submit" className="button button-primary big-button" disabled={status === 'loading'}>
+            {submitLabel}
+          </button>
         </div>
-      </form>
-    </section>
+      </div>
+    </form>
   )
 }

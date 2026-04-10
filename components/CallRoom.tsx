@@ -82,8 +82,8 @@ export function CallRoom({
       ? 'Rozmowa zakonczona'
       : running
         ? 'Rozmowa aktywna'
-        : 'Pokoj aktywny'
-    : 'Przedpokoj aktywny'
+        : 'Pokój aktywny'
+    : 'Przedpokój aktywny'
   const completeUrl = useMemo(
     () =>
       accessToken
@@ -234,7 +234,7 @@ export function CallRoom({
 
       if (!response.ok) {
         const payload = (await response.json()) as { error?: string }
-        throw new Error(payload.error ?? 'Nie udalo sie zamknac konsultacji.')
+        throw new Error(payload.error ?? 'Nie udało się zamknąć konsultacji.')
       }
 
       setRunning(false)
@@ -242,19 +242,19 @@ export function CallRoom({
       router.refresh()
     } catch (finishError) {
       console.error('[behawior15][room] finish failed', finishError)
-      setError(finishError instanceof Error ? finishError.message : 'Wystapil blad podczas zamykania konsultacji.')
+      setError(finishError instanceof Error ? finishError.message : 'Wystąpił błąd podczas zamykania konsultacji.')
     }
   }
 
   return (
     <section className="two-col-section booking-layout">
       <div className="panel room-panel">
-        <div className="section-eyebrow">{roomUnlocked ? 'Panel rozmowy audio' : 'Przedpokoj konsultacji'}</div>
-        <h1>{roomUnlocked ? `Panel rozmowy: ${serviceTitle}` : 'Pokoj rozmowy otworzy sie 15 minut przed terminem'}</h1>
+        <div className="section-eyebrow">{roomUnlocked ? 'Panel rozmowy audio' : 'Przedpokój konsultacji'}</div>
+        <h1>{roomUnlocked ? `Panel rozmowy: ${serviceTitle}` : 'Pokój rozmowy otworzy się 15 minut przed terminem'}</h1>
         <p className="muted paragraph-gap">
           {roomUnlocked
-            ? `To jest link do ${serviceSummary.toLowerCase()} Kamera nie jest potrzebna. Przygotuj spokojne miejsce, najwazniejsze obserwacje o zwierzeciu i otworz rozmowe kilka minut przed czasem.`
-            : 'Jestes juz we wlasciwym miejscu. Przedpokoj pokazuje pokoj przez szklana warstwe, a pelne wejscie odblokuje sie automatycznie dokladnie 15 minut przed startem konsultacji.'}
+            ? `To jest link do ${serviceSummary.toLowerCase()}. Kamera nie jest potrzebna. Przygotuj spokojne miejsce, najważniejsze obserwacje o zwierzęciu i otwórz rozmowę kilka minut przed czasem.`
+            : 'Jesteś już we właściwym miejscu. Przedpokój pokazuje pokój przez szklaną warstwę, a pełne wejście odblokuje się automatycznie dokładnie 15 minut przed startem konsultacji.'}
         </p>
 
         <div className={`video-shell room-stage ${roomUnlocked ? 'room-stage-live' : 'room-stage-locked'}`}>
@@ -270,10 +270,10 @@ export function CallRoom({
               <div className="room-preview-overlay">
                 <div className="waiting-room-badge">{SITE_NAME}</div>
                 <div className="waiting-room-copy">
-                  <span className="waiting-room-kicker">Przedpokoj konsultacji</span>
-                  <strong>Wejscie otworzy sie za {formatCountdown(unlockInSeconds)}</strong>
+                  <span className="waiting-room-kicker">Przedpokój konsultacji</span>
+                  <strong>Wejście otworzy się za {formatCountdown(unlockInSeconds)}</strong>
                   <span>
-                    Widzisz wlasciwy pokoj jak przez szybe. Pelny dostep pojawi sie automatycznie 15 minut przed terminem {roomEntryLabel}.
+                    Widzisz właściwy pokój jak przez szybę. Pełny dostęp pojawi się automatycznie 15 minut przed terminem {roomEntryLabel}.
                   </span>
                 </div>
                 <div className="waiting-room-logos" aria-label="Certyfikacje specjalisty">
@@ -302,24 +302,24 @@ export function CallRoom({
               </button>
               {!finished ? (
                 <a href={meetingUrl} target="_blank" rel="noopener noreferrer" className="button button-ghost big-button">
-                  Otworz rozmowe w nowej karcie
+                  Otwórz rozmowę w nowej karcie
                 </a>
               ) : null}
               <button type="button" onClick={handleFinish} className="button button-ghost big-button" disabled={finished}>
-                Zakoncz rozmowe
+                Zakończ rozmowę
               </button>
             </>
           ) : (
             <>
               <button type="button" className="button button-primary big-button" disabled>
-                Pokoj odblokuje sie za {formatCountdown(unlockInSeconds)}
+                Pokój odblokuje się za {formatCountdown(unlockInSeconds)}
               </button>
               <button
                 type="button"
                 className="button button-ghost big-button"
                 onClick={() => setAmbienceEnabled((current) => !current)}
               >
-                {ambienceEnabled ? 'Wycisz dzwiek oczekiwania' : 'Wlacz delikatny dzwiek oczekiwania'}
+                {ambienceEnabled ? 'Wycisz dźwięk oczekiwania' : 'Włącz delikatny dźwięk oczekiwania'}
               </button>
             </>
           )}
@@ -338,7 +338,7 @@ export function CallRoom({
             <span>
               {roomUnlocked
                 ? roomEntryLabel
-                : `Przedpokoj jest juz gotowy. Wlasciwy pokoj odblokuje sie automatycznie 15 minut przed terminem ${roomEntryLabel}.`}
+                : `Przedpokój jest już gotowy. Właściwy pokój odblokuje się automatycznie 15 minut przed terminem ${roomEntryLabel}.`}
             </span>
           </div>
           <div className="list-card tree-backed-card">
@@ -350,15 +350,15 @@ export function CallRoom({
             <span>
               {roomUnlocked
                 ? meetingUrl
-                : `Spokojne miejsce, sluchawki albo glosnik oraz 2-3 najwazniejsze obserwacje o zwierzeciu, zeby ${roomDurationMinutes} minut wykorzystac konkretnie.`}
+                : `Spokojne miejsce, słuchawki albo głośnik oraz 2-3 najważniejsze obserwacje o zwierzęciu, żeby ${roomDurationMinutes} minut wykorzystać konkretnie.`}
             </span>
           </div>
           <div className="list-card accent-outline tree-backed-card">
             <strong>{roomUnlocked ? 'Po rozmowie' : 'Co stanie sie dalej'}</strong>
             <span>
               {roomUnlocked
-                ? 'Po tej rozmowie mozna zaplanowac pelna konsultacje, wizyte domowa albo terapie, jesli temat wymaga wiecej.'
-                : `Gdy wybije okno wejscia, warstwa szkła zniknie, pokoj audio zrobi sie aktywny i bedzie mozna uruchomic licznik ${roomDurationMinutes} minut.`}
+                ? 'Po tej rozmowie można zaplanować pełną konsultację, wizytę domową albo terapię, jeśli temat wymaga więcej.'
+                : `Gdy wybije okno wejścia, warstwa szkła zniknie, pokój audio zrobi się aktywny i będzie można uruchomić licznik ${roomDurationMinutes} minut.`}
             </span>
           </div>
         </div>

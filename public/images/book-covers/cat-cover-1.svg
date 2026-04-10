@@ -1,0 +1,12 @@
+<svg width="900" height="1200" viewBox="0 0 900 1200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="900" height="1200" rx="52" fill="#F4EFE4"/>
+  <rect x="58" y="58" width="784" height="1084" rx="42" fill="#E7E0D2"/>
+  <path d="M130 230C260 160 540 160 770 240" stroke="#6D8A71" stroke-width="20" stroke-linecap="round"/>
+  <circle cx="168" cy="328" r="54" fill="#C6D0B8"/>
+  <circle cx="732" cy="328" r="54" fill="#C6D0B8"/>
+  <rect x="160" y="470" width="580" height="28" rx="14" fill="#9EA78F"/>
+  <rect x="160" y="530" width="430" height="22" rx="11" fill="#C1B7A6"/>
+  <rect x="160" y="590" width="500" height="22" rx="11" fill="#C1B7A6"/>
+  <text x="160" y="820" fill="#42584A" font-family="Arial, Helvetica, sans-serif" font-size="88" font-weight="700" letter-spacing="4">CATS</text>
+  <text x="160" y="910" fill="#6A7A6D" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="600">paper shelf</text>
+</svg>

@@ -33,7 +33,7 @@ export function assertStripeCheckoutAmountSupported(amount: number) {
     throw new Error(
       `Stripe Checkout w PLN wymaga kwoty co najmniej ${formatPricePln(
         MIN_STRIPE_CHECKOUT_AMOUNT_PLN,
-      )}. Ustaw wyzsza cene konsultacji w panelu specjalisty, zanim wlaczysz platnosc Stripe.`,
+      )}. Ustaw wyższą cenę konsultacji w panelu specjalisty, zanim włączysz płatność Stripe.`,
     )
   }
 }
@@ -93,11 +93,11 @@ export async function createCheckoutSession(
   const booking = await getBookingForViewer(bookingId, accessToken, authorizationHeader)
 
   if (!booking) {
-    throw new Error('Nie znaleziono rezerwacji do platnosci.')
+    throw new Error('Nie znaleziono rezerwacji do płatności.')
   }
 
   if (!(booking.bookingStatus === 'pending' && booking.paymentStatus === 'unpaid')) {
-    throw new Error('Stripe Checkout mozna uruchomic tylko dla bookingu oczekujacego na platnosc.')
+    throw new Error('Stripe Checkout można uruchomić tylko dla bookingu oczekującego na płatność.')
   }
 
   const stripe = getStripeClient()
@@ -171,7 +171,7 @@ async function resolveStripePaymentIntentId(booking: RefundableBookingSnapshot):
       : session.payment_intent?.id ?? null
 
   if (!paymentIntentId) {
-    throw new Error('Nie udalo sie ustalic payment intent dla tej platnosci Stripe.')
+    throw new Error('Nie udało się ustalić payment intent dla tej płatności Stripe.')
   }
 
   return paymentIntentId

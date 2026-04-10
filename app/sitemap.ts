@@ -16,6 +16,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/oferta/pobyty-socjalizacyjno-terapeutyczne',
     ...listPdfRoutePaths(),
     '/koty',
+    '/psy',
+    '/faq',
+    '/o-mnie',
     '/kontakt',
     '/book',
     '/polityka-prywatnosci',
@@ -28,7 +31,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency:
       path === '/' || path === '/oferta' || path === '/book'
         ? 'weekly'
-        : path === '/koty' || path === '/kontakt'
+        : path === '/koty' || path === '/psy' || path === '/kontakt' || path === '/faq'
           ? 'monthly'
           : 'monthly',
     priority:
@@ -38,8 +41,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
           ? 0.9
           : path === '/book'
             ? 0.85
-            : path === '/koty'
+          : path === '/koty'
               ? 0.8
-              : 0.6,
+              : path === '/psy'
+                ? 0.8
+                : path === '/faq'
+                  ? 0.75
+                : 0.6,
   }))
 }

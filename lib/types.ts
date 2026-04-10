@@ -1,6 +1,6 @@
 import type { BookingServiceType } from './booking-services'
 
-export type DogProblemType = 'szczeniak' | 'separacja' | 'agresja' | 'niszczenie' | 'dogoterapia'
+export type DogProblemType = 'szczeniak' | 'separacja' | 'spacer' | 'pobudzenie' | 'agresja'
 
 export type PublicCatProblemType =
   | 'kot-kuweta'
@@ -9,9 +9,7 @@ export type PublicCatProblemType =
   | 'kot-stres'
   | 'kot-nocna-wokalizacja'
 
-export type LegacyCatProblemType = 'kot'
-
-export type CatProblemType = LegacyCatProblemType | PublicCatProblemType
+export type CatProblemType = PublicCatProblemType
 
 export type ProblemType = DogProblemType | CatProblemType | 'inne'
 

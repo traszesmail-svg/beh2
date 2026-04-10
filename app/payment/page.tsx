@@ -123,23 +123,21 @@ export default async function PaymentPage({
           ) : null}
           <BookingStageEyebrow stage={isConfirmed ? 'confirmation' : 'payment'} className="section-eyebrow" />
           <div className="status-pill transaction-status-pill">
-            {qaBooking ? 'Tryb testowy' : isWaitingManual ? 'Czekamy na potwierdzenie wpłaty' : 'Wybór płatności'}
+            {qaBooking ? 'Tryb testowy' : isWaitingManual ? 'Czekamy na potwierdzenie wpłaty' : 'Płatność'}
           </div>
-          <h1>{qaBooking ? 'Kontrolowany test płatności' : isWaitingManual ? 'Wpłata została zgłoszona' : 'Wybierz sposób płatności za rezerwację'}</h1>
+          <h1>{qaBooking ? 'Test płatności' : isWaitingManual ? 'Wpłata została zgłoszona' : 'Wybierz sposób płatności'}</h1>
           <p className="hero-text small-width center-text">
             {qaBooking
-              ? 'Ta rezerwacja jest oznaczona jako testowa i przejdzie przez bezpieczną ścieżkę bez realnego obciążenia klienta.'
+              ? 'Ta rezerwacja jest testowa i przejdzie przez bezpieczną ścieżkę bez realnego obciążenia klienta.'
               : isWaitingManual
-                ? customerEmailAvailable
-                  ? 'Sprawdzimy wpłatę i potwierdzimy ją do 60 minut. Gdy status zmieni się na opłacony, klient dostanie mail z linkiem do pokoju rozmowy i odblokuje się dalszy etap sprawy.'
-                  : 'Sprawdzimy wpłatę i potwierdzimy ją do 60 minut. Gdy status zmieni się na opłacony, ta strona pokaże pokój rozmowy i dalszy etap sprawy, więc zachowaj ten link.'
+                ? 'Sprawdzimy wpłatę i potwierdzimy ją do 60 minut. Po zmianie statusu ta strona pokaże dalszy krok.'
                 : payuAvailable && manualPayment.isAvailable
-                  ? 'Możesz wybrać wpłatę ręczną z potwierdzeniem do 60 minut albo płatność online. Obie opcje pokazują tę samą cenę i prowadzą do tego samego etapu po płatności.'
+                  ? 'Możesz wybrać wpłatę ręczną albo płatność online. Obie opcje prowadzą do tego samego etapu.'
                   : payuAvailable
-                    ? 'Płatność online jest dostępna od razu. Ręczna wpłata wróci, gdy będzie dostępny numer konta do przelewu.'
+                    ? 'Płatność online jest dostępna od razu. Ręczna wpłata wróci, gdy będzie dostępny numer konta.'
                     : manualPayment.isAvailable
-                      ? 'Obecnie dostępna jest ścieżka wpłaty ręcznej z potwierdzeniem do 60 minut. Po potwierdzeniu płatności przejdziesz do potwierdzenia i linku do pokoju.'
-                      : 'Płatność jest chwilowo niedostępna. Napisz wiadomość, a podpowiem najprostszy dalszy krok.'}
+                      ? 'Obecnie dostępna jest ścieżka wpłaty ręcznej z potwierdzeniem do 60 minut.'
+                      : 'Płatność jest chwilowo niedostępna. Napisz wiadomość, a wskażę najprostszy dalszy krok.'}
           </p>
 
           {flowError ? (
@@ -148,7 +146,7 @@ export default async function PaymentPage({
                 {flowError}{' '}
                 {qaBooking
                   ? 'To jest rezerwacja testowa. Sprawdź TEST_CHECKOUT_ENABLED, allowlistę kontaktu albo użyj akcji „Potwierdź QA” w panelu admina.'
-                  : 'Jeśli chcesz, napisz wiadomość i wróć do rezerwacji, gdy będziesz gotowy.'}
+                  : 'Jeśli chcesz, napisz wiadomość i wróć do rezerwacji później.'}
               </div>
               <div className="hero-actions">
                 <Link href="/book" className="button button-primary big-button">
@@ -161,10 +159,10 @@ export default async function PaymentPage({
             </div>
           ) : !booking ? (
             <div className="stack-gap top-gap">
-              <div className="error-box">Ten link do płatności jest nieprawidłowy albo wygasł. Wróć do wyboru tematu, wybierz termin ponownie albo napisz wiadomość.</div>
+              <div className="error-box">Ten link do płatności jest nieprawidłowy albo wygasł. Wróć do wyboru tematu albo napisz wiadomość.</div>
               <div className="hero-actions">
                 <Link href="/book" className="button button-primary big-button">
-                  Wróć do wyboru tematu
+                  Wróć do tematów
                 </Link>
                 <Link href="/kontakt" className="button button-ghost">
                   Napisz wiadomość
@@ -173,7 +171,7 @@ export default async function PaymentPage({
             </div>
           ) : (
             <>
-              {cancelled ? <div className="info-box top-gap">Płatność online została przerwana. Możesz wrócić do wyboru metody i dokończyć płatność później.</div> : null}
+              {cancelled ? <div className="info-box top-gap">Płatność online została przerwana. Możesz wrócić do wyboru metody i dokończyć ją później.</div> : null}
 
               {!qaBooking && customerEmailStatus && !isClosed ? (
                 <CustomerEmailStatusNotice
@@ -224,7 +222,7 @@ export default async function PaymentPage({
                     </div>
                     <div className="summary-card trust-card tree-backed-card">
                       <strong>Etap po teście</strong>
-                      <span>Po zakończeniu zobaczysz standardowe potwierdzenie, status płatności i link do pokoju rozmowy.</span>
+                      <span>Po zakończeniu zobaczysz potwierdzenie, status płatności i link do pokoju rozmowy.</span>
                     </div>
                   </div>
                 ) : (
@@ -236,12 +234,12 @@ export default async function PaymentPage({
                     {payuAvailable ? (
                       <div className="summary-card trust-card tree-backed-card">
                         <strong>Płatność online jako druga opcja</strong>
-                        <span>BLIK i karta w nowoczesnej płatności online, z automatycznym potwierdzeniem po sukcesie.</span>
+                        <span>BLIK i karta w płatności online, z automatycznym potwierdzeniem po sukcesie.</span>
                       </div>
                     ) : null}
                     <div className="summary-card trust-card tree-backed-card">
                       <strong>Etap po płatności</strong>
-                      <span>Po statusie opłacone zobaczysz potwierdzenie, status SMS i sekcję do dodania materiałów do sprawy.</span>
+                      <span>Po statusie opłacone zobaczysz potwierdzenie, status SMS i sekcję materiałów.</span>
                     </div>
                   </div>
                 )}
@@ -280,7 +278,7 @@ export default async function PaymentPage({
                   </div>
                   <div className="list-card tree-backed-card">
                     <strong>Zmiana terminu lub rezygnacja</strong>
-                    <span>Jeśli w ciągu 24 godzin chcesz zmienić termin albo zrezygnować, napisz do mnie. Przy wpłacie manualnej ustalamy to przez kontakt.</span>
+                    <span>Jeśli w ciągu 24 godzin chcesz zmienić termin albo zrezygnować, napisz do mnie.</span>
                   </div>
                   <div className="hero-actions centered-actions">
                     <Link
@@ -293,14 +291,14 @@ export default async function PaymentPage({
                       href={`/kontakt?service=${encodeURIComponent(bookingServiceType ?? 'szybka-konsultacja-15-min')}&intent=reschedule&bookingId=${encodeURIComponent(booking.id)}`}
                       className="button button-ghost big-button"
                     >
-                      Napisz w sprawie zmiany terminu
+                    Napisz o zmianie terminu
                     </Link>
                   </div>
                 </div>
               ) : isClosed ? (
                 <div className="hero-actions centered-actions">
                   <Link href={buildSlotHref(booking.problemType, bookingServiceType, qaBooking)} prefetch={false} className="button button-primary big-button">
-                    Wybierz nowy termin rozmowy
+                    Wybierz nowy termin
                   </Link>
                   <Link href="/kontakt" className="button button-ghost big-button">
                     Napisz wiadomość

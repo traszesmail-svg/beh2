@@ -5,7 +5,7 @@ import { isValidPolishPhone } from '@/lib/phone'
 import { createPendingBooking } from '@/lib/server/db'
 import { getBookingApiErrorSnapshot } from '@/lib/server/booking-api-errors'
 import { getQaCheckoutEligibility } from '@/lib/server/payment-options'
-import { AnimalType } from '@/lib/types'
+import { AnimalType, ProblemType } from '@/lib/types'
 
 function isAnimalType(value: unknown): value is AnimalType {
   return value === 'Pies' || value === 'Kot'
@@ -39,7 +39,7 @@ export async function POST(request: Request) {
     }
 
     const ownerName = body.ownerName
-    const problemType = rawProblemType
+    const problemType = rawProblemType as ProblemType
     const animalType = rawAnimalType
     const serviceType = rawServiceType
     const petAge = body.petAge

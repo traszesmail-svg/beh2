@@ -57,7 +57,7 @@ export default function PdfBundleDetailPage({ params }: PdfBundleDetailPageProps
   }
 
   return (
-    <main className="page-wrap">
+    <main className="page-wrap marketing-page">
       <div className="container">
         <Header />
 

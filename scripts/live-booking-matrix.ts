@@ -34,8 +34,8 @@ const MATRIX_ATTEMPTS: MatrixAttempt[] = [
   { label: 'szczeniak', problem: 'szczeniak', routePath: '/book', animalType: 'Pies' },
   { label: 'separacja', problem: 'separacja', routePath: '/book', animalType: 'Pies' },
   { label: 'agresja', problem: 'agresja', routePath: '/book', animalType: 'Pies' },
-  { label: 'niszczenie', problem: 'niszczenie', routePath: '/book', animalType: 'Pies' },
-  { label: 'dogoterapia', problem: 'dogoterapia', routePath: '/book', animalType: 'Pies' },
+  { label: 'spacer', problem: 'spacer', routePath: '/book', animalType: 'Pies' },
+  { label: 'pobudzenie', problem: 'pobudzenie', routePath: '/book', animalType: 'Pies' },
 ]
 
 function readArg(name: string): string | null {

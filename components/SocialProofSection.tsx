@@ -1,8 +1,11 @@
 import React from 'react'
+import { existsSync } from 'node:fs'
+import path from 'node:path'
 import Image from 'next/image'
 import Link from 'next/link'
 import { AddTestimonialForm } from '@/components/AddTestimonialForm'
-import { MEDIA_MENTIONS, REAL_CASE_STUDIES } from '@/lib/site'
+import { MEDIA_MENTIONS } from '@/lib/site'
+import { REAL_CASE_STUDIES } from '@/lib/real-case-studies'
 import { TESTIMONIALS, getTestimonialIssueLabel } from '@/lib/testimonials'
 
 function getInitials(displayName: string): string {
@@ -16,6 +19,54 @@ function getInitials(displayName: string): string {
 
 function shouldRenderLocalPhoto(photoSrc?: string | null): photoSrc is string {
   return typeof photoSrc === 'string' && photoSrc.startsWith('/')
+}
+
+function resolveCaseImageSrc(imageSrc: string, remoteSrc?: string): string {
+  const localPath = path.join(process.cwd(), 'public', imageSrc.replace(/^\//, ''))
+  return existsSync(localPath) ? imageSrc : remoteSrc ?? imageSrc
+}
+
+function CaseCard({ caseStudy }: { caseStudy: (typeof REAL_CASE_STUDIES)[number] }) {
+  return (
+    <article className="real-case-card tree-backed-card" data-case-id={caseStudy.id}>
+      <div className="real-case-gallery" aria-label={`${caseStudy.headline} - zdjęcia`}>
+        {caseStudy.images.map((image, index) => (
+          <figure key={`${caseStudy.id}-${index}`} className="real-case-gallery-item">
+            <Image
+              src={resolveCaseImageSrc(image.src, image.remoteSrc)}
+              alt={image.alt}
+              fill
+              sizes="(max-width: 680px) 100vw, (max-width: 1024px) 50vw, 32vw"
+              loading="lazy"
+              className="real-case-gallery-image"
+            />
+          </figure>
+        ))}
+      </div>
+
+      <div className="real-case-copy">
+        <div className="section-eyebrow">{caseStudy.eyebrow}</div>
+        <h3>{caseStudy.headline}</h3>
+        <p>{caseStudy.summary}</p>
+
+        <div className="real-case-detail">
+          <strong>{caseStudy.firstStepLabel}</strong>
+          <span>{caseStudy.firstStepText}</span>
+        </div>
+
+        <div className="real-case-next">
+          <strong>{caseStudy.nextStepLabel}</strong>
+          <span>{caseStudy.nextStepText}</span>
+        </div>
+
+        <div className="real-case-meta" aria-label="Meta przypadku">
+          <span>{caseStudy.species}</span>
+          <span>{caseStudy.breed}</span>
+          <span>{caseStudy.age}</span>
+        </div>
+      </div>
+    </article>
+  )
 }
 
 type SocialProofSectionProps = {
@@ -56,27 +107,7 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
 
       <div className="real-case-grid top-gap">
         {REAL_CASE_STUDIES.map((caseStudy) => (
-          <article key={caseStudy.id} className="real-case-card">
-            <div className="real-case-image-shell">
-              <Image
-                src={caseStudy.imageSrc}
-                alt={caseStudy.imageAlt}
-                width={1200}
-                height={900}
-                sizes="(max-width: 680px) 100vw, 50vw"
-                className="real-case-image"
-              />
-            </div>
-            <div className="real-case-copy">
-              <div className="section-eyebrow">{caseStudy.sourceLabel}</div>
-              <h3>{caseStudy.problem}</h3>
-              <p>{caseStudy.summary}</p>
-              <div className="real-case-result">
-                <strong>Pierwszy krok</strong>
-                <span>{caseStudy.effect}</span>
-              </div>
-            </div>
-          </article>
+          <CaseCard key={caseStudy.id} caseStudy={caseStudy} />
         ))}
       </div>
 
@@ -171,7 +202,7 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
           <div className="offer-detail-cta-copy">
             <span className="section-eyebrow">Dalszy krok</span>
             <strong>Chcesz zobaczyć pełną sekcję opinii?</strong>
-            <span>Możesz też napisać wiadomość, jeśli chcesz zacząć od kontaktu.</span>
+            <span>Możesz też od razu zacząć od 15 min albo wejść przez PDF, jeśli wolisz spokojniejszy start.</span>
             <span>Pełny formularz publikacji i dodatkowe wskazówki są na osobnej podstronie.</span>
           </div>
 
@@ -179,8 +210,11 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
             <Link href="/opinie" prefetch={false} className="button button-primary big-button">
               Zobacz pełną sekcję opinii
             </Link>
-            <Link href="/kontakt" prefetch={false} className="button button-ghost big-button">
-              Napisz wiadomość
+            <Link href="/book" prefetch={false} className="button button-ghost big-button">
+              Umów 15 min
+            </Link>
+            <Link href="/oferta/poradniki-pdf" prefetch={false} className="button button-ghost big-button">
+              Zobacz materiały PDF
             </Link>
           </div>
         </div>

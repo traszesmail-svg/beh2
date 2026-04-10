@@ -39,7 +39,7 @@ export function PdfGuideCard({ guide, primaryHref, primaryLabel, compact = false
       <div className="offer-card-head">
         <div>
           <div className="pdf-card-kicker-row">
-            <div className="section-eyebrow">{getPdfAccessLabel(guide.accessType)}</div>
+            <div className="section-eyebrow">{guide.website_card?.eyebrow ?? getPdfAccessLabel(guide.accessType)}</div>
             <span className="pdf-card-unit-label">1 poradnik PDF</span>
           </div>
           <h3>{guide.title}</h3>

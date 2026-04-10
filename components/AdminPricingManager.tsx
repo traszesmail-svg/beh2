@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { DEFAULT_PRICE_PLN } from '@/lib/pricing'
 
 interface AdminPricingManagerProps {
   currentAmount: number
@@ -68,12 +69,12 @@ export function AdminPricingManager({ currentAmount, currentLabel, updatedAtLabe
           <label>Nowa cena konsultacji (PLN)</label>
           <input
             type="number"
-            min="59"
+            min={DEFAULT_PRICE_PLN.toString()}
             step="0.01"
             inputMode="decimal"
             value={amount}
             onChange={(event) => setAmount(event.target.value)}
-            placeholder="np. 59"
+            placeholder={`np. ${DEFAULT_PRICE_PLN}`}
             required
           />
         </div>

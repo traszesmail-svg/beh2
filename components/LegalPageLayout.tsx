@@ -79,7 +79,7 @@ export function LegalPageLayout({
   const primaryHref = '/kontakt'
 
   return (
-    <main className="page-wrap">
+    <main className="page-wrap marketing-page">
       <div className="container">
         <Header />
 
@@ -115,7 +115,7 @@ export function LegalPageLayout({
               </div>
 
               <div className="hero-actions offer-detail-actions">
-                {renderAction(primaryHref, 'Napisz wiadomość', 'button button-primary big-button')}
+                {renderAction(primaryHref, 'Przejdź do kontaktu', 'button button-primary big-button')}
                 {renderAction(secondaryCtaHref, secondaryCtaLabel, 'button button-ghost big-button')}
               </div>
             </div>

@@ -60,7 +60,7 @@ function makeBookingForm(slotId: string) {
   return {
     ownerName: 'Testowy Klient',
     serviceType: 'szybka-konsultacja-15-min' as const,
-    problemType: 'kot' as const,
+    problemType: 'kot-stres' as const,
     animalType: 'Kot' as const,
     petAge: '3 lata',
     durationNotes: 'Szybki test dostarczenia maili',
@@ -220,7 +220,7 @@ test('customer emails stay on the confirmation page when disabled', async () => 
         const status = getCustomerEmailDeliveryStatus(booking.booking.email)
 
         assert.equal(status.state, 'disabled')
-        assert.match(status.summary, /swiadomie wylaczone/i)
+        assert.match(status.summary, /świadomie wyłączone/i)
         assert.match(status.nextStep, /CUSTOMER_EMAIL_MODE=auto/i)
         assert.equal(sentEmails.length, 0)
 

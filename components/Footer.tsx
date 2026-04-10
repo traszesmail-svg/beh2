@@ -11,6 +11,7 @@ import {
   buildMailtoHref,
   getPublicContactDetails,
 } from '@/lib/site'
+import { FUNNEL_PRIMARY_HREF, FUNNEL_PRIMARY_LABEL, FUNNEL_SECONDARY_HREF, FUNNEL_SECONDARY_LABEL } from '@/lib/offers'
 
 type FooterProps = {
   variant?: 'landing' | 'lean' | 'full'
@@ -24,12 +25,12 @@ type FooterProps = {
 
 export function Footer({
   variant = 'lean',
-  ctaHref = '/kontakt',
-  ctaLabel = 'Napisz wiadomość',
+  ctaHref = FUNNEL_PRIMARY_HREF,
+  ctaLabel = FUNNEL_PRIMARY_LABEL,
   headline = 'Potrzebujesz pomocy z tym etapem?',
   description = 'Jeśli temat jest mieszany albo trzeba doprecyzować kolejny ruch, napisz wiadomość.',
-  secondaryHref,
-  secondaryLabel,
+  secondaryHref = FUNNEL_SECONDARY_HREF,
+  secondaryLabel = FUNNEL_SECONDARY_LABEL,
 }: FooterProps) {
   const contact = getPublicContactDetails()
   const buildMarker = getBuildMarkerSnapshot()
@@ -197,6 +198,17 @@ export function Footer({
             >
               {ctaLabel}
             </Link>
+            {secondaryHref ? (
+              secondaryHref.startsWith('mailto:') ? (
+                <a href={secondaryHref} className="footer-simple-link">
+                  {secondaryLabel ?? 'Napisz wiadomość'}
+                </a>
+              ) : (
+                <Link href={secondaryHref} prefetch={false} className="footer-simple-link">
+                  {secondaryLabel ?? 'Zobacz więcej'}
+                </Link>
+              )
+            ) : null}
             <Link href="/oferta" prefetch={false} className="footer-simple-link">
               Oferta
             </Link>
