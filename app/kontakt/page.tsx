@@ -26,7 +26,14 @@ type SectionIntroProps = {
 
 type ListCardProps = {
   title: string
-  items: string[]
+  items: readonly string[]
+}
+
+type DecisionCard = {
+  pill: string
+  title: string
+  items: readonly string[]
+  note?: string
 }
 
 const heroPreviewCards = [
@@ -114,7 +121,7 @@ const whatToPrepare = {
   ],
 } as const
 
-const decisionCards = [
+const decisionCards: DecisionCard[] = [
   {
     pill: 'Napisz wiadomość',
     title: 'Napisz wiadomość, jeśli...',
