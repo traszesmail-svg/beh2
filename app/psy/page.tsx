@@ -15,7 +15,7 @@ export const metadata: Metadata = buildMarketingMetadata({
   title: 'Pies',
   path: '/psy',
   description:
-    'Premium podstrona problemowa dla opiekunow psow. Pomoc przy spacerach, reaktywnosci, rozlacce, pobudzeniu i trudnych zachowaniach w domu.',
+    'Premium podstrona problemowa dla opiekunów psów. Pomoc przy spacerach, reaktywności, rozłące, pobudzeniu i trudnych zachowaniach w domu.',
 })
 
 type SectionIntroProps = {
@@ -36,53 +36,53 @@ function SectionIntro({ eyebrow, title, description }: SectionIntroProps) {
   )
 }
 
-const consultationHref = buildBookHref()
+const consultationHref = buildBookHref(null, 'konsultacja-behawioralna-online')
 const contactHref = '/kontakt#formularz'
 const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min')
 
 const problemCards = [
   {
-    title: 'Spacery pelne napiecia',
-    description: 'pies ciagnie, zatrzymuje sie albo reaguje jeszcze przed wyjściem z domu',
+    title: 'Spacery pełne napięcia',
+    description: 'Pies ciągnie, zatrzymuje się albo reaguje jeszcze przed wyjściem z domu.',
   },
   {
-    title: 'Reaktywnosc i silne emocje',
-    description: 'szczekanie, wyrywanie sie i gwałtowne reakcje na ludzi, psy albo inne bodzce',
+    title: 'Reaktywność i silne emocje',
+    description: 'Szczekanie, wyrywanie się i gwałtowne reakcje na ludzi, psy albo inne bodźce.',
   },
   {
-    title: 'Trudnosc z zostawaniem samemu',
-    description: 'niepokoj po wyjsciu opiekuna, wokalizacja, niszczenie lub panika przy rozlacce',
+    title: 'Trudność z zostawaniem samemu',
+    description: 'Niepokój po wyjściu opiekuna, wokalizacja, niszczenie lub panika przy rozłące.',
   },
   {
     title: 'Pobudzenie i brak wyciszenia',
-    description: 'pies nie odpoczywa, szybko sie nakreca i trudno mu zejsc z emocji',
+    description: 'Pies nie odpoczywa, szybko się nakręca i trudno mu zejść z emocji.',
   },
   {
     title: 'Trudne zachowania w domu',
-    description: 'szczekanie, pilnowanie zasobow, skakanie, napiecie wobec gosci lub domownikow',
+    description: 'Szczekanie, pilnowanie zasobów, skakanie, napięcie wobec gości lub domowników.',
   },
   {
-    title: 'Zmiana, po ktorej cos sie posypalo',
-    description: 'przeprowadzka, nowy rytm dnia, nowi domownicy albo zmiana otoczenia',
+    title: 'Zmiana, po której coś się posypało',
+    description: 'Przeprowadzka, nowy rytm dnia, nowi domownicy albo zmiana otoczenia.',
   },
 ] as const
 
 const whenToGetHelp = {
   yes: [
-    'zachowanie psa zaczyna regularnie niepokoic',
-    'spacery robia sie coraz trudniejsze',
-    'pies ma problem z wyciszeniem albo rozlaka',
-    'sytuacja w domu staje sie napieta',
-    'rozne rady tylko mieszaja',
-    'po zmianie w domu cos sie rozsypalo',
+    'zachowanie psa zaczyna Cię regularnie niepokoić',
+    'spacery robią się coraz trudniejsze',
+    'pies ma problem z wyciszeniem albo z rozłąką',
+    'sytuacja w domu staje się napięta',
+    'różne rady tylko zwiększają chaos',
+    'po zmianie w domu coś się rozsypało',
   ],
   noNeedToWait: [
-    'problem bardzo sie nasili',
-    'codziennosc stanie sie trudna do opanowania',
-    'pojawi sie duza frustracja i bezradnosc',
-    'pies utrwali napieciowy schemat',
-    'bedziesz miec idealny opis sytuacji',
-    'wszystko stanie sie wystarczajaco powazne',
+    'chcesz zatrzymać problem, zanim się utrwali',
+    'różne rady tylko zwiększają chaos',
+    'widzisz, że temat wraca mimo prób',
+    'potrzebujesz spokojnego pierwszego planu',
+    'chcesz wiedzieć, od czego zacząć dziś',
+    'zależy Ci na sensownym kierunku, a nie przypadkowych poradach',
   ],
 } as const
 
@@ -323,12 +323,14 @@ export default function DogsPage() {
                 </Link>
               </div>
 
-              <Link href={audioHref} prefetch={false} className="prep-inline-link contact-audio-link" data-analytics-event="cta_click" data-analytics-location="dogs-hero-audio">
-                <span className="contact-inline-label">Nie masz pewności, czy to dobry moment? Krótka rozmowa wstępna 15 min audio</span>
-                <span className="contact-soft-note">bez potrzeby przygotowania kamery</span>
-              </Link>
+              <div className="home-soft-cta">
+                <Link href={audioHref} prefetch={false} className="home-soft-cta-link" data-analytics-event="cta_click" data-analytics-location="dogs-hero-audio">
+                  Nie masz pewności, czy to dobry moment? Krótka rozmowa wstępna 15 min audio
+                </Link>
+                <span className="home-soft-cta-note">bez potrzeby przygotowania kamery</span>
+              </div>
 
-              <p className="contact-support-copy">Spacer, lęk, pobudzenie, reaktywność, trudności w domu - zacznijmy od uporządkowania sytuacji.</p>
+              <p className="contact-support-copy">Spacer, lęk, pobudzenie, reaktywność, trudności w domu — zacznijmy od uporządkowania sytuacji.</p>
             </div>
 
             <aside className="editorial-hero-visual" aria-label="Zdjęcie psa w spokojnym, naturalnym kontekście">
@@ -393,7 +395,7 @@ export default function DogsPage() {
             </article>
 
             <article className="summary-card tree-backed-card">
-              <h3>Nie musisz czekać, aż</h3>
+              <h3>To też dobry moment, jeśli</h3>
               <ul className="premium-bullet-list">
                 {whenToGetHelp.noNeedToWait.map((item) => (
                   <li key={item}>{item}</li>
@@ -498,7 +500,7 @@ export default function DogsPage() {
           <SectionIntro
             eyebrow="Opinie"
             title="Co mówią opiekunowie psów po konsultacji"
-            description="Krótko, elegancko i bez ciężkiego slidera. Tylko konkretne głosy, które pokazują, co zmienia pierwszy porządek w problemie."
+            description="Trzy wyróżnione opinie i krótsze głosy pokazują, jak pierwszy porządek w problemie przekłada się na codzienność."
           />
 
           <div className="summary-grid top-gap">
@@ -523,7 +525,7 @@ export default function DogsPage() {
               Zobacz przykładowe sytuacje psów
             </Link>
             <Link href={consultationHref} prefetch={false} className="button button-ghost big-button">
-              Umów konsultację
+              Umów konsultację dotyczącą psa
             </Link>
           </div>
         </section>
@@ -532,13 +534,13 @@ export default function DogsPage() {
           <SectionIntro
             eyebrow="Mini przypadki"
             title="Przykładowe sytuacje psów, z którymi zgłaszają się opiekunowie"
-            description="Nie jako spektakl. Po prostu trzy krótkie scenariusze, które dobrze pokazują, jak zwykle zaczyna się porządkowanie tematu."
+            description="Trzy krótkie scenariusze pokazują, jak zwykle zaczyna się porządkowanie tematu."
           />
 
           <div className="summary-grid top-gap">
-            {miniCaseStudies.map((caseStudy) => (
+            {miniCaseStudies.map((caseStudy, index) => (
               <article key={caseStudy.title} className="summary-card tree-backed-card">
-                <div className="section-eyebrow">{caseStudy.title}</div>
+                <div className="section-eyebrow">Przypadek {String(index + 1).padStart(2, '0')}</div>
                 <h3>{caseStudy.title}</h3>
                 <p>
                   <strong>Sytuacja:</strong> {caseStudy.situation}
@@ -547,7 +549,7 @@ export default function DogsPage() {
                   <strong>Co było kluczowe:</strong> {caseStudy.key}
                 </p>
                 <p>
-                  <strong>Efekt / kierunek pracy:</strong> {caseStudy.effect}
+                  <strong>Efekt:</strong> {caseStudy.effect}
                 </p>
               </article>
             ))}
@@ -558,7 +560,7 @@ export default function DogsPage() {
               Sprawdź najczęstsze pytania opiekunów psów
             </Link>
             <Link href={consultationHref} prefetch={false} className="button button-ghost big-button">
-              Umów konsultację
+              Umów konsultację dotyczącą psa
             </Link>
           </div>
         </section>
@@ -633,7 +635,7 @@ export default function DogsPage() {
         <Footer
           sectionBasePath="/psy"
           ctaHref={consultationHref}
-          ctaLabel="Umów konsultację"
+          ctaLabel="Umów konsultację dotyczącą psa"
           secondaryHref={contactHref}
           secondaryLabel="Napisz wiadomość"
         />

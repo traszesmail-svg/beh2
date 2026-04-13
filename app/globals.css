@@ -7870,6 +7870,11 @@ select:focus-visible {
   .faq-page .prep-inline-link {
     width: 100%;
   }
+
+  .dog-service-page .editorial-process-note {
+    position: static;
+    top: auto;
+  }
 }
 
 .dog-featured-opinion-card {
@@ -7880,7 +7885,40 @@ select:focus-visible {
   border-radius: 30px;
   background:
     radial-gradient(circle at 18% 10%, rgba(255, 255, 255, 0.88), transparent 28%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(249, 243, 235, 0.98));
+  linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(249, 243, 235, 0.98));
+}
+
+.dog-service-page .contact-support-copy {
+  margin: 0;
+  max-width: 54ch;
+  color: var(--muted-strong);
+  font-size: 14px;
+  line-height: 1.66;
+}
+
+.dog-service-page .dog-featured-opinion-card {
+  gap: 10px;
+  padding: 22px;
+}
+
+.dog-service-page .dog-featured-opinion-card blockquote {
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+.dog-service-page .dog-opinion-wall {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.dog-service-page .dog-opinion-card {
+  padding: 17px 17px 16px;
+  border-radius: 24px;
+}
+
+.dog-service-page .dog-opinion-card p {
+  font-size: 13.5px;
+  line-height: 1.65;
 }
 
 .dog-featured-opinion-card .section-eyebrow {
@@ -7969,20 +8007,25 @@ select:focus-visible {
 }
 
 @media (max-width: 680px) {
-  .dog-featured-opinion-card {
+  .dog-service-page .contact-support-copy {
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .dog-service-page .dog-featured-opinion-card {
     padding: 18px;
   }
 
-  .dog-featured-opinion-card blockquote {
+  .dog-service-page .dog-featured-opinion-card blockquote {
     font-size: 18px;
     line-height: 1.55;
   }
 
-  .dog-opinion-wall {
+  .dog-service-page .dog-opinion-wall {
     grid-template-columns: 1fr;
   }
 
-  .dog-opinion-card {
+  .dog-service-page .dog-opinion-card {
     padding: 15px 15px 14px;
   }
 
