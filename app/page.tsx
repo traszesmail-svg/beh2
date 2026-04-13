@@ -2,21 +2,18 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { AnalyticsEventOnMount } from '@/components/AnalyticsEventOnMount'
+import { Footer } from '@/components/Footer'
+import { Header } from '@/components/Header'
 import { buildBookHref } from '@/lib/booking-routing'
-import { REAL_CASE_STUDIES } from '@/lib/real-case-studies'
 import { buildHomeMetadata } from '@/lib/seo'
 import {
   CAPBT_ORG_URL,
   CAPBT_PROFILE_URL,
   COAPE_ORG_URL,
   INSTAGRAM_PROFILE_URL,
-  SPECIALIST_CREDENTIALS,
   SPECIALIST_LOCATION,
   SPECIALIST_NAME,
   SITE_NAME,
-  SITE_SHORT_NAME,
-  SITE_TAGLINE,
-  buildMailtoHref,
   getPublicContactDetails,
 } from '@/lib/site'
 import { getBaseUrl } from '@/lib/server/env'
@@ -39,29 +36,78 @@ function SectionIntro({ eyebrow, title, description }: SectionIntroProps) {
   )
 }
 
-const consultationHref = buildBookHref()
-const contactHref = '/kontakt'
-const opinionsHref = '/opinie'
+const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min')
+const consultationHref = '/kontakt'
+const contactHref = '/kontakt#formularz'
+const opinionsHref = '/#opinie'
+const opinionsPageHref = '/opinie'
 const dogsHref = '/psy'
 const catsHref = '/koty'
+const homeAuthorityLine = 'Behawiorysta COAPE, trener zwierząt towarzyszących i technik weterynarii.'
 
 // Legacy source markers kept for runtime-config smoke assertions.
 // Najpierw porządek. Potem zmiana.
 // Jedna spokojna rozmowa wystarcza.
-// PDF będzie drugim krokiem, a nie pierwszym skrótem.
-// 15 minut na start
-// PDF jako spokojny drugi krok
 // 30 min / pełna jako upgrade
 // FUNNEL_PRIMARY_HREF
 // FUNNEL_SECONDARY_LABEL
 // FUNNEL_UPGRADE_LABEL
 
-const trustItems = ['Behawiorysta COAPE', 'Pomoc dla psów i kotów', 'Online i stacjonarnie w Olsztynie', 'Plan działania po konsultacji']
+type TrustIconKind = 'badge' | 'paw' | 'camera' | 'plan'
+
+type TrustItem = {
+  label: string
+  icon: TrustIconKind
+}
+
+function TrustIcon({ kind }: { kind: TrustIconKind }) {
+  switch (kind) {
+    case 'badge':
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <circle cx="12" cy="12" r="8.25" />
+          <path d="M8.7 12.7 11 15l4.8-5.8" />
+        </svg>
+      )
+    case 'paw':
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <circle cx="7.4" cy="8" r="1.25" />
+          <circle cx="10.1" cy="6.9" r="1.25" />
+          <circle cx="13.9" cy="6.9" r="1.25" />
+          <circle cx="16.6" cy="8" r="1.25" />
+          <path d="M8.1 15.3c0-2.2 1.7-4 3.9-4s3.9 1.8 3.9 4c0 1.2-1.7 2.2-3.9 2.2s-3.9-1-3.9-2.2Z" />
+        </svg>
+      )
+    case 'camera':
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <rect x="4.5" y="8" width="10" height="8" rx="2" />
+          <path d="m14.5 10.7 4-2.2v6.8l-4-2.2" />
+        </svg>
+      )
+    case 'plan':
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M8 5.5h8A1.5 1.5 0 0 1 17.5 7v10A1.5 1.5 0 0 1 16 18.5H8A1.5 1.5 0 0 1 6.5 17V7A1.5 1.5 0 0 1 8 5.5Z" />
+          <path d="M9.5 9h5M9.5 12h5M9.5 15h3.4" />
+        </svg>
+      )
+  }
+
+  return null
+}
+
+const trustItems: TrustItem[] = [
+  { label: 'Behawiorysta COAPE', icon: 'badge' },
+  { label: 'Pomoc dla psów i kotów', icon: 'paw' },
+  { label: 'Konsultacje online', icon: 'camera' },
+  { label: 'Plan działania po konsultacji', icon: 'plan' },
+]
 
 const quickChoiceCards = [
   {
     title: 'Pies',
-    intro: 'Najczęściej zgłaszane tematy:',
     items: [
       'lęk i napięcie na spacerach',
       'reaktywność na ludzi lub inne psy',
@@ -73,7 +119,6 @@ const quickChoiceCards = [
   },
   {
     title: 'Kot',
-    intro: 'Najczęściej zgłaszane tematy:',
     items: [
       'załatwianie poza kuwetą',
       'napięcie, wycofanie lub nadmierna czujność',
@@ -108,66 +153,86 @@ const benefitCards = [
 const opinionCards = [
   { species: 'Pies', quote: 'Po konsultacji przestałam próbować wszystkiego naraz. Wreszcie miałam jeden plan do spacerów i domu.', note: 'Reaktywność na spacerach' },
   { species: 'Kot', quote: 'Zamiast zgadywać przy kuwecie dostałam porządek i spokojny start. Kot szybciej wrócił do przewidywalności.', note: 'Kuweta i stres w domu' },
-  { species: 'Ogólna', quote: 'Najmocniejsze było to, że problem został uporządkowany bez oceniania. Wyszłam z jasnym pierwszym krokiem.', note: 'Najważniejsza opinia' },
+  { species: 'Styl pracy', quote: 'Najmocniejsze było to, że problem został uporządkowany bez oceniania. Wyszłam z jasnym pierwszym krokiem.', note: 'Spokojnie i konkretnie' },
 ] as const
 
 const miniOpinionCards = [
   { species: 'Pies', copy: 'Najbardziej uspokoiło mnie to, że wiedziałam, od czego zacząć.' },
   { species: 'Kot', copy: 'Dostałam konkretny kierunek, bez sprzecznych rad.' },
-  { species: 'Dom', copy: 'Pierwszy krok był prosty do wdrożenia i nie przytłoczył codzienności.' },
+  { species: 'Styl pracy', copy: 'Pierwszy krok był prosty do wdrożenia i nie przytłoczył codzienności.' },
 ] as const
 
 const faqItems = [
   {
-    question: 'Skąd mam wiedzieć, czy to dobry moment na konsultację?',
-    answer: 'Jeśli problem wraca, narasta albo zaczynasz czuć, że kręcisz się w kółko, to dobry moment. Nie trzeba czekać, aż sytuacja stanie się skrajna.',
+    question: 'Czy to dobry moment?',
+    answer: 'Jeśli problem wraca, narasta albo zaczynasz czuć bezradność, to dobry moment. Nie trzeba czekać na kryzys.',
   },
   {
-    question: 'Czy konsultacja jest tylko dla trudnych, poważnych przypadków?',
-    answer: 'Nie. Często najlepszy efekt daje wczesny kontakt, zanim zachowanie zdąży się utrwalić albo rozlać na kolejne sytuacje.',
+    question: 'Czy konsultacja jest tylko dla trudnych przypadków?',
+    answer: 'Nie. Często najlepszy efekt daje wczesny kontakt, zanim zachowanie zdąży się utrwalić.',
   },
   {
-    question: 'Jak przygotować się do pierwszego spotkania?',
-    answer: 'Wystarczy krótki opis sytuacji, kilka przykładów z codzienności i jeśli masz - krótkie nagranie zachowania. Resztę uporządkujemy razem.',
+    question: 'Jak się przygotować?',
+    answer: 'Wystarczy krótki opis sytuacji, kilka przykładów z codzienności i ewentualnie krótkie nagranie. Resztę uporządkujemy razem.',
   },
   {
-    question: 'Czy konsultacja online ma sens?',
-    answer: 'Tak, szczególnie kiedy trzeba uporządkować sytuację, zobaczyć rytm dnia i ustalić plan działania. W wielu sprawach to w pełni wystarcza na dobry start.',
+    question: 'Czy online ma sens?',
+    answer: 'Tak. W wielu sprawach wystarczy, żeby dobrze uporządkować sytuację i ustalić plan działania.',
   },
   {
     question: 'Co dostanę po konsultacji?',
-    answer: 'Dostajesz jasny kierunek pracy, priorytety i kolejne kroki do wdrożenia w domu. Celem jest porządek, a nie przytłoczenie listą zaleceń.',
+    answer: 'Jasny kierunek pracy, priorytety i pierwsze kroki do wdrożenia w domu.',
   },
   {
     question: 'Co jeśli nie wiem, od czego zacząć?',
-    answer: 'To wystarczy napisać. Opisz sytuację tak, jak ją widzisz, a pomogę wybrać najprostszy i najbezpieczniejszy pierwszy krok.',
+    answer: 'Wystarczy opisać sytuację tak, jak ją widzisz, a pomogę wybrać najprostszy i najbezpieczniejszy start.',
   },
 ] as const
 
-const caseStudyOrder = ['case-02', 'case-06', 'case-05'] as const
+const caseStudyCards = [
+  {
+    species: 'Pies',
+    title: 'Pies napięty na spacerach',
+    situation: 'Spacer kończy się pobudzeniem, ciągnięciem albo trudną mijanką z ludźmi i innymi psami.',
+    key: 'Najpierw skracamy bodźce, tempo i dystans, żeby pies mógł zejść z napięcia.',
+    effect: 'Potem można budować spokojniejsze przejścia i prostszy rytm dnia.',
+  },
+  {
+    species: 'Kot',
+    title: 'Kot załatwiający się poza kuwetą',
+    situation: 'Kot omija kuwetę po zmianach w domu, przy stresie albo po wahaniach w codziennym rytmie.',
+    key: 'Porządkujemy przestrzeń, kuwetę i tło zdrowotne, zanim dołożymy kolejne wnioski.',
+    effect: 'Dopiero na tym tle widać, czy problem jest środowiskowy, czy wymaga szerszej pracy.',
+  },
+  {
+    species: 'Dom',
+    title: 'Napięcie po zmianach w domu',
+    situation: 'Po remoncie, przeprowadzce albo zmianie rytmu dnia zwierzę przestaje się swobodnie wyciszać.',
+    key: 'Ustalamy prostszy układ dnia, strefy odpoczynku i przewidywalny dostęp do zasobów.',
+    effect: 'Dom wraca do czytelności, a zwierzę szybciej odzyskuje spokój.',
+  },
+  {
+    species: 'Relacje',
+    title: 'Relacje i napięcie między zwierzętami',
+    situation: 'Pojawia się blokowanie przejść, pilnowanie zasobów albo gonitwy między zwierzętami.',
+    key: 'Najpierw zabezpieczamy przestrzeń i obniżamy liczbę sytuacji, które podkręcają konflikt.',
+    effect: 'Dopiero potem budujemy spokojniejszy kontakt i kontrolowane spotkania.',
+  },
+] as const
+
 export default function HomePage() {
   const baseUrl = getBaseUrl()
   const specialistImagePath = '/branding/omnie-hero.webp'
+  const consultationImagePath = '/branding/omnie2.png'
   const aboutImagePath = '/branding/specialist-krzysztof-portrait.jpg'
   const contact = getPublicContactDetails()
-  const mailtoHref = contact.email
-    ? buildMailtoHref(
-        contact.email,
-        'Zapytanie - Regulski | Behawiorysta COAPE',
-        'Dzień dobry,\n\nchciałbym opisać sytuację psa lub kota i ustalić najlepszy pierwszy krok.\n\n- gatunek:\n- problem:\n- od kiedy trwa:\n- co najbardziej mnie niepokoi:\n',
-      )
-    : null
-
-  const caseStudies = caseStudyOrder
-    .map((id) => REAL_CASE_STUDIES.find((caseStudy) => caseStudy.id === id))
-    .filter((caseStudy): caseStudy is (typeof REAL_CASE_STUDIES)[number] => Boolean(caseStudy))
 
   const structuredData = [
     {
       '@context': 'https://schema.org',
       '@type': 'ProfessionalService',
       name: SITE_NAME,
-      description: `${SITE_TAGLINE}. Olsztyn, woj. warmińsko-mazurskie i online.`,
+      description: 'Konsultacje behawioralne dla psów i kotów online i w Olsztynie. Spokojny pierwszy krok, jasny plan działania i kontakt bez presji.',
       url: baseUrl,
       areaServed: [
         { '@type': 'City', name: 'Olsztyn' },
@@ -180,7 +245,7 @@ export default function HomePage() {
         name: SPECIALIST_NAME,
         jobTitle: 'Behawiorysta COAPE',
         image: new URL(specialistImagePath, baseUrl).toString(),
-        description: `${SPECIALIST_CREDENTIALS}.`,
+        description: homeAuthorityLine,
       },
       contactPoint: contact.email
         ? { '@type': 'ContactPoint', contactType: 'customer support', email: contact.email, areaServed: 'PL' }
@@ -190,7 +255,7 @@ export default function HomePage() {
       '@context': 'https://schema.org',
       '@type': 'Person',
       name: SPECIALIST_NAME,
-      description: `${SITE_TAGLINE}.`,
+      description: homeAuthorityLine,
       image: new URL(specialistImagePath, baseUrl).toString(),
       sameAs: [COAPE_ORG_URL, CAPBT_ORG_URL, CAPBT_PROFILE_URL, INSTAGRAM_PROFILE_URL],
       homeLocation: { '@type': 'Place', name: SPECIALIST_LOCATION },
@@ -211,35 +276,9 @@ export default function HomePage() {
       <AnalyticsEventOnMount eventName="home_view" />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
 
-      <header className="premium-home-header">
-        <div className="container premium-home-header-inner">
-          <Link href="/" prefetch={false} className="premium-home-brand" aria-label={SITE_NAME}>
-            <span className="brand-copy">
-              <span className="brand">{SITE_SHORT_NAME}</span>
-              <span className="header-subtitle">Behawiorysta COAPE | Koty i psy</span>
-            </span>
-          </Link>
-
-          <nav className="premium-home-nav" aria-label="Główna nawigacja">
-            <a href="#jak-pomagam" className="header-link">Jak pomagam</a>
-            <a href="#pierwsza-konsultacja" className="header-link">Pierwsza konsultacja</a>
-            <a href="#opinie" className="header-link">Opinie</a>
-            <a href="#faq" className="header-link">FAQ</a>
-          </nav>
-
-          <Link
-            href={consultationHref}
-            prefetch={false}
-            className="button button-primary big-button premium-home-header-cta"
-            data-analytics-event="cta_click"
-            data-analytics-location="header"
-          >
-            Umów konsultację
-          </Link>
-        </div>
-      </header>
-
       <div className="container editorial-stack">
+        <Header />
+
         <section className="editorial-hero-shell premium-hero-shell" id="start">
           <div className="editorial-hero-grid">
             <div className="editorial-hero-copy">
@@ -252,34 +291,43 @@ export default function HomePage() {
                 <Link href={contactHref} prefetch={false} className="button button-ghost big-button" data-analytics-event="cta_click" data-analytics-location="home-hero-message">Napisz wiadomość</Link>
               </div>
 
-              <Link href={consultationHref} prefetch={false} className="prep-inline-link">Nie wiesz, od czego zacząć? Krótka rozmowa wstępna 15 min</Link>
+              <div className="home-soft-cta">
+                <Link href={audioHref} prefetch={false} className="home-soft-cta-link" data-analytics-event="cta_click" data-analytics-location="home-hero-audio">
+                  Nie wiesz, od czego zacząć? Krótka rozmowa wstępna 15 min audio
+                </Link>
+                <span className="home-soft-cta-note">bez potrzeby przygotowania kamery</span>
+              </div>
             </div>
 
             <aside className="editorial-hero-visual" aria-label="Zdjęcie specjalisty">
               <div className="editorial-hero-photo-frame">
                 <Image src={specialistImagePath} alt={`${SPECIALIST_NAME} z kotem podczas spokojnej konsultacji`} fill sizes="(max-width: 980px) 100vw, 520px" priority className="editorial-hero-photo" />
-                <div className="editorial-hero-photo-caption">
-                  <span>Spokojny pierwszy krok</span>
-                  <strong>Jedna rozmowa pomaga zobaczyć, co napędza problem i od czego zacząć.</strong>
-                </div>
               </div>
             </aside>
           </div>
         </section>
 
-        <div className="premium-trust-strip panel">
+        <ul className="premium-trust-strip" aria-label="Najważniejsze filary zaufania">
           {trustItems.map((item) => (
-            <span key={item}>{item}</span>
+            <li key={item.label} className="premium-trust-strip-item">
+              <span className="premium-trust-strip-icon" aria-hidden="true">
+                <TrustIcon kind={item.icon} />
+              </span>
+              <span className="premium-trust-strip-label">{item.label}</span>
+            </li>
           ))}
-        </div>
+        </ul>
 
         <section className="panel section-panel editorial-section" id="z-czym-najczesciej">
-          <SectionIntro eyebrow="Szybki wybór pies / kot" title="Z czym najczęściej zgłaszają się opiekunowie psów i kotów" description="Najpierw patrzę, co naprawdę obciąża codzienność, a dopiero potem wybieram najlepszy start." />
+          <SectionIntro
+            eyebrow="Pies i kot"
+            title="Z czym najczęściej zgłaszają się opiekunowie psów i kotów"
+            description="Wybierz obszar najbliższy Twojej sytuacji. Jeśli nie widzisz tu dokładnie swojego przypadku, napisz, a wspólnie ustalimy pierwszy krok."
+          />
 
           <div className="premium-two-column-grid">
             {quickChoiceCards.map((card) => (
               <article key={card.title} className="editorial-entry-card premium-choice-card">
-                <div className="section-eyebrow">{card.intro}</div>
                 <h3>{card.title}</h3>
                 <ul className="premium-bullet-list">
                   {card.items.map((item) => <li key={item}>{item}</li>)}
@@ -303,28 +351,45 @@ export default function HomePage() {
           </div>
 
           <div className="hero-actions editorial-final-actions">
-            <Link href="#pierwsza-konsultacja" prefetch={false} className="prep-inline-link">Zobacz, jak wygląda pierwsza konsultacja</Link>
+            <Link href="/#pierwsza-konsultacja" prefetch={false} className="prep-inline-link">Zobacz, jak wygląda pierwsza konsultacja</Link>
           </div>
         </section>
 
         <section className="panel section-panel editorial-section" id="pierwsza-konsultacja">
-          <SectionIntro eyebrow="Pierwsza konsultacja" title="Jak wygląda pierwsza konsultacja krok po kroku" description="Wystarczy opis sytuacji. Resztę uporządkujemy razem." />
+          <SectionIntro
+            eyebrow="Pierwsza konsultacja"
+            title="Jak wygląda pierwsza konsultacja"
+            description="Wystarczy opis sytuacji. Resztę uporządkujemy razem."
+          />
 
-          <div className="editorial-process-layout">
-            <div className="editorial-process-timeline">
-              {consultationSteps.map((step, index) => (
-                <article key={step.title} className="editorial-process-card">
-                  <div className="editorial-process-step">{String(index + 1).padStart(2, '0')}</div>
-                  <h3>{step.title}</h3>
-                  <p>{step.copy}</p>
-                </article>
-              ))}
+          <div className="editorial-process-layout home-process-layout">
+            <div className="home-process-copy">
+              <div className="editorial-process-timeline">
+                {consultationSteps.map((step, index) => (
+                  <article key={step.title} className="editorial-process-card">
+                    <div className="editorial-process-step">{String(index + 1).padStart(2, '0')}</div>
+                    <h3>{step.title}</h3>
+                    <p>{step.copy}</p>
+                  </article>
+                ))}
+              </div>
             </div>
 
-            <aside className="editorial-process-note" aria-label="Ważna notatka">
-              <span className="editorial-process-note-label">Ważne</span>
-              <strong>Nie musisz wszystkiego wiedzieć przed spotkaniem.</strong>
-              <p>Wystarczy, że opiszesz swoją sytuację - resztę uporządkujemy razem.</p>
+            <aside className="home-process-visual" aria-label="Spokojny pierwszy kontakt">
+              <div className="home-process-photo-frame">
+                <Image
+                  src={consultationImagePath}
+                  alt="Krzysztof Regulski podczas spokojnej konsultacji behawioralnej"
+                  fill
+                  sizes="(max-width: 980px) 100vw, 520px"
+                  className="home-process-photo"
+                />
+              </div>
+
+              <div className="home-process-proof-card">
+                <span className="home-process-proof-label">Spokojny pierwszy kontakt</span>
+                <p>Pierwsza rozmowa pomaga uporządkować sytuację i wybrać najlepszy pierwszy krok.</p>
+              </div>
             </aside>
           </div>
 
@@ -335,7 +400,7 @@ export default function HomePage() {
         </section>
 
         <section className="panel section-panel editorial-section" id="co-zyskasz">
-          <SectionIntro eyebrow="Co zyskasz ze współpracy" title="Co zyskasz ze współpracy" description="Mniej napięcia, więcej czytelności i spokojniejszy start pracy." />
+          <SectionIntro eyebrow="Korzyści" title="Co zyskasz ze współpracy" description="Mniej napięcia, więcej czytelności i spokojniejszy start pracy." />
 
           <div className="premium-two-column-grid">
             {benefitCards.map((card) => (
@@ -375,41 +440,35 @@ export default function HomePage() {
 
           <div className="hero-actions editorial-final-actions">
             <Link href={consultationHref} prefetch={false} className="button button-primary big-button" data-analytics-event="cta_click" data-analytics-location="home-opinions-book">Umów konsultację</Link>
-            <Link href={opinionsHref} prefetch={false} className="button button-ghost big-button">Zobacz więcej opinii</Link>
+            <Link href={opinionsPageHref} prefetch={false} className="button button-ghost big-button">Zobacz więcej opinii</Link>
           </div>
         </section>
 
         <section className="panel section-panel editorial-section" id="przypadki">
-          <SectionIntro eyebrow="Przypadki" title="Przykładowe sytuacje, z którymi zgłaszają się opiekunowie" description="Nie jako spektakl. Po prostu kilka realnych startów, które dobrze pokazują kierunek pracy." />
+          <SectionIntro
+            eyebrow="Przykładowe sytuacje"
+            title="Przykładowe sytuacje, z którymi zgłaszają się opiekunowie"
+            description="Krótko, realnie i bez katalogowego ciężaru. To kilka najczęstszych startów, które dobrze pokazują kierunek pracy."
+          />
 
-          <div className="real-case-grid">
-            {caseStudies.map((caseStudy) => (
-              <article key={caseStudy.id} className="real-case-card" data-case-id={caseStudy.id}>
-                <div className="real-case-gallery" aria-label={`${caseStudy.headline} - zdjęcia`}>
-                  {caseStudy.images.map((image, index) => (
-                    <figure key={`${caseStudy.id}-${index}`} className="real-case-gallery-item">
-                      <Image src={image.src} alt={image.alt} fill sizes="(max-width: 680px) 100vw, (max-width: 1024px) 50vw, 32vw" loading="lazy" className="real-case-gallery-image" />
-                    </figure>
-                  ))}
-                </div>
+          <div className="premium-two-column-grid">
+            {caseStudyCards.map((caseStudy) => (
+              <article key={caseStudy.title} className="summary-card tree-backed-card home-mini-case-card">
+                <div className="section-eyebrow">{caseStudy.species}</div>
+                <h3>{caseStudy.title}</h3>
 
-                <div className="real-case-copy">
-                  <div className="section-eyebrow">{caseStudy.eyebrow}</div>
-                  <div className="real-case-meta" aria-label="Meta przypadku">
-                    <span>{caseStudy.breed}</span>
-                    <span>{caseStudy.age}</span>
+                <div className="home-case-mini-lines">
+                  <div className="home-case-mini-line">
+                    <span className="home-case-mini-label">Sytuacja</span>
+                    <p>{caseStudy.situation}</p>
                   </div>
-                  <h3>{caseStudy.headline}</h3>
-                  <p>{caseStudy.summary}</p>
-
-                  <div className="real-case-detail">
-                    <strong>{caseStudy.firstStepLabel}</strong>
-                    <span>{caseStudy.firstStepText}</span>
+                  <div className="home-case-mini-line">
+                    <span className="home-case-mini-label">Klucz</span>
+                    <p>{caseStudy.key}</p>
                   </div>
-
-                  <div className="real-case-next">
-                    <strong>{caseStudy.nextStepLabel}</strong>
-                    <span>{caseStudy.nextStepText}</span>
+                  <div className="home-case-mini-line">
+                    <span className="home-case-mini-label">Efekt</span>
+                    <p>{caseStudy.effect}</p>
                   </div>
                 </div>
               </article>
@@ -418,7 +477,7 @@ export default function HomePage() {
 
           <div className="hero-actions editorial-final-actions">
             <Link href={consultationHref} prefetch={false} className="button button-primary big-button" data-analytics-event="cta_click" data-analytics-location="home-cases-book">Umów konsultację</Link>
-            <Link href={contactHref} prefetch={false} className="button button-ghost big-button" data-analytics-event="cta_click" data-analytics-location="home-cases-message">Masz podobną sytuację? Napisz wiadomość</Link>
+            <Link href={contactHref} prefetch={false} className="button button-ghost big-button" data-analytics-event="cta_click" data-analytics-location="home-cases-message">Napisz wiadomość</Link>
           </div>
         </section>
 
@@ -430,15 +489,17 @@ export default function HomePage() {
               </div>
               <div className="editorial-hero-meta">
                 <span>Behawiorysta COAPE</span>
-                <span>{SPECIALIST_LOCATION}</span>
-                <span>Online i stacjonarnie</span>
+                <span>Trener zwierząt towarzyszących</span>
+                <span>Technik weterynarii</span>
               </div>
             </div>
 
             <div className="premium-about-copy">
               <SectionIntro eyebrow="O mnie + COAPE + sposób pracy" title="Pracuję spokojnie, konkretnie i z uwzględnieniem potrzeb zwierzęcia oraz opiekuna" description="Najpierw szukam przyczyny, potem dopasowuję plan i dbam o to, żeby wdrożenie było realne." />
 
-              <p className="editorial-hero-lead"><strong>Jestem behawiorystą COAPE.</strong> Pracuję z psami i kotami tak, żeby lepiej zrozumieć zachowanie, uporządkować codzienność i wybrać pierwszy krok, który ma sens w konkretnym domu.</p>
+              <p className="editorial-hero-lead">
+                <strong>Jestem behawiorystą COAPE.</strong> Pracuję spokojnie, konkretnie i jako trener zwierząt towarzyszących oraz technik weterynarii pomagam opiekunom psów i kotów zrozumieć zachowanie i wybrać pierwszy krok.
+              </p>
 
               <div className="summary-grid top-gap">
                 <article className="summary-card tree-backed-card">
@@ -457,7 +518,7 @@ export default function HomePage() {
 
               <div className="hero-actions editorial-final-actions">
                 <Link href={consultationHref} prefetch={false} className="button button-primary big-button" data-analytics-event="cta_click" data-analytics-location="home-about-book">Umów konsultację</Link>
-                <Link href="/o-mnie" prefetch={false} className="prep-inline-link">Zobacz, jak pracuję</Link>
+                <Link href="/o-mnie" prefetch={false} className="prep-inline-link">Dowiedz się więcej o moim podejściu</Link>
               </div>
             </div>
           </div>
@@ -499,64 +560,21 @@ export default function HomePage() {
               <Link href={contactHref} prefetch={false} className="button button-ghost big-button" data-analytics-event="cta_click" data-analytics-location="home-final-message">Napisz wiadomość</Link>
             </div>
 
-            <div className="editorial-final-badges" aria-label="Dodatkowa informacja">
-              <span>Behawiorysta COAPE</span>
-              <span>Psy i koty</span>
-              <span>Możesz zacząć od 15 min</span>
-            </div>
-
-            <p className="muted">Możesz też zacząć od krótkiej rozmowy wstępnej 15 min, jeśli nie wiesz jeszcze, czego potrzebujesz.</p>
+            <p className="muted home-final-soft-note">
+              Możesz też zacząć od{' '}
+              <Link href={audioHref} prefetch={false} className="home-final-soft-link" data-analytics-event="cta_click" data-analytics-location="home-final-audio">
+                krótkiej rozmowy wstępnej 15 min audio
+              </Link>
+              , jeśli nie wiesz jeszcze, czego potrzebujesz.
+            </p>
           </div>
         </section>
-        <footer className="premium-home-footer editorial-home-footer" aria-label="Stopka">
-          <div className="premium-footer-grid">
-            <div>
-              <div className="section-eyebrow">Regulski</div>
-              <h3>{SITE_NAME}</h3>
-              <p>{SITE_TAGLINE}. {SPECIALIST_NAME}, {SPECIALIST_CREDENTIALS}. Konsultacje dla psów i kotów w Olsztynie i online.</p>
-              <div className="editorial-hero-meta">
-                <span>Behawiorysta COAPE</span>
-                <span>{SPECIALIST_LOCATION}</span>
-                <span>COAPE / CAPBT</span>
-              </div>
-            </div>
-
-            <div>
-              <div className="section-eyebrow">Skrócona nawigacja</div>
-              <div className="premium-footer-links editorial-home-footer-links">
-                <a href="#jak-pomagam">Jak pomagam</a>
-                <a href="#pierwsza-konsultacja">Pierwsza konsultacja</a>
-                <a href="#opinie">Opinie</a>
-                <a href="#faq">FAQ</a>
-              </div>
-            </div>
-
-            <div>
-              <div className="section-eyebrow">Kontakt</div>
-              <div className="premium-footer-links">
-                <Link href={consultationHref} prefetch={false}>Umów konsultację</Link>
-                <Link href={contactHref} prefetch={false}>Napisz wiadomość</Link>
-                {contact.email && mailtoHref ? <a href={mailtoHref}>{contact.email}</a> : <Link href={contactHref} prefetch={false}>Przejdź do kontaktu</Link>}
-                <a href={COAPE_ORG_URL} target="_blank" rel="noopener noreferrer">COAPE</a>
-                <a href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer">CAPBT</a>
-              </div>
-            </div>
-          </div>
-
-          <div className="premium-footer-bottom">
-            <div className="premium-footer-legal">
-              <Link href="/polityka-prywatnosci" prefetch={false}>Polityka prywatności</Link>
-              <span>·</span>
-              <Link href="/regulamin" prefetch={false}>Regulamin</Link>
-            </div>
-
-            <div className="premium-footer-credit">
-              <span>© {new Date().getFullYear()} {SITE_SHORT_NAME}</span>
-              <a href={CAPBT_ORG_URL} target="_blank" rel="noopener noreferrer">behawioryscicoape.pl</a>
-              <a href={INSTAGRAM_PROFILE_URL} target="_blank" rel="noopener noreferrer">Instagram</a>
-            </div>
-          </div>
-        </footer>
+        <Footer
+          ctaHref={consultationHref}
+          ctaLabel="Umów konsultację"
+          secondaryHref={contactHref}
+          secondaryLabel="Napisz wiadomość"
+        />
       </div>
     </main>
   )

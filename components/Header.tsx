@@ -1,87 +1,223 @@
-﻿import React from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { COAPE_LOGO, SITE_NAME } from '@/lib/site'
+'use client'
 
-type HeaderProps = {
-  compactHome?: boolean
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { buildBookHref } from '@/lib/booking-routing'
+import { SITE_NAME, SITE_SHORT_NAME } from '@/lib/site'
+
+type NavItem = {
+  href: string
+  label: string
+  sectionId?: string
 }
 
-export function Header({ compactHome = false }: HeaderProps) {
-  const headerLinks = [
-    {
-      href: '/oferta',
-      label: 'Oferta',
-    },
-    {
-      href: '/oferta/poradniki-pdf',
-      label: 'PDF',
-    },
-  ]
+const desktopNavItems: NavItem[] = [
+  { href: '/#jak-pomagam', label: 'Jak pomagam', sectionId: 'jak-pomagam' },
+  { href: '/#pierwsza-konsultacja', label: 'Pierwsza konsultacja', sectionId: 'pierwsza-konsultacja' },
+  { href: '/#opinie', label: 'Opinie', sectionId: 'opinie' },
+  { href: '/#faq', label: 'FAQ', sectionId: 'faq' },
+]
+
+const mobileNavItems: NavItem[] = [...desktopNavItems, { href: '/kontakt', label: 'Kontakt' }]
+
+export function Header() {
+  const pathname = usePathname()
+  const isHome = pathname === '/'
+  const consultationHref = '/kontakt'
+  const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min')
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [activeSection, setActiveSection] = useState<string>('jak-pomagam')
+
+  useEffect(() => {
+    setMenuOpen(false)
+
+    if (pathname !== '/') {
+      setActiveSection('')
+      return
+    }
+
+    const hash = window.location.hash.replace(/^#/, '')
+    const validSectionIds = new Set(desktopNavItems.map((item) => item.sectionId).filter((sectionId): sectionId is string => Boolean(sectionId)))
+    setActiveSection(validSectionIds.has(hash) ? hash : 'jak-pomagam')
+
+    const sectionIds = desktopNavItems
+      .map((item) => item.sectionId)
+      .filter((sectionId): sectionId is string => Boolean(sectionId))
+
+    const sections = sectionIds
+      .map((sectionId) => document.getElementById(sectionId))
+      .filter((section): section is HTMLElement => Boolean(section))
+
+    if (sections.length === 0) {
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntries = entries.filter((entry) => entry.isIntersecting)
+
+        if (visibleEntries.length === 0) {
+          return
+        }
+
+        const topEntry = visibleEntries.sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
+        const sectionId = topEntry?.target instanceof HTMLElement ? topEntry.target.id : null
+
+        if (sectionId) {
+          setActiveSection(sectionId)
+        }
+      },
+      {
+        rootMargin: '-28% 0px -55% 0px',
+        threshold: [0.18, 0.32, 0.48, 0.64],
+      },
+    )
+
+    for (const section of sections) {
+      observer.observe(section)
+    }
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [pathname])
+
+  const activeHref =
+    pathname === '/'
+      ? `/#${activeSection}`
+      : pathname === '/opinie'
+        ? '/opinie'
+        : pathname === '/faq'
+          ? '/faq'
+          : pathname === '/kontakt'
+            ? '/kontakt'
+            : pathname
+
+  function getLinkState(href: string) {
+    return activeHref === href
+  }
+
+  function handleNavClick() {
+    setMenuOpen(false)
+  }
+
+  const navItems = desktopNavItems
+  const mobileItems = isHome ? desktopNavItems : mobileNavItems
+  const headerClassName = isHome ? 'premium-home-header header-shell' : 'header-shell'
+  const headerMainClassName = isHome ? 'premium-home-header-inner header-main' : 'header-main'
+  const brandClassName = isHome ? 'premium-home-brand header-branding' : 'header-branding'
+  const navClassName = isHome ? 'premium-home-nav header-nav' : 'header-nav'
+  const ctaClassName = isHome ? 'button button-primary header-cta premium-home-header-cta' : 'button button-primary header-cta'
 
   return (
-    <>
-      <header className={`header-shell${compactHome ? ' header-shell-home-compact' : ''}`}>
-        <div className="header-main">
-          <div className="header-branding">
-            <Link href="/" prefetch={false} className="brand-link" aria-label={SITE_NAME}>
-              <span className="brand-emblem-row" aria-hidden="true">
-                <span className="brand-mark brand-mark-sigil">
-                  <svg className="brand-sigil-svg" viewBox="0 0 72 72" role="presentation" focusable="false">
-                    <path
-                      d="M24 20h14.2c7.8 0 12.8 4.1 12.8 10.3 0 4.4-2.3 7.5-6.2 8.9L53 52H42.8l-7.4-11.2H32V52h-8V20zm8 7v8h5.8c3.8 0 5.8-1.5 5.8-4s-2-4-5.8-4H32z"
-                      className="brand-sigil-r"
-                    />
-                    <path
-                      d="M18 29c2.4-5.8 7.4-8.9 11.6-8.9 4.4 0 8 2 10.4 5.7 2.5-3.7 6-5.7 10.3-5.7 4.2 0 9.2 3.1 11.6 8.9"
-                      className="brand-sigil-animal brand-sigil-top"
-                    />
-                    <path
-                      d="M24 50c4.4-6.1 9.2-9.2 12-9.2s7.6 3.1 12 9.2"
-                      className="brand-sigil-animal brand-sigil-bottom"
-                    />
-                    <circle cx="26" cy="26" r="2.2" className="brand-sigil-dog" />
-                    <circle cx="46" cy="25.5" r="2.2" className="brand-sigil-cat" />
-                  </svg>
-                </span>
-                <span className="brand-mark brand-mark-coape">
-                  <Image
-                    src={COAPE_LOGO.src}
-                    alt=""
-                    fill
-                    sizes="96px"
-                    className="brand-mark-image brand-mark-coape-image"
-                  />
-                </span>
-              </span>
-            </Link>
-          </div>
+    <header className={headerClassName}>
+      <div className={headerMainClassName}>
+        <Link href="/" prefetch={false} className={brandClassName} aria-label={SITE_NAME}>
+          <span className="brand-copy">
+            <span className="brand">{SITE_SHORT_NAME}</span>
+            <span className="header-subtitle">Behawiorysta COAPE | Koty i psy</span>
+          </span>
+        </Link>
 
-          <div className={`header-nav${compactHome ? ' header-nav-home-compact' : ''}`}>
-            <nav className="header-links" aria-label="Główna nawigacja">
-              {headerLinks.map((link) => (
-                <Link key={link.href} href={link.href} prefetch={false} className="header-link">
-                  {link.label}
+        <nav className={navClassName} aria-label="Główna nawigacja">
+          <div className="header-links">
+            {navItems.map((item) => {
+              const isActive = getLinkState(item.href)
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  prefetch={false}
+                  className={`header-link${isActive ? ' is-active' : ''}`}
+                  aria-current={isActive ? 'page' : undefined}
+                >
+                  {item.label}
                 </Link>
-              ))}
-            </nav>
+              )
+            })}
+          </div>
+        </nav>
 
+        <div className="header-actions">
+          <Link
+            href={consultationHref}
+            prefetch={false}
+            className={ctaClassName}
+            data-analytics-event="cta_click"
+            data-analytics-location="header"
+          >
+            Umów konsultację
+          </Link>
+
+          <button
+            type="button"
+            className="header-menu-toggle"
+            aria-expanded={menuOpen}
+            aria-controls="site-mobile-menu"
+            aria-label={menuOpen ? 'Zamknij menu' : 'Otwórz menu'}
+            onClick={() => setMenuOpen((current) => !current)}
+          >
+            <span className="header-menu-bars" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </span>
+          </button>
+        </div>
+      </div>
+
+      {menuOpen ? (
+        <div className="header-mobile-panel" id="site-mobile-menu">
+          <nav className="header-mobile-links" aria-label="Menu mobilne">
+            {mobileItems.map((item) => {
+              const isActive = getLinkState(item.href)
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  prefetch={false}
+                  className={`header-mobile-link${isActive ? ' is-active' : ''}`}
+                  aria-current={isActive ? 'page' : undefined}
+                  onClick={handleNavClick}
+                >
+                  {item.label}
+                </Link>
+              )
+            })}
+          </nav>
+
+          <div className="header-mobile-actions">
             <Link
-              href="/book"
+              href={consultationHref}
               prefetch={false}
-              className={`button button-primary header-cta${compactHome ? ' header-cta-home-compact' : ''}`}
+              className="button button-primary big-button header-mobile-cta"
               data-analytics-event="cta_click"
-              data-analytics-location="header"
+              data-analytics-location="header-mobile-book"
+              onClick={handleNavClick}
             >
-              Umów 15 min
+              Umów konsultację
             </Link>
+            {isHome ? null : (
+              <>
+                <Link
+                  href={audioHref}
+                  prefetch={false}
+                  className="header-mobile-soft-link"
+                  data-analytics-event="cta_click"
+                  data-analytics-location="header-mobile-audio"
+                  onClick={handleNavClick}
+                >
+                  Krótka rozmowa wstępna 15 min audio
+                </Link>
+                <span className="header-mobile-soft-note">bez potrzeby przygotowania kamery</span>
+              </>
+            )}
           </div>
         </div>
-      </header>
-    </>
+      ) : null}
+    </header>
   )
 }
-
-
-
-
