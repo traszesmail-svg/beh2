@@ -1,16 +1,18 @@
 import React from 'react'
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { Footer } from '@/components/Footer'
+import { Header } from '@/components/Header'
 import { ContactLeadForm } from '@/components/ContactLeadForm'
 import { buildBookHref } from '@/lib/booking-routing'
 import { buildMarketingMetadata } from '@/lib/seo'
-import { buildMailtoHref, getContactDetails, SPECIALIST_CREDENTIALS, SITE_NAME, SITE_SHORT_NAME, SITE_TAGLINE } from '@/lib/site'
+import { buildMailtoHref, getContactDetails } from '@/lib/site'
 
 export const metadata: Metadata = buildMarketingMetadata({
   title: 'Kontakt / rezerwacja',
   path: '/kontakt',
   description:
-    'Kontakt i rezerwacja dla marki Regulski. Zacznij od najprostszej formy: konsultacji, krótkiej wiadomości albo 15 min audio.',
+    'Kontakt i rezerwacja dla marki Regulski. Zacznij od konsultacji, krótkiej wiadomości albo krótkiej rozmowy wstępnej 15 min audio.',
 })
 
 const consultationHref = buildBookHref()
@@ -49,7 +51,7 @@ const heroPreviewCards = [
   },
   {
     pill: 'Niski próg wejścia',
-    title: '15 min audio',
+    title: 'Krótka rozmowa wstępna 15 min audio',
     copy: 'Krótka forma audio, bez potrzeby przygotowania kamery.',
   },
 ] as const
@@ -73,9 +75,9 @@ const contactMethods = [
   },
   {
     pill: 'Krótka rozmowa',
-    title: 'Krótka rozmowa wstępna 15 min',
+    title: 'Krótka rozmowa wstępna 15 min audio',
     description: 'Krótka forma audio, bez potrzeby przygotowania kamery. Dobra, jeśli nie wiesz jeszcze, czego potrzebujesz.',
-    cta: 'Umów 15 min',
+    cta: 'Krótka rozmowa wstępna 15 min audio',
     href: audioHref,
     external: false,
   },
@@ -85,7 +87,7 @@ const contactSteps = [
   {
     number: '01',
     title: 'Wybierz formę startu',
-    copy: 'Konsultacja, wiadomość albo 15 min audio. Każda ścieżka jest równie poprawnym początkiem.',
+    copy: 'Konsultacja, wiadomość albo krótka rozmowa wstępna 15 min audio. Każda ścieżka jest równie poprawnym początkiem.',
   },
   {
     number: '02',
@@ -133,8 +135,8 @@ const decisionCards: DecisionCard[] = [
     items: ['chcesz od razu wejść w termin', 'potrzebujesz planu działania', 'nie chcesz długiej wymiany wiadomości'],
   },
   {
-    pill: '15 min audio',
-    title: 'Wybierz 15 min audio, jeśli...',
+    pill: 'Krótka rozmowa',
+    title: 'Wybierz krótką rozmowę wstępną 15 min audio, jeśli...',
     items: ['chcesz krótki start', 'nie chcesz przygotowywać kamery', 'chcesz sprawdzić najlepszą ścieżkę'],
     note: 'Krótka forma audio bez potrzeby przygotowania kamery.',
   },
@@ -165,8 +167,8 @@ const faqItems = [
     answer: 'Nie. Wystarczy krótki opis sytuacji, od kiedy to trwa i co najbardziej Cię niepokoi.',
   },
   {
-    question: 'Co jeśli nie wiem, czy wybrać wiadomość, konsultację czy 15 min?',
-    answer: 'Jeśli masz wątpliwość, zacznij od wiadomości albo 15 min audio. To najprostsze wejście.',
+    question: 'Co jeśli nie wiem, czy wybrać wiadomość, konsultację czy krótką rozmowę wstępną 15 min audio?',
+    answer: 'Jeśli masz wątpliwość, zacznij od wiadomości albo krótkiej rozmowy wstępnej 15 min audio. To najprostsze wejście.',
   },
   {
     question: 'Czy rozmowa 15 min wymaga włączenia kamery?',
@@ -221,43 +223,9 @@ export default function ContactPage() {
 
   return (
     <main className="page-wrap editorial-home-page premium-home-page contact-page">
-      <header className="premium-home-header">
-        <div className="container premium-home-header-inner">
-          <Link href="/" prefetch={false} className="premium-home-brand" aria-label={SITE_NAME}>
-            <span className="brand-copy">
-              <span className="brand">{SITE_SHORT_NAME}</span>
-              <span className="header-subtitle">Behawiorysta COAPE | Koty i psy</span>
-            </span>
-          </Link>
-
-          <nav className="premium-home-nav" aria-label="Główna nawigacja">
-            <a href="#kontakt" className="header-link">
-              Kontakt
-            </a>
-            <a href="#jak-umowic-konsultacje" className="header-link">
-              Jak umówić konsultację
-            </a>
-            <a href="#faq" className="header-link">
-              FAQ
-            </a>
-            <a href="#rezerwacja" className="header-link">
-              Rezerwacja
-            </a>
-          </nav>
-
-          <Link
-            href={consultationHref}
-            prefetch={false}
-            className="button button-primary big-button premium-home-header-cta"
-            data-analytics-event="cta_click"
-            data-analytics-location="contact-header-book"
-          >
-            Umów konsultację
-          </Link>
-        </div>
-      </header>
-
       <div className="container editorial-stack">
+        <Header />
+
         <section className="editorial-hero-shell premium-hero-shell contact-hero-shell" id="kontakt">
           <div className="editorial-hero-grid">
             <div className="editorial-hero-copy">
@@ -295,7 +263,7 @@ export default function ContactPage() {
                 data-analytics-event="cta_click"
                 data-analytics-location="contact-lead-reschedule"
               >
-                <span className="contact-inline-label">Krótka rozmowa wstępna 15 min</span>
+                <span className="contact-inline-label">Krótka rozmowa wstępna 15 min audio</span>
                 <span className="contact-soft-note">forma audio - bez potrzeby przygotowania kamery</span>
               </Link>
 
@@ -426,7 +394,7 @@ export default function ContactPage() {
           <div className="premium-contact-band top-gap">
             <div className="premium-contact-band-copy">
               <strong>Im mniej presji na wejściu, tym łatwiej zacząć.</strong>
-              <p>Jeśli chcesz, możesz od razu wysłać krótką wiadomość albo wejść w 15 min audio.</p>
+              <p>Jeśli chcesz, możesz od razu wysłać krótką wiadomość albo wejść w krótką rozmowę wstępną 15 min audio.</p>
             </div>
             <div className="hero-actions">
               <a href="#formularz" className="button button-primary big-button">
@@ -461,7 +429,7 @@ export default function ContactPage() {
             ))}
           </div>
 
-          <p className="muted top-gap-small">Najprościej: jeśli masz wątpliwość, zacznij od wiadomości albo 15 min audio.</p>
+          <p className="muted top-gap-small">Najprościej: jeśli masz wątpliwość, zacznij od wiadomości albo krótkiej rozmowy wstępnej 15 min audio.</p>
 
           <div className="hero-actions top-gap-small">
             <a href="#formularz" className="button button-primary big-button">
@@ -568,7 +536,7 @@ export default function ContactPage() {
                   data-analytics-event="cta_click"
                   data-analytics-location="contact-lead-bundle"
                 >
-                  Umów 15 min audio
+                  Krótka rozmowa wstępna 15 min audio
                 </Link>
               </div>
 
@@ -584,70 +552,11 @@ export default function ContactPage() {
           </div>
 
           <p className="muted top-gap-small">
-            Jeśli nie wiesz, którą opcję wybrać, najprościej zacząć od wiadomości albo 15 min audio.
+            Jeśli nie wiesz, którą opcję wybrać, najprościej zacząć od wiadomości albo krótkiej rozmowy wstępnej 15 min audio.
           </p>
         </section>
 
-        <footer className="premium-home-footer" aria-label="Stopka">
-          <div className="premium-footer-grid">
-            <div>
-              <div className="section-eyebrow">Regulski</div>
-              <h3>{SITE_NAME}</h3>
-              <p>
-                {SITE_TAGLINE}. {SPECIALIST_CREDENTIALS}. Konsultacje dla psów i kotów w Olsztynie i online.
-              </p>
-              <div className="editorial-hero-meta">
-                <span>Behawiorysta COAPE</span>
-                <span>Psy i koty</span>
-              </div>
-            </div>
-
-            <div>
-              <div className="section-eyebrow">Nawigacja</div>
-              <div className="premium-footer-links">
-                <a href="#kontakt">Kontakt</a>
-                <a href="#jak-umowic-konsultacje">Jak umówić konsultację</a>
-                <a href="#faq">FAQ</a>
-                <a href="#rezerwacja">Rezerwacja</a>
-              </div>
-            </div>
-
-            <div>
-              <div className="section-eyebrow">Kontakt</div>
-              <div className="premium-footer-links">
-                <a href={mailtoHref}>{contact.email}</a>
-                {contact.phoneDisplay && contact.phoneHref ? (
-                  <a href={`tel:${contact.phoneHref}`}>{contact.phoneDisplay}</a>
-                ) : (
-                  <span>Telefon po wiadomości</span>
-                )}
-                <Link href={consultationHref} prefetch={false}>
-                  Umów konsultację
-                </Link>
-                <Link href={audioHref} prefetch={false}>
-                  Umów 15 min audio
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div className="premium-footer-bottom">
-            <div className="premium-footer-legal">
-              <Link href="/polityka-prywatnosci" prefetch={false}>
-                Polityka prywatności
-              </Link>
-              <span>·</span>
-              <Link href="/regulamin" prefetch={false}>
-                Regulamin
-              </Link>
-            </div>
-
-            <div className="premium-footer-credit">
-              <span>© {new Date().getFullYear()} {SITE_SHORT_NAME}</span>
-              <a href={mailtoHref}>Napisz wiadomość</a>
-            </div>
-          </div>
-        </footer>
+        <Footer />
       </div>
     </main>
   )

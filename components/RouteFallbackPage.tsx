@@ -1,5 +1,3 @@
-import React from 'react'
-
 type RouteFallbackAction = {
   href: string
   label: string
@@ -27,9 +25,9 @@ export function RouteFallbackPage({
   highlights,
   actions,
   footerCtaHref = '/book',
-  footerCtaLabel = 'Umów 15 min',
+  footerCtaLabel = 'Umów konsultację',
   footerHeadline = 'Potrzebujesz pomocy z tym adresem?',
-  footerDescription = 'Wróć do bezpiecznej ścieżki albo zobacz PDF jako materiał wspierający, jeśli temat wymaga spokojniejszego wejścia.',
+  footerDescription = 'Wróć do głównej ścieżki konsultacji albo napisz wiadomość, jeśli chcesz spokojnie ustalić kolejny krok.',
 }: RouteFallbackPageProps) {
   return (
     <main className="page-wrap marketing-page">
@@ -57,7 +55,7 @@ export function RouteFallbackPage({
 
             <div className="list-card tree-backed-card">
               <strong>Najbezpieczniej teraz</strong>
-              <span>Wróć do głównej ścieżki albo zobacz PDF, jeśli chcesz spokojniejszego materiału między krokami.</span>
+              <span>Wróć do głównej ścieżki konsultacji albo napisz wiadomość, jeśli potrzebujesz najprostszego kolejnego kroku.</span>
             </div>
           </div>
 
@@ -79,9 +77,6 @@ export function RouteFallbackPage({
             <span className="top-gap-small" style={{ display: 'block' }}>
               <a href={footerCtaHref} className="inline-link">
                 {footerCtaLabel}
-              </a>{' '}
-              <a href="/oferta/poradniki-pdf" className="inline-link">
-                Zobacz materiały PDF
               </a>
             </span>
           </div>

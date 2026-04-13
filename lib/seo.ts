@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { DEFAULT_BOOKING_SERVICE, getBookingServiceRoomSummary, getBookingServiceTitle, type BookingServiceType } from '@/lib/booking-services'
-import { SITE_NAME, SITE_OG_IMAGE, SITE_SHORT_NAME, SITE_TAGLINE, SPECIALIST_NAME } from '@/lib/site'
+import { SITE_NAME, SITE_OG_IMAGE, SITE_SHORT_NAME, SPECIALIST_NAME } from '@/lib/site'
 
 const DEFAULT_OG_IMAGE = SITE_OG_IMAGE
 const LOCAL_SEO_CONTEXT = 'Działam w Olsztynie, woj. warmińsko-mazurskim i online.'
@@ -48,7 +48,7 @@ export function buildMarketingMetadata({ title, path, description }: MarketingMe
 
 export async function buildHomeMetadata(): Promise<Metadata> {
   const description = appendLocalSeoContext(
-    `${SITE_NAME}. ${SITE_TAGLINE}. Behawiorysta COAPE dla opiekunów psów i kotów: spokojna konsultacja, jasny pierwszy krok i plan działania w Olsztynie oraz online.`
+    `${SITE_NAME}. Behawiorysta COAPE dla opiekunów psów i kotów: konsultacja, spokojny pierwszy krok i jasny plan działania w Olsztynie oraz online.`,
   )
 
   return {

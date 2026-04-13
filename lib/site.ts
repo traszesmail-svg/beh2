@@ -23,10 +23,10 @@ export const HOME_HERO_PHOTO = {
 export const SITE_NAME = 'Regulski | Terapia behawioralna'
 export const SITE_SHORT_NAME = 'Regulski'
 export const SITE_URL_FALLBACK = 'http://localhost:3000'
-export const SITE_PRODUCTION_URL = 'https://coapebehawiorysta.vercel.app'
+export const SITE_PRODUCTION_URL = 'https://coapebehawiorysta-6608.vercel.app'
 export const PUBLIC_CONTACT_EMAIL_FALLBACK = 'coapebehawiorysta@gmail.com'
-export const SITE_TAGLINE = 'Pomoc dla psów i kotów z trudnym zachowaniem'
-export const SITE_DESCRIPTION = 'Pomoc dla psów i kotów z trudnym zachowaniem: konsultacje, pobyty i spokojny start.'
+export const SITE_TAGLINE = 'Behawiorysta COAPE | Koty i psy'
+export const SITE_DESCRIPTION = 'Spokojna pomoc w zrozumieniu problemów zachowania psów i kotów, z jasnym planem działania po konsultacji.'
 
 export const SPECIALIST_NAME = 'Krzysztof Regulski'
 export const SPECIALIST_CREDENTIALS = 'behawiorysta COAPE / CAPBT, technik weterynarii, dogoterapeuta, dietetyk'

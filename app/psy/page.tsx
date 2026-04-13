@@ -1,19 +1,13 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { AnalyticsEventOnMount } from '@/components/AnalyticsEventOnMount'
+import { Footer } from '@/components/Footer'
+import { Header } from '@/components/Header'
 import { buildBookHref } from '@/lib/booking-routing'
 import { buildMarketingMetadata } from '@/lib/seo'
-import {
-  SITE_NAME,
-  SITE_SHORT_NAME,
-  SITE_TAGLINE,
-  SPECIALIST_CREDENTIALS,
-  SPECIALIST_LOCATION,
-  SPECIALIST_NAME,
-  buildMailtoHref,
-  getPublicContactDetails,
-} from '@/lib/site'
 import { getBaseUrl } from '@/lib/server/env'
+import { getPublicContactDetails, SITE_NAME, SITE_TAGLINE, SPECIALIST_CREDENTIALS, SPECIALIST_NAME } from '@/lib/site'
 
 export const dynamic = 'force-dynamic'
 
@@ -21,7 +15,7 @@ export const metadata: Metadata = buildMarketingMetadata({
   title: 'Pies',
   path: '/psy',
   description:
-    'Premium strona usługowa dla opiekunów psów z trudnym zachowaniem. Umów konsultację, napisz wiadomość albo zacznij od krótkiej rozmowy wstępnej 15 min.',
+    'Premium podstrona problemowa dla opiekunow psow. Pomoc przy spacerach, reaktywnosci, rozlacce, pobudzeniu i trudnych zachowaniach w domu.',
 })
 
 type SectionIntroProps = {
@@ -43,61 +37,52 @@ function SectionIntro({ eyebrow, title, description }: SectionIntroProps) {
 }
 
 const consultationHref = buildBookHref()
-const contactHref = '/kontakt'
-const heroTopics = [
-  'spacery pełne napięcia',
-  'reaktywność i silne emocje',
-  'zostawanie samemu',
-  'pobudzenie i brak wyciszenia',
-  'trudne zachowania w domu',
-  'zmiana po przeprowadzce',
-] as const
+const contactHref = '/kontakt#formularz'
+const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min')
 
 const problemCards = [
   {
-    title: 'Spacery pełne napięcia',
-    description:
-      'ciągnięcie, czujność, trudność w mijaniu ludzi lub psów, napięcie już przed wyjściem z domu',
+    title: 'Spacery pelne napiecia',
+    description: 'pies ciagnie, zatrzymuje sie albo reaguje jeszcze przed wyjściem z domu',
   },
   {
-    title: 'Reaktywność i silne emocje',
-    description:
-      'gwałtowne reakcje, szczekanie, wyrywanie się, pobudzenie lub trudność z odzyskaniem spokoju',
+    title: 'Reaktywnosc i silne emocje',
+    description: 'szczekanie, wyrywanie sie i gwałtowne reakcje na ludzi, psy albo inne bodzce',
   },
   {
-    title: 'Trudność z zostawaniem samemu',
-    description:
-      'niepokój po wyjściu opiekuna, wokalizacja, niszczenie, napięcie związane z rozłąką',
+    title: 'Trudnosc z zostawaniem samemu',
+    description: 'niepokoj po wyjsciu opiekuna, wokalizacja, niszczenie lub panika przy rozlacce',
   },
   {
     title: 'Pobudzenie i brak wyciszenia',
-    description:
-      'pies ma trudność z odpoczywaniem, szybko się nakręca, trudno mu wrócić do równowagi',
+    description: 'pies nie odpoczywa, szybko sie nakreca i trudno mu zejsc z emocji',
   },
   {
     title: 'Trudne zachowania w domu',
-    description:
-      'szczekanie, pilnowanie zasobów, napięcie wobec gości, trudności w codziennym funkcjonowaniu',
+    description: 'szczekanie, pilnowanie zasobow, skakanie, napiecie wobec gosci lub domownikow',
   },
   {
-    title: 'Zmiana, po której coś się posypało',
-    description:
-      'przeprowadzka, nowy rytm dnia, nowe osoby lub zwierzęta, po których zachowanie psa się zmieniło',
+    title: 'Zmiana, po ktorej cos sie posypalo',
+    description: 'przeprowadzka, nowy rytm dnia, nowi domownicy albo zmiana otoczenia',
   },
 ] as const
 
 const whenToGetHelp = {
   yes: [
-    'problem wraca w podobnych sytuacjach',
-    'spacery, samotność lub dom zaczynają zabierać coraz więcej energii',
-    'pies szybciej niż wcześniej przekracza próg',
-    'domownicy zaczynają chodzić na palcach wokół problemu',
+    'zachowanie psa zaczyna regularnie niepokoic',
+    'spacery robia sie coraz trudniejsze',
+    'pies ma problem z wyciszeniem albo rozlaka',
+    'sytuacja w domu staje sie napieta',
+    'rozne rady tylko mieszaja',
+    'po zmianie w domu cos sie rozsypalo',
   ],
   noNeedToWait: [
-    'aż problem sam zniknie',
-    'aż będzie trzeba działać w trybie kryzysowym',
-    'aż pies się przyzwyczai',
-    'aż sytuacja stanie się nieznośna',
+    'problem bardzo sie nasili',
+    'codziennosc stanie sie trudna do opanowania',
+    'pojawi sie duza frustracja i bezradnosc',
+    'pies utrwali napieciowy schemat',
+    'bedziesz miec idealny opis sytuacji',
+    'wszystko stanie sie wystarczajaco powazne',
   ],
 } as const
 
@@ -149,17 +134,17 @@ const benefitCards = [
 const featuredOpinions = [
   {
     quote:
-      'Po konsultacji przestałam wymieniać sprzęt i sztuczki. Został jeden plan na spacer, a napięcie wyraźnie spadło.',
-    note: 'Spacer i reaktywność',
+      'Po konsultacji przestałam wymieniać metodę co dwa dni. Został jeden plan na spacer i dokładnie wiedziałam, co obserwować.',
+    note: 'Spacery / reaktywność',
   },
   {
     quote:
       'Największą zmianę dało uporządkowanie rytmu dnia. Pies szybciej się wyciszał, a dom przestał być stale na wysokim obrocie.',
-    note: 'Pobudzenie w domu',
+    note: 'Pobudzenie / dom',
   },
   {
     quote:
-      'Bez oceniania, bez pośpiechu i bez ciężkiego języka. Wszystko zostało rozpisane tak, że wiedziałam, co robić od jutra.',
+      'Spokojne wyjaśnienie całego procesu zrobiło dużą różnicę. Zamiast poczucia, że robię wszystko źle, dostałam prosty plan i logiczny kierunek.',
     note: 'Spokojny styl pracy',
   },
 ] as const
@@ -217,26 +202,22 @@ const miniCaseStudies = [
   {
     title: 'Pies napięty na spacerach',
     situation:
-      'Na spacerze pies zatrzymywał się, napinał i reagował na mijane bodźce, zanim opiekun zdążył wejść w jakikolwiek plan.',
-    key: 'Co było kluczowe: zwiększenie dystansu od wyzwalaczy, spokojniejsza trasa i mniej presji na tempo.',
-    effect:
-      'Efekt / kierunek pracy: najpierw pies ma możliwość myślenia, a dopiero później budujemy dalszą ekspozycję.',
+      'Na spacerze pies napinał się już przed wyjściem, ciągnął do bodźców i po powrocie wciąż nie mógł odpuścić.',
+    key: 'Kluczowe było skrócenie najbardziej pobudzających tras, większy dystans od wyzwalaczy i spokojniejszy rytm wyjścia.',
+    effect: 'Najpierw pies ma przestrzeń do myślenia, dopiero potem dokładamy kolejne kroki.',
   },
   {
     title: 'Pies, który nie radzi sobie z zostawaniem samemu',
     situation:
       'Po wyjściu opiekuna pies szczekał, wył i nie umiał zejść z emocji, nawet gdy na zewnątrz wydawało się, że wszystko jest w porządku.',
-    key: 'Co było kluczowe: rytuał wyjścia, próg trudności i rozdzielenie lęku od przeciążenia lub frustracji.',
-    effect:
-      'Efekt / kierunek pracy: opiekun dostaje bezpieczny pierwszy plan i wie, czy potrzebny jest dłuższy proces.',
+    key: 'Kluczowe było sprawdzenie rytuału wyjścia, progu trudności i tego, czy problem wynika z lęku, przeciążenia czy frustracji.',
+    effect: 'Opiekun dostaje bezpieczny pierwszy plan i wie, czy potrzebny jest dłuższy proces.',
   },
   {
     title: 'Pies, który rozsypał się po zmianach',
-    situation:
-      'Po przeprowadzce, nowym rytmie dnia albo zmianie domowników pies stał się bardziej czujny i trudniej mu było odpocząć.',
-    key: 'Co było kluczowe: stabilizacja otoczenia, zasobów i przewidywalności dnia.',
-    effect:
-      'Efekt / kierunek pracy: dopiero potem dokładamy dalszą pracę nad emocjami i reakcjami.',
+    situation: 'Po przeprowadzce, nowym rytmie dnia albo zmianie domowników pies stał się bardziej czujny i trudniej było mu odpocząć.',
+    key: 'Kluczowe było ustabilizowanie otoczenia, zasobów i przewidywalności dnia.',
+    effect: 'Dopiero potem dokładamy dalszą pracę nad emocjami i reakcjami.',
   },
 ] as const
 
@@ -244,12 +225,12 @@ const faqItems = [
   {
     question: 'Czy konsultacja jest dla mojego psa, jeśli problem dopiero się zaczyna?',
     answer:
-      'Tak. Wczesny kontakt bywa najlepszy, bo łatwiej zatrzymać wzorzec zanim zacznie się utrwalać i rozszerzać na kolejne sytuacje.',
+      'Tak. Wczesny kontakt bywa najlepszy, bo łatwiej zatrzymać wzorzec zanim zacznie się utrwalać i rozlewać na kolejne sytuacje.',
   },
   {
     question: 'Czy pomoc dotyczy tylko bardzo trudnych przypadków?',
     answer:
-      'Nie. Często najwięcej zyskują właśnie sprawy na początku, zanim zrobią się bardzo złożone i obciążające codzienność.',
+      'Nie. Często najlepiej działa wtedy, gdy problem jest jeszcze świeży, niejednoznaczny albo dopiero zaczyna wpływać na codzienność.',
   },
   {
     question: 'Czy konsultacja online ma sens przy problemach spacerowych albo reaktywności?',
@@ -264,7 +245,7 @@ const faqItems = [
   {
     question: 'Co jeśli mój pies ma kilka problemów naraz?',
     answer:
-      'To normalne. Opiszesz wszystko po prostu jako kilka wątków naraz, a ja pomogę ustawić priorytety i kolejność działania.',
+      'To normalne. Opisz wszystko po prostu jako kilka wątków naraz, a ja pomogę ustawić priorytety i kolejność działania.',
   },
   {
     question: 'Co jeśli nie wiem, jak nazwać problem mojego psa?',
@@ -276,13 +257,6 @@ const faqItems = [
 export default function DogsPage() {
   const baseUrl = getBaseUrl()
   const contact = getPublicContactDetails()
-  const mailtoHref = contact.email
-    ? buildMailtoHref(
-        contact.email,
-        'Zapytanie - Regulski | Pies',
-        'Dzień dobry,\n\nchciałbym/chciałabym opisać sytuację psa i zapytać o możliwy pierwszy krok.\n\n- co się dzieje:\n- kiedy to się dzieje:\n- od kiedy trwa:\n- czego najbardziej potrzebuję:\n',
-      )
-    : null
 
   const structuredData = [
     {
@@ -298,8 +272,8 @@ export default function DogsPage() {
       ],
       serviceType: [
         'Konsultacje behawioralne dla psów',
-        'Pomoc przy spacerach, samotności i pobudzeniu',
-        'Krótka rozmowa wstępna 15 min',
+        'Pomoc przy spacerach, reaktywności i rozłące',
+        'Spokojny plan działania po konsultacji',
       ],
       provider: {
         '@type': 'Person',
@@ -324,43 +298,12 @@ export default function DogsPage() {
   ]
 
   return (
-    <main className="page-wrap marketing-page dog-service-page">
+    <main className="page-wrap editorial-home-page premium-home-page dog-service-page">
+      <AnalyticsEventOnMount eventName="dogs_page_view" />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
 
       <div className="container editorial-stack">
-        <header className="premium-home-header">
-          <div className="premium-home-header-inner">
-            <Link href="/" prefetch={false} className="premium-home-brand" aria-label={SITE_NAME}>
-              <span className="brand">Regulski</span>
-              <span className="header-subtitle">Behawiorysta COAPE | Koty i psy</span>
-            </Link>
-
-            <nav className="premium-home-nav" aria-label="Nawigacja na stronie psów">
-              <a href="#jak-pomagam" className="header-link">
-                Jak pomagam
-              </a>
-              <a href="#konsultacja" className="header-link">
-                Konsultacja
-              </a>
-              <a href="#opinie" className="header-link">
-                Opinie
-              </a>
-              <a href="#faq" className="header-link">
-                FAQ
-              </a>
-            </nav>
-
-            <Link
-              href={consultationHref}
-              prefetch={false}
-              className="button button-primary big-button premium-home-header-cta"
-              data-analytics-event="cta_click"
-              data-analytics-location="dogs-header-book"
-            >
-              Umów konsultację
-            </Link>
-          </div>
-        </header>
+        <Header />
 
         <section className="editorial-hero-shell premium-hero-shell" id="start">
           <div className="editorial-hero-grid">
@@ -372,50 +315,35 @@ export default function DogsPage() {
               </p>
 
               <div className="hero-actions editorial-hero-actions">
-                <Link
-                  href={consultationHref}
-                  prefetch={false}
-                  className="button button-primary big-button"
-                  data-analytics-event="cta_click"
-                  data-analytics-location="dogs-hero-book"
-                >
+                <Link href={consultationHref} prefetch={false} className="button button-primary big-button" data-analytics-event="cta_click" data-analytics-location="dogs-hero-book">
                   Umów konsultację
                 </Link>
-                <Link
-                  href={contactHref}
-                  prefetch={false}
-                  className="button button-ghost big-button"
-                  data-analytics-event="cta_click"
-                  data-analytics-location="dogs-hero-message"
-                >
+                <Link href={contactHref} prefetch={false} className="button button-ghost big-button" data-analytics-event="cta_click" data-analytics-location="dogs-hero-message">
                   Napisz wiadomość
                 </Link>
               </div>
 
-              <Link href={consultationHref} prefetch={false} className="prep-inline-link">
-                Nie masz pewności, czy to dobry moment? Krótka rozmowa wstępna 15 min
+              <Link href={audioHref} prefetch={false} className="prep-inline-link contact-audio-link" data-analytics-event="cta_click" data-analytics-location="dogs-hero-audio">
+                <span className="contact-inline-label">Nie masz pewności, czy to dobry moment? Krótka rozmowa wstępna 15 min audio</span>
+                <span className="contact-soft-note">bez potrzeby przygotowania kamery</span>
               </Link>
 
-              <div className="editorial-hero-meta" aria-label="Najczęstsze trudności">
-                {heroTopics.map((item) => (
-                  <span key={item}>{item}</span>
-                ))}
-              </div>
+              <p className="contact-support-copy">Spacer, lęk, pobudzenie, reaktywność, trudności w domu - zacznijmy od uporządkowania sytuacji.</p>
             </div>
 
-            <aside className="editorial-hero-visual" aria-label="Zdjęcie psa w spokojnym wnętrzu">
+            <aside className="editorial-hero-visual" aria-label="Zdjęcie psa w spokojnym, naturalnym kontekście">
               <div className="editorial-hero-photo-frame">
                 <Image
-                  src="/branding/topic-cards/dog-resting-home.jpg"
-                  alt="Pies odpoczywający w domowym wnętrzu"
+                  src="/branding/case-dog-home.jpg"
+                  alt="Spokojny pies w domowym kadrze"
                   fill
                   sizes="(max-width: 980px) 100vw, 520px"
                   priority
                   className="editorial-hero-photo"
                 />
                 <div className="editorial-hero-photo-caption">
-                  <span>Spokojny start</span>
-                  <strong>Najpierw rozumiem kontekst, potem wskazuję pierwszy realny krok.</strong>
+                  <span>Naturalny kontekst</span>
+                  <strong>Najpierw porządkujemy sytuację, potem budujemy konkretny plan pracy.</strong>
                 </div>
               </div>
             </aside>
@@ -424,9 +352,9 @@ export default function DogsPage() {
 
         <section className="panel section-panel editorial-section" id="jak-pomagam">
           <SectionIntro
-            eyebrow="Jak pomagam"
+            eyebrow="Typowe trudności"
             title="Z jakimi trudnościami najczęściej zgłaszają się opiekunowie psów"
-            description="Nie każdy problem zaczyna się spektakularnie. Często to drobne sygnały, które już zabierają dużo energii w codzienności."
+            description="Nie każda trudność zaczyna się spektakularnie. Często to zestaw sygnałów, który z czasem coraz bardziej obciąża codzienność."
           />
 
           <div className="editorial-entry-grid">
@@ -438,7 +366,7 @@ export default function DogsPage() {
             ))}
           </div>
 
-          <p className="muted top-gap">To zwykle nie jest jeden objaw, tylko zestaw napięć, który zaczyna wpływać na cały dom.</p>
+          <p className="muted top-gap">To zwykle nie jest jeden objaw, tylko układ napięć, który zaczyna wpływać na cały dom.</p>
 
           <div className="hero-actions editorial-final-actions">
             <Link href="#kiedy-warto" prefetch={false} className="prep-inline-link">
@@ -474,7 +402,7 @@ export default function DogsPage() {
             </article>
           </div>
 
-          <p className="muted top-gap">Jeśli już teraz widzisz, że temat wraca lub zaczyna się rozlewać na więcej sytuacji, to dobry moment na kontakt.</p>
+          <p className="muted top-gap">Jeśli już teraz widzisz, że temat wraca albo zaczyna rozlewać się na więcej sytuacji, to dobry moment na kontakt.</p>
 
           <div className="hero-actions editorial-final-actions">
             <Link href="#konsultacja" prefetch={false} className="button button-primary big-button">
@@ -490,7 +418,7 @@ export default function DogsPage() {
           <SectionIntro
             eyebrow="Pierwsza konsultacja"
             title="Jak wygląda pierwsza konsultacja dotycząca psa"
-            description="Wystarczy, że opiszesz sytuację psa. Resztę porządkujemy razem bez zbędnego przeciążania."
+            description="Wystarczy, że opiszesz sytuację psa. Resztę porządkujemy razem, bez zbędnego przeciążania i bez szukania idealnego opisu."
           />
 
           <div className="editorial-process-layout">
@@ -506,7 +434,7 @@ export default function DogsPage() {
 
             <aside className="editorial-process-note" aria-label="Co przygotować przed konsultacją">
               <span className="editorial-process-note-label">Co warto przygotować</span>
-              <strong>Nie musisz mieć wszystkiego idealnie poukładanego.</strong>
+              <strong>Nie musisz opisywać wszystkiego idealnie.</strong>
               <p>Wystarczy materiał, który pokaże codzienność psa i najważniejsze momenty problemu.</p>
 
               <ul className="premium-bullet-list top-gap-small">
@@ -515,7 +443,7 @@ export default function DogsPage() {
                 ))}
               </ul>
 
-              <p>To wystarczy, żeby sensownie zacząć i nie gubić się już na wejściu.</p>
+              <p>To wystarczy, żeby zacząć spokojnie i nie gubić się już na wejściu.</p>
             </aside>
           </div>
 
@@ -570,7 +498,7 @@ export default function DogsPage() {
           <SectionIntro
             eyebrow="Opinie"
             title="Co mówią opiekunowie psów po konsultacji"
-            description="Krótko, czysto i bez ciężkiego slidera. Tylko konkretne głosy, które pokazują, co zmienia się po pierwszym kroku."
+            description="Krótko, elegancko i bez ciężkiego slidera. Tylko konkretne głosy, które pokazują, co zmienia pierwszy porządek w problemie."
           />
 
           <div className="summary-grid top-gap">
@@ -616,10 +544,10 @@ export default function DogsPage() {
                   <strong>Sytuacja:</strong> {caseStudy.situation}
                 </p>
                 <p>
-                  <strong>{caseStudy.key}</strong>
+                  <strong>Co było kluczowe:</strong> {caseStudy.key}
                 </p>
                 <p>
-                  <strong>{caseStudy.effect}</strong>
+                  <strong>Efekt / kierunek pracy:</strong> {caseStudy.effect}
                 </p>
               </article>
             ))}
@@ -629,7 +557,7 @@ export default function DogsPage() {
             <Link href="#faq" prefetch={false} className="prep-inline-link">
               Sprawdź najczęstsze pytania opiekunów psów
             </Link>
-            <Link href={contactHref} prefetch={false} className="button button-ghost big-button">
+            <Link href={consultationHref} prefetch={false} className="button button-ghost big-button">
               Umów konsultację
             </Link>
           </div>
@@ -654,8 +582,8 @@ export default function DogsPage() {
           <div className="premium-contact-band">
             <div className="premium-contact-band-copy">
               <div className="section-eyebrow">Kontakt</div>
-              <strong>Jeśli chcesz dopytać przed rezerwacją, napisz wiadomość.</strong>
-              <p>Jeden krótki opis sytuacji często wystarcza, żeby wskazać najprostszy kolejny krok.</p>
+              <strong>Jeśli chcesz doprecyzować sytuację przed rezerwacją, napisz wiadomość.</strong>
+              <p>Jeden krótki opis często wystarcza, żeby wskazać najprostszy kolejny krok.</p>
             </div>
             <div className="hero-actions editorial-final-actions">
               <Link
@@ -683,94 +611,32 @@ export default function DogsPage() {
         <section className="panel cta-panel editorial-final-panel" id="final-cta">
           <div className="editorial-final-copy">
             <div className="section-eyebrow">Ostatni krok</div>
-            <h2>
-              Jeśli chcesz spokojnie uporządkować sytuację swojego psa, zacznijmy od pierwszego kroku
-            </h2>
+            <h2>Jeśli chcesz spokojnie uporządkować sytuację swojego psa, zacznijmy od pierwszego kroku</h2>
             <p>
               Nie musisz wiedzieć wszystkiego przed pierwszym kontaktem. Wystarczy, że opiszesz sytuację swojego psa, a wspólnie
               ustalimy najlepszy kierunek rozpoczęcia pracy.
             </p>
 
             <div className="hero-actions editorial-final-actions">
-              <Link
-                href={consultationHref}
-                prefetch={false}
-                className="button button-primary big-button"
-                data-analytics-event="cta_click"
-                data-analytics-location="dogs-final-book"
-              >
+              <Link href={consultationHref} prefetch={false} className="button button-primary big-button" data-analytics-event="cta_click" data-analytics-location="dogs-final-book">
                 Umów konsultację dotyczącą psa
               </Link>
-              <Link
-                href={contactHref}
-                prefetch={false}
-                className="button button-ghost big-button"
-                data-analytics-event="cta_click"
-                data-analytics-location="dogs-final-message"
-              >
+              <Link href={contactHref} prefetch={false} className="button button-ghost big-button" data-analytics-event="cta_click" data-analytics-location="dogs-final-message">
                 Napisz wiadomość
               </Link>
             </div>
 
-            <p className="muted">Jeśli nie masz jeszcze pewności, możesz zacząć od krótkiej rozmowy wstępnej 15 min.</p>
+            <p className="muted">Jeśli nie masz jeszcze pewności, możesz zacząć od krótkiej rozmowy wstępnej 15 min audio.</p>
           </div>
         </section>
 
-        <footer className="premium-home-footer" aria-label="Stopka">
-          <div className="premium-footer-grid">
-            <div>
-              <div className="section-eyebrow">Regulski</div>
-              <h3>{SITE_NAME}</h3>
-              <p>
-                {SITE_TAGLINE}. {SPECIALIST_NAME}, {SPECIALIST_CREDENTIALS}. Konsultacje dla psów i kotów w Olsztynie i online.
-              </p>
-              <div className="editorial-hero-meta">
-                <span>Behawiorysta COAPE</span>
-                <span>{SPECIALIST_LOCATION}</span>
-                <span>Psy i koty</span>
-              </div>
-            </div>
-
-            <div>
-              <div className="section-eyebrow">Skrócona nawigacja</div>
-              <div className="premium-footer-links">
-                <a href="#jak-pomagam">Jak pomagam</a>
-                <a href="#konsultacja">Konsultacja</a>
-                <a href="#opinie">Opinie</a>
-                <a href="#faq">FAQ</a>
-              </div>
-            </div>
-
-            <div>
-              <div className="section-eyebrow">Kontakt</div>
-              <div className="premium-footer-links">
-                <Link href={consultationHref} prefetch={false}>
-                  Umów konsultację
-                </Link>
-                <Link href={contactHref} prefetch={false}>
-                  Napisz wiadomość
-                </Link>
-                {contact.email && mailtoHref ? <a href={mailtoHref}>{contact.email}</a> : null}
-              </div>
-            </div>
-          </div>
-
-          <div className="premium-footer-bottom">
-            <div className="premium-footer-legal">
-              <Link href="/polityka-prywatnosci" prefetch={false}>
-                Polityka prywatności
-              </Link>
-              <span>·</span>
-              <Link href="/regulamin" prefetch={false}>
-                Regulamin
-              </Link>
-            </div>
-
-            <div className="premium-footer-credit">
-              <span>© {new Date().getFullYear()} {SITE_SHORT_NAME}</span>
-            </div>
-          </div>
-        </footer>
+        <Footer
+          sectionBasePath="/psy"
+          ctaHref={consultationHref}
+          ctaLabel="Umów konsultację"
+          secondaryHref={contactHref}
+          secondaryLabel="Napisz wiadomość"
+        />
       </div>
     </main>
   )

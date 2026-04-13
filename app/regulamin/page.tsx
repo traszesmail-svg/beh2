@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = buildLegalMetadata(
   'Regulamin',
   '/regulamin',
-  'Zasady rezerwacji, płatności, konsultacji audio, zwrotów, reklamacji i kontaktu dla szybkiej konsultacji 15 min w marce Regulski | Terapia behawioralna.',
+  'Zasady rezerwacji, płatności, konsultacji audio, zwrotów, reklamacji i kontaktu dla krótkiej rozmowy wstępnej 15 min audio w marce Regulski | Terapia behawioralna.',
 )
 
 const summaryItems: LegalSummaryItem[] = [
@@ -70,10 +70,10 @@ export default function TermsPage() {
       supportNoteText="Jeśli nie wiesz, czy lepsza będzie wiadomość, 15 minut czy dłuższa praca, napisz krótko o sytuacji przez formularz. Wskażę najprostszy kolejny ruch."
       ctaTitle="Napisz w sprawie rezerwacji albo płatności"
       ctaText="W wiadomości wystarczy krótko opisać, czy pytanie dotyczy terminu, płatności, rezygnacji, zwrotu albo przebiegu rozmowy."
-      secondaryCtaHref="/book"
-      secondaryCtaLabel="Umów 15 min"
-      footerCtaHref="/book"
-      footerCtaLabel="Umów 15 min"
+      secondaryCtaHref="/kontakt"
+      secondaryCtaLabel="Umów konsultację"
+      footerCtaHref="/kontakt"
+      footerCtaLabel="Umów konsultację"
     />
   )
 }

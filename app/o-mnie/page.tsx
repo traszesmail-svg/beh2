@@ -1,6 +1,8 @@
 ﻿import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { Footer } from '@/components/Footer'
+import { Header } from '@/components/Header'
 import { buildBookHref } from '@/lib/booking-routing'
 import { buildMarketingMetadata } from '@/lib/seo'
 import {
@@ -10,9 +12,7 @@ import {
   INSTAGRAM_PROFILE_URL,
   SPECIALIST_NAME,
   SITE_NAME,
-  SITE_SHORT_NAME,
   SITE_TAGLINE,
-  buildMailtoHref,
   getPublicContactDetails,
 } from '@/lib/site'
 import { getBaseUrl } from '@/lib/server/env'
@@ -257,13 +257,6 @@ const faqItems = [
 export default function AboutPage() {
   const baseUrl = getBaseUrl()
   const contact = getPublicContactDetails()
-  const mailtoHref = contact.email
-    ? buildMailtoHref(
-        contact.email,
-        'Zapytanie - Regulski | O mnie i metodyka',
-        'Dzień dobry,\n\nchciałbym/chciałabym opisać sytuację psa lub kota i ustalić najlepszy pierwszy krok.\n\n- gatunek:\n- co się dzieje:\n- od kiedy:\n- co najbardziej mnie niepokoi:\n',
-      )
-    : null
 
   const structuredData = [
     {
@@ -311,43 +304,8 @@ export default function AboutPage() {
     <main className="page-wrap marketing-page editorial-home-page premium-home-page authority-page">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
 
-      <header className="premium-home-header">
-        <div className="container premium-home-header-inner">
-          <Link href="/" prefetch={false} className="premium-home-brand" aria-label={SITE_NAME}>
-            <span className="brand-copy">
-              <span className="brand">Regulski</span>
-              <span className="header-subtitle">Behawiorysta COAPE | Koty i psy</span>
-            </span>
-          </Link>
-
-          <nav className="premium-home-nav" aria-label="Nawigacja na stronie o mnie">
-            <a href="#kim-jestem" className="header-link">
-              Kim jestem
-            </a>
-            <a href="#metodyka" className="header-link">
-              Metodyka
-            </a>
-            <a href="#opinie" className="header-link">
-              Opinie
-            </a>
-            <a href="#faq" className="header-link">
-              FAQ
-            </a>
-          </nav>
-
-          <Link
-            href={consultationHref}
-            prefetch={false}
-            className="button button-primary big-button premium-home-header-cta"
-            data-analytics-event="cta_click"
-            data-analytics-location="about-header"
-          >
-            Umów konsultację
-          </Link>
-        </div>
-      </header>
-
       <div className="container editorial-stack">
+        <Header />
         <section className="editorial-hero-shell premium-hero-shell" id="start">
           <div className="editorial-hero-grid">
             <div className="editorial-hero-copy">
@@ -748,81 +706,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <footer className="premium-home-footer" aria-label="Stopka">
-          <div className="premium-footer-grid">
-            <div>
-              <div className="section-eyebrow">Regulski</div>
-              <h3>{SITE_NAME}</h3>
-              <p>
-                {SITE_TAGLINE}. Krzysztof Regulski, behawiorysta COAPE / CAPBT, technik weterynarii. Konsultacje dla
-                psów i kotów w Olsztynie i online.
-              </p>
-              <div className="editorial-hero-meta">
-                <span>Behawiorysta COAPE</span>
-                <span>Technik weterynarii</span>
-              </div>
-            </div>
-
-            <div>
-              <div className="section-eyebrow">Skrócona nawigacja</div>
-              <div className="premium-footer-links">
-                <a href="#kim-jestem">Kim jestem</a>
-                <a href="#metodyka">Metodyka</a>
-                <a href="#opinie">Opinie</a>
-                <a href="#faq">FAQ</a>
-              </div>
-            </div>
-
-            <div>
-              <div className="section-eyebrow">Kontakt</div>
-              <div className="premium-footer-links">
-                <Link href={consultationHref} prefetch={false}>
-                  Umów konsultację
-                </Link>
-                <Link href={contactHref} prefetch={false}>
-                  Napisz wiadomość
-                </Link>
-                <a href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer">
-                  Zobacz mój profil w katalogu COAPE
-                </a>
-                <a href={COAPE_ORG_URL} target="_blank" rel="noopener noreferrer">
-                  COAPE
-                </a>
-                <a href={CAPBT_ORG_URL} target="_blank" rel="noopener noreferrer">
-                  CAPBT
-                </a>
-                <a href={INSTAGRAM_PROFILE_URL} target="_blank" rel="noopener noreferrer">
-                  Instagram
-                </a>
-                {contact.email && mailtoHref ? <a href={mailtoHref}>{contact.email}</a> : null}
-              </div>
-            </div>
-          </div>
-
-          <div className="premium-footer-bottom">
-            <div className="premium-footer-legal">
-              <Link href="/polityka-prywatnosci" prefetch={false}>
-                Polityka prywatności
-              </Link>
-              <span>·</span>
-              <Link href="/regulamin" prefetch={false}>
-                Regulamin
-              </Link>
-            </div>
-
-            <div className="premium-footer-credit">
-              <span>
-                © {new Date().getFullYear()} {SITE_SHORT_NAME}
-              </span>
-              <a href={CAPBT_ORG_URL} target="_blank" rel="noopener noreferrer">
-                behawioryscicoape.pl
-              </a>
-              <a href={INSTAGRAM_PROFILE_URL} target="_blank" rel="noopener noreferrer">
-                Instagram
-              </a>
-            </div>
-          </div>
-        </footer>
+        <Footer />
       </div>
     </main>
   )

@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { buildBookHref } from '@/lib/booking-routing'
 import { SITE_NAME, SITE_SHORT_NAME } from '@/lib/site'
 
 type NavItem = {
@@ -12,38 +11,51 @@ type NavItem = {
   sectionId?: string
 }
 
-const desktopNavItems: NavItem[] = [
+const homeNavItems: NavItem[] = [
   { href: '/#jak-pomagam', label: 'Jak pomagam', sectionId: 'jak-pomagam' },
   { href: '/#pierwsza-konsultacja', label: 'Pierwsza konsultacja', sectionId: 'pierwsza-konsultacja' },
   { href: '/#opinie', label: 'Opinie', sectionId: 'opinie' },
   { href: '/#faq', label: 'FAQ', sectionId: 'faq' },
 ]
 
-const mobileNavItems: NavItem[] = [...desktopNavItems, { href: '/kontakt', label: 'Kontakt' }]
+const dogNavItems: NavItem[] = [
+  { href: '/psy#jak-pomagam', label: 'Jak pomagam', sectionId: 'jak-pomagam' },
+  { href: '/psy#konsultacja', label: 'Konsultacja', sectionId: 'konsultacja' },
+  { href: '/psy#opinie', label: 'Opinie', sectionId: 'opinie' },
+  { href: '/psy#faq', label: 'FAQ', sectionId: 'faq' },
+]
+
+function getNavItems(pathname: string): NavItem[] {
+  return pathname === '/psy' ? dogNavItems : homeNavItems
+}
+
+function buildSectionHref(pathname: string, sectionId: string): string {
+  return pathname === '/psy' ? `/psy#${sectionId}` : `/#${sectionId}`
+}
 
 export function Header() {
-  const pathname = usePathname()
+  const pathname = usePathname() ?? '/'
   const isHome = pathname === '/'
-  const consultationHref = '/kontakt'
-  const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min')
+  const consultationHref = pathname === '/psy' ? '/book' : '/kontakt'
   const [menuOpen, setMenuOpen] = useState(false)
-  const [activeSection, setActiveSection] = useState<string>('jak-pomagam')
+  const navItems = getNavItems(pathname)
+  const [activeSection, setActiveSection] = useState<string>(navItems[0]?.sectionId ?? '')
 
   useEffect(() => {
     setMenuOpen(false)
 
-    if (pathname !== '/') {
+    const sectionIds = navItems
+      .map((item) => item.sectionId)
+      .filter((sectionId): sectionId is string => Boolean(sectionId))
+
+    if (sectionIds.length === 0) {
       setActiveSection('')
       return
     }
 
     const hash = window.location.hash.replace(/^#/, '')
-    const validSectionIds = new Set(desktopNavItems.map((item) => item.sectionId).filter((sectionId): sectionId is string => Boolean(sectionId)))
-    setActiveSection(validSectionIds.has(hash) ? hash : 'jak-pomagam')
-
-    const sectionIds = desktopNavItems
-      .map((item) => item.sectionId)
-      .filter((sectionId): sectionId is string => Boolean(sectionId))
+    const validSectionIds = new Set(sectionIds)
+    setActiveSection(validSectionIds.has(hash) ? hash : sectionIds[0])
 
     const sections = sectionIds
       .map((sectionId) => document.getElementById(sectionId))
@@ -81,18 +93,9 @@ export function Header() {
     return () => {
       observer.disconnect()
     }
-  }, [pathname])
+  }, [navItems, pathname])
 
-  const activeHref =
-    pathname === '/'
-      ? `/#${activeSection}`
-      : pathname === '/opinie'
-        ? '/opinie'
-        : pathname === '/faq'
-          ? '/faq'
-          : pathname === '/kontakt'
-            ? '/kontakt'
-            : pathname
+  const activeHref = activeSection ? buildSectionHref(pathname, activeSection) : pathname
 
   function getLinkState(href: string) {
     return activeHref === href
@@ -102,8 +105,6 @@ export function Header() {
     setMenuOpen(false)
   }
 
-  const navItems = desktopNavItems
-  const mobileItems = isHome ? desktopNavItems : mobileNavItems
   const headerClassName = isHome ? 'premium-home-header header-shell' : 'header-shell'
   const headerMainClassName = isHome ? 'premium-home-header-inner header-main' : 'header-main'
   const brandClassName = isHome ? 'premium-home-brand header-branding' : 'header-branding'
@@ -171,7 +172,7 @@ export function Header() {
       {menuOpen ? (
         <div className="header-mobile-panel" id="site-mobile-menu">
           <nav className="header-mobile-links" aria-label="Menu mobilne">
-            {mobileItems.map((item) => {
+            {navItems.map((item) => {
               const isActive = getLinkState(item.href)
 
               return (
@@ -203,7 +204,7 @@ export function Header() {
             {isHome ? null : (
               <>
                 <Link
-                  href={audioHref}
+                  href="/book?service=szybka-konsultacja-15-min"
                   prefetch={false}
                   className="header-mobile-soft-link"
                   data-analytics-event="cta_click"

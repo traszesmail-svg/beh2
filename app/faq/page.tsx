@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { Footer } from '@/components/Footer'
+import { Header } from '@/components/Header'
 import { buildBookHref } from '@/lib/booking-routing'
 import { buildMarketingMetadata } from '@/lib/seo'
-import { buildMailtoHref, getContactDetails, SPECIALIST_CREDENTIALS, SITE_NAME, SITE_SHORT_NAME, SITE_TAGLINE } from '@/lib/site'
+import { buildMailtoHref, getContactDetails } from '@/lib/site'
 
 export const metadata: Metadata = buildMarketingMetadata({
   title: 'FAQ',
@@ -341,43 +343,9 @@ export default function FaqPage() {
     <main className="page-wrap editorial-home-page premium-home-page faq-page">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
 
-      <header className="premium-home-header">
-        <div className="container premium-home-header-inner">
-          <Link href="/" prefetch={false} className="premium-home-brand" aria-label={SITE_NAME}>
-            <span className="brand-copy">
-              <span className="brand">{SITE_SHORT_NAME}</span>
-              <span className="header-subtitle">Behawiorysta COAPE | Koty i psy</span>
-            </span>
-          </Link>
-
-          <nav className="premium-home-nav" aria-label="Główna nawigacja">
-            <a href="#faq-start" className="header-link">
-              Start współpracy
-            </a>
-            <a href="#faq-konsultacja" className="header-link">
-              Konsultacja
-            </a>
-            <a href="#faq-psy" className="header-link">
-              Psy i koty
-            </a>
-            <a href="#kontakt" className="header-link">
-              Kontakt
-            </a>
-          </nav>
-
-          <Link
-            href={consultationHref}
-            prefetch={false}
-            className="button button-primary big-button premium-home-header-cta"
-            data-analytics-event="cta_click"
-            data-analytics-location="faq-header-book"
-          >
-            Umów konsultację
-          </Link>
-        </div>
-      </header>
-
       <div className="container editorial-stack">
+        <Header />
+
         <section className="editorial-hero-shell premium-hero-shell faq-hero-shell" id="start">
           <div className="editorial-hero-grid">
             <div className="editorial-hero-copy">
@@ -582,63 +550,7 @@ export default function FaqPage() {
           </div>
         </section>
 
-        <footer className="premium-home-footer" aria-label="Stopka">
-          <div className="premium-footer-grid">
-            <div>
-              <div className="section-eyebrow">Regulski</div>
-              <h3>{SITE_NAME}</h3>
-              <p>
-                {SITE_TAGLINE}. {SPECIALIST_CREDENTIALS}. Spokojna pomoc dla opiekunów psów i kotów, bez chaosu i bez
-                zbędnej presji.
-              </p>
-              <div className="editorial-hero-meta">
-                <span>Behawiorysta COAPE</span>
-                <span>Psy i koty</span>
-              </div>
-            </div>
-
-            <div>
-              <div className="section-eyebrow">Nawigacja</div>
-              <div className="premium-footer-links">
-                <a href="#faq-start">Start współpracy</a>
-                <a href="#faq-konsultacja">Konsultacja</a>
-                <a href="#faq-psy">Psy i koty</a>
-                <a href="#kontakt">Kontakt</a>
-              </div>
-            </div>
-
-            <div>
-              <div className="section-eyebrow">Kontakt</div>
-              <div className="premium-footer-links">
-                {contact.email && mailtoHref ? <a href={mailtoHref}>{contact.email}</a> : <a href={contactHref}>Kontakt</a>}
-                {contact.phoneDisplay && contact.phoneHref ? <a href={`tel:${contact.phoneHref}`}>{contact.phoneDisplay}</a> : null}
-                <Link href={consultationHref} prefetch={false}>
-                  Umów konsultację
-                </Link>
-                <Link href={audioHref} prefetch={false}>
-                  Umów 15 min audio
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div className="premium-footer-bottom">
-            <div className="premium-footer-legal">
-              <Link href="/polityka-prywatnosci" prefetch={false}>
-                Polityka prywatności
-              </Link>
-              <span>·</span>
-              <Link href="/regulamin" prefetch={false}>
-                Regulamin
-              </Link>
-            </div>
-
-            <div className="premium-footer-credit">
-              <span>© {new Date().getFullYear()} {SITE_SHORT_NAME}</span>
-              <span>COAPE / CAPBT</span>
-            </div>
-          </div>
-        </footer>
+        <Footer />
       </div>
     </main>
   )

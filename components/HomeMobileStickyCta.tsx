@@ -21,13 +21,13 @@ export function HomeMobileStickyCta() {
   return (
     <div className={`mobile-sticky-cta home-mobile-sticky-cta${isVisible ? ' is-visible' : ''}`}>
       <a
-        href="/book"
+        href="/kontakt"
         className="button button-primary"
         data-home-sticky-cta="start"
         data-analytics-event="cta_click"
-        data-analytics-location="home-sticky-book"
+        data-analytics-location="home-sticky-consultation"
       >
-        Umów 15 min
+        Umów konsultację
       </a>
     </div>
   )

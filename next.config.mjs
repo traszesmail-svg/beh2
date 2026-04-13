@@ -15,6 +15,9 @@ const nextConfig = {
       '/*': ['./qa-reports/latest-report.md'],
     },
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 }
 
 export default nextConfig

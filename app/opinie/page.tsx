@@ -1,18 +1,16 @@
-import React from 'react'
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { Footer } from '@/components/Footer'
+import { Header } from '@/components/Header'
 import { SocialProofSection } from '@/components/SocialProofSection'
 import { buildBookHref } from '@/lib/booking-routing'
 import { buildMarketingMetadata } from '@/lib/seo'
 import { getBaseUrl } from '@/lib/server/env'
 import {
-  buildMailtoHref,
   getPublicContactDetails,
   SITE_NAME,
-  SITE_SHORT_NAME,
   SITE_TAGLINE,
   SPECIALIST_CREDENTIALS,
-  SPECIALIST_LOCATION,
   SPECIALIST_NAME,
 } from '@/lib/site'
 
@@ -253,13 +251,6 @@ const faqItems = [
 export default function OpinionsPage() {
   const baseUrl = getBaseUrl()
   const contact = getPublicContactDetails()
-  const mailtoHref = contact.email
-    ? buildMailtoHref(
-        contact.email,
-        'Zapytanie - Regulski | Opinie i przypadki',
-        `Dzień dobry,\n\nchciałbym/chciałabym opisać sytuację psa lub kota i zapytać o najprostszy kolejny krok.\n\n- co się dzieje:\n- od kiedy trwa:\n- co już próbowałem/próbowałam:\n- czego teraz potrzebuję:\n`,
-      )
-    : null
 
   const structuredData = [
     {
@@ -313,39 +304,7 @@ export default function OpinionsPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
 
       <div className="container editorial-stack">
-        <header className="premium-home-header">
-          <div className="premium-home-header-inner">
-            <Link href="/" prefetch={false} className="premium-home-brand" aria-label={SITE_NAME}>
-              <span className="brand">Regulski</span>
-              <span className="header-subtitle">Behawiorysta COAPE | Koty i psy</span>
-            </Link>
-
-            <nav className="premium-home-nav" aria-label="Nawigacja na stronie opinii">
-              <a href="#opinie" className="header-link">
-                Opinie
-              </a>
-              <a href="#przypadki" className="header-link">
-                Przypadki
-              </a>
-              <a href="#faq" className="header-link">
-                FAQ
-              </a>
-              <a href="#kontakt" className="header-link">
-                Kontakt
-              </a>
-            </nav>
-
-            <Link
-              href={consultationHref}
-              prefetch={false}
-              className="button button-primary big-button premium-home-header-cta"
-              data-analytics-event="cta_click"
-              data-analytics-location="opinions-header-book"
-            >
-              Umów konsultację
-            </Link>
-          </div>
-        </header>
+        <Header />
 
         <section className="editorial-hero-shell opinions-hero-shell" id="start">
           <div className="editorial-hero-grid opinions-hero-grid">
@@ -673,64 +632,7 @@ export default function OpinionsPage() {
           </div>
         </section>
 
-        <footer className="premium-home-footer" aria-label="Stopka">
-          <div className="premium-footer-grid">
-            <div>
-              <div className="section-eyebrow">Regulski</div>
-              <h3>{SITE_NAME}</h3>
-              <p>
-                {SITE_TAGLINE}. {SPECIALIST_NAME}, {SPECIALIST_CREDENTIALS}. Konsultacje dla psów i kotów w Olsztynie
-                i online.
-              </p>
-              <div className="editorial-hero-meta">
-                <span>Behawiorysta COAPE</span>
-                <span>{SPECIALIST_LOCATION}</span>
-                <span>Psy i koty</span>
-              </div>
-            </div>
-
-            <div>
-              <div className="section-eyebrow">Nawigacja</div>
-              <div className="premium-footer-links">
-                <a href="#opinie">Opinie</a>
-                <a href="#przypadki">Przypadki</a>
-                <a href="#faq">FAQ</a>
-                <a href="#kontakt">Kontakt</a>
-              </div>
-            </div>
-
-            <div>
-              <div className="section-eyebrow">Kontakt</div>
-              <div className="premium-footer-links">
-                <Link href={consultationHref} prefetch={false}>
-                  Umów konsultację
-                </Link>
-                <Link href={contactHref} prefetch={false}>
-                  Napisz wiadomość
-                </Link>
-                {contact.email && mailtoHref ? <a href={mailtoHref}>{contact.email}</a> : null}
-              </div>
-            </div>
-          </div>
-
-          <div className="premium-footer-bottom">
-            <div className="premium-footer-legal">
-              <Link href="/polityka-prywatnosci" prefetch={false}>
-                Polityka prywatności
-              </Link>
-              <span>·</span>
-              <Link href="/regulamin" prefetch={false}>
-                Regulamin
-              </Link>
-            </div>
-
-            <div className="premium-footer-credit">
-              <span>
-                © {new Date().getFullYear()} {SITE_SHORT_NAME}
-              </span>
-            </div>
-          </div>
-        </footer>
+        <Footer />
       </div>
     </main>
   )

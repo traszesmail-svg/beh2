@@ -284,7 +284,7 @@ export default function HomePage() {
             <div className="editorial-hero-copy">
               <div className="section-eyebrow">Behawiorysta COAPE | Konsultacje dla opiekunów psów i kotów</div>
               <h1>Potrzebujesz pomocy przy problemach psa lub kota?</h1>
-              <p className="editorial-hero-lead">Pomagam spokojnie zrozumieć problem, uporządkować sytuację i wybrać najlepszy pierwszy krok.</p>
+              <p className="editorial-hero-lead">Pomagam spokojnie zrozumieć problem i wybrać najlepszy pierwszy krok.</p>
 
               <div className="hero-actions editorial-hero-actions">
                 <Link href={consultationHref} prefetch={false} className="button button-primary big-button" data-analytics-event="cta_click" data-analytics-location="home-hero-book">Umów konsultację</Link>
@@ -293,7 +293,7 @@ export default function HomePage() {
 
               <div className="home-soft-cta">
                 <Link href={audioHref} prefetch={false} className="home-soft-cta-link" data-analytics-event="cta_click" data-analytics-location="home-hero-audio">
-                  Nie wiesz, od czego zacząć? Krótka rozmowa wstępna 15 min audio
+                  Nie wiesz, od czego zacząć? Krótka rozmowa 15 min audio
                 </Link>
                 <span className="home-soft-cta-note">bez potrzeby przygotowania kamery</span>
               </div>
@@ -322,7 +322,7 @@ export default function HomePage() {
           <SectionIntro
             eyebrow="Pies i kot"
             title="Z czym najczęściej zgłaszają się opiekunowie psów i kotów"
-            description="Wybierz obszar najbliższy Twojej sytuacji. Jeśli nie widzisz tu dokładnie swojego przypadku, napisz, a wspólnie ustalimy pierwszy krok."
+            description="Wybierz obszar najbliższy Twojej sytuacji. Jeśli nie widzisz dokładnie swojego przypadku, napisz, a wspólnie ustalimy pierwszy krok."
           />
 
           <div className="premium-two-column-grid">
@@ -339,7 +339,7 @@ export default function HomePage() {
         </section>
 
         <section className="panel section-panel editorial-section" id="jak-pomagam">
-          <SectionIntro eyebrow="Jak pomagam" title="Jak pomagam uporządkować sytuację i wybrać najlepszy plan działania" description="Krótko, spokojnie i bez dokładania kolejnej warstwy chaosu." />
+          <SectionIntro eyebrow="Jak pomagam" title="Jak pomagam uporządkować sytuację i wybrać najlepszy plan działania" description="Krótko, spokojnie i bez dokładania chaosu." />
 
           <div className="editorial-entry-grid">
             {helpCards.map((card) => (
@@ -359,7 +359,7 @@ export default function HomePage() {
           <SectionIntro
             eyebrow="Pierwsza konsultacja"
             title="Jak wygląda pierwsza konsultacja"
-            description="Wystarczy opis sytuacji. Resztę uporządkujemy razem."
+            description="Wystarczy krótki opis sytuacji. Resztę uporządkujemy razem."
           />
 
           <div className="editorial-process-layout home-process-layout">
@@ -388,19 +388,19 @@ export default function HomePage() {
 
               <div className="home-process-proof-card">
                 <span className="home-process-proof-label">Spokojny pierwszy kontakt</span>
-                <p>Pierwsza rozmowa pomaga uporządkować sytuację i wybrać najlepszy pierwszy krok.</p>
+                <p>Pierwsza rozmowa porządkuje sytuację i wskazuje najlepszy pierwszy krok.</p>
               </div>
             </aside>
           </div>
 
           <div className="hero-actions editorial-final-actions">
-            <Link href={consultationHref} prefetch={false} className="button button-primary big-button" data-analytics-event="cta_click" data-analytics-location="home-process-book">Umów pierwszą konsultację</Link>
+            <Link href={consultationHref} prefetch={false} className="button button-primary big-button" data-analytics-event="cta_click" data-analytics-location="home-process-book">Umów konsultację</Link>
             <Link href={contactHref} prefetch={false} className="button button-ghost big-button" data-analytics-event="cta_click" data-analytics-location="home-process-message">Napisz wiadomość</Link>
           </div>
         </section>
 
         <section className="panel section-panel editorial-section" id="co-zyskasz">
-          <SectionIntro eyebrow="Korzyści" title="Co zyskasz ze współpracy" description="Mniej napięcia, więcej czytelności i spokojniejszy start pracy." />
+          <SectionIntro eyebrow="Korzyści" title="Co zyskasz ze współpracy" description="Mniej napięcia, więcej czytelności i spokojniejszy start." />
 
           <div className="premium-two-column-grid">
             {benefitCards.map((card) => (
@@ -417,7 +417,7 @@ export default function HomePage() {
           </div>
         </section>
         <section className="panel section-panel editorial-section" id="opinie">
-          <SectionIntro eyebrow="Opinie" title="Opinie opiekunów, którzy skorzystali z konsultacji" description="Krótko i bez ciężkiego slidera. Kilka głosów, które pokazują, jak zmienia się start pracy." />
+          <SectionIntro eyebrow="Opinie" title="Opinie opiekunów, którzy skorzystali z konsultacji" description="Kilka głosów po konsultacji, które pokazują spokojny start pracy." />
 
           <div className="summary-grid top-gap">
             {opinionCards.map((opinion) => (
@@ -448,7 +448,7 @@ export default function HomePage() {
           <SectionIntro
             eyebrow="Przykładowe sytuacje"
             title="Przykładowe sytuacje, z którymi zgłaszają się opiekunowie"
-            description="Krótko, realnie i bez katalogowego ciężaru. To kilka najczęstszych startów, które dobrze pokazują kierunek pracy."
+            description="Krótko, realnie i bez katalogowego ciężaru. To kilka najczęstszych startów, które pokazują kierunek pracy."
           />
 
           <div className="premium-two-column-grid">
@@ -495,19 +495,19 @@ export default function HomePage() {
             </div>
 
             <div className="premium-about-copy">
-              <SectionIntro eyebrow="O mnie + COAPE + sposób pracy" title="Pracuję spokojnie, konkretnie i z uwzględnieniem potrzeb zwierzęcia oraz opiekuna" description="Najpierw szukam przyczyny, potem dopasowuję plan i dbam o to, żeby wdrożenie było realne." />
+              <SectionIntro eyebrow="O mnie + COAPE + sposób pracy" title="Pracuję spokojnie, konkretnie i z uwzględnieniem potrzeb zwierzęcia oraz opiekuna" description="Najpierw szukam przyczyny. Potem dopasowuję plan do psa, kota i rytmu domu." />
 
               <p className="editorial-hero-lead">
-                <strong>Jestem behawiorystą COAPE.</strong> Pracuję spokojnie, konkretnie i jako trener zwierząt towarzyszących oraz technik weterynarii pomagam opiekunom psów i kotów zrozumieć zachowanie i wybrać pierwszy krok.
+                <strong>Jestem behawiorystą COAPE.</strong> Łączę pracę behawioralną z doświadczeniem trenera zwierząt towarzyszących i technika weterynarii, żeby dać opiekunowi czytelny start.
               </p>
 
               <div className="summary-grid top-gap">
                 <article className="summary-card tree-backed-card">
-                  <h3>Zrozumienie przyczyny, nie tylko objawu</h3>
-                  <p>Szukam tego, co napędza zachowanie, zamiast zatrzymywać się wyłącznie na widocznym problemie.</p>
+                  <h3>Najpierw przyczyna</h3>
+                  <p>Szukam tego, co napędza zachowanie, zamiast zatrzymywać się wyłącznie na objawie.</p>
                 </article>
                 <article className="summary-card tree-backed-card">
-                  <h3>Plan dopasowany do konkretnej sytuacji</h3>
+                  <h3>Plan dopasowany do sytuacji</h3>
                   <p>Nie chodzi o gotowy schemat, tylko o kierunek, który pasuje do psa, kota i rytmu domu.</p>
                 </article>
                 <article className="summary-card tree-backed-card">
@@ -553,7 +553,7 @@ export default function HomePage() {
           <div className="editorial-final-copy">
             <div className="section-eyebrow">Ostatni krok</div>
             <h2>Jeśli chcesz spokojnie uporządkować sytuację, zacznijmy od pierwszego kroku</h2>
-            <p>Nie musisz mieć wszystkiego poukładanego przed kontaktem. Opisz swoją sytuację, a wspólnie ustalimy najlepszy sposób rozpoczęcia pracy.</p>
+            <p>Nie musisz mieć wszystkiego poukładanego. Opisz swoją sytuację, a wspólnie ustalimy najlepszy start.</p>
 
             <div className="hero-actions editorial-final-actions">
               <Link href={consultationHref} prefetch={false} className="button button-primary big-button" data-analytics-event="cta_click" data-analytics-location="home-final-book">Umów konsultację</Link>

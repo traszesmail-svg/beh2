@@ -1,17 +1,6 @@
-import React from 'react'
 import Link from 'next/link'
-import { getBuildMarkerSnapshot } from '@/lib/build-marker'
-import {
-  CAPBT_PROFILE_URL,
-  INSTAGRAM_PROFILE_URL,
-  SITE_NAME,
-  SITE_TAGLINE,
-  SPECIALIST_CREDENTIALS,
-  SPECIALIST_NAME,
-  buildMailtoHref,
-  getPublicContactDetails,
-} from '@/lib/site'
-import { FUNNEL_PRIMARY_HREF, FUNNEL_PRIMARY_LABEL, FUNNEL_SECONDARY_HREF, FUNNEL_SECONDARY_LABEL } from '@/lib/offers'
+import { buildBookHref } from '@/lib/booking-routing'
+import { buildMailtoHref, getContactDetails, SITE_SHORT_NAME, SPECIALIST_NAME } from '@/lib/site'
 
 type FooterProps = {
   variant?: 'landing' | 'lean' | 'full'
@@ -21,236 +10,106 @@ type FooterProps = {
   description?: string
   secondaryHref?: string
   secondaryLabel?: string
+  sectionBasePath?: '/' | '/psy'
 }
 
-export function Footer({
-  variant = 'lean',
-  ctaHref = FUNNEL_PRIMARY_HREF,
-  ctaLabel = FUNNEL_PRIMARY_LABEL,
-  headline = 'Potrzebujesz pomocy z tym etapem?',
-  description = 'Jeśli temat jest mieszany albo trzeba doprecyzować kolejny ruch, napisz wiadomość.',
-  secondaryHref = FUNNEL_SECONDARY_HREF,
-  secondaryLabel = FUNNEL_SECONDARY_LABEL,
-}: FooterProps) {
-  const contact = getPublicContactDetails()
-  const buildMarker = getBuildMarkerSnapshot()
+function buildSectionHref(sectionBasePath: '/' | '/psy', sectionId: string) {
+  return sectionBasePath === '/psy' ? `/psy#${sectionId}` : `/#${sectionId}`
+}
+
+export function Footer(props: FooterProps) {
+  const contact = getContactDetails()
+  const consultationHref = props.ctaHref ?? '/kontakt'
+  const consultationLabel = props.ctaLabel ?? 'Umów konsultację'
+  const secondaryHref = props.secondaryHref ?? null
+  const secondaryLabel = props.secondaryLabel ?? null
+  const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min')
+  const sectionBasePath = props.sectionBasePath ?? '/'
+
   const mailtoHref = contact.email
     ? buildMailtoHref(
         contact.email,
-        'Zapytanie - Regulski | Terapia behawioralna',
-        'Dzień dobry,\n\nkrótko opisuję swoją sytuację:\n\n- gatunek:\n- problem:\n- od kiedy trwa:\n- od czego chcę zacząć:\n',
+        'Zapytanie - Regulski | Konsultacje',
+        'Dzień dobry,\n\nkrótko opisuję swoją sytuację:\n\n- gatunek:\n- problem:\n- od kiedy trwa:\n- czego potrzebuję na start:\n',
       )
     : null
-  const effectiveSecondaryHref = secondaryHref ?? (mailtoHref ? mailtoHref : '/kontakt')
-  const effectiveSecondaryLabel = secondaryLabel ?? (mailtoHref ? 'Napisz wiadomość' : 'Kontakt')
-
-  if (variant === 'landing') {
-    return (
-      <footer className="site-footer site-footer-landing" id="kontakt">
-        <div className="site-footer-landing-grid">
-          <div className="site-footer-landing-copy">
-            <div className="footer-label">Start i kontakt</div>
-            <h2 className="footer-landing-title">{headline}</h2>
-            <p className="footer-landing-text">{description}</p>
-            <div className="footer-landing-pills" aria-label="Zaufanie i zakres">
-              <span className="hero-proof-pill">Prowadzę osobiście</span>
-              <span className="hero-proof-pill">Olsztyn / online</span>
-              <span className="hero-proof-pill">COAPE / CAPBT</span>
-            </div>
-          </div>
-
-          <div className="site-footer-landing-actions">
-            <Link
-              href={ctaHref}
-              prefetch={false}
-              className="button button-primary big-button"
-              data-analytics-event="cta_click"
-              data-analytics-location="footer"
-            >
-              {ctaLabel}
-            </Link>
-
-            {effectiveSecondaryHref.startsWith('mailto:') ? (
-              <a href={effectiveSecondaryHref} className="button button-ghost big-button">
-                {effectiveSecondaryLabel}
-              </a>
-            ) : (
-              <Link href={effectiveSecondaryHref} prefetch={false} className="button button-ghost big-button">
-                {effectiveSecondaryLabel}
-              </Link>
-            )}
-
-            <div className="footer-landing-note tree-backed-card">
-              <strong>{SITE_NAME}</strong>
-              <span>
-                {SITE_TAGLINE}. {SPECIALIST_NAME}, {SPECIALIST_CREDENTIALS}. Konsultacje prowadzę osobiście w Olsztynie i online.
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div className="site-footer-landing-meta">
-          <div className="footer-simple-legal">
-            <Link href="/polityka-prywatnosci" prefetch={false}>
-              Polityka prywatności
-            </Link>
-            <span>•</span>
-            <Link href="/regulamin" prefetch={false}>
-              Regulamin
-            </Link>
-          </div>
-
-          <div className="footer-simple-links" aria-label="Profile publiczne">
-            <a href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="footer-simple-profile">
-              Publiczny profil CAPBT
-            </a>
-            <a href={INSTAGRAM_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="footer-simple-profile">
-              Instagram @coapebehawiorysta
-            </a>
-          </div>
-        </div>
-
-        <div data-build-marker={buildMarker.value} hidden aria-hidden="true" />
-      </footer>
-    )
-  }
-
-  if (variant === 'lean') {
-    return (
-      <footer className="site-footer site-footer-lean site-footer-funnel" id="kontakt">
-        <div className="site-footer-funnel-grid">
-          <div className="site-footer-funnel-copy">
-            <div className="footer-label">Dalszy krok</div>
-            <h2 className="footer-funnel-title">{headline}</h2>
-            <p className="footer-funnel-text">{description}</p>
-          </div>
-
-          <div className="site-footer-funnel-actions">
-            <Link
-              href={ctaHref}
-              prefetch={false}
-              className="button button-primary footer-funnel-primary"
-              data-analytics-event="cta_click"
-              data-analytics-location="footer"
-            >
-              {ctaLabel}
-            </Link>
-
-            {effectiveSecondaryHref.startsWith('mailto:') ? (
-              <a href={effectiveSecondaryHref} className="button button-ghost footer-funnel-secondary">
-                {effectiveSecondaryLabel}
-              </a>
-            ) : (
-              <Link href={effectiveSecondaryHref} prefetch={false} className="button button-ghost footer-funnel-secondary">
-                {effectiveSecondaryLabel}
-              </Link>
-            )}
-          </div>
-        </div>
-
-        <div className="site-footer-funnel-meta">
-          <div className="footer-funnel-trust">
-            COAPE / CAPBT. {SPECIALIST_NAME}, {SPECIALIST_CREDENTIALS}. Prowadzę osobiście.{' '}
-            <a href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="footer-simple-profile">
-              Publiczny profil CAPBT
-            </a>{' '}
-            <span aria-hidden="true">•</span>{' '}
-            <a href={INSTAGRAM_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="footer-simple-profile">
-              Instagram @coapebehawiorysta
-            </a>
-          </div>
-
-          <div className="footer-funnel-legal">
-            <Link href="/polityka-prywatnosci" prefetch={false}>
-              Polityka prywatności
-            </Link>
-            <span>•</span>
-            <Link href="/regulamin" prefetch={false}>
-              Regulamin
-            </Link>
-          </div>
-        </div>
-
-        <div data-build-marker={buildMarker.value} hidden aria-hidden="true" />
-      </footer>
-    )
-  }
 
   return (
-    <footer className="site-footer site-footer-full" id="kontakt">
-      <div className="site-footer-simple-grid">
-        <div className="footer-simple-brand">
+    <footer className="site-footer" aria-label="Stopka">
+      <div className="site-footer-grid">
+        <div className="site-footer-brand">
           <div className="section-eyebrow">Regulski</div>
-          <h2 className="footer-title">{SITE_NAME}</h2>
-          <p className="muted footer-copy">
-            {SITE_TAGLINE}. {SPECIALIST_NAME}, {SPECIALIST_CREDENTIALS}. Konsultacje prowadzę osobiście w Olsztynie i online.
-          </p>
+          <h3>{SITE_SHORT_NAME}</h3>
+          <p>Spokojna pomoc w zrozumieniu problemów zachowania psów i kotów.</p>
+          <div className="site-footer-brand-line">Behawiorysta COAPE | Koty i psy</div>
         </div>
 
-        <div className="footer-simple-meta">
-          <div className="footer-simple-links">
-            <Link
-              href={ctaHref}
-              prefetch={false}
-              className="footer-simple-link footer-simple-link-primary"
-              data-analytics-event="cta_click"
-              data-analytics-location="footer"
-            >
-              {ctaLabel}
+        <div className="site-footer-nav">
+          <div className="section-eyebrow">Nawigacja</div>
+          <div className="site-footer-links">
+            <Link href={buildSectionHref(sectionBasePath, 'jak-pomagam')} prefetch={false} className="site-footer-link">
+              Jak pomagam
             </Link>
-            {secondaryHref ? (
-              secondaryHref.startsWith('mailto:') ? (
-                <a href={secondaryHref} className="footer-simple-link">
-                  {secondaryLabel ?? 'Napisz wiadomość'}
-                </a>
-              ) : (
-                <Link href={secondaryHref} prefetch={false} className="footer-simple-link">
-                  {secondaryLabel ?? 'Zobacz więcej'}
-                </Link>
-              )
+            <Link href={buildSectionHref(sectionBasePath, 'konsultacja')} prefetch={false} className="site-footer-link">
+              Konsultacja
+            </Link>
+            <Link href={buildSectionHref(sectionBasePath, 'opinie')} prefetch={false} className="site-footer-link">
+              Opinie
+            </Link>
+            <Link href={buildSectionHref(sectionBasePath, 'faq')} prefetch={false} className="site-footer-link">
+              FAQ
+            </Link>
+            <Link href="/kontakt" prefetch={false} className="site-footer-link">
+              Kontakt
+            </Link>
+          </div>
+        </div>
+
+        <div className="site-footer-contact">
+          <div className="section-eyebrow">Kontakt</div>
+          <div className="site-footer-links">
+            <Link href={consultationHref} prefetch={false} className="site-footer-link site-footer-link-primary">
+              {consultationLabel}
+            </Link>
+            {secondaryHref && secondaryLabel ? (
+              <Link href={secondaryHref} prefetch={false} className="site-footer-link">
+                {secondaryLabel}
+              </Link>
             ) : null}
-            <Link href="/oferta" prefetch={false} className="footer-simple-link">
-              Oferta
-            </Link>
-            {contact.email && mailtoHref ? (
-              <a href={mailtoHref} className="footer-simple-link">
+            {contact.email ? (
+              <a href={mailtoHref ?? `mailto:${contact.email}`} className="site-footer-link">
                 {contact.email}
               </a>
-            ) : (
-              <Link href="/kontakt" prefetch={false} className="footer-simple-link">
-                Przejdź do kontaktu
-              </Link>
-            )}
-          </div>
-
-          <div className="footer-simple-bottom">
-            <div className="footer-simple-legal">
-              <Link href="/polityka-prywatnosci" prefetch={false}>
-                Polityka prywatności
-              </Link>
-              <span>•</span>
-              <Link href="/regulamin" prefetch={false}>
-                Regulamin
-              </Link>
-            </div>
-
-            <div className="footer-simple-trust">
-              <span>COAPE / CAPBT. Prowadzę osobiście.</span>
-            </div>
-
-            <div className="footer-simple-links" aria-label="Profile publiczne">
-              <a href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="footer-simple-profile">
-                Publiczny profil CAPBT
+            ) : null}
+            {contact.phoneDisplay && contact.phoneHref ? (
+              <a href={`tel:${contact.phoneHref}`} className="site-footer-link">
+                {contact.phoneDisplay}
               </a>
-              <a href={INSTAGRAM_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="footer-simple-profile">
-                Instagram @coapebehawiorysta
-              </a>
-            </div>
+            ) : null}
+            <Link href={audioHref} prefetch={false} className="site-footer-link">
+              Krótka rozmowa wstępna 15 min audio
+            </Link>
+            <span className="site-footer-note">bez potrzeby przygotowania kamery</span>
           </div>
         </div>
       </div>
 
-      <div data-build-marker={buildMarker.value} hidden aria-hidden="true" />
+      <div className="site-footer-bottom">
+        <div className="site-footer-legal">
+          <Link href="/polityka-prywatnosci" prefetch={false}>
+            Polityka prywatności
+          </Link>
+          <span>•</span>
+          <Link href="/regulamin" prefetch={false}>
+            Regulamin
+          </Link>
+        </div>
+
+        <div className="site-footer-credit">
+          <span>© {new Date().getFullYear()} {SITE_SHORT_NAME}</span>
+          <span>{SPECIALIST_NAME}</span>
+        </div>
+      </div>
     </footer>
   )
 }
