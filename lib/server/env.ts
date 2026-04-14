@@ -1,3 +1,5 @@
+import { SITE_PRODUCTION_URL } from '@/lib/site'
+
 const DEFAULT_APP_URL = 'http://localhost:3000'
 const DEFAULT_JITSI_BASE_URL = 'https://meet.jit.si'
 const DEFAULT_RESERVATION_WINDOW_MINUTES = 15
@@ -211,6 +213,10 @@ function logRuntimeMessage(key: string, summary: string, level: 'info' | 'warn')
 }
 
 export function getBaseUrl(): string {
+  if (process.env.VERCEL_ENV === 'production') {
+    return SITE_PRODUCTION_URL
+  }
+
   if (readEnv('NEXT_PUBLIC_APP_URL')) {
     return readEnv('NEXT_PUBLIC_APP_URL')!
   }
@@ -220,6 +226,10 @@ export function getBaseUrl(): string {
   }
 
   return DEFAULT_APP_URL
+}
+
+export function getCanonicalBaseUrl(): string {
+  return SITE_PRODUCTION_URL
 }
 
 export function getJitsiBaseUrl(): string {

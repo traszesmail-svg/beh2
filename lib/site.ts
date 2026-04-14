@@ -23,7 +23,7 @@ export const HOME_HERO_PHOTO = {
 export const SITE_NAME = 'Regulski | Terapia behawioralna'
 export const SITE_SHORT_NAME = 'Regulski'
 export const SITE_URL_FALLBACK = 'http://localhost:3000'
-export const SITE_PRODUCTION_URL = 'https://coapebehawiorysta-6608.vercel.app'
+export const SITE_PRODUCTION_URL = 'https://regulskibehawiorysta.pl'
 export const PUBLIC_CONTACT_EMAIL_FALLBACK = 'coapebehawiorysta@gmail.com'
 export const SITE_TAGLINE = 'Behawiorysta COAPE | Koty i psy'
 export const SITE_DESCRIPTION = 'Spokojna pomoc w zrozumieniu problemów zachowania psów i kotów, z jasnym planem działania po konsultacji.'
@@ -31,20 +31,30 @@ export const SITE_DESCRIPTION = 'Spokojna pomoc w zrozumieniu problemów zachowa
 export const SPECIALIST_NAME = 'Krzysztof Regulski'
 export const SPECIALIST_CREDENTIALS = 'behawiorysta COAPE / CAPBT, technik weterynarii, dogoterapeuta, dietetyk'
 export const SPECIALIST_LOCATION = 'Olsztyn, woj. warmińsko-mazurskie'
+export const COAPE_INTL_URL = 'https://coape.org/'
 export const COAPE_ORG_URL = 'https://coape.pl/'
 export const CAPBT_ORG_URL = 'https://behawioryscicoape.pl/'
 export const CAPBT_PROFILE_URL = 'https://behawioryscicoape.pl/behawiorysta/Regulski'
 export const INSTAGRAM_PROFILE_URL = 'https://www.instagram.com/coapebehawiorysta/'
 
-export const COAPE_LOGO = {
+export const COAPE_INTL_LOGO = {
+  src: '/branding/coape-org.png',
+  alt: 'Logo COAPE',
+}
+
+export const COAPE_POLSKA_LOGO = {
   src: '/branding/coape-polska.png',
   alt: 'Logo COAPE Polska',
 }
 
-export const CAPBT_LOGO = {
+export const CAPBT_POLSKA_LOGO = {
   src: '/branding/capbt-polska.png',
   alt: 'Logo CAPBT Polska, Stowarzyszenie Behawiorystów i Trenerów COAPE',
 }
+
+// Legacy aliases kept for existing sections outside homepage.
+export const COAPE_LOGO = COAPE_POLSKA_LOGO
+export const CAPBT_LOGO = CAPBT_POLSKA_LOGO
 
 export const SPECIALIST_TRUST_STATEMENT = 'Pomagam spokojnie uporządkować sytuację i wybrać dobry następny krok.'
 export const CONSULTATION_PRICE_COMPARE_COPY =

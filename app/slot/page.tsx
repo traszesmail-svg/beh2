@@ -49,10 +49,21 @@ export default async function SlotPage({
     try {
       groupedAvailability = filterGroupedAvailabilityForService(await listAvailability(), serviceType)
     } catch (error) {
-      console.warn('[behawior15][slot] failed to load availability', error)
+      console.warn('[behawior15][slot] failed to load availability', {
+        dataMode: dataMode.summary,
+        error:
+          error instanceof Error
+            ? {
+                name: error.name,
+                message: error.message,
+                stack: error.stack,
+              }
+            : String(error),
+      })
       publicFlowMessage = 'Terminy chwilowo się odświeżają. Spróbuj ponownie za moment.'
     }
   } else {
+    console.warn('[behawior15][slot] booking data mode is invalid', dataMode.summary)
     publicFlowMessage = 'Terminy chwilowo się odświeżają. Spróbuj ponownie za moment.'
   }
 
