@@ -1,4 +1,8 @@
 /** @type {import('next').NextConfig} */
+const blockSearchIndexing = process.env.VERCEL_ENV
+  ? process.env.VERCEL_ENV !== 'production'
+  : process.env.NODE_ENV !== 'production'
+
 const nextConfig = {
   images: {
     remotePatterns: [
@@ -10,13 +14,117 @@ const nextConfig = {
   },
   experimental: {
     typedRoutes: false,
+    workerThreads: true,
+    cpus: 1,
     webpackBuildWorker: false,
+    optimizeCss: true,
     outputFileTracingIncludes: {
       '/*': ['./qa-reports/latest-report.md'],
     },
   },
   typescript: {
     ignoreBuildErrors: true,
+  },
+  async redirects() {
+    return [
+      {
+        source: '/behawiorysta-psow',
+        destination: '/psy',
+        statusCode: 301,
+      },
+      {
+        source: '/behawiorysta-kotow',
+        destination: '/koty',
+        statusCode: 301,
+      },
+      {
+        source: '/oferta/konsultacja-behawioralna-online',
+        destination: '/konsultacja-behawioralna-online',
+        statusCode: 301,
+      },
+      {
+        source: '/behawiorysta-olsztyn',
+        destination: '/behawiorysta-online-polska',
+        statusCode: 301,
+      },
+      {
+        source: '/oferta/poradniki-pdf',
+        destination: '/niezbednik',
+        statusCode: 301,
+      },
+      {
+        source: '/oferta/poradniki-pdf/pies_zostaje_sam_i_wpada_w_panike_v2',
+        destination: '/oferta/poradniki-pdf/pies-zostaje-sam-plan-pierwszych-krokow',
+        statusCode: 301,
+      },
+      {
+        source: '/oferta/poradniki-pdf/pies_szczeka_na_gosci_i_dzwonek_v2',
+        destination: '/oferta/poradniki-pdf/pies-boi-sie-gosci-i-dzwiekow',
+        statusCode: 301,
+      },
+      {
+        source: '/oferta/poradniki-pdf/dlaczego_pies_glupieje_na_smyczy_v2',
+        destination: '/oferta/poradniki-pdf/pies-reaktywny-na-spacerze',
+        statusCode: 301,
+      },
+      {
+        source: '/oferta/poradniki-pdf/trudny_spacer_v2',
+        destination: '/oferta/poradniki-pdf/pies-reaktywny-na-spacerze',
+        statusCode: 301,
+      },
+      {
+        source: '/oferta/poradniki-pdf/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2',
+        destination: '/oferta/poradniki-pdf/pies-ile-ruchu-potrzebuje',
+        statusCode: 301,
+      },
+      {
+        source: '/oferta/poradniki-pdf/szczeniak_gryzie_i_skacze_v2',
+        destination: '/oferta/poradniki-pdf/szczeniak-gryzienie-i-skakanie',
+        statusCode: 301,
+      },
+      {
+        source: '/oferta/poradniki-pdf/szczeniak_nie_umie_sie_wyciszyc_v2',
+        destination: '/oferta/poradniki-pdf/szczeniak-wyciszanie',
+        statusCode: 301,
+      },
+      {
+        source: '/oferta/poradniki-pdf/pies_niszczy_w_domu_v2',
+        destination: '/oferta/poradniki-pdf/pies-niszczy-w-domu',
+        statusCode: 301,
+      },
+      {
+        source: '/oferta/poradniki-pdf/pies_broni_zasobow_v2',
+        destination: '/oferta/poradniki-pdf/pies-broni-zasobow',
+        statusCode: 301,
+      },
+      {
+        source: '/oferta/poradniki-pdf/pogon_demolka_i_brak_hamulcow_v2',
+        destination: '/oferta/poradniki-pdf/pies-impulsy-i-hamulce',
+        statusCode: 301,
+      },
+      {
+        source: '/oferta/poradniki-pdf/pies_do_pracy_z_ludzmi_v2',
+        destination: '/oferta/poradniki-pdf/pies-do-pracy-z-ludzmi',
+        statusCode: 301,
+      },
+    ]
+  },
+  async headers() {
+    if (!blockSearchIndexing) {
+      return []
+    }
+
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'X-Robots-Tag',
+            value: 'noindex, follow, noarchive',
+          },
+        ],
+      },
+    ]
   },
 }
 
