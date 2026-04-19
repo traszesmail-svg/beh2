@@ -1,11 +1,27 @@
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 import { NextResponse } from 'next/server'
+import { getPublicProblemOptionById, type FunnelSpecies } from '@/lib/funnel'
 import { ConfigurationError } from '@/lib/server/env'
 import { sendContactLeadEmail } from '@/lib/server/notifications'
 import { getContactDetails } from '@/lib/site'
 
-const SUCCESS_MESSAGE = 'Dziękuję. Wiadomość trafiła do weryfikacji. Odpowiem na podany kontakt.'
+const SUCCESS_MESSAGE = 'Dziękuję. Wiadomość trafiła do mnie. Odpowiem na podany adres e-mail.'
 const UNAVAILABLE_MESSAGE = 'Formularz kontaktowy jest chwilowo niedostępny. Spróbuj później lub napisz bezpośrednio.'
 const GENERIC_ERROR_MESSAGE = 'Nie udało się wysłać wiadomości. Spróbuj ponownie później.'
+
+type ValidatedContactLeadPayload = {
+  name: string
+  email: string
+  topic: string
+  message: string
+  contextLabel: string
+  bookingId?: string | null
+  website?: string | null
+  consentProcessing: boolean
+  consentPolicy: boolean
+}
 
 function getUnavailableMessage(): string {
   const contact = getContactDetails()
@@ -36,45 +52,49 @@ function normalizeLongText(value: unknown, maxLength: number): string | null {
 }
 
 function pickContactCandidate(body: Record<string, unknown>): string | null {
-  return (
-    normalizeSingleLine(body.email, 160) ??
-    normalizeSingleLine(body.contact, 160) ??
-    normalizeSingleLine(body.phone, 160)
-  )
+  return normalizeSingleLine(body.email, 160) ?? normalizeSingleLine(body.contact, 160) ?? normalizeSingleLine(body.phone, 160)
 }
 
-function normalizeSpeciesLabel(value: unknown): string | null {
+function normalizeSpecies(value: unknown): FunnelSpecies | null {
   const species = normalizeSingleLine(value, 32)?.toLowerCase() ?? null
 
-  if (species === 'pies') {
-    return 'Pies'
+  if (species === 'pies' || species === 'kot') {
+    return species
   }
 
-  if (species === 'kot') {
-    return 'Kot'
-  }
-
-  return normalizeSingleLine(value, 32)
+  return null
 }
 
-function validatePayload(body: Record<string, unknown>): { payload?: Parameters<typeof sendContactLeadEmail>[0]; error?: string } {
+function getSpeciesLabel(species: FunnelSpecies) {
+  return species === 'kot' ? 'Kot' : 'Pies'
+}
+
+function validatePayload(body: Record<string, unknown>): { payload?: ValidatedContactLeadPayload; error?: string } {
   const name = normalizeSingleLine(body.name ?? body.displayName, 120)
   const contact = pickContactCandidate(body)
-  const topic = normalizeSingleLine(body.topic, 120) ?? 'Kontakt i rezerwacja'
-  const contextLabel =
-    normalizeSingleLine(body.contextLabel, 120) ??
-    normalizeSpeciesLabel(body.species) ??
-    'Kontakt ogólny'
-  const message = normalizeLongText(body.message, 4000)
+  const species = normalizeSpecies(body.species)
+  const legacyTopic = normalizeSingleLine(body.topic, 120)
+  const legacyContextLabel = normalizeSingleLine(body.contextLabel, 160)
+  const topicId = normalizeSingleLine(body.topicId, 80)
+  const topic = species ? getPublicProblemOptionById(species, topicId)?.title ?? legacyTopic ?? null : legacyTopic ?? null
+  const message = normalizeLongText(body.message, 1200)
   const bookingId = normalizeSingleLine(body.bookingId, 120) ?? null
   const website = normalizeSingleLine(body.website, 120) ?? ''
+  const consentProcessing = body.consentProcessing === true
+  const consentPolicy = body.consentPolicy === true
+  const contextLabel =
+    legacyContextLabel ?? (species && topic ? `${getSpeciesLabel(species)} • ${topic}` : topic ? `Kontakt • ${topic}` : null)
 
-  if (!name || !contact || !message) {
-    return { error: 'Uzupełnij imię, kontakt i krótki opis sytuacji.' }
+  if (!name || !contact || !topic || !message || !contextLabel) {
+    return { error: 'Uzupełnij imię, adres e-mail, gatunek, temat i krótki opis problemu.' }
   }
 
-  if (message.length < 12) {
-    return { error: 'Napisz kilka zdań o sytuacji, żeby łatwiej było zacząć.' }
+  if (message.length < 20) {
+    return { error: 'Opisz problem w 2-4 zdaniach, żebym mógł wskazać najprostszy kolejny krok.' }
+  }
+
+  if (!consentProcessing || !consentPolicy) {
+    return { error: 'Zaznacz zgodę na kontakt i akceptację polityki prywatności.' }
   }
 
   return {
@@ -86,6 +106,8 @@ function validatePayload(body: Record<string, unknown>): { payload?: Parameters<
       contextLabel,
       bookingId,
       website,
+      consentProcessing,
+      consentPolicy,
     },
   }
 }

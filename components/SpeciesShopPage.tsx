@@ -24,7 +24,7 @@ export function SpeciesShopPage({
   consultHref,
 }: {
   species: ShopSpecies
-  heroImage: { src: string; alt: string }
+  heroImage: { src: string; alt: string; width: number; height: number }
   consultHref: string
 }) {
   const pdfCards = SHOP_PDF_CARDS[species]
@@ -33,7 +33,7 @@ export function SpeciesShopPage({
   const speciesLabel = species === 'koty' ? 'kotów' : 'psów'
   const pdfCardsOnly = pdfCards.filter((card) => card.kind === 'pdf')
   const bundleCardsOnly = pdfCards.filter((card) => card.kind === 'pakiet')
-  const pdfShelfHref = species === 'koty' ? '/oferta/poradniki-pdf#koty-pdf' : '/oferta/poradniki-pdf#psy-pdf'
+  const pdfShelfHref = '/niezbednik#pdf-y'
   const speciesAnchors = [
     { href: `#${species}-konsultacja`, label: 'Konsultacja 15 min' },
     { href: `#${species}-pdf`, label: 'Materiały PDF' },
@@ -132,9 +132,12 @@ export function SpeciesShopPage({
               <Image
                 src={heroImage.src}
                 alt={heroImage.alt}
-                width={1200}
-                height={900}
+                width={heroImage.width}
+                height={heroImage.height}
                 sizes="(max-width: 980px) 100vw, 38vw"
+                priority
+                loading="eager"
+                fetchPriority="high"
                 className="shop-hero-image"
               />
             </aside>

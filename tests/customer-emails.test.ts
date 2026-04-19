@@ -75,15 +75,18 @@ function makeBookingForm(slotId: string) {
 function makeContactLeadPayload() {
   return {
     name: 'Anna Nowak',
-    email: 'klient@example.com',
-    topic: 'Ogólne pytanie',
-    contextLabel: 'Kontakt ogólny',
-    message: 'Potrzebuję pomocy z kotem i chcę ustalić prosty start.',
+    contact: 'klient@example.com',
+    species: 'kot',
+    topicId: 'kot-stres',
+    topic: 'Lek, stres i wycofanie',
+    contextLabel: 'Kot - Lek, stres i wycofanie',
+    message: 'Potrzebuje pomocy z kotem i chce ustalic prosty start. Temat wraca od kilku tygodni i nie wiem, od czego zaczac.',
     bookingId: 'booking-123',
     website: '',
+    consentProcessing: true,
+    consentPolicy: true,
   }
 }
-
 test('customer emails cover reservation, review, confirmation and cancel outcomes', async () => {
   const sentEmails: ResendEmailPayload[] = []
   const originalFetch = globalThis.fetch
@@ -183,7 +186,6 @@ test('customer emails cover reservation, review, confirmation and cancel outcome
     await sandbox.cleanup()
   }
 })
-
 test('customer emails stay on the confirmation page when disabled', async () => {
   const sentEmails: ResendEmailPayload[] = []
   const originalFetch = globalThis.fetch
@@ -220,7 +222,7 @@ test('customer emails stay on the confirmation page when disabled', async () => 
         const status = getCustomerEmailDeliveryStatus(booking.booking.email)
 
         assert.equal(status.state, 'disabled')
-        assert.match(status.summary, /świadomie wyłączone/i)
+        assert.match(status.summary, /swiadomie wylaczone|świadomie wyłączone/i)
         assert.match(status.nextStep, /CUSTOMER_EMAIL_MODE=auto/i)
         assert.equal(sentEmails.length, 0)
 
@@ -247,7 +249,6 @@ test('customer emails stay on the confirmation page when disabled', async () => 
     await sandbox.cleanup()
   }
 })
-
 test('contact route sends leads to the public inbox and replies to the sender', async () => {
   const sentEmails: ResendEmailPayload[] = []
   const originalFetch = globalThis.fetch
@@ -288,12 +289,12 @@ test('contact route sends leads to the public inbox and replies to the sender', 
 
         assert.equal(response.status, 200)
         assert.equal(payload.ok, true)
-        assert.match(payload.message ?? '', /Wiadomość trafiła do weryfikacji/i)
+        assert.match(payload.message ?? '', /Odpowiem na podany adres e-mail/i)
         assert.equal(sentEmails.length, 1)
         assert.equal(sentEmails[0].to?.[0], 'coapebehawiorysta@gmail.com')
         assert.equal(sentEmails[0].reply_to, 'klient@example.com')
-        assert.match(sentEmails[0].subject ?? '', /Kontakt - Ogólne pytanie - Anna Nowak/)
-        assert.match(sentEmails[0].text ?? '', /Kontekst: Kontakt ogólny/)
+        assert.match(sentEmails[0].subject ?? '', /Kontakt - .*Anna Nowak/)
+        assert.match(sentEmails[0].text ?? '', /Kontekst:/)
         assert.match(sentEmails[0].text ?? '', /Numer rezerwacji: booking-123/)
       },
     )

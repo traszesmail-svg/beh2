@@ -83,18 +83,18 @@ function makeBooking(
 test('funnel metrics snapshot keeps QA out of production counts and renders the funnel', () => {
   const now = new Date('2026-04-06T12:00:00.000Z')
   const events: FunnelEventRecord[] = [
-    makeEvent('home_view', '2026-04-06T09:00:00.000Z'),
-    makeEvent('cta_click', '2026-04-06T09:01:00.000Z'),
-    makeEvent('topic_selected', '2026-04-06T09:02:00.000Z'),
-    makeEvent('slot_selected', '2026-04-06T09:03:00.000Z'),
-    makeEvent('form_started', '2026-04-06T09:04:00.000Z'),
-    makeEvent('payment_opened', '2026-04-06T09:05:00.000Z'),
-    makeEvent('manual_pending', '2026-04-06T09:06:00.000Z'),
-    makeEvent('paid', '2026-04-06T09:07:00.000Z'),
-    makeEvent('confirmed', '2026-04-06T09:08:00.000Z'),
+    makeEvent('view_page', '2026-04-06T09:00:00.000Z'),
+    makeEvent('funnel_entry_15_min', '2026-04-06T09:01:00.000Z'),
+    makeEvent('booking_start', '2026-04-06T09:02:00.000Z'),
+    makeEvent('booking_slot_selected', '2026-04-06T09:03:00.000Z'),
+    makeEvent('booking_form_started', '2026-04-06T09:04:00.000Z'),
+    makeEvent('payment_viewed', '2026-04-06T09:05:00.000Z'),
+    makeEvent('payment_marked_pending', '2026-04-06T09:06:00.000Z'),
+    makeEvent('payment_completed', '2026-04-06T09:07:00.000Z'),
+    makeEvent('booking_confirmed', '2026-04-06T09:08:00.000Z'),
     makeEvent('reject_cancel', '2026-03-30T11:59:00.000Z'),
-    makeEvent('home_view', '2026-04-06T09:09:00.000Z', true),
-    makeEvent('paid', '2026-04-06T09:10:00.000Z', true),
+    makeEvent('view_page', '2026-04-06T09:09:00.000Z', true),
+    makeEvent('payment_completed', '2026-04-06T09:10:00.000Z', true),
   ]
   const bookings: BookingRecord[] = [
     makeBooking('booking-1', false, 'pending_manual_payment', 'pending_manual_review'),
@@ -122,10 +122,10 @@ test('funnel metrics snapshot keeps QA out of production counts and renders the 
 
   assert.equal(window24h?.eventCount, 9)
   assert.equal(window24h?.qaEventCount, 2)
-  assert.equal(window24h?.stageCounts.home_view, 1)
-  assert.equal(window24h?.stageCounts.confirmed, 1)
-  assert.equal(window24h?.conversions.homeToCta, '100.0%')
-  assert.equal(window24h?.conversions.paidToConfirmed, '100.0%')
+  assert.equal(window24h?.stageCounts.view_page, 1)
+  assert.equal(window24h?.stageCounts.booking_confirmed, 1)
+  assert.equal(window24h?.conversions.viewToEntry15, '100.0%')
+  assert.equal(window24h?.conversions.completedToConfirmed, '100.0%')
 
   assert.equal(window7d?.eventCount, 9)
   assert.equal(windowAll?.eventCount, 10)
@@ -133,5 +133,5 @@ test('funnel metrics snapshot keeps QA out of production counts and renders the 
   assert.match(report, /Zdarzenia produkcyjne: 10/)
   assert.match(report, /Bookingi QA: 1/)
   assert.match(report, /Ostatnie 24 h/)
-  assert.match(report, /Paid -> confirmed: 100.0%/)
+  assert.match(report, /Completed -> confirmed: 100.0%/)
 })

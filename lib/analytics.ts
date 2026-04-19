@@ -1,6 +1,8 @@
 export const ANALYTICS_CONSENT_STORAGE_KEY = 'behawior15.analytics.consent'
 export const ANALYTICS_CONSENT_COOKIE = 'behawior15_analytics_consent'
 
+import { pushDebugAnalyticsEvent } from '@/lib/analytics-debug'
+
 export type AnalyticsConsentState = 'granted' | 'denied' | 'unset'
 
 declare global {
@@ -134,7 +136,7 @@ export function trackAnalyticsEvent(
 
   const payload = Object.fromEntries(
     Object.entries(params).filter(([, value]) => value !== undefined && value !== null && value !== ''),
-  )
+  ) as Record<string, string | number | boolean | null>
 
   postInternalAnalyticsEvent({
     eventType: name,
@@ -147,4 +149,11 @@ export function trackAnalyticsEvent(
   if (typeof window.gtag === 'function') {
     window.gtag('event', name, payload)
   }
+
+  pushDebugAnalyticsEvent({
+    eventType: name,
+    pagePath: getPagePath(),
+    properties: payload,
+    createdAt: new Date().toISOString(),
+  })
 }

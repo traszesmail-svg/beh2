@@ -1,64 +1,82 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
+import { getBookingAnalyticsContextParams } from '@/lib/analytics-schema'
 import { trackAnalyticsEvent } from '@/lib/analytics'
+import { buildBookHref } from '@/lib/booking-routing'
 import { getManualPaymentDetailCards, getManualPaymentDisplayCopy } from '@/lib/manual-payment'
 import { HardNavLink } from '@/components/HardNavLink'
-import type { QaCheckoutEligibility } from '@/lib/types'
+import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
+import type { AnimalType, BookingStatus, ProblemType, QaCheckoutEligibility } from '@/lib/types'
+import type { BookingServiceType } from '@/lib/booking-services'
 
 interface PaymentActionsProps {
   bookingId: string
   accessToken: string
   amountLabel: string
+  roomAccessLabel: string
   paymentReference: string
   manualAvailable: boolean
   manualPhoneDisplay?: string | null
-  manualBankAccountDisplay?: string | null
+  manualPaypalMeDisplay?: string | null
+  manualPaypalMeHref?: string | null
   manualAccountName?: string | null
   manualInstructions?: string | null
   manualSummary: string
   customerEmailAvailable: boolean
-  payuAvailable: boolean
-  payuSummary: string
+  serviceType: BookingServiceType
+  amount: number
+  animalType: AnimalType
+  problemType: ProblemType
+  bookingStatus: BookingStatus
   qaBooking?: boolean
   qaEligibility?: QaCheckoutEligibility | null
 }
-
-type SelectedMethod = 'manual' | 'payu'
 
 export function PaymentActions({
   bookingId,
   accessToken,
   amountLabel,
+  roomAccessLabel,
   paymentReference,
   manualAvailable,
   manualPhoneDisplay,
-  manualBankAccountDisplay,
+  manualPaypalMeDisplay,
+  manualPaypalMeHref,
   manualAccountName,
   manualInstructions,
   manualSummary,
   customerEmailAvailable,
-  payuAvailable,
-  payuSummary,
+  serviceType,
+  amount,
+  animalType,
+  problemType,
+  bookingStatus,
   qaBooking = false,
   qaEligibility = null,
 }: PaymentActionsProps) {
   const [error, setError] = useState('')
   const [qaLoading, setQaLoading] = useState(false)
-  const defaultSelectedMethod: SelectedMethod = manualAvailable || !payuAvailable ? 'manual' : 'payu'
-  const [selectedMethod, setSelectedMethod] = useState<SelectedMethod>(defaultSelectedMethod)
-  const [loadingMethod, setLoadingMethod] = useState<SelectedMethod | null>(null)
+  const [loadingMethod, setLoadingMethod] = useState<'manual' | null>(null)
   const manualPaymentCopy = getManualPaymentDisplayCopy({
     phoneDisplay: manualPhoneDisplay,
-    bankAccountDisplay: manualBankAccountDisplay,
+    paypalMeDisplay: manualPaypalMeDisplay,
   })
   const manualPaymentDetailCards = getManualPaymentDetailCards({
     phoneDisplay: manualPhoneDisplay,
-    bankAccountDisplay: manualBankAccountDisplay,
+    paypalMeDisplay: manualPaypalMeDisplay,
+    paypalMeHref: manualPaypalMeHref,
     accountName: manualAccountName,
   })
-  const noPaymentMethodsAvailable = !manualAvailable && !payuAvailable
+  const quickAudioHref = buildBookHref(null, 'szybka-konsultacja-15-min', qaBooking)
   const qaAvailable = Boolean(qaBooking && qaEligibility?.isAllowed)
+  const analyticsContext = getBookingAnalyticsContextParams({
+    serviceType,
+    quickConsultationPrice: amount,
+    animalType,
+    problemType,
+    bookingStatus,
+  })
 
   async function handleManualSubmit() {
     if (!manualAvailable) {
@@ -70,7 +88,12 @@ export function PaymentActions({
     setLoadingMethod('manual')
 
     try {
-      trackAnalyticsEvent('payment_started', { payment_mode: 'manual' })
+      trackAnalyticsEvent('payment_started', {
+        booking_id: bookingId,
+        source_page: '/payment',
+        ...analyticsContext,
+        payment_mode: 'manual',
+      })
       const response = await fetch('/api/payments/manual', {
         method: 'POST',
         headers: {
@@ -91,41 +114,6 @@ export function PaymentActions({
     } catch (paymentError) {
       console.error('[behawior15][payment] manual payment submit failed', paymentError)
       setError(paymentError instanceof Error ? paymentError.message : 'Wystąpił błąd zgłoszenia wpłaty.')
-      setLoadingMethod(null)
-    }
-  }
-
-  async function handlePayuSubmit() {
-    if (!payuAvailable) {
-      setError('Płatność online jest chwilowo niedostępna.')
-      return
-    }
-
-    setError('')
-    setLoadingMethod('payu')
-
-    try {
-      trackAnalyticsEvent('payment_started', { payment_mode: 'payu' })
-      const response = await fetch('/api/payments/payu/checkout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          bookingId,
-          accessToken,
-        }),
-      })
-      const payload = (await response.json()) as { url?: string; error?: string }
-
-      if (!response.ok || !payload.url) {
-        throw new Error(payload.error ?? 'Nie udało się uruchomić płatności online.')
-      }
-
-      window.location.href = payload.url
-    } catch (paymentError) {
-      console.error('[behawior15][payment] payu checkout start failed', paymentError)
-      setError(paymentError instanceof Error ? paymentError.message : 'Wystąpił błąd płatności online.')
       setLoadingMethod(null)
     }
   }
@@ -164,9 +152,6 @@ export function PaymentActions({
       setQaLoading(false)
     }
   }
-
-  const manualActive = selectedMethod === 'manual'
-  const payuActive = selectedMethod === 'payu'
 
   if (qaBooking) {
     return (
@@ -234,33 +219,28 @@ export function PaymentActions({
     )
   }
 
-  if (noPaymentMethodsAvailable) {
+  if (!manualAvailable) {
     return (
       <div className="stack-gap top-gap" data-payment-method-selected="none">
         {error ? <div className="error-box">{error}</div> : null}
 
         <div className="list-card accent-outline payment-next-card tree-backed-card">
           <strong>Płatność chwilowo niedostępna</strong>
-          <span>Nie udało się teraz włączyć wpłaty ręcznej. Rezerwacja nadal jest zapisana, a następny krok można ustalić bez zgadywania.</span>
+          <span>Rezerwacja i dane terminu są zapisane, ale na tym wdrożeniu nie udało się teraz odblokować płatności ręcznej.</span>
         </div>
 
         <div className="summary-grid trust-grid">
           <div className="summary-card trust-card tree-backed-card">
-            <strong>Wpłata ręczna</strong>
-            <span>{manualSummary}</span>
+            <strong>Co dalej</strong>
+            <span>Użyj krótkiej wiadomości, a wskażę najprostszy dalszy krok albo pomogę wrócić do płatności, gdy konfiguracja znów będzie gotowa.</span>
           </div>
         </div>
 
-        <div className="list-card tree-backed-card">
-          <strong>Co dalej</strong>
-          <span>Napisz wiadomość, a wskażę najprostszy dalszy krok albo pomogę wrócić do płatności, gdy konfiguracja znów będzie gotowa.</span>
-        </div>
-
         <div className="hero-actions">
-          <HardNavLink href="/kontakt" className="button button-primary big-button">
-            Napisz wiadomość
+          <HardNavLink href="/kontakt#formularz" className="button button-primary big-button">
+            {FUNNEL_CTA_LABELS.contact}
           </HardNavLink>
-          <HardNavLink href="/book" className="button button-ghost">
+          <HardNavLink href={quickAudioHref} className="button button-ghost">
             Wróć do rezerwacji
           </HardNavLink>
         </div>
@@ -269,171 +249,131 @@ export function PaymentActions({
   }
 
   return (
-    <div className="stack-gap top-gap" data-payment-method-selected={selectedMethod}>
+    <div className="stack-gap top-gap" data-payment-method-selected="manual">
       {error ? <div className="error-box">{error}</div> : null}
 
       <div className="list-card accent-outline payment-next-card tree-backed-card">
-        <strong>Wybierz metodę płatności</strong>
+        <strong>Wpłata ręczna jest dostępna</strong>
         <span>
-          {payuAvailable
-            ? manualAvailable
-              ? 'Możesz wybrać wpłatę ręczną z potwierdzeniem do 60 minut albo przejść do płatności online, która potwierdzi płatność automatycznie.'
-              : 'Ręczna wpłata jest chwilowo niedostępna. Możesz przejść do płatności online, która potwierdzi płatność automatycznie.'
-            : manualAvailable
-              ? 'Obecnie dostępna jest ścieżka wpłaty ręcznej z potwierdzeniem do 60 minut. Po zgłoszeniu wpłaty przejdziesz do potwierdzenia i linku do pokoju.'
-              : 'Płatność jest chwilowo niedostępna. Napisz wiadomość, a podpowiem dalszy krok.'}
+          Płatność odbywa się ręcznie. Opłać rezerwację zgodnie z danymi poniżej, a potwierdzenie wpłaty nastąpi po ręcznej weryfikacji.
         </span>
       </div>
 
       <div className="payment-method-grid">
-        <button
-          type="button"
-          className={`payment-method-card tree-backed-card ${manualActive ? 'payment-method-card-active' : ''}`}
-          data-payment-method="manual"
-          onClick={() => {
-            if (manualAvailable) {
-              setSelectedMethod('manual')
-            }
-          }}
-          disabled={!manualAvailable}
-        >
+        <div className="payment-method-card tree-backed-card payment-method-card-active" data-payment-method="manual">
           <div className="payment-method-card-copy">
             <strong>{manualPaymentCopy.selectionTitle}</strong>
             <span>
-              {manualAvailable
-                ? payuAvailable
-                  ? customerEmailAvailable
-                    ? 'Przelew albo BLIK na telefon. Po zgłoszeniu wpłaty potwierdzimy ją do 60 minut i wyślemy link do rozmowy.'
-                    : 'Przelew albo BLIK na telefon. Po zgłoszeniu wpłaty potwierdzimy ją do 60 minut, a link pokaże się na potwierdzeniu.'
-                  : customerEmailAvailable
-                    ? 'To dostępna ścieżka wpłaty ręcznej. Po zgłoszeniu wpłaty potwierdzimy ją do 60 minut i wyślemy link do rozmowy.'
-                    : 'To dostępna ścieżka wpłaty ręcznej. Po zgłoszeniu wpłaty potwierdzimy ją do 60 minut, a link pokaże się na potwierdzeniu.'
-                : 'Ta opcja wróci, gdy numer do wpłaty będzie znowu aktywny. Do tego czasu napisz wiadomość.'}
+              {customerEmailAvailable
+                ? `Opłać rezerwację zgodnie z danymi poniżej. Po zgłoszeniu wpłaty potwierdzimy ją ręcznie do 60 minut, a szczegóły i ${roomAccessLabel} pokażemy na potwierdzeniu oraz wyślemy mailowo.`
+                : `Opłać rezerwację zgodnie z danymi poniżej. Po zgłoszeniu wpłaty potwierdzimy ją ręcznie do 60 minut, a szczegóły i ${roomAccessLabel} pokażemy na potwierdzeniu.`}
             </span>
           </div>
-          <span className="payment-method-badge">{manualAvailable ? (payuAvailable ? 'Do 60 min' : 'Dostępne teraz') : 'Chwilowo niedostępne'}</span>
-        </button>
-
-        {payuAvailable ? (
-          <button
-            type="button"
-            className={`payment-method-card tree-backed-card ${payuActive ? 'payment-method-card-active' : ''}`}
-            data-payment-method="payu"
-            onClick={() => setSelectedMethod('payu')}
-          >
-            <div className="payment-method-card-copy">
-              <strong>Zapłać online</strong>
-              <span>Płatność online pokaże standardową stronę z metodami online. Po sukcesie status potwierdzi się automatycznie, a pokój odblokuje się od razu.</span>
-            </div>
-            <span className="payment-method-badge">Automatyczne potwierdzenie</span>
-          </button>
-        ) : null}
+          <span className="payment-method-badge">Dostępne teraz</span>
+        </div>
       </div>
 
-      {!payuAvailable || manualActive ? (
-        <div className="stack-gap payment-detail-shell payment-detail-shell-manual">
-          <div className="summary-grid">
-            <div className="summary-card tree-backed-card">
-              <div className="stat-label">Kwota</div>
-              <div className="summary-value">{amountLabel}</div>
-            </div>
-            <div className="summary-card tree-backed-card">
-              <div className="stat-label">Tytuł płatności</div>
-              <div className="summary-value payment-reference-value">{paymentReference}</div>
-            </div>
-            <div className="summary-card tree-backed-card">
-              <div className="stat-label">Potwierdzenie</div>
-              <div className="summary-value payment-summary-value">Do 60 min</div>
-            </div>
-          </div>
+      <div className="stack-gap payment-detail-shell payment-detail-shell-manual">
+        <div className="list-card tree-backed-card">
+          <strong>Jak wygląda ten krok</strong>
+          <span>
+            1. Opłać rezerwację zgodnie z danymi poniżej. 2. Kliknij przycisk poniżej i zgłoś wpłatę. 3. Po ręcznym potwierdzeniu pokażemy dalszą instrukcję i {roomAccessLabel}.
+          </span>
+        </div>
 
-          <div className="summary-grid trust-grid">
-            {manualPaymentDetailCards.map((card) => (
-              <div key={card.key} className="summary-card trust-card tree-backed-card">
-                <strong>{card.label}</strong>
-                <span>{card.value}</span>
-              </div>
-            ))}
+        <div className="summary-grid">
+          <div className="summary-card tree-backed-card">
+            <div className="stat-label">Kwota</div>
+            <div className="summary-value">{amountLabel}</div>
           </div>
+          <div className="summary-card tree-backed-card">
+            <div className="stat-label">Tytuł płatności</div>
+            <div className="summary-value payment-reference-value">{paymentReference}</div>
+          </div>
+          <div className="summary-card tree-backed-card">
+            <div className="stat-label">Potwierdzenie</div>
+            <div className="summary-value payment-summary-value">Ręcznie do 60 min</div>
+          </div>
+        </div>
 
-          <div className="list-card tree-backed-card">
-            <strong>Co stanie się dalej</strong>
-            <span>
-              {customerEmailAvailable ? (
-                <>
-                  Wyślij wpłatę z tytułem <strong>{paymentReference}</strong>, kliknij przycisk poniżej i poczekaj na potwierdzenie do 60 minut. Po akceptacji dostaniesz mail z linkiem do pokoju.
-                </>
+        <div className="summary-grid trust-grid">
+          {manualPaymentDetailCards.map((card) => (
+            <div key={card.key} className="summary-card trust-card tree-backed-card">
+              <strong>{card.label}</strong>
+              {card.href ? (
+                <span>
+                  <a href={card.href} target="_blank" rel="noreferrer">
+                    {card.value}
+                  </a>
+                </span>
               ) : (
-                <>
-                  Wyślij wpłatę z tytułem <strong>{paymentReference}</strong>, kliknij przycisk poniżej i poczekaj na potwierdzenie do 60 minut. Po akceptacji zobaczysz aktywne potwierdzenie i link do pokoju na tej stronie, więc zachowaj ten link.
-                </>
+                <span>{card.value}</span>
               )}
+            </div>
+          ))}
+        </div>
+
+        <div className="summary-grid trust-grid">
+          <div className="summary-card trust-card tree-backed-card">
+            <strong>1. Opłać rezerwację</strong>
+            <span>Skorzystaj z danych płatności poniżej i zachowaj tytuł płatności bez zmian.</span>
+          </div>
+          <div className="summary-card trust-card tree-backed-card">
+            <strong>2. Zgłoś wpłatę</strong>
+            <span>Po wysłaniu wpłaty kliknij przycisk poniżej. Ten ekran od razu przeniesie Cię do potwierdzenia.</span>
+          </div>
+          <div className="summary-card trust-card tree-backed-card">
+            <strong>3. Poczekaj spokojnie na potwierdzenie</strong>
+            <span>
+          {customerEmailAvailable
+                ? `Po akceptacji pokażemy ${roomAccessLabel}, dalszą instrukcję i wyślemy potwierdzenie mailowo.`
+                : `Po akceptacji pokażemy ${roomAccessLabel} i dalszą instrukcję na stronie potwierdzenia.`}
             </span>
           </div>
-
-          {manualInstructions ? (
-            <div className="list-card tree-backed-card">
-              <strong>Dodatkowa instrukcja</strong>
-              <span>{manualInstructions}</span>
-            </div>
-          ) : null}
-
-          <div className="hero-actions">
-            <button
-              type="button"
-              className="button button-primary big-button"
-              data-payment-submit="manual"
-              onClick={handleManualSubmit}
-              disabled={loadingMethod !== null || !manualAvailable}
-            >
-              {loadingMethod === 'manual' ? 'Zapisuję zgłoszenie wpłaty...' : 'Zapłaciłem, czekam na potwierdzenie'}
-            </button>
-          </div>
-
-          <div className="disclaimer">
-            {manualSummary}{' '}
-            {customerEmailAvailable
-              ? 'Link do pokoju odblokuje się dopiero po potwierdzeniu płatności.'
-              : 'Zachowaj ten link do strony potwierdzenia, bo przy obecnej konfiguracji mailowej to tam pokażemy dostęp do pokoju po potwierdzeniu płatności.'}
-          </div>
         </div>
-      ) : (
-        <div className="stack-gap payment-detail-shell payment-detail-shell-payu">
-          <div className="summary-grid trust-grid payment-logo-grid">
-            <div className="summary-card trust-card tree-backed-card">
-              <strong>BLIK i karta</strong>
-              <span>Płatność online pokaże standardową stronę z metodami online. Cena pozostaje taka sama jak przy wpłacie BLIK/przelewem.</span>
-            </div>
-            <div className="summary-card trust-card tree-backed-card">
-              <strong>Automatyczne potwierdzenie</strong>
-              <span>Po sukcesie rezerwacja przejdzie do statusu opłacona, a link do pokoju odblokuje się bez czekania na dodatkowe potwierdzenie.</span>
-            </div>
-            <div className="summary-card trust-card tree-backed-card">
-              <strong>Ten sam link do pokoju</strong>
-              <span>Bez dopłat za metodę płatności i bez osobno pokazywanej prowizji operatora.</span>
-            </div>
-          </div>
 
+        <div className="list-card tree-backed-card">
+          <strong>Co stanie się dalej</strong>
+          <span>
+            {customerEmailAvailable ? (
+              <>
+                Wyślij płatność z tytułem <strong>{paymentReference}</strong>, kliknij przycisk poniżej i poczekaj na ręczne potwierdzenie do 60 minut. Po akceptacji dostaniesz mail, a na stronie potwierdzenia od razu zobaczysz {roomAccessLabel}.
+              </>
+            ) : (
+              <>
+                Wyślij płatność z tytułem <strong>{paymentReference}</strong>, kliknij przycisk poniżej i poczekaj na ręczne potwierdzenie do 60 minut. Po akceptacji zobaczysz aktywne potwierdzenie i {roomAccessLabel} na tej stronie, więc zachowaj ten link.
+              </>
+            )}
+          </span>
+        </div>
+
+        {manualInstructions ? (
           <div className="list-card tree-backed-card">
-            <strong>Co stanie się dalej</strong>
-            <span>Przejdziesz do płatności online. Po zakończeniu płatności wrócisz na potwierdzenie rezerwacji, a pokój odblokuje się automatycznie po statusie opłacona.</span>
+            <strong>Dodatkowa instrukcja</strong>
+            <span>{manualInstructions}</span>
           </div>
+        ) : null}
 
-          <div className="hero-actions">
-            <button
-              type="button"
-              className="button button-primary big-button"
-              data-payment-submit="payu"
-              onClick={handlePayuSubmit}
-              disabled={loadingMethod !== null || !payuAvailable}
-            >
-              {loadingMethod === 'payu' ? 'Przechodzę do płatności online...' : 'Przejdź do płatności online'}
-            </button>
-          </div>
-
-          <div className="disclaimer">{payuSummary}</div>
+        <div className="hero-actions">
+          <button
+            type="button"
+            className="button button-primary big-button"
+            data-payment-submit="manual"
+            onClick={handleManualSubmit}
+            disabled={loadingMethod !== null}
+          >
+            {loadingMethod === 'manual' ? 'Zapisuję zgłoszenie wpłaty...' : 'Zgłoś wpłatę i pokaż status'}
+          </button>
         </div>
-      )}
+
+        <div className="disclaimer">
+          {manualSummary}{' '}
+          {customerEmailAvailable
+            ? `Dostęp do ${roomAccessLabel} odblokuje się dopiero po potwierdzeniu wpłaty.`
+            : `Zachowaj link do strony potwierdzenia, bo to tam pokażemy ${roomAccessLabel} po potwierdzeniu wpłaty.`}
+        </div>
+      </div>
     </div>
   )
 }
+

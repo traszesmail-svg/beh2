@@ -4,6 +4,7 @@ import path from 'node:path'
 import Image from 'next/image'
 import Link from 'next/link'
 import { AddTestimonialForm } from '@/components/AddTestimonialForm'
+import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { MEDIA_MENTIONS } from '@/lib/site'
 import { REAL_CASE_STUDIES } from '@/lib/real-case-studies'
 import { TESTIMONIALS, getTestimonialIssueLabel } from '@/lib/testimonials'
@@ -26,22 +27,48 @@ function resolveCaseImageSrc(imageSrc: string, remoteSrc?: string): string {
   return existsSync(localPath) ? imageSrc : remoteSrc ?? imageSrc
 }
 
+const CASE_IMAGE_DIMENSIONS: Record<string, { width: number; height: number }> = {
+  '/branding/case-studies/Border_Collie.jpg': { width: 600, height: 775 },
+  '/branding/topic-cards/french-bulldog-leash.jpg': { width: 1400, height: 1050 },
+  '/branding/topic-cards/dog-window-alone.jpg': { width: 1400, height: 1050 },
+  '/images/cutover/dog-separation.png': { width: 1024, height: 1536 },
+  '/branding/case-studies/labrador_luksi01.jpg': { width: 1024, height: 768 },
+  '/branding/topic-cards/dog-resting-home.jpg': { width: 1200, height: 900 },
+  '/images/cutover/dog-puppy-home.png': { width: 1024, height: 1536 },
+  '/branding/case-cat-sofa.jpg': { width: 1200, height: 900 },
+  '/branding/topic-cards/cats/cat-litter-box.jpg': { width: 1200, height: 900 },
+  '/branding/topic-cards/cats/cat-intercat-conflict.jpg': { width: 1200, height: 900 },
+  '/branding/case-cat-snow.jpg': { width: 1200, height: 900 },
+  '/branding/topic-cards/cats/cat-anxious-hiding.jpg': { width: 1200, height: 1200 },
+  '/branding/case-cat-scratcher.jpg': { width: 1200, height: 900 },
+  '/branding/topic-cards/cats/cat-night-meowing.jpg': { width: 1400, height: 1050 },
+} as const
+
+function getCaseImageDimensions(imageSrc: string) {
+  return CASE_IMAGE_DIMENSIONS[imageSrc] ?? { width: 1200, height: 900 }
+}
+
 function CaseCard({ caseStudy }: { caseStudy: (typeof REAL_CASE_STUDIES)[number] }) {
   return (
     <article className="real-case-card tree-backed-card" data-case-id={caseStudy.id}>
       <div className="real-case-gallery" aria-label={`${caseStudy.headline} - zdjęcia`}>
-        {caseStudy.images.map((image, index) => (
-          <figure key={`${caseStudy.id}-${index}`} className="real-case-gallery-item">
-            <Image
-              src={resolveCaseImageSrc(image.src, image.remoteSrc)}
-              alt={image.alt}
-              fill
-              sizes="(max-width: 680px) 100vw, (max-width: 1024px) 50vw, 32vw"
-              loading="lazy"
-              className="real-case-gallery-image"
-            />
-          </figure>
-        ))}
+        {caseStudy.images.map((image, index) => {
+          const dimensions = getCaseImageDimensions(image.src)
+
+          return (
+            <figure key={`${caseStudy.id}-${index}`} className="real-case-gallery-item">
+              <Image
+                src={resolveCaseImageSrc(image.src, image.remoteSrc)}
+                alt={image.alt}
+                width={dimensions.width}
+                height={dimensions.height}
+                sizes="(max-width: 680px) 100vw, (max-width: 1024px) 50vw, 32vw"
+                loading="lazy"
+                className="real-case-gallery-image"
+              />
+            </figure>
+          )
+        })}
       </div>
 
       <div className="real-case-copy">
@@ -84,23 +111,23 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
           <h2 id="historie-heading">Historie opiekunów i efekty konsultacji</h2>
         </div>
         <div className="muted">
-          Krótko pokazujemy punkt wyjścia, pierwszy krok i dalszą ścieżkę.
+          Pokazujemy krótki kontekst, pierwszy krok i to, co realnie pomogło dalej.
           <br />
-          Obok są publiczne źródła i zweryfikowane wpisy.
+          Obok są publiczne źródła i zanonimizowany kontekst sytuacji.
         </div>
       </div>
 
       <div className="summary-grid trust-grid top-gap">
         <div className="summary-card tree-backed-card">
           <div className="stat-label">Typowe starty</div>
-          <span>Sprawy, z którymi opiekunowie przychodzą na pierwszy kontakt.</span>
+          <span>Najczęstsze sprawy, z którymi opiekunowie zgłaszają się na start.</span>
         </div>
         <div className="summary-card tree-backed-card">
           <div className="stat-label">Publiczne źródła</div>
           <span>Łączymy case studies, profil zawodowy i publikacje w jednym miejscu.</span>
         </div>
         <div className="summary-card tree-backed-card">
-          <div className="stat-label">Ręczna weryfikacja</div>
+          <div className="stat-label">Ręczne sprawdzenie</div>
           <span>Nic nie trafia na stronę automatycznie.</span>
         </div>
       </div>
@@ -117,7 +144,7 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
           <h3>Gdzie można sprawdzić profil i publikacje</h3>
         </div>
         <div className="muted">
-          CAPBT, Instagram i publikacje branżowe pomagają szybko sprawdzić profil przed przekazaniem strony dalej.
+          CAPBT, Instagram i publikacje branżowe pomagają sprawdzić sposób pracy przed kontaktem.
         </div>
       </div>
 
@@ -140,8 +167,8 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
         <>
         <div className="section-head top-gap">
           <div>
-            <div className="section-eyebrow">Zweryfikowane opinie</div>
-            <h3>Akceptowane wpisy klientów</h3>
+            <div className="section-eyebrow">Wybrane opinie</div>
+            <h3>Zanonimizowane opinie klientów</h3>
           </div>
           <div className="muted">Opinie pojawiają się dopiero po ręcznej akceptacji.</div>
         </div>
@@ -181,7 +208,7 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
         </>
       ) : (
         <div className="real-case-empty top-gap">
-          <strong>Zweryfikowane opinie pojawią się po ręcznej akceptacji.</strong>
+          <strong>Wybrane opinie pojawią się po ręcznej akceptacji.</strong>
           <p>
             Na ten moment pokazujemy przede wszystkim realne przypadki, publiczne profile i publikacje. Dzięki temu
             sekcja nie opiera się na pustych deklaracjach.
@@ -190,7 +217,7 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
       )}
 
       <div className="info-box top-gap">
-        Opinie i dane kontaktowe z formularza są weryfikowane ręcznie. Nic nie trafia na stronę automatycznie.
+        Opinie i dane kontaktowe z formularza są sprawdzane ręcznie. Nic nie trafia na stronę automatycznie.
       </div>
 
       {showSubmissionForm ? (
@@ -202,7 +229,7 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
           <div className="offer-detail-cta-copy">
             <span className="section-eyebrow">Dalszy krok</span>
             <strong>Chcesz zobaczyć pełną sekcję opinii?</strong>
-            <span>Możesz też od razu zacząć od 15 min albo wejść przez PDF, jeśli wolisz spokojniejszy start.</span>
+            <span>Jeśli wolisz spokojniejszy start, możesz wybrać Kwadrans z behawiorystą albo Niezbędnik.</span>
             <span>Pełny formularz publikacji i dodatkowe wskazówki są na osobnej podstronie.</span>
           </div>
 
@@ -211,10 +238,10 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
               Zobacz pełną sekcję opinii
             </Link>
             <Link href="/book" prefetch={false} className="button button-ghost big-button">
-              Umów 15 min
+              {FUNNEL_CTA_LABELS.primary}
             </Link>
-            <Link href="/oferta/poradniki-pdf" prefetch={false} className="button button-ghost big-button">
-              Zobacz materiały PDF
+            <Link href="/niezbednik" prefetch={false} className="button button-ghost big-button">
+              {FUNNEL_CTA_LABELS.secondary}
             </Link>
           </div>
         </div>

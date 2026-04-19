@@ -7,6 +7,7 @@ import {
   normalizeBookingServiceType,
   resolveBookingServiceType,
 } from '@/lib/booking-services'
+import { getBookingAnalyticsContextParams } from '@/lib/analytics-schema'
 import { compareDateAndTime, formatDateLabel, isFutureAvailabilitySlot } from '@/lib/data'
 import { normalizePolishPhone } from '@/lib/phone'
 import { createActiveConsultationPrice, DEFAULT_PRICE_PLN, parseConsultationPriceInput } from '@/lib/pricing'
@@ -70,6 +71,17 @@ function getStorePaths() {
     pricingSettingsFile: path.join(dataDir, 'pricing-settings.json'),
     usersFile: path.join(dataDir, 'users.json'),
   }
+}
+
+function getBookingFunnelEventProperties(booking: BookingRecord) {
+  return getBookingAnalyticsContextParams({
+    serviceType: resolveBookingServiceType(booking.serviceType, booking.amount),
+    quickConsultationPrice: booking.amount,
+    animalType: booking.animalType,
+    problemType: booking.problemType,
+    bookingStatus: booking.bookingStatus,
+    paymentMode: booking.paymentMethod,
+  })
 }
 
 function createSeedAvailability(nowIso: string): AvailabilitySlot[] {
@@ -713,11 +725,12 @@ export async function markBookingManualPaymentPending(
 
     if (shouldSendManualReviewEmail) {
       appendFunnelEvent(store, {
-        eventType: 'manual_pending',
+        eventType: 'payment_marked_pending',
         bookingId: booking.id,
         qaBooking: Boolean(booking.qaBooking),
         source: 'server',
         properties: {
+          ...getBookingFunnelEventProperties(booking),
           payment_reference: booking.paymentReference ?? null,
           payment_status: booking.paymentStatus,
           booking_status: booking.bookingStatus,
@@ -805,11 +818,12 @@ export async function markBookingPaid(
 
     if (shouldRecordPaidEvent) {
       appendFunnelEvent(store, {
-        eventType: 'paid',
+        eventType: 'payment_completed',
         bookingId: booking.id,
         qaBooking: Boolean(booking.qaBooking),
         source: 'server',
         properties: {
+          ...getBookingFunnelEventProperties(booking),
           payment_method: booking.paymentMethod ?? null,
           payment_reference: booking.paymentReference ?? null,
           payu_order_id: booking.payuOrderId ?? null,
@@ -821,11 +835,12 @@ export async function markBookingPaid(
 
     if (shouldRecordConfirmedEvent) {
       appendFunnelEvent(store, {
-        eventType: 'confirmed',
+        eventType: 'booking_confirmed',
         bookingId: booking.id,
         qaBooking: Boolean(booking.qaBooking),
         source: 'server',
         properties: {
+          ...getBookingFunnelEventProperties(booking),
           payment_method: booking.paymentMethod ?? null,
           payment_status: booking.paymentStatus,
           booking_status: booking.bookingStatus,

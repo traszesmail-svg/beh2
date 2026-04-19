@@ -3,6 +3,7 @@ import { access, mkdir, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { loadEnvConfig } from '@next/env'
 import { chromium, type BrowserContext, type Page } from 'playwright-core'
+import { resolveBrowserExecutablePath } from './lib/browser-path'
 
 const rootDir = process.cwd()
 const baseUrl = process.env.STAGE8_BASE_URL?.replace(/\/$/, '') ?? 'http://127.0.0.1:3000'
@@ -24,7 +25,7 @@ function createBasicAuthHeader(password: string) {
   return `Basic ${Buffer.from(`admin:${password}`).toString('base64')}`
 }
 
-async function resolveBrowserExecutablePath() {
+async function resolveBrowserExecutablePathLegacy() {
   const candidates = [
     'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
     'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',

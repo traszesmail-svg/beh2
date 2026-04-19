@@ -16,6 +16,7 @@
     "ui-smoke": "node --import tsx scripts/ui-smoke.ts",
     "qa-smoke": "node --import tsx scripts/qa-bypass-smoke.ts",
     "schema-audit": "node scripts/schema-audit.js",
+    "gen-sitemap": "node --import tsx scripts/gen-sitemap.ts",
     "live-readiness": "node --import tsx scripts/live-readiness.ts",
     "live-smoke": "node --import tsx scripts/live-smoke.ts",
     "live-clickthrough-report": "node --import tsx scripts/live-clickthrough-report.ts",
@@ -25,10 +26,12 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "2.54.0",
+    "critters": "^0.0.23",
     "next": "14.2.35",
     "nodemailer": "^8.0.4",
     "react": "18.3.1",
     "react-dom": "18.3.1",
+    "sharp": "^0.34.5",
     "stripe": "20.4.1"
   },
   "devDependencies": {
@@ -38,6 +41,7 @@
     "@types/react-dom": "^18.3.7",
     "eslint": "8.57.1",
     "eslint-config-next": "14.2.35",
+    "lighthouse": "^13.1.0",
     "playwright-core": "^1.58.2",
     "tsx": "4.21.0",
     "typescript": "^5.4.5"

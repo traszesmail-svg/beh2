@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation'
+import { appendSearchParams } from '@/lib/booking-routing'
 
 function readSearchParam(value: string | string[] | undefined): string | null {
   if (Array.isArray(value)) {
@@ -16,8 +17,8 @@ export default function LegacyConfirmPage({
   const id = readSearchParam(searchParams?.id)
 
   if (id) {
-    redirect(`/confirmation?bookingId=${id}`)
+    redirect(appendSearchParams(`/confirmation?bookingId=${encodeURIComponent(id)}`, searchParams, ['id']))
   }
 
-  redirect('/book')
+  redirect(appendSearchParams('/book', searchParams, ['id']))
 }

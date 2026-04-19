@@ -1,3 +1,6 @@
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 import { NextResponse } from 'next/server'
 import { parseConsultationPriceInput } from '@/lib/pricing'
 import { updateActiveConsultationPrice } from '@/lib/server/db'

@@ -1,6 +1,7 @@
 type ManualPaymentCopyInput = {
   phoneDisplay?: string | null
-  bankAccountDisplay?: string | null
+  paypalMeDisplay?: string | null
+  paypalMeHref?: string | null
   accountName?: string | null
 }
 
@@ -11,52 +12,54 @@ export type ManualPaymentDisplayCopy = {
 }
 
 export type ManualPaymentDetailCard = {
-  key: 'phone' | 'bank' | 'account'
+  key: 'phone' | 'paypal' | 'account'
   label: string
   value: string
+  href?: string | null
 }
 
 export function getManualPaymentDisplayCopy({
   phoneDisplay,
-  bankAccountDisplay,
+  paypalMeDisplay,
 }: ManualPaymentCopyInput): ManualPaymentDisplayCopy {
   const hasPhone = Boolean(phoneDisplay)
-  const hasBankAccount = Boolean(bankAccountDisplay)
+  const hasPaypalMe = Boolean(paypalMeDisplay)
 
-  if (hasPhone && hasBankAccount) {
+  if (hasPhone && hasPaypalMe) {
     return {
-      selectionTitle: 'Przelew tradycyjny / BLIK na telefon',
-      summaryTitle: 'BLIK / przelew z potwierdzeniem do 60 min',
-      description: 'Najprostszy start: BLIK na telefon albo zwykły przelew z tytułem bookingu.',
+      selectionTitle: 'Wpłata ręczna',
+      summaryTitle: 'Wpłata ręczna z potwierdzeniem',
+      description: 'Opłać rezerwację wybraną metodą i poczekaj na ręczne potwierdzenie wpłaty.',
     }
   }
 
   if (hasPhone) {
     return {
-      selectionTitle: 'BLIK na telefon',
-      summaryTitle: 'BLIK na telefon z potwierdzeniem do 60 min',
-      description: 'Najprostszy start: wpłata BLIK na telefon z tytułem bookingu.',
+      selectionTitle: 'Wpłata ręczna',
+      summaryTitle: 'Wpłata ręczna z potwierdzeniem',
+      description: 'Opłać rezerwację zgodnie z danymi poniżej i poczekaj na ręczne potwierdzenie wpłaty.',
     }
   }
 
-  if (hasBankAccount) {
+  if (hasPaypalMe) {
     return {
-      selectionTitle: 'Przelew tradycyjny',
-      summaryTitle: 'Przelew z potwierdzeniem do 60 min',
-      description: 'Najprostszy start: zwykły przelew z tytułem bookingu.',
+      selectionTitle: 'PayPal.me',
+      summaryTitle: 'PayPal.me z ręcznym potwierdzeniem',
+      description: 'Opłać rezerwację przez PayPal.me i poczekaj na ręczne potwierdzenie wpłaty.',
     }
   }
 
   return {
-    selectionTitle: 'Wpłata manualna',
-    summaryTitle: 'Wpłata manualna z potwierdzeniem do 60 min',
-    description: 'Dostępność szczegółów zależy od aktywnej konfiguracji płatności.',
+    selectionTitle: 'Wpłata ręczna',
+    summaryTitle: 'Wpłata ręczna z potwierdzeniem',
+    description: 'Dalsze szczegóły płatności zależą od aktywnej konfiguracji rezerwacji.',
   }
 }
 
 export function getManualPaymentDetailCards({
   phoneDisplay,
-  bankAccountDisplay,
+  paypalMeDisplay,
+  paypalMeHref,
   accountName,
 }: ManualPaymentCopyInput): ManualPaymentDetailCard[] {
   const cards: ManualPaymentDetailCard[] = []
@@ -64,16 +67,17 @@ export function getManualPaymentDetailCards({
   if (phoneDisplay) {
     cards.push({
       key: 'phone',
-      label: 'BLIK na telefon',
+      label: 'BLIK',
       value: phoneDisplay,
     })
   }
 
-  if (bankAccountDisplay) {
+  if (paypalMeDisplay) {
     cards.push({
-      key: 'bank',
-      label: 'Numer konta do przelewu',
-      value: bankAccountDisplay,
+      key: 'paypal',
+      label: 'PayPal.me',
+      value: paypalMeDisplay,
+      href: paypalMeHref ?? null,
     })
   }
 

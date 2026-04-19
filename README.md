@@ -130,6 +130,11 @@ npm run start
 
 Nowy projekt Vercel powinien wskazywac root repo `/`.
 
+Canonical production URL:
+
+- `https://regulskibehawiorysta.pl`
+- `https://www.regulskibehawiorysta.pl` nie jest jeszcze publicznie aktywne, bo domena nadal wskazuje na nameserwery OVH; strefa DNS w Vercel jest już przygotowana.
+
 Ustawienia:
 
 - Framework Preset: `Next.js`
@@ -142,6 +147,8 @@ Wazne:
 - `vercel.json` nie zawiera aktywnego Vercel Cron
 - scheduler remindera dziala po stronie Supabase
 - aplikacja wystawia chroniony endpoint `POST /api/reminders/run`
+- deploye, smoke testy i linki zwrotne powinny celowac w canonical `https://regulskibehawiorysta.pl`
+- jeśli chcesz, żeby domena zaczęła rozwiązywać publicznie, przepnij nameserwery w OVH na `ns1.vercel-dns.com` i `ns2.vercel-dns.com`
 
 Po deployu sprawdz:
 

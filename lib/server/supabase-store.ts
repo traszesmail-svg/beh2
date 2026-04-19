@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { getBookingAnalyticsContextParams } from '@/lib/analytics-schema'
 import {
   getBookableServiceAvailabilityWindow,
   getBookingServicePrice,
@@ -37,6 +38,17 @@ import {
   GroupedAvailability,
   UserRecord,
 } from '@/lib/types'
+
+function getBookingFunnelEventProperties(booking: BookingRecord): FunnelEventProperties {
+  return getBookingAnalyticsContextParams({
+    serviceType: resolveBookingServiceType(booking.serviceType, booking.amount),
+    quickConsultationPrice: booking.amount,
+    animalType: booking.animalType,
+    problemType: booking.problemType,
+    bookingStatus: booking.bookingStatus,
+    paymentMode: booking.paymentMethod,
+  })
+}
 
 type AvailabilityRow = {
   id: string
@@ -162,6 +174,57 @@ let smsSchemaMode: 'unknown' | 'modern' | 'legacy' = 'unknown'
 const LEGACY_QA_BOOKING_COLUMN_NAMES = ['qa_booking'] as const
 
 let qaSchemaMode: 'unknown' | 'modern' | 'legacy' = 'unknown'
+
+const BOOKING_SELECT_COLUMNS = [
+  'id',
+  'user_id',
+  'customer_access_token_hash',
+  'owner_name',
+  'animal_type',
+  'problem_type',
+  'pet_age',
+  'duration_notes',
+  'description',
+  'phone',
+  'email',
+  'booking_date',
+  'booking_time',
+  'slot_id',
+  'qa_booking',
+  'booking_status',
+  'payment_status',
+  'payment_method',
+  'payment_reference',
+  'amount',
+  'meeting_url',
+  'checkout_session_id',
+  'payment_intent_id',
+  'payu_order_id',
+  'payu_order_status',
+  'customer_phone_normalized',
+  'sms_confirmation_status',
+  'sms_confirmation_sent_at',
+  'sms_provider_message_id',
+  'sms_error_code',
+  'sms_error_message',
+  'paid_at',
+  'payment_reported_at',
+  'payment_rejected_at',
+  'payment_rejected_reason',
+  'cancelled_at',
+  'expired_at',
+  'refunded_at',
+  'recommended_next_step',
+  'reminder_sent',
+  'prep_video_path',
+  'prep_video_filename',
+  'prep_video_size_bytes',
+  'prep_link_url',
+  'prep_notes',
+  'prep_uploaded_at',
+  'created_at',
+  'updated_at',
+].join(', ')
 
 function setPaymentSchemaMode(mode: typeof paymentSchemaMode) {
   paymentSchemaMode = mode
@@ -905,7 +968,7 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
   const slotWindow = getBookableServiceAvailabilityWindow(dayAvailability, form.slotId, serviceType)
 
   if (!slotWindow?.length) {
-    throw new Error('Wybrany termin nie jest juĹĽ dostÄ™pny.')
+    throw new Error('Wybrany termin nie jest już dostępny.')
   }
 
   const user = await findOrCreateUser(form.email)
@@ -987,16 +1050,16 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
   let inserted
 
   if (paymentSchemaMode === 'legacy' && smsSchemaMode === 'legacy') {
-    inserted = await supabase.from('bookings').insert(legacyBookingInsertPayload).select('*').single()
+    inserted = await supabase.from('bookings').insert(legacyBookingInsertPayload).select(BOOKING_SELECT_COLUMNS).single()
   } else if (paymentSchemaMode === 'legacy') {
     inserted = await supabase
       .from('bookings')
       .insert(qaSchemaMode === 'legacy' ? legacySmsInsertPayload : smsInsertPayload)
-      .select('*')
+      .select(BOOKING_SELECT_COLUMNS)
       .single()
 
     if (inserted.error && shouldRetryWithLegacySmsSchema(inserted.error)) {
-      inserted = await supabase.from('bookings').insert(legacyBookingInsertPayload).select('*').single()
+      inserted = await supabase.from('bookings').insert(legacyBookingInsertPayload).select(BOOKING_SELECT_COLUMNS).single()
     } else if (!inserted.error) {
       setSmsSchemaMode('modern')
     }
@@ -1004,11 +1067,11 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
     inserted = await supabase
       .from('bookings')
       .insert(qaSchemaMode === 'legacy' ? legacyPaymentOnlyInsertPayload : paymentOnlyInsertPayload)
-      .select('*')
+      .select(BOOKING_SELECT_COLUMNS)
       .single()
 
     if (inserted.error && shouldRetryWithLegacyPaymentSchema(inserted.error)) {
-      inserted = await supabase.from('bookings').insert(legacyBookingInsertPayload).select('*').single()
+      inserted = await supabase.from('bookings').insert(legacyBookingInsertPayload).select(BOOKING_SELECT_COLUMNS).single()
     } else if (!inserted.error) {
       setPaymentSchemaMode('modern')
     }
@@ -1016,26 +1079,26 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
     inserted = await supabase
       .from('bookings')
       .insert(qaSchemaMode === 'legacy' ? legacyPaymentInsertPayload : paymentModernInsertPayload)
-      .select('*')
+      .select(BOOKING_SELECT_COLUMNS)
       .single()
 
     if (inserted.error && shouldRetryWithoutQaBooking(inserted.error)) {
       setQaSchemaMode('legacy')
-      inserted = await supabase.from('bookings').insert(legacyPaymentInsertPayload).select('*').single()
+      inserted = await supabase.from('bookings').insert(legacyPaymentInsertPayload).select(BOOKING_SELECT_COLUMNS).single()
     } else if (inserted.error && shouldRetryWithLegacySmsSchema(inserted.error)) {
       inserted = await supabase
         .from('bookings')
         .insert(qaSchemaMode === 'legacy' ? legacyPaymentOnlyInsertPayload : paymentOnlyInsertPayload)
-        .select('*')
+        .select(BOOKING_SELECT_COLUMNS)
         .single()
 
       if (inserted.error && shouldRetryWithLegacyPaymentSchema(inserted.error)) {
-        inserted = await supabase.from('bookings').insert(legacyBookingInsertPayload).select('*').single()
+        inserted = await supabase.from('bookings').insert(legacyBookingInsertPayload).select(BOOKING_SELECT_COLUMNS).single()
       } else if (!inserted.error) {
         setPaymentSchemaMode('modern')
       }
     } else if (inserted.error && shouldRetryWithLegacyPaymentSchema(inserted.error)) {
-      inserted = await supabase.from('bookings').insert(legacyBookingInsertPayload).select('*').single()
+      inserted = await supabase.from('bookings').insert(legacyBookingInsertPayload).select(BOOKING_SELECT_COLUMNS).single()
     } else if (!inserted.error) {
       if (qaSchemaMode !== 'legacy') {
         setQaSchemaMode('modern')
@@ -1085,7 +1148,7 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
     throw new Error('Wybrany termin zostal przed chwila zajety.')
   }
 
-  const booking = mapBookingRow(inserted.data as BookingRow)
+  const booking = mapBookingRow(inserted.data as unknown as BookingRow)
   await sendBookingReservationCreatedEmail(booking)
 
   return {
@@ -1098,13 +1161,13 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
 export async function getBookingById(id: string): Promise<BookingRecord | null> {
   await cleanupExpiredReservations()
   const supabase = getSupabaseAdmin()
-  const { data, error } = await supabase.from('bookings').select('*').eq('id', id).maybeSingle()
+  const { data, error } = await supabase.from('bookings').select(BOOKING_SELECT_COLUMNS).eq('id', id).maybeSingle()
 
   if (error) {
     throw error
   }
 
-  return data ? mapBookingRow(data as BookingRow) : null
+  return data ? mapBookingRow(data as unknown as BookingRow) : null
 }
 
 export async function getBookingByCustomerAccess(id: string, accessToken: string): Promise<BookingRecord | null> {
@@ -1113,7 +1176,7 @@ export async function getBookingByCustomerAccess(id: string, accessToken: string
   const tokenHash = hashCustomerAccessToken(accessToken)
   const { data, error } = await supabase
     .from('bookings')
-    .select('*')
+    .select(BOOKING_SELECT_COLUMNS)
     .eq('id', id)
     .eq('customer_access_token_hash', tokenHash)
     .maybeSingle()
@@ -1123,7 +1186,7 @@ export async function getBookingByCustomerAccess(id: string, accessToken: string
   }
 
   if (data) {
-    return mapBookingRow(data as BookingRow)
+    return mapBookingRow(data as unknown as BookingRow)
   }
 
   const legacyBooking = await getBookingById(id)
@@ -1140,14 +1203,14 @@ export async function listBookings(): Promise<BookingRecord[]> {
   const supabase = getSupabaseAdmin()
   const { data, error } = await supabase
     .from('bookings')
-    .select('*')
+    .select(BOOKING_SELECT_COLUMNS)
     .order('created_at', { ascending: false })
 
   if (error) {
     throw error
   }
 
-  return (data as BookingRow[]).map(mapBookingRow)
+  return (data as unknown as BookingRow[]).map(mapBookingRow)
 }
 
 export async function listFunnelEvents(): Promise<FunnelEventRecord[]> {
@@ -1206,14 +1269,14 @@ export async function updateBookingPreparation(
     .from('bookings')
     .update(updatePayload)
     .eq('id', bookingId)
-    .select('*')
+    .select(BOOKING_SELECT_COLUMNS)
     .maybeSingle()
 
   if (error) {
     throw error
   }
 
-  return data ? mapBookingRow(data as BookingRow) : null
+  return data ? mapBookingRow(data as unknown as BookingRow) : null
 }
 
 export async function attachCheckoutSession(bookingId: string, checkoutSessionId: string): Promise<BookingRecord | null> {
@@ -1225,14 +1288,14 @@ export async function attachCheckoutSession(bookingId: string, checkoutSessionId
       updated_at: new Date().toISOString(),
     })
     .eq('id', bookingId)
-    .select('*')
+    .select(BOOKING_SELECT_COLUMNS)
     .maybeSingle()
 
   if (error) {
     throw error
   }
 
-  return data ? mapBookingRow(data as BookingRow) : null
+  return data ? mapBookingRow(data as unknown as BookingRow) : null
 }
 
 export async function attachPayuOrder(
@@ -1257,7 +1320,7 @@ export async function attachPayuOrder(
         updated_at: nowIso,
       })
       .eq('id', bookingId)
-      .select('*')
+      .select(BOOKING_SELECT_COLUMNS)
       .maybeSingle()
   } else {
     result = await supabase
@@ -1269,7 +1332,7 @@ export async function attachPayuOrder(
         updated_at: nowIso,
       })
       .eq('id', bookingId)
-      .select('*')
+      .select(BOOKING_SELECT_COLUMNS)
       .maybeSingle()
 
     if (result.error && shouldRetryWithLegacyPaymentSchema(result.error)) {
@@ -1280,7 +1343,7 @@ export async function attachPayuOrder(
           updated_at: nowIso,
         })
         .eq('id', bookingId)
-        .select('*')
+        .select(BOOKING_SELECT_COLUMNS)
         .maybeSingle()
     } else if (!result.error) {
       setPaymentSchemaMode('modern')
@@ -1291,7 +1354,7 @@ export async function attachPayuOrder(
     throw result.error
   }
 
-  return result.data ? mapBookingRow(result.data as BookingRow) : null
+  return result.data ? mapBookingRow(result.data as unknown as BookingRow) : null
 }
 
 export async function markBookingManualPaymentPending(
@@ -1340,7 +1403,7 @@ export async function markBookingManualPaymentPending(
         updated_at: nowIso,
       })
       .eq('id', bookingId)
-      .select('*')
+      .select(BOOKING_SELECT_COLUMNS)
       .maybeSingle()
   } else {
     bookingUpdate = await supabase
@@ -1358,7 +1421,7 @@ export async function markBookingManualPaymentPending(
         updated_at: nowIso,
       })
       .eq('id', bookingId)
-      .select('*')
+      .select(BOOKING_SELECT_COLUMNS)
       .maybeSingle()
 
     if (bookingUpdate.error && shouldRetryWithLegacyPaymentSchema(bookingUpdate.error, true)) {
@@ -1373,7 +1436,7 @@ export async function markBookingManualPaymentPending(
           updated_at: nowIso,
         })
         .eq('id', bookingId)
-        .select('*')
+        .select(BOOKING_SELECT_COLUMNS)
         .maybeSingle()
     } else if (!bookingUpdate.error) {
       setPaymentSchemaMode('modern')
@@ -1384,7 +1447,7 @@ export async function markBookingManualPaymentPending(
     throw bookingUpdate.error
   }
 
-  const updatedBooking = bookingUpdate.data ? mapBookingRow(bookingUpdate.data as BookingRow) : null
+  const updatedBooking = bookingUpdate.data ? mapBookingRow(bookingUpdate.data as unknown as BookingRow) : null
 
   await updateBookingAvailabilityWindow(current, {
     isBooked: false,
@@ -1400,14 +1463,15 @@ export async function markBookingManualPaymentPending(
     updatedBooking.paymentStatus === 'pending_manual_review'
   ) {
     await recordServerFunnelEvent(supabase, {
-      eventType: 'manual_pending',
+      eventType: 'payment_marked_pending',
       bookingId: updatedBooking.id,
       qaBooking: Boolean(updatedBooking.qaBooking),
       source: 'server',
-      properties: {
-        payment_reference: updatedBooking.paymentReference ?? null,
-        payment_status: updatedBooking.paymentStatus,
-        booking_status: updatedBooking.bookingStatus,
+        properties: {
+          ...getBookingFunnelEventProperties(updatedBooking),
+          payment_reference: updatedBooking.paymentReference ?? null,
+          payment_status: updatedBooking.paymentStatus,
+          booking_status: updatedBooking.bookingStatus,
         hold_until: holdUntil,
       },
     })
@@ -1523,14 +1587,14 @@ export async function markBookingPaid(
       .from('bookings')
       .update(legacyPaymentUpdate)
       .eq('id', bookingId)
-      .select('*')
+      .select(BOOKING_SELECT_COLUMNS)
       .maybeSingle()
   } else if (paymentSchemaMode === 'legacy') {
     bookingUpdate = await supabase
       .from('bookings')
       .update(legacyPaymentWithSmsUpdate)
       .eq('id', bookingId)
-      .select('*')
+      .select(BOOKING_SELECT_COLUMNS)
       .maybeSingle()
 
     if (bookingUpdate.error && shouldRetryWithLegacySmsSchema(bookingUpdate.error)) {
@@ -1538,7 +1602,7 @@ export async function markBookingPaid(
         .from('bookings')
         .update(legacyPaymentUpdate)
         .eq('id', bookingId)
-        .select('*')
+        .select(BOOKING_SELECT_COLUMNS)
         .maybeSingle()
 
       if (!bookingUpdate.error) {
@@ -1552,7 +1616,7 @@ export async function markBookingPaid(
       .from('bookings')
       .update(paymentModernUpdate)
       .eq('id', bookingId)
-      .select('*')
+      .select(BOOKING_SELECT_COLUMNS)
       .maybeSingle()
 
     if (bookingUpdate.error && shouldRetryWithLegacyPaymentSchema(bookingUpdate.error)) {
@@ -1560,7 +1624,7 @@ export async function markBookingPaid(
         .from('bookings')
         .update(legacyPaymentUpdate)
         .eq('id', bookingId)
-        .select('*')
+        .select(BOOKING_SELECT_COLUMNS)
         .maybeSingle()
     } else if (!bookingUpdate.error) {
       setPaymentSchemaMode('modern')
@@ -1570,7 +1634,7 @@ export async function markBookingPaid(
       .from('bookings')
       .update(paymentModernWithSmsUpdate)
       .eq('id', bookingId)
-      .select('*')
+      .select(BOOKING_SELECT_COLUMNS)
       .maybeSingle()
 
     if (bookingUpdate.error && shouldRetryWithLegacySmsSchema(bookingUpdate.error)) {
@@ -1578,7 +1642,7 @@ export async function markBookingPaid(
         .from('bookings')
         .update(paymentModernUpdate)
         .eq('id', bookingId)
-        .select('*')
+        .select(BOOKING_SELECT_COLUMNS)
         .maybeSingle()
 
       if (bookingUpdate.error && shouldRetryWithLegacyPaymentSchema(bookingUpdate.error)) {
@@ -1586,7 +1650,7 @@ export async function markBookingPaid(
           .from('bookings')
           .update(legacyPaymentUpdate)
           .eq('id', bookingId)
-          .select('*')
+          .select(BOOKING_SELECT_COLUMNS)
           .maybeSingle()
       } else if (!bookingUpdate.error) {
         setPaymentSchemaMode('modern')
@@ -1597,7 +1661,7 @@ export async function markBookingPaid(
         .from('bookings')
         .update(legacyPaymentUpdate)
         .eq('id', bookingId)
-        .select('*')
+        .select(BOOKING_SELECT_COLUMNS)
         .maybeSingle()
     } else if (!bookingUpdate.error) {
       setPaymentSchemaMode('modern')
@@ -1609,7 +1673,7 @@ export async function markBookingPaid(
     throw bookingUpdate.error
   }
 
-  let booking = bookingUpdate.data ? mapBookingRow(bookingUpdate.data as BookingRow) : null
+  let booking = bookingUpdate.data ? mapBookingRow(bookingUpdate.data as unknown as BookingRow) : null
 
   await updateBookingAvailabilityWindow(current, {
     isBooked: true,
@@ -1620,11 +1684,12 @@ export async function markBookingPaid(
 
   if (booking && shouldRecordPaidEvent && booking.paymentStatus === 'paid') {
     await recordServerFunnelEvent(supabase, {
-      eventType: 'paid',
+      eventType: 'payment_completed',
       bookingId: booking.id,
       qaBooking: Boolean(booking.qaBooking),
       source: 'server',
       properties: {
+        ...getBookingFunnelEventProperties(booking),
         payment_method: booking.paymentMethod ?? null,
         payment_reference: booking.paymentReference ?? null,
         payu_order_id: booking.payuOrderId ?? null,
@@ -1636,11 +1701,12 @@ export async function markBookingPaid(
 
   if (booking && shouldRecordConfirmedEvent && booking.bookingStatus === 'confirmed') {
     await recordServerFunnelEvent(supabase, {
-      eventType: 'confirmed',
+      eventType: 'booking_confirmed',
       bookingId: booking.id,
       qaBooking: Boolean(booking.qaBooking),
       source: 'server',
       properties: {
+        ...getBookingFunnelEventProperties(booking),
         payment_method: booking.paymentMethod ?? null,
         payment_status: booking.paymentStatus,
         booking_status: booking.bookingStatus,
@@ -1667,7 +1733,7 @@ export async function markBookingPaid(
       .from('bookings')
       .update(smsUpdatePayload)
       .eq('id', bookingId)
-      .select('*')
+      .select(BOOKING_SELECT_COLUMNS)
       .maybeSingle()
     let smsUpdateData = smsUpdate.data
     let smsUpdateError = smsUpdate.error
@@ -1683,7 +1749,7 @@ export async function markBookingPaid(
       throw smsUpdateError
     }
 
-    booking = smsUpdateData ? mapBookingRow(smsUpdateData as BookingRow) : booking
+    booking = smsUpdateData ? mapBookingRow(smsUpdateData as unknown as BookingRow) : booking
   }
 
   return booking
@@ -1713,7 +1779,7 @@ export async function markBookingPaymentFailed(bookingId: string): Promise<Booki
       updated_at: nowIso,
     })
     .eq('id', bookingId)
-    .select('*')
+    .select(BOOKING_SELECT_COLUMNS)
     .maybeSingle()
 
   if (bookingUpdate.error) {
@@ -1727,7 +1793,7 @@ export async function markBookingPaymentFailed(bookingId: string): Promise<Booki
     updatedAt: nowIso,
   })
 
-  const updatedBooking = bookingUpdate.data ? mapBookingRow(bookingUpdate.data as BookingRow) : null
+  const updatedBooking = bookingUpdate.data ? mapBookingRow(bookingUpdate.data as unknown as BookingRow) : null
 
   if (updatedBooking && shouldRecordRejectCancelEvent) {
     await recordServerFunnelEvent(supabase, {
@@ -1790,7 +1856,7 @@ export async function markBookingManualPaymentRejected(
         recommended_next_step: legacyMeta,
       })
       .eq('id', bookingId)
-      .select('*')
+      .select(BOOKING_SELECT_COLUMNS)
       .maybeSingle()
   } else {
     bookingUpdate = await supabase
@@ -1805,7 +1871,7 @@ export async function markBookingManualPaymentRejected(
         updated_at: nowIso,
       })
       .eq('id', bookingId)
-      .select('*')
+      .select(BOOKING_SELECT_COLUMNS)
       .maybeSingle()
 
     if (bookingUpdate.error && shouldRetryWithLegacyPaymentSchema(bookingUpdate.error, true)) {
@@ -1819,7 +1885,7 @@ export async function markBookingManualPaymentRejected(
           recommended_next_step: legacyMeta,
         })
         .eq('id', bookingId)
-        .select('*')
+        .select(BOOKING_SELECT_COLUMNS)
         .maybeSingle()
     } else if (!bookingUpdate.error) {
       setPaymentSchemaMode('modern')
@@ -1830,7 +1896,7 @@ export async function markBookingManualPaymentRejected(
     throw bookingUpdate.error
   }
 
-  const updatedBooking = bookingUpdate.data ? mapBookingRow(bookingUpdate.data as BookingRow) : null
+  const updatedBooking = bookingUpdate.data ? mapBookingRow(bookingUpdate.data as unknown as BookingRow) : null
 
   await updateBookingAvailabilityWindow(current, {
     isBooked: false,
@@ -1884,14 +1950,14 @@ export async function markBookingRefunded(bookingId: string): Promise<BookingRec
       updated_at: nowIso,
     })
     .eq('id', bookingId)
-    .select('*')
+    .select(BOOKING_SELECT_COLUMNS)
     .maybeSingle()
 
   if (bookingUpdate.error) {
     throw bookingUpdate.error
   }
 
-  const updatedBooking = bookingUpdate.data ? mapBookingRow(bookingUpdate.data as BookingRow) : null
+  const updatedBooking = bookingUpdate.data ? mapBookingRow(bookingUpdate.data as unknown as BookingRow) : null
 
   await updateBookingAvailabilityWindow(current, {
     isBooked: false,
@@ -1964,7 +2030,7 @@ export async function markBookingExpired(bookingId: string): Promise<BookingReco
         recommended_next_step: legacyMeta,
       })
       .eq('id', bookingId)
-      .select('*')
+      .select(BOOKING_SELECT_COLUMNS)
       .maybeSingle()
   } else {
     bookingUpdate = await supabase
@@ -1981,7 +2047,7 @@ export async function markBookingExpired(bookingId: string): Promise<BookingReco
         updated_at: nowIso,
       })
       .eq('id', bookingId)
-      .select('*')
+      .select(BOOKING_SELECT_COLUMNS)
       .maybeSingle()
 
     if (bookingUpdate.error && shouldRetryWithLegacyPaymentSchema(bookingUpdate.error, true)) {
@@ -1995,7 +2061,7 @@ export async function markBookingExpired(bookingId: string): Promise<BookingReco
           recommended_next_step: legacyMeta,
         })
         .eq('id', bookingId)
-        .select('*')
+        .select(BOOKING_SELECT_COLUMNS)
         .maybeSingle()
     } else if (!bookingUpdate.error) {
       setPaymentSchemaMode('modern')
@@ -2006,7 +2072,7 @@ export async function markBookingExpired(bookingId: string): Promise<BookingReco
     throw bookingUpdate.error
   }
 
-  const updatedBooking = bookingUpdate.data ? mapBookingRow(bookingUpdate.data as BookingRow) : null
+  const updatedBooking = bookingUpdate.data ? mapBookingRow(bookingUpdate.data as unknown as BookingRow) : null
 
   await updateBookingAvailabilityWindow(current, {
     isBooked: false,
@@ -2056,14 +2122,14 @@ export async function markBookingDone(bookingId: string, recommendedNextStep?: s
       updated_at: new Date().toISOString(),
     })
     .eq('id', bookingId)
-    .select('*')
+    .select(BOOKING_SELECT_COLUMNS)
     .maybeSingle()
 
   if (error) {
     throw error
   }
 
-  return data ? mapBookingRow(data as BookingRow) : null
+  return data ? mapBookingRow(data as unknown as BookingRow) : null
 }
 
 export async function markBookingReminderSent(bookingId: string): Promise<BookingRecord | null> {
@@ -2075,12 +2141,12 @@ export async function markBookingReminderSent(bookingId: string): Promise<Bookin
       updated_at: new Date().toISOString(),
     })
     .eq('id', bookingId)
-    .select('*')
+    .select(BOOKING_SELECT_COLUMNS)
     .maybeSingle()
 
   if (error) {
     throw error
   }
 
-  return data ? mapBookingRow(data as BookingRow) : null
+  return data ? mapBookingRow(data as unknown as BookingRow) : null
 }

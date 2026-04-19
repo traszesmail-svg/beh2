@@ -34,6 +34,20 @@ export type ShopBookCard = {
   amazonAffiliateUrl?: string
 }
 
+export type ShopRecommendationSpecies = ShopSpecies | 'mixed'
+
+export type ShopAccessoryCard = {
+  slug: string
+  species: ShopRecommendationSpecies
+  title: string
+  summary: string
+  helpsWith: string
+  usage: string
+  caution: string
+  affiliateUrl: string
+  cta: string
+}
+
 export type ShopEntranceCard = {
   slug: string
   eyebrow: string
@@ -533,6 +547,53 @@ export const SHOP_AFFILIATE_BOOKS = [
   },
 ] as const
 
+export const SHOP_AFFILIATE_ACCESSORIES: ReadonlyArray<ShopAccessoryCard> = [
+  {
+    slug: 'psy-linka-spacerowa',
+    species: 'psy',
+    title: 'Długa linka spacerowa 5-10 m',
+    summary: 'Daje więcej bezpiecznego dystansu i pozwala pracować bez puszczania psa luzem tam, gdzie to nie ma sensu.',
+    helpsWith: 'reaktywnością, mijankami, spokojniejszym powrotem do równowagi i pierwszą pracą na spacerze',
+    usage: 'ma sens wtedy, gdy plan spacerowy opiera się na dystansie, czytaniu sygnałów i mniejszej presji na krótkiej smyczy',
+    caution: 'nie zastępuje planu pracy i źle prowadzona potrafi dokładać chaosu zamiast go zmniejszać',
+    affiliateUrl: 'https://www.amazon.pl/s?k=linka+treningowa+dla+psa+10m',
+    cta: 'Zobacz przykłady',
+  },
+  {
+    slug: 'mixed-lickmaty-i-maty',
+    species: 'mixed',
+    title: 'Licki maty i maty do spokojnego jedzenia',
+    summary: 'Pomagają spowolnić tempo, wprowadzić prosty rytuał i dołożyć zwierzęciu czytelne zajęcie bez nakręcania.',
+    helpsWith: 'wyciszeniem, spokojniejszym przejściem przez codzienną rutynę i prostymi rytuałami przed wyjściem albo odpoczynkiem',
+    usage: 'traktuję je jako wsparcie planu, gdy trzeba dołożyć przewidywalny rytm albo bezpieczne zajęcie',
+    caution: 'u części zwierząt sam gadżet nic nie zmienia, a czasem wręcz przykrywa głębszy problem',
+    affiliateUrl: 'https://www.amazon.pl/s?k=lickmat+mata+dla+psa+kota',
+    cta: 'Zobacz przykłady',
+  },
+  {
+    slug: 'koty-transporter-gorne-otwieranie',
+    species: 'koty',
+    title: 'Transporter z górnym otwieraniem',
+    summary: 'Ułatwia spokojniejsze wchodzenie, bezpieczne przenoszenie kota i sensowniejszą pracę przy wizytach oraz wyjściach z domu.',
+    helpsWith: 'transportem, wizytami, powrotem z lecznicy i odbudową przewidywalności wokół wyjścia',
+    usage: 'najbardziej pomaga wtedy, gdy transporter staje się częścią codzienności, a nie narzędziem wyciąganym tylko przed stresem',
+    caution: 'sam transporter nie rozwiąże lęku; liczy się sposób wprowadzania i skojarzenia budowane w domu',
+    affiliateUrl: 'https://www.amazon.pl/s?k=transporter+dla+kota+g%C3%B3rne+otwieranie',
+    cta: 'Zobacz przykłady',
+  },
+  {
+    slug: 'koty-drapak-pionowy',
+    species: 'koty',
+    title: 'Drapak pionowy i punkty obserwacji',
+    summary: 'Dają kotu lepszą kontrolę nad otoczeniem i realne miejsce do rozładowania napięcia zamiast przypadkowego niszczenia domu.',
+    helpsWith: 'napięciem środowiskowym, konfliktami, brakiem sensownych tras i potrzebą drapania w odpowiednim miejscu',
+    usage: 'warto je dobierać wtedy, gdy problem dotyczy środowiska, pionu, obserwacji albo konfliktu o zasoby',
+    caution: 'kupowanie „jakiegokolwiek drapaka” często nic nie daje, jeśli nie pasuje do układu mieszkania i zachowania kota',
+    affiliateUrl: 'https://www.amazon.pl/s?k=drapak+pionowy+dla+kota',
+    cta: 'Zobacz przykłady',
+  },
+] as const
+
 function buildCuratedBookCards(species: ShopSpecies): ShopBookCard[] {
   return SHOP_AFFILIATE_BOOKS.filter((book) => book.speciesCategory === species).map((book) => ({
     slug: book.slug,
@@ -553,7 +614,7 @@ const SHOP_ENTRANCES: ShopEntranceCard[] = [
     eyebrow: 'PDF dla kotów',
     title: 'Koty',
     summary: 'Materiały PDF jako drugi krok, gdy chcesz wrócić do zaleceń we własnym tempie.',
-    href: '/oferta/poradniki-pdf#koty-pdf',
+    href: '/niezbednik#pdf-y',
     cta: 'Zobacz materiały PDF',
   },
   {
@@ -561,7 +622,7 @@ const SHOP_ENTRANCES: ShopEntranceCard[] = [
     eyebrow: 'PDF dla psów',
     title: 'Psy',
     summary: 'Materiały PDF do spokojnego uporządkowania tematu między krokami.',
-    href: '/oferta/poradniki-pdf#psy-pdf',
+    href: '/niezbednik#pdf-y',
     cta: 'Zobacz materiały PDF',
   },
   {
@@ -569,7 +630,7 @@ const SHOP_ENTRANCES: ShopEntranceCard[] = [
     eyebrow: 'Pakiety PDF',
     title: 'Pakiety PDF',
     summary: 'Gdy jeden materiał to za mało i chcesz szerzej uporządkować temat bez chaosu.',
-    href: '/oferta/poradniki-pdf#pakiety-pdf',
+    href: '/niezbednik#pdf-y',
     cta: 'Zobacz pakiety',
   },
   {
@@ -628,17 +689,16 @@ function buildPdfCardsForSpecies(species: ShopSpecies, seeds: PdfThemeSeed[]): S
 
 function buildDogPdfCards(): ShopPdfCard[] {
   const dogGuideSlugs = [
-    'czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2',
-    'szczeniak_gryzie_i_skacze_v2',
-    'trudny_spacer_v2',
-    'pies_niszczy_w_domu_v2',
-    'pies_szczeka_na_gosci_i_dzwonek_v2',
-    'szczeniak_nie_umie_sie_wyciszyc_v2',
-    'dlaczego_pies_glupieje_na_smyczy_v2',
-    'pies_zostaje_sam_i_wpada_w_panike_v2',
-    'pies_broni_zasobow_v2',
-    'pogon_demolka_i_brak_hamulcow_v2',
-    'pies_do_pracy_z_ludzmi_v2',
+    'pies-ile-ruchu-potrzebuje',
+    'szczeniak-gryzienie-i-skakanie',
+    'pies-reaktywny-na-spacerze',
+    'pies-niszczy-w-domu',
+    'pies-boi-sie-gosci-i-dzwiekow',
+    'szczeniak-wyciszanie',
+    'pies-zostaje-sam-plan-pierwszych-krokow',
+    'pies-broni-zasobow',
+    'pies-impulsy-i-hamulce',
+    'pies-do-pracy-z-ludzmi',
   ]
 
   return dogGuideSlugs
@@ -686,6 +746,10 @@ export const SHOP_BOOK_CARDS = {
   koty: buildCuratedBookCards('koty'),
   psy: buildCuratedBookCards('psy'),
 } as const
+
+export function listShopAccessoryCards(): ShopAccessoryCard[] {
+  return [...SHOP_AFFILIATE_ACCESSORIES]
+}
 
 export const SHOP_ENTRANCE_CARDS = SHOP_ENTRANCES
 

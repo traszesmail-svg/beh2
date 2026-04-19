@@ -1,0 +1,187 @@
+import type { Metadata } from 'next'
+import Link from 'next/link'
+import { Footer } from '@/components/Footer'
+import { Header } from '@/components/Header'
+import { LeadMagnetSignup } from '@/components/LeadMagnetSignup'
+import { NewsletterSignup } from '@/components/NewsletterSignup'
+import { BLOG_ROUTE_BASE, getBlogListingMetadata, listBlogPosts } from '@/lib/blog'
+import { buildBookHref } from '@/lib/booking-routing'
+import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
+import { getLeadMagnetBySlug } from '@/lib/growth-layer'
+import { FUNNEL_SECONDARY_HREF } from '@/lib/offers'
+
+export const dynamic = 'force-static'
+
+export const metadata: Metadata = getBlogListingMetadata({
+  title: 'Blog: porady behawiorysty psów i kotów',
+  path: BLOG_ROUTE_BASE,
+  description: 'Teksty o zachowaniu psów i kotów: spokojnie, konkretnie i bez szkicowego tonu.',
+})
+
+const mainPathCards = [
+  {
+    href: '/psy',
+    title: 'Psy',
+    copy: 'Spacery, reaktywność, rozłąka i napięcie w domu.',
+  },
+  {
+    href: '/koty',
+    title: 'Koty',
+    copy: 'Kuweta, stres środowiskowy i napięcie między kotami.',
+  },
+  {
+    href: '/book',
+    title: 'Kwadrans',
+    copy: 'Najprostszy pierwszy krok, jeśli chcesz omówić swoją sytuację.',
+  },
+  {
+    href: '/niezbednik',
+    title: 'Niezbędnik',
+    copy: 'Materiały do samodzielnej pracy, gdy chcesz najpierw spokojnie poczytać.',
+  },
+] as const
+
+export default function BlogPage() {
+  const posts = listBlogPosts()
+  const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min')
+  const leadMagnets = [
+    getLeadMagnetBySlug('pies-reaktywnosc-5-krokow'),
+    getLeadMagnetBySlug('kot-kuweta-checklista'),
+    getLeadMagnetBySlug('przygotowanie-do-konsultacji-online'),
+  ].filter((item): item is NonNullable<typeof item> => item !== null)
+
+  return (
+    <main className="page-wrap blog-page">
+      <div className="container editorial-stack">
+        <Header />
+
+        <section className="panel section-panel blog-hero-panel">
+          <div className="editorial-section-head">
+            <div className="editorial-section-head-copy">
+              <div className="section-eyebrow">Blog</div>
+              <h1>Teksty o zachowaniu psów i kotów - konkretnie, bez ogólników.</h1>
+            </div>
+            <p className="editorial-section-lead">
+              Znajdziesz tu krótkie i praktyczne teksty o najczęstszych problemach psów i kotów. Jeśli po lekturze chcesz przejść dalej,
+              pod ręką jest Kwadrans z behawiorystą, strony tematyczne i Niezbędnik.
+            </p>
+          </div>
+
+          <div className="hero-actions blog-hero-actions">
+            <Link href={audioHref} prefetch={false} className="button button-primary big-button">
+              {FUNNEL_CTA_LABELS.primary}
+            </Link>
+            <Link href={FUNNEL_SECONDARY_HREF} prefetch={false} className="button button-ghost big-button">
+              {FUNNEL_CTA_LABELS.secondary}
+            </Link>
+            <Link href="/psy" prefetch={false} className="prep-inline-link">
+              Psy
+            </Link>
+            <Link href="/koty" prefetch={false} className="prep-inline-link">
+              Koty
+            </Link>
+          </div>
+        </section>
+
+        <section className="panel section-panel blog-listing-panel">
+          <div className="editorial-section-head">
+            <div className="editorial-section-head-copy">
+              <div className="section-eyebrow">Wpisy</div>
+              <h2>Artykuły na start</h2>
+            </div>
+            <p className="editorial-section-lead">Każdy wpis odpowiada na konkretne pytanie i pomaga zdecydować, co sprawdzić dalej.</p>
+          </div>
+
+          <div className="blog-list-grid">
+            {posts.map((post) => (
+              <article key={post.slug} className="summary-card tree-backed-card blog-list-card">
+                <div className="blog-list-card-topline">
+                  <span className="section-eyebrow">{post.categoryLabel}</span>
+                  <span className="blog-list-meta">
+                    <time dateTime={post.publishedAt}>{post.publishedAtLabel}</time>
+                    <span>·</span>
+                    <span>{post.readingTimeMinutes} min czytania</span>
+                  </span>
+                </div>
+
+                <h3>
+                  <Link href={post.path} prefetch={false} className="blog-list-title-link">
+                    {post.title}
+                  </Link>
+                </h3>
+                <p>{post.excerpt}</p>
+
+                <div className="blog-list-card-footer">
+                  <Link href={post.path} prefetch={false} className="prep-inline-link">
+                    Czytaj wpis
+                  </Link>
+                  <Link href={post.categoryHref} prefetch={false} className="prep-inline-link">
+                    {post.categoryLabel}
+                  </Link>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="panel section-panel blog-pathways-panel">
+          <div className="editorial-section-head">
+            <div className="editorial-section-head-copy">
+              <div className="section-eyebrow">Dalej</div>
+              <h2>Zobacz też</h2>
+            </div>
+            <p className="editorial-section-lead">Jeśli chcesz przejść od czytania do kolejnego kroku, zacznij tutaj.</p>
+          </div>
+
+          <div className="blog-route-grid">
+            {mainPathCards.map((card) => (
+              <Link key={card.href} href={card.href} prefetch={false} className="summary-card tree-backed-card blog-route-card">
+                <strong>{card.title}</strong>
+                <span>{card.copy}</span>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        <section className="panel section-panel editorial-section">
+          <div className="editorial-section-head">
+            <div className="editorial-section-head-copy">
+              <div className="section-eyebrow">Materiały</div>
+              <h2>Do czytania po blogu</h2>
+            </div>
+            <p className="editorial-section-lead">
+              Jeśli wolisz jeszcze zostać przy materiałach, poniżej znajdziesz trzy sensowne punkty startu i zapis do newslettera.
+            </p>
+          </div>
+
+          <div className="card-grid three-up top-gap-small">
+            {leadMagnets.map((magnet) => (
+              <article key={magnet.slug} className="summary-card tree-backed-card">
+                <div className="section-eyebrow">Bezpłatny materiał</div>
+                <h3>{magnet.shortTitle}</h3>
+                <p>{magnet.subtitle}</p>
+                <Link href={`/bezplatne-materialy/${magnet.slug}`} prefetch={false} className="prep-inline-link">
+                  Zobacz materiał
+                </Link>
+              </article>
+            ))}
+          </div>
+
+          <div className="premium-two-column-grid top-gap-small">
+            {leadMagnets[0] ? <LeadMagnetSignup magnet={leadMagnets[0]} location="blog-listing-lead-magnet" sourcePage="/blog" /> : null}
+            <NewsletterSignup location="blog-listing-newsletter" sourcePage="/blog" />
+          </div>
+        </section>
+
+        <Footer
+          variant="lean"
+          sectionBasePath="/blog"
+          ctaHref={audioHref}
+          ctaLabel={FUNNEL_CTA_LABELS.primary}
+          secondaryHref={FUNNEL_SECONDARY_HREF}
+          secondaryLabel={FUNNEL_CTA_LABELS.secondary}
+        />
+      </div>
+    </main>
+  )
+}

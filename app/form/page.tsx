@@ -1,8 +1,10 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { unstable_noStore as noStore } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { BookingStageEyebrow } from '@/components/BookingStageEyebrow'
 import { BookingForm } from '@/components/BookingForm'
+import { BookingServiceInfoCard } from '@/components/BookingServiceInfoCard'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { PricingDisclosure } from '@/components/PricingDisclosure'
@@ -12,6 +14,7 @@ import {
   getBookingServicePriceLabel,
   getBookingServiceRoomSummary,
   getBookingServiceTitle,
+  isAudioOnlyBookingService,
   normalizeBookingServiceType,
 } from '@/lib/booking-services'
 import {
@@ -22,13 +25,23 @@ import {
   readQaBookingSearchParam,
   readSearchParam,
 } from '@/lib/booking-routing'
-import { formatDateTimeLabel, getProblemLabel, isFutureAvailabilitySlot } from '@/lib/data'
+import { formatDateTimeLabel, getProblemLabel, getProblemSpecies, isFutureAvailabilitySlot } from '@/lib/data'
+import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { DEFAULT_PRICE_PLN } from '@/lib/pricing'
 import { getActiveConsultationPrice, getAvailabilitySlot, listAvailability } from '@/lib/server/db'
 import { getDataModeStatus } from '@/lib/server/env'
+import { buildTechnicalMetadata } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
+
+export function generateMetadata(): Metadata {
+  return buildTechnicalMetadata({
+    title: 'Dane do rezerwacji',
+    path: '/form',
+    description: 'Uzupełnij dane potrzebne do potwierdzenia terminu i przejścia do płatności.',
+  })
+}
 
 export default async function FormPage({
   searchParams,
@@ -46,10 +59,13 @@ export default async function FormPage({
     redirect(buildBookHref(null, serviceQuery, qaBooking))
   }
 
+  const messageHref = `/kontakt?species=${getProblemSpecies(problem)}#formularz`
+  const quickAudioHref = buildBookHref(null, 'szybka-konsultacja-15-min', qaBooking, getProblemSpecies(problem))
   const dataMode = getDataModeStatus()
   let slot: Awaited<ReturnType<typeof getAvailabilitySlot>> = null
   let flowError: string | null = null
   let slotWindowAvailable = false
+  let amount = DEFAULT_PRICE_PLN
   let amountLabel = getBookingServicePriceLabel(serviceType, DEFAULT_PRICE_PLN)
 
   if (dataMode.isValid) {
@@ -62,6 +78,7 @@ export default async function FormPage({
       slot = selectedSlot
       const availableSlots = groupedAvailability.flatMap((group) => group.slots)
       slotWindowAvailable = Boolean(selectedSlot && getBookableServiceAvailabilityWindow(availableSlots, slotId, serviceType))
+      amount = quickConsultationPrice.amount
       amountLabel = getBookingServicePriceLabel(serviceType, quickConsultationPrice.amount)
     } catch (error) {
       console.warn('[behawior15][form] failed to load form or slot', error)
@@ -89,10 +106,17 @@ export default async function FormPage({
             {qaBooking ? <div className="status-pill transaction-status-pill">Tryb testowy</div> : null}
             <h1>Uzupełnij dane</h1>
             <p className="hero-text compact-panel-text">
-              Wpisz tylko to, co potrzebne do rezerwacji. Po zapisaniu formularza termin chwilowo się zablokuje.
+              Wpisz tylko dane potrzebne do rezerwacji. Po zapisaniu formularza termin chwilowo się zablokuje na czas płatności.
             </p>
 
             <div className="stack-gap top-gap booking-facts-stack">
+              <BookingServiceInfoCard
+                serviceType={serviceType}
+                quickConsultationPrice={amount}
+                title="Parametry tej rezerwacji"
+                stageLabel="Usługa"
+                emphasis="Tutaj uzupełniasz dane potrzebne do potwierdzenia terminu i przejścia do płatności."
+              />
               <div className="list-card tree-backed-card">
                 <strong>Usługa</strong>
                 <span>{getBookingServiceTitle(serviceType)}</span>
@@ -107,7 +131,10 @@ export default async function FormPage({
               </div>
               <div className="list-card accent-outline tree-backed-card">
                 <strong>Format</strong>
-                <span>{getBookingServiceRoomSummary(serviceType)} Kamera nie jest potrzebna.</span>
+                <span>
+                  {getBookingServiceRoomSummary(serviceType)}{' '}
+                  {isAudioOnlyBookingService(serviceType) ? 'Kamera nie jest potrzebna.' : 'To konsultacja online z większą ilością czasu na temat.'}
+                </span>
               </div>
               <div className="list-card tree-backed-card">
                 <PricingDisclosure
@@ -123,22 +150,22 @@ export default async function FormPage({
             {flowError ? (
               <>
                 <div className="info-box">
-                  {flowError} Jeśli temat jest pilny, napisz wiadomość i wróć do terminów później.
+                  {flowError} Jeśli temat jest pilny, wyślij krótką wiadomość i wróć do terminów później.
                 </div>
                 <div className="hero-actions top-gap">
                   <Link href={buildSlotHref(problem, serviceQuery, qaBooking)} prefetch={false} className="button button-primary big-button">
                     Wróć do terminów
                   </Link>
-                  <Link href="/kontakt" prefetch={false} className="button button-ghost">
-                    Napisz wiadomość
+                  <Link href={messageHref} prefetch={false} className="button button-ghost">
+                    {FUNNEL_CTA_LABELS.contact}
                   </Link>
                 </div>
               </>
             ) : activeSlot ? (
               <>
                 <div className="section-eyebrow">Dane do potwierdzenia</div>
-                <h2>Formularz konsultacji</h2>
-                <p className="hero-text compact-panel-text">Wpisz tylko informacje potrzebne do rezerwacji i kontaktu.</p>
+                <h2>Formularz rezerwacji</h2>
+                <p className="hero-text compact-panel-text">Wpisz tylko informacje potrzebne do rezerwacji i potwierdzenia.</p>
                 <BookingForm
                   problemType={problem}
                   serviceType={serviceType}
@@ -151,14 +178,14 @@ export default async function FormPage({
             ) : (
               <>
                 <div className="error-box">
-                  Ten termin nie jest już dostępny dla wybranej usługi. Wróć do listy albo napisz wiadomość.
+                  Ten termin nie jest już dostępny dla wybranej usługi. Wróć do listy albo wyślij krótką wiadomość.
                 </div>
                 <div className="hero-actions top-gap">
                   <Link href={buildSlotHref(problem, serviceQuery, qaBooking)} prefetch={false} className="button button-primary big-button">
                     Wróć do terminów
                   </Link>
-                  <Link href="/kontakt" prefetch={false} className="button button-ghost">
-                    Napisz wiadomość
+                  <Link href={messageHref} prefetch={false} className="button button-ghost">
+                    {FUNNEL_CTA_LABELS.contact}
                   </Link>
                 </div>
               </>
@@ -167,10 +194,12 @@ export default async function FormPage({
         </section>
 
         <Footer
-          ctaHref="/kontakt"
-          ctaLabel="Masz pytanie? Napisz"
+          ctaHref={quickAudioHref}
+          ctaLabel={FUNNEL_CTA_LABELS.primary}
+          secondaryHref="/niezbednik"
+          secondaryLabel={FUNNEL_CTA_LABELS.secondary}
           headline="Masz pytanie przed płatnością?"
-          description="Jeśli chcesz doprecyzować rezerwację, napisz wiadomość."
+          description="Jeśli chcesz coś doprecyzować przed wpłatą, napisz wiadomość."
         />
       </div>
     </main>

@@ -4,12 +4,14 @@ export type DogProblemType = 'szczeniak' | 'separacja' | 'spacer' | 'pobudzenie'
 
 export type PublicCatProblemType =
   | 'kot-kuweta'
+  | 'kot-wycofanie'
   | 'kot-konflikt'
-  | 'kot-dotyk'
-  | 'kot-stres'
-  | 'kot-nocna-wokalizacja'
+  | 'kot-zmiany-w-domu'
+  | 'kot-wokalizacja'
 
-export type CatProblemType = PublicCatProblemType
+export type LegacyCatProblemType = 'kot-dotyk' | 'kot-stres' | 'kot-nocna-wokalizacja'
+
+export type CatProblemType = PublicCatProblemType | LegacyCatProblemType
 
 export type ProblemType = DogProblemType | CatProblemType | 'inne'
 
@@ -22,7 +24,28 @@ export type PaymentStatus = 'unpaid' | 'pending_manual_review' | 'paid' | 'faile
 export type PaymentMethod = 'manual' | 'payu' | 'stripe' | 'mock'
 
 export type FunnelEventType =
+  | 'page_view'
+  | 'view_page'
+  | 'funnel_entry_15_min'
+  | 'funnel_entry_60_min'
+  | 'funnel_entry_niezbednik'
+  | 'newsletter_signup'
+  | 'lead_magnet_signup'
+  | 'booking_start'
+  | 'booking_service_selected'
+  | 'booking_slot_selected'
+  | 'booking_form_started'
+  | 'booking_form_submitted'
+  | 'payment_viewed'
+  | 'payment_marked_pending'
+  | 'payment_completed'
+  | 'booking_confirmed'
+  | 'confirmation_viewed'
+  | 'call_room_viewed'
+  | 'contact_form_started'
+  | 'contact_form_submitted'
   | 'home_view'
+  | 'dogs_page_view'
   | 'cta_click'
   | 'topic_selected'
   | 'slot_selected'

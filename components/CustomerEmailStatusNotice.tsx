@@ -11,14 +11,14 @@ type CustomerEmailStatusNoticeProps = {
 
 function getTitle(status: CustomerEmailDeliveryStatus, context: CustomerEmailStatusNoticeContext) {
   if (status.state === 'ready') {
-    return context === 'payment' ? 'Maile klienta są aktywne' : 'Mail z potwierdzeniem jest aktywny'
+    return context === 'payment' ? 'Potwierdzenie mailowe jest aktywne' : 'Mail z potwierdzeniem jest aktywny'
   }
 
-  if (status.state === 'disabled') {
-    return 'Maile klienta są wyłączone'
+  if (status.state === 'disabled' || status.state === 'blocked') {
+    return 'Mail z potwierdzeniem jest chwilowo niedostępny'
   }
 
-  return 'Wysyłka maili jest zablokowana'
+  return 'Mail z potwierdzeniem może się opóźnić'
 }
 
 function getBody(status: CustomerEmailDeliveryStatus, recipientEmail: string, context: CustomerEmailStatusNoticeContext) {
@@ -27,22 +27,22 @@ function getBody(status: CustomerEmailDeliveryStatus, recipientEmail: string, co
       return `Po potwierdzeniu wpłaty wyślemy link do pokoju na adres ${recipientEmail}. Jeśli skrzynka się opóźni, ta strona nadal pokazuje pełny status i kolejny krok.`
     }
 
-    return `Wyślemy mail z potwierdzeniem na adres ${recipientEmail}. Jeśli skrzynka się opóźni, ta strona nadal pokazuje potwierdzenie, status SMS i link do pokoju.`
+    return `Wyślemy mail z potwierdzeniem na adres ${recipientEmail}. Jeśli skrzynka się opóźni, ta strona nadal pokazuje potwierdzenie i link do pokoju.`
   }
 
-  if (status.state === 'disabled') {
+  if (status.state === 'disabled' || status.state === 'blocked') {
     if (context === 'payment') {
-      return 'Po potwierdzeniu wpłaty pokażemy aktywne potwierdzenie i link do pokoju bezpośrednio na tej stronie. To świadomy fallback, dopóki wysyłka maili klienta pozostaje wyłączona w konfiguracji.'
+      return 'Po potwierdzeniu wpłaty aktywne potwierdzenie i link do pokoju zobaczysz bezpośrednio na tej stronie.'
     }
 
-    return 'Ta strona pozostaje pełnym fallbackiem: potwierdzenie, status SMS i link do pokoju są zapisane tutaj, nawet gdy maile klienta są wyłączone.'
+    return 'Ta strona nadal pokazuje potwierdzenie i link do pokoju, nawet jeśli mail dotrze później.'
   }
 
   if (context === 'payment') {
-    return `Po potwierdzeniu wpłaty pokażemy aktywne potwierdzenie i link do pokoju bezpośrednio na tej stronie. ${status.summary} Następny krok: ${status.nextStep}.`
+    return 'Po potwierdzeniu wpłaty aktywne potwierdzenie i link do pokoju zobaczysz bezpośrednio na tej stronie.'
   }
 
-  return `Ta strona pozostaje pełnym fallbackiem: potwierdzenie, status SMS i link do pokoju są zapisane tutaj. ${status.summary} Następny krok: ${status.nextStep}.`
+  return 'Ta strona nadal pokazuje potwierdzenie i link do pokoju, nawet jeśli mail dotrze później.'
 }
 
 export function CustomerEmailStatusNotice({

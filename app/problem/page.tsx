@@ -1,5 +1,12 @@
 import { redirect } from 'next/navigation'
-import { buildBookHref, buildSlotHref, readProblemTypeSearchParam, readQaBookingSearchParam } from '@/lib/booking-routing'
+import {
+  appendSearchParams,
+  buildBookHref,
+  buildSlotHref,
+  readBookingServiceSearchParam,
+  readProblemTypeSearchParam,
+  readQaBookingSearchParam,
+} from '@/lib/booking-routing'
 
 export default function LegacyProblemPage({
   searchParams,
@@ -7,11 +14,14 @@ export default function LegacyProblemPage({
   searchParams?: Record<string, string | string[] | undefined>
 }) {
   const problem = readProblemTypeSearchParam(searchParams?.problem)
+  const serviceType = readBookingServiceSearchParam(searchParams?.service)
   const qaBooking = readQaBookingSearchParam(searchParams?.qa)
 
   if (problem) {
-    redirect(buildSlotHref(problem, null, qaBooking))
+    const slotHref = appendSearchParams(buildSlotHref(problem, null, qaBooking), searchParams, ['problem', 'qa', 'service'])
+    redirect(serviceType ? appendSearchParams(slotHref, { service: serviceType }, []) : slotHref)
   }
 
-  redirect(buildBookHref(null, null, qaBooking))
+  const bookHref = appendSearchParams(buildBookHref(null, null, qaBooking), searchParams, ['qa', 'service'])
+  redirect(serviceType ? appendSearchParams(bookHref, { service: serviceType }, []) : bookHref)
 }

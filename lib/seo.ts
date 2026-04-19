@@ -3,24 +3,24 @@ import { DEFAULT_BOOKING_SERVICE, getBookingServiceRoomSummary, getBookingServic
 import { SITE_NAME, SITE_OG_IMAGE, SITE_SHORT_NAME, SPECIALIST_NAME } from '@/lib/site'
 
 const DEFAULT_OG_IMAGE = SITE_OG_IMAGE
-const LOCAL_SEO_CONTEXT = 'Działam w Olsztynie, woj. warmińsko-mazurskim i online.'
 
 type MarketingMetadataInput = {
   title: string
   path: string
   description: string
+  appendLocalContext?: boolean
+}
+
+type TechnicalMetadataInput = MarketingMetadataInput & {
+  noIndex?: boolean
 }
 
 function appendLocalSeoContext(description: string) {
-  if (/Olsztyn/i.test(description)) {
-    return description
-  }
-
-  return `${description} ${LOCAL_SEO_CONTEXT}`
+  return description
 }
 
-export function buildMarketingMetadata({ title, path, description }: MarketingMetadataInput): Metadata {
-  const localizedDescription = appendLocalSeoContext(description)
+export function buildMarketingMetadata({ title, path, description, appendLocalContext = true }: MarketingMetadataInput): Metadata {
+  const localizedDescription = appendLocalContext ? appendLocalSeoContext(description) : description
 
   return {
     title,
@@ -46,9 +46,37 @@ export function buildMarketingMetadata({ title, path, description }: MarketingMe
   }
 }
 
+export function buildTechnicalMetadata({ title, path, description, noIndex = true }: TechnicalMetadataInput): Metadata {
+  const localizedDescription = appendLocalSeoContext(description)
+
+  return {
+    title,
+    description: localizedDescription,
+    alternates: {
+      canonical: path,
+    },
+    robots: noIndex ? { index: false, follow: false } : undefined,
+    openGraph: {
+      title: `${title} | ${SITE_SHORT_NAME}`,
+      description: localizedDescription,
+      siteName: SITE_NAME,
+      type: 'website',
+      locale: 'pl_PL',
+      url: path,
+      images: [DEFAULT_OG_IMAGE],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${title} | ${SITE_SHORT_NAME}`,
+      description: localizedDescription,
+      images: [DEFAULT_OG_IMAGE.url],
+    },
+  }
+}
+
 export async function buildHomeMetadata(): Promise<Metadata> {
   const description = appendLocalSeoContext(
-    `${SITE_NAME}. Behawiorysta COAPE dla opiekunów psów i kotów: konsultacja, spokojny pierwszy krok i jasny plan działania w Olsztynie oraz online.`,
+    `${SITE_NAME}. Behawiorysta COAPE dla opiekunów psów i kotów: konsultacja, spokojny pierwszy krok i jasny plan działania online.`,
   )
 
   return {
@@ -91,5 +119,6 @@ export function buildLegalMetadata(title: string, path: string, description: str
     title,
     path,
     description,
+    appendLocalContext: false,
   })
 }

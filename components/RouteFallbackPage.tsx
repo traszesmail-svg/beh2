@@ -1,3 +1,5 @@
+import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
+
 type RouteFallbackAction = {
   href: string
   label: string
@@ -25,9 +27,9 @@ export function RouteFallbackPage({
   highlights,
   actions,
   footerCtaHref = '/book',
-  footerCtaLabel = 'Umów konsultację',
-  footerHeadline = 'Potrzebujesz pomocy z tym adresem?',
-  footerDescription = 'Wróć do głównej ścieżki konsultacji albo napisz wiadomość, jeśli chcesz spokojnie ustalić kolejny krok.',
+  footerCtaLabel = FUNNEL_CTA_LABELS.primary,
+  footerHeadline = 'Wróć do sprawdzonego punktu startu',
+  footerDescription = 'Najprościej wrócić do strony głównej, wejść na stronę psa lub kota albo wybrać Kwadrans z behawiorystą.',
 }: RouteFallbackPageProps) {
   return (
     <main className="page-wrap marketing-page">
@@ -55,17 +57,13 @@ export function RouteFallbackPage({
 
             <div className="list-card tree-backed-card">
               <strong>Najbezpieczniej teraz</strong>
-              <span>Wróć do głównej ścieżki konsultacji albo napisz wiadomość, jeśli potrzebujesz najprostszego kolejnego kroku.</span>
+              <span>Wróć do strony głównej, strony psa lub kota albo wybierz Kwadrans z behawiorystą.</span>
             </div>
           </div>
 
           <div className="hero-actions top-gap">
             {actions.map((action) => (
-              <a
-                key={action.href}
-                href={action.href}
-                className={`button big-button${action.primary ? ' button-primary' : ' button-ghost'}`}
-              >
+              <a key={action.href} href={action.href} className={`button big-button${action.primary ? ' button-primary' : ' button-ghost'}`}>
                 {action.label}
               </a>
             ))}

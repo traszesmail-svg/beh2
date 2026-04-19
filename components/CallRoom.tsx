@@ -3,17 +3,19 @@
 import Image from 'next/image'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { getBookingAnalyticsContextParams } from '@/lib/analytics-schema'
 import { trackAnalyticsEvent } from '@/lib/analytics'
 import {
   type BookingServiceType,
+  getBookingServiceRoomAccessLabel,
   getBookingServiceRoomDurationMinutes,
-  getBookingServiceRoomSummary,
   getBookingServiceTitle,
+  isAudioOnlyBookingService,
 } from '@/lib/booking-services'
 import { formatDateTimeLabel, getSecondsUntilRoomUnlock } from '@/lib/data'
 import { createMeetingEmbedUrl } from '@/lib/server/jitsi'
 import { CAPBT_LOGO, COAPE_LOGO, SITE_NAME } from '@/lib/site'
-import { BookingRecord } from '@/lib/types'
+import { AnimalType, BookingRecord, ProblemType } from '@/lib/types'
 
 function formatTime(seconds: number): string {
   const minutes = Math.floor(seconds / 60)
@@ -34,6 +36,68 @@ function formatCountdown(seconds: number): string {
   return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`
 }
 
+function capitalizeFirstLetter(value: string) {
+  if (!value) {
+    return value
+  }
+
+  return value.charAt(0).toUpperCase() + value.slice(1)
+}
+
+function getCallRoomCopy(serviceType: BookingServiceType, roomAccessLabel: string) {
+  const roomAccessTitle = capitalizeFirstLetter(roomAccessLabel)
+
+  if (!isAudioOnlyBookingService(serviceType)) {
+    return {
+      activeEyebrow: roomAccessTitle,
+      lockedEyebrow: 'Przed konsultacją',
+      lockedHeading: 'Pokój konsultacji otworzy się 15 minut przed terminem',
+      activeLead:
+        'Tutaj wejdziesz do konsultacji online. Przygotuj spokojne miejsce, najważniejsze notatki i materiały, które chcesz omówić na spotkaniu.',
+      lockedLead:
+        'Wejście do konsultacji odblokuje się automatycznie 15 minut przed startem.',
+      iframeTitle: 'Panel konsultacji online',
+      waitingKicker: 'Przed konsultacją',
+      openInNewTabLabel: 'Otwórz konsultację w nowej karcie',
+      activeLinkLabel: 'Link do konsultacji',
+      lockedPrepLabel: 'Co przygotować',
+      lockedPrepCopy:
+        'Spokojne miejsce, notatki z najważniejszym tłem sprawy oraz materiały, które chcesz omówić, żeby wejść od razu w konkrety.',
+      activeAfterLabel: 'Po konsultacji',
+      activeAfterCopy:
+        'Po konsultacji możesz wrócić do zaleceń, materiałów do sprawy albo ustalić dalsze kroki.',
+      lockedAfterLabel: 'Co stanie się dalej',
+      lockedAfterCopy: `Gdy nadejdzie czas wejścia, ${roomAccessLabel} stanie się aktywny i będzie można uruchomić licznik rozmowy.`,
+      completionNextStep:
+        'Po konsultacji możesz wrócić do zaleceń, materiałów do sprawy albo ustalić dalsze kroki.',
+    }
+  }
+
+  return {
+    activeEyebrow: roomAccessTitle,
+    lockedEyebrow: 'Przed rozmową',
+    lockedHeading: 'Pokój rozmowy otworzy się 15 minut przed terminem',
+    activeLead:
+      'Tutaj wejdziesz do rozmowy audio. Kamera nie jest potrzebna. Przygotuj spokojne miejsce, słuchawki lub głośnik i 2-3 najważniejsze obserwacje o zwierzęciu.',
+    lockedLead:
+      'Wejście do rozmowy odblokuje się automatycznie 15 minut przed startem.',
+    iframeTitle: 'Panel rozmowy audio',
+    waitingKicker: 'Przed rozmową',
+    openInNewTabLabel: 'Otwórz rozmowę w nowej karcie',
+    activeLinkLabel: 'Link do rozmowy audio',
+    lockedPrepLabel: 'Co przygotować',
+    lockedPrepCopy:
+      'Spokojne miejsce, słuchawki albo głośnik oraz 2-3 najważniejsze obserwacje o zwierzęciu, żeby rozmowę wykorzystać konkretnie.',
+    activeAfterLabel: 'Po rozmowie',
+    activeAfterCopy:
+      'Jeśli po rozmowie temat okaże się szerszy, kolejnym krokiem może być konsultacja 60 min.',
+    lockedAfterLabel: 'Co stanie się dalej',
+    lockedAfterCopy: `Gdy nadejdzie czas wejścia, ${roomAccessLabel} stanie się aktywny i będzie można uruchomić licznik rozmowy.`,
+    completionNextStep:
+      'Jeśli po rozmowie temat okaże się szerszy, kolejnym krokiem może być konsultacja 60 min.',
+  }
+}
+
 type AudioContextWindow = Window & typeof globalThis & {
   webkitAudioContext?: typeof AudioContext
 }
@@ -46,6 +110,8 @@ interface CallRoomProps {
   bookingDate: string
   bookingTime: string
   bookingStatus: BookingRecord['bookingStatus']
+  animalType: AnimalType
+  problemType: ProblemType
   serviceType: BookingServiceType
   qaBooking?: boolean
 }
@@ -58,6 +124,8 @@ export function CallRoom({
   bookingDate,
   bookingTime,
   bookingStatus,
+  animalType,
+  problemType,
   serviceType,
   qaBooking = false,
 }: CallRoomProps) {
@@ -65,7 +133,8 @@ export function CallRoom({
   const trackedEntryRef = useRef(false)
   const roomDurationMinutes = getBookingServiceRoomDurationMinutes(serviceType)
   const serviceTitle = getBookingServiceTitle(serviceType)
-  const serviceSummary = getBookingServiceRoomSummary(serviceType)
+  const roomAccessLabel = getBookingServiceRoomAccessLabel(serviceType)
+  const roomCopy = getCallRoomCopy(serviceType, roomAccessLabel)
   const [secondsLeft, setSecondsLeft] = useState(roomDurationMinutes * 60)
   const [running, setRunning] = useState(false)
   const [finished, setFinished] = useState(bookingStatus === 'done')
@@ -83,7 +152,7 @@ export function CallRoom({
       : running
         ? 'Rozmowa aktywna'
         : 'Pokój aktywny'
-    : 'Przedpokój aktywny'
+    : 'Oczekiwanie na wejście'
   const completeUrl = useMemo(
     () =>
       accessToken
@@ -102,13 +171,18 @@ export function CallRoom({
     }
 
     trackedEntryRef.current = true
-    trackAnalyticsEvent('room_entered', {
+    trackAnalyticsEvent('call_room_viewed', {
       booking_id: bookingId,
-      booking_status: bookingStatus,
       room_unlocked: roomUnlocked,
-      service_type: serviceType,
+      source_page: '/call',
+      ...getBookingAnalyticsContextParams({
+        serviceType,
+        animalType,
+        problemType,
+        bookingStatus,
+      }),
     })
-  }, [bookingId, bookingStatus, qaBooking, roomUnlocked, serviceType])
+  }, [animalType, bookingId, bookingStatus, problemType, qaBooking, roomUnlocked, serviceType])
 
   useEffect(() => {
     setSecondsLeft(roomDurationMinutes * 60)
@@ -227,8 +301,7 @@ export function CallRoom({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          recommendedNextStep:
-            'W razie potrzeby kolejnym krokiem moze byc pelna konsultacja, wizyta domowa albo kolejna rozmowa.',
+          recommendedNextStep: roomCopy.completionNextStep,
         }),
       })
 
@@ -249,18 +322,16 @@ export function CallRoom({
   return (
     <section className="two-col-section booking-layout">
       <div className="panel room-panel">
-        <div className="section-eyebrow">{roomUnlocked ? 'Panel rozmowy audio' : 'Przedpokój konsultacji'}</div>
-        <h1>{roomUnlocked ? `Panel rozmowy: ${serviceTitle}` : 'Pokój rozmowy otworzy się 15 minut przed terminem'}</h1>
+        <div className="section-eyebrow">{roomUnlocked ? roomCopy.activeEyebrow : roomCopy.lockedEyebrow}</div>
+        <h1>{roomUnlocked ? `${roomCopy.activeEyebrow}: ${serviceTitle}` : roomCopy.lockedHeading}</h1>
         <p className="muted paragraph-gap">
-          {roomUnlocked
-            ? `To jest link do ${serviceSummary.toLowerCase()}. Kamera nie jest potrzebna. Przygotuj spokojne miejsce, najważniejsze obserwacje o zwierzęciu i otwórz rozmowę kilka minut przed czasem.`
-            : 'Jesteś już we właściwym miejscu. Przedpokój pokazuje pokój przez szklaną warstwę, a pełne wejście odblokuje się automatycznie dokładnie 15 minut przed startem konsultacji.'}
+          {roomUnlocked ? roomCopy.activeLead : roomCopy.lockedLead}
         </p>
 
         <div className={`video-shell room-stage ${roomUnlocked ? 'room-stage-live' : 'room-stage-locked'}`}>
           <div className="room-preview-frame">
             <iframe
-              title="Panel rozmowy glosowej"
+              title={roomCopy.iframeTitle}
               src={embedUrl}
               className={`video-frame ${roomUnlocked ? '' : 'video-frame-muted'}`}
               allow="camera; microphone; fullscreen; display-capture"
@@ -270,18 +341,30 @@ export function CallRoom({
               <div className="room-preview-overlay">
                 <div className="waiting-room-badge">{SITE_NAME}</div>
                 <div className="waiting-room-copy">
-                  <span className="waiting-room-kicker">Przedpokój konsultacji</span>
+                  <span className="waiting-room-kicker">{roomCopy.waitingKicker}</span>
                   <strong>Wejście otworzy się za {formatCountdown(unlockInSeconds)}</strong>
-                  <span>
-                    Widzisz właściwy pokój jak przez szybę. Pełny dostęp pojawi się automatycznie 15 minut przed terminem {roomEntryLabel}.
-                  </span>
+                  <span>Pełny dostęp pojawi się automatycznie 15 minut przed terminem {roomEntryLabel}.</span>
                 </div>
                 <div className="waiting-room-logos" aria-label="Certyfikacje specjalisty">
                   <div className="waiting-room-logo">
-                    <Image src={COAPE_LOGO.src} alt={COAPE_LOGO.alt} width={221} height={52} />
+                    <Image
+                      src={COAPE_LOGO.src}
+                      alt={COAPE_LOGO.alt}
+                      width={COAPE_LOGO.width}
+                      height={COAPE_LOGO.height}
+                      sizes="221px"
+                      style={{ width: 221, height: 'auto' }}
+                    />
                   </div>
                   <div className="waiting-room-logo">
-                    <Image src={CAPBT_LOGO.src} alt={CAPBT_LOGO.alt} width={221} height={52} />
+                    <Image
+                      src={CAPBT_LOGO.src}
+                      alt={CAPBT_LOGO.alt}
+                      width={CAPBT_LOGO.width}
+                      height={CAPBT_LOGO.height}
+                      sizes="218px"
+                      style={{ width: 218, height: 'auto' }}
+                    />
                   </div>
                 </div>
               </div>
@@ -302,7 +385,7 @@ export function CallRoom({
               </button>
               {!finished ? (
                 <a href={meetingUrl} target="_blank" rel="noopener noreferrer" className="button button-ghost big-button">
-                  Otwórz rozmowę w nowej karcie
+                  {roomCopy.openInNewTabLabel}
                 </a>
               ) : null}
               <button type="button" onClick={handleFinish} className="button button-ghost big-button" disabled={finished}>
@@ -338,7 +421,7 @@ export function CallRoom({
             <span>
               {roomUnlocked
                 ? roomEntryLabel
-                : `Przedpokój jest już gotowy. Właściwy pokój odblokuje się automatycznie 15 minut przed terminem ${roomEntryLabel}.`}
+                : `Pokój odblokuje się automatycznie 15 minut przed terminem ${roomEntryLabel}.`}
             </span>
           </div>
           <div className="list-card tree-backed-card">
@@ -346,19 +429,15 @@ export function CallRoom({
             <span>{ownerName}</span>
           </div>
           <div className="list-card tree-backed-card">
-            <strong>{roomUnlocked ? 'Link do rozmowy' : 'Co przygotowac'}</strong>
+            <strong>{roomUnlocked ? roomCopy.activeLinkLabel : roomCopy.lockedPrepLabel}</strong>
             <span>
-              {roomUnlocked
-                ? meetingUrl
-                : `Spokojne miejsce, słuchawki albo głośnik oraz 2-3 najważniejsze obserwacje o zwierzęciu, żeby ${roomDurationMinutes} minut wykorzystać konkretnie.`}
+              {roomUnlocked ? meetingUrl : roomCopy.lockedPrepCopy}
             </span>
           </div>
           <div className="list-card accent-outline tree-backed-card">
-            <strong>{roomUnlocked ? 'Po rozmowie' : 'Co stanie sie dalej'}</strong>
+            <strong>{roomUnlocked ? roomCopy.activeAfterLabel : roomCopy.lockedAfterLabel}</strong>
             <span>
-              {roomUnlocked
-                ? 'Po tej rozmowie można zaplanować pełną konsultację, wizytę domową albo terapię, jeśli temat wymaga więcej.'
-                : `Gdy wybije okno wejścia, warstwa szkła zniknie, pokój audio zrobi się aktywny i będzie można uruchomić licznik ${roomDurationMinutes} minut.`}
+              {roomUnlocked ? roomCopy.activeAfterCopy : `${roomCopy.lockedAfterCopy} Licznik obejmuje ${roomDurationMinutes} minut.`}
             </span>
           </div>
         </div>

@@ -1,9 +1,14 @@
-﻿import type { Metadata } from 'next'
+import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Footer } from '@/components/Footer'
+import { FunnelPrimaryActions } from '@/components/FunnelPrimaryActions'
 import { Header } from '@/components/Header'
+import { HeroAudioSoftCta } from '@/components/HeroAudioSoftCta'
+import { LeadMagnetSignup } from '@/components/LeadMagnetSignup'
+import { OfferEntrySection } from '@/components/OfferEntrySection'
 import { buildBookHref } from '@/lib/booking-routing'
+import { getLeadMagnetBySlug } from '@/lib/growth-layer'
 import { buildMarketingMetadata } from '@/lib/seo'
 import {
   CATS_PAGE_PHOTO,
@@ -13,39 +18,16 @@ import {
   SPECIALIST_NAME,
   getPublicContactDetails,
 } from '@/lib/site'
-import { getBaseUrl } from '@/lib/server/env'
-
-// Legacy source markers kept for the existing smoke assertions:
-// Zacznij od krĂłtkiej konsultacji i sprawdĹş, co bÄ™dzie najlepszym kolejnym krokiem.
-// PDF jako drugi krok
-// Tematy do rozmowy
-// data-analytics-disabled={qaBooking ? 'true' : undefined}
-// Tryb QA
-// CAT_PROBLEM_OPTIONS.map
-// data-cat-problem={category.id}
-// buildSlotHref(category.id, serviceQuery, qaBooking)
-// CAT_TOPIC_VISUALS[category.id as keyof typeof CAT_TOPIC_VISUALS]
-// data-analytics-event="topic_selected"
-// cats-start-step
-// Spokojny pierwszy krok przy problemach kota
-// Kuweta i zachowania toaletowe
-// Konflikt miÄ™dzy kotami
-// Dotyk, pielÄ™gnacja i obrona
-// LÄ™k, stres i wycofanie
-// Nocna aktywnoĹ›Ä‡ i rytm dnia
-// Zacznij od krĂłtkiej konsultacji i sprawdĹş, co bÄ™dzie najlepszym kolejnym krokiem.
-// Spokojny pierwszy krok przy problemach kota
-// Spokojny pierwszy krok przy problemach kota. Zacznij od 15 min, a PDF potraktuj jako drugi krok i materiaĹ‚ pomocniczy miÄ™dzy etapami.
-// SpeciesShopPage
-// species="koty"
+import { getCanonicalBaseUrl } from '@/lib/server/env'
+import { FAQ_SHORTLISTS } from '@/lib/trust-layer'
 
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: 'Koty',
+  title: 'Pomoc behawioralna dla kotów',
   path: '/koty',
   description:
-    'Premium strona usĹ‚ugowa dla opiekunĂłw kotĂłw z realnym problemem zachowania. UmĂłw konsultacjÄ™, napisz wiadomoĹ›Ä‡ albo zacznij od krĂłtkiej rozmowy wstÄ™pnej 15 min.',
+    'Konsultacje behawioralne dla opiekunów kotów. Pomoc przy kuwecie, stresie, wycofaniu, napięciu między kotami i zmianach w domu.',
 })
 
 type SectionIntroProps = {
@@ -66,250 +48,220 @@ function SectionIntro({ eyebrow, title, description }: SectionIntroProps) {
   )
 }
 
-const consultationHref = buildBookHref(null, 'konsultacja-behawioralna-online')
-const introCallHref = buildBookHref(null, 'szybka-konsultacja-15-min')
-const contactHref = '/kontakt'
+const consultationHref = buildBookHref(null, 'konsultacja-behawioralna-online', false, 'kot')
+const introCallHref = buildBookHref(null, 'szybka-konsultacja-15-min', false, 'kot')
+const contactHref = '/kontakt?species=kot#formularz'
+const litterGuide = (() => {
+  const guide = getLeadMagnetBySlug('kot-kuweta-checklista')
+
+  if (!guide) {
+    throw new Error('Missing lead magnet: kot-kuweta-checklista')
+  }
+
+  return guide
+})()
 
 const problemCards = [
   {
-    title: 'ZaĹ‚atwianie poza kuwetÄ…',
+    title: 'Załatwianie poza kuwetą',
     description:
-      'Kot omija kuwetÄ™ caĹ‚kowicie albo tylko w wybranych sytuacjach, a problem zaczyna wracaÄ‡ lub siÄ™ utrwala.',
+      'Kot omija kuwetę całkowicie albo tylko w części sytuacji, a temat wraca mimo prób uporządkowania otoczenia.',
+    href: '/koty/zalatwianie-poza-kuweta',
   },
   {
-    title: 'Wycofanie i napiÄ™cie',
+    title: 'Wycofanie i napięcie',
     description:
-      'Kot chowa siÄ™, unika kontaktu, jest bardziej czujny niĹĽ zwykle albo trudniej mu siÄ™ rozluĹşniÄ‡.',
+      'Kot chowa się, unika kontaktu albo pozostaje w czujności dłużej niż zwykle i trudno mu wrócić do rozluźnienia.',
   },
   {
-    title: 'Konflikt miÄ™dzy kotami',
+    title: 'Konflikt między kotami',
     description:
-      'Pojawia siÄ™ napiÄ™cie, unikanie, blokowanie przejĹ›Ä‡, obserwowanie, gonitwy albo trudna atmosfera miÄ™dzy kotami.',
+      'Pojawia się unikanie, blokowanie przejść, napięte obserwowanie, gonitwy albo coraz trudniejsza atmosfera między kotami.',
+    href: '/koty/konflikt-miedzy-kotami',
   },
   {
     title: 'Trudne zmiany po nowej sytuacji w domu',
     description:
-      'Przeprowadzka, nowy domownik, nowe zwierzÄ™ albo zmiana rytmu dnia wpĹ‚ywajÄ… na zachowanie kota.',
+      'Po przeprowadzce, nowym domowniku albo zmianie rytmu dnia coś w zachowaniu kota wyraźnie się rozsypało.',
   },
   {
     title: 'Nadmierna wokalizacja albo pobudzenie',
     description:
-      'Kot czÄ™Ĺ›ciej miauczy, domaga siÄ™ uwagi, wydaje siÄ™ napiÄ™ty albo trudniej mu wrĂłciÄ‡ do spokoju.',
+      'Kot częściej miauczy, intensywnie domaga się uwagi albo trudniej mu się wyciszyć po zwykłych sytuacjach dnia.',
   },
   {
-    title: 'Zachowania, ktĂłre nagle siÄ™ zmieniĹ‚y',
+    title: 'Zachowania, które nagle się zmieniły',
     description:
-      'Kot zaczÄ…Ĺ‚ reagowaÄ‡ inaczej niĹĽ zwykle i opiekun nie wie, co mogĹ‚o uruchomiÄ‡ tÄ™ zmianÄ™.',
+      'Widzisz zmianę, ale trudno nazwać ją jednym słowem i ocenić, od czego najlepiej spokojnie zacząć.',
   },
 ] as const
 
 const whenToGetHelp = {
   yes: [
-    'problem wraca w podobnych sytuacjach',
-    'kot coraz cz??ciej jest napi?ty, wycofany albo czujny',
-    'temat zaczyna wp?ywa? na kuwet?, relacje lub rytm domu',
-    'chcesz dzia?a? spokojnie, zanim sytuacja si? utrwali',
+    'załatwianie poza kuwetą wraca albo zaczyna pojawiać się częściej',
+    'wycofanie, czujność lub stres zaczynają wpływać na codzienny rytm kota',
+    'między kotami rośnie unikanie, blokowanie albo napięte obserwowanie',
+    'po zmianach w domu kot nie wraca do swojej równowagi',
+    'widzisz kilka trudności naraz i trudno wybrać pierwszy krok',
+    'chcesz zareagować wcześniej, zanim temat się utrwali',
   ],
   noNeedToWait: [
-    'a? problem sam zniknie',
-    'a? zachowanie stanie si? wyra?nie gorsze',
-    'a? w domu pojawi si? sta?y konflikt',
-    'a? zabraknie Ci pomys?u, co obserwowa?',
+    'widzisz subtelne sygnały, które regularnie wracają',
+    'drobna zmiana zaczyna obejmować kolejne miejsca albo sytuacje',
+    'temat nie jest jeszcze duży, ale już zabiera spokój w domu',
+    'chcesz zatrzymać problem, zanim utrwali się na dobre',
+    'zależy Ci na spokojnym planie startu zamiast zgadywania',
+    'chcesz działać szerzej niż tylko na sam objaw',
   ],
 } as const
 
 const consultationSteps = [
   {
-    title: 'Umawiamy termin i pierwszy kontakt',
-    copy: 'Wybierasz spokojny start i krĂłtko opisujesz, co dzieje siÄ™ z kotem.',
+    title: 'Umawiamy termin i krótko opisujesz, co się zmieniło',
+    copy: 'Wybierasz spokojny termin i w kilku zdaniach opisujesz, co dziś najbardziej niepokoi Cię w zachowaniu kota.',
   },
   {
-    title: 'PoznajÄ™ kota i jego codzienne Ĺ›rodowisko',
-    copy: 'PatrzÄ™ na rytm dnia, przestrzeĹ„, zasoby i to, co realnie utrudnia ĹĽycie w domu.',
+    title: 'Patrzymy na kota, środowisko i relacje w domu',
+    copy: 'Bierzemy pod uwagę kuwetę, zasoby, rytm dnia, napięcie w domu i to, co mogło uruchomić zmianę.',
   },
   {
-    title: 'PorzÄ…dkujemy problem',
-    copy: 'Oddzielamy objawy od tĹ‚a i ustalamy, co jest teraz najwaĹĽniejsze, a co moĹĽna odĹ‚oĹĽyÄ‡.',
+    title: 'Porządkujemy, co jest objawem, a co tłem',
+    copy: 'Oddzielamy to, co widać na pierwszy rzut oka, od przyczyn i ustalamy, co ma największe znaczenie na start.',
   },
   {
-    title: 'Dostajesz kierunek dziaĹ‚ania',
-    copy: 'Wychodzisz z konsultacji z jasnym pierwszym planem, a nie z listÄ… przypadkowych rad.',
+    title: 'Dostajesz jasny plan pierwszych kroków',
+    copy: 'Po konsultacji wiesz, co wdrożyć najpierw, co obserwować i jak działać spokojnie, bez dokładania chaosu sobie ani kotu.',
   },
 ] as const
 
 const prepItems = [
-  'krĂłtki opis problemu',
-  'informacjÄ™, od kiedy widaÄ‡ zmianÄ™',
-  'opis codziennego Ĺ›rodowiska kota',
-  'relacje z innymi kotami lub domownikami, jeĹ›li sÄ… waĹĽne',
-  'ewentualne nagrania lub zdjÄ™cia',
+  'krótki opis problemu i tego, co najbardziej niepokoi Cię dzisiaj',
+  'od kiedy widać zmianę i czy wcześniej wydarzyło się coś ważnego',
+  'kilka informacji o środowisku kota: kuwecie, zasobach, przestrzeni i rytmie dnia',
+  'relacje z innymi kotami, zwierzętami albo domownikami, jeśli mają znaczenie',
+  'zdjęcia lub nagrania, jeśli już masz je pod ręką',
 ] as const
 
 const benefitCards = [
   {
-    title: 'JaĹ›niejszy obraz sytuacji',
-    copy: 'Ĺatwiej zobaczyÄ‡, co naprawdÄ™ stoi za zachowaniem i gdzie problem siÄ™ utrzymuje.',
+    eyebrow: 'Czytelność',
+    title: 'Jaśniejszy obraz sytuacji',
+    copy: 'Lepiej widzisz, co jest głównym problemem, a co jego skutkiem, tłem albo konsekwencją napięcia.',
   },
   {
-    title: 'Plan pierwszych krokĂłw',
-    copy: 'Wiesz, od czego zaczÄ…Ä‡ od razu i co ma sens w najbliĹĽszych dniach.',
+    eyebrow: 'Pierwszy plan',
+    title: 'Plan pierwszych kroków',
+    copy: 'Wiesz, co warto wdrożyć od razu, co obserwować i czego na ten moment lepiej nie dokładać.',
   },
   {
+    eyebrow: 'Dopasowanie',
     title: 'Kierunek dopasowany do Twojego kota i domu',
-    copy: 'Dostajesz plan oparty na konkretnym kocie, Twoim domu i realnym rytmie dnia.',
+    copy: 'Plan uwzględnia konkretnego kota, jego środowisko, relacje w domu i realia Waszej codzienności.',
   },
   {
-    title: 'Mniej chaosu i wiÄ™cej spokoju',
-    copy: 'Zamiast prĂłbowaÄ‡ wszystkiego naraz, masz jeden spokojny punkt startu.',
+    eyebrow: 'Spokój',
+    title: 'Mniej chaosu i więcej spokoju',
+    copy: 'Zamiast wielu sprzecznych prób masz uporządkowany punkt startu i większy oddech w codzienności.',
   },
 ] as const
 
 const featuredOpinions = [
   {
+    label: 'Kuweta',
+    context: 'porządek zamiast zgadywania',
     quote:
-      'Po konsultacji przestaĹ‚am zgadywaÄ‡, czy problem jest w kuwecie, czy w napiÄ™ciu. Wreszcie miaĹ‚am porzÄ…dek i spokojny start.',
-    note: 'Kuweta',
+      'Po konsultacji przestałam zgadywać, czy to tylko kwestia kuwety. Wreszcie wiedziałam, od czego zacząć, co uporządkować w domu i co spokojnie obserwować dalej.',
+    signature: 'Opiekunka kota z problemem kuwetowym',
+    note: 'więcej porządku, spokojniejszy start',
   },
   {
+    label: 'Napięcie',
+    context: 'wycofanie i stres w domu',
     quote:
-      'Kot byĹ‚ wycofany i caĹ‚y czas w napiÄ™ciu. Po rozmowie zobaczyĹ‚am, co zmieniÄ‡ w domu, ĹĽeby mĂłgĹ‚ szybciej wracaÄ‡ do rĂłwnowagi.',
-    note: 'Wycofanie',
+      'Kot był wycofany i czujny, a ja nie umiałam ocenić, co go tak obciąża. Po rozmowie zobaczyłam, które elementy domu naprawdę dokładały mu stresu i od czego warto zacząć zmiany.',
+    signature: 'Opiekunka kota bardziej wycofanego',
+    note: 'czytelniejsza sytuacja, mniej chaosu',
   },
   {
+    label: 'Relacje',
+    context: 'między kotami i styl pracy',
     quote:
-      'Najbardziej pomogĹ‚o to, ĹĽe sytuacja miÄ™dzy kotami zostaĹ‚a rozpisana bez presji. Od razu byĹ‚o wiadomo, co zabezpieczyÄ‡ najpierw.',
-    note: 'Relacje miÄ™dzy kotami',
+      'Najbardziej pomogło mi spokojne rozpisanie sytuacji między kotami bez oceniania i bez presji. Po konsultacji od razu było wiadomo, co zabezpieczyć na start i jak nie dokładać napięcia.',
+    signature: 'Opiekunka dwóch kotów po zmianach',
+    note: 'konkretnie, bez presji i straszenia',
   },
 ] as const
 
 const shortOpinions = [
-  'Wreszcie wiem, od czego zaczÄ…Ä‡.',
-  'Kuweta przestaĹ‚a byÄ‡ chaosem.',
-  'Kot szybciej wraca do spokoju.',
-  'Wycofanie zaczÄ™Ĺ‚o mieÄ‡ sens.',
-  'Plan byĹ‚ prosty do wdroĹĽenia.',
-  'Bez presji, bez oceniania.',
-  'WidzÄ™ teraz wiÄ™cej sygnaĹ‚Ăłw.',
-  'NapiÄ™cie w domu wyraĹşnie spadĹ‚o.',
-  'Konflikt miÄ™dzy kotami przestaĹ‚ eskalowaÄ‡.',
-  'DostaĹ‚am konkretny pierwszy krok.',
-  'Kot znĂłw korzysta z kuwety spokojniej.',
-  'PrzestaĹ‚am zgadywaÄ‡ przyczynÄ™.',
-  'Rozmowa byĹ‚a rzeczowa i spokojna.',
-  'Nagle wszystko zrobiĹ‚o siÄ™ czytelniejsze.',
-  'WystarczyĹ‚o uporzÄ…dkowaÄ‡ Ĺ›rodowisko.',
-  'Kot mniej siÄ™ chowa.',
-  'Mamy plan na zmianÄ™ w domu.',
-  'To byĹ‚a ulga juĹĽ po pierwszej rozmowie.',
-  'NapiÄ™cie przy karmieniu spadĹ‚o.',
-  'Zmiana po przeprowadzce nabraĹ‚a sensu.',
-  'Wiem, co obserwowaÄ‡ dalej.',
-  'Dom przestaĹ‚ krÄ™ciÄ‡ siÄ™ wokĂłĹ‚ problemu.',
-  'Kot szybciej siÄ™ wycisza.',
-  'DostaĹ‚am spokojnÄ…, eksperckÄ… odpowiedĹş.',
-  'Nie musiaĹ‚am znaÄ‡ nazw problemĂłw.',
-  'Teraz lepiej rozumiem relacjÄ™ kotĂłw.',
-  'Jest mniej blokowania przejĹ›Ä‡.',
-  'Kuweta przestaĹ‚a byÄ‡ jedynym tematem.',
-  'Koci rytm dnia wraca do normy.',
-  'WidzÄ™, co byĹ‚o priorytetem.',
-  'To nie byĹ‚a lista przypadkowych rad.',
-  'Bardzo konkretny, ale Ĺ‚agodny kierunek.',
-  'Kot mniej reaguje napiÄ™ciem.',
-  'Wreszcie mogĹ‚am opisaÄ‡ wszystko po swojemu.',
-  'Mniej chaosu w domu po kilku dniach.',
-  'Zmiany okazaĹ‚y siÄ™ realne do wdroĹĽenia.',
-  'Jest jaĹ›niej, co sprawdziÄ‡ najpierw.',
-  'Spokojne prowadzenie od poczÄ…tku do koĹ„ca.',
-  'Kot przestaĹ‚ byÄ‡ niewiadomÄ….',
-  'Ĺatwiej nam byĹ‚o dziaĹ‚aÄ‡ razem.',
-  'DostaĹ‚am odpowiedĹş bez medycznego nadÄ™cia.',
-  'NapiÄ™cie miÄ™dzy kotami zaczÄ™Ĺ‚o siÄ™ rozplÄ…tywaÄ‡.',
-  'Domownicy przestali chodziÄ‡ na palcach.',
-  'To byĹ‚ dobry pierwszy krok.',
-  'Wreszcie mam porzÄ…dek w gĹ‚owie.',
-  'MogÄ™ dziaĹ‚aÄ‡ bez zgadywania.',
+  {
+    label: 'Kuweta',
+    copy: 'Wreszcie wiedziałam, co sprawdzić najpierw, zamiast robić wszystko naraz.',
+  },
+  {
+    label: 'Wycofanie',
+    copy: 'Drobne sygnały zaczęły mieć sens i łatwiej było działać spokojnie.',
+  },
+  {
+    label: 'Dom',
+    copy: 'Plan był prosty do wdrożenia i nie wywrócił codzienności.',
+  },
+  {
+    label: 'Styl pracy',
+    copy: 'Bez oceniania, bez straszenia, za to bardzo konkretnie.',
+  },
 ] as const
 
 const miniCaseStudies = [
   {
-    title: 'ZaĹ‚atwianie poza kuwetÄ…',
+    eyebrow: 'Kuweta',
+    title: 'Kot załatwiający się poza kuwetą',
     situation:
-      'Kot zaczÄ…Ĺ‚ omijaÄ‡ kuwetÄ™ po zmianach w rytmie domu i opiekun miaĹ‚ wraĹĽenie, ĹĽe problem wraca znikÄ…d.',
-    key: 'Co byĹ‚o kluczowe: odrĂłĹĽnienie tĹ‚a Ĺ›rodowiskowego od sygnaĹ‚Ăłw, ktĂłre wymagaĹ‚y sprawdzenia weterynaryjnego.',
+      'Problem wrócił po zmianach w rytmie domu. Raz dotyczył sofy, raz łazienki, a opiekunka nie wiedziała, czy to kwestia kuwety, stresu czy szerszego przeciążenia.',
+    key:
+      'Kluczowe było uporządkowanie zasobów, historii zmian i sygnałów, które równolegle wymagały sprawdzenia weterynaryjnego.',
     effect:
-      'Efekt / kierunek pracy: najpierw porzÄ…dkujemy otoczenie i zasoby, a dopiero potem dokĹ‚adamy dalsze kroki.',
+      'Powstał jasny plan: co poprawić w środowisku od razu, co dalej obserwować i czego nie robić chaotycznie.',
   },
   {
-    title: 'Wycofanie i napiÄ™cie',
+    eyebrow: 'Wycofanie',
+    title: 'Kot, który stał się bardziej wycofany i napięty',
     situation:
-      'Kot czÄ™Ĺ›ciej chowaĹ‚ siÄ™, unikaĹ‚ kontaktu i trudniej byĹ‚o go rozluĹşniÄ‡ nawet w spokojnych momentach.',
-    key: 'Co byĹ‚o kluczowe: stabilizacja dnia, uwaĹĽna obserwacja bodĹşcĂłw i zmniejszenie presji w domu.',
+      'Kot coraz częściej chował się, unikał kontaktu i pozostawał w czujności nawet wtedy, gdy w domu było spokojnie.',
+    key:
+      'Kluczowe okazało się przyjrzenie bodźcom, układowi przestrzeni i temu, czy kot ma realną możliwość odpoczynku i kontroli.',
     effect:
-      'Efekt / kierunek pracy: opiekun dostaje czytelny plan, ktĂłry pomaga kotu wracaÄ‡ do poczucia bezpieczeĹ„stwa.',
+      'Po konsultacji łatwiej było uprościć otoczenie i przywrócić kotu większe poczucie bezpieczeństwa.',
   },
   {
-    title: 'NapiÄ™cie miÄ™dzy kotami po zmianach',
+    eyebrow: 'Relacje',
+    title: 'Napięcie między kotami po zmianach',
     situation:
-      'Po przeprowadzce lub pojawieniu siÄ™ nowego domownika relacja miÄ™dzy kotami zaczÄ™Ĺ‚a siÄ™ psuÄ‡.',
-    key: 'Co byĹ‚o kluczowe: przestrzeĹ„, zasoby i kolejnoĹ›Ä‡ wprowadzanych zmian.',
+      'Po przeprowadzce albo pojawieniu się nowego domownika między kotami zaczęło rosnąć unikanie, blokowanie i napięte obserwowanie.',
+    key:
+      'Najważniejsze okazały się zasoby, odległość, kolejność zmian i zabezpieczenie sytuacji, które napędzały konflikt.',
     effect:
-      'Efekt / kierunek pracy: najpierw zabezpieczamy relacjÄ™, potem dopiero budujemy dalszÄ… pracÄ™ nad emocjami.',
+      'Dom dostał spokojniejszy układ, a dalsza praca mogła zacząć się bez dokładania presji.',
   },
 ] as const
 
-const faqItems = [
-  {
-    question: 'Czy konsultacja ma sens, jeĹ›li problem dopiero siÄ™ pojawiĹ‚?',
-    answer:
-      'Tak. JeĹ›li problem dopiero siÄ™ zaczyna, czÄ™sto Ĺ‚atwiej zatrzymaÄ‡ go zanim siÄ™ utrwali i zacznie rozlewaÄ‡ na kolejne sytuacje.',
-  },
-  {
-    question: 'Czy pomoc dotyczy tylko powaĹĽnych problemĂłw, takich jak kuweta albo silny konflikt miÄ™dzy kotami?',
-    answer:
-      'Nie. Pomagam takĹĽe wtedy, gdy temat nie wyglÄ…da â€žduĹĽyâ€ť, ale juĹĽ wpĹ‚ywa na codziennoĹ›Ä‡ kota i domu.',
-  },
-  {
-    question: 'Czy konsultacja online ma sens przy problemach kota?',
-    answer:
-      'Tak. W wielu sytuacjach online wystarczy, ĹĽeby uporzÄ…dkowaÄ‡ kontekst, Ĺ›rodowisko i pierwszy kierunek dziaĹ‚ania.',
-  },
-  {
-    question: 'Co przygotowaÄ‡ przed pierwszÄ… konsultacjÄ… dotyczÄ…cÄ… kota?',
-    answer:
-      'Wystarczy krĂłtki opis problemu, moment, od kiedy widaÄ‡ zmianÄ™, tĹ‚o domu i ewentualne nagrania lub zdjÄ™cia.',
-  },
-  {
-    question: 'Co jeĹ›li mĂłj kot ma kilka trudnoĹ›ci naraz?',
-    answer:
-      'To normalne. Najpierw rozpisujemy priorytety, potem kolejne kroki, ĹĽeby nie dokĹ‚adaÄ‡ chaosu.',
-  },
-  {
-    question: 'Co jeĹ›li nie umiem dobrze opisaÄ‡ problemu mojego kota?',
-    answer:
-      'To teĹĽ wystarczy. Nie musisz znaÄ‡ fachowych nazw, ĹĽeby dobrze opisaÄ‡ sytuacjÄ™ i zaczÄ…Ä‡.',
-  },
-] as const
+const faqItems = FAQ_SHORTLISTS.cats
 
 export default function CatsPage() {
-  const baseUrl = getBaseUrl()
+  const baseUrl = getCanonicalBaseUrl()
   const contact = getPublicContactDetails()
+
   const structuredData = [
     {
       '@context': 'https://schema.org',
       '@type': 'ProfessionalService',
       name: SITE_NAME,
-      description: `${SITE_TAGLINE}. Olsztyn, woj. warmiĹ„sko-mazurskie i online.`,
+      description: `${SITE_TAGLINE}. Online dla opiekunów kotów z całej Polski.`,
       url: new URL('/koty', baseUrl).toString(),
-      areaServed: [
-        { '@type': 'City', name: 'Olsztyn' },
-        { '@type': 'AdministrativeArea', name: 'woj. warmiĹ„sko-mazurskie' },
-        { '@type': 'Country', name: 'Polska' },
-      ],
+      areaServed: [{ '@type': 'Country', name: 'Polska' }],
       serviceType: [
-        'Konsultacje behawioralne dla kotĂłw',
-        'KrĂłtkie rozmowy wstÄ™pne 15 min',
-        'Pomoc przy kuwecie, napiÄ™ciu i konflikcie miÄ™dzy kotami',
+        'Konsultacje behawioralne dla kotów',
+        'Pomoc przy kuwecie, stresie i relacjach między kotami',
+        'Spokojny plan pierwszych kroków po konsultacji',
       ],
       provider: {
         '@type': 'Person',
@@ -319,11 +271,11 @@ export default function CatsPage() {
       },
       contactPoint: contact.email
         ? {
-            '@type': 'ContactPoint',
-            contactType: 'customer support',
-            email: contact.email,
-            areaServed: 'PL',
-          }
+          '@type': 'ContactPoint',
+          contactType: 'customer support',
+          email: contact.email,
+          areaServed: [{ '@type': 'Country', name: 'Polska' }],
+        }
         : undefined,
     },
     {
@@ -338,63 +290,67 @@ export default function CatsPage() {
   ]
 
   return (
-    <main className="page-wrap marketing-page editorial-home-page premium-home-page cat-service-page">
+    <main className="page-wrap editorial-home-page premium-home-page cat-service-page">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
 
       <div className="container editorial-stack">
         <Header />
-        <section className="editorial-hero-shell premium-hero-shell" id="start">
+        <OfferEntrySection
+          species="kot"
+          sectionId="start"
+          eyebrow="Oferta dla kota"
+          title="Kwadrans z behawiorystą jest najprostszym startem dla kota."
+          description="Jeśli temat jest szerszy, wybierz konsultację online 60 min. Jeśli chcesz tylko doprecyzować sprawę, napisz krótką wiadomość."
+        />
+
+        <section className="editorial-hero-shell premium-hero-shell">
           <div className="editorial-hero-grid">
             <div className="editorial-hero-copy">
-              <div className="section-eyebrow">Pomoc behawioralna dla opiekunĂłw kotĂłw</div>
-              <h1>TwĂłj kot zachowuje siÄ™ inaczej niĹĽ zwykle i nie wiesz, co moĹĽe byÄ‡ przyczynÄ…?</h1>
+              <div className="section-eyebrow">Pomoc behawioralna dla opiekunów kotów</div>
+              <h1>Pomoc dla opiekunów kotów</h1>
               <p className="editorial-hero-lead">
-                Pomagam zrozumieÄ‡, co moĹĽe staÄ‡ za trudnym zachowaniem kota, uporzÄ…dkowaÄ‡ sytuacjÄ™ i wybraÄ‡ najlepszy pierwszy krok.
+                Pracuję z opiekunami kotów, którzy nie rozumieją, co się dzieje z ich kotem i chcą wiedzieć, od czego zacząć.
               </p>
 
-              <div className="hero-actions editorial-hero-actions">
-                <Link
-                  href={consultationHref}
-                  prefetch={false}
-                  className="button button-primary big-button"
-                  data-analytics-event="cta_click"
-                  data-analytics-location="cats-hero-book"
-                >
-                  UmĂłw konsultacjÄ™
-                </Link>
-                <Link
-                  href={contactHref}
-                  prefetch={false}
-                  className="button button-ghost big-button"
-                  data-analytics-event="cta_click"
-                  data-analytics-location="cats-hero-message"
-                >
-                  Napisz wiadomoĹ›Ä‡
-                </Link>
-              </div>
+              <FunnelPrimaryActions
+                audioHref={introCallHref}
+                consultationHref={consultationHref}
+                contactHref={contactHref}
+                primaryLocation="cats-hero-audio"
+                secondaryLocation="cats-hero-toolkit"
+                actionsClassName="hero-actions editorial-hero-actions"
+                noteClassName="cat-hero-cta-note"
+              />
 
-              <Link href={introCallHref} prefetch={false} className="prep-inline-link">
-                Nie masz pewnoĹ›ci, czy to dobry moment? KrĂłtka rozmowa wstÄ™pna 15 min
-              </Link>
+              <HeroAudioSoftCta
+                href={introCallHref}
+                analyticsLocation="cats-hero-audio"
+                className="cat-hero-soft-cta"
+                title="Nie wiesz jeszcze, od czego zacząć z problemem kota?"
+                copy="Kwadrans z behawiorystą wystarczy, żeby spokojnie opisać sytuację, ustalić, czy to temat behawioralny, środowiskowy czy zdrowotny, i wybrać pierwszy ruch."
+              />
 
-              <p className="muted top-gap-small">
-                Najcz??ciej pracuj? przy kuwecie, wycofaniu, konflikcie mi?dzy kotami, nag?ej wokalizacji i zmianach po przeprowadzce lub nowych domownikach.
+              <p className="cat-contact-support-copy">
+                Zachowanie kota zmienia się rzadko bez powodu. Zanim zdecydujesz, co zmienić w środowisku, warto wiedzieć, co stoi za tym zachowaniem.
               </p>
             </div>
 
-            <aside className="editorial-hero-visual" aria-label="ZdjÄ™cie kota w spokojnym wnÄ™trzu">
+            <aside className="editorial-hero-visual" aria-label="Zdjęcie kota w spokojnym wnętrzu">
               <div className="editorial-hero-photo-frame">
                 <Image
                   src={CATS_PAGE_PHOTO.src}
                   alt={CATS_PAGE_PHOTO.alt}
-                  fill
+                  width={1024}
+                  height={1536}
                   sizes="(max-width: 980px) 100vw, 520px"
                   priority
+                  loading="eager"
+                  fetchPriority="high"
                   className="editorial-hero-photo"
                 />
                 <div className="editorial-hero-photo-caption">
                   <span>Spokojny pierwszy krok</span>
-                  <strong>Najpierw rozumiem tĹ‚o zachowania, potem proponujÄ™ najlepszy pierwszy ruch.</strong>
+                  <strong>Najpierw rozumiem, co zmieniło zachowanie kota. Potem układamy spokojny plan dla kota, domu i relacji.</strong>
                 </div>
               </div>
             </aside>
@@ -403,39 +359,51 @@ export default function CatsPage() {
 
         <section className="panel section-panel editorial-section" id="jak-pomagam">
           <SectionIntro
-            eyebrow="Jak pomagam"
-            title="Z jakimi trudnoĹ›ciami najczÄ™Ĺ›ciej zgĹ‚aszajÄ… siÄ™ opiekunowie kotĂłw"
-            description="Nie kaĹĽdy problem zaczyna siÄ™ spektakularnie. Czasem pierwszym sygnaĹ‚em jest drobna zmiana, ktĂłra szybko zaczyna wpĹ‚ywaÄ‡ na rytm domu."
+            eyebrow="Typowe trudności"
+            title="Z jakimi trudnościami najczęściej zgłaszają się opiekunowie kotów"
+            description="Przy kotach ważne bywają także subtelne zmiany. Warto je uporządkować, zanim zaczną mocniej wpływać na rytm domu."
           />
 
-          <div className="editorial-entry-grid">
+          <div className="editorial-entry-grid cat-problem-grid">
             {problemCards.map((card) => (
-              <article key={card.title} className="editorial-entry-card">
+              <article key={card.title} className="editorial-entry-card cat-problem-card">
                 <h3>{card.title}</h3>
                 <p>{card.description}</p>
+                {'href' in card ? (
+                  <Link href={card.href} prefetch={false} className="prep-inline-link">
+                    Zobacz stronę problemową
+                  </Link>
+                ) : null}
               </article>
             ))}
           </div>
 
-          <p className="muted top-gap">Nie trzeba znaÄ‡ fachowych nazw. Wystarczy, ĹĽe opiszesz, co widzisz na co dzieĹ„.</p>
+          <p className="muted top-gap">
+            Nie musisz znać fachowych nazw. Wystarczy opis tego, co widzisz na co dzień i tego, co zaczyna zabierać spokój Wam obojgu.
+          </p>
 
           <div className="hero-actions editorial-final-actions">
             <Link href="#kiedy-warto" prefetch={false} className="prep-inline-link">
-              SprawdĹş, kiedy warto zgĹ‚osiÄ‡ siÄ™ po pomoc
+              Sprawdź, kiedy warto zgłosić się po pomoc
             </Link>
           </div>
         </section>
 
         <section className="panel section-panel editorial-section" id="kiedy-warto">
           <SectionIntro
-            eyebrow="Kiedy warto dziaĹ‚aÄ‡"
-            title="Kiedy warto zgĹ‚osiÄ‡ siÄ™ po pomoc behawioralnÄ… dla kota"
-            description="Nie trzeba czekaÄ‡, aĹĽ sytuacja siÄ™ zaostrzy. Im wczeĹ›niej opiszesz to, co widzisz, tym Ĺ‚atwiej ustaliÄ‡ bezpieczny start."
+            eyebrow="Kiedy działać"
+            title="Kiedy warto zgłosić się po pomoc behawioralną dla kota"
+            description="Nie trzeba czekać na duży kryzys. Przy kotach znaczenie mają także drobniejsze sygnały, jeśli zaczynają się powtarzać lub rozszerzać."
           />
 
-          <div className="premium-two-column-grid">
-            <article className="summary-card tree-backed-card">
-              <h3>Warto zgĹ‚osiÄ‡ siÄ™ wtedy, gdy</h3>
+          <div className="premium-two-column-grid cat-comparison-grid">
+            <article className="summary-card tree-backed-card cat-compare-card">
+              <div className="section-eyebrow">Sygnały z codzienności</div>
+              <h3>Warto zgłosić się wtedy, gdy</h3>
+              <p>
+                Nie chodzi o dramatyczny moment. Wystarczy, że temat wraca, zaczyna się utrwalać albo wyraźnie obciąża kota i
+                codzienność domu.
+              </p>
               <ul className="premium-bullet-list">
                 {whenToGetHelp.yes.map((item) => (
                   <li key={item}>{item}</li>
@@ -443,8 +411,13 @@ export default function CatsPage() {
               </ul>
             </article>
 
-            <article className="summary-card tree-backed-card">
-              <h3>Nie musisz czekaÄ‡, aĹĽ</h3>
+            <article className="summary-card tree-backed-card cat-compare-card cat-compare-card-accent">
+              <div className="section-eyebrow">Dobry moment na pierwszy krok</div>
+              <h3>Nie trzeba czekać, aż zrobi się bardzo źle</h3>
+              <p>
+                Wcześniejszy kontakt często daje więcej spokoju, bo pozwala zatrzymać problem na etapie, na którym łatwiej go
+                uporządkować i nie dokładać napięcia w domu.
+              </p>
               <ul className="premium-bullet-list">
                 {whenToGetHelp.noNeedToWait.map((item) => (
                   <li key={item}>{item}</li>
@@ -454,24 +427,24 @@ export default function CatsPage() {
           </div>
 
           <p className="muted top-gap">
-            JeĹ›li juĹĽ teraz widzisz, ĹĽe temat wraca albo zaczyna siÄ™ rozlewaÄ‡ na kolejne obszary, to dobry moment na kontakt.
+            Jeśli widzisz, że zmiana zaczyna obejmować kuwetę, napięcie, relacje albo rytm dnia, to zwykle jest dobry moment na
+            spokojny kontakt.
           </p>
 
-          <div className="hero-actions editorial-final-actions">
-            <Link href="#konsultacja" prefetch={false} className="button button-primary big-button">
-              SprawdĹş, jak wyglÄ…da konsultacja dotyczÄ…ca kota
-            </Link>
-            <Link href={contactHref} prefetch={false} className="button button-ghost big-button">
-              Nie masz pewnoĹ›ci? Napisz wiadomoĹ›Ä‡
-            </Link>
-          </div>
+          <FunnelPrimaryActions
+            audioHref={introCallHref}
+            consultationHref={consultationHref}
+            contactHref={contactHref}
+            primaryLocation="cats-when-audio"
+            secondaryLocation="cats-when-toolkit"
+          />
         </section>
 
         <section className="panel section-panel editorial-section" id="konsultacja">
           <SectionIntro
             eyebrow="Pierwsza konsultacja"
-            title="Jak wyglÄ…da pierwsza konsultacja dotyczÄ…ca kota"
-            description="Wystarczy, ĹĽe opiszesz sytuacjÄ™ kota. ResztÄ™ uporzÄ…dkujemy razem bez zbÄ™dnego przeciÄ…ĹĽania."
+            title="Jak wygląda konsultacja dotycząca kota"
+            description="Wystarczy krótko opisać, co się zmieniło. Resztę porządkujemy razem spokojnie, konkretnie i bez presji."
           />
 
           <div className="editorial-process-layout">
@@ -485,10 +458,13 @@ export default function CatsPage() {
               ))}
             </div>
 
-            <aside className="editorial-process-note" aria-label="Co warto przygotowaÄ‡ przed konsultacjÄ…">
-              <span className="editorial-process-note-label">Co warto przygotowaÄ‡ przed konsultacjÄ…</span>
-              <strong>Nie musisz mieÄ‡ wszystkiego idealnie poukĹ‚adanego.</strong>
-              <p>Wystarczy materiaĹ‚, ktĂłry pokaĹĽe codziennoĹ›Ä‡ kota i najwaĹĽniejsze momenty problemu.</p>
+            <aside className="editorial-process-note cat-process-note" aria-label="Co warto przygotować przed konsultacją">
+              <span className="editorial-process-note-label">Co warto przygotować</span>
+              <strong>Nie musisz mieć wszystkiego idealnie poukładanego przed rozmową.</strong>
+              <p>
+                Wystarczy kilka konkretów: opis problemu, tło zmian i to, jak dziś wygląda codzienność kota. To daje dobry start bez
+                przeciążania siebie i bez zgadywania.
+              </p>
 
               <ul className="premium-bullet-list top-gap-small">
                 {prepItems.map((item) => (
@@ -496,53 +472,71 @@ export default function CatsPage() {
                 ))}
               </ul>
 
-              <p>To wystarczy, ĹĽeby sensownie zaczÄ…Ä‡ i nie gubiÄ‡ siÄ™ juĹĽ na wejĹ›ciu.</p>
+              <p className="cat-process-soft-note">
+                Jeśli czegoś nie masz pod ręką, doprecyzujemy to spokojnie podczas konsultacji. Nie trzeba przygotowywać wszystkiego
+                perfekcyjnie.
+              </p>
             </aside>
           </div>
 
-          <div className="hero-actions editorial-final-actions">
-            <Link
-              href={consultationHref}
-              prefetch={false}
-              className="button button-primary big-button"
-              data-analytics-event="cta_click"
-              data-analytics-location="cats-consultation-book"
-            >
-              UmĂłw konsultacjÄ™ dotyczÄ…cÄ… kota
-            </Link>
-            <Link
-              href={contactHref}
-              prefetch={false}
-              className="button button-ghost big-button"
-              data-analytics-event="cta_click"
-              data-analytics-location="cats-consultation-message"
-            >
-              Masz pytanie przed umĂłwieniem? Napisz wiadomoĹ›Ä‡
-            </Link>
+          <FunnelPrimaryActions
+            audioHref={introCallHref}
+            consultationHref={consultationHref}
+            contactHref={contactHref}
+            primaryLocation="cats-consultation-audio"
+            secondaryLocation="cats-consultation-toolkit"
+          />
+        </section>
+
+        <section className="panel section-panel editorial-section" id="material-startowy">
+          <SectionIntro
+            eyebrow="Lżejszy start"
+            title="Jeśli temat dotyczy kuwety albo napięcia w domu, możesz zacząć od krótkiej checklisty"
+            description="To materiał do spokojnego uporządkowania obserwacji przed rozmową albo między kolejnymi krokami. Jeśli chcesz od razu odnieść temat do swojej sytuacji, wybierz Kwadrans z behawiorystą."
+          />
+
+          <div className="premium-two-column-grid top-gap-small">
+            <LeadMagnetSignup magnet={litterGuide} location="cats-page" sourcePage="/koty" />
+
+            <article className="summary-card tree-backed-card">
+              <div className="section-eyebrow">Kiedy warto</div>
+              <h3>{litterGuide.shortTitle}</h3>
+              <p>Ten materiał pomaga zebrać najważniejsze elementy środowiska i codzienności kota, zanim wejdziesz w szerszą rozmowę o kuwecie, stresie albo napięciu między kotami.</p>
+              <ul className="premium-bullet-list">
+                {litterGuide.bullets.slice(0, 3).map((bullet) => (
+                  <li key={bullet}>{bullet}</li>
+                ))}
+              </ul>
+              <p className="muted">Jeśli po uporządkowaniu checklisty nadal nie jest jasne, co najmocniej napędza problem, przejdź do Kwadransu z behawiorystą.</p>
+            </article>
           </div>
         </section>
 
         <section className="panel section-panel editorial-section" id="co-dostajesz">
           <SectionIntro
             eyebrow="Efekt konsultacji"
-            title="Co dostajesz po konsultacji dotyczÄ…cej kota"
-            description="NajwaĹĽniejsze jest to, ĹĽe zyskujesz porzÄ…dek, czytelnoĹ›Ä‡ i spokojniejszy punkt startu."
+            title="Co dostajesz po konsultacji dotyczącej kota"
+            description="Najważniejsze jest to, że po rozmowie widzisz sytuację wyraźniej i wiesz, od czego naprawdę spokojnie zacząć."
           />
 
-          <div className="premium-two-column-grid">
+          <div className="premium-two-column-grid cat-benefits-grid">
             {benefitCards.map((card) => (
-              <article key={card.title} className="summary-card tree-backed-card">
+              <article key={card.title} className="summary-card tree-backed-card cat-benefit-card">
+                <div className="section-eyebrow">{card.eyebrow}</div>
                 <h3>{card.title}</h3>
                 <p>{card.copy}</p>
               </article>
             ))}
           </div>
 
-          <p className="muted top-gap">NajczÄ™Ĺ›ciej wĹ‚aĹ›nie wtedy robi siÄ™ mniej chaotycznie, bo wiadomo, co jest priorytetem.</p>
+          <p className="muted top-gap">
+            To zwykle moment, w którym robi się mniej chaotycznie, bo nie trzeba już zgadywać kolejnych ruchów ani próbować wszystkiego
+            naraz.
+          </p>
 
           <div className="hero-actions editorial-final-actions">
             <Link href="#opinie" prefetch={false} className="prep-inline-link">
-              Zobacz opinie opiekunĂłw kotĂłw
+              Zobacz opinie opiekunów kotów
             </Link>
           </div>
         </section>
@@ -550,79 +544,112 @@ export default function CatsPage() {
         <section className="panel section-panel editorial-section" id="opinie">
           <SectionIntro
             eyebrow="Opinie"
-            title="Co mĂłwiÄ… opiekunowie kotĂłw po konsultacji"
-            description="KrĂłtko i bez ciÄ™ĹĽkiego slidera. Kilka gĹ‚osĂłw, ktĂłre pokazujÄ…, jak wyglÄ…da spokojny start pracy."
+            title="Co mówią opiekunowie kotów po konsultacji"
+            description="Najczęściej wraca jedno: więcej porządku, mniej zgadywania i spokojniejszy pierwszy plan działania."
           />
 
-          <div className="summary-grid top-gap">
-            {featuredOpinions.map((opinion) => (
-              <article key={opinion.note} className="summary-card tree-backed-card cat-featured-opinion-card">
-                <div className="section-eyebrow">{opinion.note}</div>
-                <blockquote>{opinion.quote}</blockquote>
+          <div className="home-opinion-featured-grid cat-opinion-featured-grid top-gap">
+            {featuredOpinions.map((opinion, index) => (
+              <article key={opinion.label} className="home-quote-card cat-quote-card">
+                <div className="home-quote-head cat-quote-head">
+                  <div className="cat-quote-topline">
+                    <span className="home-quote-label">{opinion.label}</span>
+                    <span className="cat-quote-order">{String(index + 1).padStart(2, '0')}</span>
+                  </div>
+                  <span className="home-quote-context">{opinion.context}</span>
+                </div>
+                <blockquote className="home-quote-text">„{opinion.quote}”</blockquote>
+                <div className="home-quote-footer cat-quote-footer">
+                  <span className="home-quote-person">{opinion.signature}</span>
+                  <span className="home-quote-note">{opinion.note}</span>
+                </div>
               </article>
             ))}
           </div>
 
-          <div className="cat-opinion-wall top-gap">
+          <div className="cat-opinion-micro-intro">
+            <span>Krótsze głosy po pierwszych konsultacjach</span>
+            <p>To krótkie zdania, które najczęściej wracają wtedy, gdy pierwszy plan jest już poukładany i w codzienności robi się trochę lżej.</p>
+          </div>
+
+          <div className="home-opinion-micro-grid cat-opinion-micro-grid top-gap-small">
             {shortOpinions.map((opinion) => (
-              <article key={opinion} className="cat-opinion-card">
-                <p>{opinion}</p>
+              <article key={opinion.copy} className="summary-card tree-backed-card home-opinion-micro-card cat-opinion-micro-card">
+                <div className="home-opinion-micro-label">{opinion.label}</div>
+                <p>„{opinion.copy}”</p>
               </article>
             ))}
           </div>
 
           <div className="hero-actions editorial-final-actions">
             <Link href="#przypadki" prefetch={false} className="prep-inline-link">
-              Zobacz przykĹ‚adowe sytuacje kotĂłw
-            </Link>
-            <Link href={consultationHref} prefetch={false} className="button button-ghost big-button">
-              UmĂłw konsultacjÄ™
+              Zobacz przykładowe sytuacje kotów
             </Link>
           </div>
+
+          <FunnelPrimaryActions
+            audioHref={introCallHref}
+            consultationHref={consultationHref}
+            contactHref={contactHref}
+            primaryLocation="cats-opinions-audio"
+            secondaryLocation="cats-opinions-toolkit"
+          />
         </section>
 
         <section className="panel section-panel editorial-section" id="przypadki">
           <SectionIntro
             eyebrow="Mini przypadki"
-            title="PrzykĹ‚adowe sytuacje kotĂłw, z ktĂłrymi zgĹ‚aszajÄ… siÄ™ opiekunowie"
-            description="Bez spektaklu, bez diagnozowania przez internet. Po prostu trzy przykĹ‚adowe scenariusze, ktĂłre dobrze pokazujÄ… kierunek pracy."
+            title="Przykładowe sytuacje kotów, z którymi zgłaszają się opiekunowie"
+            description="Trzy krótkie scenariusze pokazują, jak zwykle zaczyna się spokojne uporządkowanie sytuacji."
           />
 
-          <div className="summary-grid top-gap">
+          <div className="summary-grid cat-case-grid top-gap">
             {miniCaseStudies.map((caseStudy) => (
-              <article key={caseStudy.title} className="editorial-entry-card">
+              <article key={caseStudy.title} className="summary-card tree-backed-card home-mini-case-card cat-case-card">
+                <div className="section-eyebrow">{caseStudy.eyebrow}</div>
                 <h3>{caseStudy.title}</h3>
-                <p>
-                  <strong>Sytuacja:</strong> {caseStudy.situation}
-                </p>
-                <p>
-                  <strong>{caseStudy.key}</strong>
-                </p>
-                <p>
-                  <strong>{caseStudy.effect}</strong>
-                </p>
+
+                <div className="home-case-mini-lines">
+                  <div className="home-case-mini-line">
+                    <span className="home-case-mini-label">Sytuacja</span>
+                    <p>{caseStudy.situation}</p>
+                  </div>
+                  <div className="home-case-mini-line">
+                    <span className="home-case-mini-label">Co było kluczowe</span>
+                    <p>{caseStudy.key}</p>
+                  </div>
+                  <div className="home-case-mini-line">
+                    <span className="home-case-mini-label">Efekt</span>
+                    <p>{caseStudy.effect}</p>
+                  </div>
+                </div>
               </article>
             ))}
           </div>
 
           <div className="hero-actions editorial-final-actions">
             <Link href="#faq" prefetch={false} className="prep-inline-link">
-              SprawdĹş najczÄ™stsze pytania opiekunĂłw kotĂłw
-            </Link>
-            <Link href={consultationHref} prefetch={false} className="button button-ghost big-button">
-              UmĂłw konsultacjÄ™
+              Sprawdź najczęstsze pytania opiekunów kotów
             </Link>
           </div>
+
+          <FunnelPrimaryActions
+            audioHref={introCallHref}
+            consultationHref={consultationHref}
+            contactHref={contactHref}
+            primaryLocation="cats-cases-audio"
+            secondaryLocation="cats-cases-toolkit"
+          />
         </section>
 
         <section className="panel section-panel editorial-section" id="faq">
           <SectionIntro
             eyebrow="FAQ"
-            title="NajczÄ™stsze pytania opiekunĂłw kotĂłw przed konsultacjÄ…"
-            description="KrĂłtko odpowiadam na pytania, ktĂłre najczÄ™Ĺ›ciej pojawiajÄ… siÄ™ jeszcze przed pierwszym kontaktem."
+            title="Najczęstsze pytania opiekunów kotów przed konsultacją"
+            description="Krótko, konkretnie i spokojnie o tym, co najczęściej pojawia się jeszcze przed pierwszym kontaktem."
           />
 
-          <div className="premium-faq-grid">
+          <div className="premium-faq-grid cat-faq-grid">
             {faqItems.map((item) => (
               <details key={item.question} className="premium-faq-item">
                 <summary className="premium-faq-summary">{item.question}</summary>
@@ -631,72 +658,49 @@ export default function CatsPage() {
             ))}
           </div>
 
-          <div className="premium-contact-band">
+          <div className="premium-contact-band cat-contact-band">
             <div className="premium-contact-band-copy">
               <div className="section-eyebrow">Kontakt</div>
-              <strong>JeĹ›li wolisz doprecyzowaÄ‡ temat przed rezerwacjÄ…, napisz wiadomoĹ›Ä‡.</strong>
-              <p>Odpowiadam osobiĹ›cie i pomagam wybraÄ‡ najprostszy start.</p>
+              <strong>Zacznij od Kwadransu z behawiorystą.</strong>
+              <p>Opisujesz, co się dzieje. Pytam. Ustalamy, czy to temat behawioralny, środowiskowy czy zdrowotny i co zrobić w pierwszej kolejności.</p>
             </div>
-            <div className="hero-actions editorial-final-actions">
-              <Link
-                href={consultationHref}
-                prefetch={false}
-                className="button button-primary big-button"
-                data-analytics-event="cta_click"
-                data-analytics-location="cats-faq-book"
-              >
-                UmĂłw konsultacjÄ™ dotyczÄ…cÄ… kota
-              </Link>
-              <Link
-                href={contactHref}
-                prefetch={false}
-                className="button button-ghost big-button"
-                data-analytics-event="cta_click"
-                data-analytics-location="cats-faq-message"
-              >
-                Napisz wiadomoĹ›Ä‡
-              </Link>
-            </div>
+            <FunnelPrimaryActions
+              audioHref={introCallHref}
+              consultationHref={consultationHref}
+              contactHref={contactHref}
+              primaryLocation="cats-faq-audio"
+              secondaryLocation="cats-faq-toolkit"
+            />
           </div>
         </section>
 
         <section className="panel cta-panel editorial-final-panel" id="final-cta">
           <div className="editorial-final-copy">
             <div className="section-eyebrow">Ostatni krok</div>
-            <h2>JeĹ›li chcesz spokojnie uporzÄ…dkowaÄ‡ sytuacjÄ™ swojego kota, zacznijmy od pierwszego kroku</h2>
+            <h2>Zacznij od Kwadransu z behawiorystą</h2>
             <p>
-              Nie musisz wiedzieÄ‡ wszystkiego przed pierwszym kontaktem. Wystarczy, ĹĽe opiszesz sytuacjÄ™ swojego kota, a wspĂłlnie
-              ustalimy najlepszy kierunek rozpoczÄ™cia pracy.
+              Opisujesz, co się dzieje. Pytam. Ustalamy, czy to temat behawioralny, środowiskowy czy zdrowotny i co zrobić w pierwszej kolejności.
             </p>
 
-            <div className="hero-actions editorial-final-actions">
-              <Link
-                href={consultationHref}
-                prefetch={false}
-                className="button button-primary big-button"
-                data-analytics-event="cta_click"
-                data-analytics-location="cats-final-book"
-              >
-                UmĂłw konsultacjÄ™ dotyczÄ…cÄ… kota
-              </Link>
-              <Link
-                href={contactHref}
-                prefetch={false}
-                className="button button-ghost big-button"
-                data-analytics-event="cta_click"
-                data-analytics-location="cats-final-message"
-              >
-                Napisz wiadomoĹ›Ä‡
-              </Link>
-            </div>
-
-            <p className="muted">
-              JeĹ›li nie masz jeszcze pewnoĹ›ci, moĹĽesz zaczÄ…Ä‡ od krĂłtkiej rozmowy wstÄ™pnej 15 min.
-            </p>
+            <FunnelPrimaryActions
+              audioHref={introCallHref}
+              consultationHref={consultationHref}
+              contactHref={contactHref}
+              primaryLocation="cats-final-audio"
+              secondaryLocation="cats-final-toolkit"
+              noteClassName="muted home-final-soft-note"
+            />
           </div>
         </section>
 
-        <Footer />
+        <Footer
+          variant="home"
+          sectionBasePath="/koty"
+          ctaHref={introCallHref}
+          ctaLabel="Zarezerwuj Kwadrans z behawiorystą"
+          secondaryHref="/niezbednik"
+          secondaryLabel="Przejdź do Niezbędnika"
+        />
       </div>
     </main>
   )

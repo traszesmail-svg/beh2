@@ -29,7 +29,7 @@ export default async function InternalQaReportPage() {
         <section className="panel section-panel">
           <div className="section-head">
             <div>
-              <div className="section-eyebrow">Wewnętrzny raport QA</div>
+              <div className="section-eyebrow">Wewnetrzny raport QA</div>
               <h1>Raport techniczny tylko po autoryzacji</h1>
             </div>
           </div>
@@ -40,7 +40,7 @@ export default async function InternalQaReportPage() {
               <span>{report.exists ? 'Raport znaleziony w repo.' : 'Raport nie istnieje jeszcze w repo.'}</span>
             </div>
             <div className="list-card">
-              <strong>Ścieżka źródłowa</strong>
+              <strong>Sciezka zrodlowa</strong>
               <span>{report.filePath}</span>
             </div>
             <div className="list-card">
@@ -48,8 +48,8 @@ export default async function InternalQaReportPage() {
               <span>{report.updatedAt ?? 'brak'}</span>
             </div>
             <div className="list-card">
-              <strong>Dostęp</strong>
-              <span>Ta trasa używa tej samej autoryzacji Basic Auth co `/admin` i nie jest indeksowana.</span>
+              <strong>Dostep</strong>
+              <span>Ta trasa uzywa tej samej autoryzacji Basic Auth co `/admin` i nie jest indeksowana.</span>
             </div>
           </div>
 

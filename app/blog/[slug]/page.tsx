@@ -1,0 +1,149 @@
+import type { Metadata } from 'next'
+import Link from 'next/link'
+import { notFound } from 'next/navigation'
+import { Footer } from '@/components/Footer'
+import { Header } from '@/components/Header'
+import {
+  BLOG_ROUTE_BASE,
+  getBlogArticleJsonLd,
+  getBlogPostBySlug,
+  getBlogPostMetadata,
+  listBlogPosts,
+  renderBlogPostContent,
+} from '@/lib/blog'
+import { getCanonicalBaseUrl } from '@/lib/server/env'
+import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
+import { FUNNEL_SECONDARY_HREF } from '@/lib/offers'
+
+export const dynamic = 'force-static'
+export const dynamicParams = false
+
+type BlogPostPageProps = {
+  params: {
+    slug: string
+  }
+}
+
+export function generateStaticParams() {
+  return listBlogPosts().map((post) => ({
+    slug: post.slug,
+  }))
+}
+
+export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
+  const post = getBlogPostBySlug(params.slug)
+
+  if (!post) {
+    return {
+      title: 'Blog',
+      description: 'Blog regulskibehawiorysta.pl.',
+      alternates: {
+        canonical: BLOG_ROUTE_BASE,
+      },
+      robots: {
+        index: false,
+        follow: false,
+      },
+    }
+  }
+
+  return getBlogPostMetadata({
+    post,
+    description: post.metaDescription,
+  })
+}
+
+export default function BlogPostPage({ params }: BlogPostPageProps) {
+  const post = getBlogPostBySlug(params.slug)
+
+  if (!post) {
+    notFound()
+  }
+
+  const baseUrl = getCanonicalBaseUrl()
+  const jsonLd = getBlogArticleJsonLd(post, baseUrl)
+
+  return (
+    <main className="page-wrap blog-page blog-article-page">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
+      <div className="container editorial-stack">
+        <Header />
+
+        <section className="panel section-panel blog-article-hero-panel">
+          <div className="editorial-section-head">
+            <div className="editorial-section-head-copy">
+              <div className="section-eyebrow">
+                <Link href={BLOG_ROUTE_BASE} prefetch={false} className="prep-inline-link">
+                  Blog
+                </Link>{' '}
+                · {post.categoryLabel}
+              </div>
+              <h1>{post.h1}</h1>
+            </div>
+            <p className="editorial-section-lead">{post.excerpt}</p>
+          </div>
+
+          <div className="blog-article-meta-row" aria-label="Metadane wpisu">
+            <span>{post.categoryLabel}</span>
+            <span>
+              <time dateTime={post.publishedAt}>{post.publishedAtLabel}</time>
+            </span>
+            <span>{post.readingTimeMinutes} min czytania</span>
+            <span>
+              Autor:{' '}
+              <Link href="/o-mnie" prefetch={false} className="prep-inline-link">
+                {post.author}
+              </Link>
+            </span>
+          </div>
+
+          <div className="hero-actions blog-article-actions">
+            <Link href={BLOG_ROUTE_BASE} prefetch={false} className="prep-inline-link">
+              Wróć do bloga
+            </Link>
+            <Link href={post.categoryHref} prefetch={false} className="prep-inline-link">
+              Zobacz {post.categoryLabel.toLowerCase()}
+            </Link>
+          </div>
+        </section>
+
+        <article className="panel section-panel blog-article-panel">
+          <div className="blog-article-content">{renderBlogPostContent(post)}</div>
+        </article>
+
+        <section className="panel section-panel blog-related-panel">
+          <div className="editorial-section-head">
+            <div className="editorial-section-head-copy">
+              <div className="section-eyebrow">Dalej</div>
+              <h2>Powiązane strony</h2>
+            </div>
+            <p className="editorial-section-lead">Jeśli ten temat dotyczy też Twojej sytuacji, poniżej znajdziesz najbliższe następne kroki.</p>
+          </div>
+
+          <div className="blog-related-grid">
+            {post.supportLinks.map((link) => (
+              <Link key={link.href} href={link.href} prefetch={false} className="summary-card tree-backed-card blog-related-card">
+                <strong>{link.label}</strong>
+                <span>{link.description}</span>
+              </Link>
+            ))}
+            <Link href={BLOG_ROUTE_BASE} prefetch={false} className="summary-card tree-backed-card blog-related-card blog-related-card-main">
+              <strong>Blog</strong>
+              <span>Wróć do listy wpisów.</span>
+            </Link>
+          </div>
+        </section>
+
+        <Footer
+          variant="lean"
+          sectionBasePath="/blog"
+          ctaHref={post.audioHref}
+          ctaLabel={FUNNEL_CTA_LABELS.primary}
+          secondaryHref={FUNNEL_SECONDARY_HREF}
+          secondaryLabel={FUNNEL_CTA_LABELS.secondary}
+        />
+      </div>
+    </main>
+  )
+}

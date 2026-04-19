@@ -2,17 +2,17 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { getBookingAnalyticsContextParams } from '@/lib/analytics-schema'
 import { trackAnalyticsEvent } from '@/lib/analytics'
 import {
   DEFAULT_BOOKING_SERVICE,
+  isAudioOnlyBookingService,
   type BookingServiceType,
   getBookingServiceDurationLabel,
   getBookingServiceTitle,
 } from '@/lib/booking-services'
 import { buildPaymentHref } from '@/lib/booking-routing'
 import { getProblemLabel, isCatProblemType } from '@/lib/data'
-import { isValidPolishPhone } from '@/lib/phone'
-import { CONSULTATION_PRICE_COMPARE_COPY } from '@/lib/site'
 import { AnimalType, ProblemType } from '@/lib/types'
 
 interface BookingFormProps {
@@ -63,6 +63,18 @@ function isSlotUnavailableBookingMessage(value: string) {
   )
 }
 
+function getCheckoutComparisonCopy(serviceType: BookingServiceType) {
+  if (serviceType === 'konsultacja-behawioralna-online') {
+    return 'To rezerwacja konsultacji 60 min z większą ilością czasu na temat.'
+  }
+
+  if (!isAudioOnlyBookingService(serviceType)) {
+    return 'To rezerwacja dłuższej konsultacji z większą ilością czasu na temat.'
+  }
+
+  return 'Jeśli po rozmowie okaże się, że temat wymaga szerszego omówienia, kolejnym krokiem może być konsultacja 60 min.'
+}
+
 export function BookingForm({
   problemType,
   serviceType,
@@ -75,14 +87,13 @@ export function BookingForm({
   const formCopy = getProblemFormCopy(problemType)
   const trackedStartRef = useRef(false)
   const [ownerName, setOwnerName] = useState('')
-  const [animalType, setAnimalType] = useState<AnimalType>(formCopy.animalType)
   const [petAge, setPetAge] = useState('')
   const [durationNotes, setDurationNotes] = useState('')
   const [description, setDescription] = useState('')
-  const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
+  const animalType = formCopy.animalType
 
   useEffect(() => {
     if (qaBooking || trackedStartRef.current) {
@@ -90,13 +101,17 @@ export function BookingForm({
     }
 
     trackedStartRef.current = true
-    trackAnalyticsEvent('form_started', {
-      problem: problemType,
-      service_type: serviceType,
+    trackAnalyticsEvent('booking_form_started', {
       slot_id: slotId,
-      slot_label: slotLabel,
+      slot_time: slotLabel,
+      source_page: '/form',
+      ...getBookingAnalyticsContextParams({
+        serviceType,
+        animalType,
+        problemType,
+      }),
     })
-  }, [problemType, qaBooking, serviceType, slotId, slotLabel])
+  }, [animalType, problemType, qaBooking, serviceType, slotId, slotLabel])
 
   function isEmailValid(value: string): boolean {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
@@ -106,18 +121,13 @@ export function BookingForm({
     event.preventDefault()
     setError('')
 
-    if (!ownerName.trim() || !phone.trim() || !email.trim() || !description.trim() || !petAge.trim() || !durationNotes.trim()) {
-      setError('Uzupełnij wszystkie pola, aby zarezerwować termin i przejść do wyboru płatności.')
+    if (!ownerName.trim() || !email.trim() || !description.trim() || !petAge.trim() || !durationNotes.trim()) {
+      setError('Uzupełnij wszystkie pola, aby zapisać rezerwację i przejść do płatności.')
       return
     }
 
     if (!isEmailValid(email.trim())) {
       setError('Podaj poprawny adres e-mail. Na ten adres wyślemy potwierdzenie rozmowy.')
-      return
-    }
-
-    if (!isValidPolishPhone(phone.trim())) {
-      setError('Podaj poprawny polski numer telefonu, np. 500 600 700 albo +48 500 600 700.')
       return
     }
 
@@ -142,7 +152,7 @@ export function BookingForm({
           petAge,
           durationNotes,
           description,
-          phone,
+          phone: '',
           email,
           slotId,
           qaBooking,
@@ -165,6 +175,18 @@ export function BookingForm({
         setIsSubmitting(false)
         return
       }
+
+      trackAnalyticsEvent('booking_form_submitted', {
+        booking_id: payload.bookingId,
+        slot_id: slotId,
+        slot_time: slotLabel,
+        source_page: '/form',
+        ...getBookingAnalyticsContextParams({
+          serviceType,
+          animalType,
+          problemType,
+        }),
+      })
 
       router.push(
         buildPaymentHref(
@@ -195,7 +217,7 @@ export function BookingForm({
       <div className="form-section-card tree-backed-card form-section-card-owner">
         <div className="form-section-heading">
           <span className="section-eyebrow">1. Dane podstawowe</span>
-          <strong>Ty i zwierzak?</strong>
+          <strong>Dane opiekuna i zwierzaka</strong>
         </div>
 
         <div className="form-section-grid">
@@ -206,10 +228,7 @@ export function BookingForm({
 
           <div className="form-field">
             <label>Zwierzak</label>
-            <select value={animalType} onChange={(event) => setAnimalType(event.target.value as AnimalType)} data-booking-field="animal-type">
-              <option value="Pies">Pies</option>
-              <option value="Kot">Kot</option>
-            </select>
+            <input value={animalType} readOnly data-readonly="true" data-booking-field="animal-type" />
           </div>
 
           <div className="form-field">
@@ -222,7 +241,7 @@ export function BookingForm({
       <div className="form-section-card tree-backed-card form-section-card-context">
         <div className="form-section-heading">
           <span className="section-eyebrow">2. Kontekst sprawy</span>
-          <strong>Temat i krótki opis sytuacji</strong>
+          <strong>Temat i opis sytuacji</strong>
         </div>
 
         <div className="form-section-grid">
@@ -267,22 +286,11 @@ export function BookingForm({
 
       <div className="form-section-card tree-backed-card form-section-card-contact">
         <div className="form-section-heading">
-          <span className="section-eyebrow">3. Potwierdzenie kontaktu</span>
-          <strong>Dane do potwierdzenia rezerwacji</strong>
+          <span className="section-eyebrow">3. Potwierdzenie</span>
+          <strong>Adres do potwierdzenia</strong>
         </div>
 
         <div className="form-section-grid">
-          <div className="form-field">
-            <label>Telefon</label>
-            <input
-              type="tel"
-              value={phone}
-              onChange={(event) => setPhone(event.target.value)}
-              placeholder="np. 500 000 000"
-              data-booking-field="phone"
-            />
-          </div>
-
           <div className="form-field">
             <label>E-mail</label>
             <input
@@ -309,9 +317,9 @@ export function BookingForm({
           <div className="muted">
             {qaBooking
               ? 'Na kolejnym ekranie zobaczysz kontrolowaną płatność testową bez realnego obciążenia.'
-              : `Na kolejnym ekranie przejdziesz do wpłaty ręcznej. Do zapłaty: ${amountLabel}. Tę samą kwotę zobaczysz jeszcze raz przed kliknięciem.`}
+              : `Na kolejnym ekranie przejdziesz do wpłaty ręcznej. Do zapłaty: ${amountLabel}. Tę samą kwotę zobaczysz jeszcze raz przed zgłoszeniem wpłaty.`}
           </div>
-          <div className="price-compare-text">{CONSULTATION_PRICE_COMPARE_COPY}</div>
+          <div className="price-compare-text">{getCheckoutComparisonCopy(serviceType)}</div>
         </div>
         <div className="checkout-right">
           <button type="submit" className="button button-primary big-button" disabled={isSubmitting} data-booking-submit="payment">

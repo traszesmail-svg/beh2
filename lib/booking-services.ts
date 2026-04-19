@@ -1,10 +1,8 @@
 import { formatPricePln } from './pricing'
+import { FUNNEL_SERVICE_CONFIG, type AnyBookingServiceType } from './funnel'
 import type { AvailabilitySlot, GroupedAvailability } from './types'
 
-export type BookingServiceType =
-  | 'szybka-konsultacja-15-min'
-  | 'konsultacja-30-min'
-  | 'konsultacja-behawioralna-online'
+export type BookingServiceType = AnyBookingServiceType
 
 type BookingServiceConfig = {
   id: BookingServiceType
@@ -20,46 +18,52 @@ type BookingServiceConfig = {
 const BOOKING_SERVICE_CONFIG: Record<BookingServiceType, BookingServiceConfig> = {
   'szybka-konsultacja-15-min': {
     id: 'szybka-konsultacja-15-min',
-    title: 'Szybka konsultacja 15 min',
-    shortTitle: '15 min',
-    slotSpan: 1,
-    roomDurationMinutes: 15,
-    slotSummary: '15 min, rozmowa głosowa online.',
-    slotBadge: '15 min online',
-    roomSummary: '15-minutowa konsultacja głosowa online.',
+    title: FUNNEL_SERVICE_CONFIG['szybka-konsultacja-15-min'].title,
+    shortTitle: FUNNEL_SERVICE_CONFIG['szybka-konsultacja-15-min'].shortTitle,
+    slotSpan: FUNNEL_SERVICE_CONFIG['szybka-konsultacja-15-min'].slotSpan,
+    roomDurationMinutes: FUNNEL_SERVICE_CONFIG['szybka-konsultacja-15-min'].durationMinutes,
+    slotSummary: FUNNEL_SERVICE_CONFIG['szybka-konsultacja-15-min'].slotSummary,
+    slotBadge: FUNNEL_SERVICE_CONFIG['szybka-konsultacja-15-min'].slotBadge,
+    roomSummary: FUNNEL_SERVICE_CONFIG['szybka-konsultacja-15-min'].roomSummary,
   },
   'konsultacja-30-min': {
     id: 'konsultacja-30-min',
-    title: 'Konsultacja 30 min',
-    shortTitle: '30 min',
-    slotSpan: 2,
-    roomDurationMinutes: 30,
-    slotSummary: '30 min, rozmowa głosowa online.',
-    slotBadge: '30 min online',
-    roomSummary: '30-minutowa konsultacja głosowa online.',
+    title: FUNNEL_SERVICE_CONFIG['konsultacja-30-min'].title,
+    shortTitle: FUNNEL_SERVICE_CONFIG['konsultacja-30-min'].shortTitle,
+    slotSpan: FUNNEL_SERVICE_CONFIG['konsultacja-30-min'].slotSpan,
+    roomDurationMinutes: FUNNEL_SERVICE_CONFIG['konsultacja-30-min'].durationMinutes,
+    slotSummary: FUNNEL_SERVICE_CONFIG['konsultacja-30-min'].slotSummary,
+    slotBadge: FUNNEL_SERVICE_CONFIG['konsultacja-30-min'].slotBadge,
+    roomSummary: FUNNEL_SERVICE_CONFIG['konsultacja-30-min'].roomSummary,
   },
   'konsultacja-behawioralna-online': {
     id: 'konsultacja-behawioralna-online',
-    title: 'Konsultacja behawioralna online',
-    shortTitle: 'Online',
-    slotSpan: 4,
-    roomDurationMinutes: 60,
-    slotSummary: '60 min, konsultacja online.',
-    slotBadge: '60 min online',
-    roomSummary: '60-minutowa konsultacja online.',
+    title: FUNNEL_SERVICE_CONFIG['konsultacja-behawioralna-online'].title,
+    shortTitle: FUNNEL_SERVICE_CONFIG['konsultacja-behawioralna-online'].shortTitle,
+    slotSpan: FUNNEL_SERVICE_CONFIG['konsultacja-behawioralna-online'].slotSpan,
+    roomDurationMinutes: FUNNEL_SERVICE_CONFIG['konsultacja-behawioralna-online'].durationMinutes,
+    slotSummary: FUNNEL_SERVICE_CONFIG['konsultacja-behawioralna-online'].slotSummary,
+    slotBadge: FUNNEL_SERVICE_CONFIG['konsultacja-behawioralna-online'].slotBadge,
+    roomSummary: FUNNEL_SERVICE_CONFIG['konsultacja-behawioralna-online'].roomSummary,
   },
 }
 
 export const DEFAULT_BOOKING_SERVICE: BookingServiceType = 'szybka-konsultacja-15-min'
-export const BOOKING_SERVICE_30_PRICE = 119
-export const BOOKING_SERVICE_ONLINE_PRICE = 350
+export const BOOKING_SERVICE_30_PRICE = FUNNEL_SERVICE_CONFIG['konsultacja-30-min'].priceAmount
+export const BOOKING_SERVICE_ONLINE_PRICE = FUNNEL_SERVICE_CONFIG['konsultacja-behawioralna-online'].priceAmount
+const DEFAULT_BOOKING_SLOT_STEP_MINUTES = 20
+const MAX_INFERRED_BOOKING_SLOT_STEP_MINUTES = 30
 
 export function isBookingServiceType(value: string | null | undefined): value is BookingServiceType {
   return value === 'szybka-konsultacja-15-min' || value === 'konsultacja-30-min' || value === 'konsultacja-behawioralna-online'
 }
 
 export function normalizeBookingServiceType(value: string | null | undefined): BookingServiceType {
-  return isBookingServiceType(value) ? value : DEFAULT_BOOKING_SERVICE
+  if (value === 'konsultacja-behawioralna-online') {
+    return value
+  }
+
+  return DEFAULT_BOOKING_SERVICE
 }
 
 export function getBookingServiceConfig(serviceType: BookingServiceType) {
@@ -84,6 +88,18 @@ export function getBookingServiceSlotBadge(serviceType: BookingServiceType) {
 
 export function getBookingServiceRoomSummary(serviceType: BookingServiceType) {
   return getBookingServiceConfig(serviceType).roomSummary
+}
+
+export function getBookingServiceRoomAccessLabel(serviceType: BookingServiceType) {
+  if (serviceType === 'konsultacja-behawioralna-online') {
+    return 'pokój konsultacji online'
+  }
+
+  if (serviceType === 'konsultacja-30-min') {
+    return 'pokój konsultacji'
+  }
+
+  return 'pokój rozmowy audio'
 }
 
 export function getBookingServicePrice(serviceType: BookingServiceType, quickConsultationPrice: number) {
@@ -134,13 +150,79 @@ export function getBookingServiceRoomDurationMinutes(serviceType: BookingService
   return getBookingServiceConfig(serviceType).roomDurationMinutes
 }
 
+export function isAudioOnlyBookingService(serviceType: BookingServiceType) {
+  return FUNNEL_SERVICE_CONFIG[serviceType].mode === 'audio'
+}
+
 function parseTimeToMinutes(value: string) {
   const [hours, minutes] = value.split(':').map(Number)
   return hours * 60 + minutes
 }
 
-function areSlotsConsecutive(left: AvailabilitySlot, right: AvailabilitySlot) {
-  return left.bookingDate === right.bookingDate && parseTimeToMinutes(right.bookingTime) - parseTimeToMinutes(left.bookingTime) === 20
+function getSortedAvailabilitySlots(slots: AvailabilitySlot[]) {
+  return [...slots].sort((left, right) =>
+    `${left.bookingDate}T${left.bookingTime}`.localeCompare(`${right.bookingDate}T${right.bookingTime}`),
+  )
+}
+
+function getAvailabilitySlotStepMinutes(slots: AvailabilitySlot[]) {
+  const sortedSlots = getSortedAvailabilitySlots(slots)
+  const diffCounts = new Map<number, number>()
+
+  for (let index = 1; index < sortedSlots.length; index += 1) {
+    const previousSlot = sortedSlots[index - 1]
+    const nextSlot = sortedSlots[index]
+
+    if (previousSlot.bookingDate !== nextSlot.bookingDate) {
+      continue
+    }
+
+    const diffMinutes = parseTimeToMinutes(nextSlot.bookingTime) - parseTimeToMinutes(previousSlot.bookingTime)
+
+    if (diffMinutes <= 0 || diffMinutes > MAX_INFERRED_BOOKING_SLOT_STEP_MINUTES) {
+      continue
+    }
+
+    diffCounts.set(diffMinutes, (diffCounts.get(diffMinutes) ?? 0) + 1)
+  }
+
+  if (diffCounts.size === 0) {
+    return null
+  }
+
+  return [...diffCounts.entries()].sort((left, right) => {
+    if (right[1] !== left[1]) {
+      return right[1] - left[1]
+    }
+
+    return left[0] - right[0]
+  })[0]?.[0] ?? null
+}
+
+function getServiceAvailabilitySlotSpan(slots: AvailabilitySlot[], serviceType: BookingServiceType) {
+  const slotStepMinutes = getAvailabilitySlotStepMinutes(slots)
+  const configuredSlotSpan = getBookingServiceSlotSpan(serviceType)
+
+  if (!slotStepMinutes) {
+    if (slots.length === 0) {
+      return configuredSlotSpan
+    }
+
+    return Math.max(1, Math.ceil(getBookingServiceRoomDurationMinutes(serviceType) / DEFAULT_BOOKING_SLOT_STEP_MINUTES))
+  }
+
+  return Math.max(1, Math.ceil(getBookingServiceRoomDurationMinutes(serviceType) / slotStepMinutes))
+}
+
+function areSlotsConsecutive(left: AvailabilitySlot, right: AvailabilitySlot, slotStepMinutes: number | null) {
+  if (slotStepMinutes === null) {
+    return left.bookingDate === right.bookingDate
+  }
+
+  return (
+    left.bookingDate === right.bookingDate &&
+    parseTimeToMinutes(right.bookingTime) - parseTimeToMinutes(left.bookingTime) === slotStepMinutes
+  )
 }
 
 export function getServiceAvailabilityWindow(
@@ -148,10 +230,11 @@ export function getServiceAvailabilityWindow(
   startSlotId: string,
   serviceType: BookingServiceType,
 ): AvailabilitySlot[] | null {
-  const slotSpan = getBookingServiceSlotSpan(serviceType)
-  const sortedSlots = [...slots].sort((left, right) =>
-    `${left.bookingDate}T${left.bookingTime}`.localeCompare(`${right.bookingDate}T${right.bookingTime}`),
-  )
+  const sortedSlots = getSortedAvailabilitySlots(slots)
+  const slotSpan = getServiceAvailabilitySlotSpan(sortedSlots, serviceType)
+  const slotStepMinutes =
+    getAvailabilitySlotStepMinutes(sortedSlots) ??
+    (sortedSlots.length > 0 ? DEFAULT_BOOKING_SLOT_STEP_MINUTES : null)
   const startIndex = sortedSlots.findIndex((slot) => slot.id === startSlotId)
 
   if (startIndex === -1) {
@@ -165,7 +248,7 @@ export function getServiceAvailabilityWindow(
   }
 
   for (let index = 1; index < window.length; index += 1) {
-    if (!areSlotsConsecutive(window[index - 1], window[index])) {
+    if (!areSlotsConsecutive(window[index - 1], window[index], slotStepMinutes)) {
       return null
     }
   }
@@ -191,7 +274,7 @@ export function filterGroupedAvailabilityForService(
   groups: GroupedAvailability[],
   serviceType: BookingServiceType,
 ): GroupedAvailability[] {
-  const slotSpan = getBookingServiceSlotSpan(serviceType)
+  const slotSpan = getServiceAvailabilitySlotSpan(groups.flatMap((group) => group.slots), serviceType)
 
   if (slotSpan === 1) {
     return groups

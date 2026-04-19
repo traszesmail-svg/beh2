@@ -1,17 +1,42 @@
 import type { MetadataRoute } from 'next'
-import { getBaseUrl } from '@/lib/server/env'
+import { getCanonicalBaseUrl, shouldBlockSearchIndexing } from '@/lib/server/env'
+
+const publicRules: MetadataRoute.Robots['rules'] = [
+  {
+    userAgent: '*',
+    allow: '/',
+    disallow: [
+      '/admin/',
+      '/__internal/',
+      '/qa-share-20260328-v7n3m8',
+      '/booking',
+      '/book',
+      '/slot',
+      '/form',
+      '/payment',
+      '/confirmation',
+      '/confirm',
+      '/call/',
+      '/room/',
+      '/pokoj',
+      '/problem',
+      '/materialy',
+      '/przybornik',
+    ],
+  },
+]
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = getBaseUrl()
+  if (shouldBlockSearchIndexing()) {
+    return {
+      rules: publicRules,
+    }
+  }
+
+  const baseUrl = getCanonicalBaseUrl()
 
   return {
-    rules: [
-      {
-        userAgent: '*',
-        allow: '/',
-        disallow: ['/admin/', '/__internal/', '/qa-share-20260328-v7n3m8'],
-      },
-    ],
+    rules: publicRules,
     sitemap: `${baseUrl}/sitemap.xml`,
     host: baseUrl,
   }

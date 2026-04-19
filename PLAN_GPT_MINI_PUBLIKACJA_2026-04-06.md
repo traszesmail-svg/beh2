@@ -1,4 +1,4 @@
-﻿# PLAN PUBLIKACJA I FINISZ
+# PLAN PUBLIKACJA I FINISZ
 
 Data audytu: 2026-04-07
 Status tego etapu: analiza i plan only, bez zmian w kodzie aplikacji
@@ -210,7 +210,7 @@ Zakres:
 3. Potwierdzic brakujace migracje dla QA checkoutu i funnel events.
 4. Po kazdym kroku uruchomic:
    - `npm run live-readiness -- --report-only`
-   - `npm run live-clickthrough-report -- --url https://coapebehawiorysta.vercel.app`
+   - `npm run live-clickthrough-report -- --url https://regulskibehawiorysta.pl`
 
 Definition of done:
 - production DB i produkcyjny kod sa zsynchronizowane

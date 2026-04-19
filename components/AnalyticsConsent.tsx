@@ -2,6 +2,7 @@
 
 import Script from 'next/script'
 import { useEffect, useState } from 'react'
+import { usePathname, useSearchParams } from 'next/navigation'
 import {
   AnalyticsConsentState,
   persistAnalyticsConsent,
@@ -15,6 +16,8 @@ type AnalyticsConsentProps = {
 
 export function AnalyticsConsent({ measurementId }: AnalyticsConsentProps) {
   const [consent, setConsent] = useState<AnalyticsConsentState>('unset')
+  const pathname = usePathname() ?? '/'
+  const searchParams = useSearchParams()
 
   useEffect(() => {
     if (!measurementId) {
@@ -47,14 +50,35 @@ export function AnalyticsConsent({ measurementId }: AnalyticsConsentProps) {
 
       trackAnalyticsEvent(eventName, {
         location: target.dataset.analyticsLocation,
-        problem: target.dataset.analyticsProblem,
-        slot_time: target.dataset.analyticsSlot,
+        source_page: target.dataset.analyticsSourcePage ?? pathname,
+        problem_key: target.dataset.analyticsProblem,
+        species: target.dataset.analyticsSpecies,
+        service_key: target.dataset.analyticsService,
+        service_name: target.dataset.analyticsServiceName,
+        service_duration: target.dataset.analyticsServiceDuration,
+        service_price: target.dataset.analyticsServicePrice,
+        cta_label: target.dataset.analyticsCtaLabel,
+        slot_date: target.dataset.analyticsSlotDate,
+        slot_time: target.dataset.analyticsSlotTime,
       })
     }
 
     document.addEventListener('click', handleTrackedClick)
     return () => document.removeEventListener('click', handleTrackedClick)
-  }, [measurementId])
+  }, [measurementId, pathname])
+
+  useEffect(() => {
+    if (!measurementId || consent !== 'granted') {
+      return
+    }
+
+    const query = searchParams?.toString()
+
+    trackAnalyticsEvent('view_page', {
+      source_page: pathname,
+      page_path: query ? `${pathname}?${query}` : pathname,
+    })
+  }, [consent, measurementId, pathname, searchParams])
 
   if (!measurementId) {
     return null
@@ -89,9 +113,9 @@ export function AnalyticsConsent({ measurementId }: AnalyticsConsentProps) {
       {consent === 'unset' ? (
         <div className="consent-banner" role="dialog" aria-labelledby="consent-title" aria-describedby="consent-copy">
           <div className="consent-copy">
-            <strong id="consent-title">Analityka po Twojej zgodzie</strong>
+            <strong id="consent-title">Analityka po wyrażeniu zgody</strong>
             <span id="consent-copy">
-              Używamy lekkiej analityki, żeby sprawdzać, czy landing i rezerwacja są czytelne. Nic nie uruchamia się przed Twoją decyzją.
+              Analityka uruchamia się dopiero po Twojej decyzji i służy wyłącznie do pomiaru korzystania z serwisu oraz rezerwacji.
             </span>
           </div>
           <div className="consent-actions">

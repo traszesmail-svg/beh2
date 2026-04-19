@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { recordFunnelEvent } from '@/lib/server/db'
-import { isFunnelEventType, isInternalAnalyticsPagePath, normalizeFunnelEventProperties } from '@/lib/server/funnel-events'
+import { isInternalAnalyticsPagePath, normalizeFunnelEventProperties, normalizeFunnelEventType } from '@/lib/server/funnel-events'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -35,9 +35,9 @@ export async function POST(request: Request) {
       return new NextResponse(null, { status: 204 })
     }
 
-    const eventType = typeof body.eventType === 'string' ? body.eventType : null
+    const eventType = normalizeFunnelEventType(typeof body.eventType === 'string' ? body.eventType : null)
 
-    if (!eventType || !isFunnelEventType(eventType)) {
+    if (!eventType) {
       console.log(
         JSON.stringify({
           level: 'info',

@@ -1,0 +1,127 @@
+'use client'
+
+import React, { useState, type FormEvent } from 'react'
+import { trackAnalyticsEvent } from '@/lib/analytics'
+import type { LeadMagnet } from '@/lib/growth-layer'
+
+type FormState = 'idle' | 'loading' | 'success' | 'error'
+
+type LeadMagnetSignupProps = {
+  magnet: LeadMagnet
+  location: string
+  sourcePage: string
+  compact?: boolean
+  className?: string
+}
+
+function isEmailValid(value: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+}
+
+export function LeadMagnetSignup({
+  magnet,
+  location,
+  sourcePage,
+  compact = false,
+  className,
+}: LeadMagnetSignupProps) {
+  const [email, setEmail] = useState('')
+  const [status, setStatus] = useState<FormState>('idle')
+  const [feedback, setFeedback] = useState('')
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+
+    if (!isEmailValid(email.trim())) {
+      setStatus('error')
+      setFeedback('Podaj poprawny adres e-mail.')
+      return
+    }
+
+    setStatus('loading')
+    setFeedback('')
+
+    try {
+      const response = await fetch('/api/growth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          kind: 'lead_magnet',
+          email: email.trim(),
+          leadMagnetSlug: magnet.slug,
+          location,
+          sourcePage,
+        }),
+      })
+
+      const payload = (await response.json()) as { ok?: boolean; redirectTo?: string; error?: string; message?: string }
+
+      if (!response.ok || !payload.ok) {
+        throw new Error(payload.error ?? 'Nie udało się zapisać do pobrania materiału.')
+      }
+
+      trackAnalyticsEvent('lead_magnet_signup', {
+        location,
+        source_page: sourcePage,
+        lead_magnet_slug: magnet.slug,
+      })
+
+      if (payload.redirectTo) {
+        window.location.assign(payload.redirectTo)
+        return
+      }
+
+      setStatus('success')
+      setFeedback(payload.message ?? 'Zapis przyjęty.')
+      setEmail('')
+    } catch (error) {
+      setStatus('error')
+      setFeedback(error instanceof Error ? error.message : 'Nie udało się zapisać do pobrania materiału.')
+    }
+  }
+
+  return (
+    <article className={className ?? 'summary-card tree-backed-card'}>
+      <div className="section-eyebrow">Lead magnet</div>
+      <h3>{magnet.title}</h3>
+      <p className="muted">{magnet.lead}</p>
+
+      <ul className="premium-bullet-list top-gap-small">
+        {magnet.bullets.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
+
+      <form className={`form-grid top-gap${compact ? ' compact-form-grid' : ''}`} onSubmit={handleSubmit} noValidate>
+        <div className="form-field">
+          <label htmlFor={`lead-magnet-email-${magnet.slug}-${location}`}>E-mail</label>
+          <input
+            id={`lead-magnet-email-${magnet.slug}-${location}`}
+            name="email"
+            type="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            placeholder="twoj@email.pl"
+            autoComplete="email"
+          />
+        </div>
+
+        <div className="full-width hero-actions top-gap-small">
+          <button type="submit" className="button button-primary" disabled={status === 'loading'}>
+            {status === 'loading' ? 'Przygotowuję...' : magnet.ctaLabel}
+          </button>
+        </div>
+
+        <div className="full-width field-help">{magnet.note}</div>
+
+        {feedback ? (
+          <div className={`full-width info-box ${status === 'error' ? 'error-box' : ''}`}>
+            <span>{feedback}</span>
+          </div>
+        ) : null}
+      </form>
+    </article>
+  )
+}

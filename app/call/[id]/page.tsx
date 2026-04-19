@@ -1,17 +1,36 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { unstable_noStore as noStore } from 'next/cache'
 import { headers } from 'next/headers'
 import { CallRoom } from '@/components/CallRoom'
 import { Header } from '@/components/Header'
 import { PreparationMaterialsCard } from '@/components/PreparationMaterialsCard'
-import { getBookingServiceTitle, resolveBookingServiceType } from '@/lib/booking-services'
+import {
+  getBookingServiceRoomAccessLabel,
+  getBookingServiceTitle,
+  resolveBookingServiceType,
+} from '@/lib/booking-services'
 import { getProblemLabel } from '@/lib/data'
+import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { canEditPreparationMaterials } from '@/lib/preparation'
 import { getBookingForViewer } from '@/lib/server/db'
 import { getDataModeStatus } from '@/lib/server/env'
+import { buildTechnicalMetadata } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
+
+export function generateMetadata({
+  params,
+}: {
+  params: { id: string }
+}): Metadata {
+  return buildTechnicalMetadata({
+    title: 'Pokój rozmowy',
+    path: `/call/${params.id}`,
+    description: 'Bezpieczny pokój rozmowy lub konsultacji po potwierdzeniu rezerwacji.',
+  })
+}
 
 function readSearchParam(value: string | string[] | undefined): string | null {
   if (Array.isArray(value)) {
@@ -35,7 +54,7 @@ export default async function CallPage({
   let flowError: string | null = null
 
   if (!dataMode.isValid) {
-      flowError = 'Pokój rozmowy chwilowo nie jest dostępny. Spróbuj ponownie za kilka minut.'
+    flowError = 'Pokój rozmowy chwilowo nie jest dostępny. Spróbuj ponownie za kilka minut.'
   } else {
     try {
       booking = await getBookingForViewer(params.id, accessToken, headers().get('authorization'))
@@ -55,16 +74,17 @@ export default async function CallPage({
         <div className="container">
           <Header />
           <section className="panel centered-panel">
+            <h1>Pokój rozmowy chwilowo niedostępny</h1>
             <div className="stack-gap">
               <div className="error-box">
-                {flowError} Jeśli chcesz, napisz wiadomość i wróć do rezerwacji później.
+                {flowError} Jeśli chcesz, przejdź do krótkiej wiadomości i wróć do rezerwacji później.
               </div>
               <div className="hero-actions centered-actions">
                 <Link href="/book" className="button button-primary big-button">
-                  Wróć do rezerwacji
+                  {FUNNEL_CTA_LABELS.primary}
                 </Link>
-                <Link href="/kontakt" className="button button-ghost big-button">
-                  Napisz wiadomość
+                <Link href="/kontakt#formularz" className="button button-ghost big-button">
+                  {FUNNEL_CTA_LABELS.contact}
                 </Link>
               </div>
             </div>
@@ -80,14 +100,15 @@ export default async function CallPage({
         <div className="container">
           <Header />
           <section className="panel centered-panel">
+            <h1>Link do pokoju rozmowy wygasł</h1>
             <div className="stack-gap">
               <div className="error-box">Ten link do rozmowy jest nieprawidłowy albo wygasł.</div>
               <div className="hero-actions centered-actions">
                 <Link href="/book" className="button button-primary big-button">
-                  Wróć do rezerwacji
+                  {FUNNEL_CTA_LABELS.primary}
                 </Link>
-                <Link href="/kontakt" className="button button-ghost big-button">
-                  Napisz wiadomość
+                <Link href="/kontakt#formularz" className="button button-ghost big-button">
+                  {FUNNEL_CTA_LABELS.contact}
                 </Link>
               </div>
             </div>
@@ -99,6 +120,7 @@ export default async function CallPage({
 
   const hasAccess = booking.paymentStatus === 'paid' && (booking.bookingStatus === 'confirmed' || booking.bookingStatus === 'done')
   const serviceType = resolveBookingServiceType(booking.serviceType, booking.amount)
+  const roomAccessLabel = getBookingServiceRoomAccessLabel(serviceType)
   const qaBooking = Boolean(booking.qaBooking)
 
   return (
@@ -109,13 +131,13 @@ export default async function CallPage({
         {hasAccess ? (
           <>
             <div className="panel section-panel">
-              <div className="section-eyebrow">Twoja rozmowa</div>
+              <div className="section-eyebrow">Potwierdzona rezerwacja</div>
               <h2>{getProblemLabel(booking.problemType)}</h2>
               <p className="muted paragraph-gap">
-                {getBookingServiceTitle(serviceType)}. To podsumowanie sprawy, z którą przychodzisz na rozmowę. Jeśli po opłaceniu chcesz coś doprecyzować, materiały do sprawy są poniżej.
+                {`${getBookingServiceTitle(serviceType)}. Tutaj wejdziesz do ${roomAccessLabel}. Jeśli chcesz, poniżej dodasz materiały do sprawy.`}
               </p>
               <div className="list-card top-gap">
-                <strong>Opis zgloszenia</strong>
+                <strong>Opis zgłoszenia</strong>
                 <span>{booking.description}</span>
               </div>
             </div>
@@ -127,6 +149,8 @@ export default async function CallPage({
               bookingDate={booking.bookingDate}
               bookingTime={booking.bookingTime}
               bookingStatus={booking.bookingStatus}
+              animalType={booking.animalType}
+              problemType={booking.problemType}
               serviceType={serviceType}
               qaBooking={qaBooking}
             />
@@ -145,16 +169,19 @@ export default async function CallPage({
         ) : (
           <section className="panel centered-panel">
             <div className="stack-gap">
-              <div className="error-box">Dostęp do pokoju rozmowy odblokowuje się dopiero po statusie paid: po potwierdzeniu wpłaty albo po sukcesie PayU.</div>
+              <div className="error-box">{`Dostęp do ${roomAccessLabel} odblokowuje się dopiero po potwierdzeniu wpłaty. Najpierw sprawdź status na potwierdzeniu albo wróć do płatności, jeśli ten etap nie został jeszcze domknięty.`}</div>
               <div className="hero-actions centered-actions">
                 <Link
-                  href={`/payment?bookingId=${booking.id}${accessToken ? `&access=${encodeURIComponent(accessToken)}` : ''}`}
+                  href={`/confirmation?bookingId=${booking.id}${accessToken ? `&access=${encodeURIComponent(accessToken)}` : ''}`}
                   className="button button-primary big-button"
                 >
-                  Wróć do płatności
+                  Zobacz potwierdzenie
                 </Link>
-                <Link href="/kontakt" className="button button-ghost big-button">
-                  Napisz wiadomość
+                <Link
+                  href={`/payment?bookingId=${booking.id}${accessToken ? `&access=${encodeURIComponent(accessToken)}` : ''}`}
+                  className="button button-ghost big-button"
+                >
+                  Wróć do płatności
                 </Link>
               </div>
             </div>

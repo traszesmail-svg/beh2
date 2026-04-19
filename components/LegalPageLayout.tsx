@@ -30,15 +30,10 @@ type LegalPageLayoutProps = {
   contactSubject: string
   summaryItems: LegalSummaryItem[]
   sections: LegalSection[]
+  supportTitle: string
   supportText: string
   supportNoteTitle: string
   supportNoteText: string
-  ctaTitle: string
-  ctaText: string
-  secondaryCtaHref: string
-  secondaryCtaLabel: string
-  footerCtaHref?: string
-  footerCtaLabel?: string
 }
 
 function renderAction(href: string, label: string, className: string) {
@@ -64,19 +59,13 @@ export function LegalPageLayout({
   contactSubject,
   summaryItems,
   sections,
+  supportTitle,
   supportText,
   supportNoteTitle,
   supportNoteText,
-  ctaTitle,
-  ctaText,
-  secondaryCtaHref,
-  secondaryCtaLabel,
-  footerCtaHref = '/kontakt',
-  footerCtaLabel = 'Napisz wiadomość',
 }: LegalPageLayoutProps) {
   const contact = getPublicContactDetails()
   const contactMailtoHref = contact.email ? buildMailtoHref(contact.email, contactSubject) : null
-  const primaryHref = '/kontakt'
 
   return (
     <main className="page-wrap marketing-page">
@@ -107,18 +96,17 @@ export function LegalPageLayout({
               ))}
             </div>
 
-            <div className="offer-detail-cta-band legal-stage-cta top-gap">
-              <div className="offer-detail-cta-copy">
-                <span className="section-eyebrow">Masz pytanie?</span>{' '}
-                <strong>{ctaTitle}</strong>
-                <span>{ctaText}</span>
+            <article className="list-card tree-backed-card legal-section-card top-gap">
+              <strong>{supportNoteTitle}</strong>
+              <div className="legal-section-body">
+                <p>{supportNoteText}</p>
               </div>
 
-              <div className="hero-actions offer-detail-actions">
-                {renderAction(primaryHref, 'Przejdź do kontaktu', 'button button-primary big-button')}
-                {renderAction(secondaryCtaHref, secondaryCtaLabel, 'button button-ghost big-button')}
+              <div className="hero-actions top-gap-small">
+                {contactMailtoHref ? renderAction(contactMailtoHref, 'Napisz e-mail', 'button button-primary big-button') : null}
+                {renderAction('/kontakt#formularz', 'Formularz kontaktowy', 'button button-ghost big-button')}
               </div>
-            </div>
+            </article>
           </div>
 
           <aside className="panel section-panel contact-support-panel legal-support-panel">
@@ -126,15 +114,15 @@ export function LegalPageLayout({
               <Image
                 src={SPECIALIST_WIDE_PHOTO.src}
                 alt={SPECIALIST_WIDE_PHOTO.alt}
-                width={1200}
-                height={900}
+                width={SPECIALIST_WIDE_PHOTO.width}
+                height={SPECIALIST_WIDE_PHOTO.height}
                 sizes="(max-width: 980px) 100vw, 38vw"
                 className="contact-feature-image"
               />
             </div>
 
-            <div className="section-eyebrow">Kontakt i zaufanie</div>
-            <h2>{SPECIALIST_NAME}</h2>
+            <div className="section-eyebrow">Dane kontaktowe</div>
+            <h2>{supportTitle}</h2>
             <p className="hero-text">{supportText}</p>
 
             <div className="legal-support-grid">
@@ -148,34 +136,35 @@ export function LegalPageLayout({
               ) : null}
 
               <div className="list-card tree-backed-card">
-                <strong>Profil zawodowy</strong>
-                <span>
-                  <a href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer">
-                    Publiczny profil CAPBT / COAPE
-                  </a>{' '}
-                  •{' '}
-                  <a href={INSTAGRAM_PROFILE_URL} target="_blank" rel="noopener noreferrer">
-                    Instagram @coapebehawiorysta
-                  </a>
-                </span>
+                <strong>Obszar działania</strong>
+                <span>Kontakt online / cała Polska</span>
               </div>
 
               <div className="list-card tree-backed-card">
-                <strong>{supportNoteTitle}</strong>
-                <span>{supportNoteText}</span>
+                <strong>Profile publiczne</strong>
+                <span>
+                  <a href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer">
+                    Profil CAPBT / COAPE
+                  </a>{' '}
+                  potwierdza kwalifikacje, a{' '}
+                  <a href={INSTAGRAM_PROFILE_URL} target="_blank" rel="noopener noreferrer">
+                    Instagram @coapebehawiorysta
+                  </a>{' '}
+                  zawiera publiczne informacje o marce.
+                </span>
               </div>
 
               <div className="list-card tree-backed-card">
                 <strong>Kto odpowiada</strong>
                 <span>
-                  {SPECIALIST_CREDENTIALS}. Odpowiadam osobiście.
+                  {SPECIALIST_NAME}, {SPECIALIST_CREDENTIALS}.
                 </span>
               </div>
             </div>
           </aside>
         </section>
 
-        <Footer variant="full" ctaHref={footerCtaHref} ctaLabel={footerCtaLabel} />
+        <Footer variant="legal" />
       </div>
     </main>
   )

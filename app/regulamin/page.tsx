@@ -1,5 +1,8 @@
 import type { Metadata } from 'next'
 import { LegalPageLayout, type LegalSection, type LegalSummaryItem } from '@/components/LegalPageLayout'
+import { FUNNEL_SERVICE_CONFIG } from '@/lib/funnel'
+import { OFFERS } from '@/lib/offers'
+import { formatPricePln } from '@/lib/pricing'
 import { buildLegalMetadata } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
@@ -7,52 +10,203 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = buildLegalMetadata(
   'Regulamin',
   '/regulamin',
-  'Zasady rezerwacji, płatności, konsultacji audio, zwrotów, reklamacji i kontaktu dla krótkiej rozmowy wstępnej 15 min audio w marce Regulski | Terapia behawioralna.',
+  'Regulamin świadczenia usług, zasad rezerwacji, płatności, potwierdzeń, zmian terminu i reklamacji w serwisie Regulski | Terapia behawioralna.',
 )
+
+const quickStartService = FUNNEL_SERVICE_CONFIG['szybka-konsultacja-15-min']
+const fullConsultationService = FUNNEL_SERVICE_CONFIG['konsultacja-behawioralna-online']
+const toolkitOffer = OFFERS.find((offer) => offer.slug === 'poradniki-pdf')
+
+if (!toolkitOffer) {
+  throw new Error('Missing offer config for poradniki-pdf')
+}
 
 const summaryItems: LegalSummaryItem[] = [
   {
-    label: 'Forma',
-    value: '15 minut rozmowy głosowej online jako pierwszy sensowny krok dla psa albo kota.',
+    label: 'Usługi objęte regulaminem',
+    value: `${quickStartService.title} (${formatPricePln(quickStartService.priceAmount)}) oraz ${fullConsultationService.title} (${formatPricePln(fullConsultationService.priceAmount)}).`,
   },
   {
-    label: 'Płatność',
-    value: 'Termin blokuje się na czas wpłaty ręcznej. Potwierdzenie następuje po skutecznym zgłoszeniu wpłaty.',
+    label: 'Model płatności',
+    value: 'Płatność odbywa się ręcznie przez BLIK na telefon lub PayPal.me, z potwierdzeniem wpłaty do 60 minut.',
   },
   {
-    label: 'Zmiana lub rezygnacja',
-    value: 'Po opłaceniu masz 24 godziny na bezpłatną rezygnację albo wiadomość o zmianie terminu.',
+    label: 'Kontakt w sprawach dokumentu',
+    value: 'Kontakt prowadzony jest przez formularz kontaktowy oraz e-mail.',
   },
 ]
 
 const sections: LegalSection[] = [
   {
-    title: 'Forma usługi',
-    body: 'Szybka konsultacja 15 min to 15-minutowa konsultacja głosowa online. To pierwszy krok w szerszym systemie pracy, a nie konsultacja wideo ani pełna terapia behawioralna.',
+    title: '1. Postanowienia ogólne',
+    body: (
+      <>
+        <p>
+          Regulamin określa zasady korzystania z serwisu, składania rezerwacji oraz realizacji usług świadczonych na
+          odległość przez Krzysztofa Regulskiego w ramach marki Regulski | Terapia behawioralna.
+        </p>
+        <p>
+          Regulamin dotyczy usług publicznie udostępnionych w serwisie oraz materiałów pomocniczych dostępnych w
+          {` ${toolkitOffer.title}.`}
+        </p>
+      </>
+    ),
   },
   {
-    title: 'Rezerwacja i płatność',
-    body: 'Termin jest blokowany na czas wpłaty. Jeśli płatność nie zostanie dokończona, slot wraca do puli. Publicznie dostępna metoda płatności to wpłata BLIK lub przelewem potwierdzana do 60 minut.',
+    title: '2. Zakres usług',
+    body: (
+      <>
+        <ul className="premium-bullet-list">
+          <li>{quickStartService.title} jest krótką konsultacją zdalną prowadzoną w formie audio.</li>
+          <li>{fullConsultationService.title} jest pełną konsultacją prowadzoną online.</li>
+          <li>{toolkitOffer.title} zawiera materiały pomocnicze i nie zastępuje rezerwacji konsultacji.</li>
+        </ul>
+        <p>
+          Usługi mają charakter konsultacji behawioralnych świadczonych na odległość. W uzasadnionych przypadkach
+          klient może zostać poproszony o wcześniejsze wykluczenie tła zdrowotnego lub konsultację weterynaryjną.
+        </p>
+      </>
+    ),
   },
   {
-    title: 'Zmiana terminu i anulacja',
-    body: 'Przy wpłacie ręcznej można skorzystać z samodzielnej rezygnacji na ekranie potwierdzenia. Zmiana terminu lub rezygnacja odbywa się przez wiadomość w tym samym 24-godzinnym oknie.',
+    title: '3. Wymagania techniczne',
+    body: (
+      <>
+        <p>
+          Do korzystania z serwisu i realizacji usług niezbędne są: urządzenie z dostępem do internetu, aktualna
+          przeglądarka internetowa, aktywny adres e-mail oraz możliwość odebrania połączenia audio albo dołączenia do
+          konsultacji online.
+        </p>
+        <p>
+          W przypadku konsultacji online klient powinien zapewnić warunki umożliwiające spokojny udział w rozmowie oraz
+          samodzielny dostęp do linku przekazanego po potwierdzeniu rezerwacji.
+        </p>
+      </>
+    ),
   },
   {
-    title: 'No-show i nieopłacone rezerwacje',
-    body: 'Nieopłacona rezerwacja wygasa i termin wraca do kalendarza. Jeśli klient nie stawi się na opłaconą rozmowę bez wcześniejszego kontaktu, konsultacja może zostać uznana za zrealizowaną.',
+    title: '4. Rezerwacja',
+    body: (
+      <>
+        <p>
+          Rezerwacja następuje po wyborze usługi, gatunku, tematu i terminu oraz po podaniu danych wymaganych przez
+          formularz rezerwacyjny.
+        </p>
+        <p>
+          Wiadomość wysłana przez formularz kontaktowy ma charakter wstępny i nie zastępuje rezerwacji usługi.
+        </p>
+      </>
+    ),
   },
   {
-    title: 'Zwrot i reklamacja',
-    body: 'Po upływie 24 godzin nadal możesz zgłosić reklamację albo wniosek o zwrot, jeśli konsultacja nie spełniła swojej roli jako pierwszy krok. Każda sprawa jest rozpatrywana indywidualnie.',
+    title: '5. Płatność i potwierdzenie',
+    body: (
+      <>
+        <p>
+          Aktualnie dostępny model płatności obejmuje ręczną płatność przez BLIK na telefon lub PayPal.me. Po zgłoszeniu
+          wpłaty rezerwacja otrzymuje status oczekiwania na ręczne potwierdzenie.
+        </p>
+        <p>
+          Termin zostaje ostatecznie zablokowany dopiero po potwierdzeniu wpłaty. Czas potwierdzenia wynosi co do zasady
+          do 60 minut.
+        </p>
+        <p>
+          Nieopłacona lub niepotwierdzona rezerwacja może wygasnąć, a termin może wrócić do puli dostępnych terminów.
+        </p>
+      </>
+    ),
   },
   {
-    title: 'Materiały przed rozmową',
-    body: 'MP4, linki i notatki są opcjonalne. Pomagają lepiej przygotować rozmowę, ale nie są wymagane do przejścia przez rezerwację.',
+    title: '6. Realizacja usługi',
+    body: (
+      <>
+        <p>
+          Po potwierdzeniu wpłaty klient otrzymuje dostęp do strony potwierdzenia, na której widoczne są co najmniej:
+          termin, status rezerwacji oraz dalsza instrukcja.
+        </p>
+        <p>
+          W zależności od konfiguracji serwisu i dostępnych danych kontaktowych potwierdzenie może zostać dodatkowo
+          przekazane pocztą elektroniczną lub wiadomością SMS.
+        </p>
+        <p>
+          Przed rozmową klient może dobrowolnie dodać materiały przygotowawcze, w szczególności krótki opis sprawy,
+          linki lub nagrania. Materiały te mają charakter pomocniczy.
+        </p>
+      </>
+    ),
   },
   {
-    title: 'Jak działa konsultacja',
-    body: 'Rozmowa pomaga szybko uporządkować sytuację i ustalić pierwszy kolejny ruch. W zależności od problemu może prowadzić do dalszej konsultacji, wizyty albo konsultacji weterynaryjnej.',
+    title: '7. Zmiana terminu i rezygnacja',
+    body: (
+      <>
+        <p>
+          Po potwierdzeniu wpłaty klient ma 24 godziny na zgłoszenie rezygnacji albo wniosku o zmianę terminu.
+        </p>
+        <p>
+          Przy obecnym modelu ręcznej płatności ewentualny zwrot środków wymaga kontaktu i jest rozpatrywany
+          indywidualnie, z uwzględnieniem etapu realizacji usługi oraz przebiegu rezerwacji.
+        </p>
+        <p>
+          Po upływie wskazanego terminu zmiana lub odwołanie rezerwacji może nie być możliwe bez poniesienia kosztu
+          usługi.
+        </p>
+      </>
+    ),
+  },
+  {
+    title: '8. Nieobecność i wygaśnięcie rezerwacji',
+    body: (
+      <>
+        <p>
+          Jeżeli klient nie opłaci rezerwacji albo wpłata nie zostanie potwierdzona, rezerwacja może zostać zamknięta
+          jako nieaktywna.
+        </p>
+        <p>
+          Jeżeli klient nie stawi się na opłaconą usługę bez wcześniejszego kontaktu, rezerwacja może zostać uznana za
+          zrealizowaną.
+        </p>
+      </>
+    ),
+  },
+  {
+    title: '9. Reklamacje',
+    body: (
+      <>
+        <p>
+          Reklamacje dotyczące działania serwisu, procesu rezerwacji albo realizacji usługi można zgłaszać przez formularz
+          kontaktowy lub e-mail.
+        </p>
+        <p>
+          Zgłoszenie powinno zawierać dane pozwalające zidentyfikować sprawę oraz krótki opis zastrzeżeń. Reklamacje są
+          rozpatrywane bez zbędnej zwłoki.
+        </p>
+      </>
+    ),
+  },
+  {
+    title: '10. Dane osobowe',
+    body: (
+      <>
+        <p>
+          Zasady przetwarzania danych osobowych związanych z serwisem, kontaktem, rezerwacją i realizacją usług określa
+          odrębna Polityka prywatności.
+        </p>
+      </>
+    ),
+  },
+  {
+    title: '11. Postanowienia końcowe',
+    body: (
+      <>
+        <p>
+          Regulamin obowiązuje od dnia jego opublikowania w serwisie i ma zastosowanie do rezerwacji składanych po tej
+          dacie.
+        </p>
+        <p>
+          W sprawach nieuregulowanych w regulaminie zastosowanie mają odpowiednie przepisy prawa polskiego.
+        </p>
+      </>
+    ),
   },
 ]
 
@@ -60,20 +214,15 @@ export default function TermsPage() {
   return (
     <LegalPageLayout
       eyebrow="Regulamin"
-      title="Zasady rezerwacji szybkiej konsultacji 15 min"
-      intro="Najważniejsze zasady rezerwacji, płatności, rozmowy i zmian terminu dla szybkiej konsultacji 15 min."
+      title="Regulamin świadczenia usług"
+      intro="Dokument określa zasady korzystania z serwisu, rezerwacji usług, dokonywania płatności, potwierdzeń, zmian terminu oraz trybu składania reklamacji."
       contactSubject="Pytanie o regulamin - Regulski | Terapia behawioralna"
       summaryItems={summaryItems}
       sections={sections}
-      supportText="Kontakt w sprawach rezerwacji, płatności, reklamacji i zmian terminu prowadzę przez formularz kontaktowy albo mailowo. Rozmowa telefoniczna odbywa się wyłącznie w ramach umówionej konsultacji."
-      supportNoteTitle="Najkrótsza ścieżka"
-      supportNoteText="Jeśli nie wiesz, czy lepsza będzie wiadomość, 15 minut czy dłuższa praca, napisz krótko o sytuacji przez formularz. Wskażę najprostszy kolejny ruch."
-      ctaTitle="Napisz w sprawie rezerwacji albo płatności"
-      ctaText="W wiadomości wystarczy krótko opisać, czy pytanie dotyczy terminu, płatności, rezygnacji, zwrotu albo przebiegu rozmowy."
-      secondaryCtaHref="/kontakt"
-      secondaryCtaLabel="Umów konsultację"
-      footerCtaHref="/kontakt"
-      footerCtaLabel="Umów konsultację"
+      supportTitle="Kontakt w sprawach regulaminu"
+      supportText="W sprawach dotyczących rezerwacji, płatności, zmian terminu, rezygnacji i reklamacji kontakt prowadzony jest przez formularz kontaktowy oraz e-mail."
+      supportNoteTitle="Wniosek o zmianę terminu, rezygnację lub reklamację"
+      supportNoteText="W wiadomości należy podać dane pozwalające zidentyfikować rezerwację oraz krótki opis sprawy. Telefon nie jest publicznym kanałem kontaktu serwisu."
     />
   )
 }

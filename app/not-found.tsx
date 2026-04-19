@@ -1,4 +1,5 @@
 import { RouteFallbackPage } from '@/components/RouteFallbackPage'
+import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 
 export default function NotFound() {
   return (
@@ -6,17 +7,18 @@ export default function NotFound() {
       code="404"
       eyebrow="Strona nie istnieje"
       title="Nie znaleźliśmy tej strony"
-      description="Ten adres nie prowadzi już do żadnej publicznej podstrony. Wróć do sprawdzonej ścieżki i wybierz najkrótszy kolejny krok."
-      highlights={['Co możesz zrobić', 'Wrócić do strony głównej, konsultacji albo wiadomości bez zgadywania, gdzie kliknąć dalej.']}
+      description="Ten adres nie prowadzi już do publicznej podstrony. Wróć do sprawdzonej ścieżki i wybierz najkrótszy kolejny krok."
+      highlights={['Co możesz zrobić', 'Wrócić do strony głównej, ścieżki psa lub kota albo przejść od razu do 15 min audio.']}
       actions={[
         { href: '/', label: 'Strona główna', primary: true },
-        { href: '/book', label: 'Umów konsultację' },
-        { href: '/kontakt', label: 'Napisz wiadomość' },
+        { href: '/psy', label: 'Psy' },
+        { href: '/koty', label: 'Koty' },
+        { href: '/book?service=szybka-konsultacja-15-min', label: FUNNEL_CTA_LABELS.primary },
       ]}
-      footerCtaHref="/book"
-      footerCtaLabel="Umów konsultację"
+      footerCtaHref="/book?service=szybka-konsultacja-15-min"
+      footerCtaLabel={FUNNEL_CTA_LABELS.primary}
       footerHeadline="Nie musisz szukać dalej"
-      footerDescription="Wróć do strony głównej albo napisz wiadomość, jeśli chcesz dostać najkrótszą ścieżkę do właściwego miejsca."
+      footerDescription="Najprościej wrócić do strony głównej albo wybrać od razu 15 min audio, jeśli chcesz szybko uporządkować temat."
     />
   )
 }

@@ -5,11 +5,14 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
+import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { OFFERS, getOfferBySlug } from '@/lib/offers'
 import { buildMarketingMetadata } from '@/lib/seo'
 import { DEFAULT_PRICE_PLN, formatPricePln } from '@/lib/pricing'
 import { getActiveConsultationPrice } from '@/lib/server/db'
 import { getDataModeStatus } from '@/lib/server/env'
+
+const LEGACY_OFFER_SLUGS = new Set(['konsultacja-behawioralna-online', 'poradniki-pdf'])
 
 type OfferDetailPageProps = {
   params: {
@@ -20,12 +23,20 @@ type OfferDetailPageProps = {
 export const dynamic = 'force-dynamic'
 
 export function generateStaticParams() {
-  return OFFERS.filter((offer) => offer.slug !== 'poradniki-pdf').map((offer) => ({
+  return OFFERS.filter((offer) => !LEGACY_OFFER_SLUGS.has(offer.slug)).map((offer) => ({
     slug: offer.slug,
   }))
 }
 
 export function generateMetadata({ params }: OfferDetailPageProps): Metadata {
+  if (LEGACY_OFFER_SLUGS.has(params.slug)) {
+    return buildMarketingMetadata({
+      title: 'Oferta',
+      path: '/oferta',
+      description: 'Przegląd aktualnej oferty w marce Regulski.',
+    })
+  }
+
   const offer = getOfferBySlug(params.slug)
 
   if (!offer) {
@@ -44,6 +55,10 @@ export function generateMetadata({ params }: OfferDetailPageProps): Metadata {
 }
 
 export default async function OfferDetailPage({ params }: OfferDetailPageProps) {
+  if (LEGACY_OFFER_SLUGS.has(params.slug)) {
+    notFound()
+  }
+
   const offer = getOfferBySlug(params.slug)
 
   if (!offer) {
@@ -56,15 +71,12 @@ export default async function OfferDetailPage({ params }: OfferDetailPageProps) 
   if (offer.slug === 'szybka-konsultacja-15-min' && dataMode.isValid) {
     try {
       const quickConsultationPrice = await getActiveConsultationPrice()
-      priceLabel = `Od ${formatPricePln(quickConsultationPrice.amount)}`
+      priceLabel = formatPricePln(quickConsultationPrice.amount)
     } catch (error) {
       console.warn('[behawior15][oferta-detail] nie udało się pobrać aktywnej ceny konsultacji', error)
-      priceLabel = `Od ${formatPricePln(DEFAULT_PRICE_PLN)}`
+      priceLabel = formatPricePln(DEFAULT_PRICE_PLN)
     }
   }
-
-  const detailPoints = offer.outcomes.slice(0, 3)
-  const secondarySentence = offer.heroSummary
 
   return (
     <main className="page-wrap marketing-page">
@@ -84,7 +96,7 @@ export default async function OfferDetailPage({ params }: OfferDetailPageProps) 
             <div className="offer-detail-hero-copy">
               <h1>{offer.title}</h1>
               <p className="hero-text">{offer.whenToChoose}</p>
-              <p className="muted paragraph-gap">{secondarySentence}</p>
+              <p className="muted paragraph-gap">{offer.heroSummary}</p>
             </div>
 
             <div className="summary-grid top-gap">
@@ -93,8 +105,8 @@ export default async function OfferDetailPage({ params }: OfferDetailPageProps) 
                 <div className="summary-value">{offer.forWho}</div>
               </div>
               <div className="summary-card tree-backed-card">
-                <div className="stat-label">Kiedy wybrać</div>
-                <div className="summary-value">{offer.whenToChoose}</div>
+                <div className="stat-label">Cena</div>
+                <div className="summary-value">{priceLabel ?? 'Po wyborze ścieżki'}</div>
               </div>
               <div className="summary-card tree-backed-card">
                 <div className="stat-label">Co dostajesz</div>
@@ -105,32 +117,6 @@ export default async function OfferDetailPage({ params }: OfferDetailPageProps) 
                 <div className="summary-value">{offer.nextStep}</div>
               </div>
             </div>
-
-            <div className="offer-detail-highlight-row top-gap">
-              {priceLabel ? (
-                <div className="hero-price-badge offer-price-box tree-backed-card">
-                  <strong>{priceLabel}</strong>
-                </div>
-              ) : (
-                <div className="list-card tree-backed-card offer-detail-price-card">
-                  <strong>Najpierw napisz</strong>
-                  <span>Cenę i dalszy krok ustalimy po wiadomości.</span>
-                </div>
-              )}
-
-              <div className="list-card tree-backed-card offer-detail-price-card">
-                <strong>Co dalej po tym starcie</strong>
-                <span>{offer.nextStep}</span>
-              </div>
-            </div>
-
-            <ul className="detail-points-list top-gap">
-              {detailPoints.map((item) => (
-                <li key={item} className="detail-point tree-backed-card">
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
 
             <div className="stack-gap top-gap">
               {offer.descriptions.map((item) => (
@@ -145,7 +131,7 @@ export default async function OfferDetailPage({ params }: OfferDetailPageProps) 
               <div className="offer-detail-cta-copy">
                 <span className="section-eyebrow">Pierwszy ruch</span>
                 <strong>{offer.primaryCtaLabel}</strong>
-                <span>{offer.note ?? 'Jeśli nadal nie masz pewności, napisz dwie linijki. Powiem, czy ten start ma sens i co zrobić dalej.'}</span>
+                <span>{offer.note ?? 'Jeśli nadal nie masz pewności, użyj krótkiej wiadomości i wskażę najprostszy kolejny krok.'}</span>
               </div>
 
               <div className="hero-actions offer-detail-actions">
@@ -162,7 +148,9 @@ export default async function OfferDetailPage({ params }: OfferDetailPageProps) 
 
             <div className="list-card accent-outline tree-backed-card top-gap offer-detail-contact-card">
               <strong>Fallback bez zgadywania</strong>
-              <span>Jeśli nadal nie masz pewności, napisz dwie linijki. Powiem, czy ten start ma sens, czy lepiej wejść od kontaktu albo innej usługi.</span>
+              <span>
+                Jeśli po przeczytaniu nadal nie wiesz, czy wejść od razu w ten format, wybierz 15 min audio albo użyj krótkiej wiadomości kwalifikacyjnej.
+              </span>
             </div>
           </div>
 
@@ -171,8 +159,8 @@ export default async function OfferDetailPage({ params }: OfferDetailPageProps) 
               <Image
                 src={offer.imageSrc}
                 alt={offer.imageAlt}
-                width={1200}
-                height={900}
+                width={offer.imageWidth}
+                height={offer.imageHeight}
                 sizes="(max-width: 980px) 100vw, 42vw"
                 className="section-feature-image"
               />
@@ -183,12 +171,19 @@ export default async function OfferDetailPage({ params }: OfferDetailPageProps) 
               <span>{offer.heroSummary}</span>
             </div>
 
-            {offer.note ? (
+            {offer.slug === 'konsultacja-behawioralna-online' ? (
               <div className="list-card tree-backed-card offer-detail-media-note">
                 <strong>Ważna uwaga</strong>
-                <span>{offer.note}</span>
+                <span>To głębsza opcja z ograniczoną liczbą terminów. Jeśli temat jest prostszy, 15 min audio zwykle wystarczy na dobry start.</span>
               </div>
-            ) : null}
+            ) : (
+              <div className="list-card tree-backed-card offer-detail-media-note">
+                <strong>Dalszy krok</strong>
+                <span>
+                  Jeśli temat okaże się szerszy, po rozmowie wskażę, czy przejść do {FUNNEL_CTA_LABELS.consultation.toLowerCase()} albo wrócić do Niezbędnika.
+                </span>
+              </div>
+            )}
           </div>
         </section>
 

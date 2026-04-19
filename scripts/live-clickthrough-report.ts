@@ -1,4 +1,4 @@
-﻿import { access, mkdir, writeFile } from 'node:fs/promises'
+import { access, mkdir, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { loadEnvConfig } from '@next/env'
 import { chromium, type BrowserContext, type Locator, type Page } from 'playwright-core'
@@ -6,6 +6,7 @@ import { getBookingServiceTitle, type BookingServiceType } from '../lib/booking-
 import { getProblemLabel, isFutureAvailabilitySlot } from '../lib/data'
 import { SITE_PRODUCTION_URL } from '../lib/site'
 import type { ProblemType } from '../lib/types'
+import { resolveBrowserExecutablePath } from './lib/browser-path'
 
 type StepStatus = 'passed' | 'failed'
 
@@ -138,7 +139,7 @@ function isIgnorableSameOriginAbort(url: string, message: string, resourceType?:
   }
 }
 
-async function resolveBrowserExecutablePath() {
+async function resolveBrowserExecutablePathLegacy() {
   const candidates = [
     'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
     'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
@@ -152,7 +153,7 @@ async function resolveBrowserExecutablePath() {
     } catch {}
   }
 
-  throw new Error('Nie znaleziono lokalnej przeglÄ…darki Chromium (Chrome lub Edge) do live-clickthrough-report.')
+  throw new Error('Nie znaleziono lokalnej przeglądarki Chromium (Chrome lub Edge) do live-clickthrough-report.')
 }
 
 function pushIssue(issues: Issue[], issue: Issue, seen: Set<string>) {
@@ -284,7 +285,7 @@ async function waitForAnyVisible(locators: Locator[], timeout: number) {
     await new Promise((resolve) => setTimeout(resolve, 250))
   }
 
-  throw new Error('Ĺ»aden z oczekiwanych elementĂłw nie pojawiĹ‚ siÄ™ na czas.')
+  throw new Error('Żaden z oczekiwanych elementów nie pojawił się na czas.')
 }
 
 async function waitForAnyBodyText(page: Page, patterns: Array<RegExp | string>, timeout: number) {
@@ -310,7 +311,7 @@ async function waitForAnyBodyText(page: Page, patterns: Array<RegExp | string>, 
     await new Promise((resolve) => setTimeout(resolve, 250))
   }
 
-  throw new Error('Ĺ»aden z oczekiwanych elementĂłw nie pojawiĹ‚ siÄ™ na czas.')
+  throw new Error('Żaden z oczekiwanych elementów nie pojawił się na czas.')
 }
 
 function escapeRegExp(value: string) {
@@ -421,7 +422,7 @@ async function assertNoPublicPhoneLinks(page: Page, routePath: string) {
 }
 
 async function assertLegacyHeaderLinksHidden(page: Page, routePath: string) {
-  const legacyLabels = ['Koty', 'Pobyty', 'UmĂłw konsultacjÄ™']
+  const legacyLabels = ['Koty', 'Pobyty', 'Umów konsultację']
   const visibleLegacyLinks: string[] = []
 
   for (const label of legacyLabels) {
@@ -431,7 +432,7 @@ async function assertLegacyHeaderLinksHidden(page: Page, routePath: string) {
   }
 
   if (visibleLegacyLinks.length > 0) {
-    throw new Error(`Stare linki nawigacji nadal sÄ… widoczne na ${routePath}: ${visibleLegacyLinks.join(', ')}.`)
+    throw new Error(`Stare linki nawigacji nadal są widoczne na ${routePath}: ${visibleLegacyLinks.join(', ')}.`)
   }
 }
 
@@ -833,11 +834,11 @@ function buildReportMarkdown({
     '',
     `- Data: ${timestamp}`,
     `- URL: ${baseUrl}`,
-    `- Wynik ogĂłlny: ${overall}`,
+    `- Wynik ogólny: ${overall}`,
     `- Kroki zaliczone: ${passed}/${results.length}`,
     `- Liczba zebranych issue z runtime: ${issues.length}`,
     `- Booking QA identity: ${qaIdentity.ownerName} / ${qaIdentity.email}`,
-    `- Bezpiecznik pĹ‚atnoĹ›ci: bez realnej pĹ‚atnoĹ›ci PayU i bez faĹ‚szywego approve na produkcji; test manual zakoĹ„czony reject w adminie`,
+    `- Bezpiecznik płatności: bez realnej płatności PayU i bez fałszywego approve na produkcji; test manual zakończony reject w adminie`,
     '',
     '## Kroki',
   ]
@@ -874,7 +875,7 @@ function buildReportMarkdown({
 
   lines.push('## Runtime issues')
   if (issues.length === 0) {
-    lines.push('- Brak zebranych bĹ‚Ä™dĂłw konsoli, pageerrorĂłw i same-origin request failures/HTTP >= 400.')
+    lines.push('- Brak zebranych błędów konsoli, pageerrorów i same-origin request failures/HTTP >= 400.')
   } else {
     for (const issue of issues) {
       const urlSuffix = issue.url ? ` | ${issue.url}` : ''
@@ -894,7 +895,7 @@ async function main() {
   const baseUrl = resolveBaseUrl()
   const adminSecret = process.env.ADMIN_ACCESS_SECRET?.trim()
   if (!adminSecret) {
-    throw new Error('Brak ADMIN_ACCESS_SECRET w Ĺ›rodowisku lokalnym.')
+    throw new Error('Brak ADMIN_ACCESS_SECRET w środowisku lokalnym.')
   }
 
   const timestamp = getWarsawTimestamp()
@@ -938,7 +939,7 @@ async function main() {
       await waitForAnyVisible([publicPage.locator('[data-home-quick-choice="dog"]').first()], 20000)
       await waitForAnyVisible([publicPage.locator('[data-home-quick-choice="cat"]').first()], 20000)
       await waitForAnyVisible([publicPage.locator('[data-home-quick-choice="help"]').first()], 20000)
-      step.notes.push('Hero i 3 wejĹ›cia sÄ… widoczne na stronie gĹ‚Ăłwnej.')
+      step.notes.push('Hero i 3 wejścia są widoczne na stronie głównej.')
     })
 
     await runStep(results, 'Hero CTA x3', publicPage, async (step) => {
@@ -1060,7 +1061,7 @@ async function main() {
       await waitForAnyVisible(
         [
           publicPage.locator('[data-payment-state="payment-selection"]').first(),
-          publicPage.getByRole('heading', { level: 1, name: /Wybierz sposĂłb pĹ‚atnoĹ›ci/i }),
+          publicPage.getByRole('heading', { level: 1, name: /Wybierz sposób płatności/i }),
         ],
         20000,
       )
@@ -1104,7 +1105,7 @@ async function main() {
       let pendingVisible = false
       for (let attempt = 0; attempt < 3; attempt += 1) {
         try {
-          await waitForConfirmationState(publicPage, 'pending-manual-review', /WpĹ‚ata czeka na potwierdzenie/i, 20000)
+          await waitForConfirmationState(publicPage, 'pending-manual-review', /Wpłata czeka na potwierdzenie/i, 20000)
           pendingVisible = true
           break
         } catch {
@@ -1119,7 +1120,7 @@ async function main() {
 
       step.notes.push('POST /api/payments/manual zwrocil canonical redirectTo i potwierdzenie pokazalo pending manual review.')
       confirmationUrl = publicPage.url()
-      step.notes.push('Rezerwacja przeszĹ‚a do pending manual review.')
+      step.notes.push('Rezerwacja przeszła do pending manual review.')
     })
 
     const skipAdminFlow = process.env.LIVE_CLICKTHROUGH_SKIP_ADMIN_FLOW === '1' || process.env.LIVE_CLICKTHROUGH_SKIP_ADMIN_FLOW === 'true'
@@ -1138,7 +1139,7 @@ async function main() {
           await adminPage.close()
         }
 
-        step.notes.push('Admin odrzuciĹ‚ testowÄ… wpĹ‚atÄ™ QA.')
+        step.notes.push('Admin odrzucił testową wpłatę QA.')
       })
 
       await runStep(results, '/confirmation', publicPage, async (step) => {
@@ -1176,11 +1177,11 @@ async function main() {
         }
 
         if (!rejectedVisible) {
-          throw new Error('Confirmation nie pokazaĹ‚ stanu odrzuconej wpĹ‚aty po adminowym reject.')
+          throw new Error('Confirmation nie pokazał stanu odrzuconej wpłaty po adminowym reject.')
         }
 
         await waitForAnyVisible([confirmationPage.getByRole('link', { name: /Wybierz nowy termin/i })], 20000)
-        step.notes.push('Confirmation pokazuje stan odrzuconej wpĹ‚aty.')
+        step.notes.push('Confirmation pokazuje stan odrzuconej wpłaty.')
       })
     }
 
@@ -1188,7 +1189,7 @@ async function main() {
       await publicPage.goto(`${baseUrl}/oferta`, { waitUntil: 'domcontentloaded' })
       await waitForAnyVisible([publicPage.getByRole('heading', { level: 1, name: /Wybierz start dla swojej sytuacji\./i })], 20000)
       const firstCardButtons = await publicPage.locator('.offer-card').first().locator('.offer-card-actions .button').count()
-      step.notes.push(`Pierwsza karta ma 1 gĹ‚Ăłwne CTA: ${firstCardButtons === 1}`)
+      step.notes.push(`Pierwsza karta ma 1 główne CTA: ${firstCardButtons === 1}`)
     })
 
     await runOfferJourney(results, publicPage, baseUrl, {
@@ -1237,27 +1238,27 @@ async function main() {
       await publicPage.goto(`${baseUrl}/oferta/konsultacja-30-min`, { waitUntil: 'domcontentloaded' })
       await waitForAnyVisible([publicPage.getByRole('heading', { level: 1, name: /Konsultacja 30 min/i })], 20000)
       const bodyText = cleanText(await publicPage.locator('main').innerText())
-      if (bodyText.includes('SprawdĹş szybko') || bodyText.includes('Po tym wiesz, co robiÄ‡')) {
+      if (bodyText.includes('Sprawdź szybko') || bodyText.includes('Po tym wiesz, co robić')) {
         throw new Error('Detail page 1 nadal zawiera stary szablon.')
       }
-      step.notes.push('Konsultacja 30 min ma skrĂłcony ukĹ‚ad i 2 CTA.')
+      step.notes.push('Konsultacja 30 min ma skrócony układ i 2 CTA.')
     })
 
     await runStep(results, 'detail page 2', publicPage, async (step) => {
       await publicPage.goto(`${baseUrl}/oferta/pobyty-socjalizacyjno-terapeutyczne`, { waitUntil: 'domcontentloaded' })
       await waitForAnyVisible([publicPage.getByRole('heading', { level: 1, name: /Pobyty socjalizacyjno-terapeutyczne/i })], 20000)
       const bodyText = cleanText(await publicPage.locator('main').innerText())
-      if (bodyText.includes('SprawdĹş szybko') || bodyText.includes('Po tym wiesz, co robiÄ‡')) {
+      if (bodyText.includes('Sprawdź szybko') || bodyText.includes('Po tym wiesz, co robić')) {
         throw new Error('Detail page 2 nadal zawiera stary szablon.')
       }
-      step.notes.push('Pobyty pozostajÄ… opcjÄ… dalszÄ…, nie zimnym pierwszym krokiem.')
+      step.notes.push('Pobyty pozostają opcją dalszą, nie zimnym pierwszym krokiem.')
     })
 
     await runStep(results, '/kontakt', publicPage, async (step) => {
       await publicPage.goto(`${baseUrl}/kontakt`, { waitUntil: 'domcontentloaded' })
       await waitForAnyBodyText(publicPage, [/Napisz wiadomość/i, /Piszesz do mnie/i], 20000)
       await assertNoPublicPhoneLinks(publicPage, '/kontakt')
-      step.notes.push('Kontakt jest skrĂłcony do akcji i krĂłtkiej toĹĽsamoĹ›ci.')
+      step.notes.push('Kontakt jest skrócony do akcji i krótkiej tożsamości.')
     })
 
     await runStep(results, '/regulamin', publicPage, async (step) => {
@@ -1266,7 +1267,7 @@ async function main() {
       await waitForAnyVisible([publicPage.getByText(/Publiczny profil CAPBT \/ COAPE/i)], 20000)
       await assertNoPublicPhoneLinks(publicPage, '/regulamin')
       await assertLegacyHeaderLinksHidden(publicPage, '/regulamin')
-      step.notes.push('Regulamin uĹĽywa nowego shellu prawnego bez publicznego telefonu i starego menu.')
+      step.notes.push('Regulamin używa nowego shellu prawnego bez publicznego telefonu i starego menu.')
     })
 
     await runStep(results, '/polityka-prywatnosci', publicPage, async (step) => {
@@ -1278,7 +1279,7 @@ async function main() {
       )
       await assertNoPublicPhoneLinks(publicPage, '/polityka-prywatnosci')
       await assertLegacyHeaderLinksHidden(publicPage, '/polityka-prywatnosci')
-      step.notes.push('Polityka prywatnoĹ›ci uĹĽywa nowego shellu prawnego bez publicznego telefonu i starego menu.')
+      step.notes.push('Polityka prywatności używa nowego shellu prawnego bez publicznego telefonu i starego menu.')
     })
 
     await publicContext.close()

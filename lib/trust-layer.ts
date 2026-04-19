@@ -1,0 +1,414 @@
+import { REAL_CASE_STUDIES } from '@/lib/real-case-studies'
+
+export type TrustFaqItem = {
+  question: string
+  answer: string
+}
+
+export type TrustSignalItem = {
+  title: string
+  copy: string
+  href?: string
+  cta?: string
+}
+
+export const FAQ_SHORTLISTS = {
+  home: [
+    {
+      question: 'Czym jest Kwadrans z behawiorystą?',
+      answer:
+        'To 15 minut rozmowy audio bez kamery. Opisujesz sytuację, ustalamy priorytet i wybieramy pierwszy konkretny krok.',
+    },
+    {
+      question: 'Czy Kwadrans wystarczy?',
+      answer:
+        'Przy jednym pytaniu albo przy pierwszym uporządkowaniu tematu często tak. Przy sprawie złożonej pomaga zdecydować, czy potrzebujesz szerszej konsultacji.',
+    },
+    {
+      question: 'Czy konsultacja online 60 min ma sens?',
+      answer:
+        'Tak. Przy wielu problemach ważne są historia, środowisko i codzienny rytm, a nie tylko sam objaw.',
+    },
+    {
+      question: 'Czy mogę najpierw napisać?',
+      answer:
+        'Tak. Krótka wiadomość pomaga doprecyzować sytuację, jeśli nie chcesz rezerwować od razu.',
+    },
+  ] satisfies TrustFaqItem[],
+  dogs: [
+    {
+      question: 'Czy pomoc jest tylko dla bardzo trudnych przypadków?',
+      answer:
+        'Nie. Wiele osób zgłasza się wtedy, gdy chce zrozumieć sytuację i wybrać spokojny pierwszy krok, zanim problem urośnie.',
+    },
+    {
+      question: 'Czy konsultacja online ma sens przy spacerach albo reaktywności?',
+      answer:
+        'Tak. W wielu psich tematach wystarcza, żeby uporządkować wyzwalacze, próg reakcji i pierwszy plan działania.',
+    },
+    {
+      question: 'Co jeśli byłem u trenera, a problem wraca?',
+      answer:
+        'To częsty sygnał, że pod spodem jest temat emocji, pobudzenia albo środowiska. Wtedy konsultacja behawioralna daje lepszy punkt startu.',
+    },
+    {
+      question: 'Kiedy warto zgłosić się po pomoc?',
+      answer:
+        'Wtedy, gdy temat wraca, obciąża codzienność albo kolejne próby nic nie zmieniają. Nie trzeba czekać, aż zrobi się naprawdę źle.',
+    },
+    {
+      question: 'Czy warto zgłosić się, jeśli trudność dopiero zaczyna się u psa?',
+      answer: 'Tak. Im wcześniej złapiemy schemat, tym łatwiej zatrzymać jego utrwalanie.',
+    },
+    {
+      question: 'Czy pomagasz przy rozłące i trudnym zostawaniu samemu?',
+      answer:
+        'Tak. W takich sytuacjach szczególnie ważny jest spokojny plan pierwszych kroków i tempo dopasowane do psa.',
+    },
+    {
+      question: 'Czy konsultacja ma sens, jeśli pies jest stale pobudzony i trudno mu się wyciszyć?',
+      answer:
+        'Tak. Sprawdzamy rytm dnia, obciążenie i to, co pomaga wracać do równowagi bez dokładania presji.',
+    },
+    {
+      question: 'Co jeśli pies ma kilka trudności naraz?',
+      answer: 'To bardzo częste. Najpierw wybieramy temat, od którego warto zacząć, żeby reszta też mogła się uporządkować.',
+    },
+  ] satisfies TrustFaqItem[],
+  cats: [
+    {
+      question: 'Czy konsultacja ma sens, jeśli widzę tylko subtelne zmiany w zachowaniu kota?',
+      answer:
+        'Tak. Przy kotach właśnie drobne sygnały często najwięcej mówią o napięciu, bólu albo zmianie w środowisku.',
+    },
+    {
+      question: 'Czy konsultacja online ma sens przy kuwecie, stresie albo wycofaniu?',
+      answer:
+        'Tak. W wielu kocich sprawach online w pełni wystarcza, żeby uporządkować środowisko, relacje i pierwszy kierunek działania.',
+    },
+    {
+      question: 'Czy muszę już wiedzieć, czy problem dotyczy kuwety, stresu czy relacji?',
+      answer:
+        'Nie. Konsultacja jest po to, żeby oddzielić objaw od tła i ustalić, co dziś naprawdę wymaga uwagi.',
+    },
+    {
+      question: 'Kiedy najpierw weterynarz?',
+      answer:
+        'Przy nagłej zmianie zachowania, szczególnie u kota. Najpierw wykluczamy tło zdrowotne, potem dokładamy warstwę behawioralną.',
+    },
+    {
+      question: 'Czy konsultacja ma sens, jeśli kot stał się bardziej wycofany, czujny albo napięty?',
+      answer: 'Tak. To sygnały, które warto uporządkować wcześnie, zanim staną się nową codziennością.',
+    },
+    {
+      question: 'Czy pomagasz przy napięciu między kotami?',
+      answer: 'Tak. W takich sytuacjach liczą się bezpieczeństwo, przestrzeń i dobra kolejność zmian.',
+    },
+    {
+      question: 'Co jeśli zachowanie kota zmieniło się po przeprowadzce, nowym domowniku albo zmianie rytmu dnia?',
+      answer: 'To częsty scenariusz. Takie zmiany potrafią mocno wpłynąć na kota, nawet jeśli z zewnątrz wyglądają niewinnie.',
+    },
+    {
+      question: 'Czy konsultacja jest tylko dla poważnych problemów kota?',
+      answer: 'Nie. Często warto odezwać się właśnie wtedy, gdy widzisz, że coś zaczyna iść w złą stronę.',
+    },
+  ] satisfies TrustFaqItem[],
+  contact: [
+    {
+      question: 'Kiedy wybrać krótką wiadomość?',
+      answer:
+        'Gdy nie chcesz rezerwować od razu albo chcesz krótko doprecyzować temat.',
+    },
+    {
+      question: 'Czy krótka wiadomość zastępuje konsultację?',
+      answer:
+        'Nie. To krótka wiadomość, po której wskażę, czy lepszy będzie Kwadrans z behawiorystą, konsultacja online 60 min czy jeszcze samo doprecyzowanie tematu.',
+    },
+    {
+      question: 'Czy Kwadrans z behawiorystą wymaga kamery?',
+      answer: 'Nie. To rozmowa audio bez kamery, przeznaczona do krótkiego omówienia sprawy przed dalszą decyzją.',
+    },
+    {
+      question: 'Czy mogę ustalić inny format, jeśli rozmowa głosowa jest dla mnie trudna?',
+      answer:
+        'Tak. Napisz przez formularz i opisz ograniczenie. Ustalimy, czy da się bezpiecznie przygotować inny wariant kontaktu.',
+    },
+  ] satisfies TrustFaqItem[],
+  pricing: [
+    {
+      question: 'Czym jest Kwadrans z behawiorystą?',
+      answer:
+        'To samodzielny format: 15 minut rozmowy audio bez kamery. Dostajesz priorytet i pierwszy kierunek działania.',
+    },
+    {
+      question: 'Czy Kwadrans to próbna konsultacja?',
+      answer:
+        'Nie. To osobna usługa z własnym zastosowaniem. Dla wielu osób ten format w pełni wystarcza na start.',
+    },
+    {
+      question: 'Kiedy wybrać 60 min zamiast Kwadransu?',
+      answer:
+        'Gdy problem trwa dłużej, ma kilka wątków albo od razu wiesz, że potrzebujesz pełniejszej analizy i planu.',
+    },
+    {
+      question: 'Co dostaję po konsultacji 60 min?',
+      answer:
+        'Pełniejszy obraz sytuacji, plan pierwszych kroków, wiedzę czego nie robić i podsumowanie pisemne wysyłane e-mailem.',
+    },
+    {
+      question: 'Czy mogę od razu wejść w 60 min?',
+      answer: 'Tak. Nie ma obowiązku zaczynania od Kwadransu, jeśli wiesz, że temat wymaga szerszej pracy.',
+    },
+  ] satisfies TrustFaqItem[],
+  consultation: [
+    {
+      question: 'Kiedy to jest dobry moment, żeby się odezwać?',
+      answer:
+        'Gdy coś wraca, nasila się albo zaczyna ustawiać codzienność w domu. Nie trzeba czekać, aż zrobi się naprawdę trudno.',
+    },
+    {
+      question: 'Czy mogę napisać, jeśli nie umiem dobrze nazwać problemu?',
+      answer:
+        'Tak. Wystarczy zwykły opis tego, co widzisz na co dzień. Nazwę i porządek możemy ustalić później.',
+    },
+    {
+      question: 'Jak wygląda pierwsza konsultacja?',
+      answer:
+        'Najpierw porządkujemy sytuację, potem patrzymy na tło i codzienność, a na końcu wybieramy pierwszy krok.',
+    },
+    {
+      question: 'Co dostanę po konsultacji?',
+      answer: 'Jasny kierunek, priorytet i pierwszy plan, który da się realnie wdrożyć.',
+    },
+    {
+      question: 'Czy konsultacja online ma sens?',
+      answer:
+        'Tak. Przy większości problemów behawioralnych online nie jest kompromisem, bo najważniejsze są historia, środowisko i kontekst.',
+    },
+    {
+      question: 'Czy muszę mieć kamerę albo nagranie?',
+      answer:
+        'Nie. Kamera jest opcjonalna, a nagranie bywa pomocne, ale nie jest warunkiem rozpoczęcia rozmowy.',
+    },
+    {
+      question: 'Czy pies albo kot musi być przy mnie podczas konsultacji?',
+      answer:
+        'Nie musi. Pracuję na tym, co opisujesz. Jeśli zwierzę jest obok i coś pokazuje, to tylko dodatkowy kontekst.',
+    },
+    {
+      question: 'Co jeśli temat okaże się poza zakresem?',
+      answer:
+        'Powiem to wprost i skieruję Cię do odpowiedniego specjalisty. Nie zatrzymuję Cię w formacie, który nie wystarczy.',
+    },
+  ] satisfies TrustFaqItem[],
+  dogBehaviorist: [
+    {
+      question: 'Czy Kwadrans ma sens przy psie, jeśli nie umiem nazwać problemu?',
+      answer:
+        'Tak. Wystarczy opis tego, co widzisz. Pomagam nazwać temat, ocenić priorytet i wybrać właściwy pierwszy ruch.',
+    },
+    {
+      question: 'Czy pomoc behawiorysty ma sens po nieudanym treningu?',
+      answer:
+        'Tak. Trening nie zawsze sięga tego, co napędza zachowanie. Przy lęku, reaktywności albo pobudzeniu trzeba najpierw zrozumieć tło.',
+    },
+    {
+      question: 'Czy przy problemie psa online wystarczy?',
+      answer:
+        'Bardzo często tak. Wyjątki są jasne i jeśli Twój przypadek do nich należy, powiem o tym od razu.',
+    },
+    {
+      question: 'Z czym najczęściej zgłaszają się opiekunowie psów?',
+      answer:
+        'Najczęściej ze spacerami, reaktywnością, rozłąką, pobudzeniem w domu albo trudnym startem po adopcji.',
+    },
+  ] satisfies TrustFaqItem[],
+  catBehaviorist: [
+    {
+      question: 'Czy Kwadrans ma sens przy problemie kota?',
+      answer:
+        'Tak. To dobry format, gdy chcesz ustalić, czy temat jest behawioralny, środowiskowy czy wymaga najpierw weterynarza.',
+    },
+    {
+      question: 'Czy każda zmiana zachowania kota jest behawioralna?',
+      answer:
+        'Nie. Przy nagłych zmianach pierwszym krokiem bywa weterynarz. To element bezpiecznej diagnozy, nie przeszkoda.',
+    },
+    {
+      question: 'Czy online wystarczy przy kuwecie albo konflikcie między kotami?',
+      answer:
+        'W wielu przypadkach tak, bo kluczowe są środowisko, zasoby, historia zmian i relacje w domu.',
+    },
+    {
+      question: 'Z czym najczęściej zgłaszają się opiekunowie kotów?',
+      answer:
+        'Najczęściej z kuwetą, stresem środowiskowym, wycofaniem, nagłą zmianą zachowania i napięciem między kotami.',
+    },
+  ] satisfies TrustFaqItem[],
+  toolkit: [
+    {
+      question: 'Czy Niezbędnik zastępuje konsultację?',
+      answer:
+        'Nie. To uporządkowany hub materiałów do samodzielnej pracy. Jeśli temat jest mieszany albo wraca, rozmowa zwykle daje lepszy start.',
+    },
+    {
+      question: 'Od czego zacząć w Niezbędniku?',
+      answer:
+        'Od jednego materiału najbliższego Twojej sytuacji. Jeśli po przejrzeniu nadal nie wiesz, co wybrać, napisz krótką wiadomość.',
+    },
+    {
+      question: 'Czy materiały są tylko dla osób przed konsultacją?',
+      answer:
+        'Nie. W Niezbędniku są bezpłatne materiały startowe, własne przewodniki i wybrane źródła do szerszej pracy.',
+    },
+    {
+      question: 'Czy po materiale warto wrócić do rozmowy?',
+      answer:
+        'Tak, jeśli temat wymaga dopasowania do Twojej sytuacji albo widzisz, że sam materiał nie wystarcza do uporządkowania problemu.',
+    },
+  ] satisfies TrustFaqItem[],
+  opinions: [
+    {
+      question: 'Czy opinie są anonimowe?',
+      answer: 'Tak. Pokazuję tylko tyle, ile wystarczy, żeby zachować kontekst bez odsłaniania danych wrażliwych.',
+    },
+    {
+      question: 'Czy opinie pokazują realne sytuacje?',
+      answer:
+        'Tak. Zależy mi, żeby były to krótkie głosy z rzeczywistym problemem i pierwszym ruchem, a nie same komplementy.',
+    },
+    {
+      question: 'Czy na podstawie opinii da się ocenić styl pracy?',
+      answer:
+        'Tak. Z opinii widać, jak wygląda kontakt, sposób tłumaczenia i tempo porządkowania tematu.',
+    },
+    {
+      question: 'Czy po przeczytaniu opinii nadal mogę napisać krótką wiadomość?',
+      answer:
+        'Tak. Krótka wiadomość jest dobrym krokiem, jeśli chcesz sprawdzić, czy to właściwy moment na kontakt.',
+    },
+  ] satisfies TrustFaqItem[],
+} as const
+
+export const TRUST_SIGNAL_SETS = {
+  contact: [
+    {
+      title: 'Jasny zakres kontaktu',
+      copy: 'Krótka wiadomość ma doprecyzować sytuację, a nie zamienić się w długą korespondencję przed rozmową.',
+    },
+    {
+      title: 'Szczera rekomendacja',
+      copy: 'Jeśli temat wymaga od razu Kwadransu z behawiorystą albo pełnej konsultacji, mówię to wprost.',
+    },
+    {
+      title: 'Publiczne punkty odniesienia',
+      copy: 'Profil CAPBT i istniejące publikacje pozwalają sprawdzić styl pracy przed kontaktem.',
+      href: '/o-mnie',
+      cta: 'Sprawdź profil i źródła',
+    },
+  ] satisfies TrustSignalItem[],
+  pricing: [
+    {
+      title: 'Dwa formaty, nie lepszy i gorszy',
+      copy: 'Kwadrans z behawiorystą i konsultacja 60 min rozwiązują różne potrzeby. Wybór zależy od złożoności tematu.',
+    },
+    {
+      title: 'Bez kamery, jeśli nie chcesz',
+      copy: 'Kwadrans jest zawsze rozmową głosową. Przy 60 min kamera pozostaje opcjonalna.',
+    },
+    {
+      title: 'Bez obietnic na zapas',
+      copy: 'Nie obiecuję efektów po jednej rozmowie. Obiecuję uczciwe ustawienie priorytetu i pierwszego sensownego planu.',
+    },
+  ] satisfies TrustSignalItem[],
+  consultation: [
+    {
+      title: 'Diagnoza przed techniką',
+      copy: 'Konsultacja zaczyna się od tego, co napędza zachowanie, a nie od dopisywania gotowej metody.',
+    },
+    {
+      title: 'Zakres mówiony wprost',
+      copy: 'Jeśli temat wymaga innego specjalisty albo formatu stacjonarnego, komunikuję to jasno.',
+    },
+    {
+      title: 'Podsumowanie po 60 min',
+      copy: 'Po pełnej konsultacji dostajesz plan i podsumowanie pisemne, żeby nie opierać wszystkiego na pamięci z rozmowy.',
+    },
+  ] satisfies TrustSignalItem[],
+  toolkit: [
+    {
+      title: 'Materiały jako wsparcie, nie zamiennik rozmowy',
+      copy: 'Niezbędnik ma porządkować temat i dawać punkt startu. Gdy sytuacja jest wielowątkowa, lepiej przejść do rozmowy.',
+    },
+    {
+      title: 'Selekcja zamiast katalogu wszystkiego',
+      copy: 'Każda pozycja jest tu dlatego, że przydaje się w konkretnej sytuacji, a nie dlatego, że wypełnia półkę.',
+    },
+    {
+      title: 'Spokojny next step',
+      copy: 'Po materiale możesz wrócić do Kwadransu z behawiorystą, jeśli temat wymaga dopasowania do Twojej sytuacji.',
+    },
+  ] satisfies TrustSignalItem[],
+  dogBehaviorist: [
+    {
+      title: 'Najpierw przyczyna, potem plan',
+      copy: 'Przy psich problemach ważniejsze od samego objawu bywa to, co go napędza: napięcie, frustracja, lęk albo codzienny chaos.',
+    },
+    {
+      title: 'Kwadrans jest samodzielną usługą',
+      copy: 'To nie próbka przed pełną konsultacją, tylko osobny format do ustawienia pierwszego kierunku.',
+    },
+    {
+      title: 'Jeśli online nie wystarczy, powiem to wprost',
+      copy: 'Nie zatrzymuję psa i opiekuna w formacie, który nie ma szans zadziałać.',
+    },
+  ] satisfies TrustSignalItem[],
+  catBehaviorist: [
+    {
+      title: 'Kot nie zmienia zachowania bez powodu',
+      copy: 'Przy kotach porządkujemy zdrowie, środowisko i relacje zanim zaczniemy cokolwiek „trenować”.',
+    },
+    {
+      title: 'Nagła zmiana = najpierw zdrowie',
+      copy: 'To element bezpiecznego procesu, a nie przerzucanie odpowiedzialności. Przy kotach to szczególnie ważne.',
+    },
+    {
+      title: 'Online dobrze działa przy kocich tematach',
+      copy: 'Kuweta, stres, wycofanie i konflikty zwykle wymagają przede wszystkim dobrego rozpoznania środowiska i historii.',
+    },
+  ] satisfies TrustSignalItem[],
+  opinions: [
+    {
+      title: 'Zanonimizowane historie',
+      copy: 'Publicznie pokazuję tylko skrócone, anonimowe opisy punktu startu i pierwszych kroków.',
+    },
+    {
+      title: 'Publiczne źródła obok opinii',
+      copy: 'CAPBT, publikacje i profile publiczne są po to, żeby decyzja nie opierała się wyłącznie na cytacie.',
+    },
+    {
+      title: 'Brak obietnic identycznego efektu',
+      copy: 'Case studies pokazują drogę uporządkowania tematu, nie gwarancję powtórzenia czyjegoś wyniku.',
+    },
+  ] satisfies TrustSignalItem[],
+} as const
+
+export const CASE_STUDY_SELECTIONS = {
+  dogBehaviorist: ['case-01', 'case-02'] as const,
+  catBehaviorist: ['case-05', 'case-06'] as const,
+  opinions: ['case-01', 'case-02', 'case-05', 'case-06'] as const,
+  problemLandings: {
+    'reaktywnosc-na-smyczy': 'case-01',
+    'lek-separacyjny': 'case-02',
+    'zalatwianie-poza-kuweta': 'case-05',
+    'konflikt-miedzy-kotami': 'case-06',
+  } as const,
+} as const
+
+export function getCaseStudiesByIds(ids: readonly string[]) {
+  const studies = ids
+    .map((id) => REAL_CASE_STUDIES.find((item) => item.id === id))
+    .filter((item): item is (typeof REAL_CASE_STUDIES)[number] => Boolean(item))
+
+  return studies
+}

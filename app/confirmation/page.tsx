@@ -1,8 +1,10 @@
+﻿import type { Metadata } from 'next'
 import Link from 'next/link'
 import { unstable_noStore as noStore } from 'next/cache'
 import { headers } from 'next/headers'
 import { AnalyticsEventOnMount } from '@/components/AnalyticsEventOnMount'
 import { BookingStageEyebrow } from '@/components/BookingStageEyebrow'
+import { getBookingAnalyticsContextParams } from '@/lib/analytics-schema'
 import { CustomerEmailStatusNotice } from '@/components/CustomerEmailStatusNotice'
 import { ConfirmationStatusWatcher } from '@/components/ConfirmationStatusWatcher'
 import { HardNavLink } from '@/components/HardNavLink'
@@ -10,19 +12,35 @@ import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { PreparationMaterialsCard } from '@/components/PreparationMaterialsCard'
 import { SelfCancellationActions } from '@/components/SelfCancellationActions'
-import { getBookingServiceTitle, resolveBookingServiceType } from '@/lib/booking-services'
+import { COPY_HELPERS } from '@/lib/copy-governance'
+import {
+  type BookingServiceType,
+  getBookingServiceRoomAccessLabel,
+  getBookingServiceTitle,
+  resolveBookingServiceType,
+} from '@/lib/booking-services'
+import { buildBookHref } from '@/lib/booking-routing'
 import { formatDateTimeLabel, getProblemLabel } from '@/lib/data'
+import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { formatPricePln } from '@/lib/pricing'
 import { canSelfCancelBooking, getRemainingSelfCancellationSeconds } from '@/lib/self-cancellation'
 import { getBookingForViewer } from '@/lib/server/db'
 import { getDataModeStatus } from '@/lib/server/env'
 import { getCustomerEmailDeliveryStatus } from '@/lib/server/notifications'
-import { syncPayuBookingByBookingId } from '@/lib/server/payu'
 import { finalizeStripeCheckoutSession } from '@/lib/server/stripe'
+import { buildTechnicalMetadata } from '@/lib/seo'
 import { SmsConfirmationStatus } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
+
+export function generateMetadata(): Metadata {
+  return buildTechnicalMetadata({
+    title: 'Potwierdzenie rezerwacji',
+    path: '/confirmation',
+    description: 'Sprawdź status wpłaty, potwierdzenie rezerwacji i dalszy krok do rozmowy.',
+  })
+}
 
 function readSearchParam(value: string | string[] | undefined): string | null {
   if (Array.isArray(value)) {
@@ -35,22 +53,103 @@ function readSearchParam(value: string | string[] | undefined): string | null {
 function getSmsPanelContent(status: SmsConfirmationStatus | null | undefined) {
   if (status === 'sent') {
     return {
-      title: 'SMS został wysłany',
-      body: 'Wysłaliśmy SMS z potwierdzeniem na numer telefonu z rezerwacji.',
+      title: 'Potwierdzenie zostało wysłane',
+      body: 'Wysłaliśmy krótkie potwierdzenie rezerwacji.',
     }
   }
 
   if (status === 'processing') {
     return {
-      title: 'Kończymy wysyłkę SMS',
-      body: 'Płatność jest już potwierdzona. Jeśli SMS nie pojawi się od razu, szczegóły rezerwacji są zapisane na tej stronie.',
+      title: 'Kończymy wysyłkę potwierdzenia',
+      body: 'Płatność jest już potwierdzona. Jeśli wiadomość nie pojawi się od razu, szczegóły rezerwacji są zapisane na tej stronie.',
     }
   }
 
   return {
     title: 'Potwierdzenie jest zapisane',
-    body: 'Jeśli SMS nie dotrze od razu, skontaktujemy się na podstawie danych z rezerwacji.',
+    body: 'Jeśli wiadomość nie dotrze od razu, potwierdzenie i dalsze instrukcje są zapisane na tej stronie.',
   }
+}
+
+function getCallRoomCtaLabel(serviceType: BookingServiceType, roomAccessLabel: string) {
+  if (serviceType === 'konsultacja-behawioralna-online') {
+    return 'Zobacz pokój konsultacji online'
+  }
+
+  if (serviceType === 'konsultacja-30-min') {
+    return 'Zobacz pokój konsultacji'
+  }
+
+  return roomAccessLabel === 'pokój rozmowy audio' ? 'Zobacz pokój rozmowy audio' : 'Zobacz pokój rozmowy'
+}
+
+function getConfirmedChecklist(serviceType: BookingServiceType) {
+  if (serviceType === 'konsultacja-behawioralna-online') {
+    return {
+      title: 'Przed konsultacją online',
+      items: [
+        'Zachowaj termin i wróć do tego linku kilka minut przed konsultacją online.',
+        'Przygotuj 2-3 najważniejsze obserwacje, krótki kontekst problemu i materiały, które chcesz omówić.',
+        'Jeśli chcesz, dodaj przed rozmową nagranie MP4, link do materiałów albo krótki opis sytuacji, żeby wejść od razu w sedno.',
+      ],
+      materialsLead:
+        'To nie jest obowiązkowe. Materiały pomagają skrócić wstęp i szybciej przejść do zaleceń po pełnej konsultacji.',
+    }
+  }
+
+  return {
+    title: 'Przed rozmową audio',
+    items: [
+      'Zachowaj termin i wróć do tego linku kilka minut przed rozmową audio.',
+      'Jeśli chcesz, dodaj teraz nagranie MP4, link do materiałów albo krótki opis sytuacji.',
+      'Przed rozmową możesz też spokojnie przejrzeć Niezbędnik, jeśli chcesz uporządkować temat jeszcze lepiej.',
+    ],
+    materialsLead:
+      'To nie jest obowiązkowe. Jeśli chcesz, możesz teraz dodać nagranie, link do materiałów albo krótki opis sytuacji, żeby szybciej uporządkować temat przed rozmową.',
+  }
+}
+
+function getConfirmedFlowCards(
+  serviceType: BookingServiceType,
+  roomAccessLabel: string,
+  customerEmailReady: boolean,
+  email: string,
+) {
+  if (serviceType === 'konsultacja-behawioralna-online') {
+      return [
+        {
+          title: 'Termin jest zapisany',
+          body: 'Konsultacja 60 min jest potwierdzona. Wróć do tego linku kilka minut przed spotkaniem.',
+        },
+      {
+        title: 'Dalszy link i instrukcja',
+        body: customerEmailReady
+          ? `Link do ${roomAccessLabel} i dalszą instrukcję wyślemy także na ${email}.`
+          : `Link do ${roomAccessLabel} i dalszą instrukcję masz stale na tej stronie, więc zachowaj ten adres.`,
+      },
+      {
+        title: 'Przygotowanie',
+        body: 'Jeśli masz nagranie, link do materiałów albo krótki opis tła sprawy, dodaj je teraz, żeby wejść od razu w konkrety.',
+      },
+    ]
+  }
+
+  return [
+    {
+      title: 'Termin jest zapisany',
+      body: 'Kwadrans z behawiorystą jest potwierdzony. Wróć do tego linku kilka minut przed rozmową.',
+    },
+    {
+      title: 'Dalszy link i instrukcja',
+      body: customerEmailReady
+        ? `Link do ${roomAccessLabel} i krótkie potwierdzenie wyślemy także na ${email}.`
+        : `Link do ${roomAccessLabel} i dalszą instrukcję masz stale na tej stronie, więc zachowaj ten adres.`,
+    },
+    {
+      title: 'Przygotowanie',
+      body: 'Jeśli chcesz, dodaj nagranie, link albo krótki opis sytuacji. To pomaga szybciej uporządkować temat podczas rozmowy.',
+    },
+  ]
 }
 
 export default async function ConfirmationPage({
@@ -62,11 +161,10 @@ export default async function ConfirmationPage({
   const bookingId = readSearchParam(searchParams?.bookingId)
   const accessToken = readSearchParam(searchParams?.access)
   const sessionId = readSearchParam(searchParams?.session_id)
-  const payuReturn = readSearchParam(searchParams?.payu)
   const manualReported = readSearchParam(searchParams?.manual)
   const adminNotice = readSearchParam(searchParams?.adminNotice)
   const dataMode = getDataModeStatus()
-  const returnedFromOnlineCheckout = Boolean(sessionId || payuReturn)
+  const returnedFromOnlineCheckout = Boolean(sessionId)
   let booking: Awaited<ReturnType<typeof getBookingForViewer>> = null
   let flowError: string | null = null
   let onlineSyncWarning: string | null = null
@@ -86,22 +184,7 @@ export default async function ConfirmationPage({
         sessionId,
         error,
       })
-      onlineSyncWarning = 'Wróciliśmy z płatności online, ale nie udał się teraz zapis finalnego statusu. Ta strona spróbuje ponownie sama za chwilę.'
-      // Wróciliśmy z płatności online
-    }
-  }
-
-  if (!flowError && bookingId && payuReturn) {
-    try {
-      await syncPayuBookingByBookingId(bookingId)
-    } catch (error) {
-      console.warn('[behawior15][confirmation] payu return sync failed', {
-        bookingId,
-        payuReturn,
-        error,
-      })
-      onlineSyncWarning = 'Wróciliśmy z płatności online, ale nie udał się teraz zapis finalnego statusu. Ta strona spróbuje ponownie sama za chwilę.'
-      // Wróciliśmy z płatności online
+      onlineSyncWarning = 'Nie udał się teraz zapis finalnego statusu rezerwacji. Ta strona spróbuje ponownie sama za chwilę.'
     }
   }
 
@@ -134,7 +217,9 @@ export default async function ConfirmationPage({
   const customerEmailStatus = booking ? getCustomerEmailDeliveryStatus(booking.email) : null
   const bookingServiceType = booking ? resolveBookingServiceType(booking.serviceType, booking.amount) : null
   const bookingServiceTitle = bookingServiceType ? getBookingServiceTitle(bookingServiceType) : null
+  const roomAccessLabel = bookingServiceType ? getBookingServiceRoomAccessLabel(bookingServiceType) : 'pokój rozmowy'
   const qaBooking = Boolean(booking?.qaBooking)
+  const quickAudioHref = buildBookHref(null, 'szybka-konsultacja-15-min', qaBooking)
   const showAdminNoticeQueued = isWaitingManual && manualReported === 'reported' && adminNotice === 'queued'
   const showAdminNoticeWarning = isWaitingManual && manualReported === 'reported' && (adminNotice === 'failed' || adminNotice === 'skipped')
   const confirmationState = isSelfCancelled
@@ -153,23 +238,31 @@ export default async function ConfirmationPage({
                 ? 'loaded'
                 : 'invalid'
 
+  const serviceLabel = bookingServiceTitle ?? 'usługa'
+  const callRoomCtaLabel = bookingServiceType ? getCallRoomCtaLabel(bookingServiceType, roomAccessLabel) : 'Zobacz pokój rozmowy'
+  const confirmedChecklist = bookingServiceType ? getConfirmedChecklist(bookingServiceType) : null
+  const confirmedFlowCards =
+    booking && bookingServiceType ? getConfirmedFlowCards(bookingServiceType, roomAccessLabel, customerEmailStatus?.state === 'ready', booking.email) : []
+
   return (
     <main className="page-wrap" data-analytics-disabled={qaBooking ? 'true' : undefined} data-qa-booking={qaBooking ? 'true' : 'false'} data-customer-email-state={customerEmailStatus?.state ?? 'unknown'}>
       <div className="container">
         <Header />
         <section className="panel centered-panel hero-surface booking-stage-panel transaction-panel booking-flow-panel" data-confirmation-state={confirmationState} data-booking-id={booking?.id ?? ''}>
           <BookingStageEyebrow stage="confirmation" className="section-eyebrow" />
+          {isConfirmed ? <div className="muted top-gap-small">{COPY_HELPERS.aftercareConfirmation}</div> : null}
           {flowError ? (
             <div className="stack-gap">
+              <h1>Potwierdzenie rezerwacji chwilowo niedostępne</h1>
               <div className="error-box">
-                {flowError} Napisz wiadomość albo wróć do rezerwacji, jeśli chcesz sprawdzić wszystko jeszcze raz.
+                {flowError} Użyj krótkiej wiadomości albo wróć do rezerwacji, jeśli chcesz sprawdzić wszystko jeszcze raz.
               </div>
               <div className="hero-actions centered-actions">
-                <HardNavLink href="/book" className="button button-primary big-button">
+                <HardNavLink href={quickAudioHref} className="button button-primary big-button">
                   Wróć do rezerwacji
                 </HardNavLink>
-                <HardNavLink href="/kontakt" className="button button-ghost big-button">
-                  Napisz wiadomość
+                <HardNavLink href="/kontakt#formularz" className="button button-ghost big-button">
+                  {FUNNEL_CTA_LABELS.contact}
                 </HardNavLink>
               </div>
             </div>
@@ -179,30 +272,37 @@ export default async function ConfirmationPage({
                 {isSelfCancelled
                   ? 'Zakup anulowany'
                   : isConfirmed
-                    ? 'Płatność potwierdzona'
+                    ? 'Wpłata potwierdzona'
                     : isWaitingManual
                       ? 'Czekamy na potwierdzenie wpłaty'
                       : isRejected
                         ? 'Wpłata niepotwierdzona'
-                        : 'Sprawdzamy status płatności'}
+                        : 'Sprawdzamy status wpłaty'}
               </div>
               {qaBooking ? <div className="status-pill transaction-status-pill top-gap-small">Rezerwacja testowa</div> : null}
-              {isConfirmed && !qaBooking ? (
-                <AnalyticsEventOnMount
-                  eventName="payment_success"
-                  params={{
-                    booking_id: booking.id,
-                    payment_method: booking.paymentMethod ?? 'unknown',
-                  }}
-                />
-              ) : null}
+              <AnalyticsEventOnMount
+                eventName="confirmation_viewed"
+                params={{
+                  booking_id: booking.id,
+                  payment_status: booking.paymentStatus,
+                  source_page: '/confirmation',
+                  ...getBookingAnalyticsContextParams({
+                    serviceType: bookingServiceType ?? 'szybka-konsultacja-15-min',
+                    quickConsultationPrice: booking.amount,
+                    animalType: booking.animalType,
+                    problemType: booking.problemType,
+                    bookingStatus: booking.bookingStatus,
+                    paymentMode: booking.paymentMethod ?? 'unknown',
+                  }),
+                }}
+              />
               <h1>
                 {isSelfCancelled
                   ? 'Rezerwacja została anulowana'
                   : isConfirmed
                     ? qaBooking
                       ? 'Testowa płatność została potwierdzona'
-                      : 'Płatność za konsultację została potwierdzona'
+                      : `Wpłata za ${serviceLabel} została potwierdzona`
                     : isWaitingManual
                       ? 'Wpłata czeka na potwierdzenie do 60 min'
                       : isRejected
@@ -214,19 +314,19 @@ export default async function ConfirmationPage({
                   ? 'Termin wrócił do kalendarza, a płatność została cofnięta. Jeśli chcesz, możesz od razu wybrać nowy termin albo wrócić później.'
                   : isConfirmed
                     ? qaBooking
-                      ? 'To jest rezerwacja testowa. Poniżej masz potwierdzenie, status SMS i kolejny krok bez realnej płatności.'
-                      : 'Opłacona rezerwacja jest już zapisana. Poniżej masz podsumowanie zakupu, status SMS i kolejny krok po płatności.'
+                      ? 'To jest rezerwacja testowa. Poniżej masz potwierdzenie i kolejny krok bez realnej płatności.'
+                      : `Wpłata jest już potwierdzona. Poniżej masz podsumowanie rezerwacji, status wiadomości, ${roomAccessLabel} i dalszy krok.`
                     : isWaitingManual
-                      ? 'Sprawdzamy wpłatę i potwierdzimy ją do 60 minut. Gdy status zmieni się na opłacony, ta strona sama pokaże pokój rozmowy i sekcję materiałów.'
+                      ? `Sprawdzamy wpłatę ręczną i potwierdzimy ją do 60 minut. Gdy status zmieni się na opłacony, zobaczysz ${roomAccessLabel} i sekcję materiałów.`
                       : isRejected
                         ? booking.paymentRejectedReason ?? 'Termin wrócił do puli. Jeśli trzeba, utwórz nową rezerwację i zgłoś wpłatę ponownie.'
-                        : 'Jeśli przed chwilą opłaciłeś konsultację online, odśwież tę stronę za chwilę. Jeśli płatność nie doszła, wróć do wyboru metody i spróbuj ponownie.'}
+                        : 'Jeśli przed chwilą wysłałeś płatność ręczną, odśwież tę stronę za chwilę. Jeśli wpłata nie została jeszcze zgłoszona, wróć do ekranu płatności i dokończ ten krok.'}
               </p>
 
               <div className="summary-grid">
                 <div className="summary-card tree-backed-card">
                   <div className="stat-label">Usługa</div>
-                  <div className="summary-value">{bookingServiceTitle ?? 'Konsultacja'}</div>
+                  <div className="summary-value">{serviceLabel}</div>
                 </div>
                 <div className="summary-card tree-backed-card">
                   <div className="stat-label">Temat rozmowy</div>
@@ -261,12 +361,38 @@ export default async function ConfirmationPage({
                 />
               ) : null}
 
+              {!isSelfCancelled && !isClosed ? (
+                <div className="summary-grid trust-grid top-gap">
+                  {(isConfirmed ? confirmedFlowCards : [
+                    {
+                      title: 'Status płatności',
+                      body: isWaitingManual
+                        ? 'Wpłata jest zapisana i czeka na potwierdzenie do 60 minut.'
+                        : 'Wpłata nie jest jeszcze potwierdzona. Jeśli właśnie wysłałeś płatność ręczną, poczekaj na ręczną akceptację.',
+                    },
+                    {
+                      title: 'Kolejny krok',
+                      body: 'Nie musisz zgadywać, co dalej. Gdy status się zmieni, potwierdzenie pokaże właściwy stan rezerwacji.',
+                    },
+                    {
+                      title: 'Co odblokuje się potem',
+                      body: `Po statusie opłacone zobaczysz ${roomAccessLabel}, dalszą instrukcję i sekcję materiałów do sprawy.`,
+                    },
+                  ]).map((card) => (
+                    <div key={card.title} className="summary-card trust-card tree-backed-card">
+                      <strong>{card.title}</strong>
+                      <span>{card.body}</span>
+                    </div>
+                  ))}
+                </div>
+              ) : null}
+
               {canSelfCancel ? (
                 <SelfCancellationActions
                   bookingId={booking.id}
                   accessToken={accessToken ?? ''}
                   initialRemainingSeconds={initialRemainingSeconds}
-                  contactHref={`/kontakt?service=${encodeURIComponent(bookingServiceType ?? 'szybka-konsultacja-15-min')}&intent=reschedule&bookingId=${encodeURIComponent(booking.id)}`}
+                  contactHref={`/kontakt?service=${encodeURIComponent(bookingServiceType ?? 'szybka-konsultacja-15-min')}&intent=reschedule&bookingId=${encodeURIComponent(booking.id)}#formularz`}
                 />
               ) : null}
 
@@ -275,6 +401,7 @@ export default async function ConfirmationPage({
                 bookingId={booking.id}
                 accessToken={accessToken}
                 currentState={`${booking.bookingStatus}:${booking.paymentStatus}`}
+                roomAccessLabel={roomAccessLabel}
               />
 
               {showAdminNoticeQueued ? (
@@ -285,13 +412,13 @@ export default async function ConfirmationPage({
 
               {showAdminNoticeWarning ? (
                 <div className="info-box top-gap">
-                  Zgłoszenie wpłaty zostało zapisane, ale automatyczne powiadomienie obsługi o tej wpłacie nie zostało teraz dostarczone. Zachowaj ten link. Jeśli status nie zmieni się w ciągu 60 minut, skontaktuj się bezpośrednio przez dane kontaktowe na stronie.
+                  Zgłoszenie wpłaty zostało zapisane, ale automatyczne powiadomienie obsługi o tej wpłacie nie zostało teraz dostarczone. Zachowaj ten link. Jeśli status nie zmieni się w ciągu 60 minut, skontaktuj się przez formularz kontaktowy.
                 </div>
               ) : null}
 
               {isAwaitingOnlineConfirmation ? (
                 <div className="info-box top-gap">
-                  Wróciło przekierowanie z płatności online. Jeśli operator jeszcze kończy potwierdzenie, ta strona sama sprawdzi status ponownie i odblokuje pokój rozmowy bez dodatkowego klikania.
+                  {`Status rezerwacji jest jeszcze domykany. Ta strona sama sprawdzi go ponownie i odblokuje ${roomAccessLabel} bez dodatkowego klikania.`}
                 </div>
               ) : null}
 
@@ -300,7 +427,7 @@ export default async function ConfirmationPage({
               {isClosed ? (
                 <div className="error-box top-gap">
                   {booking.paymentStatus === 'failed'
-                    ? 'Płatność online nie została potwierdzona, a termin wrócił do kalendarza.'
+                    ? 'Wpłata nie została potwierdzona, a termin wrócił do kalendarza.'
                     : 'Ta rezerwacja nie jest już aktywna. Jeśli chcesz, wybierz nowy termin.'}
                 </div>
               ) : null}
@@ -309,10 +436,10 @@ export default async function ConfirmationPage({
                 <div className="info-box top-gap">
                   Tytuł wpłaty: <strong>{booking.paymentReference ?? booking.id}</strong>.{' '}
                   {customerEmailStatus?.state === 'ready'
-                    ? `Gdy tylko potwierdzimy wpłatę, wyślemy link do rozmowy na ${booking.email}, odblokujemy materiały i pokażemy nowy stan na tej stronie.`
+                    ? `Gdy tylko potwierdzimy wpłatę, wyślemy link do ${roomAccessLabel} na ${booking.email} i odblokujemy materiały.`
                     : customerEmailStatus?.state === 'disabled'
-                      ? 'Gdy tylko potwierdzimy wpłatę, odblokujemy materiały i pokażemy aktywny link do rozmowy bezpośrednio na tej stronie. Maile klienta są świadomie wyłączone, więc ten link pozostaje fallbackiem.'
-                      : 'Gdy tylko potwierdzimy wpłatę, odblokujemy materiały i pokażemy aktywny link do rozmowy bezpośrednio na tej stronie. Maile klienta są teraz zablokowane, więc ten link pozostaje fallbackiem.'}
+                      ? `Gdy tylko potwierdzimy wpłatę, odblokujemy materiały, a aktywny link do ${roomAccessLabel} znajdziesz pod tym adresem.`
+                      : `Gdy tylko potwierdzimy wpłatę, odblokujemy materiały, a aktywny link do ${roomAccessLabel} znajdziesz pod tym adresem, nawet jeśli e-mail dotrze chwilę później.`}
                 </div>
               ) : null}
 
@@ -325,27 +452,31 @@ export default async function ConfirmationPage({
                         <span>{smsPanel.body}</span>
                       </div>
                       <div className="prep-checklist tree-backed-card">
-                        <strong>Przed rozmową</strong>
+                        <strong>{confirmedChecklist?.title ?? 'Przed rozmową'}</strong>
                         <ul>
-                          <li>Zachowaj termin i wróć do tego linku przed rozmową audio.</li>
-                          <li>Jeśli chcesz, dodaj teraz nagranie MP4, link do zdjęć lub krótki opis sytuacji.</li>
-                          <li>Po rozmowie wskażemy, czy wystarczy domowy start, czy lepsza będzie dłuższa konsultacja albo terapia.</li>
+                          {(confirmedChecklist?.items ?? []).map((item) => (
+                            <li key={item}>{item}</li>
+                          ))}
                         </ul>
                       </div>
                       <div className="list-card accent-outline tree-backed-card">
                         <strong>Dodaj materiały do sprawy</strong>
-                        <span>To nie jest obowiązkowe. Jeśli chcesz, możesz teraz dodać nagranie, link do materiałów albo krótki opis sytuacji, żeby lepiej przygotować rozmowę.</span>
+                        <span>{confirmedChecklist?.materialsLead ?? 'To nie jest obowiązkowe. Jeśli chcesz, możesz teraz dodać nagranie, link do materiałów albo krótki opis sytuacji.'}</span>
                       </div>
                     </>
                   ) : (
                     <>
                       <div className="list-card tree-backed-card">
                         <strong>Po płatności zobaczysz</strong>
-                        <span>Po statusie opłacone zobaczysz finalne potwierdzenie, status SMS i sekcję do dodania materiałów do sprawy.</span>
+                        <span>{`Po statusie opłacone zobaczysz finalne potwierdzenie, status wiadomości, ${roomAccessLabel} i sekcję do dodania materiałów do sprawy.`}</span>
                       </div>
                       <div className="list-card accent-outline tree-backed-card">
                         <strong>Jeśli temat okaże się szerszy</strong>
-                        <span>Można wtedy przejść do konsultacji 30 min, pełnej konsultacji online, wizyty domowej albo terapii.</span>
+                        <span>
+                          {bookingServiceType === 'konsultacja-behawioralna-online'
+                            ? 'Po konsultacji możesz wrócić do zaleceń, materiałów do sprawy albo ustalić dalsze kroki.'
+                            : 'Jeśli po rozmowie temat okaże się szerszy, kolejnym krokiem może być konsultacja 60 min.'}
+                        </span>
                       </div>
                     </>
                   )}
@@ -360,11 +491,11 @@ export default async function ConfirmationPage({
               <div className="hero-actions centered-actions">
                 {isSelfCancelled || isRejected || isClosed ? (
                   <>
-                    <HardNavLink href="/book" className="button button-primary big-button">
+                    <HardNavLink href={quickAudioHref} className="button button-primary big-button">
                       Wybierz nowy termin
                     </HardNavLink>
-                    <HardNavLink href="/kontakt" className="button button-ghost big-button">
-                      Napisz wiadomość
+                    <HardNavLink href="/kontakt#formularz" className="button button-ghost big-button">
+                      {FUNNEL_CTA_LABELS.contact}
                     </HardNavLink>
                   </>
                 ) : isConfirmed ? (
@@ -373,7 +504,7 @@ export default async function ConfirmationPage({
                       href={`/call/${booking.id}${accessToken ? `?access=${encodeURIComponent(accessToken)}` : ''}`}
                       className="button button-primary big-button"
                     >
-                      Dołącz do rozmowy audio
+                      {callRoomCtaLabel}
                     </Link>
                     <Link href="#materialy-do-sprawy" className="button button-ghost big-button">
                       Dodaj materiały
@@ -387,8 +518,8 @@ export default async function ConfirmationPage({
                     >
                       Wróć do płatności
                     </HardNavLink>
-                    <HardNavLink href="/kontakt" className="button button-ghost big-button">
-                      Napisz wiadomość
+                    <HardNavLink href="/kontakt#formularz" className="button button-ghost big-button">
+                      {FUNNEL_CTA_LABELS.contact}
                     </HardNavLink>
                   </>
                 )}
@@ -412,21 +543,23 @@ export default async function ConfirmationPage({
             </>
           ) : (
             <>
+              <h1>Potwierdzenie rezerwacji wygasło</h1>
               <div className="error-box">Ten link do potwierdzenia jest nieprawidłowy albo wygasł.</div>
               <div className="hero-actions centered-actions">
-                <HardNavLink href="/book" className="button button-primary big-button">
+                <HardNavLink href={quickAudioHref} className="button button-primary big-button">
                   Przejdź do rezerwacji
                 </HardNavLink>
-                <HardNavLink href="/kontakt" className="button button-ghost big-button">
-                  Napisz wiadomość
+                <HardNavLink href="/kontakt#formularz" className="button button-ghost big-button">
+                  {FUNNEL_CTA_LABELS.contact}
                 </HardNavLink>
               </div>
             </>
           )}
         </section>
 
-        <Footer ctaHref="/book" ctaLabel="Umów kolejny termin" />
+        <Footer variant="full" ctaHref={quickAudioHref} ctaLabel={FUNNEL_CTA_LABELS.primary} secondaryHref="/niezbednik" secondaryLabel={FUNNEL_CTA_LABELS.secondary} />
       </div>
     </main>
   )
 }
+

@@ -2,6 +2,7 @@ import { access, mkdir, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { loadEnvConfig } from '@next/env'
 import { chromium, type BrowserContext, type Locator, type Page } from 'playwright-core'
+import { resolveBrowserExecutablePath } from './lib/browser-path'
 import { SITE_PRODUCTION_URL } from '../lib/site'
 
 type MatrixAttempt = {
@@ -60,7 +61,7 @@ function escapeAttributeValue(value: string) {
   return value.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
 }
 
-async function resolveBrowserExecutablePath() {
+async function resolveBrowserExecutablePathLegacy() {
   const candidates = [
     'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
     'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',

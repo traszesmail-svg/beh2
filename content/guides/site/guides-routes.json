@@ -1,6 +1,6 @@
 {
   "listing": {
-    "routePath": "/oferta/poradniki-pdf",
+    "routePath": "/niezbednik",
     "pagePath": "content/guides/site/pages/index.html"
   },
   "guides": [
@@ -103,6 +103,76 @@
       "accessType": "bonus",
       "category": "cat",
       "kind": "quick"
+    },
+    {
+      "slug": "pies-ile-ruchu-potrzebuje",
+      "title": "Czy Twój pies naprawdę potrzebuje więcej ruchu?",
+      "routePath": "/oferta/poradniki-pdf/pies-ile-ruchu-potrzebuje",
+      "pagePath": "content/guides/site/pages/guides/pies-ile-ruchu-potrzebuje.html",
+      "pdfPath": "content/guides/pdf/pies-ile-ruchu-potrzebuje.pdf",
+      "accessType": "lead magnet",
+      "category": "dog",
+      "kind": "main"
+    },
+    {
+      "slug": "szczeniak-gryzienie-i-skakanie",
+      "title": "Szczeniak gryzie i skacze?",
+      "routePath": "/oferta/poradniki-pdf/szczeniak-gryzienie-i-skakanie",
+      "pagePath": "content/guides/site/pages/guides/szczeniak-gryzienie-i-skakanie.html",
+      "pdfPath": "content/guides/pdf/szczeniak-gryzienie-i-skakanie.pdf",
+      "accessType": "low-ticket",
+      "category": "dog",
+      "kind": "main"
+    },
+    {
+      "slug": "pies-niszczy-w-domu",
+      "title": "Pies niszczy w domu?",
+      "routePath": "/oferta/poradniki-pdf/pies-niszczy-w-domu",
+      "pagePath": "content/guides/site/pages/guides/pies-niszczy-w-domu.html",
+      "pdfPath": "content/guides/pdf/pies-niszczy-w-domu.pdf",
+      "accessType": "low-ticket",
+      "category": "dog",
+      "kind": "main"
+    },
+    {
+      "slug": "szczeniak-wyciszanie",
+      "title": "Szczeniak nie umie się wyciszyć?",
+      "routePath": "/oferta/poradniki-pdf/szczeniak-wyciszanie",
+      "pagePath": "content/guides/site/pages/guides/szczeniak-wyciszanie.html",
+      "pdfPath": "content/guides/pdf/szczeniak-wyciszanie.pdf",
+      "accessType": "low-ticket",
+      "category": "dog",
+      "kind": "main"
+    },
+    {
+      "slug": "pies-broni-zasobow",
+      "title": "Pies broni zasobów?",
+      "routePath": "/oferta/poradniki-pdf/pies-broni-zasobow",
+      "pagePath": "content/guides/site/pages/guides/pies-broni-zasobow.html",
+      "pdfPath": "content/guides/pdf/pies-broni-zasobow.pdf",
+      "accessType": "low-ticket",
+      "category": "dog",
+      "kind": "main"
+    },
+    {
+      "slug": "pies-impulsy-i-hamulce",
+      "title": "Pogoń, demolka i brak hamulców?",
+      "routePath": "/oferta/poradniki-pdf/pies-impulsy-i-hamulce",
+      "pagePath": "content/guides/site/pages/guides/pies-impulsy-i-hamulce.html",
+      "pdfPath": "content/guides/pdf/pies-impulsy-i-hamulce.pdf",
+      "accessType": "low-ticket",
+      "category": "dog",
+      "kind": "main"
+    },
+    {
+      "slug": "pies-do-pracy-z-ludzmi",
+      "title": "Pies do pracy z ludźmi?",
+      "routePath": "/oferta/poradniki-pdf/pies-do-pracy-z-ludzmi",
+      "pagePath": "content/guides/site/pages/guides/pies-do-pracy-z-ludzmi.html",
+      "pdfPath": "content/guides/pdf/pies-do-pracy-z-ludzmi.pdf",
+      "accessType": "low-ticket",
+      "category": "dog",
+      "kind": "quick"
     }
   ],
   "bundles": [
@@ -187,6 +257,83 @@
       "consult": [
         "szybka konsultacja 15 min",
         "konsultacja dla kota",
+        "konsultacja behawioralna online"
+      ]
+    },
+    {
+      "slug": "pakiet-spokojny-szczeniak",
+      "title": "Pakiet Spokojny szczeniak",
+      "routePath": "/oferta/poradniki-pdf/pakiety/pakiet-spokojny-szczeniak",
+      "pagePath": "content/guides/site/pages/bundles/pakiet-spokojny-szczeniak.html",
+      "pricing": "129 zł",
+      "guideSlugs": [
+        "pies-ile-ruchu-potrzebuje",
+        "szczeniak-gryzienie-i-skakanie",
+        "szczeniak-wyciszanie"
+      ],
+      "consult": [
+        "szybka konsultacja 15 min",
+        "konsultacja 30 min"
+      ]
+    },
+    {
+      "slug": "pakiet-spacer-bez-wybuchu",
+      "title": "Pakiet Spacer bez wybuchu",
+      "routePath": "/oferta/poradniki-pdf/pakiety/pakiet-spacer-bez-wybuchu",
+      "pagePath": "content/guides/site/pages/bundles/pakiet-spacer-bez-wybuchu.html",
+      "pricing": "129 zł",
+      "guideSlugs": [
+        "pies-ile-ruchu-potrzebuje",
+        "pies-reaktywny-na-spacerze"
+      ],
+      "consult": [
+        "szybka konsultacja 15 min",
+        "konsultacja behawioralna online"
+      ]
+    },
+    {
+      "slug": "pakiet-sam-w-domu",
+      "title": "Pakiet Sam w domu",
+      "routePath": "/oferta/poradniki-pdf/pakiety/pakiet-sam-w-domu",
+      "pagePath": "content/guides/site/pages/bundles/pakiet-sam-w-domu.html",
+      "pricing": "109 zł",
+      "guideSlugs": [
+        "pies-niszczy-w-domu",
+        "pies-zostaje-sam-plan-pierwszych-krokow"
+      ],
+      "consult": [
+        "szybka konsultacja 15 min",
+        "konsultacja 30 min",
+        "konsultacja behawioralna online"
+      ]
+    },
+    {
+      "slug": "pakiet-pobudzenie-i-hamulce",
+      "title": "Pakiet Pobudzenie i hamulce",
+      "routePath": "/oferta/poradniki-pdf/pakiety/pakiet-pobudzenie-i-hamulce",
+      "pagePath": "content/guides/site/pages/bundles/pakiet-pobudzenie-i-hamulce.html",
+      "pricing": "99 zł",
+      "guideSlugs": [
+        "pies-ile-ruchu-potrzebuje",
+        "pies-impulsy-i-hamulce"
+      ],
+      "consult": [
+        "szybka konsultacja 15 min",
+        "konsultacja behawioralna online"
+      ]
+    },
+    {
+      "slug": "pakiet-dom-i-bezpieczenstwo",
+      "title": "Pakiet Dom i bezpieczeństwo",
+      "routePath": "/oferta/poradniki-pdf/pakiety/pakiet-dom-i-bezpieczenstwo",
+      "pagePath": "content/guides/site/pages/bundles/pakiet-dom-i-bezpieczenstwo.html",
+      "pricing": "99 zł",
+      "guideSlugs": [
+        "pies-boi-sie-gosci-i-dzwiekow",
+        "pies-broni-zasobow"
+      ],
+      "consult": [
+        "szybka konsultacja 15 min",
         "konsultacja behawioralna online"
       ]
     }

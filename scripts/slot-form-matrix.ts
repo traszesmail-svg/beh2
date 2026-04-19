@@ -7,6 +7,7 @@ import { loadEnvConfig } from '@next/env'
 import { chromium } from 'playwright-core'
 import { problemOptions } from '../lib/data'
 import { createLocalDataSandbox } from './lib/local-data-sandbox'
+import { resolveBrowserExecutablePath } from './lib/browser-path'
 
 const require = createRequire(import.meta.url)
 const rootDir = process.cwd()
@@ -91,7 +92,7 @@ async function waitForServer(server: ReturnType<typeof spawn>, startupLogs: stri
   throw new Error(`Local server did not become ready in time.${serverLogs}`)
 }
 
-async function resolveBrowserExecutablePath() {
+async function resolveBrowserExecutablePathLegacy() {
   const candidates = [
     'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
     'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
@@ -150,7 +151,7 @@ function buildReportMarkdown({
     '- Wynik: PASS',
     '',
     '## Zakres',
-    '- Każdy topic z `lib/data.ts` został sprawdzony przez ścieżkę `/slot -> /form`.',
+    '- Każdy topic z lib/data.ts został sprawdzony przez ścieżkę /slot -> /form.',
     '- Dla każdego topicu potwierdzono 2 przyszłe sloty.',
     '- W każdej kombinacji formularz załadował się bez błędów RSC i bez pageerrorów.',
     '',

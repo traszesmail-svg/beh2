@@ -2,230 +2,184 @@
   {
     "id": "case-01",
     "species": "pies",
-    "breed": "Labrador retriever",
-    "age": "10 miesięcy",
-    "eyebrow": "Start: smycz i pobudzenie",
-    "headline": "Młody labrador ciągnie do ludzi, po spacerze dalej nakręca się w domu i trudno mu odpuścić.",
-    "summary": "Opiekun zgłasza skakanie na gości, noszenie zabawek bez wyciszenia i szczekanie przy każdym ruchu w mieszkaniu. W pierwszej rozmowie porządkujemy, czy to głównie przebodźcowanie, brak odpoczynku, czy chaotyczny rytm dnia.",
+    "breed": "mieszaniec",
+    "age": "3 lata",
+    "eyebrow": "Reaktywność na spacerze",
+    "headline": "Spacery, które przestały być możliwe",
+    "summary": "Pies reagował na inne psy szczekaniem, szarpaniem smyczy i wybuchami trwającymi kilka minut. Opiekunka próbowała różnych technik od miesięcy, ale bez stałego efektu i bez jasności, czy problem wynika z lęku, frustracji czy przeciążenia.",
     "firstStepLabel": "Pierwszy krok",
-    "firstStepText": "Na start skracamy najbardziej pobudzające spacery, dokładamy krótkie aktywności węchowe i układamy prosty rytuał zejścia z emocji po powrocie do domu.",
-    "nextStepLabel": "Dalsza ścieżka",
-    "nextStepText": "Po tygodniu wiadomo, czy wystarcza uporządkowanie dnia, czy trzeba wejść głębiej w pracę nad impulsywnością i samoregulacją.",
+    "firstStepText": "Zaczęliśmy od 15 min audio, żeby ustalić wyzwalacze, próg reakcji i ocenić, czy to temat na pełną konsultację. Już ten etap uporządkował, że potrzebna jest głębsza diagnoza, a nie kolejna technika stosowana za blisko bodźca.",
+    "nextStepLabel": "Co uporządkowano dalej",
+    "nextStepText": "W 60 min ustaliliśmy próg reakcji, wzorzec wyzwalaczy i plan zarządzania środowiskiem. Efektem nie było „wyleczenie reaktywności”, tylko bardziej przewidywalne spacery i mniejszy chaos po każdej mijance.",
     "images": [
       {
-        "src": "/branding/topic-cards/dog-resting-home.jpg",
-        "alt": "Pies odpoczywa w miękkim świetle na kanapie w domowym salonie."
+        "src": "/branding/case-studies/Border_Collie.jpg",
+        "alt": "Pies typu border collie stojący na zewnątrz i obserwujący otoczenie."
       },
       {
-        "src": "/images/cutover/dog-puppy-home.png",
-        "alt": "Młody pies odpoczywa w domowym wnętrzu blisko opiekuna."
+        "src": "/branding/topic-cards/french-bulldog-leash.jpg",
+        "alt": "Pies na smyczy podczas spaceru w miejskim otoczeniu."
       }
     ]
   },
   {
     "id": "case-02",
     "species": "pies",
-    "breed": "Border collie",
-    "age": "2 lata",
-    "eyebrow": "Start: ruch i nadreaktywność",
-    "headline": "Border collie spina się na rowery, biegaczy i szybko poruszające się bodźce.",
-    "summary": "Na spacerze pies zatrzymuje się, wpatruje, po czym wyrywa lub szczeka. Zamiast od razu zakładać złośliwość albo dominację, rozdzielamy napięcie, frustrację i utrwalony wzorzec pogoni za ruchem.",
+    "breed": "mieszaniec",
+    "age": "4 lata",
+    "eyebrow": "Lęk separacyjny",
+    "headline": "Pies, który nie dawał rady zostać sam",
+    "summary": "Po zmianie trybu pracy opiekuna pies zaczął wyć przez pierwsze 30-40 minut po wyjściu z domu. Próby ignorowania, wychodzenia bez pożegnania i zostawiania telewizora nie porządkowały tematu.",
     "firstStepLabel": "Pierwszy krok",
-    "firstStepText": "Najpierw zwiększamy dystans od wyzwalaczy i ustawiamy spacer tak, żeby pies w ogóle mógł jeszcze myśleć, a nie tylko reagować.",
-    "nextStepLabel": "Dalsza ścieżka",
-    "nextStepText": "Dopiero na tym poziomie budujemy spokojne zachowanie zastępcze i plan ekspozycji bez dokładania presji.",
+    "firstStepText": "Najpierw 15 min audio, żeby odróżnić zwykły protest od realnego napięcia przy rozstaniu. To szybko pokazało, że temat wymaga pełnej konsultacji i spokojnego planu, a nie kolejnych ogólnych porad.",
+    "nextStepLabel": "Co uporządkowano dalej",
+    "nextStepText": "W dalszej pracy pojawił się monitoring samotności, plan bardzo krótkich wyjść i stopniowe wydłużanie czasu bez dokładania psu paniki. Celem pierwszego etapu nie był cud, tylko stabilna baza i pierwsze godziny bez wycia.",
     "images": [
       {
-        "src": "/branding/case-studies/Border_Collie.jpg",
-        "alt": "Border collie w klasycznym portrecie, pies stoi bokiem."
+        "src": "/branding/topic-cards/dog-window-alone.jpg",
+        "alt": "Pies wyglądający przez okno podczas samotnego pozostania w domu."
       },
       {
-        "src": "/branding/topic-cards/border-collie-running.jpg",
-        "alt": "Border collie w ruchu podczas pogoni za piłką."
+        "src": "/images/cutover/dog-separation.png",
+        "alt": "Pies szukający bezpiecznego miejsca po wyjściu opiekuna."
       }
     ]
   },
   {
     "id": "case-03",
     "species": "pies",
-    "breed": "Beagle",
-    "age": "3 lata",
-    "eyebrow": "Start: samotność i hałas",
-    "headline": "Beagle wyje po wyjściu opiekuna, drapie drzwi i niszczy przedmioty zostawione przy wejściu.",
-    "summary": "Tu najważniejsze jest odróżnienie nudy od realnego napięcia przy rozstaniu. W rozmowie sprawdzamy nagrania, moment startu problemu i to, jak wygląda cały rytuał wyjścia z domu.",
+    "breed": "labrador",
+    "age": "2 lata",
+    "eyebrow": "Luźna smycz",
+    "headline": "Spacer zamieniał się w holowanie",
+    "summary": "Pies ciągnął od szczeniaka. Opiekunka próbowała zatrzymywania, zmiany kierunku i klikkera, ale każda metoda działała tylko chwilowo. Problem wyglądał jak czysty trening, ale pod spodem było silne pobudzenie.",
     "firstStepLabel": "Pierwszy krok",
-    "firstStepText": "Ustalamy prosty monitoring, porządkujemy sekwencję wyjścia i ograniczamy sytuacje, w których pies ma trenować panikę bez wsparcia.",
-    "nextStepLabel": "Dalsza ścieżka",
-    "nextStepText": "Dalej wchodzimy w plan budowania tolerancji na krótkie rozstania albo poszerzamy diagnostykę, jeśli obraz wskazuje na silny lęk.",
+    "firstStepText": "15 min audio wystarczyło, żeby oddzielić nawyk od pobudzenia i ustalić, że praca musi zacząć się jeszcze przed wyjściem z domu, a nie dopiero na napiętej smyczy.",
+    "nextStepLabel": "Co uporządkowano dalej",
+    "nextStepText": "Opiekunka dostała jedno ćwiczenie na start i kryterium, kiedy warto wejść w pełną konsultację. Miesiąc później wróciła już po kolejny etap, a nie po kolejną desperacką próbę.",
     "images": [
       {
-        "src": "/branding/topic-cards/dog-window-alone.jpg",
-        "alt": "Pies czeka przy oknie w ciepłym, domowym wnętrzu."
+        "src": "/branding/case-studies/labrador_luksi01.jpg",
+        "alt": "Labrador na zewnątrz w portretowym kadrze."
       },
       {
-        "src": "/images/cutover/dog-separation.png",
-        "alt": "Pies chowa się pod meblem po wyjściu opiekuna i szuka bezpiecznego miejsca."
+        "src": "/branding/topic-cards/dog-resting-home.jpg",
+        "alt": "Pies odpoczywający w spokojnym domowym wnętrzu."
       }
     ]
   },
   {
     "id": "case-04",
     "species": "pies",
-    "breed": "Shiba inu",
-    "age": "2 lata",
-    "eyebrow": "Start: dotyk i zasoby",
-    "headline": "Pies sztywnieje przy podchodzeniu do legowiska, warczy przy podnoszeniu z kanapy i nie lubi manipulacji.",
-    "summary": "Opiekun zwykle mówi, że pies nagle zaczął być trudny. Porządkujemy, czy problem pojawia się przy bólu, zmęczeniu, naruszaniu przestrzeni czy przy konkretnych sytuacjach związanych z zasobami.",
+    "breed": "suczka mix",
+    "age": "2-3 lata",
+    "eyebrow": "Start po adopcji",
+    "headline": "Nowy pies, nowy dom, dużo pytań",
+    "summary": "Suczka po adopcji z zagranicy przez pierwsze 48 godzin nie jadła, chowała się za kanapą i nie reagowała na wołanie. Opiekunka nie wiedziała, czy to normalna adaptacja, czy sygnał większego problemu.",
     "firstStepLabel": "Pierwszy krok",
-    "firstStepText": "Na start wycofujemy przepychanki, uczymy czytelnego wołania z miejsca odpoczynku i zabezpieczamy sytuacje, w których dochodzi do napięcia.",
-    "nextStepLabel": "Dalsza ścieżka",
-    "nextStepText": "Potem budujemy zgodę na współpracę krok po kroku, bez siłowania się z psem i bez prowokowania ostrzegawczych zachowań.",
+    "firstStepText": "W 15 min audio uporządkowaliśmy, że to mieści się w typowej normie adaptacyjnej dla psa po adopcji i że na tym etapie najważniejsze są pierwsze 72 godziny, a nie szybkie „oswajanie”.",
+    "nextStepLabel": "Co uporządkowano dalej",
+    "nextStepText": "Plan obejmował minimalną stymulację, spokojne współbycie i listę sygnałów alarmowych. Dzięki temu pierwsze dni przestały być ciągłym napięciem, a stały się świadomym okresem adaptacji.",
     "images": [
       {
-        "src": "/images/cutover/dog-resource-guarding.png",
-        "alt": "Pies pilnuje legowiska i wyraźnie sygnalizuje napięcie przy podchodzeniu."
+        "src": "/branding/topic-cards/dog-resting-home.jpg",
+        "alt": "Pies odpoczywający na kanapie w spokojnym świetle."
       },
       {
-        "src": "/branding/topic-cards/dog-checkup.jpg",
-        "alt": "Pies w spokojnym kontakcie z opiekunem w domowym kadrze."
+        "src": "/images/cutover/dog-puppy-home.png",
+        "alt": "Pies w domowym wnętrzu blisko opiekuna."
       }
     ]
   },
   {
     "id": "case-05",
-    "species": "pies",
-    "breed": "Owczarek niemiecki",
+    "species": "kot",
+    "breed": "kot kastrowany",
     "age": "4 lata",
-    "eyebrow": "Start: goście i pilnowanie",
-    "headline": "Przy wejściu gości pies szczeka, blokuje korytarz i długo nie wraca do równowagi.",
-    "summary": "To często wygląda jak czyste pilnowanie domu, ale w praktyce mieszają się w tym pobudzenie, przewidywanie chaosu i brak bezpiecznego scenariusza wejścia. Najpierw porządkujemy środowisko i role ludzi.",
+    "eyebrow": "Kuweta po zmianie",
+    "headline": "Kot, który przestał korzystać z kuwety",
+    "summary": "Po przeprowadzce kot zaczął załatwiać się na dywanie mimo wcześniejszego prawidłowego korzystania z kuwety. Weterynarz wykluczył przyczyny zdrowotne, a zmiany żwirku i samej kuwety nie przynosiły efektu.",
     "firstStepLabel": "Pierwszy krok",
-    "firstStepText": "Ustalamy prosty protokół wejścia, strefę startową dla psa i sposób prowadzenia gości bez przypadkowego nakręcania całej sytuacji.",
-    "nextStepLabel": "Dalsza ścieżka",
-    "nextStepText": "Dalej dokładamy pracę nad spokojnym odprowadzaniem napięcia i czytelnym sygnałem, co ma robić pies zamiast kontrolować wejście.",
+    "firstStepText": "15 min audio wystarczyło, żeby ustalić, że temat wymaga pełnej analizy środowiska. Kluczowe było nie dokładanie kolejnych losowych zmian, tylko pokazanie układu mieszkania i punktów napięcia.",
+    "nextStepLabel": "Co uporządkowano dalej",
+    "nextStepText": "Wyszło, że kuweta stała przy oknie z widokiem na obce koty. Przeniesienie kuwety i ograniczenie bodźca wizualnego uporządkowały sytuację szybciej niż kolejne eksperymenty ze żwirkiem.",
     "images": [
       {
-        "src": "/branding/case-studies/German_Shepherd.jpg",
-        "alt": "Ciemny owczarek niemiecki stoi na zewnątrz w lekkim półprofilu."
+        "src": "/branding/case-cat-sofa.jpg",
+        "alt": "Kot odpoczywający na sofie w domowym wnętrzu."
       },
       {
-        "src": "/branding/topic-cards/dog-resting-home.jpg",
-        "alt": "Pies odpoczywa w miękkim świetle na kanapie."
+        "src": "/branding/topic-cards/cats/cat-litter-box.jpg",
+        "alt": "Kot w pobliżu kuwety w mieszkaniu."
       }
     ]
   },
   {
     "id": "case-06",
     "species": "kot",
-    "breed": "Maine Coon",
-    "age": "3 lata",
-    "eyebrow": "Start: kuweta po zmianie",
-    "headline": "Po remoncie kot omija kuwetę, częściej chowa się wieczorem i wyraźnie unika części mieszkania.",
-    "summary": "W takich sprawach nie zakładamy od razu wyłącznie problemu behawioralnego. Najpierw oddzielamy tło środowiskowe od możliwego wątku zdrowotnego i sprawdzamy, co zmieniło się w zapachu, hałasie i ustawieniu zasobów.",
+    "breed": "dwa koty",
+    "age": "3 i 5 lat",
+    "eyebrow": "Relacje w domu",
+    "headline": "Dwa koty, jedno mieszkanie, złe powietrze",
+    "summary": "Po zmianie w domu jeden kot zaczął gonić drugiego, blokować dostęp do miski i kuwety, a drugi praktycznie zniknął do sypialni. Opiekunowie próbowali przeczekać napięcie albo rozdzielać koty tylko po incydentach.",
     "firstStepLabel": "Pierwszy krok",
-    "firstStepText": "Na start wracamy do prostszego układu kuwet i kryjówek, ograniczamy presję w przestrzeni i ustalamy, co warto równolegle skonsultować weterynaryjnie.",
-    "nextStepLabel": "Dalsza ścieżka",
-    "nextStepText": "Dopiero na uporządkowanym tle oceniamy, czy problem wygasa, czy potrzebny jest dłuższy plan obniżania napięcia.",
+    "firstStepText": "Tu od razu potrzebna była pełna konsultacja. Najpierw uporządkowaliśmy, że to nie „same się dogadają”, tylko nowy układ terytorialny, który trzeba świadomie przebudować.",
+    "nextStepLabel": "Co uporządkowano dalej",
+    "nextStepText": "Pojawiło się rozdzielenie zasobów, osobne strefy i reintrodukcja przez zapach. Efektem nie była natychmiastowa przyjaźń, tylko wyraźny spadek napięcia i możliwość wspólnego funkcjonowania bez ciągłej pogoni.",
     "images": [
       {
-        "src": "/branding/case-studies/young_maine_coon_male.jpg",
-        "alt": "Młody maine coon w prążkowanym umaszczeniu siedzi wśród roślin."
+        "src": "/branding/topic-cards/cats/cat-intercat-conflict.jpg",
+        "alt": "Dwa koty spotykające się w napiętej domowej sytuacji."
       },
       {
-        "src": "/branding/topic-cards/cats/cat-anxious-hiding.jpg",
-        "alt": "Kot chowa się pod meblem i obserwuje otoczenie z kryjówki."
+        "src": "/branding/case-cat-snow.jpg",
+        "alt": "Kot w zimowym świetle w portretowym ujęciu."
       }
     ]
   },
   {
     "id": "case-07",
     "species": "kot",
-    "breed": "Kot europejski krótkowłosy",
-    "age": "6 lat",
-    "eyebrow": "Start: okno i agresja przeniesiona",
-    "headline": "Kot widzi obcego kota za oknem, po czym atakuje drugiego kota w domu albo odwraca się na człowieka.",
-    "summary": "To jeden z tych przypadków, które opiekun odbiera jako nagły wybuch bez ostrzeżenia. W rozmowie szukamy wyzwalacza, toru pobudzenia i tego, jak zabezpieczyć dom zanim napięcie utrwali nowy konflikt.",
+    "breed": "kotka",
+    "age": "5 lat",
+    "eyebrow": "Lęk i goście",
+    "headline": "Kot, który chował się przez całe wizyty gości",
+    "summary": "Po przeprowadzce kotka przy każdej wizycie chowała się pod łóżkiem na wiele godzin. Próby „oswajania” przez zapraszanie gości do jej pokoju tylko pogłębiały problem.",
     "firstStepLabel": "Pierwszy krok",
-    "firstStepText": "Najpierw osłaniamy problematyczne okno, rozdzielamy zwierzęta po incydencie i wygaszamy sytuacje, które natychmiast podnoszą pobudzenie.",
-    "nextStepLabel": "Dalsza ścieżka",
-    "nextStepText": "Potem planujemy bezpieczny powrót do wspólnej przestrzeni i odbudowę przewidywalności między kotami.",
+    "firstStepText": "15 min audio wystarczyło, żeby ustalić kierunek: nie forsować socjalizacji, tylko zbudować bezpieczną strefę i zmienić oczekiwania wobec kota i gości.",
+    "nextStepLabel": "Co uporządkowano dalej",
+    "nextStepText": "Po kilku tygodniach kotka zaczęła wychodzić do kuchni podczas wizyt, o ile nikt jej nie prowokował do kontaktu. Kluczowa była redukcja stresu, nie „naprawianie charakteru”.",
     "images": [
       {
-        "src": "/images/cutover/cat-conflict.png",
-        "alt": "Dwa koty napinają się w domowym wnętrzu po silnym bodźcu."
+        "src": "/branding/topic-cards/cats/cat-anxious-hiding.jpg",
+        "alt": "Kot obserwujący otoczenie z bezpiecznej kryjówki pod meblem."
       },
       {
-        "src": "/branding/topic-cards/cats/cat-anxious-hiding.jpg",
-        "alt": "Kot chowa się pod meblem i obserwuje otoczenie z kryjówki."
+        "src": "/branding/case-cat-scratcher.jpg",
+        "alt": "Kot przy drapaku w spokojnym domowym otoczeniu."
       }
     ]
   },
   {
     "id": "case-08",
     "species": "kot",
-    "breed": "Ragdoll",
-    "age": "4 lata",
-    "eyebrow": "Start: dwa koty, jedno napięcie",
-    "headline": "Po pojawieniu się drugiego kota starszy kot wycofuje się, pilnuje przejść i przestaje spokojnie odpoczywać.",
-    "summary": "Nie każdy konflikt wygląda jak otwarta bójka. Czasem problemem są ciche blokady przy misce, kuwecie albo w przejściach. Dlatego porządkujemy mikro-sygnały i rozmieszczenie zasobów w domu.",
+    "breed": "kocur",
+    "age": "1,5 roku",
+    "eyebrow": "Pobudzenie i noc",
+    "headline": "Kot, który „napadał” na opiekunkę o 2 w nocy",
+    "summary": "Młody kot atakował nogi opiekunki, demolował mieszkanie nocą i nie potrafił się wyciszyć. Problem wyglądał jak agresja, ale źródłem okazało się niedopasowane środowisko i brak ujścia energii.",
     "firstStepLabel": "Pierwszy krok",
-    "firstStepText": "Na start rozdzielamy kluczowe zasoby, upraszczamy kontakt i przywracamy obu kotom przewidywalność bez wymuszania bliskości.",
-    "nextStepLabel": "Dalsza ścieżka",
-    "nextStepText": "Dalej dopiero budujemy pozytywne skojarzenia i kontrolowane, krótkie spotkania na warunkach obu zwierząt.",
+    "firstStepText": "Potrzebna była pełna konsultacja i analiza domu. Zaczęliśmy od środowiska, rytmu zabawy i tego, jak wygląda wieczór kota, zanim opiekunka idzie spać.",
+    "nextStepLabel": "Co uporządkowano dalej",
+    "nextStepText": "Po wdrożeniu intensywnej zabawy przed snem, karmników puzzle i lepszego wzbogacenia środowiska nocne ataki wyraźnie osłabły. Celem nie było zrobienie z kota pluszaka, tylko obniżenie napięcia i odzyskanie przewidywalności.",
     "images": [
       {
-        "src": "/branding/topic-cards/cats/cat-intercat-conflict.jpg",
-        "alt": "Dwa koty spotykają się w napiętej, ale domowej sytuacji."
+        "src": "/branding/topic-cards/cats/cat-night-meowing.jpg",
+        "alt": "Kot aktywny nocą w mieszkaniu."
       },
       {
-        "src": "/branding/case-dog-home.jpg",
-        "alt": "Spokojny domowy kadr z kotami na sofie przy oknie."
-      }
-    ]
-  },
-  {
-    "id": "case-09",
-    "species": "pies",
-    "breed": "Whippet",
-    "age": "18 miesięcy",
-    "eyebrow": "Start: miasto i niepewność",
-    "headline": "Whippet boi się klatki schodowej, windy i gwałtownych dźwięków przy wyjściu z mieszkania.",
-    "summary": "Opiekun często słyszy, że pies musi się przyzwyczaić, ale szybkie przeciąganie przez trudne miejsca zwykle tylko wzmacnia lęk. Najpierw sprawdzamy próg trudności i tempo, w jakim pies w ogóle jest w stanie przetwarzać bodźce.",
-    "firstStepLabel": "Pierwszy krok",
-    "firstStepText": "Układamy trasę awaryjną, ćwiczymy krótkie wejścia na bezpiecznym poziomie i rezygnujemy z przepychania psa przez najbardziej obciążające miejsca.",
-    "nextStepLabel": "Dalsza ścieżka",
-    "nextStepText": "Dalej dokładamy spokojną ekspozycję, budowanie poczucia kontroli i ocenę, czy potrzebne jest szersze wsparcie w temacie lęku.",
-    "images": [
-      {
-        "src": "/branding/topic-cards/dog-window-alone.jpg",
-        "alt": "Pies obserwuje otoczenie z mieszkania i pozostaje czujny."
-      },
-      {
-        "src": "/branding/topic-cards/dog-resting-home.jpg",
-        "alt": "Pies odpoczywa w miękkim świetle na kanapie."
-      }
-    ]
-  },
-  {
-    "id": "case-10",
-    "species": "pies",
-    "breed": "Cavalier King Charles Spaniel",
-    "age": "8 miesięcy",
-    "eyebrow": "Start: goście i chaos",
-    "headline": "Młody pies skacze na gości, łapie rękawy i nie umie zejść z emocji przy większym ruchu w domu.",
-    "summary": "To częsty moment, w którym opiekun czuje, że wszystko już próbował: komendy, odsyłanie na miejsce, poprawianie smyczy. W praktyce zwykle trzeba najpierw uprościć sytuację i ograniczyć ilość przypadkowych nagród za nakręcanie się.",
-    "firstStepLabel": "Pierwszy krok",
-    "firstStepText": "Na start układamy jedno proste wejście gości, czytelny plan odciążenia psa i krótkie sesje, po których naprawdę wraca odpoczynek.",
-    "nextStepLabel": "Dalsza ścieżka",
-    "nextStepText": "Dalej można dołożyć trening spokojnego witania, ale dopiero wtedy, gdy pies nie jest już stale ponad swoim progiem.",
-    "images": [
-      {
-        "src": "/images/cutover/dog-puppy-home.png",
-        "alt": "Młody pies w spokojnym, domowym ujęciu z człowiekiem."
-      },
-      {
-        "src": "/branding/case-dog-rest.jpg",
-        "alt": "Pies odpoczywa w domowym kadrze blisko opiekuna."
+        "src": "/branding/case-cat-sofa.jpg",
+        "alt": "Kot leżący na sofie w domowym wnętrzu."
       }
     ]
   }

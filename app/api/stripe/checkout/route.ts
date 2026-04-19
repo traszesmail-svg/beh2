@@ -1,3 +1,6 @@
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 import { NextResponse } from 'next/server'
 import { createCheckoutSession } from '@/lib/server/stripe'
 import { ConfigurationError, getPaymentModeStatus, getPublicFeatureUnavailableMessage } from '@/lib/server/env'

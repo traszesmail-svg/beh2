@@ -1,9 +1,9 @@
-import { SPECIALIST_NAME, getContactDetails } from '@/lib/site'
+import { SPECIALIST_NAME } from '@/lib/site'
 import { normalizePolishPhone } from '@/lib/phone'
 import type { BookingRecord, QaCheckoutEligibility } from '@/lib/types'
 import { getPaymentModeStatus } from '@/lib/server/env'
 
-const DEFAULT_MANUAL_PAYMENT_HOLD_MINUTES = 12 * 60
+const DEFAULT_MANUAL_PAYMENT_HOLD_MINUTES = 60
 
 function readEnv(name: string): string | null {
   const value = process.env[name]?.trim()
@@ -29,20 +29,6 @@ function readListEnv(name: string): string[] {
     .filter(Boolean)
 }
 
-function formatBankAccount(value: string | null): string | null {
-  if (!value) {
-    return null
-  }
-
-  const compact = value.replace(/\s+/g, '')
-
-  if (/^\d{26}$/.test(compact)) {
-    return compact.replace(/(\d{4})(?=\d)/g, '$1 ')
-  }
-
-  return value
-}
-
 function formatPhone(value: string | null): string | null {
   if (!value) {
     return null
@@ -61,12 +47,71 @@ function formatPhone(value: string | null): string | null {
   return value
 }
 
+function formatPaypalMe(value: string | null): { display: string | null; url: string | null } {
+  if (!value) {
+    return { display: null, url: null }
+  }
+
+  const trimmed = value.trim()
+
+  if (!trimmed) {
+    return { display: null, url: null }
+  }
+
+  if (/^https?:\/\//i.test(trimmed)) {
+    return {
+      display: trimmed.replace(/^https?:\/\//i, ''),
+      url: trimmed,
+    }
+  }
+
+  const normalizedPath = trimmed.replace(/^\/+/, '').replace(/^paypal\.me\//i, '')
+
+  return {
+    display: `paypal.me/${normalizedPath}`,
+    url: `https://paypal.me/${normalizedPath}`,
+  }
+}
+
+function getManualPaymentMethodLabel(phone: string | null, paypalMeUrl: string | null) {
+  if (phone && paypalMeUrl) {
+    return 'BLIK i PayPal.me'
+  }
+
+  if (phone) {
+    return 'BLIK'
+  }
+
+  if (paypalMeUrl) {
+    return 'PayPal.me'
+  }
+
+  return 'Wpłata ręczna'
+}
+
+function getManualPaymentAvailabilityLabel(phone: string | null, paypalMeUrl: string | null) {
+  if (phone && paypalMeUrl) {
+    return 'BLIK i PayPal.me są dostępne'
+  }
+
+  if (phone) {
+    return 'BLIK jest dostępny'
+  }
+
+  if (paypalMeUrl) {
+    return 'PayPal.me jest dostępny'
+  }
+
+  return 'Wpłata ręczna jest dostępna'
+}
+
 export type ManualPaymentConfig = {
   isAvailable: boolean
   phone: string | null
   phoneDisplay: string | null
-  bankAccount: string | null
-  bankAccountDisplay: string | null
+  paypalMe: string | null
+  paypalMeDisplay: string | null
+  paypalMeUrl: string | null
   accountName: string
   instructions: string | null
   holdMinutes: number
@@ -229,7 +274,8 @@ export function getQaCheckoutPolicySummary(): string {
 }
 
 function readPayuMode(): PayuMode {
-  return readEnv('PAYU_MODE') === 'disabled' ? 'disabled' : 'auto'
+  const configuredMode = readEnv('PAYU_MODE')
+  return configuredMode === 'auto' ? 'auto' : 'disabled'
 }
 
 export function getManualPaymentReference(bookingId: string): string {
@@ -238,47 +284,41 @@ export function getManualPaymentReference(bookingId: string): string {
 }
 
 export function getManualPaymentConfig(): ManualPaymentConfig {
-  const contact = getContactDetails()
-  const phone = readEnv('MANUAL_PAYMENT_BLIK_PHONE') ?? contact.phoneHref ?? null
-  const bankAccount = readEnv('MANUAL_PAYMENT_BANK_ACCOUNT')
+  const phone = readEnv('MANUAL_PAYMENT_BLIK_PHONE') ?? null
+  const paypalMeRaw = readEnv('MANUAL_PAYMENT_PAYPAL_ME_URL') ?? readEnv('MANUAL_PAYMENT_PAYPAL_ME')
+  const paypalMe = formatPaypalMe(paypalMeRaw)
   const instructions = readEnv('MANUAL_PAYMENT_INSTRUCTIONS')
   const accountName = readEnv('MANUAL_PAYMENT_ACCOUNT_NAME') ?? SPECIALIST_NAME
   const holdMinutesRaw = Number(readEnv('MANUAL_PAYMENT_HOLD_MINUTES'))
   const holdMinutes =
     Number.isFinite(holdMinutesRaw) && holdMinutesRaw > 0 ? holdMinutesRaw : DEFAULT_MANUAL_PAYMENT_HOLD_MINUTES
 
-  if (!phone && !bankAccount) {
+  if (!phone && !paypalMe.url) {
     return {
       isAvailable: false,
       phone: null,
       phoneDisplay: null,
-      bankAccount: null,
-      bankAccountDisplay: null,
+      paypalMe: null,
+      paypalMeDisplay: null,
+      paypalMeUrl: null,
       accountName,
       instructions,
       holdMinutes,
-      summary: 'Wpłata BLIK/przelewem wymaga przynajmniej numeru telefonu do BLIK lub numeru konta do przelewu.',
+      summary: 'Wpłata ręczna wymaga aktywnej konfiguracji BLIK lub PayPal.me.',
     }
-  }
-
-  const parts = []
-  if (phone) {
-    parts.push('BLIK na telefon jest skonfigurowany')
-  }
-  if (bankAccount) {
-    parts.push('przelew tradycyjny jest skonfigurowany')
   }
 
   return {
     isAvailable: true,
     phone,
     phoneDisplay: formatPhone(phone),
-    bankAccount,
-    bankAccountDisplay: formatBankAccount(bankAccount),
+    paypalMe: paypalMeRaw,
+    paypalMeDisplay: paypalMe.display,
+    paypalMeUrl: paypalMe.url,
     accountName,
     instructions,
     holdMinutes,
-    summary: `Wpłata BLIK/przelewem jest dostępna: ${parts.join(' i ')}.`,
+    summary: `${getManualPaymentAvailabilityLabel(phone, paypalMe.url)}.`,
   }
 }
 
@@ -289,23 +329,11 @@ export function getPublicManualPaymentConfig(): ManualPaymentConfig {
     return manual
   }
 
-  if (manual.phone && manual.bankAccount) {
-    return {
-      ...manual,
-      summary: 'BLIK na telefon i przelew tradycyjny są dostępne z ręcznym potwierdzeniem do 60 minut.',
-    }
-  }
-
-  if (manual.bankAccount) {
-    return {
-      ...manual,
-      summary: 'Przelew tradycyjny jest dostępny z ręcznym potwierdzeniem do 60 minut.',
-    }
-  }
-
   return {
     ...manual,
-    summary: 'BLIK na telefon jest dostępny z ręcznym potwierdzeniem do 60 minut.',
+    phone: null,
+    phoneDisplay: null,
+    summary: `${getManualPaymentAvailabilityLabel(null, manual.paypalMeUrl)} z ręcznym potwierdzeniem do 60 minut.`,
   }
 }
 
@@ -337,7 +365,7 @@ export function getPayuOptionStatus(): PayuOptionStatus {
       clientId,
       clientSecret,
       secondKey,
-      summary: 'PayU online jest świadomie wyłączone. Sprzedaż działa przez wpłatę ręczną z potwierdzeniem na stronie.',
+      summary: 'Płatność online PayU jest chwilowo niedostępna. Na ten moment rezerwacja korzysta z wpłaty ręcznej.',
       missing: [],
     }
   }
@@ -385,3 +413,4 @@ export function getPaymentOptionsSummary() {
     summary: [manual.summary, payu.summary, qa].join(' '),
   }
 }
+

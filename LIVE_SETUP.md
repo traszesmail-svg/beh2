@@ -48,7 +48,13 @@ Domyslny publiczny adres kontaktowy w aplikacji:
 - `coapebehawiorysta@gmail.com`
 
 Domyslny publiczny adres aplikacji:
-- `https://coapebehawiorysta.vercel.app`
+- `https://regulskibehawiorysta.pl`
+
+Canonical production URL:
+- zawsze uzywaj `https://regulskibehawiorysta.pl`
+- `https://www.regulskibehawiorysta.pl` nie jest jeszcze publicznie aktywne, bo domena nadal wskazuje na nameserwery OVH
+- nie wracaj do tymczasowych aliasow deploya typu `coapebehawiorysta-6608.vercel.app`
+- w Vercel strefa DNS dla `regulskibehawiorysta.pl` jest juz przygotowana; w OVH zmien nameserwery na `ns1.vercel-dns.com` i `ns2.vercel-dns.com`, zeby domena zaczela dzialac publicznie
 
 Jesli podlaczysz wlasna domene `.pl`, ustaw `NEXT_PUBLIC_APP_URL` na jej produkcyjny HTTPS adres i zostaw ten sam adres jako canonical dla linkow, maili i powrotow z platnosci.
 
@@ -122,7 +128,7 @@ Wazne:
 Przed deployem mozesz odpalic:
 
 - `npm run payu-smoke`
-- `npm run payu-smoke:production -- --url https://coapebehawiorysta.vercel.app`
+- `npm run payu-smoke:production -- --url https://regulskibehawiorysta.pl`
 - `npm run funnel-metrics`
 - `npm run live-readiness`
 

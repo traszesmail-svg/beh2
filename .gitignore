@@ -17,6 +17,18 @@ stripe-*.png
 .tmp-*/
 *.tsbuildinfo
 qa-artifacts/
+.codex-deploy-*/
+.npm-cache/
+.next-start*.err
+.next-start*.log
+dev-server*.err
+dev-server*.out
+qa-reports/**/*.png
+qa-reports/**/*.pid
+qa-reports/**/*.err
+qa-reports/**/*.out
+qa-reports/**/*.html
+qa-reports/**/*.xml
 
 .DS_Store
 Thumbs.db

@@ -1,0 +1,93 @@
+{
+  "_audit": {
+    "scanned_at": "2026-04-18",
+    "scope": "app/, components/, content/, lib/, pages/, public/, scripts/, tools/, middleware.ts, next.config.mjs, vercel.json",
+    "excluded_from_scope": [
+      "node_modules/",
+      "qa-reports/ (snapshoty HTML ze starych crawli — historyczne artefakty, nie kod żywy)",
+      ".codex-deploy-*/stage/ (archiwa poprzednich deploy'ów — nie są serwowane)",
+      "debug.log, tsconfig.tsbuildinfo (artefakty buildu)"
+    ],
+    "search_patterns": ["Olsztyn", "olszty", "warmi", "mazursk", "warmińsk", "mazursk"],
+    "case_insensitive": true,
+    "result": "ZERO wystąpień w żywym kodzie renderowanym przez Next.js (app router + pages + components + lib + content).",
+    "only_living_reference": {
+      "file": "next.config.mjs",
+      "line": 46,
+      "value": "source: '/behawiorysta-olsztyn' → destination: '/behawiorysta-online-polska' (301)",
+      "action": "NIE RUSZAĆ — to klucz starej trasy serwujący 301. Usunięcie złamie SEO migrację."
+    }
+  },
+  "meta_description_changes": [],
+  "h1_h2_h3_changes": [],
+  "body_copy_changes": [],
+  "jsonld_changes": [
+    {
+      "url": "/behawiorysta-online-polska",
+      "schema_type": "ProfessionalService",
+      "file_hint": "app/behawiorysta-online-polska/page.tsx:47",
+      "current_state": "areaServed: 'Polska' (string)",
+      "instruction": "NIE WYMAGA ZMIANY — brak Olsztyn/warmińsko-mazurskie. Opcjonalnie można unormować do obiektowej formy { '@type': 'Country', 'name': 'Polska' }, ale to nie jest zakres tego taska.",
+      "action": "no-op"
+    },
+    {
+      "url": "/psy",
+      "schema_type": "ProfessionalService + ContactPoint",
+      "file_hint": "app/psy/page.tsx:240,254",
+      "current_state": "areaServed: [{@type:Country, name:Polska}]; ContactPoint areaServed:'PL'",
+      "instruction": "Bez zmian — już zgodne ze strategią globalną.",
+      "action": "no-op"
+    },
+    {
+      "url": "/koty",
+      "schema_type": "ProfessionalService + ContactPoint",
+      "file_hint": "app/koty/page.tsx:260,277",
+      "current_state": "areaServed: [{@type:Country, name:Polska}]; ContactPoint areaServed:'PL'",
+      "instruction": "Bez zmian — już zgodne ze strategią globalną.",
+      "action": "no-op"
+    },
+    {
+      "url": "/",
+      "schema_type": "ProfessionalService + Person + ContactPoint",
+      "file_hint": "app/page.tsx:325,328-333,335",
+      "current_state": "areaServed: [{@type:Country, name:Polska}]; Person Krzysztof Regulski bez workLocation; ContactPoint areaServed:'PL'",
+      "instruction": "Bez zmian — Person nie ma workLocation, areaServed na poziomie Country/PL.",
+      "action": "no-op"
+    },
+    {
+      "url": "/opinie",
+      "schema_type": "ProfessionalService + ContactPoint",
+      "file_hint": "app/opinie/page.tsx:301-303,321",
+      "current_state": "areaServed: [{@type:Country, name:Polska}]; ContactPoint areaServed:'PL'",
+      "instruction": "Bez zmian.",
+      "action": "no-op"
+    },
+    {
+      "url": "/o-mnie",
+      "schema_type": "Person + ContactPoint",
+      "file_hint": "app/o-mnie/page.tsx:369-372",
+      "current_state": "ContactPoint areaServed:'PL', brak PostalAddress, brak workLocation",
+      "instruction": "Bez zmian.",
+      "action": "no-op"
+    },
+    {
+      "url": "/faq",
+      "schema_type": "ContactPoint",
+      "file_hint": "app/faq/page.tsx:378-381",
+      "current_state": "ContactPoint areaServed:'PL'",
+      "instruction": "Bez zmian.",
+      "action": "no-op"
+    }
+  ],
+  "full_removal_list": [],
+  "human_review_flags": [
+    "FLAGA:/behawiorysta-olsztyn — redirect 301 do /behawiorysta-online-polska (next.config.mjs:46). Słowo 'olsztyn' pojawia się jako KLUCZ STAREJ TRASY. NIE USUWAĆ dopóki Search Console pokazuje impresje na tym URL-u. Rekomendacja: zostawić redirect przez min. 12 mies. od ostatniej impresji.",
+    "FLAGA:qa-reports/ — katalog zawiera HTML-owe snapshoty starych wersji stron (m.in. behawiorysta-olsztyn.html, utf8-opinie.html) z frazą 'Olsztyn' w treści. To artefakty historyczne, nieserwowane publicznie. Decyzja ludzka: (a) zostawić jako archiwum diff-owe, (b) przenieść do oddzielnego repo archiwalnego, (c) dodać do .gitignore i skasować lokalnie. Nie wpływa na SEO produkcyjne.",
+    "FLAGA:.codex-deploy-*/stage/ — zagnieżdżone katalogi poprzednich deploy-stage'y, rekurencyjnie zawierające kopie kodu SPRZED migracji (z frazami Olsztyn w komponentach). To czysty śmieć po deployu. Rekomendacja: bezpiecznie skasować cały katalog .codex-deploy-ac09c588-0406-453c-9c16-da70d98c948f/ — oszczędzi miejsca i usunie 99% trafień grep-a w repo.",
+    "FLAGA:app/behawiorysta-olsztyn/ — katalog istnieje ale jest PUSTY (brak page.tsx). Route nieaktywny (Next.js zwróci 404), ale redirect z next.config.mjs przejmuje ruch wcześniej. Rekomendacja: usunąć pusty katalog, żeby nie mylił przyszłych edycji.",
+    "FLAGA:public/sitemap.xml — NIE zawiera już /behawiorysta-olsztyn (sprawdzone, linia po linii). W porządku.",
+    "FLAGA:app/o-mnie/page.tsx — warto ręcznie przeczytać sekcję bio Krzysztofa Regulskiego (poza JSON-LD) pod kątem wzmianki o pracowni / gabinecie / mieście. Grep nie znalazł, ale tekst bio często zawiera skróty typu 'Warmia' w formie odmienionej albo w cytacie — warto oko rzucić przed migracją.",
+    "FLAGA:content/blog-mvp/, content/guides/, content/money-pages/, content/landings-mvp/ — katalogi treści MDX sprawdzone, czyste. Jeśli w przyszłości dojdą nowe artykuły pisane przez AI, warto trzymać tę regułę (brak lokalizacji) w promptach autorskich — inaczej fraza wróci."
+  ],
+  "summary": "Przeskanowałem cały żywy kod źródłowy (app/, components/, content/, lib/, pages/, public/, scripts/, tools/ + pliki konfiguracyjne root) pod kątem fraz 'Olsztyn', 'olszty*', 'warmi*', 'mazursk*'. Wynik: ZERO wystąpień w treści renderowanej użytkownikowi — ani w meta description, ani H1/H2/H3, ani body copy, ani JSON-LD, ani alt/CTA/breadcrumb. Migracja do pozycjonowania globalnego została już wykonana wcześniej (prawdopodobnie w innym tasku). JSON-LD na wszystkich 7 stronach z schematami ProfessionalService/ContactPoint/Person jest CZYSTE: areaServed to wyłącznie 'Polska' / {@type:Country, name:'Polska'} / 'PL', brak PostalAddress, brak workLocation na Person. Jedyne żywe wystąpienie 'olsztyn' to klucz redirectu 301 w next.config.mjs:46 — MUSI zostać dla migracji SEO. Cała masa trafień grep-a (387+ plików) pochodzi z qa-reports/ (HTML-owe snapshoty ze starych crawli) oraz zagnieżdżonych .codex-deploy-*/stage/ (archiwum poprzednich deployy), które NIE są serwowane produkcyjnie. Dominująca kategoria zmian: brak zmian kodowych — wymagane są tylko porządki repo (usunięcie pustego katalogu app/behawiorysta-olsztyn/, decyzja co do .codex-deploy-* i qa-reports/) oraz jedna weryfikacja ludzka: ręczne przeczytanie sekcji bio w app/o-mnie/page.tsx pod kątem ewentualnych skrótowych odniesień geograficznych nietrafionych przez grep. Jeśli Codex ma ten mapping zaaplikować, to de facto zrobi tylko housekeeping (skasuje .codex-deploy-* i pusty katalog) — żadnych edit-ów treści."
+}

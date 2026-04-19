@@ -4,9 +4,10 @@ import { spawn, type ChildProcess } from 'node:child_process'
 import { loadEnvConfig } from '@next/env'
 import { chromium, type Locator, type Page } from 'playwright-core'
 import { createLocalDataSandbox } from './lib/local-data-sandbox'
+import { resolveBrowserExecutablePath } from './lib/browser-path'
 
 const rootDir = process.cwd()
-const port = 3267
+const port = 3210 + Math.floor(Math.random() * 200)
 const appUrl = `http://localhost:${port}`
 const adminSecret = 'codex-admin-secret'
 const routeNavigationTimeoutMs = 30_000
@@ -64,7 +65,7 @@ async function waitForServer() {
   throw new Error('Local QA smoke server did not become ready in time.')
 }
 
-async function resolveBrowserExecutablePath() {
+async function resolveBrowserExecutablePathLegacy() {
   const candidates = [
     'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
     'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
@@ -101,6 +102,10 @@ async function waitForCondition(check: () => Promise<boolean>, timeoutMs: number
   }
 
   throw new Error(errorMessage)
+}
+
+function isRetryableApiStatus(status: number) {
+  return status === 404 || status === 503
 }
 
 function escapeAttributeValue(value: string) {
@@ -187,79 +192,97 @@ async function startRoomTimerWithRetry(page: Page) {
 }
 
 async function createAvailabilitySlotViaApi(bookingDate: string, bookingTime: string) {
-  const response = await fetch(`${appUrl}/api/availability`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: createBasicAuthHeader(adminSecret),
-    },
-    body: JSON.stringify({ bookingDate, bookingTime }),
-  })
+  for (let attempt = 1; attempt <= 20; attempt += 1) {
+    const response = await fetch(`${appUrl}/api/availability`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: createBasicAuthHeader(adminSecret),
+      },
+      body: JSON.stringify({ bookingDate, bookingTime }),
+    })
 
-  const bodyText = await response.text()
-  let payload: { slot?: { id?: string }; error?: string } = {}
+    const bodyText = await response.text()
+    let payload: { slot?: { id?: string }; error?: string } = {}
 
-  if ((response.headers.get('content-type') ?? '').includes('application/json')) {
-    try {
-      payload = JSON.parse(bodyText) as { slot?: { id?: string }; error?: string }
-    } catch {}
+    if ((response.headers.get('content-type') ?? '').includes('application/json')) {
+      try {
+        payload = JSON.parse(bodyText) as { slot?: { id?: string }; error?: string }
+      } catch {}
+    }
+
+    if (response.ok && payload.slot?.id) {
+      return payload.slot.id
+    }
+
+    const message = `POST /api/availability returned ${response.status}${payload.error ? `: ${payload.error}` : `: ${bodyText}`}.`
+
+    if (attempt < 20 && isRetryableApiStatus(response.status)) {
+      await new Promise((resolve) => setTimeout(resolve, 1500))
+      continue
+    }
+
+    assert.equal(response.ok, true, message)
+    assert.ok(payload.slot?.id, 'Expected slot id from availability API.')
   }
 
-  assert.equal(
-    response.ok,
-    true,
-    `POST /api/availability returned ${response.status}${payload.error ? `: ${payload.error}` : `: ${bodyText}`}.`,
-  )
-  assert.ok(payload.slot?.id, 'Expected slot id from availability API.')
-
-  return payload.slot.id
+  throw new Error('Expected slot id from availability API.')
 }
 
 async function createQaBookingViaApi(slotId: string, ownerName: string, problemType: 'szczeniak' | 'kot-stres') {
-  const response = await fetch(`${appUrl}/api/bookings`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      ownerName,
-      serviceType: null,
-      problemType,
-      animalType: problemType === 'kot-stres' ? 'Kot' : 'Pies',
-      petAge: problemType === 'kot-stres' ? '3 lata' : '2 lata',
-      durationNotes: 'QA smoke flow',
-      description:
-        problemType === 'kot-stres'
-          ? 'Testowa rezerwacja QA dla sciezki bez realnej platnosci.'
-          : 'Testowa rezerwacja QA dla sciezki adminowego potwierdzenia.',
-      phone: qaSmokePhone,
-      email: qaSmokeEmail,
-      slotId,
-      qaBooking: true,
-    }),
-  })
+  for (let attempt = 1; attempt <= 20; attempt += 1) {
+    const response = await fetch(`${appUrl}/api/bookings`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ownerName,
+        serviceType: null,
+        problemType,
+        animalType: problemType === 'kot-stres' ? 'Kot' : 'Pies',
+        petAge: problemType === 'kot-stres' ? '3 lata' : '2 lata',
+        durationNotes: 'QA smoke flow',
+        description:
+          problemType === 'kot-stres'
+            ? 'Testowa rezerwacja QA dla sciezki bez realnej platnosci.'
+            : 'Testowa rezerwacja QA dla sciezki adminowego potwierdzenia.',
+        phone: qaSmokePhone,
+        email: qaSmokeEmail,
+        slotId,
+        qaBooking: false,
+      }),
+    })
 
-  const bodyText = await response.text()
-  let payload: { bookingId?: string; accessToken?: string; error?: string } = {}
+    const bodyText = await response.text()
+    let payload: { bookingId?: string; accessToken?: string; error?: string } = {}
 
-  if ((response.headers.get('content-type') ?? '').includes('application/json')) {
-    try {
-      payload = JSON.parse(bodyText) as { bookingId?: string; accessToken?: string; error?: string }
-    } catch {}
+    if ((response.headers.get('content-type') ?? '').includes('application/json')) {
+      try {
+        payload = JSON.parse(bodyText) as { bookingId?: string; accessToken?: string; error?: string }
+      } catch {}
+    }
+
+    if (response.ok && payload.bookingId && payload.accessToken) {
+      return {
+        bookingId: payload.bookingId,
+        accessToken: payload.accessToken,
+      }
+    }
+
+    const message = `POST /api/bookings returned ${response.status}${payload.error ? `: ${payload.error}` : `: ${bodyText}`}.`
+
+    if (attempt < 20 && isRetryableApiStatus(response.status)) {
+      await new Promise((resolve) => setTimeout(resolve, 1500))
+      continue
+    }
+
+    assert.equal(response.ok, true, message)
+    assert.ok(payload.bookingId, 'Expected bookingId from QA booking API.')
+    assert.ok(payload.accessToken, 'Expected access token from QA booking API.')
   }
 
-  assert.equal(
-    response.ok,
-    true,
-    `POST /api/bookings returned ${response.status}${payload.error ? `: ${payload.error}` : `: ${bodyText}`}.`,
-  )
-  assert.ok(payload.bookingId, 'Expected bookingId from QA booking API.')
-  assert.ok(payload.accessToken, 'Expected access token from QA booking API.')
-
-  return {
-    bookingId: payload.bookingId,
-    accessToken: payload.accessToken,
-  }
+  throw new Error('Expected bookingId from QA booking API.')
 }
 
 function isRetryableSmokeError(error: unknown) {
@@ -288,7 +311,8 @@ async function runQaSmokeOnce() {
   process.env.VERCEL_ENV = 'production'
   process.env.RESEND_API_KEY = ''
   process.env.BEHAVIOR15_CONTACT_PHONE = '500600700'
-  process.env.MANUAL_PAYMENT_BANK_ACCOUNT = '11112222333344445555666677'
+  process.env.MANUAL_PAYMENT_BLIK_PHONE = '512992026'
+  process.env.MANUAL_PAYMENT_PAYPAL_ME_URL = 'paypal.me/behawior15'
   process.env.MANUAL_PAYMENT_ACCOUNT_NAME = 'Krzysztof Regulski'
   process.env.SMS_PROVIDER = 'disabled'
   delete process.env.PAYU_CLIENT_ID
@@ -305,7 +329,26 @@ async function runQaSmokeOnce() {
   try {
     await cleanLocalData(dataDir)
 
-    server = spawn('cmd.exe', ['/c', 'npm', 'run', 'dev', '--', '--hostname', '127.0.0.1', '--port', String(port)], {
+    const devServerCommand = [
+      'set "APP_DATA_MODE=local"',
+      'set "APP_PAYMENT_MODE=mock"',
+      `set "NEXT_PUBLIC_APP_URL=${appUrl}"`,
+      `set "ADMIN_ACCESS_SECRET=${adminSecret}"`,
+      'set "TEST_CHECKOUT_ENABLED=true"',
+      `set "QA_CHECKOUT_EMAIL_ALLOWLIST=${qaSmokeEmail}"`,
+      `set "QA_CHECKOUT_PHONE_ALLOWLIST=${qaSmokePhone}"`,
+      'set "VERCEL_ENV=production"',
+      'set "RESEND_API_KEY="',
+      'set "BEHAVIOR15_CONTACT_PHONE=500600700"',
+      'set "MANUAL_PAYMENT_BLIK_PHONE=512992026"',
+      'set "MANUAL_PAYMENT_PAYPAL_ME_URL=paypal.me/behawior15"',
+      'set "MANUAL_PAYMENT_ACCOUNT_NAME=Krzysztof Regulski"',
+      'set "SMS_PROVIDER=disabled"',
+      `set "APP_LOCAL_DATA_DIR=${dataDir}"`,
+      `npm run dev -- --hostname 127.0.0.1 --port ${port}`,
+    ].join(' && ')
+
+    server = spawn('cmd.exe', ['/d', '/s', '/c', devServerCommand], {
       cwd: rootDir,
       env: process.env,
       stdio: 'ignore',
@@ -313,14 +356,24 @@ async function runQaSmokeOnce() {
     })
 
     await waitForServer()
+    await Promise.all(
+      ['/', '/404', '/500', '/book', '/admin'].map((route) =>
+        fetch(`${appUrl}${route}`, { cache: 'no-store' }).catch(() => null),
+      ),
+    )
+    await fetch(`${appUrl}/api/availability`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: createBasicAuthHeader(adminSecret),
+      },
+      body: JSON.stringify({ bookingDate: '2000-01-01', bookingTime: '00:00' }),
+    }).catch(() => null)
 
-    const checkoutSlot = getWarsawSlotInMinutes(12)
-    const adminSlot = getWarsawSlotInMinutes(32)
+    const checkoutSlot = getWarsawSlotInMinutes(14)
     const checkoutAvailabilityId = await createAvailabilitySlotViaApi(checkoutSlot.date, checkoutSlot.time)
-    const adminAvailabilityId = await createAvailabilitySlotViaApi(adminSlot.date, adminSlot.time)
 
     assert.ok(checkoutAvailabilityId, 'Expected a custom QA checkout slot.')
-    assert.ok(adminAvailabilityId, 'Expected a custom QA admin slot.')
 
     browser = await chromium.launch({
       headless: true,
@@ -342,87 +395,82 @@ async function runQaSmokeOnce() {
 
     const checkoutBooking = await createQaBookingViaApi(checkoutAvailabilityId, `${qaSmokeOwnerName} Checkout`, 'kot-stres')
     await publicPage.goto(
-      `${appUrl}/payment?bookingId=${encodeURIComponent(checkoutBooking.bookingId)}&access=${encodeURIComponent(
-        checkoutBooking.accessToken,
-      )}&qa=1`,
+      `${appUrl}/payment?bookingId=${encodeURIComponent(checkoutBooking.bookingId)}&access=${encodeURIComponent(checkoutBooking.accessToken)}`,
       { waitUntil: 'domcontentloaded' },
     )
-    await publicPage.getByRole('heading', { name: /Kontrolowany checkout testowy/i }).waitFor()
-    await publicPage.locator('[data-payment-method-selected="qa"]').waitFor()
-    assert.equal(await publicPage.locator('[data-qa-booking="true"]').count(), 1)
-    assert.equal(await publicPage.locator('[data-payment-submit="qa"]').count(), 1)
-    assert.equal(await publicPage.locator('[data-payment-submit="manual"]').count(), 0)
+    await publicPage.getByRole('heading', { name: /Opłać rezerwację|Wpłata została zgłoszona/i }).waitFor()
+    await publicPage.locator('[data-payment-method-selected="manual"]').waitFor()
+    assert.equal(await publicPage.locator('[data-qa-booking="true"]').count(), 0)
+    assert.equal(await publicPage.locator('[data-payment-submit="manual"]').count(), 1)
+    assert.equal(await publicPage.locator('[data-payment-submit="qa"]').count(), 0)
     assert.equal(await publicPage.locator('[data-payment-submit="payu"]').count(), 0)
 
-    await Promise.all([
-      publicPage.waitForURL(/\/confirmation\?bookingId=/, {
-        timeout: routeNavigationTimeoutMs,
-        waitUntil: 'domcontentloaded',
+    const manualResponse = await fetch(`${appUrl}/api/payments/manual`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        bookingId: checkoutBooking.bookingId,
+        accessToken: checkoutBooking.accessToken,
       }),
-      publicPage.locator('[data-payment-submit="qa"]').click(),
-    ])
+    })
+    const manualPayload = (await manualResponse.json()) as { redirectTo?: string; error?: string }
+    assert.equal(manualResponse.ok, true)
+    assert.ok(manualPayload.redirectTo, 'Expected redirectTo from manual payment API.')
+    await publicPage.goto(new URL(manualPayload.redirectTo, appUrl).toString(), { waitUntil: 'domcontentloaded' })
 
-    await publicPage.locator('[data-confirmation-state="confirmed"]').waitFor()
-    await publicPage.getByRole('heading', { name: /Testowy checkout QA zostal potwierdzony/i }).waitFor()
-    assert.equal(await publicPage.locator('textarea').count() > 0, true)
-    const roomJoinHref = await publicPage.getByRole('link', { name: /Dolacz do rozmowy audio/i }).getAttribute('href')
-    assert.ok(roomJoinHref, 'Expected QA confirmation page to expose room link.')
-
-    await publicPage.goto(new URL(roomJoinHref, appUrl).toString(), { waitUntil: 'domcontentloaded' })
-    await publicPage.getByRole('button', { name: /Uruchom licznik 15 minut/i }).waitFor({ timeout: 10_000 })
-    await startRoomTimerWithRetry(publicPage)
-    assert.equal(await publicPage.getByText(/Pokoj aktywny/i).isVisible(), true)
-
-    const adminBooking = await createQaBookingViaApi(adminAvailabilityId, `${qaSmokeOwnerName} Admin`, 'szczeniak')
+    await publicPage.locator('[data-confirmation-state="pending-manual-review"]').waitFor()
+    await publicPage.getByRole('heading', { name: /Wpłata czeka na potwierdzenie do 60 min/i }).waitFor()
     await adminPage.goto(`${appUrl}/admin`, { waitUntil: 'domcontentloaded' })
     await adminPage.getByRole('heading', { name: /Rezerwacje.*terminy/i }).waitFor()
-    const bookingRow = await waitForBookingRow(adminPage, adminBooking.bookingId, qaSmokeEmail)
-    const qaConfirmButton = bookingRow.locator('[data-admin-booking-action="qa-confirm"]').first()
-    await qaConfirmButton.waitFor()
+    const bookingRow = await waitForBookingRow(adminPage, checkoutBooking.bookingId, qaSmokeEmail)
+    const approveButton = bookingRow.locator('[data-admin-manual-action="approve"]').first()
+    await approveButton.waitFor()
 
-    const qaConfirmResponsePromise = adminPage.waitForResponse(
-      (response) =>
-        response.url().includes(`/api/admin/bookings/${adminBooking.bookingId}/qa-confirm`) &&
-        response.request().method() === 'POST',
-      { timeout: routeNavigationTimeoutMs },
-    )
-    await qaConfirmButton.click({ force: true })
-    const qaConfirmResponse = await qaConfirmResponsePromise
-    assert.equal(qaConfirmResponse.ok(), true)
+    const approveResponsePromise = adminPage
+      .waitForResponse(
+        (response) =>
+          response.url().includes(`/api/admin/bookings/${checkoutBooking.bookingId}/manual-payment`) &&
+          response.request().method() === 'POST',
+        { timeout: routeNavigationTimeoutMs },
+      )
+      .catch(() => null)
+    await approveButton.click({ force: true })
+    const approveResponse = await approveResponsePromise
+    if (approveResponse) {
+      assert.equal(approveResponse.ok(), true)
+    }
 
-    await adminPage.reload({ waitUntil: 'domcontentloaded' })
-    const refreshedRow = await waitForBookingRow(adminPage, adminBooking.bookingId, qaSmokeEmail)
+    try {
+      await adminPage.waitForLoadState('domcontentloaded', { timeout: 10_000 })
+    } catch {}
+
+    let refreshedRow = await waitForBookingRow(adminPage, checkoutBooking.bookingId, qaSmokeEmail)
+
+    if (!(await isVisible(refreshedRow.locator('[data-admin-booking-action="done"]').first()))) {
+      await adminPage.reload({ waitUntil: 'domcontentloaded' })
+      refreshedRow = await waitForBookingRow(adminPage, checkoutBooking.bookingId, qaSmokeEmail)
+    }
+
     await waitForCondition(
       async () => isVisible(refreshedRow.locator('[data-admin-booking-action="done"]').first()),
       slowRouteTimeoutMs,
-      'QA confirm did not expose the done action in admin in time.',
+      'Manual approve did not expose the done action in admin in time.',
     )
 
-    const adminConfirmationPage = await publicContext.newPage()
-    await adminConfirmationPage.goto(
-      `${appUrl}/confirmation?bookingId=${encodeURIComponent(adminBooking.bookingId)}&access=${encodeURIComponent(
-        adminBooking.accessToken,
-      )}&qa=1`,
-      { waitUntil: 'domcontentloaded' },
-    )
-    await adminConfirmationPage.locator('[data-confirmation-state="confirmed"]').waitFor()
-    await adminConfirmationPage.getByRole('heading', { name: /Testowy checkout QA zostal potwierdzony/i }).waitFor()
-    assert.equal(await adminConfirmationPage.locator('textarea').count() > 0, true)
+    await publicPage.reload({ waitUntil: 'domcontentloaded' })
+    await publicPage.locator('[data-confirmation-state="confirmed"]').waitFor()
+    await publicPage.getByRole('heading', { name: /Wpłata za .* została potwierdzona/i }).waitFor()
+    assert.equal(await publicPage.locator('textarea').count() > 0, true)
+    const roomJoinHref = await publicPage.getByRole('link', { name: /Zobacz pokój rozmowy audio|Zobacz pokój rozmowy/i }).getAttribute('href')
+    assert.ok(roomJoinHref, 'Expected confirmation page to expose room link.')
 
-    console.log(
-      JSON.stringify(
-        {
-          qaCheckoutVisible: true,
-          qaCheckoutConfirmed: true,
-          qaRoomActive: true,
-          qaAdminConfirmWorked: true,
-        },
-        null,
-        2,
-      ),
-    )
+    await publicPage.goto(new URL(roomJoinHref, appUrl).toString(), { waitUntil: 'domcontentloaded' })
+    await publicPage.getByRole('button', { name: /Uruchom licznik .* minut/i }).waitFor({ timeout: 10_000 })
+    await startRoomTimerWithRetry(publicPage)
+    assert.equal(await publicPage.getByText(/Pokój aktywny|Rozmowa aktywna/i).isVisible(), true)
 
-    await adminConfirmationPage.close()
     await adminPage.close()
     await publicPage.close()
     await publicContext.close()

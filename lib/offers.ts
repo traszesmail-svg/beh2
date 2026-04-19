@@ -1,17 +1,9 @@
 import { buildBookHref } from './booking-routing'
-import { buildPdfInquiryHref } from './pdf-guides'
+import { FUNNEL_CTA_LABELS } from './funnel'
 import { DEFAULT_PRICE_PLN, formatPricePln } from './pricing'
-import {
-  CAT_HOME_PHOTO,
-  HOME_VISIT_PHOTO,
-  SPECIALIST_EXTENDED_START_PHOTO,
-  SPECIALIST_ONLINE_PHOTO,
-  SPECIALIST_WIDE_PHOTO,
-  STAYS_PHOTO,
-  THERAPY_PROCESS_PHOTO,
-} from './site'
+import { CAT_HOME_PHOTO, SPECIALIST_ONLINE_PHOTO, SPECIALIST_WIDE_PHOTO } from './site'
 
-export type OfferKind = 'booking' | 'inquiry' | 'resource'
+export type OfferKind = 'booking' | 'resource'
 
 export type Offer = {
   slug: string
@@ -38,6 +30,8 @@ export type Offer = {
   secondaryHref?: string
   imageSrc: string
   imageAlt: string
+  imageWidth: number
+  imageHeight: number
   note?: string
 }
 
@@ -48,212 +42,114 @@ export type PdfTopic = {
   summary: string
 }
 
-const quickStartPriceLabel = `Od ${formatPricePln(DEFAULT_PRICE_PLN)}`
+const quickStartPriceLabel = formatPricePln(DEFAULT_PRICE_PLN)
 
 export const FUNNEL_PRIMARY_HREF = buildBookHref()
-export const FUNNEL_PRIMARY_LABEL = 'Umów 15 min'
-export const FUNNEL_SECONDARY_HREF = '/oferta/poradniki-pdf'
-export const FUNNEL_SECONDARY_LABEL = 'Zobacz materiały PDF'
-export const FUNNEL_UPGRADE_HREF = '/oferta#wiecej-czasu'
-export const FUNNEL_UPGRADE_LABEL = 'Konsultacja 30 min / pełna'
+export const FUNNEL_PRIMARY_LABEL = FUNNEL_CTA_LABELS.primary
+export const FUNNEL_SECONDARY_HREF = '/niezbednik'
+export const FUNNEL_SECONDARY_LABEL = FUNNEL_CTA_LABELS.secondary
+export const FUNNEL_UPGRADE_HREF = buildBookHref(null, 'konsultacja-behawioralna-online')
+export const FUNNEL_UPGRADE_LABEL = FUNNEL_CTA_LABELS.consultation
 
 export const OFFERS: Offer[] = [
   {
     slug: 'szybka-konsultacja-15-min',
-    title: 'Szybka konsultacja 15 min',
-    shortTitle: '15 min',
+    title: 'Kwadrans z behawiorystą',
+    shortTitle: 'Kwadrans z behawiorystą',
     eyebrow: 'Pierwszy krok',
     kind: 'booking',
     priceLabel: quickStartPriceLabel,
     priceAmount: DEFAULT_PRICE_PLN,
-    forWho: 'Dla psa lub kota, gdy potrzebujesz szybkiego startu.',
-    whenToChoose: 'Gdy chcesz szybko wejść w termin i dostać pierwszy konkretny krok jeszcze tego samego dnia.',
-    nextStep: 'Wybierasz temat, termin i płatność. Potem wiesz, czy ten format wystarczy, czy trzeba wejść szerzej.',
+    forWho: 'Dla psa albo kota, gdy chcesz szybko uporządkować temat i wybrać właściwy pierwszy krok.',
+    whenToChoose: 'Gdy masz jedno pytanie, potrzebujesz orientacji w temacie albo chcesz zacząć bez kamery i bez długiego przygotowania.',
+    nextStep: 'Wybierasz temat, termin i płatność. Po rozmowie wiesz, co zrobić teraz i czy ten format wystarczy.',
     cardSummary: 'Najprostszy pierwszy krok.',
-    heroSummary: 'Krótka rozmowa, gdy trzeba szybko uporządkować temat.',
+    heroSummary: 'Najlżejszy pierwszy krok: rozmowa głosem bez kamery, gdy trzeba szybko ustalić priorytet i ruszyć bez chaosu.',
     descriptions: [
-      'To dobry wybór, gdy temat jest świeży, wąski albo chcesz najpierw sprawdzić najlepszy kierunek bez długiego wejścia.',
+      'To dobry wybór, gdy temat jest świeży, wąski albo nie wiesz jeszcze, jak duży jest problem.',
       'Po rozmowie masz pierwszy plan: co zrobić od razu, co obserwować i czy ten format wystarczy.',
     ],
-    bestFor: ['krótki temat na start', 'szybka decyzja', 'pierwsza rozmowa'],
+    bestFor: ['jedno pytanie', 'orientacja w temacie', 'spokojny pierwszy krok'],
     outcomes: ['co zrobić dziś', 'co obserwować przez najbliższe dni', 'czy zostać przy 15 min czy wejść głębiej'],
-    primaryCtaLabel: 'Umów 15 min',
+    primaryCtaLabel: FUNNEL_CTA_LABELS.primary,
     primaryHref: buildBookHref(),
-    secondaryCtaLabel: FUNNEL_SECONDARY_LABEL,
+    secondaryCtaLabel: FUNNEL_CTA_LABELS.secondary,
     secondaryHref: FUNNEL_SECONDARY_HREF,
     imageSrc: SPECIALIST_WIDE_PHOTO.src,
     imageAlt: SPECIALIST_WIDE_PHOTO.alt,
-    note: 'Jeśli temat okaże się szerszy, od razu wskażę, czy lepszy będzie PDF, 30 min, pełna konsultacja online albo inny dalszy krok.',
-  },
-  {
-    slug: 'konsultacja-30-min',
-    title: 'Konsultacja 30 min',
-    shortTitle: '30 min',
-    eyebrow: 'Więcej czasu',
-    kind: 'booking',
-    priceLabel: formatPricePln(119),
-    priceAmount: 119,
-    forWho: 'Dla psa lub kota z szerszym, ale nadal startowym tematem.',
-    whenToChoose: 'Gdy wiesz, że 15 min będzie za krótkie, ale nie potrzebujesz jeszcze pełnej konsultacji online.',
-    nextStep: 'Od razu rezerwujesz termin 30 min i przechodzisz przez ten sam prosty proces co w 15 min.',
-    cardSummary: 'Więcej czasu na spokojny start.',
-    heroSummary: 'Dłuższa rozmowa, gdy temat wymaga spokojniejszego omówienia.',
-    descriptions: [
-      'To pomost między 15 min a pełną konsultacją online, gdy chcesz omówić więcej bez wchodzenia od razu w najdłuższy format.',
-      'Po rozmowie masz jaśniejszy obraz sytuacji, pierwszy plan i decyzję, czy ten poziom był wystarczający.',
-    ],
-    bestFor: ['temat mieszany', 'więcej czasu na start', 'gdy 15 min to za mało'],
-    outcomes: ['spokojniejsze omówienie bez pośpiechu', 'jasny pierwszy plan pracy', 'czy potrzeba pełnej konsultacji online albo terapii'],
-    primaryCtaLabel: 'Umów 30 min',
-    primaryHref: buildBookHref(null, 'konsultacja-30-min'),
-    secondaryCtaLabel: 'Umów 15 min',
-    secondaryHref: buildBookHref(),
-    imageSrc: SPECIALIST_EXTENDED_START_PHOTO.src,
-    imageAlt: SPECIALIST_EXTENDED_START_PHOTO.alt,
-    note: 'To dobry wybór, gdy chcesz spokojniej wejść w temat, ale nie potrzebujesz jeszcze najdłuższego formatu.',
+    imageWidth: SPECIALIST_WIDE_PHOTO.width,
+    imageHeight: SPECIALIST_WIDE_PHOTO.height,
+    note: 'Jeśli temat okaże się szerszy, od razu wskażę, czy lepsza będzie konsultacja online 60 min albo Niezbędnik.',
   },
   {
     slug: 'konsultacja-behawioralna-online',
-    title: 'Konsultacja behawioralna online',
-    shortTitle: 'Online',
-    eyebrow: 'Więcej czasu',
+    title: 'Konsultacja online 60 min',
+    shortTitle: '60 min online',
+    eyebrow: 'Głębsza opcja',
     kind: 'booking',
     priceLabel: formatPricePln(350),
     priceAmount: 350,
     forWho: 'Dla spraw złożonych, utrwalonych albo wielowątkowych.',
-    whenToChoose: 'Gdy problem trwa długo, dotyczy kilku obszarów albo chcesz od razu wejść w pełniejszą analizę.',
+    whenToChoose: 'Gdy problem trwa dłużej, wraca albo obejmuje kilka obszarów naraz i potrzebuje pełniejszej analizy.',
     nextStep: 'Od razu rezerwujesz dłuższy termin online zamiast zaczynać od samego formularza kontaktowego.',
     cardSummary: 'Pełniejszy start dla trudniejszej sprawy.',
-    heroSummary: 'Pełna konsultacja online, gdy temat wymaga szerszej analizy już na wejściu.',
+    heroSummary: 'Pełna rozmowa online, gdy temat wymaga szerszej analizy już na wejściu.',
     descriptions: [
       'To format dla sytuacji, w których szybki start byłby zbyt płytki: problem wraca, narasta albo dotyka kilku rzeczy naraz.',
       'Po konsultacji masz pełniejszy obraz sytuacji, plan pierwszych zmian i decyzję o dalszej pracy, jeśli będzie potrzebna.',
     ],
-    bestFor: ['temat złożony', 'kilka problemów naraz', 'gdy 15 i 30 min to za mało'],
-    outcomes: ['pełniejszy obraz sytuacji i priorytetów', 'co zrobić najpierw bez zgadywania', 'czy dalej potrzebna jest wizyta, terapia albo kolejna konsultacja'],
-    primaryCtaLabel: 'Umów konsultację online',
+    bestFor: ['temat złożony', 'kilka problemów naraz', 'gdy 15 min to za mało'],
+    outcomes: ['pełniejszy obraz sytuacji i priorytetów', 'co zrobić najpierw bez zgadywania', 'czy dalej potrzebna jest kolejna konsultacja albo materiał pomocniczy'],
+    primaryCtaLabel: FUNNEL_CTA_LABELS.consultation,
     primaryHref: buildBookHref(null, 'konsultacja-behawioralna-online'),
-    secondaryCtaLabel: 'Umów 15 min',
+    detailHref: '/konsultacja-behawioralna-online',
+    secondaryCtaLabel: FUNNEL_CTA_LABELS.primary,
     secondaryHref: buildBookHref(),
     imageSrc: SPECIALIST_ONLINE_PHOTO.src,
     imageAlt: SPECIALIST_ONLINE_PHOTO.alt,
-    note: 'To najszerszy start online. Jeśli temat okazałby się prostszy, nie dopłacasz tu za chaos, tylko za spokojniejsze wejście.',
-  },
-  {
-    slug: 'konsultacja-domowa-wyjazdowa',
-    title: 'Konsultacja domowa / wyjazdowa',
-    shortTitle: 'Domowa',
-    eyebrow: 'Na miejscu',
-    kind: 'inquiry',
-    priceLabel: null,
-    priceAmount: null,
-    forWho: 'Dla sytuacji, które najlepiej widać na miejscu.',
-    whenToChoose: 'Gdy problem najlepiej widać w domu, ogrodzie albo na spacerze.',
-    nextStep: 'Najpierw piszesz, potem ustalamy, czy wizyta na miejscu ma sens i jak ją przygotować.',
-    cardSummary: 'Gdy trzeba zobaczyć sytuację na miejscu.',
-    heroSummary: 'Wizyta na miejscu, gdy sam opis to za mało.',
-    descriptions: [
-      'Wybierz to, jeśli miejsce ma duże znaczenie dla problemu albo oceny zachowania.',
-      'Najpierw napisz, żebym mógł ocenić, czy to dobry wybór i czy nie lepiej zacząć od innego kroku.',
-    ],
-    bestFor: ['problem w konkretnym miejscu', 'dom, ogród albo spacer', 'gdy sam opis nie wystarcza'],
-    outcomes: ['widzimy sytuację na miejscu', 'proste zmiany do wdrożenia', 'wiadomo, co robić dalej'],
-    primaryCtaLabel: 'Napisz wiadomość',
-    primaryHref: '/kontakt?service=konsultacja-domowa-wyjazdowa',
-    secondaryCtaLabel: 'Umów 15 min',
-    secondaryHref: '/book',
-    imageSrc: HOME_VISIT_PHOTO.src,
-    imageAlt: HOME_VISIT_PHOTO.alt,
-  },
-  {
-    slug: 'indywidualna-terapia-behawioralna',
-    title: 'Indywidualna terapia behawioralna',
-    shortTitle: 'Terapia',
-    eyebrow: 'Gdy trzeba więcej',
-    kind: 'inquiry',
-    priceLabel: null,
-    priceAmount: null,
-    forWho: 'Dla tematów, które nie kończą się na jednej rozmowie.',
-    whenToChoose: 'Gdy po starcie widać, że trzeba wracać do tematu i prowadzić zmiany dalej.',
-    nextStep: 'Najpierw piszesz albo zaczynasz od rozmowy. Potem ustalamy najrozsądniejszy dalszy krok.',
-    cardSummary: 'Na temat, który nie mieści się w jednym spotkaniu.',
-    heroSummary: 'Opcja na temat, do którego trzeba wracać i prowadzić go dłużej.',
-    descriptions: [
-      'Wybierz to, jeśli problem jest utrwalony albo wraca mimo prób działania na własną rękę.',
-      'Najpierw sprawdzamy, czy taki start ma sens i co będzie najbardziej realistyczne dalej.',
-    ],
-    bestFor: ['problem wraca', 'trzeba wracać do tematu', 'jedna rozmowa to za mało'],
-    outcomes: ['jasny kierunek', 'mniej chaosu', 'kolejne kroki dopasowane do sytuacji'],
-    primaryCtaLabel: 'Napisz wiadomość',
-    primaryHref: '/kontakt?service=indywidualna-terapia-behawioralna',
-    secondaryCtaLabel: 'Umów 15 min',
-    secondaryHref: '/book',
-    imageSrc: THERAPY_PROCESS_PHOTO.src,
-    imageAlt: THERAPY_PROCESS_PHOTO.alt,
-  },
-  {
-    slug: 'pobyty-socjalizacyjno-terapeutyczne',
-    title: 'Pobyty socjalizacyjno-terapeutyczne',
-    shortTitle: 'Pobyty',
-    eyebrow: 'Po rozmowie',
-    kind: 'inquiry',
-    priceLabel: null,
-    priceAmount: null,
-    forWho: 'Dla psa, któremu pobyt może realnie pomóc.',
-    whenToChoose: 'Gdy po rozmowie albo opisie sytuacji widać, że pobyt może pomóc psu, a nie tylko zastąpić opiekę.',
-    nextStep: 'Najpierw sprawdzamy, czy pobyt ma sens. Dopiero potem ustalamy, jak wygląda i co ma dać po powrocie.',
-    cardSummary: 'Nie jako hotel. Tylko wtedy, gdy to pomaga.',
-    heroSummary: 'Pobyt terapeutyczny ma sens tylko wtedy, gdy realnie pomaga psu i daje dalszy plan po zakończeniu.',
-    descriptions: [
-      'To nie jest hotel i nie działa jako skrót dla każdego problemu. Najpierw sprawdzamy, czy taki kierunek ma sens dla konkretnego psa.',
-      'Jeśli ten kierunek ma sens, ustalamy przebieg pobytu, cel pracy i to, co opiekun dostaje po odbiorze psa.',
-    ],
-    bestFor: ['pies potrzebuje spokojniejszego rytmu', 'po rozmowie widać sens pobytu', 'to nie jest hotel'],
-    outcomes: ['czy pobyt ma sens dla tego psa', 'jasne zasady przebiegu', 'co opiekun dostaje po pobycie i jak wdrożyć dalszą pracę'],
-    primaryCtaLabel: 'Napisz wiadomość',
-    primaryHref: '/kontakt?service=pobyty-socjalizacyjno-terapeutyczne',
-    secondaryCtaLabel: 'Umów 15 min',
-    secondaryHref: '/book',
-    imageSrc: STAYS_PHOTO.src,
-    imageAlt: STAYS_PHOTO.alt,
-    note: 'Jeśli pobyt nie ma sensu, nie będę go wciskał. Powiem wprost, czy lepszy będzie inny start.',
+    imageWidth: SPECIALIST_ONLINE_PHOTO.width,
+    imageHeight: SPECIALIST_ONLINE_PHOTO.height,
+    note: 'To szersza i dłuższa opcja dla spraw złożonych. Jeśli temat jest węższy, często wystarczy Kwadrans z behawiorystą.',
   },
   {
     slug: 'poradniki-pdf',
-    contactServiceSlugs: ['poradniki-pdf', 'poradnik-pdf', 'pdf', 'poradniki'],
-    title: 'Poradniki PDF',
-    shortTitle: 'PDF',
-    eyebrow: 'Na jeden temat',
+    contactServiceSlugs: ['poradniki-pdf', 'poradnik-pdf', 'pdf', 'poradniki', 'niezbednik'],
+    title: 'Niezbędnik',
+    shortTitle: 'Niezbędnik',
+    eyebrow: 'Materiały pomocnicze',
     kind: 'resource',
     priceLabel: null,
     priceAmount: null,
-    forWho: 'Dla jednego konkretnego tematu.',
-    whenToChoose: 'Gdy chcesz spokojnie wrócić do tematu albo uporządkować zalecenia we własnym tempie.',
-    nextStep: 'Najpierw wracasz do materiału, a potem łatwiej wybierasz rozmowę, pakiet albo kolejny krok.',
-    cardSummary: 'Spokojny materiał do porządkowania między krokami.',
-    heroSummary: 'Poradnik albo pakiet, gdy chcesz wrócić do zaleceń we własnym tempie.',
+    forWho: 'Dla osób, które chcą wracać do materiałów i rekomendacji między rozmowami.',
+    whenToChoose: 'Gdy chcesz spokojnie wrócić do tematu, przygotować się do rozmowy albo sprawdzić, czy z czymś da się ruszyć samodzielnie.',
+    nextStep: 'Najpierw porządkujesz temat, a potem łatwiej decydujesz, czy wystarczy materiał, czy lepiej wejść w rozmowę.',
+    cardSummary: 'Materiały do samodzielnej pracy jako drugi krok.',
+    heroSummary: 'Materiały do samodzielnej pracy: własne przewodniki, książki i narzędzia dobrane pod konkretne sytuacje.',
     descriptions: [
-      'Wybierz to, jeśli chcesz uporządkować jeden temat bez pośpiechu i wracać do materiału wtedy, gdy Ci wygodnie.',
-      'Jeśli temat okaże się szerszy, łatwo przejdziesz do wiadomości, konsultacji albo następnego materiału.',
+      'Znajdziesz tu materiały, do których możesz wrócić przed rozmową, po rozmowie albo między kolejnymi krokami.',
+      'To miejsce z przewodnikami i narzędziami dobranymi pod konkretne sytuacje.',
     ],
-    bestFor: ['jeden temat', 'materiał do domu', 'spokojny powrót do zaleceń'],
-    outcomes: ['prosty materiał', 'mniej chaosu między krokami', 'czy wystarczy poradnik'],
-    primaryCtaLabel: 'Napisz wiadomość',
-    primaryHref: buildPdfInquiryHref(),
-    detailCtaLabel: 'Zobacz PDF',
-    detailHref: '/oferta/poradniki-pdf',
-    secondaryCtaLabel: 'Zobacz PDF',
-    secondaryHref: '/oferta/poradniki-pdf',
+    bestFor: ['powrót do zaleceń', 'materiały pomocnicze', 'spokojne pogłębienie tematu'],
+    outcomes: ['czytelny materiał na później', 'mniej chaosu między krokami', 'łatwiejsza decyzja o kolejnym ruchu'],
+    primaryCtaLabel: FUNNEL_CTA_LABELS.secondary,
+    primaryHref: '/niezbednik',
+    detailCtaLabel: FUNNEL_CTA_LABELS.secondary,
+    detailHref: '/niezbednik',
+    secondaryCtaLabel: FUNNEL_CTA_LABELS.primary,
+    secondaryHref: buildBookHref(),
     imageSrc: CAT_HOME_PHOTO.src,
     imageAlt: CAT_HOME_PHOTO.alt,
+    imageWidth: CAT_HOME_PHOTO.width,
+    imageHeight: CAT_HOME_PHOTO.height,
+    note: 'Niezbędnik pomaga przygotować się do rozmowy albo wrócić do zaleceń po konsultacji.',
   },
 ]
 
 export const CAT_SUPPORT_AREAS = [
-  'sika poza kuwetę',
-  'gryzie przy dotyku albo pielęgnacji',
+  'sika poza kuwetą',
   'konflikt między kotami',
   'żyje w napięciu albo się chowa',
+  'źle znosi zmiany w domu',
   'budzi dom po nocy',
 ] as const
 
@@ -267,12 +163,12 @@ export const CAT_POPULAR_CATEGORIES = [
     summary: 'Gonitwy, blokowanie przejść, napięcie przy zasobach albo rozjazd relacji w domu.',
   },
   {
-    title: 'Lęk, napięcie i chowanie się',
-    summary: 'Wycofanie, stres po zmianie, napięcie przy gościach albo trudność z powrotem do spokoju.',
+    title: 'Wycofanie i napięcie',
+    summary: 'Wycofanie, stres po zmianie i trudność z powrotem do codziennego spokoju.',
   },
   {
-    title: 'Trudny dotyk i pielęgnacja',
-    summary: 'Gryzienie przy głaskaniu, noszeniu, obcinaniu pazurów albo przy domowych zabiegach.',
+    title: 'Wokalizacja i pobudzenie',
+    summary: 'Miauczenie, nocne pobudki i rytm dnia, który rozsypuje spokój w domu.',
   },
 ] as const
 
@@ -334,7 +230,7 @@ export const PDF_TOPICS: PdfTopic[] = [
   {
     id: 'kot-przy-dotyku',
     animal: 'Kot',
-    title: 'Kot agresywny przy dotyku',
+    title: 'Kot przy trudnym dotyku i pielęgnacji',
     summary: 'Na start przy pielęgnacji i trudnym kontakcie.',
   },
 ] as const

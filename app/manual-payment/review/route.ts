@@ -3,6 +3,9 @@ import { getBookingById } from '@/lib/server/db'
 import { verifyManualPaymentReviewToken } from '@/lib/server/manual-payment-review'
 import { BookingRecord } from '@/lib/types'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 type HtmlOptions = {
   actionHref?: string
   actionLabel?: string

@@ -3,6 +3,8 @@ import { isProblemType } from '@/lib/data'
 import type { ProblemType } from '@/lib/types'
 
 type SearchParamValue = string | string[] | undefined
+type SearchParamsInput = Record<string, SearchParamValue> | undefined
+export type BookingSpecies = 'pies' | 'kot'
 
 export function readSearchParam(value: SearchParamValue): string | null {
   if (Array.isArray(value)) {
@@ -32,6 +34,15 @@ export function readQaBookingSearchParam(value: SearchParamValue): boolean {
   return ['1', 'true', 'qa', 'yes'].includes(qa.trim().toLowerCase())
 }
 
+export function isBookingSpecies(value: string | null | undefined): value is BookingSpecies {
+  return value === 'pies' || value === 'kot'
+}
+
+export function readBookingSpeciesSearchParam(value: SearchParamValue): BookingSpecies | null {
+  const species = readSearchParam(value)
+  return isBookingSpecies(species) ? species : null
+}
+
 function buildQueryHref(pathname: string, params: Record<string, string | null | undefined>): string {
   const searchParams = new URLSearchParams()
 
@@ -49,11 +60,13 @@ export function buildBookHref(
   problem?: ProblemType | null,
   serviceType?: BookingServiceType | null,
   qaBooking?: boolean,
+  species?: BookingSpecies | null,
 ): string {
   return buildQueryHref('/book', {
     problem: problem ?? null,
     service: serviceType ?? null,
     qa: qaBooking ? '1' : null,
+    species: species ?? null,
   })
 }
 
@@ -95,4 +108,40 @@ export function buildPaymentHref(
     service: serviceType ?? null,
     qa: qaBooking ? '1' : null,
   })
+}
+
+export function appendSearchParams(
+  href: string,
+  searchParams?: SearchParamsInput,
+  excludedKeys: string[] = [],
+): string {
+  if (!searchParams) {
+    return href
+  }
+
+  const [pathname, existingQuery = ''] = href.split('?')
+  const params = new URLSearchParams(existingQuery)
+  const excluded = new Set(excludedKeys)
+
+  for (const [key, value] of Object.entries(searchParams)) {
+    if (excluded.has(key)) {
+      continue
+    }
+
+    if (Array.isArray(value)) {
+      for (const item of value) {
+        if (typeof item === 'string' && item.trim().length > 0) {
+          params.append(key, item)
+        }
+      }
+      continue
+    }
+
+    if (typeof value === 'string' && value.trim().length > 0) {
+      params.set(key, value)
+    }
+  }
+
+  const query = params.toString()
+  return query ? `${pathname}?${query}` : pathname
 }

@@ -1,3 +1,6 @@
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 import { NextResponse } from 'next/server'
 import { ConfigurationError } from '@/lib/server/env'
 import { getTestimonialSubmissionConfigIssue, sendTestimonialSubmissionEmail } from '@/lib/server/notifications'

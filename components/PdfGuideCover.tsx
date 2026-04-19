@@ -17,11 +17,13 @@ export function PdfGuideCover({ guide, className, sizes, priority = false, decor
         src={getPdfGuideCoverSrc(guide)}
         alt={decorative ? '' : getPdfGuideCoverAlt(guide)}
         aria-hidden={decorative}
-        width={620}
-        height={877}
-        sizes={sizes ?? '(max-width: 760px) 70vw, 240px'}
+        width={1240}
+        height={1754}
+        sizes={sizes ?? '(max-width: 760px) 70vw, (max-width: 1200px) 32vw, 240px'}
         className="pdf-cover-image"
         priority={priority}
+        loading={priority ? 'eager' : 'lazy'}
+        fetchPriority={priority ? 'high' : undefined}
         unoptimized
       />
     </div>

@@ -246,13 +246,13 @@ export default async function AdminPage() {
                       <div className="stat-label">{window.label}</div>
                       <div className="summary-value">{window.eventCount}</div>
                       <span>
-                        Home {window.stageCounts.home_view} · CTA {window.stageCounts.cta_click} · Topic {window.stageCounts.topic_selected} · Slot {window.stageCounts.slot_selected} · Form {window.stageCounts.form_started}
+                        View {window.stageCounts.view_page} · Entry 15 min {window.stageCounts.funnel_entry_15_min} · Booking start {window.stageCounts.booking_start} · Service {window.stageCounts.booking_service_selected} · Slot {window.stageCounts.booking_slot_selected}
                       </span>
                       <span>
-                        Payment {window.stageCounts.payment_opened} · Pending {window.stageCounts.manual_pending} · Paid {window.stageCounts.paid} · Confirmed {window.stageCounts.confirmed}
+                        Form {window.stageCounts.booking_form_started} · Payment viewed {window.stageCounts.payment_viewed} · Payment started {window.stageCounts.payment_started} · Pending {window.stageCounts.payment_marked_pending} · Completed {window.stageCounts.payment_completed} · Confirmed {window.stageCounts.booking_confirmed}
                       </span>
                       <span>
-                        {window.conversions.homeToCta} home→CTA · {window.conversions.topicToSlot} topic→slot · {window.conversions.paidToConfirmed} paid→confirmed
+                        {window.conversions.viewToEntry15} view→entry 15 min · {window.conversions.entry15ToBookingStart} entry→booking start · {window.conversions.completedToConfirmed} completed→confirmed
                       </span>
                     </div>
                   ))}

@@ -1,0 +1,10 @@
+.git
+.next
+node_modules
+.vercel
+.tmp-local-data
+.codex-deploy-*
+qa-reports/**
+!qa-reports/latest-report.md
+*.log
+*.pid

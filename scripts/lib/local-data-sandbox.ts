@@ -13,8 +13,9 @@ export async function createLocalDataSandbox(scriptName: string, rootDir = proce
     '.tmp-local-data',
     `${scriptName}-${process.pid}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
   )
+  const absoluteSandboxDir = path.join(rootDir, relativeSandboxDir)
 
-  process.env.APP_LOCAL_DATA_DIR = relativeSandboxDir
+  process.env.APP_LOCAL_DATA_DIR = absoluteSandboxDir
 
   const dataDir = getLocalStoreDataDir(rootDir)
   await rm(dataDir, { recursive: true, force: true })

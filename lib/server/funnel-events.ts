@@ -2,7 +2,28 @@ import { randomUUID } from 'node:crypto'
 import type { FunnelEventInput, FunnelEventProperties, FunnelEventRecord, FunnelEventType } from '@/lib/types'
 
 const FUNNEL_EVENT_TYPES = new Set<FunnelEventType>([
+  'page_view',
+  'view_page',
+  'funnel_entry_15_min',
+  'funnel_entry_60_min',
+  'funnel_entry_niezbednik',
+  'newsletter_signup',
+  'lead_magnet_signup',
+  'booking_start',
+  'booking_service_selected',
+  'booking_slot_selected',
+  'booking_form_started',
+  'booking_form_submitted',
+  'payment_viewed',
+  'payment_marked_pending',
+  'payment_completed',
+  'booking_confirmed',
+  'confirmation_viewed',
+  'call_room_viewed',
+  'contact_form_started',
+  'contact_form_submitted',
   'home_view',
+  'dogs_page_view',
   'cta_click',
   'topic_selected',
   'slot_selected',
@@ -24,6 +45,36 @@ export type FunnelEventQueryWindow = '24h' | '7d' | 'all'
 
 export function isFunnelEventType(value: string): value is FunnelEventType {
   return FUNNEL_EVENT_TYPES.has(value as FunnelEventType)
+}
+
+export function normalizeFunnelEventType(value: string | null | undefined): FunnelEventType | null {
+  if (!value) {
+    return null
+  }
+
+  switch (value) {
+    case 'page_view':
+    case 'home_view':
+    case 'dogs_page_view':
+      return 'view_page'
+    case 'slot_selected':
+      return 'booking_slot_selected'
+    case 'form_started':
+      return 'booking_form_started'
+    case 'payment_opened':
+      return 'payment_viewed'
+    case 'manual_pending':
+      return 'payment_marked_pending'
+    case 'paid':
+    case 'payment_success':
+      return 'payment_completed'
+    case 'confirmed':
+      return 'booking_confirmed'
+    case 'room_entered':
+      return 'call_room_viewed'
+    default:
+      return isFunnelEventType(value) ? value : null
+  }
 }
 
 export function getFunnelEventTypes(): FunnelEventType[] {
@@ -61,9 +112,11 @@ export function normalizeFunnelEventProperties(
 }
 
 export function createFunnelEventRecord(input: FunnelEventInput): FunnelEventRecord {
+  const normalizedEventType = normalizeFunnelEventType(input.eventType) ?? input.eventType
+
   return {
     id: randomUUID(),
-    eventType: input.eventType,
+    eventType: normalizedEventType,
     bookingId: input.bookingId ?? null,
     qaBooking: Boolean(input.qaBooking),
     source: input.source ?? 'client',

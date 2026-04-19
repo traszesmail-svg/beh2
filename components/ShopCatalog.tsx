@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import type { PdfBundle } from '@/lib/pdf-guides'
-import type { ShopBookCard, ShopBundleShelfCard, ShopEntranceCard, ShopPdfCard } from '@/lib/shop-catalog'
+import type { ShopAccessoryCard, ShopBookCard, ShopBundleShelfCard, ShopEntranceCard, ShopPdfCard } from '@/lib/shop-catalog'
 
 export function ShopAnchorNav({
   items,
@@ -11,7 +11,7 @@ export function ShopAnchorNav({
   className?: string
 }) {
   return (
-    <nav className={`shop-anchor-nav ${className}`.trim()} aria-label="Nawigacja po półkach">
+    <nav className={`shop-anchor-nav ${className}`.trim()} aria-label="Nawigacja po sekcjach">
       {items.map((item) => (
         <Link key={item.href} href={item.href} prefetch={false} className="shop-anchor-pill">
           {item.label}
@@ -43,7 +43,7 @@ export function PdfShelfCard({ card }: { card: ShopPdfCard }) {
     <article className={`pdf-path-card tree-backed-card shop-pdf-card shop-pdf-card-${card.kind}`} data-product-kind={card.kind}>
       <div className="pdf-path-card-topline">
         <span className="section-eyebrow">{card.kindLabel}</span>
-        <span className={`shop-pdf-kind shop-pdf-kind-${card.kind}`}>{card.kind === 'pdf' ? 'Produkt PDF' : 'Pakiet PDF'}</span>
+        <span className={`shop-pdf-kind shop-pdf-kind-${card.kind}`}>{card.kind === 'pdf' ? 'PDF' : 'Pakiet'}</span>
       </div>
 
       <h3>{card.title}</h3>
@@ -157,7 +157,7 @@ export function PdfBundleShelfCard({ bundle }: { bundle: PdfBundle }) {
   )
 }
 
-export function BookShelfCard({ book }: { book: ShopBookCard }) {
+export function BookShelfCard({ book, ctaLabel = 'Zobacz książkę' }: { book: ShopBookCard; ctaLabel?: string }) {
   const bookImage = book.image ?? book.coverSrc ?? ''
   const bookImageAlt = book.imageAlt ?? book.coverAlt ?? `Okładka książki ${book.title}`
   const bookDescription =
@@ -176,7 +176,7 @@ export function BookShelfCard({ book }: { book: ShopBookCard }) {
           sizes="(max-width: 680px) 42vw, (max-width: 1100px) 24vw, 18vw"
           className="shop-book-cover"
         />
-        <span className="shop-book-badge">link afiliacyjny</span>
+        <span className="shop-book-badge">link zewnętrzny</span>
       </div>
 
       <div className="shop-book-copy">
@@ -194,9 +194,62 @@ export function BookShelfCard({ book }: { book: ShopBookCard }) {
           target="_blank"
           rel="sponsored noopener noreferrer"
           className="button button-ghost"
-          aria-label={`Zobacz na Amazonie: ${book.title}`}
+          aria-label={`Zobacz książkę: ${book.title}`}
         >
-          Zobacz na Amazonie
+          {ctaLabel}
+        </a>
+      </div>
+    </article>
+  )
+}
+
+function getAccessorySpeciesLabel(species: ShopAccessoryCard['species']) {
+  if (species === 'koty') {
+    return 'Koty'
+  }
+
+  if (species === 'psy') {
+    return 'Psy'
+  }
+
+  return 'Psy i koty'
+}
+
+export function AccessoryShelfCard({ accessory }: { accessory: ShopAccessoryCard }) {
+  return (
+    <article className="pdf-path-card tree-backed-card shop-accessory-card">
+      <div className="pdf-path-card-topline">
+        <span className="section-eyebrow">{getAccessorySpeciesLabel(accessory.species)}</span>
+        <span className="shop-book-badge shop-book-badge-inline">link zewnętrzny</span>
+      </div>
+
+      <h3>{accessory.title}</h3>
+      <p className="pdf-path-card-promise">{accessory.summary}</p>
+
+      <dl className="pdf-path-card-facts">
+        <div className="pdf-path-card-fact">
+          <dt>Po co może się przydać</dt>
+          <dd>{accessory.helpsWith}</dd>
+        </div>
+        <div className="pdf-path-card-fact">
+          <dt>Kiedy ma sens</dt>
+          <dd>{accessory.usage}</dd>
+        </div>
+        <div className="pdf-path-card-fact">
+          <dt>Na co uważać</dt>
+          <dd>{accessory.caution}</dd>
+        </div>
+      </dl>
+
+      <div className="hero-actions pdf-path-card-actions">
+        <a
+          href={accessory.affiliateUrl}
+          target="_blank"
+          rel="sponsored noopener noreferrer"
+          className="button button-ghost"
+          aria-label={`${accessory.cta}: ${accessory.title}`}
+        >
+          {accessory.cta}
         </a>
       </div>
     </article>

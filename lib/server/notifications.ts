@@ -384,7 +384,7 @@ function renderContactBlockHtml() {
   }
 
   if (!parts.length) {
-    parts.push('<p><strong>Kontakt:</strong> odpowiedz na tĂ„â„˘ wiadomoÄąâ€şĂ„â€ˇ, jeÄąâ€şli potrzebujesz doprecyzowania terminu.</p>')
+    parts.push('<p><strong>Kontakt:</strong> odpowiedz na tę wiadomość, jeśli potrzebujesz doprecyzowania terminu.</p>')
   }
 
   return parts.join('')
@@ -399,7 +399,7 @@ function renderContactBlockText() {
   }
 
   if (!lines.length) {
-    lines.push('Kontakt: odpowiedz na tĂ„â„˘ wiadomoÄąâ€şĂ„â€ˇ, jeÄąâ€şli potrzebujesz doprecyzowania terminu.')
+    lines.push('Kontakt: odpowiedz na tę wiadomość, jeśli potrzebujesz doprecyzowania terminu.')
   }
 
   return lines.join('\n')
@@ -611,32 +611,32 @@ async function deliverEmail(payload: SendEmailPayload, audience: EmailAudience =
 
 export async function sendBookingReservationCreatedEmail(booking: BookingRecord): Promise<DeliveryResult> {
   const summary = buildBookingSummary(booking)
-  const subject = `Rezerwacja przyjÄ™ta - Behawior 15 - ${summary}`
+  const subject = `Rezerwacja przyjęta - Behawior 15 - ${summary}`
   const customerEmailStatus = getCustomerEmailDeliveryStatus(booking.email)
   const emailDeliveryNote =
     customerEmailStatus.state === 'ready'
-      ? 'Po potwierdzeniu klient automatycznie dostanie mail z linkiem do pokoju rozmowy, a przy braku wpĹ‚aty wrĂłci do pĹ‚atnoĹ›ci.'
+      ? 'Po potwierdzeniu klient automatycznie dostanie mail z linkiem do pokoju rozmowy, a przy braku wpłaty wróci do płatności.'
       : customerEmailStatus.state === 'disabled'
-        ? 'Po potwierdzeniu klient od razu zobaczy aktywne potwierdzenie i pokĂłj na swojej stronie rezerwacji. Maile klienta sÄ… teraz Ĺ›wiadomie wyĹ‚Ä…czone, wiÄ™c link do rozmowy zostaje na stronie potwierdzenia.'
-        : 'Po potwierdzeniu klient od razu zobaczy aktywne potwierdzenie i pokĂłj na swojej stronie rezerwacji. WysyĹ‚ka maili do innych adresĂłw ruszy po naprawie konfiguracji Resend.'
+        ? 'Po potwierdzeniu klient od razu zobaczy aktywne potwierdzenie i pokój na swojej stronie rezerwacji. Maile klienta są teraz świadomie wyłączone, więc link do rozmowy zostaje na stronie potwierdzenia.'
+        : 'Po potwierdzeniu klient od razu zobaczy aktywne potwierdzenie i pokój na swojej stronie rezerwacji. Wysyłka maili do innych adresów ruszy po naprawie konfiguracji Resend.'
   const html = renderEmailShell(
-    'Mamy TwojÄ… rezerwacjÄ™',
-    'Termin zostaĹ‚ chwilowo zablokowany i czeka na pĹ‚atnoĹ›Ä‡. To pierwszy krok do spokojniejszego planu dziaĹ‚ania.',
+    'Mamy Twoją rezerwację',
+    'Termin został chwilowo zablokowany i czeka na płatność. To pierwszy krok do spokojniejszego planu działania.',
     `
       <p><strong>Termin:</strong> ${formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}</p>
       <p><strong>Temat:</strong> ${getProblemLabel(booking.problemType)}</p>
       <p><strong>Kwota:</strong> ${formatPricePln(booking.amount)}</p>
-      <p><strong>Co dalej:</strong> dokoĹ„cz pĹ‚atnoĹ›Ä‡, aby ostatecznie potwierdziÄ‡ konsultacjÄ™ i odblokowaÄ‡ link do rozmowy.</p>
+      <p><strong>Co dalej:</strong> dokończ płatność, aby ostatecznie potwierdzić konsultację i odblokować link do rozmowy.</p>
       ${renderContactBlockHtml()}
     `,
     emailDeliveryNote,
   )
   const text = [
-    'Behawior 15 - rezerwacja przyjÄ™ta.',
+    'Behawior 15 - rezerwacja przyjęta.',
     `Termin: ${formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}`,
     `Temat: ${getProblemLabel(booking.problemType)}`,
     `Kwota: ${formatPricePln(booking.amount)}`,
-    'Co dalej: dokoĹ„cz pĹ‚atnoĹ›Ä‡, aby ostatecznie potwierdziÄ‡ konsultacjÄ™ i odblokowaÄ‡ link do rozmowy.',
+    'Co dalej: dokończ płatność, aby ostatecznie potwierdzić konsultację i odblokować link do rozmowy.',
     emailDeliveryNote,
     renderContactBlockText(),
   ].join('\n')
@@ -713,24 +713,24 @@ export async function sendBookingConfirmationEmail(booking: BookingRecord): Prom
   const subject = `Potwierdzenie konsultacji - Behawior 15 - ${summary}`
   const html = renderEmailShell(
     'Konsultacja potwierdzona',
-    'PÄąâ€šatnoÄąâ€şĂ„â€ˇ zostaÄąâ€ša przyjĂ„â„˘ta, a TwÄ‚Ĺ‚j termin jest juÄąÄ˝ przypisany do Ciebie.',
+    'Płatność została przyjęta, a Twój termin jest już przypisany do Ciebie.',
     `
       <p><strong>Termin:</strong> ${formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}</p>
       <p><strong>Temat:</strong> ${getProblemLabel(booking.problemType)}</p>
-      <p><strong>Opis zgÄąâ€šoszenia:</strong> ${booking.description}</p>
+      <p><strong>Opis zgłoszenia:</strong> ${booking.description}</p>
       <p><strong>Link do rozmowy:</strong> <a href="${booking.meetingUrl}">${booking.meetingUrl}</a></p>
-      <p><strong>Co dalej:</strong> wejdÄąĹź 3-5 minut przed czasem i przygotuj najwaÄąÄ˝niejsze obserwacje oraz pytania. Po rozmowie dostaniesz jasny nastĂ„â„˘pny krok zamiast ogÄ‚Ĺ‚lnych porad.</p>
+      <p><strong>Co dalej:</strong> wejdź 3-5 minut przed czasem i przygotuj najważniejsze obserwacje oraz pytania. Po rozmowie dostaniesz jasny następny krok zamiast ogólnych porad.</p>
       ${renderContactBlockHtml()}
     `,
-    'JeÄąâ€şli bĂ„â„˘dzie potrzebny kolejny krok po rozmowie, dostaniesz jasnĂ„â€¦ rekomendacjĂ„â„˘ zamiast ogÄ‚Ĺ‚lnych porad.',
+    'Jeśli będzie potrzebny kolejny krok po rozmowie, dostaniesz jasną rekomendację zamiast ogólnych porad.',
   )
   const text = [
-    'Twoja konsultacja Behawior 15 zostaÄąâ€ša potwierdzona.',
+    'Twoja konsultacja Behawior 15 została potwierdzona.',
     `Termin: ${formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}`,
     `Temat: ${getProblemLabel(booking.problemType)}`,
     `Opis: ${booking.description}`,
     `Link do rozmowy: ${booking.meetingUrl}`,
-    'Co dalej: wejdÄąĹź 3-5 minut przed czasem i przygotuj najwaÄąÄ˝niejsze obserwacje oraz pytania. Po rozmowie dostaniesz jasny nastĂ„â„˘pny krok zamiast ogÄ‚Ĺ‚lnych porad.',
+    'Co dalej: wejdź 3-5 minut przed czasem i przygotuj najważniejsze obserwacje oraz pytania. Po rozmowie dostaniesz jasny następny krok zamiast ogólnych porad.',
     renderContactBlockText(),
   ].join('\n')
 
@@ -865,21 +865,21 @@ export async function sendManualPaymentReportedAdminEmail(
     }
   }
 
-  const subject = `PÄąâ€šatnoÄąâ€şĂ„â€ˇ do potwierdzenia do 60 min - Behawior 15 - ${buildBookingSummary(booking)}`
+  const subject = `Płatność do potwierdzenia do 60 min - Behawior 15 - ${buildBookingSummary(booking)}`
   const html = renderEmailShell(
-    'WpÄąâ€šata czeka na decyzjĂ„â„˘',
-    'Klient kliknĂ„â€¦Äąâ€š "ZapÄąâ€šaciÄąâ€šem". SprawdÄąĹź wpÄąâ€šyw i kliknij wÄąâ€šaÄąâ€şciwĂ„â€¦ decyzjĂ„â„˘.',
+    'Wpłata czeka na decyzję',
+    'Klient kliknął "Zapłaciłem". Sprawdź wpływ i kliknij właściwą decyzję.',
     `
       <p><strong>Booking ID:</strong> ${escapeHtml(booking.id)}</p>
-      <p><strong>TytuÄąâ€š pÄąâ€šatnoÄąâ€şci:</strong> ${escapeHtml(booking.paymentReference ?? booking.id)}</p>
+      <p><strong>Tytuł płatności:</strong> ${escapeHtml(booking.paymentReference ?? booking.id)}</p>
       <p><strong>Termin:</strong> ${formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}</p>
       <p><strong>Temat:</strong> ${getProblemLabel(booking.problemType)}</p>
       <p><strong>Kwota:</strong> ${formatPricePln(booking.amount)}</p>
       <p><strong>Klient:</strong> ${escapeHtml(booking.ownerName)} | <a href="mailto:${escapeHtml(booking.email)}">${escapeHtml(booking.email)}</a> | ${escapeHtml(booking.phone)}</p>
       <p><strong>Opis:</strong> ${formatMultilineHtml(booking.description)}</p>
       <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:20px;">
-        <a href="${links.approveUrl}" style="display:inline-block;padding:12px 18px;border-radius:999px;background:#0a5c36;color:#ffffff;text-decoration:none;font-weight:700;">Jest wpÄąâ€šata - potwierdÄąĹź i otwÄ‚Ĺ‚rz pokÄ‚Ĺ‚j</a>
-        <a href="${links.rejectUrl}" style="display:inline-block;padding:12px 18px;border-radius:999px;background:#8a3022;color:#ffffff;text-decoration:none;font-weight:700;">Nie ma wpÄąâ€šaty</a>
+        <a href="${links.approveUrl}" style="display:inline-block;padding:12px 18px;border-radius:999px;background:#0a5c36;color:#ffffff;text-decoration:none;font-weight:700;">Jest wpłata - potwierdź i otwórz pokój</a>
+        <a href="${links.rejectUrl}" style="display:inline-block;padding:12px 18px;border-radius:999px;background:#8a3022;color:#ffffff;text-decoration:none;font-weight:700;">Nie ma wpłaty</a>
       </div>
     `,
     customerEmailStatus.state !== 'ready'
@@ -887,41 +887,41 @@ export async function sendManualPaymentReportedAdminEmail(
       : 'Po potwierdzeniu klient automatycznie dostanie mail z linkiem do pokoju rozmowy, a przy braku wpłaty wróci do płatności.',
   )
   const text = [
-    'PÄąâ€šatnoÄąâ€şĂ„â€ˇ czeka na potwierdzenie do 60 min.',
+    'Płatność czeka na potwierdzenie do 60 min.',
     `Booking ID: ${booking.id}`,
-    `TytuÄąâ€š pÄąâ€šatnoÄąâ€şci: ${booking.paymentReference ?? booking.id}`,
+    `Tytuł płatności: ${booking.paymentReference ?? booking.id}`,
     `Termin: ${formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}`,
     `Temat: ${getProblemLabel(booking.problemType)}`,
     `Kwota: ${formatPricePln(booking.amount)}`,
     `Klient: ${booking.ownerName} | ${booking.email} | ${booking.phone}`,
     `Opis: ${booking.description}`,
-    `Jest wpÄąâ€šata: ${links.approveUrl}`,
-    `Nie ma wpÄąâ€šaty: ${links.rejectUrl}`,
+    `Jest wpłata: ${links.approveUrl}`,
+    `Nie ma wpłaty: ${links.rejectUrl}`,
   ].join('\n')
 
   return deliverEmail({ to: recipient, subject, html, text }, 'internal')
 }
 
 export async function sendBookingReminderEmail(booking: BookingRecord): Promise<DeliveryResult> {
-  const subject = 'Przypomnienie: konsultacja Behawior 15 startuje za mniej niÄąÄ˝ godzinĂ„â„˘'
+  const subject = 'Przypomnienie: konsultacja Behawior 15 startuje za mniej niż godzinę'
   const html = renderEmailShell(
     'Przypomnienie o konsultacji',
-    'Za mniej niÄąÄ˝ godzinĂ„â„˘ startuje Twoja rozmowa. Warto wejÄąâ€şĂ„â€ˇ chwilĂ„â„˘ wczeÄąâ€şniej, ÄąÄ˝eby zaczĂ„â€¦Ă„â€ˇ spokojnie i bez poÄąâ€şpiechu.',
+    'Za mniej niż godzinę startuje Twoja rozmowa. Warto wejść chwilę wcześniej, żeby zacząć spokojnie i bez pośpiechu.',
     `
       <p><strong>Termin:</strong> ${formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}</p>
       <p><strong>Temat:</strong> ${getProblemLabel(booking.problemType)}</p>
       <p><strong>Link do rozmowy:</strong> <a href="${booking.meetingUrl}">${booking.meetingUrl}</a></p>
-      <p><strong>Przed rozmowĂ„â€¦:</strong> przygotuj 2-3 najwaÄąÄ˝niejsze pytania i najkrÄ‚Ĺ‚tszy moÄąÄ˝liwy opis problemu.</p>
+      <p><strong>Przed rozmową:</strong> przygotuj 2-3 najważniejsze pytania i najkrótszy możliwy opis problemu.</p>
       ${renderContactBlockHtml()}
     `,
-    'Do usÄąâ€šyszenia. To bĂ„â„˘dzie krÄ‚Ĺ‚tka rozmowa, ale z konkretnym kierunkiem dziaÄąâ€šania.',
+    'Do usłyszenia. To będzie krótka rozmowa, ale z konkretnym kierunkiem działania.',
   )
   const text = [
     'Przypomnienie o konsultacji Behawior 15.',
     `Termin: ${formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}`,
     `Temat: ${getProblemLabel(booking.problemType)}`,
     `Link do rozmowy: ${booking.meetingUrl}`,
-    'Przed rozmowĂ„â€¦ przygotuj 2-3 najwaÄąÄ˝niejsze pytania i najkrÄ‚Ĺ‚tszy moÄąÄ˝liwy opis problemu.',
+    'Przed rozmową przygotuj 2-3 najważniejsze pytania i najkrótszy możliwy opis problemu.',
     renderContactBlockText(),
   ].join('\n')
 
@@ -939,33 +939,80 @@ export async function sendTestimonialSubmissionEmail(submission: TestimonialSubm
     }
   }
 
-  const subject = `Nowe zgÄąâ€šoszenie opinii do weryfikacji - Behawior 15 - ${submission.displayName}`
+  const subject = `Nowe zgłoszenie opinii do weryfikacji - Behawior 15 - ${submission.displayName}`
   const photoBlock = submission.photoUrl
-    ? `<p><strong>Link do zdjĂ„â„˘cia:</strong> <a href="${escapeHtml(submission.photoUrl)}">${escapeHtml(submission.photoUrl)}</a></p>`
-    : '<p><strong>Link do zdjĂ„â„˘cia:</strong> klient nie dodaÄąâ€š linku.</p>'
+    ? `<p><strong>Link do zdjęcia:</strong> <a href="${escapeHtml(submission.photoUrl)}">${escapeHtml(submission.photoUrl)}</a></p>`
+    : '<p><strong>Link do zdjęcia:</strong> klient nie dodał linku.</p>'
   const html = renderEmailShell(
-    'Nowa opinia czeka na weryfikacjĂ„â„˘',
-    'Klient wysÄąâ€šaÄąâ€š opiniĂ„â„˘ przez formularz na stronie. Wpis nie jest jeszcze opublikowany.',
+    'Nowa opinia czeka na weryfikację',
+    'Klient wysłał opinię przez formularz na stronie. Wpis nie jest jeszcze opublikowany.',
     `
-      <p><strong>ImiĂ„â„˘ do publikacji:</strong> ${escapeHtml(submission.displayName)}</p>
+      <p><strong>Imię do publikacji:</strong> ${escapeHtml(submission.displayName)}</p>
       <p><strong>Email do kontaktu:</strong> <a href="mailto:${escapeHtml(submission.email)}">${escapeHtml(submission.email)}</a></p>
       <p><strong>Kategoria problemu:</strong> ${escapeHtml(submission.issueCategory)}</p>
-      <p><strong>TreÄąâ€şĂ„â€ˇ opinii:</strong><br />${formatMultilineHtml(submission.opinion)}</p>
-      <p><strong>Co siĂ„â„˘ zmieniÄąâ€šo:</strong><br />${formatMultilineHtml(submission.beforeAfter)}</p>
+      <p><strong>Treść opinii:</strong><br />${formatMultilineHtml(submission.opinion)}</p>
+      <p><strong>Co się zmieniło:</strong><br />${formatMultilineHtml(submission.beforeAfter)}</p>
       ${photoBlock}
-      <p><strong>Status:</strong> wpis nadal wymaga rĂ„â„˘cznej akceptacji i rĂ„â„˘cznego dodania do statycznej listy opinii.</p>
+      <p><strong>Status:</strong> wpis nadal wymaga ręcznej akceptacji i ręcznego dodania do statycznej listy opinii.</p>
     `,
-    'Po akceptacji zapisz zdjĂ„â„˘cie lokalnie i dopisz nowy wpis do lib/testimonials.ts przed kolejnym deployem.',
+    'Po akceptacji zapisz zdjęcie lokalnie i dopisz nowy wpis do lib/testimonials.ts przed kolejnym deployem.',
   )
   const text = [
-    'Nowa opinia czeka na weryfikacjĂ„â„˘. Wpis nie jest jeszcze opublikowany.',
-    `ImiĂ„â„˘ do publikacji: ${submission.displayName}`,
+    'Nowa opinia czeka na weryfikację. Wpis nie jest jeszcze opublikowany.',
+    `Imię do publikacji: ${submission.displayName}`,
     `Email do kontaktu: ${submission.email}`,
     `Kategoria problemu: ${submission.issueCategory}`,
-    `TreÄąâ€şĂ„â€ˇ opinii: ${submission.opinion}`,
-    `Co siĂ„â„˘ zmieniÄąâ€šo: ${submission.beforeAfter}`,
-    `Link do zdjĂ„â„˘cia: ${submission.photoUrl || 'brak'}`,
-    'Status: wpis nadal wymaga rĂ„â„˘cznej akceptacji i rĂ„â„˘cznego dodania do statycznej listy opinii.',
+    `Treść opinii: ${submission.opinion}`,
+    `Co się zmieniło: ${submission.beforeAfter}`,
+    `Link do zdjęcia: ${submission.photoUrl || 'brak'}`,
+    'Status: wpis nadal wymaga ręcznej akceptacji i ręcznego dodania do statycznej listy opinii.',
+  ].join('\n')
+
+  return deliverEmail({ to: recipient, subject, html, text }, 'internal')
+}
+
+export type OpinionSubmission = {
+  displayName: string
+  species: 'pies' | 'kot'
+  topic: string
+  opinion: string
+  consentPublish: boolean
+}
+
+export async function sendOpinionSubmissionEmail(submission: OpinionSubmission): Promise<DeliveryResult> {
+  const recipient = getNotificationRecipientEmail()
+
+  if (!recipient) {
+    return {
+      status: 'skipped',
+      reason: 'public contact email missing or invalid',
+    }
+  }
+
+  const speciesLabel = submission.species === 'kot' ? 'Kot' : 'Pies'
+  const subject = `Nowa opinia do ręcznej akceptacji - Behawior 15 - ${submission.displayName}`
+  const html = renderEmailShell(
+    'Nowa opinia do sprawdzenia',
+    'Klient wysłał opinię przez ukryty formularz po konsultacji. To nie jest jeszcze wpis publikowany.',
+    `
+      <p><strong>Imię lub inicjały:</strong> ${escapeHtml(submission.displayName)}</p>
+      <p><strong>Gatunek:</strong> ${escapeHtml(speciesLabel)}</p>
+      <p><strong>Temat:</strong> ${escapeHtml(submission.topic)}</p>
+      <p><strong>Zgoda na publikację:</strong> ${submission.consentPublish ? 'tak' : 'nie'}</p>
+      <p><strong>Treść opinii:</strong><br />${formatMultilineHtml(submission.opinion)}</p>
+      <p><strong>Status:</strong> wpis czeka na ręczną akceptację i dodanie do publicznej listy opinii.</p>
+    `,
+    'Po akceptacji dodaj wpis ręcznie do publicznej listy opinii przed kolejnym publikowaniem strony.',
+  )
+  const text = [
+    'Nowa opinia do ręcznej akceptacji.',
+    `Imię lub inicjały: ${submission.displayName}`,
+    `Gatunek: ${speciesLabel}`,
+    `Temat: ${submission.topic}`,
+    `Zgoda na publikację: ${submission.consentPublish ? 'tak' : 'nie'}`,
+    `Treść opinii: ${submission.opinion}`,
+    'Status: wpis czeka na ręczną akceptację i dodanie do publicznej listy opinii.',
+    'Po akceptacji dodaj wpis ręcznie do publicznej listy opinii przed kolejnym publikowaniem strony.',
   ].join('\n')
 
   return deliverEmail({ to: recipient, subject, html, text }, 'internal')

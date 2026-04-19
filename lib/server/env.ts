@@ -228,8 +228,28 @@ export function getBaseUrl(): string {
   return DEFAULT_APP_URL
 }
 
+export function isProductionDeployment(): boolean {
+  if (process.env.VERCEL_ENV) {
+    return process.env.VERCEL_ENV === 'production'
+  }
+
+  return process.env.NODE_ENV === 'production'
+}
+
+export function shouldBlockSearchIndexing(): boolean {
+  return !isProductionDeployment()
+}
+
 export function getCanonicalBaseUrl(): string {
-  return SITE_PRODUCTION_URL
+  if (process.env.VERCEL_ENV === 'production') {
+    return SITE_PRODUCTION_URL
+  }
+
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`
+  }
+
+  return getBaseUrl()
 }
 
 export function getJitsiBaseUrl(): string {

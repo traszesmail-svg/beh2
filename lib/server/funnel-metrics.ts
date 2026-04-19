@@ -1,23 +1,32 @@
 import type { BookingRecord, FunnelEventRecord, FunnelEventType } from '@/lib/types'
+import { normalizeFunnelEventType } from '@/lib/server/funnel-events'
 
 export const FUNNEL_METRIC_WINDOWS = ['24h', '7d', 'all'] as const
 export type FunnelMetricWindow = (typeof FUNNEL_METRIC_WINDOWS)[number]
 
 export const FUNNEL_STAGE_EVENT_TYPES = [
-  'home_view',
-  'cta_click',
-  'topic_selected',
-  'slot_selected',
-  'form_started',
-  'payment_opened',
-  'manual_pending',
-  'paid',
-  'confirmed',
+  'view_page',
+  'funnel_entry_15_min',
+  'funnel_entry_60_min',
+  'funnel_entry_niezbednik',
+  'booking_start',
+  'booking_service_selected',
+  'booking_slot_selected',
+  'booking_form_started',
+  'booking_form_submitted',
+  'payment_viewed',
+  'payment_started',
+  'payment_marked_pending',
+  'payment_completed',
+  'booking_confirmed',
+  'confirmation_viewed',
+  'call_room_viewed',
+  'contact_form_started',
+  'contact_form_submitted',
   'reject_cancel',
 ] as const satisfies readonly FunnelEventType[]
 
 export type FunnelStageEventType = (typeof FUNNEL_STAGE_EVENT_TYPES)[number]
-
 export type FunnelStageCounts = Record<FunnelStageEventType, number>
 
 export type FunnelBookingCounts = {
@@ -40,14 +49,14 @@ export type FunnelWindowSnapshot = {
   qaEventCount: number
   stageCounts: FunnelStageCounts
   conversions: {
-    homeToCta: string
-    ctaToTopic: string
-    topicToSlot: string
-    slotToForm: string
-    formToPayment: string
+    viewToEntry15: string
+    entry15ToBookingStart: string
+    bookingStartToSlot: string
+    slotToFormStart: string
+    formStartToPayment: string
     paymentToPending: string
-    pendingToPaid: string
-    paidToConfirmed: string
+    paymentToCompleted: string
+    completedToConfirmed: string
   }
   lastEventAt: string | null
 }
@@ -62,15 +71,24 @@ export type FunnelMetricsSnapshot = {
 
 function createZeroStageCounts(): FunnelStageCounts {
   return {
-    home_view: 0,
-    cta_click: 0,
-    topic_selected: 0,
-    slot_selected: 0,
-    form_started: 0,
-    payment_opened: 0,
-    manual_pending: 0,
-    paid: 0,
-    confirmed: 0,
+    view_page: 0,
+    funnel_entry_15_min: 0,
+    funnel_entry_60_min: 0,
+    funnel_entry_niezbednik: 0,
+    booking_start: 0,
+    booking_service_selected: 0,
+    booking_slot_selected: 0,
+    booking_form_started: 0,
+    booking_form_submitted: 0,
+    payment_viewed: 0,
+    payment_started: 0,
+    payment_marked_pending: 0,
+    payment_completed: 0,
+    booking_confirmed: 0,
+    confirmation_viewed: 0,
+    call_room_viewed: 0,
+    contact_form_started: 0,
+    contact_form_submitted: 0,
     reject_cancel: 0,
   }
 }
@@ -149,14 +167,14 @@ function createBookingCounts(bookings: BookingRecord[]): FunnelBookingCounts {
 
 function buildConversions(stageCounts: FunnelStageCounts) {
   return {
-    homeToCta: formatPercentage(stageCounts.cta_click, stageCounts.home_view),
-    ctaToTopic: formatPercentage(stageCounts.topic_selected, stageCounts.cta_click),
-    topicToSlot: formatPercentage(stageCounts.slot_selected, stageCounts.topic_selected),
-    slotToForm: formatPercentage(stageCounts.form_started, stageCounts.slot_selected),
-    formToPayment: formatPercentage(stageCounts.payment_opened, stageCounts.form_started),
-    paymentToPending: formatPercentage(stageCounts.manual_pending, stageCounts.payment_opened),
-    pendingToPaid: formatPercentage(stageCounts.paid, stageCounts.manual_pending),
-    paidToConfirmed: formatPercentage(stageCounts.confirmed, stageCounts.paid),
+    viewToEntry15: formatPercentage(stageCounts.funnel_entry_15_min, stageCounts.view_page),
+    entry15ToBookingStart: formatPercentage(stageCounts.booking_start, stageCounts.funnel_entry_15_min),
+    bookingStartToSlot: formatPercentage(stageCounts.booking_slot_selected, stageCounts.booking_start),
+    slotToFormStart: formatPercentage(stageCounts.booking_form_started, stageCounts.booking_slot_selected),
+    formStartToPayment: formatPercentage(stageCounts.payment_viewed, stageCounts.booking_form_started),
+    paymentToPending: formatPercentage(stageCounts.payment_marked_pending, stageCounts.payment_viewed),
+    paymentToCompleted: formatPercentage(stageCounts.payment_completed, stageCounts.payment_started),
+    completedToConfirmed: formatPercentage(stageCounts.booking_confirmed, stageCounts.payment_completed),
   }
 }
 
@@ -189,8 +207,9 @@ export function buildFunnelMetricsSnapshot({
       eventCount += 1
       lastEventAt = event.createdAt
 
-      if (event.eventType in stageCounts) {
-        stageCounts[event.eventType as FunnelStageEventType] += 1
+      const normalizedType = normalizeFunnelEventType(event.eventType)
+      if (normalizedType && normalizedType in stageCounts) {
+        stageCounts[normalizedType as FunnelStageEventType] += 1
       }
     }
 
@@ -228,7 +247,7 @@ export function renderFunnelMetricsMarkdown(snapshot: FunnelMetricsSnapshot): st
     '# Raport Funnel Metrics',
     '',
     formatLine('Data generacji', snapshot.generatedAt),
-    formatLine('Zrodlo', 'internal funnel ledger + bookings'),
+    formatLine('Źródło', 'internal funnel ledger + bookings'),
     formatLine('Zdarzenia produkcyjne', snapshot.totalEvents),
     formatLine('Zdarzenia QA', snapshot.totalQaEvents),
     '',
@@ -247,18 +266,18 @@ export function renderFunnelMetricsMarkdown(snapshot: FunnelMetricsSnapshot): st
 
   for (const window of snapshot.windows) {
     lines.push(`### ${window.label}`)
-    lines.push(formatLine('Zakres od', window.from ?? 'poczatek danych'))
+    lines.push(formatLine('Zakres od', window.from ?? 'początek danych'))
     lines.push(formatLine('Zakres do', window.to))
     lines.push(formatLine('Zdarzenia produkcyjne', window.eventCount))
     lines.push(formatLine('Zdarzenia QA wykluczone', window.qaEventCount))
-    lines.push(formatLine('Home -> CTA', window.conversions.homeToCta))
-    lines.push(formatLine('CTA -> topic', window.conversions.ctaToTopic))
-    lines.push(formatLine('Topic -> slot', window.conversions.topicToSlot))
-    lines.push(formatLine('Slot -> form', window.conversions.slotToForm))
-    lines.push(formatLine('Form -> payment', window.conversions.formToPayment))
+    lines.push(formatLine('View -> entry 15 min', window.conversions.viewToEntry15))
+    lines.push(formatLine('Entry 15 min -> booking start', window.conversions.entry15ToBookingStart))
+    lines.push(formatLine('Booking start -> slot', window.conversions.bookingStartToSlot))
+    lines.push(formatLine('Slot -> form start', window.conversions.slotToFormStart))
+    lines.push(formatLine('Form start -> payment', window.conversions.formStartToPayment))
     lines.push(formatLine('Payment -> pending', window.conversions.paymentToPending))
-    lines.push(formatLine('Pending -> paid', window.conversions.pendingToPaid))
-    lines.push(formatLine('Paid -> confirmed', window.conversions.paidToConfirmed))
+    lines.push(formatLine('Payment -> completed', window.conversions.paymentToCompleted))
+    lines.push(formatLine('Completed -> confirmed', window.conversions.completedToConfirmed))
     lines.push(formatLine('Ostatnie zdarzenie', window.lastEventAt ?? 'brak'))
     lines.push('')
   }

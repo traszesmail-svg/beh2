@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { HardNavLink } from '@/components/HardNavLink'
+import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 
 interface ConfirmationStatusWatcherProps {
   active: boolean
@@ -9,6 +10,7 @@ interface ConfirmationStatusWatcherProps {
   accessToken?: string | null
   currentState: string
   intervalMs?: number
+  roomAccessLabel?: string
 }
 
 export function ConfirmationStatusWatcher({
@@ -17,6 +19,7 @@ export function ConfirmationStatusWatcher({
   accessToken,
   currentState,
   intervalMs = 7000,
+  roomAccessLabel = 'pokój rozmowy',
 }: ConfirmationStatusWatcherProps) {
   const [secondsUntilRefresh, setSecondsUntilRefresh] = useState(Math.ceil(intervalMs / 1000))
   const [isRefreshing, setIsRefreshing] = useState(false)
@@ -70,24 +73,24 @@ export function ConfirmationStatusWatcher({
             window.location.reload()
           }
         })
-      .catch((error) => {
-        if (cancelled) {
-          return
-        }
-
-        console.warn('[behawior15][confirmation-status] polling failed', error)
-        setPollFailureCount((current) => {
-          const next = current + 1
-
-          if (next >= 2) {
-            setPollWarning(
-              'Automatyczne sprawdzanie statusu ma chwilowy problem. Możesz odświeżyć stronę ręcznie albo wrócić tu za chwilę. Rezerwacja nadal jest zapisana.',
-            )
+        .catch((error) => {
+          if (cancelled) {
+            return
           }
 
-          return next
+          console.warn('[behawior15][confirmation-status] polling failed', error)
+          setPollFailureCount((current) => {
+            const next = current + 1
+
+            if (next >= 2) {
+              setPollWarning(
+                'Automatyczne sprawdzanie statusu ma chwilowy problem. Możesz odświeżyć stronę ręcznie albo wrócić tu za chwilę. Rezerwacja nadal jest zapisana.',
+              )
+            }
+
+            return next
+          })
         })
-      })
     }, intervalMs)
 
     const countdownTimer = window.setInterval(() => {
@@ -109,7 +112,7 @@ export function ConfirmationStatusWatcher({
     <div className="top-gap stack-gap">
       <div className="list-card accent-outline tree-backed-card">
         <strong>Sprawdzamy status automatycznie</strong>
-        <span>Ta strona odświeża się sama co kilka sekund. Po potwierdzeniu wpłaty od razu pokaże pokój rozmowy i kolejny krok.</span>
+        <span>{`Ta strona odświeża się sama co kilka sekund. Po potwierdzeniu wpłaty od razu pokaże potwierdzenie, ${roomAccessLabel} i dalszą instrukcję.`}</span>
         <span>{isRefreshing ? 'Aktualizuję status...' : `Kolejne sprawdzenie za ok. ${secondsUntilRefresh} s.`}</span>
       </div>
 
@@ -117,14 +120,14 @@ export function ConfirmationStatusWatcher({
         <div className="error-box tree-backed-card">
           <strong>Nie przegapisz zmiany statusu</strong>
           <span>
-            {pollWarning} Zanotowano {pollFailureCount} nieudane sprawdzenia z rzedu.
+            {pollWarning} Zanotowano {pollFailureCount} nieudane sprawdzenia z rzędu.
           </span>
           <div className="hero-actions top-gap">
             <button type="button" className="button button-ghost" onClick={() => window.location.reload()}>
-              Odswiez teraz
+              Odśwież teraz
             </button>
-            <HardNavLink href="/kontakt" className="button button-primary">
-              Napisz wiadomość
+            <HardNavLink href="/kontakt#formularz" className="button button-primary">
+              {FUNNEL_CTA_LABELS.contact}
             </HardNavLink>
           </div>
         </div>

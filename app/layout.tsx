@@ -1,7 +1,8 @@
+import { Suspense } from 'react'
 import type { Metadata, Viewport } from 'next'
 import { Fraunces, Manrope } from 'next/font/google'
 import { AnalyticsConsent } from '@/components/AnalyticsConsent'
-import { getBaseUrl } from '@/lib/server/env'
+import { getCanonicalBaseUrl, shouldBlockSearchIndexing } from '@/lib/server/env'
 import { SITE_DESCRIPTION, SITE_NAME, SITE_OG_IMAGE, SITE_SHORT_NAME, SITE_TAGLINE } from '@/lib/site'
 import './globals.css'
 
@@ -15,7 +16,8 @@ const fraunces = Fraunces({
   variable: '--font-display',
 })
 
-const metadataBase = new URL(getBaseUrl())
+const metadataBase = new URL(getCanonicalBaseUrl())
+const blockSearchIndexing = shouldBlockSearchIndexing()
 
 export const metadata: Metadata = {
   metadataBase,
@@ -28,8 +30,9 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   robots: {
-    index: true,
+    index: !blockSearchIndexing,
     follow: true,
+    noarchive: blockSearchIndexing,
   },
   openGraph: {
     title: SITE_NAME,
@@ -58,7 +61,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="pl">
       <body className={`${manrope.variable} ${fraunces.variable}`}>
         {children}
-        <AnalyticsConsent measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim() || null} />
+        <Suspense fallback={null}>
+          <AnalyticsConsent measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim() || null} />
+        </Suspense>
       </body>
     </html>
   )

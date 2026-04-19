@@ -16,6 +16,8 @@ import {
 } from '@/lib/server/env'
 
 export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 function resolveAccessToken(request: Request): string | null {
   return new URL(request.url).searchParams.get('access')

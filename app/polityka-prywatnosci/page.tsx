@@ -7,52 +7,170 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = buildLegalMetadata(
   'Polityka prywatności',
   '/polityka-prywatnosci',
-  'Informacje o przetwarzaniu danych, kontakcie, operatorach technicznych i zasadach prywatności w marce Regulski | Terapia behawioralna.',
+  'Polityka prywatności serwisu Regulski | Terapia behawioralna opisująca zakres danych, cele przetwarzania, odbiorców danych oraz prawa użytkownika.',
 )
 
 const summaryItems: LegalSummaryItem[] = [
   {
-    label: 'Zakres danych',
-    value: 'Przetwarzane są tylko dane potrzebne do rezerwacji, płatności, kontaktu i przygotowania rozmowy.',
+    label: 'Punkty styku danych',
+    value: 'Formularz kontaktowy, rezerwacja, płatność, potwierdzenie, materiały przygotowawcze, materiały bezpłatne oraz newsletter.',
   },
   {
-    label: 'Operatorzy',
-    value: 'Supabase, Resend, Jitsi oraz Google Analytics po wyrażeniu zgody.',
+    label: 'Podstawowe narzędzia',
+    value: 'Supabase, Resend, Jitsi oraz narzędzia analityczne uruchamiane wyłącznie po wyrażeniu zgody.',
   },
   {
-    label: 'Kontakt',
-    value: 'W sprawie danych kontakt prowadzony jest przez formularz lub mailowo, bez publicznej ścieżki telefonicznej.',
+    label: 'Publiczny kontakt',
+    value: 'Publiczny kontakt odbywa się przez formularz i e-mail. Telefon nie jest publikowany na stronie.',
   },
 ]
 
 const sections: LegalSection[] = [
   {
-    title: 'Administrator danych',
-    body: 'Administratorem danych związanych z serwisem, kontaktem i rezerwacją konsultacji jest Krzysztof Regulski, behawiorysta COAPE / CAPBT, technik weterynarii, dogoterapeuta, dietetyk.',
+    title: '1. Administrator danych',
+    body: (
+      <>
+        <p>
+          Administratorem danych osobowych przetwarzanych w związku z działaniem serwisu, kontaktem, rezerwacją i
+          realizacją usług jest Krzysztof Regulski prowadzący działalność pod marką Regulski | Terapia behawioralna.
+        </p>
+      </>
+    ),
   },
   {
-    title: 'Jakie dane przetwarzamy',
-    body: 'Przetwarzamy imię opiekuna, dane kontaktowe, opis problemu, wybrany termin, status płatności oraz opcjonalne materiały dodane przed rozmową.',
+    title: '2. Zakres danych',
+    body: (
+      <>
+        <ul className="premium-bullet-list">
+          <li>W formularzu kontaktowym: imię, e-mail lub numer telefonu, gatunek, temat i treść wiadomości.</li>
+          <li>Przy rezerwacji: dane identyfikacyjne i kontaktowe, temat, termin, status rezerwacji oraz status płatności.</li>
+          <li>Przy realizacji usługi: dane potrzebne do potwierdzenia rezerwacji, wysyłki wiadomości oraz dostępu do pokoju rozmowy.</li>
+          <li>W materiałach przygotowawczych: notatki, linki i pliki dodane dobrowolnie przez klienta.</li>
+          <li>W formularzach materiałów bezpłatnych i newslettera: adres e-mail, segment tematyczny oraz identyfikator materiału lub źródła zapisu.</li>
+        </ul>
+      </>
+    ),
   },
   {
-    title: 'Cele i podstawy przetwarzania',
-    body: 'Dane służą przyjęciu rezerwacji, przeprowadzeniu konsultacji, obsłudze płatności, wysyłce potwierdzeń i przypomnień, przygotowaniu specjalisty do rozmowy oraz obsłudze reklamacji, zwrotów i kontaktu posprzedażowego.',
+    title: '3. Cele przetwarzania danych',
+    body: (
+      <>
+        <p>Dane są przetwarzane w celu:</p>
+        <ul className="premium-bullet-list">
+          <li>udzielenia odpowiedzi na wiadomość przesłaną przez formularz kontaktowy,</li>
+          <li>przyjęcia i obsługi rezerwacji usługi,</li>
+          <li>potwierdzenia płatności i obsługi strony potwierdzenia,</li>
+          <li>realizacji konsultacji oraz przygotowania się do rozmowy na podstawie przekazanych materiałów,</li>
+          <li>obsługi formularzy materiałów bezpłatnych i newslettera,</li>
+          <li>zapewnienia bezpieczeństwa serwisu, rozliczeń oraz dochodzenia lub obrony roszczeń.</li>
+        </ul>
+      </>
+    ),
   },
   {
-    title: 'Operatorzy i odbiorcy danych',
-    body: 'Do działania serwisu wykorzystywane są usługi Supabase, Resend oraz Jitsi, a po wyrażeniu zgody także Google Analytics. Jeśli włączona jest wysyłka SMS po płatności, dane kontaktowe są przekazywane również do operatora SMS.',
+    title: '4. Podstawa przetwarzania',
+    body: (
+      <>
+        <p>
+          Dane są przetwarzane w zakresie niezbędnym do zawarcia i wykonania umowy, udzielenia odpowiedzi na zgłoszenie,
+          wypełnienia obowiązków prawnych związanych z rozliczeniami oraz na podstawie prawnie uzasadnionego interesu
+          administratora polegającego na zapewnieniu bezpieczeństwa serwisu i obsługi zgłoszeń.
+        </p>
+        <p>
+          W zakresie analityki oraz w tych przypadkach, w których wymaga tego charakter formularza, przetwarzanie może
+          odbywać się także na podstawie zgody użytkownika.
+        </p>
+      </>
+    ),
   },
   {
-    title: 'Jak długo przechowujemy dane',
-    body: 'Dane rezerwacyjne i rozliczeniowe są przechowywane tak długo, jak jest to potrzebne do realizacji usługi, rozliczeń, kontaktu posprzedażowego oraz spełnienia obowiązków prawnych i podatkowych.',
+    title: '5. Odbiorcy danych',
+    body: (
+      <>
+        <p>
+          Dane mogą być przekazywane wyłącznie w zakresie niezbędnym do działania serwisu i realizacji usług, w
+          szczególności dostawcom obsługującym bazę danych, wysyłkę wiadomości e-mail, pokój rozmowy online oraz
+          narzędzia analityczne.
+        </p>
+        <p>
+          W aktualnym modelu technicznym serwis korzysta z usług Supabase, Resend i Jitsi. Jeżeli dla danej rezerwacji
+          aktywna jest obsługa SMS lub inna funkcja powiadomień, dane mogą zostać przekazane także operatorowi tej
+          wiadomości.
+        </p>
+      </>
+    ),
   },
   {
-    title: 'Twoje prawa',
-    body: 'Możesz poprosić o dostęp do danych, ich sprostowanie, ograniczenie przetwarzania lub usunięcie, o ile nie koliduje to z obowiązkami rozliczeniowymi albo bezpieczeństwem obsługi rezerwacji.',
+    title: '6. Numer telefonu i kontakt publiczny',
+    body: (
+      <>
+        <p>
+          Telefon nie jest publikowany jako publiczny kanał kontaktu serwisu. Publiczny kontakt odbywa się przez formularz
+          i e-mail.
+        </p>
+        <p>
+          Numer telefonu może być jednak przetwarzany przy rezerwacji usługi, jeżeli jest wymagany przez formularz lub
+          potrzebny do obsługi rezerwacji, potwierdzenia płatności albo wysłania wiadomości SMS.
+        </p>
+      </>
+    ),
   },
   {
-    title: 'Bezpieczeństwo kontaktu',
-    body: 'Dane są przekazywane wyłącznie w zakresie potrzebnym do obsługi rezerwacji, płatności, wiadomości, pokoju rozmowy i bezpieczeństwa działania serwisu.',
+    title: '7. Materiały bezpłatne, newsletter i analityka',
+    body: (
+      <>
+        <p>
+          Formularze materiałów bezpłatnych i newslettera służą do przyjęcia zgłoszenia, przypisania go do właściwej
+          strony, materiału lub segmentu tematycznego oraz obsługi dalszego kroku wynikającego z danego formularza.
+        </p>
+        <p>
+          Serwis zapisuje decyzję dotyczącą analityki w pamięci przeglądarki i pliku cookie. Narzędzia analityczne nie są
+          uruchamiane przed wyrażeniem zgody.
+        </p>
+      </>
+    ),
+  },
+  {
+    title: '8. Okres przechowywania danych',
+    body: (
+      <>
+        <p>
+          Dane są przechowywane przez okres niezbędny do obsługi kontaktu, rezerwacji, realizacji usługi, rozliczeń oraz
+          wykonania obowiązków prawnych, a także przez okres potrzebny do dochodzenia lub obrony roszczeń.
+        </p>
+        <p>
+          Dane przetwarzane na podstawie zgody są przechowywane do czasu jej cofnięcia albo utraty celu, dla którego były
+          przetwarzane.
+        </p>
+      </>
+    ),
+  },
+  {
+    title: '9. Prawa osoby, której dane dotyczą',
+    body: (
+      <>
+        <p>
+          Osobie, której dane dotyczą, przysługuje prawo dostępu do danych, ich sprostowania, usunięcia, ograniczenia
+          przetwarzania, przenoszenia danych, wniesienia sprzeciwu oraz cofnięcia zgody, jeżeli przetwarzanie odbywa się
+          na jej podstawie.
+        </p>
+        <p>
+          Osobie, której dane dotyczą, przysługuje również prawo wniesienia skargi do Prezesa Urzędu Ochrony Danych
+          Osobowych.
+        </p>
+      </>
+    ),
+  },
+  {
+    title: '10. Postanowienia końcowe',
+    body: (
+      <>
+        <p>
+          Polityka prywatności obowiązuje od dnia jej opublikowania w serwisie. Zmiany polityki są publikowane w tej samej
+          zakładce.
+        </p>
+      </>
+    ),
   },
 ]
 
@@ -60,18 +178,15 @@ export default function PrivacyPolicyPage() {
   return (
     <LegalPageLayout
       eyebrow="Polityka prywatności"
-      title="Jak przetwarzane są dane w marce Regulski | Terapia behawioralna"
-      intro="Tu jest skrót tego, jakie dane są potrzebne do rezerwacji i kto pomaga obsługiwać płatność, wiadomości oraz pokój rozmowy."
+      title="Polityka prywatności"
+      intro="Dokument opisuje zasady przetwarzania danych osobowych w związku z korzystaniem z serwisu, formularza kontaktowego, rezerwacji usług, potwierdzeń, materiałów przygotowawczych oraz formularzy materiałów bezpłatnych i newslettera."
       contactSubject="Prywatność i dane - Regulski | Terapia behawioralna"
       summaryItems={summaryItems}
       sections={sections}
-      supportText="Dane służą obsłudze rezerwacji, płatności, formularza kontaktowego, kontaktu z opiekunem psa albo kota oraz bezpiecznemu przygotowaniu konsultacji."
-      supportNoteTitle="Pytanie o dane"
-      supportNoteText="Jeśli chcesz poprawić dane, dopytać o zakres przetwarzania albo zgłosić żądanie, napisz przez formularz kontaktowy albo mailowo. To jest główna ścieżka kontaktu także w sprawach prywatności."
-      ctaTitle="Napisz w sprawie danych albo prywatności"
-      ctaText="W wiadomości wystarczy krótko wskazać, czy pytanie dotyczy danych kontaktowych, operatorów technicznych, zgody analitycznej albo obsługi rezerwacji."
-      secondaryCtaHref="/kontakt"
-      secondaryCtaLabel="Przejdź do kontaktu"
+      supportTitle="Kontakt w sprawach danych osobowych"
+      supportText="W sprawach dotyczących danych osobowych, zakresu przetwarzania lub realizacji praw osoby, której dane dotyczą, kontakt prowadzony jest przez formularz kontaktowy oraz e-mail."
+      supportNoteTitle="Żądanie dotyczące danych"
+      supportNoteText="W wiadomości warto wskazać, czego dotyczy żądanie oraz podać dane pozwalające zidentyfikować zgłoszenie, rezerwację lub formularz."
     />
   )
 }
