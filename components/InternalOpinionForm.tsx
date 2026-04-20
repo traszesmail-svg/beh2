@@ -151,7 +151,7 @@ export function InternalOpinionForm() {
       })
 
       setStatus('success')
-      setFeedback(payload.message ?? 'Dziękuję. Opinia została zapisana do ręcznego sprawdzenia.')
+      setFeedback(payload.message ?? 'Dziękuję. Opinia została zapisana.')
       setForm(createInitialForm(form.species))
       startedRef.current = false
     } catch (error) {
@@ -255,7 +255,7 @@ export function InternalOpinionForm() {
             onFocus={markStarted}
             required
           />
-            <span>Wyrażam zgodę na opublikowanie tej opinii na stronie - w całości albo w skróconej formie, z inicjałami albo innym zakresem wynikającym z treści opinii i mojej zgody.</span>
+            <span>Wyrażam zgodę na opublikowanie tej opinii na stronie, w całości albo w skróconej formie, z inicjałami lub innym zakresem zgodnym z treścią opinii i moją zgodą.</span>
         </label>
       </fieldset>
 
@@ -293,7 +293,7 @@ export function InternalOpinionForm() {
 
       <div className="checkout-box full-width tree-backed-card">
         <div>
-          <div className="muted">Link służy wyłącznie do zebrania opinii po konsultacji.</div>
+          <div className="muted">Formularz służy wyłącznie do zebrania opinii po konsultacji.</div>
           <div className="checkout-title">Krótka opinia wystarczy</div>
           <div className="muted">{COPY_HELPERS.reviewPrivacy}</div>
         </div>

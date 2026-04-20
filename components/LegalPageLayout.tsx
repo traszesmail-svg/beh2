@@ -34,6 +34,7 @@ type LegalPageLayoutProps = {
   supportText: string
   supportNoteTitle: string
   supportNoteText: string
+  structuredData?: Record<string, unknown>[]
 }
 
 function renderAction(href: string, label: string, className: string) {
@@ -63,12 +64,16 @@ export function LegalPageLayout({
   supportText,
   supportNoteTitle,
   supportNoteText,
+  structuredData = [],
 }: LegalPageLayoutProps) {
   const contact = getPublicContactDetails()
   const contactMailtoHref = contact.email ? buildMailtoHref(contact.email, contactSubject) : null
 
   return (
     <main className="page-wrap marketing-page">
+      {structuredData.length > 0 ? (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+      ) : null}
       <div className="container">
         <Header />
 
@@ -113,7 +118,8 @@ export function LegalPageLayout({
             <div className="contact-visual-shell">
               <Image
                 src={SPECIALIST_WIDE_PHOTO.src}
-                alt={SPECIALIST_WIDE_PHOTO.alt}
+                alt=""
+                aria-hidden="true"
                 width={SPECIALIST_WIDE_PHOTO.width}
                 height={SPECIALIST_WIDE_PHOTO.height}
                 sizes="(max-width: 980px) 100vw, 38vw"

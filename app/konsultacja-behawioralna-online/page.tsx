@@ -9,6 +9,7 @@ import { TrustSignalSection } from '@/components/TrustSignalSection'
 import { buildBookHref } from '@/lib/booking-routing'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { getLeadMagnetBySlug } from '@/lib/growth-layer'
+import { getBreadcrumbJsonLd, getServiceJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
 import { FAQ_SHORTLISTS, TRUST_SIGNAL_SETS } from '@/lib/trust-layer'
 import { SPECIALIST_NAME } from '@/lib/site'
@@ -19,7 +20,7 @@ export const metadata: Metadata = buildMarketingMetadata({
   title: 'Konsultacja behawioralna online 60 min',
   path: '/konsultacja-behawioralna-online',
   description:
-    'Konsultacja behawioralna online dla psa i kota. Sprawdz, dla kogo jest 60 min, kiedy wystarczy Kwadrans z behawiorysta i jak wyglada rozmowa.',
+    'Konsultacja behawioralna online 60 min dla psa i kota. Zakres, cena i moment, w którym lepiej wybrać dłuższą rozmowę.',
 })
 
 function SectionIntro({ eyebrow, title, description }: { eyebrow: string; title: string; description: string }) {
@@ -39,9 +40,34 @@ export default function ConsultationOnlinePage() {
   const consultationHref = buildBookHref(null, 'konsultacja-behawioralna-online')
   const contactHref = '/kontakt#formularz'
   const prepGuide = getLeadMagnetBySlug('przygotowanie-do-konsultacji-online')
+  const structuredData = [
+    getBreadcrumbJsonLd([
+      { name: 'Strona główna', path: '/' },
+      { name: 'Konsultacja behawioralna online', path: '/konsultacja-behawioralna-online' },
+    ]),
+    getServiceJsonLd({
+      name: 'Konsultacja behawioralna online 60 min',
+      description: '60 minut konsultacji online dla psa lub kota, z planem i podsumowaniem po rozmowie.',
+      serviceUrl: consultationHref,
+      offerPrice: 350,
+    }),
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: FAQ_SHORTLISTS.consultation.map((item) => ({
+        '@type': 'Question',
+        name: item.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.answer,
+        },
+      })),
+    },
+  ]
 
   return (
     <main className="page-wrap editorial-home-page premium-home-page money-page">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       <div className="container editorial-stack">
         <Header />
 
@@ -81,7 +107,8 @@ export default function ConsultationOnlinePage() {
               <div className="home-hero-photo-shell">
                 <Image
                   src={heroImage.src}
-                  alt={`${SPECIALIST_NAME} podczas spokojnej konsultacji behawioralnej online`}
+                  alt=""
+                  aria-hidden="true"
                   width={heroImage.width}
                   height={heroImage.height}
                   sizes="(max-width: 980px) 100vw, 480px"

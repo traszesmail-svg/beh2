@@ -1,0 +1,1712 @@
+source=Niezbędnik afiliacyjny dla regulskibehawiorysta.pl (1).pdf
+pages=21
+
+--- PAGE 1 ---
+Niezbędnik afiliacyjny dla
+regulskibehawiorysta.pl
+Streszczenie
+Poniżej przygotowałem kompletny, wdrożeniowy pakiet do sekcji „Niezbędnik”: katalog produktów,
+gotowe anchory, komponenty HTML/CSS, warianty układu sekcji, szkic SEO oraz checklistę zdjęć i praw
+do wykorzystania. Dobór produktów jest świadomie osadzony w nurcie pozytywnego wzmocnienia,
+pracy z emocjami, czytelnej komunikacji i zarządzania środowiskiem, co jest spójne z publicznym
+profilem Krzysztofa Regulskiego jako dyplomanta COAPE oraz współautora publikacji o lęku u psów i
+kotów. Ten kierunek dobrze wspierają również źródła odnoszące się do pozytywnych metod i
+klikerowego treningu, w tym publikacje Turid Rugaas, Patricii McConnell, Karen Pryor i materiały Karen
+Pryor Academy. 
+Pakiet jest zbudowany tak, by sekcja „Niezbędnik” mogła działać jednocześnie jako treść ekspercka,
+narzędzie SEO i moduł monetyzacji afiliacyjnej. Tam, gdzie udało się potwierdzić obecność produktu
+w publicznie indeksowanych wynikach Amazon.pl, oznaczyłem to wprost. Tam, gdzie nie znalazłem
+takiego potwierdzenia, oznaczam pozycję jako „brak na Amazon.pl w publicznym indeksie” i podaję
+praktyczną alternatywę. Ponieważ indeksacja ofert Amazon jest dynamiczna, rekomenduję jeszcze
+krótką ręczną weryfikację przy podpinaniu finalnych linków afiliacyjnych. 
+Założenia i metodologia
+Nie udało się wiarygodnie odczytać aktualnej zawartości podstrony „Niezbędnik” z publicznie
+dostępnych, indeksowanych źródeł, dlatego raport przygotowałem jako gotowy pakiet do wdrożenia
+na regulskibehawiorysta.pl, oparty na publicznym profilu eksperckim właściciela marki, oficjalnych
+opisach produktów, oficjalnych materiałach wydawców oraz publicznie indeksowanych wynikach
+Amazon.pl i porównywarek wskazujących oferty Amazon. Taki zestaw źródeł pozwala zbudować sekcję,
+która jest spójna z marką, bezpieczna w komunikacji i praktyczna sprzedażowo. 
+Logika doboru produktów jest prosta: w pierwszej kolejności książki budujące kompetencję
+opiekuna, następnie narzędzia spacerowe i treningowe, potem enrichment, smakołyki i produkty
+do codziennego zarządzania zachowaniem, a na końcu transport i samochód, czyli obszary często
+zaniedbywane, a bardzo ważne w profilaktyce stresu i problemów behawioralnych. To podejście dobrze
+współgra z publicznie opisywaną przez COAPE filozofią pracy nad zachowaniem oraz z materiałami
+autorów promujących współpracę zamiast presji. 
+1
+2
+3
+4
+1
+
+--- PAGE 2 ---
+Tabela gotowych pozycji do sekcji Niezbędnik
+Pozycja Tytuł / autor lub
+marka Krótki opis Dlaczego
+polecam
+Sugerowany
+anchor text
+Przykładowy
+tekst
+rekomendacji
+Kategoria Amazon.pl /
+alternatywa
+Placeholder
+linku Źródła
+AFFIL_LINK_1
+Sygnały
+uspokajające.
+Jak psy unikają
+konfliktów — 
+Turid Rugaas
+Krótka, bardzo
+konkretna
+książka o
+komunikacji
+psów i tzw.
+sygnałach
+uspokajających.
+Daje opiekunowi
+język do czytania
+napięcia,
+unikania
+konfliktów i
+lepszego
+rozumienia
+zachowania w
+codziennych
+sytuacjach.
+• świetna
+„pierwsza
+książka” dla
+opiekuna •
+wzmacnia
+uważność
+zamiast kontroli
+• spójna z
+podejściem bez
+przemocy
+Sygnały
+uspokajające
+Turid Rugaas
+Jeśli chcesz
+lepiej
+rozumieć, co
+pies
+komunikuje
+ciałem, to jest
+jedna z
+najkrótszych i
+najbardziej
+użytecznych
+książek na
+start.
+książka
+brak na
+Amazon.pl w
+publicznym
+indeksie;
+alternatywa:
+Galaktyka /
+Bee.pl
+AFFIL_LINK_1
+AFFIL_LINK_2
+Drugi koniec
+smyczy. Jak
+kształtować
+więź z psem — 
+Patricia
+McConnell
+Klasyczna
+pozycja o tym,
+jak człowiek i
+pies „czytają”
+swoje
+zachowania.
+Pomaga
+zrozumieć,
+dlaczego dobre
+intencje
+opiekuna bywają
+źle odbierane
+przez psa i jak
+poprawić
+komunikację.
+• buduje relację i
+czytelność
+sygnałów •
+bardzo dobra dla
+rodzin z psem •
+łączy naukę z
+praktyką
+Drugi koniec
+smyczy Patricia
+McConnell
+To książka, do
+której warto
+wracać, gdy
+chcesz
+poprawić
+codzienną
+komunikację z
+psem bez
+presji i
+konfliktu.
+książka
+brak na
+Amazon.pl w
+publicznym
+indeksie;
+alternatywa:
+Galaktyka /
+Tantis
+AFFIL_LINK_2
+AFFIL_LINK_3
+Kliker.
+Skuteczne
+szkolenie psa
+— Karen Pryor
+Przystępne
+wprowadzenie
+do treningu
+klikerowego i
+markerów
+nagrody.
+Pokazuje, jak
+uczyć psa
+precyzyjnie,
+pozytywnie i bez
+karania.
+• idealna do
+sekcji
+edukacyjnej •
+wzmacnia
+pozytywne
+nawyki • dobrze
+łączy się ze
+sprzedażą
+klikera i
+smakołyków
+Kliker Karen
+Pryor
+Polecam
+każdemu
+opiekunowi,
+który chce
+szkolić
+precyzyjniej i
+spokojniej —
+to praktyczna
+baza pod
+trening
+pozytywny.
+książka
+brak na
+Amazon.pl w
+publicznym
+indeksie;
+alternatywa:
+Bonito /
+Petsmile /
+Korob
+AFFIL_LINK_3
+5
+6
+7
+2
+
+--- PAGE 3 ---
+Pozycja Tytuł / autor lub
+marka Krótki opis Dlaczego
+polecam
+Sugerowany
+anchor text
+Przykładowy
+tekst
+rekomendacji
+Kategoria Amazon.pl /
+alternatywa
+Placeholder
+linku Źródła
+AFFIL_LINK_4
+Before You Get
+Your Puppy /
+After You Get
+Your Puppy — 
+dr Ian Dunbar
+Dwie kultowe
+pozycje Dunbara
+o priorytetach
+rozwojowych
+szczenięcia,
+socjalizacji,
+nauce gryzienia i
+profilaktyce
+problemów.
+Oficjalne źródła
+Dog Star Daily
+podkreślają
+wagę pierwszych
+miesięcy życia i
+przygotowania
+domu jeszcze
+przed
+przyjazdem psa.
+• znakomite dla
+nowych
+opiekunów •
+mocny nacisk na
+profilaktykę •
+bardzo dobre
+jako treść pod
+lead magnet lub
+afiliację
+książkową
+Ian Dunbar o
+szczeniakach
+Jeśli w domu
+pojawia się
+szczeniak, te
+książki
+pomagają
+ułożyć
+priorytety
+zanim zaczną
+się problemy z
+gryzieniem,
+lękiem czy
+chaosem w
+domu.
+książka
+brak na
+Amazon.pl w
+publicznym
+indeksie;
+alternatywa:
+Dog Star
+Daily / Libristo
+AFFIL_LINK_4
+AFFIL_LINK_5
+How Dogs
+Work — 
+Raymond
+Coppinger,
+Mark Feinstein
+Książka patrząca
+na psa bardziej
+biologicznie i
+etologicznie niż
+poradnikowo.
+Pomaga
+zrozumieć, skąd
+biorą się
+zachowania
+psów i jak ich
+ciało, rozwój i
+środowisko
+wpływają na
+funkcjonowanie.
+• wartościowa
+dla bardziej
+świadomych
+opiekunów •
+wzmacnia
+ekspercki
+charakter sekcji •
+odróżnia
+Niezbędnik od
+„listy gadżetów”
+How Dogs
+Work
+Coppinger
+To świetny
+wybór dla
+osób, które
+chcą pójść
+krok dalej i
+zrozumieć psa
+nie tylko
+„użytkowo”,
+ale naprawdę
+etologicznie.
+książka
+brak na
+Amazon.pl w
+publicznym
+indeksie;
+alternatywa:
+Enbook /
+University of
+Chicago Press
+AFFIL_LINK_5
+8
+9
+3
+
+--- PAGE 4 ---
+Pozycja Tytuł / autor lub
+marka Krótki opis Dlaczego
+polecam
+Sugerowany
+anchor text
+Przykładowy
+tekst
+rekomendacji
+Kategoria Amazon.pl /
+alternatywa
+Placeholder
+linku Źródła
+AFFIL_LINK_6
+PetSafe Easy
+Walk / Deluxe
+Easy Walk — 
+PetSafe
+Oryginalne szelki
+front-clip
+zaprojektowane
+do delikatnego
+ograniczania
+ciągnięcia na
+smyczy. Marka
+podkreśla
+mocowanie z
+przodu klatki
+piersiowej, a
+polskie źródła
+opisują model
+jako rozwiązanie,
+które nie uciska
+tchawicy jak
+klasyczne, źle
+dopasowane
+systemy.
+• naturalny
+bestseller
+afiliacyjny •
+bardzo czytelna
+korzyść dla
+klienta • mocno
+spójny z
+treningiem
+spacerowym
+oryginalne
+szelki Easy
+Walk
+Dla psów,
+które ciągną
+na spacerze,
+to jedno z
+najbardziej
+sensownych
+narzędzi
+startowych —
+pod
+warunkiem
+dobrego
+dopasowania i
+pracy nad
+emocjami.
+akcesorium
+tak —
+potwierdzone;
+oferty
+Amazon.pl są
+widoczne w
+publicznym
+indeksie
+AFFIL_LINK_6
+AFFIL_LINK_7
+Dr Seidel Lick It
+Roll-On 15 ml
+— dr Seidel
+Płynny smakołyk
+treningowy w
+poręcznej formie
+roll-on. Źródła
+sklepowe opisują
+go jako
+niskokaloryczny,
+wygodny w
+użyciu i pomocny
+w skupieniu
+uwagi psa
+podczas spaceru
+lub treningu.
+• świetny
+produkt
+impulsowy •
+dobrze działa w
+pakiecie z matą
+do lizania lub
+klikerem • ma
+silny „problem–
+rozwiązanie”
+Lick It Roll-On
+dr Seidel
+Mały, czysty w
+użyciu i
+bardzo
+praktyczny —
+szczególnie
+wtedy, gdy
+chcesz szybko
+nagrodzić
+skupienie bez
+brudzenia rąk.
+akcesorium
+brak na
+Amazon.pl w
+publicznym
+indeksie;
+alternatywa:
+LickiMat
+Soother/Buddy
+AFFIL_LINK_7
+10
+11
+4
+
+--- PAGE 5 ---
+Pozycja Tytuł / autor lub
+marka Krótki opis Dlaczego
+polecam
+Sugerowany
+anchor text
+Przykładowy
+tekst
+rekomendacji
+Kategoria Amazon.pl /
+alternatywa
+Placeholder
+linku Źródła
+AFFIL_LINK_8
+Clik-R Trainer /
+kliker
+treningowy — 
+PetSafe
+Klasyczny
+marker
+dźwiękowy z
+paskiem na
+palec,
+zaprojektowany
+do precyzyjnego
+oznaczania
+zachowań. To
+prosty, tani
+produkt, który
+może być
+świetnym
+wejściem do
+treningu
+pozytywnego.
+• niski próg
+cenowy • wysoka
+zgodność z
+książką Karen
+Pryor • dobry
+element zestawu
+startowego
+kliker dla psa
+Kliker to
+drobiazg, ale
+potrafi bardzo
+uporządkować
+trening i
+przyspieszyć
+naukę, jeśli
+opiekun
+rozumie, jak
+go używać.
+akcesorium
+brak na
+Amazon.pl w
+publicznym
+indeksie;
+alternatywa:
+Trixie Kliker
+Sporting
+AFFIL_LINK_8
+AFFIL_LINK_9
+HALTI Training
+Lead — 
+Company of
+Animals /
+HALTI
+Regulowana
+smycz
+treningowa o
+wielu
+konfiguracjach
+długości i
+mocowania.
+Źródła opisują ją
+jako rozwiązanie
+do spaceru,
+treningu,
+przypięcia do
+szelek lub pracy
+nad kontrolą bez
+szarpania.
+• praktyczna dla
+psów w nauce
+chodzenia •
+rozszerza koszyk
+zakupowy przy
+Easy Walk •
+dobra do treści o
+spacerach i
+przywołaniu
+smycz
+treningowa
+HALTI
+To jedna z
+tych rzeczy,
+które
+naprawdę
+ułatwiają
+codzienne
+życie —
+szczególnie
+jeśli chcesz
+mieć jedną
+smycz do
+różnych
+scenariuszy
+spacerowych.
+akcesorium
+brak na
+Amazon.pl w
+publicznym
+indeksie;
+alternatywa:
+linka
+treningowa
+10–15 m
+AFFIL_LINK_9
+AFFIL_LINK_10
+Mata
+antypoślizgowa
+do
+transportera
+Capri — Trixie
+Miękka,
+piankowa mata z
+antypoślizgowym
+spodem do
+transporterów
+Capri. Zwiększa
+stabilność i
+komfort podróży,
+a do tego nadaje
+się do prania.
+• bardzo
+sensowny upsell
+do transportera •
+wspiera komfort
+i bezpieczeństwo
+• przydatna
+także w pracy z
+psami/kotami
+wrażliwymi na
+śliskie podłoże
+mata
+antypoślizgowa
+do
+transportera
+Drobny
+dodatek, który
+potrafi realnie
+poprawić
+komfort
+podróży i
+ograniczyć
+ślizganie się
+zwierzęcia w
+transporterze.
+akcesorium
+brak na
+Amazon.pl w
+publicznym
+indeksie;
+alternatywa:
+mata Trixie
+Journey lub
+mata pod
+kuwetę / pod
+miskę
+AFFIL_LINK_10
+12
+13
+14
+5
+
+--- PAGE 6 ---
+Pozycja Tytuł / autor lub
+marka Krótki opis Dlaczego
+polecam
+Sugerowany
+anchor text
+Przykładowy
+tekst
+rekomendacji
+Kategoria Amazon.pl /
+alternatywa
+Placeholder
+linku Źródła
+AFFIL_LINK_11
+LickiMat
+Classic Buddy /
+Soother — 
+LickiMat
+Mata do lizania
+opracowana
+przez
+weterynarzy,
+projektowana z
+myślą o
+dobrostanie
+zwierzęcia.
+Oficjalne
+materiały
+wskazują na
+zastosowania
+związane z
+redukcją nudy,
+odwróceniem
+uwagi,
+spowolnieniem
+jedzenia i
+wsparciem w
+sytuacjach
+stresowych.
+• silny produkt
+behawioralny •
+działa dla psów i
+kotów • bardzo
+dobry
+contentowo:
+pielęgnacja, wet,
+burze, nuda
+mata do lizania
+LickiMat
+To jeden z
+najbardziej
+uniwersalnych
+produktów do
+pracy nad
+spokojem,
+zajęciem i
+bezpiecznym
+„wylizaniem”
+emocji.
+akcesorium
+brak
+potwierdzenia
+Amazon.pl;
+alternatywa:
+polskie sklepy
+zoologiczne /
+Bonami
+AFFIL_LINK_11
+AFFIL_LINK_12KONG Classic
+— KONG
+Ikoniczna
+zabawka do
+wypełniania
+jedzeniem lub
+pastą, wykonana
+z naturalnej
+gumy. Oficjalne
+źródła KONG
+opisują ją jako
+produkt do
+wzbogacenia
+środowiska,
+żucia, aportu i
+wydłużania
+zabawy przez
+wypełnienie
+nagrodą.
+• bardzo mocny
+produkt
+evergreen • silna
+rozpoznawalność
+marki • świetny
+do treści „jak
+zostawić psa
+samego” lub „co
+zamiast nudy”
+KONG Classic
+Jeśli mam
+wskazać jedną
+zabawkę,
+która
+najczęściej
+„zarabia na
+siebie”
+użytecznością,
+KONG Classic
+jest bardzo
+wysoko na tej
+liście.
+akcesorium
+brak
+potwierdzenia
+Amazon.pl;
+alternatywa:
+sklepy
+zoologiczne z
+KONG
+AFFIL_LINK_12
+15
+16
+6
+
+--- PAGE 7 ---
+Pozycja Tytuł / autor lub
+marka Krótki opis Dlaczego
+polecam
+Sugerowany
+anchor text
+Przykładowy
+tekst
+rekomendacji
+Kategoria Amazon.pl /
+alternatywa
+Placeholder
+linku Źródła
+AFFIL_LINK_13KONG Wobbler
+— KONG
+Interaktywna
+zabawka–
+podajnik karmy i
+smakołyków,
+która chwieje się
+i roluje po
+popchnięciu
+nosem lub łapą.
+Oficjalne
+materiały KONG
+opisują ją jako
+sposób na
+stymulację
+psychiczną,
+spowolnienie
+jedzenia i
+zwiększenie
+aktywności.
+• mocny produkt
+do enrichmentu
+• świetny do
+przewlekłej nudy
+i szybkiego
+jedzenia • dobrze
+wygląda na
+zdjęciach i w
+video
+KONG Wobbler
+Polecam
+szczególnie
+psom, które
+jedzą zbyt
+szybko albo
+potrzebują
+bardziej
+angażującego
+karmienia niż
+zwykła miska.
+akcesorium
+brak
+potwierdzenia
+Amazon.pl;
+alternatywa:
+porównywarki
+i sklepy z
+KONG
+AFFIL_LINK_13
+AFFIL_LINK_14
+Chewies
+Przysmaki
+treningowe
+Maxi 200 g — 
+Chewies
+Amazon.pl
+pokazuje ten
+produkt jako
+bezcukrowe
+przysmaki
+treningowe z
+dużą zawartością
+mięsa. To
+wygodny typ
+produktu na
+szybkie
+powtórzenia,
+naukę skupienia
+i codzienne
+nagradzanie.
+• potwierdzona
+obecność na
+Amazon.pl •
+czytelna funkcja
+treningowa •
+dobry produkt
+towarzyszący do
+klikera i szelek
+przysmaki
+treningowe
+Chewies
+Dobre
+przysmaki
+treningowe
+powinny być
+małe,
+wygodne i
+smakowite —
+ten typ
+produktu
+zwykle
+sprawdza się
+właśnie w
+takiej roli.
+akcesoriumtak —
+potwierdzoneAFFIL_LINK_14
+17
+18
+7
+
+--- PAGE 8 ---
+Pozycja Tytuł / autor lub
+marka Krótki opis Dlaczego
+polecam
+Sugerowany
+anchor text
+Przykładowy
+tekst
+rekomendacji
+Kategoria Amazon.pl /
+alternatywa
+Placeholder
+linku Źródła
+AFFIL_LINK_15
+Trixie Friends
+on Tour Capri 3
+Open Top / Be
+Eco Capri — 
+Trixie
+Transporter z
+twardą
+konstrukcją,
+wygodny do
+podróży i wizyt w
+gabinecie.
+Publicznie
+indeksowane
+wyniki wskazują
+oferty Amazon.pl
+dla serii Capri i
+modeli Trixie
+Friends on Tour ,
+a źródła
+produktowe
+podkreślają
+praktyczne cechy
+serii, takie jak
+uchwyt, klapka i
+kompatybilność z
+matami.
+• przydatny i dla
+psów, i dla kotów
+• dobrze łączy się
+z matą
+antypoślizgową •
+wspiera treści o
+treningu
+transportera i
+wizytach wet
+transporter
+Trixie Capri
+To rozsądny
+wybór dla
+opiekunów,
+którzy chcą
+mieć
+transporter
+nie tylko „na
+awarię”, ale
+do
+regularnego,
+spokojnego
+treningu
+podróży.
+akcesoriumtak —
+potwierdzoneAFFIL_LINK_15
+AFFIL_LINK_16
+KYG koc / mata
+ochronna do
+samochodu — 
+KYG
+W publicznym
+indeksie
+Amazon.pl i
+porównywarek
+widać warianty
+mat KYG z osłoną
+boczną,
+okienkiem,
+wodoodporną
+powierzchnią i
+warstwą
+antypoślizgową.
+To produkt
+typowo
+„użytkowy”, ale
+bardzo ważny dla
+komfortu
+podróży i
+ochrony auta.
+• bardzo dobry
+produkt
+afiliacyjny o
+szerokim
+popycie •
+czytelna korzyść i
+dobry próg
+cenowy • pasuje
+do treści o
+bezpieczeństwie
+w aucie
+mata do
+samochodu dla
+psa KYG
+Jeśli jeździsz z
+psem autem,
+to jedna z tych
+rzeczy, które
+poprawiają
+komfort
+podróży i
+Tobie, i
+zwierzęciu, a
+przy okazji
+chronią
+tapicerkę.
+akcesoriumtak —
+potwierdzoneAFFIL_LINK_16
+Gotowe anchory i placeholdery afiliacyjne
+[Sygnały uspokajające Turid Rugaas] -> AFFIL_LINK_1
+[Drugi koniec smyczy Patricia McConnell] -> AFFIL_LINK_2
+[Kliker Karen Pryor] -> AFFIL_LINK_3
+19
+20
+8
+
+--- PAGE 9 ---
+[Ian Dunbar o szczeniakach] -> AFFIL_LINK_4
+[How Dogs Work Coppinger] -> AFFIL_LINK_5
+[oryginalne szelki Easy Walk] -> AFFIL_LINK_6
+[Lick It Roll-On dr Seidel] -> AFFIL_LINK_7
+[kliker dla psa] -> AFFIL_LINK_8
+[smycz treningowa HALTI] -> AFFIL_LINK_9
+[mata antypoślizgowa do transportera] -> AFFIL_LINK_10
+[mata do lizania LickiMat] -> AFFIL_LINK_11
+[KONG Classic] -> AFFIL_LINK_12
+[KONG Wobbler] -> AFFIL_LINK_13
+[przysmaki treningowe Chewies] -> AFFIL_LINK_14
+[transporter Trixie Capri] -> AFFIL_LINK_15
+[mata do samochodu dla psa KYG] -> AFFIL_LINK_16
+Polecenia dla Codex lub copywritera
+Dodaj link afiliacyjny AFFIL_LINK_1 do tekstu: "Kup na Amazon: Sygnały 
+uspokajające Turid Rugaas (AFFIL_LINK_1)"
+Dodaj link afiliacyjny AFFIL_LINK_2 do tekstu: "Kup na Amazon: Drugi koniec 
+smyczy Patricia McConnell (AFFIL_LINK_2)"
+Dodaj link afiliacyjny AFFIL_LINK_3 do tekstu: "Kup na Amazon: Kliker Karen 
+Pryor (AFFIL_LINK_3)"
+Dodaj link afiliacyjny AFFIL_LINK_4 do tekstu: "Kup na Amazon: Ian Dunbar o 
+szczeniakach (AFFIL_LINK_4)"
+Dodaj link afiliacyjny AFFIL_LINK_5 do tekstu: "Kup na Amazon: How Dogs Work 
+Coppinger (AFFIL_LINK_5)"
+Dodaj link afiliacyjny AFFIL_LINK_6 do tekstu: "Kup na Amazon: oryginalne 
+szelki Easy Walk (AFFIL_LINK_6)"
+Dodaj link afiliacyjny AFFIL_LINK_7 do tekstu: "Kup na Amazon: Lick It Roll-
+On dr Seidel (AFFIL_LINK_7)"
+Dodaj link afiliacyjny AFFIL_LINK_8 do tekstu: "Kup na Amazon: kliker dla psa 
+(AFFIL_LINK_8)"
+Dodaj link afiliacyjny AFFIL_LINK_9 do tekstu: "Kup na Amazon: smycz 
+treningowa HALTI (AFFIL_LINK_9)"
+Dodaj link afiliacyjny AFFIL_LINK_10 do tekstu: "Kup na Amazon: mata 
+antypoślizgowa do transportera (AFFIL_LINK_10)"
+Dodaj link afiliacyjny AFFIL_LINK_11 do tekstu: "Kup na Amazon: mata do 
+lizania LickiMat (AFFIL_LINK_11)"
+Dodaj link afiliacyjny AFFIL_LINK_12 do tekstu: "Kup na Amazon: KONG Classic 
+(AFFIL_LINK_12)"
+Dodaj link afiliacyjny AFFIL_LINK_13 do tekstu: "Kup na Amazon: KONG Wobbler 
+(AFFIL_LINK_13)"
+Dodaj link afiliacyjny AFFIL_LINK_14 do tekstu: "Kup na Amazon: przysmaki 
+treningowe Chewies (AFFIL_LINK_14)"
+Dodaj link afiliacyjny AFFIL_LINK_15 do tekstu: "Kup na Amazon: transporter 
+Trixie Capri (AFFIL_LINK_15)"
+Dodaj link afiliacyjny AFFIL_LINK_16 do tekstu: "Kup na Amazon: mata do 
+samochodu dla psa KYG (AFFIL_LINK_16)"
+9
+
+--- PAGE 10 ---
+Komponenty HTML i CSS gotowe do wklejenia
+Google rekomenduje oznaczanie linków sponsorowanych i afiliacyjnych wartością rel="sponsored",
+a dla stron produktowych warto wdrażać uporządkowane dane Product, bo mogą wzbogacać wynik
+w Google o cenę, dostępność i ocenę. Poniższy komponent jest więc przygotowany tak, aby był
+jednocześnie estetyczny, responsywny i zgodny z dobrymi praktykami SEO. 
+<sectionclass="niezbednik-sekcja"aria-labelledby="niezbednik-tytul">
+<divclass="niezbednik-wrap">
+<headerclass="niezbednik-header">
+<h2id="niezbednik-tytul">Niezbędnik</h2>
+<p class="niezbednik-lead">
+        Sprawdzone książki i akcesoria wspierające spokojniejsze życie z psem 
+lub kotem.
+</p>
+</header>
+<divclass="niezbednik-grid">
+<articleclass="produkt-card"aria-labelledby="produkt-1-tytul">
+<a class="produkt-obraz-link"href="AFFIL_LINK_6"rel="sponsored 
+noopener"target="_blank"aria-label="Kup oryginalne szelki Easy Walk na 
+Amazon">
+<img
+src="IMAGE_PLACEHOLDER_6"
+alt="Oryginalne szelki Easy Walk w kolorze czarnym"
+loading="lazy"
+width="640"
+height="640"
+>
+</a>
+<divclass="produkt-body">
+<p class="produkt-kategoria">Szelki i spacery</p>
+<h3id="produkt-1-tytul"class="produkt-tytul">PetSafe Easy Walk</
+h3>
+<divclass="produkt-meta"aria-label="Ocena i cena">
+<spanclass="produkt-gwiazdki"aria-label="Ocena produktu: 5 na 
+5">★★★★★</span>
+<spanclass="produkt-cena">od 108,74 zł</span>
+</div>
+<p class="produkt-opis">
+            Oryginalne szelki front-clip, które pomagają delikatnie 
+ograniczać ciągnięcie na smyczy
+            i poprawiają kontrolę podczas spaceru.
+</p>
+<a
+class="produkt-cta"
+21
+10
+
+--- PAGE 11 ---
+href="AFFIL_LINK_6"
+rel="sponsored noopener"
+target="_blank"
+aria-label="Kup PetSafe Easy Walk na Amazon"
+>
+            Kup na Amazon
+</a>
+</div>
+</article>
+<articleclass="produkt-card"aria-labelledby="produkt-2-tytul">
+<a class="produkt-obraz-link"href="AFFIL_LINK_11"rel="sponsored 
+noopener"target="_blank"aria-label="Kup matę do lizania LickiMat na 
+Amazon">
+<img
+src="IMAGE_PLACEHOLDER_11"
+alt="Mata do lizania LickiMat w kolorze zielonym"
+loading="lazy"
+width="640"
+height="640"
+>
+</a>
+<divclass="produkt-body">
+<p class="produkt-kategoria">Enrichment</p>
+<h3id="produkt-2-tytul"class="produkt-tytul">LickiMat Buddy / 
+Soother</h3>
+<divclass="produkt-meta"aria-label="Ocena i cena">
+<spanclass="produkt-gwiazdki"aria-label="Ocena produktu: 5 na 
+5">★★★★★</span>
+<spanclass="produkt-cena">od 31,90 zł</span>
+</div>
+<p class="produkt-opis">
+            Mata do lizania wspierająca spokojniejsze jedzenie, zajęcie psa 
+lub kota i rozładowanie
+            napięcia w trudniejszych momentach dnia.
+</p>
+<a
+class="produkt-cta"
+href="AFFIL_LINK_11"
+rel="sponsored noopener"
+target="_blank"
+aria-label="Kup LickiMat na Amazon"
+>
+            Kup na Amazon
+</a>
+</div>
+</article>
+11
+
+--- PAGE 12 ---
+<articleclass="produkt-card"aria-labelledby="produkt-3-tytul">
+<a class="produkt-obraz-link"href="AFFIL_LINK_2"rel="sponsored 
+noopener"target="_blank"aria-label="Kup książkę Drugi koniec smyczy na 
+Amazon">
+<img
+src="IMAGE_PLACEHOLDER_2"
+alt="Okładka książki Drugi koniec smyczy Patricii McConnell"
+loading="lazy"
+width="640"
+height="640"
+>
+</a>
+<divclass="produkt-body">
+<p class="produkt-kategoria">Książki</p>
+<h3id="produkt-3-tytul"class="produkt-tytul">Drugi koniec 
+smyczy</h3>
+<divclass="produkt-meta"aria-label="Ocena i cena">
+<spanclass="produkt-gwiazdki"aria-label="Ocena produktu: 5 na 
+5">★★★★★</span>
+<spanclass="produkt-cena">ok. 29–40 zł</span>
+</div>
+<p class="produkt-opis">
+            Klasyczna książka o komunikacji człowieka z psem i o tym, jak 
+budować bardziej czytelną,
+            bezpieczną relację na co dzień.
+</p>
+<a
+class="produkt-cta"
+href="AFFIL_LINK_2"
+rel="sponsored noopener"
+target="_blank"
+aria-label="Kup Drugi koniec smyczy na Amazon"
+>
+            Kup na Amazon
+</a>
+</div>
+</article>
+</div>
+</div>
+</section>
+:root{
+--nb-bg: #fcfbf7;
+--nb-surface: #ffffff;
+--nb-text: #1f2937;
+12
+
+--- PAGE 13 ---
+--nb-muted: #667085;
+--nb-line: #e7e2d8;
+--nb-accent: #7a9b76;
+--nb-accent-strong: #5e7f5b;
+--nb-shadow: 0 10px30pxrgba(31, 41, 55, 0.08);
+--nb-radius: 18px;
+--nb-max: 1200px;
+}
+.niezbednik-sekcja{
+background: var(--nb-bg);
+color: var(--nb-text);
+padding: clamp(24px, 4vw, 56px) 16px;
+}
+.niezbednik-wrap{
+max-width: var(--nb-max);
+margin: 0 auto;
+}
+.niezbednik-header{
+margin-bottom: 24px;
+}
+.niezbednik-headerh2{
+font-size: clamp(1.8rem, 3vw, 2.6rem);
+line-height: 1.1;
+margin: 0 0 8px;
+}
+.niezbednik-lead{
+margin: 0;
+max-width: 68ch;
+color: var(--nb-muted);
+font-size: 1rem;
+line-height: 1.6;
+}
+.niezbednik-grid{
+display: grid;
+grid-template-columns: repeat(3, minmax(0, 1fr));
+gap: 20px;
+}
+.produkt-card{
+display: flex;
+flex-direction: column;
+background: var(--nb-surface);
+border: 1pxsolidvar(--nb-line);
+border-radius: var(--nb-radius);
+overflow: hidden;
+13
+
+--- PAGE 14 ---
+box-shadow: var(--nb-shadow);
+min-height: 100%;
+}
+.produkt-obraz-link{
+display: block;
+aspect-ratio: 1 / 1;
+background: #f4efe7;
+}
+.produkt-obraz-linkimg{
+display: block;
+width: 100%;
+height: 100%;
+object-fit: cover;
+}
+.produkt-body{
+display: flex;
+flex-direction: column;
+gap: 10px;
+padding: 18px;
+flex: 1;
+}
+.produkt-kategoria{
+margin: 0;
+color: var(--nb-accent-strong);
+font-size: 0.82rem;
+font-weight: 700;
+text-transform: uppercase;
+letter-spacing: 0.04em;
+}
+.produkt-tytul{
+margin: 0;
+font-size: 1.2rem;
+line-height: 1.3;
+}
+.produkt-meta{
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 12px;
+flex-wrap: wrap;
+}
+.produkt-gwiazdki{
+letter-spacing: 0.06em;
+font-size: 0.95rem;
+14
+
+--- PAGE 15 ---
+}
+.produkt-cena{
+font-weight: 700;
+}
+.produkt-opis{
+margin: 0;
+color: var(--nb-muted);
+line-height: 1.6;
+flex: 1;
+}
+.produkt-cta{
+display: inline-flex;
+align-items: center;
+justify-content: center;
+min-height: 44px;
+padding: 12px16px;
+border-radius: 999px;
+background: var(--nb-accent);
+color: #fff;
+text-decoration: none;
+font-weight: 700;
+transition: transform.15s ease, background-color.15s ease, box-shadow.
+15s ease;
+}
+.produkt-cta:hover,
+.produkt-cta:focus-visible{
+background: var(--nb-accent-strong);
+transform: translateY(-1px);
+box-shadow: 0 8px18pxrgba(94,127,91,.25);
+}
+.produkt-obraz-link:focus-visible,
+.produkt-cta:focus-visible{
+outline: 3pxsolid#111827;
+outline-offset: 3px;
+}
+@media(max-width: 960px){
+.niezbednik-grid{
+grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+}
+@media(max-width: 640px){
+.niezbednik-grid{
+grid-template-columns: 1fr;
+}
+15
+
+--- PAGE 16 ---
+.produkt-body{
+padding: 16px;
+}
+}
+Warianty układu sekcji Niezbędnik
+Porównanie wariantów
+Wariant Jak wygląda Kiedy wybrać Plusy Ryzyka Wskazówki
+techniczne
+Siatka
+trzech
+kolumn
+Klasyczny
+grid kart, 3
+kolumny
+desktop / 2
+tablet / 1
+mobile
+Gdy zależy Ci
+na prostym
+wdrożeniu i
+dobrej
+skanowalności
+najszybszy do
+wdrożenia,
+świetny pod
+SEO, dobry na
+desktop i
+mobile
+przy większej
+liczbie
+produktów
+może robić się
+„ściana kart”
+czysty CSS
+Grid, bez JS;
+dopnij lazy-
+loading
+obrazów i
+filtry jako
+anchor links
+Lista z
+filtrem
+Pionowa
+lista z
+miniaturą,
+opisem i
+filtrami po
+kategoriach
+Gdy chcesz
+mocniej
+wspierać
+czytanie i
+decyzję
+zakupową
+lepsza dla
+dłuższych
+opisów,
+wygodna dla
+książek i
+rekomendacji
+eksperckich,
+łatwo dodać
+tagi „Psy/Koty”
+wymaga
+lepszej
+architektury
+treści, inaczej
+może zrobić
+się zbyt długa
+polecam
+Vanilla JS lub
+Alpine.js;
+filtry jako
+checkboxy
+lub przyciski
+z aria-
+pressed
+Karuzela
+produktów
+Przesuwane
+karty, np.
+„Polecane”,
+„Na start”,
+„Do auta”
+Tylko dla sekcji
+pobocznej, np.
+„Top 6”
+atrakcyjna
+wizualnie,
+dobra do
+promowania
+bestsellerów,
+działa na
+mobile
+łatwo
+pogorszyć
+dostępność i
+odkrywalność
+treści
+jeśli używasz
+karuzeli,
+zastosuj
+Embla lub
+Splide oraz
+przyciski
+prev/next,
+pauzę auto-
+play i pełną
+obsługę
+klawiatury
+zgodnie z
+WAI/W3C 
+Rekomendacja układu
+Dla regulskibehawiorysta.pl rekomenduję układ hybrydowy: u góry 3–4 karty „Polecane na start”,
+niżej lista z filtrem. Taki model lepiej wykorzystuje eksperckość marki, bo pozwala dodać krótkie
+komentarze behawioralne, a jednocześnie nie zamyka całej sekcji w samej siatce sprzedażowej. Karuzelę
+22
+16
+
+--- PAGE 17 ---
+warto zostawić wyłącznie jako element dodatkowy, np. „Najczęściej wybierane” lub „Nowo dodane”. W
+karuzelach W3C zaleca m.in. pełną obsługę klawiatury, możliwość zatrzymania ruchu, czytelny region i
+komunikowanie aktualnego slajdu. 
+Mockup przepływu sekcji
+flowchart TD
+    A[H2: Niezbędnik] --> B[Krótki lead ekspercki]
+    B --> C[Top polecane: 3-4 karty]
+    C --> D[Filtry: Psy / Koty / Książki / Trening / Transport / Samochód]
+    D --> E[Listowanie produktów]
+    E --> F[Karta produktu]
+    F --> F1[Zdjęcie]
+    F --> F2[Tytuł i marka]
+    F --> F3[Krótki opis]
+    F --> F4[Tagi]
+    F --> F5[Cena]
+    F --> F6[CTA Kup na Amazon]
+    E --> G[Blok edukacyjny]
+    G --> H[FAQ lub poradnik zakupowy]
+SEO, schema i compliance afiliacyjne
+Meta title i meta description
+Google zaleca, aby tytuły stron były opisowe i zwięzłe, a meta description była unikalna i trafnie
+streszczała zawartość strony. Dla podstrony „Niezbędnik” rekomenduję: 
+Meta title
+Niezbędnik behawiorysty | książki i akcesoria dla psów i kotów
+Meta description
+Starannie wybrane książki i akcesoria polecane przez behawiorystę: trening 
+pozytywny, spacery, transport, enrichment i spokojniejsza codzienność psa lub 
+kota.
+Przykład JSON-LD schema.org Product
+Google dokumentuje, że dane uporządkowane Product mogą pomóc wzbogacić wyniki wyszukiwania
+o informacje takie jak cena, dostępność, ocena czy dane oferty. Poniższy snippet jest prostym,
+bezpiecznym punktem startowym. 
+<scripttype="application/ld+json">
+{
+"@context": "https://schema.org",
+"@type": "Product",
+"name": "PetSafe Easy Walk",
+"image": [
+23
+24
+25
+17
+
+--- PAGE 18 ---
+"IMAGE_PLACEHOLDER_6"
+],
+"description": "Oryginalne szelki front-clip pomagające ograniczać 
+ciągnięcie na smyczy i poprawiające komfort spaceru.",
+"brand": {
+"@type": "Brand",
+"name": "PetSafe"
+},
+"category": "Szelki dla psa",
+"sku": "SKU_PLACEHOLDER_6",
+"offers": {
+"@type": "Offer",
+"url": "AFFIL_LINK_6",
+"priceCurrency": "PLN",
+"price": "108.74",
+"availability": "https://schema.org/InStock",
+"itemCondition": "https://schema.org/NewCondition"
+}
+}
+</script>
+Zasady linków afiliacyjnych i oznaczeń
+Google rekomenduje oznaczanie linków płatnych i afiliacyjnych jako rel="sponsored". Dlatego CTA
+w kartach powinno używać właśnie tego atrybutu, opcjonalnie razem z noopener przy otwieraniu
+nowej karty. 
+Checklist zdjęć i praw do wykorzystania
+Najbezpieczniejszy model zdjęć dla sekcji „Niezbędnik” wygląda tak:
+najpierw własne zdjęcia i packshoty — to najlepsza opcja wizerunkowo i prawnie,
+potem materiały producenta lub dystrybutora z wyraźną zgodą,
+a dopiero na końcu obrazy z Amazon w ramach dozwolonego Program Content, nie jako
+„ręcznie pobrane” grafiki z karty produktu. Amazon w zasadach Associates wskazuje, że treści
+produktowe, w tym obrazy, są udostępniane jako Program Content w ramach programu, a znaki
+i logotypy Amazon można wykorzystywać wyłącznie zgodnie z ich wytycznymi; dla wydawców
+udostępniony jest znak „Available at Amazon”, natomiast samodzielne używanie standardowego
+logo Amazon nie jest dozwolone bez osobnej zgody. 
+Praktyczna checklista:
+sprawdź, czy masz prawo do zdjęcia i czy obejmuje ono publikację komercyjną,
+jeśli używasz obrazów producenta, zachowaj mail lub zapis zgody,
+jeśli używasz materiałów Amazon, rób to przez narzędzia programu / Program Content, a nie
+przez ręczne kopiowanie,
+nie używaj standalone logo Amazon; jeśli chcesz badge, użyj dopuszczonego wariantu
+„Available at Amazon”,
+utrzymuj spójne alty: opisowe, krótkie, bez keyword stuffing. 
+26
+• 
+• 
+• 
+27
+• 
+• 
+• 
+• 
+• 28
+18
+
+--- PAGE 19 ---
+Tagi, zdjęcia i priorytety wdrożenia
+Proponowane tagi i kategorie filtrów
+Najlepszy zestaw filtrów dla tej sekcji to:
+Tag / filtr Zastosowanie
+Książki wszystkie pozycje edukacyjne
+Trening kliker , smycz, przysmaki, książki treningowe
+Spacery i szelki Easy Walk, smycze, akcesoria spacerowe
+Zabawki i enrichmentKONG, LickiMat, Wobbler
+Smakołyki Chewies, Lick It Roll-On
+Transport transporter , mata do transportera
+Samochód mata / pokrowiec do auta
+Koty produkty i treści użyteczne także dla kotów
+Sugestie zdjęć i typy kadrów
+Dla tej marki najlepiej zadziałają zdjęcia użytkowe, spokojne i wiarygodne. Zamiast „katalogowego
+przepychu” rekomenduję:
+kadr produkt + użycie — np. Easy Walk założone na psa w neutralnym spacerze,
+kadr dłoni opiekuna — np. kliker , Lick It Roll-On, wrzucanie smakołyków do Wobblera,
+kadr domowy / gabinetowy — LickiMat podczas pielęgnacji, transporter z matą w tle,
+flat lay ekspercki — książka + kliker + przysmaki + notatnik, dobrze działający jako grafika sekcji,
+kadr „problem–rozwiązanie” — mata samochodowa w aucie, transporter z antypoślizgową
+wkładką.
+Priorytety wdrożenia
+Priorytet Zadanie Efekt biznesowy Szacowany
+wysiłek
+Quick win uruchomienie podstrony „Niezbędnik”
+z 8–10 produktami startowymi
+szybkie wejście w
+monetyzację i
+indeksację
+niski
+Quick win wdrożenie kart z rel="sponsored"
+i poprawnymi altami
+porządek SEO i
+compliance niski
+Quick win dodanie 2–3 bloków eksperckich nad
+listą produktów
+wyższe zaufanie i lepszy
+CTR niski
+Quick win filtrowanie po tagach + sekcja
+„Polecane na start”
+łatwiejsza eksploracja
+sekcji niski / średni
+• 
+• 
+• 
+• 
+• 
+19
+
+--- PAGE 20 ---
+Priorytet Zadanie Efekt biznesowy Szacowany
+wysiłek
+Strategicznewłasna sesja zdjęciowa 12–16
+produktów
+silniejsza marka i
+większa klikalność średni
+Strategicznewdrożenie JSON-LD Product i test w
+Rich Results Test
+lepsza czytelność dla
+Google średni
+Strategicznerozbudowa o krótkie FAQ zakupowe
+przy kategoriach
+więcej long-tail SEO i
+wyższa użyteczność średni
+Strategiczneosobne landing pages: „książki”,
+„spacery”, „samochód”, „koty”
+większa powierzchnia
+SEO i afiliacyjna
+średni /
+wysoki
+Finalna rekomendacja redakcyjna
+Jeśli miałbym wskazać najbezpieczniejszy start, wdrożyłbym od razu: Drugi koniec smyczy, Sygnały
+uspokajające, Easy Walk, LickiMat, KONG Classic, Chewies, transporter Trixie i matę KYG do auta.
+To zestaw, który dobrze łączy eksperckość, użyteczność i potencjał afiliacyjny, a przy tym pozostaje
+spójny z publicznie widoczną filozofią pracy opartą na etologii, profilaktyce i treningu bez przemocy. 
+https://behawioryscicoape.pl/
+https://behawioryscicoape.pl/
+https://www.skapiec.pl/site/cat/5913/comp/104461917
+https://www.skapiec.pl/site/cat/5913/comp/104461917
+https://coape.pl/behawiorysci-coape
+https://coape.pl/behawiorysci-coape
+https://www.galaktyka.com.pl/zwierzeta/sygnaly-uspokajajace-jak-psy-unikaja-konfliktow
+https://www.galaktyka.com.pl/zwierzeta/sygnaly-uspokajajace-jak-psy-unikaja-konfliktow
+https://www.galaktyka.com.pl/zwierzeta/drugi-koniec-smyczy-jak-ksztaltowac-wiez-z-psem
+https://www.galaktyka.com.pl/zwierzeta/drugi-koniec-smyczy-jak-ksztaltowac-wiez-z-psem
+https://www.naukowa.pl/Ksiazki/kliker-skuteczne-szkolenie-psa-1014319
+https://www.naukowa.pl/Ksiazki/kliker-skuteczne-szkolenie-psa-1014319
+BEFORE You Get Your Puppy | Dog Star Daily
+https://www.dogstardaily.com/storefront/you-get-your-puppy?utm_source=chatgpt.com
+https://press.uchicago.edu/ucp/books/book/chicago/H/bo18378358.html
+https://press.uchicago.edu/ucp/books/book/chicago/H/bo18378358.html
+https://www.petsafe.pl/szelki-dla-psa-dzialajace-jak-kantarek---easywalk-r-ml-id-2309.aspx
+https://www.petsafe.pl/szelki-dla-psa-dzialajace-jak-kantarek---easywalk-r-ml-id-2309.aspx
+https://zoozone.pl/dr-seidel-lick-it-roll-on-smakolyk-treningowy-15ml.html
+https://zoozone.pl/dr-seidel-lick-it-roll-on-smakolyk-treningowy-15ml.html
+https://www.truevalue.com/product/clik-r-trainer/
+https://www.truevalue.com/product/clik-r-trainer/
+https://www.zooplus.com/shop/dogs/dog_collars_dog_leads/nylon_leads/499545
+https://www.zooplus.com/shop/dogs/dog_collars_dog_leads/nylon_leads/499545
+29
+1 3
+2
+4
+5
+6 29
+7
+8
+9
+10
+11
+12
+13
+20
+
+--- PAGE 21 ---
+https://www.proshop.pl/Psy/Trixie-Mata-antyposlizgowa-do-transportera-Capri-26x46cm/3043156
+https://www.proshop.pl/Psy/Trixie-Mata-antyposlizgowa-do-transportera-Capri-26x46cm/3043156
+https://lickimat.info/pl/products/lickimat-classic-soother-2/
+https://lickimat.info/pl/products/lickimat-classic-soother-2/
+https://www.kongcompany.com/kong-classic/
+https://www.kongcompany.com/kong-classic/
+https://www.kongcompany.com/catalogue/PW2/
+https://www.kongcompany.com/catalogue/PW2/
+https://www.amazon.pl/b?node=20855459031
+https://www.amazon.pl/b?node=20855459031
+https://www.skapiec.pl/cat/3246/99999.14891
+https://www.skapiec.pl/cat/3246/99999.14891
+https://bigshopper .pl/product/kyg-koc-dla-psa-na-tylne-siedzenie-samochodu-z-oslona-boczna-i-
+okienkiem-odporny-zarysowania-wode-mata-psa-samochodowe-135-x-148-cm-czarny-1018913381.htm
+https://bigshopper .pl/product/kyg-koc-dla-psa-na-tylne-siedzenie-samochodu-z-oslona-boczna-i-okienkiem-odporny-
+zarysowania-wode-mata-psa-samochodowe-135-x-148-cm-czarny-1018913381.htm
+https://developers.google.com/search/docs/crawling-indexing/qualify-outbound-links?hl=pl
+https://developers.google.com/search/docs/crawling-indexing/qualify-outbound-links?hl=pl
+https://www.w3.org/WAI/tutorials/carousels/
+https://www.w3.org/WAI/tutorials/carousels/
+https://developers.google.com/search/docs/appearance/title-link?
+rd=1&visit_id=638233634817608809-2439174413
+https://developers.google.com/search/docs/appearance/title-link?rd=1&visit_id=638233634817608809-2439174413
+https://developers.google.com/search/docs/appearance/structured-data/product
+https://developers.google.com/search/docs/appearance/structured-data/product
+https://affiliate-program.amazon.com/help/operating/agreement/
+https://affiliate-program.amazon.com/help/operating/agreement/
+14
+15
+16
+17
+18
+19
+20
+21 26
+22 23
+24
+25
+27 28
+21
+

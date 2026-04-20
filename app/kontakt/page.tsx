@@ -12,6 +12,7 @@ import { buildBookHref, readBookingSpeciesSearchParam } from '@/lib/booking-rout
 import { COPY_HELPERS } from '@/lib/copy-governance'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { getLeadMagnetBySlug } from '@/lib/growth-layer'
+import { getBreadcrumbJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
 import { FAQ_SHORTLISTS, TRUST_SIGNAL_SETS } from '@/lib/trust-layer'
 import { getCanonicalBaseUrl } from '@/lib/server/env'
@@ -26,9 +27,9 @@ import {
 } from '@/lib/site'
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: 'Kontakt',
+  title: 'Kontakt i rezerwacja konsultacji',
   path: '/kontakt',
-  description: 'Napisz krótko, jeśli chcesz doprecyzować temat albo sprawdzić dostępność terminu.',
+  description: 'Kontakt, formularz i rezerwacja konsultacji behawioralnych online dla opiekunów psów i kotów.',
 })
 
 type SectionIntroProps = {
@@ -118,7 +119,7 @@ export default function ContactPage({
       ),
     },
     {
-      title: 'Profile publiczne',
+      title: 'Dodatkowe informacje',
       content: (
         <>
           <a href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="prep-inline-link">
@@ -128,23 +129,29 @@ export default function ContactPage({
           <a href={INSTAGRAM_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="prep-inline-link">
             Instagram
           </a>{' '}
-          pokazują publiczne informacje o marce.
+          to dodatkowe miejsca, jeśli chcesz zajrzeć przed kontaktem.
         </>
       ),
     },
   ]
 
-  const structuredData = {
-    '@context': 'https://schema.org',
-    '@type': 'ProfessionalService',
-    name: SITE_NAME,
-    description: `${SITE_TAGLINE}. Kontakt dla ${speciesCopy.lead}.`,
-    url: new URL('/kontakt', getCanonicalBaseUrl()).toString(),
-    provider: {
-      '@type': 'Person',
-      name: SPECIALIST_NAME,
+  const structuredData = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'ProfessionalService',
+      name: SITE_NAME,
+      description: `${SITE_TAGLINE}. Kontakt dla ${speciesCopy.lead}.`,
+      url: new URL('/kontakt', getCanonicalBaseUrl()).toString(),
+      provider: {
+        '@type': 'Person',
+        name: SPECIALIST_NAME,
+      },
     },
-  }
+    getBreadcrumbJsonLd([
+      { name: 'Strona główna', path: '/' },
+      { name: 'Kontakt', path: '/kontakt' },
+    ]),
+  ]
 
   return (
     <main className="page-wrap editorial-home-page premium-home-page contact-page">
@@ -157,10 +164,9 @@ export default function ContactPage({
           <div className="editorial-hero-grid contact-hero-grid">
             <div className="editorial-hero-copy contact-hero-copy">
               <div className="section-eyebrow">Kontakt</div>
-              <h1>Napisz, jeśli chcesz doprecyzować temat albo zadać pytanie.</h1>
+              <h1>Skontaktuj się, jeśli chcesz krótko opisać temat albo zadać pytanie.</h1>
               <p className="editorial-hero-lead">
-                Jeśli chcesz opisać sprawę albo sprawdzić, od czego zacząć, wyślij krótką wiadomość. Wystarczy gatunek,
-                temat i zwięzły opis sytuacji. {COPY_HELPERS.contactResponseWindow}
+                Wystarczy gatunek, temat i krótki opis sytuacji. {COPY_HELPERS.contactResponseWindow}
               </p>
 
               <FunnelPrimaryActions
@@ -177,7 +183,7 @@ export default function ContactPage({
                 <Link href={consultationHref} prefetch={false} className="prep-inline-link">
                   {FUNNEL_CTA_LABELS.consultation.toLowerCase()}
                 </Link>
-                . Jeśli chcesz napisać, przewiń niżej do formularza.
+                . Jeśli chcesz napisać, przewiń do formularza.
               </p>
 
               <p className="contact-support-copy">
@@ -198,9 +204,9 @@ export default function ContactPage({
 
         <section className="panel section-panel editorial-section" id="jak-umowic-konsultacje">
           <SectionIntro
-            eyebrow="Wybór formy"
+            eyebrow="Jak się skontaktować"
             title="Kwadrans, konsultacja 60 min albo krótka wiadomość"
-            description="Kwadrans z behawiorystą sprawdza się przy krótszym temacie. Konsultacja 60 min jest dla spraw szerszych. Wiadomość służy do doprecyzowania tematu."
+            description="Kwadrans z behawiorystą jest najprostszym startem. Konsultacja 60 min jest dla spraw szerszych. Wiadomość służy do krótkiego doprecyzowania tematu."
           />
 
           <div className="card-grid three-up top-gap">
@@ -257,7 +263,7 @@ export default function ContactPage({
         <section className="panel section-panel editorial-section" id="rezerwacja">
           <SectionIntro
             eyebrow="Krótka wiadomość"
-            title="Jeżeli nie wybierasz terminu od razu, wyślij krótką wiadomość"
+            title="Jeśli nie wybierasz terminu od razu, wyślij krótką wiadomość"
             description="Wystarczy gatunek, temat, 2-4 zdania opisu i adres e-mail."
           />
 
@@ -298,10 +304,10 @@ export default function ContactPage({
 
               <article className="summary-card tree-backed-card contact-support-card contact-support-card-message">
                 <span className="pill subtle-pill">Po wysłaniu formularza</span>
-                <h3>Po wiadomości wskażę, co dalej</h3>
+                <h3>Po wiadomości odpiszę, co będzie najlepszym kolejnym krokiem</h3>
                 <p className="muted">
-                  Jeżeli będzie to potrzebne, wskażę od razu odpowiedni kolejny krok zamiast prowadzić długą wymianę
-                  wiadomości.
+                  Jeśli będzie to potrzebne, od razu wskażę, czy lepszy będzie Kwadrans z behawiorystą, konsultacja
+                  60 min albo dalsza wiadomość.
                 </p>
               </article>
             </div>
@@ -320,7 +326,7 @@ export default function ContactPage({
         </section>
 
         <TrustSignalSection
-          eyebrow="Informacje dodatkowe"
+          eyebrow="Warto wiedzieć"
           title="Najważniejsze informacje o kontakcie"
           description="Krótko o tym, kiedy napisać, czego dotyczy formularz i jak wygląda dalszy krok."
           items={TRUST_SIGNAL_SETS.contact}
@@ -331,10 +337,10 @@ export default function ContactPage({
             <SectionIntro
               eyebrow="Materiał pomocniczy"
               title="Jeżeli chcesz uporządkować opis sprawy przed kontaktem"
-              description="Materiał ma charakter uzupełniający. Nie zastępuje formularza kontaktowego ani rezerwacji konsultacji."
+              description="To dodatkowy materiał dla osób, które chcą łatwiej opisać sytuację przed rozmową."
             />
 
-            <div className="premium-two-column-grid top-gap-small">
+            <div className="premium-two-column-grid top-gap-small contact-prep-grid">
               <LeadMagnetSignup magnet={prepGuide} location="contact-prep-guide" sourcePage="/kontakt" />
 
               <article className="summary-card tree-backed-card">

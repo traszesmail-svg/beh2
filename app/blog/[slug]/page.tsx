@@ -14,6 +14,7 @@ import {
 import { getCanonicalBaseUrl } from '@/lib/server/env'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { FUNNEL_SECONDARY_HREF } from '@/lib/offers'
+import { getBreadcrumbJsonLd } from '@/lib/schema'
 
 export const dynamic = 'force-static'
 export const dynamicParams = false
@@ -61,7 +62,14 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
   }
 
   const baseUrl = getCanonicalBaseUrl()
-  const jsonLd = getBlogArticleJsonLd(post, baseUrl)
+  const jsonLd = [
+    getBlogArticleJsonLd(post, baseUrl),
+    getBreadcrumbJsonLd([
+      { name: 'Strona główna', path: '/' },
+      { name: 'Blog', path: BLOG_ROUTE_BASE },
+      { name: post.h1, path: post.path },
+    ]),
+  ]
 
   return (
     <main className="page-wrap blog-page blog-article-page">
@@ -123,7 +131,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
 
           <div className="blog-related-grid">
             {post.supportLinks.map((link) => (
-              <Link key={link.href} href={link.href} prefetch={false} className="summary-card tree-backed-card blog-related-card">
+              <Link key={`${link.label}-${link.href}`} href={link.href} prefetch={false} className="summary-card tree-backed-card blog-related-card">
                 <strong>{link.label}</strong>
                 <span>{link.description}</span>
               </Link>

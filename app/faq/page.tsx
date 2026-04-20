@@ -95,8 +95,7 @@ export default function FaqPage() {
               <div className="section-eyebrow">FAQ</div>
               <h1>Najczęstsze pytania przed kontaktem</h1>
               <p className="editorial-hero-lead">
-                Jeśli potrzebujesz odpowiedzi od razu, znajdziesz tu najważniejsze pytania o Kwadrans z behawiorystą,
-                konsultację 60 min i krótką wiadomość.
+                Znajdziesz tu najważniejsze pytania o Kwadrans z behawiorystą, konsultację 60 min i wiadomość.
               </p>
 
               <FunnelPrimaryActions
@@ -114,7 +113,7 @@ export default function FaqPage() {
         <EditorialFaqSection
           id="faq"
           eyebrow="Najczęstsze pytania"
-          title="Pytania, które najczęściej pojawiają się przed kontaktem"
+          title="Najczęstsze pytania przed kontaktem"
           description="Krótko, konkretnie i bez zbędnych objaśnień."
           items={FAQ_SHORTLISTS.home}
         />
@@ -151,10 +150,10 @@ export default function FaqPage() {
         <section className="panel cta-panel editorial-final-panel faq-short-contact-panel" id="kontakt">
           <div className="editorial-final-copy">
             <div className="section-eyebrow">Nie widzisz pytania?</div>
-            <h2>Nie musisz znaleźć tu swojej sytuacji 1:1</h2>
+            <h2>Jeśli nie widzisz tu swojego pytania, napisz wiadomość</h2>
             <p>
-              Wystarczy krótka wiadomość. Wspólnie ustalimy, czy najlepszym startem będzie Kwadrans z behawiorystą,
-              konsultacja 60 min czy po prostu wiadomość.
+              Wystarczy krótka wiadomość. Pomogę ustalić, czy najlepszym startem będzie Kwadrans z behawiorystą,
+              konsultacja 60 min czy dalsza wiadomość.
             </p>
 
             <FunnelPrimaryActions
@@ -170,7 +169,7 @@ export default function FaqPage() {
         <section className="panel cta-panel editorial-final-panel faq-final-cta-panel" id="final-cta">
           <div className="editorial-final-copy">
             <div className="section-eyebrow">Pierwszy krok</div>
-            <h2>Masz już wystarczająco dużo, żeby się odezwać</h2>
+            <h2>Jeśli chcesz uporządkować sytuację, odezwij się</h2>
             <p>
               Jeśli chcesz spokojnie uporządkować sytuację psa albo kota, wybierz Kwadrans z behawiorystą, konsultację
               60 min albo napisz wiadomość. Nie musisz przygotowywać wszystkiego przed kontaktem.

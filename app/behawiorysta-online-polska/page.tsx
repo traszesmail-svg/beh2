@@ -5,13 +5,14 @@ import { Header } from '@/components/Header'
 import { buildBookHref } from '@/lib/booking-routing'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { getLocalSeoPageByPath } from '@/lib/growth-layer'
+import { getBreadcrumbJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
 import { getCanonicalBaseUrl } from '@/lib/server/env'
 
 const pageData = getLocalSeoPageByPath('/behawiorysta-online-polska')
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: pageData?.title ?? 'Behawiorysta online dla psa i kota',
+  title: pageData?.title ?? 'Behawiorysta online w Polsce - psy i koty',
   path: '/behawiorysta-online-polska',
   description: pageData?.description ?? 'Konsultacje behawioralne online dla opiekunów psów i kotów z całej Polski.',
   appendLocalContext: false,
@@ -60,6 +61,10 @@ export default function LocalSeoPolandOnlinePage() {
         },
       })),
     },
+    getBreadcrumbJsonLd([
+      { name: 'Strona główna', path: '/' },
+      { name: 'Behawiorysta online w Polsce', path: '/behawiorysta-online-polska' },
+    ]),
   ]
 
   return (

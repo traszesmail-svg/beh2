@@ -29,11 +29,15 @@ export function FunnelPrimaryActions({
   const consultationService = getServiceAnalyticsParams('konsultacja-behawioralna-online')
   const resolvedNote = note ?? (
     <>
-      Jeśli wolisz najpierw napisać, użyj{' '}
+      Jeśli chcesz najpierw napisać, użyj{' '}
       <Link href={contactHref} prefetch={false} className="prep-inline-link">
         {COPY_CTA.contact.toLowerCase()}
       </Link>
-      . Jeśli chcesz najpierw przeczytać materiały, zajrzyj do
+      . Jeśli chcesz najpierw sięgnąć po materiały, przejdź do{' '}
+      <Link href={FUNNEL_SECONDARY_HREF} prefetch={false} className="prep-inline-link">
+        {COPY_CTA.toolkit}
+      </Link>
+      .
     </>
   )
 
@@ -55,9 +59,23 @@ export function FunnelPrimaryActions({
           {COPY_CTA.primary}
         </Link>
         <Link
-          href={consultationHref}
+          href={FUNNEL_SECONDARY_HREF}
           prefetch={false}
           className="button button-ghost big-button home-secondary-cta"
+          data-analytics-event={getFunnelEntryEventForHref(FUNNEL_SECONDARY_HREF)}
+          data-analytics-location={`${secondaryLocation}-toolkit`}
+          data-analytics-cta-label={COPY_CTA.toolkit}
+        >
+          {COPY_CTA.toolkit}
+        </Link>
+      </div>
+
+      <p className={noteClassName}>
+        {resolvedNote} Szerszy temat?{' '}
+        <Link
+          href={consultationHref}
+          prefetch={false}
+          className="prep-inline-link"
           data-analytics-event={getFunnelEntryEventForHref(consultationHref)}
           data-analytics-location={secondaryLocation}
           data-analytics-cta-label={COPY_CTA.consultation}
@@ -66,14 +84,7 @@ export function FunnelPrimaryActions({
           data-analytics-service-duration={String(consultationService.service_duration)}
           data-analytics-service-price={String(consultationService.service_price)}
         >
-          {COPY_CTA.consultation}
-        </Link>
-      </div>
-
-      <p className={noteClassName}>
-        {resolvedNote}{' '}
-        <Link href={FUNNEL_SECONDARY_HREF} prefetch={false} className="prep-inline-link">
-          {COPY_CTA.toolkit}
+          {COPY_CTA.consultation.toLowerCase()}
         </Link>
         .
       </p>

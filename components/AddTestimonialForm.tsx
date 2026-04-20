@@ -45,10 +45,10 @@ export function AddTestimonialForm() {
 
   const submitLabel = useMemo(() => {
     if (status === 'loading') {
-      return 'Wysyłam zgłoszenie...'
+      return 'Wysyłam opinię...'
     }
 
-    return 'Wyślij opinię do weryfikacji'
+    return 'Wyślij opinię'
   }, [status])
 
   function updateField<K extends keyof SubmissionPayload>(key: K, value: SubmissionPayload[K]) {
@@ -57,11 +57,11 @@ export function AddTestimonialForm() {
 
   function validate(): string | null {
     if (!normalizeText(form.displayName)) {
-      return 'Podaj imię albo inicjały, których możemy użyć po akceptacji opinii.'
+      return 'Podaj imię albo inicjały, których możemy użyć przy publikacji opinii.'
     }
 
     if (!isEmailValid(form.email.trim())) {
-      return 'Podaj poprawny adres e-mail do weryfikacji opinii.'
+      return 'Podaj poprawny adres e-mail do kontaktu w sprawie opinii.'
     }
 
     if (!form.issueCategory) {
@@ -77,7 +77,7 @@ export function AddTestimonialForm() {
     }
 
     if (!form.consentContact || !form.consentPublish) {
-      return 'Zaznacz zgody wymagane do weryfikacji i ewentualnej publikacji opinii.'
+      return 'Zaznacz zgody potrzebne do kontaktu i ewentualnej publikacji opinii.'
     }
 
     return null
@@ -118,12 +118,12 @@ export function AddTestimonialForm() {
       const payload = (await response.json()) as { ok?: boolean; message?: string; error?: string }
 
       if (!response.ok || !payload.ok) {
-        throw new Error(payload.error ?? 'Nie udało się wysłać opinii do weryfikacji.')
+        throw new Error(payload.error ?? 'Nie udało się wysłać opinii.')
       }
 
       setStatus('success')
       trackAnalyticsEvent('opinion_add', { issue_category: form.issueCategory })
-      setMessage(payload.message ?? 'Dziękujemy. Twoja opinia trafiła do weryfikacji. Po akceptacji dodamy ją na stronę.')
+      setMessage(payload.message ?? 'Dziękujemy. Twoja opinia została zapisana. Jeśli będzie publikowana, zrobimy to po sprawdzeniu zgody.')
       setForm(INITIAL_FORM)
     } catch (error) {
       setStatus('error')
@@ -136,10 +136,10 @@ export function AddTestimonialForm() {
       <div className="section-head">
         <div>
           <div className="section-eyebrow">Po konsultacji</div>
-          <h3 id="dodaj-opinie-heading">Dodaj swoją opinię do ręcznej weryfikacji</h3>
+          <h3 id="dodaj-opinie-heading">Dodaj swoją opinię</h3>
         </div>
         <div className="muted">
-          Formularz służy tylko do zgłoszenia opinii. Treść, zdjęcie i dane kontaktowe nie trafiają automatycznie na stronę.
+          Formularz służy tylko do przesłania opinii. Treść, zdjęcie i dane kontaktowe nie trafiają automatycznie na stronę.
         </div>
       </div>
 
@@ -156,7 +156,7 @@ export function AddTestimonialForm() {
         </div>
 
         <div>
-          <label htmlFor="testimonial-email">Email do weryfikacji</label>
+          <label htmlFor="testimonial-email">Email kontaktowy</label>
           <input
             id="testimonial-email"
             type="email"
@@ -235,7 +235,7 @@ export function AddTestimonialForm() {
               checked={form.consentContact}
               onChange={(event) => updateField('consentContact', event.target.checked)}
             />
-            <span>Zgadzam się na kontakt weryfikacyjny w sprawie opinii.</span>
+            <span>Zgadzam się na kontakt w sprawie opinii.</span>
           </label>
 
           <label className="checkbox-card" htmlFor="testimonial-consent-publish">
@@ -245,7 +245,7 @@ export function AddTestimonialForm() {
               checked={form.consentPublish}
               onChange={(event) => updateField('consentPublish', event.target.checked)}
             />
-            <span>Zgadzam się na publikację opinii i zdjęcia po ręcznej akceptacji.</span>
+            <span>Zgadzam się na publikację opinii i zdjęcia po wcześniejszym sprawdzeniu zgody.</span>
           </label>
         </div>
 
@@ -258,7 +258,7 @@ export function AddTestimonialForm() {
         <div className="checkout-box full-width">
           <div>
             <div className="muted">
-              Najpierw wysyłamy zgłoszenie do właściciela projektu. Po potwierdzeniu zgody treść może zostać ręcznie dodana do sekcji historii i efektów.
+              Opinia trafia najpierw do właściciela projektu. Jeśli zostanie opublikowana, nastąpi to po osobnym sprawdzeniu zgody.
             </div>
           </div>
           <div className="checkout-right">

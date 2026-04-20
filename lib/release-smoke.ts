@@ -226,12 +226,10 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
     {
       path: '/opinie',
       required: [
-        'Jak opiekunowie najczęściej opisują dobrze poprowadzony pierwszy kontakt',
         'Najczęściej wracają trzy rzeczy: ulga, porządek i spokojny kierunek dalszej pracy',
-        'Różne sytuacje brzmią inaczej, ale sposób odczuwania pierwszej konsultacji wraca bardzo podobny',
         'Krótki kontekst problemu, kluczowy pierwszy ruch i kierunek dalszej pracy',
-        'Jeśli chcesz oprzeć decyzję na czymś więcej niż cytacie, są też publiczne punkty weryfikacji',
-        'Co najczęściej zmienia dobrze poprowadzona pierwsza rozmowa',
+        'Jeśli chcesz, możesz zajrzeć też tutaj',
+        'Co najczęściej daje pierwsza rozmowa',
         'Jeśli widzisz w tych głosach coś bliskiego swojej sytuacji, zrób pierwszy spokojny krok',
         'Krótka rozmowa wstępna 15 min audio',
       ],
@@ -329,12 +327,10 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
     {
       path: '/o-mnie',
       required: [
-        'Spokojna, konkretna pomoc behawioralna dla opiekunów psów i kotów',
+        'Krzysztof Regulski - behawiorysta psów i kotów',
         'Publiczny profil CAPBT',
-        'Konkretny specjalista, nie ogólna wizytówka',
-        'To, co można spokojnie sprawdzić przed pierwszym kontaktem',
+        'To, co warto wiedzieć przed pierwszą rozmową',
         'Jak prowadzę konsultację, żeby była spokojna i konkretna',
-        'Autorytet ma sens tylko wtedy, gdy prowadzi do bezpiecznego pierwszego kroku',
         'Co opiekunowie cenią w moim sposobie pracy',
         'Najczęstsze pytania o współpracę i sposób pracy',
         'Zobacz publiczny profil CAPBT',

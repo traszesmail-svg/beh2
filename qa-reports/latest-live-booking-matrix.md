@@ -1,138 +1,138 @@
 # Raport Live Booking Matrix
 
-- Data: 2026-04-07 09:37:46 Europe/Warsaw
-- URL: https://coapebehawiorysta.vercel.app
-- Wynik ogolny: PASS
-- Proby zaliczone: 10/10
+- Data: 2026-04-14 18:51:25 Europe/Warsaw
+- URL: https://coapebehawiorysta-csld4et7q-coapebehawiorysta-6608s-projects.vercel.app
+- Wynik ogolny: FAIL
+- Proby zaliczone: 5/10
 
 ## Proby
-### PASSED - 1. kot-stres
+### FAILED - 1. kot-stres
 - Route start: /koty
 - Start URL: about:blank
-- End URL: https://coapebehawiorysta.vercel.app/payment?bookingId=826bdab6-6331-4c05-97ed-e7ff3709bd26&access=jDJNPLnGkepKfigZhXgB0q1E8mP5Vr-U
-- Slot: 11:40
-- BookingId: 826bdab6-6331-4c05-97ed-e7ff3709bd26
-- Access: present
-- Note: Route: /book or /koty -> /slot -> /form -> /payment
-- Note: Slot: 11:40
-- Note: manualVisible=false
-- Note: payuVisible=false
-- Note: bookingId=826bdab6-6331-4c05-97ed-e7ff3709bd26
+- End URL: https://coapebehawiorysta-csld4et7q-coapebehawiorysta-6608s-projects.vercel.app/koty
+- Slot: brak
+- BookingId: brak
+- Access: missing
+- Note: page.waitForURL: Timeout 30000ms exceeded.
+=========================== logs ===========================
+waiting for navigation until "domcontentloaded"
+  navigated to "https://coapebehawiorysta-csld4et7q-coapebehawiorysta-6608s-projects.vercel.app/koty"
+============================================================
 
-### PASSED - 2. kot-kuweta
+### FAILED - 2. kot-kuweta
 - Route start: /koty
 - Start URL: about:blank
-- End URL: https://coapebehawiorysta.vercel.app/payment?bookingId=84c53747-bab6-4fb6-8735-46aeeaf3b170&access=lfzg51OJaXk6T-gZnRP3K6SjDj2fDuxD
-- Slot: 16:20
-- BookingId: 84c53747-bab6-4fb6-8735-46aeeaf3b170
-- Access: present
-- Note: Route: /book or /koty -> /slot -> /form -> /payment
-- Note: Slot: 16:20
-- Note: manualVisible=false
-- Note: payuVisible=false
-- Note: bookingId=84c53747-bab6-4fb6-8735-46aeeaf3b170
+- End URL: https://coapebehawiorysta-csld4et7q-coapebehawiorysta-6608s-projects.vercel.app/koty
+- Slot: brak
+- BookingId: brak
+- Access: missing
+- Note: page.waitForURL: Timeout 30000ms exceeded.
+=========================== logs ===========================
+waiting for navigation until "domcontentloaded"
+  navigated to "https://coapebehawiorysta-csld4et7q-coapebehawiorysta-6608s-projects.vercel.app/koty"
+============================================================
 
-### PASSED - 3. kot-dotyk
+### FAILED - 3. kot-dotyk
 - Route start: /koty
 - Start URL: about:blank
-- End URL: https://coapebehawiorysta.vercel.app/payment?bookingId=d6efaeba-bd9a-4e8f-935e-cf38348273a1&access=tOL4KZRWTGo6R_mb_W1aI6Q6mRzCphbj
+- End URL: https://coapebehawiorysta-csld4et7q-coapebehawiorysta-6608s-projects.vercel.app/koty
+- Slot: brak
+- BookingId: brak
+- Access: missing
+- Note: page.waitForURL: Timeout 30000ms exceeded.
+=========================== logs ===========================
+waiting for navigation until "domcontentloaded"
+  navigated to "https://coapebehawiorysta-csld4et7q-coapebehawiorysta-6608s-projects.vercel.app/koty"
+============================================================
+
+### FAILED - 4. kot-konflikt
+- Route start: /koty
+- Start URL: about:blank
+- End URL: https://coapebehawiorysta-csld4et7q-coapebehawiorysta-6608s-projects.vercel.app/koty
+- Slot: brak
+- BookingId: brak
+- Access: missing
+- Note: page.waitForURL: Timeout 30000ms exceeded.
+=========================== logs ===========================
+waiting for navigation until "domcontentloaded"
+  navigated to "https://coapebehawiorysta-csld4et7q-coapebehawiorysta-6608s-projects.vercel.app/koty"
+============================================================
+
+### FAILED - 5. kot-nocna-wokalizacja
+- Route start: /koty
+- Start URL: about:blank
+- End URL: https://coapebehawiorysta-csld4et7q-coapebehawiorysta-6608s-projects.vercel.app/koty
+- Slot: brak
+- BookingId: brak
+- Access: missing
+- Note: page.waitForURL: Timeout 30000ms exceeded.
+=========================== logs ===========================
+waiting for navigation until "domcontentloaded"
+  navigated to "https://coapebehawiorysta-csld4et7q-coapebehawiorysta-6608s-projects.vercel.app/koty"
+============================================================
+
+### PASSED - 6. szczeniak
+- Route start: /book
+- Start URL: about:blank
+- End URL: https://coapebehawiorysta-csld4et7q-coapebehawiorysta-6608s-projects.vercel.app/payment?bookingId=9c1e29b3-e2b6-4dee-aeaf-b5a6c72a6e7a&access=5h-2RjPjDCsG_WC056CL4eAqHO9ZvrlY
 - Slot: 16:40
-- BookingId: d6efaeba-bd9a-4e8f-935e-cf38348273a1
+- BookingId: 9c1e29b3-e2b6-4dee-aeaf-b5a6c72a6e7a
 - Access: present
 - Note: Route: /book or /koty -> /slot -> /form -> /payment
 - Note: Slot: 16:40
 - Note: manualVisible=false
 - Note: payuVisible=false
-- Note: bookingId=d6efaeba-bd9a-4e8f-935e-cf38348273a1
+- Note: bookingId=9c1e29b3-e2b6-4dee-aeaf-b5a6c72a6e7a
 
-### PASSED - 4. kot-konflikt
-- Route start: /koty
+### PASSED - 7. separacja
+- Route start: /book
 - Start URL: about:blank
-- End URL: https://coapebehawiorysta.vercel.app/payment?bookingId=c00df074-33d1-480c-9b2a-e1c5d54e8e4e&access=wIjAtFXqBLlY9NS8a_fFZMiPaIasJ19J
+- End URL: https://coapebehawiorysta-csld4et7q-coapebehawiorysta-6608s-projects.vercel.app/payment?bookingId=505be4e6-9240-4352-a8dd-08991dbfade3&access=peNtjPyQSeDIcOhrN20W8UcXWpTZHIGk
 - Slot: 09:00
-- BookingId: c00df074-33d1-480c-9b2a-e1c5d54e8e4e
+- BookingId: 505be4e6-9240-4352-a8dd-08991dbfade3
 - Access: present
 - Note: Route: /book or /koty -> /slot -> /form -> /payment
 - Note: Slot: 09:00
 - Note: manualVisible=false
 - Note: payuVisible=false
-- Note: bookingId=c00df074-33d1-480c-9b2a-e1c5d54e8e4e
+- Note: bookingId=505be4e6-9240-4352-a8dd-08991dbfade3
 
-### PASSED - 5. kot-nocna-wokalizacja
-- Route start: /koty
+### PASSED - 8. agresja
+- Route start: /book
 - Start URL: about:blank
-- End URL: https://coapebehawiorysta.vercel.app/payment?bookingId=aaaad156-bc1f-4c9e-a6e9-dcf279af1d8b&access=3vNaH6nnd4W3Z6N7hNCDxTKwH5gQH4Vi
+- End URL: https://coapebehawiorysta-csld4et7q-coapebehawiorysta-6608s-projects.vercel.app/payment?bookingId=fee87682-bb31-4764-8a27-4f471c40009f&access=r8CzcOb7MYprELpTU6kk_L6I1Qe7p6E8
 - Slot: 09:20
-- BookingId: aaaad156-bc1f-4c9e-a6e9-dcf279af1d8b
+- BookingId: fee87682-bb31-4764-8a27-4f471c40009f
 - Access: present
 - Note: Route: /book or /koty -> /slot -> /form -> /payment
 - Note: Slot: 09:20
 - Note: manualVisible=false
 - Note: payuVisible=false
-- Note: bookingId=aaaad156-bc1f-4c9e-a6e9-dcf279af1d8b
+- Note: bookingId=fee87682-bb31-4764-8a27-4f471c40009f
 
-### PASSED - 6. szczeniak
+### PASSED - 9. spacer
 - Route start: /book
 - Start URL: about:blank
-- End URL: https://coapebehawiorysta.vercel.app/payment?bookingId=4bfb7ba4-cd6c-4209-aff9-cb3d3527cf77&access=sj3gEbSkfbEa0L15YQHkzy_S66tOoYYM
-- Slot: 09:40
-- BookingId: 4bfb7ba4-cd6c-4209-aff9-cb3d3527cf77
+- End URL: https://coapebehawiorysta-csld4et7q-coapebehawiorysta-6608s-projects.vercel.app/payment?bookingId=1a934473-2a1e-48ff-9bcd-3f3095451ba5&access=uHBZBo-0ozXRD9ykm05d3uKz2U8jf0qi
+- Slot: 17:00
+- BookingId: 1a934473-2a1e-48ff-9bcd-3f3095451ba5
 - Access: present
 - Note: Route: /book or /koty -> /slot -> /form -> /payment
-- Note: Slot: 09:40
+- Note: Slot: 17:00
 - Note: manualVisible=false
 - Note: payuVisible=false
-- Note: bookingId=4bfb7ba4-cd6c-4209-aff9-cb3d3527cf77
+- Note: bookingId=1a934473-2a1e-48ff-9bcd-3f3095451ba5
 
-### PASSED - 7. separacja
+### PASSED - 10. pobudzenie
 - Route start: /book
 - Start URL: about:blank
-- End URL: https://coapebehawiorysta.vercel.app/payment?bookingId=cdb58cb6-1098-4cf0-9336-ccfb98d9584e&access=A9pdUW725bqMzOPq7g1ETWCDRfOfbcLn
-- Slot: 10:00
-- BookingId: cdb58cb6-1098-4cf0-9336-ccfb98d9584e
+- End URL: https://coapebehawiorysta-csld4et7q-coapebehawiorysta-6608s-projects.vercel.app/payment?bookingId=17e283ff-7446-4372-b31c-a6bfeccb9a8b&access=G8PnBV91Qk5RtB8MuGla58DnGF3Mps-n
+- Slot: 17:20
+- BookingId: 17e283ff-7446-4372-b31c-a6bfeccb9a8b
 - Access: present
 - Note: Route: /book or /koty -> /slot -> /form -> /payment
-- Note: Slot: 10:00
+- Note: Slot: 17:20
 - Note: manualVisible=false
 - Note: payuVisible=false
-- Note: bookingId=cdb58cb6-1098-4cf0-9336-ccfb98d9584e
-
-### PASSED - 8. agresja
-- Route start: /book
-- Start URL: about:blank
-- End URL: https://coapebehawiorysta.vercel.app/payment?bookingId=94d45fc5-540a-4aba-85d7-a716b6784ee6&access=p2kji-IxN9Og_DltLdyHgQWBScOrx4jd
-- Slot: 10:20
-- BookingId: 94d45fc5-540a-4aba-85d7-a716b6784ee6
-- Access: present
-- Note: Route: /book or /koty -> /slot -> /form -> /payment
-- Note: Slot: 10:20
-- Note: manualVisible=true
-- Note: payuVisible=false
-- Note: bookingId=94d45fc5-540a-4aba-85d7-a716b6784ee6
-
-### PASSED - 9. niszczenie
-- Route start: /book
-- Start URL: about:blank
-- End URL: https://coapebehawiorysta.vercel.app/payment?bookingId=b4e7b96b-bfbd-489e-ad5b-9584ffddec22&access=2WxVXodKp-LvHRydMhFmMrfWUj3AK8a9
-- Slot: 10:40
-- BookingId: b4e7b96b-bfbd-489e-ad5b-9584ffddec22
-- Access: present
-- Note: Route: /book or /koty -> /slot -> /form -> /payment
-- Note: Slot: 10:40
-- Note: manualVisible=false
-- Note: payuVisible=false
-- Note: bookingId=b4e7b96b-bfbd-489e-ad5b-9584ffddec22
-
-### PASSED - 10. dogoterapia
-- Route start: /book
-- Start URL: about:blank
-- End URL: https://coapebehawiorysta.vercel.app/payment?bookingId=d3cac751-bfd9-495d-aaf0-574c2ef9d2d5&access=ZVVNZ_luPU4HA_wPMFKN5qVfi3HyGGU7
-- Slot: 11:00
-- BookingId: d3cac751-bfd9-495d-aaf0-574c2ef9d2d5
-- Access: present
-- Note: Route: /book or /koty -> /slot -> /form -> /payment
-- Note: Slot: 11:00
-- Note: manualVisible=false
-- Note: payuVisible=false
-- Note: bookingId=d3cac751-bfd9-495d-aaf0-574c2ef9d2d5
+- Note: bookingId=17e283ff-7446-4372-b31c-a6bfeccb9a8b
 

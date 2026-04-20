@@ -2,6 +2,7 @@ import { Suspense } from 'react'
 import type { Metadata, Viewport } from 'next'
 import { Fraunces, Manrope } from 'next/font/google'
 import { AnalyticsConsent } from '@/components/AnalyticsConsent'
+import { getOrganizationJsonLd, getWebsiteJsonLd } from '@/lib/schema'
 import { getCanonicalBaseUrl, shouldBlockSearchIndexing } from '@/lib/server/env'
 import { SITE_DESCRIPTION, SITE_NAME, SITE_OG_IMAGE, SITE_SHORT_NAME, SITE_TAGLINE } from '@/lib/site'
 import './globals.css'
@@ -57,9 +58,12 @@ export const viewport: Viewport = {
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const rootJsonLd = [getOrganizationJsonLd(), getWebsiteJsonLd()]
+
   return (
     <html lang="pl">
       <body className={`${manrope.variable} ${fraunces.variable}`}>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(rootJsonLd) }} />
         {children}
         <Suspense fallback={null}>
           <AnalyticsConsent measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim() || null} />

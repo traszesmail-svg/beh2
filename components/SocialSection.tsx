@@ -9,7 +9,7 @@ export function SocialSection() {
           <div className="section-eyebrow">Profil specjalisty</div>
           <h2 id="social-heading">Sprawdź publiczny profil specjalisty i podeślij stronę osobie, która też potrzebuje spokojnego wsparcia</h2>
         </div>
-        <div className="muted">Pokazujemy tylko aktywne, publiczne źródła, które realnie wzmacniają zaufanie.</div>
+        <div className="muted">Dwa dodatkowe miejsca, jeśli chcesz zajrzeć poza samą stronę.</div>
       </div>
 
       <div className="social-grid top-gap">
@@ -29,7 +29,7 @@ export function SocialSection() {
             </svg>
           </span>
           <strong>CAPBT</strong>
-          <span>Publiczny profil specjalisty do sprawdzenia profilu zawodowego i spokojnego przekazania strony dalej.</span>
+          <span>Profil CAPBT z krótką informacją o kwalifikacjach i obecności w katalogu.</span>
         </a>
 
         <a
@@ -47,7 +47,7 @@ export function SocialSection() {
             </svg>
           </span>
           <strong>Instagram</strong>
-          <span>Publiczny profil marki z dodatkowymi zdjęciami, krótkimi aktualnościami i spokojnym przekazaniem strony dalej.</span>
+          <span>Profil marki z dodatkowymi zdjęciami i krótkimi aktualnościami.</span>
         </a>
       </div>
     </section>

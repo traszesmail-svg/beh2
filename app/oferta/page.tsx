@@ -19,6 +19,24 @@ export const metadata: Metadata = buildMarketingMetadata({
   description: 'Aktualna oferta publiczna: Kwadrans z behawiorystą jako najprostszy start, konsultacja 60 min jako szersza opcja i Niezbędnik dla osób, które chcą najpierw uporządkować temat.',
 })
 
+const SERVICE_COMPARISON_ROWS = [
+  {
+    label: 'Najlepszy wybór, gdy',
+    quick: 'masz jedno pytanie, chcesz sprawdzić pierwszy ruch albo nie wiesz jeszcze, jak szeroki jest temat',
+    full: 'problem trwa dłużej, wraca albo obejmuje kilka obszarów naraz i potrzebujesz szerszego uporządkowania',
+  },
+  {
+    label: 'Format rozmowy',
+    quick: '15 minut audio bez kamery i bez rozbudowanego wejścia',
+    full: '60 minut online z większą ilością czasu na kontekst, pytania i plan',
+  },
+  {
+    label: 'Po rozmowie wychodzisz z',
+    quick: 'jasnym priorytetem i decyzją, jaki powinien być pierwszy krok',
+    full: 'szerszym planem działania i podsumowaniem pisemnym po konsultacji',
+  },
+] as const
+
 export default async function OfferPage() {
   const dataMode = getDataModeStatus()
   let quickStartPriceAmount = DEFAULT_PRICE_PLN
@@ -35,9 +53,12 @@ export default async function OfferPage() {
   const quickStartOffer = OFFERS.find((offer) => offer.slug === 'szybka-konsultacja-15-min') ?? null
   const fullConsultationOffer = OFFERS.find((offer) => offer.slug === 'konsultacja-behawioralna-online') ?? null
   const essentialsOffer = OFFERS.find((offer) => offer.slug === 'poradniki-pdf') ?? null
+  const quickStartHref = buildBookHref()
+  const fullConsultationHref = buildBookHref(null, 'konsultacja-behawioralna-online')
+  const contactHref = '/kontakt#formularz'
 
   return (
-    <main className="page-wrap marketing-page">
+    <main className="page-wrap marketing-page money-page">
       <div className="container">
         <Header />
 
@@ -51,7 +72,7 @@ export default async function OfferPage() {
               </p>
 
               <div className="hero-actions top-gap">
-                <Link href={buildBookHref()} prefetch={false} className="button button-primary big-button">
+                <Link href={quickStartHref} prefetch={false} className="button button-primary big-button">
                   {FUNNEL_CTA_LABELS.primary}
                 </Link>
                 <Link href="/niezbednik" prefetch={false} className="button button-ghost big-button">
@@ -61,11 +82,11 @@ export default async function OfferPage() {
 
               <p className="muted top-gap-small">
                 Jeśli temat jest złożony i wiesz, że potrzebujesz szerszego wejścia, wybierz{' '}
-                <Link href={buildBookHref(null, 'konsultacja-behawioralna-online')} prefetch={false} className="prep-inline-link">
+                <Link href={fullConsultationHref} prefetch={false} className="prep-inline-link">
                   {FUNNEL_CTA_LABELS.consultation.toLowerCase()}
                 </Link>
                 . Jeśli nie rezerwujesz od razu, użyj{' '}
-                <Link href="/kontakt#formularz" prefetch={false} className="prep-inline-link">
+                <Link href={contactHref} prefetch={false} className="prep-inline-link">
                   krótkiej wiadomości
                 </Link>
                 .
@@ -164,9 +185,106 @@ export default async function OfferPage() {
           </div>
         </section>
 
+        <section className="panel section-panel editorial-section">
+          <div className="editorial-section-head">
+            <div className="editorial-section-head-copy">
+              <div className="section-eyebrow">Wybór usługi</div>
+              <h2>Kwadrans czy 60 minut</h2>
+            </div>
+            <p className="editorial-section-lead">
+              Jeśli chcesz po prostu dobrze wybrać, najbezpieczniej zacząć od Kwadransu. Konsultacja 60 min ma sens wtedy, gdy już
+              wiesz, że temat jest szerszy i potrzebuje większej ilości czasu.
+            </p>
+          </div>
+
+          <div className="premium-two-column-grid top-gap">
+            <article className="summary-card tree-backed-card">
+              <div className="section-eyebrow">Kwadrans z behawiorystą</div>
+              <h3>Najprostszy pierwszy krok</h3>
+              <ul className="premium-bullet-list">
+                <li>15 minut rozmowy audio bez kamery</li>
+                <li>jedno pytanie albo pierwszy kontakt z tematem</li>
+                <li>uporządkowanie priorytetu i decyzja, co robić dalej</li>
+                <li>dobry wybór, gdy nie chcesz przepłacać za zbyt szeroki start</li>
+              </ul>
+              <div className="hero-actions top-gap-small">
+                <Link href={quickStartHref} prefetch={false} className="button button-primary">
+                  {FUNNEL_CTA_LABELS.primary}
+                </Link>
+              </div>
+            </article>
+
+            <article className="summary-card tree-backed-card">
+              <div className="section-eyebrow">Konsultacja 60 min</div>
+              <h3>Szersze wejście w problem</h3>
+              <ul className="premium-bullet-list">
+                <li>60 minut rozmowy online</li>
+                <li>więcej czasu na kontekst, pytania i kilka wątków naraz</li>
+                <li>plan i podsumowanie pisemne po rozmowie</li>
+                <li>lepszy wybór przy tematach przewlekłych, złożonych albo wracających</li>
+              </ul>
+              <div className="hero-actions top-gap-small">
+                <Link href={fullConsultationHref} prefetch={false} className="button button-ghost">
+                  {FUNNEL_CTA_LABELS.consultation}
+                </Link>
+              </div>
+            </article>
+          </div>
+
+          <div className="list-card accent-outline tree-backed-card top-gap">
+            <strong>Najkrótsza zasada wyboru</strong>
+            <span>
+              Jeśli nie masz pewności, zacznij od Kwadransu. Jeśli już teraz wiesz, że temat jest wielowątkowy albo od dawna nie rusza
+              z miejsca, wybierz 60 minut.
+            </span>
+          </div>
+
+          <div className="top-gap">
+            {SERVICE_COMPARISON_ROWS.map((row) => (
+              <div key={row.label} className="summary-card tree-backed-card top-gap-small">
+                <div className="section-eyebrow">{row.label}</div>
+                <div className="premium-two-column-grid">
+                  <div>
+                    <strong>Kwadrans z behawiorystą</strong>
+                    <p>{row.quick}</p>
+                  </div>
+                  <div>
+                    <strong>Konsultacja 60 min</strong>
+                    <p>{row.full}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            <div className="summary-card tree-backed-card top-gap-small">
+              <div className="section-eyebrow">Cena</div>
+              <div className="premium-two-column-grid">
+                <div>
+                  <strong>Kwadrans z behawiorystą</strong>
+                  <p>
+                    <PriceDisplay amount={quickStartPriceAmount} />
+                  </p>
+                </div>
+                <div>
+                  <strong>Konsultacja 60 min</strong>
+                  <p>350 zł</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p className="muted top-gap-small">
+            Jeśli nadal chcesz tylko doprecyzować, od czego zacząć, użyj{' '}
+            <Link href={contactHref} prefetch={false} className="prep-inline-link">
+              krótkiej wiadomości
+            </Link>
+            . Nie trzeba zgadywać idealnego formatu już przy pierwszym wejściu.
+          </p>
+        </section>
+
         <Footer
           variant="home"
-          ctaHref={buildBookHref()}
+          ctaHref={quickStartHref}
           ctaLabel={FUNNEL_CTA_LABELS.primary}
           secondaryHref="/niezbednik"
           secondaryLabel={FUNNEL_CTA_LABELS.secondary}

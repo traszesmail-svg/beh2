@@ -95,8 +95,6 @@ const BASE_SEEDS = Array.from(new Set([
   '/',
   '/cennik',
   '/konsultacja-behawioralna-online',
-  '/behawiorysta-psow',
-  '/behawiorysta-kotow',
   '/behawiorysta-online-polska',
   '/niezbednik',
   '/opinie',
@@ -377,7 +375,6 @@ function extractPrimaryCtas(page: Page, mode: CrawlMode) {
 async function detectOverflow(page: Page) {
   return page.evaluate(() => {
     const viewportWidth = window.innerWidth
-    const viewportHeight = window.innerHeight
     const offenders: string[] = []
 
     for (const element of document.querySelectorAll<HTMLElement>('body *')) {
@@ -388,9 +385,8 @@ async function detectOverflow(page: Page) {
 
       const rect = element.getBoundingClientRect()
       const overflowX = rect.right > viewportWidth + 2 || rect.left < -2
-      const overflowY = rect.bottom > viewportHeight + 400
 
-      if (overflowX || overflowY) {
+      if (overflowX) {
         const identifier = [
           element.tagName.toLowerCase(),
           element.id ? `#${element.id}` : '',

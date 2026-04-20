@@ -1,9 +1,9 @@
 # Raport QA Booking Matrix
 
-- Data: 2026-04-04 06:57:09 Europe/Warsaw
+- Data: 2026-04-08 11:16:26 Europe/Warsaw
 - Tryb lokalnego serwera: next start
-- URL: http://localhost:3472
-- Topics z kodu: 7
+- URL: http://localhost:3606
+- Topics z kodu: 11
 - Wynik: PASS
 
 ## Zakres
@@ -14,35 +14,55 @@
 ## Wyniki
 ### PASS - szczeniak
 - Label: Szczeniak i młody pies
-- Slot 1: 08:56 | http://localhost:3472/form?problem=szczeniak&slotId=2026-04-04-08%3A56
-- Slot 2: 09:16 | http://localhost:3472/form?problem=szczeniak&slotId=2026-04-04-09%3A16
-
-### PASS - kot
-- Label: Kot i trudne zachowania
-- Slot 1: 08:56 | http://localhost:3472/form?problem=kot&slotId=2026-04-04-08%3A56
-- Slot 2: 09:16 | http://localhost:3472/form?problem=kot&slotId=2026-04-04-09%3A16
+- Slot 1: 13:16 | http://localhost:3606/form?problem=szczeniak&slotId=2026-04-08-13%3A16
+- Slot 2: 13:36 | http://localhost:3606/form?problem=szczeniak&slotId=2026-04-08-13%3A36
 
 ### PASS - separacja
-- Label: Lęk separacyjny
-- Slot 1: 08:56 | http://localhost:3472/form?problem=separacja&slotId=2026-04-04-08%3A56
-- Slot 2: 09:16 | http://localhost:3472/form?problem=separacja&slotId=2026-04-04-09%3A16
+- Label: Problemy separacyjne
+- Slot 1: 13:16 | http://localhost:3606/form?problem=separacja&slotId=2026-04-08-13%3A16
+- Slot 2: 13:36 | http://localhost:3606/form?problem=separacja&slotId=2026-04-08-13%3A36
+
+### PASS - spacer
+- Label: Spacer i reakcje
+- Slot 1: 13:16 | http://localhost:3606/form?problem=spacer&slotId=2026-04-08-13%3A16
+- Slot 2: 13:36 | http://localhost:3606/form?problem=spacer&slotId=2026-04-08-13%3A36
+
+### PASS - pobudzenie
+- Label: Pobudzenie i pogoń
+- Slot 1: 13:16 | http://localhost:3606/form?problem=pobudzenie&slotId=2026-04-08-13%3A16
+- Slot 2: 13:36 | http://localhost:3606/form?problem=pobudzenie&slotId=2026-04-08-13%3A36
 
 ### PASS - agresja
-- Label: Agresja i reakcje obronne
-- Slot 1: 08:56 | http://localhost:3472/form?problem=agresja&slotId=2026-04-04-08%3A56
-- Slot 2: 09:16 | http://localhost:3472/form?problem=agresja&slotId=2026-04-04-09%3A16
+- Label: Agresja i obrona zasobów
+- Slot 1: 13:16 | http://localhost:3606/form?problem=agresja&slotId=2026-04-08-13%3A16
+- Slot 2: 13:36 | http://localhost:3606/form?problem=agresja&slotId=2026-04-08-13%3A36
 
-### PASS - niszczenie
-- Label: Pobudzenie, pogoń i niszczenie
-- Slot 1: 08:56 | http://localhost:3472/form?problem=niszczenie&slotId=2026-04-04-08%3A56
-- Slot 2: 09:16 | http://localhost:3472/form?problem=niszczenie&slotId=2026-04-04-09%3A16
+### PASS - kot-kuweta
+- Label: Kuweta i zachowania toaletowe
+- Slot 1: 13:16 | http://localhost:3606/form?problem=kot-kuweta&slotId=2026-04-08-13%3A16
+- Slot 2: 13:36 | http://localhost:3606/form?problem=kot-kuweta&slotId=2026-04-08-13%3A36
 
-### PASS - dogoterapia
-- Label: Dogoterapia
-- Slot 1: 08:56 | http://localhost:3472/form?problem=dogoterapia&slotId=2026-04-04-08%3A56
-- Slot 2: 09:16 | http://localhost:3472/form?problem=dogoterapia&slotId=2026-04-04-09%3A16
+### PASS - kot-konflikt
+- Label: Konflikt między kotami
+- Slot 1: 13:16 | http://localhost:3606/form?problem=kot-konflikt&slotId=2026-04-08-13%3A16
+- Slot 2: 13:36 | http://localhost:3606/form?problem=kot-konflikt&slotId=2026-04-08-13%3A36
+
+### PASS - kot-dotyk
+- Label: Dotyk, pielęgnacja i obrona
+- Slot 1: 13:16 | http://localhost:3606/form?problem=kot-dotyk&slotId=2026-04-08-13%3A16
+- Slot 2: 13:36 | http://localhost:3606/form?problem=kot-dotyk&slotId=2026-04-08-13%3A36
+
+### PASS - kot-stres
+- Label: Lęk, stres i wycofanie
+- Slot 1: 13:16 | http://localhost:3606/form?problem=kot-stres&slotId=2026-04-08-13%3A16
+- Slot 2: 13:36 | http://localhost:3606/form?problem=kot-stres&slotId=2026-04-08-13%3A36
+
+### PASS - kot-nocna-wokalizacja
+- Label: Nocna aktywność i rytm dnia
+- Slot 1: 13:16 | http://localhost:3606/form?problem=kot-nocna-wokalizacja&slotId=2026-04-08-13%3A16
+- Slot 2: 13:36 | http://localhost:3606/form?problem=kot-nocna-wokalizacja&slotId=2026-04-08-13%3A36
 
 ### PASS - inne
-- Label: Inny temat do omówienia
-- Slot 1: 08:56 | http://localhost:3472/form?problem=inne&slotId=2026-04-04-08%3A56
-- Slot 2: 09:16 | http://localhost:3472/form?problem=inne&slotId=2026-04-04-09%3A16
+- Label: Inny problem lub temat pokrewny
+- Slot 1: 13:16 | http://localhost:3606/form?problem=inne&slotId=2026-04-08-13%3A16
+- Slot 2: 13:36 | http://localhost:3606/form?problem=inne&slotId=2026-04-08-13%3A36

@@ -26,7 +26,7 @@ function getSpeciesLabel(species?: BookingSpecies | null) {
 
 function getAudioDescription(species?: BookingSpecies | null) {
   if (species === 'pies') {
-    return 'Dla opiekuna psa, gdy chcesz omówić jedno pytanie albo spokojnie ustalić pierwszy kierunek.'
+    return 'Dla opiekuna psa, gdy chcesz omówić jedno pytanie albo spokojnie ustalić, od czego zacząć.'
   }
 
   if (species === 'kot') {
@@ -48,24 +48,12 @@ function getFullConsultationDescription(species?: BookingSpecies | null) {
   return 'Dla spraw bardziej złożonych, dłużej trwających albo wielowątkowych, gdy potrzebna jest pełniejsza konsultacja.'
 }
 
-function getMessageDescription(species?: BookingSpecies | null) {
-  if (species === 'pies') {
-    return 'Krótka wiadomość dla opiekuna psa. Wystarczą 2-4 zdania, temat i kontakt.'
-  }
-
-  if (species === 'kot') {
-    return 'Krótka wiadomość dla opiekuna kota. Wystarczą 2-4 zdania, temat i kontakt.'
-  }
-
-  return 'Krótka wiadomość, jeśli nie chcesz rezerwować od razu. Wystarczą 2-4 zdania i kontakt.'
-}
-
 export function OfferEntrySection({
   species = null,
   sectionId,
   eyebrow = 'Oferta',
-  title = 'Kwadrans z behawiorystą jest najprostszym startem. Niezbędnik pomaga się przygotować, a konsultacja 60 min służy szerszym tematom.',
-  description = 'Tu od razu widać trzy możliwości: krótki start, materiały do spokojnego przygotowania i szerszą konsultację.',
+  title = 'Zacznij od Kwadransu z behawiorystą. Jeśli temat jest szerszy, wybierz konsultację 60 min.',
+  description = 'Niezbędnik zostaje drugą opcją, a wiadomość służy tylko do krótkiego doprecyzowania tematu.',
 }: OfferEntrySectionProps) {
   const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min', false, species)
   const fullConsultationHref = buildBookHref(null, 'konsultacja-behawioralna-online', false, species)
@@ -87,11 +75,11 @@ export function OfferEntrySection({
         <Link href={audioHref} prefetch={false} className="button button-primary big-button">
           {COPY_CTA.primary}
         </Link>
-        <Link href={fullConsultationHref} prefetch={false} className="prep-inline-link">
-          {COPY_CTA.consultation}
-        </Link>
         <Link href={toolkitHref} prefetch={false} className="prep-inline-link">
           {COPY_CTA.toolkit}
+        </Link>
+        <Link href={fullConsultationHref} prefetch={false} className="prep-inline-link">
+          {COPY_CTA.consultation}
         </Link>
         <Link href={messageHref} prefetch={false} className="prep-inline-link">
           {COPY_CTA.contact}
@@ -108,10 +96,27 @@ export function OfferEntrySection({
             <span>{formatPricePln(DEFAULT_PRICE_PLN)}</span>
             <span>bez kamery</span>
           </div>
-          <p className="muted">Dla {speciesLabel}, gdy temat jest jeden albo chcesz najpierw ustalić najlepszy kierunek.</p>
+          <p className="muted">Dla {speciesLabel}, gdy temat jest jeden albo chcesz spokojnie ustalić kierunek.</p>
           <div className="hero-actions top-gap-small">
             <Link href={audioHref} prefetch={false} className="button button-primary">
               {COPY_CTA.primary}
+            </Link>
+          </div>
+        </article>
+
+        <article className="summary-card tree-backed-card">
+          <div className="section-eyebrow">Niezbędnik</div>
+          <h3>{COPY_SERVICE_NAMES.toolkit}</h3>
+          <p>{COPY_HELPERS.toolkitIntro}</p>
+          <div className="editorial-hero-meta" aria-label="Zakres materiałów">
+            <span>materiały własne</span>
+            <span>książki</span>
+            <span>narzędzia</span>
+          </div>
+          <p className="muted">Dla {speciesLabel}, gdy chcesz wrócić do materiałów albo przygotować się do rozmowy.</p>
+          <div className="hero-actions top-gap-small">
+            <Link href={toolkitHref} prefetch={false} className="button button-ghost">
+              {COPY_CTA.toolkit}
             </Link>
           </div>
         </article>
@@ -123,29 +128,12 @@ export function OfferEntrySection({
           <div className="editorial-hero-meta" aria-label="Parametry usługi">
             <span>60 min</span>
             <span>{formatPricePln(BOOKING_SERVICE_ONLINE_PRICE)}</span>
-            <span>ograniczona dostępność</span>
+            <span>online</span>
           </div>
           <p className="muted">Dla {speciesLabel}, gdy problem trwa dłużej, wraca albo obejmuje kilka obszarów naraz.</p>
           <div className="hero-actions top-gap-small">
             <Link href={fullConsultationHref} prefetch={false} className="button button-ghost">
               {COPY_CTA.consultation}
-            </Link>
-          </div>
-        </article>
-
-        <article className="summary-card tree-backed-card">
-          <div className="section-eyebrow">Niezbędnik</div>
-          <h3>{COPY_CTA.toolkit}</h3>
-          <p>{COPY_HELPERS.toolkitIntro}</p>
-          <div className="editorial-hero-meta" aria-label="Parametry formularza">
-            <span>materiały własne</span>
-            <span>książki</span>
-            <span>narzędzia</span>
-          </div>
-          <p className="muted">{getMessageDescription(species)}</p>
-          <div className="hero-actions top-gap-small">
-            <Link href={toolkitHref} prefetch={false} className="button button-ghost">
-              {COPY_CTA.toolkit}
             </Link>
           </div>
         </article>
@@ -156,7 +144,7 @@ export function OfferEntrySection({
         <Link href={messageHref} prefetch={false} className="prep-inline-link">
           {COPY_CTA.contact.toLowerCase()}
         </Link>{' '}
-        pomaga wtedy, gdy chcesz najpierw doprecyzować temat.
+        pomaga wtedy, gdy chcesz tylko krótko doprecyzować temat.
       </p>
     </section>
   )

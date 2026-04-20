@@ -19,8 +19,13 @@ function appendLocalSeoContext(description: string) {
   return description
 }
 
+function buildMetadataTitle(title: string) {
+  return title === SITE_NAME ? SITE_NAME : `${title} | ${SITE_SHORT_NAME}`
+}
+
 export function buildMarketingMetadata({ title, path, description, appendLocalContext = true }: MarketingMetadataInput): Metadata {
   const localizedDescription = appendLocalContext ? appendLocalSeoContext(description) : description
+  const fullTitle = buildMetadataTitle(title)
 
   return {
     title,
@@ -29,7 +34,7 @@ export function buildMarketingMetadata({ title, path, description, appendLocalCo
       canonical: path,
     },
     openGraph: {
-      title: `${title} | ${SITE_SHORT_NAME}`,
+      title: fullTitle,
       description: localizedDescription,
       siteName: SITE_NAME,
       type: 'website',
@@ -39,7 +44,7 @@ export function buildMarketingMetadata({ title, path, description, appendLocalCo
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${title} | ${SITE_SHORT_NAME}`,
+      title: fullTitle,
       description: localizedDescription,
       images: [DEFAULT_OG_IMAGE.url],
     },
@@ -48,6 +53,7 @@ export function buildMarketingMetadata({ title, path, description, appendLocalCo
 
 export function buildTechnicalMetadata({ title, path, description, noIndex = true }: TechnicalMetadataInput): Metadata {
   const localizedDescription = appendLocalSeoContext(description)
+  const fullTitle = buildMetadataTitle(title)
 
   return {
     title,
@@ -57,7 +63,7 @@ export function buildTechnicalMetadata({ title, path, description, noIndex = tru
     },
     robots: noIndex ? { index: false, follow: false } : undefined,
     openGraph: {
-      title: `${title} | ${SITE_SHORT_NAME}`,
+      title: fullTitle,
       description: localizedDescription,
       siteName: SITE_NAME,
       type: 'website',
@@ -67,7 +73,7 @@ export function buildTechnicalMetadata({ title, path, description, noIndex = tru
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${title} | ${SITE_SHORT_NAME}`,
+      title: fullTitle,
       description: localizedDescription,
       images: [DEFAULT_OG_IMAGE.url],
     },
@@ -76,10 +82,11 @@ export function buildTechnicalMetadata({ title, path, description, noIndex = tru
 
 export async function buildHomeMetadata(): Promise<Metadata> {
   const description = appendLocalSeoContext(
-    `${SITE_NAME}. Behawiorysta COAPE dla opiekunów psów i kotów: konsultacja, spokojny pierwszy krok i jasny plan działania online.`,
+    'Behawiorysta online dla opiekunów psów i kotów. Spokojny pierwszy krok, konsultacje online i materiały pomocnicze bez chaosu.',
   )
 
   return {
+    title: SITE_NAME,
     description,
     alternates: {
       canonical: '/',
@@ -109,8 +116,7 @@ export async function buildBookMetadata(serviceType: BookingServiceType = DEFAUL
   return buildMarketingMetadata({
     title: serviceTitle,
     path: '/book',
-    description:
-      `${serviceTitle} w marce ${SITE_SHORT_NAME}. ${serviceSummary} Pomaga uporządkować sytuację i zdecydować, co zrobić dalej ze specjalistą ${SPECIALIST_NAME}.`,
+    description: `${serviceTitle} w marce ${SITE_SHORT_NAME}. ${serviceSummary} Pomaga uporządkować sytuację i zdecydować, co zrobić dalej ze specjalistą ${SPECIALIST_NAME}.`,
   })
 }
 

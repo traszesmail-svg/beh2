@@ -111,9 +111,9 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
           <h2 id="historie-heading">Historie opiekunów i efekty konsultacji</h2>
         </div>
         <div className="muted">
-          Pokazujemy krótki kontekst, pierwszy krok i to, co realnie pomogło dalej.
+          Pokazujemy krótki kontekst, pierwszy krok i dalszy kierunek pracy.
           <br />
-          Obok są publiczne źródła i zanonimizowany kontekst sytuacji.
+          Obok są publikacje i krótkie informacje o profilu.
         </div>
       </div>
 
@@ -123,8 +123,8 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
           <span>Najczęstsze sprawy, z którymi opiekunowie zgłaszają się na start.</span>
         </div>
         <div className="summary-card tree-backed-card">
-          <div className="stat-label">Publiczne źródła</div>
-          <span>Łączymy case studies, profil zawodowy i publikacje w jednym miejscu.</span>
+          <div className="stat-label">Profil i publikacje</div>
+          <span>Obok przykładów są też podstawowe informacje o kwalifikacjach i artykułach.</span>
         </div>
         <div className="summary-card tree-backed-card">
           <div className="stat-label">Ręczne sprawdzenie</div>
@@ -140,11 +140,11 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
 
       <div className="section-head top-gap">
         <div>
-          <div className="section-eyebrow">Publiczne źródła</div>
-          <h3>Gdzie można sprawdzić profil i publikacje</h3>
+          <div className="section-eyebrow">Profil i publikacje</div>
+          <h3>Dodatkowe informacje</h3>
         </div>
         <div className="muted">
-          CAPBT, Instagram i publikacje branżowe pomagają sprawdzić sposób pracy przed kontaktem.
+          CAPBT, Instagram i publikacje branżowe pokazują dodatkowy kontekst pracy.
         </div>
       </div>
 
@@ -168,9 +168,9 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
         <div className="section-head top-gap">
           <div>
             <div className="section-eyebrow">Wybrane opinie</div>
-            <h3>Zanonimizowane opinie klientów</h3>
+            <h3>Krótkie opinie klientów</h3>
           </div>
-          <div className="muted">Opinie pojawiają się dopiero po ręcznej akceptacji.</div>
+          <div className="muted">Opinie są dodawane dopiero po wcześniejszym sprawdzeniu zgody.</div>
         </div>
 
           <div className="summary-grid top-gap">

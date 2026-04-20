@@ -13,6 +13,7 @@ import { COPY_HELPERS } from '@/lib/copy-governance'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { getLeadMagnetBySlug } from '@/lib/growth-layer'
 import { REAL_CASE_STUDIES } from '@/lib/real-case-studies'
+import { getBreadcrumbJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
 import { getCanonicalBaseUrl } from '@/lib/server/env'
 import { CASE_STUDY_SELECTIONS, FAQ_SHORTLISTS, TRUST_SIGNAL_SETS } from '@/lib/trust-layer'
@@ -23,16 +24,17 @@ import {
   SITE_TAGLINE,
   SPECIALIST_CREDENTIALS,
   SPECIALIST_NAME,
+  SPECIALIST_PUBLIC_STATUS,
   getPublicContactDetails,
 } from '@/lib/site'
 
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: 'Opinie',
+  title: 'Opinie o konsultacjach behawioralnych',
   path: '/opinie',
   description:
-    'Zanonimizowane głosy po konsultacjach, przykładowe sytuacje startowe i publiczne źródła prowadzące do spokojnego pierwszego kroku.',
+    'Krótkie głosy po konsultacjach, przykładowe sytuacje i spokojny obraz tego, jak zwykle wygląda pierwszy kontakt.',
 })
 
 type SectionIntroProps = {
@@ -41,29 +43,17 @@ type SectionIntroProps = {
   description: string
 }
 
-type QuoteCard = {
+type OpinionCaseCard = {
   quote: string
   name: string
-  role: string
-  tag: string
-}
-
-type FeaturedOpinion = QuoteCard & {
+  signature: string
   label: string
+  problemType: string
+  cooperationStage: string
+  format: string
   context: string
+  outcome: string
   note: string
-}
-
-type OpinionGroup = {
-  title: string
-  lead: string
-  topics: string[]
-  items: Array<{
-    name: string
-    role: string
-    context: string
-    quote: string
-  }>
 }
 
 type EffectCard = {
@@ -117,98 +107,45 @@ const heroSignals = [
   'relacje między zwierzętami',
 ] as const
 
-const heroLeadQuote: QuoteCard = {
-  quote:
-    'Po konsultacji przestałam próbować pięciu rzeczy naraz. Został jeden plan spacerów i wreszcie wiedziałam, co robić najpierw.',
-  name: 'M.',
-  role: 'opiekunka psa',
-  tag: 'spacery i reaktywność',
-}
-
-const featuredOpinions: FeaturedOpinion[] = [
+const opinionCaseCards: OpinionCaseCard[] = [
   {
     quote:
       'Po konsultacji przestałam skakać między rozwiązaniami. Został jeden plan spacerów, jasna kolejność i wreszcie wiedziałam, co naprawdę obserwować.',
     name: 'M.K.',
-    role: 'pies, Warszawa',
+    signature: 'opiekunka psa, Warszawa',
     label: 'Pies',
-    context: 'spacery, pobudzenie i pierwszy porządek działania',
+    problemType: 'spacery, pobudzenie, mijanki',
+    cooperationStage: 'po pierwszej konsultacji',
+    format: 'po 60 min',
+    context: 'start od chaosu na spacerach i kilku niespójnych prób działania',
+    outcome: 'jeden plan spacerów i czytelne obserwacje zamiast wielu technik naraz',
     note: 'po pierwszej konsultacji',
-    tag: 'problem: spacery i pobudzenie',
   },
   {
     quote:
       'Najbardziej pomogło spokojne uporządkowanie kuwety, przestrzeni i rytmu domu. Temat przestał być chaotyczny, a stał się czytelny i dużo mniej obciążający.',
     name: 'A.P.',
-    role: 'kot, Gdańsk',
+    signature: 'opiekunka kota, Gdańsk',
     label: 'Kot',
-    context: 'kuweta, środowisko i napięcie w domu',
+    problemType: 'kuweta, środowisko, napięcie w domu',
+    cooperationStage: 'po pierwszej konsultacji',
+    format: 'po 60 min',
+    context: 'temat wracał mimo zmian żwirku i ustawienia kuwety',
+    outcome: 'porządek w środowisku i mniej napięcia zamiast kolejnych losowych zmian',
     note: 'po pierwszej konsultacji',
-    tag: 'problem: kuweta i środowisko',
   },
   {
     quote:
       'To była pierwsza rozmowa, po której poczułam ulgę, a nie więcej presji. Dostałam jasny kierunek, spokojne wytłumaczenie i zero oceniania.',
     name: 'K.S.',
-    role: 'pies i kot, online',
+    signature: 'opiekunka psa i kota, konsultacja online',
     label: 'Styl pracy',
-    context: 'spokojny kontakt, jasny język i brak presji',
+    problemType: 'niepewność od czego zacząć',
+    cooperationStage: 'po pierwszym kontakcie',
+    format: 'po Kwadransie',
+    context: 'potrzeba spokojnego uporządkowania sytuacji przed decyzją o dalszej pracy',
+    outcome: 'jasny dalszy krok bez presji i bez oceniania',
     note: 'po pierwszym kontakcie',
-    tag: 'najczęściej cenione: styl pracy',
-  },
-]
-
-const opinionGroups: OpinionGroup[] = [
-  {
-    title: 'Po uporządkowaniu psa',
-    lead: 'Spacery, pobudzenie, trudność z mijaniem i chaos na starcie pracy.',
-    topics: ['spacery', 'reaktywność', 'pobudzenie'],
-    items: [
-      {
-        name: 'J.',
-        role: 'opiekunka psa',
-        context: 'po pierwszym planie spacerów',
-        quote: 'Wreszcie wiem, co robimy przed spacerem, co w trakcie i jak nie dokładać mu napięcia.',
-      },
-      {
-        name: 'T.',
-        role: 'opiekun psa',
-        context: 'po uproszczeniu tras i dystansu',
-        quote: 'Najwięcej dało uproszczenie tras, dystansu i tempa działania na początku.',
-      },
-    ],
-  },
-  {
-    title: 'Po uporządkowaniu kota',
-    lead: 'Kuweta, środowisko, wycofanie i napięcie po zmianach w domu.',
-    topics: ['kuweta', 'wycofanie', 'środowisko'],
-    items: [
-      {
-        name: 'K.',
-        role: 'opiekunka kota',
-        context: 'po sprawdzeniu środowiska i zasobów',
-        quote: 'Kuweta przestała być jedynym miejscem, wokół którego kręcił się cały stres w domu.',
-      },
-      {
-        name: 'M.',
-        role: 'opiekun kota',
-        context: 'po spokojnym ustawieniu priorytetów',
-        quote: 'Najbardziej pomogło spokojne sprawdzenie środowiska, zanim zaczęliśmy cokolwiek zmieniać.',
-      },
-    ],
-  },
-  {
-    title: 'Po pierwszej rozmowie',
-    lead: 'Spokojny kontakt, jasne tłumaczenie i konkretny pierwszy ruch bez nacisku.',
-    topics: ['spokój', 'bez oceniania', 'jasny język'],
-    items: [
-      {
-        name: 'A.',
-        role: 'opiekunka psa',
-        context: 'po pierwszym kontakcie',
-        quote: 'Dostałam konkret, a nie ogólne hasła. W końcu wiedziałam, od czego zacząć.',
-      },
-    ],
   },
 ]
 
@@ -231,18 +168,18 @@ const leadCaseStudy = displayedCaseStudies[0] ?? fallbackCaseStudy
 const proofStats: ProofStat[] = [
   {
     value: String(REAL_CASE_STUDIES.length),
-    label: 'opisanych sytuacji',
-    copy: 'z konkretnym punktem wyjścia, pierwszym ruchem i dalszym krokiem',
+    label: 'przykładowych sytuacji',
+    copy: 'pokazanych krótko: od punktu wyjścia do pierwszego kierunku pracy',
   },
   {
     value: String(MEDIA_MENTIONS.length),
-    label: 'publiczne artykuły',
-    copy: 'do sprawdzenia profilu i sposobu mówienia o trudniejszych tematach',
+    label: 'opublikowane artykuły',
+    copy: 'dla osób, które chcą przeczytać więcej o podobnych tematach',
   },
   {
     value: '1',
     label: 'publiczny profil CAPBT',
-    copy: 'najprostszy punkt sprawdzenia przed pierwszym kontaktem',
+    copy: 'krótka informacja o kwalifikacjach i obecności w katalogu',
   },
 ]
 
@@ -270,7 +207,7 @@ const proofResources: ProofResource[] = [
     id: 'capbt-profile',
     label: 'Publiczny profil',
     title: 'Profil specjalisty w CAPBT',
-    copy: 'Jeśli chcesz sprawdzić afiliację i profil zawodowy przed kontaktem, to najprostszy punkt odniesienia.',
+    copy: 'Krótka informacja o kwalifikacjach i profilu zawodowym.',
     href: CAPBT_PROFILE_URL,
     cta: 'Otwórz profil',
   },
@@ -309,7 +246,7 @@ export default function OpinionsPage() {
       provider: {
         '@type': 'Person',
         name: SPECIALIST_NAME,
-        jobTitle: 'Behawiorysta COAPE',
+        jobTitle: SPECIALIST_PUBLIC_STATUS,
         image: new URL(profilePhoto.src, baseUrl).toString(),
         description: `${SPECIALIST_CREDENTIALS}.`,
       },
@@ -334,6 +271,10 @@ export default function OpinionsPage() {
         },
       })),
     },
+    getBreadcrumbJsonLd([
+      { name: 'Strona główna', path: '/' },
+      { name: 'Opinie', path: '/opinie' },
+    ]),
   ]
 
   return (
@@ -362,8 +303,8 @@ export default function OpinionsPage() {
               />
 
               <p className="opinions-hero-note">
-                Pokazuję tu krótkie sygnały po konsultacjach, anonimowe podpisy i przykładowe sytuacje startowe. To
-                materiał do oceny stylu pracy i sensu pierwszego kroku, a nie obietnica identycznego efektu.
+                To krótkie głosy po konsultacjach i przykładowe sytuacje, które pokazują, jak zwykle zaczyna się taka
+                praca. Każda sprawa wymaga osobnej oceny.
               </p>
 
               <div className="opinions-hero-signals" aria-label="Najczęstsze tematy">
@@ -378,7 +319,8 @@ export default function OpinionsPage() {
                 <div className="opinions-profile-media">
                   <Image
                     src={profilePhoto.src}
-                    alt={`${SPECIALIST_NAME} podczas spokojnej pracy z opiekunem psa lub kota`}
+                    alt=""
+                    aria-hidden="true"
                     width={profilePhoto.width}
                     height={profilePhoto.height}
                     sizes="(max-width: 980px) 100vw, 360px"
@@ -391,7 +333,7 @@ export default function OpinionsPage() {
                 <div className="opinions-profile-copy">
                   <div className="section-eyebrow">Kto prowadzi</div>
                   <h3>{SPECIALIST_NAME}</h3>
-                  <p>Behawiorysta COAPE / CAPBT | psy i koty</p>
+                  <p>{SPECIALIST_PUBLIC_STATUS} | psy i koty</p>
                   <span>
                     Spokojny, konkretny start rozmowy. Najpierw porządkuję sytuację, potem wskazuję pierwszy krok i
                     dalszy kierunek pracy.
@@ -402,7 +344,7 @@ export default function OpinionsPage() {
               <div className="opinions-hero-proof-grid">
                 <article className="summary-card tree-backed-card opinions-hero-proof-card">
                   <div className="section-eyebrow">Co pokazują te opinie</div>
-                  <h3>Cytaty są tu w kontekście</h3>
+                  <h3>Najczęściej wraca ulga, porządek i jaśniejszy dalszy krok</h3>
                   <div className="opinions-proof-stat-list">
                     {proofStats.map((item) => (
                       <div key={item.label} className="opinions-proof-stat">
@@ -444,15 +386,15 @@ export default function OpinionsPage() {
 
         <section className="panel section-panel editorial-section" id="opinie">
           <SectionIntro
-            eyebrow="Wybrane głosy"
-            title="Najczęściej wracają trzy rzeczy: ulga, porządek i spokojny kierunek dalszej pracy"
-            description="To krótkie, zanonimizowane głosy po konsultacjach. Pokazują, co realnie zmienia dobrze ustawiony pierwszy kontakt."
+            eyebrow="Półzweryfikowane case cards"
+            title="Nie same cytaty, tylko krótki obraz sytuacji, etapu współpracy i pierwszego efektu"
+            description="Każda karta łączy głos opiekuna z kontekstem problemu, formatem kontaktu i tym, co realnie uporządkował pierwszy krok."
           />
 
           <div className="opinions-featured-grid">
-            {featuredOpinions.slice(0, 2).map((opinion, index) => (
+            {opinionCaseCards.map((opinion, index) => (
               <article
-                key={`${opinion.name}-${opinion.tag}`}
+                key={`${opinion.name}-${opinion.problemType}`}
                 className="summary-card tree-backed-card opinions-featured-card"
               >
                 <div className="opinions-featured-head">
@@ -461,17 +403,26 @@ export default function OpinionsPage() {
                     <span className="opinions-featured-order">{String(index + 1).padStart(2, '0')}</span>
                   </div>
                   <span className="opinions-featured-context">{opinion.context}</span>
+                  <div className="opinions-featured-pills" aria-label={`Metadane opinii ${opinion.name}`}>
+                    <span>{opinion.problemType}</span>
+                    <span>{opinion.cooperationStage}</span>
+                    <span>{opinion.format}</span>
+                  </div>
                 </div>
 
                 <blockquote>{opinion.quote}</blockquote>
 
+                <div className="opinions-featured-outcome">
+                  <span className="opinions-case-label">Co uporządkował pierwszy krok</span>
+                  <p>{opinion.outcome}</p>
+                </div>
+
                 <div className="opinions-card-meta opinions-card-meta--featured">
                   <div className="opinions-card-signature">
                     <strong>{opinion.name}</strong>
-                    <span>{opinion.role}</span>
+                    <span>{opinion.signature}</span>
                   </div>
                   <span className="opinions-card-note">{opinion.note}</span>
-                  <span className="opinions-card-tag">{opinion.tag}</span>
                 </div>
               </article>
             ))}
@@ -488,7 +439,7 @@ export default function OpinionsPage() {
           <SectionIntro
             eyebrow="Przykładowe sytuacje"
             title="Krótki kontekst problemu, pierwszy ruch i kierunek dalszej pracy"
-            description="Te karty opierają się na istniejących opisach przypadków. Zamiast obiecywać identyczny finał pokazują, od czego zwykle zaczyna się porządkowanie tematu."
+            description="Te karty pokazują, od czego zwykle zaczyna się porządkowanie tematu i jaki pierwszy ruch bywa sensowny."
           />
 
           <div className="premium-two-column-grid opinions-case-grid">
@@ -545,9 +496,9 @@ export default function OpinionsPage() {
 
         <section className="panel section-panel editorial-section" id="wiarygodnosc">
           <SectionIntro
-            eyebrow="Poza samą opinią"
-            title="Jeśli chcesz sprawdzić profil i publiczne źródła, znajdziesz je tutaj"
-            description="Profil CAPBT i publiczne publikacje pomagają spokojnie sprawdzić sposób pracy przed kontaktem."
+            eyebrow="Profil i publikacje"
+            title="Jeśli chcesz, możesz zajrzeć też tutaj"
+            description="Krótko: profil CAPBT i opublikowane artykuły."
           />
 
           <div className="summary-grid opinions-proof-grid">
@@ -570,9 +521,9 @@ export default function OpinionsPage() {
         </section>
 
         <TrustSignalSection
-          eyebrow="Dodatkowe informacje"
-          title="Dodatkowe informacje i źródła"
-          description="Obok cytatów zostają anonimowe historie, publiczne źródła i jasna granica bez obietnic identycznego efektu."
+          eyebrow="Warto wiedzieć"
+          title="Kilka ważnych dopowiedzeń"
+          description="Krótko o tym, jak czytać te głosy i przykłady."
           items={TRUST_SIGNAL_SETS.opinions}
         />
 
@@ -580,7 +531,7 @@ export default function OpinionsPage() {
           <section className="panel section-panel editorial-section">
             <SectionIntro
               eyebrow="Lekki następny krok"
-              title="Jeśli po opiniach chcesz najpierw zobaczyć materiał"
+              title="Jeśli po opiniach chcesz najpierw sięgnąć po materiał"
               description="To materiał przygotowujący do rozmowy. Porządkuje start dla osób, które chcą najpierw zebrać myśli."
             />
 
@@ -600,7 +551,7 @@ export default function OpinionsPage() {
         <section className="panel section-panel editorial-section" id="efekt">
           <SectionIntro
             eyebrow="Efekt konsultacji"
-            title="Co najczęściej zmienia dobrze poprowadzona pierwsza rozmowa"
+            title="Co najczęściej daje pierwsza rozmowa"
             description="Konsultacja nie obiecuje cudu. Daje zrozumienie i mniejszy chaos, żeby kolejne kroki były prostsze do podjęcia."
           />
 
@@ -613,7 +564,7 @@ export default function OpinionsPage() {
             ))}
           </div>
 
-          <p className="muted top-gap">To zwykle daje największą ulgę: temat przestaje być mgłą, a staje się planem.</p>
+          <p className="muted top-gap">Najczęściej o to właśnie chodzi na starcie: mniej chaosu i jaśniejszy plan.</p>
 
           <div className="hero-actions editorial-final-actions">
             <Link href="#faq" prefetch={false} className="prep-inline-link">
@@ -639,7 +590,7 @@ export default function OpinionsPage() {
         <EditorialFaqSection
           id="faq"
           title="Najczęstsze pytania po przeczytaniu głosów i sytuacji startowych"
-          description="Tu zostaje tylko minimum potrzebne do decyzji: czy zrobić pierwszy krok, czy jeszcze wrócić do publicznych źródeł."
+          description="Tu zostają najważniejsze odpowiedzi przed pierwszym kontaktem."
           items={faqItems}
           afterContent={
             <div className="premium-contact-band opinions-contact-band">
@@ -669,7 +620,7 @@ export default function OpinionsPage() {
             </p>
 
             <p className="muted top-gap-small">
-              Po konsultacji link do opinii wysyłam osobno. Publicznie pokazuję tylko zanonimizowane, krótkie głosy po ręcznej akceptacji.
+              Pokazuję tu tylko krótkie głosy po konsultacjach i kilka przykładowych sytuacji.
             </p>
 
             <FunnelPrimaryActions

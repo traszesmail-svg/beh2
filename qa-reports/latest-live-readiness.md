@@ -1,8 +1,8 @@
 # Raport Go-Live Readiness
 
-- Data: 2026-04-07 14:04:57 Europe/Warsaw
+- Data: 2026-04-17 16:02:32 Europe/Warsaw
 - Tryb: report-only
-- Zrodlo env: production snapshot (C:\projekt\behawior15-mvp-full\beh2\.vercel\.env.production.current)
+- Zrodlo env: default runtime env
 - Wynik ogolny: READY
 - Gotowe: 5/5
 - Blockery: 0
@@ -15,21 +15,21 @@
 
 ### GOTOWE - Publiczny URL
 - Stan: ready
-- Summary: Publiczny URL aplikacji jest gotowy do linkow zwrotnych i maili: https://coapebehawiorysta.vercel.app (HTTP 200).
-- Next: Brak blokera po stronie publicznego URL i jego dostepnosci HTTP.
+- Summary: Publiczny URL aplikacji jest gotowy do linków zwrotnych i maili: https://regulskibehawiorysta.pl (HTTP 200).
+- Next: Brak blokera po stronie publicznego URL i jego dostępności HTTP.
 
 ### GOTOWE - Schema Supabase
 - Stan: ready
-- Summary: Canonical Supabase schema i rollout migrations sa zsynchronizowane z aktualnym code path.
+- Summary: Canonical Supabase schema i rollout migrations są zsynchronizowane z aktualnym code path.
 - Next: Brak blokera po stronie booking/payment/QA schema.
 
 ### GOTOWE - Maile klienta
 - Stan: ready
-- Summary: Wysylka maili do klientow zewnetrznych jest gotowa z aktualnej konfiguracji Resend.
+- Summary: Wysyłka maili do klientów zewnętrznych jest gotowa z aktualnej konfiguracji Resend.
 - Next: Brak blokera po stronie konfiguracji maili klienta.
 
 ### GOTOWE - PayU online
 - Stan: ready
-- Summary: PayU online jest swiadomie wylaczone. Checkout dziala przez wplate reczna i potwierdzenie na stronie.
-- Next: Mozesz wystartowac na platnosci recznej. Po aktywacji produkcyjnego PayU ustaw PAYU_MODE=auto.
+- Summary: PayU online jest świadomie wyłączone. Checkout działa przez wpłatę ręczną i potwierdzenie na stronie.
+- Next: Możesz wystartować na płatności ręcznej. Po aktywacji produkcyjnego PayU ustaw PAYU_MODE=auto.
 

@@ -33,7 +33,7 @@ export function SpeciesShopPage({
   const speciesLabel = species === 'koty' ? 'kotów' : 'psów'
   const pdfCardsOnly = pdfCards.filter((card) => card.kind === 'pdf')
   const bundleCardsOnly = pdfCards.filter((card) => card.kind === 'pakiet')
-  const pdfShelfHref = '/niezbednik#pdf-y'
+  const pdfShelfHref = '/niezbednik#polecane-starty'
   const speciesAnchors = [
     { href: `#${species}-konsultacja`, label: 'Konsultacja 15 min' },
     { href: `#${species}-pdf`, label: 'Materiały PDF' },

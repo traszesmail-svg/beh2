@@ -30,6 +30,8 @@ import {
   SITE_HEADER_SUBTITLE,
   SITE_NAME,
   SPECIALIST_LOCATION,
+  SPECIALIST_PUBLIC_STATUS,
+  SPECIALIST_STATUS_EXPLANATION,
   SPECIALIST_NAME,
   getPublicContactDetails,
 } from '@/lib/site'
@@ -46,7 +48,7 @@ type SectionIntroProps = {
   description: string
 }
 
-type TrustIconKind = 'badge' | 'paw' | 'camera' | 'plan'
+type TrustIconKind = 'badge' | 'paw' | 'camera' | 'plan' | 'article'
 
 type TrustItem = {
   label: string
@@ -133,6 +135,13 @@ function TrustIcon({ kind }: { kind: TrustIconKind }) {
           <path d="M9.5 9h5M9.5 12h5M9.5 15h3.4" />
         </svg>
       )
+    case 'article':
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M7.5 5.5h9A1.5 1.5 0 0 1 18 7v10a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 6 17V7a1.5 1.5 0 0 1 1.5-1.5Z" />
+          <path d="M9 9.2h6M9 12h6M9 14.8h4.2" />
+        </svg>
+      )
   }
 
   return null
@@ -156,37 +165,18 @@ const contactHref = '/kontakt#formularz'
 const specialistImage = { src: '/branding/omnie-hero.webp', width: 1024, height: 1536 } as const
 const consultationImage = { src: '/branding/omnie2.png', width: 1024, height: 1536 } as const
 const aboutImage = { src: '/branding/specialist-krzysztof-portrait.jpg', width: 1200, height: 1500 } as const
-const homeAuthorityLine = 'Behawiorysta COAPE, trener zwierząt towarzyszących i technik weterynarii.'
+const preciseAuthorityLine = `${SPECIALIST_PUBLIC_STATUS}, trener zwierząt towarzyszących i technik weterynarii.`
 
 const toolkitOffer = getOffer('poradniki-pdf')
 
-const quickStartService = FUNNEL_SERVICE_CONFIG['szybka-konsultacja-15-min']
 const fullConsultationService = FUNNEL_SERVICE_CONFIG['konsultacja-behawioralna-online']
 
 const trustItems: TrustItem[] = [
-  { label: 'Behawiorysta COAPE', icon: 'badge' },
-  { label: 'Psy i koty', icon: 'paw' },
-  { label: 'Konsultacje online', icon: 'camera' },
-  { label: 'Plan po konsultacji', icon: 'plan' },
+  { label: SPECIALIST_PUBLIC_STATUS, icon: 'badge' },
+  { label: 'Profil publiczny CAPBT', icon: 'camera' },
+  { label: 'Publikacje branżowe', icon: 'article' },
+  { label: 'Bez kar i bez obietnic cudów', icon: 'plan' },
 ]
-
-const heroOfferCards = [
-  {
-    eyebrow: 'Pierwszy krok',
-    title: `${quickStartService.durationMinutes} min / ${getPublicServicePriceLabel('szybka-konsultacja-15-min')}`,
-    copy: quickStartService.publicSummary,
-  },
-  {
-    eyebrow: 'Niezbędnik',
-    title: toolkitOffer.title,
-    copy: toolkitOffer.heroSummary,
-  },
-  {
-    eyebrow: 'Gdy temat jest szerszy',
-    title: `${fullConsultationService.durationMinutes} min / ${getPublicServicePriceLabel('konsultacja-behawioralna-online')}`,
-    copy: fullConsultationService.publicSummary,
-  },
-] as const
 
 const speciesCards: SpeciesCard[] = [
   {
@@ -254,12 +244,12 @@ const featuredLeadMagnets = [
 
 const authorityRoleCards = [
   {
-    title: 'Behawiorysta COAPE',
-    copy: 'porządkowanie przyczyn i tła zachowania',
+    title: SPECIALIST_PUBLIC_STATUS,
+    copy: 'uczciwie nazwany status widoczny w publicznym źródle',
   },
   {
-    title: 'Trener zwierząt towarzyszących',
-    copy: 'praca z realną codziennością psa lub kota',
+    title: 'Profil publiczny CAPBT',
+    copy: 'czytelny punkt odniesienia dla kwalifikacji i afiliacji',
   },
   {
     title: 'Technik weterynarii',
@@ -269,8 +259,8 @@ const authorityRoleCards = [
 
 const authoritySupportCards: AuthoritySupportCard[] = [
   {
-    title: 'Najpierw przyczyna',
-    copy: 'Najpierw sprawdzam, co naprawdę napędza zachowanie, a nie tylko jak wygląda objaw.',
+    title: 'Jak najuczciwiej nazwać kwalifikacje',
+    copy: SPECIALIST_STATUS_EXPLANATION,
   },
   {
     title: 'Plan dopasowany do domu',
@@ -327,9 +317,9 @@ export default function HomePage() {
       provider: {
         '@type': 'Person',
         name: SPECIALIST_NAME,
-        jobTitle: 'Behawiorysta COAPE',
+        jobTitle: SPECIALIST_PUBLIC_STATUS,
         image: new URL(specialistImage.src, baseUrl).toString(),
-        description: homeAuthorityLine,
+        description: preciseAuthorityLine,
       },
       contactPoint: contact.email
         ? {
@@ -344,7 +334,7 @@ export default function HomePage() {
       '@context': 'https://schema.org',
       '@type': 'Person',
       name: SPECIALIST_NAME,
-      description: homeAuthorityLine,
+      description: preciseAuthorityLine,
       image: new URL(specialistImage.src, baseUrl).toString(),
       sameAs: [COAPE_INTL_URL, COAPE_ORG_URL, CAPBT_ORG_URL, CAPBT_PROFILE_URL, INSTAGRAM_PROFILE_URL],
       homeLocation: { '@type': 'Place', name: SPECIALIST_LOCATION },
@@ -373,56 +363,36 @@ export default function HomePage() {
               <div className="section-eyebrow home-hero-eyebrow">{SITE_HEADER_SUBTITLE}</div>
 
               <div className="home-hero-copy">
-                <h1>Twój pies albo kot zachowuje się inaczej niż powinien i chcesz wiedzieć, co z tym zrobić.</h1>
-              <p className="home-hero-text">
-                  Pomagam opiekunom, którzy widzą problem i szukają konkretnej pomocy, nie kolejnych ogólnych porad z internetu.
-                  Kwadrans z behawiorystą to najprostszy start, gdy chcesz spokojnie ustalić pierwszy krok.
+                <h1>Jeśli coś w zachowaniu Twojego psa albo kota Cię niepokoi, zacznij od spokojnej rozmowy.</h1>
+                <p className="home-hero-text">
+                  Pomagam opiekunom, którzy widzą problem i chcą wiedzieć, co zrobić dalej. Kwadrans z behawiorystą to
+                  najprostszy start, gdy chcesz krótko opisać sytuację i dostać jasny kierunek.
                 </p>
               </div>
 
-              <div className="home-hero-offer-grid" aria-label="Główne sposoby rozpoczęcia współpracy">
-                {heroOfferCards.map((card) => (
-                  <article key={card.title} className="home-hero-offer-card">
-                    <span className="home-hero-offer-label">{card.eyebrow}</span>
-                    <strong className="home-hero-offer-title">{card.title}</strong>
-                    <p className="home-hero-offer-copy">{card.copy}</p>
-                  </article>
-                ))}
+              <div className="hero-actions home-hero-actions">
+                <Link href={FUNNEL_PRIMARY_HREF} prefetch={false} className="button button-primary big-button home-primary-cta">
+                  Umów Kwadrans z behawiorystą
+                </Link>
+                <Link href="#pies-i-kot" prefetch={false} className="button button-ghost big-button home-secondary-cta">
+                  Nie wiem, od czego zacząć
+                </Link>
               </div>
 
-              <FunnelPrimaryActions
-                audioHref={FUNNEL_PRIMARY_HREF}
-                consultationHref={FUNNEL_UPGRADE_HREF}
-                contactHref={contactHref}
-                primaryLocation="home-hero-audio"
-                secondaryLocation="home-hero-toolkit"
-                actionsClassName="hero-actions home-hero-actions"
-                noteClassName="muted"
-                note={
-                  <>
-                    Jeśli od razu wiesz, że temat jest szerszy, wybierz{' '}
-                    <Link href={FUNNEL_UPGRADE_HREF} prefetch={false} className="prep-inline-link">
-                      {FUNNEL_CTA_LABELS.consultation.toLowerCase()}
-                    </Link>
-                    . Jeśli potrzebujesz tylko krótkiego doprecyzowania, zostaje{' '}
-                    <Link href={contactHref} prefetch={false} className="prep-inline-link">
-                      {FUNNEL_CTA_LABELS.contact.toLowerCase()}
-                    </Link>
-                    .
-                  </>
-                }
-              />
-
-              <p className="home-hero-link-row">
-                Masz już konkretny kontekst?{' '}
+              <div className="editorial-hero-meta" aria-label="Wybór ścieżki startowej">
                 <Link href={dogsHref} prefetch={false} className="prep-inline-link">
                   Pies
-                </Link>{' '}
-                albo{' '}
-                <Link href={catsHref} prefetch={false} className="prep-inline-link">
-                  kot
                 </Link>
-                .
+                <Link href={catsHref} prefetch={false} className="prep-inline-link">
+                  Kot
+                </Link>
+                <Link href={contactHref} prefetch={false} className="prep-inline-link">
+                  Krótkie pytanie
+                </Link>
+              </div>
+
+              <p className="muted">
+                Konsultacja 60 min, kontakt i Niezbędnik zostają niżej. Na pierwszym ekranie najprościej wybrać Kwadrans albo wejść w ścieżkę psa lub kota.
               </p>
             </div>
 
@@ -464,8 +434,8 @@ export default function HomePage() {
         <section className="panel section-panel editorial-section" id="pies-i-kot">
           <SectionIntro
             eyebrow="Pies i kot"
-            title="Jeśli wiesz już, czy temat dotyczy psa czy kota, wybierz właściwą stronę"
-            description="Na stronie psa i kota od razu znajdziesz odpowiednie tematy, Kwadrans z behawiorystą, Niezbędnik i konsultację 60 min, gdy temat jest szerszy."
+            title="Wybierz stronę dla psa albo kota"
+            description="Znajdziesz tam najczęstsze tematy, Kwadrans z behawiorystą, Niezbędnik i konsultację 60 min przy szerszych sprawach."
           />
 
           <div className="premium-two-column-grid top-gap">
@@ -505,9 +475,9 @@ export default function HomePage() {
 
         <section className="panel section-panel editorial-section" id="jak-pomagam">
           <SectionIntro
-            eyebrow="Jak to działa"
+            eyebrow="Jak wygląda start"
             title="Zacznij od Kwadransu z behawiorystą"
-            description="Reaktywność na spacerze, lęk separacyjny, problemy z kuwetą czy konflikty między kotami nie potrzebują na starcie chaosu. Najpierw ustalamy priorytet."
+            description="Reaktywność na spacerze, lęk separacyjny, problemy z kuwetą czy konflikty między kotami warto najpierw spokojnie uporządkować."
           />
 
           <div className="editorial-process-layout home-process-layout">
@@ -562,7 +532,7 @@ export default function HomePage() {
                 <Link href={contactHref} prefetch={false} className="prep-inline-link">
                   {FUNNEL_CTA_LABELS.contact.toLowerCase()}
                 </Link>
-                . To krótka wiadomość, nie długi mail.
+                .
               </>
             }
           />
@@ -571,8 +541,8 @@ export default function HomePage() {
         <section className="panel section-panel editorial-section" id="bezplatne-materialy">
           <SectionIntro
             eyebrow="Bezpłatne materiały"
-            title="Jeśli chcesz wejść lżej, możesz najpierw sięgnąć po krótki materiał startowy"
-            description="To pomocnicza opcja dla osób, które chcą uporządkować temat przed rozmową. Kwadrans z behawiorystą pozostaje najprostszym startem."
+            title="Jeśli chcesz, możesz najpierw sięgnąć po krótki materiał startowy"
+            description="To dodatkowa opcja dla osób, które chcą uporządkować temat przed rozmową. Kwadrans z behawiorystą pozostaje najprostszym startem."
           />
 
           <div className="card-grid three-up top-gap">
@@ -598,7 +568,7 @@ export default function HomePage() {
           <SectionIntro
             eyebrow="Opinie"
             title="Co opiekunowie mówią o konsultacjach"
-            description="Konkretne głosy po Kwadransie z behawiorystą i po pełniejszych konsultacjach. Pokazują, co pomagało zrozumieć sytuację i zacząć spokojniej."
+            description="Krótkie głosy po pierwszym kontakcie i po pełniejszych konsultacjach."
           />
 
           <div className="home-opinion-featured-grid top-gap">
@@ -664,8 +634,7 @@ export default function HomePage() {
               </p>
 
               <p className="premium-authority-links-intro">
-                Certyfikację i afiliacje można sprawdzić publicznie. Poniżej są oryginalne logotypy organizacji i link do publicznego profilu
-                specjalisty.
+                Poniżej są organizacje, z którymi jestem związany, oraz link do profilu CAPBT.
               </p>
 
               <div className="home-authority-proof-grid" aria-label="Publiczne źródła i afiliacje">
@@ -698,7 +667,7 @@ export default function HomePage() {
 
               <div className="specialist-badge-list">
                 <Link href={CAPBT_PROFILE_URL} prefetch={false} target="_blank" rel="noopener noreferrer" className="specialist-badge">
-                  Zobacz publiczny profil specjalisty
+                  Zobacz profil CAPBT
                 </Link>
               </div>
 
@@ -733,8 +702,8 @@ export default function HomePage() {
         <section className="panel section-panel editorial-section" id="faq">
           <SectionIntro
             eyebrow="FAQ"
-            title="Najczęstsze pytania przed pierwszym ruchem"
-            description="Krótko o pytaniach, które najczęściej pojawiają się przed kontaktem, Niezbędnikiem albo krótką wiadomością."
+            title="Najczęstsze pytania przed pierwszym kontaktem"
+            description="Krótko o pytaniach, które najczęściej pojawiają się przed rozmową, Niezbędnikiem albo wiadomością."
           />
 
           <div className="premium-faq-grid">
@@ -749,8 +718,8 @@ export default function HomePage() {
           <div className="premium-contact-band">
             <div className="premium-contact-band-copy">
               <div className="section-eyebrow">Kontakt</div>
-              <strong>Jeśli wolisz najpierw zapytać, napisz krótką wiadomość.</strong>
-              <p>Wystarczy gatunek, temat i kilka zdań. {COPY_HELPERS.contactResponseWindow} i wskazuję, jaki pierwszy krok ma najwięcej sensu.</p>
+              <strong>Jeśli chcesz najpierw zapytać, napisz krótką wiadomość.</strong>
+              <p>Wystarczy gatunek, temat i kilka zdań. {COPY_HELPERS.contactResponseWindow}</p>
             </div>
 
             <div className="hero-actions editorial-final-actions">
@@ -781,7 +750,7 @@ export default function HomePage() {
               secondaryLocation="home-final-toolkit"
               note={
                 <>
-                  Jeśli potrzebujesz tylko doprecyzowania przed decyzją, użyj{' '}
+                  Jeśli chcesz tylko krótko doprecyzować temat, użyj{' '}
                   <Link href={contactHref} prefetch={false} className="prep-inline-link">
                     {FUNNEL_CTA_LABELS.contact.toLowerCase()}
                   </Link>

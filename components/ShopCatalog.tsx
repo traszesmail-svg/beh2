@@ -143,8 +143,8 @@ export function PdfBundleShelfCard({ bundle }: { bundle: PdfBundle }) {
           <dd>{bundle.guides.map((guide) => guide.title).join(' · ')}</dd>
         </div>
         <div className="pdf-path-card-fact">
-          <dt>Wskazówka</dt>
-          <dd>Najlepiej, gdy jeden PDF to za mało i chcesz wejść szerzej w temat bez chaosu.</dd>
+          <dt>Kiedy ma sens</dt>
+          <dd>Najlepiej wtedy, gdy jeden PDF to za mało i chcesz uporządkować temat szerzej bez dokładania chaosu.</dd>
         </div>
       </dl>
 
@@ -160,8 +160,7 @@ export function PdfBundleShelfCard({ bundle }: { bundle: PdfBundle }) {
 export function BookShelfCard({ book, ctaLabel = 'Zobacz książkę' }: { book: ShopBookCard; ctaLabel?: string }) {
   const bookImage = book.image ?? book.coverSrc ?? ''
   const bookImageAlt = book.imageAlt ?? book.coverAlt ?? `Okładka książki ${book.title}`
-  const bookDescription =
-    book.shortDescription ?? book.note ?? 'Dla osób, które chcą wejść szerzej w temat i wolą papierową półkę obok PDF-ów.'
+  const bookDescription = book.shortDescription ?? book.note ?? 'Dla osób, które chcą spokojnie wejść szerzej w temat i wracać do niego we własnym tempie.'
   const affiliateHref = book.amazonAffiliateUrl ?? book.amazonHref ?? '#'
   const speciesLabel = book.speciesCategory ?? book.species ?? 'papier'
 
@@ -181,7 +180,7 @@ export function BookShelfCard({ book, ctaLabel = 'Zobacz książkę' }: { book: 
 
       <div className="shop-book-copy">
         <div className="shop-book-topline">
-          <span className="section-eyebrow">{speciesLabel === 'koty' ? 'Koty' : speciesLabel === 'psy' ? 'Psy' : 'Książka papierowa'}</span>
+          <span className="section-eyebrow">{speciesLabel === 'koty' ? 'Koty' : speciesLabel === 'psy' ? 'Psy' : 'Książka'}</span>
         </div>
         <h3>{book.title}</h3>
         <div className="shop-book-author">{book.author}</div>
@@ -228,7 +227,7 @@ export function AccessoryShelfCard({ accessory }: { accessory: ShopAccessoryCard
 
       <dl className="pdf-path-card-facts">
         <div className="pdf-path-card-fact">
-          <dt>Po co może się przydać</dt>
+          <dt>W czym pomaga</dt>
           <dd>{accessory.helpsWith}</dd>
         </div>
         <div className="pdf-path-card-fact">

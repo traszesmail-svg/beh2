@@ -212,7 +212,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
     fileName: '05-wpis-jak-wyglada-konsultacja-behawioralna-online.md',
     publishedAt: '2026-04-13',
     categoryLabel: 'Konsultacja',
-    categoryHref: '/o-mnie',
+    categoryHref: '/konsultacja-behawioralna-online',
     topic: 'konsultacja',
     audioHref: buildBookHref(null, 'szybka-konsultacja-15-min'),
     supportLinks: [
@@ -316,7 +316,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
       },
       {
         label: 'Pierwsze dni po adopcji',
-        href: '/oferta/poradniki-pdf/pierwsze-dni-po-adopcji-psa-lub-kota',
+        href: '/niezbednik',
         description: 'Konkretny materiał, jeśli jesteś na starcie po adopcji.',
       },
       {
@@ -336,7 +336,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
     fileName: '10-wpis-kiedy-behawiorysta-kiedy-trener.md',
     publishedAt: '2026-04-09',
     categoryLabel: 'Konsultacja',
-    categoryHref: '/o-mnie',
+    categoryHref: '/konsultacja-behawioralna-online',
     topic: 'konsultacja',
     audioHref: buildBookHref(null, 'szybka-konsultacja-15-min'),
     supportLinks: [
@@ -367,7 +367,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
     fileName: '11-wpis-behawiorysta-zoopsycholog-trener.md',
     publishedAt: '2026-04-08',
     categoryLabel: 'Konsultacja',
-    categoryHref: '/o-mnie',
+    categoryHref: '/konsultacja-behawioralna-online',
     topic: 'konsultacja',
     audioHref: buildBookHref(null, 'szybka-konsultacja-15-min'),
     supportLinks: [

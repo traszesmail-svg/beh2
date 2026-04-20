@@ -106,7 +106,7 @@ export default async function FormPage({
             {qaBooking ? <div className="status-pill transaction-status-pill">Tryb testowy</div> : null}
             <h1>Uzupełnij dane</h1>
             <p className="hero-text compact-panel-text">
-              Wpisz tylko dane potrzebne do rezerwacji. Po zapisaniu formularza termin chwilowo się zablokuje na czas płatności.
+              Wpisz tylko dane potrzebne do rezerwacji. Po zapisaniu formularza termin chwilowo się zablokuje na czas dokończenia płatności.
             </p>
 
             <div className="stack-gap top-gap booking-facts-stack">
@@ -136,11 +136,15 @@ export default async function FormPage({
                   {isAudioOnlyBookingService(serviceType) ? 'Kamera nie jest potrzebna.' : 'To konsultacja online z większą ilością czasu na temat.'}
                 </span>
               </div>
+              <div className="list-card accent-outline tree-backed-card">
+                <strong>Co dalej</strong>
+                <span>Po tym formularzu przejdziesz do płatności, a po jej zakończeniu zobaczysz potwierdzenie kolejnego kroku rezerwacji.</span>
+              </div>
               <div className="list-card tree-backed-card">
                 <PricingDisclosure
                   stage="pre-payment"
                   labelAs="strong"
-                  message={`${amountLabel}. To finalna kwota dla tej usługi przed przejściem do wpłaty ręcznej.`}
+                  message={`${amountLabel}. To finalna kwota dla tej usługi przed przejściem do płatności.`}
                 />
               </div>
             </div>
@@ -165,7 +169,7 @@ export default async function FormPage({
               <>
                 <div className="section-eyebrow">Dane do potwierdzenia</div>
                 <h2>Formularz rezerwacji</h2>
-                <p className="hero-text compact-panel-text">Wpisz tylko informacje potrzebne do rezerwacji i potwierdzenia.</p>
+                <p className="hero-text compact-panel-text">Wpisz tylko informacje potrzebne do rezerwacji i przejścia do płatności.</p>
                 <BookingForm
                   problemType={problem}
                   serviceType={serviceType}

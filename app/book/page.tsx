@@ -151,6 +151,8 @@ const SPECIES_CARDS: Record<BookingSpecies, { title: string; summary: string; bu
   },
 }
 
+const BOOKING_DECISION_STEPS = ['1. Wybierz gatunek', '2. Wybierz temat', '3. Wybierz termin', '4. Uzupełnij dane'] as const
+
 function getServiceLead(serviceType: BookingServiceType) {
   return FUNNEL_SERVICE_CONFIG[serviceType].bookingLead
 }
@@ -230,6 +232,12 @@ export default async function BookPage({
               <h1>{selectedSpecies ? getTopicSectionTitle(selectedSpecies) : 'Wybierz, czy konsultacja dotyczy psa czy kota'}</h1>
               <p className="hero-text">{getServiceLead(serviceType)}</p>
 
+              <div className="editorial-hero-meta" aria-label="Kroki rezerwacji">
+                {BOOKING_DECISION_STEPS.map((step) => (
+                  <span key={step}>{step}</span>
+                ))}
+              </div>
+
               <div className="book-hero-stats top-gap-small">
                 <div className="book-hero-stat tree-backed-card">
                   <span className="book-hero-stat-label">Wybrana usługa</span>
@@ -260,6 +268,49 @@ export default async function BookPage({
               }
             />
           </div>
+
+          {!selectedSpecies ? (
+            <div className="premium-two-column-grid top-gap-small">
+              <article className="summary-card tree-backed-card">
+                <div className="section-eyebrow">Najczęstszy wybór na start</div>
+                <h2>Kwadrans z behawiorystą</h2>
+                <p>
+                  Wybierz go, jeśli chcesz spokojnie ustalić pierwszy krok, masz jedno pytanie albo nie chcesz jeszcze zgadywać, jak
+                  szeroki jest temat.
+                </p>
+                <ul className="premium-bullet-list">
+                  <li>15 minut rozmowy audio bez kamery</li>
+                  <li>dobry pierwszy krok przy niepewnym temacie</li>
+                  <li>pozwala zdecydować, czy potrzebna jest szersza konsultacja</li>
+                </ul>
+              </article>
+
+              <article className="summary-card tree-backed-card">
+                <div className="section-eyebrow">Opcja dla tematów szerszych</div>
+                <h2>Konsultacja 60 min</h2>
+                <p>
+                  Wybierz ją, jeśli problem jest wielowątkowy, trwa od dawna albo wiesz już, że potrzebujesz pełniejszego uporządkowania i
+                  planu po rozmowie.
+                </p>
+                <ul className="premium-bullet-list">
+                  <li>60 minut konsultacji online</li>
+                  <li>więcej czasu na szerszy obraz tematu</li>
+                  <li>po rozmowie dostajesz podsumowanie pisemne</li>
+                </ul>
+                {serviceType !== 'konsultacja-behawioralna-online' ? (
+                  <div className="hero-actions top-gap-small">
+                    <Link
+                      href={buildBookHref(null, 'konsultacja-behawioralna-online', qaBooking)}
+                      prefetch={false}
+                      className="button button-ghost"
+                    >
+                      {FUNNEL_CTA_LABELS.consultation}
+                    </Link>
+                  </div>
+                ) : null}
+              </article>
+            </div>
+          ) : null}
 
           {!selectedSpecies ? (
             <div className="card-grid two-up top-gap">

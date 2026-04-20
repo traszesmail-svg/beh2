@@ -9,6 +9,7 @@ import { LeadMagnetSignup } from '@/components/LeadMagnetSignup'
 import { OfferEntrySection } from '@/components/OfferEntrySection'
 import { buildBookHref } from '@/lib/booking-routing'
 import { getLeadMagnetBySlug } from '@/lib/growth-layer'
+import { getBreadcrumbJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
 import {
   CATS_PAGE_PHOTO,
@@ -16,6 +17,7 @@ import {
   SITE_TAGLINE,
   SPECIALIST_CREDENTIALS,
   SPECIALIST_NAME,
+  SPECIALIST_PUBLIC_STATUS,
   getPublicContactDetails,
 } from '@/lib/site'
 import { getCanonicalBaseUrl } from '@/lib/server/env'
@@ -24,10 +26,10 @@ import { FAQ_SHORTLISTS } from '@/lib/trust-layer'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: 'Pomoc behawioralna dla kotów',
+  title: 'Behawiorysta kotów online - pomoc dla opiekunów kotów',
   path: '/koty',
   description:
-    'Konsultacje behawioralne dla opiekunów kotów. Pomoc przy kuwecie, stresie, wycofaniu, napięciu między kotami i zmianach w domu.',
+    'Pomoc behawioralna online dla opiekunów kotów. Kuweta, stres, wycofanie, napięcie między kotami i zmiany w domu.',
 })
 
 type SectionIntroProps = {
@@ -244,6 +246,36 @@ const miniCaseStudies = [
   },
 ] as const
 
+const relatedResourceCards = [
+  {
+    eyebrow: 'Problem',
+    title: 'Załatwianie poza kuwetą',
+    copy: 'Jeśli temat krąży wokół kuwety, domu i subtelnych sygnałów stresu, zacznij od strony problemowej albo checklisty.',
+    primaryHref: '/koty/zalatwianie-poza-kuweta',
+    primaryLabel: 'Zobacz stronę problemową',
+    secondaryHref: '/bezplatne-materialy/kot-kuweta-checklista',
+    secondaryLabel: 'Pobierz checklistę kuwety',
+  },
+  {
+    eyebrow: 'Problem',
+    title: 'Konflikt między kotami',
+    copy: 'Jeśli rośnie napięcie, blokowanie przejść albo gonitwy, przejdź do strony problemowej i pakietu dla domu z napięciem.',
+    primaryHref: '/koty/konflikt-miedzy-kotami',
+    primaryLabel: 'Zobacz stronę problemową',
+    secondaryHref: '/oferta/poradniki-pdf/pakiety/pakiet-kot-bez-napiecia',
+    secondaryLabel: 'Zobacz pakiet dla napięcia w domu',
+  },
+  {
+    eyebrow: 'Hub',
+    title: 'Niezbędnik dla opiekunów psów i kotów',
+    copy: 'Jeśli chcesz wejść od materiałów, pakietów i spokojnego wyboru następnego kroku, wróć do huba problemów i treści evergreen.',
+    primaryHref: '/niezbednik',
+    primaryLabel: 'Przejdź do Niezbędnika',
+    secondaryHref: '/oferta',
+    secondaryLabel: 'Porównaj wszystkie wejścia',
+  },
+] as const
+
 const faqItems = FAQ_SHORTLISTS.cats
 
 export default function CatsPage() {
@@ -266,7 +298,7 @@ export default function CatsPage() {
       provider: {
         '@type': 'Person',
         name: SPECIALIST_NAME,
-        jobTitle: 'Behawiorysta COAPE',
+        jobTitle: SPECIALIST_PUBLIC_STATUS,
         description: `${SPECIALIST_CREDENTIALS}.`,
       },
       contactPoint: contact.email
@@ -287,6 +319,10 @@ export default function CatsPage() {
         acceptedAnswer: { '@type': 'Answer', text: item.answer },
       })),
     },
+    getBreadcrumbJsonLd([
+      { name: 'Strona główna', path: '/' },
+      { name: 'Koty', path: '/koty' },
+    ]),
   ]
 
   return (
@@ -299,8 +335,8 @@ export default function CatsPage() {
           species="kot"
           sectionId="start"
           eyebrow="Oferta dla kota"
-          title="Kwadrans z behawiorystą jest najprostszym startem dla kota."
-          description="Jeśli temat jest szerszy, wybierz konsultację online 60 min. Jeśli chcesz tylko doprecyzować sprawę, napisz krótką wiadomość."
+          title="Zacznij od Kwadransu z behawiorystą."
+          description="Jeśli temat jest szerszy, wybierz konsultację online 60 min. Jeśli chcesz tylko krótko doprecyzować sprawę, napisz wiadomość."
         />
 
         <section className="editorial-hero-shell premium-hero-shell">
@@ -326,7 +362,7 @@ export default function CatsPage() {
                 href={introCallHref}
                 analyticsLocation="cats-hero-audio"
                 className="cat-hero-soft-cta"
-                title="Nie wiesz jeszcze, od czego zacząć z problemem kota?"
+                title="Chcesz spokojnie omówić problem kota?"
                 copy="Kwadrans z behawiorystą wystarczy, żeby spokojnie opisać sytuację, ustalić, czy to temat behawioralny, środowiskowy czy zdrowotny, i wybrać pierwszy ruch."
               />
 
@@ -491,7 +527,7 @@ export default function CatsPage() {
         <section className="panel section-panel editorial-section" id="material-startowy">
           <SectionIntro
             eyebrow="Lżejszy start"
-            title="Jeśli temat dotyczy kuwety albo napięcia w domu, możesz zacząć od krótkiej checklisty"
+            title="Jeśli temat dotyczy kuwety albo napięcia w domu, możesz też zacząć od krótkiej checklisty"
             description="To materiał do spokojnego uporządkowania obserwacji przed rozmową albo między kolejnymi krokami. Jeśli chcesz od razu odnieść temat do swojej sytuacji, wybierz Kwadrans z behawiorystą."
           />
 
@@ -509,6 +545,32 @@ export default function CatsPage() {
               </ul>
               <p className="muted">Jeśli po uporządkowaniu checklisty nadal nie jest jasne, co najmocniej napędza problem, przejdź do Kwadransu z behawiorystą.</p>
             </article>
+          </div>
+        </section>
+
+        <section className="panel section-panel editorial-section" id="powiazane-materialy">
+          <SectionIntro
+            eyebrow="Powiązane ścieżki"
+            title="Najbliższe materiały i strony, jeśli chcesz wejść głębiej"
+            description="Tu są najkrótsze przejścia między problemem kota, materiałem, ofertą i spokojnym kolejnym krokiem."
+          />
+
+          <div className="card-grid three-up">
+            {relatedResourceCards.map((card) => (
+              <article key={card.title} className="summary-card tree-backed-card">
+                <div className="section-eyebrow">{card.eyebrow}</div>
+                <h3>{card.title}</h3>
+                <p>{card.copy}</p>
+                <div className="hero-actions top-gap-small">
+                  <Link href={card.primaryHref} prefetch={false} className="button button-primary">
+                    {card.primaryLabel}
+                  </Link>
+                  <Link href={card.secondaryHref} prefetch={false} className="prep-inline-link">
+                    {card.secondaryLabel}
+                  </Link>
+                </div>
+              </article>
+            ))}
           </div>
         </section>
 

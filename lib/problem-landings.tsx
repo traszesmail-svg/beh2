@@ -16,6 +16,7 @@ import { buildBookHref } from '@/lib/booking-routing'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { getLeadMagnetBySlug, getProblemLandingLeadMagnetSlug } from '@/lib/growth-layer'
 import { REAL_CASE_STUDIES } from '@/lib/real-case-studies'
+import { getBreadcrumbJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
 import { getCanonicalBaseUrl } from '@/lib/server/env'
 import { SITE_NAME, SITE_OG_IMAGE, SITE_SHORT_NAME, SPECIALIST_NAME, TOPIC_VISUALS } from '@/lib/site'
@@ -128,8 +129,20 @@ const PROBLEM_LANDING_CONFIGS: ProblemLandingConfig[] = [
     visualAlt: TOPIC_VISUALS.spacer.alt,
     visualWidth: 1024,
     visualHeight: 1536,
-    toolkitHref: '/oferta/poradniki-pdf/pies-reaktywny-na-spacerze',
-    toolkitLabel: 'Poradnik: pies reaktywny na spacerze',
+    toolkitHref: '/bezplatne-materialy/pies-reaktywnosc-5-krokow',
+    toolkitLabel: 'Bezpłatny materiał: 5 kroków dla reaktywnego psa',
+    crossLinks: [
+      {
+        href: '/psy/lek-separacyjny',
+        label: 'Lęk separacyjny u psa',
+        copy: 'Jeśli obok spacerów widzisz też trudność z rozłąką albo z wyciszeniem po wyjściu opiekuna, sprawdź też ten temat.',
+      },
+      {
+        href: '/oferta/poradniki-pdf/pakiety/pakiet-spacerowy-pies',
+        label: 'Pakiet spacerowy dla psa',
+        copy: 'Jeśli jeden materiał to za mało, zobacz też szerszy pakiet PDF związany ze spacerami i regulacją emocji.',
+      },
+    ],
   },
   {
     slug: 'lek-separacyjny',
@@ -144,7 +157,19 @@ const PROBLEM_LANDING_CONFIGS: ProblemLandingConfig[] = [
     visualWidth: 1024,
     visualHeight: 1536,
     toolkitHref: '/oferta/poradniki-pdf/pies-zostaje-sam-plan-pierwszych-krokow',
-    toolkitLabel: 'Poradnik: pies zostaje sam',
+    toolkitLabel: 'PDF: pies zostaje sam',
+    crossLinks: [
+      {
+        href: '/psy/reaktywnosc-na-smyczy',
+        label: 'Reaktywność na smyczy',
+        copy: 'Jeśli obok trudności z samotnością pojawia się też wysokie napięcie na spacerach, zobacz również tę stronę problemową.',
+      },
+      {
+        href: '/niezbednik',
+        label: 'Niezbędnik',
+        copy: 'Jeśli chcesz zobaczyć więcej materiałów i spokojnie porównać ścieżki, wróć do huba problemów i treści.',
+      },
+    ],
   },
   {
     slug: 'zalatwianie-poza-kuweta',
@@ -158,8 +183,8 @@ const PROBLEM_LANDING_CONFIGS: ProblemLandingConfig[] = [
     visualAlt: TOPIC_VISUALS['kot-kuweta'].alt,
     visualWidth: 1024,
     visualHeight: 1536,
-    toolkitHref: '/oferta/poradniki-pdf/kot-i-kuweta-pierwszy-plan-dzialania',
-    toolkitLabel: 'Poradnik: kot i kuweta',
+    toolkitHref: '/bezplatne-materialy/kot-kuweta-checklista',
+    toolkitLabel: 'Bezpłatna checklista kuwety',
     crossLinks: [
       {
         href: '/koty/konflikt-miedzy-kotami',
@@ -180,7 +205,7 @@ const PROBLEM_LANDING_CONFIGS: ProblemLandingConfig[] = [
     visualAlt: TOPIC_VISUALS['kot-konflikt'].alt,
     visualWidth: 1024,
     visualHeight: 1536,
-    toolkitHref: '/oferta/poradniki-pdf/konflikt-miedzy-kotami-w-domu',
+    toolkitHref: '/oferta/poradniki-pdf/pakiety/pakiet-kot-bez-napiecia',
     toolkitLabel: 'Poradnik: konflikt między kotami',
     crossLinks: [
       {
@@ -673,6 +698,14 @@ export function ProblemLandingPage({ routePath }: { routePath: string }) {
       })),
     })
   }
+
+  structuredData.push(
+    getBreadcrumbJsonLd([
+      { name: 'Strona główna', path: '/' },
+      { name: landing.categoryLabel, path: landing.categoryHref },
+      { name: landing.h1, path: landing.path },
+    ]),
+  )
 
   return (
     <main className="page-wrap editorial-home-page premium-home-page">

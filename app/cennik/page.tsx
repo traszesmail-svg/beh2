@@ -9,6 +9,7 @@ import { TrustSignalSection } from '@/components/TrustSignalSection'
 import { buildBookHref } from '@/lib/booking-routing'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { getLeadMagnetBySlug } from '@/lib/growth-layer'
+import { getBreadcrumbJsonLd, getServiceJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
 import { FAQ_SHORTLISTS, TRUST_SIGNAL_SETS } from '@/lib/trust-layer'
 import { SPECIALIST_NAME } from '@/lib/site'
@@ -16,10 +17,10 @@ import { SPECIALIST_NAME } from '@/lib/site'
 const heroImage = { src: '/branding/omnie-hero.webp', width: 1024, height: 1536 } as const
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: 'Cennik konsultacji behawioralnych online',
+  title: 'Cennik - konsultacje behawioralne online',
   path: '/cennik',
   description:
-    'Cennik konsultacji behawioralnych online dla psa i kota. Sprawdz, kiedy wybrac Kwadrans z behawiorysta, a kiedy konsultacje 60 min.',
+    'Cennik konsultacji behawioralnych online dla psa i kota. Kwadrans z behawiorystą i konsultacja 60 min w jednym miejscu.',
 })
 
 function SectionIntro({ eyebrow, title, description }: { eyebrow: string; title: string; description: string }) {
@@ -34,14 +35,75 @@ function SectionIntro({ eyebrow, title, description }: { eyebrow: string; title:
   )
 }
 
+const SERVICE_COMPARISON_ROWS = [
+  {
+    label: 'Najlepszy wybór, gdy',
+    quick: 'masz jedno pytanie, chcesz spokojnie ustalić pierwszy krok albo nie wiesz jeszcze, jak szeroki jest temat',
+    full: 'problem trwa dłużej, dotyczy kilku wątków naraz albo wiesz, że potrzebujesz szerszego uporządkowania',
+  },
+  {
+    label: 'Format',
+    quick: '15 minut rozmowy audio bez kamery',
+    full: '60 minut rozmowy online z większą ilością czasu na temat',
+  },
+  {
+    label: 'Po rozmowie wychodzisz z',
+    quick: 'priorytetem i decyzją, co robić dalej',
+    full: 'szerszym planem i podsumowaniem pisemnym',
+  },
+  {
+    label: 'Cena',
+    quick: '69 zł',
+    full: '350 zł',
+  },
+] as const
+
+const BOOKING_FLOW_STEPS = [
+  '1. Wybierasz usługę, gatunek i temat.',
+  '2. Widzisz dostępne terminy i klikasz ten, który pasuje.',
+  '3. Uzupełniasz krótki formularz i przechodzisz do płatności.',
+  '4. Po potwierdzeniu wracasz do strony z następnym krokiem rezerwacji.',
+] as const
+
 export default function PricingPage() {
   const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min')
   const consultationHref = buildBookHref(null, 'konsultacja-behawioralna-online')
   const contactHref = '/kontakt#formularz'
   const prepGuide = getLeadMagnetBySlug('przygotowanie-do-konsultacji-online')
+  const structuredData = [
+    getBreadcrumbJsonLd([
+      { name: 'Strona główna', path: '/' },
+      { name: 'Cennik', path: '/cennik' },
+    ]),
+    getServiceJsonLd({
+      name: 'Kwadrans z behawiorystą',
+      description: '15 minut rozmowy audio jako spokojny pierwszy krok przy problemie psa lub kota.',
+      serviceUrl: audioHref,
+      offerPrice: 69,
+    }),
+    getServiceJsonLd({
+      name: 'Konsultacja behawioralna online 60 min',
+      description: '60 minut konsultacji online dla tematów szerszych, dłuższych albo wielowątkowych.',
+      serviceUrl: consultationHref,
+      offerPrice: 350,
+    }),
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: FAQ_SHORTLISTS.pricing.map((item) => ({
+        '@type': 'Question',
+        name: item.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.answer,
+        },
+      })),
+    },
+  ]
 
   return (
     <main className="page-wrap editorial-home-page premium-home-page money-page">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       <div className="container editorial-stack">
         <Header />
 
@@ -81,7 +143,8 @@ export default function PricingPage() {
               <div className="home-hero-photo-shell">
                 <Image
                   src={heroImage.src}
-                  alt={`${SPECIALIST_NAME} podczas spokojnej konsultacji dla opiekuna psa lub kota`}
+                  alt=""
+                  aria-hidden="true"
                   width={heroImage.width}
                   height={heroImage.height}
                   sizes="(max-width: 980px) 100vw, 480px"
@@ -135,6 +198,32 @@ export default function PricingPage() {
               </div>
             </article>
           </div>
+
+          <div className="list-card accent-outline tree-backed-card top-gap">
+            <strong>Najkrótsza zasada wyboru</strong>
+            <span>
+              Jeśli nie masz pewności, zacznij od Kwadransu. Jeśli już teraz wiesz, że temat jest szerszy, przewlekły albo wielowątkowy,
+              wybierz 60 minut.
+            </span>
+          </div>
+
+          <div className="top-gap">
+            {SERVICE_COMPARISON_ROWS.map((row) => (
+              <div key={row.label} className="summary-card tree-backed-card top-gap-small">
+                <div className="section-eyebrow">{row.label}</div>
+                <div className="premium-two-column-grid">
+                  <div>
+                    <strong>Kwadrans z behawiorysta</strong>
+                    <p>{row.quick}</p>
+                  </div>
+                  <div>
+                    <strong>Konsultacja 60 min</strong>
+                    <p>{row.full}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </section>
 
         <section className="panel section-panel editorial-section">
@@ -163,6 +252,41 @@ export default function PricingPage() {
                 <li>masz za soba nieskuteczne proby i chcesz szerszego uporzadkowania</li>
                 <li>potrzebujesz planu po rozmowie, a nie tylko pierwszego kierunku</li>
               </ul>
+            </article>
+          </div>
+        </section>
+
+        <section className="panel section-panel editorial-section">
+          <SectionIntro
+            eyebrow="Po rezerwacji"
+            title="Co stanie sie po kliknieciu"
+            description="Raport pokazywal tarcie na etapie decyzji i platnosci, dlatego tutaj caly proces jest rozpisany wprost."
+          />
+
+          <div className="premium-two-column-grid top-gap-small">
+            <article className="summary-card tree-backed-card">
+              <h3>Sciezka rezerwacji</h3>
+              <ul className="premium-bullet-list">
+                {BOOKING_FLOW_STEPS.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </article>
+
+            <article className="summary-card tree-backed-card">
+              <h3>Gdy nadal nie masz pewnosci</h3>
+              <p>
+                Nie musisz zgadywac idealnej uslugi. Jesli temat jest mieszany albo chcesz najpierw dopytac o sensowny pierwszy krok,
+                napisz wiadomosc. Jesli wolisz prostszy start bez rozpisywania calego problemu, wybierz Kwadrans.
+              </p>
+              <div className="hero-actions top-gap-small">
+                <Link href={audioHref} prefetch={false} className="button button-primary">
+                  {FUNNEL_CTA_LABELS.primary}
+                </Link>
+                <Link href={contactHref} prefetch={false} className="button button-ghost">
+                  {FUNNEL_CTA_LABELS.contact}
+                </Link>
+              </div>
             </article>
           </div>
         </section>

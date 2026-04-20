@@ -9,18 +9,26 @@ import { LeadMagnetSignup } from '@/components/LeadMagnetSignup'
 import { OfferEntrySection } from '@/components/OfferEntrySection'
 import { buildBookHref } from '@/lib/booking-routing'
 import { getLeadMagnetBySlug } from '@/lib/growth-layer'
+import { getBreadcrumbJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
 import { getCanonicalBaseUrl } from '@/lib/server/env'
-import { getPublicContactDetails, SITE_NAME, SITE_TAGLINE, SPECIALIST_CREDENTIALS, SPECIALIST_NAME } from '@/lib/site'
+import {
+  getPublicContactDetails,
+  SITE_NAME,
+  SITE_TAGLINE,
+  SPECIALIST_CREDENTIALS,
+  SPECIALIST_NAME,
+  SPECIALIST_PUBLIC_STATUS,
+} from '@/lib/site'
 import { FAQ_SHORTLISTS } from '@/lib/trust-layer'
 
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: 'Pomoc behawioralna dla psów',
+  title: 'Behawiorysta psów online - pomoc dla opiekunów psów',
   path: '/psy',
   description:
-    'Konsultacje behawioralne dla opiekunów psów. Pomoc przy spacerach, reaktywności, rozłące, pobudzeniu i trudnych zachowaniach w domu.',
+    'Pomoc behawioralna online dla opiekunów psów. Spacery, reaktywność, rozłąka, pobudzenie i trudne zachowania w domu.',
 })
 
 type SectionIntroProps = {
@@ -224,6 +232,36 @@ const miniCaseStudies = [
   },
 ] as const
 
+const relatedResourceCards = [
+  {
+    eyebrow: 'Problem',
+    title: 'Reaktywność na smyczy',
+    copy: 'Jeśli temat dotyczy spacerów, mijanek i szybkiego wchodzenia w emocje, zacznij od strony problemowej albo bezpłatnego materiału.',
+    primaryHref: '/psy/reaktywnosc-na-smyczy',
+    primaryLabel: 'Zobacz stronę problemową',
+    secondaryHref: '/bezplatne-materialy/pies-reaktywnosc-5-krokow',
+    secondaryLabel: 'Pobierz 5 pierwszych kroków',
+  },
+  {
+    eyebrow: 'Problem',
+    title: 'Trudność z zostawaniem samemu',
+    copy: 'Jeśli pies źle znosi samotność albo temat wraca po zmianie rytmu dnia, przejdź do landingu i PDF-u o pierwszych krokach.',
+    primaryHref: '/psy/lek-separacyjny',
+    primaryLabel: 'Zobacz stronę problemową',
+    secondaryHref: '/oferta/poradniki-pdf/pies-zostaje-sam-plan-pierwszych-krokow',
+    secondaryLabel: 'Zobacz PDF o zostawaniu samemu',
+  },
+  {
+    eyebrow: 'Hub',
+    title: 'Niezbędnik dla opiekunów psów i kotów',
+    copy: 'Jeśli chcesz wejść od materiałów, pakietów i spokojnego wyboru następnego kroku, wróć do huba problemów i treści evergreen.',
+    primaryHref: '/niezbednik',
+    primaryLabel: 'Przejdź do Niezbędnika',
+    secondaryHref: '/oferta',
+    secondaryLabel: 'Porównaj wszystkie wejścia',
+  },
+] as const
+
 const faqItems = FAQ_SHORTLISTS.dogs
 
 export default function DogsPage() {
@@ -246,7 +284,7 @@ export default function DogsPage() {
       provider: {
         '@type': 'Person',
         name: SPECIALIST_NAME,
-        jobTitle: 'Behawiorysta COAPE',
+        jobTitle: SPECIALIST_PUBLIC_STATUS,
         image: new URL('/branding/specialist-krzysztof-portrait.jpg', baseUrl).toString(),
         description: `${SPECIALIST_CREDENTIALS}.`,
       },
@@ -268,6 +306,10 @@ export default function DogsPage() {
         acceptedAnswer: { '@type': 'Answer', text: item.answer },
       })),
     },
+    getBreadcrumbJsonLd([
+      { name: 'Strona główna', path: '/' },
+      { name: 'Psy', path: '/psy' },
+    ]),
   ]
 
   return (
@@ -280,8 +322,8 @@ export default function DogsPage() {
           species="pies"
           sectionId="start"
           eyebrow="Oferta dla psa"
-          title="Kwadrans z behawiorystą jest najprostszym startem dla psa."
-          description="Jeśli temat jest szerszy, wybierz konsultację online 60 min. Jeśli chcesz tylko doprecyzować sprawę, napisz krótką wiadomość."
+          title="Zacznij od Kwadransu z behawiorystą."
+          description="Jeśli temat jest szerszy, wybierz konsultację online 60 min. Jeśli chcesz tylko krótko doprecyzować sprawę, napisz wiadomość."
         />
 
         <section className="editorial-hero-shell premium-hero-shell">
@@ -307,7 +349,7 @@ export default function DogsPage() {
                 href={audioHref}
                 analyticsLocation="dogs-hero-audio"
                 className="dog-hero-soft-cta"
-                title="Nie wiesz jeszcze, od czego zacząć z problemem psa?"
+                title="Chcesz spokojnie omówić problem psa?"
                 copy="Kwadrans z behawiorystą wystarczy, żeby spokojnie opisać sytuację, ustalić priorytet i ocenić, czy potrzebujesz czegoś więcej."
               />
 
@@ -470,7 +512,7 @@ export default function DogsPage() {
         <section className="panel section-panel editorial-section" id="material-startowy">
           <SectionIntro
             eyebrow="Lżejszy start"
-            title="Jeśli temat dotyczy spacerów albo reaktywności, możesz najpierw pobrać krótki materiał"
+            title="Jeśli temat dotyczy spacerów albo reaktywności, możesz też zacząć od krótkiego materiału"
             description="To materiał, który pomaga uporządkować temat przed rozmową albo między kolejnymi krokami. Jeśli chcesz od razu odnieść sytuację do swojego psa, wybierz Kwadrans z behawiorystą."
           />
 
@@ -488,6 +530,32 @@ export default function DogsPage() {
               </ul>
               <p className="muted">Jeśli po przeczytaniu widzisz, że temat jest szerszy niż jeden spacer czy jedno zachowanie, przejdź do Kwadransu z behawiorystą.</p>
             </article>
+          </div>
+        </section>
+
+        <section className="panel section-panel editorial-section" id="powiazane-materialy">
+          <SectionIntro
+            eyebrow="Powiązane ścieżki"
+            title="Najbliższe materiały i strony, jeśli chcesz wejść głębiej"
+            description="Tu są najkrótsze przejścia między problemem psa, materiałem, ofertą i spokojnym kolejnym krokiem."
+          />
+
+          <div className="card-grid three-up">
+            {relatedResourceCards.map((card) => (
+              <article key={card.title} className="summary-card tree-backed-card">
+                <div className="section-eyebrow">{card.eyebrow}</div>
+                <h3>{card.title}</h3>
+                <p>{card.copy}</p>
+                <div className="hero-actions top-gap-small">
+                  <Link href={card.primaryHref} prefetch={false} className="button button-primary">
+                    {card.primaryLabel}
+                  </Link>
+                  <Link href={card.secondaryHref} prefetch={false} className="prep-inline-link">
+                    {card.secondaryLabel}
+                  </Link>
+                </div>
+              </article>
+            ))}
           </div>
         </section>
 

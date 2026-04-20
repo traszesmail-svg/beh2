@@ -9,13 +9,15 @@ import { buildBookHref } from '@/lib/booking-routing'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { getLeadMagnetBySlug } from '@/lib/growth-layer'
 import { FUNNEL_SECONDARY_HREF } from '@/lib/offers'
+import { getBreadcrumbJsonLd, getItemListJsonLd } from '@/lib/schema'
+import { getCanonicalBaseUrl } from '@/lib/server/env'
 
 export const dynamic = 'force-static'
 
 export const metadata: Metadata = getBlogListingMetadata({
-  title: 'Blog: porady behawiorysty psów i kotów',
+  title: 'Blog o zachowaniu psów i kotów',
   path: BLOG_ROUTE_BASE,
-  description: 'Teksty o zachowaniu psów i kotów: spokojnie, konkretnie i bez szkicowego tonu.',
+  description: 'Blog o zachowaniu psów i kotów: praktyczne teksty o spacerach, kuwecie, stresie i konsultacjach online.',
 })
 
 const mainPathCards = [
@@ -44,6 +46,19 @@ const mainPathCards = [
 export default function BlogPage() {
   const posts = listBlogPosts()
   const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min')
+  const structuredData = [
+    getBreadcrumbJsonLd([
+      { name: 'Strona główna', path: '/' },
+      { name: 'Blog', path: '/blog' },
+    ]),
+    getItemListJsonLd(
+      posts.map((post) => ({
+        name: post.h1,
+        url: new URL(post.path, getCanonicalBaseUrl()).toString(),
+      })),
+      'https://schema.org/ItemListOrderDescending',
+    ),
+  ]
   const leadMagnets = [
     getLeadMagnetBySlug('pies-reaktywnosc-5-krokow'),
     getLeadMagnetBySlug('kot-kuweta-checklista'),
@@ -52,6 +67,7 @@ export default function BlogPage() {
 
   return (
     <main className="page-wrap blog-page">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       <div className="container editorial-stack">
         <Header />
 

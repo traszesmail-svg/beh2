@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { getBreadcrumbJsonLd } from '@/lib/schema'
 import { LegalPageLayout, type LegalSection, type LegalSummaryItem } from '@/components/LegalPageLayout'
 import { FUNNEL_SERVICE_CONFIG } from '@/lib/funnel'
 import { OFFERS } from '@/lib/offers'
@@ -10,7 +11,7 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = buildLegalMetadata(
   'Regulamin',
   '/regulamin',
-  'Regulamin świadczenia usług, zasad rezerwacji, płatności, potwierdzeń, zmian terminu i reklamacji w serwisie Regulski | Terapia behawioralna.',
+  'Regulamin świadczenia usług, rezerwacji, płatności, zmian terminu i reklamacji w serwisie Regulski | Terapia behawioralna.',
 )
 
 const quickStartService = FUNNEL_SERVICE_CONFIG['szybka-konsultacja-15-min']
@@ -223,6 +224,12 @@ export default function TermsPage() {
       supportText="W sprawach dotyczących rezerwacji, płatności, zmian terminu, rezygnacji i reklamacji kontakt prowadzony jest przez formularz kontaktowy oraz e-mail."
       supportNoteTitle="Wniosek o zmianę terminu, rezygnację lub reklamację"
       supportNoteText="W wiadomości należy podać dane pozwalające zidentyfikować rezerwację oraz krótki opis sprawy. Telefon nie jest publicznym kanałem kontaktu serwisu."
+      structuredData={[
+        getBreadcrumbJsonLd([
+          { name: 'Strona główna', path: '/' },
+          { name: 'Regulamin', path: '/regulamin' },
+        ]),
+      ]}
     />
   )
 }

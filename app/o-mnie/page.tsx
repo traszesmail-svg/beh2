@@ -10,6 +10,7 @@ import { buildBookHref } from '@/lib/booking-routing'
 import { COPY_HELPERS } from '@/lib/copy-governance'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { getLeadMagnetBySlug } from '@/lib/growth-layer'
+import { getBreadcrumbJsonLd, getPersonJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
 import {
   CAPBT_POLSKA_LOGO,
@@ -23,6 +24,8 @@ import {
   MEDIA_MENTIONS,
   SPECIALIST_CREDENTIALS,
   SPECIALIST_NAME,
+  SPECIALIST_PUBLIC_STATUS,
+  SPECIALIST_STATUS_EXPLANATION,
   SPECIALIST_LOCATION,
   SITE_NAME,
   SITE_TAGLINE,
@@ -31,10 +34,10 @@ import {
 import { getCanonicalBaseUrl } from '@/lib/server/env'
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: 'O mnie / metodyka / COAPE',
+  title: 'Krzysztof Regulski - behawiorysta psów i kotów',
   path: '/o-mnie',
   description:
-    'Spokojna, konkretna pomoc dla opiekunów psów i kotów. COAPE / CAPBT, publiczny profil CAPBT i inne publiczne punkty odniesienia.',
+    'Krzysztof Regulski: behawiorysta psów i kotów. Sposób pracy, status dyplomanta COAPE, profil CAPBT i najważniejsze informacje przed kontaktem.',
 })
 
 type SectionIntroProps = {
@@ -129,7 +132,7 @@ const opinionsHref = '/opinie'
 const profilePhoto = { src: '/branding/omnie3.png', width: 1024, height: 1536 } as const
 
 const heroTrustItems: TrustItem[] = [
-  { label: 'COAPE / CAPBT', icon: 'badge' },
+  { label: SPECIALIST_PUBLIC_STATUS, icon: 'badge' },
   { label: 'Psy i koty', icon: 'paw' },
   { label: 'Publiczny profil CAPBT', icon: 'camera' },
   { label: `${MEDIA_MENTIONS.length} publiczne artykuły`, icon: 'article' },
@@ -158,7 +161,7 @@ const qualificationLogoTiles = [
   {
     title: 'COAPE',
     eyebrow: 'Międzynarodowe odniesienie',
-    copy: 'Zaplecze szkoleniowe i punkt odniesienia dla sposobu myślenia o zachowaniu, dobrostanie i pracy z opiekunem.',
+    copy: 'Zaplecze szkoleniowe dla sposobu myślenia o zachowaniu, dobrostanie i pracy z opiekunem.',
     href: COAPE_INTL_URL,
     logo: COAPE_INTL_LOGO,
     logoWidth: 1024,
@@ -176,7 +179,7 @@ const qualificationLogoTiles = [
   {
     title: 'CAPBT Polska',
     eyebrow: 'Środowisko zawodowe',
-    copy: 'Stowarzyszenie Behawiorystów i Trenerów COAPE oraz kolejny punkt sprawdzenia afiliacji zawodowych.',
+    copy: 'Stowarzyszenie Behawiorystów i Trenerów COAPE oraz środowisko zawodowe, z którym jestem związany.',
     href: CAPBT_ORG_URL,
     logo: CAPBT_POLSKA_LOGO,
     logoWidth: 436,
@@ -189,7 +192,7 @@ const publicProofCards: PublicProofCard[] = [
     id: 'capbt-profile',
     label: 'Publiczny profil',
     title: 'Profil specjalisty w CAPBT',
-    copy: 'Najprostszy punkt sprawdzenia afiliacji zawodowych i publicznej obecności przed pierwszym kontaktem.',
+    copy: 'Krótka informacja o kwalifikacjach i obecności w katalogu CAPBT.',
     href: CAPBT_PROFILE_URL,
     cta: 'Otwórz profil',
   },
@@ -197,7 +200,7 @@ const publicProofCards: PublicProofCard[] = [
     id: 'instagram-profile',
     label: 'Publiczny profil',
     title: 'Profil marki na Instagramie',
-    copy: 'Dodatkowy publiczny punkt odniesienia, jeśli chcesz zobaczyć sposób komunikacji projektu poza samą stroną.',
+    copy: 'Dodatkowy publiczny profil, jeśli chcesz zobaczyć sposób komunikacji projektu poza samą stroną.',
     href: INSTAGRAM_PROFILE_URL,
     cta: 'Otwórz Instagram',
   },
@@ -355,22 +358,16 @@ export default function AboutPage() {
       },
     },
     {
-      '@context': 'https://schema.org',
-      '@type': 'Person',
-      name: SPECIALIST_NAME,
-      jobTitle: 'Behawiorysta COAPE / CAPBT',
-      description: `Spokojna, konkretna pomoc dla opiekunów psów i kotów. ${SPECIALIST_CREDENTIALS}.`,
+      ...getPersonJsonLd(),
       image: new URL(profilePhoto.src, baseUrl).toString(),
-      homeLocation: { '@type': 'Place', name: SPECIALIST_LOCATION },
-      knowsAbout: ['behawiorystyka psów i kotów', 'konsultacje behawioralne', 'dobrostan zwierząt'],
       sameAs: [COAPE_INTL_URL, COAPE_ORG_URL, CAPBT_ORG_URL, CAPBT_PROFILE_URL, INSTAGRAM_PROFILE_URL],
       contactPoint: contact.email
         ? {
-          '@type': 'ContactPoint',
-          contactType: 'customer support',
-          email: contact.email,
-          areaServed: [{ '@type': 'Country', name: 'Polska' }],
-        }
+            '@type': 'ContactPoint',
+            contactType: 'customer support',
+            email: contact.email,
+            areaServed: [{ '@type': 'Country', name: 'Polska' }],
+          }
         : undefined,
     },
     {
@@ -382,6 +379,10 @@ export default function AboutPage() {
         acceptedAnswer: { '@type': 'Answer', text: item.answer },
       })),
     },
+    getBreadcrumbJsonLd([
+      { name: 'Strona główna', path: '/' },
+      { name: 'O mnie', path: '/o-mnie' },
+    ]),
   ]
 
   return (
@@ -393,12 +394,12 @@ export default function AboutPage() {
         <section className="editorial-hero-shell premium-hero-shell" id="start">
           <div className="editorial-hero-grid">
             <div className="editorial-hero-copy">
-              <div className="section-eyebrow">Krzysztof Regulski | Behawiorysta COAPE / CAPBT</div>
+              <div className="section-eyebrow">Krzysztof Regulski | {SPECIALIST_PUBLIC_STATUS}</div>
               <h1>Krzysztof Regulski - behawiorysta psów i kotów</h1>
               <p className="editorial-hero-lead">
-                Konsultacje online dla opiekunów, którzy chcą zrozumieć zachowanie swojego zwierzęcia i wiedzieć, co z tym zrobić.
-                Kwadrans z behawiorystą to samodzielny format dla jednego pytania lub orientacji w temacie, a konsultacja online 60 min
-                osobna opcja dla spraw złożonych.
+                Konsultacje online dla opiekunów, którzy chcą zrozumieć zachowanie swojego zwierzęcia i wiedzieć, co z
+                tym zrobić. Kwadrans z behawiorystą jest najprostszym startem, a konsultacja 60 min pozostaje opcją dla
+                spraw złożonych.
               </p>
 
               <FunnelPrimaryActions
@@ -415,7 +416,7 @@ export default function AboutPage() {
                 href={introCallHref}
                 analyticsLocation="about-hero-audio"
                 className="authority-hero-soft-cta"
-                title="Kwadrans z behawiorystą jest samodzielnym formatem."
+                title="Kwadrans z behawiorystą to prosty sposób, żeby zacząć."
                 copy="Jeśli masz jedno pytanie albo chcesz ustalić priorytet, to najprostszy format. Przy temacie złożonym od razu powiem, że lepsza będzie konsultacja online 60 min."
               />
 
@@ -429,7 +430,8 @@ export default function AboutPage() {
               <div className="editorial-hero-photo-frame">
                 <Image
                   src={profilePhoto.src}
-                  alt={`${SPECIALIST_NAME} podczas spokojnej pracy z opiekunem psa lub kota`}
+                  alt=""
+                  aria-hidden="true"
                   width={profilePhoto.width}
                   height={profilePhoto.height}
                   sizes="(max-width: 980px) 100vw, 520px"
@@ -463,8 +465,8 @@ export default function AboutPage() {
         <section className="panel section-panel editorial-section" id="kim-jestem">
           <SectionIntro
             eyebrow="Kim jestem"
-            title="Konkretny specjalista, nie ogólna wizytówka"
-            description="Najważniejsze nie jest to, ile etykiet stoi w bio, tylko czy da się spokojnie sprawdzić, z kim rozmawiasz i jak wygląda rozmowa."
+            title="Poznaj mnie i sposób, w jaki pracuję"
+            description="Najważniejsze jest to, z kim rozmawiasz i czego możesz spodziewać się po współpracy."
           />
 
           <div className="premium-two-column-grid">
@@ -502,31 +504,33 @@ export default function AboutPage() {
 
         <section className="panel section-panel editorial-section" id="kwalifikacje">
           <SectionIntro
-            eyebrow="Kwalifikacje i źródła"
+            eyebrow="Kwalifikacje i afiliacje"
             title="To, co warto wiedzieć przed pierwszą rozmową"
-            description="Pokazuję tylko te punkty, które pomagają zrozumieć sposób pracy i sprawdzić, z kim rozmawiasz."
+            description="Krótko o kwalifikacjach, publikacjach i profilach zawodowych."
           />
 
           <div className="premium-two-column-grid authority-qualifications-grid">
             <article className="summary-card tree-backed-card authority-card authority-qualifications-copy">
               <div className="section-eyebrow">Zaplecze zawodowe</div>
-              <h3>Publiczne źródła i punkty odniesienia</h3>
+              <h3>Kwalifikacje i publikacje</h3>
               <p>
-                Na tej stronie pokazuję tylko te elementy, które można realnie sprawdzić przed kontaktem: profil CAPBT,
-                afiliacje COAPE / CAPBT i istniejące artykuły.
+                Na tej stronie zostają najważniejsze informacje: profil CAPBT, afiliacje COAPE i opublikowane
+                artykuły.
               </p>
               <p>
-                To nie ma robić wrażenia samą listą. Ma pomóc spokojnie ocenić, z kim rozmawiasz i czy taki styl pracy
-                odpowiada Twojej sytuacji.
+                {SPECIALIST_STATUS_EXPLANATION}
               </p>
-              <div className="authority-fact-list" aria-label="Publiczne źródła">
+              <p>
+                Chodzi o prosty obraz tego, z kim rozmawiasz i jak pracuję, bez budowania wrażenia samą listą nazw.
+              </p>
+              <div className="authority-fact-list" aria-label="Kwalifikacje">
                 {credentialFacts.map((fact) => (
                   <div key={fact} className="authority-fact-item">
                     <strong>{formatCredentialFact(fact)}</strong>
                   </div>
                 ))}
               </div>
-              <p className="authority-qualifications-note">Profil CAPBT, organizacje COAPE / CAPBT i publiczne artykuły są poniżej jako osobne punkty do sprawdzenia.</p>
+              <p className="authority-qualifications-note">Niżej są linki do profilu CAPBT, organizacji COAPE i artykułów.</p>
               <a
                 href={CAPBT_PROFILE_URL}
                 target="_blank"
@@ -582,7 +586,7 @@ export default function AboutPage() {
 
           <div className="authority-note-band top-gap">
             <span>
-              Te linki i informacje mają dać spokojny kontekst przed kontaktem. Nie zastępują konsultacji, ale pozwalają sprawdzić profil bez opierania decyzji wyłącznie na deklaracjach.
+              Te linki i informacje porządkują najważniejsze fakty przed pierwszym kontaktem.
             </span>
           </div>
         </section>
@@ -605,7 +609,7 @@ export default function AboutPage() {
 
           <article className="summary-card tree-backed-card authority-card authority-method-band top-gap">
             <div className="section-eyebrow">Co to oznacza w praktyce</div>
-            <h3>Autorytet ma sens tylko wtedy, gdy prowadzi do bezpiecznego pierwszego kroku</h3>
+            <h3>Najważniejsze jest to, żeby po rozmowie było wiadomo, co robić dalej</h3>
             <p>
               Na pierwszej rozmowie chcę najpierw ustalić, co dziś najbardziej obciąża dom i jaki ruch ma sens teraz.
               Dopiero potem decydujemy, czy to wystarcza, czy temat wymaga pełnej konsultacji 60 min.
@@ -710,7 +714,7 @@ export default function AboutPage() {
 
           <div className="hero-actions editorial-final-actions">
             <Link href="#opinie" prefetch={false} className="prep-inline-link">
-              Zobacz opinie o moim stylu pracy
+              Zobacz głosy po konsultacjach
             </Link>
           </div>
         </section>
@@ -718,7 +722,7 @@ export default function AboutPage() {
           <SectionIntro
             eyebrow="Głosy po pierwszym kontakcie"
             title="Co opiekunowie cenią w moim sposobie pracy"
-            description="To tylko krótki wycinek. Pełniejsza strona opinii pokazuje też opisane sytuacje startowe i publiczne punkty odniesienia."
+            description="Krótki wybór głosów po konsultacjach. Więcej znajdziesz na osobnej stronie."
           />
 
           <div className="home-opinion-featured-grid authority-opinion-featured-grid top-gap">

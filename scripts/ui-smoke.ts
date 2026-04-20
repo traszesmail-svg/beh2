@@ -447,7 +447,7 @@ async function runUiSmokeOnce() {
     await publicPage
       .getByRole('heading', {
         level: 1,
-        name: /Twój pies albo kot zachowuje się inaczej niż powinien i chcesz wiedzieć, co z tym zrobić/i,
+        name: /Jeśli coś w zachowaniu Twojego psa albo kota Cię niepokoi, zacznij od spokojnej rozmowy/i,
       })
       .waitFor()
 
@@ -479,12 +479,13 @@ async function runUiSmokeOnce() {
         assert.ok((await page.locator('.summary-card').count()) >= 2, `${label}: expected dog page summary cards`)
 
         await page.goto(`${appUrl}/oferta`, { waitUntil: 'domcontentloaded' })
-        await page.getByRole('heading', { name: /Kwadrans z behawiorystą|15 min audio/i }).first().waitFor()
-        assert.equal(await page.locator('.summary-card').count(), 3, `${label}: expected 3 public offer summary cards`)
+        await page.getByRole('heading', { name: /Kwadrans z behawiorystą/i }).first().waitFor()
+        await page.getByRole('heading', { name: /Kwadrans czy 60 minut/i }).waitFor({ timeout: slowRouteTimeoutMs })
+        assert.ok((await page.locator('.summary-card').count()) >= 6, `${label}: expected expanded public offer summary cards`)
 
         await page.goto(`${appUrl}/oferta/poradniki-pdf`, { waitUntil: 'domcontentloaded' })
         assert(page.url().includes('/niezbednik'), `${label}: expected poradniki-pdf route to redirect to /niezbednik`)
-        await page.getByRole('heading', { name: /Niezbędnik/i }).waitFor({ timeout: slowRouteTimeoutMs })
+        await page.getByRole('heading', { level: 1, name: /Niezbędnik/i }).waitFor({ timeout: slowRouteTimeoutMs })
         assert.equal(await page.locator('#pdf-y').count(), 1, `${label}: expected Niezbednik PDF section`)
         assert.equal(await page.locator('#ksiazki').count(), 1, `${label}: expected Niezbednik books section`)
         assert.equal(await page.locator('#przybory').count(), 1, `${label}: expected Niezbednik accessories section`)
@@ -509,13 +510,13 @@ async function runUiSmokeOnce() {
       },
       {
         path: '/kontakt',
-        heading: /Napisz, jeśli chcesz doprecyzować temat albo zadać pytanie\./i,
+        heading: /Skontaktuj się, jeśli chcesz krótko opisać temat albo zadać pytanie\./i,
         buttonLabels: [/Napisz (krótką )?wiadomość/i, primaryBookingLabel],
       },
       {
         path: '/niezbednik',
         heading: /Niezbędnik/i,
-        buttonLabels: [/Przegl[aą]daj Niezb[eę]dnik/i, primaryBookingLabel],
+        buttonLabels: [/Zobacz od czego zacz[aą]ć/i, primaryBookingLabel],
       },
       {
         path: '/cennik',
@@ -598,7 +599,7 @@ async function runUiSmokeOnce() {
         path: '/oferta/poradniki-pdf',
         destinationPath: '/niezbednik',
         heading: /Niezbędnik/i,
-        buttonLabels: [/Przegl[aą]daj Niezb[eę]dnik/i, primaryBookingLabel],
+        buttonLabels: [/Zobacz od czego zacz[aą]ć/i, primaryBookingLabel],
       },
     ] as const) {
       await verifyRedirectRoute(publicPage, route.path, route.destinationPath, route.heading, {

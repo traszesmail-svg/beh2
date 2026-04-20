@@ -19,7 +19,7 @@ import {
   listPdfGuides,
   PDF_GUIDES_LISTING_ROUTE,
 } from '@/lib/pdf-guides'
-import { buildMarketingMetadata } from '@/lib/seo'
+import { buildMarketingMetadata, buildTechnicalMetadata } from '@/lib/seo'
 
 type PdfGuideDetailPageProps = {
   params: {
@@ -46,10 +46,11 @@ export function generateMetadata({ params }: PdfGuideDetailPageProps): Metadata 
     })
   }
 
-  return buildMarketingMetadata({
+  return buildTechnicalMetadata({
     title: `${guide.title} | Poradnik PDF`,
     path: guide.routePath,
     description: guide.description,
+    noIndex: true,
   })
 }
 

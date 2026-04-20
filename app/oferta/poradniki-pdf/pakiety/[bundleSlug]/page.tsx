@@ -15,7 +15,7 @@ import {
   listPdfBundles,
   PDF_GUIDES_LISTING_ROUTE,
 } from '@/lib/pdf-guides'
-import { buildMarketingMetadata } from '@/lib/seo'
+import { buildMarketingMetadata, buildTechnicalMetadata } from '@/lib/seo'
 
 type PdfBundleDetailPageProps = {
   params: {
@@ -42,10 +42,11 @@ export function generateMetadata({ params }: PdfBundleDetailPageProps): Metadata
     })
   }
 
-  return buildMarketingMetadata({
+  return buildTechnicalMetadata({
     title: `${bundle.title} | Pakiet PDF`,
     path: bundle.routePath,
     description: bundle.promise,
+    noIndex: true,
   })
 }
 

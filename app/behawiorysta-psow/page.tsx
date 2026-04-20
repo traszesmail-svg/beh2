@@ -6,14 +6,15 @@ import { Header } from '@/components/Header'
 import { TrustSignalSection } from '@/components/TrustSignalSection'
 import { buildBookHref } from '@/lib/booking-routing'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
-import { buildMarketingMetadata } from '@/lib/seo'
+import { buildTechnicalMetadata } from '@/lib/seo'
 import { FAQ_SHORTLISTS, TRUST_SIGNAL_SETS } from '@/lib/trust-layer'
 
-export const metadata: Metadata = buildMarketingMetadata({
+export const metadata: Metadata = buildTechnicalMetadata({
   title: 'Behawiorysta psow online',
   path: '/behawiorysta-psow',
   description:
     'Behawiorysta psow online. Sprawdz, kiedy zaczac od Kwadransu z behawiorysta, kiedy wybrac konsultacje 60 min i jak wyglada pomoc dla opiekuna psa.',
+  noIndex: true,
 })
 
 function SectionIntro({ eyebrow, title, description }: { eyebrow: string; title: string; description: string }) {

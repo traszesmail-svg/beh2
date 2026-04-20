@@ -19,8 +19,6 @@ paths=(
   /kontakt
   /cennik
   /blog
-  /behawiorysta-psow
-  /behawiorysta-kotow
   /behawiorysta-online-polska
   /konsultacja-behawioralna-online
   /bezplatne-materialy/pies-reaktywnosc-5-krokow

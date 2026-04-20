@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { getFunnelEntryEventForHref, getServiceAnalyticsParams } from '@/lib/analytics-schema'
 import { getBuildMarkerSnapshot } from '@/lib/build-marker'
 import { buildBookHref } from '@/lib/booking-routing'
-import { FUNNEL_CTA_LABELS, FUNNEL_SERVICE_CONFIG } from '@/lib/funnel'
+import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import {
   buildMailtoHref,
   getPublicContactEmailNote,
@@ -97,7 +97,7 @@ function getFooterNavItems(sectionBasePath: FooterSectionBasePath): FooterNavIte
     const essentialsBasePath = sectionBasePath === '/materialy' ? '/niezbednik' : sectionBasePath
 
     return [
-      { href: buildSectionHref(essentialsBasePath, 'pdf-y'), label: 'Materiały' },
+      { href: buildSectionHref(essentialsBasePath, 'polecane-starty'), label: 'Polecane starty' },
       { href: buildSectionHref(essentialsBasePath, 'ksiazki'), label: 'Książki' },
       { href: buildSectionHref(essentialsBasePath, 'przybory'), label: 'Narzędzia' },
       { href: '/kontakt', label: 'Kontakt' },
@@ -128,7 +128,6 @@ export function Footer(props: FooterProps) {
   const publicContactNote = getPublicContactEmailNote()
   const quickService = getServiceAnalyticsParams('szybka-konsultacja-15-min')
   const fullService = getServiceAnalyticsParams('konsultacja-behawioralna-online')
-  const quickServiceTitle = FUNNEL_SERVICE_CONFIG['szybka-konsultacja-15-min'].title
   const primaryService = primaryHref.includes('service=konsultacja-behawioralna-online') ? fullService : quickService
   const primaryServiceKey = primaryHref.includes('service=konsultacja-behawioralna-online')
     ? 'konsultacja-behawioralna-online'
@@ -238,23 +237,6 @@ export function Footer(props: FooterProps) {
                 ))}
               </div>
 
-              <div className="site-footer-soft-card">
-                <Link
-                  href={audioHref}
-                  prefetch={false}
-                  className="site-footer-link site-footer-soft-link"
-                  data-analytics-event="funnel_entry_15_min"
-                  data-analytics-location="footer-soft-audio"
-                  data-analytics-cta-label={FUNNEL_CTA_LABELS.primary}
-                  data-analytics-service="szybka-konsultacja-15-min"
-                  data-analytics-service-name={String(quickService.service_name)}
-                  data-analytics-service-duration={String(quickService.service_duration)}
-                  data-analytics-service-price={String(quickService.service_price)}
-                >
-                  {quickServiceTitle}
-                </Link>
-                <span className="site-footer-note site-footer-soft-note">głos, bez kamery</span>
-              </div>
             </div>
           ) : (
             <div className="site-footer-links">
@@ -295,21 +277,6 @@ export function Footer(props: FooterProps) {
                   {link.label}
                 </a>
               ))}
-              <Link
-                href={audioHref}
-                prefetch={false}
-                className="site-footer-link"
-                data-analytics-event="funnel_entry_15_min"
-                data-analytics-location="footer-soft-audio"
-                data-analytics-cta-label={FUNNEL_CTA_LABELS.primary}
-                data-analytics-service="szybka-konsultacja-15-min"
-                data-analytics-service-name={String(quickService.service_name)}
-                data-analytics-service-duration={String(quickService.service_duration)}
-                data-analytics-service-price={String(quickService.service_price)}
-              >
-                {quickServiceTitle}
-              </Link>
-              <span className="site-footer-note">głos, bez kamery</span>
             </div>
           )}
         </div>

@@ -1,178 +1,57 @@
-# Raport QA Live Clickthrough
+# Latest QA Report
 
-- Data: 2026-04-07 10:19:04 Europe/Warsaw
-- URL: https://coapebehawiorysta.vercel.app
-- Wynik ogĂłlny: PASS
-- Kroki zaliczone: 19/19
-- Liczba zebranych issue z runtime: 0
-- Booking QA identity: QA LIVE 20260407-101904 / qa-live-20260407-101904@example.com
-- Bezpiecznik pĹ‚atnoĹ›ci: bez realnej pĹ‚atnoĹ›ci PayU i bez faĹ‚szywego approve na produkcji; test manual zakoĹ„czony reject w adminie
+- Data: 2026-04-20
+- Repo: `behawior15-mvp-full / beh2`
+- Etap: full local crawl refresh after plan execution
+- Werdykt: `PASS`
 
-## Kroki
-### PASSED - Home
-- Start URL: about:blank
-- End URL: https://coapebehawiorysta.vercel.app/
-- Note: Hero i 3 wejĹ›cia sÄ… widoczne na stronie gĹ‚Ăłwnej.
+## 1. Zakres
 
-### PASSED - Hero CTA x3
-- Start URL: https://coapebehawiorysta.vercel.app/
-- End URL: https://coapebehawiorysta.vercel.app/kontakt
-- Note: Mam psa -> /book
-- Note: Mam kota -> /koty
-- Note: Nie wiem, od czego zaczĂ„â€¦Ă„â€ˇ -> /kontakt
+Zweryfikowano aktualny stan po wykonaniu planu z `PLAN_POPRAWEK_REGULSKIBEHAWIORYSTA_2026-04-20.md`, w tym:
 
-### PASSED - /koty
-- Start URL: https://coapebehawiorysta.vercel.app/kontakt
-- End URL: https://coapebehawiorysta.vercel.app/koty
-- Note: Strona kotow pokazuje 5 kategorii z obrazami.
+- pelny lokalny crawl publicznych tras z manifestem screenshotow desktop + mobile
+- aktualny build produkcyjny uzyty jako podstawa audytu
+- glowne trasy publiczne, tresci blogowe, lead magnety, poradniki PDF i redirecty legacy
+- aliasy bookingowe i sciezki pomocnicze odkryte podczas crawla
 
-### PASSED - /book
-- Start URL: https://coapebehawiorysta.vercel.app/koty
-- End URL: https://coapebehawiorysta.vercel.app/book
-- Note: Wejscie do book dziala i pokazuje tylko psie tematy.
+## 2. Wyniki
 
-### PASSED - /slot
-- Start URL: https://coapebehawiorysta.vercel.app/book
-- End URL: https://coapebehawiorysta.vercel.app/slot?problem=kot-stres
-- Note: Pierwszy slot: 11:40
+- `npm run build`: `PASS`
+- `scripts/full-public-crawl-local.ts`: `PASS`
+- `qa-reports/final-crawl/report.md`: statusy `200=139`, `307=2`, blockerow `0`
 
-### PASSED - /form
-- Start URL: https://coapebehawiorysta.vercel.app/slot?problem=kot-stres
-- End URL: https://coapebehawiorysta.vercel.app/payment?bookingId=630e75dc-72a8-45af-8c24-c2125b1fccd0&access=FjlFJaypBG11tDn5t5azyOsUhncgOD2i
-- Note: Formularz przeszedl do payment.
+## 3. Co potwierdzil pelny crawl
 
-### PASSED - /koty -> slot / 30 min
-- Start URL: https://coapebehawiorysta.vercel.app/payment?bookingId=630e75dc-72a8-45af-8c24-c2125b1fccd0&access=FjlFJaypBG11tDn5t5azyOsUhncgOD2i
-- End URL: https://coapebehawiorysta.vercel.app/slot?problem=kot-kuweta&service=konsultacja-30-min
-- Note: Kocia sciezka 30 min zachowuje service=konsultacja-30-min.
+- swiezy crawl nie wykazal zadnych automatycznych blockerow ani bledow klasy `500` / `404` na trasach objetych przebiegiem
+- dynamiczne strony `blog`, `bezplatne-materialy` i `oferta/poradniki-pdf/*`, ktore wczesniej wywracaly sie w niestabilnym audycie, laduja sie poprawnie po stabilizacji runnera
+- redirecty legacy dzialaja zgodnie z oczekiwaniem, m.in. stare wpisy blogowe wracaja do `/blog`, a aliasy typu `/booking`, `/confirm`, `/slot`, `/materialy`, `/przybornik` prowadza do aktualnych tras
+- manifest, snapshoty HTML i screenshoty zostaly odswiezone w `qa-reports/final-crawl/`
 
-### PASSED - /payment
-- Start URL: https://coapebehawiorysta.vercel.app/slot?problem=kot-kuweta&service=konsultacja-30-min
-- End URL: https://coapebehawiorysta.vercel.app/payment?bookingId=630e75dc-72a8-45af-8c24-c2125b1fccd0&access=FjlFJaypBG11tDn5t5azyOsUhncgOD2i
-- Note: manualVisible=true
-- Note: payuVisible=false
+## 4. Korekty w QA
 
-### PASSED - manual payment -> pending
-- Start URL: https://coapebehawiorysta.vercel.app/payment?bookingId=630e75dc-72a8-45af-8c24-c2125b1fccd0&access=FjlFJaypBG11tDn5t5azyOsUhncgOD2i
-- End URL: https://coapebehawiorysta.vercel.app/confirmation?bookingId=630e75dc-72a8-45af-8c24-c2125b1fccd0&manual=reported&access=FjlFJaypBG11tDn5t5azyOsUhncgOD2i&adminNotice=failed
-- Note: POST /api/payments/manual zwrocil canonical redirectTo i potwierdzenie pokazalo pending manual review.
-- Note: Rezerwacja przeszĹ‚a do pending manual review.
+Podczas domykania etapu zaktualizowano narzedzia QA:
 
-### PASSED - admin reject
-- Start URL: https://coapebehawiorysta.vercel.app/confirmation?bookingId=630e75dc-72a8-45af-8c24-c2125b1fccd0&manual=reported&access=FjlFJaypBG11tDn5t5azyOsUhncgOD2i&adminNotice=failed
-- End URL: https://coapebehawiorysta.vercel.app/confirmation?bookingId=630e75dc-72a8-45af-8c24-c2125b1fccd0&manual=reported&access=FjlFJaypBG11tDn5t5azyOsUhncgOD2i&adminNotice=failed
-- Note: Admin odrzuciĹ‚ testowÄ… wpĹ‚atÄ™ QA.
+- `scripts/full-public-crawl-local.ts` uruchamia teraz crawl na czystym buildzie `next build + next start`, zamiast na niestabilnym `next dev`
+- runner korzysta z losowego portu i mocniejszego cleanupu procesu na Windows, zeby kolejne przebiegi nie trafialy w stary serwer
+- `scripts/full-public-crawl.ts` ma zawezona heurystyke overflow, zeby nie oznaczac dlugich stron jako problem tylko dlatego, ze sa dlugie
 
-### PASSED - /confirmation
-- Start URL: https://coapebehawiorysta.vercel.app/confirmation?bookingId=630e75dc-72a8-45af-8c24-c2125b1fccd0&manual=reported&access=FjlFJaypBG11tDn5t5azyOsUhncgOD2i&adminNotice=failed
-- End URL: https://coapebehawiorysta.vercel.app/confirmation?bookingId=630e75dc-72a8-45af-8c24-c2125b1fccd0&manual=reported&access=FjlFJaypBG11tDn5t5azyOsUhncgOD2i&adminNotice=failed
-- Note: Confirmation pokazuje stan odrzuconej wpĹ‚aty.
+To byly poprawki samego procesu QA, nie regresje publicznego UI.
 
-### PASSED - /oferta
-- Start URL: https://coapebehawiorysta.vercel.app/confirmation?bookingId=630e75dc-72a8-45af-8c24-c2125b1fccd0&manual=reported&access=FjlFJaypBG11tDn5t5azyOsUhncgOD2i&adminNotice=failed
-- End URL: https://coapebehawiorysta.vercel.app/oferta
-- Note: Pierwsza karta ma 1 gĹ‚Ăłwne CTA: true
+## 5. Reczna ocena tras z flaga overflow
 
-### PASSED - oferta -> payment / 30 min CTA
-- Start URL: https://coapebehawiorysta.vercel.app/oferta
-- End URL: https://coapebehawiorysta.vercel.app/payment?bookingId=5ea281e5-0c4b-48e9-ac77-5221983fc199&access=WaDVEqdFpZP3E3jHNaUtFqr7kuAIMK6f&service=konsultacja-30-min
-- Note: /oferta -> /book z service=konsultacja-30-min
-- Note: /book -> /slot z problem=separacja
-- Note: /slot -> /form z service=konsultacja-30-min
-- Note: /form -> /payment z service=konsultacja-30-min
-- Note: manualVisible=true
-- Note: payuVisible=false
+Reczny przeglad screenshotow i snapshotow HTML potwierdzil, ze alarmy dla `/kontakt` i `/niezbednik` nie wskazuja na poziomy overflow.
 
-### PASSED - oferta -> slot / online CTA
-- Start URL: https://coapebehawiorysta.vercel.app/payment?bookingId=5ea281e5-0c4b-48e9-ac77-5221983fc199&access=WaDVEqdFpZP3E3jHNaUtFqr7kuAIMK6f&service=konsultacja-30-min
-- End URL: https://coapebehawiorysta.vercel.app/slot?problem=separacja&service=konsultacja-behawioralna-online
-- Note: Online CTA prowadzi do /slot z dostepnymi godzinami.
+- `/kontakt`: widoczna jest realna, nadmierna pionowa przerwa w koncowej sekcji `#material-przed-kontaktem`
+- `/niezbednik`: widoczna jest podobna nienaturalnie wysoka koncowa partia strony przed stopka
+- pozostale sygnaly z ostatniego crawla wygladaja na efekt heurystyki lub dlugosci strony, a nie na blocker renderingu
 
-### PASSED - detail page 1
-- Start URL: https://coapebehawiorysta.vercel.app/slot?problem=separacja&service=konsultacja-behawioralna-online
-- End URL: https://coapebehawiorysta.vercel.app/oferta/konsultacja-30-min
-- Note: Konsultacja 30 min ma skrĂłcony ukĹ‚ad i 2 CTA.
+To jest otwarty problem layoutu do osobnej poprawki, ale nie blocker dla wyniku biezacego crawla.
 
-### PASSED - detail page 2
-- Start URL: https://coapebehawiorysta.vercel.app/oferta/konsultacja-30-min
-- End URL: https://coapebehawiorysta.vercel.app/oferta/pobyty-socjalizacyjno-terapeutyczne
-- Note: Pobyty pozostajÄ… opcjÄ… dalszÄ…, nie zimnym pierwszym krokiem.
+## 6. Status repo po cleanupie
 
-### PASSED - /kontakt
-- Start URL: https://coapebehawiorysta.vercel.app/oferta/pobyty-socjalizacyjno-terapeutyczne
-- End URL: https://coapebehawiorysta.vercel.app/kontakt
-- Note: Kontakt jest skrĂłcony do akcji i krĂłtkiej toĹĽsamoĹ›ci.
+- historyczne artefakty QA zostaly wyczyszczone z `qa-reports/`
+- jako biezacy punkt odniesienia pozostawiono `final-crawl/`, `latest-report.md` i aktualne raporty zbiorcze
 
-### PASSED - /regulamin
-- Start URL: https://coapebehawiorysta.vercel.app/kontakt
-- End URL: https://coapebehawiorysta.vercel.app/regulamin
-- Note: Regulamin uĹĽywa nowego shellu prawnego bez publicznego telefonu i starego menu.
+## 7. Status
 
-### PASSED - /polityka-prywatnosci
-- Start URL: https://coapebehawiorysta.vercel.app/regulamin
-- End URL: https://coapebehawiorysta.vercel.app/polityka-prywatnosci
-- Note: Polityka prywatnoĹ›ci uĹĽywa nowego shellu prawnego bez publicznego telefonu i starego menu.
-
-## Mobile
-### 360px x 800px
-- heroClear=true
-- cardsReadable=true
-- bottomAreaLean=true
-- ctaEasyToTap=true
-- layoutStable=true
-- Note: decisionBlockVisibleSoon=true
-- Note: homeCardsReadable=true
-- Note: bookCardsReadable=true
-- Note: offerCardsReadable=true
-- Note: homeLean=true
-- Note: bookLean=true
-- Note: kontaktLean=true
-- Note: ofertaLean=true
-
-### 375px x 812px
-- heroClear=true
-- cardsReadable=true
-- bottomAreaLean=true
-- ctaEasyToTap=true
-- layoutStable=true
-- Note: decisionBlockVisibleSoon=true
-- Note: homeCardsReadable=true
-- Note: bookCardsReadable=true
-- Note: offerCardsReadable=true
-- Note: homeLean=true
-- Note: bookLean=true
-- Note: kontaktLean=true
-- Note: ofertaLean=true
-
-### 390px x 844px
-- heroClear=true
-- cardsReadable=true
-- bottomAreaLean=true
-- ctaEasyToTap=true
-- layoutStable=true
-- Note: decisionBlockVisibleSoon=true
-- Note: homeCardsReadable=true
-- Note: bookCardsReadable=true
-- Note: offerCardsReadable=true
-- Note: homeLean=true
-- Note: bookLean=true
-- Note: kontaktLean=true
-- Note: ofertaLean=true
-
-### 430px x 932px
-- heroClear=true
-- cardsReadable=true
-- bottomAreaLean=true
-- ctaEasyToTap=true
-- layoutStable=true
-- Note: decisionBlockVisibleSoon=true
-- Note: homeCardsReadable=true
-- Note: bookCardsReadable=true
-- Note: offerCardsReadable=true
-- Note: homeLean=true
-- Note: bookLean=true
-- Note: kontaktLean=true
-- Note: ofertaLean=true
-
-## Runtime issues
-- Brak zebranych bĹ‚Ä™dĂłw konsoli, pageerrorĂłw i same-origin request failures/HTTP >= 400.
+Aktualny stan repo po tym przebiegu jest uporzadkowany i gotowy do kolejnego etapu prac. Najblizszy sensowny ruch to juz nie kolejny crawl, tylko poprawka layoutu dla koncowych sekcji `/kontakt` i `/niezbednik`.

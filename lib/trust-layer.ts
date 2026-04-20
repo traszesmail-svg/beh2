@@ -259,7 +259,7 @@ export const FAQ_SHORTLISTS = {
     {
       question: 'Czy materiały są tylko dla osób przed konsultacją?',
       answer:
-        'Nie. W Niezbędniku są bezpłatne materiały startowe, własne przewodniki i wybrane źródła do szerszej pracy.',
+        'Nie. W Niezbędniku są bezpłatne materiały startowe, własne przewodniki i materiały uzupełniające do dalszej pracy.',
     },
     {
       question: 'Czy po materiale warto wrócić do rozmowy?',
@@ -275,17 +275,17 @@ export const FAQ_SHORTLISTS = {
     {
       question: 'Czy opinie pokazują realne sytuacje?',
       answer:
-        'Tak. Zależy mi, żeby były to krótkie głosy z rzeczywistym problemem i pierwszym ruchem, a nie same komplementy.',
+        'Tak. To krótkie głosy po konsultacjach i przykładowe opisy sytuacji, w których było wiadomo, od czego zacząć.',
     },
     {
-      question: 'Czy na podstawie opinii da się ocenić styl pracy?',
+      question: 'Czego można się po nich spodziewać?',
       answer:
-        'Tak. Z opinii widać, jak wygląda kontakt, sposób tłumaczenia i tempo porządkowania tematu.',
+        'Raczej tonu rozmowy, sposobu tłumaczenia i tego, co pomaga uporządkować temat na starcie.',
     },
     {
       question: 'Czy po przeczytaniu opinii nadal mogę napisać krótką wiadomość?',
       answer:
-        'Tak. Krótka wiadomość jest dobrym krokiem, jeśli chcesz sprawdzić, czy to właściwy moment na kontakt.',
+        'Tak. Jeśli nie chcesz od razu wybierać terminu, możesz zacząć od krótkiej wiadomości.',
     },
   ] satisfies TrustFaqItem[],
 } as const
@@ -301,10 +301,10 @@ export const TRUST_SIGNAL_SETS = {
       copy: 'Jeśli temat wymaga od razu Kwadransu z behawiorystą albo pełnej konsultacji, mówię to wprost.',
     },
     {
-      title: 'Publiczne punkty odniesienia',
-      copy: 'Profil CAPBT i istniejące publikacje pozwalają sprawdzić styl pracy przed kontaktem.',
+      title: 'Więcej o mnie',
+      copy: 'Na stronie o mnie są krótko opisane kwalifikacje, publikacje i sposób pracy.',
       href: '/o-mnie',
-      cta: 'Sprawdź profil i źródła',
+      cta: 'Zobacz stronę o mnie',
     },
   ] satisfies TrustSignalItem[],
   pricing: [
@@ -355,8 +355,8 @@ export const TRUST_SIGNAL_SETS = {
       copy: 'Przy psich problemach ważniejsze od samego objawu bywa to, co go napędza: napięcie, frustracja, lęk albo codzienny chaos.',
     },
     {
-      title: 'Kwadrans jest samodzielną usługą',
-      copy: 'To nie próbka przed pełną konsultacją, tylko osobny format do ustawienia pierwszego kierunku.',
+      title: 'Kwadrans z behawiorystą ma własne miejsce',
+      copy: 'To osobna forma pomocy dla jednego pytania albo spokojnego uporządkowania tematu.',
     },
     {
       title: 'Jeśli online nie wystarczy, powiem to wprost',
@@ -379,16 +379,16 @@ export const TRUST_SIGNAL_SETS = {
   ] satisfies TrustSignalItem[],
   opinions: [
     {
-      title: 'Zanonimizowane historie',
-      copy: 'Publicznie pokazuję tylko skrócone, anonimowe opisy punktu startu i pierwszych kroków.',
+      title: 'Krótkie głosy po konsultacjach',
+      copy: 'Na stronie są krótkie cytaty i skrócone opisy sytuacji bez ujawniania wrażliwych danych.',
     },
     {
-      title: 'Publiczne źródła obok opinii',
-      copy: 'CAPBT, publikacje i profile publiczne są po to, żeby decyzja nie opierała się wyłącznie na cytacie.',
+      title: 'Profil i publikacje',
+      copy: 'Obok opinii są też linki do profilu CAPBT i opublikowanych artykułów.',
     },
     {
-      title: 'Brak obietnic identycznego efektu',
-      copy: 'Case studies pokazują drogę uporządkowania tematu, nie gwarancję powtórzenia czyjegoś wyniku.',
+      title: 'Każda sytuacja jest osobna',
+      copy: 'Te przykłady pokazują punkt wyjścia i pierwszy kierunek pracy. Nie zastępują indywidualnej oceny.',
     },
   ] satisfies TrustSignalItem[],
 } as const

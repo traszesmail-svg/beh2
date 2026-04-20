@@ -39,7 +39,12 @@ export const SITE_TAGLINE = 'Spokojna pomoc dla opiekunów psów i kotów'
 export const SITE_DESCRIPTION = 'Spokojna pomoc w zrozumieniu problemów zachowania psów i kotów, z jasnym planem działania po konsultacji.'
 
 export const SPECIALIST_NAME = 'Krzysztof Regulski'
-export const SPECIALIST_CREDENTIALS = 'behawiorysta COAPE / CAPBT, technik weterynarii, dogoterapeuta, dietetyk'
+export const SPECIALIST_PUBLIC_STATUS = 'Dyplomant COAPE'
+export const SPECIALIST_PUBLIC_DIRECTORY = 'profil publiczny CAPBT'
+export const SPECIALIST_PUBLIC_TITLE = `${SPECIALIST_PUBLIC_STATUS} | ${SPECIALIST_PUBLIC_DIRECTORY}`
+export const SPECIALIST_CREDENTIALS = 'dyplomant COAPE, technik weterynarii, dogoterapeuta, dietetyk'
+export const SPECIALIST_STATUS_EXPLANATION =
+  'Na publicznym profilu CAPBT widnieje status dyplomanta COAPE. To najprostszy i najuczciwszy sposób opisania publicznej ścieżki zawodowej bez skrótów, które brzmią szerzej niż źródło.'
 export const SPECIALIST_LOCATION = 'Polska'
 export const COAPE_INTL_URL = 'https://coape.org/'
 export const COAPE_ORG_URL = 'https://coape.pl/'

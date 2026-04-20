@@ -53,7 +53,7 @@ const contactNavItems: NavItem[] = [
 ]
 
 const materialNavItems: NavItem[] = [
-  { href: '/niezbednik#pdf-y', label: 'Materiały', sectionId: 'pdf-y' },
+  { href: '/niezbednik#polecane-starty', label: 'Polecane starty', sectionId: 'polecane-starty' },
   { href: '/niezbednik#ksiazki', label: 'Książki', sectionId: 'ksiazki' },
   { href: '/niezbednik#przybory', label: 'Narzędzia', sectionId: 'przybory' },
   { href: '/niezbednik#kontakt', label: 'Dalszy krok', sectionId: 'kontakt' },
@@ -273,16 +273,6 @@ export function Header() {
 
         <div className="header-actions">
           <Link
-            href={toolkitHref}
-            prefetch={false}
-            className="button button-ghost header-secondary-cta"
-            data-analytics-event="funnel_entry_niezbednik"
-            data-analytics-location="header-toolkit"
-            data-analytics-cta-label={FUNNEL_CTA_LABELS.secondary}
-          >
-            {FUNNEL_CTA_LABELS.secondary}
-          </Link>
-          <Link
             href={audioHref}
             prefetch={false}
             className={ctaClassName}
@@ -295,6 +285,16 @@ export function Header() {
             data-analytics-service-price={String(quickService.service_price)}
           >
             {FUNNEL_CTA_LABELS.primary}
+          </Link>
+          <Link
+            href={toolkitHref}
+            prefetch={false}
+            className="button button-ghost header-secondary-cta"
+            data-analytics-event="funnel_entry_niezbednik"
+            data-analytics-location="header-toolkit"
+            data-analytics-cta-label={FUNNEL_CTA_LABELS.secondary}
+          >
+            {FUNNEL_CTA_LABELS.secondary}
           </Link>
 
           <button
@@ -379,7 +379,7 @@ export function Header() {
                 {FUNNEL_CTA_LABELS.consultation}
               </Link>
               <span className="header-mobile-soft-note">
-                60 min dla szerszych tematów albo{' '}
+                Dla szerszych tematów albo{' '}
                 <Link href={messageHref} prefetch={false} onClick={handleNavClick}>
                   {FUNNEL_CTA_LABELS.contact}
                 </Link>

@@ -3,7 +3,6 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 
 import path from 'node:path'
 import { listLeadMagnetPaths, listLocalSeoPaths } from '../lib/growth-layer'
 import { OFFERS } from '../lib/offers'
-import { listPdfRoutePaths } from '../lib/pdf-guides'
 
 type SourceMap = Map<string, string[]>
 
@@ -30,11 +29,12 @@ type ValidationOutcome =
       source: string[]
     }
 
+type ExcludedValidationOutcome = Extract<ValidationOutcome, { keep: false }>
+
 const ROOT_DIR = process.cwd()
 const APP_DIR = path.join(ROOT_DIR, 'app')
 const PAGES_DIR = path.join(ROOT_DIR, 'pages')
 const BLOG_DIR = path.join(ROOT_DIR, 'content', 'blog-mvp')
-const GUIDES_ROUTES_PATH = path.join(ROOT_DIR, 'content', 'guides', 'site', 'guides-routes.json')
 const BASELINE_SITEMAP_MANIFEST_PATH = path.join(ROOT_DIR, 'qa-reports', 'full-crawl', 'manifests', 'manifest.csv')
 const PUBLIC_DIR = path.join(ROOT_DIR, 'public')
 const REPORT_DIR = path.join(ROOT_DIR, 'qa-reports')
@@ -110,7 +110,7 @@ const LEGAL_PAGES = new Set([
   '/polityka-prywatnosci',
 ])
 
-const PDF_ROUTE_PREFIXES = ['/bezplatne-materialy/', '/oferta/poradniki-pdf/'] as const
+const PDF_ROUTE_PREFIXES = ['/bezplatne-materialy/'] as const
 const TOPICAL_ROUTE_PREFIXES = ['/psy/', '/koty/'] as const
 
 function formatWarsawDate(date = new Date()): string {
@@ -234,30 +234,7 @@ function discoverBlogRoutes(): SourceMap {
 }
 
 function discoverPdfRoutes(): SourceMap {
-  const discovered: SourceMap = new Map()
-  const raw = JSON.parse(readFileSync(GUIDES_ROUTES_PATH, 'utf8')) as {
-    listing: { routePath: string }
-    guides: Array<{ routePath: string }>
-    bundles: Array<{ routePath: string }>
-  }
-
-  const routes = [
-    raw.listing.routePath,
-    ...raw.guides.map((guide) => guide.routePath),
-    ...raw.bundles.map((bundle) => bundle.routePath),
-  ]
-
-  for (const routePath of routes) {
-    const normalized = normalizeRoutePath(routePath)
-    if (isExcludedRoutePath(normalized)) {
-      continue
-    }
-
-    const existingSources = discovered.get(normalized) ?? []
-    discovered.set(normalized, [...existingSources, 'pdf-routes-json'])
-  }
-
-  return discovered
+  return new Map()
 }
 
 function discoverLeadMagnetRoutes(): SourceMap {
@@ -385,7 +362,6 @@ function collectCandidateMap(): SourceMap {
     }
   }
 
-  mergeRoutes(listPdfRoutePaths(), 'pdf-route')
   mergeRoutes(listLeadMagnetPaths(), 'lead-magnet-route')
   mergeRoutes(listLocalSeoPaths(), 'local-seo-route')
   mergeRoutes(
@@ -687,7 +663,7 @@ function buildReport({
   candidateCount: number
   previousUrls: string[]
   validatedEntries: SitemapEntry[]
-  excluded: ValidationOutcome[]
+  excluded: ExcludedValidationOutcome[]
   validationBaseUrl: string
   deployDate: string
 }): string {
@@ -761,7 +737,7 @@ async function main() {
   const previousUrls = loadBaselineUrls()
   const previousUrlSet = new Set(previousUrls)
   const validated: SitemapEntry[] = []
-  const excluded: ValidationOutcome[] = []
+  const excluded: ExcludedValidationOutcome[] = []
 
   for (const routePath of uniqueCandidatePaths) {
     const outcome = await validatePath(routePath, candidateMap.get(routePath) ?? [], validationBaseUrl)

@@ -248,13 +248,16 @@ export default async function SlotPage({
                 {getBookingServiceSlotSummary(serviceType)}{' '}
                 {isFullConsultation ? 'Każdy wybór rezerwuje pełne 60 minut.' : 'Wybierz godzinę.'}
               </p>
+              <p className="muted">
+                Po kliknięciu terminu przejdziesz do krótkiego formularza, a potem do płatności i potwierdzenia rezerwacji.
+              </p>
             </div>
 
               <BookingServiceInfoCard
                 serviceType={serviceType}
                 title="Po wyborze terminu przejdziesz do formularza"
                 stageLabel="Ta usługa"
-                emphasis="Kliknij termin, żeby przejść do formularza rezerwacji."
+                emphasis="Kliknij termin, żeby przejść do formularza, a potem dokończyć rezerwację."
               />
           </div>
 

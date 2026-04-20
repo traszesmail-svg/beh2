@@ -1,3 +1,13 @@
+const INVALID_ENV_SENTINELS = new Set(['undefined', 'null', ''])
+
+for (const envName of ['__NEXT_INCREMENTAL_CACHE_IPC_PORT', '__NEXT_INCREMENTAL_CACHE_IPC_KEY']) {
+  const rawValue = process.env[envName]
+
+  if (typeof rawValue === 'string' && INVALID_ENV_SENTINELS.has(rawValue.trim().toLowerCase())) {
+    delete process.env[envName]
+  }
+}
+
 /** @type {import('next').NextConfig} */
 const blockSearchIndexing = process.env.VERCEL_ENV
   ? process.env.VERCEL_ENV !== 'production'
@@ -56,6 +66,16 @@ const nextConfig = {
       {
         source: '/behawiorysta-olsztyn',
         destination: '/behawiorysta-online-polska',
+        statusCode: 301,
+      },
+      {
+        source: '/behawiorysta-psow',
+        destination: '/psy',
+        statusCode: 301,
+      },
+      {
+        source: '/behawiorysta-kotow',
+        destination: '/koty',
         statusCode: 301,
       },
       {

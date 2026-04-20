@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { getBreadcrumbJsonLd } from '@/lib/schema'
 import { LegalPageLayout, type LegalSection, type LegalSummaryItem } from '@/components/LegalPageLayout'
 import { buildLegalMetadata } from '@/lib/seo'
 
@@ -7,7 +8,7 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = buildLegalMetadata(
   'Polityka prywatności',
   '/polityka-prywatnosci',
-  'Polityka prywatności serwisu Regulski | Terapia behawioralna opisująca zakres danych, cele przetwarzania, odbiorców danych oraz prawa użytkownika.',
+  'Polityka prywatności serwisu Regulski | Terapia behawioralna: zakres danych, cele przetwarzania i prawa użytkownika.',
 )
 
 const summaryItems: LegalSummaryItem[] = [
@@ -187,6 +188,12 @@ export default function PrivacyPolicyPage() {
       supportText="W sprawach dotyczących danych osobowych, zakresu przetwarzania lub realizacji praw osoby, której dane dotyczą, kontakt prowadzony jest przez formularz kontaktowy oraz e-mail."
       supportNoteTitle="Żądanie dotyczące danych"
       supportNoteText="W wiadomości warto wskazać, czego dotyczy żądanie oraz podać dane pozwalające zidentyfikować zgłoszenie, rezerwację lub formularz."
+      structuredData={[
+        getBreadcrumbJsonLd([
+          { name: 'Strona główna', path: '/' },
+          { name: 'Polityka prywatności', path: '/polityka-prywatnosci' },
+        ]),
+      ]}
     />
   )
 }
