@@ -2,10 +2,9 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { EditorialFaqSection } from '@/components/EditorialFaqSection'
-import { Footer } from '@/components/Footer'
 import { FunnelPrimaryActions } from '@/components/FunnelPrimaryActions'
-import { Header } from '@/components/Header'
 import { LeadMagnetSignup } from '@/components/LeadMagnetSignup'
+import { NotatnikPageShell } from '@/components/NotatnikA'
 import { TrustSignalSection } from '@/components/TrustSignalSection'
 import { getServiceAnalyticsParams } from '@/lib/analytics-schema'
 import { buildBookHref } from '@/lib/booking-routing'
@@ -280,12 +279,23 @@ export default function OpinionsPage() {
   ]
 
   return (
-    <main className="page-wrap marketing-page editorial-home-page opinions-page opinions-dowodowa-page">
+    <NotatnikPageShell
+      tag="Opinie / historie po rozmowie"
+      navItems={[
+        { href: '/psy', label: 'Pies' },
+        { href: '/koty', label: 'Kot' },
+        { href: '/niezbednik', label: 'Niezbednik' },
+        { href: '/o-mnie', label: 'O mnie' },
+        { href: '/kontakt#formularz', label: 'Kontakt' },
+      ]}
+      ctaHref={audioHref}
+      ctaLabel={FUNNEL_CTA_LABELS.primary}
+      footerPrimaryHref={audioHref}
+      footerPrimaryLabel={FUNNEL_CTA_LABELS.primary}
+    >
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
 
       <div className="container editorial-stack">
-        <Header />
-
         <section className="editorial-hero-shell opinions-hero-shell" id="start">
           <div className="editorial-hero-grid opinions-hero-grid">
             <div className="editorial-hero-copy opinions-hero-copy">
@@ -654,15 +664,7 @@ export default function OpinionsPage() {
           </div>
         </section>
 
-        <Footer
-          variant="home"
-          sectionBasePath="/opinie"
-          ctaHref={audioHref}
-          ctaLabel={FUNNEL_CTA_LABELS.primary}
-          secondaryHref="/niezbednik"
-          secondaryLabel={FUNNEL_CTA_LABELS.secondary}
-        />
       </div>
-    </main>
+    </NotatnikPageShell>
   )
 }

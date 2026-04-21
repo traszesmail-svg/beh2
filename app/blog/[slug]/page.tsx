@@ -1,8 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { Footer } from '@/components/Footer'
-import { Header } from '@/components/Header'
+import { NotatnikPageShell } from '@/components/NotatnikA'
 import {
   BLOG_ROUTE_BASE,
   getBlogArticleJsonLd,
@@ -72,11 +71,24 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
   ]
 
   return (
-    <main className="page-wrap blog-page blog-article-page">
+    <NotatnikPageShell
+      tag="Blog / wpis"
+      navItems={[
+        { href: '/blog', label: 'Blog' },
+        { href: '/psy', label: 'Psy' },
+        { href: '/koty', label: 'Koty' },
+        { href: '/niezbednik', label: 'Niezbednik' },
+        { href: '/kontakt#formularz', label: 'Kontakt' },
+      ]}
+      ctaHref={post.audioHref}
+      ctaLabel={FUNNEL_CTA_LABELS.primary}
+      footerPrimaryHref={post.audioHref}
+      footerPrimaryLabel={FUNNEL_CTA_LABELS.primary}
+    >
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       <div className="container editorial-stack">
-        <Header />
+        
 
         <section className="panel section-panel blog-article-hero-panel">
           <div className="editorial-section-head">
@@ -143,15 +155,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
           </div>
         </section>
 
-        <Footer
-          variant="lean"
-          sectionBasePath="/blog"
-          ctaHref={post.audioHref}
-          ctaLabel={FUNNEL_CTA_LABELS.primary}
-          secondaryHref={FUNNEL_SECONDARY_HREF}
-          secondaryLabel={FUNNEL_CTA_LABELS.secondary}
-        />
       </div>
-    </main>
+    </NotatnikPageShell>
   )
 }

@@ -1,11 +1,10 @@
 ﻿import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Footer } from '@/components/Footer'
 import { FunnelPrimaryActions } from '@/components/FunnelPrimaryActions'
-import { Header } from '@/components/Header'
 import { HeroAudioSoftCta } from '@/components/HeroAudioSoftCta'
 import { LeadMagnetSignup } from '@/components/LeadMagnetSignup'
+import { NotatnikPageShell } from '@/components/NotatnikA'
 import { buildBookHref } from '@/lib/booking-routing'
 import { COPY_HELPERS } from '@/lib/copy-governance'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
@@ -386,11 +385,23 @@ export default function AboutPage() {
   ]
 
   return (
-    <main className="page-wrap marketing-page editorial-home-page premium-home-page authority-page">
+    <NotatnikPageShell
+      tag="O mnie / Krzysztof Regulski"
+      navItems={[
+        { href: '/psy', label: 'Pies' },
+        { href: '/koty', label: 'Kot' },
+        { href: '/niezbednik', label: 'Niezbednik' },
+        { href: '/o-mnie', label: 'O mnie' },
+        { href: '/kontakt#formularz', label: 'Kontakt' },
+      ]}
+      ctaHref={introCallHref}
+      ctaLabel={FUNNEL_CTA_LABELS.primary}
+      footerPrimaryHref={introCallHref}
+      footerPrimaryLabel={FUNNEL_CTA_LABELS.primary}
+    >
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
 
       <div className="container editorial-stack">
-        <Header />
         <section className="editorial-hero-shell premium-hero-shell" id="start">
           <div className="editorial-hero-grid">
             <div className="editorial-hero-copy">
@@ -848,16 +859,8 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <Footer
-          variant="home"
-          sectionBasePath="/o-mnie"
-          ctaHref={introCallHref}
-          ctaLabel={FUNNEL_CTA_LABELS.primary}
-          secondaryHref="/niezbednik"
-          secondaryLabel={FUNNEL_CTA_LABELS.secondary}
-        />
       </div>
-    </main>
+    </NotatnikPageShell>
   )
 }
 

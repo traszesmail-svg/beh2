@@ -1,9 +1,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Footer } from '@/components/Footer'
-import { Header } from '@/components/Header'
 import { LeadMagnetSignup } from '@/components/LeadMagnetSignup'
 import { NewsletterSignup } from '@/components/NewsletterSignup'
+import { NotatnikPageShell } from '@/components/NotatnikA'
 import { BLOG_ROUTE_BASE, getBlogListingMetadata, listBlogPosts } from '@/lib/blog'
 import { buildBookHref } from '@/lib/booking-routing'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
@@ -66,10 +65,22 @@ export default function BlogPage() {
   ].filter((item): item is NonNullable<typeof item> => item !== null)
 
   return (
-    <main className="page-wrap blog-page">
+    <NotatnikPageShell
+      tag="Blog / zachowanie psow i kotow"
+      navItems={[
+        { href: '/blog', label: 'Blog' },
+        { href: '/psy', label: 'Psy' },
+        { href: '/koty', label: 'Koty' },
+        { href: '/niezbednik', label: 'Niezbednik' },
+        { href: '/kontakt#formularz', label: 'Kontakt' },
+      ]}
+      ctaHref={audioHref}
+      ctaLabel={FUNNEL_CTA_LABELS.primary}
+      footerPrimaryHref={audioHref}
+      footerPrimaryLabel={FUNNEL_CTA_LABELS.primary}
+    >
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       <div className="container editorial-stack">
-        <Header />
 
         <section className="panel section-panel blog-hero-panel">
           <div className="editorial-section-head">
@@ -189,15 +200,7 @@ export default function BlogPage() {
           </div>
         </section>
 
-        <Footer
-          variant="lean"
-          sectionBasePath="/blog"
-          ctaHref={audioHref}
-          ctaLabel={FUNNEL_CTA_LABELS.primary}
-          secondaryHref={FUNNEL_SECONDARY_HREF}
-          secondaryLabel={FUNNEL_CTA_LABELS.secondary}
-        />
       </div>
-    </main>
+    </NotatnikPageShell>
   )
 }

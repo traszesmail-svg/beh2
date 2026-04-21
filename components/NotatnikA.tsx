@@ -33,6 +33,16 @@ type NotatnikFooterProps = {
   primaryLabel: string
 }
 
+type NotatnikPageShellProps = {
+  tag: string
+  navItems: NotatnikNavItem[]
+  ctaHref: string
+  ctaLabel: string
+  footerPrimaryHref: string
+  footerPrimaryLabel: string
+  children: React.ReactNode
+}
+
 function getCtaClassName(variant: NotatnikTopbarProps['ctaVariant']) {
   if (variant === 'ghost') {
     return 'notatnik-btn notatnik-btn-ghost'
@@ -194,5 +204,25 @@ export function NotatnikFooter({ primaryHref, primaryLabel }: NotatnikFooterProp
         </ul>
       </div>
     </footer>
+  )
+}
+
+export function NotatnikPageShell({
+  tag,
+  navItems,
+  ctaHref,
+  ctaLabel,
+  footerPrimaryHref,
+  footerPrimaryLabel,
+  children,
+}: NotatnikPageShellProps) {
+  return (
+    <main className="notatnik-page">
+      <div className="notatnik-shell">
+        <NotatnikTopbar tag={tag} navItems={navItems} ctaHref={ctaHref} ctaLabel={ctaLabel} />
+        {children}
+        <NotatnikFooter primaryHref={footerPrimaryHref} primaryLabel={footerPrimaryLabel} />
+      </div>
+    </main>
   )
 }

@@ -1,9 +1,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { EditorialFaqSection } from '@/components/EditorialFaqSection'
-import { Footer } from '@/components/Footer'
 import { FunnelPrimaryActions } from '@/components/FunnelPrimaryActions'
-import { Header } from '@/components/Header'
+import { NotatnikPageShell } from '@/components/NotatnikA'
 import { buildBookHref } from '@/lib/booking-routing'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { buildMarketingMetadata } from '@/lib/seo'
@@ -89,12 +88,23 @@ const structuredData = [
 
 export default function FaqPage() {
   return (
-    <main className="page-wrap editorial-home-page premium-home-page faq-page">
+    <NotatnikPageShell
+      tag="FAQ / najczestsze pytania"
+      navItems={[
+        { href: '/konsultacja-behawioralna-online#faq', label: 'Konsultacja' },
+        { href: '/psy#faq', label: 'Psy' },
+        { href: '/koty#faq', label: 'Koty' },
+        { href: '/o-mnie#faq', label: 'Podejscie' },
+        { href: '/faq#kontakt', label: 'Kontakt' },
+      ]}
+      ctaHref={audioHref}
+      ctaLabel={FUNNEL_CTA_LABELS.primary}
+      footerPrimaryHref={audioHref}
+      footerPrimaryLabel={FUNNEL_CTA_LABELS.primary}
+    >
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
 
       <div className="container editorial-stack">
-        <Header />
-
         <section className="editorial-hero-shell premium-hero-shell faq-hero-shell" id="start">
           <div className="editorial-hero-grid">
             <div className="editorial-hero-copy">
@@ -190,16 +200,7 @@ export default function FaqPage() {
             />
           </div>
         </section>
-
-        <Footer
-          variant="home"
-          sectionBasePath="/faq"
-          ctaHref={audioHref}
-          ctaLabel={FUNNEL_CTA_LABELS.primary}
-          secondaryHref="/niezbednik"
-          secondaryLabel={FUNNEL_CTA_LABELS.secondary}
-        />
       </div>
-    </main>
+    </NotatnikPageShell>
   )
 }

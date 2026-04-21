@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Footer } from '@/components/Footer'
-import { Header } from '@/components/Header'
+import { NotatnikPageShell } from '@/components/NotatnikA'
 import { PriceDisplay } from '@/components/PriceDisplay'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { buildBookHref } from '@/lib/booking-routing'
@@ -58,9 +57,21 @@ export default async function OfferPage() {
   const contactHref = '/kontakt#formularz'
 
   return (
-    <main className="page-wrap marketing-page money-page">
+    <NotatnikPageShell
+      tag="Oferta / start i porownanie"
+      navItems={[
+        { href: '/psy', label: 'Pies' },
+        { href: '/koty', label: 'Kot' },
+        { href: '/niezbednik', label: 'Niezbednik' },
+        { href: '/o-mnie', label: 'O mnie' },
+        { href: '/kontakt#formularz', label: 'Kontakt' },
+      ]}
+      ctaHref={quickStartHref}
+      ctaLabel={FUNNEL_CTA_LABELS.primary}
+      footerPrimaryHref={quickStartHref}
+      footerPrimaryLabel={FUNNEL_CTA_LABELS.primary}
+    >
       <div className="container">
-        <Header />
 
         <section className="panel section-panel hero-surface offer-page-panel visual-scan-page">
           <div className="offer-page-hero-grid">
@@ -282,14 +293,7 @@ export default async function OfferPage() {
           </p>
         </section>
 
-        <Footer
-          variant="home"
-          ctaHref={quickStartHref}
-          ctaLabel={FUNNEL_CTA_LABELS.primary}
-          secondaryHref="/niezbednik"
-          secondaryLabel={FUNNEL_CTA_LABELS.secondary}
-        />
       </div>
-    </main>
+    </NotatnikPageShell>
   )
 }
