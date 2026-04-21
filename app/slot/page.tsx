@@ -3,11 +3,10 @@ import Link from 'next/link'
 import { unstable_noStore as noStore } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { AnalyticsEventOnMount } from '@/components/AnalyticsEventOnMount'
-import { getServiceAnalyticsParams } from '@/lib/analytics-schema'
 import { BookingStageEyebrow } from '@/components/BookingStageEyebrow'
 import { BookingServiceInfoCard } from '@/components/BookingServiceInfoCard'
-import { Footer } from '@/components/Footer'
-import { Header } from '@/components/Header'
+import { NotatnikFooter, NotatnikTopbar } from '@/components/NotatnikA'
+import { getServiceAnalyticsParams } from '@/lib/analytics-schema'
 import {
   type BookingServiceType,
   DEFAULT_BOOKING_SERVICE,
@@ -33,6 +32,13 @@ import type { GroupedAvailability } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
+
+const BOOKING_NAV_ITEMS = [
+  { href: '/psy', label: 'Pies' },
+  { href: '/koty', label: 'Kot' },
+  { href: '/niezbednik', label: 'Niezbednik' },
+  { href: '/kontakt#formularz', label: 'Kontakt' },
+] as const
 
 function addMinutesToTime(time: string, minutesToAdd: number) {
   const [hours, minutes] = time.split(':').map(Number)
@@ -134,6 +140,7 @@ export default async function SlotPage({
   const messageHref = `/kontakt?species=${getProblemSpecies(problem)}#formularz`
   const returnHref = buildBookHref(null, serviceQuery, qaBooking, getProblemSpecies(problem))
   const quickAudioHref = buildBookHref(null, 'szybka-konsultacja-15-min', qaBooking, getProblemSpecies(problem))
+  const retryHref = buildSlotHref(problem, serviceQuery, qaBooking)
   const dataMode = getDataModeStatus()
   const serviceConfig = FUNNEL_SERVICE_CONFIG[serviceType]
   const isFullConsultation = serviceType === 'konsultacja-behawioralna-online'
@@ -173,33 +180,34 @@ export default async function SlotPage({
 
   const renderSlotGroups = (groups: GroupedAvailability[], slotTier: 'standard' | 'additional' = 'standard') =>
     groups.map((group) => (
-      <div key={`${slotTier}-${group.date}`} className="slot-day-card tree-backed-card" data-slot-tier={slotTier}>
-        <div className="slot-day-head">
-          <div className="slot-day-copy">
+      <div key={`${slotTier}-${group.date}`} className="notatnik-slot-day" data-slot-tier={slotTier}>
+        <div className="notatnik-slot-day-head">
+          <div className="notatnik-slot-day-copy">
             <strong>{group.label}</strong>
-            <span>
+            <p>
               {getBookingServiceSlotSummary(serviceType)}
               {slotTier === 'additional'
                 ? ' To dodatkowe okno poza standardowym grafikiem tej usługi.'
                 : serviceConfig.limitedAvailabilityNote
                   ? ` ${serviceConfig.limitedAvailabilityNote}`
                   : ''}
-            </span>
+            </p>
           </div>
-          <span className="slot-day-format">
+          <span className="notatnik-slot-day-badge">
             {slotTier === 'additional' ? 'termin dodatkowy' : getBookingServiceSlotBadge(serviceType)}
           </span>
         </div>
-        <div className="time-grid">
+
+        <div className="notatnik-slot-grid">
           {group.slots.map((slot) => {
-            const slotRangeLabel = `${slot.bookingTime}–${addMinutesToTime(slot.bookingTime, serviceConfig.durationMinutes)}`
+            const slotRangeLabel = `${slot.bookingTime}-${addMinutesToTime(slot.bookingTime, serviceConfig.durationMinutes)}`
 
             return (
               <Link
                 key={slot.id}
                 href={buildFormHref(problem, slot.id, serviceQuery, qaBooking)}
                 prefetch={false}
-                className="slot-button slot-link"
+                className="notatnik-slot-button"
                 data-slot-id={slot.id}
                 data-slot-problem={problem}
                 data-slot-tier={slotTier}
@@ -225,9 +233,10 @@ export default async function SlotPage({
     ))
 
   return (
-    <main className="page-wrap" data-analytics-disabled={qaBooking ? 'true' : undefined} data-qa-booking={qaBooking ? 'true' : 'false'}>
-      <div className="container">
-        <Header />
+    <main className="notatnik-page" data-analytics-disabled={qaBooking ? 'true' : undefined} data-qa-booking={qaBooking ? 'true' : 'false'}>
+      <div className="notatnik-shell">
+        <NotatnikTopbar tag="Rezerwacja konsultacji" navItems={BOOKING_NAV_ITEMS} ctaHref={returnHref} ctaLabel="Wroc do tematow" ctaVariant="ghost" />
+
         <AnalyticsEventOnMount
           eventName="view_page"
           params={{
@@ -238,112 +247,129 @@ export default async function SlotPage({
           }}
         />
 
-        <section className="panel section-panel hero-surface booking-stage-panel slot-page-panel booking-flow-panel">
-          <div className="booking-stage-hero-grid">
-            <div className="booking-stage-copy-column">
-              <BookingStageEyebrow stage="slot" className="section-eyebrow" />
-              {qaBooking ? <div className="status-pill transaction-status-pill">Tryb testowy</div> : null}
-              <h1>Wybierz termin: {getProblemLabel(problem)}</h1>
-              <p className="hero-text">
-                {getBookingServiceSlotSummary(serviceType)}{' '}
-                {isFullConsultation ? 'Każdy wybór rezerwuje pełne 60 minut.' : 'Wybierz godzinę.'}
-              </p>
-              <p className="muted">
-                Po kliknięciu terminu przejdziesz do krótkiego formularza, a potem do płatności i potwierdzenia rezerwacji.
-              </p>
-            </div>
+        <div className="notatnik-booking">
+          <div className="notatnik-booking-left">
+            <BookingStageEyebrow stage="slot" />
+            {qaBooking ? (
+              <div className="notatnik-contact-note" style={{ marginTop: 18 }}>
+                <strong>Tryb testowy</strong>
+                <p>Wybierasz termin w sciezce testowej bez realnego obciazenia klienta.</p>
+              </div>
+            ) : null}
 
+            <h1>
+              Wybierz termin dla <em>{getProblemLabel(problem)}</em>.
+            </h1>
+            <p className="notatnik-booking-lede">
+              {getBookingServiceSlotSummary(serviceType)}{' '}
+              {isFullConsultation
+                ? 'Kazdy wybor blokuje pelny blok tej konsultacji, czyli okolo 2 godziny.'
+                : 'Kliknij godzine, ktora realnie pasuje do Twojego dnia.'}
+            </p>
+
+            <div className="notatnik-detail-stack">
               <BookingServiceInfoCard
                 serviceType={serviceType}
-                title="Po wyborze terminu przejdziesz do formularza"
-                stageLabel="Ta usługa"
-                emphasis="Kliknij termin, żeby przejść do formularza, a potem dokończyć rezerwację."
+                title="Ta usluga na tym etapie"
+                stageLabel="Wybor terminu"
+                emphasis="Po kliknieciu terminu przejdziesz do formularza i od razu zablokujesz wybrane okno na czas dokonczenia rezerwacji."
               />
+
+              <div className="notatnik-detail-card">
+                <strong>Temat</strong>
+                <p>{getProblemLabel(problem)}</p>
+              </div>
+
+              <div className="notatnik-detail-card">
+                <strong>Powrot</strong>
+                <p>Jesli chcesz zmienic temat albo gatunek, wroc do poprzedniego kroku i wybierz inna sciezke.</p>
+              </div>
+            </div>
           </div>
 
-          {publicFlowMessage ? (
-            <div className="stack-gap top-gap slot-state-stack">
-              <div className="info-box">
-                {publicFlowMessage} Jeśli temat jest pilny, napisz wiadomość.
-              </div>
-              <div className="hero-actions">
-                <Link href={isFullConsultation ? quickAudioHref : buildSlotHref(problem, serviceQuery, qaBooking)} prefetch={false} className="button button-primary big-button">
-                  {isFullConsultation ? FUNNEL_CTA_LABELS.primary : 'Spróbuj ponownie'}
-                </Link>
-                <Link href={returnHref} prefetch={false} className="button button-ghost">
-                  Wróć do tematów
-                </Link>
-                <Link href={messageHref} prefetch={false} className="button button-ghost">
-                  {FUNNEL_CTA_LABELS.contact}
-                </Link>
-              </div>
-            </div>
-          ) : hasOnlyAdditionalGroups ? (
-            <div className="stack-gap top-gap slot-state-stack">
-              <div className="list-card accent-outline tree-backed-card">
-                <strong>Pojawiły się dodatkowe terminy konsultacji 60 min.</strong>
-                <span>
-                  To ta sama konsultacja 60 min w tej samej cenie. Poniżej masz dodatkowe godziny poza podstawową pulą terminów.
-                </span>
-              </div>
-              <details className="list-card accent-outline tree-backed-card slot-extra-availability" open>
-                <summary>Pokaż dodatkowe terminy 60 min</summary>
-                <p className="slot-extra-availability-note">
-                  To nadal konsultacja 60 min za 350 zł. Wybierz termin, który naprawdę Ci pasuje.
-                </p>
-                <div className="slot-extra-availability-panel">{renderSlotGroups(additionalGroups, 'additional')}</div>
-              </details>
-              <div className="hero-actions">
-                <Link href={quickAudioHref} prefetch={false} className="button button-primary big-button">
-                  {FUNNEL_CTA_LABELS.primary}
-                </Link>
-                <Link href={returnHref} prefetch={false} className="button button-ghost">
-                  Wróć do tematów
-                </Link>
-                <Link href={messageHref} prefetch={false} className="button button-ghost">
-                  {FUNNEL_CTA_LABELS.contact}
-                </Link>
-              </div>
-            </div>
-          ) : visibleGroups.length === 0 ? (
-            <div className="stack-gap top-gap slot-state-stack">
-              <div className="empty-box">{serviceConfig.noAvailabilityMessage}</div>
-              <div className="hero-actions">
-                <Link href={isFullConsultation ? quickAudioHref : buildSlotHref(problem, serviceQuery, qaBooking)} prefetch={false} className="button button-primary big-button">
-                  {isFullConsultation ? FUNNEL_CTA_LABELS.primary : 'Odśwież terminy'}
-                </Link>
-                <Link href={returnHref} prefetch={false} className="button button-ghost">
-                  Wróć do tematów
-                </Link>
-                <Link href={messageHref} prefetch={false} className="button button-ghost">
-                  {FUNNEL_CTA_LABELS.contact}
-                </Link>
-              </div>
-            </div>
-          ) : (
-            <>
-              <div className="slot-list top-gap">{renderSlotGroups(visibleGroups)}</div>
-              {hasAdditionalGroups ? (
-                <details className="list-card accent-outline tree-backed-card top-gap slot-extra-availability">
-                  <summary>Pokaż dodatkowe terminy 60 min</summary>
-                  <p className="slot-extra-availability-note">
-                    To te same konsultacje 60 min w dodatkowych oknach poza podstawową pulą terminów.
-                  </p>
-                  <div className="slot-extra-availability-panel">{renderSlotGroups(additionalGroups, 'additional')}</div>
-                </details>
-              ) : null}
-            </>
-          )}
-        </section>
+          <div className="notatnik-booking-right">
+            <div className="notatnik-booking-panel">
+              <div className="notatnik-mono">Krok 03 / 04 · Termin</div>
 
-        <Footer
-          ctaHref={quickAudioHref}
-          ctaLabel={FUNNEL_CTA_LABELS.primary}
-          secondaryHref="/niezbednik"
-          secondaryLabel={FUNNEL_CTA_LABELS.secondary}
-          headline="Żaden termin nie pasuje?"
-          description="Możesz wybrać Kwadrans z behawiorystą albo napisać wiadomość."
-        />
+              {publicFlowMessage ? (
+                <>
+                  <div className="notatnik-callout">
+                    {publicFlowMessage} Jesli temat jest pilny, napisz wiadomosc i wroc za chwile.
+                  </div>
+                  <div className="notatnik-actions">
+                    <Link
+                      href={isFullConsultation ? quickAudioHref : retryHref}
+                      prefetch={false}
+                      className="notatnik-btn notatnik-btn-accent"
+                    >
+                      {isFullConsultation ? FUNNEL_CTA_LABELS.primary : 'Sprobuj ponownie'}
+                    </Link>
+                    <Link href={returnHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
+                      Wroc do tematow
+                    </Link>
+                    <Link href={messageHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
+                      {FUNNEL_CTA_LABELS.contact}
+                    </Link>
+                  </div>
+                </>
+              ) : hasOnlyAdditionalGroups ? (
+                <>
+                  <div className="notatnik-callout">
+                    Pelna konsultacja nie ma teraz podstawowej puli terminow, ale pojawily sie dodatkowe okna w tej samej cenie.
+                  </div>
+                  <details className="notatnik-slot-extra" open>
+                    <summary>Pokaz dodatkowe terminy pelnej konsultacji</summary>
+                    <p>To nadal pelna konsultacja behawioralna. Wybierz termin, ktory naprawde pasuje do Twojego rytmu dnia.</p>
+                    <div className="notatnik-slot-stack">{renderSlotGroups(additionalGroups, 'additional')}</div>
+                  </details>
+                  <div className="notatnik-actions">
+                    <Link href={quickAudioHref} prefetch={false} className="notatnik-btn notatnik-btn-accent">
+                      {FUNNEL_CTA_LABELS.primary}
+                    </Link>
+                    <Link href={returnHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
+                      Wroc do tematow
+                    </Link>
+                    <Link href={messageHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
+                      {FUNNEL_CTA_LABELS.contact}
+                    </Link>
+                  </div>
+                </>
+              ) : visibleGroups.length === 0 ? (
+                <>
+                  <div className="notatnik-callout">{serviceConfig.noAvailabilityMessage}</div>
+                  <div className="notatnik-actions">
+                    <Link
+                      href={isFullConsultation ? quickAudioHref : retryHref}
+                      prefetch={false}
+                      className="notatnik-btn notatnik-btn-accent"
+                    >
+                      {isFullConsultation ? FUNNEL_CTA_LABELS.primary : 'Odswiez terminy'}
+                    </Link>
+                    <Link href={returnHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
+                      Wroc do tematow
+                    </Link>
+                    <Link href={messageHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
+                      {FUNNEL_CTA_LABELS.contact}
+                    </Link>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="notatnik-slot-stack">{renderSlotGroups(visibleGroups)}</div>
+                  {hasAdditionalGroups ? (
+                    <details className="notatnik-slot-extra">
+                      <summary>Pokaz dodatkowe terminy pelnej konsultacji</summary>
+                      <p>To te same konsultacje w dodatkowych oknach poza podstawowa pula terminow.</p>
+                      <div className="notatnik-slot-stack">{renderSlotGroups(additionalGroups, 'additional')}</div>
+                    </details>
+                  ) : null}
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <NotatnikFooter primaryHref={quickAudioHref} primaryLabel={FUNNEL_CTA_LABELS.primary} />
       </div>
     </main>
   )

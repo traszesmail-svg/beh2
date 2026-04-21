@@ -26,10 +26,17 @@ const publicRules: MetadataRoute.Robots['rules'] = [
   },
 ]
 
+const blockedRules: MetadataRoute.Robots['rules'] = [
+  {
+    userAgent: '*',
+    disallow: ['/'],
+  },
+]
+
 export default function robots(): MetadataRoute.Robots {
   if (shouldBlockSearchIndexing()) {
     return {
-      rules: publicRules,
+      rules: blockedRules,
     }
   }
 

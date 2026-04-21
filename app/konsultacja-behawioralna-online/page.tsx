@@ -17,10 +17,10 @@ import { SPECIALIST_NAME } from '@/lib/site'
 const heroImage = { src: '/branding/omnie-hero.webp', width: 1024, height: 1536 } as const
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: 'Konsultacja behawioralna online 60 min',
+  title: 'Pelna konsultacja behawioralna',
   path: '/konsultacja-behawioralna-online',
   description:
-    'Konsultacja behawioralna online 60 min dla psa i kota. Zakres, cena i moment, w którym lepiej wybrać dłuższą rozmowę.',
+    'Pelna konsultacja behawioralna dla psa i kota. Zakres, cena i moment, w ktorym lepiej wybrac najszersza rozmowe online.',
 })
 
 function SectionIntro({ eyebrow, title, description }: { eyebrow: string; title: string; description: string }) {
@@ -46,8 +46,8 @@ export default function ConsultationOnlinePage() {
       { name: 'Konsultacja behawioralna online', path: '/konsultacja-behawioralna-online' },
     ]),
     getServiceJsonLd({
-      name: 'Konsultacja behawioralna online 60 min',
-      description: '60 minut konsultacji online dla psa lub kota, z planem i podsumowaniem po rozmowie.',
+      name: 'Pelna konsultacja behawioralna',
+      description: 'Pelna konsultacja behawioralna online dla psa lub kota, ok. 2 h lacznie, z planem i podsumowaniem po rozmowie.',
       serviceUrl: consultationHref,
       offerPrice: 350,
     }),
@@ -74,8 +74,8 @@ export default function ConsultationOnlinePage() {
         <section className="editorial-hero-shell premium-hero-shell">
           <div className="editorial-hero-grid">
             <div className="editorial-hero-copy">
-              <div className="section-eyebrow">Konsultacja online 60 min</div>
-              <h1>Konsultacja behawioralna online 60 min</h1>
+              <div className="section-eyebrow">Pelna konsultacja behawioralna</div>
+              <h1>Pelna konsultacja behawioralna</h1>
               <p className="editorial-hero-lead">
                 To opcja dla tematow szerszych, dluzszych albo bardziej zlozonych. Jesli nie masz pewnosci, czy potrzebujesz pelnej
                 konsultacji, najpierw wybierz Kwadrans z behawiorysta.
@@ -93,7 +93,7 @@ export default function ConsultationOnlinePage() {
               <p className="muted top-gap-small">
                 Jesli od razu wiesz, ze potrzebujesz dluzszej rozmowy, mozesz od razu{' '}
                 <Link href={consultationHref} prefetch={false} className="prep-inline-link">
-                  umowic konsultacje 60 min
+                  umowic pelna konsultacje
                 </Link>
                 . Jesli chcesz doprecyzowac wybor,{' '}
                 <Link href={contactHref} prefetch={false} className="prep-inline-link">
@@ -125,13 +125,13 @@ export default function ConsultationOnlinePage() {
         <section className="panel section-panel editorial-section">
           <SectionIntro
             eyebrow="Dla kogo"
-            title="Kiedy warto wybrac konsultacje 60 min"
+            title="Kiedy warto wybrac pelna konsultacje behawioralna"
             description="Pelna konsultacja daje wiecej czasu na tlo problemu, codziennosc zwierzecia i uporzadkowanie kilku watkow naraz."
           />
 
           <div className="premium-two-column-grid">
             <article className="summary-card tree-backed-card">
-              <h3>Konsultacja 60 min bedzie dobrym wyborem, jesli</h3>
+              <h3>Pelna konsultacja bedzie dobrym wyborem, jesli</h3>
               <ul className="premium-bullet-list">
                 <li>problem trwa od tygodni albo miesiecy</li>
                 <li>dotyczy kilku tematow naraz</li>
@@ -201,7 +201,7 @@ export default function ConsultationOnlinePage() {
               />
               <article className="summary-card tree-backed-card">
                 <div className="section-eyebrow">Kiedy warto</div>
-                <h3>Przed Kwadransem albo przed 60 min</h3>
+                <h3>Przed Kwadransem, Dwoma kwadransami albo pelna konsultacja</h3>
                 <p>
                   Ten material przydaje sie wtedy, gdy chcesz najpierw uporzadkowac opis sytuacji. Nie jest konieczny do rezerwacji i nie
                   zastapi rozmowy.
@@ -219,7 +219,7 @@ export default function ConsultationOnlinePage() {
         <EditorialFaqSection
           id="faq"
           title="Najczestsze pytania o konsultacje online"
-          description="Krotko o tym, kiedy wybrac 60 min, a kiedy wystarczy Kwadrans."
+          description="Krotko o tym, kiedy wybrac pelna konsultacje, a kiedy wystarczy Kwadrans."
           items={FAQ_SHORTLISTS.consultation}
         />
 
@@ -228,7 +228,7 @@ export default function ConsultationOnlinePage() {
             <div className="section-eyebrow">Decyzja</div>
             <h2>Zacznij od kroku, ktory pasuje do Twojej sytuacji</h2>
             <p>
-              Jesli temat jest szeroki, wybierz konsultacje 60 min. Jesli chcesz najpierw spokojnie ocenic sytuacje, zacznij od Kwadransu
+              Jesli temat jest szeroki, wybierz pelna konsultacje. Jesli chcesz najpierw spokojnie ocenic sytuacje, zacznij od Kwadransu
               z behawiorysta.
             </p>
 

@@ -14,7 +14,7 @@ import { NewsletterSignup } from '@/components/NewsletterSignup'
 import { TrustSignalSection } from '@/components/TrustSignalSection'
 import { buildBookHref } from '@/lib/booking-routing'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
-import { getLeadMagnetBySlug, getProblemLandingLeadMagnetSlug } from '@/lib/growth-layer'
+import { getLeadMagnetBySlug, getProblemLandingLeadMagnetSlug, getTopicalClusterByRoutePath } from '@/lib/growth-layer'
 import { REAL_CASE_STUDIES } from '@/lib/real-case-studies'
 import { getBreadcrumbJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
@@ -666,6 +666,8 @@ export function ProblemLandingPage({ routePath }: { routePath: string }) {
     return null
   }
 
+  const cluster = getTopicalClusterByRoutePath(landing.path)
+
   const baseUrl = getCanonicalBaseUrl()
   const structuredData: Array<Record<string, unknown>> = [
     {
@@ -849,6 +851,12 @@ export function ProblemLandingPage({ routePath }: { routePath: string }) {
               <strong>{FUNNEL_CTA_LABELS.primary}</strong>
               <span>Najprostszy pierwszy krok, jeśli chcesz omówić swoją sytuację.</span>
             </Link>
+            {cluster ? (
+              <Link href={cluster.serviceLink.href} prefetch={false} className="summary-card tree-backed-card blog-related-card">
+                <strong>{cluster.serviceLink.label}</strong>
+                <span>{cluster.serviceLink.copy}</span>
+              </Link>
+            ) : null}
             <Link href="/book" prefetch={false} className="summary-card tree-backed-card blog-related-card">
               <strong>Rezerwacja</strong>
               <span>Zobacz dostępne warianty i przejdź do właściwego startu.</span>
@@ -861,6 +869,12 @@ export function ProblemLandingPage({ routePath }: { routePath: string }) {
               <strong>{landing.toolkitLabel}</strong>
               <span>Materiał pomocniczy, jeśli chcesz najpierw spokojnie poczytać.</span>
             </Link>
+            {cluster?.blogLinks.map((link) => (
+              <Link key={link.href} href={link.href} prefetch={false} className="summary-card tree-backed-card blog-related-card">
+                <strong>{link.label}</strong>
+                <span>{link.copy}</span>
+              </Link>
+            ))}
             {landing.crossLinks.map((link) => (
               <Link key={link.href} href={link.href} prefetch={false} className="summary-card tree-backed-card blog-related-card">
                 <strong>{link.label}</strong>

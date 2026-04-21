@@ -7,14 +7,16 @@ import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import ContactPage from '@/app/kontakt/page'
 import OpinionsPage from '@/app/opinie/page'
+import generateRobots from '@/app/robots'
 import { Footer } from '@/components/Footer'
 import { SocialSection } from '@/components/SocialSection'
 import { SocialProofSection } from '@/components/SocialProofSection'
 import { buildBookHref, buildFormHref, buildPaymentHref, buildSlotHref, readQaBookingSearchParam } from '@/lib/booking-routing'
 import { BUILD_MARKER_KEY } from '@/lib/build-marker'
 import { getDefaultReleaseSmokeRules } from '@/lib/release-smoke'
+import { getOrganizationJsonLd } from '@/lib/schema'
 import { CAPBT_ORG_URL, INSTAGRAM_PROFILE_URL, SITE_PRODUCTION_URL } from '@/lib/site'
-import { buildHomeMetadata } from '@/lib/seo'
+import { buildBookMetadata, buildHomeMetadata } from '@/lib/seo'
 import { getDeployReadinessChecks, getGoLiveChecks, getVerifiedDeployReadinessChecks } from '@/lib/server/go-live'
 import { getQaCheckoutEligibility, getQaCheckoutPaymentReference, getPublicManualPaymentConfig } from '@/lib/server/payment-options'
 import { auditSupabaseSchemaText, getSupabaseSchemaAudit } from '@/scripts/lib/schema-audit'
@@ -146,6 +148,141 @@ test('root layout metadata base is derived from the canonical runtime base url h
 
   assert.match(layoutSource, /getCanonicalBaseUrl\(\)/)
   assert.doesNotMatch(layoutSource, /http:\/\/localhost:3000/)
+})
+
+test('home metadata stays service-first while keeping the canonical homepage path', async () => {
+  const metadata = await buildHomeMetadata()
+
+  assert.equal(metadata.title, 'Behawiorysta psow i kotow online')
+  assert.equal(metadata.alternates?.canonical, '/')
+  assert.match(String(metadata.description ?? ''), /Behawiorysta psow i kotow online/)
+  assert.match(String(metadata.openGraph?.title ?? ''), /Behawiorysta psow i kotow online/)
+})
+
+test('book metadata uses technical noindex metadata with follow enabled', async () => {
+  const metadata = await buildBookMetadata()
+
+  assert.equal(metadata.alternates?.canonical, '/book')
+  assert.equal(metadata.robots?.index, false)
+  assert.equal(metadata.robots?.follow, true)
+  assert.match(String(metadata.title ?? ''), /Rezerwacja konsultacji/)
+})
+
+test('organization schema uses the configured public contact email', () => {
+  withEnv(
+    {
+      BEHAVIOR15_CONTACT_EMAIL: 'kontakt+public@example.com',
+    },
+    () => {
+      const schema = getOrganizationJsonLd() as { email?: string }
+
+      assert.equal(schema.email, 'kontakt+public@example.com')
+    },
+  )
+})
+
+test('robots block all crawling outside production and expose sitemap on production', () => {
+  withEnv(
+    {
+      VERCEL_ENV: 'preview',
+      VERCEL_URL: 'preview-example.vercel.app',
+    },
+    () => {
+      const previewRobots = generateRobots()
+
+      assert.deepEqual(previewRobots, {
+        rules: [
+          {
+            userAgent: '*',
+            disallow: ['/'],
+          },
+        ],
+      })
+    },
+  )
+
+  withEnv(
+    {
+      VERCEL_ENV: 'production',
+      VERCEL_URL: 'regulskibehawiorysta.pl',
+    },
+    () => {
+      const productionRobots = generateRobots()
+
+      assert.equal(productionRobots.sitemap, `${SITE_PRODUCTION_URL}/sitemap.xml`)
+      assert.equal(productionRobots.host, SITE_PRODUCTION_URL)
+    },
+  )
+})
+
+test('service-page architecture keeps one broad online landing and redirects helper seo routes', () => {
+  const growthLayerSource = readSource('lib', 'growth-layer.ts')
+  const nextConfigSource = readSource('next.config.mjs')
+  const uiSmokeSource = readSource('scripts', 'ui-smoke.ts')
+
+  assert.match(growthLayerSource, /path: '\/behawiorysta-online-polska'/)
+  assert.match(growthLayerSource, /title: 'Behawiorysta psow i kotow online - cala Polska'/)
+  assert.match(growthLayerSource, /href: '\/konsultacja-behawioralna-online'/)
+
+  assert.match(nextConfigSource, /source: '\/behawiorysta-psow'/)
+  assert.match(nextConfigSource, /destination: '\/psy'/)
+  assert.match(nextConfigSource, /source: '\/behawiorysta-kotow'/)
+  assert.match(nextConfigSource, /destination: '\/koty'/)
+
+  assert.match(uiSmokeSource, /path: '\/behawiorysta-psow'/)
+  assert.match(uiSmokeSource, /destinationPath: '\/psy'/)
+  assert.match(uiSmokeSource, /path: '\/behawiorysta-kotow'/)
+  assert.match(uiSmokeSource, /destinationPath: '\/koty'/)
+})
+
+test('copy governance keeps Kwadrans as the primary service name and format as supporting detail', () => {
+  const copyGovernanceSource = readSource('lib', 'copy-governance.ts')
+  const offerEntrySource = readSource('components', 'OfferEntrySection.tsx')
+  const bookingServiceInfoCardSource = readSource('components', 'BookingServiceInfoCard.tsx')
+  const contactSource = readSource('app', 'kontakt', 'page.tsx')
+  const bookSource = readSource('app', 'book', 'page.tsx')
+
+  assert.match(copyGovernanceSource, /primary: 'Kwadrans z behawiorysta'/)
+  assert.match(copyGovernanceSource, /primaryDescriptor: '15 min audio bez kamery'/)
+  assert.match(copyGovernanceSource, /primaryLead: 'Kwadrans z behawiorysta to 15 min audio bez kamery\.'/)
+
+  assert.match(offerEntrySource, /COPY_SERVICE_NAMES\.primaryDescriptor/)
+  assert.match(offerEntrySource, /Kwadrans zostaje nazwa uslugi/)
+
+  assert.match(bookingServiceInfoCardSource, /const serviceLabel = service\.mode === 'audio' \? COPY_SERVICE_NAMES\.primary : service\.title/)
+  assert.match(bookingServiceInfoCardSource, /const formatLabel = service\.mode === 'audio' \? COPY_SERVICE_NAMES\.primaryDescriptor : 'rozmowa online'/)
+  assert.match(bookingServiceInfoCardSource, /COPY_SERVICE_NAMES\.primaryShort/)
+
+  assert.match(contactSource, /<h3>Kwadrans z behawiorysta<\/h3>/)
+  assert.match(bookSource, /nazwa uslugi: Kwadrans z behawiorysta/)
+  assert.match(bookSource, /format: 15 min audio bez kamery/)
+})
+
+test('home, dogs and cats pages point users to the canonical service page and explain Kwadrans vs 60 min', () => {
+  const homeSource = readSource('app', 'page.tsx')
+  const dogsSource = readSource('app', 'psy', 'page.tsx')
+  const catsSource = readSource('app', 'koty', 'page.tsx')
+  const funnelActionsSource = readSource('components', 'FunnelPrimaryActions.tsx')
+  const serviceDecisionSource = readSource('components', 'ServiceDecisionSection.tsx')
+
+  assert.match(serviceDecisionSource, /strony uslugi online/)
+  assert.match(funnelActionsSource, /serviceHref\?: string/)
+  assert.match(funnelActionsSource, /Jesli chcesz najpierw zobaczyc pelny opis uslugi/)
+
+  assert.match(homeSource, /serviceLandingHref = '\/behawiorysta-online-polska'/)
+  assert.match(homeSource, /<ServiceDecisionSection/)
+  assert.match(homeSource, /serviceHref=\{serviceLandingHref\}/)
+  assert.match(homeSource, /Behawiorysta psów i kotów online\. Zacznij od spokojnej rozmowy\./)
+
+  assert.match(dogsSource, /title: 'Behawiorysta psów online - reaktywnosc, separacja i pomoc w domu'/)
+  assert.match(dogsSource, /serviceLandingHref = '\/behawiorysta-online-polska'/)
+  assert.match(dogsSource, /<ServiceDecisionSection/)
+  assert.match(dogsSource, /Zobacz stronę usługi online/)
+
+  assert.match(catsSource, /title: 'Behawiorysta kotów online - kuweta, stres i relacje miedzy kotami'/)
+  assert.match(catsSource, /serviceLandingHref = '\/behawiorysta-online-polska'/)
+  assert.match(catsSource, /<ServiceDecisionSection/)
+  assert.match(catsSource, /Zobacz stronę usługi online/)
 })
 
 test.skip('offer and booking pages keep quick-scan language', () => {

@@ -59,6 +59,10 @@ export function isBookingServiceType(value: string | null | undefined): value is
 }
 
 export function normalizeBookingServiceType(value: string | null | undefined): BookingServiceType {
+  if (value === 'konsultacja-30-min') {
+    return value
+  }
+
   if (value === 'konsultacja-behawioralna-online') {
     return value
   }
@@ -75,7 +79,7 @@ export function getBookingServiceTitle(serviceType: BookingServiceType) {
 }
 
 export function getBookingServiceDurationLabel(serviceType: BookingServiceType) {
-  return `${getBookingServiceRoomDurationMinutes(serviceType)} min`
+  return FUNNEL_SERVICE_CONFIG[serviceType].durationLabel
 }
 
 export function getBookingServiceSlotSummary(serviceType: BookingServiceType) {

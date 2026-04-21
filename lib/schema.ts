@@ -1,15 +1,16 @@
 import {
-  INSTAGRAM_PROFILE_URL,
-  PUBLIC_CONTACT_EMAIL_FALLBACK,
+  ORGANIZATION_PUBLIC_PROFILE_URLS,
   SITE_NAME,
   SITE_OG_IMAGE,
   SITE_PRODUCTION_URL,
   SITE_SHORT_NAME,
   SITE_TAGLINE,
-  SPECIALIST_CREDENTIALS,
   SPECIALIST_LOCATION,
   SPECIALIST_NAME,
+  SPECIALIST_PUBLIC_PROFILE_URLS,
+  SPECIALIST_PUBLIC_PROOF_SUMMARY,
   SPECIALIST_PUBLIC_STATUS,
+  getPublicContactDetails,
 } from '@/lib/site'
 
 type BreadcrumbInput = {
@@ -27,6 +28,8 @@ type ServiceSchemaInput = {
 }
 
 export function getOrganizationJsonLd() {
+  const publicContact = getPublicContactDetails()
+
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
@@ -35,8 +38,8 @@ export function getOrganizationJsonLd() {
     alternateName: SITE_SHORT_NAME,
     url: SITE_PRODUCTION_URL,
     description: SITE_TAGLINE,
-    email: PUBLIC_CONTACT_EMAIL_FALLBACK,
-    sameAs: [INSTAGRAM_PROFILE_URL],
+    email: publicContact.email,
+    sameAs: ORGANIZATION_PUBLIC_PROFILE_URLS,
     logo: {
       '@type': 'ImageObject',
       url: new URL(SITE_OG_IMAGE.url, SITE_PRODUCTION_URL).toString(),
@@ -69,8 +72,9 @@ export function getPersonJsonLd() {
     '@id': `${SITE_PRODUCTION_URL}/o-mnie#person`,
     name: SPECIALIST_NAME,
     jobTitle: SPECIALIST_PUBLIC_STATUS,
-    description: `${SPECIALIST_CREDENTIALS}.`,
+    description: SPECIALIST_PUBLIC_PROOF_SUMMARY,
     url: `${SITE_PRODUCTION_URL}/o-mnie`,
+    sameAs: [...SPECIALIST_PUBLIC_PROFILE_URLS],
     homeLocation: {
       '@type': 'Place',
       name: SPECIALIST_LOCATION,

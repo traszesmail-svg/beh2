@@ -26,34 +26,34 @@ function getSpeciesLabel(species?: BookingSpecies | null) {
 
 function getAudioDescription(species?: BookingSpecies | null) {
   if (species === 'pies') {
-    return 'Dla opiekuna psa, gdy chcesz omówić jedno pytanie albo spokojnie ustalić, od czego zacząć.'
+    return `${COPY_SERVICE_NAMES.primary} to najprostszy start dla opiekuna psa, gdy chcesz omowic jedno pytanie albo spokojnie ustalic, od czego zaczac.`
   }
 
   if (species === 'kot') {
-    return 'Dla opiekuna kota, gdy chcesz uporządkować temat i sprawdzić najlepszy pierwszy krok.'
+    return `${COPY_SERVICE_NAMES.primary} to najprostszy start dla opiekuna kota, gdy chcesz uporzadkowac temat i sprawdzic najlepszy pierwszy krok.`
   }
 
-  return 'Dla opiekuna psa lub kota, gdy chcesz uporządkować jeden temat i ruszyć z właściwego miejsca.'
+  return `${COPY_SERVICE_NAMES.primary} to najprostszy start dla opiekuna psa lub kota, gdy chcesz uporzadkowac jeden temat i ruszyc z wlasciwego miejsca.`
 }
 
 function getFullConsultationDescription(species?: BookingSpecies | null) {
   if (species === 'pies') {
-    return 'Dla psa przy temacie bardziej złożonym, dłużej trwającym albo obejmującym kilka wątków.'
+    return 'Dla psa przy temacie bardziej zlozonym, dluzej trwajacym albo obejmujacym kilka watkow.'
   }
 
   if (species === 'kot') {
-    return 'Dla kota przy temacie szerszym, dłużej trwającym albo obejmującym kilka obszarów naraz.'
+    return 'Dla kota przy temacie szerszym, dluzej trwajacym albo obejmujacym kilka obszarow naraz.'
   }
 
-  return 'Dla spraw bardziej złożonych, dłużej trwających albo wielowątkowych, gdy potrzebna jest pełniejsza konsultacja.'
+  return 'Dla spraw bardziej zlozonych, dluzej trwajacych albo wielowatkowych, gdy potrzebna jest pelniejsza konsultacja.'
 }
 
 export function OfferEntrySection({
   species = null,
   sectionId,
   eyebrow = 'Oferta',
-  title = 'Zacznij od Kwadransu z behawiorystą. Jeśli temat jest szerszy, wybierz konsultację 60 min.',
-  description = 'Niezbędnik zostaje drugą opcją, a wiadomość służy tylko do krótkiego doprecyzowania tematu.',
+  title = 'Zacznij od Kwadransu z behawiorysta. Jesli temat jest szerszy, wybierz Dwa kwadranse albo pelna konsultacje.',
+  description = 'Kwadrans zostaje nazwa uslugi, a 15 min audio bez kamery tylko opisuje jego format. Dwa kwadranse sa etapem posrednim, Niezbednik zostaje opcja materialowa, a wiadomosc sluzy do krotkiego doprecyzowania tematu.',
 }: OfferEntrySectionProps) {
   const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min', false, species)
   const fullConsultationHref = buildBookHref(null, 'konsultacja-behawioralna-online', false, species)
@@ -88,15 +88,15 @@ export function OfferEntrySection({
 
       <div className="card-grid three-up top-gap">
         <article className="summary-card tree-backed-card">
-          <div className="section-eyebrow">Kwadrans z behawiorystą</div>
+          <div className="section-eyebrow">{COPY_SERVICE_NAMES.primary}</div>
           <h3>{COPY_SERVICE_NAMES.primary}</h3>
           <p>{getAudioDescription(species)}</p>
-          <div className="editorial-hero-meta" aria-label="Parametry usługi">
-            <span>15 min</span>
+          <div className="editorial-hero-meta" aria-label="Parametry uslugi">
+            <span>{COPY_SERVICE_NAMES.primaryDescriptor}</span>
             <span>{formatPricePln(DEFAULT_PRICE_PLN)}</span>
-            <span>bez kamery</span>
+            <span>najprostszy start</span>
           </div>
-          <p className="muted">Dla {speciesLabel}, gdy temat jest jeden albo chcesz spokojnie ustalić kierunek.</p>
+          <p className="muted">Dla {speciesLabel}, gdy temat jest jeden albo chcesz spokojnie ustalic kierunek bez przechodzenia od razu do dluzszej konsultacji.</p>
           <div className="hero-actions top-gap-small">
             <Link href={audioHref} prefetch={false} className="button button-primary">
               {COPY_CTA.primary}
@@ -105,15 +105,15 @@ export function OfferEntrySection({
         </article>
 
         <article className="summary-card tree-backed-card">
-          <div className="section-eyebrow">Niezbędnik</div>
+          <div className="section-eyebrow">Niezbednik</div>
           <h3>{COPY_SERVICE_NAMES.toolkit}</h3>
           <p>{COPY_HELPERS.toolkitIntro}</p>
-          <div className="editorial-hero-meta" aria-label="Zakres materiałów">
-            <span>materiały własne</span>
-            <span>książki</span>
-            <span>narzędzia</span>
+          <div className="editorial-hero-meta" aria-label="Zakres materialow">
+            <span>materialy wlasne</span>
+            <span>ksiazki</span>
+            <span>narzedzia</span>
           </div>
-          <p className="muted">Dla {speciesLabel}, gdy chcesz wrócić do materiałów albo przygotować się do rozmowy.</p>
+          <p className="muted">Dla {speciesLabel}, gdy chcesz wrocic do materialow albo przygotowac sie do rozmowy.</p>
           <div className="hero-actions top-gap-small">
             <Link href={toolkitHref} prefetch={false} className="button button-ghost">
               {COPY_CTA.toolkit}
@@ -122,15 +122,15 @@ export function OfferEntrySection({
         </article>
 
         <article className="summary-card tree-backed-card">
-          <div className="section-eyebrow">Konsultacja 60 min</div>
-          <h3>Konsultacja online 60 min</h3>
+          <div className="section-eyebrow">Pelna konsultacja</div>
+          <h3>Pelna konsultacja behawioralna</h3>
           <p>{getFullConsultationDescription(species)}</p>
-          <div className="editorial-hero-meta" aria-label="Parametry usługi">
-            <span>60 min</span>
+          <div className="editorial-hero-meta" aria-label="Parametry uslugi">
+            <span>ok. 2 h</span>
             <span>{formatPricePln(BOOKING_SERVICE_ONLINE_PRICE)}</span>
             <span>online</span>
           </div>
-          <p className="muted">Dla {speciesLabel}, gdy problem trwa dłużej, wraca albo obejmuje kilka obszarów naraz.</p>
+          <p className="muted">Dla {speciesLabel}, gdy problem trwa dluzej, wraca albo obejmuje kilka obszarow naraz.</p>
           <div className="hero-actions top-gap-small">
             <Link href={fullConsultationHref} prefetch={false} className="button button-ghost">
               {COPY_CTA.consultation}
@@ -144,7 +144,7 @@ export function OfferEntrySection({
         <Link href={messageHref} prefetch={false} className="prep-inline-link">
           {COPY_CTA.contact.toLowerCase()}
         </Link>{' '}
-        pomaga wtedy, gdy chcesz tylko krótko doprecyzować temat.
+        pomaga wtedy, gdy chcesz tylko krotko doprecyzowac temat.
       </p>
     </section>
   )

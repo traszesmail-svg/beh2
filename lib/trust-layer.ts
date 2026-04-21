@@ -379,16 +379,16 @@ export const TRUST_SIGNAL_SETS = {
   ] satisfies TrustSignalItem[],
   opinions: [
     {
-      title: 'Krótkie głosy po konsultacjach',
-      copy: 'Na stronie są krótkie cytaty i skrócone opisy sytuacji bez ujawniania wrażliwych danych.',
+      title: 'Status publiczny opisany dokładnie',
+      copy: 'Warstwa trust korzysta z tego samego opisu co profil CAPBT i schema: dyplomant COAPE, bez dopisywania szerszych tytułów.',
     },
     {
-      title: 'Profil i publikacje',
-      copy: 'Obok opinii są też linki do profilu CAPBT i opublikowanych artykułów.',
+      title: 'Każda karta ma kontekst pracy',
+      copy: 'Przy przykładach pokazuję typ problemu, format kontaktu, etap współpracy i przybliżony czas pierwszych zmian, żeby nie zostawiać samych ogólnych cytatów.',
     },
     {
-      title: 'Każda sytuacja jest osobna',
-      copy: 'Te przykłady pokazują punkt wyjścia i pierwszy kierunek pracy. Nie zastępują indywidualnej oceny.',
+      title: 'Profil, publikacje i ograniczenia',
+      copy: 'Obok opinii są publiczne źródła i wyraźna informacja, że każdy przypadek jest osobny. To materiał dowodowy, nie obietnica identycznego efektu.',
     },
   ] satisfies TrustSignalItem[],
 } as const

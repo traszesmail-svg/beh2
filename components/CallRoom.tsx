@@ -90,11 +90,11 @@ function getCallRoomCopy(serviceType: BookingServiceType, roomAccessLabel: strin
       'Spokojne miejsce, słuchawki albo głośnik oraz 2-3 najważniejsze obserwacje o zwierzęciu, żeby rozmowę wykorzystać konkretnie.',
     activeAfterLabel: 'Po rozmowie',
     activeAfterCopy:
-      'Jeśli po rozmowie temat okaże się szerszy, kolejnym krokiem może być konsultacja 60 min.',
+      'Jesli po rozmowie temat okaze sie szerszy, kolejnym krokiem moga byc Dwa kwadranse albo pelna konsultacja behawioralna.',
     lockedAfterLabel: 'Co stanie się dalej',
     lockedAfterCopy: `Gdy nadejdzie czas wejścia, ${roomAccessLabel} stanie się aktywny i będzie można uruchomić licznik rozmowy.`,
     completionNextStep:
-      'Jeśli po rozmowie temat okaże się szerszy, kolejnym krokiem może być konsultacja 60 min.',
+      'Jesli po rozmowie temat okaze sie szerszy, kolejnym krokiem moga byc Dwa kwadranse albo pelna konsultacja behawioralna.',
   }
 }
 

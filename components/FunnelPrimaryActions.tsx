@@ -13,6 +13,9 @@ type FunnelPrimaryActionsProps = {
   note?: ReactNode
   actionsClassName?: string
   noteClassName?: string
+  serviceHref?: string
+  serviceLabel?: string
+  serviceLocation?: string
 }
 
 export function FunnelPrimaryActions({
@@ -24,16 +27,36 @@ export function FunnelPrimaryActions({
   note,
   actionsClassName = 'hero-actions editorial-final-actions',
   noteClassName = 'muted top-gap-small',
+  serviceHref,
+  serviceLabel = 'strony uslugi online',
+  serviceLocation,
 }: FunnelPrimaryActionsProps) {
   const quickService = getServiceAnalyticsParams('szybka-konsultacja-15-min')
   const consultationService = getServiceAnalyticsParams('konsultacja-behawioralna-online')
+  const resolvedServiceLocation = serviceLocation ?? `${secondaryLocation}-service`
   const resolvedNote = note ?? (
     <>
-      Jeśli chcesz najpierw napisać, użyj{' '}
+      {serviceHref ? (
+        <>
+          Jesli chcesz najpierw zobaczyc pelny opis uslugi, przejdz do{' '}
+          <Link
+            href={serviceHref}
+            prefetch={false}
+            className="prep-inline-link"
+            data-analytics-event={getFunnelEntryEventForHref(serviceHref)}
+            data-analytics-location={resolvedServiceLocation}
+            data-analytics-cta-label={serviceLabel}
+          >
+            {serviceLabel}
+          </Link>
+          .{' '}
+        </>
+      ) : null}
+      Jesli chcesz najpierw napisac, uzyj{' '}
       <Link href={contactHref} prefetch={false} className="prep-inline-link">
         {COPY_CTA.contact.toLowerCase()}
       </Link>
-      . Jeśli chcesz najpierw sięgnąć po materiały, przejdź do{' '}
+      . Jesli chcesz najpierw siegnac po materialy, przejdz do{' '}
       <Link href={FUNNEL_SECONDARY_HREF} prefetch={false} className="prep-inline-link">
         {COPY_CTA.toolkit}
       </Link>

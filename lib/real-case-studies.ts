@@ -6,6 +6,15 @@ export type RealCaseImage = {
   alt: string
 }
 
+export type RealCaseProof = {
+  problemType: string
+  serviceFormat: string
+  cooperationStage: string
+  timeHorizon: string
+  sourceContext: string
+  outcomeSnapshot: string
+}
+
 export type RealCaseStudy = {
   id: string
   species: string
@@ -18,7 +27,17 @@ export type RealCaseStudy = {
   firstStepText: string
   nextStepLabel: string
   nextStepText: string
+  proof: RealCaseProof
   images: RealCaseImage[]
 }
 
 export const REAL_CASE_STUDIES = casesData as RealCaseStudy[]
+
+export function getRealCaseProofPills(caseStudy: RealCaseStudy) {
+  return [
+    caseStudy.proof.problemType,
+    caseStudy.proof.serviceFormat,
+    caseStudy.proof.cooperationStage,
+    caseStudy.proof.timeHorizon,
+  ]
+}

@@ -16,7 +16,7 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = buildMarketingMetadata({
   title: 'Oferta: behawiorysta online dla psa i kota',
   path: '/oferta',
-  description: 'Aktualna oferta publiczna: Kwadrans z behawiorystą jako najprostszy start, konsultacja 60 min jako szersza opcja i Niezbędnik dla osób, które chcą najpierw uporządkować temat.',
+  description: 'Aktualna oferta publiczna: Kwadrans z behawiorysta jako najprostszy start, Dwa kwadranse jako etap posredni, pelna konsultacja behawioralna jako najszersza opcja i Niezbednik dla osob, ktore chca najpierw uporzadkowac temat.',
 })
 
 const SERVICE_COMPARISON_ROWS = [
@@ -28,7 +28,7 @@ const SERVICE_COMPARISON_ROWS = [
   {
     label: 'Format rozmowy',
     quick: '15 minut audio bez kamery i bez rozbudowanego wejścia',
-    full: '60 minut online z większą ilością czasu na kontekst, pytania i plan',
+    full: 'ok. 2 h online z wieksza iloscia czasu na kontekst, pytania i plan',
   },
   {
     label: 'Po rozmowie wychodzisz z',
@@ -66,9 +66,9 @@ export default async function OfferPage() {
           <div className="offer-page-hero-grid">
             <div className="offer-page-hero-copy">
               <div className="section-eyebrow">Oferta</div>
-              <h1>Najprostszy start to Kwadrans z behawiorystą. Konsultacja 60 min zostaje szerszą opcją, a Niezbędnik pomaga spokojnie uporządkować temat.</h1>
+              <h1>Najprostszy start to Kwadrans z behawiorysta. Dwa kwadranse sa etapem posrednim, a pelna konsultacja behawioralna zostaje najszersza opcja.</h1>
               <p className="hero-text">
-                Publicznie zostają trzy czytelne wejścia: Kwadrans z behawiorystą, konsultacja online 60 min i Niezbędnik dla osób, które chcą najpierw wrócić do materiałów.
+                Publicznie zostaja cztery czytelne wejscia: Kwadrans z behawiorysta, Dwa kwadranse, pelna konsultacja behawioralna i Niezbednik dla osob, ktore chca najpierw wrocic do materialow.
               </p>
 
               <div className="hero-actions top-gap">
@@ -95,14 +95,14 @@ export default async function OfferPage() {
 
             <aside className="offer-page-hero-card tree-backed-card">
               <span className="offer-page-hero-label">Jak zacząć</span>
-              <strong>Kwadrans z behawiorystą sprawdza się na start. Konsultacja 60 min jest dla tematów szerszych, a Niezbędnik pomaga spokojnie przygotować się do rozmowy.</strong>
+              <strong>Kwadrans z behawiorysta sprawdza sie na start. Dwa kwadranse sa etapem posrednim, a pelna konsultacja behawioralna jest dla tematow najszerszych.</strong>
               <div className="offer-page-hero-stats">
                 <div className="offer-page-hero-stat">
                   <span>15 min / {quickStartPriceAmount} zł</span>
                   <strong>Najprostszy start</strong>
                 </div>
                 <div className="offer-page-hero-stat">
-                  <span>60 min / 350 zł</span>
+                  <span>ok. 2 h / 350 zl</span>
                   <strong>Szersza opcja</strong>
                 </div>
                 <div className="offer-page-hero-stat">
@@ -151,7 +151,7 @@ export default async function OfferPage() {
                 <h3>{fullConsultationOffer.title}</h3>
                 <p>{fullConsultationOffer.cardSummary}</p>
                 <div className="editorial-hero-meta" aria-label="Parametry usługi">
-                  <span>60 min</span>
+                  <span>ok. 2 h</span>
                   <span>350 zł</span>
                   <span>ograniczona dostępność</span>
                 </div>
@@ -189,11 +189,11 @@ export default async function OfferPage() {
           <div className="editorial-section-head">
             <div className="editorial-section-head-copy">
               <div className="section-eyebrow">Wybór usługi</div>
-              <h2>Kwadrans czy 60 minut</h2>
+              <h2>Kwadrans czy pelna konsultacja</h2>
             </div>
             <p className="editorial-section-lead">
-              Jeśli chcesz po prostu dobrze wybrać, najbezpieczniej zacząć od Kwadransu. Konsultacja 60 min ma sens wtedy, gdy już
-              wiesz, że temat jest szerszy i potrzebuje większej ilości czasu.
+              Jesli chcesz po prostu dobrze wybrac, najbezpieczniej zaczac od Kwadransu. Pelna konsultacja ma sens wtedy, gdy juz
+              wiesz, ze temat jest szerszy i potrzebuje wiekszej ilosci czasu.
             </p>
           </div>
 
@@ -215,10 +215,10 @@ export default async function OfferPage() {
             </article>
 
             <article className="summary-card tree-backed-card">
-              <div className="section-eyebrow">Konsultacja 60 min</div>
+              <div className="section-eyebrow">Pelna konsultacja</div>
               <h3>Szersze wejście w problem</h3>
               <ul className="premium-bullet-list">
-                <li>60 minut rozmowy online</li>
+                <li>ok. 2 h rozmowy online lacznie</li>
                 <li>więcej czasu na kontekst, pytania i kilka wątków naraz</li>
                 <li>plan i podsumowanie pisemne po rozmowie</li>
                 <li>lepszy wybór przy tematach przewlekłych, złożonych albo wracających</li>
@@ -234,8 +234,8 @@ export default async function OfferPage() {
           <div className="list-card accent-outline tree-backed-card top-gap">
             <strong>Najkrótsza zasada wyboru</strong>
             <span>
-              Jeśli nie masz pewności, zacznij od Kwadransu. Jeśli już teraz wiesz, że temat jest wielowątkowy albo od dawna nie rusza
-              z miejsca, wybierz 60 minut.
+              Jesli nie masz pewnosci, zacznij od Kwadransu. Jesli juz teraz wiesz, ze temat jest wielowatkowy albo od dawna nie rusza
+              z miejsca, wybierz pelna konsultacje.
             </span>
           </div>
 
@@ -249,7 +249,7 @@ export default async function OfferPage() {
                     <p>{row.quick}</p>
                   </div>
                   <div>
-                    <strong>Konsultacja 60 min</strong>
+                    <strong>Pelna konsultacja</strong>
                     <p>{row.full}</p>
                   </div>
                 </div>
@@ -266,7 +266,7 @@ export default async function OfferPage() {
                   </p>
                 </div>
                 <div>
-                  <strong>Konsultacja 60 min</strong>
+                  <strong>Pelna konsultacja</strong>
                   <p>350 zł</p>
                 </div>
               </div>

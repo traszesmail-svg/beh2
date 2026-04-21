@@ -1,20 +1,31 @@
 import { Suspense } from 'react'
 import type { Metadata, Viewport } from 'next'
-import { Fraunces, Manrope } from 'next/font/google'
+import { Fraunces, Inter, JetBrains_Mono, Manrope } from 'next/font/google'
 import { AnalyticsConsent } from '@/components/AnalyticsConsent'
 import { getOrganizationJsonLd, getWebsiteJsonLd } from '@/lib/schema'
 import { getCanonicalBaseUrl, shouldBlockSearchIndexing } from '@/lib/server/env'
 import { SITE_DESCRIPTION, SITE_NAME, SITE_OG_IMAGE, SITE_SHORT_NAME, SITE_TAGLINE } from '@/lib/site'
 import './globals.css'
+import './notatnik-a.css'
 
 const manrope = Manrope({
   subsets: ['latin', 'latin-ext'],
   variable: '--font-ui',
 })
 
+const inter = Inter({
+  subsets: ['latin', 'latin-ext'],
+  variable: '--font-body',
+})
+
 const fraunces = Fraunces({
   subsets: ['latin', 'latin-ext'],
   variable: '--font-display',
+})
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin', 'latin-ext'],
+  variable: '--font-mono',
 })
 
 const metadataBase = new URL(getCanonicalBaseUrl())
@@ -30,11 +41,16 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/',
   },
-  robots: {
-    index: !blockSearchIndexing,
-    follow: true,
-    noarchive: blockSearchIndexing,
-  },
+  robots: blockSearchIndexing
+    ? {
+        index: false,
+        follow: false,
+        noarchive: true,
+      }
+    : {
+        index: true,
+        follow: true,
+      },
   openGraph: {
     title: SITE_NAME,
     description: `${SITE_TAGLINE}. ${SITE_DESCRIPTION}`,
@@ -62,7 +78,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <html lang="pl">
-      <body className={`${manrope.variable} ${fraunces.variable}`}>
+      <body className={`${manrope.variable} ${inter.variable} ${fraunces.variable} ${jetbrainsMono.variable}`}>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(rootJsonLd) }} />
         {children}
         <Suspense fallback={null}>

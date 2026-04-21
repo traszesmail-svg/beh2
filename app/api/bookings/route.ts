@@ -67,7 +67,7 @@ export async function POST(request: Request) {
     const fields = [ownerName, petAge, durationNotes, description, email, slotId]
 
     if (fields.some((value) => value.trim().length === 0)) {
-      return NextResponse.json({ error: 'Uzupełnij wszystkie pola formularza.' }, { status: 400 })
+      return NextResponse.json({ error: 'Uzupelnij wszystkie pola formularza.' }, { status: 400 })
     }
 
     if (!isEmailValid(email.trim())) {
@@ -75,27 +75,20 @@ export async function POST(request: Request) {
     }
 
     if (phone.trim().length > 0 && !/^\+?\d[\d\s-]{6,}$/.test(phone.trim())) {
-      return NextResponse.json(
-        { error: 'Podaj poprawny numer telefonu albo zostaw to pole puste.' },
-        { status: 400 },
-      )
+      return NextResponse.json({ error: 'Podaj poprawny numer telefonu albo zostaw to pole puste.' }, { status: 400 })
     }
 
     if (description.trim().length < 20) {
       return NextResponse.json(
-        { error: 'Dodaj krótki, ale konkretny opis sytuacji, aby dobrze wykorzystać wybrany czas rozmowy.' },
+        { error: 'Dodaj krotki, ale konkretny opis sytuacji, aby dobrze wykorzystac wybrany czas rozmowy.' },
         { status: 400 },
       )
-    }
-
-    if (serviceType === 'konsultacja-30-min') {
-      return NextResponse.json({ error: 'Ta usługa nie jest już publicznie dostępna.' }, { status: 400 })
     }
 
     const problemSpecies = getProblemSpecies(problemType)
 
     if ((problemSpecies === 'kot' && animalType !== 'Kot') || (problemSpecies === 'pies' && animalType !== 'Pies')) {
-      return NextResponse.json({ error: 'Gatunek i temat muszą wskazywać ten sam typ sprawy.' }, { status: 400 })
+      return NextResponse.json({ error: 'Gatunek i temat musza wskazywac ten sam typ sprawy.' }, { status: 400 })
     }
 
     const result = await createPendingBooking({

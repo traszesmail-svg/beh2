@@ -2,11 +2,10 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { unstable_noStore as noStore } from 'next/cache'
 import { redirect } from 'next/navigation'
-import { BookingStageEyebrow } from '@/components/BookingStageEyebrow'
 import { BookingForm } from '@/components/BookingForm'
 import { BookingServiceInfoCard } from '@/components/BookingServiceInfoCard'
-import { Footer } from '@/components/Footer'
-import { Header } from '@/components/Header'
+import { BookingStageEyebrow } from '@/components/BookingStageEyebrow'
+import { NotatnikFooter, NotatnikTopbar } from '@/components/NotatnikA'
 import { PricingDisclosure } from '@/components/PricingDisclosure'
 import {
   DEFAULT_BOOKING_SERVICE,
@@ -28,18 +27,25 @@ import {
 import { formatDateTimeLabel, getProblemLabel, getProblemSpecies, isFutureAvailabilitySlot } from '@/lib/data'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { DEFAULT_PRICE_PLN } from '@/lib/pricing'
-import { getActiveConsultationPrice, getAvailabilitySlot, listAvailability } from '@/lib/server/db'
+import { getAvailabilitySlot, getActiveConsultationPrice, listAvailability } from '@/lib/server/db'
 import { getDataModeStatus } from '@/lib/server/env'
 import { buildTechnicalMetadata } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
+const BOOKING_NAV_ITEMS = [
+  { href: '/psy', label: 'Pies' },
+  { href: '/koty', label: 'Kot' },
+  { href: '/niezbednik', label: 'Niezbednik' },
+  { href: '/kontakt#formularz', label: 'Kontakt' },
+]
+
 export function generateMetadata(): Metadata {
   return buildTechnicalMetadata({
     title: 'Dane do rezerwacji',
     path: '/form',
-    description: 'Uzupełnij dane potrzebne do potwierdzenia terminu i przejścia do płatności.',
+    description: 'Uzupelnij dane potrzebne do potwierdzenia terminu i przejscia do platnosci.',
   })
 }
 
@@ -61,6 +67,7 @@ export default async function FormPage({
 
   const messageHref = `/kontakt?species=${getProblemSpecies(problem)}#formularz`
   const quickAudioHref = buildBookHref(null, 'szybka-konsultacja-15-min', qaBooking, getProblemSpecies(problem))
+  const slotsHref = buildSlotHref(problem, serviceQuery, qaBooking)
   const dataMode = getDataModeStatus()
   let slot: Awaited<ReturnType<typeof getAvailabilitySlot>> = null
   let flowError: string | null = null
@@ -82,10 +89,10 @@ export default async function FormPage({
       amountLabel = getBookingServicePriceLabel(serviceType, quickConsultationPrice.amount)
     } catch (error) {
       console.warn('[behawior15][form] failed to load form or slot', error)
-      flowError = 'Formularz chwilowo się odświeża. Spróbuj ponownie za moment.'
+      flowError = 'Formularz chwilowo sie odswieza. Sprobuj ponownie za moment.'
     }
   } else {
-    flowError = 'Formularz chwilowo się odświeża. Spróbuj ponownie za moment.'
+    flowError = 'Formularz chwilowo sie odswieza. Sprobuj ponownie za moment.'
   }
 
   const slotIsBookable = slot
@@ -97,114 +104,126 @@ export default async function FormPage({
   const activeSlot = slotIsBookable ? slot : null
 
   return (
-    <main className="page-wrap" data-analytics-disabled={qaBooking ? 'true' : undefined} data-qa-booking={qaBooking ? 'true' : 'false'}>
-      <div className="container">
-        <Header />
-        <section className="two-col-section booking-layout booking-stage-layout">
-          <div className="panel section-panel hero-surface booking-stage-panel booking-stage-summary-panel booking-flow-panel">
-            <BookingStageEyebrow stage="details" className="section-eyebrow" />
-            {qaBooking ? <div className="status-pill transaction-status-pill">Tryb testowy</div> : null}
-            <h1>Uzupełnij dane</h1>
-            <p className="hero-text compact-panel-text">
-              Wpisz tylko dane potrzebne do rezerwacji. Po zapisaniu formularza termin chwilowo się zablokuje na czas dokończenia płatności.
+    <main className="notatnik-page" data-analytics-disabled={qaBooking ? 'true' : undefined} data-qa-booking={qaBooking ? 'true' : 'false'}>
+      <div className="notatnik-shell">
+        <NotatnikTopbar tag="Rezerwacja konsultacji" navItems={BOOKING_NAV_ITEMS} ctaHref={slotsHref} ctaLabel="Wroc do terminow" ctaVariant="ghost" />
+
+        <div className="notatnik-booking">
+          <div className="notatnik-booking-left">
+            <BookingStageEyebrow stage="details" />
+            {qaBooking ? (
+              <div className="notatnik-contact-note" style={{ marginTop: 18 }}>
+                <strong>Tryb testowy</strong>
+                <p>Przejdziesz przez kontrolowana platnosc testowa bez realnego obciazenia klienta.</p>
+              </div>
+            ) : null}
+
+            <h1>
+              Uzupelnij <em>potrzebne dane</em>.
+            </h1>
+            <p className="notatnik-booking-lede">
+              Wpisz tylko informacje potrzebne do rezerwacji. Po zapisaniu formularza przejdziesz do wpłaty ręcznej i końcowego potwierdzenia terminu.
             </p>
 
-            <div className="stack-gap top-gap booking-facts-stack">
+            <div className="notatnik-detail-stack">
               <BookingServiceInfoCard
                 serviceType={serviceType}
                 quickConsultationPrice={amount}
                 title="Parametry tej rezerwacji"
-                stageLabel="Usługa"
-                emphasis="Tutaj uzupełniasz dane potrzebne do potwierdzenia terminu i przejścia do płatności."
+                stageLabel="Dane do potwierdzenia"
+                emphasis="To ostatni spokojny krok przed platnoscia. Po zapisaniu formularza wybrane okno zostanie tymczasowo zablokowane."
               />
-              <div className="list-card tree-backed-card">
-                <strong>Usługa</strong>
-                <span>{getBookingServiceTitle(serviceType)}</span>
+
+              <div className="notatnik-detail-card">
+                <strong>Usluga</strong>
+                <p>{getBookingServiceTitle(serviceType)}</p>
               </div>
-              <div className="list-card tree-backed-card">
+
+              <div className="notatnik-detail-card">
                 <strong>Temat</strong>
-                <span>{getProblemLabel(problem)}</span>
+                <p>{getProblemLabel(problem)}</p>
               </div>
-              <div className="list-card tree-backed-card">
+
+              <div className="notatnik-detail-card">
                 <strong>Termin rozmowy</strong>
-                <span>{slot ? formatDateTimeLabel(slot.bookingDate, slot.bookingTime) : 'Termin nie jest już dostępny.'}</span>
+                <p>{slot ? formatDateTimeLabel(slot.bookingDate, slot.bookingTime) : 'Ten termin nie jest juz dostepny.'}</p>
               </div>
-              <div className="list-card accent-outline tree-backed-card">
+
+              <div className="notatnik-detail-card">
                 <strong>Format</strong>
-                <span>
+                <p>
                   {getBookingServiceRoomSummary(serviceType)}{' '}
-                  {isAudioOnlyBookingService(serviceType) ? 'Kamera nie jest potrzebna.' : 'To konsultacja online z większą ilością czasu na temat.'}
-                </span>
+                  {isAudioOnlyBookingService(serviceType)
+                    ? 'Kamera nie jest potrzebna.'
+                    : serviceType === 'konsultacja-30-min'
+                      ? 'To spokojniejszy etap posredni, gdy sam Kwadrans to za malo.'
+                      : 'To najszersza konsultacja online z wieksza iloscia czasu na temat i kilka watkow naraz.'}
+                </p>
               </div>
-              <div className="list-card accent-outline tree-backed-card">
-                <strong>Co dalej</strong>
-                <span>Po tym formularzu przejdziesz do płatności, a po jej zakończeniu zobaczysz potwierdzenie kolejnego kroku rezerwacji.</span>
-              </div>
-              <div className="list-card tree-backed-card">
+
+              <div className="notatnik-detail-card">
                 <PricingDisclosure
                   stage="pre-payment"
                   labelAs="strong"
-                  message={`${amountLabel}. To finalna kwota dla tej usługi przed przejściem do płatności.`}
+                  message={`${amountLabel}. To finalna kwota dla tej uslugi przed przejsciem do platnosci.`}
                 />
               </div>
             </div>
           </div>
 
-          <div className="panel section-panel booking-stage-panel booking-stage-form-panel booking-flow-panel">
-            {flowError ? (
-              <>
-                <div className="info-box">
-                  {flowError} Jeśli temat jest pilny, wyślij krótką wiadomość i wróć do terminów później.
-                </div>
-                <div className="hero-actions top-gap">
-                  <Link href={buildSlotHref(problem, serviceQuery, qaBooking)} prefetch={false} className="button button-primary big-button">
-                    Wróć do terminów
-                  </Link>
-                  <Link href={messageHref} prefetch={false} className="button button-ghost">
-                    {FUNNEL_CTA_LABELS.contact}
-                  </Link>
-                </div>
-              </>
-            ) : activeSlot ? (
-              <>
-                <div className="section-eyebrow">Dane do potwierdzenia</div>
-                <h2>Formularz rezerwacji</h2>
-                <p className="hero-text compact-panel-text">Wpisz tylko informacje potrzebne do rezerwacji i przejścia do płatności.</p>
-                <BookingForm
-                  problemType={problem}
-                  serviceType={serviceType}
-                  slotId={activeSlot.id}
-                  slotLabel={formatDateTimeLabel(activeSlot.bookingDate, activeSlot.bookingTime)}
-                  amountLabel={amountLabel}
-                  qaBooking={qaBooking}
-                />
-              </>
-            ) : (
-              <>
-                <div className="error-box">
-                  Ten termin nie jest już dostępny dla wybranej usługi. Wróć do listy albo wyślij krótką wiadomość.
-                </div>
-                <div className="hero-actions top-gap">
-                  <Link href={buildSlotHref(problem, serviceQuery, qaBooking)} prefetch={false} className="button button-primary big-button">
-                    Wróć do terminów
-                  </Link>
-                  <Link href={messageHref} prefetch={false} className="button button-ghost">
-                    {FUNNEL_CTA_LABELS.contact}
-                  </Link>
-                </div>
-              </>
-            )}
-          </div>
-        </section>
+          <div className="notatnik-booking-right">
+            <div className="notatnik-booking-panel">
+              <div className="notatnik-mono">Krok 04 / 04 · Formularz</div>
 
-        <Footer
-          ctaHref={quickAudioHref}
-          ctaLabel={FUNNEL_CTA_LABELS.primary}
-          secondaryHref="/niezbednik"
-          secondaryLabel={FUNNEL_CTA_LABELS.secondary}
-          headline="Masz pytanie przed płatnością?"
-          description="Jeśli chcesz coś doprecyzować przed wpłatą, napisz wiadomość."
-        />
+              {flowError ? (
+                <>
+                  <div className="notatnik-callout">
+                    {flowError} Jesli temat jest pilny, wyslij krotka wiadomosc i wroc do terminow pozniej.
+                  </div>
+                  <div className="notatnik-actions">
+                    <Link href={slotsHref} prefetch={false} className="notatnik-btn notatnik-btn-accent">
+                      Wroc do terminow
+                    </Link>
+                    <Link href={messageHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
+                      {FUNNEL_CTA_LABELS.contact}
+                    </Link>
+                  </div>
+                </>
+              ) : activeSlot ? (
+                <>
+                  <div className="notatnik-contact-note">
+                    <strong>Formularz rezerwacji</strong>
+                    <p>Wpisz tylko informacje potrzebne do rezerwacji i przejscia do platnosci.</p>
+                  </div>
+                  <BookingForm
+                    problemType={problem}
+                    serviceType={serviceType}
+                    slotId={activeSlot.id}
+                    slotLabel={formatDateTimeLabel(activeSlot.bookingDate, activeSlot.bookingTime)}
+                    amountLabel={amountLabel}
+                    qaBooking={qaBooking}
+                  />
+                </>
+              ) : (
+                <>
+                  <div className="notatnik-callout notatnik-callout-error">
+                    Ten termin nie jest juz dostepny dla wybranej uslugi. Wroc do listy albo wyslij krotka wiadomosc.
+                  </div>
+                  <div className="notatnik-actions">
+                    <Link href={slotsHref} prefetch={false} className="notatnik-btn notatnik-btn-accent">
+                      Wroc do terminow
+                    </Link>
+                    <Link href={messageHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
+                      {FUNNEL_CTA_LABELS.contact}
+                    </Link>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <NotatnikFooter primaryHref={quickAudioHref} primaryLabel={FUNNEL_CTA_LABELS.primary} />
       </div>
     </main>
   )

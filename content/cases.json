@@ -11,6 +11,14 @@
     "firstStepText": "Zaczęliśmy od 15 min audio, żeby ustalić wyzwalacze, próg reakcji i ocenić, czy to temat na pełną konsultację. Już ten etap uporządkował, że potrzebna jest głębsza diagnoza, a nie kolejna technika stosowana za blisko bodźca.",
     "nextStepLabel": "Co uporządkowano dalej",
     "nextStepText": "W 60 min ustaliliśmy próg reakcji, wzorzec wyzwalaczy i plan zarządzania środowiskiem. Efektem nie było „wyleczenie reaktywności”, tylko bardziej przewidywalne spacery i mniejszy chaos po każdej mijance.",
+    "proof": {
+      "problemType": "reaktywność na smyczy i pobudzenie spacerowe",
+      "serviceFormat": "15 min audio + konsultacja online 60 min",
+      "cooperationStage": "po pierwszym uporządkowaniu i wejściu w pełną diagnozę",
+      "timeHorizon": "pierwsze porządki po 1 rozmowie, dalsza praca w kolejnych tygodniach",
+      "sourceContext": "opis opiekunki po miesiącach prób i nagrania ze spacerów",
+      "outcomeSnapshot": "bardziej przewidywalne spacery i mniejszy chaos po mijankach"
+    },
     "images": [
       {
         "src": "/branding/case-studies/Border_Collie.jpg",
@@ -34,6 +42,14 @@
     "firstStepText": "Najpierw 15 min audio, żeby odróżnić zwykły protest od realnego napięcia przy rozstaniu. To szybko pokazało, że temat wymaga pełnej konsultacji i spokojnego planu, a nie kolejnych ogólnych porad.",
     "nextStepLabel": "Co uporządkowano dalej",
     "nextStepText": "W dalszej pracy pojawił się monitoring samotności, plan bardzo krótkich wyjść i stopniowe wydłużanie czasu bez dokładania psu paniki. Celem pierwszego etapu nie był cud, tylko stabilna baza i pierwsze godziny bez wycia.",
+    "proof": {
+      "problemType": "lęk separacyjny i napięcie przy rozstaniu",
+      "serviceFormat": "15 min audio + konsultacja online 60 min",
+      "cooperationStage": "po pierwszym rozróżnieniu protestu i realnego napięcia",
+      "timeHorizon": "pierwszy etap rozpisany na kolejne tygodnie spokojnej pracy",
+      "sourceContext": "opis opiekuna po zmianie trybu pracy i obserwacje po wyjściu z domu",
+      "outcomeSnapshot": "stabilniejsza baza i pierwsze godziny bez wycia"
+    },
     "images": [
       {
         "src": "/branding/topic-cards/dog-window-alone.jpg",
@@ -57,6 +73,14 @@
     "firstStepText": "15 min audio wystarczyło, żeby oddzielić nawyk od pobudzenia i ustalić, że praca musi zacząć się jeszcze przed wyjściem z domu, a nie dopiero na napiętej smyczy.",
     "nextStepLabel": "Co uporządkowano dalej",
     "nextStepText": "Opiekunka dostała jedno ćwiczenie na start i kryterium, kiedy warto wejść w pełną konsultację. Miesiąc później wróciła już po kolejny etap, a nie po kolejną desperacką próbę.",
+    "proof": {
+      "problemType": "ciągnięcie na smyczy i wysokie pobudzenie",
+      "serviceFormat": "start od 15 min audio",
+      "cooperationStage": "po pierwszym ustawieniu ćwiczenia i kryteriów dalszej pracy",
+      "timeHorizon": "pierwszy ruch od razu, powrót po miesiącu na kolejny etap",
+      "sourceContext": "opis opiekunki po wielu krótkotrwałych próbach treningowych",
+      "outcomeSnapshot": "jeden punkt startu zamiast kolejnych desperackich prób"
+    },
     "images": [
       {
         "src": "/branding/case-studies/labrador_luksi01.jpg",
@@ -80,6 +104,14 @@
     "firstStepText": "W 15 min audio uporządkowaliśmy, że to mieści się w typowej normie adaptacyjnej dla psa po adopcji i że na tym etapie najważniejsze są pierwsze 72 godziny, a nie szybkie „oswajanie”.",
     "nextStepLabel": "Co uporządkowano dalej",
     "nextStepText": "Plan obejmował minimalną stymulację, spokojne współbycie i listę sygnałów alarmowych. Dzięki temu pierwsze dni przestały być ciągłym napięciem, a stały się świadomym okresem adaptacji.",
+    "proof": {
+      "problemType": "start po adopcji i trudna adaptacja",
+      "serviceFormat": "start od 15 min audio",
+      "cooperationStage": "po pierwszym kontakcie i ustawieniu pierwszych 72 godzin",
+      "timeHorizon": "najważniejsze decyzje podjęte na samym początku adaptacji",
+      "sourceContext": "opis opiekunki z pierwszych 48 godzin po adopcji",
+      "outcomeSnapshot": "pierwsze dni przestały być ciągłym napięciem i dostały jasne ramy"
+    },
     "images": [
       {
         "src": "/branding/topic-cards/dog-resting-home.jpg",
@@ -103,6 +135,14 @@
     "firstStepText": "15 min audio wystarczyło, żeby ustalić, że temat wymaga pełnej analizy środowiska. Kluczowe było nie dokładanie kolejnych losowych zmian, tylko pokazanie układu mieszkania i punktów napięcia.",
     "nextStepLabel": "Co uporządkowano dalej",
     "nextStepText": "Wyszło, że kuweta stała przy oknie z widokiem na obce koty. Przeniesienie kuwety i ograniczenie bodźca wizualnego uporządkowały sytuację szybciej niż kolejne eksperymenty ze żwirkiem.",
+    "proof": {
+      "problemType": "załatwianie poza kuwetą po przeprowadzce",
+      "serviceFormat": "15 min audio + konsultacja online 60 min",
+      "cooperationStage": "po pierwszym uporządkowaniu tła i wejściu w analizę środowiska",
+      "timeHorizon": "pierwsze decyzje po 1 rozmowie, szybka korekta ustawienia kuwety",
+      "sourceContext": "opis opiekunki po zmianach żwirku, kuwety i wcześniejszej konsultacji weterynaryjnej",
+      "outcomeSnapshot": "mniej chaosu i szybsze uporządkowanie kuwety niż przy kolejnych eksperymentach"
+    },
     "images": [
       {
         "src": "/branding/case-cat-sofa.jpg",
@@ -126,6 +166,14 @@
     "firstStepText": "Tu od razu potrzebna była pełna konsultacja. Najpierw uporządkowaliśmy, że to nie „same się dogadają”, tylko nowy układ terytorialny, który trzeba świadomie przebudować.",
     "nextStepLabel": "Co uporządkowano dalej",
     "nextStepText": "Pojawiło się rozdzielenie zasobów, osobne strefy i reintrodukcja przez zapach. Efektem nie była natychmiastowa przyjaźń, tylko wyraźny spadek napięcia i możliwość wspólnego funkcjonowania bez ciągłej pogoni.",
+    "proof": {
+      "problemType": "konflikt między kotami i blokowanie zasobów",
+      "serviceFormat": "od razu konsultacja online 60 min",
+      "cooperationStage": "po pierwszej pełnej konsultacji i wdrożeniu zabezpieczeń",
+      "timeHorizon": "pierwszy etap rozpisany na tygodnie reintrodukcji",
+      "sourceContext": "opis opiekunów po zmianie w domu i obserwacje konfliktu przy misce i kuwecie",
+      "outcomeSnapshot": "spadek napięcia i możliwość wspólnego funkcjonowania bez ciągłej pogoni"
+    },
     "images": [
       {
         "src": "/branding/topic-cards/cats/cat-intercat-conflict.jpg",
@@ -149,6 +197,14 @@
     "firstStepText": "15 min audio wystarczyło, żeby ustalić kierunek: nie forsować socjalizacji, tylko zbudować bezpieczną strefę i zmienić oczekiwania wobec kota i gości.",
     "nextStepLabel": "Co uporządkowano dalej",
     "nextStepText": "Po kilku tygodniach kotka zaczęła wychodzić do kuchni podczas wizyt, o ile nikt jej nie prowokował do kontaktu. Kluczowa była redukcja stresu, nie „naprawianie charakteru”.",
+    "proof": {
+      "problemType": "lęk kota przy gościach i po przeprowadzce",
+      "serviceFormat": "start od 15 min audio",
+      "cooperationStage": "po pierwszym ustawieniu bezpiecznej strefy",
+      "timeHorizon": "pierwsze efekty po kilku tygodniach spokojniejszego prowadzenia wizyt",
+      "sourceContext": "opis opiekunki po nieudanych próbach oswajania z gośćmi",
+      "outcomeSnapshot": "kotka zaczęła wychodzić podczas wizyt bez wymuszania kontaktu"
+    },
     "images": [
       {
         "src": "/branding/topic-cards/cats/cat-anxious-hiding.jpg",
@@ -172,6 +228,14 @@
     "firstStepText": "Potrzebna była pełna konsultacja i analiza domu. Zaczęliśmy od środowiska, rytmu zabawy i tego, jak wygląda wieczór kota, zanim opiekunka idzie spać.",
     "nextStepLabel": "Co uporządkowano dalej",
     "nextStepText": "Po wdrożeniu intensywnej zabawy przed snem, karmników puzzle i lepszego wzbogacenia środowiska nocne ataki wyraźnie osłabły. Celem nie było zrobienie z kota pluszaka, tylko obniżenie napięcia i odzyskanie przewidywalności.",
+    "proof": {
+      "problemType": "nocne pobudzenie i atakowanie opiekunki",
+      "serviceFormat": "od razu konsultacja online 60 min",
+      "cooperationStage": "po pierwszej analizie środowiska i rytmu dnia",
+      "timeHorizon": "pierwsze osłabienie ataków po wdrożeniu zmian w kolejnych tygodniach",
+      "sourceContext": "opis opiekunki o nocnych atakach i codziennym rytmie kota",
+      "outcomeSnapshot": "niższe napięcie i bardziej przewidywalne noce"
+    },
     "images": [
       {
         "src": "/branding/topic-cards/cats/cat-night-meowing.jpg",

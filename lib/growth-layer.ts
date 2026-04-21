@@ -57,6 +57,121 @@ export type LocalSeoPage = {
   relatedLinks: Array<{ href: string; label: string; copy: string }>
 }
 
+export type TopicalClusterLink = {
+  href: string
+  label: string
+  copy: string
+}
+
+export type TopicalCluster = {
+  routePath: string
+  serviceLink: TopicalClusterLink
+  blogLinks: TopicalClusterLink[]
+}
+
+const TOPICAL_CLUSTERS: TopicalCluster[] = [
+  {
+    routePath: '/psy/reaktywnosc-na-smyczy',
+    serviceLink: {
+      href: '/behawiorysta-online-polska',
+      label: 'Behawiorysta psow i kotow online',
+      copy: 'Kanoniczna strona uslugi, jesli chcesz przejsc z tresci problemowej do glownego opisu pomocy.',
+    },
+    blogLinks: [
+      {
+        href: '/blog/dlaczego-moj-pies-szczeka-na-inne-psy',
+        label: 'Blog: pies szczeka na inne psy',
+        copy: 'Punkt wejscia do tematu, jesli chcesz zaczac od rozroznienia emocji i najczestszych przyczyn.',
+      },
+      {
+        href: '/blog/prog-pobudzenia-u-psa',
+        label: 'Blog: prog pobudzenia u psa',
+        copy: 'Wyjasnia, kiedy pies jeszcze przetwarza, a kiedy wchodzi juz w reakcje ponad prog.',
+      },
+      {
+        href: '/blog/reaktywnosc-na-smyczy-cwiczenie-luznej-smyczy',
+        label: 'Blog: luzna smycz z reaktywnym psem',
+        copy: 'Przechodzi z rozumienia problemu do pierwszej praktyki spacerowej bez szarpania.',
+      },
+    ],
+  },
+  {
+    routePath: '/psy/lek-separacyjny',
+    serviceLink: {
+      href: '/behawiorysta-online-polska',
+      label: 'Behawiorysta psow i kotow online',
+      copy: 'Glowna strona uslugi, jesli chcesz przejsc od materialow o samotnosci do rozmowy o swoim psie.',
+    },
+    blogLinks: [
+      {
+        href: '/blog/pies-wyje-kiedy-zostaje-sam',
+        label: 'Blog: pies wyje, kiedy zostaje sam',
+        copy: 'Pomaga odroznic lek separacyjny od frustracji, nudy i innych scenariuszy zostawania samemu.',
+      },
+      {
+        href: '/blog/jak-nagrac-psa-zostawionego-samemu',
+        label: 'Blog: jak nagrac psa zostawionego samemu',
+        copy: 'Pokazuje, jak zebrac material, ktory realnie skraca droge do dobrej diagnozy.',
+      },
+      {
+        href: '/blog/rutyna-wyjscia-oswajanie-psa-z-samotnoscia',
+        label: 'Blog: rutyna wyjscia i oswajanie z samotnoscia',
+        copy: 'Rozwija temat pierwszego planu treningowego bez skokow i bez przypadkowego przyspieszania.',
+      },
+    ],
+  },
+  {
+    routePath: '/koty/zalatwianie-poza-kuweta',
+    serviceLink: {
+      href: '/behawiorysta-online-polska',
+      label: 'Behawiorysta psow i kotow online',
+      copy: 'Glowna strona uslugi, jesli po tresciach o kuwecie chcesz przejsc do spokojnego omowienia swojego przypadku.',
+    },
+    blogLinks: [
+      {
+        href: '/blog/kot-zalatwia-sie-poza-kuweta',
+        label: 'Blog: kot zalatwia sie poza kuweta',
+        copy: 'Najszerszy punkt startu przed rozpisaniem zdrowia, kuwety i napiecia srodowiskowego.',
+      },
+      {
+        href: '/blog/jak-wybrac-kuwete-i-zwirek-dla-kota',
+        label: 'Blog: jak wybrac kuwete i zwirek',
+        copy: 'Porzadkuje wybor kuwety i zwirku, zanim zaczniesz zmieniac caly dom naraz.',
+      },
+      {
+        href: '/blog/stres-kota-a-zachowania-toaletowe',
+        label: 'Blog: stres kota a zachowania toaletowe',
+        copy: 'Dopina warstwe srodowiskowa, kiedy zdrowie i sama kuweta nie tlumacza juz problemu.',
+      },
+    ],
+  },
+  {
+    routePath: '/koty/konflikt-miedzy-kotami',
+    serviceLink: {
+      href: '/behawiorysta-online-polska',
+      label: 'Behawiorysta psow i kotow online',
+      copy: 'Glowna strona uslugi, jesli konflikt w domu wymaga juz ulozenia pierwszego planu zewnetrznego wsparcia.',
+    },
+    blogLinks: [
+      {
+        href: '/blog/jak-wprowadzic-nowego-kota-do-domu',
+        label: 'Blog: jak wprowadzic nowego kota',
+        copy: 'Pomaga nie zepsuc relacji juz na starcie, zanim napiecie zamieni sie w staly konflikt.',
+      },
+      {
+        href: '/blog/agresja-przekierowana-u-kota',
+        label: 'Blog: agresja przekierowana u kota',
+        copy: 'Wazny kontekst, gdy napiecie eksploduje nagle i wydaje sie nieadekwatne do sytuacji.',
+      },
+      {
+        href: '/blog/jak-zapoznac-dwa-koty',
+        label: 'Blog: jak zapoznac dwa koty',
+        copy: 'Przechodzi krok po kroku przez spokojny proces zapoznania, zanim koty zaczna mieszkac razem.',
+      },
+    ],
+  },
+]
+
 export const LEAD_MAGNETS: LeadMagnet[] = [
   {
     slug: 'pies-reaktywnosc-5-krokow',
@@ -116,8 +231,9 @@ export const LEAD_MAGNETS: LeadMagnet[] = [
     categoryLabel: 'Psy',
     relatedLinks: [
       { href: '/psy/reaktywnosc-na-smyczy', label: 'Landing: reaktywność na smyczy' },
-      { href: '/blog/dlaczego-moj-pies-szczeka-na-inne-psy', label: 'Blog: dlaczego mój pies szczeka na inne psy' },
-      { href: '/psy', label: 'Pomoc dla opiekunów psów' },
+      { href: '/blog/prog-pobudzenia-u-psa', label: 'Blog: prog pobudzenia u psa' },
+      { href: '/blog/reaktywnosc-na-smyczy-cwiczenie-luznej-smyczy', label: 'Blog: luzna smycz z reaktywnym psem' },
+      { href: '/behawiorysta-online-polska', label: 'Behawiorysta psow i kotow online' },
     ],
     asset: {
       kind: 'pdf',
@@ -184,8 +300,9 @@ export const LEAD_MAGNETS: LeadMagnet[] = [
     categoryLabel: 'Koty',
     relatedLinks: [
       { href: '/koty/zalatwianie-poza-kuweta', label: 'Landing: załatwianie poza kuwetą' },
-      { href: '/blog/kot-zalatwia-sie-poza-kuweta', label: 'Blog: kot załatwia się poza kuwetą' },
-      { href: '/koty', label: 'Pomoc dla opiekunów kotów' },
+      { href: '/blog/jak-wybrac-kuwete-i-zwirek-dla-kota', label: 'Blog: jak wybrac kuwete i zwirek' },
+      { href: '/blog/stres-kota-a-zachowania-toaletowe', label: 'Blog: stres kota a zachowania toaletowe' },
+      { href: '/behawiorysta-online-polska', label: 'Behawiorysta psow i kotow online' },
     ],
     asset: {
       kind: 'pdf',
@@ -252,8 +369,10 @@ export const LEAD_MAGNETS: LeadMagnet[] = [
     categoryLabel: 'Konsultacja online',
     relatedLinks: [
       { href: '/konsultacja-behawioralna-online', label: 'Jak wygląda konsultacja online' },
+      { href: '/blog/jak-przygotowac-sie-do-konsultacji-behawioralnej-online', label: 'Blog: jak przygotowac sie do konsultacji online' },
+      { href: '/behawiorysta-online-polska', label: 'Behawiorysta psow i kotow online' },
       { href: '/cennik', label: 'Cennik i porównanie 15 min vs 60 min' },
-      { href: '/kontakt', label: 'Krótka wiadomość przed rezerwacją' },
+      { href: '/kontakt', label: 'Krotka wiadomosc przed rezerwacja' },
     ],
     asset: {
       kind: 'text',
@@ -300,13 +419,13 @@ const LEAD_MAGNET_BY_SLUG = new Map(LEAD_MAGNETS.map((item) => [item.slug, item]
 export const LOCAL_SEO_PAGES: LocalSeoPage[] = [
   {
     path: '/behawiorysta-online-polska',
-    title: 'Behawiorysta online dla psa i kota - cała Polska',
-    description: 'Konsultacje behawioralne online dla opiekunów psów i kotów z całej Polski. 15 min audio na start, pełna konsultacja przy sprawach szerszych.',
-    h1: 'Behawiorysta online dla opiekunów psów i kotów',
+    title: 'Behawiorysta psow i kotow online - cala Polska',
+    description: 'Behawiorysta psow i kotow online dla opiekunow z calej Polski. 15 min audio na start, konsultacja 60 min przy sprawach szerszych.',
+    h1: 'Behawiorysta psow i kotow online',
     intro: [
-      'Pracuję online z opiekunami psów i kotów z całej Polski.',
-      'Nie prowadzę wizyt domowych ani konsultacji stacjonarnych. Pracujemy zdalnie, na podstawie opisu sytuacji, historii problemu i tego, jak wygląda codzienność zwierzęcia.',
-      'Na początek najprościej wybrać 15 min audio. Jeśli temat od razu jest szerszy, możesz przejść do pełnej konsultacji online.',
+      'Pracuje online z opiekunami psow i kotow z calej Polski.',
+      'Nie prowadze wizyt domowych ani konsultacji stacjonarnych. Pracujemy zdalnie, na podstawie opisu sytuacji, historii problemu i tego, jak wyglada codziennosc zwierzecia.',
+      'Ta strona jest glownym punktem wejscia dla uslugi. Jesli temat dotyczy konkretnego problemu psa albo kota, nizej znajdziesz przejscie do odpowiedniej kategorii.',
     ],
     problemCards: [
       { title: 'Problem dotyczy psa', copy: 'Spacery, reaktywność, rozłąka, pobudzenie albo trudne zachowania w domu.', href: '/psy' },
@@ -314,11 +433,11 @@ export const LOCAL_SEO_PAGES: LocalSeoPage[] = [
       { title: 'Chcesz ustalić pierwszy krok', copy: 'Masz jedno pytanie albo potrzebujesz spokojnie uporządkować temat przed dalszym działaniem.' },
       { title: 'Sprawa jest szersza', copy: 'Problem trwa dłużej, wraca albo obejmuje kilka wątków naraz i wymaga dłuższej rozmowy.' },
     ],
-    supportTitle: 'Jak wygląda taka pomoc online',
+    supportTitle: 'Jak wyglada taka pomoc online',
     supportBody: [
-      'W pracy behawioralnej najważniejsze są kontekst, historia problemu, środowisko i codzienne sytuacje, w których zachowanie wraca. To właśnie porządkujemy na rozmowie.',
-      'Do startu wystarczy krótki opis. Nagrania bywają pomocne, ale nie są warunkiem, a kamera nie jest potrzebna przy 15 min audio.',
-      'Online oznacza też prostszy kontakt: bez dojazdu, bez szukania specjalisty w swoim mieście i bez dokładania dodatkowego zamieszania na start.',
+      'W pracy behawioralnej najwazniejsze sa kontekst, historia problemu, srodowisko i codzienne sytuacje, w ktorych zachowanie wraca. To wlasnie porzadkujemy na rozmowie.',
+      'Do startu wystarczy krotki opis. Nagrania bywaja pomocne, ale nie sa warunkiem, a kamera nie jest potrzebna przy 15 min audio.',
+      'Opis procesu konsultacji 60 min znajduje sie na osobnej stronie uslugi. Tutaj najpierw ustalasz, czy pracujemy o psie, o kocie, czy od razu potrzebujesz szerszej rozmowy online.',
     ],
     firstStepCards: [
       { title: '15 min audio', copy: 'Krótka rozmowa głosowa bez kamery. Dobra na jedno pytanie, pierwszy ogląd sytuacji i ustalenie priorytetu.' },
@@ -333,16 +452,17 @@ export const LOCAL_SEO_PAGES: LocalSeoPage[] = [
       { question: 'Gdzie sprawdzić dostępne terminy?', answer: 'Aktualną dostępność najłatwiej sprawdzić w kalendarzu przy rezerwacji.' },
     ],
     relatedLinks: [
-      { href: '/psy', label: 'Pomoc dla opiekunów psów', copy: 'Jeśli problem dotyczy psa, tutaj znajdziesz szerszy opis najczęstszych tematów.' },
-      { href: '/koty', label: 'Pomoc dla opiekunów kotów', copy: 'Jeśli problem dotyczy kota, tutaj znajdziesz szerszy opis najczęstszych tematów.' },
-      { href: '/cennik', label: 'Cennik', copy: 'Porównanie 15 min audio i konsultacji 60 min.' },
-      { href: '/o-mnie', label: 'O mnie', copy: 'Styl pracy, kwalifikacje i publiczne punkty odniesienia.' },
-      { href: '/kontakt', label: 'Kontakt', copy: 'Krótka wiadomość, jeśli chcesz coś doprecyzować przed rezerwacją.' },
+      { href: '/psy', label: 'Pomoc dla opiekunow psow', copy: 'Jesli problem dotyczy psa, tutaj znajdziesz szerszy opis najczestszych tematow i problemow.' },
+      { href: '/koty', label: 'Pomoc dla opiekunow kotow', copy: 'Jesli problem dotyczy kota, tutaj znajdziesz szerszy opis najczestszych tematow i problemow.' },
+      { href: '/konsultacja-behawioralna-online', label: 'Jak wyglada konsultacja 60 min', copy: 'Osobna strona procesu i przebiegu dluzszej konsultacji online.' },
+      { href: '/cennik', label: 'Cennik', copy: 'Porownanie 15 min audio i konsultacji 60 min.' },
+      { href: '/kontakt', label: 'Kontakt', copy: 'Krotka wiadomosc, jesli chcesz cos doprecyzowac przed rezerwacja.' },
     ],
   },
 ] as const
 
 const LOCAL_SEO_PAGE_BY_PATH = new Map(LOCAL_SEO_PAGES.map((page) => [page.path, page] as const))
+const TOPICAL_CLUSTER_BY_ROUTE_PATH = new Map(TOPICAL_CLUSTERS.map((cluster) => [cluster.routePath, cluster] as const))
 
 export const NEWSLETTER_SIGNUP_COPY = {
   title: 'Newsletter dla opiekunów psów i kotów',
@@ -367,6 +487,10 @@ export function listLocalSeoPaths() {
 
 export function getLocalSeoPageByPath(pathname: string) {
   return LOCAL_SEO_PAGE_BY_PATH.get(pathname) ?? null
+}
+
+export function getTopicalClusterByRoutePath(routePath: string) {
+  return TOPICAL_CLUSTER_BY_ROUTE_PATH.get(routePath) ?? null
 }
 
 export function getProblemLandingLeadMagnetSlug(routePath: string) {

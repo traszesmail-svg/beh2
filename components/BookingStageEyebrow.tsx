@@ -27,15 +27,15 @@ export function BookingStageEyebrow({ stage, className }: BookingStageEyebrowPro
   const currentStageIndex = BOOKING_STAGE_PROGRESS.findIndex((item) => item.id === stage)
 
   return (
-    <div className="booking-flow-head">
-      <div className={className}>{BOOKING_STAGE_LABELS[stage]}</div>
-      <div className="booking-flow-track" aria-hidden="true">
+    <div className="notatnik-progress">
+      <div className={className ?? 'notatnik-mono'}>{BOOKING_STAGE_LABELS[stage]}</div>
+      <div className="notatnik-progress-track" aria-hidden="true">
         {BOOKING_STAGE_PROGRESS.map((item, index) => {
           const state = index < currentStageIndex ? 'done' : index === currentStageIndex ? 'current' : 'upcoming'
 
           return (
-            <span key={item.id} className={`booking-flow-pill booking-flow-pill-${state}`}>
-              <span className="booking-flow-pill-index">{index + 1}</span>
+            <span key={item.id} className={`notatnik-progress-pill notatnik-progress-pill-${state}`}>
+              <span className="notatnik-progress-pill-index">{index + 1}</span>
               <span>{item.label}</span>
             </span>
           )

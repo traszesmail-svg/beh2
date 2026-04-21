@@ -1,0 +1,1933 @@
+.notatnik-page {
+  --bg: #f5f1ea;
+  --bg-2: #ebe5d8;
+  --paper: #faf7f0;
+  --ink: #1f1d17;
+  --ink-soft: #55524a;
+  --ink-mute: #8b877c;
+  --line: #d9d3c4;
+  --accent: #5d6b3f;
+  --accent-warm: #b6753a;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+.notatnik-page a {
+  color: inherit;
+}
+
+.notatnik-page h1,
+.notatnik-page h2,
+.notatnik-page h3,
+.notatnik-page h4,
+.notatnik-page h5 {
+  margin: 0;
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+.notatnik-serif {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+.notatnik-mono {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.notatnik-kicker-spaced {
+  margin-bottom: 14px;
+}
+
+.notatnik-text-accent {
+  color: var(--accent);
+}
+
+.notatnik-shell {
+  width: min(1320px, calc(100vw - 48px));
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.22), 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.notatnik-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 22px 48px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(245, 241, 234, 0.96);
+  backdrop-filter: blur(10px);
+}
+
+.notatnik-brand {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.notatnik-brand-mark {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  font-style: italic;
+}
+
+.notatnik-brand-tag {
+  font-family: var(--font-mono), monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.notatnik-nav {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+  gap: 26px;
+  flex-wrap: wrap;
+  font-size: 13.5px;
+  color: var(--ink-soft);
+}
+
+.notatnik-nav a {
+  text-decoration: none;
+}
+
+.notatnik-nav a:hover {
+  color: var(--ink);
+}
+
+.notatnik-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 11px 18px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 13px;
+  text-decoration: none;
+  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+
+.notatnik-btn:hover {
+  transform: translateY(-1px);
+}
+
+.notatnik-btn-ghost {
+  background: transparent;
+  color: var(--ink);
+}
+
+.notatnik-btn-accent {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--paper);
+}
+
+.notatnik-btn-arrow {
+  font-family: var(--font-display), Georgia, serif;
+  font-style: italic;
+}
+
+.notatnik-page section {
+  padding: 80px 48px;
+  border-bottom: 1px solid var(--line);
+}
+
+.notatnik-hero {
+  padding-top: 80px;
+  padding-bottom: 72px;
+}
+
+.notatnik-hero-kicker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 32px;
+  color: var(--ink-mute);
+}
+
+.notatnik-hero-edition {
+  padding: 3px 8px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+}
+
+.notatnik-hero h1 {
+  max-width: 16ch;
+  font-size: clamp(42px, 5.5vw, 82px);
+  line-height: 1.02;
+  font-weight: 300;
+}
+
+.notatnik-hero h1 em,
+.notatnik-subhero h1 em,
+.notatnik-final h2 em {
+  color: var(--accent);
+  font-style: italic;
+}
+
+.notatnik-hero-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 0.9fr;
+  gap: 64px;
+  align-items: end;
+  margin-top: 56px;
+}
+
+.notatnik-hero-lede {
+  max-width: 52ch;
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+.notatnik-hero-lede strong {
+  color: var(--ink);
+}
+
+.notatnik-hero-cta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 28px;
+}
+
+.notatnik-hero-fine {
+  margin-top: 18px;
+  font-size: 13px;
+  color: var(--ink-mute);
+}
+
+.notatnik-hero-fine a {
+  color: var(--ink);
+  text-underline-offset: 3px;
+}
+
+.notatnik-hero-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--paper);
+}
+
+.notatnik-hero-card-corner {
+  position: absolute;
+  top: 16px;
+  right: 28px;
+  z-index: 2;
+  padding: 0 8px;
+  background: rgba(245, 241, 234, 0.88);
+}
+
+.notatnik-hero-card-media {
+  position: relative;
+  height: 240px;
+  overflow: hidden;
+  background: linear-gradient(145deg, #d9c8ae, #9f7b56);
+}
+
+.notatnik-hero-card-media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 42%, rgba(31, 29, 23, 0.32) 100%);
+}
+
+.notatnik-hero-card-media img {
+  object-fit: cover;
+}
+
+.notatnik-hero-card-media-note {
+  position: absolute;
+  left: 20px;
+  bottom: 14px;
+  z-index: 1;
+  color: rgba(250, 247, 240, 0.9);
+}
+
+.notatnik-hero-card-body {
+  padding: 26px 28px 24px;
+}
+
+.notatnik-hero-card h3 {
+  margin-bottom: 8px;
+  font-size: 22px;
+  font-style: italic;
+}
+
+.notatnik-hero-card p {
+  margin: 0 0 18px;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+.notatnik-price-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--line);
+}
+
+.notatnik-price-row-plain {
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: none;
+}
+
+.notatnik-price-big {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 28px;
+}
+
+.notatnik-price-small {
+  color: var(--ink-mute);
+  font-size: 12px;
+}
+
+.notatnik-section-head {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 40px;
+  align-items: start;
+  margin-bottom: 56px;
+}
+
+.notatnik-section-index {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 56px;
+  line-height: 1;
+  color: var(--accent);
+  font-style: italic;
+}
+
+.notatnik-section-head h2 {
+  max-width: 24ch;
+  font-size: clamp(30px, 3vw, 44px);
+  line-height: 1.1;
+}
+
+.notatnik-section-head-copy {
+  display: grid;
+  gap: 12px;
+}
+
+.notatnik-quiet-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.notatnik-quiet-card {
+  display: grid;
+  gap: 16px;
+  padding: 36px 36px 32px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+
+.notatnik-quiet-card h3 {
+  font-size: 34px;
+  font-style: italic;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+}
+
+.notatnik-quiet-card h3 em {
+  color: var(--accent);
+  font-style: italic;
+}
+
+.notatnik-quiet-card p {
+  margin: 0;
+  max-width: 42ch;
+  color: var(--ink-soft);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.notatnik-inline-link {
+  justify-self: start;
+  padding-bottom: 3px;
+  border-bottom: 1px solid currentColor;
+  font-family: var(--font-mono), monospace;
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.notatnik-inline-link:hover {
+  color: var(--accent);
+}
+
+.notatnik-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+.notatnik-step-number {
+  margin-bottom: 18px;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 72px;
+  line-height: 1;
+  color: var(--accent);
+  font-style: italic;
+  font-weight: 300;
+}
+
+.notatnik-step h3 {
+  margin-bottom: 10px;
+  font-size: 22px;
+}
+
+.notatnik-step p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.notatnik-material-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.notatnik-material-card {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 14px;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--paper);
+}
+
+.notatnik-material-tag {
+  color: var(--accent);
+}
+
+.notatnik-material-card h3 {
+  font-size: 22px;
+  font-style: italic;
+  line-height: 1.2;
+}
+
+.notatnik-material-card p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.notatnik-material-card a {
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.notatnik-quote-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+.notatnik-quote {
+  position: relative;
+  padding: 40px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--paper);
+}
+
+.notatnik-quote::before {
+  content: '"';
+  position: absolute;
+  top: 16px;
+  left: 14px;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 120px;
+  line-height: 0.8;
+  color: var(--accent);
+  opacity: 0.35;
+}
+
+.notatnik-quote blockquote {
+  margin: 0;
+}
+
+.notatnik-quote p {
+  position: relative;
+  z-index: 1;
+  margin: 16px 0 18px;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 24px;
+  line-height: 1.3;
+  font-style: italic;
+  font-weight: 300;
+}
+
+.notatnik-quote footer {
+  color: var(--ink-mute);
+  font-size: 13px;
+}
+
+.notatnik-about {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.notatnik-portrait {
+  position: relative;
+  height: 420px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background:
+    repeating-linear-gradient(135deg, transparent 0 12px, rgba(31, 29, 23, 0.05) 12px 13px),
+    var(--bg-2);
+}
+
+.notatnik-portrait img {
+  object-fit: cover;
+}
+
+.notatnik-about-copy h2 {
+  max-width: 20ch;
+  margin-bottom: 20px;
+  font-size: clamp(30px, 3vw, 42px);
+  line-height: 1.15;
+}
+
+.notatnik-about-copy p {
+  max-width: 50ch;
+  color: var(--ink-soft);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.notatnik-cred-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-top: 28px;
+}
+
+.notatnik-cred {
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+
+.notatnik-cred-title {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.notatnik-cred-copy {
+  margin-top: 4px;
+  color: var(--ink-mute);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.notatnik-faq-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--line);
+}
+
+.notatnik-faq-item {
+  padding: 26px 30px;
+  background: var(--paper);
+}
+
+.notatnik-faq-item h4 {
+  margin-bottom: 8px;
+  font-size: 19px;
+  font-style: italic;
+}
+
+.notatnik-faq-item p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+
+.notatnik-final {
+  padding: 100px 48px;
+  background: var(--ink);
+  color: var(--paper);
+  text-align: center;
+}
+
+.notatnik-final h2 {
+  max-width: 20ch;
+  margin: 0 auto 24px;
+  font-size: clamp(36px, 4.5vw, 64px);
+  font-style: italic;
+  font-weight: 300;
+}
+
+.notatnik-final p {
+  max-width: 56ch;
+  margin: 0 auto 36px;
+  color: #c5beae;
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+.notatnik-final-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.notatnik-final .notatnik-btn {
+  background: var(--paper);
+  color: var(--ink);
+  border-color: var(--paper);
+}
+
+.notatnik-final .notatnik-btn-ghost {
+  background: transparent;
+  color: var(--paper);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.notatnik-service-section {
+  background: var(--paper);
+}
+
+.notatnik-service-description {
+  max-width: 56ch;
+  margin: -24px 0 36px 220px;
+  color: var(--ink-soft);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.notatnik-service-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.notatnik-service-card {
+  display: grid;
+  gap: 16px;
+  padding: 32px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #fff;
+}
+
+.notatnik-service-card h3 {
+  font-size: 28px;
+  line-height: 1.15;
+  font-style: italic;
+}
+
+.notatnik-service-card p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.notatnik-service-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.notatnik-service-meta span {
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 12px;
+  color: var(--ink-mute);
+}
+
+.notatnik-service-list {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.notatnik-service-list li + li {
+  margin-top: 8px;
+}
+
+.notatnik-service-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.notatnik-service-note {
+  margin: 28px 0 0;
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.notatnik-foot {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: 32px;
+  padding: 48px;
+  border-top: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+.notatnik-foot h5 {
+  margin: 0 0 12px;
+  color: var(--ink-mute);
+  font-family: var(--font-mono), monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+.notatnik-foot ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.notatnik-foot li {
+  padding: 4px 0;
+}
+
+.notatnik-foot-mark {
+  margin-bottom: 6px;
+  color: var(--ink);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 28px;
+  font-style: italic;
+}
+
+.notatnik-subhero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: end;
+  padding-top: 72px;
+  padding-bottom: 60px;
+}
+
+.notatnik-subhero-tag {
+  margin-bottom: 20px;
+}
+
+.notatnik-subhero h1 {
+  max-width: 16ch;
+  font-size: clamp(40px, 5vw, 72px);
+  line-height: 1.04;
+  font-weight: 300;
+}
+
+.notatnik-subhero p {
+  max-width: 44ch;
+  color: var(--ink-soft);
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+.notatnik-topic-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  padding: 56px 48px;
+  border-bottom: 1px solid var(--line);
+}
+
+.notatnik-topic-card {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 12px;
+  min-height: 220px;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--paper);
+}
+
+.notatnik-topic-number {
+  color: var(--accent);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 20px;
+  font-style: italic;
+}
+
+.notatnik-topic-card h3 {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.notatnik-topic-card p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.notatnik-topic-card a {
+  font-family: var(--font-mono), monospace;
+  font-size: 12.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.notatnik-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  padding: 28px 48px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.notatnik-filter-bar .notatnik-mono {
+  margin-right: 12px;
+}
+
+.notatnik-filter-button {
+  padding: 6px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.notatnik-filter-button[aria-pressed='true'] {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+.notatnik-list {
+  display: grid;
+  border-top: 1px solid var(--line);
+}
+
+.notatnik-list-row {
+  display: grid;
+  grid-template-columns: 80px 200px 1fr 240px 120px;
+  gap: 32px;
+  align-items: center;
+  padding: 28px 48px;
+  border-bottom: 1px solid var(--line);
+}
+
+.notatnik-list-row:hover {
+  background: var(--paper);
+}
+
+.notatnik-list-index {
+  color: var(--accent);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 28px;
+  font-style: italic;
+}
+
+.notatnik-list-meta {
+  color: var(--ink-mute);
+}
+
+.notatnik-list-title {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 22px;
+  font-style: italic;
+}
+
+.notatnik-list-copy {
+  color: var(--ink-soft);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.notatnik-list-link {
+  text-align: right;
+}
+
+.notatnik-list-link a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.notatnik-booking {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 680px;
+}
+
+.notatnik-booking-left {
+  padding: 64px 48px;
+  border-right: 1px solid var(--line);
+}
+
+.notatnik-booking-right {
+  padding: 64px 48px;
+  background: var(--paper);
+}
+
+.notatnik-booking h1 {
+  margin-bottom: 12px;
+  font-size: 44px;
+  line-height: 1.1;
+  font-weight: 300;
+}
+
+.notatnik-booking h1 em {
+  color: var(--accent);
+  font-style: italic;
+}
+
+.notatnik-booking-lede {
+  max-width: 44ch;
+  margin-bottom: 32px;
+  color: var(--ink-soft);
+  font-size: 15.5px;
+  line-height: 1.55;
+}
+
+.notatnik-option-grid {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.notatnik-option-card {
+  display: grid;
+  gap: 6px 16px;
+  grid-template-columns: 1fr auto;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: transparent;
+}
+
+.notatnik-option-card[data-active='true'] {
+  background: var(--paper);
+  border-color: var(--ink);
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+.notatnik-option-title {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 19px;
+  font-style: italic;
+}
+
+.notatnik-option-price {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 19px;
+}
+
+.notatnik-option-copy {
+  grid-column: 1 / -1;
+  color: var(--ink-soft);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.notatnik-booking-panel {
+  display: grid;
+  gap: 24px;
+}
+
+.notatnik-booking-summary {
+  display: grid;
+  gap: 12px;
+}
+
+.notatnik-booking-note,
+.notatnik-contact-note {
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #fff;
+}
+
+.notatnik-booking-note strong,
+.notatnik-contact-note strong {
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 22px;
+  font-style: italic;
+}
+
+.notatnik-booking-note p,
+.notatnik-contact-note p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.notatnik-booking .book-topics-grid,
+.notatnik-booking .premium-two-column-grid,
+.notatnik-booking .card-grid,
+.notatnik-booking .book-hero-stats {
+  display: grid;
+  gap: 14px;
+}
+
+.notatnik-booking .book-hero-stats {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.notatnik-booking .book-hero-stat,
+.notatnik-booking .summary-card,
+.notatnik-booking .topic-card,
+.notatnik-booking .booking-service-info-card,
+.notatnik-booking .tree-backed-card,
+.notatnik-booking .list-card {
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: none;
+}
+
+.notatnik-booking .book-hero-stat-label,
+.notatnik-booking .section-eyebrow,
+.notatnik-booking .topic-card .section-eyebrow {
+  font-family: var(--font-mono), monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.notatnik-booking .book-topic-card {
+  gap: 14px;
+}
+
+.notatnik-booking .topic-media-shell {
+  display: none;
+}
+
+.notatnik-booking .topic-card h3,
+.notatnik-booking .summary-card h2,
+.notatnik-booking .summary-card h3,
+.notatnik-booking .booking-service-info-card h3 {
+  font-family: var(--font-display), Georgia, serif;
+  font-style: italic;
+}
+
+.notatnik-booking .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 11px 18px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  text-decoration: none;
+}
+
+.notatnik-booking .button.button-ghost {
+  background: transparent;
+  color: var(--ink);
+}
+
+.notatnik-booking .editorial-hero-meta,
+.notatnik-booking .premium-bullet-list {
+  color: var(--ink-soft);
+}
+
+.notatnik-booking .premium-bullet-list {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.notatnik-booking .premium-bullet-list li + li {
+  margin-top: 8px;
+}
+
+.notatnik-contact {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 680px;
+}
+
+.notatnik-contact-left {
+  padding: 72px 48px;
+}
+
+.notatnik-contact-right {
+  padding: 72px 48px;
+  border-left: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.notatnik-contact h1 {
+  margin-bottom: 18px;
+  font-size: 48px;
+  line-height: 1.1;
+  font-weight: 300;
+}
+
+.notatnik-contact h1 em {
+  color: var(--accent);
+  font-style: italic;
+}
+
+.notatnik-contact-lede {
+  max-width: 44ch;
+  margin-bottom: 36px;
+  color: var(--ink-soft);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.notatnik-contact .contact-form-card,
+.notatnik-contact .summary-card {
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+.notatnik-contact .form-grid {
+  gap: 20px;
+}
+
+.notatnik-page .form-grid label,
+.notatnik-page .form-grid .field-legend,
+.notatnik-page .form-grid .section-eyebrow {
+  font-family: var(--font-mono), monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.notatnik-page .form-grid input,
+.notatnik-page .form-grid textarea,
+.notatnik-page .form-grid select {
+  width: 100%;
+  padding: 10px 0;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.notatnik-page .form-grid textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.notatnik-page .form-grid input:focus,
+.notatnik-page .form-grid textarea:focus,
+.notatnik-page .form-grid select:focus {
+  border-color: var(--ink);
+  outline: none;
+}
+
+.notatnik-page .contact-form-intro,
+.notatnik-page .info-box,
+.notatnik-page .error-box,
+.notatnik-page .checkout-box,
+.notatnik-page .form-section-card,
+.notatnik-page .list-card,
+.notatnik-page .booking-service-info-card {
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: none;
+}
+
+.notatnik-page .field-help,
+.notatnik-page .muted,
+.notatnik-page .price-compare-text,
+.notatnik-page .checkout-box .muted {
+  color: var(--ink-soft);
+}
+
+.notatnik-page .checkbox-card {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px 0;
+  border-bottom: 1px dashed var(--line);
+}
+
+.notatnik-page .checkbox-card:last-child {
+  border-bottom: none;
+}
+
+.notatnik-page .checkbox-card input {
+  width: 16px;
+  margin-top: 2px;
+  border: 1px solid var(--line);
+}
+
+.notatnik-page .button.big-button,
+.notatnik-page button.button,
+.notatnik-page .checkout-box button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 11px 18px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  font: inherit;
+  cursor: pointer;
+}
+
+.notatnik-page .button.button-ghost {
+  background: transparent;
+  color: var(--ink);
+}
+
+.notatnik-kinfo h3 {
+  margin-bottom: 12px;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 24px;
+  font-style: italic;
+}
+
+.notatnik-kinfo p {
+  color: var(--ink-soft);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.notatnik-kinfo-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 14px 0;
+  border-bottom: 1px dashed var(--line);
+  font-size: 14px;
+}
+
+.notatnik-kinfo-row span:first-child {
+  color: var(--ink-mute);
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.notatnik-info-stack {
+  margin-top: 36px;
+}
+
+.notatnik-side-cta {
+  margin-top: 48px;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #fff;
+}
+
+.notatnik-side-cta h3,
+.notatnik-side-cta h4 {
+  margin: 6px 0 10px;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 22px;
+  font-style: italic;
+}
+
+.notatnik-side-cta p {
+  margin: 0 0 14px;
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.notatnik-progress {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.notatnik-progress-track {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.notatnik-progress-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  font-size: 12px;
+  color: var(--ink-mute);
+}
+
+.notatnik-progress-pill-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+}
+
+.notatnik-progress-pill-done {
+  border-color: rgba(93, 107, 63, 0.25);
+  color: var(--ink-soft);
+}
+
+.notatnik-progress-pill-done .notatnik-progress-pill-index {
+  background: rgba(93, 107, 63, 0.16);
+}
+
+.notatnik-progress-pill-current {
+  border-color: var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.notatnik-progress-pill-current .notatnik-progress-pill-index {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.notatnik-choice-grid,
+.notatnik-topic-choice-grid,
+.notatnik-slot-stack,
+.notatnik-detail-stack {
+  display: grid;
+  gap: 14px;
+}
+
+.notatnik-choice-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.notatnik-choice-card,
+.notatnik-topic-choice-card,
+.notatnik-detail-card,
+.notatnik-slot-day,
+.notatnik-callout,
+.notatnik-slot-extra,
+.notatnik-form-section,
+.notatnik-submit-box {
+  padding: 20px 22px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #fff;
+}
+
+.notatnik-choice-card {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+}
+
+.notatnik-choice-card h2 {
+  font-size: 28px;
+  font-style: italic;
+}
+
+.notatnik-choice-card p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.notatnik-choice-kicker {
+  font-family: var(--font-mono), monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.notatnik-choice-list {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.notatnik-choice-list li + li {
+  margin-top: 8px;
+}
+
+.notatnik-choice-actions {
+  margin-top: 6px;
+}
+
+.notatnik-topic-choice-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.notatnik-topic-choice-card {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 12px;
+  text-decoration: none;
+  transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
+}
+
+.notatnik-topic-choice-card:hover,
+.notatnik-slot-button:hover {
+  transform: translateY(-1px);
+}
+
+.notatnik-topic-choice-card:hover {
+  border-color: var(--ink);
+  background: var(--paper);
+}
+
+.notatnik-topic-choice-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.notatnik-topic-choice-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.notatnik-topic-choice-icon svg {
+  width: 30px;
+  height: 30px;
+}
+
+.notatnik-topic-choice-title {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 24px;
+  line-height: 1.15;
+  font-style: italic;
+}
+
+.notatnik-topic-choice-copy {
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.notatnik-topic-choice-link {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.notatnik-detail-card,
+.notatnik-callout {
+  display: grid;
+  gap: 8px;
+}
+
+.notatnik-detail-card strong,
+.notatnik-callout strong {
+  display: block;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 22px;
+  font-style: italic;
+}
+
+.notatnik-detail-card p,
+.notatnik-callout p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.notatnik-callout {
+  background: var(--paper);
+}
+
+.notatnik-callout-error {
+  border-color: rgba(138, 48, 34, 0.22);
+  background: rgba(191, 82, 50, 0.08);
+}
+
+.notatnik-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.notatnik-slot-day {
+  display: grid;
+  gap: 18px;
+}
+
+.notatnik-slot-day-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.notatnik-slot-day-copy {
+  display: grid;
+  gap: 6px;
+}
+
+.notatnik-slot-day-copy strong {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 24px;
+  font-style: italic;
+}
+
+.notatnik-slot-day-copy p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.notatnik-slot-day-badge {
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 11px;
+  color: var(--ink-mute);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.notatnik-slot-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.notatnik-slot-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  text-decoration: none;
+  transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
+}
+
+.notatnik-slot-button:hover {
+  border-color: var(--ink);
+  background: #fff;
+}
+
+.notatnik-slot-extra {
+  display: grid;
+  gap: 14px;
+}
+
+.notatnik-slot-extra summary {
+  cursor: pointer;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 22px;
+  font-style: italic;
+}
+
+.notatnik-slot-extra p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.notatnik-form {
+  display: grid;
+  gap: 14px;
+}
+
+.notatnik-form-section {
+  display: grid;
+  gap: 18px;
+}
+
+.notatnik-form-heading {
+  display: grid;
+  gap: 6px;
+}
+
+.notatnik-form-heading strong {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 24px;
+  font-style: italic;
+}
+
+.notatnik-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 20px;
+}
+
+.notatnik-field {
+  display: grid;
+  gap: 8px;
+}
+
+.notatnik-field-wide {
+  grid-column: 1 / -1;
+}
+
+.notatnik-field label {
+  font-family: var(--font-mono), monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.notatnik-field input,
+.notatnik-field textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+}
+
+.notatnik-field textarea {
+  min-height: 132px;
+  resize: vertical;
+}
+
+.notatnik-field input:focus,
+.notatnik-field textarea:focus {
+  outline: none;
+  border-color: var(--ink);
+  background: #fff;
+}
+
+.notatnik-field input[data-readonly='true'] {
+  color: var(--ink-soft);
+}
+
+.notatnik-field-help {
+  color: var(--ink-soft);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.notatnik-submit-box {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: center;
+}
+
+.notatnik-submit-copy {
+  display: grid;
+  gap: 8px;
+}
+
+.notatnik-submit-kicker {
+  font-family: var(--font-mono), monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.notatnik-submit-title {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 28px;
+  font-style: italic;
+}
+
+.notatnik-submit-copy p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.notatnik-submit-note {
+  padding-top: 8px;
+  border-top: 1px dashed var(--line);
+}
+
+.notatnik-submit-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (max-width: 1180px) {
+  .notatnik-shell {
+    width: calc(100vw - 24px);
+  }
+
+  .notatnik-topbar {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .notatnik-nav {
+    order: 3;
+    flex-basis: 100%;
+    justify-content: flex-start;
+  }
+
+  .notatnik-hero-grid,
+  .notatnik-about,
+  .notatnik-subhero,
+  .notatnik-booking,
+  .notatnik-contact {
+    grid-template-columns: 1fr;
+  }
+
+  .notatnik-quiet-grid,
+  .notatnik-material-grid,
+  .notatnik-steps,
+  .notatnik-topic-grid,
+  .notatnik-foot {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .notatnik-quote-grid,
+  .notatnik-faq-grid,
+  .notatnik-service-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .notatnik-cred-grid,
+  .notatnik-booking .book-hero-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .notatnik-choice-grid,
+  .notatnik-topic-choice-grid,
+  .notatnik-form-grid,
+  .notatnik-slot-grid,
+  .notatnik-submit-box {
+    grid-template-columns: 1fr;
+  }
+
+  .notatnik-list-row {
+    grid-template-columns: 72px 1fr;
+  }
+
+  .notatnik-list-row > *:nth-child(3),
+  .notatnik-list-row > *:nth-child(4),
+  .notatnik-list-row > *:nth-child(5) {
+    grid-column: 2;
+  }
+
+  .notatnik-list-link {
+    text-align: left;
+  }
+
+  .notatnik-booking-left,
+  .notatnik-contact-left {
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .notatnik-contact-right {
+    border-left: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .notatnik-shell {
+    width: 100%;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .notatnik-topbar,
+  .notatnik-page section,
+  .notatnik-topic-grid,
+  .notatnik-filter-bar,
+  .notatnik-list-row,
+  .notatnik-booking-left,
+  .notatnik-booking-right,
+  .notatnik-contact-left,
+  .notatnik-contact-right,
+  .notatnik-foot {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .notatnik-page section {
+    padding-top: 56px;
+    padding-bottom: 56px;
+  }
+
+  .notatnik-topbar {
+    gap: 14px;
+    padding-top: 18px;
+    padding-bottom: 18px;
+  }
+
+  .notatnik-brand {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .notatnik-nav,
+  .notatnik-hero-cta,
+  .notatnik-final-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .notatnik-quiet-grid,
+  .notatnik-material-grid,
+  .notatnik-topic-grid,
+  .notatnik-foot {
+    grid-template-columns: 1fr;
+  }
+
+  .notatnik-section-head {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    margin-bottom: 36px;
+  }
+
+  .notatnik-service-description {
+    margin: -12px 0 28px;
+  }
+
+  .notatnik-section-head h2 {
+    max-width: none;
+  }
+
+  .notatnik-hero h1,
+  .notatnik-subhero h1,
+  .notatnik-final h2,
+  .notatnik-contact h1,
+  .notatnik-booking h1 {
+    max-width: none;
+    font-size: clamp(34px, 11vw, 48px);
+  }
+
+  .notatnik-hero-grid,
+  .notatnik-about,
+  .notatnik-subhero,
+  .notatnik-booking,
+  .notatnik-contact {
+    gap: 28px;
+  }
+
+  .notatnik-hero-card-media,
+  .notatnik-portrait {
+    height: 220px;
+  }
+
+  .notatnik-list-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .notatnik-list-row > * {
+    grid-column: auto !important;
+  }
+
+  .notatnik-slot-day-head,
+  .notatnik-actions,
+  .notatnik-submit-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .notatnik-progress-track {
+    flex-direction: column;
+  }
+
+  .notatnik-filter-bar .notatnik-mono {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  .notatnik-filter-button,
+  .notatnik-btn,
+  .notatnik-page .button.big-button,
+  .notatnik-page button.button,
+  .notatnik-page .checkout-box button {
+    width: 100%;
+  }
+}

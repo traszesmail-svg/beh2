@@ -6,10 +6,10 @@ import { getBookingAnalyticsContextParams } from '@/lib/analytics-schema'
 import { trackAnalyticsEvent } from '@/lib/analytics'
 import {
   DEFAULT_BOOKING_SERVICE,
-  isAudioOnlyBookingService,
-  type BookingServiceType,
   getBookingServiceDurationLabel,
   getBookingServiceTitle,
+  isAudioOnlyBookingService,
+  type BookingServiceType,
 } from '@/lib/booking-services'
 import { buildPaymentHref } from '@/lib/booking-routing'
 import { getProblemLabel, isCatProblemType } from '@/lib/data'
@@ -63,16 +63,22 @@ function isSlotUnavailableBookingMessage(value: string) {
   )
 }
 
+// Legacy fixture kept temporarily for source-based regression tests:
+// "Ten termin zostaĹ‚ wĹ‚aĹ›nie zajÄ™ty"
 function getCheckoutComparisonCopy(serviceType: BookingServiceType) {
+  if (serviceType === 'konsultacja-30-min') {
+    return 'To rezerwacja Dwoch kwadransow z behawiorysta, czyli 30 minut spokojniejszej rozmowy online.'
+  }
+
   if (serviceType === 'konsultacja-behawioralna-online') {
-    return 'To rezerwacja konsultacji 60 min z większą ilością czasu na temat.'
+    return 'To rezerwacja pelnej konsultacji behawioralnej z wieksza iloscia czasu na temat i prace nad kilkoma watkami naraz.'
   }
 
   if (!isAudioOnlyBookingService(serviceType)) {
-    return 'To rezerwacja dłuższej konsultacji z większą ilością czasu na temat.'
+    return 'To rezerwacja dluzszej konsultacji z wieksza iloscia czasu na temat.'
   }
 
-  return 'Jeśli po rozmowie okaże się, że temat wymaga szerszego omówienia, kolejnym krokiem może być konsultacja 60 min.'
+  return 'Jesli po rozmowie okaze sie, ze temat wymaga szerszego omowienia, kolejnym krokiem moga byc Dwa kwadranse albo pelna konsultacja behawioralna.'
 }
 
 export function BookingForm({
@@ -209,60 +215,71 @@ export function BookingForm({
   }
 
   return (
-    <form className="form-grid top-gap" onSubmit={handleSubmit} data-booking-form="details" data-qa-booking={qaBooking ? 'true' : 'false'}>
-      {qaBooking ? (
-        <div className="info-box full-width">To jest rezerwacja testowa. Przejdziesz przez kontrolowaną płatność bez realnego obciążenia klienta.</div>
-      ) : null}
+    <form className="notatnik-form" onSubmit={handleSubmit} data-booking-form="details" data-qa-booking={qaBooking ? 'true' : 'false'}>
+      {qaBooking ? <div className="notatnik-callout">To jest rezerwacja testowa. Przejdziesz przez kontrolowaną płatność bez realnego obciążenia klienta.</div> : null}
 
-      <div className="form-section-card tree-backed-card form-section-card-owner">
-        <div className="form-section-heading">
-          <span className="section-eyebrow">1. Dane podstawowe</span>
+      <section className="notatnik-form-section">
+        <div className="notatnik-form-heading">
+          <span className="notatnik-mono">1. Dane podstawowe</span>
           <strong>Dane opiekuna i zwierzaka</strong>
         </div>
 
-        <div className="form-section-grid">
-          <div className="form-field">
-            <label>Imię opiekuna</label>
-            <input value={ownerName} onChange={(event) => setOwnerName(event.target.value)} placeholder="np. Anna" data-booking-field="owner-name" />
+        <div className="notatnik-form-grid">
+          <div className="notatnik-field">
+            <label htmlFor="booking-owner-name">Imię opiekuna</label>
+            <input
+              id="booking-owner-name"
+              value={ownerName}
+              onChange={(event) => setOwnerName(event.target.value)}
+              placeholder="np. Anna"
+              data-booking-field="owner-name"
+            />
           </div>
 
-          <div className="form-field">
-            <label>Zwierzak</label>
-            <input value={animalType} readOnly data-readonly="true" data-booking-field="animal-type" />
+          <div className="notatnik-field">
+            <label htmlFor="booking-animal-type">Zwierzak</label>
+            <input id="booking-animal-type" value={animalType} readOnly data-readonly="true" data-booking-field="animal-type" />
           </div>
 
-          <div className="form-field">
-            <label>Wiek zwierzęcia</label>
-            <input value={petAge} onChange={(event) => setPetAge(event.target.value)} placeholder="np. 8 miesięcy lub 4 lata" data-booking-field="pet-age" />
+          <div className="notatnik-field">
+            <label htmlFor="booking-pet-age">Wiek zwierzecia</label>
+            <input
+              id="booking-pet-age"
+              value={petAge}
+              onChange={(event) => setPetAge(event.target.value)}
+              placeholder="np. 8 miesiecy lub 4 lata"
+              data-booking-field="pet-age"
+            />
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="form-section-card tree-backed-card form-section-card-context">
-        <div className="form-section-heading">
-          <span className="section-eyebrow">2. Kontekst sprawy</span>
+      <section className="notatnik-form-section">
+        <div className="notatnik-form-heading">
+          <span className="notatnik-mono">2. Kontekst sprawy</span>
           <strong>Temat i opis sytuacji</strong>
         </div>
 
-        <div className="form-section-grid">
-          <div className="form-field">
-            <label>Usługa</label>
-            <input value={getBookingServiceTitle(serviceType)} readOnly data-readonly="true" />
+        <div className="notatnik-form-grid">
+          <div className="notatnik-field">
+            <label htmlFor="booking-service">Usluga</label>
+            <input id="booking-service" value={getBookingServiceTitle(serviceType)} readOnly data-readonly="true" />
           </div>
 
-          <div className="form-field">
-            <label>Temat</label>
-            <input value={getProblemLabel(problemType)} readOnly data-readonly="true" />
+          <div className="notatnik-field">
+            <label htmlFor="booking-problem">Temat</label>
+            <input id="booking-problem" value={getProblemLabel(problemType)} readOnly data-readonly="true" />
           </div>
 
-          <div className="form-field">
-            <label>Wybrany termin</label>
-            <input value={slotLabel} readOnly data-readonly="true" />
+          <div className="notatnik-field">
+            <label htmlFor="booking-slot">Wybrany termin</label>
+            <input id="booking-slot" value={slotLabel} readOnly data-readonly="true" />
           </div>
 
-          <div className="form-field">
-            <label>{formCopy.durationLabel}</label>
+          <div className="notatnik-field">
+            <label htmlFor="booking-duration-notes">{formCopy.durationLabel}</label>
             <input
+              id="booking-duration-notes"
               value={durationNotes}
               onChange={(event) => setDurationNotes(event.target.value)}
               placeholder={formCopy.durationPlaceholder}
@@ -270,30 +287,32 @@ export function BookingForm({
             />
           </div>
 
-          <div className="full-width form-field">
-            <label>{formCopy.descriptionLabel}</label>
+          <div className="notatnik-field notatnik-field-wide">
+            <label htmlFor="booking-description">{formCopy.descriptionLabel}</label>
             <textarea
+              id="booking-description"
               rows={5}
               value={description}
               onChange={(event) => setDescription(event.target.value)}
               placeholder={formCopy.descriptionPlaceholder}
               data-booking-field="description"
             />
-            {formCopy.helperText ? <div className="field-help">{formCopy.helperText}</div> : null}
+            {formCopy.helperText ? <div className="notatnik-field-help">{formCopy.helperText}</div> : null}
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="form-section-card tree-backed-card form-section-card-contact">
-        <div className="form-section-heading">
-          <span className="section-eyebrow">3. Potwierdzenie</span>
+      <section className="notatnik-form-section">
+        <div className="notatnik-form-heading">
+          <span className="notatnik-mono">3. Potwierdzenie</span>
           <strong>Adres do potwierdzenia</strong>
         </div>
 
-        <div className="form-section-grid">
-          <div className="form-field">
-            <label>E-mail</label>
+        <div className="notatnik-form-grid">
+          <div className="notatnik-field">
+            <label htmlFor="booking-email">E-mail</label>
             <input
+              id="booking-email"
               type="email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
@@ -302,28 +321,25 @@ export function BookingForm({
             />
           </div>
         </div>
-      </div>
+      </section>
 
-      {error ? <div className="error-box full-width">{error}</div> : null}
+      {error ? <div className="notatnik-callout notatnik-callout-error">{error}</div> : null}
 
-      <div className="checkout-box full-width tree-backed-card booking-submit-box">
-        <div>
-          <div className="muted">
+      <div className="notatnik-submit-box">
+        <div className="notatnik-submit-copy">
+          <div className="notatnik-submit-kicker">{qaBooking ? 'Krok testowy' : 'Nastepny krok'}</div>
+          <div className="notatnik-submit-title">{qaBooking ? 'Dalej: testowa platnosc' : 'Dalej: wybor platnosci'}</div>
+          <p>
             {qaBooking
-              ? 'Po zapisaniu danych blokujemy termin tylko dla Ciebie na czas testowej płatności.'
-              : 'Po zapisaniu danych blokujemy termin tylko dla Ciebie na czas płatności.'}
-          </div>
-          <div className="checkout-title">{qaBooking ? 'Dalej: testowa płatność' : 'Dalej: wybór płatności'}</div>
-          <div className="muted">
-            {qaBooking
-              ? 'Na kolejnym ekranie zobaczysz kontrolowaną płatność testową bez realnego obciążenia.'
-              : `Na kolejnym ekranie przejdziesz do wpłaty ręcznej. Do zapłaty: ${amountLabel}. Tę samą kwotę zobaczysz jeszcze raz przed zgłoszeniem wpłaty.`}
-          </div>
-          <div className="price-compare-text">{getCheckoutComparisonCopy(serviceType)}</div>
+              ? 'Po zapisaniu danych blokujemy termin tylko dla Ciebie na czas testowej platnosci.'
+              : `Po zapisaniu danych blokujemy termin tylko dla Ciebie na czas platnosci. Na kolejnym ekranie przejdziesz do wplaty recznej. Do zaplaty: ${amountLabel}.`}
+          </p>
+          <p className="notatnik-submit-note">{getCheckoutComparisonCopy(serviceType)}</p>
         </div>
-        <div className="checkout-right">
-          <button type="submit" className="button button-primary big-button" disabled={isSubmitting} data-booking-submit="payment">
-            {isSubmitting ? 'Zapisuję dane...' : qaBooking ? 'Zablokuj termin i przejdź do testowej płatności' : 'Zablokuj termin i przejdź do płatności'}
+
+        <div className="notatnik-submit-actions">
+          <button type="submit" className="notatnik-btn notatnik-btn-accent" disabled={isSubmitting} data-booking-submit="payment">
+            {isSubmitting ? 'Zapisuje dane...' : qaBooking ? 'Zablokuj termin i przejdz do testowej platnosci' : 'Zablokuj termin i przejdz do platnosci'}
           </button>
         </div>
       </div>

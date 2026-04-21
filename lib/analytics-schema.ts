@@ -68,8 +68,12 @@ export function getFunnelEntryEventForHref(href: string) {
     return null
   }
 
+  if (href.includes('service=konsultacja-30-min')) {
+    return 'funnel_entry_30_min'
+  }
+
   if (href.includes('service=konsultacja-behawioralna-online')) {
-    return 'funnel_entry_60_min'
+    return 'funnel_entry_full_consultation'
   }
 
   return 'funnel_entry_15_min'
@@ -82,6 +86,10 @@ export function getFunnelEntryLabelForHref(href: string) {
 
   if (href.startsWith('/kontakt')) {
     return FUNNEL_CTA_LABELS.contact
+  }
+
+  if (href.includes('service=konsultacja-30-min')) {
+    return FUNNEL_CTA_LABELS.bridge
   }
 
   if (href.includes('service=konsultacja-behawioralna-online')) {

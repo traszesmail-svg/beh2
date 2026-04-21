@@ -9,10 +9,9 @@ import { LeadMagnetSignup } from '@/components/LeadMagnetSignup'
 import { TrustSignalSection } from '@/components/TrustSignalSection'
 import { getServiceAnalyticsParams } from '@/lib/analytics-schema'
 import { buildBookHref } from '@/lib/booking-routing'
-import { COPY_HELPERS } from '@/lib/copy-governance'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { getLeadMagnetBySlug } from '@/lib/growth-layer'
-import { REAL_CASE_STUDIES } from '@/lib/real-case-studies'
+import { REAL_CASE_STUDIES, getRealCaseProofPills } from '@/lib/real-case-studies'
 import { getBreadcrumbJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
 import { getCanonicalBaseUrl } from '@/lib/server/env'
@@ -22,9 +21,11 @@ import {
   MEDIA_MENTIONS,
   SITE_NAME,
   SITE_TAGLINE,
-  SPECIALIST_CREDENTIALS,
   SPECIALIST_NAME,
+  SPECIALIST_PUBLIC_PROFILE_URLS,
+  SPECIALIST_PUBLIC_PROOF_SUMMARY,
   SPECIALIST_PUBLIC_STATUS,
+  SPECIALIST_STATUS_EXPLANATION,
   getPublicContactDetails,
 } from '@/lib/site'
 
@@ -169,7 +170,7 @@ const proofStats: ProofStat[] = [
   {
     value: String(REAL_CASE_STUDIES.length),
     label: 'przykładowych sytuacji',
-    copy: 'pokazanych krótko: od punktu wyjścia do pierwszego kierunku pracy',
+    copy: 'każda z opisanym typem problemu, formatem pracy, etapem i przybliżonym czasem',
   },
   {
     value: String(MEDIA_MENTIONS.length),
@@ -207,7 +208,7 @@ const proofResources: ProofResource[] = [
     id: 'capbt-profile',
     label: 'Publiczny profil',
     title: 'Profil specjalisty w CAPBT',
-    copy: 'Krótka informacja o kwalifikacjach i profilu zawodowym.',
+    copy: SPECIALIST_STATUS_EXPLANATION,
     href: CAPBT_PROFILE_URL,
     cta: 'Otwórz profil',
   },
@@ -248,7 +249,8 @@ export default function OpinionsPage() {
         name: SPECIALIST_NAME,
         jobTitle: SPECIALIST_PUBLIC_STATUS,
         image: new URL(profilePhoto.src, baseUrl).toString(),
-        description: `${SPECIALIST_CREDENTIALS}.`,
+        description: SPECIALIST_PUBLIC_PROOF_SUMMARY,
+        sameAs: [...SPECIALIST_PUBLIC_PROFILE_URLS],
       },
       contactPoint: contact.email
         ? {
@@ -304,7 +306,8 @@ export default function OpinionsPage() {
 
               <p className="opinions-hero-note">
                 To krótkie głosy po konsultacjach i przykładowe sytuacje, które pokazują, jak zwykle zaczyna się taka
-                praca. Każda sprawa wymaga osobnej oceny.
+                praca. Przy kartach zostają też typ problemu, format kontaktu, etap współpracy i przybliżony czas
+                pierwszych zmian. Każda sprawa wymaga osobnej oceny.
               </p>
 
               <div className="opinions-hero-signals" aria-label="Najczęstsze tematy">
@@ -335,8 +338,8 @@ export default function OpinionsPage() {
                   <h3>{SPECIALIST_NAME}</h3>
                   <p>{SPECIALIST_PUBLIC_STATUS} | psy i koty</p>
                   <span>
-                    Spokojny, konkretny start rozmowy. Najpierw porządkuję sytuację, potem wskazuję pierwszy krok i
-                    dalszy kierunek pracy.
+                    {SPECIALIST_PUBLIC_PROOF_SUMMARY} Spokojny, konkretny start rozmowy: najpierw porządek w sytuacji,
+                    potem pierwszy krok i dalszy kierunek pracy.
                   </span>
                 </div>
               </article>
@@ -364,6 +367,9 @@ export default function OpinionsPage() {
                   <span>{getSpeciesLabel(leadCaseStudy.species)}</span>
                   <span>{leadCaseStudy.breed}</span>
                   <span>{leadCaseStudy.age}</span>
+                  {getRealCaseProofPills(leadCaseStudy).map((pill) => (
+                    <span key={`${leadCaseStudy.id}-${pill}`}>{pill}</span>
+                  ))}
                 </div>
                 <div className="opinions-hero-case-stack">
                   <div className="opinions-case-detail">
@@ -377,6 +383,12 @@ export default function OpinionsPage() {
                   <div className="opinions-case-detail">
                     <span className="opinions-case-label">{leadCaseStudy.nextStepLabel}</span>
                     <p>{leadCaseStudy.nextStepText}</p>
+                  </div>
+                  <div className="opinions-case-detail">
+                    <span className="opinions-case-label">Źródło kontekstu i pierwszy efekt</span>
+                    <p>
+                      {leadCaseStudy.proof.sourceContext}. Efekt pierwszego etapu: {leadCaseStudy.proof.outcomeSnapshot}.
+                    </p>
                   </div>
                 </div>
               </article>
@@ -439,7 +451,7 @@ export default function OpinionsPage() {
           <SectionIntro
             eyebrow="Przykładowe sytuacje"
             title="Krótki kontekst problemu, pierwszy ruch i kierunek dalszej pracy"
-            description="Te karty pokazują, od czego zwykle zaczyna się porządkowanie tematu i jaki pierwszy ruch bywa sensowny."
+            description="Te karty pokazują, od czego zwykle zaczyna się porządkowanie tematu, w jakim formacie toczył się pierwszy etap i jaki ruch bywa sensowny."
           />
 
           <div className="premium-two-column-grid opinions-case-grid">
@@ -452,6 +464,9 @@ export default function OpinionsPage() {
                     <span>{getSpeciesLabel(caseStudy.species)}</span>
                     <span>{caseStudy.breed}</span>
                     <span>{caseStudy.age}</span>
+                    {getRealCaseProofPills(caseStudy).map((pill) => (
+                      <span key={`${caseStudy.id}-${pill}`}>{pill}</span>
+                    ))}
                   </div>
                 </div>
 
@@ -467,6 +482,12 @@ export default function OpinionsPage() {
                   <div className="opinions-case-line">
                     <span className="opinions-case-label">{caseStudy.nextStepLabel}</span>
                     <p>{caseStudy.nextStepText}</p>
+                  </div>
+                  <div className="opinions-case-line">
+                    <span className="opinions-case-label">Źródło kontekstu i pierwszy efekt</span>
+                    <p>
+                      {caseStudy.proof.sourceContext}. Efekt pierwszego etapu: {caseStudy.proof.outcomeSnapshot}.
+                    </p>
                   </div>
                 </div>
               </article>
@@ -498,7 +519,7 @@ export default function OpinionsPage() {
           <SectionIntro
             eyebrow="Profil i publikacje"
             title="Jeśli chcesz, możesz zajrzeć też tutaj"
-            description="Krótko: profil CAPBT i opublikowane artykuły."
+            description="Krótko: publiczny profil CAPBT, spójny opis statusu i opublikowane artykuły."
           />
 
           <div className="summary-grid opinions-proof-grid">

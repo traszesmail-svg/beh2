@@ -20,7 +20,7 @@ export const metadata: Metadata = buildMarketingMetadata({
   title: 'Cennik - konsultacje behawioralne online',
   path: '/cennik',
   description:
-    'Cennik konsultacji behawioralnych online dla psa i kota. Kwadrans z behawiorystą i konsultacja 60 min w jednym miejscu.',
+    'Cennik konsultacji behawioralnych online dla psa i kota. Kwadrans, Dwa kwadranse i pelna konsultacja behawioralna w jednym miejscu.',
 })
 
 function SectionIntro({ eyebrow, title, description }: { eyebrow: string; title: string; description: string }) {
@@ -44,7 +44,7 @@ const SERVICE_COMPARISON_ROWS = [
   {
     label: 'Format',
     quick: '15 minut rozmowy audio bez kamery',
-    full: '60 minut rozmowy online z większą ilością czasu na temat',
+    full: 'ok. 2 h rozmowy online z wieksza iloscia czasu na temat',
   },
   {
     label: 'Po rozmowie wychodzisz z',
@@ -82,8 +82,8 @@ export default function PricingPage() {
       offerPrice: 69,
     }),
     getServiceJsonLd({
-      name: 'Konsultacja behawioralna online 60 min',
-      description: '60 minut konsultacji online dla tematów szerszych, dłuższych albo wielowątkowych.',
+      name: 'Pelna konsultacja behawioralna',
+      description: 'Pelna konsultacja online dla tematow szerszych, dluzszych albo wielowatkowych.',
       serviceUrl: consultationHref,
       offerPrice: 350,
     }),
@@ -113,7 +113,7 @@ export default function PricingPage() {
               <div className="section-eyebrow">Cennik</div>
               <h1>Cennik i zakres konsultacji</h1>
               <p className="editorial-hero-lead">
-                Do wyboru sa dwa formaty: Kwadrans z behawiorysta i konsultacja online 60 min. Jesli nie wiesz, od czego zaczac,
+                Do wyboru sa trzy formaty: Kwadrans, Dwa kwadranse i pelna konsultacja behawioralna. Jesli nie wiesz, od czego zaczac,
                 najbezpieczniej zaczac od Kwadransu.
               </p>
 
@@ -129,7 +129,7 @@ export default function PricingPage() {
               <p className="muted top-gap-small">
                 Jesli od razu wiesz, ze temat jest szerszy, mozesz wybrac{' '}
                 <Link href={consultationHref} prefetch={false} className="prep-inline-link">
-                  konsultacje 60 min
+                  pelna konsultacje
                 </Link>
                 . Jesli chcesz najpierw dopytac,{' '}
                 <Link href={contactHref} prefetch={false} className="prep-inline-link">
@@ -162,7 +162,7 @@ export default function PricingPage() {
           <SectionIntro
             eyebrow="Porownanie"
             title="Ktory format wybrac"
-            description="Kwadrans pomaga uporzadkowac temat i wybrac pierwszy krok. Konsultacja 60 min daje wiecej czasu na szersza diagnoze i plan."
+            description="Kwadrans pomaga uporzadkowac temat i wybrac pierwszy krok. Pelna konsultacja daje wiecej czasu na szersza diagnoze i plan."
           />
 
           <div className="premium-two-column-grid top-gap">
@@ -183,10 +183,10 @@ export default function PricingPage() {
             </article>
 
             <article className="summary-card tree-backed-card">
-              <div className="section-eyebrow">Konsultacja online 60 min</div>
+              <div className="section-eyebrow">Pelna konsultacja behawioralna</div>
               <h3>350 zl</h3>
               <ul className="premium-bullet-list">
-                <li>60 minut rozmowy online</li>
+                <li>ok. 2 h rozmowy online lacznie</li>
                 <li>wideo albo glos</li>
                 <li>dla tematow zlozonych, dlugotrwalych albo wielowatkowych</li>
                 <li>plan i podsumowanie pisemne po rozmowie</li>
@@ -203,7 +203,7 @@ export default function PricingPage() {
             <strong>Najkrótsza zasada wyboru</strong>
             <span>
               Jeśli nie masz pewności, zacznij od Kwadransu. Jeśli już teraz wiesz, że temat jest szerszy, przewlekły albo wielowątkowy,
-              wybierz 60 minut.
+              wybierz pelna konsultacje.
             </span>
           </div>
 
@@ -217,7 +217,7 @@ export default function PricingPage() {
                     <p>{row.quick}</p>
                   </div>
                   <div>
-                    <strong>Konsultacja 60 min</strong>
+                    <strong>Pelna konsultacja</strong>
                     <p>{row.full}</p>
                   </div>
                 </div>
@@ -230,7 +230,7 @@ export default function PricingPage() {
           <SectionIntro
             eyebrow="Od czego zaczac"
             title="Najczesciej wystarczy prosta zasada"
-            description="Im mniej wiesz o problemie, tym bardziej warto zaczac od Kwadransu. Im szerszy i dluzszy temat, tym bardziej ma sens konsultacja 60 min."
+            description="Im mniej wiesz o problemie, tym bardziej warto zaczac od Kwadransu. Im szerszy i dluzszy temat, tym bardziej ma sens pelna konsultacja."
           />
 
           <div className="premium-two-column-grid">
@@ -245,7 +245,7 @@ export default function PricingPage() {
             </article>
 
             <article className="summary-card tree-backed-card">
-              <h3>Wybierz 60 min, jesli</h3>
+              <h3>Wybierz pelna konsultacje, jesli</h3>
               <ul className="premium-bullet-list">
                 <li>problem trwa od dawna</li>
                 <li>dotyczy kilku kwestii naraz</li>
@@ -328,7 +328,7 @@ export default function PricingPage() {
         <EditorialFaqSection
           id="faq"
           title="Najczestsze pytania przed rezerwacja"
-          description="Krotko o tym, czym rozni sie Kwadrans od konsultacji 60 min."
+          description="Krotko o tym, czym rozni sie Kwadrans od pelnej konsultacji."
           items={FAQ_SHORTLISTS.pricing}
         />
 
@@ -338,7 +338,7 @@ export default function PricingPage() {
             <h2>Zacznij od formatu, ktory pasuje do Twojej sytuacji</h2>
             <p>
               Jesli potrzebujesz pierwszego uporzadkowania, wybierz Kwadrans z behawiorysta. Jesli wiesz, ze temat jest szeroki,
-              wybierz konsultacje 60 min.
+              wybierz pelna konsultacje.
             </p>
 
             <div className="hero-actions editorial-final-actions">

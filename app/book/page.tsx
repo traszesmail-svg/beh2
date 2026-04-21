@@ -1,23 +1,20 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { unstable_noStore as noStore } from 'next/cache'
 import { AnalyticsEventOnMount } from '@/components/AnalyticsEventOnMount'
+import { BookingServiceInfoCard } from '@/components/BookingServiceInfoCard'
+import { NotatnikFooter, NotatnikTopbar } from '@/components/NotatnikA'
+import { PriceDisplay } from '@/components/PriceDisplay'
 import { getServiceAnalyticsParams } from '@/lib/analytics-schema'
 import {
   DEFAULT_BOOKING_SERVICE,
-  type BookingServiceType,
   filterGroupedAvailabilityForService,
   getBookingServicePrice,
   getBookingServiceTitle,
   normalizeBookingServiceType,
+  type BookingServiceType,
 } from '@/lib/booking-services'
-import { BookingStageEyebrow } from '@/components/BookingStageEyebrow'
-import { BookingServiceInfoCard } from '@/components/BookingServiceInfoCard'
-import { Footer } from '@/components/Footer'
-import { Header } from '@/components/Header'
-import { PriceDisplay } from '@/components/PriceDisplay'
 import {
   buildBookHref,
   buildSlotHref,
@@ -33,11 +30,32 @@ import { DEFAULT_PRICE_PLN } from '@/lib/pricing'
 import { buildBookMetadata } from '@/lib/seo'
 import { getActiveConsultationPrice, listAvailability } from '@/lib/server/db'
 import { getDataModeStatus } from '@/lib/server/env'
-import { TOPIC_VISUALS } from '@/lib/site'
 import { ProblemType } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
+
+const BOOKING_NAV_ITEMS = [
+  { href: '/psy', label: 'Pies' },
+  { href: '/koty', label: 'Kot' },
+  { href: '/niezbednik', label: 'Niezbednik' },
+  { href: '/faq', label: 'FAQ' },
+]
+
+const BOOKING_DECISION_STEPS = ['1. Wybierz gatunek', '2. Wybierz temat', '3. Wybierz termin', '4. Uzupelnij dane'] as const
+
+const SPECIES_CARDS: Record<BookingSpecies, { title: string; summary: string; bullets: string[] }> = {
+  pies: {
+    title: 'Pies',
+    summary: 'Wybierz psa, zeby zobaczyc tematy i terminy wlasciwe dla spraw psich.',
+    bullets: ['Szczeniak / mlody pies', 'Spacer i reaktywnosc', 'Separacja', 'Pobudzenie / wyciszenie', 'Agresja / zasoby'],
+  },
+  kot: {
+    title: 'Kot',
+    summary: 'Wybierz kota, zeby zobaczyc tematy i terminy wlasciwe dla spraw kocich.',
+    bullets: ['Kuweta', 'Wycofanie / napiecie', 'Konflikt miedzy kotami', 'Zmiany w domu', 'Wokalizacja / pobudzenie'],
+  },
+}
 
 export async function generateMetadata({
   searchParams,
@@ -138,27 +156,12 @@ function renderProblemIcon(problem: ProblemType) {
   }
 }
 
-const SPECIES_CARDS: Record<BookingSpecies, { title: string; summary: string; bullets: string[] }> = {
-  pies: {
-    title: 'Pies',
-    summary: 'Wybierz psa, żeby zobaczyć tematy i terminy właściwe dla spraw psich.',
-    bullets: ['Szczeniak / młody pies', 'Spacer i reaktywność', 'Separacja', 'Pobudzenie / wyciszenie', 'Agresja / zasoby'],
-  },
-  kot: {
-    title: 'Kot',
-    summary: 'Wybierz kota, żeby zobaczyć tematy i terminy właściwe dla spraw kocich.',
-    bullets: ['Kuweta', 'Wycofanie / napięcie', 'Konflikt między kotami', 'Zmiany w domu', 'Wokalizacja / pobudzenie'],
-  },
+function getTopicSectionTitle(species: BookingSpecies) {
+  return species === 'kot' ? 'Wybierz temat koci' : 'Wybierz temat psi'
 }
-
-const BOOKING_DECISION_STEPS = ['1. Wybierz gatunek', '2. Wybierz temat', '3. Wybierz termin', '4. Uzupełnij dane'] as const
 
 function getServiceLead(serviceType: BookingServiceType) {
   return FUNNEL_SERVICE_CONFIG[serviceType].bookingLead
-}
-
-function getTopicSectionTitle(species: BookingSpecies) {
-  return species === 'kot' ? 'Wybierz temat koci' : 'Wybierz temat psi'
 }
 
 export default async function BookPage({
@@ -195,18 +198,15 @@ export default async function BookPage({
       availabilityLabel = filteredAvailability.length > 0 ? serviceConfig.availabilityLabel : serviceConfig.noAvailabilityMessage
     } catch (error) {
       pricingAmount = getBookingServicePrice(serviceType, DEFAULT_PRICE_PLN)
-      console.warn('[behawior15][book] nie udało się wczytać dostępności', error)
+      console.warn('[behawior15][book] nie udalo sie wczytac dostepnosci', error)
     }
   }
 
   return (
-    <main
-      className="page-wrap marketing-page"
-      data-analytics-disabled={qaBooking ? 'true' : undefined}
-      data-qa-booking={qaBooking ? 'true' : 'false'}
-    >
-      <div className="container">
-        <Header />
+    <main className="notatnik-page" data-analytics-disabled={qaBooking ? 'true' : undefined} data-qa-booking={qaBooking ? 'true' : 'false'}>
+      <div className="notatnik-shell">
+        <NotatnikTopbar tag="Rezerwacja konsultacji" navItems={BOOKING_NAV_ITEMS} ctaHref="/" ctaLabel="Wroc na strone" ctaVariant="ghost" />
+
         <AnalyticsEventOnMount
           eventName="booking_start"
           params={{
@@ -224,194 +224,191 @@ export default async function BookPage({
           }}
         />
 
-        <section className="panel section-panel hero-surface booking-stage-panel decision-page-panel booking-flow-panel">
-          <div className="booking-stage-hero-grid">
-            <div className="booking-stage-copy-column">
-              <BookingStageEyebrow stage="topic" className="section-eyebrow" />
-              {qaBooking ? <div className="status-pill transaction-status-pill">Tryb testowy</div> : null}
-              <h1>{selectedSpecies ? getTopicSectionTitle(selectedSpecies) : 'Wybierz, czy konsultacja dotyczy psa czy kota'}</h1>
-              <p className="hero-text">{getServiceLead(serviceType)}</p>
-
-              <div className="editorial-hero-meta" aria-label="Kroki rezerwacji">
-                {BOOKING_DECISION_STEPS.map((step) => (
-                  <span key={step}>{step}</span>
-                ))}
+        <div className="notatnik-booking">
+          <div className="notatnik-booking-left">
+            <div className="notatnik-mono">{selectedSpecies ? 'Krok 01 / 04 · Usluga' : 'Krok 01 / 04 · Wybierz usluge'}</div>
+            {qaBooking ? (
+              <div className="notatnik-contact-note" style={{ marginTop: 18 }}>
+                <strong>Tryb testowy</strong>
+                <p>To jest booking testowy bez realnego obciazenia klienta.</p>
               </div>
+            ) : null}
 
-              <div className="book-hero-stats top-gap-small">
-                <div className="book-hero-stat tree-backed-card">
-                  <span className="book-hero-stat-label">Wybrana usługa</span>
-                  <strong>{serviceTitle}</strong>
+            <h1>
+              Wybierz <em>najprostszy start</em>.
+            </h1>
+            <p className="notatnik-booking-lede">
+              {selectedSpecies
+                ? `Masz juz wybrany gatunek. ${getTopicSectionTitle(selectedSpecies)} i przejdz do realnych terminow.`
+                : 'Nie musisz znac odpowiedzi od razu. Kwadrans pomaga zdecydowac, czy wystarczy krotki start, Dwa kwadranse, czy od razu pelna konsultacja.'}
+            </p>
+
+            <div className="notatnik-option-grid">
+              <Link
+                href={buildBookHref(null, 'szybka-konsultacja-15-min', qaBooking, selectedSpecies)}
+                prefetch={false}
+                className="notatnik-option-card"
+                data-active={serviceType === 'szybka-konsultacja-15-min'}
+              >
+                <div className="notatnik-option-title">Kwadrans z behawiorysta</div>
+                <span className="sr-only">nazwa uslugi: Kwadrans z behawiorysta; format: 15 min audio bez kamery.</span>
+                <div className="notatnik-option-price">
+                  <PriceDisplay amount={getBookingServicePrice('szybka-konsultacja-15-min', pricingAmount)} />
                 </div>
-                <div className="book-hero-stat tree-backed-card">
-                  <span className="book-hero-stat-label">Cena</span>
-                  <strong>
-                    <PriceDisplay amount={pricingAmount} />
-                  </strong>
+                <div className="notatnik-option-copy">
+                  15 min · rozmowa audio bez kamery. Jedno pytanie albo uporzadkowanie tematu. Najprostszy start.
                 </div>
-                <div className="book-hero-stat tree-backed-card">
-                  <span className="book-hero-stat-label">Dostępność</span>
-                  <strong>{availabilityLabel}</strong>
+              </Link>
+
+              <Link
+                href={buildBookHref(null, 'konsultacja-30-min', qaBooking, selectedSpecies)}
+                prefetch={false}
+                className="notatnik-option-card"
+                data-active={serviceType === 'konsultacja-30-min'}
+              >
+                <div className="notatnik-option-title">Dwa kwadranse z behawiorysta</div>
+                <div className="notatnik-option-price">
+                  <PriceDisplay amount={getBookingServicePrice('konsultacja-30-min', pricingAmount)} />
                 </div>
-              </div>
+                <div className="notatnik-option-copy">
+                  2 x 15 min · rozmowa online. Spokojniejszy etap posredni, gdy sam Kwadrans to za malo, ale nie potrzebujesz jeszcze pelnej konsultacji.
+                </div>
+              </Link>
+
+              <Link
+                href={buildBookHref(null, 'konsultacja-behawioralna-online', qaBooking, selectedSpecies)}
+                prefetch={false}
+                className="notatnik-option-card"
+                data-active={serviceType === 'konsultacja-behawioralna-online'}
+              >
+                <div className="notatnik-option-title">Pelna konsultacja behawioralna</div>
+                <div className="notatnik-option-price">
+                  <PriceDisplay amount={getBookingServicePrice('konsultacja-behawioralna-online', pricingAmount)} />
+                </div>
+                <div className="notatnik-option-copy">
+                  ok. 2 h · online. Zawiera wstepny Kwadrans z behawiorysta dla rozpoznania problematyki i pierwszych zaleceń.
+                </div>
+              </Link>
+
+              <Link href={messageHref} prefetch={false} className="notatnik-option-card" data-active={false}>
+                <div className="notatnik-option-title">Wiadomosc przed rezerwacja</div>
+                <div className="notatnik-option-price">bezplatnie</div>
+                <div className="notatnik-option-copy">
+                  Jesli nie wiesz, co wybrac, napisz krotko co sie dzieje. W odpowiedzi wskaze najlepszy start.
+                </div>
+              </Link>
             </div>
 
-            <BookingServiceInfoCard
-              serviceType={serviceType}
-              quickConsultationPrice={pricingAmount}
-              title={selectedSpecies ? 'Teraz wybierasz temat' : 'Najpierw wybierasz gatunek'}
-              stageLabel="Ta usługa"
-              emphasis={
-                selectedSpecies
-                  ? 'Po wyborze tematu od razu pokażę najbliższe terminy tej usługi.'
-                  : 'Wybierz, czy sprawa dotyczy psa czy kota, a pokażę właściwe tematy.'
-              }
-            />
+            <div className="notatnik-booking-summary">
+              <div className="notatnik-booking-note">
+                <strong>Wybrana usluga</strong>
+                <p>{serviceTitle}</p>
+              </div>
+              <div className="notatnik-booking-note">
+                <strong>Cena i dostepnosc</strong>
+                <p>
+                  <PriceDisplay amount={pricingAmount} /> · {availabilityLabel}
+                </p>
+              </div>
+              <div className="notatnik-booking-note">
+                <strong>Ta usluga</strong>
+                <p>{getServiceLead(serviceType)}</p>
+              </div>
+              <div className="notatnik-booking-note">
+                <strong>Kroki rezerwacji</strong>
+                <p>{BOOKING_DECISION_STEPS.join(' · ')}</p>
+              </div>
+            </div>
           </div>
 
-          {!selectedSpecies ? (
-            <div className="premium-two-column-grid top-gap-small">
-              <article className="summary-card tree-backed-card">
-                <div className="section-eyebrow">Najczęstszy wybór na start</div>
-                <h2>Kwadrans z behawiorystą</h2>
-                <p>
-                  Wybierz go, jeśli chcesz spokojnie ustalić pierwszy krok, masz jedno pytanie albo nie chcesz jeszcze zgadywać, jak
-                  szeroki jest temat.
-                </p>
-                <ul className="premium-bullet-list">
-                  <li>15 minut rozmowy audio bez kamery</li>
-                  <li>dobry pierwszy krok przy niepewnym temacie</li>
-                  <li>pozwala zdecydować, czy potrzebna jest szersza konsultacja</li>
-                </ul>
-              </article>
+          <div className="notatnik-booking-right">
+            <div className="notatnik-booking-panel">
+              <div className="notatnik-mono">{selectedSpecies ? 'Krok 02 / 04 · Wybierz temat' : 'Krok 02 / 04 · Wybierz gatunek'}</div>
 
-              <article className="summary-card tree-backed-card">
-                <div className="section-eyebrow">Opcja dla tematów szerszych</div>
-                <h2>Konsultacja 60 min</h2>
-                <p>
-                  Wybierz ją, jeśli problem jest wielowątkowy, trwa od dawna albo wiesz już, że potrzebujesz pełniejszego uporządkowania i
-                  planu po rozmowie.
-                </p>
-                <ul className="premium-bullet-list">
-                  <li>60 minut konsultacji online</li>
-                  <li>więcej czasu na szerszy obraz tematu</li>
-                  <li>po rozmowie dostajesz podsumowanie pisemne</li>
-                </ul>
-                {serviceType !== 'konsultacja-behawioralna-online' ? (
-                  <div className="hero-actions top-gap-small">
-                    <Link
-                      href={buildBookHref(null, 'konsultacja-behawioralna-online', qaBooking)}
-                      prefetch={false}
-                      className="button button-ghost"
-                    >
-                      {FUNNEL_CTA_LABELS.consultation}
-                    </Link>
+              <BookingServiceInfoCard
+                serviceType={serviceType}
+                quickConsultationPrice={pricingAmount}
+                title={selectedSpecies ? 'Teraz wybierasz temat' : 'Najpierw wybierasz gatunek'}
+                stageLabel="Ta usluga"
+                emphasis={
+                  selectedSpecies
+                    ? 'Po wyborze tematu od razu pokazemy najblizsze terminy tej uslugi.'
+                    : 'Wybierz, czy sprawa dotyczy psa czy kota, a potem pokaze wlasciwe tematy.'
+                }
+              />
+
+              {!selectedSpecies ? (
+                <div className="notatnik-choice-grid">
+                  {(Object.keys(SPECIES_CARDS) as BookingSpecies[]).map((species) => {
+                    const card = SPECIES_CARDS[species]
+
+                    return (
+                      <article key={species} className="notatnik-choice-card">
+                        <span className="notatnik-choice-kicker">{species === 'kot' ? 'Tematy kota' : 'Tematy psa'}</span>
+                        <h2>{card.title}</h2>
+                        <p>{card.summary}</p>
+                        <ul className="notatnik-choice-list">
+                          {card.bullets.map((item) => (
+                            <li key={item}>{item}</li>
+                          ))}
+                        </ul>
+                        <div className="notatnik-choice-actions">
+                          <Link href={buildBookHref(null, serviceQuery, qaBooking, species)} prefetch={false} className="notatnik-btn">
+                            {species === 'kot' ? 'Wybierz kota' : 'Wybierz psa'}
+                          </Link>
+                        </div>
+                      </article>
+                    )
+                  })}
+                </div>
+              ) : (
+                <>
+                  <div className="notatnik-topic-choice-grid" id="tematy">
+                    {mainProblemOptions.map((item) => (
+                      <Link
+                        key={item.id}
+                        href={buildSlotHref(item.id, serviceQuery, qaBooking)}
+                        prefetch={false}
+                        className="notatnik-topic-choice-card"
+                        data-problem={item.id}
+                      >
+                        <div className="notatnik-topic-choice-head">
+                          <span className="notatnik-choice-kicker">
+                            {item.visualLabel ?? (selectedSpecies === 'kot' ? 'Temat kota' : 'Temat psa')}
+                          </span>
+                          <span className="notatnik-topic-choice-icon">{renderProblemIcon(item.id)}</span>
+                        </div>
+                        <div className="notatnik-topic-choice-title">{item.title}</div>
+                        <div className="notatnik-topic-choice-copy">{item.desc}</div>
+                        <div className="notatnik-topic-choice-link">Wybierz temat</div>
+                      </Link>
+                    ))}
                   </div>
-                ) : null}
-              </article>
+
+                  <div className="notatnik-contact-note">
+                    <strong>Nie musisz znac idealnej nazwy problemu.</strong>
+                    <p>
+                      Jesli temat jest mieszany, wybierz{' '}
+                      {mixedProblemOption ? (
+                        <Link href={buildSlotHref(mixedProblemOption.id, serviceQuery, qaBooking)} prefetch={false}>
+                          {mixedProblemOption.title}
+                        </Link>
+                      ) : (
+                        'inny temat'
+                      )}{' '}
+                      albo uzyj <Link href={messageHref}>krotkiej wiadomosci</Link>. Mozesz tez{' '}
+                      <Link href={switchSpeciesHref}>zmienic gatunek</Link>.
+                    </p>
+                  </div>
+                </>
+              )}
             </div>
-          ) : null}
+          </div>
+        </div>
 
-          {!selectedSpecies ? (
-            <div className="card-grid two-up top-gap">
-              {(Object.keys(SPECIES_CARDS) as BookingSpecies[]).map((species) => {
-                const card = SPECIES_CARDS[species]
-
-                return (
-                  <article key={species} className="summary-card tree-backed-card">
-                    <div className="section-eyebrow">{species === 'kot' ? 'Tematy kota' : 'Tematy psa'}</div>
-                    <h2>{card.title}</h2>
-                    <p>{card.summary}</p>
-                    <ul className="premium-bullet-list">
-                      {card.bullets.map((item) => (
-                        <li key={item}>{item}</li>
-                      ))}
-                    </ul>
-                    <div className="hero-actions top-gap-small">
-                      <Link href={buildBookHref(null, serviceQuery, qaBooking, species)} prefetch={false} className="button button-primary">
-                        {species === 'kot' ? 'Wybierz kota' : 'Wybierz psa'}
-                      </Link>
-                    </div>
-                  </article>
-                )
-              })}
-            </div>
-          ) : (
-            <>
-              <div className="card-grid three-up top-gap book-topics-grid" id="tematy">
-                {mainProblemOptions.map((item) => {
-                  const topicVisual = TOPIC_VISUALS[item.id]
-
-                  return (
-                    <Link
-                      key={item.id}
-                      href={buildSlotHref(item.id, serviceQuery, qaBooking)}
-                      prefetch={false}
-                      className="topic-card tree-backed-card book-topic-card"
-                      data-problem={item.id}
-                    >
-                      <div className="topic-media-shell">
-                        <Image
-                          src={topicVisual.src}
-                          alt={topicVisual.alt}
-                          width={topicVisual.width}
-                          height={topicVisual.height}
-                          sizes="(max-width: 680px) 100vw, (max-width: 980px) 50vw, 33vw"
-                          className="topic-media-image"
-                        />
-                        <div className="topic-media-overlay" aria-hidden="true" />
-                        {item.visualLabel ? <div className="topic-media-badge">{item.visualLabel}</div> : null}
-                      </div>
-                      <span className="topic-icon-shell">{renderProblemIcon(item.id)}</span>
-                      <div className="topic-title">{item.title}</div>
-                      <div className="topic-desc">{item.desc}</div>
-                      <div className="topic-link">Wybierz temat</div>
-                    </Link>
-                  )
-                })}
-              </div>
-
-              <div className="book-page-support-card tree-backed-card top-gap">
-                <div className="book-page-support-copy">
-                  <div className="section-eyebrow">{mixedProblemOption?.title ?? 'Inny temat'}</div>
-                  <strong>Nie musisz znać idealnej nazwy problemu.</strong>
-                  <span>
-                    Jeśli temat jest mieszany, wybierz{' '}
-                    {mixedProblemOption ? (
-                      <Link href={buildSlotHref(mixedProblemOption.id, serviceQuery, qaBooking)} prefetch={false} className="inline-link">
-                        {mixedProblemOption.title}
-                      </Link>
-                    ) : (
-                      'inny temat'
-                    )}{' '}
-                    albo użyj{' '}
-                    <Link href={messageHref} prefetch={false} className="inline-link">
-                      krótkiej wiadomości
-                    </Link>
-                    .
-                  </span>
-                </div>
-
-                <div className="offer-card-actions">
-                  <Link href={switchSpeciesHref} prefetch={false} className="button button-ghost">
-                    Zmień gatunek
-                  </Link>
-                  <Link href={messageHref} prefetch={false} className="button button-ghost">
-                    {FUNNEL_CTA_LABELS.contact}
-                  </Link>
-                </div>
-              </div>
-            </>
-          )}
-        </section>
-
-        <Footer
-          ctaHref={buildBookHref(null, 'szybka-konsultacja-15-min', qaBooking, selectedSpecies)}
-          ctaLabel={FUNNEL_CTA_LABELS.primary}
-          secondaryHref="/niezbednik"
-          secondaryLabel={FUNNEL_CTA_LABELS.secondary}
-          headline="Masz temat mieszany albo pytanie przed rezerwacją?"
-          description="Jeśli nie widzisz idealnej kategorii albo chcesz najpierw krótko opisać sprawę, napisz wiadomość."
+        <NotatnikFooter
+          primaryHref={buildBookHref(null, 'szybka-konsultacja-15-min', qaBooking, selectedSpecies)}
+          primaryLabel={FUNNEL_CTA_LABELS.primary}
         />
       </div>
     </main>

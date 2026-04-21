@@ -9,7 +9,13 @@ import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { buildMarketingMetadata } from '@/lib/seo'
 import { FAQ_SHORTLISTS } from '@/lib/trust-layer'
 import { getCanonicalBaseUrl } from '@/lib/server/env'
-import { SITE_NAME, SITE_TAGLINE, SPECIALIST_CREDENTIALS, SPECIALIST_NAME } from '@/lib/site'
+import {
+  SITE_NAME,
+  SITE_TAGLINE,
+  SPECIALIST_NAME,
+  SPECIALIST_PUBLIC_PROOF_SUMMARY,
+  SPECIALIST_PUBLIC_STATUS,
+} from '@/lib/site'
 
 const baseMetadata = buildMarketingMetadata({
   title: 'FAQ',
@@ -76,8 +82,8 @@ const structuredData = [
     '@context': 'https://schema.org',
     '@type': 'Person',
     name: SPECIALIST_NAME,
-    jobTitle: 'Behawiorysta i trener zwierząt towarzyszących',
-    description: `${SPECIALIST_CREDENTIALS}.`,
+    jobTitle: SPECIALIST_PUBLIC_STATUS,
+    description: SPECIALIST_PUBLIC_PROOF_SUMMARY,
   },
 ]
 
@@ -95,7 +101,7 @@ export default function FaqPage() {
               <div className="section-eyebrow">FAQ</div>
               <h1>Najczęstsze pytania przed kontaktem</h1>
               <p className="editorial-hero-lead">
-                Znajdziesz tu najważniejsze pytania o Kwadrans z behawiorystą, konsultację 60 min i wiadomość.
+                Znajdziesz tu najwazniejsze pytania o Kwadrans z behawiorysta, Dwa kwadranse, pelna konsultacje i wiadomosc.
               </p>
 
               <FunnelPrimaryActions
@@ -153,7 +159,7 @@ export default function FaqPage() {
             <h2>Jeśli nie widzisz tu swojego pytania, napisz wiadomość</h2>
             <p>
               Wystarczy krótka wiadomość. Pomogę ustalić, czy najlepszym startem będzie Kwadrans z behawiorystą,
-              konsultacja 60 min czy dalsza wiadomość.
+              Dwa kwadranse, pelna konsultacja czy dalsza wiadomosc.
             </p>
 
             <FunnelPrimaryActions
@@ -172,7 +178,7 @@ export default function FaqPage() {
             <h2>Jeśli chcesz uporządkować sytuację, odezwij się</h2>
             <p>
               Jeśli chcesz spokojnie uporządkować sytuację psa albo kota, wybierz Kwadrans z behawiorystą, konsultację
-              60 min albo napisz wiadomość. Nie musisz przygotowywać wszystkiego przed kontaktem.
+              Dwa kwadranse, pelna konsultacje albo napisz wiadomosc. Nie musisz przygotowywac wszystkiego przed kontaktem.
             </p>
 
             <FunnelPrimaryActions

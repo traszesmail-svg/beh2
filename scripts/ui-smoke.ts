@@ -568,16 +568,6 @@ async function runUiSmokeOnce() {
         heading: /Kot załatwia się poza kuwetą/i,
         buttonLabels: [primaryBookingLabel],
       },
-      {
-        path: '/behawiorysta-psow',
-        heading: /Behawiorysta psow online|Pomoc dla opiekunów psów/i,
-        buttonLabels: [primaryBookingLabel],
-      },
-      {
-        path: '/behawiorysta-kotow',
-        heading: /Behawiorysta kotow online|Pomoc dla opiekunów kotów/i,
-        buttonLabels: [primaryBookingLabel],
-      },
     ] as const) {
       await verifyPublicRoute(publicPage, route.path, route.heading, { buttonLabels: route.buttonLabels })
     }
@@ -593,6 +583,18 @@ async function runUiSmokeOnce() {
         path: '/behawiorysta-olsztyn',
         destinationPath: '/behawiorysta-online-polska',
         heading: /Behawiorysta online dla opiekunów psów i kotów|Behawiorysta psów i kotów online/i,
+        buttonLabels: [primaryBookingLabel],
+      },
+      {
+        path: '/behawiorysta-psow',
+        destinationPath: '/psy',
+        heading: /Pomoc dla opiekunow psow|Pomoc dla opiekunów psów/i,
+        buttonLabels: [primaryBookingLabel],
+      },
+      {
+        path: '/behawiorysta-kotow',
+        destinationPath: '/koty',
+        heading: /Pomoc dla opiekunow kotow|Pomoc dla opiekunów kotów/i,
         buttonLabels: [primaryBookingLabel],
       },
       {

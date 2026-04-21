@@ -12,9 +12,9 @@ import { getCanonicalBaseUrl } from '@/lib/server/env'
 const pageData = getLocalSeoPageByPath('/behawiorysta-online-polska')
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: pageData?.title ?? 'Behawiorysta online w Polsce - psy i koty',
+  title: pageData?.title ?? 'Behawiorysta psow i kotow online - cala Polska',
   path: '/behawiorysta-online-polska',
-  description: pageData?.description ?? 'Konsultacje behawioralne online dla opiekunów psów i kotów z całej Polski.',
+  description: pageData?.description ?? 'Behawiorysta psow i kotow online dla opiekunow z calej Polski.',
   appendLocalContext: false,
 })
 
@@ -63,7 +63,7 @@ export default function LocalSeoPolandOnlinePage() {
     },
     getBreadcrumbJsonLd([
       { name: 'Strona główna', path: '/' },
-      { name: 'Behawiorysta online w Polsce', path: '/behawiorysta-online-polska' },
+      { name: 'Behawiorysta psow i kotow online', path: '/behawiorysta-online-polska' },
     ]),
   ]
 
@@ -113,7 +113,7 @@ export default function LocalSeoPolandOnlinePage() {
         </section>
 
         <section className="panel section-panel editorial-section">
-          <SectionIntro eyebrow="Zakres" title="Najczęstsze powody kontaktu" description="To strona dla opiekunów z całej Polski, którzy chcą omówić problem psa albo kota w formule online." />
+          <SectionIntro eyebrow="Zakres" title="Wybierz wlasciwa sciezke wejscia" description="To jest glowna strona uslugi online. Stad przechodzisz dalej do problemow psa, problemow kota albo do opisu dluzszej konsultacji." />
           <div className="card-grid two-up top-gap-small">
             {pageData.problemCards.map((item) => (
               <article key={item.title} className="summary-card tree-backed-card">
@@ -130,7 +130,7 @@ export default function LocalSeoPolandOnlinePage() {
         </section>
 
         <section className="panel section-panel editorial-section">
-          <SectionIntro eyebrow="Jak to działa" title={pageData.supportTitle} description={pageData.supportBody[0] ?? ''} />
+          <SectionIntro eyebrow="Rola strony" title={pageData.supportTitle} description={pageData.supportBody[0] ?? ''} />
           <div className="stack-gap top-gap-small">
             {pageData.supportBody.slice(1).map((paragraph) => (
               <div key={paragraph} className="list-card tree-backed-card">
@@ -141,7 +141,7 @@ export default function LocalSeoPolandOnlinePage() {
         </section>
 
         <section className="panel section-panel editorial-section">
-          <SectionIntro eyebrow="Od czego zacząć" title="Najprostszy start to Kwadrans z behawiorystą" description="Jeśli wolisz najpierw przeczytać materiały, zajrzyj do Niezbędnika. Przy sprawach szerszych możesz od razu wybrać konsultację 60 min." />
+          <SectionIntro eyebrow="Formaty" title="Najprostszy start to Kwadrans z behawiorysta" description="Jesli wolisz najpierw przeczytac materialy, zajrzyj do Niezbednika. Przy sprawach szerszych mozesz wybrac Dwa kwadranse albo pelna konsultacje." />
           <div className="card-grid three-up top-gap-small">
             {pageData.firstStepCards.map((item) => (
               <article key={item.title} className="summary-card tree-backed-card">
@@ -153,7 +153,7 @@ export default function LocalSeoPolandOnlinePage() {
         </section>
 
         <section className="panel section-panel editorial-section" id="faq">
-          <SectionIntro eyebrow="FAQ" title="Najczęstsze pytania przed rezerwacją" description="Krótko o tym, jak wygląda start, konsultacja online i kontakt przed rezerwacją." />
+          <SectionIntro eyebrow="FAQ" title="Najczestsze pytania przed rezerwacja" description="Krotko o tym, jak wyglada start, konsultacja online i kontakt przed rezerwacja." />
           <div className="premium-faq-grid top-gap">
             {pageData.faq.map((item) => (
               <details key={item.question} className="premium-faq-item">
@@ -169,7 +169,7 @@ export default function LocalSeoPolandOnlinePage() {
         </section>
 
         <section className="panel section-panel blog-related-panel">
-          <SectionIntro eyebrow="Powiązane strony" title="Przejdź dalej tam, gdzie to ma sens" description="Tutaj znajdziesz najbliższe strony ofertowe i kontakt, bez zbędnych objazdów." />
+          <SectionIntro eyebrow="Architektura" title="Przejdz dalej tam, gdzie to ma sens" description="Tutaj znajdziesz strony, ktore maja rozne role: kategorie problemow, opis pelnej konsultacji, cennik i kontakt." />
           <div className="blog-related-grid top-gap-small">
             {pageData.relatedLinks.map((item) => (
               <Link key={item.href} href={item.href} prefetch={false} className="summary-card tree-backed-card blog-related-card">

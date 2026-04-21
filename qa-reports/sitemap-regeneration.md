@@ -1,14 +1,14 @@
 # Sitemap Regeneration Report
 
-Generated: 2026-04-19T13:53:31.154Z
-Deploy day: 2026-04-19
+Generated: 2026-04-21T05:43:37.535Z
+Deploy day: 2026-04-21
 Canonical base: https://regulskibehawiorysta.pl
 Validation base: https://regulskibehawiorysta.pl
 
 ## Counts
-- Before sitemap URLs: 60
+- Before sitemap URLs: 33
 - After sitemap URLs: 33
-- Net change: -27
+- Net change: +0
 - Candidates discovered: 46
 - Final sitemap URLs: 33
 - Excluded during validation: 13
@@ -19,33 +19,7 @@ Validation base: https://regulskibehawiorysta.pl
 - none
 
 ### Removed URLs
-- https://regulskibehawiorysta.pl/oferta/poradniki-pdf/domowy-enrichment-plan-na-14-dni
-- https://regulskibehawiorysta.pl/oferta/poradniki-pdf/konflikt-miedzy-kotami-w-domu
-- https://regulskibehawiorysta.pl/oferta/poradniki-pdf/kot-dotyk-pielegnacja-i-obrona
-- https://regulskibehawiorysta.pl/oferta/poradniki-pdf/kot-i-kuweta-pierwszy-plan-dzialania
-- https://regulskibehawiorysta.pl/oferta/poradniki-pdf/kot-stres-srodowisko-i-bledy-opiekuna
-- https://regulskibehawiorysta.pl/oferta/poradniki-pdf/pakiety/pakiet-dom-i-bezpieczenstwo
-- https://regulskibehawiorysta.pl/oferta/poradniki-pdf/pakiety/pakiet-kot-bez-napiecia
-- https://regulskibehawiorysta.pl/oferta/poradniki-pdf/pakiety/pakiet-kota-domowego
-- https://regulskibehawiorysta.pl/oferta/poradniki-pdf/pakiety/pakiet-pobudzenie-i-hamulce
-- https://regulskibehawiorysta.pl/oferta/poradniki-pdf/pakiety/pakiet-sam-w-domu
-- https://regulskibehawiorysta.pl/oferta/poradniki-pdf/pakiety/pakiet-spacer-bez-wybuchu
-- https://regulskibehawiorysta.pl/oferta/poradniki-pdf/pakiety/pakiet-spacerowy-pies
-- https://regulskibehawiorysta.pl/oferta/poradniki-pdf/pakiety/pakiet-spokojny-dom-pies
-- https://regulskibehawiorysta.pl/oferta/poradniki-pdf/pakiety/pakiet-spokojny-szczeniak
-- https://regulskibehawiorysta.pl/oferta/poradniki-pdf/pakiety/pakiet-startowy-psa
-- https://regulskibehawiorysta.pl/oferta/poradniki-pdf/pierwsze-dni-po-adopcji-psa-lub-kota
-- https://regulskibehawiorysta.pl/oferta/poradniki-pdf/pies-boi-sie-gosci-i-dzwiekow
-- https://regulskibehawiorysta.pl/oferta/poradniki-pdf/pies-broni-zasobow
-- https://regulskibehawiorysta.pl/oferta/poradniki-pdf/pies-do-pracy-z-ludzmi
-- https://regulskibehawiorysta.pl/oferta/poradniki-pdf/pies-ile-ruchu-potrzebuje
-- https://regulskibehawiorysta.pl/oferta/poradniki-pdf/pies-impulsy-i-hamulce
-- https://regulskibehawiorysta.pl/oferta/poradniki-pdf/pies-niszczy-w-domu
-- https://regulskibehawiorysta.pl/oferta/poradniki-pdf/pies-reaktywny-na-spacerze
-- https://regulskibehawiorysta.pl/oferta/poradniki-pdf/pies-zostaje-sam-plan-pierwszych-krokow
-- https://regulskibehawiorysta.pl/oferta/poradniki-pdf/szczeniak-gryzienie-i-skakanie
-- https://regulskibehawiorysta.pl/oferta/poradniki-pdf/szczeniak-pierwsze-30-dni
-- https://regulskibehawiorysta.pl/oferta/poradniki-pdf/szczeniak-wyciszanie
+- none
 
 ## Exclusions
 - redirect-301: 13

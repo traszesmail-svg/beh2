@@ -36,15 +36,24 @@ export const SITE_URL_FALLBACK = 'http://localhost:3000'
 export const SITE_PRODUCTION_URL = 'https://regulskibehawiorysta.pl'
 export const PUBLIC_CONTACT_EMAIL_FALLBACK = 'kontakt@regulskibehawiorysta.pl'
 export const SITE_TAGLINE = 'Spokojna pomoc dla opiekunów psów i kotów'
-export const SITE_DESCRIPTION = 'Spokojna pomoc w zrozumieniu problemów zachowania psów i kotów, z jasnym planem działania po konsultacji.'
+export const SITE_DESCRIPTION =
+  'Behawiorysta psow i kotow online. Spokojny pierwszy krok, konsultacje online i materialy pomocnicze z jasnym planem dzialania.'
 
 export const SPECIALIST_NAME = 'Krzysztof Regulski'
 export const SPECIALIST_PUBLIC_STATUS = 'Dyplomant COAPE'
-export const SPECIALIST_PUBLIC_DIRECTORY = 'profil publiczny CAPBT'
+export const SPECIALIST_PUBLIC_DIRECTORY = 'publiczny profil CAPBT'
 export const SPECIALIST_PUBLIC_TITLE = `${SPECIALIST_PUBLIC_STATUS} | ${SPECIALIST_PUBLIC_DIRECTORY}`
-export const SPECIALIST_CREDENTIALS = 'dyplomant COAPE, technik weterynarii, dogoterapeuta, dietetyk'
+export const SPECIALIST_CREDENTIALS_LIST = [
+  'dyplomant COAPE',
+  'technik weterynarii',
+  'dogoterapeuta',
+  'dietetyk',
+] as const
+export const SPECIALIST_CREDENTIALS = SPECIALIST_CREDENTIALS_LIST.join(', ')
+export const SPECIALIST_PUBLIC_PROOF_SUMMARY =
+  'Dyplomant COAPE z publicznym profilem CAPBT, technik weterynarii, dogoterapeuta i dietetyk.'
 export const SPECIALIST_STATUS_EXPLANATION =
-  'Na publicznym profilu CAPBT widnieje status dyplomanta COAPE. To najprostszy i najuczciwszy sposób opisania publicznej ścieżki zawodowej bez skrótów, które brzmią szerzej niż źródło.'
+  'Na publicznym profilu CAPBT status widnieje jako dyplomant COAPE. Tę formę zostawiam w serwisie bez skrótów i bez dopowiadania szerszych tytułów, których nie potwierdza źródło.'
 export const SPECIALIST_LOCATION = 'Polska'
 export const COAPE_INTL_URL = 'https://coape.org/'
 export const COAPE_ORG_URL = 'https://coape.pl/'
@@ -62,6 +71,14 @@ export const PUBLIC_SOCIAL_LINKS = [
     href: CAPBT_PROFILE_URL,
     description: 'publiczny profil specjalisty',
   },
+] as const
+export const ORGANIZATION_PUBLIC_PROFILE_URLS = PUBLIC_SOCIAL_LINKS.map((link) => link.href)
+export const SPECIALIST_PUBLIC_PROFILE_URLS = [
+  COAPE_INTL_URL,
+  COAPE_ORG_URL,
+  CAPBT_ORG_URL,
+  CAPBT_PROFILE_URL,
+  INSTAGRAM_PROFILE_URL,
 ] as const
 
 export const COAPE_INTL_LOGO = {

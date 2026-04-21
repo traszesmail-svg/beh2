@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { AddTestimonialForm } from '@/components/AddTestimonialForm'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { MEDIA_MENTIONS } from '@/lib/site'
-import { REAL_CASE_STUDIES } from '@/lib/real-case-studies'
+import { REAL_CASE_STUDIES, getRealCaseProofPills } from '@/lib/real-case-studies'
 import { TESTIMONIALS, getTestimonialIssueLabel } from '@/lib/testimonials'
 
 function getInitials(displayName: string): string {
@@ -49,6 +49,8 @@ function getCaseImageDimensions(imageSrc: string) {
 }
 
 function CaseCard({ caseStudy }: { caseStudy: (typeof REAL_CASE_STUDIES)[number] }) {
+  const proofPills = getRealCaseProofPills(caseStudy)
+
   return (
     <article className="real-case-card tree-backed-card" data-case-id={caseStudy.id}>
       <div className="real-case-gallery" aria-label={`${caseStudy.headline} - zdjęcia`}>
@@ -76,6 +78,12 @@ function CaseCard({ caseStudy }: { caseStudy: (typeof REAL_CASE_STUDIES)[number]
         <h3>{caseStudy.headline}</h3>
         <p>{caseStudy.summary}</p>
 
+        <div className="real-case-meta" aria-label={`Kontekst przypadku ${caseStudy.headline}`}>
+          {proofPills.map((pill) => (
+            <span key={`${caseStudy.id}-${pill}`}>{pill}</span>
+          ))}
+        </div>
+
         <div className="real-case-detail">
           <strong>{caseStudy.firstStepLabel}</strong>
           <span>{caseStudy.firstStepText}</span>
@@ -84,6 +92,13 @@ function CaseCard({ caseStudy }: { caseStudy: (typeof REAL_CASE_STUDIES)[number]
         <div className="real-case-next">
           <strong>{caseStudy.nextStepLabel}</strong>
           <span>{caseStudy.nextStepText}</span>
+        </div>
+
+        <div className="real-case-next">
+          <strong>Źródło i efekt</strong>
+          <span>
+            {caseStudy.proof.sourceContext}. Efekt pierwszego etapu: {caseStudy.proof.outcomeSnapshot}.
+          </span>
         </div>
 
         <div className="real-case-meta" aria-label="Meta przypadku">
@@ -111,7 +126,7 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
           <h2 id="historie-heading">Historie opiekunów i efekty konsultacji</h2>
         </div>
         <div className="muted">
-          Pokazujemy krótki kontekst, pierwszy krok i dalszy kierunek pracy.
+          Pokazujemy krótki kontekst, typ problemu, format pracy i pierwszy kierunek działania.
           <br />
           Obok są publikacje i krótkie informacje o profilu.
         </div>
@@ -120,7 +135,7 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
       <div className="summary-grid trust-grid top-gap">
         <div className="summary-card tree-backed-card">
           <div className="stat-label">Typowe starty</div>
-          <span>Najczęstsze sprawy, z którymi opiekunowie zgłaszają się na start.</span>
+          <span>Najczęstsze sprawy z opisanym formatem pracy, etapem i przybliżonym czasem.</span>
         </div>
         <div className="summary-card tree-backed-card">
           <div className="stat-label">Profil i publikacje</div>

@@ -112,6 +112,75 @@ type BlogPostMetadataInput = {
 const BLOG_DIR = path.join(process.cwd(), 'content', 'blog-mvp')
 export const BLOG_ROUTE_BASE = '/blog'
 const BLOG_AUTHOR_NAME = SPECIALIST_NAME
+const DOG_AUDIO_HREF = buildBookHref(null, 'szybka-konsultacja-15-min', false, 'pies')
+const CAT_AUDIO_HREF = buildBookHref(null, 'szybka-konsultacja-15-min', false, 'kot')
+const GENERIC_AUDIO_HREF = buildBookHref(null, 'szybka-konsultacja-15-min')
+
+const SERVICE_LANDING_LINK: BlogSupportLink = {
+  label: 'Behawiorysta psow i kotow online',
+  href: '/behawiorysta-online-polska',
+  description: 'Glowna strona uslugi, jesli chcesz przejsc z tresci edukacyjnej do pelniejszego opisu pomocy.',
+}
+
+const CONSULTATION_PAGE_LINK: BlogSupportLink = {
+  label: 'Konsultacja behawioralna online',
+  href: '/konsultacja-behawioralna-online',
+  description: 'Opis formatu 60 min, przebiegu rozmowy i tego, kiedy warto wejsc w szersza konsultacje.',
+}
+
+const PREP_GUIDE_LINK: BlogSupportLink = {
+  label: 'Bezplatny material przygotowujacy',
+  href: '/bezplatne-materialy/przygotowanie-do-konsultacji-online',
+  description: 'Lekki przewodnik, jesli chcesz najpierw uporzadkowac opis problemu i przygotowanie do rozmowy.',
+}
+
+const REACTIVITY_LANDING_LINK: BlogSupportLink = {
+  label: 'Reaktywnosc na smyczy',
+  href: '/psy/reaktywnosc-na-smyczy',
+  description: 'Glowny landing problemowy dla spacerow, szczekania, napiecia i pracy ponizej progu.',
+}
+
+const REACTIVITY_GUIDE_LINK: BlogSupportLink = {
+  label: 'Bezplatny przewodnik dla reaktywnego psa',
+  href: '/bezplatne-materialy/pies-reaktywnosc-5-krokow',
+  description: 'Piec pierwszych krokow i prosty plan obserwacji, zanim zaczniesz dokladac kolejne techniki.',
+}
+
+const SEPARATION_LANDING_LINK: BlogSupportLink = {
+  label: 'Lek separacyjny u psa',
+  href: '/psy/lek-separacyjny',
+  description: 'Glowny landing problemowy o zostawaniu samemu, diagnozie i pierwszym bezpiecznym planie.',
+}
+
+const SEPARATION_GUIDE_LINK: BlogSupportLink = {
+  label: 'PDF: pies zostaje sam',
+  href: '/oferta/poradniki-pdf/pies-zostaje-sam-plan-pierwszych-krokow',
+  description: 'Material startowy o samotnosci psa, jesli chcesz najpierw spokojnie przeczytac plan pierwszych krokow.',
+}
+
+const LITTER_LANDING_LINK: BlogSupportLink = {
+  label: 'Zalatwianie poza kuweta',
+  href: '/koty/zalatwianie-poza-kuweta',
+  description: 'Glowny landing problemowy o zdrowiu, kuwecie, stresie i kolejnosci sprawdzania przyczyn.',
+}
+
+const LITTER_GUIDE_LINK: BlogSupportLink = {
+  label: 'Bezplatna checklista kuwety',
+  href: '/bezplatne-materialy/kot-kuweta-checklista',
+  description: 'Lista kontrolna zdrowia, kuwety i srodowiska, zanim zaczniesz zmieniac wszystko naraz.',
+}
+
+const CAT_CONFLICT_LANDING_LINK: BlogSupportLink = {
+  label: 'Konflikt miedzy kotami',
+  href: '/koty/konflikt-miedzy-kotami',
+  description: 'Glowny landing problemowy dla napiecia, gonitw, blokowania zasobow i trudnych relacji w domu.',
+}
+
+const CAT_CONFLICT_GUIDE_LINK: BlogSupportLink = {
+  label: 'PDF: konflikt miedzy kotami',
+  href: '/oferta/poradniki-pdf/konflikt-miedzy-kotami-w-domu',
+  description: 'Dalszy material, jesli chcesz przejsc od pojedynczego artykulu do spokojniejszego planu pracy w domu.',
+}
 
 const BLOG_POST_CONFIGS: BlogPostConfig[] = [
   {
@@ -453,6 +522,253 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
         href: '/psy',
         description: 'Przejdź do strony dla opiekunów psów.',
       },
+    ],
+  },
+  {
+    slug: 'jak-przygotowac-sie-do-konsultacji-behawioralnej-online',
+    fileName: '14-wpis-jak-przygotowac-sie-do-konsultacji-online.md',
+    publishedAt: '2026-04-05',
+    categoryLabel: 'Konsultacja',
+    categoryHref: '/konsultacja-behawioralna-online',
+    topic: 'konsultacja',
+    audioHref: GENERIC_AUDIO_HREF,
+    supportLinks: [
+      CONSULTATION_PAGE_LINK,
+      PREP_GUIDE_LINK,
+      {
+        label: 'Cennik',
+        href: '/cennik',
+        description: 'Jesli po przygotowaniu chcesz od razu porownac 15 min i 60 min przed rezerwacja.',
+      },
+      SERVICE_LANDING_LINK,
+    ],
+  },
+  {
+    slug: 'prog-pobudzenia-u-psa',
+    fileName: '18-wpis-prog-pobudzenia-u-psa.md',
+    publishedAt: '2026-04-04',
+    categoryLabel: 'Pies',
+    categoryHref: '/psy',
+    topic: 'pies',
+    audioHref: DOG_AUDIO_HREF,
+    supportLinks: [
+      REACTIVITY_LANDING_LINK,
+      {
+        label: 'Pies szczeka na inne psy',
+        href: '/blog/dlaczego-moj-pies-szczeka-na-inne-psy',
+        description: 'Dobry punkt startu, jesli chcesz osadzic prog pobudzenia w codziennych mijankach na spacerze.',
+      },
+      REACTIVITY_GUIDE_LINK,
+      SERVICE_LANDING_LINK,
+    ],
+  },
+  {
+    slug: 'reaktywnosc-na-smyczy-cwiczenie-luznej-smyczy',
+    fileName: '19-wpis-cwiczenie-luznej-smyczy.md',
+    publishedAt: '2026-04-03',
+    categoryLabel: 'Pies',
+    categoryHref: '/psy',
+    topic: 'pies',
+    audioHref: DOG_AUDIO_HREF,
+    supportLinks: [
+      REACTIVITY_LANDING_LINK,
+      {
+        label: 'Prog pobudzenia u psa',
+        href: '/blog/prog-pobudzenia-u-psa',
+        description: 'Warto to przeczytac razem z praktyka luznej smyczy, bo procedura ma sens dopiero ponizej progu.',
+      },
+      REACTIVITY_GUIDE_LINK,
+      SERVICE_LANDING_LINK,
+    ],
+  },
+  {
+    slug: 'jak-nagrac-psa-zostawionego-samemu',
+    fileName: '20-wpis-jak-nagrac-psa-samemu.md',
+    publishedAt: '2026-04-02',
+    categoryLabel: 'Pies',
+    categoryHref: '/psy',
+    topic: 'pies',
+    audioHref: DOG_AUDIO_HREF,
+    supportLinks: [
+      SEPARATION_LANDING_LINK,
+      {
+        label: 'Pies wyje, kiedy zostaje sam',
+        href: '/blog/pies-wyje-kiedy-zostaje-sam',
+        description: 'Najblizszy artykul, jesli chcesz najpierw odroznic lek separacyjny od innych scenariuszy.',
+      },
+      SEPARATION_GUIDE_LINK,
+      SERVICE_LANDING_LINK,
+    ],
+  },
+  {
+    slug: 'rutyna-wyjscia-oswajanie-psa-z-samotnoscia',
+    fileName: '21-wpis-rutyna-wyjscia-oswajanie-z-samotnosciq.md',
+    publishedAt: '2026-04-01',
+    categoryLabel: 'Pies',
+    categoryHref: '/psy',
+    topic: 'pies',
+    audioHref: DOG_AUDIO_HREF,
+    supportLinks: [
+      SEPARATION_LANDING_LINK,
+      {
+        label: 'Jak nagrac psa zostawionego samemu',
+        href: '/blog/jak-nagrac-psa-zostawionego-samemu',
+        description: 'Daje material do oceny, jesli po pracy nad rutyna potrzebujesz lepiej zobaczyc, co napedza problem.',
+      },
+      SEPARATION_GUIDE_LINK,
+      SERVICE_LANDING_LINK,
+    ],
+  },
+  {
+    slug: 'jak-wybrac-kuwete-i-zwirek-dla-kota',
+    fileName: '22-wpis-jak-wybrac-kuwete-i-zwirek.md',
+    publishedAt: '2026-03-31',
+    categoryLabel: 'Kot',
+    categoryHref: '/koty',
+    topic: 'koty',
+    audioHref: CAT_AUDIO_HREF,
+    supportLinks: [
+      LITTER_LANDING_LINK,
+      {
+        label: 'Jak ustawic kuwete dla kota',
+        href: '/blog/jak-ustawic-kuwete-dla-kota',
+        description: 'Najblizszy tekst, jesli po wyborze kuwety chcesz od razu dopiac jej lokalizacje i liczbe.',
+      },
+      LITTER_GUIDE_LINK,
+      SERVICE_LANDING_LINK,
+    ],
+  },
+  {
+    slug: 'stres-kota-a-zachowania-toaletowe',
+    fileName: '23-wpis-stres-kota-a-zachowania-toaletowe.md',
+    publishedAt: '2026-03-30',
+    categoryLabel: 'Kot',
+    categoryHref: '/koty',
+    topic: 'koty',
+    audioHref: CAT_AUDIO_HREF,
+    supportLinks: [
+      LITTER_LANDING_LINK,
+      {
+        label: 'Kot zalatwia sie poza kuweta',
+        href: '/blog/kot-zalatwia-sie-poza-kuweta',
+        description: 'Najszerszy wpis startowy, jesli chcesz zobaczyc cala sekwencje filtrow przed dalsza praca.',
+      },
+      LITTER_GUIDE_LINK,
+      SERVICE_LANDING_LINK,
+    ],
+  },
+  {
+    slug: 'jak-wprowadzic-nowego-kota-do-domu',
+    fileName: '24-wpis-jak-wprowadzic-nowego-kota.md',
+    publishedAt: '2026-03-29',
+    categoryLabel: 'Kot',
+    categoryHref: '/koty',
+    topic: 'koty',
+    audioHref: CAT_AUDIO_HREF,
+    supportLinks: [
+      CAT_CONFLICT_LANDING_LINK,
+      {
+        label: 'Jak zapoznac dwa koty',
+        href: '/blog/jak-zapoznac-dwa-koty',
+        description: 'Rozpisuje szerzej sam proces zapoznania, jesli ten etap w domu dopiero przed toba.',
+      },
+      CAT_CONFLICT_GUIDE_LINK,
+      SERVICE_LANDING_LINK,
+    ],
+  },
+  {
+    slug: 'agresja-przekierowana-u-kota',
+    fileName: '25-wpis-agresja-przekierowana-u-kota.md',
+    publishedAt: '2026-03-28',
+    categoryLabel: 'Kot',
+    categoryHref: '/koty',
+    topic: 'koty',
+    audioHref: CAT_AUDIO_HREF,
+    supportLinks: [
+      CAT_CONFLICT_LANDING_LINK,
+      {
+        label: 'Jak zapoznac dwa koty',
+        href: '/blog/jak-zapoznac-dwa-koty',
+        description: 'Dobry kolejny tekst, jesli konflikt jest zwiazany z granicami, dystansem i powolnym wprowadzaniem kontaktu.',
+      },
+      CAT_CONFLICT_GUIDE_LINK,
+      SERVICE_LANDING_LINK,
+    ],
+  },
+  {
+    slug: 'pies-cignnie-na-smyczy-od-czego-zaczac',
+    fileName: '26-wpis-pies-cignnie-od-czego-zaczac.md',
+    publishedAt: '2026-03-27',
+    categoryLabel: 'Pies',
+    categoryHref: '/psy',
+    topic: 'pies',
+    audioHref: DOG_AUDIO_HREF,
+    supportLinks: [
+      REACTIVITY_LANDING_LINK,
+      {
+        label: 'Luzna smycz z reaktywnym psem',
+        href: '/blog/reaktywnosc-na-smyczy-cwiczenie-luznej-smyczy',
+        description: 'Przechodzi z pojedynczej zasady w bardziej uporzadkowana procedure spacerowa.',
+      },
+      REACTIVITY_GUIDE_LINK,
+      SERVICE_LANDING_LINK,
+    ],
+  },
+  {
+    slug: 'jak-nauczyc-psa-zostawania-samemu',
+    fileName: '27-wpis-jak-nauczyc-psa-zostawania-samemu.md',
+    publishedAt: '2026-03-26',
+    categoryLabel: 'Pies',
+    categoryHref: '/psy',
+    topic: 'pies',
+    audioHref: DOG_AUDIO_HREF,
+    supportLinks: [
+      SEPARATION_LANDING_LINK,
+      {
+        label: 'Rutyna wyjscia i oswajanie z samotnoscia',
+        href: '/blog/rutyna-wyjscia-oswajanie-psa-z-samotnoscia',
+        description: 'Dalej porzadkuje prace krok po kroku, jesli chcesz utrzymac plan bez przeskakiwania etapow.',
+      },
+      SEPARATION_GUIDE_LINK,
+      SERVICE_LANDING_LINK,
+    ],
+  },
+  {
+    slug: 'jak-ustawic-kuwete-dla-kota',
+    fileName: '28-wpis-jak-ustawic-kuwete-dla-kota.md',
+    publishedAt: '2026-03-25',
+    categoryLabel: 'Kot',
+    categoryHref: '/koty',
+    topic: 'koty',
+    audioHref: CAT_AUDIO_HREF,
+    supportLinks: [
+      LITTER_LANDING_LINK,
+      {
+        label: 'Jak wybrac kuwete i zwirek',
+        href: '/blog/jak-wybrac-kuwete-i-zwirek-dla-kota',
+        description: 'Najblizszy tekst, jesli po ustawieniu kuwety chcesz jeszcze sprawdzic rozmiar, zwirek i typowe bledy wyboru.',
+      },
+      LITTER_GUIDE_LINK,
+      SERVICE_LANDING_LINK,
+    ],
+  },
+  {
+    slug: 'jak-zapoznac-dwa-koty',
+    fileName: '29-wpis-jak-zapoznac-dwa-koty.md',
+    publishedAt: '2026-03-24',
+    categoryLabel: 'Kot',
+    categoryHref: '/koty',
+    topic: 'koty',
+    audioHref: CAT_AUDIO_HREF,
+    supportLinks: [
+      CAT_CONFLICT_LANDING_LINK,
+      {
+        label: 'Jak wprowadzic nowego kota do domu',
+        href: '/blog/jak-wprowadzic-nowego-kota-do-domu',
+        description: 'Dobry tekst siostrzany, jesli chcesz zaczac jeszcze krok wczesniej od calego procesu wdrozenia nowego kota.',
+      },
+      CAT_CONFLICT_GUIDE_LINK,
+      SERVICE_LANDING_LINK,
     ],
   },
 ]

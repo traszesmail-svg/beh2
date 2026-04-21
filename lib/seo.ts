@@ -13,6 +13,7 @@ type MarketingMetadataInput = {
 
 type TechnicalMetadataInput = MarketingMetadataInput & {
   noIndex?: boolean
+  follow?: boolean
 }
 
 function appendLocalSeoContext(description: string) {
@@ -51,7 +52,7 @@ export function buildMarketingMetadata({ title, path, description, appendLocalCo
   }
 }
 
-export function buildTechnicalMetadata({ title, path, description, noIndex = true }: TechnicalMetadataInput): Metadata {
+export function buildTechnicalMetadata({ title, path, description, noIndex = true, follow = false }: TechnicalMetadataInput): Metadata {
   const localizedDescription = appendLocalSeoContext(description)
   const fullTitle = buildMetadataTitle(title)
 
@@ -61,7 +62,7 @@ export function buildTechnicalMetadata({ title, path, description, noIndex = tru
     alternates: {
       canonical: path,
     },
-    robots: noIndex ? { index: false, follow: false } : undefined,
+    robots: noIndex ? { index: false, follow } : undefined,
     openGraph: {
       title: fullTitle,
       description: localizedDescription,
@@ -82,17 +83,19 @@ export function buildTechnicalMetadata({ title, path, description, noIndex = tru
 
 export async function buildHomeMetadata(): Promise<Metadata> {
   const description = appendLocalSeoContext(
-    'Behawiorysta online dla opiekunów psów i kotów. Spokojny pierwszy krok, konsultacje online i materiały pomocnicze bez chaosu.',
+    'Behawiorysta psow i kotow online. Spokojny pierwszy krok, konsultacje online i materialy pomocnicze bez chaosu.',
   )
+  const title = 'Behawiorysta psow i kotow online'
+  const fullTitle = buildMetadataTitle(title)
 
   return {
-    title: SITE_NAME,
+    title,
     description,
     alternates: {
       canonical: '/',
     },
     openGraph: {
-      title: SITE_NAME,
+      title: fullTitle,
       description,
       siteName: SITE_NAME,
       type: 'website',
@@ -102,7 +105,7 @@ export async function buildHomeMetadata(): Promise<Metadata> {
     },
     twitter: {
       card: 'summary_large_image',
-      title: SITE_NAME,
+      title: fullTitle,
       description,
       images: [DEFAULT_OG_IMAGE.url],
     },
@@ -113,10 +116,11 @@ export async function buildBookMetadata(serviceType: BookingServiceType = DEFAUL
   const serviceTitle = getBookingServiceTitle(serviceType)
   const serviceSummary = getBookingServiceRoomSummary(serviceType)
 
-  return buildMarketingMetadata({
-    title: serviceTitle,
+  return buildTechnicalMetadata({
+    title: `Rezerwacja konsultacji: ${serviceTitle}`,
     path: '/book',
-    description: `${serviceTitle} w marce ${SITE_SHORT_NAME}. ${serviceSummary} Pomaga uporządkować sytuację i zdecydować, co zrobić dalej ze specjalistą ${SPECIALIST_NAME}.`,
+    description: `${serviceSummary} Wybierz gatunek i temat konsultacji, a potem przejdz do terminow i kolejnego kroku rezerwacji ze specjalista ${SPECIALIST_NAME}.`,
+    follow: true,
   })
 }
 
