@@ -1,11 +1,10 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { Footer } from '@/components/Footer'
 import { EditorialFaqSection } from '@/components/EditorialFaqSection'
 import { FunnelPrimaryActions } from '@/components/FunnelPrimaryActions'
-import { Header } from '@/components/Header'
 import { LeadMagnetSignup } from '@/components/LeadMagnetSignup'
+import { NotatnikPageShell } from '@/components/NotatnikA'
 import { TrustSignalSection } from '@/components/TrustSignalSection'
 import { buildBookHref } from '@/lib/booking-routing'
 import { getLeadMagnetBySlug, LEAD_MAGNETS } from '@/lib/growth-layer'
@@ -56,10 +55,21 @@ export default function LeadMagnetPage({ params }: LeadMagnetPageProps) {
   const consultationHref = buildBookHref(null, 'konsultacja-behawioralna-online')
 
   return (
-    <main className="page-wrap editorial-home-page premium-home-page">
+    <NotatnikPageShell
+      tag="Bezplatny material / start"
+      navItems={[
+        { href: '/psy', label: 'Pies' },
+        { href: '/koty', label: 'Kot' },
+        { href: '/niezbednik', label: 'Niezbednik' },
+        { href: '/o-mnie', label: 'O mnie' },
+        { href: '/kontakt#formularz', label: 'Kontakt' },
+      ]}
+      ctaHref={audioHref}
+      ctaLabel="Kwadrans / 69 zl"
+      footerPrimaryHref={audioHref}
+      footerPrimaryLabel="Kwadrans z behawiorysta"
+    >
       <div className="container editorial-stack">
-        <Header />
-
         <section className="editorial-hero-shell premium-hero-shell">
           <div className="editorial-hero-grid">
             <div className="editorial-hero-copy">
@@ -148,14 +158,7 @@ export default function LeadMagnetPage({ params }: LeadMagnetPageProps) {
           </div>
         </section>
 
-        <Footer
-          variant="lean"
-          ctaHref={audioHref}
-          ctaLabel="Zarezerwuj Kwadrans z behawiorystą"
-          secondaryHref="/niezbednik"
-          secondaryLabel="Przejdź do Niezbędnika"
-        />
       </div>
-    </main>
+    </NotatnikPageShell>
   )
 }

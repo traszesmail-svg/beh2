@@ -8,8 +8,7 @@ import { getBookingAnalyticsContextParams } from '@/lib/analytics-schema'
 import { CustomerEmailStatusNotice } from '@/components/CustomerEmailStatusNotice'
 import { ConfirmationStatusWatcher } from '@/components/ConfirmationStatusWatcher'
 import { HardNavLink } from '@/components/HardNavLink'
-import { Footer } from '@/components/Footer'
-import { Header } from '@/components/Header'
+import { NotatnikPageShell } from '@/components/NotatnikA'
 import { PreparationMaterialsCard } from '@/components/PreparationMaterialsCard'
 import { SelfCancellationActions } from '@/components/SelfCancellationActions'
 import { COPY_HELPERS } from '@/lib/copy-governance'
@@ -245,9 +244,21 @@ export default async function ConfirmationPage({
     booking && bookingServiceType ? getConfirmedFlowCards(bookingServiceType, roomAccessLabel, customerEmailStatus?.state === 'ready', booking.email) : []
 
   return (
-    <main className="page-wrap" data-analytics-disabled={qaBooking ? 'true' : undefined} data-qa-booking={qaBooking ? 'true' : 'false'} data-customer-email-state={customerEmailStatus?.state ?? 'unknown'}>
+    <NotatnikPageShell
+      tag="Potwierdzenie rezerwacji"
+      navItems={[
+        { href: '/psy', label: 'Pies' },
+        { href: '/koty', label: 'Kot' },
+        { href: '/niezbednik', label: 'Niezbednik' },
+        { href: '/o-mnie', label: 'O mnie' },
+        { href: '/kontakt#formularz', label: 'Kontakt' },
+      ]}
+      ctaHref={quickAudioHref}
+      ctaLabel={FUNNEL_CTA_LABELS.primary}
+      footerPrimaryHref={quickAudioHref}
+      footerPrimaryLabel={FUNNEL_CTA_LABELS.primary}
+    >
       <div className="container">
-        <Header />
         <section className="panel centered-panel hero-surface booking-stage-panel transaction-panel booking-flow-panel" data-confirmation-state={confirmationState} data-booking-id={booking?.id ?? ''}>
           <BookingStageEyebrow stage="confirmation" className="section-eyebrow" />
           {isConfirmed ? <div className="muted top-gap-small">{COPY_HELPERS.aftercareConfirmation}</div> : null}
@@ -557,9 +568,8 @@ export default async function ConfirmationPage({
           )}
         </section>
 
-        <Footer variant="full" ctaHref={quickAudioHref} ctaLabel={FUNNEL_CTA_LABELS.primary} secondaryHref="/niezbednik" secondaryLabel={FUNNEL_CTA_LABELS.secondary} />
       </div>
-    </main>
+    </NotatnikPageShell>
   )
 }
 

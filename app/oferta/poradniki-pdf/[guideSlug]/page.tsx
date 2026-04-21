@@ -2,8 +2,7 @@ import React from 'react'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { Footer } from '@/components/Footer'
-import { Header } from '@/components/Header'
+import { NotatnikPageShell } from '@/components/NotatnikA'
 import { PdfBundleCard } from '@/components/PdfBundleCard'
 import { PdfGuideCover } from '@/components/PdfGuideCover'
 import {
@@ -65,9 +64,21 @@ export default function PdfGuideDetailPage({ params }: PdfGuideDetailPageProps) 
   const detailPoints = guide.toc.slice(0, 3)
 
   return (
-    <main className="page-wrap marketing-page">
+    <NotatnikPageShell
+      tag="Poradniki PDF / detal"
+      navItems={[
+        { href: '/psy', label: 'Pies' },
+        { href: '/koty', label: 'Kot' },
+        { href: '/niezbednik', label: 'Niezbednik' },
+        { href: '/o-mnie', label: 'O mnie' },
+        { href: '/kontakt#formularz', label: 'Kontakt' },
+      ]}
+      ctaHref={buildPdfInquiryHref({ guideSlug: guide.slug })}
+      ctaLabel="Napisz o tym PDF"
+      footerPrimaryHref={buildPdfInquiryHref({ guideSlug: guide.slug })}
+      footerPrimaryLabel="Napisz o tym PDF"
+    >
       <div className="container">
-        <Header />
 
         <section className="two-col-section offer-detail-layout pdf-detail-layout">
           <div className="panel section-panel hero-surface offer-detail-content-panel pdf-detail-content-panel">
@@ -213,8 +224,7 @@ export default function PdfGuideDetailPage({ params }: PdfGuideDetailPageProps) 
           </div>
         </section>
 
-        <Footer variant="full" ctaHref={buildPdfInquiryHref({ guideSlug: guide.slug })} ctaLabel="Napisz o tym PDF" />
       </div>
-    </main>
+    </NotatnikPageShell>
   )
 }

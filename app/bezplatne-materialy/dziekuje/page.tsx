@@ -1,8 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { TrustSignalSection } from '@/components/TrustSignalSection'
-import { Footer } from '@/components/Footer'
-import { Header } from '@/components/Header'
+import { NotatnikPageShell } from '@/components/NotatnikA'
 import { buildBookHref } from '@/lib/booking-routing'
 import { getLeadMagnetBySlug } from '@/lib/growth-layer'
 import { buildTechnicalMetadata } from '@/lib/seo'
@@ -25,9 +24,21 @@ export default function LeadMagnetThankYouPage({
   const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min')
 
   return (
-    <main className="page-wrap editorial-home-page premium-home-page">
+    <NotatnikPageShell
+      tag="Material pobrany"
+      navItems={[
+        { href: '/psy', label: 'Pies' },
+        { href: '/koty', label: 'Kot' },
+        { href: '/niezbednik', label: 'Niezbednik' },
+        { href: '/o-mnie', label: 'O mnie' },
+        { href: '/kontakt#formularz', label: 'Kontakt' },
+      ]}
+      ctaHref={audioHref}
+      ctaLabel="Kwadrans / 69 zl"
+      footerPrimaryHref={audioHref}
+      footerPrimaryLabel="Kwadrans z behawiorysta"
+    >
       <div className="container editorial-stack">
-        <Header />
 
         <section className="editorial-hero-shell premium-hero-shell">
           <div className="editorial-hero-grid">
@@ -92,14 +103,7 @@ export default function LeadMagnetThankYouPage({
           items={TRUST_SIGNAL_SETS.toolkit}
         />
 
-        <Footer
-          variant="lean"
-          ctaHref={audioHref}
-          ctaLabel="Zarezerwuj Kwadrans z behawiorystą"
-          secondaryHref="/niezbednik"
-          secondaryLabel="Przejdź do Niezbędnika"
-        />
       </div>
-    </main>
+    </NotatnikPageShell>
   )
 }

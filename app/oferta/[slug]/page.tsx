@@ -3,8 +3,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { Footer } from '@/components/Footer'
-import { Header } from '@/components/Header'
+import { NotatnikPageShell } from '@/components/NotatnikA'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { OFFERS, getOfferBySlug } from '@/lib/offers'
 import { buildMarketingMetadata } from '@/lib/seo'
@@ -79,9 +78,21 @@ export default async function OfferDetailPage({ params }: OfferDetailPageProps) 
   }
 
   return (
-    <main className="page-wrap marketing-page">
+    <NotatnikPageShell
+      tag="Oferta / szczegoly"
+      navItems={[
+        { href: '/psy', label: 'Pies' },
+        { href: '/koty', label: 'Kot' },
+        { href: '/niezbednik', label: 'Niezbednik' },
+        { href: '/o-mnie', label: 'O mnie' },
+        { href: '/kontakt#formularz', label: 'Kontakt' },
+      ]}
+      ctaHref={offer.primaryHref}
+      ctaLabel={offer.primaryCtaLabel}
+      footerPrimaryHref={offer.primaryHref}
+      footerPrimaryLabel={offer.primaryCtaLabel}
+    >
       <div className="container">
-        <Header />
 
         <section className="two-col-section offer-detail-layout">
           <div className="panel section-panel hero-surface offer-detail-content-panel">
@@ -187,8 +198,7 @@ export default async function OfferDetailPage({ params }: OfferDetailPageProps) 
           </div>
         </section>
 
-        <Footer variant="full" ctaHref={offer.primaryHref} ctaLabel={offer.primaryCtaLabel} />
       </div>
-    </main>
+    </NotatnikPageShell>
   )
 }

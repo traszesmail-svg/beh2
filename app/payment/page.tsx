@@ -6,9 +6,8 @@ import { AnalyticsEventOnMount } from '@/components/AnalyticsEventOnMount'
 import { getBookingAnalyticsContextParams } from '@/lib/analytics-schema'
 import { BookingStageEyebrow } from '@/components/BookingStageEyebrow'
 import { CustomerEmailStatusNotice } from '@/components/CustomerEmailStatusNotice'
-import { Footer } from '@/components/Footer'
-import { Header } from '@/components/Header'
 import { PaymentActions } from '@/components/PaymentActions'
+import { NotatnikPageShell } from '@/components/NotatnikA'
 import { COPY_HELPERS } from '@/lib/copy-governance'
 import {
   getBookingServiceRoomAccessLabel,
@@ -115,9 +114,21 @@ export default async function PaymentPage({
         : 'Płatność jest chwilowo niedostępna. Napisz wiadomość i wróć do rezerwacji później.'
 
   return (
-    <main className="page-wrap">
+    <NotatnikPageShell
+      tag="Platnosc"
+      navItems={[
+        { href: '/psy', label: 'Pies' },
+        { href: '/koty', label: 'Kot' },
+        { href: '/niezbednik', label: 'Niezbednik' },
+        { href: '/o-mnie', label: 'O mnie' },
+        { href: '/kontakt#formularz', label: 'Kontakt' },
+      ]}
+      ctaHref={quickAudioHref}
+      ctaLabel={FUNNEL_CTA_LABELS.primary}
+      footerPrimaryHref={quickAudioHref}
+      footerPrimaryLabel={FUNNEL_CTA_LABELS.primary}
+    >
       <div className="container">
-        <Header />
         <section
           className="panel centered-panel hero-surface booking-stage-panel transaction-panel booking-flow-panel"
           data-payment-state={
@@ -370,9 +381,8 @@ export default async function PaymentPage({
           )}
         </section>
 
-        <Footer variant="full" ctaHref={quickAudioHref} ctaLabel={FUNNEL_CTA_LABELS.primary} secondaryHref="/niezbednik" secondaryLabel={FUNNEL_CTA_LABELS.secondary} />
       </div>
-    </main>
+    </NotatnikPageShell>
   )
 }
 
