@@ -1931,3 +1931,909 @@
     width: 100%;
   }
 }
+
+/* Legacy marketing pages now share the same editorial system. */
+.page-wrap.marketing-page,
+.page-wrap.editorial-home-page,
+.page-wrap.premium-home-page,
+.page-wrap.money-page,
+.page-wrap.authority-page,
+.page-wrap.faq-page,
+.page-wrap.opinions-page,
+.page-wrap.opinions-dowodowa-page {
+  --bg: #f5f1ea;
+  --bg-2: #ebe5d8;
+  --paper: #faf7f0;
+  --ink: #1f1d17;
+  --ink-soft: #55524a;
+  --ink-mute: #8b877c;
+  --line: #d9d3c4;
+  --accent: #5d6b3f;
+  --accent-warm: #b6753a;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+.page-wrap.marketing-page a,
+.page-wrap.editorial-home-page a,
+.page-wrap.premium-home-page a,
+.page-wrap.money-page a,
+.page-wrap.authority-page a,
+.page-wrap.faq-page a,
+.page-wrap.opinions-page a,
+.page-wrap.opinions-dowodowa-page a {
+  color: inherit;
+}
+
+.page-wrap.marketing-page h1,
+.page-wrap.marketing-page h2,
+.page-wrap.marketing-page h3,
+.page-wrap.marketing-page h4,
+.page-wrap.marketing-page h5,
+.page-wrap.editorial-home-page h1,
+.page-wrap.editorial-home-page h2,
+.page-wrap.editorial-home-page h3,
+.page-wrap.editorial-home-page h4,
+.page-wrap.editorial-home-page h5,
+.page-wrap.premium-home-page h1,
+.page-wrap.premium-home-page h2,
+.page-wrap.premium-home-page h3,
+.page-wrap.premium-home-page h4,
+.page-wrap.premium-home-page h5,
+.page-wrap.money-page h1,
+.page-wrap.money-page h2,
+.page-wrap.money-page h3,
+.page-wrap.money-page h4,
+.page-wrap.money-page h5,
+.page-wrap.authority-page h1,
+.page-wrap.authority-page h2,
+.page-wrap.authority-page h3,
+.page-wrap.authority-page h4,
+.page-wrap.authority-page h5,
+.page-wrap.faq-page h1,
+.page-wrap.faq-page h2,
+.page-wrap.faq-page h3,
+.page-wrap.faq-page h4,
+.page-wrap.faq-page h5,
+.page-wrap.opinions-page h1,
+.page-wrap.opinions-page h2,
+.page-wrap.opinions-page h3,
+.page-wrap.opinions-page h4,
+.page-wrap.opinions-page h5,
+.page-wrap.opinions-dowodowa-page h1,
+.page-wrap.opinions-dowodowa-page h2,
+.page-wrap.opinions-dowodowa-page h3,
+.page-wrap.opinions-dowodowa-page h4,
+.page-wrap.opinions-dowodowa-page h5 {
+  margin: 0;
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+.page-wrap.marketing-page .container,
+.page-wrap.editorial-home-page .container,
+.page-wrap.premium-home-page .container,
+.page-wrap.money-page .container,
+.page-wrap.authority-page .container,
+.page-wrap.faq-page .container,
+.page-wrap.opinions-page .container,
+.page-wrap.opinions-dowodowa-page .container {
+  width: min(1320px, calc(100vw - 48px));
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.22), 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.page-wrap.marketing-page .header-shell,
+.page-wrap.editorial-home-page .header-shell,
+.page-wrap.premium-home-page .header-shell,
+.page-wrap.money-page .header-shell,
+.page-wrap.authority-page .header-shell,
+.page-wrap.faq-page .header-shell,
+.page-wrap.opinions-page .header-shell,
+.page-wrap.opinions-dowodowa-page .header-shell {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  border-bottom: 1px solid var(--line);
+  background: rgba(245, 241, 234, 0.96);
+  backdrop-filter: blur(10px);
+}
+
+.page-wrap.marketing-page .header-main,
+.page-wrap.editorial-home-page .header-main,
+.page-wrap.premium-home-page .header-main,
+.page-wrap.money-page .header-main,
+.page-wrap.authority-page .header-main,
+.page-wrap.faq-page .header-main,
+.page-wrap.opinions-page .header-main,
+.page-wrap.opinions-dowodowa-page .header-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 22px 48px;
+}
+
+.page-wrap.marketing-page .header-branding,
+.page-wrap.editorial-home-page .header-branding,
+.page-wrap.premium-home-page .header-branding,
+.page-wrap.money-page .header-branding,
+.page-wrap.authority-page .header-branding,
+.page-wrap.faq-page .header-branding,
+.page-wrap.opinions-page .header-branding,
+.page-wrap.opinions-dowodowa-page .header-branding {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.page-wrap.marketing-page .brand-copy,
+.page-wrap.editorial-home-page .brand-copy,
+.page-wrap.premium-home-page .brand-copy,
+.page-wrap.money-page .brand-copy,
+.page-wrap.authority-page .brand-copy,
+.page-wrap.faq-page .brand-copy,
+.page-wrap.opinions-page .brand-copy,
+.page-wrap.opinions-dowodowa-page .brand-copy {
+  display: grid;
+  gap: 4px;
+}
+
+.page-wrap.marketing-page .brand,
+.page-wrap.editorial-home-page .brand,
+.page-wrap.premium-home-page .brand,
+.page-wrap.money-page .brand,
+.page-wrap.authority-page .brand,
+.page-wrap.faq-page .brand,
+.page-wrap.opinions-page .brand,
+.page-wrap.opinions-dowodowa-page .brand {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 22px;
+  font-style: italic;
+  letter-spacing: -0.02em;
+}
+
+.page-wrap.marketing-page .header-subtitle,
+.page-wrap.editorial-home-page .header-subtitle,
+.page-wrap.premium-home-page .header-subtitle,
+.page-wrap.money-page .header-subtitle,
+.page-wrap.authority-page .header-subtitle,
+.page-wrap.faq-page .header-subtitle,
+.page-wrap.opinions-page .header-subtitle,
+.page-wrap.opinions-dowodowa-page .header-subtitle {
+  font-family: var(--font-mono), monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.page-wrap.marketing-page .header-nav,
+.page-wrap.editorial-home-page .header-nav,
+.page-wrap.premium-home-page .header-nav,
+.page-wrap.money-page .header-nav,
+.page-wrap.authority-page .header-nav,
+.page-wrap.faq-page .header-nav,
+.page-wrap.opinions-page .header-nav,
+.page-wrap.opinions-dowodowa-page .header-nav {
+  flex: 1;
+  justify-content: center;
+}
+
+.page-wrap.marketing-page .header-links,
+.page-wrap.editorial-home-page .header-links,
+.page-wrap.premium-home-page .header-links,
+.page-wrap.money-page .header-links,
+.page-wrap.authority-page .header-links,
+.page-wrap.faq-page .header-links,
+.page-wrap.opinions-page .header-links,
+.page-wrap.opinions-dowodowa-page .header-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 26px;
+  font-size: 13.5px;
+  color: var(--ink-soft);
+}
+
+.page-wrap.marketing-page .header-link,
+.page-wrap.editorial-home-page .header-link,
+.page-wrap.premium-home-page .header-link,
+.page-wrap.money-page .header-link,
+.page-wrap.authority-page .header-link,
+.page-wrap.faq-page .header-link,
+.page-wrap.opinions-page .header-link,
+.page-wrap.opinions-dowodowa-page .header-link {
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+
+.page-wrap.marketing-page .header-link.is-active,
+.page-wrap.editorial-home-page .header-link.is-active,
+.page-wrap.premium-home-page .header-link.is-active,
+.page-wrap.money-page .header-link.is-active,
+.page-wrap.authority-page .header-link.is-active,
+.page-wrap.faq-page .header-link.is-active,
+.page-wrap.opinions-page .header-link.is-active,
+.page-wrap.opinions-dowodowa-page .header-link.is-active,
+.page-wrap.marketing-page .header-link:hover,
+.page-wrap.editorial-home-page .header-link:hover,
+.page-wrap.premium-home-page .header-link:hover,
+.page-wrap.money-page .header-link:hover,
+.page-wrap.authority-page .header-link:hover,
+.page-wrap.faq-page .header-link:hover,
+.page-wrap.opinions-page .header-link:hover,
+.page-wrap.opinions-dowodowa-page .header-link:hover {
+  color: var(--ink);
+}
+
+.page-wrap.marketing-page .header-actions,
+.page-wrap.editorial-home-page .header-actions,
+.page-wrap.premium-home-page .header-actions,
+.page-wrap.money-page .header-actions,
+.page-wrap.authority-page .header-actions,
+.page-wrap.faq-page .header-actions,
+.page-wrap.opinions-page .header-actions,
+.page-wrap.opinions-dowodowa-page .header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.page-wrap.marketing-page .header-cta,
+.page-wrap.editorial-home-page .header-cta,
+.page-wrap.premium-home-page .header-cta,
+.page-wrap.money-page .header-cta,
+.page-wrap.authority-page .header-cta,
+.page-wrap.faq-page .header-cta,
+.page-wrap.opinions-page .header-cta,
+.page-wrap.opinions-dowodowa-page .header-cta,
+.page-wrap.marketing-page .button,
+.page-wrap.editorial-home-page .button,
+.page-wrap.premium-home-page .button,
+.page-wrap.money-page .button,
+.page-wrap.authority-page .button,
+.page-wrap.faq-page .button,
+.page-wrap.opinions-page .button,
+.page-wrap.opinions-dowodowa-page .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 11px 18px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  text-decoration: none;
+}
+
+.page-wrap.marketing-page .button.button-ghost,
+.page-wrap.editorial-home-page .button.button-ghost,
+.page-wrap.premium-home-page .button.button-ghost,
+.page-wrap.money-page .button.button-ghost,
+.page-wrap.authority-page .button.button-ghost,
+.page-wrap.faq-page .button.button-ghost,
+.page-wrap.opinions-page .button.button-ghost,
+.page-wrap.opinions-dowodowa-page .button.button-ghost,
+.page-wrap.marketing-page .header-secondary-cta,
+.page-wrap.editorial-home-page .header-secondary-cta,
+.page-wrap.premium-home-page .header-secondary-cta,
+.page-wrap.money-page .header-secondary-cta,
+.page-wrap.authority-page .header-secondary-cta,
+.page-wrap.faq-page .header-secondary-cta,
+.page-wrap.opinions-page .header-secondary-cta,
+.page-wrap.opinions-dowodowa-page .header-secondary-cta {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--line);
+}
+
+.page-wrap.marketing-page .header-menu-toggle,
+.page-wrap.editorial-home-page .header-menu-toggle,
+.page-wrap.premium-home-page .header-menu-toggle,
+.page-wrap.money-page .header-menu-toggle,
+.page-wrap.authority-page .header-menu-toggle,
+.page-wrap.faq-page .header-menu-toggle,
+.page-wrap.opinions-page .header-menu-toggle,
+.page-wrap.opinions-dowodowa-page .header-menu-toggle {
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.page-wrap.marketing-page .header-mobile-panel,
+.page-wrap.editorial-home-page .header-mobile-panel,
+.page-wrap.premium-home-page .header-mobile-panel,
+.page-wrap.money-page .header-mobile-panel,
+.page-wrap.authority-page .header-mobile-panel,
+.page-wrap.faq-page .header-mobile-panel,
+.page-wrap.opinions-page .header-mobile-panel,
+.page-wrap.opinions-dowodowa-page .header-mobile-panel {
+  border-top: 1px solid var(--line);
+  background: rgba(250, 247, 240, 0.98);
+}
+
+.page-wrap.marketing-page .editorial-hero-shell,
+.page-wrap.editorial-home-page .editorial-hero-shell,
+.page-wrap.premium-home-page .editorial-hero-shell,
+.page-wrap.money-page .editorial-hero-shell,
+.page-wrap.authority-page .editorial-hero-shell,
+.page-wrap.faq-page .editorial-hero-shell,
+.page-wrap.opinions-page .editorial-hero-shell,
+.page-wrap.opinions-dowodowa-page .editorial-hero-shell,
+.page-wrap.marketing-page .hero-surface,
+.page-wrap.editorial-home-page .hero-surface,
+.page-wrap.premium-home-page .hero-surface,
+.page-wrap.money-page .hero-surface,
+.page-wrap.authority-page .hero-surface,
+.page-wrap.faq-page .hero-surface,
+.page-wrap.opinions-page .hero-surface,
+.page-wrap.opinions-dowodowa-page .hero-surface {
+  padding: 80px 48px 72px;
+  border-bottom: 1px solid var(--line);
+}
+
+.page-wrap.marketing-page .editorial-hero-grid,
+.page-wrap.editorial-home-page .editorial-hero-grid,
+.page-wrap.premium-home-page .editorial-hero-grid,
+.page-wrap.money-page .editorial-hero-grid,
+.page-wrap.authority-page .editorial-hero-grid,
+.page-wrap.faq-page .editorial-hero-grid,
+.page-wrap.opinions-page .editorial-hero-grid,
+.page-wrap.opinions-dowodowa-page .editorial-hero-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 0.9fr;
+  gap: 64px;
+  align-items: end;
+}
+
+.page-wrap.marketing-page .editorial-section,
+.page-wrap.editorial-home-page .editorial-section,
+.page-wrap.premium-home-page .editorial-section,
+.page-wrap.money-page .editorial-section,
+.page-wrap.authority-page .editorial-section,
+.page-wrap.faq-page .editorial-section,
+.page-wrap.opinions-page .editorial-section,
+.page-wrap.opinions-dowodowa-page .editorial-section,
+.page-wrap.marketing-page .panel.section-panel,
+.page-wrap.editorial-home-page .panel.section-panel,
+.page-wrap.premium-home-page .panel.section-panel,
+.page-wrap.money-page .panel.section-panel,
+.page-wrap.authority-page .panel.section-panel,
+.page-wrap.faq-page .panel.section-panel,
+.page-wrap.opinions-page .panel.section-panel,
+.page-wrap.opinions-dowodowa-page .panel.section-panel,
+.page-wrap.marketing-page .cta-panel,
+.page-wrap.editorial-home-page .cta-panel,
+.page-wrap.premium-home-page .cta-panel,
+.page-wrap.money-page .cta-panel,
+.page-wrap.authority-page .cta-panel,
+.page-wrap.faq-page .cta-panel,
+.page-wrap.opinions-page .cta-panel,
+.page-wrap.opinions-dowodowa-page .cta-panel {
+  padding: 80px 48px;
+  border-bottom: 1px solid var(--line);
+}
+
+.page-wrap.marketing-page .editorial-section-head,
+.page-wrap.editorial-home-page .editorial-section-head,
+.page-wrap.premium-home-page .editorial-section-head,
+.page-wrap.money-page .editorial-section-head,
+.page-wrap.authority-page .editorial-section-head,
+.page-wrap.faq-page .editorial-section-head,
+.page-wrap.opinions-page .editorial-section-head,
+.page-wrap.opinions-dowodowa-page .editorial-section-head {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 40px;
+  align-items: start;
+  margin-bottom: 56px;
+}
+
+.page-wrap.marketing-page .section-eyebrow,
+.page-wrap.editorial-home-page .section-eyebrow,
+.page-wrap.premium-home-page .section-eyebrow,
+.page-wrap.money-page .section-eyebrow,
+.page-wrap.authority-page .section-eyebrow,
+.page-wrap.faq-page .section-eyebrow,
+.page-wrap.opinions-page .section-eyebrow,
+.page-wrap.opinions-dowodowa-page .section-eyebrow {
+  font-family: var(--font-mono), monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.page-wrap.marketing-page .editorial-section-head h2,
+.page-wrap.editorial-home-page .editorial-section-head h2,
+.page-wrap.premium-home-page .editorial-section-head h2,
+.page-wrap.money-page .editorial-section-head h2,
+.page-wrap.authority-page .editorial-section-head h2,
+.page-wrap.faq-page .editorial-section-head h2,
+.page-wrap.opinions-page .editorial-section-head h2,
+.page-wrap.opinions-dowodowa-page .editorial-section-head h2 {
+  max-width: 24ch;
+  font-size: clamp(30px, 3vw, 44px);
+  line-height: 1.1;
+}
+
+.page-wrap.marketing-page .editorial-section-lead,
+.page-wrap.editorial-home-page .editorial-section-lead,
+.page-wrap.premium-home-page .editorial-section-lead,
+.page-wrap.money-page .editorial-section-lead,
+.page-wrap.authority-page .editorial-section-lead,
+.page-wrap.faq-page .editorial-section-lead,
+.page-wrap.opinions-page .editorial-section-lead,
+.page-wrap.opinions-dowodowa-page .editorial-section-lead,
+.page-wrap.marketing-page .hero-text,
+.page-wrap.editorial-home-page .hero-text,
+.page-wrap.premium-home-page .hero-text,
+.page-wrap.money-page .hero-text,
+.page-wrap.authority-page .hero-text,
+.page-wrap.faq-page .hero-text,
+.page-wrap.opinions-page .hero-text,
+.page-wrap.opinions-dowodowa-page .hero-text,
+.page-wrap.marketing-page .editorial-hero-lead,
+.page-wrap.editorial-home-page .editorial-hero-lead,
+.page-wrap.premium-home-page .editorial-hero-lead,
+.page-wrap.money-page .editorial-hero-lead,
+.page-wrap.authority-page .editorial-hero-lead,
+.page-wrap.faq-page .editorial-hero-lead,
+.page-wrap.opinions-page .editorial-hero-lead,
+.page-wrap.opinions-dowodowa-page .editorial-hero-lead {
+  max-width: 56ch;
+  color: var(--ink-soft);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.page-wrap.marketing-page .hero-actions,
+.page-wrap.editorial-home-page .hero-actions,
+.page-wrap.premium-home-page .hero-actions,
+.page-wrap.money-page .hero-actions,
+.page-wrap.authority-page .hero-actions,
+.page-wrap.faq-page .hero-actions,
+.page-wrap.opinions-page .hero-actions,
+.page-wrap.opinions-dowodowa-page .hero-actions,
+.page-wrap.marketing-page .hero-cta,
+.page-wrap.editorial-home-page .hero-cta,
+.page-wrap.premium-home-page .hero-cta,
+.page-wrap.money-page .hero-cta,
+.page-wrap.authority-page .hero-cta,
+.page-wrap.faq-page .hero-cta,
+.page-wrap.opinions-page .hero-cta,
+.page-wrap.opinions-dowodowa-page .hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.page-wrap.marketing-page .hero-actions .button,
+.page-wrap.editorial-home-page .hero-actions .button,
+.page-wrap.premium-home-page .hero-actions .button,
+.page-wrap.money-page .hero-actions .button,
+.page-wrap.authority-page .hero-actions .button,
+.page-wrap.faq-page .hero-actions .button,
+.page-wrap.opinions-page .hero-actions .button,
+.page-wrap.opinions-dowodowa-page .hero-actions .button {
+  min-width: 0;
+}
+
+.page-wrap.marketing-page .summary-card,
+.page-wrap.editorial-home-page .summary-card,
+.page-wrap.premium-home-page .summary-card,
+.page-wrap.money-page .summary-card,
+.page-wrap.authority-page .summary-card,
+.page-wrap.faq-page .summary-card,
+.page-wrap.opinions-page .summary-card,
+.page-wrap.opinions-dowodowa-page .summary-card,
+.page-wrap.marketing-page .tree-backed-card,
+.page-wrap.editorial-home-page .tree-backed-card,
+.page-wrap.premium-home-page .tree-backed-card,
+.page-wrap.money-page .tree-backed-card,
+.page-wrap.authority-page .tree-backed-card,
+.page-wrap.faq-page .tree-backed-card,
+.page-wrap.opinions-page .tree-backed-card,
+.page-wrap.opinions-dowodowa-page .tree-backed-card,
+.page-wrap.marketing-page .premium-faq-item,
+.page-wrap.editorial-home-page .premium-faq-item,
+.page-wrap.premium-home-page .premium-faq-item,
+.page-wrap.money-page .premium-faq-item,
+.page-wrap.authority-page .premium-faq-item,
+.page-wrap.faq-page .premium-faq-item,
+.page-wrap.opinions-page .premium-faq-item,
+.page-wrap.opinions-dowodowa-page .premium-faq-item,
+.page-wrap.marketing-page .offer-page-hero-card,
+.page-wrap.editorial-home-page .offer-page-hero-card,
+.page-wrap.premium-home-page .offer-page-hero-card,
+.page-wrap.money-page .offer-page-hero-card,
+.page-wrap.authority-page .offer-page-hero-card,
+.page-wrap.faq-page .offer-page-hero-card,
+.page-wrap.opinions-page .offer-page-hero-card,
+.page-wrap.opinions-dowodowa-page .offer-page-hero-card,
+.page-wrap.marketing-page .home-hero-photo-shell,
+.page-wrap.editorial-home-page .home-hero-photo-shell,
+.page-wrap.premium-home-page .home-hero-photo-shell,
+.page-wrap.money-page .home-hero-photo-shell,
+.page-wrap.authority-page .home-hero-photo-shell,
+.page-wrap.faq-page .home-hero-photo-shell,
+.page-wrap.opinions-page .home-hero-photo-shell,
+.page-wrap.opinions-dowodowa-page .home-hero-photo-shell,
+.page-wrap.marketing-page .editorial-hero-photo-frame,
+.page-wrap.editorial-home-page .editorial-hero-photo-frame,
+.page-wrap.premium-home-page .editorial-hero-photo-frame,
+.page-wrap.money-page .editorial-hero-photo-frame,
+.page-wrap.authority-page .editorial-hero-photo-frame,
+.page-wrap.faq-page .editorial-hero-photo-frame,
+.page-wrap.opinions-page .editorial-hero-photo-frame,
+.page-wrap.opinions-dowodowa-page .editorial-hero-photo-frame,
+.page-wrap.marketing-page .opinions-profile-card,
+.page-wrap.editorial-home-page .opinions-profile-card,
+.page-wrap.premium-home-page .opinions-profile-card,
+.page-wrap.money-page .opinions-profile-card,
+.page-wrap.authority-page .opinions-profile-card,
+.page-wrap.faq-page .opinions-profile-card,
+.page-wrap.opinions-page .opinions-profile-card,
+.page-wrap.opinions-dowodowa-page .opinions-profile-card {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--paper);
+  box-shadow: none;
+}
+
+.page-wrap.marketing-page .editorial-hero-photo-frame,
+.page-wrap.editorial-home-page .editorial-hero-photo-frame,
+.page-wrap.premium-home-page .editorial-hero-photo-frame,
+.page-wrap.money-page .editorial-hero-photo-frame,
+.page-wrap.authority-page .editorial-hero-photo-frame,
+.page-wrap.faq-page .editorial-hero-photo-frame,
+.page-wrap.opinions-page .editorial-hero-photo-frame,
+.page-wrap.opinions-dowodowa-page .editorial-hero-photo-frame,
+.page-wrap.marketing-page .home-hero-photo-shell,
+.page-wrap.editorial-home-page .home-hero-photo-shell,
+.page-wrap.premium-home-page .home-hero-photo-shell,
+.page-wrap.money-page .home-hero-photo-shell,
+.page-wrap.authority-page .home-hero-photo-shell,
+.page-wrap.faq-page .home-hero-photo-shell,
+.page-wrap.opinions-page .home-hero-photo-shell,
+.page-wrap.opinions-dowodowa-page .home-hero-photo-shell {
+  overflow: hidden;
+}
+
+.page-wrap.marketing-page .footer-shell,
+.page-wrap.editorial-home-page .site-footer,
+.page-wrap.premium-home-page .site-footer,
+.page-wrap.money-page .site-footer,
+.page-wrap.authority-page .site-footer,
+.page-wrap.faq-page .site-footer,
+.page-wrap.opinions-page .site-footer,
+.page-wrap.opinions-dowodowa-page .site-footer {
+  border-top: 1px solid var(--line);
+  background: var(--bg);
+}
+
+.page-wrap.marketing-page .site-footer,
+.page-wrap.editorial-home-page .site-footer,
+.page-wrap.premium-home-page .site-footer,
+.page-wrap.money-page .site-footer,
+.page-wrap.authority-page .site-footer,
+.page-wrap.faq-page .site-footer,
+.page-wrap.opinions-page .site-footer,
+.page-wrap.opinions-dowodowa-page .site-footer {
+  padding: 48px;
+  color: var(--ink-soft);
+}
+
+.page-wrap.marketing-page .site-footer-grid,
+.page-wrap.editorial-home-page .site-footer-grid,
+.page-wrap.premium-home-page .site-footer-grid,
+.page-wrap.money-page .site-footer-grid,
+.page-wrap.authority-page .site-footer-grid,
+.page-wrap.faq-page .site-footer-grid,
+.page-wrap.opinions-page .site-footer-grid,
+.page-wrap.opinions-dowodowa-page .site-footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 32px;
+}
+
+.page-wrap.marketing-page .site-footer-brand h3,
+.page-wrap.editorial-home-page .site-footer-brand h3,
+.page-wrap.premium-home-page .site-footer-brand h3,
+.page-wrap.money-page .site-footer-brand h3,
+.page-wrap.authority-page .site-footer-brand h3,
+.page-wrap.faq-page .site-footer-brand h3,
+.page-wrap.opinions-page .site-footer-brand h3,
+.page-wrap.opinions-dowodowa-page .site-footer-brand h3 {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 28px;
+  font-style: italic;
+}
+
+.page-wrap.marketing-page .site-footer-links,
+.page-wrap.editorial-home-page .site-footer-links,
+.page-wrap.premium-home-page .site-footer-links,
+.page-wrap.money-page .site-footer-links,
+.page-wrap.authority-page .site-footer-links,
+.page-wrap.faq-page .site-footer-links,
+.page-wrap.opinions-page .site-footer-links,
+.page-wrap.opinions-dowodowa-page .site-footer-links {
+  display: grid;
+  gap: 8px;
+}
+
+.page-wrap.marketing-page .site-footer-link,
+.page-wrap.editorial-home-page .site-footer-link,
+.page-wrap.premium-home-page .site-footer-link,
+.page-wrap.money-page .site-footer-link,
+.page-wrap.authority-page .site-footer-link,
+.page-wrap.faq-page .site-footer-link,
+.page-wrap.opinions-page .site-footer-link,
+.page-wrap.opinions-dowodowa-page .site-footer-link {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.page-wrap.marketing-page .site-footer-note,
+.page-wrap.editorial-home-page .site-footer-note,
+.page-wrap.premium-home-page .site-footer-note,
+.page-wrap.money-page .site-footer-note,
+.page-wrap.authority-page .site-footer-note,
+.page-wrap.faq-page .site-footer-note,
+.page-wrap.opinions-page .site-footer-note,
+.page-wrap.opinions-dowodowa-page .site-footer-note {
+  color: var(--ink-mute);
+}
+
+.page-wrap.marketing-page .site-footer-bottom,
+.page-wrap.editorial-home-page .site-footer-bottom,
+.page-wrap.premium-home-page .site-footer-bottom,
+.page-wrap.money-page .site-footer-bottom,
+.page-wrap.authority-page .site-footer-bottom,
+.page-wrap.faq-page .site-footer-bottom,
+.page-wrap.opinions-page .site-footer-bottom,
+.page-wrap.opinions-dowodowa-page .site-footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 48px 0;
+  border-top: 1px solid var(--line);
+}
+
+@media (max-width: 1180px) {
+  .page-wrap.marketing-page .container,
+  .page-wrap.editorial-home-page .container,
+  .page-wrap.premium-home-page .container,
+  .page-wrap.money-page .container,
+  .page-wrap.authority-page .container,
+  .page-wrap.faq-page .container,
+  .page-wrap.opinions-page .container,
+  .page-wrap.opinions-dowodowa-page .container {
+    width: calc(100vw - 24px);
+  }
+
+  .page-wrap.marketing-page .editorial-hero-grid,
+  .page-wrap.editorial-home-page .editorial-hero-grid,
+  .page-wrap.premium-home-page .editorial-hero-grid,
+  .page-wrap.money-page .editorial-hero-grid,
+  .page-wrap.authority-page .editorial-hero-grid,
+  .page-wrap.faq-page .editorial-hero-grid,
+  .page-wrap.opinions-page .editorial-hero-grid,
+  .page-wrap.opinions-dowodowa-page .editorial-hero-grid,
+  .page-wrap.marketing-page .site-footer-grid,
+  .page-wrap.editorial-home-page .site-footer-grid,
+  .page-wrap.premium-home-page .site-footer-grid,
+  .page-wrap.money-page .site-footer-grid,
+  .page-wrap.authority-page .site-footer-grid,
+  .page-wrap.faq-page .site-footer-grid,
+  .page-wrap.opinions-page .site-footer-grid,
+  .page-wrap.opinions-dowodowa-page .site-footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .page-wrap.marketing-page .editorial-section-head,
+  .page-wrap.editorial-home-page .editorial-section-head,
+  .page-wrap.premium-home-page .editorial-section-head,
+  .page-wrap.money-page .editorial-section-head,
+  .page-wrap.authority-page .editorial-section-head,
+  .page-wrap.faq-page .editorial-section-head,
+  .page-wrap.opinions-page .editorial-section-head,
+  .page-wrap.opinions-dowodowa-page .editorial-section-head {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    margin-bottom: 36px;
+  }
+}
+
+@media (max-width: 760px) {
+  .page-wrap.marketing-page .container,
+  .page-wrap.editorial-home-page .container,
+  .page-wrap.premium-home-page .container,
+  .page-wrap.money-page .container,
+  .page-wrap.authority-page .container,
+  .page-wrap.faq-page .container,
+  .page-wrap.opinions-page .container,
+  .page-wrap.opinions-dowodowa-page .container {
+    width: 100%;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .page-wrap.marketing-page .header-main,
+  .page-wrap.editorial-home-page .header-main,
+  .page-wrap.premium-home-page .header-main,
+  .page-wrap.money-page .header-main,
+  .page-wrap.authority-page .header-main,
+  .page-wrap.faq-page .header-main,
+  .page-wrap.opinions-page .header-main,
+  .page-wrap.opinions-dowodowa-page .header-main,
+  .page-wrap.marketing-page .site-footer,
+  .page-wrap.editorial-home-page .site-footer,
+  .page-wrap.premium-home-page .site-footer,
+  .page-wrap.money-page .site-footer,
+  .page-wrap.authority-page .site-footer,
+  .page-wrap.faq-page .site-footer,
+  .page-wrap.opinions-page .site-footer,
+  .page-wrap.opinions-dowodowa-page .site-footer,
+  .page-wrap.marketing-page .editorial-hero-shell,
+  .page-wrap.editorial-home-page .editorial-hero-shell,
+  .page-wrap.premium-home-page .editorial-hero-shell,
+  .page-wrap.money-page .editorial-hero-shell,
+  .page-wrap.authority-page .editorial-hero-shell,
+  .page-wrap.faq-page .editorial-hero-shell,
+  .page-wrap.opinions-page .editorial-hero-shell,
+  .page-wrap.opinions-dowodowa-page .editorial-hero-shell,
+  .page-wrap.marketing-page .hero-surface,
+  .page-wrap.editorial-home-page .hero-surface,
+  .page-wrap.premium-home-page .hero-surface,
+  .page-wrap.money-page .hero-surface,
+  .page-wrap.authority-page .hero-surface,
+  .page-wrap.faq-page .hero-surface,
+  .page-wrap.opinions-page .hero-surface,
+  .page-wrap.opinions-dowodowa-page .hero-surface,
+  .page-wrap.marketing-page .editorial-section,
+  .page-wrap.editorial-home-page .editorial-section,
+  .page-wrap.premium-home-page .editorial-section,
+  .page-wrap.money-page .editorial-section,
+  .page-wrap.authority-page .editorial-section,
+  .page-wrap.faq-page .editorial-section,
+  .page-wrap.opinions-page .editorial-section,
+  .page-wrap.opinions-dowodowa-page .editorial-section,
+  .page-wrap.marketing-page .panel.section-panel,
+  .page-wrap.editorial-home-page .panel.section-panel,
+  .page-wrap.premium-home-page .panel.section-panel,
+  .page-wrap.money-page .panel.section-panel,
+  .page-wrap.authority-page .panel.section-panel,
+  .page-wrap.faq-page .panel.section-panel,
+  .page-wrap.opinions-page .panel.section-panel,
+  .page-wrap.opinions-dowodowa-page .panel.section-panel,
+  .page-wrap.marketing-page .cta-panel,
+  .page-wrap.editorial-home-page .cta-panel,
+  .page-wrap.premium-home-page .cta-panel,
+  .page-wrap.money-page .cta-panel,
+  .page-wrap.authority-page .cta-panel,
+  .page-wrap.faq-page .cta-panel,
+  .page-wrap.opinions-page .cta-panel,
+  .page-wrap.opinions-dowodowa-page .cta-panel {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .page-wrap.marketing-page .header-main,
+  .page-wrap.editorial-home-page .header-main,
+  .page-wrap.premium-home-page .header-main,
+  .page-wrap.money-page .header-main,
+  .page-wrap.authority-page .header-main,
+  .page-wrap.faq-page .header-main,
+  .page-wrap.opinions-page .header-main,
+  .page-wrap.opinions-dowodowa-page .header-main {
+    gap: 14px;
+    padding-top: 18px;
+    padding-bottom: 18px;
+  }
+
+  .page-wrap.marketing-page .header-links,
+  .page-wrap.editorial-home-page .header-links,
+  .page-wrap.premium-home-page .header-links,
+  .page-wrap.money-page .header-links,
+  .page-wrap.authority-page .header-links,
+  .page-wrap.faq-page .header-links,
+  .page-wrap.opinions-page .header-links,
+  .page-wrap.opinions-dowodowa-page .header-links,
+  .page-wrap.marketing-page .editorial-hero-grid,
+  .page-wrap.editorial-home-page .editorial-hero-grid,
+  .page-wrap.premium-home-page .editorial-hero-grid,
+  .page-wrap.money-page .editorial-hero-grid,
+  .page-wrap.authority-page .editorial-hero-grid,
+  .page-wrap.faq-page .editorial-hero-grid,
+  .page-wrap.opinions-page .editorial-hero-grid,
+  .page-wrap.opinions-dowodowa-page .editorial-hero-grid,
+  .page-wrap.marketing-page .site-footer-grid,
+  .page-wrap.editorial-home-page .site-footer-grid,
+  .page-wrap.premium-home-page .site-footer-grid,
+  .page-wrap.money-page .site-footer-grid,
+  .page-wrap.authority-page .site-footer-grid,
+  .page-wrap.faq-page .site-footer-grid,
+  .page-wrap.opinions-page .site-footer-grid,
+  .page-wrap.opinions-dowodowa-page .site-footer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-wrap.marketing-page .header-nav,
+  .page-wrap.editorial-home-page .header-nav,
+  .page-wrap.premium-home-page .header-nav,
+  .page-wrap.money-page .header-nav,
+  .page-wrap.authority-page .header-nav,
+  .page-wrap.faq-page .header-nav,
+  .page-wrap.opinions-page .header-nav,
+  .page-wrap.opinions-dowodowa-page .header-nav {
+    order: 3;
+    flex-basis: 100%;
+    justify-content: flex-start;
+  }
+
+  .page-wrap.marketing-page .header-nav .header-links,
+  .page-wrap.editorial-home-page .header-nav .header-links,
+  .page-wrap.premium-home-page .header-nav .header-links,
+  .page-wrap.money-page .header-nav .header-links,
+  .page-wrap.authority-page .header-nav .header-links,
+  .page-wrap.faq-page .header-nav .header-links,
+  .page-wrap.opinions-page .header-nav .header-links,
+  .page-wrap.opinions-dowodowa-page .header-nav .header-links,
+  .page-wrap.marketing-page .hero-actions,
+  .page-wrap.editorial-home-page .hero-actions,
+  .page-wrap.premium-home-page .hero-actions,
+  .page-wrap.money-page .hero-actions,
+  .page-wrap.authority-page .hero-actions,
+  .page-wrap.faq-page .hero-actions,
+  .page-wrap.opinions-page .hero-actions,
+  .page-wrap.opinions-dowodowa-page .hero-actions,
+  .page-wrap.marketing-page .hero-cta,
+  .page-wrap.editorial-home-page .hero-cta,
+  .page-wrap.premium-home-page .hero-cta,
+  .page-wrap.money-page .hero-cta,
+  .page-wrap.authority-page .hero-cta,
+  .page-wrap.faq-page .hero-cta,
+  .page-wrap.opinions-page .hero-cta,
+  .page-wrap.opinions-dowodowa-page .hero-cta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .page-wrap.marketing-page .header-actions,
+  .page-wrap.editorial-home-page .header-actions,
+  .page-wrap.premium-home-page .header-actions,
+  .page-wrap.money-page .header-actions,
+  .page-wrap.authority-page .header-actions,
+  .page-wrap.faq-page .header-actions,
+  .page-wrap.opinions-page .header-actions,
+  .page-wrap.opinions-dowodowa-page .header-actions,
+  .page-wrap.marketing-page .site-footer-bottom,
+  .page-wrap.editorial-home-page .site-footer-bottom,
+  .page-wrap.premium-home-page .site-footer-bottom,
+  .page-wrap.money-page .site-footer-bottom,
+  .page-wrap.authority-page .site-footer-bottom,
+  .page-wrap.faq-page .site-footer-bottom,
+  .page-wrap.opinions-page .site-footer-bottom,
+  .page-wrap.opinions-dowodowa-page .site-footer-bottom {
+    flex-direction: column;
+  }
+
+  .page-wrap.marketing-page .header-mobile-panel,
+  .page-wrap.editorial-home-page .header-mobile-panel,
+  .page-wrap.premium-home-page .header-mobile-panel,
+  .page-wrap.money-page .header-mobile-panel,
+  .page-wrap.authority-page .header-mobile-panel,
+  .page-wrap.faq-page .header-mobile-panel,
+  .page-wrap.opinions-page .header-mobile-panel,
+  .page-wrap.opinions-dowodowa-page .header-mobile-panel {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
