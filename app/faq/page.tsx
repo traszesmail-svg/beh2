@@ -1,48 +1,38 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { EditorialFaqSection } from '@/components/EditorialFaqSection'
-import { FunnelPrimaryActions } from '@/components/FunnelPrimaryActions'
-import { NotatnikPageShell } from '@/components/NotatnikA'
+import { NotatnikFinalCta, NotatnikFooter, NotatnikSectionHead, NotatnikTopbar } from '@/components/NotatnikA'
+import { Schema } from '@/components/schema'
 import { buildBookHref } from '@/lib/booking-routing'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
+import { getBreadcrumbJsonLd, getFaqPageJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
 import { FAQ_SHORTLISTS } from '@/lib/trust-layer'
-import { getCanonicalBaseUrl } from '@/lib/server/env'
-import {
-  SITE_NAME,
-  SITE_TAGLINE,
-  SPECIALIST_NAME,
-  SPECIALIST_PUBLIC_PROOF_SUMMARY,
-  SPECIALIST_PUBLIC_STATUS,
-} from '@/lib/site'
 
 const baseMetadata = buildMarketingMetadata({
-  title: 'FAQ',
+  title: 'Najczęstsze pytania o konsultację behawioralną',
   path: '/faq',
-  description: 'Najczęstsze pytania przed kontaktem i pierwszą rozmową.',
+  description: 'Najczęstsze pytania o konsultację behawioralną, rezerwację, płatność i pierwszy kontakt z behawiorystą.',
 })
 
-export const metadata: Metadata = {
-  ...baseMetadata,
-  robots: { index: false, follow: true },
-}
+export const metadata: Metadata = baseMetadata
 
-type TopicLink = {
-  eyebrow: string
-  title: string
-  copy: string
-  href: string
-}
-
-const consultationHref = buildBookHref(null, 'konsultacja-behawioralna-online')
 const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min')
+const consultationHref = buildBookHref(null, 'konsultacja-behawioralna-online')
 const contactHref = '/kontakt#formularz'
 
-const topicLinks: TopicLink[] = [
+const navItems = [
+  { href: '/psy', label: 'Pies' },
+  { href: '/koty', label: 'Kot' },
+  { href: '/niezbednik', label: 'Niezbednik' },
+  { href: '/o-mnie', label: 'O mnie' },
+  { href: '/kontakt#formularz', label: 'Kontakt' },
+]
+
+const topicLinks = [
   {
     eyebrow: 'Konsultacja',
     title: 'Jak wygląda pierwsza rozmowa',
-    copy: 'Pytania o start rozmowy, przebieg spotkania i to, co dostajesz po konsultacji.',
+    copy: 'Kwadrans, Dwa kwadranse i pełna konsultacja bez zgadywania, od czego zacząć.',
     href: '/konsultacja-behawioralna-online#faq',
   },
   {
@@ -58,149 +48,95 @@ const topicLinks: TopicLink[] = [
     href: '/koty#faq',
   },
   {
-    eyebrow: 'Podejście',
-    title: 'Jak pracuję',
-    copy: 'Sposób pracy i to, czego możesz się spodziewać po rozmowie.',
-    href: '/o-mnie#faq',
+    eyebrow: 'Kontakt',
+    title: 'Kiedy lepiej napisać',
+    copy: 'Jeśli nie chcesz od razu rezerwować, wiadomość pomoże ustalić najlepszy start.',
+    href: '/kontakt#formularz',
   },
-]
-
-const structuredData = [
-  {
-    '@context': 'https://schema.org',
-    '@type': 'WebPage',
-    name: 'FAQ',
-    description: `${SITE_NAME}. ${SITE_TAGLINE}.`,
-    url: new URL('/faq', getCanonicalBaseUrl()).toString(),
-    mainEntity: {
-      '@type': 'Person',
-      name: SPECIALIST_NAME,
-    },
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'Person',
-    name: SPECIALIST_NAME,
-    jobTitle: SPECIALIST_PUBLIC_STATUS,
-    description: SPECIALIST_PUBLIC_PROOF_SUMMARY,
-  },
-]
+] as const
 
 export default function FaqPage() {
+  const structuredData = [getBreadcrumbJsonLd([{ name: 'Strona glowna', path: '/' }, { name: 'FAQ', path: '/faq' }]), getFaqPageJsonLd(FAQ_SHORTLISTS.home)]
+
   return (
-    <NotatnikPageShell
-      tag="FAQ / najczestsze pytania"
-      navItems={[
-        { href: '/konsultacja-behawioralna-online#faq', label: 'Konsultacja' },
-        { href: '/psy#faq', label: 'Psy' },
-        { href: '/koty#faq', label: 'Koty' },
-        { href: '/o-mnie#faq', label: 'Podejscie' },
-        { href: '/faq#kontakt', label: 'Kontakt' },
-      ]}
-      ctaHref={audioHref}
-      ctaLabel={FUNNEL_CTA_LABELS.primary}
-      footerPrimaryHref={audioHref}
-      footerPrimaryLabel={FUNNEL_CTA_LABELS.primary}
-    >
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+    <main className="notatnik-page">
+      <Schema data={structuredData} />
+      <div className="notatnik-shell">
+        <NotatnikTopbar tag="FAQ / najczęstsze pytania" navItems={navItems} ctaHref={audioHref} ctaLabel={FUNNEL_CTA_LABELS.primary} />
 
-      <div className="container editorial-stack">
-        <section className="editorial-hero-shell premium-hero-shell faq-hero-shell" id="start">
-          <div className="editorial-hero-grid">
-            <div className="editorial-hero-copy">
-              <div className="section-eyebrow">FAQ</div>
-              <h1>Najczęstsze pytania przed kontaktem</h1>
-              <p className="editorial-hero-lead">
-                Znajdziesz tu najwazniejsze pytania o Kwadrans z behawiorysta, Dwa kwadranse, pelna konsultacje i wiadomosc.
-              </p>
+        <section className="notatnik-subhero">
+          <div>
+            <div className="notatnik-subhero-tag notatnik-mono">FAQ</div>
+            <h1>
+              Najczęstsze pytania przed <em>pierwszym ruchem</em>.
+            </h1>
+            <p>
+              Krótko, konkretnie i bez zbędnych objaśnień. Jeśli nie widzisz swojego pytania, zawsze możesz napisać wiadomość albo wejść od razu
+              w Kwadrans.
+            </p>
+            <div className="notatnik-subhero-actions">
+              <Link href={audioHref} prefetch={false} className="notatnik-btn">
+                <span>{FUNNEL_CTA_LABELS.primary}</span>
+                <span className="notatnik-btn-arrow" aria-hidden="true">
+                  &rarr;
+                </span>
+              </Link>
+              <Link href={contactHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
+                <span>Napisz wiadomość</span>
+              </Link>
+            </div>
+          </div>
 
-              <FunnelPrimaryActions
-                audioHref={audioHref}
-                consultationHref={consultationHref}
-                contactHref={contactHref}
-                primaryLocation="faq-hero-audio"
-                secondaryLocation="faq-hero-toolkit"
-                actionsClassName="hero-actions editorial-hero-actions"
-              />
+          <div className="notatnik-subhero-media">
+            <div className="notatnik-quiet-card">
+              <div className="notatnik-mono">Najczęściej pytacie o</div>
+              <h3>
+                Kwadrans, <em>kontakt</em>, dalszy krok.
+              </h3>
+              <p>Najwięcej wątpliwości dotyczy tego, od czego zacząć i czy trzeba od razu wchodzić w dużą konsultację.</p>
             </div>
           </div>
         </section>
 
-        <EditorialFaqSection
-          id="faq"
-          eyebrow="Najczęstsze pytania"
-          title="Najczęstsze pytania przed kontaktem"
-          description="Krótko, konkretnie i bez zbędnych objaśnień."
-          items={FAQ_SHORTLISTS.home}
+        <section id="faq">
+          <NotatnikSectionHead index="I." kicker="Najczęstsze pytania" title="Najczęściej zadawane pytania." />
+          <div className="notatnik-faq-grid">
+            {FAQ_SHORTLISTS.home.map((item) => (
+              <article key={item.question} className="notatnik-faq-item">
+                <h4>{item.question}</h4>
+                <p>{item.answer}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section>
+          <NotatnikSectionHead index="II." kicker="Wybierz temat" title="Przejdź do pytań z Twojego obszaru." />
+          <div className="notatnik-material-grid">
+            {topicLinks.map((card) => (
+              <article key={card.title} className="notatnik-material-card">
+                <div className="notatnik-material-tag notatnik-mono">{card.eyebrow}</div>
+                <h3>{card.title}</h3>
+                <p>{card.copy}</p>
+                <Link href={card.href} prefetch={false}>
+                  Przejdź dalej
+                </Link>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <NotatnikFinalCta
+          title="Jeśli nie widzisz tu swojego pytania, <em>napisz wiadomość.</em>"
+          copy="Wystarczy krótki opis sytuacji. Pomogę ustalić, czy najlepszym startem będzie Kwadrans, Dwa kwadranse czy pełna konsultacja."
+          primaryHref={audioHref}
+          primaryLabel={FUNNEL_CTA_LABELS.primary}
+          secondaryHref={consultationHref}
+          secondaryLabel="Pelna konsultacja"
         />
 
-        <section className="panel section-panel editorial-section" id="tematy">
-          <div className="editorial-section-head">
-            <div className="editorial-section-head-copy">
-              <div className="section-eyebrow">Wybierz temat</div>
-              <h2>Przejdź do pytań z Twojego obszaru</h2>
-            </div>
-            <p className="editorial-section-lead">
-              Pytania są ułożone w kontekście psa, kota, konsultacji i sposobu pracy.
-            </p>
-          </div>
-
-          <nav className="faq-quick-grid top-gap" aria-label="Tematyczne sekcje FAQ">
-            {topicLinks.map((card) => (
-              <Link
-                key={card.title}
-                href={card.href}
-                prefetch={false}
-                className="summary-card tree-backed-card faq-anchor-card"
-                aria-label={`${card.title} - przejdź do pytań`}
-              >
-                <span className="pill subtle-pill">{card.eyebrow}</span>
-                <h3>{card.title}</h3>
-                <p className="muted">{card.copy}</p>
-                <span className="faq-anchor-card-cta">Przejdź do pytań</span>
-              </Link>
-            ))}
-          </nav>
-        </section>
-
-        <section className="panel cta-panel editorial-final-panel faq-short-contact-panel" id="kontakt">
-          <div className="editorial-final-copy">
-            <div className="section-eyebrow">Nie widzisz pytania?</div>
-            <h2>Jeśli nie widzisz tu swojego pytania, napisz wiadomość</h2>
-            <p>
-              Wystarczy krótka wiadomość. Pomogę ustalić, czy najlepszym startem będzie Kwadrans z behawiorystą,
-              Dwa kwadranse, pelna konsultacja czy dalsza wiadomosc.
-            </p>
-
-            <FunnelPrimaryActions
-              audioHref={audioHref}
-              consultationHref={consultationHref}
-              contactHref={contactHref}
-              primaryLocation="faq-short-contact-audio"
-              secondaryLocation="faq-short-contact-toolkit"
-            />
-          </div>
-        </section>
-
-        <section className="panel cta-panel editorial-final-panel faq-final-cta-panel" id="final-cta">
-          <div className="editorial-final-copy">
-            <div className="section-eyebrow">Pierwszy krok</div>
-            <h2>Jeśli chcesz uporządkować sytuację, odezwij się</h2>
-            <p>
-              Jeśli chcesz spokojnie uporządkować sytuację psa albo kota, wybierz Kwadrans z behawiorystą, konsultację
-              Dwa kwadranse, pelna konsultacje albo napisz wiadomosc. Nie musisz przygotowywac wszystkiego przed kontaktem.
-            </p>
-
-            <FunnelPrimaryActions
-              audioHref={audioHref}
-              consultationHref={consultationHref}
-              contactHref={contactHref}
-              primaryLocation="faq-final-audio"
-              secondaryLocation="faq-final-toolkit"
-            />
-          </div>
-        </section>
+        <NotatnikFooter primaryHref={audioHref} primaryLabel={FUNNEL_CTA_LABELS.primary} />
       </div>
-    </NotatnikPageShell>
+    </main>
   )
 }

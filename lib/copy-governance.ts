@@ -8,7 +8,7 @@ export const COPY_SERVICE_NAMES = {
   bridge: 'Dwa kwadranse z behawiorysta',
   bridgeOperational: 'Dwa kwadranse z behawiorysta: 30 min online',
   consultation: 'pelna konsultacja behawioralna',
-  consultationOperational: 'pelna konsultacja behawioralna online, ok. 2 h',
+  consultationOperational: 'pelna konsultacja behawioralna online, 60 min',
   toolkit: 'Niezbednik',
   toolkitOperational: 'Niezbednik - materialy do samodzielnej pracy',
   contact: 'wiadomosc',

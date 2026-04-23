@@ -3,8 +3,10 @@ import Link from 'next/link'
 import { LeadMagnetSignup } from '@/components/LeadMagnetSignup'
 import { NewsletterSignup } from '@/components/NewsletterSignup'
 import { NotatnikPageShell } from '@/components/NotatnikA'
+import { Schema } from '@/components/schema'
 import { BLOG_ROUTE_BASE, getBlogListingMetadata, listBlogPosts } from '@/lib/blog'
 import { buildBookHref } from '@/lib/booking-routing'
+import { repairCopy } from '@/lib/copy'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { getLeadMagnetBySlug } from '@/lib/growth-layer'
 import { FUNNEL_SECONDARY_HREF } from '@/lib/offers'
@@ -47,12 +49,12 @@ export default function BlogPage() {
   const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min')
   const structuredData = [
     getBreadcrumbJsonLd([
-      { name: 'Strona główna', path: '/' },
+      { name: 'Strona glowna', path: '/' },
       { name: 'Blog', path: '/blog' },
     ]),
     getItemListJsonLd(
       posts.map((post) => ({
-        name: post.h1,
+        name: repairCopy(post.h1),
         url: new URL(post.path, getCanonicalBaseUrl()).toString(),
       })),
       'https://schema.org/ItemListOrderDescending',
@@ -79,9 +81,8 @@ export default function BlogPage() {
       footerPrimaryHref={audioHref}
       footerPrimaryLabel={FUNNEL_CTA_LABELS.primary}
     >
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+      <Schema data={structuredData} />
       <div className="container editorial-stack">
-
         <section className="panel section-panel blog-hero-panel">
           <div className="editorial-section-head">
             <div className="editorial-section-head-copy">
@@ -123,7 +124,7 @@ export default function BlogPage() {
             {posts.map((post) => (
               <article key={post.slug} className="summary-card tree-backed-card blog-list-card">
                 <div className="blog-list-card-topline">
-                  <span className="section-eyebrow">{post.categoryLabel}</span>
+                  <span className="section-eyebrow">{repairCopy(post.categoryLabel)}</span>
                   <span className="blog-list-meta">
                     <time dateTime={post.publishedAt}>{post.publishedAtLabel}</time>
                     <span>·</span>
@@ -133,17 +134,17 @@ export default function BlogPage() {
 
                 <h3>
                   <Link href={post.path} prefetch={false} className="blog-list-title-link">
-                    {post.title}
+                    {repairCopy(post.title)}
                   </Link>
                 </h3>
-                <p>{post.excerpt}</p>
+                <p>{repairCopy(post.excerpt)}</p>
 
                 <div className="blog-list-card-footer">
                   <Link href={post.path} prefetch={false} className="prep-inline-link">
                     Czytaj wpis
                   </Link>
                   <Link href={post.categoryHref} prefetch={false} className="prep-inline-link">
-                    {post.categoryLabel}
+                    {repairCopy(post.categoryLabel)}
                   </Link>
                 </div>
               </article>
@@ -199,7 +200,6 @@ export default function BlogPage() {
             <NewsletterSignup location="blog-listing-newsletter" sourcePage="/blog" />
           </div>
         </section>
-
       </div>
     </NotatnikPageShell>
   )

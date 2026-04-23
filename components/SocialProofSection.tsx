@@ -7,7 +7,13 @@ import { AddTestimonialForm } from '@/components/AddTestimonialForm'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { MEDIA_MENTIONS } from '@/lib/site'
 import { REAL_CASE_STUDIES, getRealCaseProofPills } from '@/lib/real-case-studies'
-import { TESTIMONIALS, getTestimonialIssueLabel } from '@/lib/testimonials'
+import {
+  TESTIMONIALS,
+  getTestimonialDisplayName,
+  getTestimonialIssueLabel,
+  getTestimonialServiceLabel,
+  getTestimonialSubjectLine,
+} from '@/lib/testimonials'
 
 function getInitials(displayName: string): string {
   return displayName
@@ -18,8 +24,8 @@ function getInitials(displayName: string): string {
     .join('')
 }
 
-function shouldRenderLocalPhoto(photoSrc?: string | null): photoSrc is string {
-  return typeof photoSrc === 'string' && photoSrc.startsWith('/')
+function shouldRenderLocalPhoto(photo?: string | null): photo is string {
+  return typeof photo === 'string' && photo.startsWith('/')
 }
 
 function resolveCaseImageSrc(imageSrc: string, remoteSrc?: string): string {
@@ -53,7 +59,7 @@ function CaseCard({ caseStudy }: { caseStudy: (typeof REAL_CASE_STUDIES)[number]
 
   return (
     <article className="real-case-card tree-backed-card" data-case-id={caseStudy.id}>
-      <div className="real-case-gallery" aria-label={`${caseStudy.headline} - zdjęcia`}>
+      <div className="real-case-gallery" aria-label={`${caseStudy.headline} - zdjecia`}>
         {caseStudy.images.map((image, index) => {
           const dimensions = getCaseImageDimensions(image.src)
 
@@ -95,7 +101,7 @@ function CaseCard({ caseStudy }: { caseStudy: (typeof REAL_CASE_STUDIES)[number]
         </div>
 
         <div className="real-case-next">
-          <strong>Źródło i efekt</strong>
+          <strong>Zrodlo i efekt</strong>
           <span>
             {caseStudy.proof.sourceContext}. Efekt pierwszego etapu: {caseStudy.proof.outcomeSnapshot}.
           </span>
@@ -123,27 +129,27 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
       <div className="section-head">
         <div>
           <div className="section-eyebrow">Opinie i realne przypadki</div>
-          <h2 id="historie-heading">Historie opiekunów i efekty konsultacji</h2>
+          <h2 id="historie-heading">Historie opiekunow i efekty konsultacji</h2>
         </div>
         <div className="muted">
-          Pokazujemy krótki kontekst, typ problemu, format pracy i pierwszy kierunek działania.
+          Pokazujemy krotki kontekst, typ problemu, format pracy i pierwszy kierunek dzialania.
           <br />
-          Obok są publikacje i krótkie informacje o profilu.
+          Obok sa publikacje i krotkie informacje o profilu.
         </div>
       </div>
 
       <div className="summary-grid trust-grid top-gap">
         <div className="summary-card tree-backed-card">
           <div className="stat-label">Typowe starty</div>
-          <span>Najczęstsze sprawy z opisanym formatem pracy, etapem i przybliżonym czasem.</span>
+          <span>Najczestsze sprawy z opisanym formatem pracy, etapem i przyblizonym czasem.</span>
         </div>
         <div className="summary-card tree-backed-card">
           <div className="stat-label">Profil i publikacje</div>
-          <span>Obok przykładów są też podstawowe informacje o kwalifikacjach i artykułach.</span>
+          <span>Obok przykladow sa tez podstawowe informacje o kwalifikacjach i artykulach.</span>
         </div>
         <div className="summary-card tree-backed-card">
-          <div className="stat-label">Ręczne sprawdzenie</div>
-          <span>Nic nie trafia na stronę automatycznie.</span>
+          <div className="stat-label">Reczne sprawdzenie</div>
+          <span>Nic nie trafia na strone automatycznie.</span>
         </div>
       </div>
 
@@ -158,9 +164,7 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
           <div className="section-eyebrow">Profil i publikacje</div>
           <h3>Dodatkowe informacje</h3>
         </div>
-        <div className="muted">
-          CAPBT, Instagram i publikacje branżowe pokazują dodatkowy kontekst pracy.
-        </div>
+        <div className="muted">CAPBT, Instagram i publikacje branzowe pokazuja dodatkowy kontekst pracy.</div>
       </div>
 
       <div className="media-grid top-gap">
@@ -180,60 +184,64 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
 
       {hasTestimonials ? (
         <>
-        <div className="section-head top-gap">
-          <div>
-            <div className="section-eyebrow">Wybrane opinie</div>
-            <h3>Krótkie opinie klientów</h3>
+          <div className="section-head top-gap">
+            <div>
+              <div className="section-eyebrow">Wybrane opinie</div>
+              <h3>Krotkie opinie klientow</h3>
+            </div>
+            <div className="muted">Opinie sa dodawane dopiero po wczesniejszym sprawdzeniu zgody.</div>
           </div>
-          <div className="muted">Opinie są dodawane dopiero po wcześniejszym sprawdzeniu zgody.</div>
-        </div>
 
           <div className="summary-grid top-gap">
-            {TESTIMONIALS.map((testimonial) => (
-              <article key={testimonial.id} className="summary-card tree-backed-card">
-                <div className="testimonial-head">
-                  {shouldRenderLocalPhoto(testimonial.photoSrc) ? (
-                    <div className="testimonial-avatar" aria-hidden="true">
-                      <Image
-                        src={testimonial.photoSrc}
-                        alt={`Zdjęcie powiązane z opinią ${testimonial.displayName}`}
-                        width={72}
-                        height={72}
-                        sizes="72px"
-                        className="testimonial-photo"
-                      />
-                    </div>
-                  ) : (
-                    <div className="testimonial-avatar" aria-hidden="true">
-                      {getInitials(testimonial.displayName)}
-                    </div>
-                  )}
+            {TESTIMONIALS.map((testimonial) => {
+              const displayName = getTestimonialDisplayName(testimonial)
+              const subjectLine = getTestimonialSubjectLine(testimonial)
 
-                  <div className="testimonial-meta">
-                    <strong>{testimonial.displayName}</strong>
-                    <span>{testimonial.dateLabel}</span>
-                    <span>{getTestimonialIssueLabel(testimonial.issueCategory)}</span>
+              return (
+                <article key={testimonial.id} className="summary-card tree-backed-card">
+                  <div className="testimonial-head">
+                    {shouldRenderLocalPhoto(testimonial.photo) ? (
+                      <div className="testimonial-avatar" aria-hidden="true">
+                        <Image
+                          src={testimonial.photo}
+                          alt={`Zdjecie powiazane z opinia ${displayName}`}
+                          width={72}
+                          height={72}
+                          sizes="72px"
+                          className="testimonial-photo"
+                        />
+                      </div>
+                    ) : (
+                      <div className="testimonial-avatar" aria-hidden="true">
+                        {getInitials(displayName)}
+                      </div>
+                    )}
+
+                    <div className="testimonial-meta">
+                      <strong>{displayName}</strong>
+                      <span>{getTestimonialIssueLabel(testimonial.category)}</span>
+                      <span>{getTestimonialServiceLabel(testimonial.service)}</span>
+                      {subjectLine ? <span>{subjectLine}</span> : null}
+                    </div>
                   </div>
-                </div>
-                <strong>{testimonial.opinion}</strong>
-                <span>{testimonial.beforeAfter}</span>
-              </article>
-            ))}
+                  <strong>{testimonial.quote}</strong>
+                  {!testimonial.consent ? <span>Dane szczegolowe zostana uzupelnione po osobnej zgodzie na publikacje.</span> : null}
+                </article>
+              )
+            })}
           </div>
         </>
       ) : (
         <div className="real-case-empty top-gap">
-          <strong>Wybrane opinie pojawią się po ręcznej akceptacji.</strong>
+          <strong>Wybrane opinie pojawia sie po recznej akceptacji.</strong>
           <p>
-            Na ten moment pokazujemy przede wszystkim realne przypadki, publiczne profile i publikacje. Dzięki temu
-            sekcja nie opiera się na pustych deklaracjach.
+            Na ten moment pokazujemy przede wszystkim realne przypadki, publiczne profile i publikacje. Dzieki temu sekcja nie opiera sie na
+            pustych deklaracjach.
           </p>
         </div>
       )}
 
-      <div className="info-box top-gap">
-        Opinie i dane kontaktowe z formularza są sprawdzane ręcznie. Nic nie trafia na stronę automatycznie.
-      </div>
+      <div className="info-box top-gap">Opinie i dane kontaktowe z formularza sa sprawdzane recznie. Nic nie trafia na strone automatycznie.</div>
 
       {showSubmissionForm ? (
         <div className="top-gap">
@@ -243,14 +251,14 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
         <div className="offer-detail-cta-band top-gap">
           <div className="offer-detail-cta-copy">
             <span className="section-eyebrow">Dalszy krok</span>
-            <strong>Chcesz zobaczyć pełną sekcję opinii?</strong>
-            <span>Jeśli wolisz spokojniejszy start, możesz wybrać Kwadrans z behawiorystą albo Niezbędnik.</span>
-            <span>Pełny formularz publikacji i dodatkowe wskazówki są na osobnej podstronie.</span>
+            <strong>Chcesz zobaczyc pelna sekcje opinii?</strong>
+            <span>Jesli wolisz spokojniejszy start, mozesz wybrac Kwadrans z behawiorysta albo Niezbednik.</span>
+            <span>Pelny formularz publikacji i dodatkowe wskazowki sa na osobnej podstronie.</span>
           </div>
 
           <div className="hero-actions offer-detail-actions">
             <Link href="/opinie" prefetch={false} className="button button-primary big-button">
-              Zobacz pełną sekcję opinii
+              Zobacz pelna sekcje opinii
             </Link>
             <Link href="/book" prefetch={false} className="button button-ghost big-button">
               {FUNNEL_CTA_LABELS.primary}

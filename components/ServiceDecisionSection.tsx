@@ -62,7 +62,7 @@ export function ServiceDecisionSection({
           <h3>Kiedy od razu wejsc szerzej</h3>
           <p>Pelna konsultacja daje wiecej czasu na kontekst, kilka watkow naraz i jasny plan dalszej pracy.</p>
           <div className="notatnik-service-meta" aria-label="Parametry pelnej konsultacji">
-            <span>ok. 2 h online</span>
+            <span>60 min online</span>
             <span>{getPublicServicePriceLabel('konsultacja-behawioralna-online')}</span>
             <span>szersza opcja</span>
           </div>

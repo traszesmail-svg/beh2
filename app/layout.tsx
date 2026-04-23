@@ -2,7 +2,9 @@ import { Suspense } from 'react'
 import type { Metadata, Viewport } from 'next'
 import { Fraunces, Inter, JetBrains_Mono, Manrope } from 'next/font/google'
 import { AnalyticsConsent } from '@/components/AnalyticsConsent'
-import { getOrganizationJsonLd, getWebsiteJsonLd } from '@/lib/schema'
+import { Schema } from '@/components/schema'
+import { APP_THEME_ATTRIBUTE, THEME_STORAGE_KEY } from '@/lib/theme'
+import { getRootSchemaGraphJsonLd } from '@/lib/schema'
 import { getCanonicalBaseUrl, shouldBlockSearchIndexing } from '@/lib/server/env'
 import { SITE_DESCRIPTION, SITE_NAME, SITE_OG_IMAGE, SITE_SHORT_NAME, SITE_TAGLINE } from '@/lib/site'
 import './globals.css'
@@ -71,18 +73,37 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
+  colorScheme: 'light dark',
 }
 
+const themeBootstrapScript = `
+(() => {
+  const fallbackTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+
+  try {
+    const storedTheme = window.localStorage.getItem('${THEME_STORAGE_KEY}');
+    const theme = storedTheme === 'light' || storedTheme === 'dark' ? storedTheme : fallbackTheme;
+    document.documentElement.setAttribute('${APP_THEME_ATTRIBUTE}', theme);
+  } catch {
+    document.documentElement.setAttribute('${APP_THEME_ATTRIBUTE}', fallbackTheme);
+  }
+})();
+`
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const rootJsonLd = [getOrganizationJsonLd(), getWebsiteJsonLd()]
+  const rootJsonLd = getRootSchemaGraphJsonLd()
 
   return (
-    <html lang="pl">
+    <html lang="pl" suppressHydrationWarning>
       <body className={`${manrope.variable} ${inter.variable} ${fraunces.variable} ${jetbrainsMono.variable}`}>
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(rootJsonLd) }} />
+        <script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
+        <Schema data={rootJsonLd} />
         {children}
         <Suspense fallback={null}>
-          <AnalyticsConsent measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim() || null} />
+          <AnalyticsConsent
+            measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim() || null}
+            cookiebotDomainGroupId={process.env.NEXT_PUBLIC_COOKIEBOT_DOMAIN_GROUP_ID?.trim() || null}
+          />
         </Suspense>
       </body>
     </html>

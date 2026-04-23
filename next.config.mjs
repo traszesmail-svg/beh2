@@ -15,7 +15,6 @@ const blockSearchIndexing = process.env.VERCEL_ENV
 
 const legacyBlogRedirects = [
   '/blog/jak-przygotowac-sie-do-konsultacji-behawioralnej-online',
-  '/blog/prog-pobudzenia-u-psa',
   '/blog/reaktywnosc-na-smyczy-cwiczenie-luznej-smyczy',
   '/blog/jak-nagrac-psa-zostawionego-samemu',
   '/blog/rutyna-wyjscia-oswajanie-psa-z-samotnoscia',
@@ -23,7 +22,6 @@ const legacyBlogRedirects = [
   '/blog/stres-kota-a-zachowania-toaletowe',
   '/blog/jak-wprowadzic-nowego-kota-do-domu',
   '/blog/agresja-przekierowana-u-kota',
-  '/blog/pies-cignnie-na-smyczy-od-czego-zaczac',
   '/blog/jak-nauczyc-psa-zostawania-samemu',
   '/blog/jak-ustawic-kuwete-dla-kota',
   '/blog/jak-zapoznac-dwa-koty',
@@ -58,6 +56,21 @@ const nextConfig = {
   async redirects() {
     return [
       ...legacyBlogRedirects,
+      {
+        source: '/blog/prog-pobudzenia-u-psa',
+        destination: '/blog/dlaczego-moj-pies-szczeka-na-inne-psy',
+        statusCode: 301,
+      },
+      {
+        source: '/blog/pies-cignnie-na-smyczy',
+        destination: '/blog/pies-ciagnie-na-smyczy',
+        statusCode: 301,
+      },
+      {
+        source: '/blog/pies-cignnie-na-smyczy-od-czego-zaczac',
+        destination: '/blog/pies-ciagnie-na-smyczy-od-czego-zaczac',
+        statusCode: 301,
+      },
       {
         source: '/oferta/konsultacja-behawioralna-online',
         destination: '/konsultacja-behawioralna-online',

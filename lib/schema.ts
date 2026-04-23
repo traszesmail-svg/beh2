@@ -1,4 +1,6 @@
 import {
+  CAPBT_PROFILE_URL,
+  INSTAGRAM_PROFILE_URL,
   ORGANIZATION_PUBLIC_PROFILE_URLS,
   SITE_NAME,
   SITE_OG_IMAGE,
@@ -7,6 +9,7 @@ import {
   SITE_TAGLINE,
   SPECIALIST_LOCATION,
   SPECIALIST_NAME,
+  SPECIALIST_PHOTO,
   SPECIALIST_PUBLIC_PROFILE_URLS,
   SPECIALIST_PUBLIC_PROOF_SUMMARY,
   SPECIALIST_PUBLIC_STATUS,
@@ -22,9 +25,35 @@ type ServiceSchemaInput = {
   name: string
   description: string
   serviceUrl: string
+  serviceType?: string
   offerPrice?: number | null
   offerPriceCurrency?: string
   areaServed?: string
+  offerCatalog?: Array<{
+    name: string
+    description: string
+    url: string
+    price?: number | null
+  }>
+}
+
+type FaqSchemaItem = {
+  question: string
+  answer: string
+}
+
+const ORGANIZATION_ID = `${SITE_PRODUCTION_URL}/#organization`
+const WEBSITE_ID = `${SITE_PRODUCTION_URL}/#website`
+const PERSON_ID = `${SITE_PRODUCTION_URL}/#krzysztof`
+const BUSINESS_ID = `${SITE_PRODUCTION_URL}/#business`
+
+function withoutContext<T extends Record<string, unknown>>(data: T) {
+  const { ['@context']: _context, ...rest } = data
+  return rest
+}
+
+function toAbsoluteUrl(url: string) {
+  return url.startsWith('http://') || url.startsWith('https://') ? url : new URL(url, SITE_PRODUCTION_URL).toString()
 }
 
 export function getOrganizationJsonLd() {
@@ -33,7 +62,7 @@ export function getOrganizationJsonLd() {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    '@id': `${SITE_PRODUCTION_URL}/#organization`,
+    '@id': ORGANIZATION_ID,
     name: SITE_NAME,
     alternateName: SITE_SHORT_NAME,
     url: SITE_PRODUCTION_URL,
@@ -53,35 +82,82 @@ export function getWebsiteJsonLd() {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    '@id': `${SITE_PRODUCTION_URL}/#website`,
+    '@id': WEBSITE_ID,
     url: SITE_PRODUCTION_URL,
     name: SITE_NAME,
     alternateName: SITE_SHORT_NAME,
     description: SITE_TAGLINE,
     publisher: {
-      '@id': `${SITE_PRODUCTION_URL}/#organization`,
+      '@id': ORGANIZATION_ID,
     },
     inLanguage: 'pl-PL',
   }
 }
 
 export function getPersonJsonLd() {
+  const publicContact = getPublicContactDetails()
+
   return {
     '@context': 'https://schema.org',
     '@type': 'Person',
-    '@id': `${SITE_PRODUCTION_URL}/o-mnie#person`,
+    '@id': PERSON_ID,
     name: SPECIALIST_NAME,
-    jobTitle: SPECIALIST_PUBLIC_STATUS,
+    jobTitle: `${SPECIALIST_PUBLIC_STATUS}, technik weterynarii, dogoterapeuta, dietetyk`,
     description: SPECIALIST_PUBLIC_PROOF_SUMMARY,
+    email: publicContact.email,
     url: `${SITE_PRODUCTION_URL}/o-mnie`,
+    image: new URL(SPECIALIST_PHOTO.src, SITE_PRODUCTION_URL).toString(),
     sameAs: [...SPECIALIST_PUBLIC_PROFILE_URLS],
     homeLocation: {
       '@type': 'Place',
       name: SPECIALIST_LOCATION,
     },
     worksFor: {
-      '@id': `${SITE_PRODUCTION_URL}/#organization`,
+      '@id': BUSINESS_ID,
     },
+  }
+}
+
+export function getProfessionalServiceJsonLd() {
+  const publicContact = getPublicContactDetails()
+  const sameAs = [
+    CAPBT_PROFILE_URL,
+    INSTAGRAM_PROFILE_URL,
+    ...ORGANIZATION_PUBLIC_PROFILE_URLS.filter((url) => url !== CAPBT_PROFILE_URL && url !== INSTAGRAM_PROFILE_URL),
+  ]
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ProfessionalService',
+    '@id': BUSINESS_ID,
+    name: 'Regulski - Behawiorysta psow i kotow online',
+    url: SITE_PRODUCTION_URL,
+    email: publicContact.email,
+    areaServed: {
+      '@type': 'Country',
+      name: 'Polska',
+    },
+    availableLanguage: ['pl-PL'],
+    founder: {
+      '@id': PERSON_ID,
+    },
+    employee: {
+      '@id': PERSON_ID,
+    },
+    priceRange: '69-350 PLN',
+    sameAs,
+  }
+}
+
+export function getRootSchemaGraphJsonLd() {
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      withoutContext(getOrganizationJsonLd()),
+      withoutContext(getWebsiteJsonLd()),
+      withoutContext(getPersonJsonLd()),
+      withoutContext(getProfessionalServiceJsonLd()),
+    ],
   }
 }
 
@@ -102,34 +178,81 @@ export function getServiceJsonLd({
   name,
   description,
   serviceUrl,
+  serviceType = 'Konsultacja behawioralna online',
   offerPrice = null,
   offerPriceCurrency = 'PLN',
   areaServed = 'Polska',
+  offerCatalog = [],
 }: ServiceSchemaInput) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Service',
     name,
     description,
-    url: serviceUrl,
+    serviceType,
+    url: toAbsoluteUrl(serviceUrl),
     provider: {
-      '@id': `${SITE_PRODUCTION_URL}/#organization`,
+      '@id': PERSON_ID,
     },
     areaServed: {
       '@type': 'Country',
       name: areaServed,
     },
+    availableLanguage: 'pl-PL',
+    ...(offerCatalog.length > 0
+      ? {
+          hasOfferCatalog: {
+            '@type': 'OfferCatalog',
+            name: `${name} - dostepne formaty`,
+            itemListElement: offerCatalog.map((item) => ({
+              '@type': 'Offer',
+              itemOffered: {
+                '@type': 'Service',
+                name: item.name,
+                description: item.description,
+                url: toAbsoluteUrl(item.url),
+                provider: {
+                  '@id': PERSON_ID,
+                },
+              },
+              ...(typeof item.price === 'number'
+                ? {
+                    price: item.price,
+                    priceCurrency: offerPriceCurrency,
+                  }
+                : {}),
+              url: toAbsoluteUrl(item.url),
+              availability: 'https://schema.org/InStock',
+            })),
+          },
+        }
+      : {}),
     ...(typeof offerPrice === 'number'
       ? {
           offers: {
             '@type': 'Offer',
             price: offerPrice,
             priceCurrency: offerPriceCurrency,
-            url: serviceUrl,
+            url: toAbsoluteUrl(serviceUrl),
             availability: 'https://schema.org/InStock',
           },
         }
       : {}),
+  }
+}
+
+export function getFaqPageJsonLd(items: FaqSchemaItem[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: items.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.answer,
+      },
+    })),
   }
 }
 

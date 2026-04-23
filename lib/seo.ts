@@ -83,7 +83,7 @@ export function buildTechnicalMetadata({ title, path, description, noIndex = tru
 
 export async function buildHomeMetadata(): Promise<Metadata> {
   const description = appendLocalSeoContext(
-    'Behawiorysta psow i kotow online. Spokojny pierwszy krok, konsultacje online i materialy pomocnicze bez chaosu.',
+    'Behawiorysta psow i kotow online. Kwadrans z behawiorysta za 69 zl - BLIK, bez kamery, konkretny pierwszy krok.',
   )
   const title = 'Behawiorysta psow i kotow online'
   const fullTitle = buildMetadataTitle(title)
@@ -115,11 +115,15 @@ export async function buildHomeMetadata(): Promise<Metadata> {
 export async function buildBookMetadata(serviceType: BookingServiceType = DEFAULT_BOOKING_SERVICE): Promise<Metadata> {
   const serviceTitle = getBookingServiceTitle(serviceType)
   const serviceSummary = getBookingServiceRoomSummary(serviceType)
+  const isQuick = serviceType === 'szybka-konsultacja-15-min'
 
   return buildTechnicalMetadata({
-    title: `Rezerwacja konsultacji: ${serviceTitle}`,
+    title: isQuick ? 'Rezerwacja konsultacji - Kwadrans z behawiorysta' : `Rezerwacja konsultacji: ${serviceTitle}`,
     path: '/book',
-    description: `${serviceSummary} Wybierz gatunek i temat konsultacji, a potem przejdz do terminow i kolejnego kroku rezerwacji ze specjalista ${SPECIALIST_NAME}.`,
+    description: isQuick
+      ? 'Zarezerwuj Kwadrans z behawiorysta: 15 minut audio bez kamery, pierwszy krok i spokojne uporzadkowanie tematu.'
+      : `${serviceSummary} Wybierz gatunek i temat konsultacji, a potem przejdz do terminow i kolejnego kroku rezerwacji ze specjalista ${SPECIALIST_NAME}.`,
+    noIndex: true,
     follow: true,
   })
 }

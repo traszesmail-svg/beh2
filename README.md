@@ -15,6 +15,10 @@ Lekka aplikacja Next.js dla jednego specjalisty prowadzacego 15-minutowe konsult
 - serwerowe potwierdzenia platnosci SMS z idempotencja po webhooku / finalnym sukcesie po stronie backendu
 - lokalny fallback JSON do developmentu, ktory tworzy katalog `data/` runtime tylko wtedy, gdy pracujesz w trybie local; statyczne tresci produktowe nie powinny byc tam trzymane
 
+## Operacyjnie
+
+- Aktualizacja dostepnosci: odswiez najblizsze wolne sloty w panelu admin albo w lokalnym fallbacku danych tak, aby `NextSlot` pokazywal realny najblizszy termin. Aktualizuj co najmniej raz w tygodniu.
+
 ## Wymagania
 
 - Node.js 20+

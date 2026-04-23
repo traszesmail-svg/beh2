@@ -64,7 +64,7 @@ function isSlotUnavailableBookingMessage(value: string) {
 }
 
 // Legacy fixture kept temporarily for source-based regression tests:
-// "Ten termin zostaĹ‚ wĹ‚aĹ›nie zajÄ™ty"
+// "Ten termin został właśnie zajęty"
 function getCheckoutComparisonCopy(serviceType: BookingServiceType) {
   if (serviceType === 'konsultacja-30-min') {
     return 'To rezerwacja Dwoch kwadransow z behawiorysta, czyli 30 minut spokojniejszej rozmowy online.'
@@ -242,12 +242,12 @@ export function BookingForm({
           </div>
 
           <div className="notatnik-field">
-            <label htmlFor="booking-pet-age">Wiek zwierzecia</label>
+            <label htmlFor="booking-pet-age">Wiek zwierzęcia</label>
             <input
               id="booking-pet-age"
               value={petAge}
               onChange={(event) => setPetAge(event.target.value)}
-              placeholder="np. 8 miesiecy lub 4 lata"
+              placeholder="np. 8 miesięcy lub 4 lata"
               data-booking-field="pet-age"
             />
           </div>
@@ -262,7 +262,7 @@ export function BookingForm({
 
         <div className="notatnik-form-grid">
           <div className="notatnik-field">
-            <label htmlFor="booking-service">Usluga</label>
+            <label htmlFor="booking-service">Usługa</label>
             <input id="booking-service" value={getBookingServiceTitle(serviceType)} readOnly data-readonly="true" />
           </div>
 
@@ -327,19 +327,19 @@ export function BookingForm({
 
       <div className="notatnik-submit-box">
         <div className="notatnik-submit-copy">
-          <div className="notatnik-submit-kicker">{qaBooking ? 'Krok testowy' : 'Nastepny krok'}</div>
-          <div className="notatnik-submit-title">{qaBooking ? 'Dalej: testowa platnosc' : 'Dalej: wybor platnosci'}</div>
+          <div className="notatnik-submit-kicker">{qaBooking ? 'Krok testowy' : 'Następny krok'}</div>
+          <div className="notatnik-submit-title">{qaBooking ? 'Dalej: testowa płatność' : 'Dalej: wybór płatności'}</div>
           <p>
             {qaBooking
-              ? 'Po zapisaniu danych blokujemy termin tylko dla Ciebie na czas testowej platnosci.'
-              : `Po zapisaniu danych blokujemy termin tylko dla Ciebie na czas platnosci. Na kolejnym ekranie przejdziesz do wplaty recznej. Do zaplaty: ${amountLabel}.`}
+              ? 'Po zapisaniu danych blokujemy termin tylko dla Ciebie na czas testowej płatności.'
+              : `Po zapisaniu danych blokujemy termin tylko dla Ciebie na czas płatności. Na kolejnym ekranie przejdziesz do wpłaty ręcznej. Do zapłaty: ${amountLabel}.`}
           </p>
           <p className="notatnik-submit-note">{getCheckoutComparisonCopy(serviceType)}</p>
         </div>
 
         <div className="notatnik-submit-actions">
           <button type="submit" className="notatnik-btn notatnik-btn-accent" disabled={isSubmitting} data-booking-submit="payment">
-            {isSubmitting ? 'Zapisuje dane...' : qaBooking ? 'Zablokuj termin i przejdz do testowej platnosci' : 'Zablokuj termin i przejdz do platnosci'}
+            {isSubmitting ? 'Zapisuję dane...' : qaBooking ? 'Zablokuj termin i przejdź do testowej płatności' : 'Zablokuj termin i przejdź do płatności'}
           </button>
         </div>
       </div>

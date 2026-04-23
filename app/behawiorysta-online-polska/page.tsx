@@ -1,19 +1,19 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { NotatnikPageShell } from '@/components/NotatnikA'
+import { Schema } from '@/components/schema'
 import { buildBookHref } from '@/lib/booking-routing'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { getLocalSeoPageByPath } from '@/lib/growth-layer'
-import { getBreadcrumbJsonLd } from '@/lib/schema'
+import { getBreadcrumbJsonLd, getFaqPageJsonLd, getServiceJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
-import { getCanonicalBaseUrl } from '@/lib/server/env'
 
 const pageData = getLocalSeoPageByPath('/behawiorysta-online-polska')
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: pageData?.title ?? 'Behawiorysta psow i kotow online - cala Polska',
+  title: pageData?.title ?? 'Behawiorysta online dla całej Polski',
   path: '/behawiorysta-online-polska',
-  description: pageData?.description ?? 'Behawiorysta psow i kotow online dla opiekunow z calej Polski.',
+  description: pageData?.description ?? 'Behawiorysta online dla całej Polski. Pomoc dla opiekunów psów i kotów, spokojny start i konsultacje online.',
   appendLocalContext: false,
 })
 
@@ -39,30 +39,30 @@ export default function LocalSeoPolandOnlinePage() {
   const toolkitHref = '/niezbednik'
   const contactHref = '/kontakt#formularz'
   const structuredData = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'ProfessionalService',
+    getServiceJsonLd({
       name: pageData.h1,
       description: pageData.description,
-      areaServed: [{ '@type': 'Country', name: 'Polska' }],
-      availableLanguage: 'pl',
-      url: new URL('/behawiorysta-online-polska', getCanonicalBaseUrl()).toString(),
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: pageData.faq.map((item) => ({
-        '@type': 'Question',
-        name: item.question,
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: item.answer,
+      serviceUrl: 'https://regulskibehawiorysta.pl/behawiorysta-online-polska',
+      offerPrice: 69,
+      offerCatalog: [
+        {
+          name: 'Kwadrans z behawiorystą',
+          description: '15 minut rozmowy audio bez kamery jako spokojny pierwszy krok.',
+          url: audioHref,
+          price: 69,
         },
-      })),
-    },
+        {
+          name: 'Pełna konsultacja behawioralna',
+          description: 'Szersza konsultacja online dla tematów wielowątkowych albo długotrwałych.',
+          url: consultationHref,
+          price: 350,
+        },
+      ],
+    }),
+    getFaqPageJsonLd(pageData.faq),
     getBreadcrumbJsonLd([
-      { name: 'Strona główna', path: '/' },
-      { name: 'Behawiorysta psow i kotow online', path: '/behawiorysta-online-polska' },
+      { name: 'Strona glowna', path: '/' },
+      { name: 'Behawiorysta psów i kotów online', path: '/behawiorysta-online-polska' },
     ]),
   ]
 
@@ -81,7 +81,7 @@ export default function LocalSeoPolandOnlinePage() {
       footerPrimaryHref={audioHref}
       footerPrimaryLabel={FUNNEL_CTA_LABELS.primary}
     >
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+      <Schema data={structuredData} />
       <div className="container editorial-stack">
         <section className="editorial-hero-shell premium-hero-shell">
           <div className="editorial-hero-grid">
@@ -91,7 +91,7 @@ export default function LocalSeoPolandOnlinePage() {
               <p className="editorial-hero-lead">{pageData.description}</p>
 
               <div className="stack-gap top-gap-small">
-                {pageData.intro.map((paragraph) => (
+                {pageData.intro.slice(0, 2).map((paragraph) => (
                   <p key={paragraph} className="muted">
                     {paragraph}
                   </p>
@@ -123,7 +123,7 @@ export default function LocalSeoPolandOnlinePage() {
         </section>
 
         <section className="panel section-panel editorial-section">
-          <SectionIntro eyebrow="Zakres" title="Wybierz wlasciwa sciezke wejscia" description="To jest glowna strona uslugi online. Stad przechodzisz dalej do problemow psa, problemow kota albo do opisu dluzszej konsultacji." />
+          <SectionIntro eyebrow="Zakres" title="Wybierz właściwą ścieżkę wejścia" description="To jest główna strona usługi online. Stąd przechodzisz dalej do problemów psa, problemów kota albo do opisu dłuższej konsultacji." />
           <div className="card-grid two-up top-gap-small">
             {pageData.problemCards.map((item) => (
               <article key={item.title} className="summary-card tree-backed-card">
@@ -131,7 +131,7 @@ export default function LocalSeoPolandOnlinePage() {
                 <p>{item.copy}</p>
                 {item.href ? (
                   <Link href={item.href} prefetch={false} className="prep-inline-link">
-                    Przejdź do tematu
+                    Przejdz do tematu
                   </Link>
                 ) : null}
               </article>
@@ -142,7 +142,7 @@ export default function LocalSeoPolandOnlinePage() {
         <section className="panel section-panel editorial-section">
           <SectionIntro eyebrow="Rola strony" title={pageData.supportTitle} description={pageData.supportBody[0] ?? ''} />
           <div className="stack-gap top-gap-small">
-            {pageData.supportBody.slice(1).map((paragraph) => (
+            {pageData.supportBody.slice(1, 3).map((paragraph) => (
               <div key={paragraph} className="list-card tree-backed-card">
                 <span>{paragraph}</span>
               </div>
@@ -151,7 +151,7 @@ export default function LocalSeoPolandOnlinePage() {
         </section>
 
         <section className="panel section-panel editorial-section">
-          <SectionIntro eyebrow="Formaty" title="Najprostszy start to Kwadrans z behawiorysta" description="Jesli wolisz najpierw przeczytac materialy, zajrzyj do Niezbednika. Przy sprawach szerszych mozesz wybrac Dwa kwadranse albo pelna konsultacje." />
+          <SectionIntro eyebrow="Formaty" title="Najprostszy start to Kwadrans z behawiorystą" description="Jeśli wolisz najpierw przeczytać materiały, zajrzyj do Niezbędnika. Przy sprawach szerszych możesz wybrać Dwa kwadranse albo pełną konsultację." />
           <div className="card-grid three-up top-gap-small">
             {pageData.firstStepCards.map((item) => (
               <article key={item.title} className="summary-card tree-backed-card">
@@ -163,7 +163,7 @@ export default function LocalSeoPolandOnlinePage() {
         </section>
 
         <section className="panel section-panel editorial-section" id="faq">
-          <SectionIntro eyebrow="FAQ" title="Najczestsze pytania przed rezerwacja" description="Krotko o tym, jak wyglada start, konsultacja online i kontakt przed rezerwacja." />
+          <SectionIntro eyebrow="FAQ" title="Najczęstsze pytania przed rezerwacją" description="Krótko o tym, jak wygląda start, konsultacja online i kontakt przed rezerwacją." />
           <div className="premium-faq-grid top-gap">
             {pageData.faq.map((item) => (
               <details key={item.question} className="premium-faq-item">
@@ -179,7 +179,7 @@ export default function LocalSeoPolandOnlinePage() {
         </section>
 
         <section className="panel section-panel blog-related-panel">
-          <SectionIntro eyebrow="Architektura" title="Przejdz dalej tam, gdzie to ma sens" description="Tutaj znajdziesz strony, ktore maja rozne role: kategorie problemow, opis pelnej konsultacji, cennik i kontakt." />
+          <SectionIntro eyebrow="Architektura" title="Przejdź dalej tam, gdzie to ma sens" description="Tutaj znajdziesz strony, które mają różne role: kategorie problemów, opis pełnej konsultacji, cennik i kontakt." />
           <div className="blog-related-grid top-gap-small">
             {pageData.relatedLinks.map((item) => (
               <Link key={item.href} href={item.href} prefetch={false} className="summary-card tree-backed-card blog-related-card">
@@ -188,10 +188,13 @@ export default function LocalSeoPolandOnlinePage() {
               </Link>
             ))}
           </div>
+          <div className="hero-actions top-gap-small">
+            <Link href={contactHref} prefetch={false} className="prep-inline-link">
+              Przejdz do kontaktu
+            </Link>
+          </div>
         </section>
-
       </div>
     </NotatnikPageShell>
   )
 }
-

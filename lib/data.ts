@@ -73,7 +73,7 @@ export const faq = [
   },
   {
     q: 'Czy zakup jest bezpieczny?',
-    a: 'Tak. Możesz wybrać prostą wpłatę BLIK/przelewem, a link do rozmowy odblokowuje się dopiero po potwierdzeniu wpłaty.',
+    a: 'Tak. Możesz wybrać prostą wpłatę BLIK na telefon, a link do rozmowy odblokowuje się dopiero po potwierdzeniu wpłaty.',
   },
   {
     q: 'Czy mogę anulować zakup?',
@@ -224,7 +224,7 @@ export function getPaymentStatusLabel(
     case 'unpaid':
       return 'Nieopłacona'
     case 'pending_manual_review':
-      return 'Zgłoszona, potwierdzenie do 60 min'
+      return 'Zgłoszona, potwierdzenie do 15 min'
     case 'paid':
       return 'Opłacona'
     case 'failed':

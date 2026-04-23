@@ -177,6 +177,26 @@ export function buildPdfInquiryHref({
   return `/kontakt?${params.toString()}`
 }
 
+export function buildPdfOrderHref({
+  guideSlug,
+  bundleSlug,
+}: {
+  guideSlug?: string | null
+  bundleSlug?: string | null
+} = {}) {
+  const params = new URLSearchParams()
+
+  if (guideSlug) {
+    params.set('guide', guideSlug)
+  }
+
+  if (bundleSlug) {
+    params.set('bundle', bundleSlug)
+  }
+
+  return `/zamow-pdf?${params.toString()}`
+}
+
 export function getPdfGuideCoverSrc(guide: Pick<PdfGuide, 'coverFileName'>): string {
   return `${PDF_GUIDE_COVER_PUBLIC_BASE}/${guide.coverFileName}`
 }

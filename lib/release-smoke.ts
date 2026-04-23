@@ -114,65 +114,34 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
     {
       path: '/',
       required: [
-        'Behawiorysta psów i kotów online. Zacznij od spokojnej rozmowy.',
-        'Wybierz stronę dla psa albo kota',
-        'Zacznij od Kwadransu z behawiorystą',
-        'Co opiekunowie mówią o konsultacjach',
-        'Najczęstsze pytania przed pierwszym kontaktem',
+        'Twoj pies albo kot zachowuje sie inaczej, niz powinien, i chcesz wiedziec, co z tym zrobic.',
+        'Kwadrans z behawiorysta',
+        'Pomoc dla opiekuna',
+        'Zacznij od Kwadransu z behawiorysta',
+        'Co opiekunowie mowia po rozmowie.',
+        'Jesli wiesz juz, czy temat dotyczy psa, czy kota, wybierz wlasciwa strone.',
       ],
       requireBuildMarker: true,
     },
     {
       path: '/oferta',
       required: [
-        'Najprostszy start to Kwadrans z behawiorystą.',
-        'Konsultacja 60 min zostaje szerszą opcją',
-        'Trzy czytelne sposoby rozpoczęcia',
-        'Kwadrans czy 60 minut',
+        'Najprostszy start to Kwadrans z behawiorysta. Dwa kwadranse sa etapem posrednim, a pelna konsultacja behawioralna zostaje najszersza opcja.',
+        'Publicznie zostaja cztery czytelne wejscia: Kwadrans z behawiorysta, Dwa kwadranse, pelna konsultacja behawioralna i Niezbednik dla osob, ktore chca najpierw wrocic do materialow.',
+        'Aktywna oferta',
+        'Kwadrans czy pelna konsultacja',
+        'Kwadrans z behawiorysta sprawdza sie na start',
       ],
       requireBuildMarker: true,
     },
     {
       path: '/niezbednik',
       required: [
-        'Niezbednik do spokojnej pracy z psem lub kotem',
-        'Najpierw wybierz problem, dopiero potem format',
-        'Wybrane ksiazki, ktore realnie sa na Amazon.pl',
-        'Przybory, ktore moga wspierac plan pracy',
-        'Najczestsze pytania przed wyborem rekomendacji albo rozmowy',
-      ],
-      requireBuildMarker: true,
-    },
-    {
-      path: '/opinie',
-      required: [
-        'Co opiekunowie mówią o konsultacjach',
-        'Nie same cytaty, tylko krótki obraz sytuacji, etapu współpracy i pierwszego efektu',
-        'Przy kartach zostają też typ problemu, format kontaktu, etap współpracy i przybliżony czas pierwszych zmian.',
-        'Krótki kontekst problemu, pierwszy ruch i kierunek dalszej pracy',
-        'Źródło kontekstu i pierwszy efekt',
-        'Co najczęściej daje pierwsza rozmowa',
-        'Jeśli widzisz w tych głosach coś bliskiego swojej sytuacji, zrób pierwszy spokojny krok',
-      ],
-      requireBuildMarker: true,
-    },
-    {
-      path: '/faq',
-      required: [
-        'Najczęstsze pytania przed kontaktem',
-        'Przejdź do pytań z Twojego obszaru',
-        'Jeśli nie widzisz tu swojego pytania, napisz wiadomość',
-        'Jeśli chcesz uporządkować sytuację, odezwij się',
-      ],
-      requireBuildMarker: true,
-    },
-    {
-      path: '/kontakt',
-      required: [
-        'Skontaktuj się, jeśli chcesz krótko opisać temat albo zadać pytanie.',
-        'Kwadrans, konsultacja 60 min albo krótka wiadomość',
-        'Najważniejsze informacje o kontakcie',
-        'Najczęstsze pytania przed kontaktem',
+        'Niezbednik / materialy i rekomendacje',
+        'Trzy konkretne materialy na realny start',
+        'Wybrane ksiazki',
+        'Przybory',
+        'Najczestsze pytania',
       ],
       requireBuildMarker: true,
     },
@@ -188,61 +157,21 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
       requireBuildMarker: true,
     },
     {
-      path: '/o-mnie',
-      required: [
-        'Krzysztof Regulski - behawiorysta psów i kotów',
-        'To, co warto wiedzieć przed pierwszą rozmową',
-        'Jak prowadzę konsultację, żeby była spokojna i konkretna',
-        'Co opiekunowie cenią w moim sposobie pracy',
-        'Najczęstsze pytania o współpracę i sposób pracy',
-      ],
-      requireBuildMarker: true,
-    },
-    {
-      path: '/book',
-      required: [
-        'Wybierz, czy konsultacja dotyczy psa czy kota',
-        'Kwadrans z behawiorystą',
-        'Konsultacja 60 min',
-        'Pies',
-        'Kot',
-      ],
-      requireBuildMarker: true,
-    },
-    {
-      path: '/koty',
-      required: [
-        'Behawiorysta kotów online dla opiekunów z całej Polski',
-        'Zacznij od Kwadransu z behawiorystą.',
-        'Z jakimi trudnościami najczęściej zgłaszają się opiekunowie kotów',
-        'Jak wygląda konsultacja dotycząca kota',
-        'Co dostajesz po konsultacji dotyczącej kota',
-      ],
-      requireBuildMarker: true,
-    },
-    {
       path: '/slot?problem=szczeniak',
-      required: ['Etap rezerwacji: wybór terminu', 'Wybierz termin: Szczeniak / młody pies'],
-      requireBuildMarker: true,
-    },
-    {
-      path: '/form?problem=szczeniak&slotId=2026-03-24-11%3A20',
-      required: [
-        'Etap rezerwacji: dane do konsultacji',
-        'Uzupełnij dane',
-        'To finalna kwota dla tej usługi przed przejściem do płatności.',
-      ],
-      requireBuildMarker: true,
-    },
-    {
-      path: '/regulamin',
-      required: ['Regulamin świadczenia usług', 'Kontakt w sprawach regulaminu'],
+      required: ['Wybierz termin', 'Szczeniak / mlody pies'],
       requireBuildMarker: true,
     },
     {
       path: '/polityka-prywatnosci',
-      required: ['Polityka prywatności', 'Kontakt w sprawach danych osobowych'],
+      required: ['Polityka prywatnosci', 'Kontakt w sprawach danych osobowych'],
+      requireBuildMarker: true,
+    },
+    {
+      path: '/polityka-prywatnosci',
+      required: ['Polityka prywatnosci', 'Kontakt w sprawach danych osobowych'],
       requireBuildMarker: true,
     },
   ]
 }
+
+

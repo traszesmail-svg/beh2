@@ -1,0 +1,302 @@
+[
+  {
+    "id": "2026-04-19-11:00",
+    "bookingDate": "2026-04-19",
+    "bookingTime": "11:00",
+    "isBooked": false,
+    "lockedByBookingId": null,
+    "lockedUntil": null,
+    "createdAt": "2026-04-18T18:53:29.285Z",
+    "updatedAt": "2026-04-18T18:53:29.285Z"
+  },
+  {
+    "id": "2026-04-19-11:20",
+    "bookingDate": "2026-04-19",
+    "bookingTime": "11:20",
+    "isBooked": false,
+    "lockedByBookingId": null,
+    "lockedUntil": null,
+    "createdAt": "2026-04-18T18:53:29.285Z",
+    "updatedAt": "2026-04-18T18:53:29.285Z"
+  },
+  {
+    "id": "2026-04-19-11:40",
+    "bookingDate": "2026-04-19",
+    "bookingTime": "11:40",
+    "isBooked": false,
+    "lockedByBookingId": null,
+    "lockedUntil": null,
+    "createdAt": "2026-04-18T18:53:29.285Z",
+    "updatedAt": "2026-04-18T18:53:29.285Z"
+  },
+  {
+    "id": "2026-04-19-16:00",
+    "bookingDate": "2026-04-19",
+    "bookingTime": "16:00",
+    "isBooked": false,
+    "lockedByBookingId": null,
+    "lockedUntil": null,
+    "createdAt": "2026-04-18T18:53:29.285Z",
+    "updatedAt": "2026-04-18T18:53:29.285Z"
+  },
+  {
+    "id": "2026-04-19-16:20",
+    "bookingDate": "2026-04-19",
+    "bookingTime": "16:20",
+    "isBooked": false,
+    "lockedByBookingId": null,
+    "lockedUntil": null,
+    "createdAt": "2026-04-18T18:53:29.285Z",
+    "updatedAt": "2026-04-18T18:53:29.285Z"
+  },
+  {
+    "id": "2026-04-19-16:40",
+    "bookingDate": "2026-04-19",
+    "bookingTime": "16:40",
+    "isBooked": false,
+    "lockedByBookingId": null,
+    "lockedUntil": null,
+    "createdAt": "2026-04-18T18:53:29.285Z",
+    "updatedAt": "2026-04-18T18:53:29.285Z"
+  },
+  {
+    "id": "2026-04-20-09:00",
+    "bookingDate": "2026-04-20",
+    "bookingTime": "09:00",
+    "isBooked": false,
+    "lockedByBookingId": null,
+    "lockedUntil": null,
+    "createdAt": "2026-04-18T18:53:29.285Z",
+    "updatedAt": "2026-04-18T18:53:29.285Z"
+  },
+  {
+    "id": "2026-04-20-09:20",
+    "bookingDate": "2026-04-20",
+    "bookingTime": "09:20",
+    "isBooked": false,
+    "lockedByBookingId": null,
+    "lockedUntil": null,
+    "createdAt": "2026-04-18T18:53:29.285Z",
+    "updatedAt": "2026-04-18T18:53:29.285Z"
+  },
+  {
+    "id": "2026-04-20-17:00",
+    "bookingDate": "2026-04-20",
+    "bookingTime": "17:00",
+    "isBooked": false,
+    "lockedByBookingId": null,
+    "lockedUntil": null,
+    "createdAt": "2026-04-18T18:53:29.285Z",
+    "updatedAt": "2026-04-18T18:53:29.285Z"
+  },
+  {
+    "id": "2026-04-20-17:20",
+    "bookingDate": "2026-04-20",
+    "bookingTime": "17:20",
+    "isBooked": false,
+    "lockedByBookingId": null,
+    "lockedUntil": null,
+    "createdAt": "2026-04-18T18:53:29.285Z",
+    "updatedAt": "2026-04-18T18:53:29.285Z"
+  },
+  {
+    "id": "2026-04-20-17:40",
+    "bookingDate": "2026-04-20",
+    "bookingTime": "17:40",
+    "isBooked": false,
+    "lockedByBookingId": null,
+    "lockedUntil": null,
+    "createdAt": "2026-04-18T18:53:29.285Z",
+    "updatedAt": "2026-04-18T18:53:29.285Z"
+  },
+  {
+    "id": "2026-04-20-18:00",
+    "bookingDate": "2026-04-20",
+    "bookingTime": "18:00",
+    "isBooked": false,
+    "lockedByBookingId": null,
+    "lockedUntil": null,
+    "createdAt": "2026-04-18T18:53:29.285Z",
+    "updatedAt": "2026-04-18T18:53:29.285Z"
+  },
+  {
+    "id": "2026-04-21-10:00",
+    "bookingDate": "2026-04-21",
+    "bookingTime": "10:00",
+    "isBooked": false,
+    "lockedByBookingId": null,
+    "lockedUntil": null,
+    "createdAt": "2026-04-18T18:53:29.285Z",
+    "updatedAt": "2026-04-18T18:53:29.285Z"
+  },
+  {
+    "id": "2026-04-21-10:20",
+    "bookingDate": "2026-04-21",
+    "bookingTime": "10:20",
+    "isBooked": false,
+    "lockedByBookingId": null,
+    "lockedUntil": null,
+    "createdAt": "2026-04-18T18:53:29.285Z",
+    "updatedAt": "2026-04-18T18:53:29.285Z"
+  },
+  {
+    "id": "2026-04-21-10:40",
+    "bookingDate": "2026-04-21",
+    "bookingTime": "10:40",
+    "isBooked": false,
+    "lockedByBookingId": null,
+    "lockedUntil": null,
+    "createdAt": "2026-04-18T18:53:29.285Z",
+    "updatedAt": "2026-04-18T18:53:29.285Z"
+  },
+  {
+    "id": "2026-04-21-11:00",
+    "bookingDate": "2026-04-21",
+    "bookingTime": "11:00",
+    "isBooked": false,
+    "lockedByBookingId": null,
+    "lockedUntil": null,
+    "createdAt": "2026-04-18T18:53:29.285Z",
+    "updatedAt": "2026-04-18T18:53:29.285Z"
+  },
+  {
+    "id": "2026-04-21-18:00",
+    "bookingDate": "2026-04-21",
+    "bookingTime": "18:00",
+    "isBooked": false,
+    "lockedByBookingId": null,
+    "lockedUntil": null,
+    "createdAt": "2026-04-18T18:53:29.285Z",
+    "updatedAt": "2026-04-18T18:53:29.285Z"
+  },
+  {
+    "id": "2026-04-21-18:20",
+    "bookingDate": "2026-04-21",
+    "bookingTime": "18:20",
+    "isBooked": false,
+    "lockedByBookingId": null,
+    "lockedUntil": null,
+    "createdAt": "2026-04-18T18:53:29.285Z",
+    "updatedAt": "2026-04-18T18:53:29.285Z"
+  },
+  {
+    "id": "2026-04-22-09:00",
+    "bookingDate": "2026-04-22",
+    "bookingTime": "09:00",
+    "isBooked": false,
+    "lockedByBookingId": null,
+    "lockedUntil": null,
+    "createdAt": "2026-04-18T18:53:29.285Z",
+    "updatedAt": "2026-04-18T18:53:29.285Z"
+  },
+  {
+    "id": "2026-04-22-09:20",
+    "bookingDate": "2026-04-22",
+    "bookingTime": "09:20",
+    "isBooked": false,
+    "lockedByBookingId": null,
+    "lockedUntil": null,
+    "createdAt": "2026-04-18T18:53:29.285Z",
+    "updatedAt": "2026-04-18T18:53:29.285Z"
+  },
+  {
+    "id": "2026-04-22-09:40",
+    "bookingDate": "2026-04-22",
+    "bookingTime": "09:40",
+    "isBooked": false,
+    "lockedByBookingId": null,
+    "lockedUntil": null,
+    "createdAt": "2026-04-18T18:53:29.285Z",
+    "updatedAt": "2026-04-18T18:53:29.285Z"
+  },
+  {
+    "id": "2026-04-22-10:00",
+    "bookingDate": "2026-04-22",
+    "bookingTime": "10:00",
+    "isBooked": false,
+    "lockedByBookingId": null,
+    "lockedUntil": null,
+    "createdAt": "2026-04-18T18:53:29.285Z",
+    "updatedAt": "2026-04-18T18:53:29.285Z"
+  },
+  {
+    "id": "2026-04-22-10:20",
+    "bookingDate": "2026-04-22",
+    "bookingTime": "10:20",
+    "isBooked": false,
+    "lockedByBookingId": null,
+    "lockedUntil": null,
+    "createdAt": "2026-04-18T18:53:29.285Z",
+    "updatedAt": "2026-04-18T18:53:29.285Z"
+  },
+  {
+    "id": "2026-04-22-10:40",
+    "bookingDate": "2026-04-22",
+    "bookingTime": "10:40",
+    "isBooked": false,
+    "lockedByBookingId": null,
+    "lockedUntil": null,
+    "createdAt": "2026-04-18T18:53:29.285Z",
+    "updatedAt": "2026-04-18T18:53:29.285Z"
+  },
+  {
+    "id": "2026-04-23-11:00",
+    "bookingDate": "2026-04-23",
+    "bookingTime": "11:00",
+    "isBooked": false,
+    "lockedByBookingId": null,
+    "lockedUntil": null,
+    "createdAt": "2026-04-18T18:53:29.285Z",
+    "updatedAt": "2026-04-18T18:53:29.285Z"
+  },
+  {
+    "id": "2026-04-23-11:20",
+    "bookingDate": "2026-04-23",
+    "bookingTime": "11:20",
+    "isBooked": false,
+    "lockedByBookingId": null,
+    "lockedUntil": null,
+    "createdAt": "2026-04-18T18:53:29.285Z",
+    "updatedAt": "2026-04-18T18:53:29.285Z"
+  },
+  {
+    "id": "2026-04-23-11:40",
+    "bookingDate": "2026-04-23",
+    "bookingTime": "11:40",
+    "isBooked": false,
+    "lockedByBookingId": null,
+    "lockedUntil": null,
+    "createdAt": "2026-04-18T18:53:29.285Z",
+    "updatedAt": "2026-04-18T18:53:29.285Z"
+  },
+  {
+    "id": "2026-04-23-16:00",
+    "bookingDate": "2026-04-23",
+    "bookingTime": "16:00",
+    "isBooked": false,
+    "lockedByBookingId": null,
+    "lockedUntil": null,
+    "createdAt": "2026-04-18T18:53:29.285Z",
+    "updatedAt": "2026-04-18T18:53:29.285Z"
+  },
+  {
+    "id": "2026-04-23-16:20",
+    "bookingDate": "2026-04-23",
+    "bookingTime": "16:20",
+    "isBooked": false,
+    "lockedByBookingId": null,
+    "lockedUntil": null,
+    "createdAt": "2026-04-18T18:53:29.285Z",
+    "updatedAt": "2026-04-18T18:53:29.285Z"
+  },
+  {
+    "id": "2026-04-23-16:40",
+    "bookingDate": "2026-04-23",
+    "bookingTime": "16:40",
+    "isBooked": false,
+    "lockedByBookingId": null,
+    "lockedUntil": null,
+    "createdAt": "2026-04-18T18:53:29.285Z",
+    "updatedAt": "2026-04-18T18:53:29.285Z"
+  }
+]

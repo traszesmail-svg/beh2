@@ -84,9 +84,9 @@ const TOPICAL_CLUSTERS: TopicalCluster[] = [
         copy: 'Punkt wejscia do tematu, jesli chcesz zaczac od rozroznienia emocji i najczestszych przyczyn.',
       },
       {
-        href: '/blog/prog-pobudzenia-u-psa',
-        label: 'Blog: prog pobudzenia u psa',
-        copy: 'Wyjasnia, kiedy pies jeszcze przetwarza, a kiedy wchodzi juz w reakcje ponad prog.',
+        href: '/blog/dlaczego-moj-pies-szczeka-na-inne-psy',
+        label: 'Blog: dlaczego moj pies szczeka na inne psy',
+        copy: 'Pomaga szybciej nazwac wzorzec spacerowy i zobaczyc, co realnie napedza reakcje psa.',
       },
       {
         href: '/blog/reaktywnosc-na-smyczy-cwiczenie-luznej-smyczy',
@@ -231,7 +231,7 @@ export const LEAD_MAGNETS: LeadMagnet[] = [
     categoryLabel: 'Psy',
     relatedLinks: [
       { href: '/psy/reaktywnosc-na-smyczy', label: 'Landing: reaktywność na smyczy' },
-      { href: '/blog/prog-pobudzenia-u-psa', label: 'Blog: prog pobudzenia u psa' },
+      { href: '/blog/dlaczego-moj-pies-szczeka-na-inne-psy', label: 'Blog: dlaczego moj pies szczeka na inne psy' },
       { href: '/blog/reaktywnosc-na-smyczy-cwiczenie-luznej-smyczy', label: 'Blog: luzna smycz z reaktywnym psem' },
       { href: '/behawiorysta-online-polska', label: 'Behawiorysta psow i kotow online' },
     ],

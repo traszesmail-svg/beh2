@@ -50,6 +50,7 @@ export default async function OfferPage() {
   }
 
   const quickStartOffer = OFFERS.find((offer) => offer.slug === 'szybka-konsultacja-15-min') ?? null
+  const urgentOffer = OFFERS.find((offer) => offer.slug === 'kwadrans-na-juz') ?? null
   const fullConsultationOffer = OFFERS.find((offer) => offer.slug === 'konsultacja-behawioralna-online') ?? null
   const essentialsOffer = OFFERS.find((offer) => offer.slug === 'poradniki-pdf') ?? null
   const quickStartHref = buildBookHref()
@@ -151,6 +152,25 @@ export default async function OfferPage() {
                 <div className="hero-actions top-gap-small">
                   <Link href={quickStartOffer.primaryHref} prefetch={false} className="button button-primary">
                     {quickStartOffer.primaryCtaLabel}
+                  </Link>
+                </div>
+              </article>
+            ) : null}
+
+            {urgentOffer ? (
+              <article className="summary-card tree-backed-card">
+                <div className="section-eyebrow">{urgentOffer.eyebrow}</div>
+                <h3>{urgentOffer.title}</h3>
+                <p>{urgentOffer.cardSummary}</p>
+                <div className="editorial-hero-meta" aria-label="Parametry uslugi">
+                  <span>preferowana data</span>
+                  <span>preferowana godzina</span>
+                  <span>odpowiedz mailowa</span>
+                </div>
+                <p className="muted">{urgentOffer.whenToChoose}</p>
+                <div className="hero-actions top-gap-small">
+                  <Link href={urgentOffer.primaryHref} prefetch={false} className="button button-ghost">
+                    {urgentOffer.primaryCtaLabel}
                   </Link>
                 </div>
               </article>

@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = buildLegalMetadata(
   'Polityka prywatności',
   '/polityka-prywatnosci',
-  'Polityka prywatności serwisu Regulski | Terapia behawioralna: zakres danych, cele przetwarzania i prawa użytkownika.',
+  'Polityka prywatnosci serwisu Regulski: zakres danych, cele przetwarzania i prawa uzytkownika.',
 )
 
 const summaryItems: LegalSummaryItem[] = [

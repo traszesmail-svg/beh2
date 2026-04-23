@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Regulski — Behawiorysta psów i kotów online</title>
+
+<!--
+ ╔══════════════════════════════════════════════════════╗
+ ║  REGULSKI — Kompletne SPA z przełącznikiem dark/light ║
+ ║                                                      ║
+ ║  HANDOFF dla Claude CLI / Codex:                     ║
+ ║  ─────────────────────────────                       ║
+ ║  Struktura plików:                                   ║
+ ║    regulski/tokens.css      → app/globals.css        ║
+ ║    regulski/icons.jsx       → components/icons/      ║
+ ║    regulski/components.jsx  → components/ui/         ║
+ ║    regulski/pages.jsx       → app/[route]/page.tsx   ║
+ ║                                                      ║
+ ║  Zależności Next.js:                                 ║
+ ║    npm install next-themes                           ║
+ ║    (zastępuje useTheme hook)                         ║
+ ╚══════════════════════════════════════════════════════╝
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<!-- Component files — load order matters (icons → components → pages → app) -->
+<script type="text/babel" src="icons.jsx"></script>
+<script type="text/babel" src="components.jsx"></script>
+<script type="text/babel" src="pages.jsx"></script>
+
+<style>
+  /* Smooth page transition */
+  .page-body { animation: fadeIn 0.2s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  /* Focus ring cleanup for mouse users */
+  :focus:not(:focus-visible) { outline: none; }
+
+  /*
+   * TWEAKS panel styles
+   * (controlled via postMessage from host toolbar)
+   */
+  .tweaks-panel {
+    position: fixed; bottom: 24px; right: 24px; z-index: 200;
+    background: var(--bg-alt); border: 1px solid var(--line);
+    border-radius: 4px; padding: 20px 24px; width: 260px;
+    box-shadow: var(--shadow);
+    font-family: var(--sans); font-size: 13px; color: var(--ink);
+  }
+  .tweaks-panel h4 { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 16px; }
+  .tweaks-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .tweaks-row label { color: var(--ink-mid); }
+</style>
+</head>
+<body>
+
+<div id="root"></div>
+
+<script type="text/babel">
+
+/* ════════════════════════════════════════════════
+   ROUTER — simple hash-based SPA navigation
+   HANDOFF: Replace with Next.js <Link> + useRouter
+════════════════════════════════════════════════ */
+const useRouter = () => {
+  const [path, setPath] = React.useState(() => {
+    return sessionStorage.getItem('regulski-path') || '/';
+  });
+
+  const navigate = React.useCallback((to) => {
+    setPath(to);
+    sessionStorage.setItem('regulski-path', to);
+    // Scroll to top
+    document.getElementById('page-top')?.scrollTo(0, 0);
+    window.scrollTo(0, 0);
+  }, []);
+
+  return { path, navigate };
+};
+
+/* ════════════════════════════════════════════════
+   ROUTE MAP
+════════════════════════════════════════════════ */
+const ROUTES = {
+  '/':           (nav) => <window.PageHome     navigate={nav} />,
+  '/psy':        (nav) => <window.PagePies     navigate={nav} />,
+  '/koty':       (nav) => <window.PageKoty     navigate={nav} />,
+  '/o-mnie':     (nav) => <window.PageOMnie    navigate={nav} />,
+  '/faq':        (nav) => <window.PageFAQ      navigate={nav} />,
+  '/kontakt':    (nav) => <window.PageKontakt  navigate={nav} />,
+  '/niezbednik': (nav) => <window.PageNiezbednik navigate={nav} />,
+  '/book':       (nav) => <window.PageBook     navigate={nav} />,
+};
+
+/* ════════════════════════════════════════════════
+   TWEAKS PANEL
+   Exposes design controls when toolbar toggle is on
+════════════════════════════════════════════════ */
+const TweaksPanel = ({ visible, tweaks, onChange }) => {
+  if (!visible) return null;
+  return (
+    <div className="tweaks-panel">
+      <h4>Tweaks</h4>
+
+      <div className="tweaks-row">
+        <label>Motyw</label>
+        <select
+          value={tweaks.theme}
+          onChange={e => onChange({ ...tweaks, theme: e.target.value })}
+          style={{ background: 'var(--bg)', border: '1px solid var(--line)', borderRadius: 2, padding: '4px 8px', fontSize: 12, color: 'var(--ink)', fontFamily: 'var(--sans)', cursor: 'pointer' }}
+        >
+          <option value="system">System</option>
+          <option value="light">Jasny</option>
+          <option value="dark">Ciemny</option>
+        </select>
+      </div>
+
+      <div className="tweaks-row">
+        <label>Strona</label>
+        <select
+          value={tweaks.route}
+          onChange={e => onChange({ ...tweaks, route: e.target.value })}
+          style={{ background: 'var(--bg)', border: '1px solid var(--line)', borderRadius: 2, padding: '4px 8px', fontSize: 12, color: 'var(--ink)', fontFamily: 'var(--sans)', cursor: 'pointer' }}
+        >
+          {Object.keys(ROUTES).map(r => (
+            <option key={r} value={r}>{r === '/' ? '/ (Home)' : r}</option>
+          ))}
+        </select>
+      </div>
+
+      <div className="tweaks-row">
+        <label>Akcent</label>
+        <div style={{ display: 'flex', gap: 6 }}>
+          {['#c07d3a','#2d6a4f','#1d3d6e','#7b2d8b'].map(col => (
+            <div
+              key={col}
+              onClick={() => onChange({ ...tweaks, accent: col })}
+              style={{
+                width: 20, height: 20, borderRadius: '50%', background: col, cursor: 'pointer',
+                border: tweaks.accent === col ? '2px solid var(--ink)' : '2px solid transparent',
+              }}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ════════════════════════════════════════════════
+   APP ROOT
+════════════════════════════════════════════════ */
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "theme": "system",
+  "accent": "#c07d3a",
+  "route": "/"
+}/*EDITMODE-END*/;
+
+const App = () => {
+  const { path, navigate } = useRouter();
+  const { theme, resolvedTheme, setTheme, toggleTheme } = window.useTheme();
+  const [tweaksVisible, setTweaksVisible] = React.useState(false);
+  const [tweaks, setTweaks] = React.useState(TWEAK_DEFAULTS);
+
+  /* Apply accent color from tweaks */
+  React.useEffect(() => {
+    document.documentElement.style.setProperty('--amber', tweaks.accent);
+    /* Derive muted/light from accent — simplified */
+    document.documentElement.style.setProperty('--amber-dim', tweaks.accent + '22');
+    document.documentElement.style.setProperty('--amber-light', tweaks.accent + '28');
+  }, [tweaks.accent]);
+
+  /* Sync theme from tweaks panel */
+  React.useEffect(() => {
+    if (tweaks.theme !== theme) setTheme(tweaks.theme);
+  }, [tweaks.theme]);
+
+  /* Navigate from tweaks panel */
+  React.useEffect(() => {
+    if (tweaks.route !== path) navigate(tweaks.route);
+  }, [tweaks.route]);
+
+  /* Tweaks panel host protocol */
+  React.useEffect(() => {
+    const handler = (e) => {
+      if (e.data?.type === '__activate_edit_mode')   setTweaksVisible(true);
+      if (e.data?.type === '__deactivate_edit_mode') setTweaksVisible(false);
+      if (e.data?.type === '__edit_mode_set_keys') {
+        setTweaks(t => ({ ...t, ...e.data.edits }));
+      }
+    };
+    window.addEventListener('message', handler);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', handler);
+  }, []);
+
+  const handleTweakChange = (newTweaks) => {
+    setTweaks(newTweaks);
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits: newTweaks }, '*');
+  };
+
+  /* Resolve current page */
+  const renderPage = ROUTES[path] || ROUTES['/'];
+
+  return (
+    <>
+      <window.NavBar
+        navigate={navigate}
+        currentPath={path}
+        theme={theme}
+        toggleTheme={toggleTheme}
+        resolvedTheme={resolvedTheme}
+      />
+      <div className="page-body" key={path} id="page-top">
+        {renderPage(navigate)}
+      </div>
+
+      <TweaksPanel
+        visible={tweaksVisible}
+        tweaks={{ ...tweaks, theme, route: path }}
+        onChange={handleTweakChange}
+      />
+    </>
+  );
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+
+</body>
+</html>

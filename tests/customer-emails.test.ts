@@ -1,7 +1,14 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { POST as postContactLead } from '@/app/api/contact/route'
-import { createAvailabilitySlot, createPendingBooking, markBookingManualPaymentPending, markBookingManualPaymentRejected, markBookingPaid, markBookingPaymentFailed } from '@/lib/server/local-store'
+import {
+  createAvailabilitySlot,
+  createPendingBooking,
+  markBookingManualPaymentPending,
+  markBookingManualPaymentRejected,
+  markBookingPaid,
+  markBookingPaymentFailed,
+} from '@/lib/server/local-store'
 import { getCustomerEmailDeliveryStatus } from '@/lib/server/notifications'
 import { createLocalDataSandbox } from '@/scripts/lib/local-data-sandbox'
 
@@ -77,9 +84,9 @@ function makeContactLeadPayload() {
     name: 'Anna Nowak',
     contact: 'klient@example.com',
     species: 'kot',
-    topicId: 'kot-stres',
-    topic: 'Lek, stres i wycofanie',
-    contextLabel: 'Kot - Lek, stres i wycofanie',
+    topicId: 'kot-wycofanie',
+    topic: 'Wycofanie / napiecie',
+    contextLabel: 'Kot - Wycofanie / napiecie',
     message: 'Potrzebuje pomocy z kotem i chce ustalic prosty start. Temat wraca od kilku tygodni i nie wiem, od czego zaczac.',
     bookingId: 'booking-123',
     website: '',
@@ -87,6 +94,7 @@ function makeContactLeadPayload() {
     consentPolicy: true,
   }
 }
+
 test('customer emails cover reservation, review, confirmation and cancel outcomes', async () => {
   const sentEmails: ResendEmailPayload[] = []
   const originalFetch = globalThis.fetch
@@ -122,27 +130,28 @@ test('customer emails cover reservation, review, confirmation and cancel outcome
         await createAvailabilitySlot(bookingDate, '10:40')
 
         const bookingA = await createPendingBooking(makeBookingForm(`${bookingDate}-10:00`))
-        assert.equal(sentEmails.length, 1)
+        assert.equal(sentEmails.length, 2)
         assert.equal(bookingA.booking.bookingStatus, 'pending')
         assert.equal(bookingA.booking.paymentStatus, 'unpaid')
-        assert.equal(Array.isArray(sentEmails[0].to), true)
         assert.equal(sentEmails[0].to?.[0], 'klient@example.com')
         assert.equal(includesNormalized(sentEmails[0].subject, 'Behawior 15'), true)
+        assert.equal(sentEmails[1].to?.[0], 'kontakt@behawior15.pl')
+        assert.equal(includesNormalized(sentEmails[1].subject, 'Kwadrans z behawiorysta'), true)
 
         const reviewBooking = await markBookingManualPaymentPending(bookingA.booking.id, {
           paymentReference: 'MANUAL-A',
         })
         assert.equal(reviewBooking?.bookingStatus, 'pending_manual_payment')
         assert.equal(reviewBooking?.paymentStatus, 'pending_manual_review')
-        assert.equal(sentEmails.length, 2)
-        assert.equal(includesNormalized(sentEmails[1].subject, 'Behawior 15'), true)
-        assert.equal(sentEmails[1].text?.includes('MANUAL-A'), true)
+        assert.equal(sentEmails.length, 3)
+        assert.equal(includesNormalized(sentEmails[2].subject, 'Behawior 15'), true)
+        assert.equal(sentEmails[2].text?.includes('MANUAL-A'), true)
 
         const reviewBookingRepeat = await markBookingManualPaymentPending(bookingA.booking.id, {
           paymentReference: 'MANUAL-A',
         })
         assert.equal(reviewBookingRepeat?.paymentStatus, 'pending_manual_review')
-        assert.equal(sentEmails.length, 2)
+        assert.equal(sentEmails.length, 3)
 
         const paidBooking = await markBookingPaid(bookingA.booking.id, {
           paymentMethod: 'manual',
@@ -150,35 +159,37 @@ test('customer emails cover reservation, review, confirmation and cancel outcome
         })
         assert.equal(paidBooking?.bookingStatus, 'confirmed')
         assert.equal(paidBooking?.paymentStatus, 'paid')
-        assert.equal(sentEmails.length, 3)
-        assert.equal(includesNormalized(sentEmails[2].subject, 'Behawior 15'), true)
-        assert.equal(sentEmails[2].text?.includes('Sprawdzam customer emails na stage 5.'), true)
-        assert.equal(sentEmails[2].text?.includes(paidBooking?.meetingUrl ?? ''), true)
-
-        const bookingB = await createPendingBooking(makeBookingForm(`${bookingDate}-10:20`))
         assert.equal(sentEmails.length, 4)
         assert.equal(includesNormalized(sentEmails[3].subject, 'Behawior 15'), true)
+        assert.equal(sentEmails[3].text?.includes('Sprawdzam customer emails na stage 5.'), true)
+        assert.equal(sentEmails[3].text?.includes(paidBooking?.meetingUrl ?? ''), true)
+
+        const bookingB = await createPendingBooking(makeBookingForm(`${bookingDate}-10:20`))
+        assert.equal(sentEmails.length, 6)
+        assert.equal(includesNormalized(sentEmails[4].subject, 'Behawior 15'), true)
+        assert.equal(sentEmails[5].to?.[0], 'kontakt@behawior15.pl')
 
         const rejectedBooking = await markBookingManualPaymentRejected(bookingB.booking.id, 'Brak potwierdzenia wplaty')
         assert.equal(rejectedBooking?.bookingStatus, 'cancelled')
         assert.equal(rejectedBooking?.paymentStatus, 'rejected')
-        assert.equal(sentEmails.length, 5)
-        assert.equal(includesNormalized(sentEmails[4].subject, 'Behawior 15'), true)
-        assert.equal(includesNormalized(sentEmails[4].text, 'Powod: Brak potwierdzenia wplaty'), true)
+        assert.equal(sentEmails.length, 7)
+        assert.equal(includesNormalized(sentEmails[6].subject, 'Behawior 15'), true)
+        assert.equal(includesNormalized(sentEmails[6].text, 'Brak potwierdzenia wplaty'), true)
 
         const rejectedRepeat = await markBookingManualPaymentRejected(bookingB.booking.id, 'Brak potwierdzenia wplaty')
         assert.equal(rejectedRepeat?.paymentStatus, 'rejected')
-        assert.equal(sentEmails.length, 5)
+        assert.equal(sentEmails.length, 7)
 
         const bookingC = await createPendingBooking(makeBookingForm(`${bookingDate}-10:40`))
-        assert.equal(sentEmails.length, 6)
-        assert.equal(includesNormalized(sentEmails[5].subject, 'Behawior 15'), true)
+        assert.equal(sentEmails.length, 9)
+        assert.equal(includesNormalized(sentEmails[7].subject, 'Behawior 15'), true)
+        assert.equal(sentEmails[8].to?.[0], 'kontakt@behawior15.pl')
 
         const failedBooking = await markBookingPaymentFailed(bookingC.booking.id)
         assert.equal(failedBooking?.bookingStatus, 'cancelled')
         assert.equal(failedBooking?.paymentStatus, 'failed')
-        assert.equal(sentEmails.length, 7)
-        assert.equal(includesNormalized(sentEmails[6].subject, 'Behawior 15'), true)
+        assert.equal(sentEmails.length, 10)
+        assert.equal(includesNormalized(sentEmails[9].subject, 'Behawior 15'), true)
       },
     )
   } finally {
@@ -186,6 +197,7 @@ test('customer emails cover reservation, review, confirmation and cancel outcome
     await sandbox.cleanup()
   }
 })
+
 test('customer emails stay on the confirmation page when disabled', async () => {
   const sentEmails: ResendEmailPayload[] = []
   const originalFetch = globalThis.fetch
@@ -222,9 +234,10 @@ test('customer emails stay on the confirmation page when disabled', async () => 
         const status = getCustomerEmailDeliveryStatus(booking.booking.email)
 
         assert.equal(status.state, 'disabled')
-        assert.match(status.summary, /swiadomie wylaczone|świadomie wyłączone/i)
+        assert.equal(includesNormalized(status.summary, 'swiadomie wylaczone'), true)
         assert.match(status.nextStep, /CUSTOMER_EMAIL_MODE=auto/i)
-        assert.equal(sentEmails.length, 0)
+        assert.equal(sentEmails.length, 1)
+        assert.equal(sentEmails[0].to?.[0], 'kontakt@behawior15.pl')
 
         const pendingBooking = await markBookingManualPaymentPending(booking.booking.id, {
           paymentReference: 'MANUAL-DISABLED',
@@ -232,7 +245,7 @@ test('customer emails stay on the confirmation page when disabled', async () => 
 
         assert.equal(pendingBooking?.bookingStatus, 'pending_manual_payment')
         assert.equal(pendingBooking?.paymentStatus, 'pending_manual_review')
-        assert.equal(sentEmails.length, 0)
+        assert.equal(sentEmails.length, 1)
 
         const paidBooking = await markBookingPaid(booking.booking.id, {
           paymentMethod: 'manual',
@@ -241,7 +254,7 @@ test('customer emails stay on the confirmation page when disabled', async () => 
 
         assert.equal(paidBooking?.bookingStatus, 'confirmed')
         assert.equal(paidBooking?.paymentStatus, 'paid')
-        assert.equal(sentEmails.length, 0)
+        assert.equal(sentEmails.length, 1)
       },
     )
   } finally {
@@ -249,6 +262,7 @@ test('customer emails stay on the confirmation page when disabled', async () => 
     await sandbox.cleanup()
   }
 })
+
 test('contact route sends leads to the public inbox and replies to the sender', async () => {
   const sentEmails: ResendEmailPayload[] = []
   const originalFetch = globalThis.fetch
@@ -280,6 +294,7 @@ test('contact route sends leads to the public inbox and replies to the sender', 
             method: 'POST',
             headers: {
               'content-type': 'application/json',
+              'x-forwarded-for': '203.0.113.10',
             },
             body: JSON.stringify(makeContactLeadPayload()),
           }),
@@ -290,12 +305,131 @@ test('contact route sends leads to the public inbox and replies to the sender', 
         assert.equal(response.status, 200)
         assert.equal(payload.ok, true)
         assert.match(payload.message ?? '', /Odpowiem na podany adres e-mail/i)
-        assert.equal(sentEmails.length, 1)
+        assert.equal(sentEmails.length, 2)
         assert.equal(sentEmails[0].to?.[0], 'coapebehawiorysta@gmail.com')
         assert.equal(sentEmails[0].reply_to, 'klient@example.com')
         assert.match(sentEmails[0].subject ?? '', /Kontakt - .*Anna Nowak/)
         assert.match(sentEmails[0].text ?? '', /Kontekst:/)
         assert.match(sentEmails[0].text ?? '', /Numer rezerwacji: booking-123/)
+        assert.equal(sentEmails[1].to?.[0], 'klient@example.com')
+        assert.match(sentEmails[1].subject ?? '', /Dostalem Twoja wiadomosc/i)
+        assert.match(sentEmails[1].text ?? '', /1-2 dni roboczych/i)
+      },
+    )
+  } finally {
+    ;(globalThis as typeof globalThis & { fetch: typeof fetch }).fetch = originalFetch
+  }
+})
+
+test('contact route silently accepts honeypot submissions without sending emails', async () => {
+  const sentEmails: ResendEmailPayload[] = []
+  const originalFetch = globalThis.fetch
+
+  try {
+    const mockFetch = async (_input: RequestInfo | URL, init?: RequestInit) => {
+      const body = typeof init?.body === 'string' ? JSON.parse(init.body) : {}
+      sentEmails.push(body)
+      return new Response('{}', {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      })
+    }
+
+    ;(globalThis as typeof globalThis & { fetch: typeof fetch }).fetch = mockFetch as typeof fetch
+
+    await withEnv(
+      {
+        MAIL_PROVIDER: 'resend',
+        RESEND_API_KEY: 're_test_key',
+        RESEND_FROM_EMAIL: 'Behawior 15 <kontakt@behawior15.pl>',
+        BEHAVIOR15_CONTACT_EMAIL: 'coapebehawiorysta@gmail.com',
+      },
+      async () => {
+        const response = await postContactLead(
+          new Request('https://example.test/api/contact', {
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json',
+              'x-forwarded-for': '203.0.113.11',
+            },
+            body: JSON.stringify({
+              ...makeContactLeadPayload(),
+              website: 'https://spam.example',
+            }),
+          }),
+        )
+
+        const payload = (await response.json()) as { ok?: boolean; message?: string }
+
+        assert.equal(response.status, 200)
+        assert.equal(payload.ok, true)
+        assert.equal(sentEmails.length, 0)
+      },
+    )
+  } finally {
+    ;(globalThis as typeof globalThis & { fetch: typeof fetch }).fetch = originalFetch
+  }
+})
+
+test('contact route rate limits repeated submissions from the same IP', async () => {
+  const sentEmails: ResendEmailPayload[] = []
+  const originalFetch = globalThis.fetch
+
+  try {
+    const mockFetch = async (_input: RequestInfo | URL, init?: RequestInit) => {
+      const body = typeof init?.body === 'string' ? JSON.parse(init.body) : {}
+      sentEmails.push(body)
+      return new Response('{}', {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      })
+    }
+
+    ;(globalThis as typeof globalThis & { fetch: typeof fetch }).fetch = mockFetch as typeof fetch
+
+    await withEnv(
+      {
+        MAIL_PROVIDER: 'resend',
+        RESEND_API_KEY: 're_test_key',
+        RESEND_FROM_EMAIL: 'Behawior 15 <kontakt@behawior15.pl>',
+        BEHAVIOR15_CONTACT_EMAIL: 'coapebehawiorysta@gmail.com',
+      },
+      async () => {
+        for (let attempt = 0; attempt < 3; attempt += 1) {
+          const response = await postContactLead(
+            new Request('https://example.test/api/contact', {
+              method: 'POST',
+              headers: {
+                'content-type': 'application/json',
+                'x-forwarded-for': '203.0.113.12',
+              },
+              body: JSON.stringify(makeContactLeadPayload()),
+            }),
+          )
+
+          assert.equal(response.status, 200)
+        }
+
+        const blockedResponse = await postContactLead(
+          new Request('https://example.test/api/contact', {
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json',
+              'x-forwarded-for': '203.0.113.12',
+            },
+            body: JSON.stringify(makeContactLeadPayload()),
+          }),
+        )
+
+        const blockedPayload = (await blockedResponse.json()) as { error?: string }
+
+        assert.equal(blockedResponse.status, 429)
+        assert.match(blockedPayload.error ?? '', /Za duzo prob/i)
+        assert.equal(sentEmails.length, 6)
       },
     )
   } finally {

@@ -39,7 +39,7 @@ async function waitForExit(child: ReturnType<typeof spawn>) {
   })
 }
 
-async function runCommand(command: string, extraEnv?: NodeJS.ProcessEnv) {
+async function runCommand(command: string, extraEnv?: Record<string, string>) {
   const child = spawn('cmd.exe', ['/c', command], {
     cwd: rootDir,
     env: {

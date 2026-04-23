@@ -8,7 +8,7 @@ import { getServiceAnalyticsParams } from '@/lib/analytics-schema'
 import { buildBookHref } from '@/lib/booking-routing'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { FUNNEL_SECONDARY_HREF } from '@/lib/offers'
-import { SITE_HEADER_BRAND, SITE_HEADER_SUBTITLE, SITE_NAME } from '@/lib/site'
+import { INSTAGRAM_PROFILE_URL, SITE_HEADER_BRAND, SITE_HEADER_SUBTITLE, SITE_NAME } from '@/lib/site'
 
 type NavItem = {
   href: string
@@ -70,6 +70,7 @@ const faqNavItems: NavItem[] = [
 const aboutNavItems: NavItem[] = [
   { href: '/o-mnie#kim-jestem', label: 'Kim jestem', sectionId: 'kim-jestem' },
   { href: '/o-mnie#metodyka', label: 'Metodyka', sectionId: 'metodyka' },
+  { href: '/cennik', label: 'Cennik' },
   { href: '/o-mnie#opinie', label: 'Opinie', sectionId: 'opinie' },
   { href: '/o-mnie#faq', label: 'FAQ', sectionId: 'faq' },
 ]
@@ -133,6 +134,16 @@ function buildSectionHref(pathname: string, sectionId: string): string {
   }
 
   return `/#${sectionId}`
+}
+
+function InstagramGlyph() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="3.25" y="3.25" width="17.5" height="17.5" rx="5.25" fill="none" stroke="currentColor" strokeWidth="1.8" />
+      <circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" strokeWidth="1.8" />
+      <circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" />
+    </svg>
+  )
 }
 
 export function Header() {
@@ -272,6 +283,15 @@ export function Header() {
         </nav>
 
         <div className="header-actions">
+          <a
+            href={INSTAGRAM_PROFILE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="header-social-link"
+            aria-label="Otworz Instagram"
+          >
+            <InstagramGlyph />
+          </a>
           <Link
             href={audioHref}
             prefetch={false}

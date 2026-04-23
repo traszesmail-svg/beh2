@@ -18,6 +18,7 @@ import { createMeetingUrl } from '@/lib/server/jitsi'
 import { getManualPaymentConfig } from '@/lib/server/payment-options'
 import {
   sendBookingConfirmationEmail,
+  sendBookingOwnerNotificationEmail,
   sendBookingReservationCreatedEmail,
   sendBookingManualPaymentPendingEmail,
   sendBookingStatusOutcomeEmail,
@@ -38,6 +39,7 @@ import {
   GroupedAvailability,
   UserRecord,
 } from '@/lib/types'
+import type { UrgentNowRequestRecord } from '@/lib/urgent-now'
 
 function getBookingFunnelEventProperties(booking: BookingRecord): FunnelEventProperties {
   return getBookingAnalyticsContextParams({
@@ -136,6 +138,27 @@ type PricingSettingsRow = {
   id: string
   consultation_price: number | string
   updated_at: string
+}
+
+type UrgentNowRequestRow = {
+  id: string
+  created_at: string
+  updated_at: string
+  status: string
+  name: string
+  email: string
+  species: string
+  topic_id: string
+  topic_label: string
+  message: string
+  requested_date: string
+  requested_time: string
+  responded_at: string | null
+  proposed_date: string | null
+  proposed_time: string | null
+  response_note: string | null
+  availability_slot_id: string | null
+  booking_href: string | null
 }
 
 type LegacyPaymentMeta = {
@@ -528,6 +551,29 @@ function mapPricingSettingsRow(row: PricingSettingsRow) {
     typeof row.consultation_price === 'string' ? Number(row.consultation_price) : row.consultation_price,
     row.updated_at,
   )
+}
+
+function mapUrgentNowRequestRow(row: UrgentNowRequestRow): UrgentNowRequestRecord {
+  return {
+    id: row.id,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+    status: row.status === 'responded' ? 'responded' : 'new',
+    name: row.name,
+    email: row.email,
+    species: row.species === 'kot' ? 'kot' : 'pies',
+    topicId: row.topic_id as UrgentNowRequestRecord['topicId'],
+    topicLabel: row.topic_label,
+    message: row.message,
+    requestedDate: row.requested_date,
+    requestedTime: row.requested_time,
+    respondedAt: row.responded_at,
+    proposedDate: row.proposed_date,
+    proposedTime: row.proposed_time,
+    responseNote: row.response_note,
+    availabilitySlotId: row.availability_slot_id,
+    bookingHref: row.booking_href,
+  }
 }
 
 async function insertFunnelEvent(
@@ -1150,6 +1196,14 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
 
   const booking = mapBookingRow(inserted.data as unknown as BookingRow)
   await sendBookingReservationCreatedEmail(booking)
+  const ownerNotification = await sendBookingOwnerNotificationEmail(booking)
+  if (ownerNotification.status !== 'sent') {
+    console.error('[behawior15][booking-owner-notification] failed', {
+      bookingId: booking.id,
+      reason: ownerNotification.reason,
+      status: ownerNotification.status,
+    })
+  }
 
   return {
     booking,
@@ -1225,6 +1279,86 @@ export async function listFunnelEvents(): Promise<FunnelEventRecord[]> {
   }
 
   return (data as FunnelEventRow[]).map(mapFunnelEventRow)
+}
+
+export async function listUrgentNowRequests(): Promise<UrgentNowRequestRecord[]> {
+  const supabase = getSupabaseAdmin()
+  const { data, error } = await supabase
+    .from('urgent_now_requests')
+    .select('*')
+    .order('created_at', { ascending: false })
+
+  if (error) {
+    throw error
+  }
+
+  return (data as UrgentNowRequestRow[]).map(mapUrgentNowRequestRow)
+}
+
+export async function createUrgentNowRequest(input: {
+  name: string
+  email: string
+  species: 'pies' | 'kot'
+  topicId: import('@/lib/types').ProblemType
+  topicLabel: string
+  message: string
+  requestedDate: string
+  requestedTime: string
+}): Promise<UrgentNowRequestRecord> {
+  const supabase = getSupabaseAdmin()
+  const { data, error } = await supabase
+    .from('urgent_now_requests')
+    .insert({
+      status: 'new',
+      name: input.name,
+      email: input.email,
+      species: input.species,
+      topic_id: input.topicId,
+      topic_label: input.topicLabel,
+      message: input.message,
+      requested_date: input.requestedDate,
+      requested_time: input.requestedTime,
+    })
+    .select('*')
+    .single()
+
+  if (error) {
+    throw error
+  }
+
+  return mapUrgentNowRequestRow(data as UrgentNowRequestRow)
+}
+
+export async function respondUrgentNowRequest(input: {
+  id: string
+  proposedDate: string
+  proposedTime: string
+  responseNote?: string | null
+  availabilitySlotId?: string | null
+  bookingHref?: string | null
+}): Promise<UrgentNowRequestRecord | null> {
+  const supabase = getSupabaseAdmin()
+  const { data, error } = await supabase
+    .from('urgent_now_requests')
+    .update({
+      status: 'responded',
+      responded_at: new Date().toISOString(),
+      proposed_date: input.proposedDate,
+      proposed_time: input.proposedTime,
+      response_note: input.responseNote ?? null,
+      availability_slot_id: input.availabilitySlotId ?? null,
+      booking_href: input.bookingHref ?? null,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', input.id)
+    .select('*')
+    .maybeSingle()
+
+  if (error) {
+    throw error
+  }
+
+  return data ? mapUrgentNowRequestRow(data as UrgentNowRequestRow) : null
 }
 
 export async function recordFunnelEvent(input: FunnelEventInput): Promise<FunnelEventRecord> {

@@ -1,4 +1,4 @@
-import { buildPdfInquiryHref, getPdfBundleBySlug, getPdfGuideBySlug } from './pdf-guides'
+import { buildPdfOrderHref, getPdfBundleBySlug, getPdfGuideBySlug } from './pdf-guides'
 
 export type ShopSpecies = 'koty' | 'psy'
 
@@ -653,8 +653,8 @@ const SHOP_ENTRANCES: ShopEntranceCard[] = [
 
 function buildPdfCardsForSpecies(species: ShopSpecies, seeds: PdfThemeSeed[]): ShopPdfCard[] {
   return seeds.flatMap((seed) => {
-    const pdfHref = buildPdfInquiryHref({ guideSlug: seed.slug })
-    const bundleHref = buildPdfInquiryHref({ bundleSlug: `${seed.slug}-pakiet` })
+    const pdfHref = buildPdfOrderHref({ guideSlug: seed.slug })
+    const bundleHref = buildPdfOrderHref({ bundleSlug: `${seed.slug}-pakiet` })
 
     return [
       {
@@ -668,7 +668,7 @@ function buildPdfCardsForSpecies(species: ShopSpecies, seeds: PdfThemeSeed[]): S
         enough: `Wystarcza, gdy ${seed.enough}.`,
         consult: `Konsultacja bywa lepsza, gdy ${seed.consult}.`,
         href: pdfHref,
-        cta: 'Napisz w sprawie PDF',
+        cta: 'Zamów PDF',
       },
       {
         slug: `${seed.slug}-pakiet`,
@@ -681,7 +681,7 @@ function buildPdfCardsForSpecies(species: ShopSpecies, seeds: PdfThemeSeed[]): S
         enough: `Wystarcza, gdy chcesz wejść szerzej niż pojedynczy PDF.`,
         consult: `Konsultacja bywa lepsza, gdy ${seed.consult}.`,
         href: bundleHref,
-        cta: 'Napisz w sprawie pakietu',
+        cta: 'Zamów pakiet',
       },
     ]
   })
@@ -714,7 +714,7 @@ function buildDogPdfCards(): ShopPdfCard[] {
     organizes: guide.valuePromise,
     enough: getPdfFunnelEnough(guide.role_in_funnel),
     consult: getPdfFunnelConsult(guide.role_in_funnel, guide.relatedService),
-    href: buildPdfInquiryHref({ guideSlug: guide.slug }),
+    href: buildPdfOrderHref({ guideSlug: guide.slug }),
     cta: guide.website_card?.cta ?? (guide.accessType === 'lead magnet' ? 'Pobierz darmowy PDF' : 'Kup PDF'),
   }))
 }
@@ -769,8 +769,8 @@ const SHOP_BUNDLE_SHELF_SEEDS: Record<ShopSpecies, ShopBundleShelfCard[]> = {
       ],
       whenEnough: 'Wystarcza, gdy chcesz najpierw uporządkować jedną domową oś problemu.',
       whenConsult: 'Konsultacja będzie lepsza, gdy pojawia się ból, silny lęk albo kilka objawów naraz.',
-      href: '/kontakt?service=poradniki-pdf',
-      cta: 'Napisz o pakiecie',
+      href: buildPdfOrderHref({ bundleSlug: 'pakiet-kuweta' }),
+      cta: 'Zamów pakiet',
     },
     {
       slug: 'pakiet-relacje',
@@ -785,8 +785,8 @@ const SHOP_BUNDLE_SHELF_SEEDS: Record<ShopSpecies, ShopBundleShelfCard[]> = {
       ],
       whenEnough: 'Wystarcza, gdy chcesz zobaczyć relację, zanim wejdziesz w szerszą przebudowę domu.',
       whenConsult: 'Konsultacja będzie lepsza, gdy konflikt jest stały albo jeden kot mocno ustępuje.',
-      href: '/kontakt?service=poradniki-pdf',
-      cta: 'Napisz o pakiecie',
+      href: buildPdfOrderHref({ bundleSlug: 'pakiet-relacje' }),
+      cta: 'Zamów pakiet',
     },
     {
       slug: 'pakiet-noc',
@@ -798,8 +798,8 @@ const SHOP_BUNDLE_SHELF_SEEDS: Record<ShopSpecies, ShopBundleShelfCard[]> = {
       guideTitles: ['Kot budzi dom po nocy?', 'Miauczenie o świcie'],
       whenEnough: 'Wystarcza, gdy potrzebujesz spokojnie ułożyć rytm nocy i poranka.',
       whenConsult: 'Konsultacja będzie lepsza, gdy nocne pobudki łączą się z bólem, głodem albo lękiem.',
-      href: '/kontakt?service=poradniki-pdf',
-      cta: 'Napisz o pakiecie',
+      href: buildPdfOrderHref({ bundleSlug: 'pakiet-noc' }),
+      cta: 'Zamów pakiet',
     },
     {
       slug: 'pakiet-dotyk',
@@ -811,8 +811,8 @@ const SHOP_BUNDLE_SHELF_SEEDS: Record<ShopSpecies, ShopBundleShelfCard[]> = {
       guideTitles: ['Kot gryzie przy głaskaniu?', 'Kot broni się przy pielęgnacji albo noszeniu?'],
       whenEnough: 'Wystarcza, gdy chcesz najpierw uporządkować sam kontakt i tempo pracy.',
       whenConsult: 'Konsultacja będzie lepsza, gdy reakcja wygląda na ból albo silną obronę szerzej niż sam dotyk.',
-      href: '/kontakt?service=poradniki-pdf',
-      cta: 'Napisz o pakiecie',
+      href: buildPdfOrderHref({ bundleSlug: 'pakiet-dotyk' }),
+      cta: 'Zamów pakiet',
     },
   ],
   psy: [

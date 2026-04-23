@@ -59,6 +59,7 @@ export function OfferEntrySection({
   const fullConsultationHref = buildBookHref(null, 'konsultacja-behawioralna-online', false, species)
   const toolkitHref = '/niezbednik'
   const messageHref = species ? `/kontakt?species=${species}#formularz` : '/kontakt#formularz'
+  const urgentNowHref = species ? `/kontakt?intent=kwadrans-na-juz&species=${species}#formularz` : '/kontakt?intent=kwadrans-na-juz#formularz'
   const speciesLabel = getSpeciesLabel(species)
 
   return (
@@ -84,6 +85,9 @@ export function OfferEntrySection({
         <Link href={messageHref} prefetch={false} className="prep-inline-link">
           {COPY_CTA.contact}
         </Link>
+        <Link href={urgentNowHref} prefetch={false} className="prep-inline-link">
+          Kwadrans na juz
+        </Link>
       </div>
 
       <div className="card-grid three-up top-gap">
@@ -100,6 +104,23 @@ export function OfferEntrySection({
           <div className="hero-actions top-gap-small">
             <Link href={audioHref} prefetch={false} className="button button-primary">
               {COPY_CTA.primary}
+            </Link>
+          </div>
+        </article>
+
+        <article className="summary-card tree-backed-card">
+          <div className="section-eyebrow">Kwadrans na juz</div>
+          <h3>Zapytaj o pilny termin</h3>
+          <p>Sciezka awaryjna, gdy zwykly kalendarz nie pasuje i chcesz od razu podac preferowana date z godzina.</p>
+          <div className="editorial-hero-meta" aria-label="Parametry pilnej sciezki">
+            <span>formularz</span>
+            <span>odpowiedz mailowa</span>
+            <span>slot z panelu admina</span>
+          </div>
+          <p className="muted">Dla {speciesLabel}, gdy potrzebujesz zapytac o konkretny termin poza standardowym wyborem slotu.</p>
+          <div className="hero-actions top-gap-small">
+            <Link href={urgentNowHref} prefetch={false} className="button button-ghost">
+              Zapytaj o termin
             </Link>
           </div>
         </article>

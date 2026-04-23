@@ -5,8 +5,9 @@ import { notFound } from 'next/navigation'
 import { NotatnikPageShell } from '@/components/NotatnikA'
 import { PdfBundleCard } from '@/components/PdfBundleCard'
 import { PdfGuideCover } from '@/components/PdfGuideCover'
+import { repairCopy } from '@/lib/copy'
 import {
-  buildPdfInquiryHref,
+  buildPdfOrderHref,
   getPdfAccessDescription,
   getPdfAccessLabel,
   getPdfCategoryLabel,
@@ -46,9 +47,9 @@ export function generateMetadata({ params }: PdfGuideDetailPageProps): Metadata 
   }
 
   return buildTechnicalMetadata({
-    title: `${guide.title} | Poradnik PDF`,
+    title: `${repairCopy(guide.title)} | Poradnik PDF`,
     path: guide.routePath,
-    description: guide.description,
+    description: repairCopy(guide.description),
     noIndex: true,
   })
 }
@@ -61,7 +62,8 @@ export default function PdfGuideDetailPage({ params }: PdfGuideDetailPageProps) 
   }
 
   const relatedBundles = listPdfBundlesForGuide(guide.slug)
-  const detailPoints = guide.toc.slice(0, 3)
+  const detailPoints = guide.toc.slice(0, 3).map(repairCopy)
+  const orderHref = buildPdfOrderHref({ guideSlug: guide.slug })
 
   return (
     <NotatnikPageShell
@@ -73,13 +75,12 @@ export default function PdfGuideDetailPage({ params }: PdfGuideDetailPageProps) 
         { href: '/o-mnie', label: 'O mnie' },
         { href: '/kontakt#formularz', label: 'Kontakt' },
       ]}
-      ctaHref={buildPdfInquiryHref({ guideSlug: guide.slug })}
-      ctaLabel="Napisz o tym PDF"
-      footerPrimaryHref={buildPdfInquiryHref({ guideSlug: guide.slug })}
-      footerPrimaryLabel="Napisz o tym PDF"
+      ctaHref={orderHref}
+      ctaLabel="Zamów ten PDF"
+      footerPrimaryHref={orderHref}
+      footerPrimaryLabel="Zamów ten PDF"
     >
       <div className="container">
-
         <section className="two-col-section offer-detail-layout pdf-detail-layout">
           <div className="panel section-panel hero-surface offer-detail-content-panel pdf-detail-content-panel">
             <Link href={PDF_GUIDES_LISTING_ROUTE} prefetch={false} className="pdf-back-link">
@@ -87,18 +88,18 @@ export default function PdfGuideDetailPage({ params }: PdfGuideDetailPageProps) 
             </Link>
 
             <div className="offer-detail-head">
-              <div className="section-eyebrow">{guide.website_card?.eyebrow ?? getPdfAccessLabel(guide.accessType)}</div>
+              <div className="section-eyebrow">{repairCopy(guide.website_card?.eyebrow ?? getPdfAccessLabel(guide.accessType))}</div>
               <div className="offer-detail-pills">
-                <span className="hero-proof-pill">{getPdfCategoryLabel(guide.category)}</span>
-                <span className="hero-proof-pill">{getPdfKindLabel(guide.kind)}</span>
+                <span className="hero-proof-pill">{repairCopy(getPdfCategoryLabel(guide.category))}</span>
+                <span className="hero-proof-pill">{repairCopy(getPdfKindLabel(guide.kind))}</span>
                 <span className="hero-proof-pill">{guide.pageCount} stron</span>
               </div>
             </div>
 
             <div className="offer-detail-hero-copy">
-              <h1>{guide.title}</h1>
-              <p className="hero-text">{guide.subtitle}</p>
-              <p className="muted paragraph-gap">{guide.description}</p>
+              <h1>{repairCopy(guide.title)}</h1>
+              <p className="hero-text">{repairCopy(guide.subtitle)}</p>
+              <p className="muted paragraph-gap">{repairCopy(guide.description)}</p>
             </div>
 
             <div className="offer-detail-highlight-row top-gap">
@@ -109,13 +110,13 @@ export default function PdfGuideDetailPage({ params }: PdfGuideDetailPageProps) 
                   background: `${guide.palette.paper}F5`,
                 }}
               >
-                <strong>{getPdfPricingBadge(guide.pricing)}</strong>
-                <span>{getPdfAccessDescription(guide.accessType)}</span>
+                <strong>{repairCopy(getPdfPricingBadge(guide.pricing))}</strong>
+                <span>{repairCopy(getPdfAccessDescription(guide.accessType))}</span>
               </div>
 
               <div className="list-card tree-backed-card offer-detail-price-card">
                 <strong>Najważniejszy efekt</strong>
-                <span>{guide.mainPromise}</span>
+                <span>{repairCopy(guide.mainPromise)}</span>
               </div>
             </div>
 
@@ -130,13 +131,13 @@ export default function PdfGuideDetailPage({ params }: PdfGuideDetailPageProps) 
             <div className="offer-detail-cta-band tree-backed-card top-gap">
               <div className="offer-detail-cta-copy">
                 <span className="section-eyebrow">Pierwszy ruch</span>
-                <strong>{getPdfGuideInquiryLabel(guide)}</strong>
-                <span>Jeśli chcesz kupić, dostać dostęp albo upewnić się, czy ten PDF ma sens na start, napisz krótką wiadomość.</span>
+                <strong>{repairCopy(getPdfGuideInquiryLabel(guide))}</strong>
+                <span>Jeśli chcesz kupić, dostać dostęp albo upewnić się, czy ten PDF ma sens na start, wyślij krótkie zamówienie przez formularz.</span>
               </div>
 
               <div className="hero-actions offer-detail-actions">
-                <Link href={buildPdfInquiryHref({ guideSlug: guide.slug })} prefetch={false} className="button button-primary big-button">
-                  {getPdfGuideInquiryLabel(guide)}
+                <Link href={orderHref} prefetch={false} className="button button-primary big-button">
+                  Zamów ten PDF
                 </Link>
                 <Link href="/book" prefetch={false} className="button button-ghost big-button">
                   Umów 15 min
@@ -146,7 +147,7 @@ export default function PdfGuideDetailPage({ params }: PdfGuideDetailPageProps) 
 
             <div className="list-card accent-outline tree-backed-card top-gap offer-detail-contact-card">
               <strong>Kiedy ten PDF ma sens</strong>
-              <span>{guide.audience}</span>
+              <span>{repairCopy(guide.audience)}</span>
             </div>
           </div>
 
@@ -165,19 +166,19 @@ export default function PdfGuideDetailPage({ params }: PdfGuideDetailPageProps) 
                 <span>czytania i porządkowania obserwacji</span>
               </div>
               <div className="stat-card tree-backed-card pdf-stat-card">
-                <strong>{guide.format}</strong>
-                <span>{guide.difficulty}</span>
+                <strong>{repairCopy(guide.format)}</strong>
+                <span>{repairCopy(guide.difficulty)}</span>
               </div>
             </div>
 
             <div className="list-card tree-backed-card offer-detail-media-note">
               <strong>Co ten materiał porządkuje</strong>
-              <span>{guide.valuePromise}</span>
+              <span>{repairCopy(guide.valuePromise)}</span>
             </div>
 
             <div className="list-card tree-backed-card offer-detail-media-note">
               <strong>Jeśli temat okaże się szerszy</strong>
-              <span>{guide.relatedService}</span>
+              <span>{repairCopy(guide.relatedService)}</span>
             </div>
           </div>
         </section>
@@ -190,7 +191,7 @@ export default function PdfGuideDetailPage({ params }: PdfGuideDetailPageProps) 
             <div className="stack-gap top-gap">
               {guide.excerpt.map((paragraph) => (
                 <div key={paragraph} className="list-card tree-backed-card">
-                  <span>{paragraph}</span>
+                  <span>{repairCopy(paragraph)}</span>
                 </div>
               ))}
             </div>
@@ -203,7 +204,7 @@ export default function PdfGuideDetailPage({ params }: PdfGuideDetailPageProps) 
             <div className="stack-gap top-gap">
               <div className="list-card tree-backed-card">
                 <strong>Najbliższa forma pomocy</strong>
-                <span>{guide.relatedService}</span>
+                <span>{repairCopy(guide.relatedService)}</span>
               </div>
               <div className="list-card tree-backed-card">
                 <strong>Dalszy krok</strong>
@@ -223,7 +224,6 @@ export default function PdfGuideDetailPage({ params }: PdfGuideDetailPageProps) 
             ) : null}
           </div>
         </section>
-
       </div>
     </NotatnikPageShell>
   )

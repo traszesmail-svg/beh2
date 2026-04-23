@@ -67,7 +67,7 @@ export const PUBLIC_SOCIAL_LINKS = [
     description: 'publiczne treści marki',
   },
   {
-    label: 'Profil CAPBT',
+    label: 'Zweryfikuj kwalifikacje COAPE',
     href: CAPBT_PROFILE_URL,
     description: 'publiczny profil specjalisty',
   },

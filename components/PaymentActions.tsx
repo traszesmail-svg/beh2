@@ -265,8 +265,8 @@ export function PaymentActions({
             <strong>{manualPaymentCopy.selectionTitle}</strong>
             <span>
               {customerEmailAvailable
-                ? `Opłać rezerwację zgodnie z danymi poniżej. Po zgłoszeniu wpłaty potwierdzimy ją ręcznie do 60 minut, a szczegóły i ${roomAccessLabel} pokażemy na potwierdzeniu oraz wyślemy mailowo.`
-                : `Opłać rezerwację zgodnie z danymi poniżej. Po zgłoszeniu wpłaty potwierdzimy ją ręcznie do 60 minut, a szczegóły i ${roomAccessLabel} pokażemy na potwierdzeniu.`}
+                ? `Opłać rezerwację zgodnie z danymi poniżej. Po zgłoszeniu wpłaty potwierdzimy ją ręcznie do 15 minut, a szczegóły i ${roomAccessLabel} pokażemy na potwierdzeniu oraz wyślemy mailowo.`
+                : `Opłać rezerwację zgodnie z danymi poniżej. Po zgłoszeniu wpłaty potwierdzimy ją ręcznie do 15 minut, a szczegóły i ${roomAccessLabel} pokażemy na potwierdzeniu.`}
             </span>
           </div>
           <span className="payment-method-badge">Dostępne teraz</span>
@@ -292,7 +292,7 @@ export function PaymentActions({
           </div>
           <div className="summary-card tree-backed-card">
             <div className="stat-label">Potwierdzenie</div>
-            <div className="summary-value payment-summary-value">Ręcznie do 60 min</div>
+            <div className="summary-value payment-summary-value">Ręcznie do 15 min</div>
           </div>
         </div>
 
@@ -337,11 +337,11 @@ export function PaymentActions({
           <span>
             {customerEmailAvailable ? (
               <>
-                Wyślij płatność z tytułem <strong>{paymentReference}</strong>, kliknij przycisk poniżej i poczekaj na ręczne potwierdzenie do 60 minut. Po akceptacji dostaniesz mail, a na stronie potwierdzenia od razu zobaczysz {roomAccessLabel}.
+                Wyślij płatność z tytułem <strong>{paymentReference}</strong>, kliknij przycisk poniżej i poczekaj na ręczne potwierdzenie do 15 minut. Po akceptacji dostaniesz mail, a na stronie potwierdzenia od razu zobaczysz {roomAccessLabel}.
               </>
             ) : (
               <>
-                Wyślij płatność z tytułem <strong>{paymentReference}</strong>, kliknij przycisk poniżej i poczekaj na ręczne potwierdzenie do 60 minut. Po akceptacji zobaczysz aktywne potwierdzenie i {roomAccessLabel} na tej stronie, więc zachowaj ten link.
+                Wyślij płatność z tytułem <strong>{paymentReference}</strong>, kliknij przycisk poniżej i poczekaj na ręczne potwierdzenie do 15 minut. Po akceptacji zobaczysz aktywne potwierdzenie i {roomAccessLabel} na tej stronie, więc zachowaj ten link.
               </>
             )}
           </span>

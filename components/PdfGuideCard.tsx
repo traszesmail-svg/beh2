@@ -2,7 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import { PdfGuideCover } from '@/components/PdfGuideCover'
 import {
-  buildPdfInquiryHref,
+  buildPdfOrderHref,
   getPdfAccessLabel,
   getPdfCategoryLabel,
   getPdfGuideInquiryLabel,
@@ -61,7 +61,7 @@ export function PdfGuideCard({ guide, primaryHref, primaryLabel, compact = false
         <Link href={guide.routePath} prefetch={false} className="button button-ghost">
           Zobacz poradnik
         </Link>
-        <Link href={primaryHref ?? buildPdfInquiryHref({ guideSlug: guide.slug })} prefetch={false} className="button button-primary">
+        <Link href={primaryHref ?? buildPdfOrderHref({ guideSlug: guide.slug })} prefetch={false} className="button button-primary">
           {primaryLabel ?? getPdfGuideInquiryLabel(guide)}
         </Link>
       </div>

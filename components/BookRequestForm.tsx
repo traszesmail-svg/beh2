@@ -1,0 +1,380 @@
+'use client'
+
+import Link from 'next/link'
+import { useMemo, useState, type FormEvent } from 'react'
+import type { BookingSpecies } from '@/lib/booking-routing'
+
+type BookingServiceId = 'kwadrans-na-juz' | 'szybka-konsultacja-15-min' | 'konsultacja-30-min' | 'konsultacja-behawioralna-online'
+type FormState = 'idle' | 'loading' | 'success' | 'error'
+
+type BookRequestFormProps = {
+  initialService: BookingServiceId
+  initialSpecies: BookingSpecies | null
+}
+
+type BookingRequestPayload = {
+  service: BookingServiceId
+  name: string
+  email: string
+  species: BookingSpecies
+  description: string
+  preferredSlots: string
+  consentRodo: boolean
+  consentRegulamin: boolean
+  consentEarlyStart: boolean
+  honeypot: string
+}
+
+const SERVICE_OPTIONS: Array<{ value: BookingServiceId; label: string; price: string }> = [
+  { value: 'kwadrans-na-juz', label: 'Kwadrans na juz / TERAZ', price: '69 zl' },
+  { value: 'szybka-konsultacja-15-min', label: 'Kwadrans z behawiorysta', price: '69 zl' },
+  { value: 'konsultacja-30-min', label: 'Dwa kwadranse', price: '129 zl' },
+  { value: 'konsultacja-behawioralna-online', label: 'Pelna konsultacja', price: '350 zl' },
+]
+
+function isEmailValid(value: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+}
+
+function normalizeSingleLine(value: string) {
+  return value.trim().replace(/\s+/g, ' ')
+}
+
+function normalizeLongText(value: string) {
+  return value.replace(/\r\n/g, '\n').trim()
+}
+
+function createInitialForm(initialService: BookingServiceId, initialSpecies: BookingSpecies | null): BookingRequestPayload {
+  return {
+    service: initialService,
+    name: '',
+    email: '',
+    species: initialSpecies ?? 'pies',
+    description: '',
+    preferredSlots: '',
+    consentRodo: false,
+    consentRegulamin: false,
+    consentEarlyStart: false,
+    honeypot: '',
+  }
+}
+
+export function BookRequestForm({ initialService, initialSpecies }: BookRequestFormProps) {
+  const [form, setForm] = useState<BookingRequestPayload>(() => createInitialForm(initialService, initialSpecies))
+  const [status, setStatus] = useState<FormState>('idle')
+  const [feedback, setFeedback] = useState('')
+  const selectedService = useMemo(
+    () => SERVICE_OPTIONS.find((option) => option.value === form.service) ?? SERVICE_OPTIONS[0],
+    [form.service],
+  )
+  const isUrgentNow = form.service === 'kwadrans-na-juz'
+
+  function updateField<K extends keyof BookingRequestPayload>(key: K, value: BookingRequestPayload[K]) {
+    if (status !== 'idle') {
+      setStatus('idle')
+      setFeedback('')
+    }
+
+    setForm((current) => ({ ...current, [key]: value }))
+  }
+
+  function validate() {
+    const name = normalizeSingleLine(form.name)
+    const email = normalizeSingleLine(form.email)
+    const description = normalizeLongText(form.description)
+    const preferredSlots = normalizeLongText(form.preferredSlots)
+
+    if (!name) {
+      return 'Podaj imie.'
+    }
+
+    if (!email || !isEmailValid(email)) {
+      return 'Podaj poprawny adres e-mail.'
+    }
+
+    if (description.length < 20 || description.length > 1000) {
+      return 'Opis sytuacji powinien miec od 20 do 1000 znakow.'
+    }
+
+    if (!isUrgentNow && !preferredSlots) {
+      return 'Podaj co najmniej jeden preferowany termin.'
+    }
+
+    if (!form.consentRodo || !form.consentRegulamin || !form.consentEarlyStart) {
+      return 'Zaznacz wszystkie wymagane zgody.'
+    }
+
+    return null
+  }
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+
+    const validationError = validate()
+
+    if (validationError) {
+      setStatus('error')
+      setFeedback(validationError)
+      return
+    }
+
+    setStatus('loading')
+    setFeedback('')
+
+    try {
+      const response = await fetch('/api/book', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          service: form.service,
+          name: normalizeSingleLine(form.name),
+          email: normalizeSingleLine(form.email),
+          species: form.species,
+          description: normalizeLongText(form.description),
+          preferredSlots: isUrgentNow
+            ? 'Chce termin jak najszybciej - prosze o kontakt w ciagu 15 minut.'
+            : normalizeLongText(form.preferredSlots),
+          consentRodo: form.consentRodo,
+          consentRegulamin: form.consentRegulamin,
+          consentEarlyStart: form.consentEarlyStart,
+          honeypot: form.honeypot.trim(),
+        }),
+      })
+
+      const payload = (await response.json()) as { ok?: boolean; error?: string; message?: string }
+
+      if (!response.ok || !payload.ok) {
+        throw new Error(payload.error ?? 'Nie udalo sie wyslac prosby o rezerwacje.')
+      }
+
+      setStatus('success')
+      setFeedback(payload.message ?? 'Dostalem Twoja rezerwacje. Sprawdz skrzynke - wyslalem kopie.')
+      setForm(createInitialForm(form.service, form.species))
+    } catch (error) {
+      setStatus('error')
+      setFeedback(error instanceof Error ? error.message : 'Nie udalo sie wyslac prosby o rezerwacje.')
+    }
+  }
+
+  if (status === 'success') {
+    return (
+      <div className="contact-form-card top-gap" role="status">
+        <div className="notatnik-mono notatnik-kicker-spaced">Rezerwacja przyjeta</div>
+        <h2>{isUrgentNow ? 'Dostalem Twoja prosbe o Kwadrans na juz.' : 'Dostalem Twoja rezerwacje.'}</h2>
+        <p>
+          {isUrgentNow
+            ? 'Twoja prosba o Kwadrans na juz dotarla. Odpisze w ciagu 15 minut z numerem BLIK i terminem. Sprawdz skrzynke - wyslalem Ci kopie.'
+            : 'W ciagu kilku godzin, miedzy 9 a 21, odezwe sie z potwierdzeniem terminu i numerem telefonu do BLIK-a. Sprawdz skrzynke - wyslalem Ci kopie.'}
+        </p>
+        <div className="notatnik-steps top-gap-small">
+          <article className="notatnik-step">
+            <div className="notatnik-step-number">01</div>
+            <p>{isUrgentNow ? 'Wracam z szybka odpowiedzia i pierwsza wolna chwila na dzis.' : 'Potwierdzam jeden z terminow albo odsylam najblizsza alternatywe.'}</p>
+          </article>
+          <article className="notatnik-step">
+            <div className="notatnik-step-number">02</div>
+            <p>W mailu dostajesz numer telefonu do BLIK-a i instrukcje platnosci.</p>
+          </article>
+          <article className="notatnik-step">
+            <div className="notatnik-step-number">03</div>
+            <p>Po wplacie potwierdzam rezerwacje i odsylam link do rozmowy.</p>
+          </article>
+        </div>
+        <div className="notatnik-subhero-actions top-gap-small">
+          <Link href="/" prefetch={false} className="notatnik-btn">
+            Wroc na strone glowna
+          </Link>
+          <button type="button" className="notatnik-btn notatnik-btn-ghost" onClick={() => setStatus('idle')}>
+            Wyslij kolejna prosbe
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <form className="form-grid top-gap" onSubmit={handleSubmit} noValidate>
+      <div className="info-box full-width contact-form-intro">
+        To jest prosba o rezerwacje. Wybierasz usluge, wpisujesz 2-4 zdania opisu i proponujesz terminy, a ja odpisuje z
+        potwierdzeniem i numerem telefonu do BLIK-a.
+      </div>
+
+      <fieldset className="full-width form-field consent-stack">
+        <legend className="field-legend">Wybierz usluge</legend>
+        {SERVICE_OPTIONS.map((option) => (
+          <label key={option.value} className="checkbox-card" htmlFor={`service-${option.value}`}>
+            <input
+              id={`service-${option.value}`}
+              type="radio"
+              name="service"
+              checked={form.service === option.value}
+              onChange={() => updateField('service', option.value)}
+            />
+            <span>
+              {option.label} / {option.price}
+            </span>
+          </label>
+        ))}
+      </fieldset>
+
+      <div className="form-field">
+        <label htmlFor="book-name">Imie</label>
+        <input
+          id="book-name"
+          name="name"
+          value={form.name}
+          onChange={(event) => updateField('name', event.target.value)}
+          autoComplete="name"
+          placeholder="np. Anna"
+        />
+      </div>
+
+      <div className="form-field">
+        <label htmlFor="book-email">E-mail</label>
+        <input
+          id="book-email"
+          name="email"
+          type="email"
+          value={form.email}
+          onChange={(event) => updateField('email', event.target.value)}
+          autoComplete="email"
+          inputMode="email"
+          placeholder="np. anna@email.pl"
+        />
+      </div>
+
+      <fieldset className="full-width form-field consent-stack">
+        <legend className="field-legend">Gatunek</legend>
+        <label className="checkbox-card" htmlFor="species-pies">
+          <input
+            id="species-pies"
+            type="radio"
+            name="species"
+            checked={form.species === 'pies'}
+            onChange={() => updateField('species', 'pies')}
+          />
+          <span>Pies</span>
+        </label>
+        <label className="checkbox-card" htmlFor="species-kot">
+          <input
+            id="species-kot"
+            type="radio"
+            name="species"
+            checked={form.species === 'kot'}
+            onChange={() => updateField('species', 'kot')}
+          />
+          <span>Kot</span>
+        </label>
+      </fieldset>
+
+      <div className="full-width form-field">
+        <label htmlFor="book-description">Krotki opis sytuacji</label>
+        <textarea
+          id="book-description"
+          name="description"
+          rows={5}
+          value={form.description}
+          onChange={(event) => updateField('description', event.target.value.slice(0, 1000))}
+          placeholder="Napisz, co dzieje sie teraz, od kiedy trwa problem i co najbardziej chcesz uporzadkowac."
+        />
+        <div className="field-help">{form.description.length}/1000 znakow</div>
+      </div>
+
+      <div className="full-width form-field">
+        <label htmlFor="book-preferred-slots">3 preferowane terminy</label>
+        {isUrgentNow ? (
+          <div className="info-box">
+            Chce termin jak najszybciej - prosze o kontakt w ciagu 15 minut.
+          </div>
+        ) : (
+          <textarea
+            id="book-preferred-slots"
+            name="preferredSlots"
+            rows={4}
+            value={form.preferredSlots}
+            onChange={(event) => updateField('preferredSlots', event.target.value)}
+            placeholder="np. wtorek 18:00, sroda 10:00, piatek 15:00"
+          />
+        )}
+      </div>
+
+      <fieldset className="full-width form-field consent-stack">
+        <legend className="field-legend">Wymagane zgody</legend>
+        <label className="checkbox-card" htmlFor="book-consent-rodo">
+          <input
+            id="book-consent-rodo"
+            type="checkbox"
+            checked={form.consentRodo}
+            onChange={(event) => updateField('consentRodo', event.target.checked)}
+            required
+          />
+          <span>Wyrazam zgode na przetwarzanie danych osobowych w celu obslugi rezerwacji.</span>
+        </label>
+
+        <label className="checkbox-card" htmlFor="book-consent-regulamin">
+          <input
+            id="book-consent-regulamin"
+            type="checkbox"
+            checked={form.consentRegulamin}
+            onChange={(event) => updateField('consentRegulamin', event.target.checked)}
+            required
+          />
+          <span>
+            Zapoznalem/am sie z{' '}
+            <Link href="/regulamin" prefetch={false}>
+              regulaminem
+            </Link>{' '}
+            oraz{' '}
+            <Link href="/regulamin-pelna-konsultacja" prefetch={false}>
+              regulaminem Pelnej konsultacji
+            </Link>{' '}
+            i akceptuje warunki.
+          </span>
+        </label>
+
+        <label className="checkbox-card" htmlFor="book-consent-early-start">
+          <input
+            id="book-consent-early-start"
+            type="checkbox"
+            checked={form.consentEarlyStart}
+            onChange={(event) => updateField('consentEarlyStart', event.target.checked)}
+            required
+          />
+          <span>
+            Wyrazam zgode na rozpoczecie swiadczenia uslugi przed uplywem 14 dni i przyjmuje do wiadomosci, ze po
+            wykonaniu konsultacji trace prawo odstapienia od umowy.
+          </span>
+        </label>
+      </fieldset>
+
+      <div
+        style={{
+          position: 'absolute',
+          left: '-9999px',
+          top: 'auto',
+          width: '1px',
+          height: '1px',
+          overflow: 'hidden',
+        }}
+        aria-hidden="true"
+      >
+        <label htmlFor="book-company">Firma</label>
+        <input id="book-company" name="company" tabIndex={-1} autoComplete="off" value={form.honeypot} onChange={(event) => updateField('honeypot', event.target.value)} />
+      </div>
+
+      {feedback ? (
+        <div className={`info-box full-width ${status === 'error' ? 'error-box' : ''}`} role="status">
+          {feedback}
+        </div>
+      ) : null}
+
+      <div className="full-width">
+        <button type="submit" className="button button-primary big-button" disabled={status === 'loading'}>
+          {status === 'loading' ? `Wysylam prosbe o ${selectedService.label.toLowerCase()}...` : 'Wyslij prosbe o rezerwacje'}
+        </button>
+      </div>
+    </form>
+  )
+}

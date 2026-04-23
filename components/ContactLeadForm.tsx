@@ -1,10 +1,12 @@
 'use client'
 
 import React from 'react'
+import Link from 'next/link'
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { trackAnalyticsEvent } from '@/lib/analytics'
 import { getProblemOptionsForSpecies, getPublicProblemOptionById, type FunnelSpecies } from '@/lib/funnel'
+import { URGENT_NOW_INTENT, isUrgentNowIntent } from '@/lib/urgent-now'
 
 type FormState = 'idle' | 'loading' | 'success' | 'error'
 type Species = FunnelSpecies
@@ -15,6 +17,8 @@ type SubmissionPayload = {
   species: Species
   topicId: string
   message: string
+  requestedDate: string
+  requestedTime: string
   website: string
   consentProcessing: boolean
   consentPolicy: boolean
@@ -29,6 +33,8 @@ function createInitialForm(species: Species = 'pies'): SubmissionPayload {
     species,
     topicId: '',
     message: '',
+    requestedDate: '',
+    requestedTime: '',
     website: '',
     consentProcessing: false,
     consentPolicy: false,
@@ -62,12 +68,15 @@ function getSpeciesLabel(species: Species) {
 export function ContactLeadForm() {
   const searchParams = useSearchParams()
   const presetSpecies = normalizeSpeciesPreset(searchParams?.get('species') ?? null)
+  const intent = searchParams?.get('intent') ?? searchParams?.get('service') ?? null
+  const isUrgentNow = isUrgentNowIntent(intent)
   const [form, setForm] = useState<SubmissionPayload>(createInitialForm(presetSpecies ?? 'pies'))
   const [status, setStatus] = useState<FormState>('idle')
   const [feedback, setFeedback] = useState('')
   const startedRef = useRef(false)
   const topicOptions = getProblemOptionsForSpecies(form.species)
   const messageLength = form.message.length
+  const isSubmitDisabled = status === 'loading' || !form.consentProcessing || !form.consentPolicy
 
   useEffect(() => {
     if (!presetSpecies) {
@@ -101,6 +110,7 @@ export function ContactLeadForm() {
     trackAnalyticsEvent('contact_form_started', {
       source_page: '/kontakt',
       species: form.species,
+      intent: isUrgentNow ? URGENT_NOW_INTENT : 'contact',
     })
   }
 
@@ -121,7 +131,7 @@ export function ContactLeadForm() {
     const normalizedMessage = normalizeLongText(form.message)
 
     if (!normalizedName) {
-      return 'Podaj imię.'
+      return 'Podaj imie.'
     }
 
     if (!normalizedContact || !isEmailValid(normalizedContact)) {
@@ -137,11 +147,15 @@ export function ContactLeadForm() {
     }
 
     if (normalizedMessage.length > MESSAGE_MAX_LENGTH) {
-      return 'Skróć opis problemu do krótkiej wiadomości.'
+      return 'Skroc opis problemu do krotkiej wiadomosci.'
+    }
+
+    if (isUrgentNow && (!form.requestedDate || !form.requestedTime)) {
+      return 'Przy Kwadransie na juz podaj preferowana date i godzine.'
     }
 
     if (!form.consentProcessing || !form.consentPolicy) {
-      return 'Zaznacz zgody na kontakt i akceptację polityki prywatności.'
+      return 'Zaznacz zgody na kontakt i akceptacje polityki prywatnosci.'
     }
 
     return null
@@ -177,6 +191,10 @@ export function ContactLeadForm() {
           species: form.species,
           topicId: form.topicId,
           message: normalizedMessage,
+          requestedDate: isUrgentNow ? form.requestedDate : null,
+          requestedTime: isUrgentNow ? form.requestedTime : null,
+          intent: isUrgentNow ? URGENT_NOW_INTENT : null,
+          service: isUrgentNow ? URGENT_NOW_INTENT : null,
           website: form.website.trim(),
           consentProcessing: form.consentProcessing,
           consentPolicy: form.consentPolicy,
@@ -186,42 +204,56 @@ export function ContactLeadForm() {
       const payload = (await response.json()) as { ok?: boolean; message?: string; error?: string }
 
       if (!response.ok || !payload.ok) {
-        throw new Error(payload.error ?? 'Nie udało się wysłać wiadomości. Spróbuj ponownie później.')
+        throw new Error(payload.error ?? 'Nie udalo sie wyslac wiadomosci. Sprobuj ponownie pozniej.')
       }
 
       trackAnalyticsEvent('contact_form_submitted', {
         source_page: '/kontakt',
         species: form.species,
         problem_key: form.topicId,
+        intent: isUrgentNow ? URGENT_NOW_INTENT : 'contact',
       })
 
       setStatus('success')
-      setFeedback(payload.message ?? 'Dziękuję. Wiadomość została przyjęta. Odpowiem na podany adres e-mail.')
+      setFeedback(
+        payload.message ??
+          (isUrgentNow
+            ? 'Dziekuje. Prosba o Kwadrans na juz zostala przyjeta. Odpowiem na podany adres e-mail w ciagu 15 minut z propozycja terminu.'
+            : 'Wyslane. Odpowiem w 1-2 dni roboczych. Sprawdz skrzynke - masz tez kopie.'),
+      )
       setForm((current) => createInitialForm(presetSpecies ?? current.species))
       startedRef.current = false
     } catch (error) {
       setStatus('error')
-      setFeedback(error instanceof Error ? error.message : 'Nie udało się wysłać wiadomości. Spróbuj ponownie później.')
+      setFeedback(error instanceof Error ? error.message : 'Nie udalo sie wyslac wiadomosci. Sprobuj ponownie pozniej.')
     }
   }
 
   const submitLabel =
     status === 'loading'
-      ? 'Wysyłam krótką wiadomość...'
+      ? isUrgentNow
+        ? 'Wysylam prosbe o termin...'
+        : 'Wysylam krotka wiadomosc...'
       : status === 'success'
-        ? 'Wyślij kolejną krótką wiadomość'
-        : 'Wyślij krótką wiadomość'
+        ? isUrgentNow
+          ? 'Wyslij kolejna prosbe'
+          : 'Wyslij kolejna krotka wiadomosc'
+        : isUrgentNow
+          ? 'Wyslij prosbe o termin'
+          : 'Wyslij krotka wiadomosc'
 
   return (
     <form className="form-grid top-gap" onSubmit={handleSubmit} noValidate>
       <div className="info-box full-width contact-form-intro">
-        Napisz krótko: gatunek, temat i co Cię niepokoi. To wystarczy, żeby odpowiedzieć na wiadomość i wskazać właściwy dalszy krok.
+        {isUrgentNow
+          ? 'To jest prosba o Kwadrans na juz. Wpisz gatunek, temat i preferowana date z godzina, a odpowiem w ciagu 15 minut z konkretna propozycja terminu.'
+          : 'Napisz krotko: gatunek, temat i co Cie niepokoi. To wystarczy, zeby odpowiedziec na wiadomosc i wskazac wlasciwy dalszy krok.'}
       </div>
 
-      <div className="section-eyebrow contact-form-kicker">Krótka wiadomość</div>
+      <div className="section-eyebrow contact-form-kicker">{isUrgentNow ? 'Kwadrans na juz' : 'Krotka wiadomosc'}</div>
 
       <div className="form-field">
-        <label htmlFor="contact-name">Imię</label>
+        <label htmlFor="contact-name">Imie</label>
         <input
           id="contact-name"
           name="name"
@@ -251,7 +283,9 @@ export function ContactLeadForm() {
           aria-describedby="contact-contact-help"
         />
         <div className="field-help" id="contact-contact-help">
-          Na ten adres odpowiem w sprawie wiadomości.
+          {isUrgentNow
+            ? 'Na ten adres odpowiem w sprawie Kwadransa na juz w ciagu 15 minut.'
+            : 'Na ten adres odpowiem w sprawie wiadomosci, zwykle w ciagu 1-2 dni roboczych.'}
         </div>
       </div>
 
@@ -285,11 +319,39 @@ export function ContactLeadForm() {
             </option>
           ))}
         </select>
-        <div className="field-help">Dobierz temat możliwie najbliższy sytuacji {getSpeciesLabel(form.species).toLowerCase()}.</div>
+        <div className="field-help">Dobierz temat mozliwie najblizszy sytuacji {getSpeciesLabel(form.species).toLowerCase()}.</div>
       </div>
 
+      {isUrgentNow ? (
+        <>
+          <div className="form-field">
+            <label htmlFor="contact-requested-date">Preferowana data</label>
+            <input
+              id="contact-requested-date"
+              name="requestedDate"
+              type="date"
+              value={form.requestedDate}
+              onChange={(event) => updateField('requestedDate', event.target.value)}
+              onFocus={markStarted}
+            />
+          </div>
+
+          <div className="form-field">
+            <label htmlFor="contact-requested-time">Preferowana godzina</label>
+            <input
+              id="contact-requested-time"
+              name="requestedTime"
+              type="time"
+              value={form.requestedTime}
+              onChange={(event) => updateField('requestedTime', event.target.value)}
+              onFocus={markStarted}
+            />
+          </div>
+        </>
+      ) : null}
+
       <div className="full-width form-field">
-        <label htmlFor="contact-message">Krótki opis problemu</label>
+        <label htmlFor="contact-message">{isUrgentNow ? 'Krotki opis i kontekst terminu' : 'Krotki opis problemu'}</label>
         <textarea
           id="contact-message"
           name="message"
@@ -297,16 +359,22 @@ export function ContactLeadForm() {
           value={form.message}
           onChange={(event) => updateField('message', event.target.value.slice(0, MESSAGE_MAX_LENGTH))}
           onFocus={markStarted}
-          placeholder="Napisz w 2-4 zdaniach, co dzieje się teraz, od kiedy to trwa i co najbardziej chcesz uporządkować."
+          placeholder={
+            isUrgentNow
+              ? 'Napisz w 2-4 zdaniach, czego dotyczy temat i czy wskazana data/godzina sa sztywne czy orientacyjne.'
+              : 'Napisz w 2-4 zdaniach, co dzieje sie teraz, od kiedy to trwa i co najbardziej chcesz uporzadkowac.'
+          }
           enterKeyHint="send"
           maxLength={MESSAGE_MAX_LENGTH}
           aria-describedby="contact-message-help contact-message-count"
         />
         <div className="field-help" id="contact-message-help">
-          Nie wysyłaj długiej historii. Krótki opis wystarczy, żeby dobrać odpowiedź i wskazać kolejny krok.
+          {isUrgentNow
+            ? 'Krotki opis wystarczy. Na tej podstawie wracam w ciagu 15 minut z propozycja terminu i dalszym krokiem.'
+            : 'Nie wysylaj dlugiej historii. Krotki opis wystarczy, zeby dobrac odpowiedz i wskazac kolejny krok.'}
         </div>
         <div className="field-help" id="contact-message-count">
-          {messageLength}/{MESSAGE_MAX_LENGTH} znaków
+          {messageLength}/{MESSAGE_MAX_LENGTH} znakow
         </div>
       </div>
 
@@ -323,7 +391,13 @@ export function ContactLeadForm() {
             onFocus={markStarted}
             required
           />
-          <span>Wyrażam zgodę na przetwarzanie danych w celu odpowiedzi na wiadomość.</span>
+          <span>
+            Wyrazam zgode na przetwarzanie danych w celu odpowiedzi na wiadomosc zgodnie z{' '}
+            <Link href="/polityka-prywatnosci" target="_blank" rel="noopener noreferrer">
+              polityka prywatnosci
+            </Link>
+            .
+          </span>
         </label>
 
         <label className="checkbox-card" htmlFor="contact-consent-policy">
@@ -336,7 +410,17 @@ export function ContactLeadForm() {
             onFocus={markStarted}
             required
           />
-          <span>Akceptuję politykę prywatności i regulamin w zakresie potrzebnym do kontaktu.</span>
+          <span>
+            Potwierdzam, ze zapoznalem sie z{' '}
+            <Link href="/polityka-prywatnosci" target="_blank" rel="noopener noreferrer">
+              polityka prywatnosci
+            </Link>{' '}
+            oraz{' '}
+            <Link href="/regulamin" target="_blank" rel="noopener noreferrer">
+              regulaminem
+            </Link>{' '}
+            w zakresie potrzebnym do kontaktu.
+          </span>
         </label>
       </fieldset>
 
@@ -358,32 +442,20 @@ export function ContactLeadForm() {
           tabIndex={-1}
           autoComplete="off"
           value={form.website}
-          onChange={(event) => updateField('website', event.target.value)}
+          onChange={(event) => setForm((current) => ({ ...current, website: event.target.value }))}
         />
       </div>
 
       {feedback ? (
-        <div
-          className={status === 'success' ? 'success-inline full-width' : 'error-box full-width'}
-          role={status === 'error' ? 'alert' : 'status'}
-          aria-live="polite"
-        >
+        <div className={`info-box full-width ${status === 'error' ? 'error-box' : ''}`} role="status">
           {feedback}
         </div>
       ) : null}
 
-      <div className="checkout-box full-width tree-backed-card">
-        <div>
-          <div className="muted">Bez rozpisywania całej historii od początku.</div>
-          <div className="checkout-title">Krótka wiadomość wystarczy</div>
-          <div className="muted">Jeśli temat okaże się szerszy, wskażę kolejny sensowny krok albo odpowiednią usługę.</div>
-        </div>
-
-        <div className="checkout-right">
-          <button type="submit" className="button button-primary big-button" disabled={status === 'loading'}>
-            {submitLabel}
-          </button>
-        </div>
+      <div className="full-width">
+        <button type="submit" className="button button-primary big-button" disabled={isSubmitDisabled}>
+          {submitLabel}
+        </button>
       </div>
     </form>
   )

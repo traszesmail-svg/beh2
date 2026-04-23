@@ -3,7 +3,7 @@ import { normalizePolishPhone } from '@/lib/phone'
 import type { BookingRecord, QaCheckoutEligibility } from '@/lib/types'
 import { getPaymentModeStatus } from '@/lib/server/env'
 
-const DEFAULT_MANUAL_PAYMENT_HOLD_MINUTES = 60
+const DEFAULT_MANUAL_PAYMENT_HOLD_MINUTES = 15
 
 function readEnv(name: string): string | null {
   const value = process.env[name]?.trim()
@@ -333,7 +333,10 @@ export function getPublicManualPaymentConfig(): ManualPaymentConfig {
     ...manual,
     phone: null,
     phoneDisplay: null,
-    summary: `${getManualPaymentAvailabilityLabel(null, manual.paypalMeUrl)} z ręcznym potwierdzeniem do 60 minut.`,
+    paypalMe: null,
+    paypalMeDisplay: null,
+    paypalMeUrl: null,
+    summary: 'Wpłata ręczna jest dostępna z ręcznym potwierdzeniem do 60 minut.',
   }
 }
 

@@ -4,14 +4,14 @@ import Link from 'next/link'
 import { EditorialFaqSection } from '@/components/EditorialFaqSection'
 import { LeadMagnetSignup } from '@/components/LeadMagnetSignup'
 import { NotatnikPageShell } from '@/components/NotatnikA'
+import { Schema } from '@/components/schema'
 import { TrustSignalSection } from '@/components/TrustSignalSection'
 import { buildBookHref } from '@/lib/booking-routing'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { getLeadMagnetBySlug } from '@/lib/growth-layer'
-import { getBreadcrumbJsonLd, getServiceJsonLd } from '@/lib/schema'
+import { getBreadcrumbJsonLd, getFaqPageJsonLd, getServiceJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
 import { FAQ_SHORTLISTS, TRUST_SIGNAL_SETS } from '@/lib/trust-layer'
-import { SPECIALIST_NAME } from '@/lib/site'
 
 const heroImage = { src: '/branding/omnie-hero.webp', width: 1024, height: 1536 } as const
 
@@ -39,6 +39,7 @@ export default function ConsultationOnlinePage() {
   const consultationHref = buildBookHref(null, 'konsultacja-behawioralna-online')
   const contactHref = '/kontakt#formularz'
   const prepGuide = getLeadMagnetBySlug('przygotowanie-do-konsultacji-online')
+  const consultationFaqItems = FAQ_SHORTLISTS.consultation.slice(0, 5)
   const structuredData = [
     getBreadcrumbJsonLd([
       { name: 'Strona główna', path: '/' },
@@ -50,18 +51,7 @@ export default function ConsultationOnlinePage() {
       serviceUrl: consultationHref,
       offerPrice: 350,
     }),
-    {
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: FAQ_SHORTLISTS.consultation.map((item) => ({
-        '@type': 'Question',
-        name: item.question,
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: item.answer,
-        },
-      })),
-    },
+    getFaqPageJsonLd(consultationFaqItems),
   ]
 
   return (
@@ -79,7 +69,7 @@ export default function ConsultationOnlinePage() {
       footerPrimaryHref={audioHref}
       footerPrimaryLabel={FUNNEL_CTA_LABELS.primary}
     >
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+      <Schema data={structuredData} />
       <div className="container editorial-stack">
 
         <section className="editorial-hero-shell premium-hero-shell">
@@ -196,14 +186,37 @@ export default function ConsultationOnlinePage() {
           items={TRUST_SIGNAL_SETS.consultation}
         />
 
-        {prepGuide ? (
-          <section className="panel section-panel editorial-section" id="przygotowanie">
-            <SectionIntro
-              eyebrow="Przygotowanie"
-              title="Jesli chcesz wejsc w rozmowe spokojniej"
-              description="Mozesz pobrac krotki material przygotowujacy. Pomaga uporzadkowac to, co warto miec pod reka przed kontaktem."
-            />
+        <section className="panel section-panel editorial-section" id="przygotowanie">
+          <SectionIntro
+            eyebrow="Przygotowanie"
+            title="Co przygotowac przed konsultacja"
+            description="Nie potrzebujesz rozbudowanej dokumentacji. Wystarczy kilka konkretow, ktore pomoga szybciej wejsc w sedno rozmowy."
+          />
 
+          <div className="card-grid two-up top-gap-small">
+            <article className="summary-card tree-backed-card">
+              <div className="section-eyebrow">01</div>
+              <h3>Opis sytuacji</h3>
+              <p>Przygotuj 2-3 zdania o tym, co sie dzieje, od kiedy trwa problem i kiedy pojawia sie najczesciej.</p>
+            </article>
+            <article className="summary-card tree-backed-card">
+              <div className="section-eyebrow">02</div>
+              <h3>Codzienny rytm</h3>
+              <p>Warto miec pod reka podstawy: spacer, karmienie, sen, obecne zmiany w domu i to, co zwykle poprzedza trudny moment.</p>
+            </article>
+            <article className="summary-card tree-backed-card">
+              <div className="section-eyebrow">03</div>
+              <h3>Dotychczasowe proby</h3>
+              <p>Jesli cos bylo juz sprawdzane, powiedz co i z jakim efektem. To oszczedza czas i pozwala nie wracac do slepych uliczek.</p>
+            </article>
+            <article className="summary-card tree-backed-card">
+              <div className="section-eyebrow">04</div>
+              <h3>Nagranie lub notatki</h3>
+              <p>Jesli masz nagranie problemu albo krotkie notatki z obserwacji, trzymaj je pod reka. To pomocne, ale nieobowiazkowe.</p>
+            </article>
+          </div>
+
+          {prepGuide ? (
             <div className="premium-two-column-grid top-gap-small">
               <LeadMagnetSignup
                 magnet={prepGuide}
@@ -211,11 +224,11 @@ export default function ConsultationOnlinePage() {
                 sourcePage="/konsultacja-behawioralna-online"
               />
               <article className="summary-card tree-backed-card">
-                <div className="section-eyebrow">Kiedy warto</div>
-                <h3>Przed Kwadransem, Dwoma kwadransami albo pelna konsultacja</h3>
+                <div className="section-eyebrow">Material pomocniczy</div>
+                <h3>Jesli chcesz uporzadkowac temat jeszcze przed rezerwacja</h3>
                 <p>
-                  Ten material przydaje sie wtedy, gdy chcesz najpierw uporzadkowac opis sytuacji. Nie jest konieczny do rezerwacji i nie
-                  zastapi rozmowy.
+                  Ten material pomaga zebrac obserwacje przed Kwadransem, Dwoma kwadransami albo pelna konsultacja. Nie jest konieczny i nie
+                  zastapi rozmowy, ale zmniejsza chaos na starcie.
                 </p>
                 <div className="hero-actions top-gap-small">
                   <Link href={`/bezplatne-materialy/${prepGuide.slug}`} prefetch={false} className="prep-inline-link">
@@ -224,14 +237,14 @@ export default function ConsultationOnlinePage() {
                 </div>
               </article>
             </div>
-          </section>
-        ) : null}
+          ) : null}
+        </section>
 
         <EditorialFaqSection
           id="faq"
           title="Najczestsze pytania o konsultacje online"
           description="Krotko o tym, kiedy wybrac pelna konsultacje, a kiedy wystarczy Kwadrans."
-          items={FAQ_SHORTLISTS.consultation}
+          items={consultationFaqItems}
         />
 
         <section className="panel cta-panel editorial-final-panel">

@@ -12,20 +12,73 @@ import {
 
 type AnalyticsConsentProps = {
   measurementId?: string | null
+  cookiebotDomainGroupId?: string | null
 }
 
-export function AnalyticsConsent({ measurementId }: AnalyticsConsentProps) {
+declare global {
+  interface Window {
+    Cookiebot?: {
+      consent?: {
+        statistics?: boolean
+      }
+    }
+  }
+}
+
+function readCookiebotStatisticsConsent(): AnalyticsConsentState {
+  if (typeof window === 'undefined') {
+    return 'unset'
+  }
+
+  const statisticsConsent = window.Cookiebot?.consent?.statistics
+
+  if (statisticsConsent === true) {
+    return 'granted'
+  }
+
+  if (statisticsConsent === false) {
+    return 'denied'
+  }
+
+  return 'unset'
+}
+
+export function AnalyticsConsent({ measurementId, cookiebotDomainGroupId }: AnalyticsConsentProps) {
   const [consent, setConsent] = useState<AnalyticsConsentState>('unset')
   const pathname = usePathname() ?? '/'
   const searchParams = useSearchParams()
+  const hasCookiebot = Boolean(cookiebotDomainGroupId)
 
   useEffect(() => {
     if (!measurementId) {
       return
     }
 
+    if (hasCookiebot) {
+      const syncCookiebotConsent = () => {
+        const nextConsent = readCookiebotStatisticsConsent()
+
+        if (nextConsent === 'granted' || nextConsent === 'denied') {
+          persistAnalyticsConsent(nextConsent)
+        }
+
+        setConsent(nextConsent)
+      }
+
+      syncCookiebotConsent()
+      window.addEventListener('CookiebotOnConsentReady', syncCookiebotConsent)
+      window.addEventListener('CookiebotOnAccept', syncCookiebotConsent)
+      window.addEventListener('CookiebotOnDecline', syncCookiebotConsent)
+
+      return () => {
+        window.removeEventListener('CookiebotOnConsentReady', syncCookiebotConsent)
+        window.removeEventListener('CookiebotOnAccept', syncCookiebotConsent)
+        window.removeEventListener('CookiebotOnDecline', syncCookiebotConsent)
+      }
+    }
+
     setConsent(readAnalyticsConsent())
-  }, [measurementId])
+  }, [hasCookiebot, measurementId])
 
   useEffect(() => {
     if (!measurementId) {
@@ -80,7 +133,7 @@ export function AnalyticsConsent({ measurementId }: AnalyticsConsentProps) {
     })
   }, [consent, measurementId, pathname, searchParams])
 
-  if (!measurementId) {
+  if (!measurementId && !hasCookiebot) {
     return null
   }
 
@@ -91,7 +144,17 @@ export function AnalyticsConsent({ measurementId }: AnalyticsConsentProps) {
 
   return (
     <>
-      {consent === 'granted' ? (
+      {hasCookiebot ? (
+        <Script
+          id="Cookiebot"
+          src="https://consent.cookiebot.com/uc.js"
+          data-cbid={cookiebotDomainGroupId}
+          data-blockingmode="auto"
+          strategy="afterInteractive"
+        />
+      ) : null}
+
+      {measurementId && consent === 'granted' ? (
         <>
           <Script
             id="ga4-script"
@@ -110,20 +173,20 @@ export function AnalyticsConsent({ measurementId }: AnalyticsConsentProps) {
         </>
       ) : null}
 
-      {consent === 'unset' ? (
+      {!hasCookiebot && measurementId && consent === 'unset' ? (
         <div className="consent-banner" role="dialog" aria-labelledby="consent-title" aria-describedby="consent-copy">
           <div className="consent-copy">
-            <strong id="consent-title">Analityka po wyrażeniu zgody</strong>
+            <strong id="consent-title">Analityka po wyrazeniu zgody</strong>
             <span id="consent-copy">
-              Analityka uruchamia się dopiero po Twojej decyzji i służy wyłącznie do pomiaru korzystania z serwisu oraz rezerwacji.
+              Analityka uruchamia sie dopiero po Twojej decyzji i sluzy wylacznie do pomiaru korzystania z serwisu oraz rezerwacji.
             </span>
           </div>
           <div className="consent-actions">
             <button type="button" className="button button-ghost small-button" onClick={() => updateConsent('denied')}>
-              Odrzuć
+              Odrzuc
             </button>
             <button type="button" className="button button-primary small-button" onClick={() => updateConsent('granted')}>
-              Akceptuję analitykę
+              Akceptuje analityke
             </button>
           </div>
         </div>

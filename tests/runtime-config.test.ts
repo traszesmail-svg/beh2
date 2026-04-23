@@ -161,10 +161,11 @@ test('home metadata stays service-first while keeping the canonical homepage pat
 
 test('book metadata uses technical noindex metadata with follow enabled', async () => {
   const metadata = await buildBookMetadata()
+  const robots = typeof metadata.robots === 'object' && metadata.robots !== null ? metadata.robots : null
 
   assert.equal(metadata.alternates?.canonical, '/book')
-  assert.equal(metadata.robots?.index, false)
-  assert.equal(metadata.robots?.follow, true)
+  assert.equal(robots?.index, false)
+  assert.equal(robots?.follow, true)
   assert.match(String(metadata.title ?? ''), /Rezerwacja konsultacji/)
 })
 

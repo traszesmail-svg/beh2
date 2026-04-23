@@ -1,32 +1,32 @@
 # Raport Go-Live Readiness
 
-- Data: 2026-04-21 07:46:54 Europe/Warsaw
+- Data: 2026-04-22 17:23:35 Europe/Warsaw
 - Tryb: report-only
-- Zrodlo env: default runtime env
-- Wynik ogolny: BLOCKED
-- Gotowe: 2/5
-- Blockery: 3
+- Zrodlo env: production snapshot (C:\projekt\regulskibehawiorysta\.vercel\.env.production.current)
+- Wynik ogolny: READY
+- Gotowe: 5/5
+- Blockery: 0
 
 ## Checki
-### ZABLOKOWANE - Warstwa danych
-- Stan: blocked
-- Summary: Warstwa danych nie jest gotowa do ruchu live: APP_DATA_MODE=auto -> aktywny jest local JSON fallback (development only), bo brakuje NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY.
-- Next: Ustaw prawidłowy runtime Supabase dla środowiska live i potwierdź zapis bookingów oraz admina poza local fallback.
+### GOTOWE - Warstwa danych
+- Stan: ready
+- Summary: Warstwa danych jest gotowa do ruchu live i korzysta z Supabase zamiast lokalnego fallbacku JSON.
+- Next: Brak blokera po stronie runtime danych.
 
-### ZABLOKOWANE - Publiczny URL
-- Stan: blocked
-- Summary: Publiczny URL nie wygląda na produkcyjny HTTPS endpoint: http://localhost:3000.
-- Next: Ustaw NEXT_PUBLIC_APP_URL na docelowy adres HTTPS używany w linkach mailowych i powrotach z płatności.
+### GOTOWE - Publiczny URL
+- Stan: ready
+- Summary: Publiczny URL aplikacji jest gotowy do linków zwrotnych i maili: https://regulskibehawiorysta.pl (HTTP 200).
+- Next: Brak blokera po stronie publicznego URL i jego dostępności HTTP.
 
 ### GOTOWE - Schema Supabase
 - Stan: ready
 - Summary: Canonical Supabase schema i rollout migrations są zsynchronizowane z aktualnym code path.
 - Next: Brak blokera po stronie booking/payment/QA schema.
 
-### ZABLOKOWANE - Maile klienta
-- Stan: blocked
-- Summary: Wysyłka maili do klientów zewnętrznych jest zablokowana: RESEND_API_KEY missing.
-- Next: Uzupełnij konfigurację Resend i powtórz próbę wysyłki na zewnętrzny adres testowy.
+### GOTOWE - Maile klienta
+- Stan: ready
+- Summary: Wysyłka maili do klientów zewnętrznych jest gotowa z aktualnej konfiguracji Resend.
+- Next: Brak blokera po stronie konfiguracji maili klienta.
 
 ### GOTOWE - PayU online
 - Stan: ready

@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { PdfGuideCoverStack } from '@/components/PdfGuideCoverStack'
-import { buildPdfInquiryHref, getPdfCategoryLabel, getPdfPricingBadge, type PdfBundle } from '@/lib/pdf-guides'
+import { buildPdfOrderHref, getPdfCategoryLabel, getPdfPricingBadge, type PdfBundle } from '@/lib/pdf-guides'
 
 type PdfBundleCardProps = {
   bundle: PdfBundle
@@ -43,8 +43,8 @@ export function PdfBundleCard({ bundle }: PdfBundleCardProps) {
         <Link href={bundle.routePath} prefetch={false} className="button button-ghost">
           Zobacz pakiet
         </Link>
-        <Link href={buildPdfInquiryHref({ bundleSlug: bundle.slug })} prefetch={false} className="button button-primary">
-          Napisz w sprawie pakietu
+        <Link href={buildPdfOrderHref({ bundleSlug: bundle.slug })} prefetch={false} className="button button-primary">
+          Zamów pakiet
         </Link>
       </div>
     </article>

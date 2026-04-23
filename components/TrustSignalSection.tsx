@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { repairCopy } from '@/lib/copy'
 import type { TrustSignalItem } from '@/lib/trust-layer'
 
 type TrustSignalSectionProps = {
@@ -27,11 +28,11 @@ export function TrustSignalSection({
       <div className="summary-grid top-gap-small">
         {items.map((item) => (
           <article key={item.title} className="summary-card tree-backed-card">
-            <h3>{item.title}</h3>
-            <p>{item.copy}</p>
+            <h3>{repairCopy(item.title)}</h3>
+            <p>{repairCopy(item.copy)}</p>
             {item.href && item.cta ? (
               <Link href={item.href} prefetch={false} className="prep-inline-link">
-                {item.cta}
+                {repairCopy(item.cta)}
               </Link>
             ) : null}
           </article>

@@ -1,4 +1,7 @@
 import Link from 'next/link'
+import { Footer } from '@/components/Footer'
+import { ThemeToggle } from '@/components/ThemeToggle'
+import { INSTAGRAM_PROFILE_URL } from '@/lib/site'
 
 export type NotatnikNavItem = {
   href: string
@@ -7,7 +10,7 @@ export type NotatnikNavItem = {
 
 type NotatnikTopbarProps = {
   tag: string
-  navItems: NotatnikNavItem[]
+  navItems: readonly NotatnikNavItem[]
   ctaHref: string
   ctaLabel: string
   ctaVariant?: 'solid' | 'ghost' | 'accent'
@@ -29,13 +32,13 @@ type NotatnikFinalCtaProps = {
 }
 
 type NotatnikFooterProps = {
-  primaryHref: string
-  primaryLabel: string
+  primaryHref?: string
+  primaryLabel?: string
 }
 
 type NotatnikPageShellProps = {
   tag: string
-  navItems: NotatnikNavItem[]
+  navItems: readonly NotatnikNavItem[]
   ctaHref: string
   ctaLabel: string
   footerPrimaryHref: string
@@ -63,13 +66,23 @@ function NotatnikButtonArrow() {
   )
 }
 
+function InstagramGlyph() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="3.25" y="3.25" width="17.5" height="17.5" rx="5.25" fill="none" stroke="currentColor" strokeWidth="1.8" />
+      <circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" strokeWidth="1.8" />
+      <circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" />
+    </svg>
+  )
+}
+
 export function NotatnikTopbar({ tag, navItems, ctaHref, ctaLabel, ctaVariant = 'solid' }: NotatnikTopbarProps) {
   return (
     <header className="notatnik-topbar">
-      <div className="notatnik-brand">
+      <Link href="/" prefetch={false} className="notatnik-brand" aria-label="Wroc na strone glowna Regulski">
         <div className="notatnik-brand-mark">Regulski.</div>
         <div className="notatnik-brand-tag">{tag}</div>
-      </div>
+      </Link>
 
       <nav className="notatnik-nav" aria-label="Glowne sekcje">
         {navItems.map((item) => (
@@ -79,10 +92,22 @@ export function NotatnikTopbar({ tag, navItems, ctaHref, ctaLabel, ctaVariant = 
         ))}
       </nav>
 
-      <Link href={ctaHref} prefetch={false} className={getCtaClassName(ctaVariant)}>
-        <span>{ctaLabel}</span>
-        <NotatnikButtonArrow />
-      </Link>
+      <div className="notatnik-topbar-actions">
+        <ThemeToggle />
+        <a
+          href={INSTAGRAM_PROFILE_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="notatnik-social-link"
+          aria-label="Otworz Instagram"
+        >
+          <InstagramGlyph />
+        </a>
+        <Link href={ctaHref} prefetch={false} className={getCtaClassName(ctaVariant)}>
+          <span>{ctaLabel}</span>
+          <NotatnikButtonArrow />
+        </Link>
+      </div>
     </header>
   )
 }
@@ -126,85 +151,8 @@ export function NotatnikFinalCta({
   )
 }
 
-export function NotatnikFooter({ primaryHref, primaryLabel }: NotatnikFooterProps) {
-  return (
-    <footer className="notatnik-foot">
-      <div>
-        <div className="notatnik-foot-mark">Regulski.</div>
-        <p>Spokojna pomoc w zrozumieniu problemow zachowania psow i kotow. Terapia behawioralna online dla opiekunow z calej Polski.</p>
-      </div>
-      <div>
-        <h5>Nawigacja</h5>
-        <ul>
-          <li>
-            <Link href="/psy" prefetch={false}>
-              Pies
-            </Link>
-          </li>
-          <li>
-            <Link href="/koty" prefetch={false}>
-              Kot
-            </Link>
-          </li>
-          <li>
-            <Link href="/niezbednik" prefetch={false}>
-              Niezbednik
-            </Link>
-          </li>
-          <li>
-            <Link href="/kontakt#formularz" prefetch={false}>
-              Kontakt
-            </Link>
-          </li>
-        </ul>
-      </div>
-      <div>
-        <h5>Start</h5>
-        <ul>
-          <li>
-            <Link href={primaryHref} prefetch={false}>
-              {primaryLabel}
-            </Link>
-          </li>
-          <li>
-            <Link href="/book?service=konsultacja-30-min" prefetch={false}>
-              Dwa kwadranse
-            </Link>
-          </li>
-          <li>
-            <Link href="/book?service=konsultacja-behawioralna-online" prefetch={false}>
-              Pelna konsultacja
-            </Link>
-          </li>
-          <li>
-            <Link href="/o-mnie" prefetch={false}>
-              O mnie
-            </Link>
-          </li>
-        </ul>
-      </div>
-      <div>
-        <h5>Materialy</h5>
-        <ul>
-          <li>
-            <Link href="/bezplatne-materialy/pies-reaktywnosc-5-krokow" prefetch={false}>
-              Reaktywny pies
-            </Link>
-          </li>
-          <li>
-            <Link href="/bezplatne-materialy/kot-kuweta-checklista" prefetch={false}>
-              Checklista kuweta
-            </Link>
-          </li>
-          <li>
-            <Link href="/bezplatne-materialy/przygotowanie-do-konsultacji-online" prefetch={false}>
-              Przygotowanie do konsultacji
-            </Link>
-          </li>
-        </ul>
-      </div>
-    </footer>
-  )
+export function NotatnikFooter(_: NotatnikFooterProps) {
+  return <Footer variant="full" />
 }
 
 export function NotatnikPageShell({

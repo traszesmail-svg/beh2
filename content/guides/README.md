@@ -1,6 +1,6 @@
 # PDF Guides Content
 
-This folder stores the integrated PDF guide catalog used by `beh2`.
+This folder stores the integrated PDF guide catalog used by `regulskibehawiorysta`.
 
 Keep these files out of `public/`. The site currently uses guide and bundle pages plus contact CTAs, not open public downloads for every PDF.
 
@@ -15,5 +15,5 @@ Layout:
 Refresh flow:
 
 1. Update or regenerate the source module in `C:\Projekt\pdf`.
-2. Copy `C:\Projekt\pdf\content\guides\` into `beh2\content\guides\`.
+2. Copy `C:\Projekt\pdf\content\guides\` into `regulskibehawiorysta\content\guides\`.
 3. Run the repo validation commands before deploy.

@@ -1,16 +1,22 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
+import { NextSlot } from '@/components/NextSlot'
 import { NotatnikFinalCta, NotatnikFooter, NotatnikSectionHead, NotatnikTopbar } from '@/components/NotatnikA'
+import { Schema } from '@/components/schema'
 import { ServiceDecisionSection } from '@/components/ServiceDecisionSection'
+import { ServicesComparison } from '@/components/ServicesComparison'
 import { buildBookHref } from '@/lib/booking-routing'
+import { getBreadcrumbJsonLd, getFaqPageJsonLd, getServiceJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
+import { FAQ_SHORTLISTS } from '@/lib/trust-layer'
 
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = buildMarketingMetadata({
   title: 'Behawiorysta kotów online - kuweta, stres i relacje miedzy kotami',
   path: '/koty',
-  description: 'Behawiorysta kotow online dla opiekunow z calej Polski. Kuweta, stres, wycofanie, konflikty i zmiany w domu.',
+  description: 'Pomoc behawioralna online dla opiekunow kotow. Kuweta, wycofanie, napiecie miedzy kotami, stres po zmianach. Kwadrans z behawiorysta - 69 zl.',
 })
 
 const navItems = [
@@ -18,6 +24,7 @@ const navItems = [
   { href: '/koty', label: 'Kot' },
   { href: '/niezbednik', label: 'Niezbednik' },
   { href: '/o-mnie', label: 'O mnie' },
+  { href: '/cennik', label: 'Cennik' },
   { href: '/kontakt#formularz', label: 'Kontakt' },
 ]
 
@@ -26,93 +33,226 @@ const consultationHref = buildBookHref(null, 'konsultacja-behawioralna-online', 
 const serviceLandingHref = '/behawiorysta-online-polska'
 
 const topics = [
-  { number: 'i.', title: 'Kuweta', copy: 'Sikanie poza kuweta, wybor miejsca, zwirek, liczba kuwet i uklad domu.', href: '/koty/zalatwianie-poza-kuweta', label: 'Zobacz temat' },
-  { number: 'ii.', title: 'Wycofanie / napiecie', copy: 'Kot, ktory chowa sie pod kanapa. Bezpieczne miejsca, kontakt i tempo zmian.', href: quickHref, label: 'Kwadrans' },
-  { number: 'iii.', title: 'Konflikt miedzy kotami', copy: 'Atak, syk, pogon. Zasoby, przestrzen pionowa, rozdzielenie i spokojny plan laczenia.', href: '/koty/konflikt-miedzy-kotami', label: 'Zobacz temat' },
-  { number: 'iv.', title: 'Zmiany w domu', copy: 'Przeprowadzka, dziecko, nowy czlonek rodziny, remont - jak przejsc przez to spokojnie.', href: quickHref, label: 'Kwadrans' },
-  { number: 'v.', title: 'Drapanie mebli', copy: 'Nie chodzi o zlosliwosc. Drapaki, rozmieszczenie i naturalne potrzeby kota.', href: quickHref, label: 'Kwadrans' },
-  { number: 'vi.', title: 'Agresja redirekt.', copy: 'Atak po widoku kota za oknem albo po silnym pobudzeniu - rozwiazywanie bez dokladania presji.', href: consultationHref, label: 'Pelna konsultacja' },
-  { number: 'vii.', title: 'Mlody kot / kociak', copy: 'Pierwsze tygodnie w domu, socjalizacja, zabawa i granice bez kar.', href: quickHref, label: 'Kwadrans' },
-  { number: 'viii.', title: 'Niepewny temat?', copy: 'Jesli nie wiesz, do ktorej szufladki to pasuje - po to jest Kwadrans.', href: quickHref, label: 'Kwadrans' },
+  {
+    number: 'i.',
+    title: 'Kuweta',
+    copy: 'Sikanie poza kuweta, wybor miejsca, zwirek i liczba kuwet. Najpierw porzadek, potem zmiany.',
+    href: '/koty/zalatwianie-poza-kuweta',
+    label: 'Zobacz temat',
+  },
+  {
+    number: 'ii.',
+    title: 'Wycofanie i napiecie',
+    copy: 'Kot chowa sie, jest bardziej czujny albo trudniej mu odpoczac po zmianach w domu.',
+    href: quickHref,
+    label: 'Kwadrans',
+  },
+  {
+    number: 'iii.',
+    title: 'Konflikt miedzy kotami',
+    copy: 'Syk, pogon, blokowanie przejsc albo napiecie stale wiszace w domu. Tu liczy sie kolejnosc zmian.',
+    href: '/koty/konflikt-miedzy-kotami',
+    label: 'Zobacz temat',
+  },
+  {
+    number: 'iv.',
+    title: 'Zmiany w domu',
+    copy: 'Przeprowadzka, dziecko, remont, nowy domownik albo rozchwiany rytm dnia potrafia mocno obciazyc kota.',
+    href: quickHref,
+    label: 'Kwadrans',
+  },
+  {
+    number: 'v.',
+    title: 'Drapanie i napiecie srodowiskowe',
+    copy: 'Tu zwykle nie chodzi o zlosliwosc, tylko o potrzeby, rozmieszczenie zasobow i poczucie bezpieczenstwa.',
+    href: quickHref,
+    label: 'Kwadrans',
+  },
+  {
+    number: 'vi.',
+    title: 'Agresja przekierowana',
+    copy: 'Silne pobudzenie po bodzcu z zewnatrz, atak po napieciu i trudnosc w zatrzymaniu eskalacji.',
+    href: consultationHref,
+    label: 'Pelna konsultacja',
+  },
+  {
+    number: 'vii.',
+    title: 'Mlody kot i start w domu',
+    copy: 'Pierwsze tygodnie, socjalizacja, zabawa i codzienne granice bez wprowadzania presji.',
+    href: quickHref,
+    label: 'Kwadrans',
+  },
+  {
+    number: 'viii.',
+    title: 'Niepewny temat',
+    copy: 'Jesli nie wiesz, czy chodzi o kuwete, stres czy zdrowie, zaczynamy od ustalenia priorytetu.',
+    href: quickHref,
+    label: 'Kwadrans',
+  },
 ] as const
 
 export default function CatsPage() {
+  const faqItems = FAQ_SHORTLISTS.cats.slice(0, 4)
+  const structuredData = [
+    getBreadcrumbJsonLd([{ name: 'Strona glowna', path: '/' }, { name: 'Koty', path: '/koty' }]),
+    getServiceJsonLd({
+      name: 'Pomoc behawioralna dla opiekunow kotow online',
+      description: 'Konsultacje online dla opiekunow kotow: kuweta, wycofanie, stres po zmianach i napiecie miedzy kotami.',
+      serviceUrl: serviceLandingHref,
+      offerPrice: 69,
+      offerCatalog: [
+        {
+          name: 'Kwadrans z behawiorysta',
+          description: '15 minut rozmowy audio bez kamery dla opiekuna kota.',
+          url: quickHref,
+          price: 69,
+        },
+        {
+          name: 'Pelna konsultacja behawioralna',
+          description: 'Szersza konsultacja online dla tematow kocich wielowatkowych albo dlugotrwalych.',
+          url: consultationHref,
+          price: 350,
+        },
+      ],
+    }),
+    getFaqPageJsonLd(faqItems),
+  ]
+
   return (
     <main className="notatnik-page">
+      <Schema data={structuredData} />
       <div className="notatnik-shell">
         <NotatnikTopbar tag="Kot / strona gatunku" navItems={navItems} ctaHref={quickHref} ctaLabel="Kwadrans / 69 zl" />
 
         <section className="notatnik-subhero">
           <div>
-            <div className="notatnik-subhero-tag notatnik-mono">Dla opiekunow kotow</div>
+            <div className="notatnik-subhero-tag notatnik-mono">Kot / strona gatunku</div>
             <h1>
-              Kot nie robi tego ze zlosliwosci - <em>zacznijmy od porzadku.</em>
+              Twoj kot zachowuje sie w sposob, <em>ktory Cie niepokoi</em>.
             </h1>
+            <p>
+              Pomagam opiekunom kotow zrozumiec, co stoi za trudnym zachowaniem i jak zaczac to porzadkowac bez stresu dla kota i dla Ciebie.
+            </p>
+            <NextSlot className="top-gap-small" />
+            <p className="notatnik-service-description">Nie oceniam. Szukam przyczyny, nie winy.</p>
+            <div className="notatnik-subhero-actions">
+              <Link href={quickHref} prefetch={false} className="notatnik-btn">
+                <span>Zarezerwuj Kwadrans</span>
+                <span className="notatnik-btn-arrow" aria-hidden="true">
+                  &rarr;
+                </span>
+              </Link>
+              <Link href="/niezbednik" prefetch={false} className="notatnik-btn notatnik-btn-ghost">
+                <span>Przejdz do Niezbednika</span>
+              </Link>
+            </div>
           </div>
-          <p>
-            Najczesciej chodzi o kuwete, wycofanie, napiecie po zmianach w domu albo trudne relacje miedzy kotami. Wybierz temat najblizszy
-            Twojej sytuacji albo zarezerwuj Kwadrans, zeby ustalic priorytet.
-          </p>
+
+          <div className="notatnik-subhero-media">
+            <div className="notatnik-subhero-figure">
+              <Image src="/branding/topic-cards/cats/cat-anxious-hiding.jpg" alt="Kot wycofany i schowany w domu" fill sizes="(max-width: 980px) 100vw, 40vw" priority />
+            </div>
+            <div className="notatnik-subhero-note">
+              <span>Kuweta / stres / relacje miedzy kotami</span>
+              <span>online / cala Polska</span>
+            </div>
+          </div>
         </section>
 
-        <div className="notatnik-topic-grid">
-          {topics.map((topic) => (
-            <article key={topic.title} className="notatnik-topic-card">
-              <div className="notatnik-topic-number">{topic.number}</div>
-              <h3>{topic.title}</h3>
-              <p>{topic.copy}</p>
-              <Link href={topic.href} prefetch={false}>
-                {topic.label}
-              </Link>
-            </article>
-          ))}
-        </div>
+        <section id="tematy">
+          <NotatnikSectionHead index="I." kicker="Problemy / kategorie" title="Problemy kocie - lista." />
+          <div className="notatnik-topic-grid">
+            {topics.map((topic) => (
+              <article key={topic.title} className="notatnik-topic-card">
+                <div className="notatnik-topic-number">{topic.number}</div>
+                <h3>{topic.title}</h3>
+                <p>{topic.copy}</p>
+                <Link href={topic.href} prefetch={false}>
+                  {topic.label}
+                </Link>
+              </article>
+            ))}
+          </div>
+          <div className="notatnik-subhero-actions top-gap">
+            <Link href={quickHref} prefetch={false} className="notatnik-btn">
+              <span>Rozpoznajesz swoj problem? Zarezerwuj Kwadrans</span>
+              <span className="notatnik-btn-arrow" aria-hidden="true">
+                &rarr;
+              </span>
+            </Link>
+            <Link href="/niezbednik" prefetch={false} className="notatnik-btn notatnik-btn-ghost">
+              <span>Niezbednik dla opiekuna kota</span>
+            </Link>
+          </div>
+        </section>
 
         <section style={{ background: 'var(--paper)' }}>
-          <NotatnikSectionHead index="I." kicker="Sciezka" title="Kot czesto potrzebuje najpierw sprawdzenia zdrowia." />
+          <NotatnikSectionHead index="II." kicker="Jak to dziala" title="Przy kocie bardzo czesto najpierw sprawdzamy porzadek sytuacji." />
           <div className="notatnik-steps">
             <article className="notatnik-step">
               <div className="notatnik-step-number">00</div>
-              <h3>Najpierw weterynarz</h3>
-              <p>Przy kuwecie i naglych zmianach zawsze zaczynamy od wykluczenia podloza medycznego.</p>
+              <h3>Najpierw zdrowie, jesli trzeba</h3>
+              <p>Przy naglej zmianie zachowania albo kuwecie pierwszym krokiem bywa weterynarz. To element bezpiecznej oceny.</p>
             </article>
             <article className="notatnik-step">
               <div className="notatnik-step-number">01</div>
-              <h3>Kwadrans - priorytet</h3>
-              <p>Rozmawiamy o tym, co dzieje sie dzis i jaki pierwszy krok ma najwiecej sensu dla kota i domu.</p>
+              <h3>Kwadrans i priorytet</h3>
+              <p>Rozmawiamy o tym, co dzieje sie dzis w domu, i wybieramy pierwszy ruch z sensem dla kota i opiekuna.</p>
             </article>
             <article className="notatnik-step">
               <div className="notatnik-step-number">02</div>
-              <h3>Obserwacja + zmiany</h3>
-              <p>Jesli trzeba, pelna konsultacja pomaga uporzadkowac zdrowie, srodowisko i kolejnosc zmian.</p>
+              <h3>Szerszy plan, gdy temat ma warstwy</h3>
+              <p>Jesli problem obejmuje zdrowie, srodowisko i relacje, pelna konsultacja porzadkuje kolejnosc zmian.</p>
             </article>
           </div>
         </section>
 
         <ServiceDecisionSection
-          index="II."
+          index="III."
           eyebrow="Usluga online"
           title="Dla kota mozesz zaczac od Kwadransu albo wejsc szerzej."
-          description="Jesli temat kota wymaga pelniejszego opisu, szeroka strona uslugi online porzadkuje caly model wspolpracy."
+          description="Kwadrans pomaga ustalic pierwszy priorytet, a pelna konsultacja zostaje dla spraw, ktore wymagaja szerszego porzadkowania."
           audioHref={quickHref}
           consultationHref={consultationHref}
           serviceHref={serviceLandingHref}
-          serviceLead="Kwadrans pomaga ustalic pierwszy priorytet, a pelna konsultacja ma sens wtedy, gdy temat kota obejmuje zdrowie, srodowisko i napiecia miedzy zwierzetami."
+          serviceLead="Jesli temat kota obejmuje zdrowie, srodowisko i napiecia w domu, od razu ustawimy bezpieczny zakres dalszej pracy."
           quickBullets={[
             'kuweta, napiecie albo zmiana w domu na start',
             'krotka rozmowa o priorytecie i pierwszym ruchu',
-            'lekki poczatek bez rozwleklego wejscia',
+            'lekki poczatek bez przeciazania opiekuna',
           ]}
           consultationBullets={[
             'kilka warstw problemu lub konflikt miedzy kotami',
-            'wiecej czasu na srodowisko, zasoby i rytm dnia',
+            'wiecej czasu na zasoby, przestrzen i rytm dnia',
             'szerszy plan zmian po pierwszym rozpoznaniu',
           ]}
           serviceLinkLabel="Zobacz stronę usługi online"
         />
 
+        <section id="konsultacja">
+          <NotatnikSectionHead index="IV." kicker="Uslugi" title="Porownanie uslug dla opiekuna kota." />
+          <p className="notatnik-service-description">
+            Przy kuwecie, stresie i relacjach miedzy kotami dobrze od razu widziec roznice miedzy Kwadransem, Dwiema
+            kwadransami i pelna konsultacja.
+          </p>
+          <ServicesComparison species="kot" />
+        </section>
+
+        <section id="faq">
+          <NotatnikSectionHead index="V." kicker="FAQ" title="Najczestsze pytania przy tematach kocich." />
+          <div className="notatnik-faq-grid">
+            {faqItems.map((item) => (
+              <article key={item.question} className="notatnik-faq-item">
+                <h4>{item.question}</h4>
+                <p>{item.answer}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
         <NotatnikFinalCta
-          title="Najprostszy start dla kota to <em>Kwadrans</em>."
+          title="Jesli temat kota Ci nie daje spokoju, <em>zacznij od porzadku.</em>"
+          copy="Nie musisz od razu wiedziec, czy chodzi o kuwete, stres czy relacje. Wystarczy pierwszy kontakt."
           primaryHref={quickHref}
           primaryLabel="Zarezerwuj Kwadrans / 69 zl"
           secondaryHref="/kontakt?species=kot#formularz"

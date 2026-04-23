@@ -3,12 +3,13 @@ import { unstable_noStore as noStore } from 'next/cache'
 import { AdminAvailabilityManager } from '@/components/AdminAvailabilityManager'
 import { AdminBookingActions } from '@/components/AdminBookingActions'
 import { AdminPricingManager } from '@/components/AdminPricingManager'
+import { AdminUrgentRequestActions } from '@/components/AdminUrgentRequestActions'
 import { Header } from '@/components/Header'
 import { getBuildMarkerSnapshot } from '@/lib/build-marker'
 import { formatDateLabel, formatDateTimeLabel, getBookingStatusLabel, getPaymentStatusLabel, getProblemLabel } from '@/lib/data'
 import { buildFunnelMetricsSnapshot } from '@/lib/server/funnel-metrics'
 import { formatPreparationFileSize, hasPreparationMaterials } from '@/lib/preparation'
-import { getActiveConsultationPrice, listAvailabilityAdmin, listBookings, listFunnelEvents } from '@/lib/server/db'
+import { getActiveConsultationPrice, listAvailabilityAdmin, listBookings, listFunnelEvents, listUrgentNowRequests } from '@/lib/server/db'
 import { getRuntimeModeSnapshot } from '@/lib/server/env'
 import { getGoLiveChecks } from '@/lib/server/go-live'
 import { getPaymentOptionsSummary } from '@/lib/server/payment-options'
@@ -20,7 +21,7 @@ export const revalidate = 0
 function getPaymentMethodLabel(value: string | null | undefined) {
   switch (value) {
     case 'manual':
-      return 'BLIK / przelew do potwierdzenia'
+      return 'BLIK do potwierdzenia'
     case 'payu':
       return 'PayU'
     case 'stripe':
@@ -44,6 +45,7 @@ export default async function AdminPage() {
   const goLiveChecks = getGoLiveChecks()
   const buildMarker = getBuildMarkerSnapshot()
   const latestQaReport = await readLatestQaReport()
+  const urgentRequests = await listUrgentNowRequests()
   let bookings: Awaited<ReturnType<typeof listBookings>> = []
   let availability: Awaited<ReturnType<typeof listAvailabilityAdmin>> = []
   let funnelEvents: Awaited<ReturnType<typeof listFunnelEvents>> = []
@@ -162,6 +164,10 @@ export default async function AdminPage() {
                 {bookingCounts.rejected} / {bookingCounts.failed}
               </div>
             </div>
+            <div className="summary-card">
+              <div className="stat-label">Kwadrans na juz</div>
+              <div className="summary-value">{urgentRequests.length}</div>
+            </div>
           </div>
 
           <div className="stack-gap top-gap">
@@ -209,6 +215,45 @@ export default async function AdminPage() {
                 </div>
               ))}
             </div>
+          </div>
+
+          <div className="top-gap">
+            <div className="section-eyebrow">Kwadrans na juz</div>
+            <h2>Prosby o pilny termin</h2>
+            <p className="muted paragraph-gap">
+              Klient wpisuje preferowana date i godzine przez formularz. Tutaj dodajesz termin do kalendarza i od razu odsylasz mu gotowy link.
+            </p>
+
+            {urgentRequests.length === 0 ? (
+              <div className="list-card tree-backed-card">Brak aktywnych prosb o Kwadrans na juz.</div>
+            ) : (
+              <div className="booking-list">
+                {urgentRequests.map((request) => (
+                  <div key={request.id} className="booking-row" data-urgent-request-id={request.id}>
+                    <div>
+                      <div className="booking-title">{request.topicLabel}</div>
+                      <div className="booking-meta">
+                        {request.name} - {request.email} - {request.species}
+                      </div>
+                      <div className="booking-meta">
+                        Preferowany termin: {request.requestedDate} {request.requestedTime}
+                      </div>
+                      <div className="booking-meta">Status: {request.status === 'responded' ? 'odpowiedziano' : 'nowa prosba'}</div>
+                    </div>
+                    <div className="booking-description">
+                      <div>{request.message}</div>
+                      {request.proposedDate && request.proposedTime ? (
+                        <div className="booking-meta top-gap-small">
+                          Odeslany termin: {request.proposedDate} {request.proposedTime}
+                        </div>
+                      ) : null}
+                      {request.bookingHref ? <div className="booking-meta">Link: {request.bookingHref}</div> : null}
+                    </div>
+                    <AdminUrgentRequestActions requestId={request.id} disabled={request.status === 'responded'} />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="top-gap">

@@ -5,8 +5,9 @@ import { notFound } from 'next/navigation'
 import { NotatnikPageShell } from '@/components/NotatnikA'
 import { PdfGuideCard } from '@/components/PdfGuideCard'
 import { PdfGuideCoverStack } from '@/components/PdfGuideCoverStack'
+import { repairCopy } from '@/lib/copy'
 import {
-  buildPdfInquiryHref,
+  buildPdfOrderHref,
   getPdfAccessDescription,
   getPdfBundleBySlug,
   getPdfCategoryLabel,
@@ -42,9 +43,9 @@ export function generateMetadata({ params }: PdfBundleDetailPageProps): Metadata
   }
 
   return buildTechnicalMetadata({
-    title: `${bundle.title} | Pakiet PDF`,
+    title: `${repairCopy(bundle.title)} | Pakiet PDF`,
     path: bundle.routePath,
-    description: bundle.promise,
+    description: repairCopy(bundle.promise),
     noIndex: true,
   })
 }
@@ -56,6 +57,8 @@ export default function PdfBundleDetailPage({ params }: PdfBundleDetailPageProps
     notFound()
   }
 
+  const orderHref = buildPdfOrderHref({ bundleSlug: bundle.slug })
+
   return (
     <NotatnikPageShell
       tag="Poradniki PDF / pakiet"
@@ -66,13 +69,12 @@ export default function PdfBundleDetailPage({ params }: PdfBundleDetailPageProps
         { href: '/o-mnie', label: 'O mnie' },
         { href: '/kontakt#formularz', label: 'Kontakt' },
       ]}
-      ctaHref={buildPdfInquiryHref({ bundleSlug: bundle.slug })}
-      ctaLabel="Napisz o pakiecie"
-      footerPrimaryHref={buildPdfInquiryHref({ bundleSlug: bundle.slug })}
-      footerPrimaryLabel="Napisz o pakiecie"
+      ctaHref={orderHref}
+      ctaLabel="Zamów pakiet"
+      footerPrimaryHref={orderHref}
+      footerPrimaryLabel="Zamów pakiet"
     >
       <div className="container">
-
         <section className="two-col-section offer-detail-layout pdf-detail-layout">
           <div className="panel section-panel hero-surface offer-detail-content-panel pdf-detail-content-panel">
             <Link href={PDF_GUIDES_LISTING_ROUTE} prefetch={false} className="pdf-back-link">
@@ -82,22 +84,22 @@ export default function PdfBundleDetailPage({ params }: PdfBundleDetailPageProps
             <div className="offer-detail-head">
               <div className="section-eyebrow">Pakiet PDF</div>
               <div className="offer-detail-pills">
-                <span className="hero-proof-pill">{getPdfCategoryLabel(bundle.category)}</span>
+                <span className="hero-proof-pill">{repairCopy(getPdfCategoryLabel(bundle.category))}</span>
                 <span className="hero-proof-pill">{bundle.guides.length} poradniki</span>
                 <span className="hero-proof-pill">spójny zestaw</span>
               </div>
             </div>
 
             <div className="offer-detail-hero-copy">
-              <h1>{bundle.title}</h1>
-              <p className="hero-text">{bundle.promise}</p>
-              <p className="muted paragraph-gap">{bundle.audience}</p>
+              <h1>{repairCopy(bundle.title)}</h1>
+              <p className="hero-text">{repairCopy(bundle.promise)}</p>
+              <p className="muted paragraph-gap">{repairCopy(bundle.audience)}</p>
             </div>
 
             <div className="offer-detail-highlight-row top-gap">
               <div className="hero-price-badge offer-price-box tree-backed-card">
-                <strong>{getPdfPricingBadge(bundle.pricing)}</strong>
-                <span>{getPdfAccessDescription(bundle.accessType)}</span>
+                <strong>{repairCopy(getPdfPricingBadge(bundle.pricing))}</strong>
+                <span>{repairCopy(getPdfAccessDescription(bundle.accessType))}</span>
               </div>
 
               <div className="list-card tree-backed-card offer-detail-price-card">
@@ -109,7 +111,7 @@ export default function PdfBundleDetailPage({ params }: PdfBundleDetailPageProps
             <ul className="detail-points-list top-gap">
               {bundle.guides.slice(0, 3).map((guide) => (
                 <li key={guide.slug} className="detail-point tree-backed-card">
-                  <span>{guide.title}</span>
+                  <span>{repairCopy(guide.title)}</span>
                 </li>
               ))}
             </ul>
@@ -117,13 +119,13 @@ export default function PdfBundleDetailPage({ params }: PdfBundleDetailPageProps
             <div className="offer-detail-cta-band tree-backed-card top-gap">
               <div className="offer-detail-cta-copy">
                 <span className="section-eyebrow">Pierwszy ruch</span>
-                <strong>Napisz w sprawie tego pakietu</strong>
-                <span>Jeśli chcesz kupić pakiet, dostać dostęp albo upewnić się, że to lepszy wybór niż jeden PDF, napisz krótką wiadomość.</span>
+                <strong>Zamów ten pakiet</strong>
+                <span>Jeśli chcesz kupić pakiet, dostać dostęp albo upewnić się, że to lepszy wybór niż jeden PDF, wyślij krótkie zamówienie przez formularz.</span>
               </div>
 
               <div className="hero-actions offer-detail-actions">
-                <Link href={buildPdfInquiryHref({ bundleSlug: bundle.slug })} prefetch={false} className="button button-primary big-button">
-                  Napisz w sprawie tego pakietu
+                <Link href={orderHref} prefetch={false} className="button button-primary big-button">
+                  Zamów pakiet
                 </Link>
                 <Link href="/book" prefetch={false} className="button button-ghost big-button">
                   Umów 15 min
@@ -133,13 +135,13 @@ export default function PdfBundleDetailPage({ params }: PdfBundleDetailPageProps
 
             <div className="list-card accent-outline tree-backed-card top-gap offer-detail-contact-card">
               <strong>Kiedy ten pakiet ma sens</strong>
-              <span>{bundle.audience}</span>
+              <span>{repairCopy(bundle.audience)}</span>
             </div>
           </div>
 
           <div className="panel section-panel image-panel offer-detail-media-panel pdf-detail-media-panel">
             <div className="offer-detail-media-top pdf-detail-cover-shell">
-              <PdfGuideCoverStack guides={bundle.guides} title={bundle.title} className="pdf-detail-stack" />
+              <PdfGuideCoverStack guides={bundle.guides} title={repairCopy(bundle.title)} className="pdf-detail-stack" />
             </div>
 
             <div className="stats-grid top-gap pdf-detail-mini-grid">
@@ -148,7 +150,7 @@ export default function PdfBundleDetailPage({ params }: PdfBundleDetailPageProps
                 <span>poradniki w jednym pakiecie</span>
               </div>
               <div className="stat-card tree-backed-card pdf-stat-card">
-                <strong>{getPdfPricingBadge(bundle.pricing)}</strong>
+                <strong>{repairCopy(getPdfPricingBadge(bundle.pricing))}</strong>
                 <span>cena za spójny zestaw materiałów</span>
               </div>
               <div className="stat-card tree-backed-card pdf-stat-card">
@@ -164,7 +166,7 @@ export default function PdfBundleDetailPage({ params }: PdfBundleDetailPageProps
 
             <div className="list-card tree-backed-card offer-detail-media-note">
               <strong>Najczęstsze dalsze kroki</strong>
-              <span>{bundle.consult.join(', ')}</span>
+              <span>{bundle.consult.map(repairCopy).join(', ')}</span>
             </div>
           </div>
         </section>
@@ -176,12 +178,7 @@ export default function PdfBundleDetailPage({ params }: PdfBundleDetailPageProps
 
             <div className="offer-grid top-gap">
               {bundle.guides.map((guide) => (
-                <PdfGuideCard
-                  key={guide.slug}
-                  guide={guide}
-                  primaryHref={buildPdfInquiryHref({ bundleSlug: bundle.slug })}
-                  primaryLabel="Napisz o tym pakiecie"
-                />
+                <PdfGuideCard key={guide.slug} guide={guide} primaryHref={orderHref} primaryLabel="Zamów pakiet" />
               ))}
             </div>
           </div>
@@ -202,8 +199,8 @@ export default function PdfBundleDetailPage({ params }: PdfBundleDetailPageProps
             </div>
 
             <div className="hero-actions top-gap">
-              <Link href={buildPdfInquiryHref({ bundleSlug: bundle.slug })} prefetch={false} className="button button-primary big-button">
-                Napisz w sprawie tego pakietu
+              <Link href={orderHref} prefetch={false} className="button button-primary big-button">
+                Zamów pakiet
               </Link>
               <Link href={PDF_GUIDES_LISTING_ROUTE} prefetch={false} className="button button-ghost big-button">
                 Wróć do listy PDF
@@ -211,7 +208,6 @@ export default function PdfBundleDetailPage({ params }: PdfBundleDetailPageProps
             </div>
           </div>
         </section>
-
       </div>
     </NotatnikPageShell>
   )

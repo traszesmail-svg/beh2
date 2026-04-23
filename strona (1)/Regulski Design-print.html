@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Regulski — Propozycje Redesignu (Druk)</title>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500&family=Space+Grotesk:wght@300;400;500;600;700&family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  @page {
+    size: A3 landscape;
+    margin: 0;
+  }
+
+  html, body {
+    background: #fff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Each "page" is exactly A3 landscape: 420mm × 297mm */
+  .print-page {
+    width: 420mm;
+    height: 297mm;
+    overflow: hidden;
+    break-after: page;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Design content is rendered at 1440px wide, scaled to fit 420mm */
+  /* 420mm at 96dpi = 1587px; scale = 1587/1440 = 1.102 — fits! */
+  /* We'll use scale so the 1440-wide layout fills the 420mm page width */
+  .design-scale {
+    width: 1440px;
+    transform: scale(1.1);
+    transform-origin: top left;
+    flex-shrink: 0;
+  }
+
+  /* Clip window: how many px of design to show per page */
+  /* Visible height at scale 1.1: 297mm at 96dpi ≈ 1122px / 1.1 = 1020px of content */
+  .clip-window {
+    overflow: hidden;
+    flex: 1;
+  }
+
+  .clip-window .design-scale {
+    margin-top: var(--scroll-y, 0px);
+  }
+
+  /* Cover pages */
+  .cover-a {
+    background: #faf8f4;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0;
+  }
+  .cover-b {
+    background: #0e0f0d;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Label strip at top of design pages */
+  .page-label {
+    height: 36px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    padding: 0 32px;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-family: 'DM Sans', sans-serif;
+    border-bottom: 1px solid;
+  }
+  .page-label-a { background: #faf8f4; color: #9a8f80; border-color: #e0d8cc; }
+  .page-label-b { background: #0e0f0d; color: #5a5a56; border-color: #2a2b27; }
+  .page-label .pg { margin-left: auto; }
+
+  @media screen {
+    body { background: #888; }
+    .print-page {
+      margin: 20px auto;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.3);
+    }
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+/* ─── Shared ───────────────────────────────── */
+const ImgPlaceholder = ({ label, w='100%', h=320, bg='#e8e2d9', stripe='#ddd6cc' }) => (
+  <div style={{ width: w, height: h, background: `repeating-linear-gradient(135deg,${bg} 0,${bg} 10px,${stripe} 10px,${stripe} 20px)`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+    <span style={{ fontFamily:'monospace', fontSize:11, color:'#9a8f84', background:bg, padding:'4px 8px' }}>{label}</span>
+  </div>
+);
+const ImgPlaceholderDark = ({ label, w='100%', h=320 }) => (
+  <div style={{ width:w, height:h, background:'repeating-linear-gradient(135deg,#1e2021 0,#1e2021 10px,#252829 10px,#252829 20px)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+    <span style={{ fontFamily:'monospace', fontSize:11, color:'#4a4a4a', background:'#1e2021', padding:'4px 8px' }}>{label}</span>
+  </div>
+);
+
+/* ─── VERSION A full render (1440px, no sticky) ─ */
+const VersionAFull = () => {
+  const c = { bg:'#faf8f4', bgAlt:'#f3ede3', ink:'#1e1a14', inkMid:'#5a5046', inkLight:'#9a8f80', amber:'#c07d3a', amberLight:'#f0e6d5', line:'#e0d8cc' };
+  const serif = '"Cormorant Garamond", Georgia, serif';
+  const sans  = '"DM Sans", system-ui, sans-serif';
+  return (
+    <div style={{ fontFamily:sans, background:c.bg, color:c.ink, width:1440 }}>
+      {/* NAV */}
+      <nav style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'28px 72px', borderBottom:`1px solid ${c.line}`, background:c.bg }}>
+        <div style={{ fontFamily:serif, fontSize:26, fontWeight:400 }}>Regulski.</div>
+        <div style={{ display:'flex', gap:36, alignItems:'center' }}>
+          {['Pies','Kot','Niezbędnik','O mnie','FAQ'].map(l=>(
+            <span key={l} style={{ fontSize:13, color:c.inkMid }}>{l}</span>
+          ))}
+          <div style={{ marginLeft:16, background:c.amber, color:'#fff', fontSize:13, fontWeight:500, padding:'10px 22px', borderRadius:2 }}>Kwadrans / 69 zł →</div>
+        </div>
+      </nav>
+      {/* HERO */}
+      <section style={{ display:'grid', gridTemplateColumns:'1fr 1fr', minHeight:700 }}>
+        <div style={{ background:c.bg, padding:'80px 72px', display:'flex', flexDirection:'column', justifyContent:'space-between' }}>
+          <div>
+            <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:48 }}>
+              <div style={{ width:24, height:1, background:c.amber }} />
+              <span style={{ fontSize:11, letterSpacing:'0.15em', color:c.amber, textTransform:'uppercase' }}>Nr 01 / 2026</span>
+            </div>
+            <h1 style={{ fontFamily:serif, fontSize:68, fontWeight:300, lineHeight:1.1, letterSpacing:'-1px', color:c.ink, marginBottom:40, maxWidth:520 }}>
+              Twój pies albo kot zachowuje się inaczej, niż powinien, i chcesz{' '}
+              <em style={{ fontStyle:'italic', fontWeight:400, color:c.amber }}>wiedzieć, co z tym zrobić.</em>
+            </h1>
+            <p style={{ fontSize:16, lineHeight:1.75, color:c.inkMid, maxWidth:440, fontWeight:300 }}>
+              Pomagam opiekunom, którzy widzą problem i szukają <strong style={{ fontWeight:500, color:c.ink }}>konkretnej pomocy</strong>, nie kolejnych ogólnych porad z internetu.
+            </p>
+          </div>
+          <div>
+            <div style={{ display:'flex', gap:12, marginBottom:28 }}>
+              <div style={{ background:c.amber, color:'#fff', fontSize:14, fontWeight:500, padding:'14px 28px', borderRadius:2 }}>Kwadrans z behawiorystą →</div>
+              <div style={{ border:`1px solid ${c.line}`, color:c.inkMid, fontSize:14, padding:'14px 28px', borderRadius:2 }}>Napisz wiadomość</div>
+            </div>
+            <p style={{ fontSize:12, color:c.inkLight }}>Szerszy temat? <span style={{ color:c.amber }}>Dwa kwadranse.</span></p>
+          </div>
+        </div>
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr' }}>
+          <ImgPlaceholder label="side-left-crop.jpg" h={700} bg="#e8e0d3" stripe="#dfd7ca" />
+          <ImgPlaceholder label="side-right-crop.jpg" h={700} bg="#e2d9cc" stripe="#d9d0c3" />
+        </div>
+      </section>
+      {/* LABEL BAR */}
+      <div style={{ borderTop:`1px solid ${c.line}`, borderBottom:`1px solid ${c.line}`, display:'flex', alignItems:'center', padding:'14px 72px', gap:48, background:c.bgAlt }}>
+        <span style={{ fontSize:11, letterSpacing:'0.12em', color:c.inkLight, textTransform:'uppercase' }}>Spokojny start dla opiekunów psów i kotów</span>
+        <div style={{ flex:1, height:1, background:c.line }} />
+        <span style={{ fontSize:11, letterSpacing:'0.12em', color:c.amber, textTransform:'uppercase' }}>Terapia behawioralna online</span>
+      </div>
+      {/* KWADRANS */}
+      <section style={{ padding:'80px 72px', display:'grid', gridTemplateColumns:'5fr 4fr', gap:64, alignItems:'center' }}>
+        <div>
+          <div style={{ fontSize:11, letterSpacing:'0.12em', color:c.inkLight, textTransform:'uppercase', marginBottom:16 }}>Pierwszy krok / Spokojna rozmowa</div>
+          <h2 style={{ fontFamily:serif, fontSize:52, fontWeight:300, lineHeight:1.15, marginBottom:28 }}>Kwadrans<br/>z behawiorystą</h2>
+          <p style={{ fontSize:15, lineHeight:1.8, color:c.inkMid, maxWidth:440, marginBottom:40 }}>15 minut rozmowy audio bez kamery. Jedno pytanie albo uporządkowanie tematu na start. Bez presji, bez długiej ankiety.</p>
+          <div style={{ display:'flex', alignItems:'baseline', gap:16, marginBottom:36 }}>
+            <span style={{ fontFamily:serif, fontSize:48, fontWeight:400, color:c.ink }}>69 zł</span>
+            <span style={{ fontSize:13, color:c.inkLight }}>· 15 min · audio · bez kamery</span>
+          </div>
+          <div style={{ background:c.amber, color:'#fff', fontSize:14, fontWeight:500, padding:'14px 32px', borderRadius:2, display:'inline-flex' }}>Rezerwacja</div>
+        </div>
+        <div style={{ background:c.bgAlt, borderRadius:4, overflow:'hidden' }}>
+          <ImgPlaceholder label="omnie-hero.webp" h={400} bg="#e5ddd0" stripe="#dbd3c6" />
+          <div style={{ padding:'24px 32px', borderTop:`1px solid ${c.line}` }}>
+            <div style={{ fontFamily:serif, fontSize:18, fontWeight:400, marginBottom:6 }}>Krzysztof Regulski</div>
+            <div style={{ fontSize:12, color:c.inkLight }}>Behawiorysta COAPE · Trener · Technik weterynarii</div>
+          </div>
+        </div>
+      </section>
+      {/* PIES / KOT */}
+      <section style={{ padding:'0 72px 80px', display:'grid', gridTemplateColumns:'1fr 1fr', gap:2 }}>
+        <div style={{ background:c.bgAlt, padding:'56px 48px' }}>
+          <div style={{ fontSize:10, letterSpacing:'0.14em', color:c.inkLight, textTransform:'uppercase', marginBottom:32 }}>I. / Sekcja A / Pies</div>
+          <h3 style={{ fontFamily:serif, fontSize:38, fontWeight:300, lineHeight:1.2, marginBottom:20 }}>Pomoc dla opiekuna <em>psa.</em></h3>
+          <p style={{ fontSize:14, lineHeight:1.8, color:c.inkMid, marginBottom:36 }}>Spacery, pobudzenie, separacja albo młody pies, z którym trudno złapać codzienny rytm.</p>
+          <span style={{ fontSize:13, color:c.amber }}>Zobacz pomoc dla psa →</span>
+        </div>
+        <div style={{ background:'#eee7db', padding:'56px 48px' }}>
+          <div style={{ fontSize:10, letterSpacing:'0.14em', color:c.inkLight, textTransform:'uppercase', marginBottom:32 }}>I. / Sekcja B / Kot</div>
+          <h3 style={{ fontFamily:serif, fontSize:38, fontWeight:300, lineHeight:1.2, marginBottom:20 }}>Pomoc dla opiekuna <em>kota.</em></h3>
+          <p style={{ fontSize:14, lineHeight:1.8, color:c.inkMid, marginBottom:36 }}>Kuweta, wycofanie, napięcie po zmianach w domu albo trudne relacje między kotami.</p>
+          <span style={{ fontSize:13, color:c.amber }}>Zobacz pomoc dla kota →</span>
+        </div>
+      </section>
+      {/* STEPS */}
+      <section style={{ borderTop:`1px solid ${c.line}`, padding:'80px 72px' }}>
+        <div style={{ fontSize:10, letterSpacing:'0.14em', color:c.inkLight, textTransform:'uppercase', marginBottom:20 }}>II. / Jak to działa</div>
+        <h2 style={{ fontFamily:serif, fontSize:44, fontWeight:300, lineHeight:1.2, marginBottom:64, maxWidth:600 }}>Zacznij od Kwadransu z behawiorystą.<br/>Najpierw ustalamy priorytet, potem pierwszy krok.</h2>
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:48 }}>
+          {[{n:'01',t:'Zaczynasz od Kwadransu',d:'Krótki start, żeby spokojnie ustalić priorytet i kolejny krok. Bez presji, bez długiej ankiety.'},{n:'02',t:'Krótko opisujesz sytuację',d:'Mówisz, co dzieje się dziś w domu, na spacerze albo przy kuwecie, i co najbardziej Cię blokuje.'},{n:'03',t:'Wiesz, co zrobić dalej',d:'Po rozmowie wiesz, od czego zacząć, co obserwować i czy temat wymaga szerszej konsultacji.'}].map(s=>(
+            <div key={s.n} style={{ borderTop:`1px solid ${c.amber}`, paddingTop:24 }}>
+              <div style={{ fontFamily:serif, fontSize:48, fontWeight:300, color:c.amberLight, marginBottom:16, lineHeight:1 }}>{s.n}</div>
+              <div style={{ fontSize:16, fontWeight:500, marginBottom:12, lineHeight:1.3 }}>{s.t}</div>
+              <div style={{ fontSize:14, color:c.inkMid, lineHeight:1.75, fontWeight:300 }}>{s.d}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+      {/* SERVICES */}
+      <section style={{ borderTop:`1px solid ${c.line}`, padding:'80px 72px', background:c.ink }}>
+        <div style={{ fontSize:10, letterSpacing:'0.14em', color:c.inkLight, textTransform:'uppercase', marginBottom:20 }}>III. / Usługi</div>
+        <h2 style={{ fontFamily:serif, fontSize:44, fontWeight:300, lineHeight:1.2, marginBottom:64, color:'#faf8f4', maxWidth:560 }}>Behawiorysta psów i kotów online.</h2>
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:2 }}>
+          {[{tag:'Kwadrans',price:'69 zł',time:'15 min / audio / bez kamery',title:'Kwadrans z behawiorystą',desc:'Porządkuje temat na start. Jedno pytanie albo pierwsze kroki bez długiego wejścia.',items:['Jedno pytanie albo uporządkowanie sytuacji','15 minut audio bez kamery','Najprostszy pierwszy krok'],cta:'Zarezerwuj',i:0},{tag:'Pełna konsultacja',price:'350 zł',time:'ok. 2 h / online',title:'Kiedy od razu wejść szerzej',desc:'Daje więcej czasu na kontekst, kilka wątków naraz i jasny plan dalszej pracy.',items:['Szerszy temat z większą liczbą wątków','Więcej czasu na kontekst i plan','Opcja dla trudniejszych spraw'],cta:'Umów konsultację',i:1}].map(s=>(
+            <div key={s.tag} style={{ background:s.i===0?c.amber:'#2c2820', padding:'52px 48px' }}>
+              <div style={{ fontSize:11, letterSpacing:'0.12em', color:s.i===0?'rgba(255,255,255,0.7)':c.inkLight, textTransform:'uppercase', marginBottom:24 }}>{s.tag}</div>
+              <div style={{ fontFamily:serif, fontSize:56, fontWeight:300, color:'#faf8f4', marginBottom:6, lineHeight:1 }}>{s.price}</div>
+              <div style={{ fontSize:12, color:s.i===0?'rgba(255,255,255,0.6)':c.inkLight, marginBottom:32 }}>{s.time}</div>
+              <h3 style={{ fontFamily:serif, fontSize:28, fontWeight:300, color:'#faf8f4', marginBottom:16, lineHeight:1.3 }}>{s.title}</h3>
+              <p style={{ fontSize:14, color:s.i===0?'rgba(255,255,255,0.8)':c.inkMid, lineHeight:1.75, marginBottom:32 }}>{s.desc}</p>
+              <ul style={{ listStyle:'none', marginBottom:40 }}>
+                {s.items.map(it=>(
+                  <li key={it} style={{ fontSize:13, color:s.i===0?'rgba(255,255,255,0.85)':c.inkMid, padding:'8px 0', borderBottom:`1px solid ${s.i===0?'rgba(255,255,255,0.15)':'rgba(255,255,255,0.06)'}`, display:'flex', gap:10 }}>
+                    <span style={{ color:s.i===0?'rgba(255,255,255,0.4)':c.amber }}>—</span> {it}
+                  </li>
+                ))}
+              </ul>
+              <div style={{ border:`1px solid ${s.i===0?'rgba(255,255,255,0.4)':'rgba(255,255,255,0.15)'}`, color:'#faf8f4', fontSize:14, padding:'13px 28px', display:'inline-flex', borderRadius:2 }}>{s.cta} →</div>
+            </div>
+          ))}
+        </div>
+      </section>
+      {/* TESTIMONIALS */}
+      <section style={{ padding:'80px 72px', borderTop:`1px solid ${c.line}` }}>
+        <div style={{ fontSize:10, letterSpacing:'0.14em', color:c.inkLight, textTransform:'uppercase', marginBottom:64 }}>V. / Opinie</div>
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:2 }}>
+          {[{q:'Po rozmowie wiedziałam, co zrobić od razu i co spokojnie odłożyć. W domu zrobiło się dużo lżej.',who:'Opiekunka psa reaktywnego / po pierwszym kontakcie audio'},{q:'Przy kuwecie dostałam porządek zamiast kolejnych domysłów. To był pierwszy moment, kiedy wiedziałam, od czego zacząć.',who:'Opiekunka kota niewychodzącego / po uporządkowaniu tematu'}].map((o,i)=>(
+            <div key={i} style={{ background:c.bgAlt, padding:'48px 48px' }}>
+              <div style={{ fontFamily:serif, fontSize:24, fontWeight:300, fontStyle:'italic', lineHeight:1.6, color:c.ink, marginBottom:32 }}>&ldquo;{o.q}&rdquo;</div>
+              <div style={{ fontSize:12, color:c.inkLight }}>— {o.who}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+      {/* CTA */}
+      <section style={{ padding:'80px 72px', borderTop:`1px solid ${c.line}`, display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+        <h2 style={{ fontFamily:serif, fontSize:52, fontWeight:300, lineHeight:1.2, maxWidth:560 }}>
+          Jeśli coś Cię niepokoi,{' '}<em style={{ fontStyle:'italic', color:c.amber }}>zacznij spokojnie.</em>
+        </h2>
+        <div style={{ display:'flex', flexDirection:'column', gap:12, alignItems:'flex-end' }}>
+          <div style={{ background:c.amber, color:'#fff', fontSize:14, fontWeight:500, padding:'16px 36px', borderRadius:2 }}>Zarezerwuj Kwadrans z behawiorystą →</div>
+          <div style={{ border:`1px solid ${c.line}`, color:c.inkMid, fontSize:14, padding:'16px 36px', borderRadius:2 }}>Napisz wiadomość</div>
+        </div>
+      </section>
+      {/* FOOTER */}
+      <footer style={{ background:c.ink, color:c.inkLight, padding:'56px 72px', display:'grid', gridTemplateColumns:'2fr 1fr 1fr 1fr', gap:48 }}>
+        <div>
+          <div style={{ fontFamily:serif, fontSize:28, fontWeight:300, color:'#faf8f4', marginBottom:16 }}>Regulski.</div>
+          <div style={{ fontSize:13, lineHeight:1.8, maxWidth:280, fontWeight:300 }}>Spokojna pomoc w zrozumieniu problemów zachowania psów i kotów. Terapia behawioralna online dla opiekunów z całej Polski.</div>
+        </div>
+        {[{h:'Nawigacja',l:['Pies','Kot','Niezbędnik','Kontakt']},{h:'Start',l:['Kwadrans','Dwa kwadranse','Pełna konsultacja','O mnie']},{h:'Materiały',l:['Reaktywny pies','Checklista kuweta','Przygotowanie']}].map(col=>(
+          <div key={col.h}>
+            <div style={{ fontSize:10, letterSpacing:'0.14em', textTransform:'uppercase', marginBottom:20, color:c.amber }}>{col.h}</div>
+            {col.l.map(l=><div key={l} style={{ fontSize:13, marginBottom:10 }}>{l}</div>)}
+          </div>
+        ))}
+      </footer>
+    </div>
+  );
+};
+
+/* ─── VERSION B full render ────────────────── */
+const VersionBFull = () => {
+  const c = { bg:'#0e0f0d', bgAlt:'#161713', bgCard:'#1c1d1a', ink:'#f0ede6', inkMid:'#8a8880', inkLight:'#5a5a56', sage:'#7aad82', sageLight:'rgba(122,173,130,0.12)', line:'#2a2b27' };
+  const headline = '"Barlow Condensed", sans-serif';
+  const sans = '"Space Grotesk", system-ui, sans-serif';
+  const QC = ({size=320}) => (
+    <svg width={size} height={size} viewBox="0 0 320 320" fill="none">
+      <path d={`M 0 0 A ${size} ${size} 0 0 1 ${size} ${size} L 0 ${size} Z`} fill={c.sage} opacity={0.06}/>
+      <path d={`M 40 0 A ${size-40} ${size-40} 0 0 1 ${size} ${size-40} L ${size} ${size} A ${size} ${size} 0 0 0 0 0 Z`} fill={c.sage} opacity={0.03}/>
+    </svg>
+  );
+  return (
+    <div style={{ fontFamily:sans, background:c.bg, color:c.ink, width:1440 }}>
+      <nav style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'24px 72px', borderBottom:`1px solid ${c.line}` }}>
+        <div style={{ fontFamily:headline, fontSize:22, fontWeight:700, letterSpacing:'0.04em' }}>REGULSKI</div>
+        <div style={{ display:'flex', gap:40, alignItems:'center' }}>
+          {['Pies','Kot','Niezbędnik','O mnie','FAQ'].map(l=>(
+            <span key={l} style={{ fontSize:13, color:c.inkMid }}>{l}</span>
+          ))}
+          <div style={{ marginLeft:12, border:`1px solid ${c.sage}`, color:c.sage, fontSize:12, fontWeight:600, padding:'9px 20px', letterSpacing:'0.08em', textTransform:'uppercase' }}>Kwadrans 69 zł</div>
+        </div>
+      </nav>
+      {/* HERO */}
+      <section style={{ padding:'0 72px', display:'grid', gridTemplateColumns:'1fr 1fr', minHeight:680, alignItems:'stretch', position:'relative' }}>
+        <div style={{ padding:'80px 0', display:'flex', flexDirection:'column', justifyContent:'space-between', zIndex:2 }}>
+          <div>
+            <div style={{ display:'flex', gap:16, marginBottom:40 }}>
+              <span style={{ fontSize:10, letterSpacing:'0.2em', color:c.sage, textTransform:'uppercase', background:c.sageLight, padding:'5px 12px' }}>Behawiorystyka</span>
+              <span style={{ fontSize:10, letterSpacing:'0.2em', color:c.inkLight, textTransform:'uppercase', padding:'5px 0' }}>Online · Cała Polska</span>
+            </div>
+            <h1 style={{ fontFamily:headline, fontSize:96, fontWeight:700, lineHeight:0.95, textTransform:'uppercase', marginBottom:40 }}>
+              <span style={{ color:c.ink, display:'block' }}>TWÓJ PIES.</span>
+              <span style={{ color:c.ink, display:'block' }}>TWÓJ KOT.</span>
+              <span style={{ color:c.sage, display:'block', fontStyle:'italic', fontWeight:400 }}>Twój spokój.</span>
+            </h1>
+            <p style={{ fontSize:16, lineHeight:1.7, color:c.inkMid, maxWidth:420, fontWeight:300 }}>Konkretna pomoc dla opiekunów, którzy widzą problem i chcą wiedzieć, co z tym zrobić.</p>
+          </div>
+          <div style={{ display:'flex', gap:8 }}>
+            <div style={{ background:c.sage, color:c.bg, fontSize:13, fontWeight:700, padding:'16px 32px', letterSpacing:'0.06em', textTransform:'uppercase' }}>Zacznij od Kwadransu →</div>
+            <div style={{ color:c.inkMid, fontSize:13, padding:'16px 24px' }}>lub napisz wiadomość</div>
+          </div>
+        </div>
+        <div style={{ position:'relative', display:'flex', alignItems:'center', justifyContent:'flex-end' }}>
+          <div style={{ position:'absolute', top:0, right:0 }}><QC size={560}/></div>
+          <div style={{ position:'absolute', top:60, right:60, width:440, height:560, zIndex:1, overflow:'hidden' }}>
+            <ImgPlaceholderDark label="omnie-hero.webp" w="100%" h={560}/>
+          </div>
+          <div style={{ position:'absolute', bottom:80, left:0, background:c.bgCard, border:`1px solid ${c.line}`, padding:'20px 28px', zIndex:3 }}>
+            <div style={{ fontFamily:headline, fontSize:44, fontWeight:700, color:c.sage, lineHeight:1 }}>15'</div>
+            <div style={{ fontSize:11, color:c.inkMid, marginTop:6, letterSpacing:'0.08em', textTransform:'uppercase' }}>audio · bez kamery · 69 zł</div>
+          </div>
+        </div>
+      </section>
+      {/* TICKER */}
+      <div style={{ borderTop:`1px solid ${c.line}`, borderBottom:`1px solid ${c.line}`, background:c.bgAlt, padding:'0 72px', display:'flex', alignItems:'center', gap:64, height:44, overflow:'hidden' }}>
+        {['Kwadrans z behawiorystą','69 zł','15 minut','Audio','Bez kamery','Online','Cała Polska','Psy i Koty','Konkretny pierwszy krok'].map((t,i)=>(
+          <span key={i} style={{ fontSize:11, letterSpacing:'0.14em', textTransform:'uppercase', color:i%3===0?c.sage:c.inkLight, whiteSpace:'nowrap', flexShrink:0 }}>{t}</span>
+        ))}
+      </div>
+      {/* PIES / KOT */}
+      <section style={{ display:'grid', gridTemplateColumns:'1fr 1fr', padding:'64px 72px', gap:2 }}>
+        {[{letter:'P',tag:'Pies',hl:'SPACERY, POBUDZENIE, SEPARACJA',desc:'Młody pies, z którym trudno złapać codzienny rytm. Reaktywność, lęk, napięcie na smyczy.',cta:'Pomoc dla opiekuna psa →'},{letter:'K',tag:'Kot',hl:'KUWETA, WYCOFANIE, NAPIĘCIE',desc:'Trudne relacje między kotami, zmiany w domu, zachowania, które niepokoją.',cta:'Pomoc dla opiekuna kota →'}].map(s=>(
+          <div key={s.tag} style={{ background:c.bgCard, padding:'56px 48px', position:'relative', overflow:'hidden' }}>
+            <div style={{ position:'absolute', top:-20, right:-20, fontFamily:headline, fontSize:220, fontWeight:700, color:c.ink, opacity:0.02, lineHeight:1 }}>{s.letter}</div>
+            <div style={{ fontSize:10, letterSpacing:'0.18em', color:c.sage, textTransform:'uppercase', marginBottom:24 }}>{s.tag}</div>
+            <h3 style={{ fontFamily:headline, fontSize:36, fontWeight:700, color:c.ink, lineHeight:1.1, marginBottom:20 }}>{s.hl}</h3>
+            <p style={{ fontSize:14, lineHeight:1.75, color:c.inkMid, maxWidth:340, marginBottom:40 }}>{s.desc}</p>
+            <span style={{ fontSize:13, color:c.sage }}>{s.cta}</span>
+          </div>
+        ))}
+      </section>
+      {/* STEPS */}
+      <section style={{ padding:'64px 72px', borderTop:`1px solid ${c.line}` }}>
+        <div style={{ display:'flex', alignItems:'baseline', gap:24, marginBottom:64 }}>
+          <div style={{ fontFamily:headline, fontSize:11, letterSpacing:'0.18em', color:c.sage, textTransform:'uppercase' }}>II. / Jak to działa</div>
+          <div style={{ flex:1, height:1, background:c.line }}/>
+        </div>
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr' }}>
+          {[{n:'01',t:'Zaczynasz od Kwadransu',d:'Krótki start, żeby spokojnie ustalić priorytet. Bez presji, bez długiej ankiety.'},{n:'02',t:'Opisujesz sytuację',d:'Mówisz, co dzieje się dziś w domu, na spacerze albo przy kuwecie.'},{n:'03',t:'Wiesz, co zrobić dalej',d:'Po rozmowie wiesz, od czego zacząć i czy potrzebujesz szerszej konsultacji.'}].map((s,i)=>(
+            <div key={s.n} style={{ padding:'40px', borderLeft:`1px solid ${c.line}`, borderRight:i===2?`1px solid ${c.line}`:'none' }}>
+              <div style={{ fontFamily:headline, fontSize:72, fontWeight:700, color:c.sage, opacity:0.2, lineHeight:1, marginBottom:20 }}>{s.n}</div>
+              <div style={{ fontSize:15, fontWeight:600, color:c.ink, marginBottom:12, lineHeight:1.4 }}>{s.t}</div>
+              <div style={{ fontSize:13, color:c.inkMid, lineHeight:1.75 }}>{s.d}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+      {/* SERVICES */}
+      <section style={{ padding:'64px 72px', borderTop:`1px solid ${c.line}` }}>
+        <div style={{ display:'flex', alignItems:'baseline', gap:24, marginBottom:64 }}>
+          <div style={{ fontFamily:headline, fontSize:11, letterSpacing:'0.18em', color:c.sage, textTransform:'uppercase' }}>III. / Usługi</div>
+          <div style={{ flex:1, height:1, background:c.line }}/>
+        </div>
+        <div style={{ display:'grid', gridTemplateColumns:'5fr 4fr', gap:2 }}>
+          <div style={{ background:c.sage, padding:'56px 52px', position:'relative', overflow:'hidden' }}>
+            <div style={{ position:'absolute', bottom:-40, right:-40, opacity:0.12 }}>
+              <svg width={200} height={200} viewBox="0 0 200 200"><circle cx={200} cy={0} r={200} fill={c.bg}/></svg>
+            </div>
+            <div style={{ fontSize:10, letterSpacing:'0.18em', color:c.bg, textTransform:'uppercase', opacity:0.7, marginBottom:32 }}>Kwadrans / Start</div>
+            <div style={{ fontFamily:headline, fontSize:88, fontWeight:700, color:c.bg, lineHeight:0.9, marginBottom:8 }}>69<span style={{ fontSize:36 }}>zł</span></div>
+            <div style={{ fontSize:12, color:c.bg, opacity:0.7, marginBottom:36, letterSpacing:'0.08em' }}>15 MIN AUDIO · BEZ KAMERY</div>
+            <h3 style={{ fontFamily:headline, fontSize:32, fontWeight:700, color:c.bg, lineHeight:1.2, marginBottom:24 }}>KWADRANS Z BEHAWIORYSTĄ</h3>
+            <p style={{ fontSize:14, color:c.bg, opacity:0.85, lineHeight:1.75, maxWidth:380, marginBottom:40 }}>Najprostszy start — jedno pytanie albo uporządkowanie sytuacji. Wiesz, co zrobić dalej.</p>
+            <div style={{ background:c.bg, color:c.sage, fontSize:13, fontWeight:700, padding:'14px 28px', display:'inline-flex', letterSpacing:'0.06em', textTransform:'uppercase' }}>Zarezerwuj →</div>
+          </div>
+          <div style={{ background:c.bgCard, padding:'56px 48px' }}>
+            <div style={{ fontSize:10, letterSpacing:'0.18em', color:c.inkLight, textTransform:'uppercase', marginBottom:32 }}>Pełna konsultacja / Szerzej</div>
+            <div style={{ fontFamily:headline, fontSize:72, fontWeight:700, color:c.ink, lineHeight:0.9, marginBottom:8 }}>350<span style={{ fontSize:32 }}>zł</span></div>
+            <div style={{ fontSize:12, color:c.inkMid, marginBottom:36, letterSpacing:'0.08em' }}>OK. 2H ONLINE</div>
+            <h3 style={{ fontFamily:headline, fontSize:28, fontWeight:700, color:c.ink, lineHeight:1.2, marginBottom:24 }}>KIEDY OD RAZU WEJŚĆ SZERZEJ</h3>
+            <p style={{ fontSize:14, color:c.inkMid, lineHeight:1.75, marginBottom:40 }}>Więcej czasu na kontekst, kilka wątków naraz i jasny plan dalszej pracy.</p>
+            <div style={{ border:`1px solid ${c.sage}`, color:c.sage, fontSize:13, fontWeight:600, padding:'14px 28px', display:'inline-flex', letterSpacing:'0.06em', textTransform:'uppercase' }}>Umów →</div>
+          </div>
+        </div>
+      </section>
+      {/* TESTIMONIALS */}
+      <section style={{ padding:'64px 72px', borderTop:`1px solid ${c.line}` }}>
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:2 }}>
+          {[{q:'Po rozmowie wiedziałam, co zrobić od razu i co spokojnie odłożyć. W domu zrobiło się dużo lżej.',who:'Opiekunka psa reaktywnego'},{q:'Przy kuwecie dostałam porządek zamiast kolejnych domysłów. Pierwszy moment, kiedy wiedziałam, od czego zacząć.',who:'Opiekunka kota niewychodzącego'}].map((o,i)=>(
+            <div key={i} style={{ padding:'48px', borderLeft:`3px solid ${c.sage}`, background:c.bgCard }}>
+              <div style={{ fontFamily:headline, fontSize:22, fontStyle:'italic', lineHeight:1.5, color:c.ink, marginBottom:24 }}>&ldquo;{o.q}&rdquo;</div>
+              <div style={{ fontSize:11, color:c.sage, letterSpacing:'0.1em', textTransform:'uppercase' }}>— {o.who}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+      {/* ABOUT */}
+      <section style={{ padding:'64px 72px', borderTop:`1px solid ${c.line}`, display:'grid', gridTemplateColumns:'1fr 1fr', gap:80, alignItems:'center' }}>
+        <div style={{ position:'relative', overflow:'hidden' }}>
+          <ImgPlaceholderDark label="specialist-krzysztof-portrait.jpg" w="100%" h={480}/>
+          <div style={{ position:'absolute', bottom:0, left:0, right:0, background:'linear-gradient(transparent,rgba(14,15,13,0.9))', padding:'40px 32px 32px' }}>
+            <div style={{ fontFamily:headline, fontSize:28, fontWeight:700, color:c.ink }}>Krzysztof Regulski</div>
+            <div style={{ fontSize:12, color:c.sage, letterSpacing:'0.08em', textTransform:'uppercase', marginTop:6 }}>Behawiorysta COAPE</div>
+          </div>
+        </div>
+        <div>
+          <div style={{ fontSize:10, letterSpacing:'0.18em', color:c.sage, textTransform:'uppercase', marginBottom:32 }}>O mnie / Podejście</div>
+          <h2 style={{ fontFamily:headline, fontSize:44, fontWeight:700, color:c.ink, lineHeight:1.1, marginBottom:28, textTransform:'uppercase' }}>SPOKOJNE<br/>PODEJŚCIE,<br/>KONKRETNE<br/>DOŚWIADCZENIE.</h2>
+          <p style={{ fontSize:15, color:c.inkMid, lineHeight:1.8, marginBottom:40 }}>Pracuję spokojnie, bez przymusu i kar, z naciskiem na kontekst, dobrostan i pierwszy wykonalny krok.</p>
+          <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
+            {['Behawiorysta COAPE','Trener zwierząt towarzyszących','Technik weterynarii'].map(t=>(
+              <div key={t} style={{ display:'flex', alignItems:'center', gap:12 }}>
+                <div style={{ width:6, height:6, background:c.sage, flexShrink:0 }}/>
+                <span style={{ fontSize:13, color:c.ink }}>{t}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+      {/* CTA */}
+      <section style={{ padding:'80px 72px', background:c.bgAlt, borderTop:`1px solid ${c.line}`, display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+        <div>
+          <h2 style={{ fontFamily:headline, fontSize:72, fontWeight:700, textTransform:'uppercase', color:c.ink, lineHeight:0.95, marginBottom:20 }}>ZACZNIJ<br/><span style={{ color:c.sage }}>SPOKOJNIE.</span></h2>
+          <p style={{ fontSize:15, color:c.inkMid }}>Krótka rozmowa głosem bez kamery. 15 minut.</p>
+        </div>
+        <div style={{ display:'flex', flexDirection:'column', gap:12, alignItems:'flex-end' }}>
+          <div style={{ background:c.sage, color:c.bg, fontSize:14, fontWeight:700, padding:'18px 40px', letterSpacing:'0.06em', textTransform:'uppercase' }}>Zarezerwuj Kwadrans →</div>
+          <div style={{ color:c.inkMid, fontSize:13 }}>lub napisz wiadomość</div>
+        </div>
+      </section>
+      {/* FOOTER */}
+      <footer style={{ background:c.bg, padding:'48px 72px', borderTop:`1px solid ${c.line}`, display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+        <div style={{ fontFamily:headline, fontSize:20, fontWeight:700, letterSpacing:'0.04em' }}>REGULSKI</div>
+        <div style={{ fontSize:12, color:c.inkLight }}>Terapia behawioralna psów i kotów online · Cała Polska</div>
+        <div style={{ display:'flex', gap:32 }}>
+          {['Pies','Kot','Kontakt','FAQ'].map(l=>(
+            <span key={l} style={{ fontSize:12, color:c.inkMid }}>{l}</span>
+          ))}
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+/* ─── Page layout helpers ──────────────────── */
+/* Each print-page clips a vertical slice of the full design at a given scroll offset.
+   scrollY: pixels to crop from top of the rendered 1440-wide design. */
+const DesignPage = ({ version, label, page, total, scrollY, clipH = 1020, scaleRef }) => (
+  <div className="print-page" style={{ background: version === 'a' ? '#faf8f4' : '#0e0f0d' }}>
+    <div className={`page-label page-label-${version}`}>
+      <span style={{ color: version === 'a' ? '#c07d3a' : '#7aad82', marginRight: 12 }}>
+        {version === 'a' ? 'Wersja A — Wzbogacona · Warmth & Editorial' : 'Wersja B — Skrajnie alternatywna · Dark & Structural'}
+      </span>
+      <span>regulski.pl</span>
+      <span className="pg">{page} / {total}</span>
+    </div>
+    <div className="clip-window" style={{ height: clipH * 1.1 }}>
+      <div className="design-scale" style={{ '--scroll-y': `-${scrollY}px` }}>
+        {version === 'a' ? <VersionAFull /> : <VersionBFull />}
+      </div>
+    </div>
+  </div>
+);
+
+const CoverPage = ({ version }) => {
+  if (version === 'a') {
+    return (
+      <div className="print-page cover-a" style={{ background:'#faf8f4', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:0 }}>
+        <div style={{ textAlign:'center' }}>
+          <div style={{ fontSize:11, letterSpacing:'0.2em', color:'#9a8f80', textTransform:'uppercase', marginBottom:32, fontFamily:'"DM Sans",sans-serif' }}>Propozycja redesignu · Regulski.pl</div>
+          <h1 style={{ fontFamily:'"Cormorant Garamond",Georgia,serif', fontSize:96, fontWeight:300, color:'#1e1a14', lineHeight:1, letterSpacing:'-2px', marginBottom:24 }}>Wersja A</h1>
+          <p style={{ fontFamily:'"Cormorant Garamond",Georgia,serif', fontSize:36, fontStyle:'italic', fontWeight:300, color:'#c07d3a', marginBottom:64 }}>Wzbogacona — ta sama koncepcja, bogatsza.</p>
+          <div style={{ width:80, height:1, background:'#c07d3a', margin:'0 auto 48px' }}/>
+          <div style={{ fontFamily:'"DM Sans",sans-serif', fontSize:13, color:'#9a8f80', lineHeight:2 }}>
+            Paleta: Kremowy beż + Ambra · Cormorant Garamond + DM Sans<br/>
+            Ciepłe, edytorialne, eleganckie
+          </div>
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div className="print-page cover-b" style={{ background:'#0e0f0d', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:0 }}>
+      <div style={{ textAlign:'center', position:'relative' }}>
+        <div style={{ position:'absolute', top:'50%', left:'50%', transform:'translate(-50%,-50%)', opacity:0.04 }}>
+          <svg width={600} height={600} viewBox="0 0 600 600"><circle cx={300} cy={300} r={300} fill="#7aad82"/></svg>
+        </div>
+        <div style={{ fontSize:11, letterSpacing:'0.2em', color:'#5a5a56', textTransform:'uppercase', marginBottom:32, fontFamily:'"Space Grotesk",sans-serif', position:'relative' }}>Propozycja redesignu · Regulski.pl</div>
+        <h1 style={{ fontFamily:'"Barlow Condensed",sans-serif', fontSize:120, fontWeight:700, color:'#f0ede6', lineHeight:0.9, letterSpacing:'-1px', marginBottom:24, textTransform:'uppercase', position:'relative' }}>WERSJA B</h1>
+        <p style={{ fontFamily:'"Barlow Condensed",sans-serif', fontSize:40, fontStyle:'italic', fontWeight:400, color:'#7aad82', marginBottom:64, position:'relative' }}>Skrajnie alternatywna.</p>
+        <div style={{ width:80, height:1, background:'#7aad82', margin:'0 auto 48px', position:'relative' }}/>
+        <div style={{ fontFamily:'"Space Grotesk",sans-serif', fontSize:13, color:'#5a5a56', lineHeight:2, position:'relative' }}>
+          Paleta: Ciemne tło + Sage Green · Barlow Condensed + Space Grotesk<br/>
+          Architektoniczne, odważne, ciemne
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const App = () => (
+  <div>
+    {/* ── COVER A ── */}
+    <CoverPage version="a" />
+
+    {/* ── WERSJA A: 5 stron ── */}
+    {/* Strona 1: Nav + Hero (0–830px) */}
+    <DesignPage version="a" page={1} total={5} scrollY={0} />
+    {/* Strona 2: Label bar + Kwadrans card (830–1870px) */}
+    <DesignPage version="a" page={2} total={5} scrollY={850} />
+    {/* Strona 3: Pies/Kot + Steps (1870–2900px) */}
+    <DesignPage version="a" page={3} total={5} scrollY={1900} />
+    {/* Strona 4: Services dark (2900–3900px) */}
+    <DesignPage version="a" page={4} total={5} scrollY={2920} />
+    {/* Strona 5: Testimonials + CTA + Footer (3900+) */}
+    <DesignPage version="a" page={5} total={5} scrollY={3940} />
+
+    {/* ── COVER B ── */}
+    <CoverPage version="b" />
+
+    {/* ── WERSJA B: 5 stron ── */}
+    <DesignPage version="b" page={1} total={5} scrollY={0} />
+    <DesignPage version="b" page={2} total={5} scrollY={830} />
+    <DesignPage version="b" page={3} total={5} scrollY={1780} />
+    <DesignPage version="b" page={4} total={5} scrollY={2720} />
+    <DesignPage version="b" page={5} total={5} scrollY={3660} />
+  </div>
+);
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+
+/* Auto-print after fonts + render */
+setTimeout(() => {
+  document.fonts.ready.then(() => {
+    setTimeout(() => window.print(), 500);
+  });
+}, 500);
+</script>
+</body>
+</html>

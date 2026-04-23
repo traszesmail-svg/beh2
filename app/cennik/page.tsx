@@ -1,375 +1,218 @@
-import type { Metadata } from 'next'
-import Image from 'next/image'
+﻿import type { Metadata } from 'next'
 import Link from 'next/link'
-import { EditorialFaqSection } from '@/components/EditorialFaqSection'
-import { LeadMagnetSignup } from '@/components/LeadMagnetSignup'
-import { NotatnikPageShell } from '@/components/NotatnikA'
-import { TrustSignalSection } from '@/components/TrustSignalSection'
-import { buildBookHref } from '@/lib/booking-routing'
-import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
-import { getLeadMagnetBySlug } from '@/lib/growth-layer'
+import { NextSlot } from '@/components/NextSlot'
+import { NotatnikFinalCta, NotatnikPageShell, NotatnikSectionHead } from '@/components/NotatnikA'
+import { Schema } from '@/components/schema'
+import { ServicesComparison } from '@/components/ServicesComparison'
 import { getBreadcrumbJsonLd, getServiceJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
-import { FAQ_SHORTLISTS, TRUST_SIGNAL_SETS } from '@/lib/trust-layer'
-import { SPECIALIST_NAME } from '@/lib/site'
-
-const heroImage = { src: '/branding/omnie-hero.webp', width: 1024, height: 1536 } as const
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: 'Cennik - konsultacje behawioralne online',
+  title: 'Cennik konsultacji behawioralnych | Regulski COAPE',
   path: '/cennik',
   description:
-    'Cennik konsultacji behawioralnych online dla psa i kota. Kwadrans, Dwa kwadranse i pelna konsultacja behawioralna w jednym miejscu.',
+    'Kwadrans z behawiorysta 69 zl, Dwa kwadranse 129 zl, pelna konsultacja 350 zl. PayPal albo BLIK na telefon, potwierdzenie do 15 minut, bez kamery.',
 })
 
-function SectionIntro({ eyebrow, title, description }: { eyebrow: string; title: string; description: string }) {
-  return (
-    <div className="editorial-section-head">
-      <div className="editorial-section-head-copy">
-        <div className="section-eyebrow">{eyebrow}</div>
-        <h2>{title}</h2>
-      </div>
-      <p className="editorial-section-lead">{description}</p>
-    </div>
-  )
-}
+const navItems = [
+  { href: '/psy', label: 'Pies' },
+  { href: '/koty', label: 'Kot' },
+  { href: '/o-mnie', label: 'O mnie' },
+  { href: '/cennik', label: 'Cennik' },
+  { href: '/faq', label: 'FAQ' },
+  { href: '/kontakt#formularz', label: 'Kontakt' },
+]
 
-const SERVICE_COMPARISON_ROWS = [
-  {
-    label: 'Najlepszy wybór, gdy',
-    quick: 'masz jedno pytanie, chcesz spokojnie ustalić pierwszy krok albo nie wiesz jeszcze, jak szeroki jest temat',
-    full: 'problem trwa dłużej, dotyczy kilku wątków naraz albo wiesz, że potrzebujesz szerszego uporządkowania',
-  },
-  {
-    label: 'Format',
-    quick: '15 minut rozmowy audio bez kamery',
-    full: 'ok. 2 h rozmowy online z wieksza iloscia czasu na temat',
-  },
-  {
-    label: 'Po rozmowie wychodzisz z',
-    quick: 'priorytetem i decyzją, co robić dalej',
-    full: 'szerszym planem i podsumowaniem pisemnym',
-  },
-  {
-    label: 'Cena',
-    quick: '69 zł',
-    full: '350 zł',
-  },
+const PAYMENT_STEPS = [
+  '1. Wybierasz usĹ‚ugÄ™ i termin.',
+  '2. Po rezerwacji dostajesz e-mailem PayPal albo instrukcje BLIK na telefon.',
+  '3. Oplacasz rezerwacje przez PayPal albo BLIK na telefon w godzinach 9-21, poza dniami ustawowo wolnymi.',
+  '4. Potwierdzenie przychodzi do 15 minut wraz z dalszÄ… instrukcjÄ… i linkiem do rozmowy.',
 ] as const
 
-const BOOKING_FLOW_STEPS = [
-  '1. Wybierasz usługę, gatunek i temat.',
-  '2. Widzisz dostępne terminy i klikasz ten, który pasuje.',
-  '3. Uzupełniasz krótki formularz i przechodzisz do płatności.',
-  '4. Po potwierdzeniu wracasz do strony z następnym krokiem rezerwacji.',
+const ctaSupportSnippets = [
+  'Jesli nie wiesz, od czego zaczac - to jest wlasnie ten krok.',
+  '15 minut. Jedno konkretne pytanie. Juz wiesz wiecej niz przed rozmowa.',
+  'Bez kamery. Bez formalnosci. Bez stresu.',
+] as const
+
+const trustSnippets = [
+  'Pracuje online z opiekunami psow i kotow w calej Polsce. Bez kamer, bez przygotowan - wystarczy mikrofon i 15 minut.',
+  'Nie obiecuje efektow w konkretnym czasie. Mowie, co realnie mozna zorganizowac - i co zalezy od zwierzecia, a co od srodowiska.',
+  'Zakres pracy jest uczciwy: powiem, co lezy w zasiegu konsultacji, a co wymaga wiecej czasu, wsparcia specjalisty lub zmian w srodowisku.',
+] as const
+
+const pricingFaqItems = [
+  {
+    question: 'Czym jest Kwadrans z behawiorysta?',
+    answer:
+      'To samodzielny format 15 min audio bez kamery. Przy jednym konkretnym pytaniu albo orientacji w temacie wystarcza, zeby ustalic priorytet i pierwszy kierunek dzialania.',
+  },
+  {
+    question: 'Czy 15 minut wystarczy?',
+    answer:
+      'Przy jednym pytaniu albo orientacji w temacie - tak. Przy bardziej zlozonym, wielowatkowym problemie daje kierunek i mowie wprost, czy potrzebujesz pelniejszej konsultacji.',
+  },
+  {
+    question: 'Czy musze miec kamere?',
+    answer:
+      'Nie. Kwadrans jest zawsze glosem, bez wideo. Wystarczy mikrofon i spokojne miejsce na rozmowe.',
+  },
+  {
+    question: 'Co dostane po 15 minutach?',
+    answer:
+      'Jeden konkretny kierunek: co zrobic teraz, co obserwowac i czy temat wymaga glebszej pracy. To nie jest plan na trzy miesiace, tylko sensowny pierwszy krok.',
+  },
+  {
+    question: 'Jak wyglada platnosc?',
+    answer:
+      'Po rezerwacji dostajesz e-mailem PayPal albo instrukcje BLIK na telefon. Po wplacie potwierdzenie wraca do 15 minut wraz z dalsza instrukcja i linkiem do rozmowy.',
+  },
+  {
+    question: 'Czy place za calosc od razu?',
+    answer:
+      'Tak. Platnosc jest jednorazowa przy rezerwacji. Kwadrans kosztuje 69 zl, Dwa kwadranse 129 zl, a Pelna konsultacja 350 zl.',
+  },
 ] as const
 
 export default function PricingPage() {
-  const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min')
-  const consultationHref = buildBookHref(null, 'konsultacja-behawioralna-online')
-  const contactHref = '/kontakt#formularz'
-  const prepGuide = getLeadMagnetBySlug('przygotowanie-do-konsultacji-online')
-  const structuredData = [
-    getBreadcrumbJsonLd([
-      { name: 'Strona główna', path: '/' },
-      { name: 'Cennik', path: '/cennik' },
-    ]),
-    getServiceJsonLd({
-      name: 'Kwadrans z behawiorystą',
-      description: '15 minut rozmowy audio jako spokojny pierwszy krok przy problemie psa lub kota.',
-      serviceUrl: audioHref,
-      offerPrice: 69,
-    }),
-    getServiceJsonLd({
-      name: 'Pelna konsultacja behawioralna',
-      description: 'Pelna konsultacja online dla tematow szerszych, dluzszych albo wielowatkowych.',
-      serviceUrl: consultationHref,
-      offerPrice: 350,
-    }),
-    {
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: FAQ_SHORTLISTS.pricing.map((item) => ({
-        '@type': 'Question',
-        name: item.question,
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: item.answer,
-        },
-      })),
-    },
-  ]
-
   return (
     <NotatnikPageShell
-      tag="Cennik / konsultacje i materialy"
-      navItems={[
-        { href: '/psy', label: 'Pies' },
-        { href: '/koty', label: 'Kot' },
-        { href: '/niezbednik', label: 'Niezbednik' },
-        { href: '/o-mnie', label: 'O mnie' },
-        { href: '/kontakt#formularz', label: 'Kontakt' },
-      ]}
-      ctaHref={audioHref}
-      ctaLabel={FUNNEL_CTA_LABELS.primary}
-      footerPrimaryHref={audioHref}
-      footerPrimaryLabel={FUNNEL_CTA_LABELS.primary}
+      tag="Cennik / konsultacje"
+      navItems={navItems}
+      ctaHref="/book?service=szybka-konsultacja-15-min"
+      ctaLabel="Kwadrans / 69 zl"
+      footerPrimaryHref="/book?service=szybka-konsultacja-15-min"
+      footerPrimaryLabel="Kwadrans z behawiorystÄ…"
     >
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
-      <div className="container editorial-stack">
+      <Schema
+        data={[
+          getBreadcrumbJsonLd([
+            { name: 'Strona glowna', path: '/' },
+            { name: 'Cennik', path: '/cennik' },
+          ]),
+          getServiceJsonLd({
+            name: 'Cennik konsultacji behawioralnych - psy i koty',
+            description: 'Trzy przejrzyste opcje: Kwadrans, Dwa kwadranse i peĹ‚na konsultacja behawioralna.',
+            serviceUrl: '/cennik',
+            offerCatalog: [
+              { name: 'Kwadrans z behawiorystÄ…', description: '15 min audio bez kamery.', url: '/book?service=szybka-konsultacja-15-min', price: 69 },
+              { name: 'Dwa kwadranse', description: '30 min audio.', url: '/book?service=konsultacja-30-min', price: 129 },
+              { name: 'PeĹ‚na konsultacja', description: '60 min audio albo video z planem dalszej pracy.', url: '/book?service=konsultacja-behawioralna-online', price: 350 },
+            ],
+          }),
+        ]}
+      />
 
-        <section className="editorial-hero-shell premium-hero-shell" id="start">
-          <div className="editorial-hero-grid">
-            <div className="editorial-hero-copy">
-              <div className="section-eyebrow">Cennik</div>
-              <h1>Cennik i zakres konsultacji</h1>
-              <p className="editorial-hero-lead">
-                Do wyboru sa trzy formaty: Kwadrans, Dwa kwadranse i pelna konsultacja behawioralna. Jesli nie wiesz, od czego zaczac,
-                najbezpieczniej zaczac od Kwadransu.
-              </p>
-
-              <div className="hero-actions editorial-hero-actions">
-                <Link href={audioHref} prefetch={false} className="button button-primary big-button">
-                  {FUNNEL_CTA_LABELS.primary}
-                </Link>
-                <Link href="/niezbednik" prefetch={false} className="button button-ghost big-button">
-                  {FUNNEL_CTA_LABELS.secondary}
-                </Link>
-              </div>
-
-              <p className="muted top-gap-small">
-                Jesli od razu wiesz, ze temat jest szerszy, mozesz wybrac{' '}
-                <Link href={consultationHref} prefetch={false} className="prep-inline-link">
-                  pelna konsultacje
-                </Link>
-                . Jesli chcesz najpierw dopytac,{' '}
-                <Link href={contactHref} prefetch={false} className="prep-inline-link">
-                  napisz wiadomosc
-                </Link>
-                .
-              </p>
-            </div>
-
-            <aside className="home-hero-aside" aria-label="Zdjecie specjalisty">
-              <div className="home-hero-photo-shell">
-                <Image
-                  src={heroImage.src}
-                  alt=""
-                  aria-hidden="true"
-                  width={heroImage.width}
-                  height={heroImage.height}
-                  sizes="(max-width: 980px) 100vw, 480px"
-                  priority
-                  loading="eager"
-                  fetchPriority="high"
-                  className="home-hero-photo"
-                />
-              </div>
-            </aside>
+      <section className="notatnik-subhero">
+        <div>
+          <div className="notatnik-subhero-tag notatnik-mono">Cennik / psy i koty</div>
+          <h1>
+            Cennik konsultacji behawioralnych <em>- psy i koty</em>
+          </h1>
+          <p>Trzy przejrzyste opcje. PayPal albo BLIK na telefon, potwierdzenie do 15 minut.</p>
+          <NextSlot className="top-gap-small" />
+          <div className="info-box top-gap-small">Jesli nie wiesz, od czego zaczac - zacznij od Kwadransu. To najlzejszy i najszybszy pierwszy krok.</div>
+          <div className="notatnik-subhero-actions">
+            <Link href="/book?service=szybka-konsultacja-15-min" prefetch={false} className="notatnik-btn">
+              <span>Zarezerwuj Kwadrans</span>
+              <span className="notatnik-btn-arrow" aria-hidden="true">
+                &rarr;
+              </span>
+            </Link>
+            <Link href="/kontakt#formularz" prefetch={false} className="notatnik-btn notatnik-btn-ghost">
+              <span>Napisz wiadomoĹ›Ä‡</span>
+            </Link>
           </div>
-        </section>
+        </div>
 
-        <section className="panel section-panel editorial-section">
-          <SectionIntro
-            eyebrow="Porownanie"
-            title="Ktory format wybrac"
-            description="Kwadrans pomaga uporzadkowac temat i wybrac pierwszy krok. Pelna konsultacja daje wiecej czasu na szersza diagnoze i plan."
-          />
+        <div className="summary-card tree-backed-card">
+          <div className="section-eyebrow">ĹšcieĹĽka wyboru</div>
+          <h3>Zacznij od tego, co pasuje do skali problemu.</h3>
+          <p>
+            Kwadrans zostaje najlĹĽejszym startem. Dwa kwadranse porzÄ…dkujÄ… temat szerzej, a peĹ‚na konsultacja jest dla
+            spraw wielowÄ…tkowych albo przewlekĹ‚ych.
+          </p>
+        </div>
+      </section>
 
-          <div className="premium-two-column-grid top-gap">
-            <article className="summary-card tree-backed-card">
-              <div className="section-eyebrow">Kwadrans z behawiorysta</div>
-              <h3>69 zl</h3>
-              <ul className="premium-bullet-list">
-                <li>15 minut rozmowy audio bez kamery</li>
-                <li>jedno pytanie albo pierwszy kontakt z tematem</li>
-                <li>ustalenie priorytetu i pierwszego kierunku</li>
-                <li>najlepszy start, gdy nie wiesz jeszcze, jak duzy jest problem</li>
-              </ul>
-              <div className="hero-actions top-gap-small">
-                <Link href={audioHref} prefetch={false} className="button button-primary">
-                  {FUNNEL_CTA_LABELS.primary}
-                </Link>
-              </div>
+      <section id="porownanie">
+        <NotatnikSectionHead index="I." kicker="PorĂłwnanie" title="Jedna tabela, trzy rĂłĹĽne zastosowania." />
+        <ServicesComparison />
+        <div className="notatnik-faq-grid top-gap">
+          {ctaSupportSnippets.map((snippet) => (
+            <article key={snippet} className="notatnik-faq-item">
+              <p>{snippet}</p>
             </article>
+          ))}
+        </div>
+      </section>
 
-            <article className="summary-card tree-backed-card">
-              <div className="section-eyebrow">Pelna konsultacja behawioralna</div>
-              <h3>350 zl</h3>
-              <ul className="premium-bullet-list">
-                <li>ok. 2 h rozmowy online lacznie</li>
-                <li>wideo albo glos</li>
-                <li>dla tematow zlozonych, dlugotrwalych albo wielowatkowych</li>
-                <li>plan i podsumowanie pisemne po rozmowie</li>
-              </ul>
-              <div className="hero-actions top-gap-small">
-                <Link href={consultationHref} prefetch={false} className="button button-ghost">
-                  {FUNNEL_CTA_LABELS.consultation}
-                </Link>
-              </div>
+      <section style={{ background: 'var(--paper)' }}>
+        <NotatnikSectionHead index="II." kicker="PĹ‚atnoĹ›Ä‡" title="Jak przebiega pĹ‚atnoĹ›Ä‡." />
+        <div className="notatnik-steps">
+          {PAYMENT_STEPS.map((step, index) => (
+            <article key={step} className="notatnik-step">
+              <div className="notatnik-step-number">{String(index + 1).padStart(2, '0')}</div>
+              <p>{step}</p>
             </article>
-          </div>
-
-          <div className="list-card accent-outline tree-backed-card top-gap">
-            <strong>Najkrótsza zasada wyboru</strong>
-            <span>
-              Jeśli nie masz pewności, zacznij od Kwadransu. Jeśli już teraz wiesz, że temat jest szerszy, przewlekły albo wielowątkowy,
-              wybierz pelna konsultacje.
-            </span>
-          </div>
-
-          <div className="top-gap">
-            {SERVICE_COMPARISON_ROWS.map((row) => (
-              <div key={row.label} className="summary-card tree-backed-card top-gap-small">
-                <div className="section-eyebrow">{row.label}</div>
-                <div className="premium-two-column-grid">
-                  <div>
-                    <strong>Kwadrans z behawiorysta</strong>
-                    <p>{row.quick}</p>
-                  </div>
-                  <div>
-                    <strong>Pelna konsultacja</strong>
-                    <p>{row.full}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="panel section-panel editorial-section">
-          <SectionIntro
-            eyebrow="Od czego zaczac"
-            title="Najczesciej wystarczy prosta zasada"
-            description="Im mniej wiesz o problemie, tym bardziej warto zaczac od Kwadransu. Im szerszy i dluzszy temat, tym bardziej ma sens pelna konsultacja."
-          />
-
-          <div className="premium-two-column-grid">
-            <article className="summary-card tree-backed-card">
-              <h3>Zacznij od Kwadransu, jesli</h3>
-              <ul className="premium-bullet-list">
-                <li>masz jedno pytanie</li>
-                <li>nie wiesz jeszcze, co jest glownym problemem</li>
-                <li>chcesz spokojnie ustalic pierwszy ruch</li>
-                <li>potrzebujesz oceny, czy temat jest behawioralny, treningowy albo zdrowotny</li>
-              </ul>
+          ))}
+        </div>
+        <div className="notatnik-quiet-grid top-gap">
+          {trustSnippets.map((snippet) => (
+            <article key={snippet} className="notatnik-quiet-card">
+              <p>{snippet}</p>
             </article>
+          ))}
+        </div>
+      </section>
 
-            <article className="summary-card tree-backed-card">
-              <h3>Wybierz pelna konsultacje, jesli</h3>
-              <ul className="premium-bullet-list">
-                <li>problem trwa od dawna</li>
-                <li>dotyczy kilku kwestii naraz</li>
-                <li>masz za soba nieskuteczne proby i chcesz szerszego uporzadkowania</li>
-                <li>potrzebujesz planu po rozmowie, a nie tylko pierwszego kierunku</li>
-              </ul>
+      <section>
+        <NotatnikSectionHead index="III." kicker="FAQ" title="Najczestsze pytania o Kwadrans i platnosc." />
+        <div className="notatnik-faq-grid">
+          {pricingFaqItems.map((item) => (
+            <article key={item.question} className="notatnik-faq-item">
+              <h4>{item.question}</h4>
+              <p>{item.answer}</p>
             </article>
-          </div>
-        </section>
+          ))}
+        </div>
+      </section>
 
-        <section className="panel section-panel editorial-section">
-          <SectionIntro
-            eyebrow="Po rezerwacji"
-            title="Co stanie sie po kliknieciu"
-            description="Raport pokazywal tarcie na etapie decyzji i platnosci, dlatego tutaj caly proces jest rozpisany wprost."
-          />
-
-          <div className="premium-two-column-grid top-gap-small">
-            <article className="summary-card tree-backed-card">
-              <h3>Sciezka rezerwacji</h3>
-              <ul className="premium-bullet-list">
-                {BOOKING_FLOW_STEPS.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </article>
-
-            <article className="summary-card tree-backed-card">
-              <h3>Gdy nadal nie masz pewnosci</h3>
-              <p>
-                Nie musisz zgadywac idealnej uslugi. Jesli temat jest mieszany albo chcesz najpierw dopytac o sensowny pierwszy krok,
-                napisz wiadomosc. Jesli wolisz prostszy start bez rozpisywania calego problemu, wybierz Kwadrans.
-              </p>
-              <div className="hero-actions top-gap-small">
-                <Link href={audioHref} prefetch={false} className="button button-primary">
-                  {FUNNEL_CTA_LABELS.primary}
-                </Link>
-                <Link href={contactHref} prefetch={false} className="button button-ghost">
-                  {FUNNEL_CTA_LABELS.contact}
-                </Link>
-              </div>
-            </article>
-          </div>
-        </section>
-
-        <TrustSignalSection
-          eyebrow="Spokojny wybor"
-          title="Tu chodzi o dobranie formatu do sytuacji"
-          description="Nie ma presji, zeby zaczynac od dluzszej rozmowy. Najwazniejsze jest to, zeby pierwszy krok byl adekwatny."
-          items={TRUST_SIGNAL_SETS.pricing}
-        />
-
-        {prepGuide ? (
-          <section className="panel section-panel editorial-section">
-            <SectionIntro
-              eyebrow="Przed rezerwacja"
-              title="Jesli lubisz przygotowac sie wczesniej"
-              description="Mozesz pobrac krotki material przygotowujacy do rozmowy. To pomoc przed kontaktem, nie osobna usluga."
-            />
-
-            <div className="premium-two-column-grid top-gap-small">
-              <LeadMagnetSignup magnet={prepGuide} location="pricing-page-lead-magnet" sourcePage="/cennik" />
-              <article className="summary-card tree-backed-card">
-                <div className="section-eyebrow">Kiedy warto</div>
-                <h3>Najpierw material, potem decyzja</h3>
-                <p>
-                  Jesli chcesz na spokojnie zebrac najwazniejsze informacje przed rozmowa, ten material ulatwia start. Jesli po nim dalej
-                  nie wiesz, co wybrac, zacznij od Kwadransu.
-                </p>
-                <div className="hero-actions top-gap-small">
-                  <Link href={`/bezplatne-materialy/${prepGuide.slug}`} prefetch={false} className="prep-inline-link">
-                    Zobacz strone materialu
-                  </Link>
-                </div>
-              </article>
-            </div>
-          </section>
-        ) : null}
-
-        <EditorialFaqSection
-          id="faq"
-          title="Najczestsze pytania przed rezerwacja"
-          description="Krotko o tym, czym rozni sie Kwadrans od pelnej konsultacji."
-          items={FAQ_SHORTLISTS.pricing}
-        />
-
-        <section className="panel cta-panel editorial-final-panel">
-          <div className="editorial-final-copy">
-            <div className="section-eyebrow">Decyzja</div>
-            <h2>Zacznij od formatu, ktory pasuje do Twojej sytuacji</h2>
+      <section>
+        <NotatnikSectionHead index="IV." kicker="Zwroty i zmiany" title="Zmiany terminu i zwroty sa opisane wprost." />
+        <div className="notatnik-quiet-grid">
+          <article className="notatnik-quiet-card">
+            <h3>Okno na zmianÄ™ lub rezygnacjÄ™</h3>
             <p>
-              Jesli potrzebujesz pierwszego uporzadkowania, wybierz Kwadrans z behawiorysta. Jesli wiesz, ze temat jest szeroki,
-              wybierz pelna konsultacje.
+              KrĂłtkie formaty przewidujÄ… 24-godzinne okno na zgĹ‚oszenie zmiany terminu albo rezygnacji po potwierdzeniu
+              wpĹ‚aty. SzczegĂłĹ‚y sÄ… opisane w regulaminie rezerwacji.
             </p>
+            <Link href="/regulamin" prefetch={false} className="notatnik-inline-link">
+              OtwĂłrz regulamin rezerwacji
+            </Link>
+          </article>
+          <article className="notatnik-quiet-card">
+            <h3>PeĹ‚na konsultacja ma osobny regulamin</h3>
+            <p>
+              Dla peĹ‚nej konsultacji publikowany jest osobny dokument, bo ten format ma osobne warunki dotyczÄ…ce zakresu,
+              materiaĹ‚Ăłw po rozmowie i zasad przed rozpoczÄ™ciem usĹ‚ugi.
+            </p>
+            <Link href="/regulamin-pelna-konsultacja" prefetch={false} className="notatnik-inline-link">
+              OtwĂłrz regulamin PeĹ‚nej konsultacji
+            </Link>
+          </article>
+        </div>
+      </section>
 
-            <div className="hero-actions editorial-final-actions">
-              <Link href={audioHref} prefetch={false} className="button button-primary big-button">
-                {FUNNEL_CTA_LABELS.primary}
-              </Link>
-              <Link href="/niezbednik" prefetch={false} className="button button-ghost big-button">
-                {FUNNEL_CTA_LABELS.secondary}
-              </Link>
-              <Link href={consultationHref} prefetch={false} className="prep-inline-link">
-                {FUNNEL_CTA_LABELS.consultation}
-              </Link>
-              <Link href={contactHref} prefetch={false} className="prep-inline-link">
-                {FUNNEL_CTA_LABELS.contact}
-              </Link>
-            </div>
-          </div>
-        </section>
-
-      </div>
+      <NotatnikFinalCta
+        title="JeĹ›li chcesz ruszyÄ‡ z tematem, <em>zacznij od Kwadransu.</em>"
+        copy="To najprostszy pierwszy krok. JeĹ›li temat jest szerszy, od razu bÄ™dzie widaÄ‡, czy lepiej przejĹ›Ä‡ do kolejnego formatu."
+        primaryHref="/book?service=szybka-konsultacja-15-min"
+        primaryLabel="Zarezerwuj Kwadrans ->"
+        secondaryHref="/kontakt#formularz"
+        secondaryLabel="Kontakt"
+      />
     </NotatnikPageShell>
   )
 }

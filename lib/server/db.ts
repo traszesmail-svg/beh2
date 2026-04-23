@@ -1,4 +1,5 @@
 import { getAdminAccessSecret, hasValidAdminAuthorization } from '@/lib/admin-auth'
+import type { UrgentNowRequestRecord } from '@/lib/urgent-now'
 import * as localStore from '@/lib/server/local-store'
 import { reportRuntimeModeUsage, resolveDataMode } from '@/lib/server/env'
 import * as supabaseStore from '@/lib/server/supabase-store'
@@ -87,6 +88,18 @@ export async function listBookings() {
 
 export async function listFunnelEvents() {
   return getProvider().listFunnelEvents()
+}
+
+export async function listUrgentNowRequests(): Promise<UrgentNowRequestRecord[]> {
+  return getProvider().listUrgentNowRequests()
+}
+
+export async function createUrgentNowRequest(input: Parameters<StoreProvider['createUrgentNowRequest']>[0]) {
+  return getProvider().createUrgentNowRequest(input)
+}
+
+export async function respondUrgentNowRequest(input: Parameters<StoreProvider['respondUrgentNowRequest']>[0]) {
+  return getProvider().respondUrgentNowRequest(input)
 }
 
 export async function recordFunnelEvent(

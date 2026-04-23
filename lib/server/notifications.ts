@@ -1,7 +1,10 @@
-import nodemailer from 'nodemailer'
+﻿import nodemailer from 'nodemailer'
+import type { LeadMagnet } from '@/lib/growth-layer'
 import { formatDateTimeLabel, getProblemLabel } from '@/lib/data'
 import { formatPricePln } from '@/lib/pricing'
 import { getContactDetails, getPublicContactDetails } from '@/lib/site'
+import { getBaseUrl } from '@/lib/server/env'
+import { getManualPaymentConfig } from '@/lib/server/payment-options'
 import { BookingRecord } from '@/lib/types'
 
 const DEFAULT_RESEND_FROM_EMAIL = 'Behawior 15 <onboarding@resend.dev>'
@@ -234,7 +237,7 @@ export function getCustomerEmailDeliveryStatus(recipientEmail?: string | null): 
       state: 'blocked',
       mode: 'invalid',
       issue: `CUSTOMER_EMAIL_MODE has invalid value "${modeConfig.raw}".`,
-      summary: 'Tryb maili klienta jest zablokowany, bo CUSTOMER_EMAIL_MODE ma nieprawidłową wartość.',
+      summary: 'Tryb maili klienta jest zablokowany, bo CUSTOMER_EMAIL_MODE ma nieprawidĹ‚owÄ… wartoĹ›Ä‡.',
       nextStep: 'Ustaw CUSTOMER_EMAIL_MODE=auto albo CUSTOMER_EMAIL_MODE=disabled.',
     }
   }
@@ -245,9 +248,9 @@ export function getCustomerEmailDeliveryStatus(recipientEmail?: string | null): 
       mode: 'disabled',
       issue: 'CUSTOMER_EMAIL_MODE=disabled',
       summary:
-        'Maile klienta są świadomie wyłączone. Status płatności, materiały i link do rozmowy pozostają na stronie potwierdzenia rezerwacji.',
+        'Maile klienta sa swiadomie wylaczone. Status platnosci, materialy i link do rozmowy pozostaja na stronie potwierdzenia rezerwacji.',
       nextStep:
-        'Zostaw ten tryb tymczasowo albo po weryfikacji domeny nadawcy przełącz CUSTOMER_EMAIL_MODE=auto i ustaw RESEND_FROM_EMAIL na zweryfikowany adres.',
+        'Zostaw ten tryb tymczasowo albo po weryfikacji domeny nadawcy przeĹ‚Ä…cz CUSTOMER_EMAIL_MODE=auto i ustaw RESEND_FROM_EMAIL na zweryfikowany adres.',
     }
   }
 
@@ -256,7 +259,7 @@ export function getCustomerEmailDeliveryStatus(recipientEmail?: string | null): 
       state: 'blocked',
       mode: 'auto',
       issue: 'MAIL_PROVIDER invalid',
-      summary: 'Wysyłka maili do klientów jest zablokowana, bo MAIL_PROVIDER ma nieprawidłową wartość.',
+      summary: 'WysyĹ‚ka maili do klientĂłw jest zablokowana, bo MAIL_PROVIDER ma nieprawidĹ‚owÄ… wartoĹ›Ä‡.',
       nextStep: 'Ustaw MAIL_PROVIDER=resend albo MAIL_PROVIDER=gmail.',
     }
   }
@@ -267,8 +270,8 @@ export function getCustomerEmailDeliveryStatus(recipientEmail?: string | null): 
         state: 'blocked',
         mode: 'auto',
         issue: 'GMAIL_SMTP_USER missing',
-        summary: 'Wysyłka maili do klientów jest zablokowana, bo brakuje GMAIL_SMTP_USER.',
-        nextStep: 'Ustaw GMAIL_SMTP_USER i powtórz próbę wysyłki.',
+        summary: 'WysyĹ‚ka maili do klientĂłw jest zablokowana, bo brakuje GMAIL_SMTP_USER.',
+        nextStep: 'Ustaw GMAIL_SMTP_USER i powtĂłrz prĂłbÄ™ wysyĹ‚ki.',
       }
     }
 
@@ -277,7 +280,7 @@ export function getCustomerEmailDeliveryStatus(recipientEmail?: string | null): 
         state: 'blocked',
         mode: 'auto',
         issue: 'GMAIL_SMTP_APP_PASSWORD missing',
-        summary: 'Wysyłka maili do klientów jest zablokowana, bo brakuje GMAIL_SMTP_APP_PASSWORD.',
+        summary: 'WysyĹ‚ka maili do klientĂłw jest zablokowana, bo brakuje GMAIL_SMTP_APP_PASSWORD.',
         nextStep: 'Wygeneruj Gmail App Password i ustaw GMAIL_SMTP_APP_PASSWORD.',
       }
     }
@@ -287,8 +290,8 @@ export function getCustomerEmailDeliveryStatus(recipientEmail?: string | null): 
         state: 'blocked',
         mode: 'auto',
         issue: 'GMAIL_FROM_EMAIL missing or invalid',
-        summary: 'Wysyłka maili do klientów jest zablokowana, bo GMAIL_FROM_EMAIL jest pusty albo nieprawidłowy.',
-        nextStep: 'Ustaw poprawny adres nadawcy w GMAIL_FROM_EMAIL albo użyj poprawnego GMAIL_SMTP_USER.',
+        summary: 'WysyĹ‚ka maili do klientĂłw jest zablokowana, bo GMAIL_FROM_EMAIL jest pusty albo nieprawidĹ‚owy.',
+        nextStep: 'Ustaw poprawny adres nadawcy w GMAIL_FROM_EMAIL albo uĹĽyj poprawnego GMAIL_SMTP_USER.',
       }
     }
 
@@ -296,7 +299,7 @@ export function getCustomerEmailDeliveryStatus(recipientEmail?: string | null): 
       state: 'ready',
       mode: 'auto',
       issue: null,
-      summary: 'Wysyłka maili do klientów zewnętrznych jest gotowa z aktualnej konfiguracji Gmail SMTP.',
+      summary: 'WysyĹ‚ka maili do klientĂłw zewnÄ™trznych jest gotowa z aktualnej konfiguracji Gmail SMTP.',
       nextStep: 'Brak blokera po stronie konfiguracji maili klienta.',
     }
   }
@@ -306,8 +309,8 @@ export function getCustomerEmailDeliveryStatus(recipientEmail?: string | null): 
       state: 'blocked',
       mode: 'auto',
       issue: 'RESEND_API_KEY missing',
-      summary: 'Wysyłka maili do klientów jest zablokowana, bo brakuje RESEND_API_KEY.',
-      nextStep: 'Uzupełnij RESEND_API_KEY i powtórz próbę wysyłki na zewnętrzny adres testowy.',
+      summary: 'WysyĹ‚ka maili do klientĂłw jest zablokowana, bo brakuje RESEND_API_KEY.',
+      nextStep: 'UzupeĹ‚nij RESEND_API_KEY i powtĂłrz prĂłbÄ™ wysyĹ‚ki na zewnÄ™trzny adres testowy.',
     }
   }
 
@@ -316,7 +319,7 @@ export function getCustomerEmailDeliveryStatus(recipientEmail?: string | null): 
       state: 'blocked',
       mode: 'auto',
       issue: 'RESEND_FROM_EMAIL missing or invalid',
-      summary: 'Wysyłka maili do klientów jest zablokowana, bo RESEND_FROM_EMAIL jest pusty albo nieprawidłowy.',
+      summary: 'WysyĹ‚ka maili do klientĂłw jest zablokowana, bo RESEND_FROM_EMAIL jest pusty albo nieprawidĹ‚owy.',
       nextStep: 'Ustaw poprawny adres nadawcy w RESEND_FROM_EMAIL.',
     }
   }
@@ -326,7 +329,7 @@ export function getCustomerEmailDeliveryStatus(recipientEmail?: string | null): 
       state: 'blocked',
       mode: 'auto',
       issue: 'RESEND_FROM_EMAIL missing or invalid',
-      summary: 'Wysyłka maili do klientów jest zablokowana, bo RESEND_FROM_EMAIL jest pusty albo nieprawidłowy.',
+      summary: 'WysyĹ‚ka maili do klientĂłw jest zablokowana, bo RESEND_FROM_EMAIL jest pusty albo nieprawidĹ‚owy.',
       nextStep: 'Ustaw poprawny adres nadawcy w RESEND_FROM_EMAIL.',
     }
   }
@@ -336,7 +339,7 @@ export function getCustomerEmailDeliveryStatus(recipientEmail?: string | null): 
       state: 'ready',
       mode: 'auto',
       issue: null,
-      summary: 'Wysyłka maili do klientów zewnętrznych jest gotowa z aktualnej konfiguracji Resend.',
+      summary: 'WysyĹ‚ka maili do klientĂłw zewnÄ™trznych jest gotowa z aktualnej konfiguracji Resend.',
       nextStep: 'Brak blokera po stronie konfiguracji maili klienta.',
     }
   }
@@ -349,7 +352,7 @@ export function getCustomerEmailDeliveryStatus(recipientEmail?: string | null): 
       state: 'ready',
       mode: 'auto',
       issue: null,
-      summary: 'Wysyłka maili do klientów zewnętrznych jest gotowa z aktualnej konfiguracji Resend.',
+      summary: 'WysyĹ‚ka maili do klientĂłw zewnÄ™trznych jest gotowa z aktualnej konfiguracji Resend.',
       nextStep: 'Brak blokera po stronie konfiguracji maili klienta.',
     }
   }
@@ -360,7 +363,7 @@ export function getCustomerEmailDeliveryStatus(recipientEmail?: string | null): 
     issue: allowedRecipient
       ? `RESEND_FROM_EMAIL uses resend.dev testing mode. Verify a domain to send customer emails to recipients other than ${allowedRecipient}.`
       : 'RESEND_FROM_EMAIL uses resend.dev testing mode. Verify a domain to send customer emails to external recipients.',
-    summary: 'Wysyłka maili do klientów zewnętrznych jest zablokowana, bo RESEND_FROM_EMAIL nadal korzysta z resend.dev testing mode.',
+    summary: 'WysyĹ‚ka maili do klientĂłw zewnÄ™trznych jest zablokowana, bo RESEND_FROM_EMAIL nadal korzysta z resend.dev testing mode.',
     nextStep: 'Zweryfikuj domene nadawcy w Resend i ustaw RESEND_FROM_EMAIL na adres z tej domeny.',
   }
 }
@@ -384,7 +387,7 @@ function renderContactBlockHtml() {
   }
 
   if (!parts.length) {
-    parts.push('<p><strong>Kontakt:</strong> odpowiedz na tę wiadomość, jeśli potrzebujesz doprecyzowania terminu.</p>')
+    parts.push('<p><strong>Kontakt:</strong> odpowiedz na tÄ™ wiadomoĹ›Ä‡, jeĹ›li potrzebujesz doprecyzowania terminu.</p>')
   }
 
   return parts.join('')
@@ -399,7 +402,7 @@ function renderContactBlockText() {
   }
 
   if (!lines.length) {
-    lines.push('Kontakt: odpowiedz na tę wiadomość, jeśli potrzebujesz doprecyzowania terminu.')
+    lines.push('Kontakt: odpowiedz na tÄ™ wiadomoĹ›Ä‡, jeĹ›li potrzebujesz doprecyzowania terminu.')
   }
 
   return lines.join('\n')
@@ -417,11 +420,33 @@ function renderEmailShell(title: string, intro: string, content: string, outro: 
           <p style="margin-top:0;">${escapeHtml(intro)}</p>
           ${content}
           <p>${escapeHtml(outro)}</p>
-          <p style="margin-bottom:0;color:#6b625b;font-size:13px;">Wiadomość wysłana automatycznie przez Behawior 15.</p>
+          <p style="margin-bottom:0;color:#6b625b;font-size:13px;">WiadomoĹ›Ä‡ wysĹ‚ana automatycznie przez Behawior 15.</p>
         </div>
       </div>
     </div>
   `
+}
+
+type EmailActionButton = {
+  href: string
+  label: string
+}
+
+function renderEmailActionButton(action: EmailActionButton) {
+  return `
+    <div style="margin:24px 0 20px;">
+      <a
+        href="${escapeHtml(action.href)}"
+        style="display:inline-block;padding:14px 22px;border-radius:999px;background:#1f1a17;color:#ffffff;text-decoration:none;font-weight:700;letter-spacing:0.01em;"
+      >
+        ${escapeHtml(action.label)}
+      </a>
+    </div>
+  `
+}
+
+function buildAbsoluteUrl(pathname: string): string {
+  return new URL(pathname, getBaseUrl()).toString()
 }
 
 type BookingEmailFact = {
@@ -611,37 +636,103 @@ async function deliverEmail(payload: SendEmailPayload, audience: EmailAudience =
 
 export async function sendBookingReservationCreatedEmail(booking: BookingRecord): Promise<DeliveryResult> {
   const summary = buildBookingSummary(booking)
-  const subject = `Rezerwacja przyjęta - Behawior 15 - ${summary}`
+  const subject = `Rezerwacja przyjÄ™ta - Behawior 15 - ${summary}`
   const customerEmailStatus = getCustomerEmailDeliveryStatus(booking.email)
   const emailDeliveryNote =
     customerEmailStatus.state === 'ready'
-      ? 'Po potwierdzeniu klient automatycznie dostanie mail z linkiem do pokoju rozmowy, a przy braku wpłaty wróci do płatności.'
+      ? 'Po potwierdzeniu klient automatycznie dostanie mail z linkiem do pokoju rozmowy, a przy braku wpĹ‚aty wrĂłci do pĹ‚atnoĹ›ci.'
       : customerEmailStatus.state === 'disabled'
-        ? 'Po potwierdzeniu klient od razu zobaczy aktywne potwierdzenie i pokój na swojej stronie rezerwacji. Maile klienta są teraz świadomie wyłączone, więc link do rozmowy zostaje na stronie potwierdzenia.'
-        : 'Po potwierdzeniu klient od razu zobaczy aktywne potwierdzenie i pokój na swojej stronie rezerwacji. Wysyłka maili do innych adresów ruszy po naprawie konfiguracji Resend.'
+        ? 'Po potwierdzeniu klient od razu zobaczy aktywne potwierdzenie i pokĂłj na swojej stronie rezerwacji. Maile klienta sÄ… teraz Ĺ›wiadomie wyĹ‚Ä…czone, wiÄ™c link do rozmowy zostaje na stronie potwierdzenia.'
+        : 'Po potwierdzeniu klient od razu zobaczy aktywne potwierdzenie i pokĂłj na swojej stronie rezerwacji. WysyĹ‚ka maili do innych adresĂłw ruszy po naprawie konfiguracji Resend.'
   const html = renderEmailShell(
-    'Mamy Twoją rezerwację',
-    'Termin został chwilowo zablokowany i czeka na płatność. To pierwszy krok do spokojniejszego planu działania.',
+    'Mamy TwojÄ… rezerwacjÄ™',
+    'Termin zostaĹ‚ chwilowo zablokowany i czeka na pĹ‚atnoĹ›Ä‡. To pierwszy krok do spokojniejszego planu dziaĹ‚ania.',
     `
       <p><strong>Termin:</strong> ${formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}</p>
       <p><strong>Temat:</strong> ${getProblemLabel(booking.problemType)}</p>
       <p><strong>Kwota:</strong> ${formatPricePln(booking.amount)}</p>
-      <p><strong>Co dalej:</strong> dokończ płatność, aby ostatecznie potwierdzić konsultację i odblokować link do rozmowy.</p>
+      <p><strong>Co dalej:</strong> dokoĹ„cz pĹ‚atnoĹ›Ä‡, aby ostatecznie potwierdziÄ‡ konsultacjÄ™ i odblokowaÄ‡ link do rozmowy.</p>
       ${renderContactBlockHtml()}
     `,
     emailDeliveryNote,
   )
   const text = [
-    'Behawior 15 - rezerwacja przyjęta.',
+    'Behawior 15 - rezerwacja przyjÄ™ta.',
     `Termin: ${formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}`,
     `Temat: ${getProblemLabel(booking.problemType)}`,
     `Kwota: ${formatPricePln(booking.amount)}`,
-    'Co dalej: dokończ płatność, aby ostatecznie potwierdzić konsultację i odblokować link do rozmowy.',
+    'Co dalej: dokoĹ„cz pĹ‚atnoĹ›Ä‡, aby ostatecznie potwierdziÄ‡ konsultacjÄ™ i odblokowaÄ‡ link do rozmowy.',
     emailDeliveryNote,
     renderContactBlockText(),
   ].join('\n')
 
   return deliverEmail({ to: booking.email, subject, html, text }, 'customer')
+}
+
+export async function sendBookingOwnerNotificationEmail(booking: BookingRecord): Promise<DeliveryResult> {
+  const recipient = getAdminNotificationRecipientEmail()
+
+  if (!recipient) {
+    return {
+      status: 'skipped',
+      reason: 'admin notification email missing or invalid',
+    }
+  }
+
+  const speciesLabel = booking.animalType
+  const serviceLabel = getProblemLabel(booking.problemType)
+  const bookingServiceLabel = booking.serviceType ? booking.serviceType : 'szybka-konsultacja-15-min'
+  const serviceTitle =
+    bookingServiceLabel === 'konsultacja-behawioralna-online'
+      ? 'Pelna konsultacja behawioralna'
+      : bookingServiceLabel === 'konsultacja-30-min'
+        ? 'Dwa kwadranse'
+        : 'Kwadrans z behawiorysta'
+  const summary = formatDateTimeLabel(booking.bookingDate, booking.bookingTime)
+  const subject = `[Rezerwacja] ${serviceTitle} - ${booking.ownerName} ${speciesLabel}`
+  const replyTo = isValidPublicEmail(booking.email) ? booking.email : undefined
+  const html = renderEmailShell(
+    'Nowa rezerwacja w systemie',
+    'Booking zostal zapisany i slot jest juz zablokowany. To jest wewnetrzne powiadomienie dla wlasciciela.',
+    `
+      <p><strong>Imie klienta:</strong> ${escapeHtml(booking.ownerName)}</p>
+      <p><strong>E-mail klienta:</strong> ${replyTo ? `<a href="mailto:${escapeHtml(booking.email)}">${escapeHtml(booking.email)}</a>` : escapeHtml(booking.email)}</p>
+      <p><strong>Gatunek:</strong> ${escapeHtml(speciesLabel)}</p>
+      <p><strong>Usluga:</strong> ${escapeHtml(serviceTitle)} (${escapeHtml(formatPricePln(booking.amount))})</p>
+      <p><strong>Temat:</strong> ${escapeHtml(serviceLabel)}</p>
+      <p><strong>Termin:</strong> ${escapeHtml(summary)}</p>
+      <p><strong>Opis sytuacji:</strong><br />${formatMultilineHtml(booking.description)}</p>
+      <p><strong>Status:</strong> ${escapeHtml(booking.bookingStatus)} / ${escapeHtml(booking.paymentStatus)}</p>
+      <p><strong>ID rezerwacji:</strong> ${escapeHtml(booking.id)}</p>
+    `,
+    'Ten flow nie zbiera oddzielnych checkboxow zgod klienta. Slot czeka teraz na oplaty i dalsza obsluge.',
+  )
+  const text = [
+    'Nowa rezerwacja w systemie.',
+    `Imie klienta: ${booking.ownerName}`,
+    `E-mail klienta: ${booking.email}`,
+    `Gatunek: ${speciesLabel}`,
+    `Usluga: ${serviceTitle} (${formatPricePln(booking.amount)})`,
+    `Temat: ${serviceLabel}`,
+    `Termin: ${summary}`,
+    'Opis sytuacji:',
+    booking.description,
+    '',
+    `Status: ${booking.bookingStatus} / ${booking.paymentStatus}`,
+    `ID rezerwacji: ${booking.id}`,
+    'Zgody: ten flow nie zbiera oddzielnych checkboxow zgod klienta.',
+  ].join('\n')
+
+  return deliverEmail(
+    {
+      to: recipient,
+      subject,
+      html,
+      text,
+      replyTo,
+    },
+    'internal',
+  )
 }
 
 export type ContactLeadSubmission = {
@@ -650,8 +741,52 @@ export type ContactLeadSubmission = {
   topic: string
   message: string
   contextLabel: string
+  serviceLabel?: string | null
+  requestedDate?: string | null
+  requestedTime?: string | null
   bookingId?: string | null
   website?: string | null
+}
+
+export type PdfOrderSubmission = {
+  itemType: 'guide' | 'bundle'
+  itemSlug: string
+  itemTitle: string
+  itemPrice: string
+  name: string
+  email: string
+  notes?: string | null
+  website?: string | null
+}
+
+export type BookRequestSubmission = {
+  service: 'kwadrans-na-juz' | 'szybka-konsultacja-15-min' | 'konsultacja-30-min' | 'konsultacja-behawioralna-online'
+  serviceLabel: string
+  servicePrice: string
+  name: string
+  email: string
+  species: 'pies' | 'kot'
+  description: string
+  preferredSlots: string
+}
+
+function getPdfOrderCustomerCta(submission: PdfOrderSubmission): EmailActionButton {
+  const manualPayment = getManualPaymentConfig()
+
+  if (manualPayment.paypalMeUrl) {
+    return {
+      href: manualPayment.paypalMeUrl,
+      label: 'Przejdz do PayPal',
+    }
+  }
+
+  return {
+    href:
+      submission.itemType === 'bundle'
+        ? buildAbsoluteUrl(`/zamow-pdf?bundle=${encodeURIComponent(submission.itemSlug)}`)
+        : buildAbsoluteUrl(`/zamow-pdf?guide=${encodeURIComponent(submission.itemSlug)}`),
+    label: 'Zobacz szczegoly zamowienia',
+  }
 }
 
 export async function sendContactLeadEmail(submission: ContactLeadSubmission): Promise<DeliveryResult> {
@@ -670,6 +805,11 @@ export async function sendContactLeadEmail(submission: ContactLeadSubmission): P
   const contextBlock = submission.bookingId
     ? `<p><strong>Numer rezerwacji:</strong> ${escapeHtml(submission.bookingId)}</p>`
     : ''
+  const serviceBlock = submission.serviceLabel ? `<p><strong>Sciezka:</strong> ${escapeHtml(submission.serviceLabel)}</p>` : ''
+  const preferredWindowBlock =
+    submission.requestedDate && submission.requestedTime
+      ? `<p><strong>Preferowany termin:</strong> ${escapeHtml(submission.requestedDate)} o ${escapeHtml(submission.requestedTime)}</p>`
+      : ''
   const html = renderEmailShell(
     'Nowa wiadomosc z formularza kontaktu',
     'Ktos wyslal wiadomosc przez formularz kontaktowy. To jest pierwszy krok do odpowiedzi i uporzadkowania kolejnego ruchu.',
@@ -677,21 +817,27 @@ export async function sendContactLeadEmail(submission: ContactLeadSubmission): P
       <p><strong>Imie:</strong> ${escapeHtml(submission.name)}</p>
       <p><strong>Kontakt:</strong> ${replyTo ? `<a href="mailto:${escapeHtml(contactValue)}">${escapeHtml(contactValue)}</a>` : escapeHtml(contactValue)}</p>
       <p><strong>Temat:</strong> ${escapeHtml(submission.topic)}</p>
+      ${serviceBlock}
       <p><strong>Kontekst:</strong> ${escapeHtml(submission.contextLabel)}</p>
+      ${preferredWindowBlock}
       ${contextBlock}
       <p><strong>Wiadomosc:</strong><br />${formatMultilineHtml(submission.message)}</p>
     `,
-    'Odpowiedz na podany adres e-mail albo wróć do kontaktu, jeśli potrzebujesz doprecyzować szczegóły.',
+    'Odpowiedz na podany adres e-mail albo wrĂłÄ‡ do kontaktu, jeĹ›li potrzebujesz doprecyzowaÄ‡ szczegĂłĹ‚y.',
   )
   const text = [
     'Nowa wiadomosc z formularza kontaktu.',
     `Imie: ${submission.name}`,
     `Kontakt: ${contactValue}`,
     `Temat: ${submission.topic}`,
+    submission.serviceLabel ? `Sciezka: ${submission.serviceLabel}` : null,
     `Kontekst: ${submission.contextLabel}`,
+    submission.requestedDate && submission.requestedTime
+      ? `Preferowany termin: ${submission.requestedDate} ${submission.requestedTime}`
+      : null,
     submission.bookingId ? `Numer rezerwacji: ${submission.bookingId}` : null,
     `Wiadomosc: ${submission.message}`,
-    'Odpowiedz na podany adres e-mail albo wróć do kontaktu, jeśli potrzebujesz doprecyzować szczegóły.',
+    'Odpowiedz na podany adres e-mail albo wrĂłÄ‡ do kontaktu, jeĹ›li potrzebujesz doprecyzowaÄ‡ szczegĂłĹ‚y.',
   ]
     .filter((line): line is string => typeof line === 'string' && line.length > 0)
     .join('\n')
@@ -708,29 +854,450 @@ export async function sendContactLeadEmail(submission: ContactLeadSubmission): P
   )
 }
 
+export async function sendContactLeadAutoReplyEmail(submission: ContactLeadSubmission): Promise<DeliveryResult> {
+  const recipient = submission.email.trim()
+
+  if (!isValidPublicEmail(recipient)) {
+    return {
+      status: 'skipped',
+      reason: 'customer contact email missing or invalid',
+    }
+  }
+
+  const subject = 'Dostalem Twoja wiadomosc - Regulski'
+  const quickStartHref = 'https://regulskibehawiorysta.pl/book?service=szybka-konsultacja-15-min'
+  const html = renderEmailShell(
+    `Czesc ${escapeHtml(submission.name)}, dostalem Twoja wiadomosc.`,
+    'Odpowiem na podany adres e-mail w ciagu 1-2 dni roboczych.',
+    `
+      <p><strong>Temat:</strong> ${escapeHtml(submission.topic)}</p>
+      <p>Jesli sytuacja wymaga szybszego wejscia, mozesz od razu umowic Kwadrans z behawiorysta.</p>
+      <p><a href="${quickStartHref}">${quickStartHref}</a></p>
+      ${renderContactBlockHtml()}
+    `,
+    'Jesli chcesz doprecyzowac temat, po prostu odpowiedz na tego maila.',
+  )
+  const text = [
+    `Czesc ${submission.name},`,
+    '',
+    'Dostalem Twoja wiadomosc i odpowiem w ciagu 1-2 dni roboczych.',
+    '',
+    `Temat: ${submission.topic}`,
+    'Jesli sytuacja wymaga szybszego wejscia, mozesz od razu umowic Kwadrans z behawiorysta:',
+    quickStartHref,
+    '',
+    'Jesli chcesz doprecyzowac temat, po prostu odpowiedz na tego maila.',
+    renderContactBlockText(),
+  ].join('\n')
+
+  return deliverEmail(
+    {
+      to: recipient,
+      subject,
+      html,
+      text,
+      replyTo: getPublicContactDetails().email ?? undefined,
+    },
+    'customer',
+  )
+}
+export async function sendPdfOrderEmail(submission: PdfOrderSubmission): Promise<DeliveryResult> {
+  const recipient = getPublicContactDetails().email
+
+  if (!recipient) {
+    return {
+      status: 'skipped',
+      reason: 'public contact email missing or invalid',
+    }
+  }
+
+  const replyTo = isValidPublicEmail(submission.email) ? submission.email : undefined
+  const itemTypeLabel = submission.itemType === 'bundle' ? 'Pakiet PDF' : 'PDF'
+  const notesBlock = submission.notes ? `<p><strong>Wiadomosc:</strong><br />${formatMultilineHtml(submission.notes)}</p>` : ''
+  const subject = `Zamowienie ${itemTypeLabel} - ${submission.itemTitle} - ${submission.name}`
+  const html = renderEmailShell(
+    'Nowe zamowienie PDF',
+    'Klient wyslal zamowienie poradnika PDF albo pakietu. Odpowiedz z potwierdzeniem wyboru i preferuj PayPal albo BLIK na telefon bez eksponowania numeru publicznie.',
+    `
+      <p><strong>Imie:</strong> ${escapeHtml(submission.name)}</p>
+      <p><strong>E-mail:</strong> ${replyTo ? `<a href="mailto:${escapeHtml(submission.email)}">${escapeHtml(submission.email)}</a>` : escapeHtml(submission.email)}</p>
+      <p><strong>Typ:</strong> ${itemTypeLabel}</p>
+      <p><strong>Produkt:</strong> ${escapeHtml(submission.itemTitle)}</p>
+      <p><strong>Slug:</strong> ${escapeHtml(submission.itemSlug)}</p>
+      <p><strong>Cena:</strong> ${escapeHtml(submission.itemPrice)}</p>
+      ${notesBlock}
+    `,
+    'Wyslij klientowi mail z przyciskiem do PayPal albo z instrukcja BLIK na telefon, bez odsylania do publicznego numeru.',
+  )
+  const text = [
+    'Nowe zamowienie PDF.',
+    `Imie: ${submission.name}`,
+    `E-mail: ${submission.email}`,
+    `Typ: ${itemTypeLabel}`,
+    `Produkt: ${submission.itemTitle}`,
+    `Slug: ${submission.itemSlug}`,
+    `Cena: ${submission.itemPrice}`,
+    submission.notes ? `Wiadomosc: ${submission.notes}` : null,
+    'Wyslij klientowi mail z przyciskiem do PayPal albo z instrukcja BLIK na telefon, bez odsylania do publicznego numeru.',
+  ]
+    .filter((line): line is string => Boolean(line))
+    .join('\n')
+
+  return deliverEmail(
+    {
+      to: recipient,
+      subject,
+      html,
+      text,
+      replyTo,
+    },
+    'internal',
+  )
+}
+
+export async function sendPdfOrderAutoReplyEmail(submission: PdfOrderSubmission): Promise<DeliveryResult> {
+  const recipient = submission.email.trim()
+
+  if (!isValidPublicEmail(recipient)) {
+    return {
+      status: 'skipped',
+      reason: 'customer contact email missing or invalid',
+    }
+  }
+
+  const action = getPdfOrderCustomerCta(submission)
+  const hasPaypalButton = action.label === 'Przejdz do PayPal'
+  const subject = `Dostalem zamowienie: ${submission.itemTitle}`
+  const html = renderEmailShell(
+    `Czesc ${escapeHtml(submission.name)}, dostalem Twoje zamowienie.`,
+    hasPaypalButton
+      ? 'Zamowienie jest zapisane. Mozesz od razu przejsc do platnosci przez PayPal z przycisku ponizej. BLIK na telefon zostaje dostepny jako opcja zapasowa bez publikowania numeru na stronie.'
+      : 'Zamowienie jest zapisane. Odpowiem mailowo z dalszym krokiem platnosci. BLIK na telefon zostaje dostepny bez publikowania numeru na stronie.',
+    `
+      <p><strong>Produkt:</strong> ${escapeHtml(submission.itemTitle)}</p>
+      <p><strong>Cena:</strong> ${escapeHtml(submission.itemPrice)}</p>
+      <p><strong>Metody platnosci:</strong> PayPal albo BLIK na telefon.</p>
+      <p><strong>Dalszy krok:</strong> ${
+        hasPaypalButton
+          ? 'po platnosci odpisze z potwierdzeniem i informacja o dostepie do materialu.'
+          : 'odpisze z potwierdzeniem wyboru i instrukcja platnosci.'
+      }</p>
+      ${renderEmailActionButton(action)}
+      <p style="margin-top:0;color:#6b625b;">${
+        hasPaypalButton
+          ? 'Przycisk prowadzi bezposrednio do PayPal, zeby ograniczyc widocznosc numeru telefonu.'
+          : 'Jesli wybierzesz BLIK na telefon, szczegoly dostaniesz mailowo bez publikowania numeru na stronie.'
+      }</p>
+      ${renderContactBlockHtml()}
+    `,
+    'Jesli chcesz cos doprecyzowac, po prostu odpowiedz na tego maila.',
+  )
+  const text = [
+    `Czesc ${submission.name},`,
+    '',
+    hasPaypalButton
+      ? 'Dostalem Twoje zamowienie. Mozesz od razu przejsc do platnosci przez PayPal z linku ponizej. BLIK na telefon zostaje dostepny jako opcja zapasowa.'
+      : 'Dostalem Twoje zamowienie. Odpisze z potwierdzeniem wyboru i instrukcja platnosci. BLIK na telefon zostaje dostepny bez publikowania numeru na stronie.',
+    '',
+    `Produkt: ${submission.itemTitle}`,
+    `Cena: ${submission.itemPrice}`,
+    'Metody platnosci: PayPal albo BLIK na telefon.',
+    `${hasPaypalButton ? 'Przycisk do PayPal' : 'Szczegoly zamowienia'}: ${action.href}`,
+    'Jesli chcesz cos doprecyzowac, po prostu odpowiedz na tego maila.',
+    renderContactBlockText(),
+  ].join('\n')
+
+  return deliverEmail(
+    {
+      to: recipient,
+      subject,
+      html,
+      text,
+      replyTo: getPublicContactDetails().email ?? undefined,
+    },
+    'customer',
+  )
+}
+
+export async function sendBookRequestEmail(submission: BookRequestSubmission): Promise<DeliveryResult> {
+  const recipient = getPublicContactDetails().email
+
+  if (!recipient) {
+    return {
+      status: 'skipped',
+      reason: 'public contact email missing or invalid',
+    }
+  }
+
+  const replyTo = isValidPublicEmail(submission.email) ? submission.email : undefined
+  const speciesLabel = submission.species === 'kot' ? 'Kot' : 'Pies'
+  const subject =
+    submission.service === 'kwadrans-na-juz'
+      ? `PILNE - Kwadrans na juz: ${submission.name}`
+      : `REZERWACJA [${submission.serviceLabel}] - ${submission.name} (${speciesLabel})`
+  const html = renderEmailShell(
+    'Nowa prosba o rezerwacje',
+    submission.service === 'kwadrans-na-juz'
+      ? 'Klient wyslal pilna prosbe o Kwadrans na juz. Wroc z odpowiedzia priorytetowo i odeslij potwierdzenie terminu z PayPal albo instrukcja BLIK na telefon.'
+      : 'Klient wyslal prosbe o rezerwacje konsultacji. Odpowiedz z potwierdzonym terminem i preferuj PayPal albo BLIK na telefon bez eksponowania numeru publicznie.',
+    `
+      <p><strong>Usluga:</strong> ${escapeHtml(submission.serviceLabel)} (${escapeHtml(submission.servicePrice)})</p>
+      <p><strong>Gatunek:</strong> ${escapeHtml(speciesLabel)}</p>
+      <p><strong>Imie:</strong> ${escapeHtml(submission.name)}</p>
+      <p><strong>E-mail:</strong> ${replyTo ? `<a href="mailto:${escapeHtml(submission.email)}">${escapeHtml(submission.email)}</a>` : escapeHtml(submission.email)}</p>
+      <p><strong>Preferowane terminy:</strong><br />${formatMultilineHtml(submission.preferredSlots)}</p>
+      <p><strong>Opis sytuacji:</strong><br />${formatMultilineHtml(submission.description)}</p>
+      <p><strong>Nastepny krok:</strong> ${submission.service === 'kwadrans-na-juz' ? 'odpisz w ciagu 15 minut z pierwszym wolnym terminem i dalszym krokiem platnosci.' : 'potwierdz termin i wyslij klientowi PayPal albo instrukcje BLIK na telefon.'}</p>
+    `,
+    'To jest manualny flow rezerwacji po potwierdzeniu terminu, bez publicznego numeru telefonu.',
+  )
+  const text = [
+    submission.service === 'kwadrans-na-juz' ? 'Nowa pilna prosba o rezerwacje.' : 'Nowa prosba o rezerwacje.',
+    `Usluga: ${submission.serviceLabel} (${submission.servicePrice})`,
+    `Gatunek: ${speciesLabel}`,
+    `Imie: ${submission.name}`,
+    `E-mail: ${submission.email}`,
+    '',
+    'Preferowane terminy:',
+    submission.preferredSlots,
+    '',
+    'Opis sytuacji:',
+    submission.description,
+    '',
+    submission.service === 'kwadrans-na-juz'
+      ? 'Nastepny krok: odpisz w ciagu 15 minut z pierwszym wolnym terminem i dalszym krokiem platnosci.'
+      : 'Nastepny krok: potwierdz termin i wyslij klientowi PayPal albo instrukcje BLIK na telefon.',
+  ].join('\n')
+
+  return deliverEmail(
+    {
+      to: recipient,
+      subject,
+      html,
+      text,
+      replyTo,
+    },
+    'internal',
+  )
+}
+
+export async function sendBookRequestAutoReplyEmail(submission: BookRequestSubmission): Promise<DeliveryResult> {
+  const recipient = submission.email.trim()
+
+  if (!isValidPublicEmail(recipient)) {
+    return {
+      status: 'skipped',
+      reason: 'customer contact email missing or invalid',
+    }
+  }
+
+  const requestHref = buildAbsoluteUrl(`/book?service=${encodeURIComponent(submission.service)}`)
+  const subject = `Dostalem Twoja rezerwacje - ${submission.serviceLabel}`
+  const html = renderEmailShell(
+    `Czesc ${escapeHtml(submission.name)}, dostalem Twoja rezerwacje.`,
+    `Prosba o ${escapeHtml(submission.serviceLabel)} (${escapeHtml(submission.servicePrice)}) trafila do mnie poprawnie. Platnosc zostaje w modelu PayPal albo BLIK na telefon, bez publikowania numeru na stronie.`,
+    `
+      <p><strong>Co dalej:</strong></p>
+      <p>${submission.service === 'kwadrans-na-juz' ? '1. Odezwe sie w ciagu 15 minut z pierwszym wolnym terminem i dalszym krokiem platnosci.' : '1. Odezwe sie w ciagu kilku godzin, miedzy 9 a 21, z potwierdzeniem terminu i dalszym krokiem platnosci.'}</p>
+      <p>2. Dostaniesz PayPal albo instrukcje BLIK na telefon, zaleznie od najprostszego wariantu dla tej rezerwacji.</p>
+      <p>3. Po platnosci potwierdzam rezerwacje do 15 minut i odsylam link do rozmowy.</p>
+      <p><strong>Twoje preferowane terminy:</strong><br />${formatMultilineHtml(submission.preferredSlots)}</p>
+      ${renderEmailActionButton({ href: requestHref, label: 'Zobacz szczegoly rezerwacji' })}
+      ${renderContactBlockHtml()}
+    `,
+    'Jesli chcesz cos dopowiedziec, po prostu odpowiedz na tego maila.',
+  )
+  const text = [
+    `Czesc ${submission.name},`,
+    '',
+    `Dostalem Twoja rezerwacje: ${submission.serviceLabel} (${submission.servicePrice}).`,
+    'Platnosc zostaje w modelu PayPal albo BLIK na telefon, bez publikowania numeru na stronie.',
+    '',
+    'Co dalej:',
+    submission.service === 'kwadrans-na-juz'
+      ? '1. Odezwe sie w ciagu 15 minut z pierwszym wolnym terminem i dalszym krokiem platnosci.'
+      : '1. Odezwe sie w ciagu kilku godzin, miedzy 9 a 21, z potwierdzeniem terminu i dalszym krokiem platnosci.',
+    '2. Dostaniesz PayPal albo instrukcje BLIK na telefon.',
+    '3. Po platnosci potwierdzam rezerwacje do 15 minut i odsylam link do rozmowy.',
+    '',
+    'Twoje preferowane terminy:',
+    submission.preferredSlots,
+    '',
+    `Szczegoly rezerwacji: ${requestHref}`,
+    '',
+    'Jesli chcesz cos dopowiedziec, po prostu odpowiedz na tego maila.',
+    renderContactBlockText(),
+  ].join('\n')
+
+  return deliverEmail(
+    {
+      to: recipient,
+      subject,
+      html,
+      text,
+      replyTo: getPublicContactDetails().email ?? undefined,
+    },
+    'customer',
+  )
+}
+
+export async function sendLeadMagnetFollowUpThreeEmail(email: string, magnet: LeadMagnet): Promise<DeliveryResult> {
+  if (!isValidPublicEmail(email)) {
+    return {
+      status: 'skipped',
+      reason: 'customer contact email missing or invalid',
+    }
+  }
+
+  const subject = `${magnet.followUpTitle} - Regulski`
+  const nextStepHref = `https://regulskibehawiorysta.pl${magnet.nextStepHref}`
+  const html = renderEmailShell(
+    magnet.followUpTitle,
+    magnet.followUpBody,
+    `
+      <p><strong>Kolejny krok:</strong> <a href="${nextStepHref}">${nextStepHref}</a></p>
+      <p>${escapeHtml(magnet.nextStepCopy)}</p>
+      ${renderContactBlockHtml()}
+    `,
+    'Jesli chcesz doprecyzowac swoja sytuacje, odpowiedz na tego maila albo przejdz do rezerwacji.',
+  )
+  const text = [
+    magnet.followUpTitle,
+    '',
+    magnet.followUpBody,
+    '',
+    `Kolejny krok: ${nextStepHref}`,
+    magnet.nextStepCopy,
+    '',
+    'Jesli chcesz doprecyzowac swoja sytuacje, odpowiedz na tego maila albo przejdz do rezerwacji.',
+    renderContactBlockText(),
+  ].join('\n')
+
+  return deliverEmail(
+    {
+      to: email,
+      subject,
+      html,
+      text,
+      replyTo: getPublicContactDetails().email ?? undefined,
+    },
+    'customer',
+  )
+}
+
+export async function sendLeadMagnetFollowUpSevenEmail(email: string, magnet: LeadMagnet): Promise<DeliveryResult> {
+  if (!isValidPublicEmail(email)) {
+    return {
+      status: 'skipped',
+      reason: 'customer contact email missing or invalid',
+    }
+  }
+
+  const bookingHref = 'https://regulskibehawiorysta.pl/book?service=szybka-konsultacja-15-min'
+  const subject = `Jesli dalej cos sie nie uklada - ${magnet.shortTitle}`
+  const html = renderEmailShell(
+    'Jesli dalej cos sie nie uklada',
+    'Po kilku dniach material powinien juz porzadkowac pierwsze obserwacje. Jesli nadal nie wiesz, co zrobic dalej, najprostszy kolejny krok to krotka rozmowa.',
+    `
+      <p><strong>Najprostszy kolejny krok:</strong> <a href="${bookingHref}">${bookingHref}</a></p>
+      <p>Kwadrans z behawiorysta zostaje najlzejszym startem, gdy chcesz przejsc od obserwacji do konkretnej decyzji.</p>
+      ${renderContactBlockHtml()}
+    `,
+    'Jesli temat jest juz dla Ciebie jasny, zachowaj material i wroc do niego wtedy, kiedy bedzie potrzebny.',
+  )
+  const text = [
+    'Jesli dalej cos sie nie uklada, najprostszy kolejny krok to krotka rozmowa.',
+    '',
+    `Najprostszy kolejny krok: ${bookingHref}`,
+    'Kwadrans z behawiorysta zostaje najlzejszym startem, gdy chcesz przejsc od obserwacji do konkretnej decyzji.',
+    '',
+    'Jesli temat jest juz dla Ciebie jasny, zachowaj material i wroc do niego wtedy, kiedy bedzie potrzebny.',
+    renderContactBlockText(),
+  ].join('\n')
+
+  return deliverEmail(
+    {
+      to: email,
+      subject,
+      html,
+      text,
+      replyTo: getPublicContactDetails().email ?? undefined,
+    },
+    'customer',
+  )
+}
+
+type UrgentNowResponseEmailPayload = {
+  customerName: string
+  customerEmail: string
+  topic: string
+  proposedDate: string
+  proposedTime: string
+  bookingHref: string
+  responseNote?: string | null
+}
+
+export async function sendUrgentNowResponseEmail(payload: UrgentNowResponseEmailPayload): Promise<DeliveryResult> {
+  const subject = `Kwadrans na juz - proponowany termin ${payload.proposedDate} ${payload.proposedTime}`
+  const noteBlock = payload.responseNote ? `<p><strong>Dodatkowa wiadomosc:</strong><br />${formatMultilineHtml(payload.responseNote)}</p>` : ''
+  const html = renderEmailShell(
+    'Mam dla Ciebie termin Kwadransu na juz',
+    'Dodalem proponowany termin do terminarza. Mozesz od razu przejsc do formularza i dokonczyc rezerwacje.',
+    `
+      <p><strong>Temat:</strong> ${escapeHtml(payload.topic)}</p>
+      <p><strong>Proponowany termin:</strong> ${escapeHtml(payload.proposedDate)} o ${escapeHtml(payload.proposedTime)}</p>
+      <p><strong>Link do terminu:</strong> <a href="${escapeHtml(payload.bookingHref)}">${escapeHtml(payload.bookingHref)}</a></p>
+      ${noteBlock}
+      ${renderContactBlockHtml()}
+    `,
+    'Jesli termin przestal pasowac, odpowiedz na tego maila albo napisz przez formularz kontaktu.',
+  )
+  const text = [
+    `Mam dla Ciebie termin Kwadransu na juz.`,
+    `Temat: ${payload.topic}`,
+    `Proponowany termin: ${payload.proposedDate} ${payload.proposedTime}`,
+    `Link do terminu: ${payload.bookingHref}`,
+    payload.responseNote ? `Dodatkowa wiadomosc: ${payload.responseNote}` : null,
+    'Jesli termin przestal pasowac, odpowiedz na tego maila albo napisz przez formularz kontaktu.',
+    renderContactBlockText(),
+  ]
+    .filter((line): line is string => Boolean(line))
+    .join('\n')
+
+  return deliverEmail(
+    {
+      to: payload.customerEmail,
+      subject,
+      html,
+      text,
+    },
+    'customer',
+  )
+}
+
 export async function sendBookingConfirmationEmail(booking: BookingRecord): Promise<DeliveryResult> {
   const summary = buildBookingSummary(booking)
   const subject = `Potwierdzenie konsultacji - Behawior 15 - ${summary}`
   const html = renderEmailShell(
     'Konsultacja potwierdzona',
-    'Płatność została przyjęta, a Twój termin jest już przypisany do Ciebie.',
+    'PĹ‚atnoĹ›Ä‡ zostaĹ‚a przyjÄ™ta, a TwĂłj termin jest juĹĽ przypisany do Ciebie.',
     `
       <p><strong>Termin:</strong> ${formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}</p>
       <p><strong>Temat:</strong> ${getProblemLabel(booking.problemType)}</p>
-      <p><strong>Opis zgłoszenia:</strong> ${booking.description}</p>
+      <p><strong>Opis zgĹ‚oszenia:</strong> ${booking.description}</p>
       <p><strong>Link do rozmowy:</strong> <a href="${booking.meetingUrl}">${booking.meetingUrl}</a></p>
-      <p><strong>Co dalej:</strong> wejdź 3-5 minut przed czasem i przygotuj najważniejsze obserwacje oraz pytania. Po rozmowie dostaniesz jasny następny krok zamiast ogólnych porad.</p>
+      <p><strong>Co dalej:</strong> wejdĹş 3-5 minut przed czasem i przygotuj najwaĹĽniejsze obserwacje oraz pytania. Po rozmowie dostaniesz jasny nastÄ™pny krok zamiast ogĂłlnych porad.</p>
       ${renderContactBlockHtml()}
     `,
-    'Jeśli będzie potrzebny kolejny krok po rozmowie, dostaniesz jasną rekomendację zamiast ogólnych porad.',
+    'JeĹ›li bÄ™dzie potrzebny kolejny krok po rozmowie, dostaniesz jasnÄ… rekomendacjÄ™ zamiast ogĂłlnych porad.',
   )
   const text = [
-    'Twoja konsultacja Behawior 15 została potwierdzona.',
+    'Twoja konsultacja Behawior 15 zostaĹ‚a potwierdzona.',
     `Termin: ${formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}`,
     `Temat: ${getProblemLabel(booking.problemType)}`,
     `Opis: ${booking.description}`,
     `Link do rozmowy: ${booking.meetingUrl}`,
-    'Co dalej: wejdź 3-5 minut przed czasem i przygotuj najważniejsze obserwacje oraz pytania. Po rozmowie dostaniesz jasny następny krok zamiast ogólnych porad.',
+    'Co dalej: wejdĹş 3-5 minut przed czasem i przygotuj najwaĹĽniejsze obserwacje oraz pytania. Po rozmowie dostaniesz jasny nastÄ™pny krok zamiast ogĂłlnych porad.',
     renderContactBlockText(),
   ].join('\n')
 
@@ -740,8 +1307,8 @@ export async function sendBookingConfirmationEmail(booking: BookingRecord): Prom
 export async function sendBookingManualPaymentPendingEmail(booking: BookingRecord): Promise<DeliveryResult> {
   const summary = buildBookingSummary(booking)
   const paymentReference = booking.paymentReference ?? booking.id
-  const subject = `Wpłata zgłoszona - czekamy na potwierdzenie - Behawior 15 - ${summary}`
-  const intro = 'Dostałem zgłoszenie wpłaty ręcznej. Sprawdzę je do 60 minut.'
+  const subject = `WpĹ‚ata zgĹ‚oszona - czekamy na potwierdzenie - Behawior 15 - ${summary}`
+  const intro = 'DostaĹ‚em zgĹ‚oszenie wpĹ‚aty rÄ™cznej. SprawdzÄ™ je do 15 minut.'
   const facts = [
     {
       label: 'Termin',
@@ -759,18 +1326,18 @@ export async function sendBookingManualPaymentPendingEmail(booking: BookingRecor
       textValue: formatPricePln(booking.amount),
     },
     {
-      label: 'Tytuł wpłaty',
+      label: 'TytuĹ‚ wpĹ‚aty',
       htmlValue: escapeHtml(paymentReference),
       textValue: paymentReference,
     },
     {
-      label: 'Następny krok',
+      label: 'NastÄ™pny krok',
       htmlValue: escapeHtml('Po akceptacji dostaniesz mail z linkiem do pokoju rozmowy.'),
       textValue: 'Po akceptacji dostaniesz mail z linkiem do pokoju rozmowy.',
     },
   ]
   const outro = 'Do czasu potwierdzenia status rezerwacji pozostaje na stronie potwierdzenia.'
-  const email = buildBookingCustomerEmail(booking, subject, 'Wpłata jest w weryfikacji', intro, facts, outro)
+  const email = buildBookingCustomerEmail(booking, subject, 'WpĹ‚ata jest w weryfikacji', intro, facts, outro)
 
   return deliverEmail(email, 'customer')
 }
@@ -781,37 +1348,37 @@ export async function sendBookingStatusOutcomeEmail(booking: BookingRecord): Pro
     booking.paymentStatus === 'refunded'
       ? {
           subject: `Rezerwacja anulowana - Behawior 15 - ${summary}`,
-          title: 'Rezerwacja została anulowana',
-          intro: 'Zwrot został uruchomiony, a termin wrócił do kalendarza.',
+          title: 'Rezerwacja zostaĹ‚a anulowana',
+          intro: 'Zwrot zostaĹ‚ uruchomiony, a termin wrĂłciĹ‚ do kalendarza.',
           statusLabel: 'Zwrot',
-          reasonLabel: 'Powód',
-          nextStep: 'Jeśli chcesz wrócić do konsultacji, wybierz nowy termin albo napisz wiadomość.',
+          reasonLabel: 'PowĂłd',
+          nextStep: 'JeĹ›li chcesz wrĂłciÄ‡ do konsultacji, wybierz nowy termin albo napisz wiadomoĹ›Ä‡.',
         }
       : booking.paymentStatus === 'rejected'
         ? {
-            subject: `Wpłata nie została potwierdzona - Behawior 15 - ${summary}`,
-            title: 'Wpłata nie została potwierdzona',
-            intro: 'Nie udało się potwierdzić wpłaty, więc termin wrócił do kalendarza.',
+            subject: `WpĹ‚ata nie zostaĹ‚a potwierdzona - Behawior 15 - ${summary}`,
+            title: 'WpĹ‚ata nie zostaĹ‚a potwierdzona',
+            intro: 'Nie udaĹ‚o siÄ™ potwierdziÄ‡ wpĹ‚aty, wiÄ™c termin wrĂłciĹ‚ do kalendarza.',
             statusLabel: 'Status',
-            reasonLabel: 'Powód',
-            nextStep: 'Jeśli chcesz wrócić do konsultacji, wybierz nowy termin albo napisz wiadomość.',
+            reasonLabel: 'PowĂłd',
+            nextStep: 'JeĹ›li chcesz wrĂłciÄ‡ do konsultacji, wybierz nowy termin albo napisz wiadomoĹ›Ä‡.',
           }
         : booking.paymentStatus === 'failed'
           ? {
-              subject: `Płatność nie została dokończona - Behawior 15 - ${summary}`,
-              title: 'Płatność nie została dokończona',
-              intro: 'Płatność online nie została zakończona i termin wrócił do kalendarza.',
+              subject: `PĹ‚atnoĹ›Ä‡ nie zostaĹ‚a dokoĹ„czona - Behawior 15 - ${summary}`,
+              title: 'PĹ‚atnoĹ›Ä‡ nie zostaĹ‚a dokoĹ„czona',
+              intro: 'PĹ‚atnoĹ›Ä‡ online nie zostaĹ‚a zakoĹ„czona i termin wrĂłciĹ‚ do kalendarza.',
               statusLabel: 'Status',
-              reasonLabel: 'Powód',
-              nextStep: 'Jeśli chcesz wrócić do konsultacji, wybierz nowy termin albo napisz wiadomość.',
+              reasonLabel: 'PowĂłd',
+              nextStep: 'JeĹ›li chcesz wrĂłciÄ‡ do konsultacji, wybierz nowy termin albo napisz wiadomoĹ›Ä‡.',
             }
           : {
-              subject: `Rezerwacja wygasła - Behawior 15 - ${summary}`,
-              title: 'Rezerwacja wygasła',
-              intro: 'Czas na potwierdzenie minął, więc termin wrócił do kalendarza.',
+              subject: `Rezerwacja wygasĹ‚a - Behawior 15 - ${summary}`,
+              title: 'Rezerwacja wygasĹ‚a',
+              intro: 'Czas na potwierdzenie minÄ…Ĺ‚, wiÄ™c termin wrĂłciĹ‚ do kalendarza.',
               statusLabel: 'Status',
-              reasonLabel: 'Powód',
-              nextStep: 'Jeśli chcesz wrócić do konsultacji, wybierz nowy termin albo napisz wiadomość.',
+              reasonLabel: 'PowĂłd',
+              nextStep: 'JeĹ›li chcesz wrĂłciÄ‡ do konsultacji, wybierz nowy termin albo napisz wiadomoĹ›Ä‡.',
             }
 
   const facts: BookingEmailFact[] = [
@@ -841,12 +1408,12 @@ export async function sendBookingStatusOutcomeEmail(booking: BookingRecord): Pro
   }
 
   facts.push({
-    label: 'Następny krok',
+    label: 'NastÄ™pny krok',
     htmlValue: escapeHtml(outcome.nextStep),
     textValue: outcome.nextStep,
   })
 
-  const email = buildBookingCustomerEmail(booking, outcome.subject, outcome.title, outcome.intro, facts, 'Możesz wrócić do rezerwacji w dowolnym momencie.')
+  const email = buildBookingCustomerEmail(booking, outcome.subject, outcome.title, outcome.intro, facts, 'MoĹĽesz wrĂłciÄ‡ do rezerwacji w dowolnym momencie.')
 
   return deliverEmail(email, 'customer')
 }
@@ -865,63 +1432,63 @@ export async function sendManualPaymentReportedAdminEmail(
     }
   }
 
-  const subject = `Płatność do potwierdzenia do 60 min - Behawior 15 - ${buildBookingSummary(booking)}`
+  const subject = `PĹ‚atnoĹ›Ä‡ do potwierdzenia do 15 min - Behawior 15 - ${buildBookingSummary(booking)}`
   const html = renderEmailShell(
-    'Wpłata czeka na decyzję',
-    'Klient kliknął "Zapłaciłem". Sprawdź wpływ i kliknij właściwą decyzję.',
+    'WpĹ‚ata czeka na decyzjÄ™',
+    'Klient kliknÄ…Ĺ‚ "ZapĹ‚aciĹ‚em". SprawdĹş wpĹ‚yw i kliknij wĹ‚aĹ›ciwÄ… decyzjÄ™.',
     `
       <p><strong>Booking ID:</strong> ${escapeHtml(booking.id)}</p>
-      <p><strong>Tytuł płatności:</strong> ${escapeHtml(booking.paymentReference ?? booking.id)}</p>
+      <p><strong>TytuĹ‚ pĹ‚atnoĹ›ci:</strong> ${escapeHtml(booking.paymentReference ?? booking.id)}</p>
       <p><strong>Termin:</strong> ${formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}</p>
       <p><strong>Temat:</strong> ${getProblemLabel(booking.problemType)}</p>
       <p><strong>Kwota:</strong> ${formatPricePln(booking.amount)}</p>
       <p><strong>Klient:</strong> ${escapeHtml(booking.ownerName)} | <a href="mailto:${escapeHtml(booking.email)}">${escapeHtml(booking.email)}</a> | ${escapeHtml(booking.phone)}</p>
       <p><strong>Opis:</strong> ${formatMultilineHtml(booking.description)}</p>
       <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:20px;">
-        <a href="${links.approveUrl}" style="display:inline-block;padding:12px 18px;border-radius:999px;background:#0a5c36;color:#ffffff;text-decoration:none;font-weight:700;">Jest wpłata - potwierdź i otwórz pokój</a>
-        <a href="${links.rejectUrl}" style="display:inline-block;padding:12px 18px;border-radius:999px;background:#8a3022;color:#ffffff;text-decoration:none;font-weight:700;">Nie ma wpłaty</a>
+        <a href="${links.approveUrl}" style="display:inline-block;padding:12px 18px;border-radius:999px;background:#0a5c36;color:#ffffff;text-decoration:none;font-weight:700;">Jest wpĹ‚ata - potwierdĹş i otwĂłrz pokĂłj</a>
+        <a href="${links.rejectUrl}" style="display:inline-block;padding:12px 18px;border-radius:999px;background:#8a3022;color:#ffffff;text-decoration:none;font-weight:700;">Nie ma wpĹ‚aty</a>
       </div>
     `,
     customerEmailStatus.state !== 'ready'
-      ? 'Po potwierdzeniu klient od razu zobaczy aktywne potwierdzenie i pokój na swojej stronie rezerwacji. Wysyłka maili do innych adresów ruszy po weryfikacji domeny nadawcy w Resend.'
-      : 'Po potwierdzeniu klient automatycznie dostanie mail z linkiem do pokoju rozmowy, a przy braku wpłaty wróci do płatności.',
+      ? 'Po potwierdzeniu klient od razu zobaczy aktywne potwierdzenie i pokĂłj na swojej stronie rezerwacji. WysyĹ‚ka maili do innych adresĂłw ruszy po weryfikacji domeny nadawcy w Resend.'
+      : 'Po potwierdzeniu klient automatycznie dostanie mail z linkiem do pokoju rozmowy, a przy braku wpĹ‚aty wrĂłci do pĹ‚atnoĹ›ci.',
   )
   const text = [
-    'Płatność czeka na potwierdzenie do 60 min.',
+    'PĹ‚atnoĹ›Ä‡ czeka na potwierdzenie do 15 min.',
     `Booking ID: ${booking.id}`,
-    `Tytuł płatności: ${booking.paymentReference ?? booking.id}`,
+    `TytuĹ‚ pĹ‚atnoĹ›ci: ${booking.paymentReference ?? booking.id}`,
     `Termin: ${formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}`,
     `Temat: ${getProblemLabel(booking.problemType)}`,
     `Kwota: ${formatPricePln(booking.amount)}`,
     `Klient: ${booking.ownerName} | ${booking.email} | ${booking.phone}`,
     `Opis: ${booking.description}`,
-    `Jest wpłata: ${links.approveUrl}`,
-    `Nie ma wpłaty: ${links.rejectUrl}`,
+    `Jest wpĹ‚ata: ${links.approveUrl}`,
+    `Nie ma wpĹ‚aty: ${links.rejectUrl}`,
   ].join('\n')
 
   return deliverEmail({ to: recipient, subject, html, text }, 'internal')
 }
 
 export async function sendBookingReminderEmail(booking: BookingRecord): Promise<DeliveryResult> {
-  const subject = 'Przypomnienie: konsultacja Behawior 15 startuje za mniej niż godzinę'
+  const subject = 'Przypomnienie: konsultacja Behawior 15 startuje za mniej niĹĽ godzinÄ™'
   const html = renderEmailShell(
     'Przypomnienie o konsultacji',
-    'Za mniej niż godzinę startuje Twoja rozmowa. Warto wejść chwilę wcześniej, żeby zacząć spokojnie i bez pośpiechu.',
+    'Za mniej niĹĽ godzinÄ™ startuje Twoja rozmowa. Warto wejĹ›Ä‡ chwilÄ™ wczeĹ›niej, ĹĽeby zaczÄ…Ä‡ spokojnie i bez poĹ›piechu.',
     `
       <p><strong>Termin:</strong> ${formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}</p>
       <p><strong>Temat:</strong> ${getProblemLabel(booking.problemType)}</p>
       <p><strong>Link do rozmowy:</strong> <a href="${booking.meetingUrl}">${booking.meetingUrl}</a></p>
-      <p><strong>Przed rozmową:</strong> przygotuj 2-3 najważniejsze pytania i najkrótszy możliwy opis problemu.</p>
+      <p><strong>Przed rozmowÄ…:</strong> przygotuj 2-3 najwaĹĽniejsze pytania i najkrĂłtszy moĹĽliwy opis problemu.</p>
       ${renderContactBlockHtml()}
     `,
-    'Do usłyszenia. To będzie krótka rozmowa, ale z konkretnym kierunkiem działania.',
+    'Do usĹ‚yszenia. To bÄ™dzie krĂłtka rozmowa, ale z konkretnym kierunkiem dziaĹ‚ania.',
   )
   const text = [
     'Przypomnienie o konsultacji Behawior 15.',
     `Termin: ${formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}`,
     `Temat: ${getProblemLabel(booking.problemType)}`,
     `Link do rozmowy: ${booking.meetingUrl}`,
-    'Przed rozmową przygotuj 2-3 najważniejsze pytania i najkrótszy możliwy opis problemu.',
+    'Przed rozmowÄ… przygotuj 2-3 najwaĹĽniejsze pytania i najkrĂłtszy moĹĽliwy opis problemu.',
     renderContactBlockText(),
   ].join('\n')
 
@@ -939,33 +1506,33 @@ export async function sendTestimonialSubmissionEmail(submission: TestimonialSubm
     }
   }
 
-  const subject = `Nowe zgłoszenie opinii do weryfikacji - Behawior 15 - ${submission.displayName}`
+  const subject = `Nowe zgĹ‚oszenie opinii do weryfikacji - Behawior 15 - ${submission.displayName}`
   const photoBlock = submission.photoUrl
-    ? `<p><strong>Link do zdjęcia:</strong> <a href="${escapeHtml(submission.photoUrl)}">${escapeHtml(submission.photoUrl)}</a></p>`
-    : '<p><strong>Link do zdjęcia:</strong> klient nie dodał linku.</p>'
+    ? `<p><strong>Link do zdjÄ™cia:</strong> <a href="${escapeHtml(submission.photoUrl)}">${escapeHtml(submission.photoUrl)}</a></p>`
+    : '<p><strong>Link do zdjÄ™cia:</strong> klient nie dodaĹ‚ linku.</p>'
   const html = renderEmailShell(
-    'Nowa opinia czeka na weryfikację',
-    'Klient wysłał opinię przez formularz na stronie. Wpis nie jest jeszcze opublikowany.',
+    'Nowa opinia czeka na weryfikacjÄ™',
+    'Klient wysĹ‚aĹ‚ opiniÄ™ przez formularz na stronie. Wpis nie jest jeszcze opublikowany.',
     `
-      <p><strong>Imię do publikacji:</strong> ${escapeHtml(submission.displayName)}</p>
+      <p><strong>ImiÄ™ do publikacji:</strong> ${escapeHtml(submission.displayName)}</p>
       <p><strong>Email do kontaktu:</strong> <a href="mailto:${escapeHtml(submission.email)}">${escapeHtml(submission.email)}</a></p>
       <p><strong>Kategoria problemu:</strong> ${escapeHtml(submission.issueCategory)}</p>
-      <p><strong>Treść opinii:</strong><br />${formatMultilineHtml(submission.opinion)}</p>
-      <p><strong>Co się zmieniło:</strong><br />${formatMultilineHtml(submission.beforeAfter)}</p>
+      <p><strong>TreĹ›Ä‡ opinii:</strong><br />${formatMultilineHtml(submission.opinion)}</p>
+      <p><strong>Co siÄ™ zmieniĹ‚o:</strong><br />${formatMultilineHtml(submission.beforeAfter)}</p>
       ${photoBlock}
-      <p><strong>Status:</strong> wpis nadal wymaga ręcznej akceptacji i ręcznego dodania do statycznej listy opinii.</p>
+      <p><strong>Status:</strong> wpis nadal wymaga rÄ™cznej akceptacji i rÄ™cznego dodania do statycznej listy opinii.</p>
     `,
-    'Po akceptacji zapisz zdjęcie lokalnie i dopisz nowy wpis do lib/testimonials.ts przed kolejnym deployem.',
+    'Po akceptacji zapisz zdjÄ™cie lokalnie i dopisz nowy wpis do lib/testimonials.ts przed kolejnym deployem.',
   )
   const text = [
-    'Nowa opinia czeka na weryfikację. Wpis nie jest jeszcze opublikowany.',
-    `Imię do publikacji: ${submission.displayName}`,
+    'Nowa opinia czeka na weryfikacjÄ™. Wpis nie jest jeszcze opublikowany.',
+    `ImiÄ™ do publikacji: ${submission.displayName}`,
     `Email do kontaktu: ${submission.email}`,
     `Kategoria problemu: ${submission.issueCategory}`,
-    `Treść opinii: ${submission.opinion}`,
-    `Co się zmieniło: ${submission.beforeAfter}`,
-    `Link do zdjęcia: ${submission.photoUrl || 'brak'}`,
-    'Status: wpis nadal wymaga ręcznej akceptacji i ręcznego dodania do statycznej listy opinii.',
+    `TreĹ›Ä‡ opinii: ${submission.opinion}`,
+    `Co siÄ™ zmieniĹ‚o: ${submission.beforeAfter}`,
+    `Link do zdjÄ™cia: ${submission.photoUrl || 'brak'}`,
+    'Status: wpis nadal wymaga rÄ™cznej akceptacji i rÄ™cznego dodania do statycznej listy opinii.',
   ].join('\n')
 
   return deliverEmail({ to: recipient, subject, html, text }, 'internal')
@@ -990,30 +1557,33 @@ export async function sendOpinionSubmissionEmail(submission: OpinionSubmission):
   }
 
   const speciesLabel = submission.species === 'kot' ? 'Kot' : 'Pies'
-  const subject = `Nowa opinia do ręcznej akceptacji - Behawior 15 - ${submission.displayName}`
+  const subject = `Nowa opinia do rÄ™cznej akceptacji - Behawior 15 - ${submission.displayName}`
   const html = renderEmailShell(
     'Nowa opinia do sprawdzenia',
-    'Klient wysłał opinię przez ukryty formularz po konsultacji. To nie jest jeszcze wpis publikowany.',
+    'Klient wysĹ‚aĹ‚ opiniÄ™ przez ukryty formularz po konsultacji. To nie jest jeszcze wpis publikowany.',
     `
-      <p><strong>Imię lub inicjały:</strong> ${escapeHtml(submission.displayName)}</p>
+      <p><strong>ImiÄ™ lub inicjaĹ‚y:</strong> ${escapeHtml(submission.displayName)}</p>
       <p><strong>Gatunek:</strong> ${escapeHtml(speciesLabel)}</p>
       <p><strong>Temat:</strong> ${escapeHtml(submission.topic)}</p>
-      <p><strong>Zgoda na publikację:</strong> ${submission.consentPublish ? 'tak' : 'nie'}</p>
-      <p><strong>Treść opinii:</strong><br />${formatMultilineHtml(submission.opinion)}</p>
-      <p><strong>Status:</strong> wpis czeka na ręczną akceptację i dodanie do publicznej listy opinii.</p>
+      <p><strong>Zgoda na publikacjÄ™:</strong> ${submission.consentPublish ? 'tak' : 'nie'}</p>
+      <p><strong>TreĹ›Ä‡ opinii:</strong><br />${formatMultilineHtml(submission.opinion)}</p>
+      <p><strong>Status:</strong> wpis czeka na rÄ™cznÄ… akceptacjÄ™ i dodanie do publicznej listy opinii.</p>
     `,
-    'Po akceptacji dodaj wpis ręcznie do publicznej listy opinii przed kolejnym publikowaniem strony.',
+    'Po akceptacji dodaj wpis rÄ™cznie do publicznej listy opinii przed kolejnym publikowaniem strony.',
   )
   const text = [
-    'Nowa opinia do ręcznej akceptacji.',
-    `Imię lub inicjały: ${submission.displayName}`,
+    'Nowa opinia do rÄ™cznej akceptacji.',
+    `ImiÄ™ lub inicjaĹ‚y: ${submission.displayName}`,
     `Gatunek: ${speciesLabel}`,
     `Temat: ${submission.topic}`,
-    `Zgoda na publikację: ${submission.consentPublish ? 'tak' : 'nie'}`,
-    `Treść opinii: ${submission.opinion}`,
-    'Status: wpis czeka na ręczną akceptację i dodanie do publicznej listy opinii.',
-    'Po akceptacji dodaj wpis ręcznie do publicznej listy opinii przed kolejnym publikowaniem strony.',
+    `Zgoda na publikacjÄ™: ${submission.consentPublish ? 'tak' : 'nie'}`,
+    `TreĹ›Ä‡ opinii: ${submission.opinion}`,
+    'Status: wpis czeka na rÄ™cznÄ… akceptacjÄ™ i dodanie do publicznej listy opinii.',
+    'Po akceptacji dodaj wpis rÄ™cznie do publicznej listy opinii przed kolejnym publikowaniem strony.',
   ].join('\n')
 
   return deliverEmail({ to: recipient, subject, html, text }, 'internal')
 }
+
+
+

@@ -2,15 +2,18 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ContactLeadForm } from '@/components/ContactLeadForm'
 import { NotatnikFooter, NotatnikTopbar } from '@/components/NotatnikA'
+import { Schema } from '@/components/schema'
 import { buildBookHref, readBookingSpeciesSearchParam } from '@/lib/booking-routing'
 import { COPY_HELPERS } from '@/lib/copy-governance'
+import { getBreadcrumbJsonLd, getFaqPageJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
+import { FAQ_SHORTLISTS } from '@/lib/trust-layer'
 import { CAPBT_PROFILE_URL, INSTAGRAM_PROFILE_URL, getPublicContactDetails, getPublicContactEmailNote } from '@/lib/site'
 
 export const metadata: Metadata = buildMarketingMetadata({
   title: 'Kontakt i rezerwacja konsultacji',
   path: '/kontakt',
-  description: 'Kontakt, formularz i rezerwacja konsultacji behawioralnych online dla opiekunow psow i kotow.',
+  description: 'Kontakt i rezerwacja konsultacji | formularz, e-mail i spokojny pierwszy krok dla opiekunow psow i kotow.',
 })
 
 const navItems = [
@@ -22,20 +25,14 @@ const navItems = [
 
 function getSpeciesCopy(species: 'pies' | 'kot' | null) {
   if (species === 'pies') {
-    return {
-      message: 'Jesli sprawa dotyczy psa, po prostu wpisz to w wiadomosci.',
-    }
+    return 'Jesli sprawa dotyczy psa, wpisz to po prostu w wiadomosci.'
   }
 
   if (species === 'kot') {
-    return {
-      message: 'Jesli sprawa dotyczy kota, po prostu wpisz to w wiadomosci.',
-    }
+    return 'Jesli sprawa dotyczy kota, wpisz to po prostu w wiadomosci.'
   }
 
-  return {
-    message: 'W wiadomosci mozesz od razu wskazac wlasciwy gatunek.',
-  }
+  return 'W wiadomosci mozesz od razu wskazac wlasciwy gatunek.'
 }
 
 export default function ContactPage({
@@ -44,14 +41,19 @@ export default function ContactPage({
   searchParams?: Record<string, string | string[] | undefined>
 }) {
   const species = readBookingSpeciesSearchParam(searchParams?.species)
-  const speciesCopy = getSpeciesCopy(species)
   const publicContact = getPublicContactDetails()
   const publicContactNote = getPublicContactEmailNote()
   const quickHref = buildBookHref(null, 'szybka-konsultacja-15-min', false, species)
   const consultationHref = buildBookHref(null, 'konsultacja-behawioralna-online', false, species)
+  const faqItems = FAQ_SHORTLISTS.contact.slice(0, 2)
+  const structuredData = [
+    getBreadcrumbJsonLd([{ name: 'Strona glowna', path: '/' }, { name: 'Kontakt', path: '/kontakt' }]),
+    getFaqPageJsonLd(faqItems),
+  ]
 
   return (
     <main className="notatnik-page">
+      <Schema data={structuredData} />
       <div className="notatnik-shell">
         <NotatnikTopbar tag="Kontakt / napisz wiadomosc" navItems={navItems} ctaHref={quickHref} ctaLabel="Kwadrans / 69 zl" />
 
@@ -59,10 +61,10 @@ export default function ContactPage({
           <div className="notatnik-contact-left">
             <div className="notatnik-mono notatnik-kicker-spaced">Kontakt / bez presji</div>
             <h1>
-              Jesli wolisz najpierw <em>zapytac</em>, napisz krotka wiadomosc.
+              Napisz, <em>zanim zarezerwujesz</em>.
             </h1>
             <p className="notatnik-contact-lede">
-              Wystarczy gatunek, temat i kilka zdan. {COPY_HELPERS.contactResponseWindow} {speciesCopy.message}
+              Wystarczy gatunek, temat i kilka zdan. {COPY_HELPERS.contactResponseWindow} {getSpeciesCopy(species)}
             </p>
 
             <div className="contact-form-card" id="formularz">
@@ -72,10 +74,7 @@ export default function ContactPage({
 
           <div className="notatnik-contact-right notatnik-kinfo">
             <h3>Co stanie sie dalej</h3>
-            <p>
-              Odpowiem na adres e-mail z formularza i wskaze najprostszy kolejny krok: Kwadrans, Dwa kwadranse, pelna konsultacje albo material z
-              Niezbednika.
-            </p>
+            <p>Odpowiem na adres e-mail z formularza i wskaze najprostszy kolejny krok: Kwadrans, szersza konsultacje albo material startowy.</p>
 
             <div className="notatnik-info-stack">
               <div className="notatnik-kinfo-row">
@@ -111,7 +110,7 @@ export default function ContactPage({
             <div className="notatnik-side-cta">
               <div className="notatnik-mono notatnik-text-accent">Szybciej niz wiadomosc</div>
               <h3>Kwadrans z behawiorysta</h3>
-              <p>15 min audio / 69 zl. Jesli wiesz, ze chcesz porozmawiac, rezerwacja jest najszybsza droga.</p>
+              <p>15 min audio / 69 zl. Jesli wiesz, ze chcesz porozmawiac, to najszybsza droga do pierwszego kroku.</p>
               <Link href={quickHref} prefetch={false} className="notatnik-btn">
                 <span>Zarezerwuj termin</span>
                 <span className="notatnik-btn-arrow" aria-hidden="true">
@@ -121,9 +120,18 @@ export default function ContactPage({
             </div>
 
             <div className="notatnik-side-cta">
+              <div className="notatnik-mono notatnik-text-accent">Pilny temat</div>
+              <h4>Kwadrans na juz</h4>
+              <p>Jesli chcesz zapytac o szybki termin, otworz osobny formularz i wpisz preferowana date oraz godzine.</p>
+              <Link href={species ? `/kontakt?intent=kwadrans-na-juz&species=${species}#formularz` : '/kontakt?intent=kwadrans-na-juz#formularz'} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
+                <span>Zapytaj o termin</span>
+              </Link>
+            </div>
+
+            <div className="notatnik-side-cta">
               <div className="notatnik-mono notatnik-text-accent">Szerszy temat</div>
               <h4>Pelna konsultacja behawioralna</h4>
-              <p>Jesli problem jest bardziej zlozony, mozesz od razu wejsc w najpelniejsza konsultacje online, ok. 2 h lacznie.</p>
+              <p>Jesli problem jest bardziej zlozony albo ma kilka warstw naraz, mozesz od razu wejsc w najpelniejsza konsultacje online.</p>
               <Link href={consultationHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
                 <span>Przejdz do konsultacji</span>
               </Link>
@@ -132,6 +140,17 @@ export default function ContactPage({
             <div className="notatnik-contact-note">
               <strong>Nota</strong>
               <p>{publicContactNote}</p>
+            </div>
+
+            <div className="notatnik-contact-faq">
+              <div className="notatnik-faq-grid">
+                {faqItems.map((item) => (
+                  <article key={item.question} className="notatnik-faq-item">
+                    <h4>{item.question}</h4>
+                    <p>{item.answer}</p>
+                  </article>
+                ))}
+              </div>
             </div>
           </div>
         </div>

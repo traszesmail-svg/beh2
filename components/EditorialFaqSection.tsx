@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { repairCopy } from '@/lib/copy'
 import type { TrustFaqItem } from '@/lib/trust-layer'
 
 type EditorialFaqSectionProps = {
@@ -31,8 +32,8 @@ export function EditorialFaqSection({
       <div className="premium-faq-grid">
         {items.map((item) => (
           <details key={item.question} className="premium-faq-item">
-            <summary className="premium-faq-summary">{item.question}</summary>
-            <div className="premium-faq-content">{item.answer}</div>
+            <summary className="premium-faq-summary">{repairCopy(item.question)}</summary>
+            <div className="premium-faq-content">{repairCopy(item.answer)}</div>
           </details>
         ))}
       </div>

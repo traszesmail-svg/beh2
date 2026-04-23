@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
+import { Schema } from '@/components/schema'
 import {
   CAPBT_PROFILE_URL,
   INSTAGRAM_PROFILE_URL,
@@ -71,9 +72,7 @@ export function LegalPageLayout({
 
   return (
     <main className="page-wrap marketing-page">
-      {structuredData.length > 0 ? (
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
-      ) : null}
+      {structuredData.length > 0 ? <Schema data={structuredData} /> : null}
       <div className="container">
         <Header />
 

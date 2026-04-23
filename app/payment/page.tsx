@@ -38,6 +38,8 @@ export function generateMetadata(): Metadata {
     title: 'Płatność i potwierdzenie',
     path: '/payment',
     description: 'Opłać rezerwację ręcznie i przejdź do potwierdzenia statusu.',
+    noIndex: false,
+    follow: true,
   })
 }
 
@@ -108,7 +110,7 @@ export default async function PaymentPage({
   const heroLead = qaBooking
     ? 'Ta rezerwacja jest testowa i przejdzie przez bezpieczną ścieżkę bez realnego obciążenia klienta.'
     : isWaitingManual
-      ? `Wpłata jest już zgłoszona. Potwierdzimy ją ręcznie do 60 minut. Po zmianie statusu zobaczysz ${roomAccessLabel} i dalszą instrukcję.`
+      ? `Wpłata jest już zgłoszona. Potwierdzimy ją ręcznie do 15 minut. Po zmianie statusu zobaczysz ${roomAccessLabel} i dalszą instrukcję.`
       : manualPayment.isAvailable
         ? `Opłać rezerwację i zgłoś wpłatę. Po potwierdzeniu pokażemy ${roomAccessLabel} i dalszą instrukcję.`
         : 'Płatność jest chwilowo niedostępna. Napisz wiadomość i wróć do rezerwacji później.'
@@ -266,7 +268,7 @@ export default async function PaymentPage({
                     </div>
                     <div className="summary-card trust-card tree-backed-card">
                       <strong>Szczegóły wpłaty</strong>
-                      <span>Dane do wpłaty masz poniżej. Po zgłoszeniu wpłaty potwierdzimy ją ręcznie do 60 minut.</span>
+                      <span>Dane do wpłaty masz poniżej. Po zgłoszeniu wpłaty potwierdzimy ją ręcznie do 15 minut.</span>
                     </div>
                     <div className="summary-card trust-card tree-backed-card">
                       <strong>Po potwierdzeniu</strong>
@@ -360,9 +362,9 @@ export default async function PaymentPage({
                     (qaBooking ? qaEligibility?.paymentReference ?? getQaCheckoutEligibility(booking).paymentReference : getManualPaymentReference(booking.id))
                   }
                   manualAvailable={manualPayment.isAvailable}
-                  manualPhoneDisplay={null}
-                  manualPaypalMeDisplay={manualPayment.paypalMeDisplay}
-                  manualPaypalMeHref={manualPayment.paypalMeUrl}
+                  manualPhoneDisplay={manualPayment.phoneDisplay}
+                  manualPaypalMeDisplay={null}
+                  manualPaypalMeHref={null}
                   manualAccountName={manualPayment.accountName}
                   manualInstructions={manualPayment.instructions}
                   manualSummary={manualPayment.summary}

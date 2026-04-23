@@ -1,5 +1,5 @@
 ---
-slug: pies-cignnie-na-smyczy
+slug: pies-ciagnie-na-smyczy
 title_seo: Pies ciągnie na smyczy — kiedy to nawyk, a kiedy problem
 meta_description: Ciągnięcie na smyczy to jeden z najczęstszych powodów frustracji na spacerze. Sprawdź, co za tym stoi i od czego zacząć — bez frustracji i bez szarpania.
 h1: Pies ciągnie na smyczy — kiedy to nawyk, a kiedy problem

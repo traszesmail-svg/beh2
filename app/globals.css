@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   --bg: #f8f4ed;
   --bg-soft: #f2ece3;
   --panel: rgba(255, 255, 255, 0.92);
@@ -906,6 +906,27 @@ textarea::placeholder {
   align-items: center;
   gap: 10px;
   flex-shrink: 0;
+}
+
+.header-social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  color: var(--ink-mid);
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.header-social-link svg {
+  width: 18px;
+  height: 18px;
+}
+
+.header-social-link:hover {
+  color: var(--amber);
+  background: rgba(47, 118, 103, 0.08);
 }
 
 .header-cta {
@@ -1838,7 +1859,7 @@ h1 span {
 }
 
 .home-hero-trust-item:not(:last-child)::after {
-  content: '·';
+  content: 'Â·';
   margin: 0 12px;
   color: rgba(31, 26, 23, 0.34);
 }
@@ -4831,12 +4852,13 @@ select:focus-visible {
 
 .site-footer-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.85fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr) minmax(0, 0.9fr) minmax(0, 1fr);
   gap: 20px;
 }
 
 .site-footer-brand,
 .site-footer-nav,
+.site-footer-start,
 .site-footer-contact {
   min-width: 0;
   display: grid;
@@ -5942,7 +5964,7 @@ select:focus-visible {
 }
 
 .home-quote-card::before {
-  content: '�';
+  content: '\201C';
   position: absolute;
   top: 14px;
   right: 18px;
@@ -6096,7 +6118,7 @@ select:focus-visible {
 }
 
 .editorial-hero-trust-item:not(:last-child)::after {
-  content: '�';
+  content: '\2022';
   margin: 0 12px;
   color: rgba(31, 26, 23, 0.34);
 }
@@ -8033,7 +8055,7 @@ select:focus-visible {
 
 .opinions-hero-quote-card blockquote::before,
 .opinions-featured-card blockquote::before {
-  content: '�';
+  content: '\201C';
   position: absolute;
   left: 0;
   top: -6px;
@@ -9754,7 +9776,7 @@ select:focus-visible {
 }
 
 .premium-bullet-list li::before {
-  content: '�';
+  content: '\2022';
   position: absolute;
   left: 0;
   color: var(--accent-2);
@@ -12132,7 +12154,7 @@ select:focus-visible {
 }
 
 .premium-home-page .prep-inline-link::after {
-  content: '�';
+  content: '\2192';
   transition: transform 160ms ease;
 }
 
@@ -12769,7 +12791,7 @@ select:focus-visible {
 }
 
 .premium-home-page .home-quote-card::before {
-  content: '�';
+  content: '\201C';
   position: absolute;
   top: 12px;
   right: 18px;
@@ -16541,3 +16563,4 @@ select:focus-visible {
     width: 100%;
   }
 }
+

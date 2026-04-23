@@ -17,9 +17,15 @@ import { getReservationWindowMinutes } from '@/lib/server/env'
 import { createMeetingUrl } from '@/lib/server/jitsi'
 import { getLocalStoreDataDir } from '@/lib/server/local-store-path'
 import { getManualPaymentConfig } from '@/lib/server/payment-options'
+import {
+  createUrgentNowRequest as createUrgentNowRequestRecord,
+  listUrgentNowRequests as listUrgentNowRequestRecords,
+  respondUrgentNowRequest as respondUrgentNowRequestRecord,
+} from '@/lib/server/urgent-now-store'
 import { createFunnelEventRecord, normalizeFunnelEventProperties } from '@/lib/server/funnel-events'
 import {
   sendBookingConfirmationEmail,
+  sendBookingOwnerNotificationEmail,
   sendBookingReservationCreatedEmail,
   sendBookingManualPaymentPendingEmail,
   sendBookingStatusOutcomeEmail,
@@ -37,6 +43,7 @@ import {
   GroupedAvailability,
   UserRecord,
 } from '@/lib/types'
+import type { UrgentNowRequestRecord } from '@/lib/urgent-now'
 
 interface LocalStoreData {
   availability: AvailabilitySlot[]
@@ -549,6 +556,14 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
     store.bookings.unshift(booking)
     await persistStore(store)
     await sendBookingReservationCreatedEmail(booking)
+    const ownerNotification = await sendBookingOwnerNotificationEmail(booking)
+    if (ownerNotification.status !== 'sent') {
+      console.error('[behawior15][booking-owner-notification] failed', {
+        bookingId: booking.id,
+        reason: ownerNotification.reason,
+        status: ownerNotification.status,
+      })
+    }
 
     return { booking, slot: { ...slot }, accessToken: accessToken.rawToken }
   })
@@ -590,6 +605,34 @@ export async function listFunnelEvents(): Promise<FunnelEventRecord[]> {
     const store = await readStore()
     return [...store.funnelEvents].sort((left, right) => right.createdAt.localeCompare(left.createdAt))
   })
+}
+
+export async function listUrgentNowRequests(): Promise<UrgentNowRequestRecord[]> {
+  return listUrgentNowRequestRecords()
+}
+
+export async function createUrgentNowRequest(input: {
+  name: string
+  email: string
+  species: 'pies' | 'kot'
+  topicId: import('@/lib/types').ProblemType
+  topicLabel: string
+  message: string
+  requestedDate: string
+  requestedTime: string
+}) {
+  return createUrgentNowRequestRecord(input)
+}
+
+export async function respondUrgentNowRequest(input: {
+  id: string
+  proposedDate: string
+  proposedTime: string
+  responseNote?: string | null
+  availabilitySlotId?: string | null
+  bookingHref?: string | null
+}) {
+  return respondUrgentNowRequestRecord(input)
 }
 
 export async function recordFunnelEvent(input: FunnelEventInput): Promise<FunnelEventRecord> {

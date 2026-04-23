@@ -1,11 +1,12 @@
 {
-  "name": "behawior15-mvp-full",
+  "name": "regulskibehawiorysta",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "prebuild": "node scripts/patch-next-revalidate.js",
     "dev": "next dev",
     "build": "next lint --no-cache && next build --no-lint",
+    "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "next lint --no-cache",
     "test": "node --import tsx --test tests/runtime-config.test.ts tests/customer-emails.test.ts tests/funnel-metrics.test.ts tests/booking-api-errors.test.ts",
@@ -29,6 +30,7 @@
     "@supabase/supabase-js": "2.54.0",
     "critters": "^0.0.23",
     "next": "14.2.35",
+    "next-sitemap": "^4.2.3",
     "nodemailer": "^8.0.4",
     "react": "18.3.1",
     "react-dom": "18.3.1",

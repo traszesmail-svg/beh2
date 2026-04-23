@@ -119,6 +119,8 @@ export function generateMetadata({
     description: problem
       ? `Wybierz termin dla ${getProblemLabel(problem)} i przejdź do formularza rezerwacji.`
       : 'Wybierz termin i przejdź do formularza rezerwacji.',
+    noIndex: false,
+    follow: true,
   })
 }
 

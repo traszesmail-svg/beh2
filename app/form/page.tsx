@@ -46,6 +46,8 @@ export function generateMetadata(): Metadata {
     title: 'Dane do rezerwacji',
     path: '/form',
     description: 'Uzupelnij dane potrzebne do potwierdzenia terminu i przejscia do platnosci.',
+    noIndex: false,
+    follow: true,
   })
 }
 
