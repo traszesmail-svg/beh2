@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { NotatnikPageShell } from '@/components/NotatnikA'
+import { OfferEntrySection } from '@/components/OfferEntrySection'
 import { Schema } from '@/components/schema'
 import { buildBookHref } from '@/lib/booking-routing'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
@@ -11,9 +12,11 @@ import { buildMarketingMetadata } from '@/lib/seo'
 const pageData = getLocalSeoPageByPath('/behawiorysta-online-polska')
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: pageData?.title ?? 'Behawiorysta online dla całej Polski',
+  title: pageData?.title ?? 'Behawiorysta online dla calej Polski',
   path: '/behawiorysta-online-polska',
-  description: pageData?.description ?? 'Behawiorysta online dla całej Polski. Pomoc dla opiekunów psów i kotów, spokojny start i konsultacje online.',
+  description:
+    pageData?.description ??
+    'Behawiorysta online dla calej Polski. Cztery jasne wejscia: Kwadrans 69 zl, Kwadrans na juz 99 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl.',
   appendLocalContext: false,
 })
 
@@ -35,34 +38,48 @@ export default function LocalSeoPolandOnlinePage() {
   }
 
   const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min')
+  const urgentNowHref = buildBookHref(null, 'kwadrans-na-juz')
+  const bridgeHref = buildBookHref(null, 'konsultacja-30-min')
   const consultationHref = buildBookHref(null, 'konsultacja-behawioralna-online')
   const toolkitHref = '/niezbednik'
   const contactHref = '/kontakt#formularz'
   const structuredData = [
     getServiceJsonLd({
       name: pageData.h1,
-      description: pageData.description,
+      description: `${pageData.description} Cztery jasne wejscia: Kwadrans 69 zl, Kwadrans na juz 99 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl.`,
       serviceUrl: 'https://regulskibehawiorysta.pl/behawiorysta-online-polska',
       offerPrice: 69,
       offerCatalog: [
         {
-          name: 'Kwadrans z behawiorystą',
-          description: '15 minut rozmowy audio bez kamery jako spokojny pierwszy krok.',
+          name: 'Kwadrans z behawiorysta',
+          description: '15 minut rozmowy audio bez kamery jako najprostszy pierwszy krok.',
           url: audioHref,
           price: 69,
         },
         {
-          name: 'Pełna konsultacja behawioralna',
-          description: 'Szersza konsultacja online dla tematów wielowątkowych albo długotrwałych.',
+          name: 'Kwadrans na juz',
+          description: 'Ten sam format 15 minut, ale z priorytetem i terminem w 15 minut.',
+          url: urgentNowHref,
+          price: 99,
+        },
+        {
+          name: 'Dwa kwadranse',
+          description: '30 minut online na szersze uporzadkowanie tematu i krotka notatke.',
+          url: bridgeHref,
+          price: 169,
+        },
+        {
+          name: 'Pelna konsultacja behawioralna',
+          description: '60 minut rozmowy, diagnoza, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.',
           url: consultationHref,
-          price: 350,
+          price: 470,
         },
       ],
     }),
     getFaqPageJsonLd(pageData.faq),
     getBreadcrumbJsonLd([
       { name: 'Strona glowna', path: '/' },
-      { name: 'Behawiorysta psów i kotów online', path: '/behawiorysta-online-polska' },
+      { name: 'Behawiorysta psow i kotow online', path: '/behawiorysta-online-polska' },
     ]),
   ]
 
@@ -91,30 +108,37 @@ export default function LocalSeoPolandOnlinePage() {
               <p className="editorial-hero-lead">{pageData.description}</p>
 
               <div className="stack-gap top-gap-small">
-                {pageData.intro.slice(0, 2).map((paragraph) => (
-                  <p key={paragraph} className="muted">
-                    {paragraph}
-                  </p>
-                ))}
+                <p className="muted">
+                  Publicznie zostaja cztery jasne wejscia: Kwadrans za 69 zl, Kwadrans na juz za 99 zl, Dwa kwadranse za 169 zl i Pelna konsultacja za
+                  470 zl.
+                </p>
+                <p className="muted">
+                  Najprostszy start to zwykly Kwadrans. Jesli temat jest pilny, wybierasz Kwadrans na juz. Jesli 15 minut to za malo, przechodzisz do
+                  Dwoch kwadransow albo Pelnej konsultacji.
+                </p>
               </div>
 
               <div className="hero-actions editorial-final-actions">
                 <Link href={audioHref} prefetch={false} className="button button-primary big-button">
                   {FUNNEL_CTA_LABELS.primary}
                 </Link>
-                <Link href={toolkitHref} prefetch={false} className="button button-ghost big-button">
-                  {FUNNEL_CTA_LABELS.secondary}
+                <Link href="/cennik" prefetch={false} className="button button-ghost big-button">
+                  Zobacz cennik
                 </Link>
               </div>
 
               <p className="muted top-gap-small">
-                Jeśli temat od razu wymaga dłuższej rozmowy, możesz wybrać{' '}
+                Jesli temat od razu wymaga dluzszej rozmowy, mozesz wybrac{' '}
+                <Link href={bridgeHref} prefetch={false} className="prep-inline-link">
+                  Dwa kwadranse
+                </Link>{' '}
+                albo{' '}
                 <Link href={consultationHref} prefetch={false} className="prep-inline-link">
-                  {FUNNEL_CTA_LABELS.consultation.toLowerCase()}
+                  Pelna konsultacje
                 </Link>
-                . Jeśli chcesz najpierw zadać krótkie pytanie, napisz{' '}
+                . Jesli chcesz najpierw zadac krotkie pytanie, napisz{' '}
                 <Link href={contactHref} prefetch={false} className="prep-inline-link">
-                  wiadomość
+                  wiadomosc
                 </Link>
                 .
               </p>
@@ -123,7 +147,11 @@ export default function LocalSeoPolandOnlinePage() {
         </section>
 
         <section className="panel section-panel editorial-section">
-          <SectionIntro eyebrow="Zakres" title="Wybierz właściwą ścieżkę wejścia" description="To jest główna strona usługi online. Stąd przechodzisz dalej do problemów psa, problemów kota albo do opisu dłuższej konsultacji." />
+          <SectionIntro
+            eyebrow="Zakres"
+            title="Wybierz wlasciwa sciezke wejscia"
+            description="To jest glowna strona uslugi online. Stad przechodzisz dalej do problemow psa, problemow kota, cennika i odpowiedniego formatu konsultacji."
+          />
           <div className="card-grid two-up top-gap-small">
             {pageData.problemCards.map((item) => (
               <article key={item.title} className="summary-card tree-backed-card">
@@ -139,6 +167,12 @@ export default function LocalSeoPolandOnlinePage() {
           </div>
         </section>
 
+        <OfferEntrySection
+          eyebrow="Formaty"
+          title="Cztery uslugi, jedna logika wyboru."
+          description="69 zl = najprostszy start. 99 zl = ten sam format, ale priorytetowo. 169 zl = szersze uporzadkowanie tematu. 470 zl = diagnoza, plan poprawy i 7 dni wsparcia przez WhatsApp."
+        />
+
         <section className="panel section-panel editorial-section">
           <SectionIntro eyebrow="Rola strony" title={pageData.supportTitle} description={pageData.supportBody[0] ?? ''} />
           <div className="stack-gap top-gap-small">
@@ -150,20 +184,8 @@ export default function LocalSeoPolandOnlinePage() {
           </div>
         </section>
 
-        <section className="panel section-panel editorial-section">
-          <SectionIntro eyebrow="Formaty" title="Najprostszy start to Kwadrans z behawiorystą" description="Jeśli wolisz najpierw przeczytać materiały, zajrzyj do Niezbędnika. Przy sprawach szerszych możesz wybrać Dwa kwadranse albo pełną konsultację." />
-          <div className="card-grid three-up top-gap-small">
-            {pageData.firstStepCards.map((item) => (
-              <article key={item.title} className="summary-card tree-backed-card">
-                <h3>{item.title}</h3>
-                <p>{item.copy}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
         <section className="panel section-panel editorial-section" id="faq">
-          <SectionIntro eyebrow="FAQ" title="Najczęstsze pytania przed rezerwacją" description="Krótko o tym, jak wygląda start, konsultacja online i kontakt przed rezerwacją." />
+          <SectionIntro eyebrow="FAQ" title="Najczestsze pytania przed rezerwacja" description="Krotko o tym, jak wyglada start, wybor uslugi i pierwszy kontakt przed rozmowa." />
           <div className="premium-faq-grid top-gap">
             {pageData.faq.map((item) => (
               <details key={item.question} className="premium-faq-item">
@@ -179,7 +201,7 @@ export default function LocalSeoPolandOnlinePage() {
         </section>
 
         <section className="panel section-panel blog-related-panel">
-          <SectionIntro eyebrow="Architektura" title="Przejdź dalej tam, gdzie to ma sens" description="Tutaj znajdziesz strony, które mają różne role: kategorie problemów, opis pełnej konsultacji, cennik i kontakt." />
+          <SectionIntro eyebrow="Architektura" title="Przejdz dalej tam, gdzie to ma sens" description="Tutaj znajdziesz strony, ktore maja rozne role: problemy psa, problemy kota, cennik, materialy i kontakt." />
           <div className="blog-related-grid top-gap-small">
             {pageData.relatedLinks.map((item) => (
               <Link key={item.href} href={item.href} prefetch={false} className="summary-card tree-backed-card blog-related-card">
@@ -187,6 +209,14 @@ export default function LocalSeoPolandOnlinePage() {
                 <span>{item.copy}</span>
               </Link>
             ))}
+            <Link href="/cennik" prefetch={false} className="summary-card tree-backed-card blog-related-card">
+              <strong>Cennik 69 / 99 / 169 / 470</strong>
+              <span>Zobacz jedna tabele porownawcza wszystkich czterech uslug.</span>
+            </Link>
+            <Link href={toolkitHref} prefetch={false} className="summary-card tree-backed-card blog-related-card">
+              <strong>Niezbednik</strong>
+              <span>Materialy pomocnicze, jesli chcesz najpierw wejsc lzej albo przygotowac sie do rozmowy.</span>
+            </Link>
           </div>
           <div className="hero-actions top-gap-small">
             <Link href={contactHref} prefetch={false} className="prep-inline-link">

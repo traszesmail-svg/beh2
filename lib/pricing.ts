@@ -1,6 +1,5 @@
 export const DEFAULT_PRICE_PLN = 69
 export const MIN_CONSULTATION_PRICE_PLN = 69
-export const BLOCKED_CONSULTATION_PRICE_PLN = DEFAULT_PRICE_PLN + 30
 export const PRE_TOPIC_PRICE_CONFIRMATION_COPY = 'Dokładną kwotę poznasz po wyborze tematu konsultacji.'
 
 export type ActiveConsultationPrice = {
@@ -18,7 +17,7 @@ function normalizeAmount(value: number): number {
 function isLegacyConsultationPrice(amount: number): boolean {
   const normalizedAmount = normalizeAmount(amount)
 
-  return normalizedAmount === BLOCKED_CONSULTATION_PRICE_PLN || normalizedAmount < MIN_CONSULTATION_PRICE_PLN
+  return normalizedAmount < MIN_CONSULTATION_PRICE_PLN
 }
 
 export function formatPricePln(amount: number): string {
@@ -71,10 +70,6 @@ export function parseConsultationPriceInput(rawValue: string | number): number {
 
   if (!Number.isFinite(amount) || amount <= 0) {
     throw new Error('Cena konsultacji musi być dodatnia.')
-  }
-
-  if (normalizeAmount(amount) === BLOCKED_CONSULTATION_PRICE_PLN) {
-    throw new Error('Ta kwota należy do innego projektu i nie może być użyta tutaj.')
   }
 
   if (amount < MIN_CONSULTATION_PRICE_PLN) {

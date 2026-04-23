@@ -12,28 +12,28 @@ const SERVICES = [
   {
     id: 'szybka-konsultacja-15-min',
     title: 'Kwadrans z behawiorysta',
-    badge: 'Cena wejscia',
+    badge: 'Najprostszy start',
     price: 69,
     duration: '15 min',
     mode: 'audio, bez kamery',
-    who: 'jedno pytanie albo pierwszy ruch',
-    plan: 'priorytet i pierwszy krok',
-    materials: '-',
-    refund: 'tak',
-    cta: 'Zarezerwuj',
+    who: 'gdy chcesz najprosciej zaczac od jednego pytania albo pierwszego uporzadkowania tematu',
+    plan: 'pierwszy kierunek, priorytet i decyzja, czy ten format wystarczy',
+    materials: 'jasne wskazanie, co zrobic teraz i co obserwowac dalej',
+    refund: 'tak, przed startem',
+    cta: 'Wybierz Kwadrans',
   },
   {
     id: 'kwadrans-na-juz',
     title: 'Kwadrans na juz',
-    badge: 'Priorytet / 15 min',
+    badge: 'Pilny termin',
     price: 99,
     duration: '15 min',
     mode: 'audio, bez kamery',
-    who: 'gdy liczy sie szybszy dostep',
-    plan: 'ten sam format, ale z priorytetem',
-    materials: '-',
+    who: 'gdy potrzebujesz tego samego formatu co Kwadrans, ale z terminem w 15 minut',
+    plan: 'ten sam zakres co w Kwadransie, ale obsluzony priorytetowo',
+    materials: 'ten sam pierwszy kierunek co w Kwadransie, tylko szybciej',
     refund: 'tak, przed startem',
-    cta: 'Zarezerwuj na juz',
+    cta: 'Wybierz na juz',
   },
   {
     id: 'konsultacja-30-min',
@@ -42,11 +42,11 @@ const SERVICES = [
     price: 169,
     duration: '30 min',
     mode: 'audio lub video',
-    who: '2-3 watki albo spokojniejsze wejscie',
-    plan: 'pierwsze kroki i kolejnosc dzialan',
-    materials: 'krotka notatka',
-    refund: 'tak',
-    cta: 'Zarezerwuj',
+    who: 'gdy temat jest szerszy i chcesz spokojniej uporzadkowac 2-3 watki',
+    plan: 'wiecej miejsca na kontekst, kolejnosc dzialan i decyzje co dalej',
+    materials: 'krotka notatka po rozmowie',
+    refund: 'tak, przed startem',
+    cta: 'Wybierz Dwa kwadranse',
   },
   {
     id: 'konsultacja-behawioralna-online',
@@ -55,11 +55,11 @@ const SERVICES = [
     price: 470,
     duration: '60 min',
     mode: 'audio lub video',
-    who: 'sprawa zlozona albo przewlekla',
-    plan: 'diagnoza i plan poprawy',
-    materials: '7 dni konsultacji przez WhatsApp',
+    who: 'gdy sprawa jest zlozona, przewlekla albo obejmuje kilka obszarow naraz',
+    plan: 'diagnoza sytuacji, plan poprawy i ustalenie priorytetow',
+    materials: '7 dni konsultacji tekstowych przez WhatsApp',
     refund: 'tak, przed startem',
-    cta: 'Umow konsultacje',
+    cta: 'Wybierz Pelna konsultacje',
   },
 ] as const
 
@@ -68,8 +68,8 @@ const ROWS = [
   { key: 'duration', label: 'Czas' },
   { key: 'mode', label: 'Forma' },
   { key: 'who', label: 'Dla kogo' },
-  { key: 'plan', label: 'Plan pracy' },
-  { key: 'materials', label: 'Materialy po rozmowie' },
+  { key: 'plan', label: 'Co klient dostaje' },
+  { key: 'materials', label: 'Po rozmowie' },
   { key: 'refund', label: 'Zmiana / zwrot' },
   { key: 'cta', label: 'CTA' },
 ] as const
@@ -118,7 +118,7 @@ export function ServicesComparison({ species = null, qaBooking = false, classNam
                     {service.cta}
                   </Link>
                 ) : (
-                  <span className={service[row.key] === '-' ? 'services-comparison-empty' : undefined}>{service[row.key]}</span>
+                  <span>{service[row.key]}</span>
                 )}
               </div>
             ))}
@@ -155,12 +155,12 @@ export function ServicesComparison({ species = null, qaBooking = false, classNam
                 <dd>{service.who}</dd>
               </div>
               <div>
-                <dt>Plan pracy</dt>
+                <dt>Co klient dostaje</dt>
                 <dd>{service.plan}</dd>
               </div>
               <div>
-                <dt>Materialy po rozmowie</dt>
-                <dd className={service.materials === '-' ? 'services-comparison-empty' : undefined}>{service.materials}</dd>
+                <dt>Po rozmowie</dt>
+                <dd>{service.materials}</dd>
               </div>
               <div>
                 <dt>Zmiana / zwrot</dt>

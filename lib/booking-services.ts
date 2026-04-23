@@ -26,6 +26,16 @@ const BOOKING_SERVICE_CONFIG: Record<BookingServiceType, BookingServiceConfig> =
     slotBadge: FUNNEL_SERVICE_CONFIG['szybka-konsultacja-15-min'].slotBadge,
     roomSummary: FUNNEL_SERVICE_CONFIG['szybka-konsultacja-15-min'].roomSummary,
   },
+  'kwadrans-na-juz': {
+    id: 'kwadrans-na-juz',
+    title: FUNNEL_SERVICE_CONFIG['kwadrans-na-juz'].title,
+    shortTitle: FUNNEL_SERVICE_CONFIG['kwadrans-na-juz'].shortTitle,
+    slotSpan: FUNNEL_SERVICE_CONFIG['kwadrans-na-juz'].slotSpan,
+    roomDurationMinutes: FUNNEL_SERVICE_CONFIG['kwadrans-na-juz'].durationMinutes,
+    slotSummary: FUNNEL_SERVICE_CONFIG['kwadrans-na-juz'].slotSummary,
+    slotBadge: FUNNEL_SERVICE_CONFIG['kwadrans-na-juz'].slotBadge,
+    roomSummary: FUNNEL_SERVICE_CONFIG['kwadrans-na-juz'].roomSummary,
+  },
   'konsultacja-30-min': {
     id: 'konsultacja-30-min',
     title: FUNNEL_SERVICE_CONFIG['konsultacja-30-min'].title,
@@ -55,10 +65,19 @@ const DEFAULT_BOOKING_SLOT_STEP_MINUTES = 20
 const MAX_INFERRED_BOOKING_SLOT_STEP_MINUTES = 30
 
 export function isBookingServiceType(value: string | null | undefined): value is BookingServiceType {
-  return value === 'szybka-konsultacja-15-min' || value === 'konsultacja-30-min' || value === 'konsultacja-behawioralna-online'
+  return (
+    value === 'szybka-konsultacja-15-min' ||
+    value === 'kwadrans-na-juz' ||
+    value === 'konsultacja-30-min' ||
+    value === 'konsultacja-behawioralna-online'
+  )
 }
 
 export function normalizeBookingServiceType(value: string | null | undefined): BookingServiceType {
+  if (value === 'kwadrans-na-juz') {
+    return value
+  }
+
   if (value === 'konsultacja-30-min') {
     return value
   }

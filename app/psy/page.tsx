@@ -16,7 +16,7 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = buildMarketingMetadata({
   title: 'Behawiorysta psów online - reaktywnosc, separacja i pomoc w domu',
   path: '/psy',
-  description: 'Konsultacja behawioralna online dla opiekunow psow. Spacery, reaktywnosc, rozlaka, pobudzenie. Kwadrans z behawiorysta COAPE - 69 zl, bez kamery.',
+  description: 'Pomoc behawioralna online dla opiekunow psow. Kwadrans 69 zl, Kwadrans na juz 99 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl.',
 })
 
 const navItems = [
@@ -29,6 +29,8 @@ const navItems = [
 ]
 
 const quickHref = buildBookHref(null, 'szybka-konsultacja-15-min', false, 'pies')
+const urgentHref = buildBookHref(null, 'kwadrans-na-juz', false, 'pies')
+const bridgeHref = buildBookHref(null, 'konsultacja-30-min', false, 'pies')
 const consultationHref = buildBookHref(null, 'konsultacja-behawioralna-online', false, 'pies')
 const serviceLandingHref = '/behawiorysta-online-polska'
 
@@ -108,10 +110,22 @@ export default function DogsPage() {
           price: 69,
         },
         {
+          name: 'Kwadrans na juz',
+          description: 'Ten sam format 15 minut, ale z terminem w 15 minut.',
+          url: urgentHref,
+          price: 99,
+        },
+        {
+          name: 'Dwa kwadranse',
+          description: '30 minut online na spokojniejsze uporzadkowanie tematu psa.',
+          url: bridgeHref,
+          price: 169,
+        },
+        {
           name: 'Pelna konsultacja behawioralna',
           description: 'Szersza konsultacja online dla tematow psich wielowatkowych albo dlugotrwalych.',
           url: consultationHref,
-          price: 350,
+          price: 470,
         },
       ],
     }),
@@ -134,7 +148,9 @@ export default function DogsPage() {
               Pomagam opiekunom psow zrozumiec, co stoi za trudnym zachowaniem i jak zaczac to porzadkowac bez przymusu i bez karania.
             </p>
             <NextSlot className="top-gap-small" />
-            <p className="notatnik-service-description">Nie musisz wiedziec, jak to nazwac. Wystarczy, ze opiszesz, co sie dzieje.</p>
+            <p className="notatnik-service-description">
+              Nie musisz wiedziec, jak to nazwac. Dla psa obowiazuje ta sama drabinka: Kwadrans na start, Kwadrans na juz przy pilnym temacie, Dwa kwadranse przy szerszym uporzadkowaniu i Pelna konsultacja przy sprawach zlozonych.
+            </p>
             <div className="notatnik-subhero-actions">
               <Link href={quickHref} prefetch={false} className="notatnik-btn">
                 <span>Zarezerwuj Kwadrans</span>
@@ -195,18 +211,18 @@ export default function DogsPage() {
           <div className="notatnik-steps">
             <article className="notatnik-step">
               <div className="notatnik-step-number">01</div>
-              <h3>Kwadrans i priorytet</h3>
-              <p>Krotko opisujesz sytuacje. Ustalamy, co wymaga uwagi najpierw i czego nie robic na starcie.</p>
+              <h3>Wybierasz wlasciwy format</h3>
+              <p>Kwadrans jest najprostszym startem. Kwadrans na juz daje ten sam zakres szybciej. Dwa kwadranse i Pelna konsultacja sa dla tematow szerszych.</p>
             </article>
             <article className="notatnik-step">
               <div className="notatnik-step-number">02</div>
-              <h3>Obserwacja codziennosci</h3>
+              <h3>Opisujesz codziennosc psa</h3>
               <p>Patrzymy na spacer, rytm dnia, wyzwalacze i momenty, w ktorych pies przestaje sobie radzic.</p>
             </article>
             <article className="notatnik-step">
               <div className="notatnik-step-number">03</div>
-              <h3>Szersza konsultacja, jesli trzeba</h3>
-              <p>Jesli temat jest wiekszy albo warstwowy, przechodzimy do pelniejszej konsultacji z planem dalszej pracy.</p>
+              <h3>Wiesz, czy zostac, czy wejsc szerzej</h3>
+              <p>Po rozmowie wiadomo, czy wystarcza ten etap, czy lepszym kolejnym krokiem beda Dwa kwadranse albo Pelna konsultacja.</p>
             </article>
           </div>
         </section>
@@ -214,8 +230,8 @@ export default function DogsPage() {
         <ServiceDecisionSection
           index="III."
           eyebrow="Usluga online"
-          title="Dla psa mozesz zaczac od Kwadransu albo wejsc szerzej."
-          description="Kwadrans porzadkuje temat na start, a pelna konsultacja zostaje dla spraw, ktore od razu wymagaja szerszego planu."
+          title="Dla psa obowiazuje ta sama logika 4 uslug."
+          description="Kwadrans porzadkuje temat na start, Kwadrans na juz przyspiesza wejscie, Dwa kwadranse daja etap posredni, a Pelna konsultacja zostaje dla spraw, ktore od razu wymagaja szerszego planu."
           audioHref={quickHref}
           consultationHref={consultationHref}
           serviceHref={serviceLandingHref}
@@ -236,8 +252,7 @@ export default function DogsPage() {
         <section id="konsultacja">
           <NotatnikSectionHead index="IV." kicker="Uslugi" title="Porownanie uslug dla opiekuna psa." />
           <p className="notatnik-service-description">
-            Przy problemach spacerowych, separacji albo pobudzeniu najwazniejsze jest, czy potrzebujesz pierwszego ruchu,
-            spokojniejszego etapu posredniego czy od razu pelnej konsultacji.
+            Przy problemach spacerowych, separacji albo pobudzeniu najwazniejsze jest, czy potrzebujesz prostego startu, pilnego terminu, spokojniejszego etapu posredniego czy od razu pelnej konsultacji.
           </p>
           <ServicesComparison species="pies" />
         </section>
@@ -256,7 +271,7 @@ export default function DogsPage() {
 
         <NotatnikFinalCta
           title="Jesli temat psa Cie niepokoi, <em>zacznij spokojnie.</em>"
-          copy="Nie musisz od razu wiedziec, czy to spacer, pobudzenie czy rozlaka. Wystarczy pierwszy kontakt."
+          copy="Nie musisz od razu wiedziec, czy to spacer, pobudzenie czy rozlaka. Wystarczy dobrze wybrac pierwszy format."
           primaryHref={quickHref}
           primaryLabel="Zarezerwuj Kwadrans / 69 zl"
           secondaryHref="/kontakt?species=pies#formularz"

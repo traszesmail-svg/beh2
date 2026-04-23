@@ -114,10 +114,11 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
     {
       path: '/',
       required: [
-        'Twoj pies albo kot zachowuje sie inaczej, niz powinien, i chcesz wiedziec, co z tym zrobic.',
+        'Masz problem z zachowaniem psa albo kota i chcesz wiedziec, od czego zaczac.',
         'Kwadrans z behawiorysta',
-        'Pomoc dla opiekuna',
-        'Zacznij od Kwadransu z behawiorysta',
+        'Cztery uslugi. Jedna logika wyboru.',
+        'Kwadrans na juz',
+        'Cztery wejscia. Jasne roznice przed rezerwacja.',
         'Co opiekunowie mowia po rozmowie.',
         'Jesli wiesz juz, czy temat dotyczy psa, czy kota, wybierz wlasciwa strone.',
       ],
@@ -150,7 +151,7 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
       required: [
         'Behawiorysta psow i kotow online',
         'Wybierz wlasciwa sciezke wejscia',
-        'Najprostszy start to Kwadrans z behawiorysta',
+        'Cztery uslugi, jedna logika wyboru.',
         'Najczestsze pytania przed rezerwacja',
         'Przejdz dalej tam, gdzie to ma sens',
       ],

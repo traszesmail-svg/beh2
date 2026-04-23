@@ -144,7 +144,7 @@ export function getProfessionalServiceJsonLd() {
     employee: {
       '@id': PERSON_ID,
     },
-    priceRange: '69-350 PLN',
+    priceRange: '69-470 PLN',
     sameAs,
   }
 }

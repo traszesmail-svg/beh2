@@ -23,10 +23,10 @@ type ValidatedBookPayload = {
 }
 
 const SERVICES: Record<BookingServiceId, { label: string; price: string }> = {
-  'kwadrans-na-juz': { label: 'Kwadrans na juz', price: '69 zl' },
+  'kwadrans-na-juz': { label: 'Kwadrans na juz', price: '99 zl' },
   'szybka-konsultacja-15-min': { label: 'Kwadrans z behawiorysta', price: '69 zl' },
-  'konsultacja-30-min': { label: 'Dwa kwadranse', price: '129 zl' },
-  'konsultacja-behawioralna-online': { label: 'Pelna konsultacja', price: '350 zl' },
+  'konsultacja-30-min': { label: 'Dwa kwadranse', price: '169 zl' },
+  'konsultacja-behawioralna-online': { label: 'Pelna konsultacja', price: '470 zl' },
 }
 
 const SUCCESS_MESSAGE = 'Dostalem Twoja rezerwacje. Wyslalem tez kopie na podany adres e-mail.'

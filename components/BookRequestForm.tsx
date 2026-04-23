@@ -26,10 +26,10 @@ type BookingRequestPayload = {
 }
 
 const SERVICE_OPTIONS: Array<{ value: BookingServiceId; label: string; price: string }> = [
-  { value: 'kwadrans-na-juz', label: 'Kwadrans na juz / TERAZ', price: '69 zl' },
   { value: 'szybka-konsultacja-15-min', label: 'Kwadrans z behawiorysta', price: '69 zl' },
-  { value: 'konsultacja-30-min', label: 'Dwa kwadranse', price: '129 zl' },
-  { value: 'konsultacja-behawioralna-online', label: 'Pelna konsultacja', price: '350 zl' },
+  { value: 'kwadrans-na-juz', label: 'Kwadrans na juz / termin w 15 min', price: '99 zl' },
+  { value: 'konsultacja-30-min', label: 'Dwa kwadranse', price: '169 zl' },
+  { value: 'konsultacja-behawioralna-online', label: 'Pelna konsultacja', price: '470 zl' },
 ]
 
 function isEmailValid(value: string) {

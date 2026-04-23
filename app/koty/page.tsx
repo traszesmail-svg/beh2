@@ -16,7 +16,7 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = buildMarketingMetadata({
   title: 'Behawiorysta kotów online - kuweta, stres i relacje miedzy kotami',
   path: '/koty',
-  description: 'Pomoc behawioralna online dla opiekunow kotow. Kuweta, wycofanie, napiecie miedzy kotami, stres po zmianach. Kwadrans z behawiorysta - 69 zl.',
+  description: 'Pomoc behawioralna online dla opiekunow kotow. Kwadrans 69 zl, Kwadrans na juz 99 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl.',
 })
 
 const navItems = [
@@ -29,6 +29,8 @@ const navItems = [
 ]
 
 const quickHref = buildBookHref(null, 'szybka-konsultacja-15-min', false, 'kot')
+const urgentHref = buildBookHref(null, 'kwadrans-na-juz', false, 'kot')
+const bridgeHref = buildBookHref(null, 'konsultacja-30-min', false, 'kot')
 const consultationHref = buildBookHref(null, 'konsultacja-behawioralna-online', false, 'kot')
 const serviceLandingHref = '/behawiorysta-online-polska'
 
@@ -108,10 +110,22 @@ export default function CatsPage() {
           price: 69,
         },
         {
+          name: 'Kwadrans na juz',
+          description: 'Ten sam format 15 minut, ale z terminem w 15 minut.',
+          url: urgentHref,
+          price: 99,
+        },
+        {
+          name: 'Dwa kwadranse',
+          description: '30 minut online na spokojniejsze uporzadkowanie tematu kota.',
+          url: bridgeHref,
+          price: 169,
+        },
+        {
           name: 'Pelna konsultacja behawioralna',
           description: 'Szersza konsultacja online dla tematow kocich wielowatkowych albo dlugotrwalych.',
           url: consultationHref,
-          price: 350,
+          price: 470,
         },
       ],
     }),
@@ -134,7 +148,9 @@ export default function CatsPage() {
               Pomagam opiekunom kotow zrozumiec, co stoi za trudnym zachowaniem i jak zaczac to porzadkowac bez stresu dla kota i dla Ciebie.
             </p>
             <NextSlot className="top-gap-small" />
-            <p className="notatnik-service-description">Nie oceniam. Szukam przyczyny, nie winy.</p>
+            <p className="notatnik-service-description">
+              Nie oceniam. Szukam przyczyny, nie winy. Dla kota obowiazuje ta sama drabinka: Kwadrans na start, Kwadrans na juz przy pilnym temacie, Dwa kwadranse przy szerszym uporzadkowaniu i Pelna konsultacja przy sprawach zlozonych.
+            </p>
             <div className="notatnik-subhero-actions">
               <Link href={quickHref} prefetch={false} className="notatnik-btn">
                 <span>Zarezerwuj Kwadrans</span>
@@ -196,13 +212,18 @@ export default function CatsPage() {
             </article>
             <article className="notatnik-step">
               <div className="notatnik-step-number">01</div>
-              <h3>Kwadrans i priorytet</h3>
-              <p>Rozmawiamy o tym, co dzieje sie dzis w domu, i wybieramy pierwszy ruch z sensem dla kota i opiekuna.</p>
+              <h3>Wybierasz wlasciwy format</h3>
+              <p>Kwadrans jest najprostszym startem. Kwadrans na juz daje ten sam zakres szybciej. Dwa kwadranse i Pelna konsultacja sa dla tematow szerszych.</p>
             </article>
             <article className="notatnik-step">
               <div className="notatnik-step-number">02</div>
-              <h3>Szerszy plan, gdy temat ma warstwy</h3>
-              <p>Jesli problem obejmuje zdrowie, srodowisko i relacje, pelna konsultacja porzadkuje kolejnosc zmian.</p>
+              <h3>Opisujesz sytuacje kota</h3>
+              <p>Rozmawiamy o tym, co dzieje sie dzis w domu, i wybieramy pierwszy ruch z sensem dla kota i opiekuna.</p>
+            </article>
+            <article className="notatnik-step">
+              <div className="notatnik-step-number">03</div>
+              <h3>Wiesz, czy wejsc szerzej</h3>
+              <p>Jesli problem obejmuje zdrowie, srodowisko i relacje, po rozmowie wiadomo, czy kolejnym krokiem maja byc Dwa kwadranse albo Pelna konsultacja.</p>
             </article>
           </div>
         </section>
@@ -210,8 +231,8 @@ export default function CatsPage() {
         <ServiceDecisionSection
           index="III."
           eyebrow="Usluga online"
-          title="Dla kota mozesz zaczac od Kwadransu albo wejsc szerzej."
-          description="Kwadrans pomaga ustalic pierwszy priorytet, a pelna konsultacja zostaje dla spraw, ktore wymagaja szerszego porzadkowania."
+          title="Dla kota obowiazuje ta sama logika 4 uslug."
+          description="Kwadrans pomaga ustalic pierwszy priorytet, Kwadrans na juz przyspiesza wejscie, Dwa kwadranse daja etap posredni, a Pelna konsultacja zostaje dla spraw, ktore wymagaja szerszego porzadkowania."
           audioHref={quickHref}
           consultationHref={consultationHref}
           serviceHref={serviceLandingHref}
@@ -232,8 +253,7 @@ export default function CatsPage() {
         <section id="konsultacja">
           <NotatnikSectionHead index="IV." kicker="Uslugi" title="Porownanie uslug dla opiekuna kota." />
           <p className="notatnik-service-description">
-            Przy kuwecie, stresie i relacjach miedzy kotami dobrze od razu widziec roznice miedzy Kwadransem, Dwiema
-            kwadransami i pelna konsultacja.
+            Przy kuwecie, stresie i relacjach miedzy kotami dobrze od razu widziec roznice miedzy prostym startem, pilnym terminem, etapem posrednim i pelna konsultacja.
           </p>
           <ServicesComparison species="kot" />
         </section>
@@ -252,7 +272,7 @@ export default function CatsPage() {
 
         <NotatnikFinalCta
           title="Jesli temat kota Ci nie daje spokoju, <em>zacznij od porzadku.</em>"
-          copy="Nie musisz od razu wiedziec, czy chodzi o kuwete, stres czy relacje. Wystarczy pierwszy kontakt."
+          copy="Nie musisz od razu wiedziec, czy chodzi o kuwete, stres czy relacje. Wystarczy dobrze wybrac pierwszy format."
           primaryHref={quickHref}
           primaryLabel="Zarezerwuj Kwadrans / 69 zl"
           secondaryHref="/kontakt?species=kot#formularz"

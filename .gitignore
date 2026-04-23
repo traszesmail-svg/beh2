@@ -36,3 +36,4 @@ qa-reports/**/*.xml
 Thumbs.db
 
 .vercel
+.env*.local

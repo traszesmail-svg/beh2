@@ -10,7 +10,7 @@ import { getBreadcrumbJsonLd, getServiceJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: 'Rezerwacja Kwadransa z behawiorystÄ…',
+  title: 'Rezerwacja Kwadransa z behawiorysta',
   path: '/book',
   description:
     'Prosba o rezerwacje Kwadransu 69 zl, Kwadransu na juz 99 zl, Dwoch kwadransow 169 zl albo Pelnej konsultacji 470 zl z diagnoza i 7 dniami wsparcia tekstowego przez WhatsApp.',
@@ -54,7 +54,7 @@ export default function BookPage({
       ctaHref="/cennik"
       ctaLabel="Zobacz cennik"
       footerPrimaryHref="/book?service=szybka-konsultacja-15-min"
-      footerPrimaryLabel="Kwadrans z behawiorystÄ…"
+      footerPrimaryLabel="Kwadrans z behawiorysta"
     >
       <Schema
         data={[
@@ -69,10 +69,10 @@ export default function BookPage({
             offerCatalog: [
               // nazwa uslugi: Kwadrans z behawiorysta
               // format: 15 min audio bez kamery
-              { name: 'Kwadrans z behawiorystÄ…', description: '15 min audio bez kamery.', url: '/book?service=szybka-konsultacja-15-min', price: 69 },
+              { name: 'Kwadrans z behawiorysta', description: '15 min audio bez kamery.', url: '/book?service=szybka-konsultacja-15-min', price: 69 },
               { name: 'Kwadrans na juz', description: '15 min audio, termin w 15 minut.', url: '/book?service=kwadrans-na-juz', price: 99 },
               { name: 'Dwa kwadranse', description: '30 min online z krotka notatka po rozmowie.', url: '/book?service=konsultacja-30-min', price: 169 },
-              { name: 'PeĹ‚na konsultacja', description: '60 min audio albo video, diagnoza, plan poprawy i 7 dni wsparcia tekstowego przez WhatsApp.', url: '/book?service=konsultacja-behawioralna-online', price: 470 },
+              { name: 'Pelna konsultacja', description: '60 min audio albo video, diagnoza, plan poprawy i 7 dni wsparcia tekstowego przez WhatsApp.', url: '/book?service=konsultacja-behawioralna-online', price: 470 },
             ],
           }),
         ]}
@@ -90,19 +90,19 @@ export default function BookPage({
           <NextSlot className="top-gap-small" />
           <div className="notatnik-subhero-actions">
             <Link href="/cennik" prefetch={false} className="notatnik-btn">
-              <span>PorĂłwnaj usĹ‚ugi</span>
+              <span>Porownaj uslugi</span>
               <span className="notatnik-btn-arrow" aria-hidden="true">
                 &rarr;
               </span>
             </Link>
             <Link href="/kontakt#formularz" prefetch={false} className="notatnik-btn notatnik-btn-ghost">
-              <span>Napisz wiadomoĹ›Ä‡</span>
+              <span>Napisz wiadomosc</span>
             </Link>
           </div>
         </div>
 
         <div className="summary-card tree-backed-card">
-          <div className="section-eyebrow">Co dzieje siÄ™ dalej</div>
+          <div className="section-eyebrow">Co dzieje sie dalej</div>
           <h3>Platnosc przychodzi dopiero po potwierdzeniu terminu.</h3>
           <p>
             Ten model porzadkuje rezerwacje bez publicznego numeru telefonu. Najpierw uzgadniamy termin, potem wysylam
@@ -112,12 +112,12 @@ export default function BookPage({
       </section>
 
       <section id="porownanie">
-        <NotatnikSectionHead index="I." kicker="UsĹ‚ugi" title="Najpierw porownaj cztery formaty." />
+        <NotatnikSectionHead index="I." kicker="Uslugi" title="Najpierw porownaj cztery formaty." />
         <ServicesComparison species={species} />
       </section>
 
       <section style={{ background: 'var(--paper)' }}>
-        <NotatnikSectionHead index="II." kicker="PĹ‚atnoĹ›Ä‡" title="Jak przebiega pĹ‚atnoĹ›Ä‡." />
+        <NotatnikSectionHead index="II." kicker="Platnosc" title="Jak przebiega platnosc." />
         <div className="notatnik-steps">
           {PAYMENT_STEPS.map((step, index) => (
             <article key={step} className="notatnik-step">
@@ -132,11 +132,11 @@ export default function BookPage({
         <div className="notatnik-contact-left">
           <div className="notatnik-mono notatnik-kicker-spaced">Formularz rezerwacji</div>
           <h2>
-            WyĹ›lij proĹ›bÄ™ o termin, <em>a ja odpiszÄ™ z potwierdzeniem.</em>
+            Wyslij prosbe o termin, <em>a ja odpisze z potwierdzeniem.</em>
           </h2>
           <p className="notatnik-contact-lede">
-            Linki z `?service=` i `?species=` dalej dziaĹ‚ajÄ…. Formularz wstÄ™pnie zaznacza wybranÄ… usĹ‚ugÄ™ i gatunek, ĹĽeby
-            nie gubiÄ‡ kontekstu po przejĹ›ciu z innych stron.
+            Linki z `?service=` i `?species=` dalej dzialaja. Formularz wstepnie zaznacza wybrana usluge i gatunek, zeby
+            nie gubic kontekstu po przejsciu z innych stron.
           </p>
 
           <div className="contact-form-card" id="formularz">
@@ -145,8 +145,8 @@ export default function BookPage({
         </div>
 
         <div className="notatnik-contact-right notatnik-kinfo">
-          <h3>Po wysĹ‚aniu proĹ›by</h3>
-          <p>Ten sam trzyetapowy proces zobaczysz teĹĽ w mailu zwrotnym, ĹĽeby od razu byĹ‚o jasne, co stanie siÄ™ dalej.</p>
+          <h3>Po wyslaniu prosby</h3>
+          <p>Ten sam trzyetapowy proces zobaczysz tez w mailu zwrotnym, zeby od razu bylo jasne, co stanie sie dalej.</p>
 
           <div className="notatnik-steps">
             {NEXT_STEPS.map((step, index) => (
@@ -162,13 +162,13 @@ export default function BookPage({
             <p>
               Przy rezerwacji akceptujesz{' '}
               <Link href="/regulamin" prefetch={false}>
-                regulamin ogĂłlny
+                regulamin ogolny
               </Link>{' '}
               oraz{' '}
               <Link href="/regulamin-pelna-konsultacja" prefetch={false}>
-                regulamin PeĹ‚nej konsultacji
+                regulamin Pelnej konsultacji
               </Link>
-              . Dla peĹ‚nej konsultacji warunki zwrotĂłw i odstÄ…pienia sÄ… opisane osobno.
+              . Dla pelnej konsultacji warunki zwrotow i odstepienia sa opisane osobno.
             </p>
           </div>
         </div>

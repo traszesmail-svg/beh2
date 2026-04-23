@@ -77,9 +77,9 @@ export default async function OfferPage() {
           <div className="offer-page-hero-grid">
             <div className="offer-page-hero-copy">
               <div className="section-eyebrow">Oferta</div>
-              <h1>Cztery proste wejscia: 69 zl na start, 99 zl za priorytet, 169 zl za spokojniejsze wejscie i 470 zl za Pelna konsultacje z diagnoza.</h1>
+              <h1>Cztery uslugi, jedna jasna logika wyboru: start, pilna pomoc, szersze uporzadkowanie albo pelna konsultacja.</h1>
               <p className="hero-text">
-                Publicznie zostaja cztery czytelne wejscia: Kwadrans z behawiorysta, Kwadrans na juz, Dwa kwadranse i Pelna konsultacja behawioralna. Roznica miedzy 69 zl a 99 zl jest prosta: to ten sam format 15 minut, ale 99 zl daje priorytet i termin w 15 minut.
+                Publicznie zostaja cztery czytelne wejscia: Kwadrans z behawiorysta, Kwadrans na juz, Dwa kwadranse i Pelna konsultacja behawioralna. Roznica miedzy 69 zl a 99 zl jest prosta: to ten sam format 15 minut, ale 99 zl daje szybszy termin.
               </p>
 
               <div className="hero-actions top-gap">
@@ -106,7 +106,7 @@ export default async function OfferPage() {
 
             <aside className="offer-page-hero-card tree-backed-card">
               <span className="offer-page-hero-label">Jak zaczac</span>
-              <strong>Kwadrans z behawiorysta sprawdza sie na start. Kwadrans na juz sprzedaje priorytet, Dwa kwadranse sa pomostem, a Pelna konsultacja daje diagnoze i wsparcie wdrozenia.</strong>
+              <strong>Kwadrans z behawiorysta sprawdza sie na start. Kwadrans na juz daje ten sam zakres szybciej, Dwa kwadranse sa pomostem, a Pelna konsultacja daje diagnoze i wsparcie wdrozenia.</strong>
               <div className="offer-page-hero-stats">
                 <div className="offer-page-hero-stat">
                   <span>15 min / {quickStartPriceAmount} zl</span>
@@ -135,7 +135,7 @@ export default async function OfferPage() {
               <div className="section-eyebrow">Aktywna oferta</div>
               <h2>Cztery czytelne wejscia</h2>
             </div>
-            <p className="editorial-section-lead">Czas i cena sa widoczne przed rezerwacja. 69 zl jest najprostszym startem, 99 zl daje priorytet, 169 zl porzadkuje temat szerzej, a 470 zl sprzedaje diagnoze i 7 dni wsparcia po rozmowie.</p>
+            <p className="editorial-section-lead">Czas i cena sa widoczne przed rezerwacja. 69 zl jest najprostszym startem, 99 zl przyspiesza wejscie, 169 zl porzadkuje temat szerzej, a 470 zl daje diagnoze i 7 dni wsparcia po rozmowie.</p>
           </div>
 
           <div className="card-grid three-up top-gap">
@@ -269,9 +269,7 @@ export default async function OfferPage() {
 
           <div className="list-card accent-outline tree-backed-card top-gap">
             <strong>Najkrotsza zasada wyboru</strong>
-            <span>
-              69 zl wybierz, gdy chcesz najprostszy start. 99 zl wybierz, gdy potrzebujesz tego samego formatu, ale priorytetowo. 169 zl wybierz, gdy 15 minut to za malo. 470 zl wybierz, gdy temat jest zlozony i chcesz diagnozy oraz 7 dni wsparcia po rozmowie.
-            </span>
+              <span>69 zl wybierz, gdy chcesz najprostszy start. 99 zl wybierz, gdy potrzebujesz tego samego formatu szybciej. 169 zl wybierz, gdy 15 minut to za malo. 470 zl wybierz, gdy temat jest zlozony i chcesz diagnozy oraz 7 dni wsparcia po rozmowie.</span>
           </div>
 
           <div className="top-gap">

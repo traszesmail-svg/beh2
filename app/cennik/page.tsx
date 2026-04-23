@@ -31,15 +31,15 @@ const PAYMENT_STEPS = [
 ] as const
 
 const ctaSupportSnippets = [
-  'Jesli nie wiesz, od czego zaczac - to jest wlasnie ten krok.',
-  '15 minut. Jedno konkretne pytanie. Juz wiesz wiecej niz przed rozmowa.',
-  'Kwadrans na juz to ten sam format 15 minut, ale z priorytetem i terminem w 15 minut.',
+  'Kwadrans za 69 zl to najprostszy start, gdy chcesz wiedziec, od czego zaczac.',
+  'Kwadrans na juz za 99 zl to ten sam format 15 minut, ale z terminem w 15 minut.',
+  'Dwa kwadranse za 169 zl spokojnie porzadkuja temat, a Pelna konsultacja za 470 zl sluzy sprawom zlozonym i przewleklym.',
 ] as const
 
 const trustSnippets = [
   'Pracuje online z opiekunami psow i kotow w calej Polsce. Bez kamer, bez przygotowan - wystarczy mikrofon i 15 minut.',
-  'Kwadrans za 69 zl jest najprostszym startem. Kwadrans na juz za 99 zl nie daje dluzszej rozmowy - daje szybszy dostep.',
-  'Pelna konsultacja za 470 zl jest produktem premium: po rozmowie dostajesz diagnoze, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.',
+  'Kwadrans za 69 zl jest najprostszym startem. Kwadrans na juz za 99 zl nie daje dluzszej rozmowy - daje szybszy termin.',
+  'Pelna konsultacja za 470 zl obejmuje 60 minut rozmowy, diagnoze, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.',
   'Nie obiecuje efektow w konkretnym czasie. Mowie, co realnie mozna zorganizowac - i co zalezy od zwierzecia, a co od srodowiska.',
   'Zakres pracy jest uczciwy: powiem, co lezy w zasiegu konsultacji, a co wymaga wiecej czasu, wsparcia specjalisty lub zmian w srodowisku.',
 ] as const
@@ -58,7 +58,7 @@ const pricingFaqItems = [
   {
     question: 'Czy 15 minut wystarczy?',
     answer:
-      'Przy jednym pytaniu albo orientacji w temacie - tak. Przy bardziej zlozonym, wielowatkowym problemie daje kierunek i mowie wprost, czy potrzebujesz pelniejszej konsultacji.',
+      'Przy jednym pytaniu albo pierwszym uporzadkowaniu tematu - tak. Przy bardziej zlozonym, wielowatkowym problemie daje kierunek i pokazuje, czy lepszym kolejnym krokiem beda Dwa kwadranse albo Pelna konsultacja.',
   },
   {
     question: 'Czy musze miec kamere?',
@@ -68,7 +68,7 @@ const pricingFaqItems = [
   {
     question: 'Co dostane po 15 minutach?',
     answer:
-      'Jeden konkretny kierunek: co zrobic teraz, co obserwowac i czy temat wymaga glebszej pracy. To nie jest plan na trzy miesiace, tylko sensowny pierwszy krok.',
+      'Jeden konkretny kierunek: co zrobic teraz, co obserwowac i czy temat wymaga glebszej pracy. To nie jest plan na trzy miesiace, tylko sensowny pierwszy krok i decyzja o ewentualnym kolejnym etapie.',
   },
   {
     question: 'Co obejmuje Pelna konsultacja 470 zl?',
@@ -95,7 +95,7 @@ export default function PricingPage() {
       ctaHref="/book?service=szybka-konsultacja-15-min"
       ctaLabel="Kwadrans / 69 zl"
       footerPrimaryHref="/book?service=szybka-konsultacja-15-min"
-      footerPrimaryLabel="Kwadrans z behawiorystÄ…"
+      footerPrimaryLabel="Kwadrans z behawiorysta"
     >
       <Schema
         data={[
@@ -108,10 +108,10 @@ export default function PricingPage() {
             description: 'Cztery przejrzyste opcje: Kwadrans, Kwadrans na juz, Dwa kwadranse i Pelna konsultacja behawioralna.',
             serviceUrl: '/cennik',
             offerCatalog: [
-              { name: 'Kwadrans z behawiorystÄ…', description: '15 min audio bez kamery.', url: '/book?service=szybka-konsultacja-15-min', price: 69 },
+              { name: 'Kwadrans z behawiorysta', description: '15 min audio bez kamery.', url: '/book?service=szybka-konsultacja-15-min', price: 69 },
               { name: 'Kwadrans na juz', description: '15 min audio, termin w 15 minut.', url: '/book?service=kwadrans-na-juz', price: 99 },
               { name: 'Dwa kwadranse', description: '30 min online z krotka notatka po rozmowie.', url: '/book?service=konsultacja-30-min', price: 169 },
-              { name: 'PeĹ‚na konsultacja', description: '60 min audio albo video, diagnoza, plan poprawy i 7 dni wsparcia tekstowego przez WhatsApp.', url: '/book?service=konsultacja-behawioralna-online', price: 470 },
+              { name: 'Pelna konsultacja', description: '60 min audio albo video, diagnoza, plan poprawy i 7 dni wsparcia tekstowego przez WhatsApp.', url: '/book?service=konsultacja-behawioralna-online', price: 470 },
             ],
           }),
         ]}
@@ -123,9 +123,9 @@ export default function PricingPage() {
           <h1>
             Cennik konsultacji behawioralnych <em>- psy i koty</em>
           </h1>
-          <p>Cztery przejrzyste opcje. 69 zl to najprostszy start, 99 zl daje ten sam format z priorytetem, a 470 zl obejmuje diagnoze i 7 dni wsparcia tekstowego przez WhatsApp.</p>
+          <p>Cztery przejrzyste opcje w jednej logice wyboru. Kwadrans to prosty start, Kwadrans na juz przyspiesza wejscie, Dwa kwadranse daja wiecej miejsca, a Pelna konsultacja sluzy sprawom zlozonym.</p>
           <NextSlot className="top-gap-small" />
-          <div className="info-box top-gap-small">Jesli nie wiesz, od czego zaczac - zacznij od Kwadransu. To najlzejszy i najszybszy pierwszy krok.</div>
+          <div className="info-box top-gap-small">Jesli nie wiesz, od czego zaczac, zacznij od Kwadransu. Nie trzeba wybierac najwiekszej uslugi na pierwszy ruch.</div>
           <div className="notatnik-subhero-actions">
             <Link href="/book?service=szybka-konsultacja-15-min" prefetch={false} className="notatnik-btn">
               <span>Zarezerwuj Kwadrans</span>
@@ -134,22 +134,22 @@ export default function PricingPage() {
               </span>
             </Link>
             <Link href="/kontakt#formularz" prefetch={false} className="notatnik-btn notatnik-btn-ghost">
-              <span>Napisz wiadomoĹ›Ä‡</span>
+              <span>Napisz wiadomosc</span>
             </Link>
           </div>
         </div>
 
         <div className="summary-card tree-backed-card">
-          <div className="section-eyebrow">ĹšcieĹĽka wyboru</div>
+          <div className="section-eyebrow">Sciezka wyboru</div>
           <h3>Zacznij od tego, co pasuje do skali problemu.</h3>
           <p>
-            Kwadrans za 69 zl zostaje najlzejszym startem. Kwadrans na juz za 99 zl daje ten sam format z priorytetem. Dwa kwadranse porzadkuja temat szerzej, a Pelna konsultacja jest dla spraw wielowatkowych albo przewleklych.
+            Kwadrans za 69 zl zostaje najlzejszym startem. Kwadrans na juz za 99 zl daje ten sam format, ale szybciej. Dwa kwadranse porzadkuja temat szerzej, a Pelna konsultacja jest dla spraw wielowatkowych albo przewleklych.
           </p>
         </div>
       </section>
 
       <section id="porownanie">
-        <NotatnikSectionHead index="I." kicker="PorĂłwnanie" title="Jedna tabela, cztery rozne zastosowania." />
+        <NotatnikSectionHead index="I." kicker="Porownanie" title="Jedna tabela, cztery role w tym samym lejku." />
         <ServicesComparison />
         <div className="notatnik-faq-grid top-gap">
           {ctaSupportSnippets.map((snippet) => (
@@ -161,7 +161,7 @@ export default function PricingPage() {
       </section>
 
       <section style={{ background: 'var(--paper)' }}>
-        <NotatnikSectionHead index="II." kicker="PĹ‚atnoĹ›Ä‡" title="Jak przebiega pĹ‚atnoĹ›Ä‡." />
+        <NotatnikSectionHead index="II." kicker="Platnosc" title="Jak przebiega platnosc." />
         <div className="notatnik-steps">
           {PAYMENT_STEPS.map((step, index) => (
             <article key={step} className="notatnik-step">
@@ -195,31 +195,31 @@ export default function PricingPage() {
         <NotatnikSectionHead index="IV." kicker="Zwroty i zmiany" title="Zmiany terminu i zwroty sa opisane wprost." />
         <div className="notatnik-quiet-grid">
           <article className="notatnik-quiet-card">
-            <h3>Okno na zmianÄ™ lub rezygnacjÄ™</h3>
+            <h3>Okno na zmiane lub rezygnacje</h3>
             <p>
-              KrĂłtkie formaty przewidujÄ… 24-godzinne okno na zgĹ‚oszenie zmiany terminu albo rezygnacji po potwierdzeniu
-              wpĹ‚aty. SzczegĂłĹ‚y sÄ… opisane w regulaminie rezerwacji.
+              Krotkie formaty przewiduja 24-godzinne okno na zgloszenie zmiany terminu albo rezygnacji po potwierdzeniu
+              wplaty. Szczegoly sa opisane w regulaminie rezerwacji.
             </p>
             <Link href="/regulamin" prefetch={false} className="notatnik-inline-link">
-              OtwĂłrz regulamin rezerwacji
+              Otworz regulamin rezerwacji
             </Link>
           </article>
           <article className="notatnik-quiet-card">
-            <h3>PeĹ‚na konsultacja ma osobny regulamin</h3>
+            <h3>Pelna konsultacja ma osobny regulamin</h3>
             <p>
-              Dla peĹ‚nej konsultacji publikowany jest osobny dokument, bo ten format ma osobne warunki dotyczace zakresu,
+              Dla pelnej konsultacji publikowany jest osobny dokument, bo ten format ma osobne warunki dotyczace zakresu,
               diagnozy, 7 dni wsparcia przez WhatsApp i zasad przed rozpoczeciem uslugi.
             </p>
             <Link href="/regulamin-pelna-konsultacja" prefetch={false} className="notatnik-inline-link">
-              OtwĂłrz regulamin PeĹ‚nej konsultacji
+              Otworz regulamin Pelnej konsultacji
             </Link>
           </article>
         </div>
       </section>
 
       <NotatnikFinalCta
-        title="JeĹ›li chcesz ruszyÄ‡ z tematem, <em>zacznij od Kwadransu.</em>"
-        copy="To najprostszy pierwszy krok. JeĹ›li temat jest szerszy, od razu bÄ™dzie widaÄ‡, czy lepiej przejĹ›Ä‡ do kolejnego formatu."
+        title="Jesli chcesz ruszyc z tematem, <em>zacznij od Kwadransu.</em>"
+        copy="To najprostszy pierwszy krok. Jesli temat okaze sie szerszy, od razu bedzie widac, czy lepiej przejsc do kolejnego formatu."
         primaryHref="/book?service=szybka-konsultacja-15-min"
         primaryLabel="Zarezerwuj Kwadrans ->"
         secondaryHref="/kontakt#formularz"

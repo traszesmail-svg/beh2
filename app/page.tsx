@@ -3,16 +3,16 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { NextSlot } from '@/components/NextSlot'
 import { NotatnikFinalCta, NotatnikFooter, NotatnikSectionHead, NotatnikTopbar } from '@/components/NotatnikA'
+import { OfferEntrySection } from '@/components/OfferEntrySection'
 import { Schema } from '@/components/schema'
 import { ServiceDecisionSection } from '@/components/ServiceDecisionSection'
 import { ServicesComparison } from '@/components/ServicesComparison'
 import { repairCopy } from '@/lib/copy'
-import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { getLeadMagnetBySlug, type LeadMagnet } from '@/lib/growth-layer'
-import { FUNNEL_PRIMARY_HREF, FUNNEL_UPGRADE_HREF } from '@/lib/offers'
+import { FUNNEL_FULL_CONSULTATION_HREF, FUNNEL_PRIMARY_HREF, FUNNEL_PRIMARY_LABEL, FUNNEL_UPGRADE_HREF } from '@/lib/offers'
+import { PUBLIC_OFFER_FAQ_ITEMS } from '@/lib/public-offer-faq'
 import { getBreadcrumbJsonLd, getFaqPageJsonLd, getServiceJsonLd } from '@/lib/schema'
 import { buildHomeMetadata } from '@/lib/seo'
-import { FAQ_SHORTLISTS } from '@/lib/trust-layer'
 
 export async function generateMetadata(): Promise<Metadata> {
   return buildHomeMetadata()
@@ -29,6 +29,7 @@ const navItems = [
 ]
 
 const serviceLandingHref = '/behawiorysta-online-polska'
+const urgentNowHref = '/book?service=kwadrans-na-juz'
 
 const materials = [
   getLeadMagnetBySlug('pies-reaktywnosc-5-krokow'),
@@ -38,57 +39,64 @@ const materials = [
 
 const quotes = [
   {
-    quote: 'Po rozmowie wiedziałam, co zrobić od razu i co spokojnie odłożyć. W domu zrobiło się dużo lżej.',
+    quote: 'Po rozmowie wiedzialam, co zrobic od razu i co spokojnie odlozyc. W domu zrobilo sie duzo lzej.',
     footer: 'Opiekunka psa reaktywnego / po pierwszym kontakcie audio',
   },
   {
-    quote: 'Przy kuwecie dostałam porządek zamiast kolejnych domysłów. To był pierwszy moment, kiedy wiedziałam, od czego zacząć.',
-    footer: 'Opiekunka kota niewychodzącego / po uporządkowaniu tematu',
+    quote: 'Przy kuwecie dostalam porzadek zamiast kolejnych domyslow. To byl pierwszy moment, kiedy wiedzialam, od czego zaczac.',
+    footer: 'Opiekunka kota niewychodzacego / po uporzadkowaniu tematu',
   },
 ] as const
 
 const credentials = [
   {
     title: 'Behawiorysta COAPE',
-    copy: 'Międzynarodowy standard kształcenia behawiorystów i spokojna praca z realną codziennością.',
+    copy: 'Miedzynarodowy standard ksztalcenia behawiorystow i spokojna praca z realna codziennoscia.',
   },
   {
-    title: 'Trener zwierząt towarzyszących',
-    copy: 'Pierwszy krok ma być wykonalny dla opiekuna i realny dla psa albo kota.',
+    title: 'Trener zwierzat towarzyszacych',
+    copy: 'Pierwszy krok ma byc wykonalny dla opiekuna i realny dla psa albo kota.',
   },
   {
     title: 'Technik weterynarii',
-    copy: 'Szerszy kontekst zdrowia, bezpieczeństwa i tego, kiedy najpierw trzeba wykluczyć podłoże medyczne.',
+    copy: 'Szerszy kontekst zdrowia, bezpieczenstwa i tego, kiedy najpierw trzeba wykluczyc podloze medyczne.',
   },
 ] as const
 
 const trustCards = [
   {
-    title: '3 formaty startu',
-    copy: 'Kwadrans, Dwa kwadranse i pełna konsultacja mają jasne role jeszcze przed rezerwacją.',
+    title: '4 wejscia, jedna logika',
+    copy: 'Kwadrans 69 zl, Kwadrans na juz 99 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl maja jasne role jeszcze przed rezerwacja.',
   },
   {
-    title: '24 h na zmianę lub rezygnację',
-    copy: 'Krótkie formaty mają opisane wprost okno na zmianę terminu albo rezygnację po potwierdzeniu wpłaty.',
+    title: 'Roznica 69 i 99 jest prosta',
+    copy: 'To ten sam 15-minutowy format. Przy 99 zl placisz za priorytet i termin w 15 minut, a nie za dluzsza rozmowe.',
   },
   {
-    title: 'Publiczny profil i źródła',
-    copy: 'Profil COAPE/CAPBT, FAQ i strony usługowe są spięte tym samym opisem kwalifikacji i zakresu pracy.',
+    title: 'Pelna konsultacja ma konkretny zakres',
+    copy: '470 zl obejmuje 60 minut rozmowy, diagnoze, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.',
   },
 ] as const
 
 export default function HomePage() {
-  const faqItems = FAQ_SHORTLISTS.home.slice(0, 4)
+  const faqItems = PUBLIC_OFFER_FAQ_ITEMS
   const structuredData = [
     getBreadcrumbJsonLd([{ name: 'Strona glowna', path: '/' }]),
     getServiceJsonLd({
-      name: 'Behawiorysta psów i kotów online',
-      description: 'Spokojny pierwszy krok dla opiekunów psów i kotów. Kwadrans, Dwa kwadranse i pełna konsultacja online.',
+      name: 'Behawiorysta psow i kotow online',
+      description:
+        'Spokojny pierwszy krok dla opiekunow psow i kotow. Cztery jasne uslugi: Kwadrans 69 zl, Kwadrans na juz 99 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl.',
       serviceUrl: serviceLandingHref,
       offerCatalog: [
-        { name: 'Kwadrans z behawiorystą', description: '15 min audio bez kamery.', url: '/book?service=szybka-konsultacja-15-min', price: 69 },
-        { name: 'Dwa kwadranse', description: '30 min audio.', url: '/book?service=konsultacja-30-min', price: 129 },
-        { name: 'Pełna konsultacja', description: '60 min audio albo video.', url: '/book?service=konsultacja-behawioralna-online', price: 350 },
+        { name: 'Kwadrans z behawiorysta', description: '15 min audio bez kamery, najprostszy start.', url: '/book?service=szybka-konsultacja-15-min', price: 69 },
+        { name: 'Kwadrans na juz', description: 'Ten sam format 15 min, ale z priorytetem i terminem w 15 minut.', url: '/book?service=kwadrans-na-juz', price: 99 },
+        { name: 'Dwa kwadranse', description: '30 min online na szersze uporzadkowanie tematu.', url: '/book?service=konsultacja-30-min', price: 169 },
+        {
+          name: 'Pelna konsultacja',
+          description: '60 min audio albo video, diagnoza, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.',
+          url: '/book?service=konsultacja-behawioralna-online',
+          price: 470,
+        },
       ],
     }),
     getFaqPageJsonLd(
@@ -114,53 +122,55 @@ export default function HomePage() {
         <section className="notatnik-hero">
           <div className="notatnik-hero-kicker notatnik-mono">
             <span className="notatnik-hero-edition">Nr 01 / 2026</span>
-            <span>Spokojny start dla opiekunów psów i kotów</span>
+            <span>Spokojny start dla opiekunow psow i kotow</span>
           </div>
 
           <h1>
-            Twój pies albo kot zachowuje się inaczej, niż powinien, i chcesz <em>wiedzieć, co z tym zrobić.</em>
+            Problem z zachowaniem psa albo kota? <em>Wybierz spokojny pierwszy krok.</em>
           </h1>
 
           <div className="notatnik-hero-grid">
             <div>
               <p className="notatnik-hero-lede">
-                Pomagam opiekunom, którzy widzą problem i szukają <strong>konkretnej pomocy</strong>, nie kolejnych ogólnych porad z internetu.
-                <strong> Kwadrans z behawiorystą</strong> to najprostszy start, gdy chcesz spokojnie ustalić pierwszy krok.
+                Na stronie sa cztery jasne wejscia: <strong>Kwadrans za 69 zl</strong>, <strong>Kwadrans na juz za 99 zl</strong>,{' '}
+                <strong>Dwa kwadranse za 169 zl</strong> i <strong>Pelna konsultacja za 470 zl</strong>. Zaczynasz od formatu, ktory pasuje do skali tematu,
+                nie od najdrozszej opcji. Kwadrans jest najprostszym startem, Kwadrans na juz przyspiesza wejscie, Dwa kwadranse daja wiecej miejsca, a
+                Pelna konsultacja sluzy sprawom zlozonym i przewleklym.
               </p>
 
               <NextSlot className="top-gap-small" />
 
               <div className="notatnik-hero-cta">
                 <Link href={FUNNEL_PRIMARY_HREF} prefetch={false} className="notatnik-btn">
-                  <span>Kwadrans z behawiorystą</span>
+                  <span>{FUNNEL_PRIMARY_LABEL}</span>
                   <span className="notatnik-btn-arrow" aria-hidden="true">
                     &rarr;
                   </span>
                 </Link>
-                <Link href="/kontakt#formularz" prefetch={false} className="notatnik-btn notatnik-btn-ghost">
-                  <span>Napisz wiadomość</span>
+                <Link href="/cennik" prefetch={false} className="notatnik-btn notatnik-btn-ghost">
+                  <span>Zobacz cennik</span>
                 </Link>
               </div>
 
               <div className="notatnik-hero-fine">
-                Szerszy temat?{' '}
+                Pilny temat?{' '}
+                <Link href={urgentNowHref} prefetch={false}>
+                  Kwadrans na juz
+                </Link>
+                . To ten sam 15-minutowy format, tylko z terminem w 15 minut. Gdy 15 minut to za malo, wybierz{' '}
                 <Link href={FUNNEL_UPGRADE_HREF} prefetch={false}>
-                  Umów Dwa kwadranse.
-                </Link>{' '}
-                / Masz już kontekst?{' '}
-                <Link href="/psy" prefetch={false}>
-                  Pies
-                </Link>{' '}
-                /{' '}
-                <Link href="/koty" prefetch={false}>
-                  Kot
+                  Dwa kwadranse
+                </Link>
+                . Przy sprawie zlozonej albo przewleklej przejdz do{' '}
+                <Link href={FUNNEL_FULL_CONSULTATION_HREF} prefetch={false}>
+                  Pelnej konsultacji
                 </Link>
                 .
               </div>
             </div>
 
             <aside className="notatnik-hero-card">
-              <div className="notatnik-hero-card-corner notatnik-mono">Pierwszy krok</div>
+              <div className="notatnik-hero-card-corner notatnik-mono">Najprostszy start</div>
               <div className="notatnik-hero-card-media">
                 <Image
                   src="/branding/omnie-hero.webp"
@@ -172,12 +182,13 @@ export default function HomePage() {
                 <div className="notatnik-hero-card-media-note notatnik-mono">spokojna rozmowa / online</div>
               </div>
               <div className="notatnik-hero-card-body">
-                <h3>Kwadrans z behawiorystą</h3>
-                <p>15 minut rozmowy audio bez kamery. Jedno pytanie albo uporządkowanie tematu na start.</p>
+                <h3>Kwadrans z behawiorysta</h3>
+                <p>15 minut rozmowy audio bez kamery. Najprostszy start, gdy chcesz nazwac problem, ustalic priorytet i wiedziec, od czego zaczac.</p>
                 <div className="notatnik-price-row">
                   <div className="notatnik-price-big">69 zl</div>
                   <div className="notatnik-price-small">15 min / audio / bez kamery</div>
                 </div>
+                <p className="notatnik-hero-fine">Pilniej? Kwadrans na juz kosztuje 99 zl i daje ten sam format z terminem w 15 minut.</p>
                 <div className="notatnik-price-row notatnik-price-row-plain">
                   <Link href={FUNNEL_PRIMARY_HREF} prefetch={false} className="notatnik-inline-link">
                     Rezerwacja
@@ -189,7 +200,7 @@ export default function HomePage() {
         </section>
 
         <section>
-          <NotatnikSectionHead index="I." kicker="Pies i Kot" title="Jeśli wiesz już, czy temat dotyczy psa, czy kota, wybierz właściwą stronę." />
+          <NotatnikSectionHead index="I." kicker="Pies i Kot" title="Jesli wiesz juz, czy temat dotyczy psa, czy kota, wybierz wlasciwa strone." />
 
           <div className="notatnik-quiet-grid">
             <article className="notatnik-quiet-card">
@@ -197,7 +208,7 @@ export default function HomePage() {
               <h3>
                 Pomoc dla opiekuna <em>psa</em>.
               </h3>
-              <p>Najczęściej start dotyczy spacerów, pobudzenia, separacji albo młodego psa, z którym trudno złapać codzienny rytm.</p>
+              <p>Najczesciej start dotyczy spacerow, pobudzenia, separacji albo mlodego psa, z ktorym trudno zlapac codzienny rytm.</p>
               <Link href="/psy" prefetch={false} className="notatnik-inline-link">
                 Zobacz pomoc dla psa
               </Link>
@@ -208,7 +219,7 @@ export default function HomePage() {
               <h3>
                 Pomoc dla opiekuna <em>kota</em>.
               </h3>
-              <p>Tu zwykle chodzi o kuwetę, wycofanie, napięcie po zmianach w domu albo trudne relacje między kotami.</p>
+              <p>Tu zwykle chodzi o kuwete, wycofanie, napiecie po zmianach w domu albo trudne relacje miedzy kotami.</p>
               <Link href="/koty" prefetch={false} className="notatnik-inline-link">
                 Zobacz pomoc dla kota
               </Link>
@@ -219,52 +230,64 @@ export default function HomePage() {
         <section style={{ background: 'var(--paper)' }}>
           <NotatnikSectionHead
             index="II."
-            kicker="Jak to działa"
-            title="Zacznij od Kwadransu z behawiorystą. Najpierw ustalamy priorytet, potem pierwszy krok."
+            kicker="Jak to dziala"
+            title="Najpierw wybierasz wlasciwy format, potem dopiero termin i kolejny krok."
           />
 
           <div className="notatnik-steps">
             <article className="notatnik-step">
               <div className="notatnik-step-number">01</div>
-              <h3>Zaczynasz od Kwadransu</h3>
-              <p>Najpierw krótki start, żeby spokojnie ustalić priorytet i kolejny krok. Bez presji, bez długiej ankiety.</p>
+              <h3>Wybierasz jedna z 4 uslug</h3>
+              <p>Kwadrans to najprostszy start. Kwadrans na juz daje ten sam zakres szybciej. Dwa kwadranse porzadkuja temat szerzej, a Pelna konsultacja sluzy sprawom zlozonym.</p>
             </article>
             <article className="notatnik-step">
               <div className="notatnik-step-number">02</div>
-              <h3>Krótko opisujesz sytuację</h3>
-              <p>Mówisz, co dzieje się dziś w domu, na spacerze albo przy kuwecie, i co najbardziej Cię blokuje.</p>
+              <h3>Krotko opisujesz sytuacje</h3>
+              <p>Mowisz, co dzieje sie dzis w domu, na spacerze albo przy kuwecie, i co najbardziej blokuje Wasza codziennosc.</p>
             </article>
             <article className="notatnik-step">
               <div className="notatnik-step-number">03</div>
-              <h3>Wiesz, co zrobić dalej</h3>
-              <p>Po rozmowie wiesz, od czego zacząć, co obserwować i czy temat wymaga Dwóch kwadransów albo pełnej konsultacji.</p>
+              <h3>Rozmawiamy w wybranym formacie</h3>
+              <p>Kwadrans i Kwadrans na juz sa audio bez kamery. Dwa kwadranse i Pelna konsultacja moga odbyc sie audio albo audio/video.</p>
+            </article>
+            <article className="notatnik-step">
+              <div className="notatnik-step-number">04</div>
+              <h3>Wiesz, co robic dalej</h3>
+              <p>Po rozmowie masz pierwszy kierunek i wiesz, czy zostac przy tym etapie, czy przejsc do Dwoch kwadransow albo Pelnej konsultacji.</p>
             </article>
           </div>
         </section>
 
+        <OfferEntrySection
+          sectionId="oferta"
+          eyebrow="Oferta"
+          title="Cztery uslugi. Jedna logika wyboru."
+          description="Kwadrans za 69 zl jest najprostszym startem. Kwadrans na juz za 99 zl daje ten sam format 15 minut, ale z terminem w 15 minut. Dwa kwadranse za 169 zl daja spokojniejsze uporzadkowanie tematu, a Pelna konsultacja za 470 zl daje diagnoze, plan poprawy i 7 dni wsparcia przez WhatsApp."
+        />
+
         <ServiceDecisionSection
           index="III."
-          eyebrow="Usluga online"
-          title="Behawiorysta psów i kotów online. Zacznij od spokojnej rozmowy."
-          description="Jeśli chcesz najpierw zobaczyć pełny opis usługi, nadal możesz wejść przez szeroką stronę online dla całej Polski."
+          eyebrow="Szeroka usluga online"
+          title="Jesli chcesz najpierw zobaczyc pelny opis pracy online, przejdz do strony uslugi dla calej Polski."
+          description="Drabinka 69 / 99 / 169 / 470 pomaga wybrac format. Strona uslugi online porzadkuje jeszcze szerzej, kiedy wystarczy Kwadrans, a kiedy lepiej od razu wejsc w najszersza konsultacje."
           audioHref={FUNNEL_PRIMARY_HREF}
-          consultationHref={FUNNEL_UPGRADE_HREF}
+          consultationHref={FUNNEL_FULL_CONSULTATION_HREF}
           serviceHref={serviceLandingHref}
-          serviceLead="Kwadrans porządkuje temat na start, a pełna konsultacja zostaje dla spraw, które od razu wymagają szerszego planu."
+          serviceLead="Kwadrans zostaje najprostszym startem, a Pelna konsultacja jest dla spraw zlozonych, przewleklych albo wielowatkowych."
           quickBullets={[
-            'jedno pytanie albo uporządkowanie sytuacji',
+            'jedno pytanie albo pierwszy porzadek',
             '15 minut audio bez kamery',
-            'najprostszy pierwszy krok bez długiego wejścia',
+            'najlatwiejszy pierwszy krok bez dlugiego wejscia',
           ]}
           consultationBullets={[
-            'szerszy temat z większą liczbą wątków',
-            'więcej czasu na kontekst i plan dalszej pracy',
-            'opcja dla trudniejszych tematów psa albo kota',
+            'wiecej czasu na tlo problemu i codziennosc',
+            'diagnoza, plan poprawy i 7 dni WhatsApp',
+            'opcja dla trudniejszych tematow psa albo kota',
           ]}
         />
 
         <section>
-          <NotatnikSectionHead index="IV." kicker="Zaufanie" title="Najważniejsze rzeczy są widoczne jeszcze przed rezerwacją." />
+          <NotatnikSectionHead index="IV." kicker="Zaufanie" title="Najwazniejsze rzeczy sa widoczne jeszcze przed rezerwacja." />
           <div className="notatnik-quiet-grid">
             {trustCards.map((card) => (
               <article key={card.title} className="notatnik-quiet-card">
@@ -276,21 +299,21 @@ export default function HomePage() {
         </section>
 
         <section>
-          <NotatnikSectionHead index="V." kicker="Cennik" title="Trzy formaty. Jasne różnice przed rezerwacją." />
+          <NotatnikSectionHead index="V." kicker="Cennik" title="Cztery wejscia. Jasne roznice przed rezerwacja." />
           <p className="notatnik-service-description">
-            Jeśli chcesz porównać usługi przed rezerwacją, poniżej masz cennik w jednym miejscu. Najprostszy start to
-            nadal Kwadrans, ale wszystkie opcje są widoczne od razu.
+            Najprostszy start to Kwadrans za 69 zl. Kwadrans na juz za 99 zl nie daje dluzszej rozmowy, tylko szybszy termin. Dwa kwadranse za 169 zl sa
+            srodkiem dla tematow szerszych, a Pelna konsultacja za 470 zl jest dla spraw zlozonych i przewleklych.
           </p>
           <ServicesComparison />
           <div className="top-gap-small">
             <Link href="/cennik" prefetch={false} className="notatnik-inline-link">
-              Otwórz pełny cennik
+              Otworz pelny cennik
             </Link>
           </div>
         </section>
 
         <section>
-          <NotatnikSectionHead index="VI." kicker="Bezpłatne materiały" title="Jeśli chcesz wejść lżej, sięgnij po krótki materiał startowy." />
+          <NotatnikSectionHead index="VI." kicker="Bezplatne materialy" title="Jesli chcesz wejsc lzej, siegnij po krotki material startowy." />
 
           <div className="notatnik-material-grid">
             {materials.map((material) => (
@@ -299,7 +322,7 @@ export default function HomePage() {
                 <h3>{material.shortTitle}</h3>
                 <p>{material.lead}</p>
                 <Link href={`/bezplatne-materialy/${material.slug}`} prefetch={false}>
-                  Zobacz materiał
+                  Zobacz material
                 </Link>
               </article>
             ))}
@@ -307,7 +330,7 @@ export default function HomePage() {
         </section>
 
         <section>
-          <NotatnikSectionHead index="VII." kicker="Opinie" title="Co opiekunowie mówią po rozmowie." />
+          <NotatnikSectionHead index="VII." kicker="Opinie" title="Co opiekunowie mowia po rozmowie." />
 
           <div className="notatnik-quote-grid">
             {quotes.map((item) => (
@@ -322,7 +345,7 @@ export default function HomePage() {
         </section>
 
         <section>
-          <NotatnikSectionHead index="VIII." kicker="O mnie" title="Spokojne podejście, konkretne doświadczenie i materiały, do których można wrócić." />
+          <NotatnikSectionHead index="VIII." kicker="O mnie" title="Spokojne podejscie, konkretne doswiadczenie i materialy, do ktorych mozna wrocic." />
           <div className="notatnik-about">
             <div className="notatnik-portrait">
               <Image src="/branding/specialist-krzysztof-portrait.jpg" alt="Krzysztof Regulski podczas pracy z kotem" fill sizes="(max-width: 1180px) 100vw, 42vw" />
@@ -330,10 +353,10 @@ export default function HomePage() {
 
             <div className="notatnik-about-copy">
               <div className="notatnik-mono notatnik-kicker-spaced">O mnie</div>
-              <h2>Spokojne podejście, konkretne doświadczenie i materiały, do których można wrócić.</h2>
+              <h2>Spokojne podejscie, konkretne doswiadczenie i materialy, do ktorych mozna wrocic.</h2>
               <p>
-                Pracuję spokojnie, bez przymusu i kar, z naciskiem na kontekst, dobrostan i pierwszy wykonalny krok. Najpierw porządkuję tło
-                zachowania, dopiero potem dobieram pierwszy ruch, który da się wdrożyć w domu bez dokładania chaosu.
+                Pracuje spokojnie, bez przymusu i kar, z naciskiem na kontekst, dobrostan i pierwszy wykonalny krok. Najpierw porzadkuje tlo zachowania,
+                dopiero potem dobieram pierwszy ruch, ktory da sie wdrozyc w domu bez dokladania chaosu.
               </p>
 
               <div className="notatnik-cred-grid">
@@ -349,7 +372,7 @@ export default function HomePage() {
         </section>
 
         <section>
-          <NotatnikSectionHead index="IX." kicker="FAQ" title="Najczęstsze pytania przed pierwszym ruchem." />
+          <NotatnikSectionHead index="IX." kicker="FAQ" title="Najczestsze pytania przed pierwszym ruchem." />
 
           <div className="notatnik-faq-grid">
             {faqItems.map((item) => (
@@ -362,15 +385,15 @@ export default function HomePage() {
         </section>
 
         <NotatnikFinalCta
-          title="Jeśli coś Cię niepokoi, <em>zacznij spokojnie.</em>"
-          copy="Krótka rozmowa głosem bez kamery wystarczy, żeby ustalić priorytet i wiedzieć, co zrobić dalej."
+          title="Jesli cos Cie niepokoi, <em>zacznij spokojnie.</em>"
+          copy="Nie musisz od razu wybierac najwiekszej uslugi. Najczesciej wystarczy dobrze dobrac pierwszy format i ruszyc bez chaosu."
           primaryHref={FUNNEL_PRIMARY_HREF}
-          primaryLabel={FUNNEL_CTA_LABELS.primary}
-          secondaryHref="/kontakt#formularz"
-          secondaryLabel="Napisz wiadomość"
+          primaryLabel={FUNNEL_PRIMARY_LABEL}
+          secondaryHref="/cennik"
+          secondaryLabel="Zobacz cennik"
         />
 
-        <NotatnikFooter primaryHref={FUNNEL_PRIMARY_HREF} primaryLabel={FUNNEL_CTA_LABELS.primary} />
+        <NotatnikFooter primaryHref={FUNNEL_PRIMARY_HREF} primaryLabel={FUNNEL_PRIMARY_LABEL} />
       </div>
     </main>
   )

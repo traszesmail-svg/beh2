@@ -4,20 +4,19 @@ import { NotatnikFinalCta, NotatnikFooter, NotatnikSectionHead, NotatnikTopbar }
 import { Schema } from '@/components/schema'
 import { buildBookHref } from '@/lib/booking-routing'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
+import { PUBLIC_OFFER_FAQ_ITEMS } from '@/lib/public-offer-faq'
 import { getBreadcrumbJsonLd, getFaqPageJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
-import { FAQ_SHORTLISTS } from '@/lib/trust-layer'
 
 const baseMetadata = buildMarketingMetadata({
-  title: 'Najczęstsze pytania o konsultację behawioralną',
+  title: 'Najczestsze pytania o konsultacje behawioralne',
   path: '/faq',
-  description: 'Najczęstsze pytania o konsultację behawioralną, rezerwację, płatność i pierwszy kontakt z behawiorystą.',
+  description: 'Najczestsze pytania o oferte 69 / 99 / 169 / 470, rezerwacje, platnosc i pierwszy kontakt z behawiorysta.',
 })
 
 export const metadata: Metadata = baseMetadata
 
 const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min')
-const consultationHref = buildBookHref(null, 'konsultacja-behawioralna-online')
 const contactHref = '/kontakt#formularz'
 
 const navItems = [
@@ -30,49 +29,49 @@ const navItems = [
 
 const topicLinks = [
   {
-    eyebrow: 'Konsultacja',
-    title: 'Jak wygląda pierwsza rozmowa',
-    copy: 'Kwadrans, Dwa kwadranse i pełna konsultacja bez zgadywania, od czego zacząć.',
-    href: '/konsultacja-behawioralna-online#faq',
+    eyebrow: 'Cennik',
+    title: 'Roznica miedzy 69 / 99 / 169 / 470',
+    copy: 'Kwadrans 69 zl, Kwadrans na juz 99 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl bez zgadywania, od czego zaczac.',
+    href: '/cennik',
   },
   {
     eyebrow: 'Psy',
     title: 'Pytania o psy',
-    copy: 'Spacery, reaktywność, pobudzenie, rozłąka i trudności w domu.',
+    copy: 'Spacery, reaktywnosc, pobudzenie, rozlaka i trudnosci w domu.',
     href: '/psy#faq',
   },
   {
     eyebrow: 'Koty',
     title: 'Pytania o koty',
-    copy: 'Kuweta, wycofanie, napięcie między kotami i zmiany w otoczeniu.',
+    copy: 'Kuweta, wycofanie, napiecie miedzy kotami i zmiany w otoczeniu.',
     href: '/koty#faq',
   },
   {
     eyebrow: 'Kontakt',
-    title: 'Kiedy lepiej napisać',
-    copy: 'Jeśli nie chcesz od razu rezerwować, wiadomość pomoże ustalić najlepszy start.',
+    title: 'Kiedy lepiej napisac',
+    copy: 'Jesli nie chcesz od razu rezerwowac, wiadomosc pomoze ustalic najlepszy start.',
     href: '/kontakt#formularz',
   },
 ] as const
 
 export default function FaqPage() {
-  const structuredData = [getBreadcrumbJsonLd([{ name: 'Strona glowna', path: '/' }, { name: 'FAQ', path: '/faq' }]), getFaqPageJsonLd(FAQ_SHORTLISTS.home)]
+  const structuredData = [getBreadcrumbJsonLd([{ name: 'Strona glowna', path: '/' }, { name: 'FAQ', path: '/faq' }]), getFaqPageJsonLd(PUBLIC_OFFER_FAQ_ITEMS)]
 
   return (
     <main className="notatnik-page">
       <Schema data={structuredData} />
       <div className="notatnik-shell">
-        <NotatnikTopbar tag="FAQ / najczęstsze pytania" navItems={navItems} ctaHref={audioHref} ctaLabel={FUNNEL_CTA_LABELS.primary} />
+        <NotatnikTopbar tag="FAQ / najczestsze pytania" navItems={navItems} ctaHref={audioHref} ctaLabel={FUNNEL_CTA_LABELS.primary} />
 
         <section className="notatnik-subhero">
           <div>
             <div className="notatnik-subhero-tag notatnik-mono">FAQ</div>
             <h1>
-              Najczęstsze pytania przed <em>pierwszym ruchem</em>.
+              Najczestsze pytania przed <em>pierwszym ruchem</em>.
             </h1>
             <p>
-              Krótko, konkretnie i bez zbędnych objaśnień. Jeśli nie widzisz swojego pytania, zawsze możesz napisać wiadomość albo wejść od razu
-              w Kwadrans.
+              Krotko, konkretnie i bez zgadywania. Najwiecej watpliwosci dotyczy roznicy miedzy 69 a 99, tego kiedy wybrac 169 i kiedy od razu wejsc w
+              470.
             </p>
             <div className="notatnik-subhero-actions">
               <Link href={audioHref} prefetch={false} className="notatnik-btn">
@@ -81,27 +80,27 @@ export default function FaqPage() {
                   &rarr;
                 </span>
               </Link>
-              <Link href={contactHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
-                <span>Napisz wiadomość</span>
+              <Link href="/cennik" prefetch={false} className="notatnik-btn notatnik-btn-ghost">
+                <span>Zobacz cennik</span>
               </Link>
             </div>
           </div>
 
           <div className="notatnik-subhero-media">
             <div className="notatnik-quiet-card">
-              <div className="notatnik-mono">Najczęściej pytacie o</div>
+              <div className="notatnik-mono">Najczesciej pytacie o</div>
               <h3>
-                Kwadrans, <em>kontakt</em>, dalszy krok.
+                69 czy 99, <em>kiedy 169</em>, kiedy 470.
               </h3>
-              <p>Najwięcej wątpliwości dotyczy tego, od czego zacząć i czy trzeba od razu wchodzić w dużą konsultację.</p>
+              <p>Najwiecej watpliwosci dotyczy tego, od czego zaczac i kiedy zostac przy prostszym formacie, zamiast od razu wybierac najszersza usluge.</p>
             </div>
           </div>
         </section>
 
         <section id="faq">
-          <NotatnikSectionHead index="I." kicker="Najczęstsze pytania" title="Najczęściej zadawane pytania." />
+          <NotatnikSectionHead index="I." kicker="Najczestsze pytania" title="Najczesciej zadawane pytania o oferte." />
           <div className="notatnik-faq-grid">
-            {FAQ_SHORTLISTS.home.map((item) => (
+            {PUBLIC_OFFER_FAQ_ITEMS.map((item) => (
               <article key={item.question} className="notatnik-faq-item">
                 <h4>{item.question}</h4>
                 <p>{item.answer}</p>
@@ -111,7 +110,7 @@ export default function FaqPage() {
         </section>
 
         <section>
-          <NotatnikSectionHead index="II." kicker="Wybierz temat" title="Przejdź do pytań z Twojego obszaru." />
+          <NotatnikSectionHead index="II." kicker="Wybierz temat" title="Przejdz dalej tam, gdzie to ma sens." />
           <div className="notatnik-material-grid">
             {topicLinks.map((card) => (
               <article key={card.title} className="notatnik-material-card">
@@ -119,7 +118,7 @@ export default function FaqPage() {
                 <h3>{card.title}</h3>
                 <p>{card.copy}</p>
                 <Link href={card.href} prefetch={false}>
-                  Przejdź dalej
+                  Przejdz dalej
                 </Link>
               </article>
             ))}
@@ -127,12 +126,12 @@ export default function FaqPage() {
         </section>
 
         <NotatnikFinalCta
-          title="Jeśli nie widzisz tu swojego pytania, <em>napisz wiadomość.</em>"
-          copy="Wystarczy krótki opis sytuacji. Pomogę ustalić, czy najlepszym startem będzie Kwadrans, Dwa kwadranse czy pełna konsultacja."
+          title="Jesli nadal nie wiesz, co wybrac, <em>zacznij od Kwadransu.</em>"
+          copy="To najlzejszy pierwszy krok. Jesli temat jest pilny, szerszy albo przewlekly, od razu bedzie wiadomo, czy przejsc do 99, 169 albo 470."
           primaryHref={audioHref}
           primaryLabel={FUNNEL_CTA_LABELS.primary}
-          secondaryHref={consultationHref}
-          secondaryLabel="Pelna konsultacja"
+          secondaryHref={contactHref}
+          secondaryLabel="Napisz wiadomosc"
         />
 
         <NotatnikFooter primaryHref={audioHref} primaryLabel={FUNNEL_CTA_LABELS.primary} />

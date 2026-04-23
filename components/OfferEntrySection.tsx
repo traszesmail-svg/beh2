@@ -56,10 +56,10 @@ export function OfferEntrySection({
   description = 'Kwadrans zostaje nazwa uslugi, a 15 min audio bez kamery opisuje tylko jego format. Kwadrans za 69 zl jest najprostszym startem. Kwadrans na juz za 99 zl to ten sam format 15 minut, ale z priorytetem i terminem w 15 minut. Dwa kwadranse sa pomostem, a Pelna konsultacja daje diagnoze i 7 dni wsparcia przez WhatsApp.',
 }: OfferEntrySectionProps) {
   const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min', false, species)
+  const urgentNowHref = buildBookHref(null, 'kwadrans-na-juz', false, species)
   const bridgeHref = buildBookHref(null, 'konsultacja-30-min', false, species)
   const fullConsultationHref = buildBookHref(null, 'konsultacja-behawioralna-online', false, species)
   const messageHref = species ? `/kontakt?species=${species}#formularz` : '/kontakt#formularz'
-  const urgentNowHref = species ? `/kontakt?intent=kwadrans-na-juz&species=${species}#formularz` : '/kontakt?intent=kwadrans-na-juz#formularz'
   const speciesLabel = getSpeciesLabel(species)
 
   return (
@@ -110,8 +110,8 @@ export function OfferEntrySection({
 
         <article className="summary-card tree-backed-card">
           <div className="section-eyebrow">Kwadrans na juz</div>
-          <h3>Ten sam format, ale z priorytetem</h3>
-          <p>15 minut audio bez kamery jak w zwyklym Kwadransie, ale z priorytetem i terminem w 15 minut.</p>
+          <h3>Ten sam format, ale szybciej</h3>
+          <p>15 minut audio bez kamery jak w zwyklym Kwadransie. Roznica jest jedna: tu rezerwujesz sciezke priorytetowa z terminem w 15 minut.</p>
           <div className="editorial-hero-meta" aria-label="Parametry pilnej sciezki">
             <span>15 min audio</span>
             <span>{formatPricePln(99)}</span>
@@ -120,7 +120,7 @@ export function OfferEntrySection({
           <p className="muted">Dla {speciesLabel}, gdy nie potrzebujesz dluzszej rozmowy, tylko szybszego dostepu.</p>
           <div className="hero-actions top-gap-small">
             <Link href={urgentNowHref} prefetch={false} className="button button-ghost">
-              Zarezerwuj na juz
+              Zarezerwuj Kwadrans na juz
             </Link>
           </div>
         </article>
