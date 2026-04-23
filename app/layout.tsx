@@ -32,6 +32,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 const metadataBase = new URL(getCanonicalBaseUrl())
 const blockSearchIndexing = shouldBlockSearchIndexing()
+const RELEASE_ID = '2026-04-23-live-verification-v1'
 
 export const metadata: Metadata = {
   metadataBase,
@@ -68,6 +69,9 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: [SITE_OG_IMAGE.url],
   },
+  other: {
+    'release-id': RELEASE_ID,
+  },
 }
 
 export const viewport: Viewport = {
@@ -95,7 +99,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <html lang="pl" suppressHydrationWarning>
-      <body className={`${manrope.variable} ${inter.variable} ${fraunces.variable} ${jetbrainsMono.variable}`}>
+      <body className={`${manrope.variable} ${inter.variable} ${fraunces.variable} ${jetbrainsMono.variable}`} data-release-id={RELEASE_ID}>
         <script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
         <Schema data={rootJsonLd} />
         {children}
