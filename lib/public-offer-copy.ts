@@ -7,19 +7,18 @@ export const PUBLIC_OFFER_PRICES = {
 
 export const PUBLIC_OFFER_SERVICE_ORDER = [
   'Kwadrans z behawiorysta',
-  'Kwadrans na juz',
   'Dwa kwadranse',
   'Pelna konsultacja',
 ] as const
 
 export const PUBLIC_OFFER_LEAD =
-  'Na stronie sa cztery jasne formaty wejscia: Kwadrans za 69 zl, Kwadrans na juz za 99 zl, Dwa kwadranse za 169 zl i Pelna konsultacja za 470 zl. Nie zaczynasz od najdrozszej opcji, tylko od tej, ktora pasuje do skali problemu.'
+  'Masz do wyboru trzy glowne formaty konsultacji: krotki start, szersze uporzadkowanie tematu albo pelna konsultacja dla spraw zlozonych. Nie zaczynasz od najdrozszej opcji, tylko od tej, ktora pasuje do skali problemu.'
 
 export const PUBLIC_OFFER_DECISION_COPY = {
   quick:
     'Kwadrans jest najprostszym startem, gdy chcesz nazwac problem, ustalic priorytet i wiedziec, co robic dalej.',
   urgent:
-    'Kwadrans na juz daje ten sam 15-minutowy format, ale z priorytetem i mozliwie szybkim terminem, gdy temat nie powinien czekac.',
+    'Kwadrans na juz to ten sam 15-minutowy format, ale w trybie priorytetowym i z mozliwie szybszym terminem. To nie jest dluzsza konsultacja.',
   bridge:
     'Dwa kwadranse sa dla tematow szerszych, gdy 15 minut to za malo, ale pelna konsultacja bylaby jeszcze zbyt szerokim startem.',
   premium:
@@ -28,19 +27,27 @@ export const PUBLIC_OFFER_DECISION_COPY = {
 
 export const PUBLIC_OFFER_START_GUIDE = [
   'Nie wiesz, od czego zaczac? Zacznij od Kwadransu.',
-  'Temat jest pilny? Wybierz Kwadrans na juz.',
   '15 minut to za malo? Wybierz Dwa kwadranse.',
   'Sprawa jest zlozona albo przewlekla? Wybierz Pelna konsultacje.',
 ] as const
 
+export const PUBLIC_OFFER_PRIORITY_VARIANT_NOTE =
+  'Jesli po wyborze terminu zalezy Ci na szybszym wejsciu, przy Kwadransie moze byc dostepny wariant priorytetowy.'
+
+export const PUBLIC_OFFER_BOOKING_PRIORITY_PROMPT =
+  'Chcesz szybciej? Przy Kwadransie moze byc dostepny priorytetowy tryb Kwadrans na juz. To ten sam 15-minutowy format, ale z szybszym terminem.'
+
+export const PUBLIC_OFFER_BOOKING_PRIORITY_NOTE =
+  'Kwadrans na juz to ten sam format co zwykly Kwadrans. Roznica dotyczy priorytetu i szybszego terminu, nie zakresu rozmowy.'
+
 export const PUBLIC_OFFER_BOOKING_LEAD =
-  'Wybierasz format, ktory pasuje do skali problemu. Kwadrans jest najprostszym startem. Kwadrans na juz daje ten sam 15-minutowy format z priorytetem. Dwa kwadranse sa dla tematow szerszych, a Pelna konsultacja dla spraw zlozonych i przewleklych.'
+  'Wybierasz zakres konsultacji, ktory pasuje do skali problemu. Kwadrans jest najprostszym startem, Dwa kwadranse sa dla tematow szerszych, a Pelna konsultacja dla spraw zlozonych i przewleklych.'
 
 export const PUBLIC_OFFER_BOOKING_REASSURANCE =
   'Nie musisz miec gotowej diagnozy. Wystarczy krotki opis sytuacji i propozycja terminow. Po wyslaniu formularza potwierdzam, ktory format i termin maja w Twojej sytuacji najwiecej sensu.'
 
 export const PUBLIC_OFFER_BOOKING_PROCESS = [
-  '1. Wybierasz usluge i wpisujesz krotki opis sytuacji.',
+  '1. Wybierasz zakres konsultacji i wpisujesz krotki opis sytuacji.',
   '2. Wracam z potwierdzeniem terminu albo najblizsza sensowna alternatywa.',
   '3. Po potwierdzeniu dostajesz dalszy krok platnosci i finalne potwierdzenie rozmowy.',
 ] as const
@@ -56,7 +63,6 @@ export const PUBLIC_OFFER_CANCELLATION_COPY =
 
 export const PUBLIC_OFFER_PRICING_DECISION_COPY = [
   'Kwadrans za 69 zl to najprostszy start, gdy chcesz nazwac problem i ustalic priorytet.',
-  'Kwadrans na juz za 99 zl to ten sam format, ale z priorytetem i mozliwie szybkim terminem.',
   'Dwa kwadranse za 169 zl sa dla tematow szerszych, gdy 15 minut to za malo.',
   'Pelna konsultacja za 470 zl jest dla spraw zlozonych, przewleklych albo wielowatkowych.',
 ] as const

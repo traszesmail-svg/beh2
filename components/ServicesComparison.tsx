@@ -24,19 +24,6 @@ const SERVICES = [
     cta: 'Wybierz Kwadrans',
   },
   {
-    id: 'kwadrans-na-juz',
-    title: 'Kwadrans na juz',
-    badge: 'Pilny termin',
-    price: PUBLIC_OFFER_PRICES.urgent,
-    duration: '15 min',
-    mode: 'audio, bez kamery',
-    who: 'gdy potrzebujesz tego samego formatu co Kwadrans, ale z priorytetem i szybkim terminem',
-    plan: 'ten sam zakres co w Kwadransie, ale obsluzony priorytetowo',
-    materials: 'ten sam pierwszy kierunek co w Kwadransie, tylko szybciej',
-    refund: PUBLIC_OFFER_CANCELLATION_COPY,
-    cta: 'Wybierz na juz',
-  },
-  {
     id: 'konsultacja-30-min',
     title: 'Dwa kwadranse',
     badge: null,
@@ -118,9 +105,9 @@ export function ServicesComparison({ species = null, qaBooking = false, classNam
                   <Link href={getHref(service.id, species, qaBooking)} prefetch={false} className="services-comparison-link">
                     {service.cta}
                   </Link>
-                ) : (
-                  <span>{service[row.key]}</span>
-                )}
+        ) : (
+          <span>{service[row.key]}</span>
+        )}
               </div>
             ))}
           </div>

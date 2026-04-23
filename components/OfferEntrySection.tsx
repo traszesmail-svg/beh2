@@ -2,7 +2,13 @@ import Link from 'next/link'
 import { buildBookHref, type BookingSpecies } from '@/lib/booking-routing'
 import { COPY_CTA, COPY_HELPERS, COPY_SERVICE_NAMES } from '@/lib/copy-governance'
 import { formatPricePln } from '@/lib/pricing'
-import { PUBLIC_OFFER_BOOKING_LEAD, PUBLIC_OFFER_BOOKING_REASSURANCE, PUBLIC_OFFER_FULL_CONSULTATION_VALUE, PUBLIC_OFFER_PRICES } from '@/lib/public-offer-copy'
+import {
+  PUBLIC_OFFER_BOOKING_LEAD,
+  PUBLIC_OFFER_BOOKING_REASSURANCE,
+  PUBLIC_OFFER_FULL_CONSULTATION_VALUE,
+  PUBLIC_OFFER_PRIORITY_VARIANT_NOTE,
+  PUBLIC_OFFER_PRICES,
+} from '@/lib/public-offer-copy'
 
 type OfferEntrySectionProps = {
   species?: BookingSpecies | null
@@ -52,11 +58,10 @@ export function OfferEntrySection({
   species = null,
   sectionId,
   eyebrow = 'Oferta',
-  title = 'Masz cztery proste wejscia: Kwadrans za 69 zl, Kwadrans na juz za 99 zl, Dwa kwadranse za 169 zl i Pelna konsultacja za 470 zl.',
+  title = 'Masz trzy glowne formaty konsultacji i jeden wariant priorytetowy przy Kwadransie.',
   description = PUBLIC_OFFER_BOOKING_LEAD,
 }: OfferEntrySectionProps) {
   const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min', false, species)
-  const urgentNowHref = buildBookHref(null, 'kwadrans-na-juz', false, species)
   const bridgeHref = buildBookHref(null, 'konsultacja-30-min', false, species)
   const fullConsultationHref = buildBookHref(null, 'konsultacja-behawioralna-online', false, species)
   const messageHref = species ? `/kontakt?species=${species}#formularz` : '/kontakt#formularz'
@@ -79,9 +84,6 @@ export function OfferEntrySection({
         <Link href="/cennik" prefetch={false} className="prep-inline-link">
           Zobacz cennik
         </Link>
-        <Link href={urgentNowHref} prefetch={false} className="prep-inline-link">
-          Kwadrans na juz
-        </Link>
       </div>
 
       <div className="card-grid three-up top-gap">
@@ -95,26 +97,10 @@ export function OfferEntrySection({
             <span>cena wejscia</span>
           </div>
           <p className="muted">Dla {speciesLabel}, gdy temat jest jeden albo chcesz spokojnie ustalic kierunek bez przechodzenia od razu do dluzszej konsultacji.</p>
+          <p className="muted">{PUBLIC_OFFER_PRIORITY_VARIANT_NOTE}</p>
           <div className="hero-actions top-gap-small">
             <Link href={audioHref} prefetch={false} className="button button-primary">
               {COPY_CTA.primary}
-            </Link>
-          </div>
-        </article>
-
-        <article className="summary-card tree-backed-card">
-          <div className="section-eyebrow">Kwadrans na juz</div>
-          <h3>Ten sam format, ale szybciej</h3>
-          <p>15 minut audio bez kamery jak w zwyklym Kwadransie. Roznica jest jedna: tu rezerwujesz sciezke priorytetowa z terminem w 15 minut.</p>
-          <div className="editorial-hero-meta" aria-label="Parametry pilnej sciezki">
-            <span>15 min audio</span>
-            <span>{formatPricePln(PUBLIC_OFFER_PRICES.urgent)}</span>
-            <span>priorytet / 15 min</span>
-          </div>
-          <p className="muted">Dla {speciesLabel}, gdy nie potrzebujesz dluzszej rozmowy, tylko szybszego dostepu.</p>
-          <div className="hero-actions top-gap-small">
-            <Link href={urgentNowHref} prefetch={false} className="button button-ghost">
-              Zarezerwuj Kwadrans na juz
             </Link>
           </div>
         </article>

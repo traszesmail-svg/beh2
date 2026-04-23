@@ -10,6 +10,7 @@ import {
   PUBLIC_OFFER_BOOKING_PROCESS,
   PUBLIC_OFFER_CANCELLATION_COPY,
   PUBLIC_OFFER_FULL_CONSULTATION_VALUE,
+  PUBLIC_OFFER_PRIORITY_VARIANT_NOTE,
   PUBLIC_OFFER_START_GUIDE,
 } from '@/lib/public-offer-copy'
 
@@ -17,7 +18,7 @@ export const metadata: Metadata = buildMarketingMetadata({
   title: 'Cennik konsultacji behawioralnych | Regulski COAPE',
   path: '/cennik',
   description:
-    'Kwadrans 69 zl, Kwadrans na juz 99 zl, Dwa kwadranse 169 zl, Pelna konsultacja 470 zl. Jasne roznice, jedna logika wyboru i spokojny start.',
+    'Kwadrans 69 zl, Dwa kwadranse 169 zl, Pelna konsultacja 470 zl. Przy Kwadransie moze byc dostepny wariant priorytetowy przy rezerwacji.',
 })
 
 const navItems = [
@@ -80,11 +81,10 @@ export default function PricingPage() {
           ]),
           getServiceJsonLd({
             name: 'Cennik konsultacji behawioralnych - psy i koty',
-            description: 'Cztery przejrzyste opcje: Kwadrans, Kwadrans na juz, Dwa kwadranse i Pelna konsultacja behawioralna.',
+            description: 'Trzy glowne formaty konsultacji: Kwadrans, Dwa kwadranse i Pelna konsultacja behawioralna. Przy Kwadransie moze byc dostepny wariant priorytetowy w rezerwacji.',
             serviceUrl: '/cennik',
             offerCatalog: [
               { name: 'Kwadrans z behawiorysta', description: '15 min audio bez kamery.', url: '/book?service=szybka-konsultacja-15-min', price: 69 },
-              { name: 'Kwadrans na juz', description: '15 min audio, termin w 15 minut.', url: '/book?service=kwadrans-na-juz', price: 99 },
               { name: 'Dwa kwadranse', description: '30 min online, gdy 15 minut to za malo.', url: '/book?service=konsultacja-30-min', price: 169 },
               { name: 'Pelna konsultacja', description: '60 min audio albo video, diagnoza, plan poprawy i 7 dni wsparcia tekstowego przez WhatsApp.', url: '/book?service=konsultacja-behawioralna-online', price: 470 },
             ],
@@ -99,8 +99,8 @@ export default function PricingPage() {
             Cennik konsultacji behawioralnych <em>- psy i koty</em>
           </h1>
           <p>
-            Cztery przejrzyste opcje w jednej logice wyboru. Kwadrans to prosty start, Kwadrans na juz przyspiesza wejscie, Dwa kwadranse porzadkuja
-            temat szerzej, a Pelna konsultacja sluzy sprawom zlozonym.
+            Trzy glowne formaty w jednej logice wyboru. Kwadrans to prosty start, Dwa kwadranse porzadkuja temat szerzej, a Pelna konsultacja sluzy
+            sprawom zlozonym. Przy Kwadransie moze pojawic sie tez wariant priorytetowy w rezerwacji.
           </p>
           <NextSlot className="top-gap-small" />
           <div className="info-box top-gap-small">Jesli nie wiesz, od czego zaczac, zacznij od Kwadransu. Nie trzeba wybierac najwiekszej uslugi na pierwszy ruch.</div>
@@ -120,15 +120,16 @@ export default function PricingPage() {
         <div className="summary-card tree-backed-card">
           <div className="section-eyebrow">Sciezka wyboru</div>
           <h3>Zacznij od tego, co pasuje do skali problemu.</h3>
-          <p>Kwadrans 69 zl = najprostszy start. 99 zl = ten sam format szybciej. 169 zl = szerszy temat. 470 zl = pelny plan i wsparcie po rozmowie.</p>
+          <p>Kwadrans 69 zl = najprostszy start. 169 zl = szerszy temat. 470 zl = pelny plan i wsparcie po rozmowie.</p>
+          <p className="muted">{PUBLIC_OFFER_PRIORITY_VARIANT_NOTE}</p>
         </div>
       </section>
 
       <section id="porownanie">
-        <NotatnikSectionHead index="I." kicker="Porownanie" title="Jedna tabela, cztery role w tym samym lejku." />
+        <NotatnikSectionHead index="I." kicker="Porownanie" title="Jedna tabela, trzy role w tym samym lejku." />
         <p className="notatnik-service-description">
-          Kwadrans 69 zl to najprostszy start. Kwadrans na juz 99 zl to ten sam format z priorytetem. Dwa kwadranse 169 zl porzadkuja temat szerzej,
-          a Pelna konsultacja 470 zl daje diagnoze, plan poprawy i 7 dni wsparcia po rozmowie.
+          Kwadrans 69 zl to najprostszy start. Dwa kwadranse 169 zl porzadkuja temat szerzej, a Pelna konsultacja 470 zl daje diagnoze, plan poprawy i
+          7 dni wsparcia po rozmowie.
         </p>
         <ServicesComparison />
         <div className="notatnik-faq-grid top-gap">
@@ -138,6 +139,7 @@ export default function PricingPage() {
             </article>
           ))}
         </div>
+        <div className="info-box top-gap-small">{PUBLIC_OFFER_PRIORITY_VARIANT_NOTE}</div>
       </section>
 
       <section style={{ background: 'var(--paper)' }}>

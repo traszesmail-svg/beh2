@@ -12,6 +12,7 @@ import {
   PUBLIC_OFFER_BOOKING_LEAD,
   PUBLIC_OFFER_BOOKING_PAYMENT,
   PUBLIC_OFFER_BOOKING_PROCESS,
+  PUBLIC_OFFER_BOOKING_PRIORITY_NOTE,
   PUBLIC_OFFER_BOOKING_REASSURANCE,
   PUBLIC_OFFER_CANCELLATION_COPY,
 } from '@/lib/public-offer-copy'
@@ -20,7 +21,7 @@ export const metadata: Metadata = buildMarketingMetadata({
   title: 'Rezerwacja Kwadransa z behawiorysta',
   path: '/book',
   description:
-    'Prosba o rezerwacje Kwadransu 69 zl, Kwadransu na juz 99 zl, Dwoch kwadransow 169 zl albo Pelnej konsultacji 470 zl z diagnoza i 7 dniami wsparcia tekstowego przez WhatsApp.',
+    'Prosba o rezerwacje Kwadransu 69 zl, Dwoch kwadransow 169 zl albo Pelnej konsultacji 470 zl z diagnoza i 7 dniami wsparcia tekstowego przez WhatsApp. Priorytetowy wariant moze pojawic sie dopiero przy wyborze terminu Kwadransu.',
 })
 
 const navItems = [
@@ -70,7 +71,6 @@ export default function BookPage({
               // nazwa uslugi: Kwadrans z behawiorysta
               // format: 15 min audio bez kamery
               { name: 'Kwadrans z behawiorysta', description: '15 min audio bez kamery.', url: '/book?service=szybka-konsultacja-15-min', price: 69 },
-              { name: 'Kwadrans na juz', description: '15 min audio, termin w 15 minut.', url: '/book?service=kwadrans-na-juz', price: 99 },
               { name: 'Dwa kwadranse', description: '30 min online z krotka notatka po rozmowie.', url: '/book?service=konsultacja-30-min', price: 169 },
               { name: 'Pelna konsultacja', description: '60 min audio albo video, diagnoza, plan poprawy i 7 dni wsparcia tekstowego przez WhatsApp.', url: '/book?service=konsultacja-behawioralna-online', price: 470 },
             ],
@@ -94,8 +94,8 @@ export default function BookPage({
                 &rarr;
               </span>
             </Link>
-            <Link href="/urgent" prefetch={false} className="notatnik-btn notatnik-btn-urgent">
-              <span>Kwadrans na juz / 99 zl</span>
+            <Link href="#formularz" prefetch={false} className="notatnik-btn notatnik-btn-ghost">
+              <span>Przejdz do formularza</span>
               <span className="notatnik-btn-arrow" aria-hidden="true">
                 &rarr;
               </span>
@@ -111,7 +111,7 @@ export default function BookPage({
       </section>
 
       <section id="porownanie">
-        <NotatnikSectionHead index="I." kicker="Uslugi" title="Najpierw porownaj cztery formaty." />
+        <NotatnikSectionHead index="I." kicker="Uslugi" title="Najpierw porownaj trzy glowne formaty." />
         <ServicesComparison species={species} />
         <div className="info-box top-gap-small">{PUBLIC_OFFER_CANCELLATION_COPY}</div>
       </section>
@@ -135,6 +135,9 @@ export default function BookPage({
             <h3>Kwadrans to bezpieczny start</h3>
             <p>Jesli nie wiesz, co wybrac, zacznij od Kwadransu za 69 zl. To najprostszy pierwszy krok, gdy chcesz nazwac problem i ustalic priorytet.</p>
           </article>
+        </div>
+        <div className="info-box top-gap-small">
+          {PUBLIC_OFFER_BOOKING_PRIORITY_NOTE}
         </div>
       </section>
 

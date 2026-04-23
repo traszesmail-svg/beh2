@@ -5,6 +5,8 @@ import { useMemo, useState, type FormEvent } from 'react'
 import type { BookingSpecies } from '@/lib/booking-routing'
 import {
   PUBLIC_OFFER_BOOKING_LEAD,
+  PUBLIC_OFFER_BOOKING_PRIORITY_NOTE,
+  PUBLIC_OFFER_BOOKING_PRIORITY_PROMPT,
   PUBLIC_OFFER_BOOKING_REASSURANCE,
 } from '@/lib/public-offer-copy'
 
@@ -31,7 +33,6 @@ type BookingRequestPayload = {
 
 const SERVICE_OPTIONS: Array<{ value: BookingServiceId; label: string; price: string }> = [
   { value: 'szybka-konsultacja-15-min', label: 'Kwadrans z behawiorysta', price: '69 zl' },
-  { value: 'kwadrans-na-juz', label: 'Kwadrans na juz', price: '99 zl' },
   { value: 'konsultacja-30-min', label: 'Dwa kwadranse', price: '169 zl' },
   { value: 'konsultacja-behawioralna-online', label: 'Pelna konsultacja', price: '470 zl' },
 ]
@@ -72,6 +73,7 @@ export function BookRequestForm({ initialService, initialSpecies }: BookRequestF
     [form.service],
   )
   const isUrgentNow = form.service === 'kwadrans-na-juz'
+  const showPriorityPrompt = form.service === 'szybka-konsultacja-15-min'
 
   function updateField<K extends keyof BookingRequestPayload>(key: K, value: BookingRequestPayload[K]) {
     if (status !== 'idle') {
@@ -223,6 +225,20 @@ export function BookRequestForm({ initialService, initialSpecies }: BookRequestF
           </label>
         ))}
       </fieldset>
+
+      {showPriorityPrompt ? (
+        <div className="info-box full-width">
+          <strong>Chcesz szybciej?</strong> {PUBLIC_OFFER_BOOKING_PRIORITY_PROMPT}{' '}
+          <button
+            type="button"
+            className="notatnik-inline-link"
+            onClick={() => updateField('service', 'kwadrans-na-juz')}
+          >
+            Przejdz do priorytetowego trybu
+          </button>
+          <div className="field-help top-gap-small">{PUBLIC_OFFER_BOOKING_PRIORITY_NOTE}</div>
+        </div>
+      ) : null}
 
       <div className="form-field">
         <label htmlFor="book-name">Imie</label>

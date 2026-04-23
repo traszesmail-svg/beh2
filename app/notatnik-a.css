@@ -93,7 +93,9 @@ html[data-theme='dark'] .notatnik-page {
   top: 120px;
   bottom: 32px;
   z-index: 0;
-  width: max(0px, calc((100vw - min(1320px, calc(100vw - 48px))) / 2));
+  width: max(0px, calc((100vw - min(1320px, calc(100vw - 48px))) / 2 - 24px));
+  box-sizing: border-box;
+  padding: 16px 12px;
   overflow: hidden;
   opacity: 0.82;
   pointer-events: none;
@@ -102,6 +104,14 @@ html[data-theme='dark'] .notatnik-page {
 .notatnik-side-visual img {
   object-fit: cover;
   object-position: center;
+}
+
+.notatnik-side-visual-left img {
+  object-position: 58% center;
+}
+
+.notatnik-side-visual-right img {
+  object-position: 42% center;
 }
 
 .notatnik-side-visual-left {
@@ -717,6 +727,15 @@ html[data-theme='dark'] .notatnik-theme-toggle-thumb {
 
 .notatnik-inline-link:hover {
   color: var(--accent);
+}
+
+button.notatnik-inline-link {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
 }
 
 .notatnik-steps {

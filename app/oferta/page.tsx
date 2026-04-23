@@ -15,7 +15,7 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = buildMarketingMetadata({
   title: 'Oferta: behawiorysta online dla psa i kota',
   path: '/oferta',
-  description: 'Aktualna oferta publiczna: Kwadrans 69 zl, Kwadrans na juz 99 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl z diagnoza oraz 7 dniami wsparcia tekstowego przez WhatsApp.',
+  description: 'Aktualna oferta publiczna: Kwadrans 69 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl z diagnoza oraz 7 dniami wsparcia tekstowego przez WhatsApp. Priorytetowy wariant pojawia sie przy rezerwacji Kwadransu.',
 })
 
 const SERVICE_COMPARISON_ROWS = [
@@ -50,7 +50,6 @@ export default async function OfferPage() {
   }
 
   const quickStartOffer = OFFERS.find((offer) => offer.slug === 'szybka-konsultacja-15-min') ?? null
-  const urgentOffer = OFFERS.find((offer) => offer.slug === 'kwadrans-na-juz') ?? null
   const bridgeOffer = OFFERS.find((offer) => offer.slug === 'konsultacja-30-min') ?? null
   const fullConsultationOffer = OFFERS.find((offer) => offer.slug === 'konsultacja-behawioralna-online') ?? null
   const quickStartHref = buildBookHref()
@@ -77,9 +76,9 @@ export default async function OfferPage() {
           <div className="offer-page-hero-grid">
             <div className="offer-page-hero-copy">
               <div className="section-eyebrow">Oferta</div>
-              <h1>Cztery uslugi, jedna jasna logika wyboru: start, pilna pomoc, szersze uporzadkowanie albo pelna konsultacja.</h1>
+              <h1>Trzy glowne uslugi, jedna jasna logika wyboru: start, szersze uporzadkowanie albo pelna konsultacja.</h1>
               <p className="hero-text">
-                Publicznie zostaja cztery czytelne wejscia: Kwadrans z behawiorysta, Kwadrans na juz, Dwa kwadranse i Pelna konsultacja behawioralna. Roznica miedzy 69 zl a 99 zl jest prosta: to ten sam format 15 minut, ale 99 zl daje szybszy termin.
+                Publicznie zostaja trzy czytelne wejscia: Kwadrans z behawiorysta, Dwa kwadranse i Pelna konsultacja behawioralna. Priorytetowy wariant pojawia sie dopiero przy rezerwacji Kwadransu.
               </p>
 
               <div className="hero-actions top-gap">
@@ -106,25 +105,22 @@ export default async function OfferPage() {
 
             <aside className="offer-page-hero-card tree-backed-card">
               <span className="offer-page-hero-label">Jak zaczac</span>
-              <strong>Kwadrans z behawiorysta sprawdza sie na start. Kwadrans na juz daje ten sam zakres szybciej, Dwa kwadranse sa pomostem, a Pelna konsultacja daje diagnoze i wsparcie wdrozenia.</strong>
+              <strong>Kwadrans z behawiorysta sprawdza sie na start. Dwa kwadranse sa pomostem, a Pelna konsultacja daje diagnoze i wsparcie wdrozenia.</strong>
               <div className="offer-page-hero-stats">
                 <div className="offer-page-hero-stat">
                   <span>15 min / {quickStartPriceAmount} zl</span>
                   <strong>Start</strong>
                 </div>
                 <div className="offer-page-hero-stat">
-                  <span>15 min / 99 zl</span>
-                  <strong>Priorytet</strong>
-                </div>
-                <div className="offer-page-hero-stat">
                   <span>30 min / 169 zl</span>
                   <strong>Pomost</strong>
                 </div>
-                <div className="offer-page-hero-stat">
-                  <span>60 min / 470 zl</span>
-                  <strong>Diagnoza + 7 dni</strong>
-                </div>
+              <div className="offer-page-hero-stat">
+                <span>60 min / 470 zl</span>
+                <strong>Diagnoza + 7 dni</strong>
               </div>
+              </div>
+              <p className="muted top-gap-small">Priorytetowy wariant pojawia sie dopiero przy rezerwacji Kwadransu, nie jako osobna glowna usluga.</p>
             </aside>
           </div>
         </section>
@@ -133,9 +129,9 @@ export default async function OfferPage() {
           <div className="editorial-section-head">
             <div className="editorial-section-head-copy">
               <div className="section-eyebrow">Aktywna oferta</div>
-              <h2>Cztery czytelne wejscia</h2>
+              <h2>Trzy glowne wejscia</h2>
             </div>
-            <p className="editorial-section-lead">Czas i cena sa widoczne przed rezerwacja. 69 zl jest najprostszym startem, 99 zl przyspiesza wejscie, 169 zl porzadkuje temat szerzej, a 470 zl daje diagnoze i 7 dni wsparcia po rozmowie.</p>
+            <p className="editorial-section-lead">Czas i cena sa widoczne przed rezerwacja. 69 zl jest najprostszym startem, 169 zl porzadkuje temat szerzej, a 470 zl daje diagnoze i 7 dni wsparcia po rozmowie. Priorytetowy wariant pojawia sie dopiero przy Kwadransie.</p>
           </div>
 
           <div className="card-grid three-up top-gap">
@@ -152,28 +148,10 @@ export default async function OfferPage() {
                   <span>cena wejscia</span>
                 </div>
                 <p className="muted">{quickStartOffer.whenToChoose}</p>
+                <p className="muted">Jesli po wyborze terminu zalezy Ci na szybszym wejsciu, przy Kwadransie moze byc dostepny wariant priorytetowy.</p>
                 <div className="hero-actions top-gap-small">
                   <Link href={quickStartOffer.primaryHref} prefetch={false} className="button button-primary">
                     {quickStartOffer.primaryCtaLabel}
-                  </Link>
-                </div>
-              </article>
-            ) : null}
-
-            {urgentOffer ? (
-              <article className="summary-card tree-backed-card">
-                <div className="section-eyebrow">{urgentOffer.eyebrow}</div>
-                <h3>{urgentOffer.title}</h3>
-                <p>{urgentOffer.cardSummary}</p>
-                <div className="editorial-hero-meta" aria-label="Parametry uslugi">
-                  <span>15 min</span>
-                  <span>99 zl</span>
-                  <span>priorytet / 15 min</span>
-                </div>
-                <p className="muted">{urgentOffer.whenToChoose}</p>
-                <div className="hero-actions top-gap-small">
-                  <Link href={urgentOffer.primaryHref} prefetch={false} className="button button-ghost">
-                    {urgentOffer.primaryCtaLabel}
                   </Link>
                 </div>
               </article>
@@ -218,7 +196,7 @@ export default async function OfferPage() {
             ) : null}
           </div>
 
-          <p className="muted top-gap-small">Niezbednik zostaje materialem pomocniczym, ale glowna drabinka sprzedazowa na tej stronie to cztery uslugi: 69 / 99 / 169 / 470.</p>
+          <p className="muted top-gap-small">Niezbednik zostaje materialem pomocniczym, a glowna drabinka sprzedazowa na tej stronie to trzy formaty: 69 / 169 / 470. Priorytetowy wariant Kwadransu pojawia sie dopiero przy rezerwacji.</p>
         </section>
 
         <section className="panel section-panel editorial-section">
@@ -269,7 +247,7 @@ export default async function OfferPage() {
 
           <div className="list-card accent-outline tree-backed-card top-gap">
             <strong>Najkrotsza zasada wyboru</strong>
-              <span>69 zl wybierz, gdy chcesz najprostszy start. 99 zl wybierz, gdy potrzebujesz tego samego formatu szybciej. 169 zl wybierz, gdy 15 minut to za malo. 470 zl wybierz, gdy temat jest zlozony i chcesz diagnozy oraz 7 dni wsparcia po rozmowie.</span>
+              <span>69 zl wybierz, gdy chcesz najprostszy start. 169 zl wybierz, gdy 15 minut to za malo. 470 zl wybierz, gdy temat jest zlozony i chcesz diagnozy oraz 7 dni wsparcia po rozmowie. Priorytetowy wariant pojawia sie dopiero przy rezerwacji Kwadransu.</span>
           </div>
 
           <div className="top-gap">

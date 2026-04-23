@@ -13,7 +13,7 @@ import { FUNNEL_FULL_CONSULTATION_HREF, FUNNEL_PRIMARY_HREF, FUNNEL_PRIMARY_LABE
 import { PUBLIC_OFFER_FAQ_ITEMS } from '@/lib/public-offer-faq'
 import { getBreadcrumbJsonLd, getFaqPageJsonLd, getServiceJsonLd } from '@/lib/schema'
 import { buildHomeMetadata } from '@/lib/seo'
-import { PUBLIC_OFFER_LEAD, PUBLIC_OFFER_PRICES } from '@/lib/public-offer-copy'
+import { PUBLIC_OFFER_LEAD, PUBLIC_OFFER_PRIORITY_VARIANT_NOTE, PUBLIC_OFFER_PRICES } from '@/lib/public-offer-copy'
 
 export async function generateMetadata(): Promise<Metadata> {
   return buildHomeMetadata()
@@ -65,12 +65,12 @@ const credentials = [
 
 const trustCards = [
   {
-    title: '4 wejscia, jedna logika',
-    copy: 'Kwadrans 69 zl, Kwadrans na juz 99 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl maja jasne role jeszcze przed rezerwacja.',
+    title: '3 glowne formaty, jedna logika',
+    copy: 'Kwadrans 69 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl maja jasne role jeszcze przed rezerwacja. Priorytetowy wariant pojawia sie dopiero przy wyborze terminu Kwadransu.',
   },
   {
-    title: 'Roznica 69 i 99 jest prosta',
-    copy: 'To ten sam 15-minutowy format. Przy 99 zl placisz za priorytet i szybki termin, a nie za dluzsza konsultacje.',
+    title: 'Priorytet pojawia sie pozniej',
+    copy: 'Nie jest to osobna usluga frontowa. To wariant przyspieszony zwyklego Kwadransu, widoczny dopiero przy rezerwacji i szukaniu terminu.',
   },
   {
     title: 'Pelna konsultacja ma konkretny zakres',
@@ -85,11 +85,10 @@ export default function HomePage() {
     getServiceJsonLd({
       name: 'Behawiorysta psow i kotow online',
       description:
-        'Spokojny pierwszy krok dla opiekunow psow i kotow. Cztery jasne uslugi: Kwadrans 69 zl, Kwadrans na juz 99 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl.',
+        'Spokojny pierwszy krok dla opiekunow psow i kotow. Trzy glowne uslugi: Kwadrans 69 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl. Priorytetowy wariant pojawia sie przy rezerwacji Kwadransu.',
       serviceUrl: serviceLandingHref,
       offerCatalog: [
         { name: 'Kwadrans z behawiorysta', description: '15 min audio bez kamery, najprostszy start.', url: '/book?service=szybka-konsultacja-15-min', price: 69 },
-        { name: 'Kwadrans na juz', description: 'Ten sam format 15 min, ale z priorytetem i terminem w 15 minut.', url: '/book?service=kwadrans-na-juz', price: 99 },
         { name: 'Dwa kwadranse', description: '30 min online na szersze uporzadkowanie tematu.', url: '/book?service=konsultacja-30-min', price: 169 },
         {
           name: 'Pelna konsultacja',
@@ -111,10 +110,10 @@ export default function HomePage() {
     <main className="notatnik-page">
       <Schema data={structuredData} />
       <div className="notatnik-side-visual notatnik-side-visual-left" aria-hidden="true">
-        <Image src="/branding/side-left-crop.jpg" alt="" fill sizes="280px" />
+        <Image src="/branding/side-left.jpg" alt="" fill sizes="280px" />
       </div>
       <div className="notatnik-side-visual notatnik-side-visual-right" aria-hidden="true">
-        <Image src="/branding/side-right-crop.jpg" alt="" fill sizes="280px" />
+        <Image src="/branding/side-right.jpg" alt="" fill sizes="280px" />
       </div>
       <div className="notatnik-shell">
         <NotatnikTopbar tag="Terapia behawioralna / psy i koty" navItems={navItems} ctaHref={FUNNEL_PRIMARY_HREF} ctaLabel="Kwadrans / 69 zl" />
@@ -150,11 +149,7 @@ export default function HomePage() {
               </div>
 
               <div className="notatnik-hero-fine">
-                Pilny temat?{' '}
-                <Link href="/urgent" prefetch={false}>
-                  Kwadrans na juz
-                </Link>
-                . Gdy 15 minut to za malo, wybierz{' '}
+                Jesli po wyborze terminu zalezy Ci na szybszym wejsciu, przy Kwadransie moze pojawic sie wariant priorytetowy. Gdy 15 minut to za malo, wybierz{' '}
                 <Link href={FUNNEL_UPGRADE_HREF} prefetch={false}>
                   Dwa kwadranse
                 </Link>
@@ -185,13 +180,7 @@ export default function HomePage() {
                   <div className="notatnik-price-big">{PUBLIC_OFFER_PRICES.quick} zl</div>
                   <div className="notatnik-price-small">15 min / audio / bez kamery</div>
                 </div>
-                <p className="notatnik-hero-fine">Pilniej? Kwadrans na juz kosztuje {PUBLIC_OFFER_PRICES.urgent} zl i daje ten sam format z priorytetem.</p>
-                <p className="notatnik-hero-fine">
-                  <Link href="/urgent" prefetch={false} className="notatnik-inline-link">
-                    Kwadrans na juz
-                  </Link>{' '}
-                  to lzejszy dopisek, nie drugi glowny kierunek.
-                </p>
+                <p className="notatnik-hero-fine">{PUBLIC_OFFER_PRIORITY_VARIANT_NOTE}</p>
               </div>
             </aside>
           </div>
@@ -229,14 +218,14 @@ export default function HomePage() {
           <NotatnikSectionHead
             index="II."
             kicker="Jak to dziala"
-            title="Najpierw wybierasz wlasciwy format, potem dopiero termin i kolejny krok."
+            title="Najpierw wybierasz wlasciwy zakres, potem dopiero termin i kolejny krok."
           />
 
           <div className="notatnik-steps">
             <article className="notatnik-step">
               <div className="notatnik-step-number">01</div>
-              <h3>Wybierasz jedna z 4 uslug</h3>
-              <p>Kwadrans to najprostszy start. Kwadrans na juz daje ten sam zakres szybciej. Dwa kwadranse porzadkuja temat szerzej, a Pelna konsultacja sluzy sprawom zlozonym.</p>
+              <h3>Wybierasz jeden z 3 glownych formatow</h3>
+              <p>Kwadrans to najprostszy start. Dwa kwadranse porzadkuja temat szerzej, a Pelna konsultacja sluzy sprawom zlozonym.</p>
             </article>
             <article className="notatnik-step">
               <div className="notatnik-step-number">02</div>
@@ -246,7 +235,7 @@ export default function HomePage() {
             <article className="notatnik-step">
               <div className="notatnik-step-number">03</div>
               <h3>Rozmawiamy w wybranym formacie</h3>
-              <p>Kwadrans i Kwadrans na juz sa audio bez kamery. Dwa kwadranse i Pelna konsultacja moga odbyc sie audio albo audio/video.</p>
+              <p>Kwadrans, Dwa kwadranse i Pelna konsultacja moga odbyc sie audio albo audio/video. Jesli przy Kwadransie liczy sie czas, wariant priorytetowy pojawia sie dopiero przy rezerwacji.</p>
             </article>
             <article className="notatnik-step">
               <div className="notatnik-step-number">04</div>
@@ -259,15 +248,15 @@ export default function HomePage() {
         <OfferEntrySection
           sectionId="oferta"
           eyebrow="Oferta"
-          title="Cztery uslugi. Jedna logika wyboru."
-          description="Kwadrans za 69 zl jest najprostszym startem. Kwadrans na juz za 99 zl daje ten sam format 15 minut, ale z terminem w 15 minut. Dwa kwadranse za 169 zl daja spokojniejsze uporzadkowanie tematu, a Pelna konsultacja za 470 zl daje diagnoze, plan poprawy i 7 dni wsparcia przez WhatsApp."
+          title="Trzy glowne formaty. Jedna logika wyboru."
+          description="Kwadrans za 69 zl jest najprostszym startem. Dwa kwadranse za 169 zl daja spokojniejsze uporzadkowanie tematu, a Pelna konsultacja za 470 zl daje diagnoze, plan poprawy i 7 dni wsparcia przez WhatsApp. Przy Kwadransie moze pojawic sie priorytetowy wariant przy rezerwacji."
         />
 
         <ServiceDecisionSection
           index="III."
           eyebrow="Szeroka usluga online"
           title="Jesli chcesz najpierw zobaczyc pelny opis pracy online, przejdz do strony uslugi dla calej Polski."
-          description="Drabinka 69 / 99 / 169 / 470 pomaga wybrac format. Strona uslugi online porzadkuje jeszcze szerzej, kiedy wystarczy Kwadrans, a kiedy lepiej od razu wejsc w najszersza konsultacje."
+          description="Drabinka 69 / 169 / 470 pomaga wybrac format. Strona uslugi online porzadkuje jeszcze szerzej, kiedy wystarczy Kwadrans, a kiedy lepiej od razu wejsc w najszersza konsultacje."
           audioHref={FUNNEL_PRIMARY_HREF}
           consultationHref={FUNNEL_FULL_CONSULTATION_HREF}
           serviceHref={serviceLandingHref}
@@ -297,10 +286,10 @@ export default function HomePage() {
         </section>
 
         <section>
-          <NotatnikSectionHead index="V." kicker="Cennik" title="Cztery wejscia. Jasne roznice przed rezerwacja." />
+          <NotatnikSectionHead index="V." kicker="Cennik" title="Trzy wejscia. Jasne roznice przed rezerwacja." />
           <p className="notatnik-service-description">
-            Najprostszy start to Kwadrans za 69 zl. Kwadrans na juz za 99 zl nie daje dluzszej rozmowy, tylko szybszy termin. Dwa kwadranse za 169 zl sa
-            srodkiem dla tematow szerszych, a Pelna konsultacja za 470 zl jest dla spraw zlozonych i przewleklych.
+            Najprostszy start to Kwadrans za 69 zl. Dwa kwadranse za 169 zl sa srodkiem dla tematow szerszych, a Pelna konsultacja za 470 zl jest dla
+            spraw zlozonych i przewleklych. Przy Kwadransie moze byc dostepny priorytetowy wariant w rezerwacji.
           </p>
           <ServicesComparison />
           <div className="top-gap-small">

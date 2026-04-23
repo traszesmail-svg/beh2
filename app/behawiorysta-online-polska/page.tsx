@@ -10,13 +10,13 @@ import { getBreadcrumbJsonLd, getFaqPageJsonLd, getServiceJsonLd } from '@/lib/s
 import { buildMarketingMetadata } from '@/lib/seo'
 
 const pageData = getLocalSeoPageByPath('/behawiorysta-online-polska')
+const pageLead =
+  'Behawiorysta online dla calej Polski. Trzy glowne wejscia: Kwadrans 69 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl. Priorytetowy wariant pojawia sie przy rezerwacji Kwadransu.'
 
 export const metadata: Metadata = buildMarketingMetadata({
   title: pageData?.title ?? 'Behawiorysta online dla calej Polski',
   path: '/behawiorysta-online-polska',
-  description:
-    pageData?.description ??
-    'Behawiorysta online dla calej Polski. Cztery jasne wejscia: Kwadrans 69 zl, Kwadrans na juz 99 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl.',
+  description: pageLead,
   appendLocalContext: false,
 })
 
@@ -38,7 +38,6 @@ export default function LocalSeoPolandOnlinePage() {
   }
 
   const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min')
-  const urgentNowHref = buildBookHref(null, 'kwadrans-na-juz')
   const bridgeHref = buildBookHref(null, 'konsultacja-30-min')
   const consultationHref = buildBookHref(null, 'konsultacja-behawioralna-online')
   const toolkitHref = '/niezbednik'
@@ -46,7 +45,7 @@ export default function LocalSeoPolandOnlinePage() {
   const structuredData = [
     getServiceJsonLd({
       name: pageData.h1,
-      description: `${pageData.description} Cztery jasne wejscia: Kwadrans 69 zl, Kwadrans na juz 99 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl.`,
+      description: pageLead,
       serviceUrl: 'https://regulskibehawiorysta.pl/behawiorysta-online-polska',
       offerPrice: 69,
       offerCatalog: [
@@ -55,12 +54,6 @@ export default function LocalSeoPolandOnlinePage() {
           description: '15 minut rozmowy audio bez kamery jako najprostszy pierwszy krok.',
           url: audioHref,
           price: 69,
-        },
-        {
-          name: 'Kwadrans na juz',
-          description: 'Ten sam format 15 minut, ale z priorytetem i terminem w 15 minut.',
-          url: urgentNowHref,
-          price: 99,
         },
         {
           name: 'Dwa kwadranse',
@@ -105,16 +98,16 @@ export default function LocalSeoPolandOnlinePage() {
             <div className="editorial-hero-copy">
               <div className="section-eyebrow">Konsultacje online</div>
               <h1>{pageData.h1}</h1>
-              <p className="editorial-hero-lead">{pageData.description}</p>
+              <p className="editorial-hero-lead">{pageLead}</p>
 
               <div className="stack-gap top-gap-small">
                 <p className="muted">
-                  Publicznie zostaja cztery jasne wejscia: Kwadrans za 69 zl, Kwadrans na juz za 99 zl, Dwa kwadranse za 169 zl i Pelna konsultacja za
-                  470 zl.
+                  Publicznie zostaja trzy jasne wejscia: Kwadrans za 69 zl, Dwa kwadranse za 169 zl i Pelna konsultacja za 470 zl. Priorytetowy
+                  wariant pojawia sie dopiero przy rezerwacji Kwadransu.
                 </p>
                 <p className="muted">
-                  Najprostszy start to zwykly Kwadrans. Jesli temat jest pilny, wybierasz Kwadrans na juz. Jesli 15 minut to za malo, przechodzisz do
-                  Dwoch kwadransow albo Pelnej konsultacji.
+                  Najprostszy start to zwykly Kwadrans. Jesli 15 minut to za malo, przechodzisz do Dwoch kwadransow albo Pelnej konsultacji. Jesli
+                  przy wyborze terminu zalezy Ci na czasie, priorytet moze pojawic sie dopiero w rezerwacji Kwadransu.
                 </p>
               </div>
 
@@ -169,8 +162,8 @@ export default function LocalSeoPolandOnlinePage() {
 
         <OfferEntrySection
           eyebrow="Formaty"
-          title="Cztery uslugi, jedna logika wyboru."
-          description="69 zl = najprostszy start. 99 zl = ten sam format, ale priorytetowo. 169 zl = szersze uporzadkowanie tematu. 470 zl = diagnoza, plan poprawy i 7 dni wsparcia przez WhatsApp."
+          title="Trzy glowne formaty, jedna logika wyboru."
+          description="69 zl = najprostszy start. 169 zl = szersze uporzadkowanie tematu. 470 zl = diagnoza, plan poprawy i 7 dni wsparcia przez WhatsApp. Priorytetowy wariant pojawia sie dopiero przy rezerwacji Kwadransu."
         />
 
         <section className="panel section-panel editorial-section">
@@ -210,8 +203,8 @@ export default function LocalSeoPolandOnlinePage() {
               </Link>
             ))}
             <Link href="/cennik" prefetch={false} className="summary-card tree-backed-card blog-related-card">
-              <strong>Cennik 69 / 99 / 169 / 470</strong>
-              <span>Zobacz jedna tabele porownawcza wszystkich czterech uslug.</span>
+              <strong>Cennik 69 / 169 / 470</strong>
+              <span>Zobacz jedna tabele porownawcza trzech glownych formatow i note o wariancie priorytetowym.</span>
             </Link>
             <Link href={toolkitHref} prefetch={false} className="summary-card tree-backed-card blog-related-card">
               <strong>Niezbednik</strong>
