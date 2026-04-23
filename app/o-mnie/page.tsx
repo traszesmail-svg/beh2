@@ -164,7 +164,7 @@ export default function AboutPage() {
               <div className="notatnik-hero-card-media" style={{ height: 360 }}>
                 <Image
                   src="/branding/specialist-krzysztof-portrait.jpg"
-                  alt="Krzysztof Regulski podczas pracy z kotem"
+                  alt="Krzysztof Regulski, behawiorysta i technik weterynarii"
                   fill
                   sizes="(max-width: 980px) 100vw, 40vw"
                   priority

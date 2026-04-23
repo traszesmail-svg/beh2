@@ -95,8 +95,11 @@ export default function BookPage({
                 &rarr;
               </span>
             </Link>
-            <Link href="/kontakt#formularz" prefetch={false} className="notatnik-btn notatnik-btn-ghost">
-              <span>Napisz wiadomosc</span>
+            <Link href="/urgent" prefetch={false} className="notatnik-btn notatnik-btn-urgent">
+              <span>Kwadrans na juz / 99 zl</span>
+              <span className="notatnik-btn-arrow" aria-hidden="true">
+                &rarr;
+              </span>
             </Link>
           </div>
         </div>

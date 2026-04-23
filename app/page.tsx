@@ -154,7 +154,7 @@ export default function HomePage() {
 
               <div className="notatnik-hero-fine">
                 Pilny temat?{' '}
-                <Link href={urgentNowHref} prefetch={false}>
+                <Link href="/urgent" prefetch={false}>
                   Kwadrans na juz
                 </Link>
                 . To ten sam 15-minutowy format, tylko z terminem w 15 minut. Gdy 15 minut to za malo, wybierz{' '}
@@ -192,6 +192,10 @@ export default function HomePage() {
                 <div className="notatnik-price-row notatnik-price-row-plain">
                   <Link href={FUNNEL_PRIMARY_HREF} prefetch={false} className="notatnik-inline-link">
                     Rezerwacja
+                  </Link>
+                  {' / '}
+                  <Link href="/urgent" prefetch={false} className="notatnik-inline-link">
+                    Kwadrans na juz / 99 zl
                   </Link>
                 </div>
               </div>
@@ -348,7 +352,7 @@ export default function HomePage() {
           <NotatnikSectionHead index="VIII." kicker="O mnie" title="Spokojne podejscie, konkretne doswiadczenie i materialy, do ktorych mozna wrocic." />
           <div className="notatnik-about">
             <div className="notatnik-portrait">
-              <Image src="/branding/specialist-krzysztof-portrait.jpg" alt="Krzysztof Regulski podczas pracy z kotem" fill sizes="(max-width: 1180px) 100vw, 42vw" />
+              <Image src="/branding/specialist-krzysztof-portrait.jpg" alt="Krzysztof Regulski behawiorysta psow i kotow" fill sizes="(max-width: 1180px) 100vw, 42vw" />
             </div>
 
             <div className="notatnik-about-copy">

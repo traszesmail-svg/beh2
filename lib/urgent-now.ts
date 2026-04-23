@@ -12,6 +12,7 @@ export type UrgentNowRequestRecord = {
   status: UrgentNowRequestStatus
   name: string
   email: string
+  phone?: string | null
   species: FunnelSpecies
   topicId: ProblemType
   topicLabel: string

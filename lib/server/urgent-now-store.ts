@@ -9,6 +9,7 @@ import { getLocalStoreDataDir } from './local-store-path'
 type CreateUrgentNowRequestInput = {
   name: string
   email: string
+  phone?: string | null
   species: FunnelSpecies
   topicId: ProblemType
   topicLabel: string
@@ -69,6 +70,7 @@ export async function createUrgentNowRequest(input: CreateUrgentNowRequestInput)
     status: 'new',
     name: input.name,
     email: input.email,
+    phone: input.phone ?? null,
     species: input.species,
     topicId: input.topicId,
     topicLabel: input.topicLabel,

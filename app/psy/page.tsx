@@ -166,7 +166,7 @@ export default function DogsPage() {
 
           <div className="notatnik-subhero-media">
             <div className="notatnik-subhero-figure">
-              <Image src="/branding/topic-cards/dog-window-alone.jpg" alt="Pies obserwujacy otoczenie przez okno" fill sizes="(max-width: 980px) 100vw, 40vw" priority />
+              <Image src="/branding/topic-cards/dog-window-alone.jpg" alt="Bialy pies odpoczywa w lesie przy kamieniu" fill sizes="(max-width: 980px) 100vw, 40vw" priority />
             </div>
             <div className="notatnik-subhero-note">
               <span>Spacery / pobudzenie / rozlaka</span>

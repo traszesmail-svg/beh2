@@ -614,6 +614,7 @@ export async function listUrgentNowRequests(): Promise<UrgentNowRequestRecord[]>
 export async function createUrgentNowRequest(input: {
   name: string
   email: string
+  phone?: string | null
   species: 'pies' | 'kot'
   topicId: import('@/lib/types').ProblemType
   topicLabel: string

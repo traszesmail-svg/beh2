@@ -332,3 +332,62 @@ export async function sendPaymentConfirmationSms(
 
   return result
 }
+
+async function sendRawSms(
+  idempotencyKey: string,
+  phone: string | null | undefined,
+  message: string,
+  logTag: string,
+): Promise<PaymentConfirmationSmsResult> {
+  if (!phone?.trim()) {
+    return { status: 'skipped_missing_phone', normalizedPhone: null, errorCode: 'PHONE_MISSING', errorMessage: 'Phone missing.' }
+  }
+
+  const normalizedPhone = normalizePolishPhone(phone)
+
+  if (!normalizedPhone) {
+    return { status: 'skipped_invalid_phone', normalizedPhone: null, errorCode: 'PHONE_INVALID', errorMessage: 'Phone could not be normalized.' }
+  }
+
+  const config = getSmsProviderConfig()
+
+  if (!config.isAvailable || !config.provider) {
+    console.warn(`[behawior15][sms] skip ${logTag}`, { reason: config.summary, phoneHint: maskPhoneForLogs(normalizedPhone.e164) })
+    return { status: 'skipped_not_configured', normalizedPhone: normalizedPhone.e164, errorCode: 'SMS_NOT_CONFIGURED', errorMessage: config.summary }
+  }
+
+  const fakeBooking = { id: idempotencyKey }
+  const result =
+    config.provider === 'smsapi'
+      ? await sendViaSmsApi(config, fakeBooking, normalizedPhone.digits, message)
+      : await sendViaWebhook(config, fakeBooking, normalizedPhone.e164, message)
+
+  const level = result.status === 'sent' ? 'info' : 'error'
+  console[level](`[behawior15][sms] ${logTag}`, {
+    idempotencyKey,
+    status: result.status,
+    phoneHint: maskPhoneForLogs(normalizedPhone.e164),
+    provider: config.provider,
+  })
+
+  return result
+}
+
+export async function sendUrgentCustomerAckSms(
+  requestId: string,
+  customerName: string,
+  phone: string | null | undefined,
+): Promise<PaymentConfirmationSmsResult> {
+  const message = `Czesc ${customerName.split(' ')[0]}, dostalem Twoja prosbe o Kwadrans na juz. Odpowiem w ciagu 15 minut z terminem. Krzysztof Regulski`
+  return sendRawSms(`urgent-ack-${requestId}`, phone, message, 'urgent-customer-ack')
+}
+
+export async function sendAdminUrgentReminderSms(
+  requestId: string,
+  customerName: string,
+  topic: string,
+): Promise<PaymentConfirmationSmsResult> {
+  const adminPhone = process.env.ADMIN_PHONE?.trim() || null
+  const message = `KWADRANS NA JUZ: ${customerName} (${topic}). Pozostalo 5 minut na odpowiedz. ID: ${requestId.slice(0, 8)}`
+  return sendRawSms(`urgent-reminder-${requestId}`, adminPhone, message, 'urgent-admin-reminder')
+}

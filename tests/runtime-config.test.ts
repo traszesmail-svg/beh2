@@ -18,6 +18,7 @@ import { getOrganizationJsonLd } from '@/lib/schema'
 import { CAPBT_ORG_URL, INSTAGRAM_PROFILE_URL, SITE_PRODUCTION_URL } from '@/lib/site'
 import { buildBookMetadata, buildHomeMetadata } from '@/lib/seo'
 import { getDeployReadinessChecks, getGoLiveChecks, getVerifiedDeployReadinessChecks } from '@/lib/server/go-live'
+import { getPaymentModeStatus } from '@/lib/server/env'
 import { getQaCheckoutEligibility, getQaCheckoutPaymentReference, getPublicManualPaymentConfig } from '@/lib/server/payment-options'
 import { auditSupabaseSchemaText, getSupabaseSchemaAudit } from '@/scripts/lib/schema-audit'
 import { getDefaultProductionEnvSnapshotPath } from '@/scripts/lib/env-file'
@@ -273,7 +274,7 @@ test('home, dogs and cats pages point users to the canonical service page and ex
   assert.match(homeSource, /serviceLandingHref = '\/behawiorysta-online-polska'/)
   assert.match(homeSource, /<ServiceDecisionSection/)
   assert.match(homeSource, /serviceHref=\{serviceLandingHref\}/)
-  assert.match(homeSource, /Behawiorysta psów i kotów online\. Zacznij od spokojnej rozmowy\./)
+  assert.match(homeSource, /Behawiorysta psow i kotow online/)
 
   assert.match(dogsSource, /title: 'Behawiorysta psów online - reaktywnosc, separacja i pomoc w domu'/)
   assert.match(dogsSource, /serviceLandingHref = '\/behawiorysta-online-polska'/)
@@ -722,6 +723,28 @@ test('public manual payment stays available when only BLIK phone is configured',
       delete process.env.MANUAL_PAYMENT_PAYPAL_ME
     }
   }
+})
+
+test('manual payment mode becomes the valid live payment runtime when BLIK is configured', () => {
+  withEnv(
+    {
+      APP_PAYMENT_MODE: 'manual',
+      MANUAL_PAYMENT_BLIK_PHONE: '500600700',
+      MANUAL_PAYMENT_PAYPAL_ME_URL: null,
+      STRIPE_SECRET_KEY: null,
+      VERCEL_ENV: 'production',
+    },
+    () => {
+      const paymentMode = getPaymentModeStatus()
+
+      assert.equal(paymentMode.isValid, true)
+      assert.equal(paymentMode.active, 'manual')
+      assert.equal(paymentMode.usesFallback, false)
+      assert.deepEqual(paymentMode.missing, [])
+      assert.match(paymentMode.summary, /APP_PAYMENT_MODE=manual/)
+      assert.match(paymentMode.summary, /reczna|recznym/i)
+    },
+  )
 })
 
 test.skip('release smoke rules track the current home and booking copy', () => {

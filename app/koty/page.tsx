@@ -166,7 +166,7 @@ export default function CatsPage() {
 
           <div className="notatnik-subhero-media">
             <div className="notatnik-subhero-figure">
-              <Image src="/branding/topic-cards/cats/cat-anxious-hiding.jpg" alt="Kot wycofany i schowany w domu" fill sizes="(max-width: 980px) 100vw, 40vw" priority />
+              <Image src="/branding/topic-cards/cats/cat-anxious-hiding.jpg" alt="Pręgowany kot siedzi spokojnie w lesie" fill sizes="(max-width: 980px) 100vw, 40vw" priority />
             </div>
             <div className="notatnik-subhero-note">
               <span>Kuweta / stres / relacje miedzy kotami</span>

@@ -14,7 +14,7 @@ Ustaw w środowisku produkcyjnym co najmniej:
 
 ```env
 APP_DATA_MODE=supabase
-APP_PAYMENT_MODE=auto
+APP_PAYMENT_MODE=manual
 NEXT_PUBLIC_APP_URL=https://regulskibehawiorysta.pl
 NEXT_PUBLIC_SUPABASE_URL=...
 SUPABASE_SERVICE_ROLE_KEY=...

@@ -1585,5 +1585,101 @@ export async function sendOpinionSubmissionEmail(submission: OpinionSubmission):
   return deliverEmail({ to: recipient, subject, html, text }, 'internal')
 }
 
+type UrgentNowSubmission = {
+  requestId: string
+  name: string
+  email: string
+  phone?: string | null
+  topic: string
+  species: string
+  message: string
+  requestedDate?: string | null
+  requestedTime?: string | null
+}
 
+export async function sendUrgentNowCustomerAckEmail(submission: UrgentNowSubmission): Promise<DeliveryResult> {
+  const recipient = submission.email.trim()
+
+  if (!isValidPublicEmail(recipient)) {
+    return { status: 'skipped', reason: 'customer email missing or invalid' }
+  }
+
+  const subject = 'Kwadrans na juz - dostałem Twoją prośbę, odpiszę w 15 minut'
+  const html = renderEmailShell(
+    `Cześć ${escapeHtml(submission.name.split(' ')[0])}, dostałem Twoją prośbę o Kwadrans na już.`,
+    'Odpiszę na ten adres e-mail w ciągu 15 minut z propozycją terminu.',
+    `
+      <p><strong>Temat:</strong> ${escapeHtml(submission.topic)}</p>
+      ${submission.requestedDate && submission.requestedTime ? `<p><strong>Preferowany termin:</strong> ${escapeHtml(submission.requestedDate)} o ${escapeHtml(submission.requestedTime)}</p>` : ''}
+      <p>Jeśli coś się zmieni albo zechcesz doprecyzować temat, po prostu odpowiedz na tego maila.</p>
+      ${renderContactBlockHtml()}
+    `,
+    'Poczekaj chwilę — termin będzie gotowy za kilkanaście minut.',
+  )
+  const text = [
+    `Cześć ${submission.name.split(' ')[0]},`,
+    '',
+    'Dostałem Twoją prośbę o Kwadrans na już. Odpiszę w ciągu 15 minut z propozycją terminu.',
+    '',
+    `Temat: ${submission.topic}`,
+    submission.requestedDate && submission.requestedTime ? `Preferowany termin: ${submission.requestedDate} ${submission.requestedTime}` : null,
+    '',
+    'Jeśli coś się zmieni, po prostu odpowiedz na tego maila.',
+    renderContactBlockText(),
+  ]
+    .filter((line): line is string => typeof line === 'string')
+    .join('\n')
+
+  return deliverEmail(
+    { to: recipient, subject, html, text, replyTo: getPublicContactDetails().email ?? undefined },
+    'customer',
+  )
+}
+
+export async function sendUrgentNowAdminAlertEmail(submission: UrgentNowSubmission): Promise<DeliveryResult> {
+  const recipient = getPublicContactDetails().email
+
+  if (!recipient) {
+    return { status: 'skipped', reason: 'admin email missing or invalid' }
+  }
+
+  const replyTo = isValidPublicEmail(submission.email) ? submission.email : undefined
+  const phoneBlock = submission.phone ? `<p><strong>Telefon:</strong> ${escapeHtml(submission.phone)}</p>` : ''
+  const preferredBlock =
+    submission.requestedDate && submission.requestedTime
+      ? `<p><strong>Preferowany termin:</strong> ${escapeHtml(submission.requestedDate)} o ${escapeHtml(submission.requestedTime)}</p>`
+      : ''
+  const subject = `KWADRANS NA JUZ: ${submission.name} - ${submission.topic} [ID: ${submission.requestId.slice(0, 8)}]`
+  const html = renderEmailShell(
+    'Nowe zgłoszenie Kwadrans na już',
+    'Klient czeka na odpowiedź w ciągu 15 minut. Potwierdź termin albo zaproponuj inny.',
+    `
+      <p><strong>Imię:</strong> ${escapeHtml(submission.name)}</p>
+      <p><strong>E-mail:</strong> ${replyTo ? `<a href="mailto:${escapeHtml(submission.email)}">${escapeHtml(submission.email)}</a>` : escapeHtml(submission.email)}</p>
+      ${phoneBlock}
+      <p><strong>Gatunek:</strong> ${escapeHtml(submission.species)}</p>
+      <p><strong>Temat:</strong> ${escapeHtml(submission.topic)}</p>
+      ${preferredBlock}
+      <p><strong>Opis:</strong><br />${formatMultilineHtml(submission.message)}</p>
+      <p><strong>ID prośby:</strong> ${escapeHtml(submission.requestId)}</p>
+    `,
+    'Odpowiedz na maila klienta albo użyj panelu admin do zatwierdzenia terminu.',
+  )
+  const text = [
+    'KWADRANS NA JUZ - nowe zgłoszenie.',
+    `Imię: ${submission.name}`,
+    `E-mail: ${submission.email}`,
+    submission.phone ? `Telefon: ${submission.phone}` : null,
+    `Gatunek: ${submission.species}`,
+    `Temat: ${submission.topic}`,
+    submission.requestedDate && submission.requestedTime ? `Preferowany termin: ${submission.requestedDate} ${submission.requestedTime}` : null,
+    `Opis: ${submission.message}`,
+    `ID prośby: ${submission.requestId}`,
+    'Odpowiedz w ciągu 15 minut.',
+  ]
+    .filter((line): line is string => typeof line === 'string')
+    .join('\n')
+
+  return deliverEmail({ to: recipient, subject, html, text, replyTo }, 'internal')
+}
 

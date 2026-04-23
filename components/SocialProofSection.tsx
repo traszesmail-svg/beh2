@@ -45,7 +45,7 @@ const CASE_IMAGE_DIMENSIONS: Record<string, { width: number; height: number }> =
   '/branding/topic-cards/cats/cat-litter-box.jpg': { width: 1200, height: 900 },
   '/branding/topic-cards/cats/cat-intercat-conflict.jpg': { width: 1200, height: 900 },
   '/branding/case-cat-snow.jpg': { width: 1200, height: 900 },
-  '/branding/topic-cards/cats/cat-anxious-hiding.jpg': { width: 1200, height: 1200 },
+  '/branding/topic-cards/cats/cat-anxious-hiding.jpg': { width: 384, height: 256 },
   '/branding/case-cat-scratcher.jpg': { width: 1200, height: 900 },
   '/branding/topic-cards/cats/cat-night-meowing.jpg': { width: 1400, height: 1050 },
 } as const

@@ -5,7 +5,7 @@ const DEFAULT_JITSI_BASE_URL = 'https://meet.jit.si'
 const DEFAULT_RESERVATION_WINDOW_MINUTES = 15
 
 const DATA_MODE_VALUES = ['auto', 'supabase', 'local'] as const
-const PAYMENT_MODE_VALUES = ['auto', 'stripe', 'mock'] as const
+const PAYMENT_MODE_VALUES = ['auto', 'manual', 'stripe', 'mock'] as const
 
 const reportedRuntimeMessages = new Set<string>()
 
@@ -13,7 +13,7 @@ export type DataMode = (typeof DATA_MODE_VALUES)[number]
 export type PaymentMode = (typeof PAYMENT_MODE_VALUES)[number]
 
 type ActiveDataMode = 'supabase' | 'local'
-type ActivePaymentMode = 'stripe' | 'mock'
+type ActivePaymentMode = 'manual' | 'stripe' | 'mock'
 
 type RuntimeModeStatus<TConfigured extends string, TActive extends string> = {
   configured: TConfigured
@@ -192,6 +192,10 @@ function getMissingStripeVars(options?: StripeConfigOptions): string[] {
   return required.filter((name) => !readEnv(name))
 }
 
+function hasManualPaymentConfig(): boolean {
+  return Boolean(readEnv('MANUAL_PAYMENT_BLIK_PHONE') || readEnv('MANUAL_PAYMENT_PAYPAL_ME_URL') || readEnv('MANUAL_PAYMENT_PAYPAL_ME'))
+}
+
 function hasProductionStripeTestKey(): boolean {
   return process.env.VERCEL_ENV === 'production' && Boolean(readEnv('STRIPE_SECRET_KEY')?.startsWith('sk_test_'))
 }
@@ -344,6 +348,7 @@ export function getDataModeStatus(): RuntimeModeStatus<DataMode, ActiveDataMode>
 
 export function getPaymentModeStatus(): RuntimeModeStatus<PaymentMode, ActivePaymentMode> {
   const configured = parseMode('APP_PAYMENT_MODE', PAYMENT_MODE_VALUES, 'auto')
+  const manualPaymentAvailable = hasManualPaymentConfig()
   const missing = getMissingStripeVars()
   const productionTestKey = hasProductionStripeTestKey()
 
@@ -355,6 +360,28 @@ export function getPaymentModeStatus(): RuntimeModeStatus<PaymentMode, ActivePay
       usesFallback: true,
       missing: [],
       summary: 'APP_PAYMENT_MODE=mock -> aktywny jest testowy bypass płatności do pełnego QA flow bez Stripe.',
+    }
+  }
+
+  if (configured === 'manual') {
+    if (!manualPaymentAvailable) {
+      return {
+        configured,
+        active: null,
+        isValid: false,
+        usesFallback: false,
+        missing: ['MANUAL_PAYMENT_BLIK_PHONE lub MANUAL_PAYMENT_PAYPAL_ME_URL'],
+        summary: 'APP_PAYMENT_MODE=manual wymaga aktywnej konfiguracji wplaty recznej przez BLIK albo PayPal.me.',
+      }
+    }
+
+    return {
+      configured,
+      active: 'manual',
+      isValid: true,
+      usesFallback: false,
+      missing: [],
+      summary: 'APP_PAYMENT_MODE=manual -> aktywna jest wplata reczna z recznym potwierdzeniem.',
     }
   }
 
