@@ -13,6 +13,7 @@ import { FUNNEL_FULL_CONSULTATION_HREF, FUNNEL_PRIMARY_HREF, FUNNEL_PRIMARY_LABE
 import { PUBLIC_OFFER_FAQ_ITEMS } from '@/lib/public-offer-faq'
 import { getBreadcrumbJsonLd, getFaqPageJsonLd, getServiceJsonLd } from '@/lib/schema'
 import { buildHomeMetadata } from '@/lib/seo'
+import { PUBLIC_OFFER_LEAD, PUBLIC_OFFER_PRICES } from '@/lib/public-offer-copy'
 
 export async function generateMetadata(): Promise<Metadata> {
   return buildHomeMetadata()
@@ -29,7 +30,6 @@ const navItems = [
 ]
 
 const serviceLandingHref = '/behawiorysta-online-polska'
-const urgentNowHref = '/book?service=kwadrans-na-juz'
 
 const materials = [
   getLeadMagnetBySlug('pies-reaktywnosc-5-krokow'),
@@ -70,11 +70,11 @@ const trustCards = [
   },
   {
     title: 'Roznica 69 i 99 jest prosta',
-    copy: 'To ten sam 15-minutowy format. Przy 99 zl placisz za priorytet i termin w 15 minut, a nie za dluzsza rozmowe.',
+    copy: 'To ten sam 15-minutowy format. Przy 99 zl placisz za priorytet i szybki termin, a nie za dluzsza konsultacje.',
   },
   {
     title: 'Pelna konsultacja ma konkretny zakres',
-    copy: '470 zl obejmuje 60 minut rozmowy, diagnoze, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.',
+    copy: '470 zl obejmuje 60 minut rozmowy, diagnoze sytuacji, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.',
   },
 ] as const
 
@@ -132,10 +132,7 @@ export default function HomePage() {
           <div className="notatnik-hero-grid">
             <div>
               <p className="notatnik-hero-lede">
-                Na stronie sa cztery jasne wejscia: <strong>Kwadrans za 69 zl</strong>, <strong>Kwadrans na juz za 99 zl</strong>,{' '}
-                <strong>Dwa kwadranse za 169 zl</strong> i <strong>Pelna konsultacja za 470 zl</strong>. Zaczynasz od formatu, ktory pasuje do skali tematu,
-                nie od najdrozszej opcji. Kwadrans jest najprostszym startem, Kwadrans na juz przyspiesza wejscie, Dwa kwadranse daja wiecej miejsca, a
-                Pelna konsultacja sluzy sprawom zlozonym i przewleklym.
+                {PUBLIC_OFFER_LEAD}
               </p>
 
               <NextSlot className="top-gap-small" />
@@ -157,7 +154,7 @@ export default function HomePage() {
                 <Link href="/urgent" prefetch={false}>
                   Kwadrans na juz
                 </Link>
-                . To ten sam 15-minutowy format, tylko z terminem w 15 minut. Gdy 15 minut to za malo, wybierz{' '}
+                . Gdy 15 minut to za malo, wybierz{' '}
                 <Link href={FUNNEL_UPGRADE_HREF} prefetch={false}>
                   Dwa kwadranse
                 </Link>
@@ -185,19 +182,16 @@ export default function HomePage() {
                 <h3>Kwadrans z behawiorysta</h3>
                 <p>15 minut rozmowy audio bez kamery. Najprostszy start, gdy chcesz nazwac problem, ustalic priorytet i wiedziec, od czego zaczac.</p>
                 <div className="notatnik-price-row">
-                  <div className="notatnik-price-big">69 zl</div>
+                  <div className="notatnik-price-big">{PUBLIC_OFFER_PRICES.quick} zl</div>
                   <div className="notatnik-price-small">15 min / audio / bez kamery</div>
                 </div>
-                <p className="notatnik-hero-fine">Pilniej? Kwadrans na juz kosztuje 99 zl i daje ten sam format z terminem w 15 minut.</p>
-                <div className="notatnik-price-row notatnik-price-row-plain">
-                  <Link href={FUNNEL_PRIMARY_HREF} prefetch={false} className="notatnik-inline-link">
-                    Rezerwacja
-                  </Link>
-                  {' / '}
+                <p className="notatnik-hero-fine">Pilniej? Kwadrans na juz kosztuje {PUBLIC_OFFER_PRICES.urgent} zl i daje ten sam format z priorytetem.</p>
+                <p className="notatnik-hero-fine">
                   <Link href="/urgent" prefetch={false} className="notatnik-inline-link">
-                    Kwadrans na juz / 99 zl
-                  </Link>
-                </div>
+                    Kwadrans na juz
+                  </Link>{' '}
+                  to lzejszy dopisek, nie drugi glowny kierunek.
+                </p>
               </div>
             </aside>
           </div>

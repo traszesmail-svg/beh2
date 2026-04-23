@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { PriceDisplay } from '@/components/PriceDisplay'
 import { buildBookHref, type BookingSpecies } from '@/lib/booking-routing'
+import { PUBLIC_OFFER_CANCELLATION_COPY, PUBLIC_OFFER_FULL_VALUE_POINTS, PUBLIC_OFFER_PRICES } from '@/lib/public-offer-copy'
 
 type ServicesComparisonProps = {
   species?: BookingSpecies | null
@@ -13,52 +14,52 @@ const SERVICES = [
     id: 'szybka-konsultacja-15-min',
     title: 'Kwadrans z behawiorysta',
     badge: 'Najprostszy start',
-    price: 69,
+    price: PUBLIC_OFFER_PRICES.quick,
     duration: '15 min',
     mode: 'audio, bez kamery',
     who: 'gdy chcesz najprosciej zaczac od jednego pytania albo pierwszego uporzadkowania tematu',
     plan: 'pierwszy kierunek, priorytet i decyzja, czy ten format wystarczy',
     materials: 'jasne wskazanie, co zrobic teraz i co obserwowac dalej',
-    refund: 'tak, przed startem',
+    refund: PUBLIC_OFFER_CANCELLATION_COPY,
     cta: 'Wybierz Kwadrans',
   },
   {
     id: 'kwadrans-na-juz',
     title: 'Kwadrans na juz',
     badge: 'Pilny termin',
-    price: 99,
+    price: PUBLIC_OFFER_PRICES.urgent,
     duration: '15 min',
     mode: 'audio, bez kamery',
-    who: 'gdy potrzebujesz tego samego formatu co Kwadrans, ale z terminem w 15 minut',
+    who: 'gdy potrzebujesz tego samego formatu co Kwadrans, ale z priorytetem i szybkim terminem',
     plan: 'ten sam zakres co w Kwadransie, ale obsluzony priorytetowo',
     materials: 'ten sam pierwszy kierunek co w Kwadransie, tylko szybciej',
-    refund: 'tak, przed startem',
+    refund: PUBLIC_OFFER_CANCELLATION_COPY,
     cta: 'Wybierz na juz',
   },
   {
     id: 'konsultacja-30-min',
     title: 'Dwa kwadranse',
     badge: null,
-    price: 169,
+    price: PUBLIC_OFFER_PRICES.bridge,
     duration: '30 min',
     mode: 'audio lub video',
     who: 'gdy temat jest szerszy i chcesz spokojniej uporzadkowac 2-3 watki',
     plan: 'wiecej miejsca na kontekst, kolejnosc dzialan i decyzje co dalej',
     materials: 'krotka notatka po rozmowie',
-    refund: 'tak, przed startem',
+    refund: PUBLIC_OFFER_CANCELLATION_COPY,
     cta: 'Wybierz Dwa kwadranse',
   },
   {
     id: 'konsultacja-behawioralna-online',
     title: 'Pelna konsultacja',
     badge: null,
-    price: 470,
+    price: PUBLIC_OFFER_PRICES.premium,
     duration: '60 min',
     mode: 'audio lub video',
     who: 'gdy sprawa jest zlozona, przewlekla albo obejmuje kilka obszarow naraz',
     plan: 'diagnoza sytuacji, plan poprawy i ustalenie priorytetow',
     materials: '7 dni konsultacji tekstowych przez WhatsApp',
-    refund: 'tak, przed startem',
+    refund: 'Osobny regulamin dla pelnej konsultacji.',
     cta: 'Wybierz Pelna konsultacje',
   },
 ] as const
@@ -67,8 +68,8 @@ const ROWS = [
   { key: 'price', label: 'Cena' },
   { key: 'duration', label: 'Czas' },
   { key: 'mode', label: 'Forma' },
-  { key: 'who', label: 'Dla kogo' },
-  { key: 'plan', label: 'Co klient dostaje' },
+  { key: 'who', label: 'Kiedy wybrac' },
+  { key: 'plan', label: 'Po co ten format' },
   { key: 'materials', label: 'Po rozmowie' },
   { key: 'refund', label: 'Zmiana / zwrot' },
   { key: 'cta', label: 'CTA' },
@@ -151,11 +152,11 @@ export function ServicesComparison({ species = null, qaBooking = false, classNam
                 <dd>{service.mode}</dd>
               </div>
               <div>
-                <dt>Dla kogo</dt>
+                <dt>Kiedy wybrac</dt>
                 <dd>{service.who}</dd>
               </div>
               <div>
-                <dt>Co klient dostaje</dt>
+                <dt>Po co ten format</dt>
                 <dd>{service.plan}</dd>
               </div>
               <div>
@@ -167,6 +168,16 @@ export function ServicesComparison({ species = null, qaBooking = false, classNam
                 <dd>{service.refund}</dd>
               </div>
             </dl>
+
+            {service.id === 'konsultacja-behawioralna-online' ? (
+              <div className="notatnik-service-note top-gap-small" aria-label="Zakres pelnej konsultacji">
+                <ul className="notatnik-service-list">
+                  {PUBLIC_OFFER_FULL_VALUE_POINTS.map((point) => (
+                    <li key={point}>{point}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
 
             <Link href={getHref(service.id, species, qaBooking)} prefetch={false} className="services-comparison-link">
               {service.cta}

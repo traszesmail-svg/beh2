@@ -8,6 +8,13 @@ import { ServicesComparison } from '@/components/ServicesComparison'
 import { readBookingServiceSearchParam, readBookingSpeciesSearchParam, readSearchParam } from '@/lib/booking-routing'
 import { getBreadcrumbJsonLd, getServiceJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
+import {
+  PUBLIC_OFFER_BOOKING_LEAD,
+  PUBLIC_OFFER_BOOKING_PAYMENT,
+  PUBLIC_OFFER_BOOKING_PROCESS,
+  PUBLIC_OFFER_BOOKING_REASSURANCE,
+  PUBLIC_OFFER_CANCELLATION_COPY,
+} from '@/lib/public-offer-copy'
 
 export const metadata: Metadata = buildMarketingMetadata({
   title: 'Rezerwacja Kwadransa z behawiorysta',
@@ -23,13 +30,6 @@ const navItems = [
   { href: '/faq', label: 'FAQ' },
   { href: '/kontakt#formularz', label: 'Kontakt' },
 ]
-
-const PAYMENT_STEPS = [
-  '1. Wybierasz usluge i wpisujesz preferowane terminy.',
-  '2. Dostajesz odpowiedz z potwierdzonym terminem i dalszym krokiem platnosci: PayPal.me albo BLIK na telefon.',
-  '3. Oplacasz rezerwacje przez PayPal.me albo BLIK na telefon w godzinach 9-21, poza dniami ustawowo wolnymi.',
-  '4. Potwierdzenie przychodzi do 15 minut wraz z linkiem do rozmowy.',
-] as const
 
 const NEXT_STEPS = [
   '1. Potwierdzam jeden z terminow albo odsylam najblizsza alternatywe.',
@@ -84,9 +84,8 @@ export default function BookPage({
           <h1>
             Rezerwacja <em>konsultacji behawioralnych online</em>.
           </h1>
-          <p>
-            Wybierasz jedna z czterech uslug, wpisujesz 2-4 zdania opisu i proponujesz terminy. Reszte potwierdzam mailem, bez telefonu na stronie i bez kalendarza do klikania.
-          </p>
+          <p>{PUBLIC_OFFER_BOOKING_LEAD}</p>
+          <p>{PUBLIC_OFFER_BOOKING_REASSURANCE}</p>
           <NextSlot className="top-gap-small" />
           <div className="notatnik-subhero-actions">
             <Link href="/cennik" prefetch={false} className="notatnik-btn">
@@ -106,28 +105,36 @@ export default function BookPage({
 
         <div className="summary-card tree-backed-card">
           <div className="section-eyebrow">Co dzieje sie dalej</div>
-          <h3>Platnosc przychodzi dopiero po potwierdzeniu terminu.</h3>
-          <p>
-            Ten model porzadkuje rezerwacje bez publicznego numeru telefonu. Najpierw uzgadniamy termin, potem wysylam
-            PayPal.me albo instrukcje BLIK na telefon i potwierdzam rezerwacje.
-          </p>
+          <h3>Najpierw sens wyboru, potem platnosc.</h3>
+          <p>{PUBLIC_OFFER_BOOKING_PAYMENT}</p>
         </div>
       </section>
 
       <section id="porownanie">
         <NotatnikSectionHead index="I." kicker="Uslugi" title="Najpierw porownaj cztery formaty." />
         <ServicesComparison species={species} />
+        <div className="info-box top-gap-small">{PUBLIC_OFFER_CANCELLATION_COPY}</div>
       </section>
 
       <section style={{ background: 'var(--paper)' }}>
-        <NotatnikSectionHead index="II." kicker="Platnosc" title="Jak przebiega platnosc." />
+        <NotatnikSectionHead index="II." kicker="Decyzja" title="Od czego zaczac, jesli nie masz pewnosci." />
         <div className="notatnik-steps">
-          {PAYMENT_STEPS.map((step, index) => (
+          {PUBLIC_OFFER_BOOKING_PROCESS.map((step, index) => (
             <article key={step} className="notatnik-step">
               <div className="notatnik-step-number">{String(index + 1).padStart(2, '0')}</div>
               <p>{step}</p>
             </article>
           ))}
+        </div>
+        <div className="notatnik-quiet-grid top-gap">
+          <article className="notatnik-quiet-card">
+            <h3>Nie musisz miec gotowej diagnozy</h3>
+            <p>Wystarczy krotki opis sytuacji i propozycja terminow. Jesli temat okaze sie szerszy, powiem to wprost.</p>
+          </article>
+          <article className="notatnik-quiet-card">
+            <h3>Kwadrans to bezpieczny start</h3>
+            <p>Jesli nie wiesz, co wybrac, zacznij od Kwadransu za 69 zl. To najprostszy pierwszy krok, gdy chcesz nazwac problem i ustalic priorytet.</p>
+          </article>
         </div>
       </section>
 
@@ -138,8 +145,7 @@ export default function BookPage({
             Wyslij prosbe o termin, <em>a ja odpisze z potwierdzeniem.</em>
           </h2>
           <p className="notatnik-contact-lede">
-            Linki z `?service=` i `?species=` dalej dzialaja. Formularz wstepnie zaznacza wybrana usluge i gatunek, zeby
-            nie gubic kontekstu po przejsciu z innych stron.
+            Wpisz gatunek, wybierz usluge i zaproponuj 2-3 terminy. Reszte potwierdzam mailem - bez telefonu na stronie i bez kalendarza do klikania.
           </p>
 
           <div className="contact-form-card" id="formularz">

@@ -2,6 +2,7 @@ import { buildBookHref } from './booking-routing'
 import { FUNNEL_CTA_LABELS } from './funnel'
 import { DEFAULT_PRICE_PLN, formatPricePln } from './pricing'
 import { CAT_HOME_PHOTO, SPECIALIST_ONLINE_PHOTO, SPECIALIST_WIDE_PHOTO } from './site'
+import { PUBLIC_OFFER_FULL_CONSULTATION_VALUE } from './public-offer-copy'
 
 export type OfferKind = 'booking' | 'resource'
 
@@ -65,14 +66,14 @@ export const OFFERS: Offer[] = [
     forWho: 'Dla psa albo kota, gdy chcesz szybko uporzadkowac temat i wybrac wlasciwy pierwszy krok.',
     whenToChoose: 'Gdy masz jedno pytanie, potrzebujesz orientacji w temacie albo chcesz zaczac bez kamery i bez dlugiego przygotowania.',
     nextStep: 'Wybierasz temat, termin i platnosc. Po rozmowie wiesz, co zrobic teraz i czy ten format wystarczy.',
-    cardSummary: 'Cena wejscia i najprostszy pierwszy krok.',
-    heroSummary: 'Najlzejszy pierwszy krok: 15 minut rozmowy glosem bez kamery, gdy trzeba szybko ustalic priorytet i ruszyc bez chaosu.',
+    cardSummary: 'Najprostszy start i cena wejscia.',
+    heroSummary: '15 minut rozmowy audio bez kamery, gdy chcesz nazwac problem, ustalic priorytet i wiedziec, co robic dalej.',
     descriptions: [
       'To dobry wybor, gdy temat jest swiezy, waski albo nie wiesz jeszcze, jak duzy jest problem.',
       'Po rozmowie masz pierwszy plan: co zrobic od razu, co obserwowac i czy ten format wystarczy.',
     ],
     bestFor: ['jedno pytanie', 'orientacja w temacie', 'spokojny pierwszy krok'],
-    outcomes: ['co zrobic dzis', 'co obserwowac przez najblizsze dni', 'czy zostac przy 15 min czy przejsc do Dwoch kwadransow albo Pelnej konsultacji'],
+    outcomes: ['co zrobic dzis', 'co obserwowac przez najblizsze dni', 'czy zostac przy 15 min czy przejsc dalej'],
     primaryCtaLabel: FUNNEL_CTA_LABELS.primary,
     primaryHref: buildBookHref(),
     secondaryCtaLabel: FUNNEL_CTA_LABELS.bridge,
@@ -81,7 +82,7 @@ export const OFFERS: Offer[] = [
     imageAlt: SPECIALIST_WIDE_PHOTO.alt,
     imageWidth: SPECIALIST_WIDE_PHOTO.width,
     imageHeight: SPECIALIST_WIDE_PHOTO.height,
-    note: 'Jesli temat okaze sie szerszy, od razu wskaze, czy lepsze beda Dwa kwadranse z behawiorysta, pelna konsultacja behawioralna albo Niezbednik.',
+    note: 'Jesli temat okaze sie szerszy, od razu wskaze, czy lepsze beda Dwa kwadranse z behawiorysta albo pelna konsultacja behawioralna.',
   },
   {
     slug: 'kwadrans-na-juz',
@@ -95,8 +96,8 @@ export const OFFERS: Offer[] = [
     forWho: 'Dla psa albo kota, gdy potrzebujesz tego samego 15-minutowego formatu co Kwadrans, ale z priorytetem i szybszym terminem.',
     whenToChoose: 'Gdy sprawa jest pilna, chcesz rozmawiac jeszcze dzis albo po prostu zalezy Ci na terminie w 15 minut.',
     nextStep: 'Wybierasz ten sam format 15 minut, ale w sciezce priorytetowej. Po potwierdzeniu terminu przechodzisz przez ten sam proces rezerwacji.',
-    cardSummary: 'Ten sam Kwadrans, ale z priorytetem i szybszym terminem.',
-    heroSummary: '15 minut audio bez kamery w trybie priorytetowym: placisz za szybszy dostep i termin w 15 minut, nie za dluzsza rozmowe.',
+    cardSummary: 'Ten sam format, ale z priorytetem.',
+    heroSummary: '15 minut audio bez kamery z priorytetem i mozliwie szybkim terminem.',
     descriptions: [
       'To ta sama forma co Kwadrans za 69 zl: 15 minut audio bez kamery, tylko realizowana priorytetowo.',
       'Zakres rozmowy jest taki sam jak w zwyklym Kwadransie. Roznica dotyczy tylko tempa wejscia i priorytetu obslugi.',
@@ -125,8 +126,8 @@ export const OFFERS: Offer[] = [
     forWho: 'Dla spraw, ktore potrzebuja wiecej czasu niz sam Kwadrans, ale nie wymagaja od razu pelnej konsultacji.',
     whenToChoose: 'Gdy temat jest szerszy niz jedno pytanie, chcesz spokojniej wejsc w rozmowe online albo potrzebujesz 30 minut na uporzadkowanie dwoch-trzech watkow.',
     nextStep: 'Od razu rezerwujesz 30-minutowy termin online i przechodzisz do formularza oraz platnosci.',
-    cardSummary: 'Pomost miedzy szybkim startem a pelna konsultacja.',
-    heroSummary: '30 minut rozmowy online, gdy sam Kwadrans to za malo, ale pelna konsultacja bylaby jeszcze za szerokim startem.',
+    cardSummary: 'Pomost miedzy startem a pelnym wejsciem.',
+    heroSummary: '30 minut rozmowy online, gdy 15 minut to za malo, ale pelna konsultacja bylaby jeszcze za szerokim startem.',
     descriptions: [
       'To format dla sytuacji, w ktorych potrzebujesz chwili wiecej na kontekst i pytania, ale nadal zalezy Ci na prostym starcie.',
       'Po rozmowie masz jasniejszy kierunek, pierwsze zalecenia, krotka notatke i decyzje, czy kolejny krok to juz pelna konsultacja behawioralna.',
@@ -155,8 +156,8 @@ export const OFFERS: Offer[] = [
     forWho: 'Dla spraw zlozonych, utrwalonych albo wielowatkowych, gdy od razu potrzebujesz szerokiego wejscia w temat.',
     whenToChoose: 'Gdy problem trwa dluzej, wraca albo obejmuje kilka obszarow naraz i potrzebuje pelniejszej analizy.',
     nextStep: 'Rezerwujesz 60-minutowy termin online. Po rozmowie dostajesz diagnoze, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.',
-    cardSummary: 'Diagnoza, plan poprawy i 7 dni wsparcia po rozmowie.',
-    heroSummary: '60 minut rozmowy online dla tematow zlozonych, z diagnoza i 7 dniami wsparcia tekstowego przez WhatsApp.',
+    cardSummary: 'Diagnoza, plan i 7 dni wsparcia.',
+    heroSummary: '60 minut rozmowy online dla tematow zlozonych, z diagnoza, planem i 7 dniami wsparcia.',
     descriptions: [
       'To format dla sytuacji, w ktorych szybki start bylby zbyt plytki: problem wraca, narasta albo dotyka kilku rzeczy naraz.',
       'Po rozmowie otrzymujesz diagnoze sytuacji, indywidualny plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.',
@@ -172,7 +173,7 @@ export const OFFERS: Offer[] = [
     imageAlt: SPECIALIST_ONLINE_PHOTO.alt,
     imageWidth: SPECIALIST_ONLINE_PHOTO.width,
     imageHeight: SPECIALIST_ONLINE_PHOTO.height,
-    note: 'Po pelnej konsultacji mozesz przez 7 dni pisac przez WhatsApp, zadawac pytania, wysylac filmy i konsultowac wdrazanie planu. Jesli ten etap nie daje poczucia realnego kierunku, to wskazanie do wizyty domowej i terapii ustalanej indywidualnie.',
+    note: PUBLIC_OFFER_FULL_CONSULTATION_VALUE + ' Po pelnej konsultacji mozesz przez 7 dni pisac przez WhatsApp, zadawac pytania, wysylac filmy i konsultowac wdrazanie planu.',
   },
   {
     slug: 'poradniki-pdf',
@@ -192,7 +193,7 @@ export const OFFERS: Offer[] = [
       'Znajdziesz tu materialy, do ktorych mozesz wrocic przed rozmowa, po rozmowie albo miedzy kolejnymi krokami.',
       'To miejsce z przewodnikami i narzedziami dobranymi pod konkretne sytuacje.',
     ],
-    bestFor: ['powrot do zaleceń', 'materialy pomocnicze', 'spokojne poglebienie tematu'],
+    bestFor: ['powrot do zalecen', 'materialy pomocnicze', 'spokojne poglebienie tematu'],
     outcomes: ['czytelny material na pozniej', 'mniej chaosu miedzy krokami', 'latwiejsza decyzja o kolejnym ruchu'],
     primaryCtaLabel: FUNNEL_CTA_LABELS.secondary,
     primaryHref: '/niezbednik',

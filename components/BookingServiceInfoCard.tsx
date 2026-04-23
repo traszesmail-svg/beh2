@@ -1,6 +1,7 @@
 import { type BookingServiceType, getBookingServiceDurationLabel, getBookingServicePriceLabel } from '@/lib/booking-services'
 import { COPY_SERVICE_NAMES } from '@/lib/copy-governance'
 import { FUNNEL_SERVICE_CONFIG } from '@/lib/funnel'
+import { PUBLIC_OFFER_CANCELLATION_COPY } from '@/lib/public-offer-copy'
 
 type BookingServiceInfoCardProps = {
   serviceType: BookingServiceType
@@ -19,8 +20,7 @@ export function BookingServiceInfoCard({
 }: BookingServiceInfoCardProps) {
   const service = FUNNEL_SERVICE_CONFIG[serviceType]
   const priceLabel = getBookingServicePriceLabel(serviceType, quickConsultationPrice ?? service.priceAmount)
-  const cancellationPolicy =
-    'Po potwierdzeniu wplaty masz 24 godziny na bezplatna rezygnacje. Zmiane terminu ustalamy przez krotki kontakt w tym samym oknie.'
+  const cancellationPolicy = PUBLIC_OFFER_CANCELLATION_COPY
   const serviceLabel = service.mode === 'audio' ? COPY_SERVICE_NAMES.primary : service.title
   const formatLabel = service.mode === 'audio' ? COPY_SERVICE_NAMES.primaryDescriptor : 'rozmowa online'
 

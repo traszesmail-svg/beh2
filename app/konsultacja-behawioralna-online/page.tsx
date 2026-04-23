@@ -12,6 +12,7 @@ import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { getLeadMagnetBySlug } from '@/lib/growth-layer'
 import { getBreadcrumbJsonLd, getFaqPageJsonLd, getServiceJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
+import { PUBLIC_OFFER_DECISION_COPY, PUBLIC_OFFER_FULL_CONSULTATION_VALUE } from '@/lib/public-offer-copy'
 
 const heroImage = { src: '/branding/omnie-hero.webp', width: 1024, height: 1536 } as const
 
@@ -119,7 +120,7 @@ export default function ConsultationOnlinePage() {
               <div className="section-eyebrow">Pelna konsultacja behawioralna</div>
               <h1>Pelna konsultacja behawioralna</h1>
               <p className="editorial-hero-lead">
-                To opcja dla tematow szerszych, dluzszych albo bardziej zlozonych. Po 60 minutach rozmowy dostajesz diagnoze, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.
+                {PUBLIC_OFFER_DECISION_COPY.premium}
               </p>
 
               <div className="hero-actions editorial-hero-actions">
@@ -225,7 +226,7 @@ export default function ConsultationOnlinePage() {
           <div className="list-card accent-outline tree-backed-card top-gap">
             <strong>Po rozmowie nie zostajesz sam z planem</strong>
             <span>
-              Przez 7 dni po konsultacji mozesz przez WhatsApp zadawac pytania, wysylac wiadomosci i filmy oraz konsultowac kazdy krok wdrazania planu. Jesli po 7 dniach nie widac postepu i nie ma poczucia skutecznej drogi do rozwiazania, to wskazanie do wizyty domowej i terapii ustalanej indywidualnie.
+              {PUBLIC_OFFER_FULL_CONSULTATION_VALUE} Przez kolejne 7 dni mozesz zadawac pytania, wysylac wiadomosci i filmy oraz konsultowac wdrazanie planu. Jesli po tym czasie nie widac postepu, to wskazanie do wizyty domowej i terapii ustalanej indywidualnie.
             </span>
           </div>
         </section>

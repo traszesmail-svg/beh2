@@ -3,6 +3,10 @@
 import Link from 'next/link'
 import { useMemo, useState, type FormEvent } from 'react'
 import type { BookingSpecies } from '@/lib/booking-routing'
+import {
+  PUBLIC_OFFER_BOOKING_LEAD,
+  PUBLIC_OFFER_BOOKING_REASSURANCE,
+} from '@/lib/public-offer-copy'
 
 type BookingServiceId = 'kwadrans-na-juz' | 'szybka-konsultacja-15-min' | 'konsultacja-30-min' | 'konsultacja-behawioralna-online'
 type FormState = 'idle' | 'loading' | 'success' | 'error'
@@ -27,7 +31,7 @@ type BookingRequestPayload = {
 
 const SERVICE_OPTIONS: Array<{ value: BookingServiceId; label: string; price: string }> = [
   { value: 'szybka-konsultacja-15-min', label: 'Kwadrans z behawiorysta', price: '69 zl' },
-  { value: 'kwadrans-na-juz', label: 'Kwadrans na juz / termin w 15 min', price: '99 zl' },
+  { value: 'kwadrans-na-juz', label: 'Kwadrans na juz', price: '99 zl' },
   { value: 'konsultacja-30-min', label: 'Dwa kwadranse', price: '169 zl' },
   { value: 'konsultacja-behawioralna-online', label: 'Pelna konsultacja', price: '470 zl' },
 ]
@@ -165,8 +169,8 @@ export function BookRequestForm({ initialService, initialSpecies }: BookRequestF
         <h2>{isUrgentNow ? 'Dostalem Twoja prosbe o Kwadrans na juz.' : 'Dostalem Twoja rezerwacje.'}</h2>
         <p>
           {isUrgentNow
-            ? 'Twoja prosba o Kwadrans na juz dotarla. Odpisze w ciagu 15 minut z numerem BLIK i terminem. Sprawdz skrzynke - wyslalem Ci kopie.'
-            : 'W ciagu kilku godzin, miedzy 9 a 21, odezwe sie z potwierdzeniem terminu i numerem telefonu do BLIK-a. Sprawdz skrzynke - wyslalem Ci kopie.'}
+            ? 'Twoja prosba o Kwadrans na juz dotarla. Odpisze w ciagu 15 minut z terminem i dalszym krokiem platnosci. Sprawdz skrzynke - wyslalem Ci kopie.'
+            : 'W ciagu kilku godzin, miedzy 9 a 21, odezwe sie z potwierdzeniem terminu i dalszym krokiem platnosci. Sprawdz skrzynke - wyslalem Ci kopie.'}
         </p>
         <div className="notatnik-steps top-gap-small">
           <article className="notatnik-step">
@@ -175,7 +179,7 @@ export function BookRequestForm({ initialService, initialSpecies }: BookRequestF
           </article>
           <article className="notatnik-step">
             <div className="notatnik-step-number">02</div>
-            <p>W mailu dostajesz numer telefonu do BLIK-a i instrukcje platnosci.</p>
+            <p>W mailu dostajesz PayPal.me albo instrukcje BLIK na telefon.</p>
           </article>
           <article className="notatnik-step">
             <div className="notatnik-step-number">03</div>
@@ -197,8 +201,9 @@ export function BookRequestForm({ initialService, initialSpecies }: BookRequestF
   return (
     <form className="form-grid top-gap" onSubmit={handleSubmit} noValidate>
       <div className="info-box full-width contact-form-intro">
-        To jest prosba o rezerwacje. Wybierasz usluge, wpisujesz 2-4 zdania opisu i proponujesz terminy, a ja odpisuje z
-        potwierdzeniem i numerem telefonu do BLIK-a.
+        {PUBLIC_OFFER_BOOKING_LEAD}
+        {' '}
+        {PUBLIC_OFFER_BOOKING_REASSURANCE}
       </div>
 
       <fieldset className="full-width form-field consent-stack">

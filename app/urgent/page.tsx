@@ -4,13 +4,14 @@ import { NotatnikPageShell, NotatnikSectionHead } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
 import { getBreadcrumbJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
+import { PUBLIC_OFFER_BOOKING_PAYMENT, PUBLIC_OFFER_PRICES } from '@/lib/public-offer-copy'
 import { UrgentForm } from './UrgentForm'
 
 export const metadata: Metadata = buildMarketingMetadata({
   title: 'Kwadrans na juz - termin w 15 minut',
   path: '/urgent',
   description:
-    'Wyslij prosbe o Kwadrans na juz. Termin w 15 minut, 99 zl, 15 min audio bez kamery. Odpowiedz e-mailem i SMS w ciagu 15 minut.',
+    'Wyslij prosbe o Kwadrans na juz. To ten sam 15-minutowy format co Kwadrans, ale z priorytetem i mozliwie szybkim terminem.',
 })
 
 const navItems = [
@@ -34,8 +35,8 @@ const HOW_IT_WORKS = [
   },
   {
     number: '03',
-    title: 'Odpiszę w ciagu 15 minut',
-    body: 'Proponuje termin na kolejne 15 minut albo najblizsze mozliwe okno. Dostaniesz link do formularza rezerwacji z PayPal.me albo BLIK.',
+    title: 'Odpisze w ciagu 15 minut',
+    body: 'Proponuje termin na kolejne 15 minut albo najblizsze mozliwe okno. Dostaniesz dalszy krok platnosci i potwierdzenie rezerwacji.',
   },
 ] as const
 
@@ -62,23 +63,23 @@ export default function UrgentPage() {
         <div>
           <div className="notatnik-subhero-tag notatnik-mono">Kwadrans na juz / pilny termin</div>
           <h1>
-            Kwadrans na juz <em>— termin w 15 minut.</em>
+            Kwadrans na juz <em>- termin w 15 minut.</em>
           </h1>
           <p>
-            Ten sam format co Kwadrans: 15 minut audio bez kamery, jeden konkretny kierunek. Roznica to czas oczekiwania
-            — odpiszę z terminem w ciagu 15 minut od Twojej prosby.
+            Ten sam format co Kwadrans: 15 minut audio bez kamery, jeden konkretny kierunek. Roznica to czas oczekiwania - odpisze z terminem w
+            ciagu 15 minut od Twojej prosby.
           </p>
           <div className="info-box top-gap-small">
-            Cena: 99 zl. Platnosc przychodzi dopiero po potwierdzeniu terminu — PayPal.me albo BLIK.
+            Cena: {PUBLIC_OFFER_PRICES.urgent} zl. Platnosc przychodzi dopiero po potwierdzeniu terminu - PayPal.me albo BLIK na telefon.
           </div>
         </div>
 
         <div className="summary-card tree-backed-card">
           <div className="section-eyebrow">Co dostajesz</div>
-          <h3>15 minut audio bez kamery z terminem w 15 minut.</h3>
+          <h3>15 minut audio bez kamery z priorytetem i szybkim terminem.</h3>
           <p>
-            Jeden konkretny priorytet i pierwszy ruch. Jesli temat okaze sie szerszy, od razu bedzie
-            widac, czy potrzebujesz Dwoch kwadransow albo Pelnej konsultacji.
+            Jeden konkretny priorytet i pierwszy ruch. Jesli temat okaze sie szerszy, od razu bedzie widac, czy potrzebujesz Dwoch kwadransow albo
+            Pelnej konsultacji.
           </p>
         </div>
       </section>
@@ -100,11 +101,10 @@ export default function UrgentPage() {
         <div className="notatnik-contact-left">
           <div className="notatnik-mono notatnik-kicker-spaced">Formularz Kwadransu na juz</div>
           <h2>
-            Wyslij prosbe, <em>a ja odpiszę z terminem w ciagu 15 minut.</em>
+            Wyslij prosbe, <em>a ja odpisze z terminem w ciagu 15 minut.</em>
           </h2>
           <p className="notatnik-contact-lede">
-            Podaj gatunek, temat i krotki opis. Termin dostaniesz mailem — bez telefonu na stronie,
-            bez kalendarza do klikania.
+            Podaj gatunek, temat i krotki opis. Termin dostaniesz mailem - bez telefonu na stronie, bez kalendarza do klikania.
           </p>
 
           <div id="formularz">
@@ -115,7 +115,7 @@ export default function UrgentPage() {
         <div className="notatnik-contact-right notatnik-kinfo">
           <h3>Czego tu nie ma</h3>
           <p>Nie ma publicznego numeru telefonu na stronie. Nie ma kalendarza do klikania. Nie ma automatycznej platnosci.</p>
-          <p>Jest formularz, moj mail i odpowiedz w 15 minut z terminem i linkiem do PayPal.me albo BLIK.</p>
+          <p>{PUBLIC_OFFER_BOOKING_PAYMENT}</p>
 
           <h3 className="top-gap-small">Po wyslaniu prosby</h3>
           <div className="notatnik-steps">
@@ -125,7 +125,7 @@ export default function UrgentPage() {
             </article>
             <article className="notatnik-step">
               <div className="notatnik-step-number">02</div>
-              <p>Odpiszę z proponowanym terminem w ciagu 15 minut.</p>
+              <p>Odpisze z proponowanym terminem w ciagu 15 minut.</p>
             </article>
             <article className="notatnik-step">
               <div className="notatnik-step-number">03</div>

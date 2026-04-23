@@ -470,6 +470,12 @@ html[data-theme='dark'] .notatnik-theme-toggle-thumb {
   color: var(--paper);
 }
 
+.notatnik-btn-urgent {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
 .notatnik-btn-arrow {
   font-family: var(--font-display), Georgia, serif;
   font-style: italic;

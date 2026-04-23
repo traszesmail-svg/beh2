@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import { NotatnikSectionHead } from '@/components/NotatnikA'
-import { COPY_CTA, COPY_HELPERS, COPY_SERVICE_NAMES } from '@/lib/copy-governance'
+import { COPY_CTA, COPY_SERVICE_NAMES } from '@/lib/copy-governance'
 import { getPublicServicePriceLabel } from '@/lib/funnel'
+import { PUBLIC_OFFER_DECISION_COPY, PUBLIC_OFFER_FULL_CONSULTATION_VALUE } from '@/lib/public-offer-copy'
 
 type ServiceDecisionSectionProps = {
   index: string
@@ -38,7 +39,7 @@ export function ServiceDecisionSection({
       <div className="notatnik-service-grid">
         <article className="notatnik-service-card">
           <div className="notatnik-mono">{COPY_SERVICE_NAMES.primary}</div>
-          <h3>{COPY_HELPERS.primaryLead}</h3>
+          <h3>{PUBLIC_OFFER_DECISION_COPY.quick}</h3>
           <p>{serviceLead}</p>
           <div className="notatnik-service-meta" aria-label="Parametry Kwadransu">
             <span>{COPY_SERVICE_NAMES.primaryDescriptor}</span>
@@ -59,8 +60,8 @@ export function ServiceDecisionSection({
 
         <article className="notatnik-service-card">
           <div className="notatnik-mono">Pelna konsultacja</div>
-          <h3>Kiedy od razu wejsc szerzej</h3>
-          <p>Pelna konsultacja daje wiecej czasu na kontekst, kilka watkow naraz, diagnoze i 7 dni wsparcia tekstowego przez WhatsApp.</p>
+          <h3>{PUBLIC_OFFER_DECISION_COPY.premium}</h3>
+          <p>{PUBLIC_OFFER_FULL_CONSULTATION_VALUE}</p>
           <div className="notatnik-service-meta" aria-label="Parametry pelnej konsultacji">
             <span>60 min online</span>
             <span>{getPublicServicePriceLabel('konsultacja-behawioralna-online')}</span>

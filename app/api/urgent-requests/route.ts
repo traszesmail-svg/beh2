@@ -134,13 +134,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Nie udalo sie odczytac formularza.' }, { status: 400 })
     }
 
+    if (body.website) {
+      return NextResponse.json({ ok: true, message: SUCCESS_MESSAGE })
+    }
+
     const { payload, error } = validate(body)
     if (error || !payload) {
       return NextResponse.json({ error: error ?? 'Blad walidacji.' }, { status: 400 })
-    }
-
-    if (payload.website) {
-      return NextResponse.json({ ok: true, message: SUCCESS_MESSAGE })
     }
 
     const rateLimit = consumeRateLimit(request)
