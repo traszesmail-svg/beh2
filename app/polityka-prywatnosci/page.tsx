@@ -6,7 +6,7 @@ import { buildLegalMetadata } from '@/lib/seo'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = buildLegalMetadata(
-  'Polityka prywatności',
+  'Polityka prywatnosci',
   '/polityka-prywatnosci',
   'Polityka prywatnosci serwisu Regulski: zakres danych, cele przetwarzania i prawa uzytkownika.',
 )
@@ -14,15 +14,15 @@ export const metadata: Metadata = buildLegalMetadata(
 const summaryItems: LegalSummaryItem[] = [
   {
     label: 'Punkty styku danych',
-    value: 'Formularz kontaktowy, rezerwacja, płatność, potwierdzenie, materiały przygotowawcze, materiały bezpłatne oraz newsletter.',
+    value: 'Formularz kontaktowy, rezerwacja, platnosc, potwierdzenie, materialy przygotowawcze, materialy bezplatne oraz newsletter.',
   },
   {
-    label: 'Podstawowe narzędzia',
-    value: 'Supabase, Resend, Jitsi oraz narzędzia analityczne uruchamiane wyłącznie po wyrażeniu zgody.',
+    label: 'Podstawowe narzedzia',
+    value: 'Supabase, Resend, Jitsi oraz narzedzia analityczne uruchamiane wylacznie po wyrazeniu zgody.',
   },
   {
     label: 'Publiczny kontakt',
-    value: 'Publiczny kontakt odbywa się przez formularz i e-mail. Telefon nie jest publikowany na stronie.',
+    value: 'Publiczny kontakt odbywa sie przez formularz i e-mail. Telefon nie jest publikowany na stronie.',
   },
 ]
 
@@ -32,8 +32,8 @@ const sections: LegalSection[] = [
     body: (
       <>
         <p>
-          Administratorem danych osobowych przetwarzanych w związku z działaniem serwisu, kontaktem, rezerwacją i
-          realizacją usług jest Krzysztof Regulski prowadzący działalność pod marką Regulski | Terapia behawioralna.
+          Administratorem danych osobowych przetwarzanych w zwiazku z dzialaniem serwisu, kontaktem, rezerwacja i
+          realizacja uslug jest Krzysztof Regulski prowadzacy dzialalnosc pod marka Regulski | Terapia behawioralna.
         </p>
       </>
     ),
@@ -43,11 +43,11 @@ const sections: LegalSection[] = [
     body: (
       <>
         <ul className="premium-bullet-list">
-          <li>W formularzu kontaktowym: imię, e-mail lub numer telefonu, gatunek, temat i treść wiadomości.</li>
-          <li>Przy rezerwacji: dane identyfikacyjne i kontaktowe, temat, termin, status rezerwacji oraz status płatności.</li>
-          <li>Przy realizacji usługi: dane potrzebne do potwierdzenia rezerwacji, wysyłki wiadomości oraz dostępu do pokoju rozmowy.</li>
-          <li>W materiałach przygotowawczych: notatki, linki i pliki dodane dobrowolnie przez klienta.</li>
-          <li>W formularzach materiałów bezpłatnych i newslettera: adres e-mail, segment tematyczny oraz identyfikator materiału lub źródła zapisu.</li>
+          <li>W formularzu kontaktowym: imie, e-mail lub numer telefonu, gatunek, temat i tresc wiadomosci.</li>
+          <li>Przy rezerwacji: dane identyfikacyjne i kontaktowe, temat, termin, status rezerwacji oraz status platnosci.</li>
+          <li>Przy realizacji uslugi: dane potrzebne do potwierdzenia rezerwacji, wysylki wiadomosci oraz dostepu do pokoju rozmowy.</li>
+          <li>W materialach przygotowawczych: notatki, linki i pliki dodane dobrowolnie przez klienta.</li>
+          <li>W formularzach materialow bezplatnych i newslettera: adres e-mail, segment tematyczny oraz identyfikator materialu lub zrodla zapisu.</li>
         </ul>
       </>
     ),
@@ -56,14 +56,14 @@ const sections: LegalSection[] = [
     title: '3. Cele przetwarzania danych',
     body: (
       <>
-        <p>Dane są przetwarzane w celu:</p>
+        <p>Dane sa przetwarzane w celu:</p>
         <ul className="premium-bullet-list">
-          <li>udzielenia odpowiedzi na wiadomość przesłaną przez formularz kontaktowy,</li>
-          <li>przyjęcia i obsługi rezerwacji usługi,</li>
-          <li>potwierdzenia płatności i obsługi strony potwierdzenia,</li>
-          <li>realizacji konsultacji oraz przygotowania się do rozmowy na podstawie przekazanych materiałów,</li>
-          <li>obsługi formularzy materiałów bezpłatnych i newslettera,</li>
-          <li>zapewnienia bezpieczeństwa serwisu, rozliczeń oraz dochodzenia lub obrony roszczeń.</li>
+          <li>udzielenia odpowiedzi na wiadomosc przeslana przez formularz kontaktowy,</li>
+          <li>przyjecia i obslugi rezerwacji uslugi,</li>
+          <li>potwierdzenia platnosci i obslugi strony potwierdzenia,</li>
+          <li>realizacji konsultacji oraz przygotowania sie do rozmowy na podstawie przekazanych materialow,</li>
+          <li>obslugi formularzy materialow bezplatnych i newslettera,</li>
+          <li>zapewnienia bezpieczenstwa serwisu, rozliczen oraz dochodzenia lub obrony roszczen.</li>
         </ul>
       </>
     ),
@@ -73,13 +73,13 @@ const sections: LegalSection[] = [
     body: (
       <>
         <p>
-          Dane są przetwarzane w zakresie niezbędnym do zawarcia i wykonania umowy, udzielenia odpowiedzi na zgłoszenie,
-          wypełnienia obowiązków prawnych związanych z rozliczeniami oraz na podstawie prawnie uzasadnionego interesu
-          administratora polegającego na zapewnieniu bezpieczeństwa serwisu i obsługi zgłoszeń.
+          Dane sa przetwarzane w zakresie niezbednym do zawarcia i wykonania umowy, udzielenia odpowiedzi na zgloszenie,
+          wypelnienia obowiazkow prawnych zwiazanych z rozliczeniami oraz na podstawie prawnie uzasadnionego interesu
+          administratora polegajacego na zapewnieniu bezpieczenstwa serwisu i obslugi zgloszen.
         </p>
         <p>
-          W zakresie analityki oraz w tych przypadkach, w których wymaga tego charakter formularza, przetwarzanie może
-          odbywać się także na podstawie zgody użytkownika.
+          W zakresie analityki oraz w tych przypadkach, w ktorych wymaga tego charakter formularza, przetwarzanie moze
+          odbywac sie takze na podstawie zgody uzytkownika.
         </p>
       </>
     ),
@@ -89,14 +89,14 @@ const sections: LegalSection[] = [
     body: (
       <>
         <p>
-          Dane mogą być przekazywane wyłącznie w zakresie niezbędnym do działania serwisu i realizacji usług, w
-          szczególności dostawcom obsługującym bazę danych, wysyłkę wiadomości e-mail, pokój rozmowy online oraz
-          narzędzia analityczne.
+          Dane moga byc przekazywane wylacznie w zakresie niezbednym do dzialania serwisu i realizacji uslug, w
+          szczegolnosci dostawcom obslugujacym baze danych, wysylke wiadomosci e-mail, pokoj rozmowy online oraz
+          narzedzia analityczne.
         </p>
         <p>
-          W aktualnym modelu technicznym serwis korzysta z usług Supabase, Resend i Jitsi. Jeżeli dla danej rezerwacji
-          aktywna jest obsługa SMS lub inna funkcja powiadomień, dane mogą zostać przekazane także operatorowi tej
-          wiadomości.
+          W aktualnym modelu technicznym serwis korzysta z uslug Supabase, Resend i Jitsi. Jezeli dla danej rezerwacji
+          aktywna jest obsluga SMS lub inna funkcja powiadomien, dane moga zostac przekazane takze operatorowi tej
+          wiadomosci.
         </p>
       </>
     ),
@@ -106,27 +106,27 @@ const sections: LegalSection[] = [
     body: (
       <>
         <p>
-          Telefon nie jest publikowany jako publiczny kanał kontaktu serwisu. Publiczny kontakt odbywa się przez formularz
+          Telefon nie jest publikowany jako publiczny kanal kontaktu serwisu. Publiczny kontakt odbywa sie przez formularz
           i e-mail.
         </p>
         <p>
-          Numer telefonu może być jednak przetwarzany przy rezerwacji usługi, jeżeli jest wymagany przez formularz lub
-          potrzebny do obsługi rezerwacji, potwierdzenia płatności albo wysłania wiadomości SMS.
+          Numer telefonu moze byc jednak przetwarzany przy rezerwacji uslugi, jezeli jest wymagany przez formularz lub
+          potrzebny do obslugi rezerwacji, potwierdzenia platnosci albo wyslania wiadomosci SMS.
         </p>
       </>
     ),
   },
   {
-    title: '7. Materiały bezpłatne, newsletter i analityka',
+    title: '7. Materialy bezplatne, newsletter i analityka',
     body: (
       <>
         <p>
-          Formularze materiałów bezpłatnych i newslettera służą do przyjęcia zgłoszenia, przypisania go do właściwej
-          strony, materiału lub segmentu tematycznego oraz obsługi dalszego kroku wynikającego z danego formularza.
+          Formularze materialow bezplatnych i newslettera sluza do przyjecia zgloszenia, przypisania go do wlasciwej
+          strony, materialu lub segmentu tematycznego oraz obslugi dalszego kroku wynikajacego z danego formularza.
         </p>
         <p>
-          Serwis zapisuje decyzję dotyczącą analityki w pamięci przeglądarki i pliku cookie. Narzędzia analityczne nie są
-          uruchamiane przed wyrażeniem zgody.
+          Serwis zapisuje decyzje dotyczaca analityki w pamieci przegladarki i pliku cookie. Narzedzia analityczne nie sa
+          uruchamiane przed wyrazeniem zgody.
         </p>
       </>
     ),
@@ -136,39 +136,39 @@ const sections: LegalSection[] = [
     body: (
       <>
         <p>
-          Dane są przechowywane przez okres niezbędny do obsługi kontaktu, rezerwacji, realizacji usługi, rozliczeń oraz
-          wykonania obowiązków prawnych, a także przez okres potrzebny do dochodzenia lub obrony roszczeń.
+          Dane sa przechowywane przez okres niezbedny do obslugi kontaktu, rezerwacji, realizacji uslugi, rozliczen oraz
+          wykonania obowiazkow prawnych, a takze przez okres potrzebny do dochodzenia lub obrony roszczen.
         </p>
         <p>
-          Dane przetwarzane na podstawie zgody są przechowywane do czasu jej cofnięcia albo utraty celu, dla którego były
+          Dane przetwarzane na podstawie zgody sa przechowywane do czasu jej cofniecia albo utraty celu, dla ktorego byly
           przetwarzane.
         </p>
       </>
     ),
   },
   {
-    title: '9. Prawa osoby, której dane dotyczą',
+    title: '9. Prawa osoby, ktorej dane dotycza',
     body: (
       <>
         <p>
-          Osobie, której dane dotyczą, przysługuje prawo dostępu do danych, ich sprostowania, usunięcia, ograniczenia
-          przetwarzania, przenoszenia danych, wniesienia sprzeciwu oraz cofnięcia zgody, jeżeli przetwarzanie odbywa się
+          Osobie, ktorej dane dotycza, przysluguje prawo dostepu do danych, ich sprostowania, usuniecia, ograniczenia
+          przetwarzania, przenoszenia danych, wniesienia sprzeciwu oraz cofniecia zgody, jezeli przetwarzanie odbywa sie
           na jej podstawie.
         </p>
         <p>
-          Osobie, której dane dotyczą, przysługuje również prawo wniesienia skargi do Prezesa Urzędu Ochrony Danych
+          Osobie, ktorej dane dotycza, przysluguje rowniez prawo wniesienia skargi do Prezesa Urzedu Ochrony Danych
           Osobowych.
         </p>
       </>
     ),
   },
   {
-    title: '10. Postanowienia końcowe',
+    title: '10. Postanowienia koncowe',
     body: (
       <>
         <p>
-          Polityka prywatności obowiązuje od dnia jej opublikowania w serwisie. Zmiany polityki są publikowane w tej samej
-          zakładce.
+          Polityka prywatnosci obowiazuje od dnia jej opublikowania w serwisie. Zmiany polityki sa publikowane w tej samej
+          zakladce.
         </p>
       </>
     ),
@@ -178,20 +178,20 @@ const sections: LegalSection[] = [
 export default function PrivacyPolicyPage() {
   return (
     <LegalPageLayout
-      eyebrow="Polityka prywatności"
-      title="Polityka prywatności"
-      intro="Dokument opisuje zasady przetwarzania danych osobowych w związku z korzystaniem z serwisu, formularza kontaktowego, rezerwacji usług, potwierdzeń, materiałów przygotowawczych oraz formularzy materiałów bezpłatnych i newslettera."
-      contactSubject="Prywatność i dane - Regulski | Terapia behawioralna"
+      eyebrow="Polityka prywatnosci"
+      title="Polityka prywatnosci"
+      intro="Dokument opisuje zasady przetwarzania danych osobowych w zwiazku z korzystaniem z serwisu, formularza kontaktowego, rezerwacji uslug, potwierdzen, materialow przygotowawczych oraz formularzy materialow bezplatnych i newslettera."
+      contactSubject="Prywatnosc i dane - Regulski | Terapia behawioralna"
       summaryItems={summaryItems}
       sections={sections}
       supportTitle="Kontakt w sprawach danych osobowych"
-      supportText="W sprawach dotyczących danych osobowych, zakresu przetwarzania lub realizacji praw osoby, której dane dotyczą, kontakt prowadzony jest przez formularz kontaktowy oraz e-mail."
-      supportNoteTitle="Żądanie dotyczące danych"
-      supportNoteText="W wiadomości warto wskazać, czego dotyczy żądanie oraz podać dane pozwalające zidentyfikować zgłoszenie, rezerwację lub formularz."
+      supportText="W sprawach dotyczacych danych osobowych, zakresu przetwarzania lub realizacji praw osoby, ktorej dane dotycza, kontakt prowadzony jest przez formularz kontaktowy oraz e-mail."
+      supportNoteTitle="Zadanie dotyczace danych"
+      supportNoteText="W wiadomosci warto wskazac, czego dotyczy zadanie oraz podac dane pozwalajace zidentyfikowac zgloszenie, rezerwacje lub formularz."
       structuredData={[
         getBreadcrumbJsonLd([
-          { name: 'Strona główna', path: '/' },
-          { name: 'Polityka prywatności', path: '/polityka-prywatnosci' },
+          { name: 'Strona glowna', path: '/' },
+          { name: 'Polityka prywatnosci', path: '/polityka-prywatnosci' },
         ]),
       ]}
     />

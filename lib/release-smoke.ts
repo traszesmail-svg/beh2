@@ -114,11 +114,11 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
     {
       path: '/',
       required: [
-        'Masz problem z zachowaniem psa albo kota i chcesz wiedziec, od czego zaczac.',
+        'Problem z zachowaniem psa albo kota? Wybierz spokojny pierwszy krok.',
         'Kwadrans z behawiorysta',
-        'Cztery uslugi. Jedna logika wyboru.',
+        'Trzy glowne formaty. Jedna logika wyboru.',
         'Kwadrans na juz',
-        'Cztery wejscia. Jasne roznice przed rezerwacja.',
+        'Trzy wejscia. Jasne roznice przed rezerwacja.',
         'Co opiekunowie mowia po rozmowie.',
         'Jesli wiesz juz, czy temat dotyczy psa, czy kota, wybierz wlasciwa strone.',
       ],
@@ -127,11 +127,10 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
     {
       path: '/oferta',
       required: [
-        'Najprostszy start to Kwadrans z behawiorysta. Dwa kwadranse sa etapem posrednim, a pelna konsultacja behawioralna zostaje najszersza opcja.',
-        'Publicznie zostaja cztery czytelne wejscia: Kwadrans z behawiorysta, Dwa kwadranse, pelna konsultacja behawioralna i Niezbednik dla osob, ktore chca najpierw wrocic do materialow.',
+        'Publicznie zostaja trzy czytelne wejscia: Kwadrans z behawiorysta, Dwa kwadranse i Pelna konsultacja behawioralna. Priorytetowy wariant pojawia sie dopiero przy rezerwacji Kwadransu.',
         'Aktywna oferta',
-        'Kwadrans czy pelna konsultacja',
-        'Kwadrans z behawiorysta sprawdza sie na start',
+        'Kwadrans czy Pelna konsultacja',
+        'Kwadrans z behawiorysta sprawdza sie na start. Dwa kwadranse sa pomostem, a Pelna konsultacja daje diagnoze i wsparcie wdrozenia.',
       ],
       requireBuildMarker: true,
     },
@@ -139,7 +138,7 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
       path: '/niezbednik',
       required: [
         'Niezbednik / materialy i rekomendacje',
-        'Trzy konkretne materialy na realny start',
+        'Trzy konkretne materialy startowe, do ktorych mozesz przejsc od razu.',
         'Wybrane ksiazki',
         'Przybory',
         'Najczestsze pytania',
@@ -151,7 +150,7 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
       required: [
         'Behawiorysta psow i kotow online',
         'Wybierz wlasciwa sciezke wejscia',
-        'Cztery uslugi, jedna logika wyboru.',
+        'Trzy glowne formaty, jedna logika wyboru.',
         'Najczestsze pytania przed rezerwacja',
         'Przejdz dalej tam, gdzie to ma sens',
       ],
@@ -160,11 +159,6 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
     {
       path: '/slot?problem=szczeniak',
       required: ['Wybierz termin', 'Szczeniak / mlody pies'],
-      requireBuildMarker: true,
-    },
-    {
-      path: '/polityka-prywatnosci',
-      required: ['Polityka prywatnosci', 'Kontakt w sprawach danych osobowych'],
       requireBuildMarker: true,
     },
     {

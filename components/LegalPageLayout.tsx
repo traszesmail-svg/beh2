@@ -141,8 +141,8 @@ export function LegalPageLayout({
               ) : null}
 
               <div className="list-card tree-backed-card">
-                <strong>Obszar działania</strong>
-                <span>Kontakt online / cała Polska</span>
+                <strong>Obszar dzialania</strong>
+                <span>Kontakt online / cala Polska</span>
               </div>
 
               <div className="list-card tree-backed-card">
