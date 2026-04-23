@@ -10,8 +10,50 @@ import { getBreadcrumbJsonLd, getFaqPageJsonLd, getServiceJsonLd } from '@/lib/s
 import { buildMarketingMetadata } from '@/lib/seo'
 
 const pageData = getLocalSeoPageByPath('/behawiorysta-online-polska')
+const pageTitle = 'Behawiorysta online dla opiekunow psow i kotow'
 const pageLead =
   'Behawiorysta online dla calej Polski. Trzy glowne wejscia: Kwadrans 69 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl. Priorytetowy wariant pojawia sie przy rezerwacji Kwadransu.'
+const pageProblemCards = [
+  { title: 'Problem dotyczy psa', copy: 'Spacery, reaktywnosc, rozlaka, pobudzenie albo trudne zachowania w domu.', href: '/psy' },
+  { title: 'Problem dotyczy kota', copy: 'Kuweta, stres, wycofanie, napiecie w domu albo relacje miedzy kotami.', href: '/koty' },
+  { title: 'Chcesz ustalic pierwszy krok', copy: 'Masz jedno pytanie albo potrzebujesz spokojnie uporzadkowac temat przed dalszym dzialaniem.' },
+  { title: 'Sprawa jest szersza', copy: 'Problem trwa dluzej, wraca albo obejmuje kilka watkow naraz i wymaga dluzszej rozmowy.' },
+]
+const pageSupportTitle = 'Jak wyglada taka pomoc online'
+const pageSupportBody = [
+  'W pracy behawioralnej najwazniejsze sa kontekst, historia problemu, srodowisko i codzienne sytuacje, w ktorych zachowanie wraca. To wlasnie porzadkujemy na rozmowie.',
+  'Do startu wystarczy krotki opis. Nagrania bywaja pomocne, ale nie sa warunkiem, a kamera nie jest potrzebna przy 15 min audio.',
+  'Najpierw wybierasz zakres. Kwadrans porzadkuje pierwszy krok, Dwa kwadranse rozwiazuja temat szerzej, a Pelna konsultacja sluzy sprawom zlozonym.',
+]
+const pageFaqItems = [
+  {
+    question: 'Czy konsultacja online jest dostepna dla calej Polski?',
+    answer: 'Tak. Pracuje online z opiekunami z calej Polski, w tej samej formule niezaleznie od miejsca.',
+  },
+  {
+    question: 'Czy potrzebuje kamery albo specjalnego sprzetu?',
+    answer: 'Nie. Przy 15 min audio wystarcza rozmowa glosowa. Przy konsultacji 60 min wideo moze pomoc, ale nie jest obowiazkowe.',
+  },
+  {
+    question: 'Czy moge zglosic temat przed adopcja albo przed zmiana w domu?',
+    answer: 'Tak. Mozesz omowic przygotowanie domu, plan dzialania i rzeczy, ktore warto sprawdzic wczesniej.',
+  },
+  {
+    question: 'Od czego najlepiej zaczac?',
+    answer: 'Jesli nie wiesz jeszcze, jak duzy jest temat, zacznij od Kwadransu. Jesli problem jest zlozony i trwa od dawna, wybierz konsultacje 60 min.',
+  },
+  {
+    question: 'Gdzie sprawdzic dostepne terminy?',
+    answer: 'Aktualna dostepnosc najlatwiej sprawdzic w kalendarzu przy rezerwacji.',
+  },
+]
+const pageRelatedLinks = [
+  { href: '/psy', label: 'Pomoc dla opiekunow psow', copy: 'Jesli problem dotyczy psa, tutaj znajdziesz szerszy opis najczestszych tematow i problemow.' },
+  { href: '/koty', label: 'Pomoc dla opiekunow kotow', copy: 'Jesli problem dotyczy kota, tutaj znajdziesz szerszy opis najczestszych tematow i problemow.' },
+  { href: '/konsultacja-behawioralna-online', label: 'Jak wyglada konsultacja 60 min', copy: 'Osobna strona procesu i przebiegu dluzszej konsultacji online.' },
+  { href: '/cennik', label: 'Cennik', copy: 'Porownanie 15 min audio i konsultacji 60 min.' },
+  { href: '/kontakt', label: 'Kontakt', copy: 'Krotka wiadomosc, jesli chcesz cos doprecyzowac przed rezerwacja.' },
+]
 
 export const metadata: Metadata = buildMarketingMetadata({
   title: pageData?.title ?? 'Behawiorysta online dla calej Polski',
@@ -44,7 +86,7 @@ export default function LocalSeoPolandOnlinePage() {
   const contactHref = '/kontakt#formularz'
   const structuredData = [
     getServiceJsonLd({
-      name: pageData.h1,
+      name: pageTitle,
       description: pageLead,
       serviceUrl: 'https://regulskibehawiorysta.pl/behawiorysta-online-polska',
       offerPrice: 69,
@@ -69,7 +111,7 @@ export default function LocalSeoPolandOnlinePage() {
         },
       ],
     }),
-    getFaqPageJsonLd(pageData.faq),
+    getFaqPageJsonLd(pageFaqItems),
     getBreadcrumbJsonLd([
       { name: 'Strona glowna', path: '/' },
       { name: 'Behawiorysta psow i kotow online', path: '/behawiorysta-online-polska' },
@@ -97,7 +139,7 @@ export default function LocalSeoPolandOnlinePage() {
           <div className="editorial-hero-grid">
             <div className="editorial-hero-copy">
               <div className="section-eyebrow">Konsultacje online</div>
-              <h1>{pageData.h1}</h1>
+              <h1>{pageTitle}</h1>
               <p className="editorial-hero-lead">{pageLead}</p>
 
               <div className="stack-gap top-gap-small">
@@ -146,7 +188,7 @@ export default function LocalSeoPolandOnlinePage() {
             description="To jest glowna strona uslugi online. Stad przechodzisz dalej do problemow psa, problemow kota, cennika i odpowiedniego formatu konsultacji."
           />
           <div className="card-grid two-up top-gap-small">
-            {pageData.problemCards.map((item) => (
+            {pageProblemCards.map((item) => (
               <article key={item.title} className="summary-card tree-backed-card">
                 <h3>{item.title}</h3>
                 <p>{item.copy}</p>
@@ -167,9 +209,9 @@ export default function LocalSeoPolandOnlinePage() {
         />
 
         <section className="panel section-panel editorial-section">
-          <SectionIntro eyebrow="Rola strony" title={pageData.supportTitle} description={pageData.supportBody[0] ?? ''} />
+          <SectionIntro eyebrow="Rola strony" title={pageSupportTitle} description={pageSupportBody[0] ?? ''} />
           <div className="stack-gap top-gap-small">
-            {pageData.supportBody.slice(1, 3).map((paragraph) => (
+            {pageSupportBody.slice(1, 3).map((paragraph) => (
               <div key={paragraph} className="list-card tree-backed-card">
                 <span>{paragraph}</span>
               </div>
@@ -180,7 +222,7 @@ export default function LocalSeoPolandOnlinePage() {
         <section className="panel section-panel editorial-section" id="faq">
           <SectionIntro eyebrow="FAQ" title="Najczestsze pytania przed rezerwacja" description="Krotko o tym, jak wyglada start, wybor uslugi i pierwszy kontakt przed rozmowa." />
           <div className="premium-faq-grid top-gap">
-            {pageData.faq.map((item) => (
+            {pageFaqItems.map((item) => (
               <details key={item.question} className="premium-faq-item">
                 <summary className="premium-faq-summary">
                   <span>{item.question}</span>
@@ -196,7 +238,7 @@ export default function LocalSeoPolandOnlinePage() {
         <section className="panel section-panel blog-related-panel">
           <SectionIntro eyebrow="Architektura" title="Przejdz dalej tam, gdzie to ma sens" description="Tutaj znajdziesz strony, ktore maja rozne role: problemy psa, problemy kota, cennik, materialy i kontakt." />
           <div className="blog-related-grid top-gap-small">
-            {pageData.relatedLinks.map((item) => (
+            {pageRelatedLinks.map((item) => (
               <Link key={item.href} href={item.href} prefetch={false} className="summary-card tree-backed-card blog-related-card">
                 <strong>{item.label}</strong>
                 <span>{item.copy}</span>
