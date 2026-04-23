@@ -4,6 +4,7 @@ import type { ProblemOption } from './types'
 export type FunnelSpecies = 'pies' | 'kot'
 export type PublicBookingServiceType =
   | 'szybka-konsultacja-15-min'
+  | 'kwadrans-na-juz'
   | 'konsultacja-30-min'
   | 'konsultacja-behawioralna-online'
 export type LegacyBookingServiceType = 'konsultacja-30-min'
@@ -59,6 +60,26 @@ export const FUNNEL_SERVICE_CONFIG: Record<AnyBookingServiceType, FunnelServiceC
     noAvailabilityMessage: 'Jesli dzis nie ma terminu, sprawdz pozniej albo napisz wiadomosc.',
     limitedAvailabilityNote: null,
   },
+  'kwadrans-na-juz': {
+    id: 'kwadrans-na-juz',
+    isPublic: true,
+    title: 'Kwadrans na juz',
+    shortTitle: 'Kwadrans na juz',
+    durationMinutes: 15,
+    durationLabel: '15 min',
+    priceAmount: 99,
+    pricePrefix: null,
+    mode: 'audio',
+    slotSpan: 1,
+    slotSummary: 'Kwadrans na juz: termin w ciagu 15 minut, 15 minut rozmowy audio.',
+    slotBadge: 'teraz / 15 min',
+    roomSummary: 'Kwadrans na juz: 15 minut rozmowy audio bez kamery, start w ciagu 15 minut od potwierdzenia wplaty.',
+    publicSummary: 'To ten sam 15-minutowy format co Kwadrans za 69 zl, ale z priorytetem i terminem w ciagu 15 minut od potwierdzenia wplaty.',
+    bookingLead: 'Napisz krotko co sie dzieje i potwierdz wplate. Odpiszemy z terminem w ciagu 15 minut.',
+    availabilityLabel: 'Dostepnosc zalezy od biezacej okazji - odpiszemy do 15 minut w godzinach dyzuru.',
+    noAvailabilityMessage: 'Jesli w tej chwili nie mam wolnego okienka, pokaze Ci najblizszy wolny Kwadrans.',
+    limitedAvailabilityNote: 'Termin w ciagu 15 minut w godzinach dyzuru.',
+  },
   'konsultacja-30-min': {
     id: 'konsultacja-30-min',
     isPublic: true,
@@ -66,7 +87,7 @@ export const FUNNEL_SERVICE_CONFIG: Record<AnyBookingServiceType, FunnelServiceC
     shortTitle: 'Dwa kwadranse',
     durationMinutes: 30,
     durationLabel: '2 x 15 min',
-    priceAmount: 129,
+    priceAmount: 169,
     pricePrefix: null,
     mode: 'online',
     slotSpan: 2,
@@ -86,15 +107,15 @@ export const FUNNEL_SERVICE_CONFIG: Record<AnyBookingServiceType, FunnelServiceC
     shortTitle: 'Pelna konsultacja',
     durationMinutes: 60,
     durationLabel: '60 min',
-    priceAmount: 350,
+    priceAmount: 470,
     pricePrefix: null,
     mode: 'online',
     slotSpan: 3,
     slotSummary: 'Pelna konsultacja behawioralna: 60 minut rozmowy online.',
     slotBadge: '60 min',
-    roomSummary: 'Pelna konsultacja behawioralna online: 60 minut rozmowy.',
+    roomSummary: 'Pelna konsultacja behawioralna online: 60 minut rozmowy, diagnoza i 7 dni konsultacji tekstowych przez WhatsApp.',
     publicSummary:
-      'Pelna konsultacja behawioralna online: 60 minut rozmowy audio lub video dla tematow szerszych, dluzszych albo wielowatkowych.',
+      'Pelna konsultacja behawioralna online: 60 minut rozmowy audio lub video, diagnoza, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.',
     bookingLead: 'Wybierz gatunek i temat. Potem pokaze najblizsze dostepne terminy pelnej konsultacji behawioralnej.',
     availabilityLabel: 'Najblizsze dostepne terminy pokaza sie po wyborze tematu.',
     noAvailabilityMessage:
@@ -105,6 +126,7 @@ export const FUNNEL_SERVICE_CONFIG: Record<AnyBookingServiceType, FunnelServiceC
 
 export const PUBLIC_FUNNEL_SERVICE_ORDER: PublicBookingServiceType[] = [
   'szybka-konsultacja-15-min',
+  'kwadrans-na-juz',
   'konsultacja-30-min',
   'konsultacja-behawioralna-online',
 ] as const

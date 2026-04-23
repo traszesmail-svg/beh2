@@ -7,19 +7,62 @@ import { NotatnikPageShell } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
 import { TrustSignalSection } from '@/components/TrustSignalSection'
 import { buildBookHref } from '@/lib/booking-routing'
+import type { TrustFaqItem, TrustSignalItem } from '@/lib/trust-layer'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { getLeadMagnetBySlug } from '@/lib/growth-layer'
 import { getBreadcrumbJsonLd, getFaqPageJsonLd, getServiceJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
-import { FAQ_SHORTLISTS, TRUST_SIGNAL_SETS } from '@/lib/trust-layer'
 
 const heroImage = { src: '/branding/omnie-hero.webp', width: 1024, height: 1536 } as const
+
+const consultationFaqItems: TrustFaqItem[] = [
+  {
+    question: 'Kiedy Pelna konsultacja ma sens?',
+    answer:
+      'Gdy problem trwa dluzej, wraca, dotyczy kilku obszarow naraz albo od razu wiesz, ze potrzebujesz diagnozy i szerszego planu poprawy.',
+  },
+  {
+    question: 'Co dostaje po Pelnej konsultacji?',
+    answer:
+      '60 minut rozmowy online, diagnoze sytuacji, indywidualny plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp, gdzie mozesz zadawac pytania, wysylac filmy i konsultowac wdrozenie planu.',
+  },
+  {
+    question: 'Czy kamera jest obowiazkowa?',
+    answer:
+      'Nie. Pelna konsultacja moze odbyc sie audio albo audio/video. Kamera moze pomoc, ale nie jest warunkiem rozpoczecia rozmowy.',
+  },
+  {
+    question: 'Co jesli po 7 dniach nie ma postepu?',
+    answer:
+      'Jesli ten etap nie wzbudza poczucia skutecznej drogi do rozwiazania, wskazuje zasadnosc wizyty domowej i terapii ustalanej indywidualnie.',
+  },
+  {
+    question: 'Czy moge zaczac od Kwadransu zamiast Pelnej konsultacji?',
+    answer:
+      'Tak. Jesli nie masz pewnosci, czy temat jest az tak szeroki, zacznij od Kwadransu. Jesli od razu wiesz, ze sprawa jest zlozona, wejdz prosto w Pelna konsultacje.',
+  },
+]
+
+const consultationSignals: TrustSignalItem[] = [
+  {
+    title: 'Diagnoza przed technika',
+    copy: 'Pelna konsultacja zaczyna sie od uporzadkowania tego, co napedza zachowanie, zanim dokladamy kolejne cwiczenia albo narzedzia.',
+  },
+  {
+    title: 'Plan poprawy do wdrozenia',
+    copy: 'Po rozmowie dostajesz indywidualny plan poprawy i jasna kolejnosc krokow, zeby nie zgadywac, od czego zaczac.',
+  },
+  {
+    title: '7 dni wsparcia przez WhatsApp',
+    copy: 'Po Pelnej konsultacji mozesz przez 7 dni zadawac pytania, wysylac filmy i konsultowac kazdy krok. Jesli to nie daje realnego kierunku, kolejnym krokiem bywa wizyta domowa i terapia ustalana indywidualnie.',
+  },
+]
 
 export const metadata: Metadata = buildMarketingMetadata({
   title: 'Pelna konsultacja behawioralna',
   path: '/konsultacja-behawioralna-online',
   description:
-    'Pelna konsultacja behawioralna dla psa i kota. Zakres, cena i moment, w ktorym lepiej wybrac najszersza rozmowe online.',
+    'Pelna konsultacja behawioralna dla psa i kota: 60 minut rozmowy, diagnoza, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.',
 })
 
 function SectionIntro({ eyebrow, title, description }: { eyebrow: string; title: string; description: string }) {
@@ -39,17 +82,16 @@ export default function ConsultationOnlinePage() {
   const consultationHref = buildBookHref(null, 'konsultacja-behawioralna-online')
   const contactHref = '/kontakt#formularz'
   const prepGuide = getLeadMagnetBySlug('przygotowanie-do-konsultacji-online')
-  const consultationFaqItems = FAQ_SHORTLISTS.consultation.slice(0, 5)
   const structuredData = [
     getBreadcrumbJsonLd([
-      { name: 'Strona główna', path: '/' },
+      { name: 'Strona glowna', path: '/' },
       { name: 'Konsultacja behawioralna online', path: '/konsultacja-behawioralna-online' },
     ]),
     getServiceJsonLd({
       name: 'Pelna konsultacja behawioralna',
-      description: 'Pelna konsultacja behawioralna online dla psa lub kota, ok. 2 h lacznie, z planem i podsumowaniem po rozmowie.',
+      description: 'Pelna konsultacja behawioralna online dla psa lub kota: 60 minut rozmowy, diagnoza, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.',
       serviceUrl: consultationHref,
-      offerPrice: 350,
+      offerPrice: 470,
     }),
     getFaqPageJsonLd(consultationFaqItems),
   ]
@@ -64,39 +106,41 @@ export default function ConsultationOnlinePage() {
         { href: '/o-mnie', label: 'O mnie' },
         { href: '/kontakt#formularz', label: 'Kontakt' },
       ]}
-      ctaHref={audioHref}
-      ctaLabel={FUNNEL_CTA_LABELS.primary}
-      footerPrimaryHref={audioHref}
-      footerPrimaryLabel={FUNNEL_CTA_LABELS.primary}
+      ctaHref={consultationHref}
+      ctaLabel={FUNNEL_CTA_LABELS.consultation}
+      footerPrimaryHref={consultationHref}
+      footerPrimaryLabel={FUNNEL_CTA_LABELS.consultation}
     >
       <Schema data={structuredData} />
       <div className="container editorial-stack">
-
         <section className="editorial-hero-shell premium-hero-shell">
           <div className="editorial-hero-grid">
             <div className="editorial-hero-copy">
               <div className="section-eyebrow">Pelna konsultacja behawioralna</div>
               <h1>Pelna konsultacja behawioralna</h1>
               <p className="editorial-hero-lead">
-                To opcja dla tematow szerszych, dluzszych albo bardziej zlozonych. Jesli nie masz pewnosci, czy potrzebujesz pelnej
-                konsultacji, najpierw wybierz Kwadrans z behawiorysta.
+                To opcja dla tematow szerszych, dluzszych albo bardziej zlozonych. Po 60 minutach rozmowy dostajesz diagnoze, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.
               </p>
 
               <div className="hero-actions editorial-hero-actions">
-                <Link href={audioHref} prefetch={false} className="button button-primary big-button">
-                  {FUNNEL_CTA_LABELS.primary}
+                <Link href={consultationHref} prefetch={false} className="button button-primary big-button">
+                  {FUNNEL_CTA_LABELS.consultation}
                 </Link>
-                <Link href="/niezbednik" prefetch={false} className="button button-ghost big-button">
-                  {FUNNEL_CTA_LABELS.secondary}
+                <Link href="/cennik" prefetch={false} className="button button-ghost big-button">
+                  Cennik i porownanie
                 </Link>
               </div>
 
               <p className="muted top-gap-small">
-                Jesli od razu wiesz, ze potrzebujesz dluzszej rozmowy, mozesz od razu{' '}
+                Jesli od razu wiesz, ze potrzebujesz diagnozy i wsparcia wdrozenia, mozesz od razu{' '}
                 <Link href={consultationHref} prefetch={false} className="prep-inline-link">
-                  umowic pelna konsultacje
+                  umowic Pelna konsultacje
                 </Link>
-                . Jesli chcesz doprecyzowac wybor,{' '}
+                . Jesli nie masz jeszcze pewnosci, czy temat jest az tak szeroki,{' '}
+                <Link href={audioHref} prefetch={false} className="prep-inline-link">
+                  zacznij od Kwadransu
+                </Link>{' '}
+                albo{' '}
                 <Link href={contactHref} prefetch={false} className="prep-inline-link">
                   napisz wiadomosc
                 </Link>
@@ -126,8 +170,8 @@ export default function ConsultationOnlinePage() {
         <section className="panel section-panel editorial-section">
           <SectionIntro
             eyebrow="Dla kogo"
-            title="Kiedy warto wybrac pelna konsultacje behawioralna"
-            description="Pelna konsultacja daje wiecej czasu na tlo problemu, codziennosc zwierzecia i uporzadkowanie kilku watkow naraz."
+            title="Kiedy warto wybrac Pelna konsultacje behawioralna"
+            description="Pelna konsultacja daje wiecej czasu na tlo problemu, codziennosc zwierzecia, diagnoze sytuacji i uporzadkowanie kilku watkow naraz."
           />
 
           <div className="premium-two-column-grid">
@@ -137,7 +181,7 @@ export default function ConsultationOnlinePage() {
                 <li>problem trwa od tygodni albo miesiecy</li>
                 <li>dotyczy kilku tematow naraz</li>
                 <li>potrzebujesz szerszego spojrzenia, a nie tylko pierwszej orientacji</li>
-                <li>chcesz po rozmowie dostac plan i podsumowanie pisemne</li>
+                <li>chcesz po rozmowie dostac diagnoze, plan poprawy i 7 dni wsparcia przez WhatsApp</li>
               </ul>
             </article>
 
@@ -157,7 +201,7 @@ export default function ConsultationOnlinePage() {
           <SectionIntro
             eyebrow="Jak wyglada"
             title="Jak przebiega konsultacja online"
-            description="Najpierw rezerwujesz termin i opisujesz sytuacje. W trakcie rozmowy porzadkujemy tlo problemu, priorytety i pierwszy plan dalszego dzialania."
+            description="Najpierw rezerwujesz termin i opisujesz sytuacje. W trakcie rozmowy porzadkujemy tlo problemu, priorytety i plan poprawy, a potem przez 7 dni mozesz konsultowac wdrozenie przez WhatsApp."
           />
 
           <div className="card-grid three-up">
@@ -173,9 +217,16 @@ export default function ConsultationOnlinePage() {
             </article>
             <article className="summary-card tree-backed-card">
               <div className="section-eyebrow">3</div>
-              <h3>Rozmowa i plan</h3>
-              <p>Po konsultacji wiesz, od czego zaczac, co obserwowac i co na ten moment nie ma sensu dokladac.</p>
+              <h3>Rozmowa, diagnoza i plan</h3>
+              <p>Po konsultacji wiesz, od czego zaczac, co obserwowac, co na ten moment nie ma sensu dokladac i jaki plan poprawy wdrazac.</p>
             </article>
+          </div>
+
+          <div className="list-card accent-outline tree-backed-card top-gap">
+            <strong>Po rozmowie nie zostajesz sam z planem</strong>
+            <span>
+              Przez 7 dni po konsultacji mozesz przez WhatsApp zadawac pytania, wysylac wiadomosci i filmy oraz konsultowac kazdy krok wdrazania planu. Jesli po 7 dniach nie widac postepu i nie ma poczucia skutecznej drogi do rozwiazania, to wskazanie do wizyty domowej i terapii ustalanej indywidualnie.
+            </span>
           </div>
         </section>
 
@@ -183,7 +234,7 @@ export default function ConsultationOnlinePage() {
           eyebrow="Jak pracuje"
           title="Online ma byc spokojna, konkretna rozmowa"
           description="Przy wiekszosci tematow kluczowe sa historia, srodowisko i codziennosc. Jesli ten format nie wystarczy, powiem to wprost."
-          items={TRUST_SIGNAL_SETS.consultation}
+          items={consultationSignals}
         />
 
         <section className="panel section-panel editorial-section" id="przygotowanie">
@@ -227,8 +278,7 @@ export default function ConsultationOnlinePage() {
                 <div className="section-eyebrow">Material pomocniczy</div>
                 <h3>Jesli chcesz uporzadkowac temat jeszcze przed rezerwacja</h3>
                 <p>
-                  Ten material pomaga zebrac obserwacje przed Kwadransem, Dwoma kwadransami albo pelna konsultacja. Nie jest konieczny i nie
-                  zastapi rozmowy, ale zmniejsza chaos na starcie.
+                  Ten material pomaga zebrac obserwacje przed Kwadransem, Dwoma kwadransami albo Pelna konsultacja. Nie jest konieczny i nie zastapi rozmowy, ale zmniejsza chaos na starcie.
                 </p>
                 <div className="hero-actions top-gap-small">
                   <Link href={`/bezplatne-materialy/${prepGuide.slug}`} prefetch={false} className="prep-inline-link">
@@ -243,7 +293,7 @@ export default function ConsultationOnlinePage() {
         <EditorialFaqSection
           id="faq"
           title="Najczestsze pytania o konsultacje online"
-          description="Krotko o tym, kiedy wybrac pelna konsultacje, a kiedy wystarczy Kwadrans."
+          description="Krotko o tym, kiedy wybrac Pelna konsultacje, a kiedy wystarczy Kwadrans."
           items={consultationFaqItems}
         />
 
@@ -252,27 +302,25 @@ export default function ConsultationOnlinePage() {
             <div className="section-eyebrow">Decyzja</div>
             <h2>Zacznij od kroku, ktory pasuje do Twojej sytuacji</h2>
             <p>
-              Jesli temat jest szeroki, wybierz pelna konsultacje. Jesli chcesz najpierw spokojnie ocenic sytuacje, zacznij od Kwadransu
-              z behawiorysta.
+              Jesli temat jest szeroki, wybierz Pelna konsultacje. Jesli chcesz najpierw spokojnie ocenic sytuacje, zacznij od Kwadransu z behawiorysta.
             </p>
 
             <div className="hero-actions editorial-final-actions">
-              <Link href={audioHref} prefetch={false} className="button button-primary big-button">
-                {FUNNEL_CTA_LABELS.primary}
-              </Link>
-              <Link href="/niezbednik" prefetch={false} className="button button-ghost big-button">
-                {FUNNEL_CTA_LABELS.secondary}
-              </Link>
-              <Link href={consultationHref} prefetch={false} className="prep-inline-link">
+              <Link href={consultationHref} prefetch={false} className="button button-primary big-button">
                 {FUNNEL_CTA_LABELS.consultation}
               </Link>
-              <Link href="/cennik" prefetch={false} className="prep-inline-link">
+              <Link href="/cennik" prefetch={false} className="button button-ghost big-button">
                 Cennik i porownanie
+              </Link>
+              <Link href={audioHref} prefetch={false} className="prep-inline-link">
+                {FUNNEL_CTA_LABELS.primary}
+              </Link>
+              <Link href="/cennik" prefetch={false} className="prep-inline-link">
+                Zobacz roznice miedzy 69 / 99 / 169 / 470
               </Link>
             </div>
           </div>
         </section>
-
       </div>
     </NotatnikPageShell>
   )

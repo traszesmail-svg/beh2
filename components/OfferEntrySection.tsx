@@ -52,12 +52,12 @@ export function OfferEntrySection({
   species = null,
   sectionId,
   eyebrow = 'Oferta',
-  title = 'Zacznij od Kwadransu z behawiorysta. Jesli temat jest szerszy, wybierz Dwa kwadranse albo pelna konsultacje.',
-  description = 'Kwadrans zostaje nazwa uslugi, a 15 min audio bez kamery tylko opisuje jego format. Dwa kwadranse sa etapem posrednim, Niezbednik zostaje opcja materialowa, a wiadomosc sluzy do krotkiego doprecyzowania tematu.',
+  title = 'Masz cztery proste wejscia: Kwadrans za 69 zl, Kwadrans na juz za 99 zl, Dwa kwadranse za 169 zl i Pelna konsultacja za 470 zl.',
+  description = 'Kwadrans zostaje nazwa uslugi, a 15 min audio bez kamery opisuje tylko jego format. Kwadrans za 69 zl jest najprostszym startem. Kwadrans na juz za 99 zl to ten sam format 15 minut, ale z priorytetem i terminem w 15 minut. Dwa kwadranse sa pomostem, a Pelna konsultacja daje diagnoze i 7 dni wsparcia przez WhatsApp.',
 }: OfferEntrySectionProps) {
   const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min', false, species)
+  const bridgeHref = buildBookHref(null, 'konsultacja-30-min', false, species)
   const fullConsultationHref = buildBookHref(null, 'konsultacja-behawioralna-online', false, species)
-  const toolkitHref = '/niezbednik'
   const messageHref = species ? `/kontakt?species=${species}#formularz` : '/kontakt#formularz'
   const urgentNowHref = species ? `/kontakt?intent=kwadrans-na-juz&species=${species}#formularz` : '/kontakt?intent=kwadrans-na-juz#formularz'
   const speciesLabel = getSpeciesLabel(species)
@@ -76,8 +76,8 @@ export function OfferEntrySection({
         <Link href={audioHref} prefetch={false} className="button button-primary big-button">
           {COPY_CTA.primary}
         </Link>
-        <Link href={toolkitHref} prefetch={false} className="prep-inline-link">
-          {COPY_CTA.toolkit}
+        <Link href={bridgeHref} prefetch={false} className="prep-inline-link">
+          {COPY_CTA.bridge}
         </Link>
         <Link href={fullConsultationHref} prefetch={false} className="prep-inline-link">
           {COPY_CTA.consultation}
@@ -98,7 +98,7 @@ export function OfferEntrySection({
           <div className="editorial-hero-meta" aria-label="Parametry uslugi">
             <span>{COPY_SERVICE_NAMES.primaryDescriptor}</span>
             <span>{formatPricePln(DEFAULT_PRICE_PLN)}</span>
-            <span>najprostszy start</span>
+            <span>cena wejscia</span>
           </div>
           <p className="muted">Dla {speciesLabel}, gdy temat jest jeden albo chcesz spokojnie ustalic kierunek bez przechodzenia od razu do dluzszej konsultacji.</p>
           <div className="hero-actions top-gap-small">
@@ -110,34 +110,34 @@ export function OfferEntrySection({
 
         <article className="summary-card tree-backed-card">
           <div className="section-eyebrow">Kwadrans na juz</div>
-          <h3>Zapytaj o pilny termin</h3>
-          <p>Sciezka awaryjna, gdy zwykly kalendarz nie pasuje i chcesz od razu podac preferowana date z godzina.</p>
+          <h3>Ten sam format, ale z priorytetem</h3>
+          <p>15 minut audio bez kamery jak w zwyklym Kwadransie, ale z priorytetem i terminem w 15 minut.</p>
           <div className="editorial-hero-meta" aria-label="Parametry pilnej sciezki">
-            <span>formularz</span>
-            <span>odpowiedz mailowa</span>
-            <span>slot z panelu admina</span>
+            <span>15 min audio</span>
+            <span>{formatPricePln(99)}</span>
+            <span>priorytet / 15 min</span>
           </div>
-          <p className="muted">Dla {speciesLabel}, gdy potrzebujesz zapytac o konkretny termin poza standardowym wyborem slotu.</p>
+          <p className="muted">Dla {speciesLabel}, gdy nie potrzebujesz dluzszej rozmowy, tylko szybszego dostepu.</p>
           <div className="hero-actions top-gap-small">
             <Link href={urgentNowHref} prefetch={false} className="button button-ghost">
-              Zapytaj o termin
+              Zarezerwuj na juz
             </Link>
           </div>
         </article>
 
         <article className="summary-card tree-backed-card">
-          <div className="section-eyebrow">Niezbednik</div>
-          <h3>{COPY_SERVICE_NAMES.toolkit}</h3>
-          <p>{COPY_HELPERS.toolkitIntro}</p>
-          <div className="editorial-hero-meta" aria-label="Zakres materialow">
-            <span>materialy wlasne</span>
-            <span>ksiazki</span>
-            <span>narzedzia</span>
+          <div className="section-eyebrow">{COPY_SERVICE_NAMES.bridge}</div>
+          <h3>{COPY_SERVICE_NAMES.bridge}</h3>
+          <p>Pomost miedzy szybkim startem a Pelna konsultacja, gdy 15 minut to za malo, ale nie potrzebujesz od razu najszerszej opcji.</p>
+          <div className="editorial-hero-meta" aria-label="Parametry uslugi posredniej">
+            <span>30 min online</span>
+            <span>{formatPricePln(169)}</span>
+            <span>pomost</span>
           </div>
-          <p className="muted">Dla {speciesLabel}, gdy chcesz wrocic do materialow albo przygotowac sie do rozmowy.</p>
+          <p className="muted">Dla {speciesLabel}, gdy chcesz spokojniej wejsc w 2-3 watki i po rozmowie dostac krotka notatke.</p>
           <div className="hero-actions top-gap-small">
-            <Link href={toolkitHref} prefetch={false} className="button button-ghost">
-              {COPY_CTA.toolkit}
+            <Link href={bridgeHref} prefetch={false} className="button button-ghost">
+              {COPY_CTA.bridge}
             </Link>
           </div>
         </article>
@@ -145,11 +145,11 @@ export function OfferEntrySection({
         <article className="summary-card tree-backed-card">
           <div className="section-eyebrow">Pelna konsultacja</div>
           <h3>Pelna konsultacja behawioralna</h3>
-          <p>{getFullConsultationDescription(species)}</p>
+          <p>{getFullConsultationDescription(species)} Po rozmowie dostajesz diagnoze, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.</p>
           <div className="editorial-hero-meta" aria-label="Parametry uslugi">
-            <span>ok. 2 h</span>
+            <span>60 min online</span>
             <span>{formatPricePln(BOOKING_SERVICE_ONLINE_PRICE)}</span>
-            <span>online</span>
+            <span>diagnoza + 7 dni WhatsApp</span>
           </div>
           <p className="muted">Dla {speciesLabel}, gdy problem trwa dluzej, wraca albo obejmuje kilka obszarow naraz.</p>
           <div className="hero-actions top-gap-small">
@@ -165,7 +165,7 @@ export function OfferEntrySection({
         <Link href={messageHref} prefetch={false} className="prep-inline-link">
           {COPY_CTA.contact.toLowerCase()}
         </Link>{' '}
-        pomaga wtedy, gdy chcesz tylko krotko doprecyzowac temat.
+        pomaga wtedy, gdy chcesz tylko krotko doprecyzowac temat. Jesli wolisz najpierw materialy, nadal mozesz wejsc do Niezbednika.
       </p>
     </section>
   )

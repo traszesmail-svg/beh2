@@ -11,7 +11,7 @@ export const metadata: Metadata = buildMarketingMetadata({
   title: 'Cennik konsultacji behawioralnych | Regulski COAPE',
   path: '/cennik',
   description:
-    'Kwadrans z behawiorysta 69 zl, Dwa kwadranse 129 zl, pelna konsultacja 350 zl. PayPal albo BLIK na telefon, potwierdzenie do 15 minut, bez kamery.',
+    'Kwadrans 69 zl, Kwadrans na juz 99 zl, Dwa kwadranse 169 zl, Pelna konsultacja 470 zl z diagnoza, planem poprawy i 7 dniami wsparcia tekstowego przez WhatsApp.',
 })
 
 const navItems = [
@@ -24,20 +24,22 @@ const navItems = [
 ]
 
 const PAYMENT_STEPS = [
-  '1. Wybierasz usĹ‚ugÄ™ i termin.',
-  '2. Po rezerwacji dostajesz e-mailem PayPal albo instrukcje BLIK na telefon.',
-  '3. Oplacasz rezerwacje przez PayPal albo BLIK na telefon w godzinach 9-21, poza dniami ustawowo wolnymi.',
-  '4. Potwierdzenie przychodzi do 15 minut wraz z dalszÄ… instrukcjÄ… i linkiem do rozmowy.',
+  '1. Wybierasz usluge i termin.',
+  '2. Po rezerwacji dostajesz e-mailem PayPal.me albo instrukcje BLIK na telefon.',
+  '3. Oplacasz rezerwacje przez PayPal.me albo BLIK na telefon w godzinach 9-21, poza dniami ustawowo wolnymi.',
+  '4. Potwierdzenie przychodzi do 15 minut wraz z dalsza instrukcja i linkiem do rozmowy.',
 ] as const
 
 const ctaSupportSnippets = [
   'Jesli nie wiesz, od czego zaczac - to jest wlasnie ten krok.',
   '15 minut. Jedno konkretne pytanie. Juz wiesz wiecej niz przed rozmowa.',
-  'Bez kamery. Bez formalnosci. Bez stresu.',
+  'Kwadrans na juz to ten sam format 15 minut, ale z priorytetem i terminem w 15 minut.',
 ] as const
 
 const trustSnippets = [
   'Pracuje online z opiekunami psow i kotow w calej Polsce. Bez kamer, bez przygotowan - wystarczy mikrofon i 15 minut.',
+  'Kwadrans za 69 zl jest najprostszym startem. Kwadrans na juz za 99 zl nie daje dluzszej rozmowy - daje szybszy dostep.',
+  'Pelna konsultacja za 470 zl jest produktem premium: po rozmowie dostajesz diagnoze, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.',
   'Nie obiecuje efektow w konkretnym czasie. Mowie, co realnie mozna zorganizowac - i co zalezy od zwierzecia, a co od srodowiska.',
   'Zakres pracy jest uczciwy: powiem, co lezy w zasiegu konsultacji, a co wymaga wiecej czasu, wsparcia specjalisty lub zmian w srodowisku.',
 ] as const
@@ -46,7 +48,12 @@ const pricingFaqItems = [
   {
     question: 'Czym jest Kwadrans z behawiorysta?',
     answer:
-      'To samodzielny format 15 min audio bez kamery. Przy jednym konkretnym pytaniu albo orientacji w temacie wystarcza, zeby ustalic priorytet i pierwszy kierunek dzialania.',
+      'To podstawowy format startowy: 15 min audio bez kamery. Przy jednym konkretnym pytaniu albo orientacji w temacie wystarcza, zeby ustalic priorytet i pierwszy kierunek dzialania.',
+  },
+  {
+    question: 'Czym rozni sie Kwadrans za 69 zl od Kwadransu na juz za 99 zl?',
+    answer:
+      'Forma rozmowy jest ta sama: 15 min audio bez kamery. Przy 99 zl placisz za priorytet i szybszy dostep, czyli termin w 15 minut, a nie za dluzsza albo lepsza konsultacje.',
   },
   {
     question: 'Czy 15 minut wystarczy?',
@@ -64,14 +71,19 @@ const pricingFaqItems = [
       'Jeden konkretny kierunek: co zrobic teraz, co obserwowac i czy temat wymaga glebszej pracy. To nie jest plan na trzy miesiace, tylko sensowny pierwszy krok.',
   },
   {
+    question: 'Co obejmuje Pelna konsultacja 470 zl?',
+    answer:
+      '60 minut rozmowy online, diagnoze sytuacji, indywidualny plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp. W tym czasie mozna zadawac pytania, wysylac filmy i konsultowac kolejne kroki. Jesli ten etap nie daje poczucia skutecznego kierunku, wskazuje zasadnosc wizyty domowej i terapii ustalanej indywidualnie.',
+  },
+  {
     question: 'Jak wyglada platnosc?',
     answer:
-      'Po rezerwacji dostajesz e-mailem PayPal albo instrukcje BLIK na telefon. Po wplacie potwierdzenie wraca do 15 minut wraz z dalsza instrukcja i linkiem do rozmowy.',
+      'Po rezerwacji dostajesz e-mailem PayPal.me albo instrukcje BLIK na telefon. Po wplacie potwierdzenie wraca do 15 minut wraz z dalsza instrukcja i linkiem do rozmowy.',
   },
   {
     question: 'Czy place za calosc od razu?',
     answer:
-      'Tak. Platnosc jest jednorazowa przy rezerwacji. Kwadrans kosztuje 69 zl, Dwa kwadranse 129 zl, a Pelna konsultacja 350 zl.',
+      'Tak. Platnosc jest jednorazowa przy rezerwacji. Kwadrans kosztuje 69 zl, Kwadrans na juz 99 zl, Dwa kwadranse 169 zl, a Pelna konsultacja 470 zl.',
   },
 ] as const
 
@@ -93,12 +105,13 @@ export default function PricingPage() {
           ]),
           getServiceJsonLd({
             name: 'Cennik konsultacji behawioralnych - psy i koty',
-            description: 'Trzy przejrzyste opcje: Kwadrans, Dwa kwadranse i peĹ‚na konsultacja behawioralna.',
+            description: 'Cztery przejrzyste opcje: Kwadrans, Kwadrans na juz, Dwa kwadranse i Pelna konsultacja behawioralna.',
             serviceUrl: '/cennik',
             offerCatalog: [
               { name: 'Kwadrans z behawiorystÄ…', description: '15 min audio bez kamery.', url: '/book?service=szybka-konsultacja-15-min', price: 69 },
-              { name: 'Dwa kwadranse', description: '30 min audio.', url: '/book?service=konsultacja-30-min', price: 129 },
-              { name: 'PeĹ‚na konsultacja', description: '60 min audio albo video z planem dalszej pracy.', url: '/book?service=konsultacja-behawioralna-online', price: 350 },
+              { name: 'Kwadrans na juz', description: '15 min audio, termin w 15 minut.', url: '/book?service=kwadrans-na-juz', price: 99 },
+              { name: 'Dwa kwadranse', description: '30 min online z krotka notatka po rozmowie.', url: '/book?service=konsultacja-30-min', price: 169 },
+              { name: 'PeĹ‚na konsultacja', description: '60 min audio albo video, diagnoza, plan poprawy i 7 dni wsparcia tekstowego przez WhatsApp.', url: '/book?service=konsultacja-behawioralna-online', price: 470 },
             ],
           }),
         ]}
@@ -110,7 +123,7 @@ export default function PricingPage() {
           <h1>
             Cennik konsultacji behawioralnych <em>- psy i koty</em>
           </h1>
-          <p>Trzy przejrzyste opcje. PayPal albo BLIK na telefon, potwierdzenie do 15 minut.</p>
+          <p>Cztery przejrzyste opcje. 69 zl to najprostszy start, 99 zl daje ten sam format z priorytetem, a 470 zl obejmuje diagnoze i 7 dni wsparcia tekstowego przez WhatsApp.</p>
           <NextSlot className="top-gap-small" />
           <div className="info-box top-gap-small">Jesli nie wiesz, od czego zaczac - zacznij od Kwadransu. To najlzejszy i najszybszy pierwszy krok.</div>
           <div className="notatnik-subhero-actions">
@@ -130,14 +143,13 @@ export default function PricingPage() {
           <div className="section-eyebrow">ĹšcieĹĽka wyboru</div>
           <h3>Zacznij od tego, co pasuje do skali problemu.</h3>
           <p>
-            Kwadrans zostaje najlĹĽejszym startem. Dwa kwadranse porzÄ…dkujÄ… temat szerzej, a peĹ‚na konsultacja jest dla
-            spraw wielowÄ…tkowych albo przewlekĹ‚ych.
+            Kwadrans za 69 zl zostaje najlzejszym startem. Kwadrans na juz za 99 zl daje ten sam format z priorytetem. Dwa kwadranse porzadkuja temat szerzej, a Pelna konsultacja jest dla spraw wielowatkowych albo przewleklych.
           </p>
         </div>
       </section>
 
       <section id="porownanie">
-        <NotatnikSectionHead index="I." kicker="PorĂłwnanie" title="Jedna tabela, trzy rĂłĹĽne zastosowania." />
+        <NotatnikSectionHead index="I." kicker="PorĂłwnanie" title="Jedna tabela, cztery rozne zastosowania." />
         <ServicesComparison />
         <div className="notatnik-faq-grid top-gap">
           {ctaSupportSnippets.map((snippet) => (
@@ -168,7 +180,7 @@ export default function PricingPage() {
       </section>
 
       <section>
-        <NotatnikSectionHead index="III." kicker="FAQ" title="Najczestsze pytania o Kwadrans i platnosc." />
+        <NotatnikSectionHead index="III." kicker="FAQ" title="Najczestsze pytania o uslugi i platnosc." />
         <div className="notatnik-faq-grid">
           {pricingFaqItems.map((item) => (
             <article key={item.question} className="notatnik-faq-item">
@@ -195,8 +207,8 @@ export default function PricingPage() {
           <article className="notatnik-quiet-card">
             <h3>PeĹ‚na konsultacja ma osobny regulamin</h3>
             <p>
-              Dla peĹ‚nej konsultacji publikowany jest osobny dokument, bo ten format ma osobne warunki dotyczÄ…ce zakresu,
-              materiaĹ‚Ăłw po rozmowie i zasad przed rozpoczÄ™ciem usĹ‚ugi.
+              Dla peĹ‚nej konsultacji publikowany jest osobny dokument, bo ten format ma osobne warunki dotyczace zakresu,
+              diagnozy, 7 dni wsparcia przez WhatsApp i zasad przed rozpoczeciem uslugi.
             </p>
             <Link href="/regulamin-pelna-konsultacja" prefetch={false} className="notatnik-inline-link">
               OtwĂłrz regulamin PeĹ‚nej konsultacji

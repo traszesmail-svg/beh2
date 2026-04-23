@@ -8,7 +8,7 @@ export const COPY_SERVICE_NAMES = {
   bridge: 'Dwa kwadranse z behawiorysta',
   bridgeOperational: 'Dwa kwadranse z behawiorysta: 30 min online',
   consultation: 'pelna konsultacja behawioralna',
-  consultationOperational: 'pelna konsultacja behawioralna online, 60 min',
+  consultationOperational: 'pelna konsultacja behawioralna online, 60 min + 7 dni wsparcia tekstowego przez WhatsApp',
   toolkit: 'Niezbednik',
   toolkitOperational: 'Niezbednik - materialy do samodzielnej pracy',
   contact: 'wiadomosc',
@@ -26,7 +26,7 @@ export const COPY_HELPERS = {
   primaryLead: 'Kwadrans z behawiorysta to 15 min audio bez kamery.',
   startFromAudio: 'Jesli nie wiesz, od czego zaczac, wybierz Kwadrans z behawiorysta.',
   startComparison:
-    'Kwadrans z behawiorysta jest nazwa uslugi. 15 min audio bez kamery opisuje tylko jej format. Dwa kwadranse daja spokojniejszy start online, a pelna konsultacja behawioralna sprawdza sie przy sprawach szerszych, dluzszych albo wielowatkowych.',
+    'Kwadrans z behawiorysta jest nazwa uslugi. 15 min audio bez kamery opisuje tylko jego format. Kwadrans na juz to ten sam format, ale z priorytetem. Dwa kwadranse daja spokojniejszy start online, a pelna konsultacja behawioralna sprawdza sie przy sprawach szerszych, dluzszych albo wielowatkowych.',
   contactResponseWindow: 'Staram sie odpowiadac w ciagu 1-2 dni roboczych.',
   toolkitIntro:
     'Niezbednik to materialy, do ktorych mozesz wrocic przed rozmowa, po rozmowie albo wtedy, gdy chcesz spokojnie uporzadkowac temat.',

@@ -12,7 +12,7 @@ export const metadata: Metadata = buildLegalMetadata(
 const summaryItems: LegalSummaryItem[] = [
   {
     label: 'Produkt objety dokumentem',
-    value: 'Pelna konsultacja behawioralna online: 60 min, audio albo video, 350 zl.',
+    value: 'Pelna konsultacja behawioralna online: 60 min rozmowy, 470 zl, diagnoza i 7 dni konsultacji tekstowych przez WhatsApp.',
   },
   {
     label: 'Platnosc',
@@ -42,8 +42,10 @@ const sections: LegalSection[] = [
       <>
         <ul className="premium-bullet-list">
           <li>Konsultacja trwa 60 minut i odbywa sie online w formie rozmowy audio lub audio/video.</li>
-          <li>W ramach konsultacji uslugodawca analizuje opisana sytuacje psa lub kota i porzadkuje priorytety.</li>
-          <li>Po konsultacji klient otrzymuje na e-mail krotkie podsumowanie lub materialy uzupelniajace.</li>
+          <li>W ramach konsultacji uslugodawca analizuje opisana sytuacje psa lub kota, porzadkuje priorytety i przekazuje diagnoze behawioralna sytuacji.</li>
+          <li>Po konsultacji klient otrzymuje diagnoze behawioralna sytuacji i indywidualny plan poprawy.</li>
+          <li>Przez 7 dni od konsultacji klient moze przez WhatsApp zadawac pytania, wysylac wiadomosci tekstowe i filmy oraz konsultowac wdrazanie planu.</li>
+          <li>Jesli po 7 dniach brak postepu albo nie ma poczucia, ze to skuteczna droga do rozwiazania, uslugodawca moze wskazac zasadnosc wizyty domowej i terapii ustalanej indywidualnie.</li>
           <li>Konsultacja nie obejmuje diagnostyki weterynaryjnej, zalece farmakologicznych ani interwencji w stanach naglych.</li>
         </ul>
         <p>
@@ -57,8 +59,8 @@ const sections: LegalSection[] = [
     title: '3. Cena i platnosc',
     body: (
       <>
-        <p>Cena konsultacji: 350 zl brutto.</p>
-        <p>Metoda platnosci: BLIK na telefon. Numer telefonu do wplaty klient otrzymuje emailem po zaakceptowaniu wstepnego terminu.</p>
+        <p>Cena konsultacji: 470 zl brutto.</p>
+        <p>Metody platnosci: BLIK na telefon albo PayPal.me. Dane do wplaty klient otrzymuje emailem po zaakceptowaniu wstepnego terminu.</p>
         <p>Platnosc przyjmowana jest w godzinach 9:00-21:00, poza dniami ustawowo wolnymi od pracy.</p>
         <p>Potwierdzenie wplyniecia BLIK-a i ostateczne potwierdzenie rezerwacji nastepuje do 15 minut od zaksiogowania wplaty w oknie obslugi.</p>
         <p>Rezerwacja bez dokonanej platnosci nie jest wiazaca. Termin wraca do puli po 24 godzinach od wyslania numeru BLIK.</p>
@@ -69,12 +71,13 @@ const sections: LegalSection[] = [
     title: '4. Rezerwacja terminu',
     body: (
       <>
-        <p>Klient inicjuje rezerwacje przez formularz na stronie /book, wskazujac preferowane terminy oraz opis sytuacji.</p>
-        <p>Uslugodawca odpowiada w ciagu kilku godzin, potwierdza jeden z zaproponowanych terminow albo proponuje inny, wraz z numerem telefonu do BLIK-a.</p>
-        <p>Konsultacja jest zarezerwowana dopiero po potwierdzeniu wplaty przez uslugodawce.</p>
-        <p>Na 24 godziny przed konsultacja klient otrzymuje e-mail z linkiem do rozmowy i lista materialow do przygotowania, jezeli sa potrzebne.</p>
-      </>
-    ),
+          <p>Klient inicjuje rezerwacje przez formularz na stronie /book, wskazujac preferowane terminy oraz opis sytuacji.</p>
+          <p>Uslugodawca odpowiada w ciagu kilku godzin, potwierdza jeden z zaproponowanych terminow albo proponuje inny, wraz z numerem telefonu do BLIK-a.</p>
+          <p>Konsultacja jest zarezerwowana dopiero po potwierdzeniu wplaty przez uslugodawce.</p>
+          <p>Na 24 godziny przed konsultacja klient otrzymuje e-mail z linkiem do rozmowy i lista materialow do przygotowania, jezeli sa potrzebne.</p>
+          <p>Po zakonczeniu konsultacji dalszy 7-dniowy kontakt tekstowy odbywa sie przez WhatsApp, chyba ze strony ustala inny kanal pisemny.</p>
+        </>
+      ),
   },
   {
     title: '5. Zmiana terminu i anulacja',
@@ -143,12 +146,12 @@ export default function FullConsultationTermsPage() {
     <LegalPageLayout
       eyebrow="Regulamin / pelna konsultacja"
       title="Regulamin Pelnej konsultacji behawioralnej online"
-      intro="Dokument opisuje zasady rezerwacji, platnosci, zmian terminu, realizacji i reklamacji dla dluzszego formatu konsultacji online."
+      intro="Dokument opisuje zasady rezerwacji, platnosci, zmian terminu, realizacji, 7 dni wsparcia tekstowego i reklamacji dla Pelnej konsultacji online."
       contactSubject="Pytanie o regulamin Pelnej konsultacji"
       summaryItems={summaryItems}
       sections={sections}
       supportTitle="Kontakt w sprawach Pelnej konsultacji"
-      supportText="Dokument jest gotowy do publikacji jako osobna podstrona regulaminu pelnej konsultacji."
+      supportText="Dokument obejmuje warunki rezerwacji, diagnozy, planu poprawy i 7 dni wsparcia tekstowego po Pelnej konsultacji."
       supportNoteTitle="Kontakt i obsluga dokumentu"
       supportNoteText="W sprawach dotyczacych regulaminu, reklamacji lub realizacji Pelnej konsultacji kontakt prowadzony jest przez formularz i e-mail."
       structuredData={[

@@ -13,7 +13,7 @@ export const metadata: Metadata = buildMarketingMetadata({
   title: 'Rezerwacja Kwadransa z behawiorystÄ…',
   path: '/book',
   description:
-    'Prosba o rezerwacje Kwadransu, Dwoch kwadransow albo Pelnej konsultacji. PayPal albo BLIK na telefon po potwierdzeniu terminu, odpowiedz w godzinach 9-21.',
+    'Prosba o rezerwacje Kwadransu 69 zl, Kwadransu na juz 99 zl, Dwoch kwadransow 169 zl albo Pelnej konsultacji 470 zl z diagnoza i 7 dniami wsparcia tekstowego przez WhatsApp.',
 })
 
 const navItems = [
@@ -25,16 +25,16 @@ const navItems = [
 ]
 
 const PAYMENT_STEPS = [
-  '1. Wybierasz usĹ‚ugÄ™ i wpisujesz preferowane terminy.',
-  '2. Dostajesz odpowiedz z potwierdzonym terminem i dalszym krokiem platnosci: PayPal albo BLIK na telefon.',
-  '3. Oplacasz rezerwacje przez PayPal albo BLIK na telefon w godzinach 9-21, poza dniami ustawowo wolnymi.',
+  '1. Wybierasz usluge i wpisujesz preferowane terminy.',
+  '2. Dostajesz odpowiedz z potwierdzonym terminem i dalszym krokiem platnosci: PayPal.me albo BLIK na telefon.',
+  '3. Oplacasz rezerwacje przez PayPal.me albo BLIK na telefon w godzinach 9-21, poza dniami ustawowo wolnymi.',
   '4. Potwierdzenie przychodzi do 15 minut wraz z linkiem do rozmowy.',
 ] as const
 
 const NEXT_STEPS = [
-  '1. Potwierdzam jeden z terminĂłw albo odsyĹ‚am najbliĹĽszÄ… alternatywÄ™.',
-  '2. W mailu dostajesz PayPal albo instrukcje BLIK na telefon.',
-  '3. Po wpĹ‚acie potwierdzam rezerwacjÄ™ i odsyĹ‚am link do rozmowy.',
+  '1. Potwierdzam jeden z terminow albo odsylam najblizsza alternatywe.',
+  '2. W mailu dostajesz PayPal.me albo instrukcje BLIK na telefon.',
+  '3. Po wplacie potwierdzam rezerwacje i odsylam link do rozmowy.',
 ] as const
 
 export default function BookPage({
@@ -49,7 +49,7 @@ export default function BookPage({
 
   return (
     <NotatnikPageShell
-      tag="Rezerwacja / PayPal lub BLIK po potwierdzeniu"
+      tag="Rezerwacja / PayPal.me lub BLIK po potwierdzeniu"
       navItems={navItems}
       ctaHref="/cennik"
       ctaLabel="Zobacz cennik"
@@ -70,8 +70,9 @@ export default function BookPage({
               // nazwa uslugi: Kwadrans z behawiorysta
               // format: 15 min audio bez kamery
               { name: 'Kwadrans z behawiorystÄ…', description: '15 min audio bez kamery.', url: '/book?service=szybka-konsultacja-15-min', price: 69 },
-              { name: 'Dwa kwadranse', description: '30 min audio.', url: '/book?service=konsultacja-30-min', price: 129 },
-              { name: 'PeĹ‚na konsultacja', description: '60 min audio albo video.', url: '/book?service=konsultacja-behawioralna-online', price: 350 },
+              { name: 'Kwadrans na juz', description: '15 min audio, termin w 15 minut.', url: '/book?service=kwadrans-na-juz', price: 99 },
+              { name: 'Dwa kwadranse', description: '30 min online z krotka notatka po rozmowie.', url: '/book?service=konsultacja-30-min', price: 169 },
+              { name: 'PeĹ‚na konsultacja', description: '60 min audio albo video, diagnoza, plan poprawy i 7 dni wsparcia tekstowego przez WhatsApp.', url: '/book?service=konsultacja-behawioralna-online', price: 470 },
             ],
           }),
         ]}
@@ -81,11 +82,10 @@ export default function BookPage({
         <div>
           <div className="notatnik-subhero-tag notatnik-mono">Rezerwacja / spokojny start</div>
           <h1>
-            Rezerwacja <em>Kwadransa z behawiorystÄ…</em>.
+            Rezerwacja <em>konsultacji behawioralnych online</em>.
           </h1>
           <p>
-            Wybierasz usĹ‚ugÄ™, wpisujesz 2-4 zdania opisu i proponujesz terminy. ResztÄ™ potwierdzam mailem, bez telefonu
-            na stronie i bez kalendarza do klikania.
+            Wybierasz jedna z czterech uslug, wpisujesz 2-4 zdania opisu i proponujesz terminy. Reszte potwierdzam mailem, bez telefonu na stronie i bez kalendarza do klikania.
           </p>
           <NextSlot className="top-gap-small" />
           <div className="notatnik-subhero-actions">
@@ -106,13 +106,13 @@ export default function BookPage({
           <h3>Platnosc przychodzi dopiero po potwierdzeniu terminu.</h3>
           <p>
             Ten model porzadkuje rezerwacje bez publicznego numeru telefonu. Najpierw uzgadniamy termin, potem wysylam
-            PayPal albo instrukcje BLIK na telefon i potwierdzam rezerwacje.
+            PayPal.me albo instrukcje BLIK na telefon i potwierdzam rezerwacje.
           </p>
         </div>
       </section>
 
       <section id="porownanie">
-        <NotatnikSectionHead index="I." kicker="UsĹ‚ugi" title="Najpierw porĂłwnaj trzy formaty." />
+        <NotatnikSectionHead index="I." kicker="UsĹ‚ugi" title="Najpierw porownaj cztery formaty." />
         <ServicesComparison species={species} />
       </section>
 

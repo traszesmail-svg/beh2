@@ -12,25 +12,38 @@ const SERVICES = [
   {
     id: 'szybka-konsultacja-15-min',
     title: 'Kwadrans z behawiorysta',
-    badge: 'Najczestszy wybor',
+    badge: 'Cena wejscia',
     price: 69,
     duration: '15 min',
     mode: 'audio, bez kamery',
-    who: 'jedno pytanie, start',
-    plan: 'pierwszy krok',
+    who: 'jedno pytanie albo pierwszy ruch',
+    plan: 'priorytet i pierwszy krok',
     materials: '-',
     refund: 'tak',
     cta: 'Zarezerwuj',
   },
   {
+    id: 'kwadrans-na-juz',
+    title: 'Kwadrans na juz',
+    badge: 'Priorytet / 15 min',
+    price: 99,
+    duration: '15 min',
+    mode: 'audio, bez kamery',
+    who: 'gdy liczy sie szybszy dostep',
+    plan: 'ten sam format, ale z priorytetem',
+    materials: '-',
+    refund: 'tak, przed startem',
+    cta: 'Zarezerwuj na juz',
+  },
+  {
     id: 'konsultacja-30-min',
     title: 'Dwa kwadranse',
     badge: null,
-    price: 129,
+    price: 169,
     duration: '30 min',
-    mode: 'audio',
-    who: 'szerszy temat',
-    plan: 'pierwsze kroki + priorytet',
+    mode: 'audio lub video',
+    who: '2-3 watki albo spokojniejsze wejscie',
+    plan: 'pierwsze kroki i kolejnosc dzialan',
     materials: 'krotka notatka',
     refund: 'tak',
     cta: 'Zarezerwuj',
@@ -39,12 +52,12 @@ const SERVICES = [
     id: 'konsultacja-behawioralna-online',
     title: 'Pelna konsultacja',
     badge: null,
-    price: 350,
+    price: 470,
     duration: '60 min',
-    mode: 'audio/video',
-    who: 'sprawa zlozona',
-    plan: 'pelny plan na tygodnie',
-    materials: 'materialy do pobrania',
+    mode: 'audio lub video',
+    who: 'sprawa zlozona albo przewlekla',
+    plan: 'diagnoza i plan poprawy',
+    materials: '7 dni konsultacji przez WhatsApp',
     refund: 'tak, przed startem',
     cta: 'Umow konsultacje',
   },
@@ -57,7 +70,7 @@ const ROWS = [
   { key: 'who', label: 'Dla kogo' },
   { key: 'plan', label: 'Plan pracy' },
   { key: 'materials', label: 'Materialy po rozmowie' },
-  { key: 'refund', label: 'Zwrot w 24h' },
+  { key: 'refund', label: 'Zmiana / zwrot' },
   { key: 'cta', label: 'CTA' },
 ] as const
 
@@ -150,7 +163,7 @@ export function ServicesComparison({ species = null, qaBooking = false, classNam
                 <dd className={service.materials === '-' ? 'services-comparison-empty' : undefined}>{service.materials}</dd>
               </div>
               <div>
-                <dt>Zwrot w 24h</dt>
+                <dt>Zmiana / zwrot</dt>
                 <dd>{service.refund}</dd>
               </div>
             </dl>

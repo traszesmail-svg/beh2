@@ -60,17 +60,20 @@ export function ServiceDecisionSection({
         <article className="notatnik-service-card">
           <div className="notatnik-mono">Pelna konsultacja</div>
           <h3>Kiedy od razu wejsc szerzej</h3>
-          <p>Pelna konsultacja daje wiecej czasu na kontekst, kilka watkow naraz i jasny plan dalszej pracy.</p>
+          <p>Pelna konsultacja daje wiecej czasu na kontekst, kilka watkow naraz, diagnoze i 7 dni wsparcia tekstowego przez WhatsApp.</p>
           <div className="notatnik-service-meta" aria-label="Parametry pelnej konsultacji">
             <span>60 min online</span>
             <span>{getPublicServicePriceLabel('konsultacja-behawioralna-online')}</span>
-            <span>szersza opcja</span>
+            <span>diagnoza + 7 dni</span>
           </div>
           <ul className="notatnik-service-list">
             {consultationBullets.map((bullet) => (
               <li key={bullet}>{bullet}</li>
             ))}
           </ul>
+          <p className="notatnik-service-note">
+            Po rozmowie mozesz przez 7 dni pisac przez WhatsApp, zadawac pytania, wysylac filmy i konsultowac kazdy krok planu. Jesli ten etap nie daje realnego kierunku, kolejnym krokiem bywa wizyta domowa i terapia ustalana indywidualnie.
+          </p>
           <div className="notatnik-service-actions">
             <Link href={consultationHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
               {COPY_CTA.consultation}
