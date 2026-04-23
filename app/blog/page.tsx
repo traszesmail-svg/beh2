@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { LeadMagnetSignup } from '@/components/LeadMagnetSignup'
 import { NewsletterSignup } from '@/components/NewsletterSignup'
-import { NotatnikPageShell } from '@/components/NotatnikA'
+import { NotatnikPageShell, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
 import { BLOG_ROUTE_BASE, getBlogListingMetadata, listBlogPosts } from '@/lib/blog'
 import { buildBookHref } from '@/lib/booking-routing'
@@ -69,13 +69,7 @@ export default function BlogPage() {
   return (
     <NotatnikPageShell
       tag="Blog / zachowanie psow i kotow"
-      navItems={[
-        { href: '/blog', label: 'Blog' },
-        { href: '/psy', label: 'Psy' },
-        { href: '/koty', label: 'Koty' },
-        { href: '/niezbednik', label: 'Niezbednik' },
-        { href: '/kontakt#formularz', label: 'Kontakt' },
-      ]}
+      navItems={PUBLIC_SITE_NAV_ITEMS}
       ctaHref={audioHref}
       ctaLabel={FUNNEL_CTA_LABELS.primary}
       footerPrimaryHref={audioHref}

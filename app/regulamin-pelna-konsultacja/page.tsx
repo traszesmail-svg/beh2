@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LegalPageLayout, type LegalSection, type LegalSummaryItem } from '@/components/LegalPageLayout'
+import { PUBLIC_OFFER_PAYMENT_METHODS } from '@/lib/public-offer-copy'
 import { getBreadcrumbJsonLd } from '@/lib/schema'
 import { buildLegalMetadata } from '@/lib/seo'
 
@@ -16,7 +17,7 @@ const summaryItems: LegalSummaryItem[] = [
   },
   {
     label: 'Platnosc',
-    value: 'BLIK na telefon po potwierdzeniu terminu. Potwierdzenie rezerwacji do 15 minut w godzinach 9-21.',
+    value: `${PUBLIC_OFFER_PAYMENT_METHODS} po potwierdzeniu terminu. Potwierdzenie rezerwacji do 15 minut w godzinach 9-21.`,
   },
 ]
 
@@ -60,10 +61,10 @@ const sections: LegalSection[] = [
     body: (
       <>
         <p>Cena konsultacji: 470 zl brutto.</p>
-        <p>Metody platnosci: BLIK na telefon albo PayPal.me. Dane do wplaty klient otrzymuje emailem po zaakceptowaniu wstepnego terminu.</p>
+        <p>Metody platnosci: {PUBLIC_OFFER_PAYMENT_METHODS}. Dane do wplaty klient otrzymuje emailem po zaakceptowaniu wstepnego terminu.</p>
         <p>Platnosc przyjmowana jest w godzinach 9:00-21:00, poza dniami ustawowo wolnymi od pracy.</p>
-        <p>Potwierdzenie wplyniecia BLIK-a i ostateczne potwierdzenie rezerwacji nastepuje do 15 minut od zaksiogowania wplaty w oknie obslugi.</p>
-        <p>Rezerwacja bez dokonanej platnosci nie jest wiazaca. Termin wraca do puli po 24 godzinach od wyslania numeru BLIK.</p>
+        <p>Potwierdzenie wplyniecia platnosci i ostateczne potwierdzenie rezerwacji nastepuje do 15 minut od zaksiogowania wplaty w oknie obslugi.</p>
+        <p>Rezerwacja bez dokonanej platnosci nie jest wiazaca. Termin wraca do puli po 24 godzinach od wyslania danych do platnosci.</p>
       </>
     ),
   },
@@ -72,7 +73,7 @@ const sections: LegalSection[] = [
     body: (
       <>
           <p>Klient inicjuje rezerwacje przez formularz na stronie /book, wskazujac preferowane terminy oraz opis sytuacji.</p>
-          <p>Uslugodawca odpowiada w ciagu kilku godzin, potwierdza jeden z zaproponowanych terminow albo proponuje inny, wraz z numerem telefonu do BLIK-a.</p>
+          <p>Uslugodawca odpowiada w ciagu kilku godzin, potwierdza jeden z zaproponowanych terminow albo proponuje inny, wraz z dalszym krokiem platnosci.</p>
           <p>Konsultacja jest zarezerwowana dopiero po potwierdzeniu wplaty przez uslugodawce.</p>
           <p>Na 24 godziny przed konsultacja klient otrzymuje e-mail z linkiem do rozmowy i lista materialow do przygotowania, jezeli sa potrzebne.</p>
           <p>Po zakonczeniu konsultacji dalszy 7-dniowy kontakt tekstowy odbywa sie przez WhatsApp, chyba ze strony ustala inny kanal pisemny.</p>

@@ -1,13 +1,14 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { NextSlot } from '@/components/NextSlot'
-import { NotatnikFinalCta, NotatnikPageShell, NotatnikSectionHead } from '@/components/NotatnikA'
+import { NotatnikFinalCta, NotatnikPageShell, NotatnikSectionHead, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
 import { ServicesComparison } from '@/components/ServicesComparison'
 import { getBreadcrumbJsonLd, getServiceJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
 import {
   PUBLIC_OFFER_BOOKING_PROCESS,
+  PUBLIC_OFFER_BOOKING_PAYMENT,
   PUBLIC_OFFER_CANCELLATION_COPY,
   PUBLIC_OFFER_FULL_CONSULTATION_VALUE,
   PUBLIC_OFFER_PRIORITY_VARIANT_NOTE,
@@ -20,15 +21,6 @@ export const metadata: Metadata = buildMarketingMetadata({
   description:
     'Kwadrans 69 zl, Dwa kwadranse 169 zl, Pelna konsultacja 470 zl. Przy Kwadransie moze byc dostepny wariant priorytetowy przy rezerwacji.',
 })
-
-const navItems = [
-  { href: '/psy', label: 'Pies' },
-  { href: '/koty', label: 'Kot' },
-  { href: '/o-mnie', label: 'O mnie' },
-  { href: '/cennik', label: 'Cennik' },
-  { href: '/faq', label: 'FAQ' },
-  { href: '/kontakt#formularz', label: 'Kontakt' },
-]
 
 const pricingFaqItems = [
   {
@@ -58,8 +50,7 @@ const pricingFaqItems = [
   },
   {
     question: 'Jak wyglada platnosc?',
-    answer:
-      'Najpierw uzgadniamy termin, dopiero potem wysylam dane do platnosci. Rezerwacje mozesz oplacic przez PayPal.me albo BLIK na telefon. Po wplacie wraca potwierdzenie i link do rozmowy.',
+    answer: PUBLIC_OFFER_BOOKING_PAYMENT,
   },
 ]
 
@@ -67,7 +58,7 @@ export default function PricingPage() {
   return (
     <NotatnikPageShell
       tag="Cennik / konsultacje"
-      navItems={navItems}
+      navItems={PUBLIC_SITE_NAV_ITEMS}
       ctaHref="/book?service=szybka-konsultacja-15-min"
       ctaLabel="Kwadrans / 69 zl"
       footerPrimaryHref="/book?service=szybka-konsultacja-15-min"

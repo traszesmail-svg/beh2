@@ -8,6 +8,22 @@ export type NotatnikNavItem = {
   label: string
 }
 
+export const PUBLIC_SITE_NAV_ITEMS: readonly NotatnikNavItem[] = [
+  { href: '/psy', label: 'Pies' },
+  { href: '/koty', label: 'Kot' },
+  { href: '/niezbednik', label: 'Niezbednik' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/o-mnie', label: 'O mnie' },
+  { href: '/cennik', label: 'Cennik' },
+  { href: '/kontakt#formularz', label: 'Kontakt' },
+]
+
+export const PUBLIC_BOOKING_FLOW_NAV_ITEMS: readonly NotatnikNavItem[] = [
+  { href: '/cennik', label: 'Cennik' },
+  { href: '/niezbednik', label: 'Niezbednik' },
+  { href: '/kontakt#formularz', label: 'Kontakt' },
+]
+
 type NotatnikTopbarProps = {
   tag: string
   navItems: readonly NotatnikNavItem[]

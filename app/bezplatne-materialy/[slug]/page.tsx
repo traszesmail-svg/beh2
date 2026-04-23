@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import { EditorialFaqSection } from '@/components/EditorialFaqSection'
 import { FunnelPrimaryActions } from '@/components/FunnelPrimaryActions'
 import { LeadMagnetSignup } from '@/components/LeadMagnetSignup'
-import { NotatnikPageShell } from '@/components/NotatnikA'
+import { NotatnikPageShell, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { TrustSignalSection } from '@/components/TrustSignalSection'
 import { buildBookHref } from '@/lib/booking-routing'
 import { getLeadMagnetBySlug, LEAD_MAGNETS } from '@/lib/growth-layer'
@@ -57,13 +57,7 @@ export default function LeadMagnetPage({ params }: LeadMagnetPageProps) {
   return (
     <NotatnikPageShell
       tag="Bezplatny material / start"
-      navItems={[
-        { href: '/psy', label: 'Pies' },
-        { href: '/koty', label: 'Kot' },
-        { href: '/niezbednik', label: 'Niezbednik' },
-        { href: '/o-mnie', label: 'O mnie' },
-        { href: '/kontakt#formularz', label: 'Kontakt' },
-      ]}
+      navItems={PUBLIC_SITE_NAV_ITEMS}
       ctaHref={audioHref}
       ctaLabel="Kwadrans / 69 zl"
       footerPrimaryHref={audioHref}

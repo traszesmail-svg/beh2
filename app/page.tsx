@@ -1,8 +1,7 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { NextSlot } from '@/components/NextSlot'
-import { NotatnikFinalCta, NotatnikFooter, NotatnikSectionHead, NotatnikTopbar } from '@/components/NotatnikA'
+import { NotatnikFinalCta, NotatnikFooter, NotatnikSectionHead, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { OfferEntrySection } from '@/components/OfferEntrySection'
 import { Schema } from '@/components/schema'
 import { ServiceDecisionSection } from '@/components/ServiceDecisionSection'
@@ -18,16 +17,6 @@ import { PUBLIC_OFFER_LEAD, PUBLIC_OFFER_PRIORITY_VARIANT_NOTE, PUBLIC_OFFER_PRI
 export async function generateMetadata(): Promise<Metadata> {
   return buildHomeMetadata()
 }
-
-const navItems = [
-  { href: '/psy', label: 'Pies' },
-  { href: '/koty', label: 'Kot' },
-  { href: '/niezbednik', label: 'Niezbednik' },
-  { href: '/o-mnie', label: 'O mnie' },
-  { href: '/cennik', label: 'Cennik' },
-  { href: '/faq', label: 'FAQ' },
-  { href: '/kontakt#formularz', label: 'Kontakt' },
-]
 
 const serviceLandingHref = '/behawiorysta-online-polska'
 
@@ -110,19 +99,22 @@ export default function HomePage() {
     <main className="notatnik-page">
       <Schema data={structuredData} />
       <div className="notatnik-side-visual notatnik-side-visual-left" aria-hidden="true">
-        <Image src="/branding/side-left.jpg" alt="" fill sizes="280px" />
+        <Image src="/branding/side-left.jpg" alt="" fill sizes="(max-width: 1600px) 240px, 360px" quality={100} />
       </div>
       <div className="notatnik-side-visual notatnik-side-visual-right" aria-hidden="true">
-        <Image src="/branding/side-right.jpg" alt="" fill sizes="280px" />
+        <Image src="/branding/side-right.jpg" alt="" fill sizes="(max-width: 1600px) 240px, 360px" quality={100} />
       </div>
       <div className="notatnik-shell">
-        <NotatnikTopbar tag="Terapia behawioralna / psy i koty" navItems={navItems} ctaHref={FUNNEL_PRIMARY_HREF} ctaLabel="Kwadrans / 69 zl" />
+        <NotatnikTopbar
+          tag="Terapia behawioralna / psy i koty"
+          navItems={PUBLIC_SITE_NAV_ITEMS}
+          ctaHref={FUNNEL_PRIMARY_HREF}
+          ctaLabel="Kwadrans 69 zl"
+          ctaVariant="accent"
+        />
 
         <section className="notatnik-hero">
-          <div className="notatnik-hero-kicker notatnik-mono">
-            <span className="notatnik-hero-edition">Nr 01 / 2026</span>
-            <span>Spokojny start dla opiekunow psow i kotow</span>
-          </div>
+          <div className="notatnik-hero-kicker notatnik-mono">Spokojny start dla opiekunow psow i kotow</div>
 
           <h1>
             Problem z zachowaniem psa albo kota? <em>Wybierz spokojny pierwszy krok.</em>
@@ -133,8 +125,6 @@ export default function HomePage() {
               <p className="notatnik-hero-lede">
                 {PUBLIC_OFFER_LEAD}
               </p>
-
-              <NextSlot className="top-gap-small" />
 
               <div className="notatnik-hero-cta">
                 <Link href={FUNNEL_PRIMARY_HREF} prefetch={false} className="notatnik-btn">
@@ -162,7 +152,6 @@ export default function HomePage() {
             </div>
 
             <aside className="notatnik-hero-card">
-              <div className="notatnik-hero-card-corner notatnik-mono">Najprostszy start</div>
               <div className="notatnik-hero-card-media">
                 <Image
                   src="/branding/omnie-hero.webp"

@@ -52,8 +52,13 @@ export const PUBLIC_OFFER_BOOKING_PROCESS = [
   '3. Po potwierdzeniu dostajesz dalszy krok platnosci i finalne potwierdzenie rozmowy.',
 ] as const
 
+export const PUBLIC_OFFER_PAYMENT_METHODS = 'PayPal albo BLIK na telefon'
+
+export const PUBLIC_OFFER_PAYMENT_EMAIL_STEP =
+  'W mailu dostajesz przycisk do PayPal albo instrukcje BLIK na telefon.'
+
 export const PUBLIC_OFFER_BOOKING_PAYMENT =
-  'Najpierw uzgadniamy termin, dopiero potem wysylam dane do platnosci. Rezerwacje mozesz oplacic przez PayPal.me albo BLIK na telefon. Po wplacie wraca potwierdzenie i link do rozmowy.'
+  `Najpierw uzgadniamy termin, dopiero potem wysylam dane do platnosci. Rezerwacje mozesz oplacic przez ${PUBLIC_OFFER_PAYMENT_METHODS}. Po wplacie wraca potwierdzenie i link do rozmowy.`
 
 export const PUBLIC_OFFER_FULL_CONSULTATION_VALUE =
   'Pelna konsultacja nie jest dluzsza wersja Kwadransu. To osobny format dla spraw, ktore wymagaja wiecej czasu, szerszego tla i wsparcia po rozmowie. Obejmuje 60 minut konsultacji online, diagnoze sytuacji, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.'

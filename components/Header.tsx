@@ -10,6 +10,7 @@ import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { FUNNEL_SECONDARY_HREF } from '@/lib/offers'
 import { INSTAGRAM_PROFILE_URL, SITE_HEADER_BRAND, SITE_HEADER_SUBTITLE, SITE_NAME } from '@/lib/site'
 
+// Legacy header kept only for older marketing layouts and special/internal flows.
 type NavItem = {
   href: string
   label: string

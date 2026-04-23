@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { NotatnikFinalCta, NotatnikFooter, NotatnikSectionHead, NotatnikTopbar } from '@/components/NotatnikA'
+import { NotatnikFinalCta, NotatnikFooter, NotatnikSectionHead, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
 import { buildBookHref } from '@/lib/booking-routing'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
@@ -19,14 +19,6 @@ export const metadata: Metadata = baseMetadata
 
 const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min')
 const contactHref = '/kontakt#formularz'
-
-const navItems = [
-  { href: '/psy', label: 'Pies' },
-  { href: '/koty', label: 'Kot' },
-  { href: '/niezbednik', label: 'Niezbednik' },
-  { href: '/o-mnie', label: 'O mnie' },
-  { href: '/kontakt#formularz', label: 'Kontakt' },
-]
 
 const topicLinks = [
   {
@@ -62,7 +54,7 @@ export default function FaqPage() {
     <main className="notatnik-page">
       <Schema data={structuredData} />
       <div className="notatnik-shell">
-        <NotatnikTopbar tag="FAQ / najczestsze pytania" navItems={navItems} ctaHref={audioHref} ctaLabel={FUNNEL_CTA_LABELS.primary} />
+        <NotatnikTopbar tag="FAQ / najczestsze pytania" navItems={PUBLIC_SITE_NAV_ITEMS} ctaHref={audioHref} ctaLabel={FUNNEL_CTA_LABELS.primary} />
 
         <section className="notatnik-subhero">
           <div>

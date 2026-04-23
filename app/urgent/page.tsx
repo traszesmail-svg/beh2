@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { NotatnikPageShell, NotatnikSectionHead } from '@/components/NotatnikA'
+import { NotatnikPageShell, NotatnikSectionHead, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
 import { getBreadcrumbJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
-import { PUBLIC_OFFER_BOOKING_PAYMENT, PUBLIC_OFFER_PRICES } from '@/lib/public-offer-copy'
+import { PUBLIC_OFFER_BOOKING_PAYMENT, PUBLIC_OFFER_PAYMENT_METHODS, PUBLIC_OFFER_PRICES } from '@/lib/public-offer-copy'
 import { UrgentForm } from './UrgentForm'
 
 export const metadata: Metadata = buildMarketingMetadata({
@@ -13,14 +13,6 @@ export const metadata: Metadata = buildMarketingMetadata({
   description:
     'Wyslij prosbe o Kwadrans na juz. To ten sam 15-minutowy format co Kwadrans, ale z priorytetem i mozliwie szybkim terminem.',
 })
-
-const navItems = [
-  { href: '/psy', label: 'Pies' },
-  { href: '/koty', label: 'Kot' },
-  { href: '/cennik', label: 'Cennik' },
-  { href: '/faq', label: 'FAQ' },
-  { href: '/kontakt#formularz', label: 'Kontakt' },
-]
 
 const HOW_IT_WORKS = [
   {
@@ -44,7 +36,7 @@ export default function UrgentPage() {
   return (
     <NotatnikPageShell
       tag="Kwadrans na juz / 99 zl"
-      navItems={navItems}
+      navItems={PUBLIC_SITE_NAV_ITEMS}
       ctaHref="/urgent"
       ctaLabel="Kwadrans na juz / 99 zl"
       footerPrimaryHref="/book?service=szybka-konsultacja-15-min"
@@ -70,7 +62,7 @@ export default function UrgentPage() {
             ciagu 15 minut od Twojej prosby.
           </p>
           <div className="info-box top-gap-small">
-            Cena: {PUBLIC_OFFER_PRICES.urgent} zl. Platnosc przychodzi dopiero po potwierdzeniu terminu - PayPal.me albo BLIK na telefon.
+            Cena: {PUBLIC_OFFER_PRICES.urgent} zl. Platnosc przychodzi dopiero po potwierdzeniu terminu - {PUBLIC_OFFER_PAYMENT_METHODS}.
           </div>
         </div>
 
@@ -129,7 +121,7 @@ export default function UrgentPage() {
             </article>
             <article className="notatnik-step">
               <div className="notatnik-step-number">03</div>
-              <p>Po wplacie 99 zl przez PayPal.me albo BLIK potwierdzam rezerwacje i wysylam link do rozmowy.</p>
+              <p>Po wplacie 99 zl przez {PUBLIC_OFFER_PAYMENT_METHODS} potwierdzam rezerwacje i wysylam link do rozmowy.</p>
             </article>
           </div>
 

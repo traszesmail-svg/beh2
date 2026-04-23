@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { TrustSignalSection } from '@/components/TrustSignalSection'
-import { NotatnikPageShell } from '@/components/NotatnikA'
+import { NotatnikPageShell, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { buildBookHref } from '@/lib/booking-routing'
 import { getLeadMagnetBySlug } from '@/lib/growth-layer'
 import { buildTechnicalMetadata } from '@/lib/seo'
@@ -26,13 +26,7 @@ export default function LeadMagnetThankYouPage({
   return (
     <NotatnikPageShell
       tag="Material pobrany"
-      navItems={[
-        { href: '/psy', label: 'Pies' },
-        { href: '/koty', label: 'Kot' },
-        { href: '/niezbednik', label: 'Niezbednik' },
-        { href: '/o-mnie', label: 'O mnie' },
-        { href: '/kontakt#formularz', label: 'Kontakt' },
-      ]}
+      navItems={PUBLIC_SITE_NAV_ITEMS}
       ctaHref={audioHref}
       ctaLabel="Kwadrans / 69 zl"
       footerPrimaryHref={audioHref}

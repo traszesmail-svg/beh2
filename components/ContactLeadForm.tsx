@@ -1,8 +1,7 @@
 'use client'
 
-import React from 'react'
 import Link from 'next/link'
-import { useEffect, useRef, useState, type FormEvent } from 'react'
+import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { trackAnalyticsEvent } from '@/lib/analytics'
 import { getProblemOptionsForSpecies, getPublicProblemOptionById, type FunnelSpecies } from '@/lib/funnel'
@@ -10,11 +9,12 @@ import { URGENT_NOW_INTENT, isUrgentNowIntent } from '@/lib/urgent-now'
 
 type FormState = 'idle' | 'loading' | 'success' | 'error'
 type Species = FunnelSpecies
+type SelectedSpecies = Species | ''
 
 type SubmissionPayload = {
   name: string
   contact: string
-  species: Species
+  species: SelectedSpecies
   topicId: string
   message: string
   requestedDate: string
@@ -26,7 +26,7 @@ type SubmissionPayload = {
 
 const MESSAGE_MAX_LENGTH = 500
 
-function createInitialForm(species: Species = 'pies'): SubmissionPayload {
+function createInitialForm(species: SelectedSpecies = ''): SubmissionPayload {
   return {
     name: '',
     contact: '',
@@ -70,11 +70,11 @@ export function ContactLeadForm() {
   const presetSpecies = normalizeSpeciesPreset(searchParams?.get('species') ?? null)
   const intent = searchParams?.get('intent') ?? searchParams?.get('service') ?? null
   const isUrgentNow = isUrgentNowIntent(intent)
-  const [form, setForm] = useState<SubmissionPayload>(createInitialForm(presetSpecies ?? 'pies'))
+  const [form, setForm] = useState<SubmissionPayload>(createInitialForm(presetSpecies ?? ''))
   const [status, setStatus] = useState<FormState>('idle')
   const [feedback, setFeedback] = useState('')
   const startedRef = useRef(false)
-  const topicOptions = getProblemOptionsForSpecies(form.species)
+  const topicOptions = useMemo(() => (form.species ? getProblemOptionsForSpecies(form.species) : []), [form.species])
   const messageLength = form.message.length
   const isSubmitDisabled = status === 'loading' || !form.consentProcessing || !form.consentPolicy
 
@@ -138,6 +138,10 @@ export function ContactLeadForm() {
       return 'Podaj poprawny adres e-mail.'
     }
 
+    if (!form.species) {
+      return 'Wybierz, czy sprawa dotyczy psa czy kota.'
+    }
+
     if (!form.topicId || !getPublicProblemOptionById(form.species, form.topicId)) {
       return 'Wybierz temat.'
     }
@@ -173,6 +177,14 @@ export function ContactLeadForm() {
       return
     }
 
+    const selectedSpecies = form.species
+
+    if (!selectedSpecies) {
+      setStatus('error')
+      setFeedback('Wybierz, czy sprawa dotyczy psa czy kota.')
+      return
+    }
+
     setStatus('loading')
     setFeedback('')
 
@@ -188,7 +200,7 @@ export function ContactLeadForm() {
           name: normalizeShortText(form.name),
           email: normalizeShortText(form.contact),
           contact: normalizeShortText(form.contact),
-          species: form.species,
+          species: selectedSpecies,
           topicId: form.topicId,
           message: normalizedMessage,
           requestedDate: isUrgentNow ? form.requestedDate : null,
@@ -209,7 +221,7 @@ export function ContactLeadForm() {
 
       trackAnalyticsEvent('contact_form_submitted', {
         source_page: '/kontakt',
-        species: form.species,
+        species: selectedSpecies,
         problem_key: form.topicId,
         intent: isUrgentNow ? URGENT_NOW_INTENT : 'contact',
       })
@@ -221,7 +233,7 @@ export function ContactLeadForm() {
             ? 'Dziekuje. Prosba o Kwadrans na juz zostala przyjeta. Odpowiem na podany adres e-mail w ciagu 15 minut z propozycja terminu.'
             : 'Wyslane. Odpowiem w 1-2 dni roboczych. Sprawdz skrzynke - masz tez kopie.'),
       )
-      setForm((current) => createInitialForm(presetSpecies ?? current.species))
+      setForm(createInitialForm(presetSpecies ?? ''))
       startedRef.current = false
     } catch (error) {
       setStatus('error')
@@ -251,6 +263,52 @@ export function ContactLeadForm() {
       </div>
 
       <div className="section-eyebrow contact-form-kicker">{isUrgentNow ? 'Kwadrans na juz' : 'Krotka wiadomosc'}</div>
+
+      <div className="form-field">
+        <label htmlFor="contact-species">Gatunek</label>
+        <select
+          id="contact-species"
+          name="species"
+          value={form.species}
+          onChange={(event) => updateField('species', event.target.value as SelectedSpecies)}
+          onFocus={markStarted}
+          aria-describedby="contact-species-help"
+        >
+          <option value="">Wybierz gatunek</option>
+          <option value="pies">Pies</option>
+          <option value="kot">Kot</option>
+        </select>
+        <div className="field-help" id="contact-species-help">
+          {form.species
+            ? `Lista tematow ponizej pokazuje teraz tylko opcje dla ${getSpeciesLabel(form.species).toLowerCase()}.`
+            : 'Najpierw wybierz, czy sprawa dotyczy psa czy kota. Potem pokaze wlasciwe tematy.'}
+        </div>
+      </div>
+
+      <div className="form-field">
+        <label htmlFor="contact-topic">Temat</label>
+        <select
+          id="contact-topic"
+          name="topic"
+          value={form.topicId}
+          onChange={(event) => updateField('topicId', event.target.value)}
+          onFocus={markStarted}
+          disabled={!form.species}
+          aria-describedby="contact-topic-help"
+        >
+          <option value="">{form.species ? 'Wybierz temat' : 'Najpierw wybierz gatunek'}</option>
+          {topicOptions.map((topic) => (
+            <option key={topic.id} value={topic.id}>
+              {topic.title}
+            </option>
+          ))}
+        </select>
+        <div className="field-help" id="contact-topic-help">
+          {form.species
+            ? `Dobierz temat mozliwie najblizszy sytuacji ${getSpeciesLabel(form.species).toLowerCase()}.`
+            : 'Po wyborze gatunku pojawi sie lista tematow tylko dla psa albo kota.'}
+        </div>
+      </div>
 
       <div className="form-field">
         <label htmlFor="contact-name">Imie</label>
@@ -287,39 +345,6 @@ export function ContactLeadForm() {
             ? 'Na ten adres odpowiem w sprawie Kwadransa na juz w ciagu 15 minut.'
             : 'Na ten adres odpowiem w sprawie wiadomosci, zwykle w ciagu 1-2 dni roboczych.'}
         </div>
-      </div>
-
-      <div className="form-field">
-        <label htmlFor="contact-species">Gatunek</label>
-        <select
-          id="contact-species"
-          name="species"
-          value={form.species}
-          onChange={(event) => updateField('species', event.target.value as Species)}
-          onFocus={markStarted}
-        >
-          <option value="pies">Pies</option>
-          <option value="kot">Kot</option>
-        </select>
-      </div>
-
-      <div className="form-field">
-        <label htmlFor="contact-topic">Temat</label>
-        <select
-          id="contact-topic"
-          name="topic"
-          value={form.topicId}
-          onChange={(event) => updateField('topicId', event.target.value)}
-          onFocus={markStarted}
-        >
-          <option value="">Wybierz temat</option>
-          {topicOptions.map((topic) => (
-            <option key={topic.id} value={topic.id}>
-              {topic.title}
-            </option>
-          ))}
-        </select>
-        <div className="field-help">Dobierz temat mozliwie najblizszy sytuacji {getSpeciesLabel(form.species).toLowerCase()}.</div>
       </div>
 
       {isUrgentNow ? (

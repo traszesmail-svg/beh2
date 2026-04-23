@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { NotatnikPageShell } from '@/components/NotatnikA'
+import { NotatnikPageShell, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { OFFERS, getOfferBySlug } from '@/lib/offers'
 import { buildMarketingMetadata } from '@/lib/seo'
@@ -80,13 +80,7 @@ export default async function OfferDetailPage({ params }: OfferDetailPageProps) 
   return (
     <NotatnikPageShell
       tag="Oferta / szczegoly"
-      navItems={[
-        { href: '/psy', label: 'Pies' },
-        { href: '/koty', label: 'Kot' },
-        { href: '/niezbednik', label: 'Niezbednik' },
-        { href: '/o-mnie', label: 'O mnie' },
-        { href: '/kontakt#formularz', label: 'Kontakt' },
-      ]}
+      navItems={PUBLIC_SITE_NAV_ITEMS}
       ctaHref={offer.primaryHref}
       ctaLabel={offer.primaryCtaLabel}
       footerPrimaryHref={offer.primaryHref}

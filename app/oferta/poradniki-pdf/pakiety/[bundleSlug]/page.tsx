@@ -2,7 +2,7 @@ import React from 'react'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { NotatnikPageShell } from '@/components/NotatnikA'
+import { NotatnikPageShell, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { PdfGuideCard } from '@/components/PdfGuideCard'
 import { PdfGuideCoverStack } from '@/components/PdfGuideCoverStack'
 import { repairCopy } from '@/lib/copy'
@@ -62,13 +62,7 @@ export default function PdfBundleDetailPage({ params }: PdfBundleDetailPageProps
   return (
     <NotatnikPageShell
       tag="Poradniki PDF / pakiet"
-      navItems={[
-        { href: '/psy', label: 'Pies' },
-        { href: '/koty', label: 'Kot' },
-        { href: '/niezbednik', label: 'Niezbednik' },
-        { href: '/o-mnie', label: 'O mnie' },
-        { href: '/kontakt#formularz', label: 'Kontakt' },
-      ]}
+      navItems={PUBLIC_SITE_NAV_ITEMS}
       ctaHref={orderHref}
       ctaLabel="Zamów pakiet"
       footerPrimaryHref={orderHref}

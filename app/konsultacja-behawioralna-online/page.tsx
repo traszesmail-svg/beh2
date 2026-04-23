@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { EditorialFaqSection } from '@/components/EditorialFaqSection'
 import { LeadMagnetSignup } from '@/components/LeadMagnetSignup'
-import { NotatnikPageShell } from '@/components/NotatnikA'
+import { NotatnikPageShell, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
 import { TrustSignalSection } from '@/components/TrustSignalSection'
 import { buildBookHref } from '@/lib/booking-routing'
@@ -100,13 +100,7 @@ export default function ConsultationOnlinePage() {
   return (
     <NotatnikPageShell
       tag="Konsultacja / pelny opis"
-      navItems={[
-        { href: '/psy', label: 'Pies' },
-        { href: '/koty', label: 'Kot' },
-        { href: '/niezbednik', label: 'Niezbednik' },
-        { href: '/o-mnie', label: 'O mnie' },
-        { href: '/kontakt#formularz', label: 'Kontakt' },
-      ]}
+      navItems={PUBLIC_SITE_NAV_ITEMS}
       ctaHref={consultationHref}
       ctaLabel={FUNNEL_CTA_LABELS.consultation}
       footerPrimaryHref={consultationHref}

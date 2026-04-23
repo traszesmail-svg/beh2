@@ -1,6 +1,7 @@
-﻿'use client'
+'use client'
 
 import { useState, type FormEvent } from 'react'
+import { PUBLIC_OFFER_PAYMENT_METHODS } from '@/lib/public-offer-copy'
 
 type PdfOrderFormProps = {
   itemType: 'guide' | 'bundle'
@@ -37,7 +38,7 @@ export function PdfOrderForm({ itemType, itemSlug, itemTitle, itemPrice }: PdfOr
 
     if (!name.trim()) {
       setStatus('error')
-      setFeedback('Podaj imiÄ™.')
+      setFeedback('Podaj imie.')
       return
     }
 
@@ -49,7 +50,7 @@ export function PdfOrderForm({ itemType, itemSlug, itemTitle, itemPrice }: PdfOr
 
     if (!consentProcessing || !consentPolicy) {
       setStatus('error')
-      setFeedback('Zaznacz zgody na kontakt i politykÄ™ prywatnoĹ›ci.')
+      setFeedback('Zaznacz zgody na kontakt i polityke prywatnosci.')
       return
     }
 
@@ -77,26 +78,26 @@ export function PdfOrderForm({ itemType, itemSlug, itemTitle, itemPrice }: PdfOr
       const payload = (await response.json()) as { ok?: boolean; message?: string; error?: string }
 
       if (!response.ok || !payload.ok) {
-        throw new Error(payload.error ?? 'Nie udaĹ‚o siÄ™ wysĹ‚aÄ‡ zamĂłwienia. SprĂłbuj ponownie pĂłĹşniej.')
+        throw new Error(payload.error ?? 'Nie udalo sie wyslac zamowienia. Sprobuj ponownie pozniej.')
       }
 
       setStatus('success')
-      setFeedback(payload.message ?? 'Dziekuje. Wyslalem potwierdzenie mailowe z dalszym krokiem platnosci. PayPal i BLIK na telefon sa obslugiwane bez publikowania numeru na stronie.')
+      setFeedback(payload.message ?? `Dziekuje. Wyslalem potwierdzenie mailowe z dalszym krokiem platnosci: ${PUBLIC_OFFER_PAYMENT_METHODS}.`)
       resetForm()
     } catch (error) {
       setStatus('error')
-      setFeedback(error instanceof Error ? error.message : 'Nie udaĹ‚o siÄ™ wysĹ‚aÄ‡ zamĂłwienia. SprĂłbuj ponownie pĂłĹşniej.')
+      setFeedback(error instanceof Error ? error.message : 'Nie udalo sie wyslac zamowienia. Sprobuj ponownie pozniej.')
     }
   }
 
   return (
     <form className="form-grid top-gap" onSubmit={handleSubmit} noValidate>
       <div className="info-box full-width">
-        Zamowienie dotyczy: <strong>{itemTitle}</strong> ({itemPrice}). Po wyslaniu formularza dostajesz mail z dalszym krokiem platnosci. PayPal i BLIK na telefon sa obslugiwane bez publikowania numeru na stronie.
+        Zamowienie dotyczy: <strong>{itemTitle}</strong> ({itemPrice}). Po wyslaniu formularza dostajesz mail z dalszym krokiem platnosci: {PUBLIC_OFFER_PAYMENT_METHODS}. BLIK na telefon zostaje dostepny bez publikowania numeru na stronie.
       </div>
 
       <div className="form-field">
-        <label htmlFor="pdf-order-name">ImiÄ™</label>
+        <label htmlFor="pdf-order-name">Imie</label>
         <input id="pdf-order-name" value={name} onChange={(event) => setName(event.target.value)} placeholder="np. Anna" autoComplete="name" />
       </div>
 
@@ -113,13 +114,13 @@ export function PdfOrderForm({ itemType, itemSlug, itemTitle, itemPrice }: PdfOr
       </div>
 
       <div className="full-width form-field">
-        <label htmlFor="pdf-order-notes">KrĂłtka wiadomoĹ›Ä‡</label>
+        <label htmlFor="pdf-order-notes">Krotka wiadomosc</label>
         <textarea
           id="pdf-order-notes"
           rows={4}
           value={notes}
           onChange={(event) => setNotes(event.target.value)}
-          placeholder="Jesli chcesz, dopisz krotko, czego dotyczy sytuacja albo czy wolisz PayPal czy BLIK na telefon."
+          placeholder="Jesli chcesz, dopisz krotko, czego dotyczy sytuacja albo czy wolisz PayPal albo BLIK na telefon."
         />
       </div>
 
@@ -133,7 +134,7 @@ export function PdfOrderForm({ itemType, itemSlug, itemTitle, itemPrice }: PdfOr
             checked={consentProcessing}
             onChange={(event) => setConsentProcessing(event.target.checked)}
           />
-          <span>WyraĹĽam zgodÄ™ na przetwarzanie danych w celu obsĹ‚ugi zamĂłwienia PDF.</span>
+          <span>Wyrazam zgode na przetwarzanie danych w celu obslugi zamowienia PDF.</span>
         </label>
 
         <label className="checkbox-card" htmlFor="pdf-order-consent-policy">
@@ -143,7 +144,7 @@ export function PdfOrderForm({ itemType, itemSlug, itemTitle, itemPrice }: PdfOr
             checked={consentPolicy}
             onChange={(event) => setConsentPolicy(event.target.checked)}
           />
-          <span>AkceptujÄ™ politykÄ™ prywatnoĹ›ci i regulamin w zakresie potrzebnym do kontaktu.</span>
+          <span>Akceptuje polityke prywatnosci i regulamin w zakresie potrzebnym do kontaktu.</span>
         </label>
       </fieldset>
 
@@ -159,7 +160,13 @@ export function PdfOrderForm({ itemType, itemSlug, itemTitle, itemPrice }: PdfOr
         aria-hidden="true"
       >
         <label htmlFor="pdf-order-website">Strona internetowa</label>
-        <input id="pdf-order-website" tabIndex={-1} autoComplete="off" value={website} onChange={(event) => setWebsite(event.target.value)} />
+        <input
+          id="pdf-order-website"
+          tabIndex={-1}
+          autoComplete="off"
+          value={website}
+          onChange={(event) => setWebsite(event.target.value)}
+        />
       </div>
 
       {feedback ? (
@@ -170,7 +177,7 @@ export function PdfOrderForm({ itemType, itemSlug, itemTitle, itemPrice }: PdfOr
 
       <div className="full-width">
         <button type="submit" className="button button-primary big-button" disabled={isSubmitting}>
-          {isSubmitting ? 'WysyĹ‚am zamĂłwienie...' : `ZamĂłw ${itemType === 'bundle' ? 'pakiet PDF' : 'PDF'}`}
+          {isSubmitting ? 'Wysylam zamowienie...' : `Zamow ${itemType === 'bundle' ? 'pakiet PDF' : 'PDF'}`}
         </button>
       </div>
     </form>

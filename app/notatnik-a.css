@@ -90,28 +90,28 @@ html[data-theme='dark'] .notatnik-page {
 
 .notatnik-side-visual {
   position: fixed;
-  top: 120px;
-  bottom: 32px;
+  top: 0;
+  bottom: 0;
   z-index: 0;
-  width: max(0px, calc((100vw - min(1320px, calc(100vw - 48px))) / 2 - 24px));
+  width: max(0px, calc((100vw - min(1320px, calc(100vw - 48px))) / 2));
   box-sizing: border-box;
-  padding: 16px 12px;
+  padding: 0;
   overflow: hidden;
-  opacity: 0.82;
+  opacity: 1;
   pointer-events: none;
 }
 
 .notatnik-side-visual img {
   object-fit: cover;
-  object-position: center;
+  object-position: 50% 50%;
 }
 
 .notatnik-side-visual-left img {
-  object-position: 58% center;
+  object-position: 56% 48%;
 }
 
 .notatnik-side-visual-right img {
-  object-position: 42% center;
+  object-position: 50% 48%;
 }
 
 .notatnik-side-visual-left {
@@ -120,13 +120,6 @@ html[data-theme='dark'] .notatnik-page {
 
 .notatnik-side-visual-right {
   right: 0;
-}
-
-.notatnik-side-visual::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--side-visual-overlay);
 }
 
 .notatnik-topbar {
@@ -272,9 +265,9 @@ html[data-theme='dark'] .notatnik-theme-toggle-thumb {
   justify-content: center;
   gap: 10px;
   padding: 11px 18px;
-  border: 1px solid var(--ink);
+  border: 1px solid var(--accent-warm);
   border-radius: 999px;
-  background: var(--ink);
+  background: var(--accent-warm);
   color: var(--paper);
   font-size: 13px;
   text-decoration: none;
@@ -467,22 +460,25 @@ html[data-theme='dark'] .notatnik-theme-toggle-thumb {
 
 .notatnik-btn:hover {
   transform: translateY(-1px);
+  background: color-mix(in srgb, var(--accent-warm) 88%, #8b5120);
+  border-color: color-mix(in srgb, var(--accent-warm) 88%, #8b5120);
 }
 
 .notatnik-btn-ghost {
-  background: transparent;
+  background: color-mix(in srgb, var(--paper) 90%, var(--accent-warm));
+  border-color: color-mix(in srgb, var(--accent-warm) 38%, var(--line));
   color: var(--ink);
 }
 
 .notatnik-btn-accent {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--accent-warm);
+  border-color: var(--accent-warm);
   color: var(--paper);
 }
 
 .notatnik-btn-urgent {
-  background: var(--ink);
-  border-color: var(--ink);
+  background: color-mix(in srgb, var(--accent-warm) 82%, #7e4519);
+  border-color: color-mix(in srgb, var(--accent-warm) 82%, #7e4519);
   color: var(--paper);
 }
 

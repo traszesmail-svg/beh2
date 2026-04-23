@@ -15,6 +15,11 @@ type AnalyticsConsentProps = {
   cookiebotDomainGroupId?: string | null
 }
 
+const FALLBACK_BANNER_DELAY_MS = 1400
+const FALLBACK_BANNER_SCROLL_OFFSET = 64
+const FALLBACK_BANNER_COMPACT_SCROLL_OFFSET = 200
+const FALLBACK_BANNER_COMPACT_VIEWPORT_QUERY = '(max-width: 540px)'
+
 declare global {
   interface Window {
     Cookiebot?: {
@@ -45,9 +50,11 @@ function readCookiebotStatisticsConsent(): AnalyticsConsentState {
 
 export function AnalyticsConsent({ measurementId, cookiebotDomainGroupId }: AnalyticsConsentProps) {
   const [consent, setConsent] = useState<AnalyticsConsentState>('unset')
+  const [isFallbackBannerReady, setIsFallbackBannerReady] = useState(false)
   const pathname = usePathname() ?? '/'
   const searchParams = useSearchParams()
   const hasCookiebot = Boolean(cookiebotDomainGroupId)
+  const shouldShowFallbackBanner = !hasCookiebot && Boolean(measurementId) && consent === 'unset'
 
   useEffect(() => {
     if (!measurementId) {
@@ -133,6 +140,62 @@ export function AnalyticsConsent({ measurementId, cookiebotDomainGroupId }: Anal
     })
   }, [consent, measurementId, pathname, searchParams])
 
+  useEffect(() => {
+    if (!shouldShowFallbackBanner) {
+      setIsFallbackBannerReady(false)
+      return
+    }
+
+    let revealed = false
+    const isCompactViewport = window.matchMedia(FALLBACK_BANNER_COMPACT_VIEWPORT_QUERY).matches
+    const scrollOffset = isCompactViewport
+      ? FALLBACK_BANNER_COMPACT_SCROLL_OFFSET
+      : FALLBACK_BANNER_SCROLL_OFFSET
+
+    const revealBanner = () => {
+      if (revealed) {
+        return
+      }
+
+      revealed = true
+      setIsFallbackBannerReady(true)
+    }
+
+    const timeoutId = isCompactViewport ? null : window.setTimeout(revealBanner, FALLBACK_BANNER_DELAY_MS)
+
+    const handleScroll = () => {
+      if (window.scrollY > scrollOffset) {
+        if (timeoutId !== null) {
+          window.clearTimeout(timeoutId)
+        }
+        revealBanner()
+      }
+    }
+
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+
+    return () => {
+      if (timeoutId !== null) {
+        window.clearTimeout(timeoutId)
+      }
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [shouldShowFallbackBanner])
+
+  useEffect(() => {
+    if (typeof document === 'undefined') {
+      return
+    }
+
+    if (shouldShowFallbackBanner && isFallbackBannerReady) {
+      document.body.setAttribute('data-consent-banner-visible', 'true')
+      return () => document.body.removeAttribute('data-consent-banner-visible')
+    }
+
+    document.body.removeAttribute('data-consent-banner-visible')
+  }, [isFallbackBannerReady, shouldShowFallbackBanner])
+
   if (!measurementId && !hasCookiebot) {
     return null
   }
@@ -173,12 +236,19 @@ export function AnalyticsConsent({ measurementId, cookiebotDomainGroupId }: Anal
         </>
       ) : null}
 
-      {!hasCookiebot && measurementId && consent === 'unset' ? (
-        <div className="consent-banner" role="dialog" aria-labelledby="consent-title" aria-describedby="consent-copy">
+      {shouldShowFallbackBanner && isFallbackBannerReady ? (
+        <div
+          className="consent-banner"
+          data-consent-banner="fallback"
+          role="dialog"
+          aria-labelledby="consent-title"
+          aria-describedby="consent-copy"
+          aria-modal="false"
+        >
           <div className="consent-copy">
-            <strong id="consent-title">Analityka po wyrazeniu zgody</strong>
+            <strong id="consent-title">Analityka po Twojej zgodzie</strong>
             <span id="consent-copy">
-              Analityka uruchamia sie dopiero po Twojej decyzji i sluzy wylacznie do pomiaru korzystania z serwisu oraz rezerwacji.
+              Statystyki wlaczam dopiero po decyzji. Pomagaja mi sprawdzac, skad trafiasz na strone i czy formularze oraz rezerwacja dzialaja poprawnie.
             </span>
           </div>
           <div className="consent-actions">

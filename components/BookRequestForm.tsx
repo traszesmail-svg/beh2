@@ -2,24 +2,26 @@
 
 import Link from 'next/link'
 import { useMemo, useState, type FormEvent } from 'react'
+import type { BookingServiceType } from '@/lib/booking-services'
 import type { BookingSpecies } from '@/lib/booking-routing'
 import {
   PUBLIC_OFFER_BOOKING_LEAD,
+  PUBLIC_OFFER_PAYMENT_EMAIL_STEP,
   PUBLIC_OFFER_BOOKING_PRIORITY_NOTE,
   PUBLIC_OFFER_BOOKING_PRIORITY_PROMPT,
   PUBLIC_OFFER_BOOKING_REASSURANCE,
 } from '@/lib/public-offer-copy'
 
-type BookingServiceId = 'kwadrans-na-juz' | 'szybka-konsultacja-15-min' | 'konsultacja-30-min' | 'konsultacja-behawioralna-online'
 type FormState = 'idle' | 'loading' | 'success' | 'error'
 
 type BookRequestFormProps = {
-  initialService: BookingServiceId
+  initialService: BookingServiceType
   initialSpecies: BookingSpecies | null
+  entryService: BookingServiceType | null
 }
 
 type BookingRequestPayload = {
-  service: BookingServiceId
+  service: BookingServiceType
   name: string
   email: string
   species: BookingSpecies
@@ -31,11 +33,25 @@ type BookingRequestPayload = {
   honeypot: string
 }
 
-const SERVICE_OPTIONS: Array<{ value: BookingServiceId; label: string; price: string }> = [
+const PRIMARY_SERVICE_OPTIONS: Array<{ value: Exclude<BookingServiceType, 'kwadrans-na-juz'>; label: string; price: string }> = [
   { value: 'szybka-konsultacja-15-min', label: 'Kwadrans z behawiorysta', price: '69 zl' },
   { value: 'konsultacja-30-min', label: 'Dwa kwadranse', price: '169 zl' },
   { value: 'konsultacja-behawioralna-online', label: 'Pelna konsultacja', price: '470 zl' },
 ]
+
+const URGENT_SERVICE_OPTION = {
+  value: 'kwadrans-na-juz' as const,
+  label: 'Kwadrans na juz',
+  price: '99 zl',
+}
+
+function getServiceOption(service: BookingServiceType) {
+  if (service === 'kwadrans-na-juz') {
+    return URGENT_SERVICE_OPTION
+  }
+
+  return PRIMARY_SERVICE_OPTIONS.find((option) => option.value === service) ?? PRIMARY_SERVICE_OPTIONS[0]
+}
 
 function isEmailValid(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
@@ -49,7 +65,7 @@ function normalizeLongText(value: string) {
   return value.replace(/\r\n/g, '\n').trim()
 }
 
-function createInitialForm(initialService: BookingServiceId, initialSpecies: BookingSpecies | null): BookingRequestPayload {
+function createInitialForm(initialService: BookingServiceType, initialSpecies: BookingSpecies | null): BookingRequestPayload {
   return {
     service: initialService,
     name: '',
@@ -64,16 +80,16 @@ function createInitialForm(initialService: BookingServiceId, initialSpecies: Boo
   }
 }
 
-export function BookRequestForm({ initialService, initialSpecies }: BookRequestFormProps) {
+export function BookRequestForm({ initialService, initialSpecies, entryService }: BookRequestFormProps) {
   const [form, setForm] = useState<BookingRequestPayload>(() => createInitialForm(initialService, initialSpecies))
   const [status, setStatus] = useState<FormState>('idle')
   const [feedback, setFeedback] = useState('')
-  const selectedService = useMemo(
-    () => SERVICE_OPTIONS.find((option) => option.value === form.service) ?? SERVICE_OPTIONS[0],
-    [form.service],
-  )
+  const selectedService = useMemo(() => getServiceOption(form.service), [form.service])
+  const entryServiceOption = entryService ? getServiceOption(entryService) : null
   const isUrgentNow = form.service === 'kwadrans-na-juz'
   const showPriorityPrompt = form.service === 'szybka-konsultacja-15-min'
+  const showEntryServiceBox = entryServiceOption !== null && entryService !== 'kwadrans-na-juz'
+  const showServiceChangeLegend = entryServiceOption !== null || isUrgentNow
 
   function updateField<K extends keyof BookingRequestPayload>(key: K, value: BookingRequestPayload[K]) {
     if (status !== 'idle') {
@@ -181,7 +197,7 @@ export function BookRequestForm({ initialService, initialSpecies }: BookRequestF
           </article>
           <article className="notatnik-step">
             <div className="notatnik-step-number">02</div>
-            <p>W mailu dostajesz PayPal.me albo instrukcje BLIK na telefon.</p>
+            <p>{PUBLIC_OFFER_PAYMENT_EMAIL_STEP}</p>
           </article>
           <article className="notatnik-step">
             <div className="notatnik-step-number">03</div>
@@ -203,14 +219,36 @@ export function BookRequestForm({ initialService, initialSpecies }: BookRequestF
   return (
     <form className="form-grid top-gap" onSubmit={handleSubmit} noValidate>
       <div className="info-box full-width contact-form-intro">
-        {PUBLIC_OFFER_BOOKING_LEAD}
-        {' '}
-        {PUBLIC_OFFER_BOOKING_REASSURANCE}
+        {PUBLIC_OFFER_BOOKING_LEAD} {PUBLIC_OFFER_BOOKING_REASSURANCE}
       </div>
 
+      {showEntryServiceBox && entryServiceOption ? (
+        <div className="info-box full-width">
+          <strong>Startujesz juz z uslugi: {entryServiceOption.label}.</strong> Ten wariant jest ustawiony jako punkt wyjscia. Jesli chcesz, mozesz nizej zmienic format.
+        </div>
+      ) : null}
+
+      {isUrgentNow ? (
+        <div className="info-box full-width">
+          <strong>
+            Wybrany tryb: {URGENT_SERVICE_OPTION.label} / {URGENT_SERVICE_OPTION.price}.
+          </strong>{' '}
+          To ten sam 15-minutowy format co zwykly Kwadrans, ale z priorytetem i szybszym terminem.{' '}
+          <button
+            type="button"
+            className="notatnik-inline-link"
+            onClick={() => updateField('service', 'szybka-konsultacja-15-min')}
+          >
+            Wroc do zwyklego Kwadransu
+          </button>
+        </div>
+      ) : null}
+
       <fieldset className="full-width form-field consent-stack">
-        <legend className="field-legend">Wybierz usluge</legend>
-        {SERVICE_OPTIONS.map((option) => (
+        <legend className="field-legend">
+          {showServiceChangeLegend ? 'Zmien usluge, jesli potrzebujesz innego formatu' : 'Wybierz usluge'}
+        </legend>
+        {PRIMARY_SERVICE_OPTIONS.map((option) => (
           <label key={option.value} className="checkbox-card" htmlFor={`service-${option.value}`}>
             <input
               id={`service-${option.value}`}
@@ -224,6 +262,20 @@ export function BookRequestForm({ initialService, initialSpecies }: BookRequestF
             </span>
           </label>
         ))}
+        {isUrgentNow ? (
+          <label className="checkbox-card" htmlFor="service-kwadrans-na-juz">
+            <input
+              id="service-kwadrans-na-juz"
+              type="radio"
+              name="service"
+              checked
+              onChange={() => updateField('service', 'kwadrans-na-juz')}
+            />
+            <span>
+              {URGENT_SERVICE_OPTION.label} / {URGENT_SERVICE_OPTION.price} (tryb priorytetowy)
+            </span>
+          </label>
+        ) : null}
       </fieldset>
 
       {showPriorityPrompt ? (
@@ -306,9 +358,7 @@ export function BookRequestForm({ initialService, initialSpecies }: BookRequestF
       <div className="full-width form-field">
         <label htmlFor="book-preferred-slots">3 preferowane terminy</label>
         {isUrgentNow ? (
-          <div className="info-box">
-            Chce termin jak najszybciej - prosze o kontakt w ciagu 15 minut.
-          </div>
+          <div className="info-box">Chce termin jak najszybciej - prosze o kontakt w ciagu 15 minut.</div>
         ) : (
           <textarea
             id="book-preferred-slots"
@@ -382,7 +432,14 @@ export function BookRequestForm({ initialService, initialSpecies }: BookRequestF
         aria-hidden="true"
       >
         <label htmlFor="book-company">Firma</label>
-        <input id="book-company" name="company" tabIndex={-1} autoComplete="off" value={form.honeypot} onChange={(event) => updateField('honeypot', event.target.value)} />
+        <input
+          id="book-company"
+          name="company"
+          tabIndex={-1}
+          autoComplete="off"
+          value={form.honeypot}
+          onChange={(event) => updateField('honeypot', event.target.value)}
+        />
       </div>
 
       {feedback ? (

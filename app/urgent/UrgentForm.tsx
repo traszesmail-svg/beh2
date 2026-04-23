@@ -1,26 +1,11 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
+import { getProblemOptionsForSpecies, getPublicProblemOptionById, type FunnelSpecies } from '@/lib/funnel'
 
-type Species = 'pies' | 'kot'
+type Species = FunnelSpecies
+type SelectedSpecies = Species | ''
 type FormState = 'idle' | 'loading' | 'success' | 'error'
-
-const DOG_TOPICS = [
-  { id: 'szczeniak', label: 'Szczeniak / mlody pies' },
-  { id: 'spacer', label: 'Spacer i reaktywnosc' },
-  { id: 'separacja', label: 'Separacja' },
-  { id: 'pobudzenie', label: 'Pobudzenie / wyciszenie' },
-  { id: 'agresja', label: 'Agresja / zasoby' },
-  { id: 'inne', label: 'Inny temat' },
-]
-
-const CAT_TOPICS = [
-  { id: 'kot-kuweta', label: 'Kuweta' },
-  { id: 'kot-stres', label: 'Stres i wycofanie' },
-  { id: 'kot-agresja', label: 'Agresja' },
-  { id: 'kot-napiecia', label: 'Napiecia miedzy kotami' },
-  { id: 'inne', label: 'Inny temat' },
-]
 
 function getTodayDate() {
   return new Date().toISOString().slice(0, 10)
@@ -44,11 +29,11 @@ function formatCountdown(secondsLeft: number): string {
 }
 
 export function UrgentForm() {
-  const [species, setSpecies] = useState<Species>('pies')
+  const [species, setSpecies] = useState<SelectedSpecies>('')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
-  const [topicId, setTopicId] = useState('inne')
+  const [topicId, setTopicId] = useState('')
   const [message, setMessage] = useState('')
   const [requestedDate, setRequestedDate] = useState(getTodayDate)
   const [requestedTime, setRequestedTime] = useState(getNowTime)
@@ -57,16 +42,22 @@ export function UrgentForm() {
   const [honeypot, setHoneypot] = useState('')
   const [status, setStatus] = useState<FormState>('idle')
   const [feedback, setFeedback] = useState('')
-  const [requestId, setRequestId] = useState<string | null>(null)
   const [secondsLeft, setSecondsLeft] = useState<number | null>(null)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
-  const topics = species === 'pies' ? DOG_TOPICS : CAT_TOPICS
+  const topics = species ? getProblemOptionsForSpecies(species) : []
 
   useEffect(() => {
-    const currentTopics = species === 'pies' ? DOG_TOPICS : CAT_TOPICS
-    if (!currentTopics.find((t) => t.id === topicId)) {
-      setTopicId(currentTopics[0].id)
+    if (!species) {
+      if (topicId) {
+        setTopicId('')
+      }
+      return
+    }
+
+    const currentTopics = getProblemOptionsForSpecies(species)
+    if (!currentTopics.find((topic) => topic.id === topicId)) {
+      setTopicId('')
     }
   }, [species, topicId])
 
@@ -77,32 +68,62 @@ export function UrgentForm() {
   }, [status, secondsLeft])
 
   useEffect(() => {
-    if (secondsLeft === null || secondsLeft <= 0) return
+    if (secondsLeft === null || secondsLeft <= 0) {
+      return
+    }
+
     intervalRef.current = setInterval(() => {
       setSecondsLeft((prev) => {
         if (prev === null || prev <= 1) {
           clearInterval(intervalRef.current!)
           return 0
         }
+
         return prev - 1
       })
     }, 1000)
+
     return () => clearInterval(intervalRef.current!)
   }, [secondsLeft])
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
     setFeedback('')
 
-    if (!name.trim()) { setFeedback('Podaj imie.'); return }
-    if (!email.trim() || !isEmailValid(email.trim())) { setFeedback('Podaj poprawny adres e-mail.'); return }
-    if (message.trim().length < 10) { setFeedback('Opisz krotko sytuacje (minimum 10 znakow).'); return }
-    if (!consentProcessing || !consentPolicy) { setFeedback('Zaznacz zgody.'); return }
+    if (!species) {
+      setFeedback('Wybierz, czy sprawa dotyczy psa czy kota.')
+      return
+    }
+
+    if (!topicId || !getPublicProblemOptionById(species, topicId)) {
+      setFeedback('Wybierz temat.')
+      return
+    }
+
+    if (!name.trim()) {
+      setFeedback('Podaj imie.')
+      return
+    }
+
+    if (!email.trim() || !isEmailValid(email.trim())) {
+      setFeedback('Podaj poprawny adres e-mail.')
+      return
+    }
+
+    if (message.trim().length < 10) {
+      setFeedback('Opisz krotko sytuacje (minimum 10 znakow).')
+      return
+    }
+
+    if (!consentProcessing || !consentPolicy) {
+      setFeedback('Zaznacz zgody.')
+      return
+    }
 
     setStatus('loading')
 
     try {
-      const res = await fetch('/api/urgent-requests', {
+      const response = await fetch('/api/urgent-requests', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -120,16 +141,15 @@ export function UrgentForm() {
         }),
       })
 
-      const data = (await res.json()) as { ok?: boolean; message?: string; requestId?: string; error?: string }
+      const data = (await response.json()) as { ok?: boolean; message?: string; error?: string }
 
-      if (!res.ok || !data.ok) {
+      if (!response.ok || !data.ok) {
         setStatus('error')
         setFeedback(data.error ?? 'Nie udalo sie wyslac prosby. Sprobuj ponownie.')
         return
       }
 
       setStatus('success')
-      setRequestId(data.requestId ?? null)
     } catch {
       setStatus('error')
       setFeedback('Blad sieci. Sprawdz polaczenie i sprobuj ponownie.')
@@ -141,8 +161,8 @@ export function UrgentForm() {
       <div className="contact-form-card urgent-success">
         <div className="urgent-success-head">
           <div className="notatnik-mono notatnik-kicker-spaced">Prosba wyslana</div>
-          <h2>Dostalem Twoja prosbe. Odpiszę w ciagu 15 minut.</h2>
-          <p>Sprawdz skrzynke e-mail — zaraz powinna pojawic sie wiadomosc z potwierdzeniem. Termin wyslę na ten sam adres.</p>
+          <h2>Dostalem Twoja prosbe. Odpowiem w ciagu 15 minut.</h2>
+          <p>Sprawdz skrzynke e-mail - zaraz powinna pojawic sie wiadomosc z potwierdzeniem. Termin wysle na ten sam adres.</p>
         </div>
 
         {secondsLeft !== null && secondsLeft > 0 && (
@@ -171,7 +191,7 @@ export function UrgentForm() {
         type="text"
         name="website"
         value={honeypot}
-        onChange={(e) => setHoneypot(e.target.value)}
+        onChange={(event) => setHoneypot(event.target.value)}
         tabIndex={-1}
         aria-hidden="true"
         className="sr-only"
@@ -179,34 +199,31 @@ export function UrgentForm() {
 
       <div className="form-field">
         <label htmlFor="urgent-species" className="form-label">Gatunek</label>
-        <div className="form-radio-group">
-          {(['pies', 'kot'] as Species[]).map((s) => (
-            <label key={s} className={`form-radio-option${species === s ? ' is-selected' : ''}`}>
-              <input
-                type="radio"
-                name="species"
-                value={s}
-                checked={species === s}
-                onChange={() => setSpecies(s)}
-              />
-              {s === 'pies' ? 'Pies' : 'Kot'}
-            </label>
-          ))}
+        <select id="urgent-species" value={species} onChange={(event) => setSpecies(event.target.value as SelectedSpecies)}>
+          <option value="">Wybierz gatunek</option>
+          <option value="pies">Pies</option>
+          <option value="kot">Kot</option>
+        </select>
+        <div className="notatnik-field-help">
+          {species
+            ? `Po wyborze gatunku lista tematow pokazuje tylko opcje dla ${species === 'kot' ? 'kota' : 'psa'}.`
+            : 'Najpierw wybierz, czy sprawa dotyczy psa czy kota. Potem pokaze wlasciwe tematy.'}
         </div>
       </div>
 
       <div className="form-field">
         <label htmlFor="urgent-topic" className="form-label">Temat</label>
-        <select
-          id="urgent-topic"
-          className="form-select"
-          value={topicId}
-          onChange={(e) => setTopicId(e.target.value)}
-        >
-          {topics.map((t) => (
-            <option key={t.id} value={t.id}>{t.label}</option>
+        <select id="urgent-topic" value={topicId} onChange={(event) => setTopicId(event.target.value)} disabled={!species}>
+          <option value="">{species ? 'Wybierz temat' : 'Najpierw wybierz gatunek'}</option>
+          {topics.map((topic) => (
+            <option key={topic.id} value={topic.id}>
+              {topic.title}
+            </option>
           ))}
         </select>
+        <div className="notatnik-field-help">
+          {species ? 'Wybierz temat najblizszy temu, co dzieje sie teraz.' : 'Po wyborze gatunku pojawi sie lista tematow tylko dla psa albo kota.'}
+        </div>
       </div>
 
       <div className="form-field">
@@ -214,10 +231,9 @@ export function UrgentForm() {
         <input
           id="urgent-name"
           type="text"
-          className="form-input"
           placeholder="Twoje imie"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(event) => setName(event.target.value)}
           autoComplete="given-name"
         />
       </div>
@@ -227,10 +243,9 @@ export function UrgentForm() {
         <input
           id="urgent-email"
           type="email"
-          className="form-input"
           placeholder="adres@email.pl"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(event) => setEmail(event.target.value)}
           autoComplete="email"
         />
       </div>
@@ -242,10 +257,9 @@ export function UrgentForm() {
         <input
           id="urgent-phone"
           type="tel"
-          className="form-input"
           placeholder="600 000 000"
           value={phone}
-          onChange={(e) => setPhone(e.target.value)}
+          onChange={(event) => setPhone(event.target.value)}
           autoComplete="tel"
         />
       </div>
@@ -254,56 +268,34 @@ export function UrgentForm() {
         <label htmlFor="urgent-message" className="form-label">Krotki opis sytuacji</label>
         <textarea
           id="urgent-message"
-          className="form-textarea"
           rows={3}
           placeholder="2-3 zdania o tym, co sie dzieje i co Cie niepokoi."
           value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          onChange={(event) => setMessage(event.target.value)}
         />
       </div>
 
       <div className="form-field-row">
         <div className="form-field">
           <label htmlFor="urgent-date" className="form-label">Preferowana data</label>
-          <input
-            id="urgent-date"
-            type="date"
-            className="form-input"
-            value={requestedDate}
-            min={getTodayDate()}
-            onChange={(e) => setRequestedDate(e.target.value)}
-          />
+          <input id="urgent-date" type="date" value={requestedDate} min={getTodayDate()} onChange={(event) => setRequestedDate(event.target.value)} />
         </div>
         <div className="form-field">
           <label htmlFor="urgent-time" className="form-label">Godzina</label>
-          <input
-            id="urgent-time"
-            type="time"
-            className="form-input"
-            value={requestedTime}
-            onChange={(e) => setRequestedTime(e.target.value)}
-          />
+          <input id="urgent-time" type="time" value={requestedTime} onChange={(event) => setRequestedTime(event.target.value)} />
         </div>
       </div>
 
       <div className="form-field form-field-checkbox">
         <label className="form-checkbox-label">
-          <input
-            type="checkbox"
-            checked={consentProcessing}
-            onChange={(e) => setConsentProcessing(e.target.checked)}
-          />
+          <input type="checkbox" checked={consentProcessing} onChange={(event) => setConsentProcessing(event.target.checked)} />
           <span>Wyrazam zgode na przetwarzanie danych osobowych w celu odpowiedzi na moja prosbe.</span>
         </label>
       </div>
 
       <div className="form-field form-field-checkbox">
         <label className="form-checkbox-label">
-          <input
-            type="checkbox"
-            checked={consentPolicy}
-            onChange={(e) => setConsentPolicy(e.target.checked)}
-          />
+          <input type="checkbox" checked={consentPolicy} onChange={(event) => setConsentPolicy(event.target.checked)} />
           <span>
             Zapoznalam/em sie z{' '}
             <a href="/polityka-prywatnosci" target="_blank" className="notatnik-inline-link">polityka prywatnosci</a>
@@ -318,11 +310,7 @@ export function UrgentForm() {
         </div>
       )}
 
-      <button
-        type="submit"
-        className="notatnik-btn urgent-submit-btn"
-        disabled={status === 'loading'}
-      >
+      <button type="submit" className="notatnik-btn urgent-submit-btn" disabled={status === 'loading'}>
         <span>{status === 'loading' ? 'Wysylanie...' : 'Wyslij prosbe o Kwadrans na juz'}</span>
         {status !== 'loading' && (
           <span className="notatnik-btn-arrow" aria-hidden="true">&rarr;</span>

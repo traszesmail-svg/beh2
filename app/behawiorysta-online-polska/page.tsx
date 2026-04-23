@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { NotatnikPageShell } from '@/components/NotatnikA'
+import { NotatnikPageShell, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { OfferEntrySection } from '@/components/OfferEntrySection'
 import { Schema } from '@/components/schema'
 import { buildBookHref } from '@/lib/booking-routing'
@@ -121,13 +121,7 @@ export default function LocalSeoPolandOnlinePage() {
   return (
     <NotatnikPageShell
       tag="Behawiorysta online / cala Polska"
-      navItems={[
-        { href: '/psy', label: 'Pies' },
-        { href: '/koty', label: 'Kot' },
-        { href: '/niezbednik', label: 'Niezbednik' },
-        { href: '/o-mnie', label: 'O mnie' },
-        { href: '/kontakt#formularz', label: 'Kontakt' },
-      ]}
+      navItems={PUBLIC_SITE_NAV_ITEMS}
       ctaHref={audioHref}
       ctaLabel={FUNNEL_CTA_LABELS.primary}
       footerPrimaryHref={audioHref}

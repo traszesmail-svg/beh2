@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { NotatnikPageShell } from '@/components/NotatnikA'
+import { NotatnikPageShell, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
 import {
   BLOG_ROUTE_BASE,
@@ -77,13 +77,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
   return (
     <NotatnikPageShell
       tag="Blog / wpis"
-      navItems={[
-        { href: '/blog', label: 'Blog' },
-        { href: '/psy', label: 'Psy' },
-        { href: '/koty', label: 'Koty' },
-        { href: '/niezbednik', label: 'Niezbednik' },
-        { href: '/kontakt#formularz', label: 'Kontakt' },
-      ]}
+      navItems={PUBLIC_SITE_NAV_ITEMS}
       ctaHref={post.audioHref}
       ctaLabel={FUNNEL_CTA_LABELS.primary}
       footerPrimaryHref={post.audioHref}

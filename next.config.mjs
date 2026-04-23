@@ -13,24 +13,6 @@ const blockSearchIndexing = process.env.VERCEL_ENV
   ? process.env.VERCEL_ENV !== 'production'
   : process.env.NODE_ENV !== 'production'
 
-const legacyBlogRedirects = [
-  '/blog/jak-przygotowac-sie-do-konsultacji-behawioralnej-online',
-  '/blog/reaktywnosc-na-smyczy-cwiczenie-luznej-smyczy',
-  '/blog/jak-nagrac-psa-zostawionego-samemu',
-  '/blog/rutyna-wyjscia-oswajanie-psa-z-samotnoscia',
-  '/blog/jak-wybrac-kuwete-i-zwirek-dla-kota',
-  '/blog/stres-kota-a-zachowania-toaletowe',
-  '/blog/jak-wprowadzic-nowego-kota-do-domu',
-  '/blog/agresja-przekierowana-u-kota',
-  '/blog/jak-nauczyc-psa-zostawania-samemu',
-  '/blog/jak-ustawic-kuwete-dla-kota',
-  '/blog/jak-zapoznac-dwa-koty',
-].map((source) => ({
-  source,
-  destination: '/blog',
-  statusCode: 301,
-}))
-
 const nextConfig = {
   images: {
     remotePatterns: [
@@ -55,7 +37,6 @@ const nextConfig = {
   },
   async redirects() {
     return [
-      ...legacyBlogRedirects,
       {
         source: '/blog/prog-pobudzenia-u-psa',
         destination: '/blog/dlaczego-moj-pies-szczeka-na-inne-psy',

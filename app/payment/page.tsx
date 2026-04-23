@@ -7,7 +7,7 @@ import { getBookingAnalyticsContextParams } from '@/lib/analytics-schema'
 import { BookingStageEyebrow } from '@/components/BookingStageEyebrow'
 import { CustomerEmailStatusNotice } from '@/components/CustomerEmailStatusNotice'
 import { PaymentActions } from '@/components/PaymentActions'
-import { NotatnikPageShell } from '@/components/NotatnikA'
+import { NotatnikPageShell, PUBLIC_BOOKING_FLOW_NAV_ITEMS } from '@/components/NotatnikA'
 import { COPY_HELPERS } from '@/lib/copy-governance'
 import {
   getBookingServiceRoomAccessLabel,
@@ -118,13 +118,7 @@ export default async function PaymentPage({
   return (
     <NotatnikPageShell
       tag="Platnosc"
-      navItems={[
-        { href: '/psy', label: 'Pies' },
-        { href: '/koty', label: 'Kot' },
-        { href: '/niezbednik', label: 'Niezbednik' },
-        { href: '/o-mnie', label: 'O mnie' },
-        { href: '/kontakt#formularz', label: 'Kontakt' },
-      ]}
+      navItems={PUBLIC_BOOKING_FLOW_NAV_ITEMS}
       ctaHref={quickAudioHref}
       ctaLabel={FUNNEL_CTA_LABELS.primary}
       footerPrimaryHref={quickAudioHref}

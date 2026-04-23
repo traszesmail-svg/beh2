@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { EditorialFaqSection } from '@/components/EditorialFaqSection'
 import { FunnelPrimaryActions } from '@/components/FunnelPrimaryActions'
 import { LeadMagnetSignup } from '@/components/LeadMagnetSignup'
-import { NotatnikPageShell } from '@/components/NotatnikA'
+import { NotatnikPageShell, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { TrustSignalSection } from '@/components/TrustSignalSection'
 import { getServiceAnalyticsParams } from '@/lib/analytics-schema'
 import { buildBookHref } from '@/lib/booking-routing'
@@ -281,13 +281,7 @@ export default function OpinionsPage() {
   return (
     <NotatnikPageShell
       tag="Opinie / historie po rozmowie"
-      navItems={[
-        { href: '/psy', label: 'Pies' },
-        { href: '/koty', label: 'Kot' },
-        { href: '/niezbednik', label: 'Niezbednik' },
-        { href: '/o-mnie', label: 'O mnie' },
-        { href: '/kontakt#formularz', label: 'Kontakt' },
-      ]}
+      navItems={PUBLIC_SITE_NAV_ITEMS}
       ctaHref={audioHref}
       ctaLabel={FUNNEL_CTA_LABELS.primary}
       footerPrimaryHref={audioHref}

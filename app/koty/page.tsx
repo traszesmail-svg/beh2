@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { NextSlot } from '@/components/NextSlot'
-import { NotatnikFinalCta, NotatnikFooter, NotatnikSectionHead, NotatnikTopbar } from '@/components/NotatnikA'
+import { NotatnikFinalCta, NotatnikFooter, NotatnikSectionHead, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
 import { ServiceDecisionSection } from '@/components/ServiceDecisionSection'
 import { ServicesComparison } from '@/components/ServicesComparison'
@@ -16,20 +16,10 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = buildMarketingMetadata({
   title: 'Behawiorysta kotów online - kuweta, stres i relacje miedzy kotami',
   path: '/koty',
-  description: 'Pomoc behawioralna online dla opiekunow kotow. Kwadrans 69 zl, Kwadrans na juz 99 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl.',
+  description: 'Pomoc behawioralna online dla opiekunow kotow. Kwadrans 69 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl.',
 })
 
-const navItems = [
-  { href: '/psy', label: 'Pies' },
-  { href: '/koty', label: 'Kot' },
-  { href: '/niezbednik', label: 'Niezbednik' },
-  { href: '/o-mnie', label: 'O mnie' },
-  { href: '/cennik', label: 'Cennik' },
-  { href: '/kontakt#formularz', label: 'Kontakt' },
-]
-
 const quickHref = buildBookHref(null, 'szybka-konsultacja-15-min', false, 'kot')
-const urgentHref = buildBookHref(null, 'kwadrans-na-juz', false, 'kot')
 const bridgeHref = buildBookHref(null, 'konsultacja-30-min', false, 'kot')
 const consultationHref = buildBookHref(null, 'konsultacja-behawioralna-online', false, 'kot')
 const serviceLandingHref = '/behawiorysta-online-polska'
@@ -110,12 +100,6 @@ export default function CatsPage() {
           price: 69,
         },
         {
-          name: 'Kwadrans na juz',
-          description: 'Ten sam format 15 minut, ale z terminem w 15 minut.',
-          url: urgentHref,
-          price: 99,
-        },
-        {
           name: 'Dwa kwadranse',
           description: '30 minut online na spokojniejsze uporzadkowanie tematu kota.',
           url: bridgeHref,
@@ -136,7 +120,7 @@ export default function CatsPage() {
     <main className="notatnik-page">
       <Schema data={structuredData} />
       <div className="notatnik-shell">
-        <NotatnikTopbar tag="Kot / strona gatunku" navItems={navItems} ctaHref={quickHref} ctaLabel="Kwadrans / 69 zl" />
+        <NotatnikTopbar tag="Kot / strona gatunku" navItems={PUBLIC_SITE_NAV_ITEMS} ctaHref={quickHref} ctaLabel="Kwadrans / 69 zl" />
 
         <section className="notatnik-subhero">
           <div>
@@ -149,7 +133,8 @@ export default function CatsPage() {
             </p>
             <NextSlot className="top-gap-small" />
             <p className="notatnik-service-description">
-              Nie oceniam. Szukam przyczyny, nie winy. Dla kota obowiazuje ta sama drabinka: Kwadrans na start, Kwadrans na juz przy pilnym temacie, Dwa kwadranse przy szerszym uporzadkowaniu i Pelna konsultacja przy sprawach zlozonych.
+              Nie oceniam. Szukam przyczyny, nie winy. Dla kota obowiazuje ta sama drabinka: Kwadrans na start, Dwa kwadranse przy szerszym
+              uporzadkowaniu i Pelna konsultacja przy sprawach zlozonych.
             </p>
             <div className="notatnik-subhero-actions">
               <Link href={quickHref} prefetch={false} className="notatnik-btn">
@@ -213,7 +198,7 @@ export default function CatsPage() {
             <article className="notatnik-step">
               <div className="notatnik-step-number">01</div>
               <h3>Wybierasz wlasciwy format</h3>
-              <p>Kwadrans jest najprostszym startem. Kwadrans na juz daje ten sam zakres szybciej. Dwa kwadranse i Pelna konsultacja sa dla tematow szerszych.</p>
+              <p>Kwadrans jest najprostszym startem. Dwa kwadranse i Pelna konsultacja sa dla tematow szerszych.</p>
             </article>
             <article className="notatnik-step">
               <div className="notatnik-step-number">02</div>
@@ -231,8 +216,8 @@ export default function CatsPage() {
         <ServiceDecisionSection
           index="III."
           eyebrow="Usluga online"
-          title="Dla kota obowiazuje ta sama logika 4 uslug."
-          description="Kwadrans pomaga ustalic pierwszy priorytet, Kwadrans na juz przyspiesza wejscie, Dwa kwadranse daja etap posredni, a Pelna konsultacja zostaje dla spraw, ktore wymagaja szerszego porzadkowania."
+          title="Dla kota obowiazuje ta sama logika 3 formatow."
+          description="Kwadrans pomaga ustalic pierwszy priorytet, Dwa kwadranse daja etap posredni, a Pelna konsultacja zostaje dla spraw, ktore wymagaja szerszego porzadkowania."
           audioHref={quickHref}
           consultationHref={consultationHref}
           serviceHref={serviceLandingHref}
@@ -253,9 +238,13 @@ export default function CatsPage() {
         <section id="konsultacja">
           <NotatnikSectionHead index="IV." kicker="Uslugi" title="Porownanie uslug dla opiekuna kota." />
           <p className="notatnik-service-description">
-            Przy kuwecie, stresie i relacjach miedzy kotami dobrze od razu widziec roznice miedzy prostym startem, pilnym terminem, etapem posrednim i pelna konsultacja.
+            Przy kuwecie, stresie i relacjach miedzy kotami dobrze od razu widziec roznice miedzy prostym startem, etapem posrednim i pelna
+            konsultacja.
           </p>
           <ServicesComparison species="kot" />
+          <p className="notatnik-service-note top-gap-small">
+            Jesli po wyborze zwyklego Kwadransu zalezy Ci na czasie, wariant priorytetowy moze pojawic sie dopiero przy rezerwacji.
+          </p>
         </section>
 
         <section id="faq">

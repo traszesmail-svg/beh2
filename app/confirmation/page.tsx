@@ -8,7 +8,7 @@ import { getBookingAnalyticsContextParams } from '@/lib/analytics-schema'
 import { CustomerEmailStatusNotice } from '@/components/CustomerEmailStatusNotice'
 import { ConfirmationStatusWatcher } from '@/components/ConfirmationStatusWatcher'
 import { HardNavLink } from '@/components/HardNavLink'
-import { NotatnikPageShell } from '@/components/NotatnikA'
+import { NotatnikPageShell, PUBLIC_BOOKING_FLOW_NAV_ITEMS } from '@/components/NotatnikA'
 import { PreparationMaterialsCard } from '@/components/PreparationMaterialsCard'
 import { SelfCancellationActions } from '@/components/SelfCancellationActions'
 import { COPY_HELPERS } from '@/lib/copy-governance'
@@ -248,13 +248,7 @@ export default async function ConfirmationPage({
   return (
     <NotatnikPageShell
       tag="Potwierdzenie rezerwacji"
-      navItems={[
-        { href: '/psy', label: 'Pies' },
-        { href: '/koty', label: 'Kot' },
-        { href: '/niezbednik', label: 'Niezbednik' },
-        { href: '/o-mnie', label: 'O mnie' },
-        { href: '/kontakt#formularz', label: 'Kontakt' },
-      ]}
+      navItems={PUBLIC_BOOKING_FLOW_NAV_ITEMS}
       ctaHref={quickAudioHref}
       ctaLabel={FUNNEL_CTA_LABELS.primary}
       footerPrimaryHref={quickAudioHref}

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LegalPageLayout, type LegalSection, type LegalSummaryItem } from '@/components/LegalPageLayout'
+import { PUBLIC_OFFER_PAYMENT_METHODS } from '@/lib/public-offer-copy'
 import { getBreadcrumbJsonLd } from '@/lib/schema'
 import { buildLegalMetadata } from '@/lib/seo'
 
@@ -18,7 +19,7 @@ const summaryItems: LegalSummaryItem[] = [
   },
   {
     label: 'Model platnosci',
-    value: 'BLIK na telefon. Numer otrzymujesz emailem po rezerwacji i potwierdzeniu terminu.',
+    value: `${PUBLIC_OFFER_PAYMENT_METHODS}. Szczegoly platnosci dostajesz emailem po rezerwacji i potwierdzeniu terminu.`,
   },
   {
     label: 'Kontakt w sprawach dokumentu',
@@ -91,7 +92,7 @@ const sections: LegalSection[] = [
     body: (
       <>
         <p>
-          Publicznie dostepna metoda platnosci jest tylko BLIK na telefon. Numer otrzymujesz emailem po rezerwacji i
+          Publicznie komunikowany model platnosci to {PUBLIC_OFFER_PAYMENT_METHODS}. Szczegoly platnosci klient otrzymuje emailem po rezerwacji i
           wstepnym potwierdzeniu terminu.
         </p>
         <p>

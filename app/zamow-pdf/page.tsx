@@ -1,17 +1,18 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { NotatnikPageShell } from '@/components/NotatnikA'
+import { NotatnikPageShell, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { PdfOrderForm } from '@/components/PdfOrderForm'
 import { Schema } from '@/components/schema'
 import { buildPdfOrderHref, getPdfBundleBySlug, getPdfGuideBySlug } from '@/lib/pdf-guides'
 import { getBreadcrumbJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
+import { PUBLIC_OFFER_PAYMENT_EMAIL_STEP, PUBLIC_OFFER_PAYMENT_METHODS } from '@/lib/public-offer-copy'
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: 'Zamówienie PDF i pakietów',
+  title: 'Zamowienie PDF i pakietow',
   path: '/zamow-pdf',
-  description: 'Formularz zamówienia poradników PDF i pakietów. Potwierdzenie oraz dane do BLIK-a przychodzą mailowo.',
+  description: 'Formularz zamowienia poradnikow PDF i pakietow. Potwierdzenie oraz dalszy krok platnosci przychodza mailowo.',
 })
 
 export default function PdfOrderPage({
@@ -31,52 +32,49 @@ export default function PdfOrderPage({
 
   const itemType = guide ? 'guide' : 'bundle'
   const itemSlug = item.slug
-  const detailHref = guide ? item.routePath : item.routePath
+  const detailHref = item.routePath
 
   return (
     <NotatnikPageShell
-      tag="PDF / zamówienie"
-      navItems={[
-        { href: '/niezbednik', label: 'Niezbednik' },
-        { href: '/oferta/poradniki-pdf', label: 'PDF-y' },
-        { href: '/cennik', label: 'Cennik' },
-        { href: '/kontakt#formularz', label: 'Kontakt' },
-      ]}
+      tag="PDF / zamowienie"
+      navItems={PUBLIC_SITE_NAV_ITEMS}
       ctaHref={detailHref}
-      ctaLabel="Wróć do opisu"
+      ctaLabel="Wroc do opisu"
       footerPrimaryHref={buildPdfOrderHref({ guideSlug, bundleSlug })}
-      footerPrimaryLabel={guide ? 'Zamów PDF' : 'Zamów pakiet'}
+      footerPrimaryLabel={guide ? 'Zamow PDF' : 'Zamow pakiet'}
     >
       <Schema
         data={[
           getBreadcrumbJsonLd([
             { name: 'Strona glowna', path: '/' },
-            { name: 'Zamów PDF', path: '/zamow-pdf' },
+            { name: 'Zamow PDF', path: '/zamow-pdf' },
           ]),
         ]}
       />
 
       <section className="notatnik-subhero">
         <div>
-          <div className="notatnik-subhero-tag notatnik-mono">Zamówienie / PDF</div>
+          <div className="notatnik-subhero-tag notatnik-mono">Zamowienie / PDF</div>
           <h1>
-            Zamów <em>{item.title}</em>.
+            Zamow <em>{item.title}</em>.
           </h1>
           <p>
-            To nie jest zwykły link do kontaktu. Formularz zapisuje zamówienie konkretnego produktu, a dalszy krok przychodzi mailowo
-            razem z danymi do BLIK-a.
+            To nie jest zwykly link do kontaktu. Formularz zapisuje zamowienie konkretnego produktu, a dalszy krok przychodzi mailowo:
+            {' '}
+            {PUBLIC_OFFER_PAYMENT_METHODS}.
           </p>
         </div>
 
         <div className="summary-card tree-backed-card">
-          <div className="section-eyebrow">Jak to działa</div>
-          <h3>Krótki formularz, potem mail i BLIK.</h3>
+          <div className="section-eyebrow">Jak to dziala</div>
+          <h3>Krotki formularz, potem mail i platnosc.</h3>
           <p>
-            Najpierw wysyłasz zamówienie. Potem odpisuję z potwierdzeniem wyboru, numerem telefonu do BLIK-a i dalszym krokiem dostępu.
+            Najpierw wysylasz zamowienie. Potem odpisuje z potwierdzeniem wyboru i dalszym krokiem platnosci. BLIK na telefon zostaje dostepny bez publikowania numeru na stronie.
           </p>
+          <p>{PUBLIC_OFFER_PAYMENT_EMAIL_STEP}</p>
           <p>
             <Link href={detailHref} prefetch={false} className="prep-inline-link">
-              Wróć do opisu produktu
+              Wroc do opisu produktu
             </Link>
           </p>
         </div>
@@ -84,9 +82,9 @@ export default function PdfOrderPage({
 
       <section className="notatnik-contact">
         <div className="notatnik-contact-left">
-          <div className="notatnik-mono notatnik-kicker-spaced">Formularz zamówienia</div>
+          <div className="notatnik-mono notatnik-kicker-spaced">Formularz zamowienia</div>
           <h2>
-            Zostaw dane, <em>a ja odpiszę z potwierdzeniem.</em>
+            Zostaw dane, <em>a ja odpisze z potwierdzeniem.</em>
           </h2>
           <div className="contact-form-card" id="formularz">
             <PdfOrderForm itemType={itemType} itemSlug={itemSlug} itemTitle={item.title} itemPrice={item.pricing} />
@@ -94,12 +92,12 @@ export default function PdfOrderPage({
         </div>
 
         <div className="notatnik-contact-right notatnik-kinfo">
-          <h3>Co dostaniesz po wysłaniu</h3>
+          <h3>Co dostaniesz po wyslaniu</h3>
           <div className="notatnik-steps">
             {[
-              '1. Potwierdzenie, że zamówienie dotyczy właściwego PDF-u albo pakietu.',
-              '2. Numer telefonu do BLIK-a i dalszą instrukcję płatności.',
-              '3. Mail z informacją o dostępie albo następnym kroku po wpłacie.',
+              '1. Potwierdzenie, ze zamowienie dotyczy wlasciwego PDF-u albo pakietu.',
+              '2. Dalszy krok platnosci: przycisk do PayPal albo instrukcja BLIK na telefon.',
+              '3. Mail z informacja o dostepie albo nastepnym kroku po wplacie.',
             ].map((step, index) => (
               <article key={step} className="notatnik-step">
                 <div className="notatnik-step-number">{String(index + 1).padStart(2, '0')}</div>

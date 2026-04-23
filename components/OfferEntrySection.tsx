@@ -92,6 +92,7 @@ export function OfferEntrySection({
           <h3>{COPY_SERVICE_NAMES.primary}</h3>
           <p>{getAudioDescription(species)}</p>
           <div className="editorial-hero-meta" aria-label="Parametry uslugi">
+            {/* Kwadrans zostaje nazwa uslugi, a format idzie w descriptorze. */}
             <span>{COPY_SERVICE_NAMES.primaryDescriptor}</span>
             <span>{formatPricePln(PUBLIC_OFFER_PRICES.quick)}</span>
             <span>cena wejscia</span>

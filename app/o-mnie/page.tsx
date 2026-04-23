@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { NotatnikFinalCta, NotatnikFooter, NotatnikSectionHead, NotatnikTopbar } from '@/components/NotatnikA'
+import { NotatnikFinalCta, NotatnikFooter, NotatnikSectionHead, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
 import { buildBookHref } from '@/lib/booking-routing'
 import { getBreadcrumbJsonLd, getFaqPageJsonLd, getPersonJsonLd } from '@/lib/schema'
@@ -30,14 +30,6 @@ export const metadata: Metadata = buildMarketingMetadata({
   description:
     'Krzysztof Regulski - behawiorysta COAPE psow i kotow. Sposob pracy, kwalifikacje, profil publiczny i informacje przed kontaktem.',
 })
-
-const navItems = [
-  { href: '/psy', label: 'Pies' },
-  { href: '/koty', label: 'Kot' },
-  { href: '/niezbednik', label: 'Niezbednik' },
-  { href: '/faq', label: 'FAQ' },
-  { href: '/kontakt#formularz', label: 'Kontakt' },
-]
 
 const quickHref = buildBookHref(null, 'szybka-konsultacja-15-min')
 const consultationHref = buildBookHref(null, 'konsultacja-behawioralna-online')
@@ -133,7 +125,7 @@ export default function AboutPage() {
     <main className="notatnik-page">
       <Schema data={structuredData} />
       <div className="notatnik-shell">
-        <NotatnikTopbar tag="O mnie / podejscie" navItems={navItems} ctaHref={quickHref} ctaLabel="Kwadrans / 69 zl" />
+        <NotatnikTopbar tag="O mnie / podejscie" navItems={PUBLIC_SITE_NAV_ITEMS} ctaHref={quickHref} ctaLabel="Kwadrans / 69 zl" />
 
         <section className="notatnik-subhero">
           <div>

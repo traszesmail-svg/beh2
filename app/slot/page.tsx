@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 import { AnalyticsEventOnMount } from '@/components/AnalyticsEventOnMount'
 import { BookingStageEyebrow } from '@/components/BookingStageEyebrow'
 import { BookingServiceInfoCard } from '@/components/BookingServiceInfoCard'
-import { NotatnikFooter, NotatnikTopbar } from '@/components/NotatnikA'
+import { NotatnikFooter, NotatnikTopbar, PUBLIC_BOOKING_FLOW_NAV_ITEMS } from '@/components/NotatnikA'
 import { getServiceAnalyticsParams } from '@/lib/analytics-schema'
 import {
   type BookingServiceType,
@@ -32,13 +32,6 @@ import type { GroupedAvailability } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
-
-const BOOKING_NAV_ITEMS = [
-  { href: '/psy', label: 'Pies' },
-  { href: '/koty', label: 'Kot' },
-  { href: '/niezbednik', label: 'Niezbednik' },
-  { href: '/kontakt#formularz', label: 'Kontakt' },
-] as const
 
 function addMinutesToTime(time: string, minutesToAdd: number) {
   const [hours, minutes] = time.split(':').map(Number)
@@ -237,7 +230,7 @@ export default async function SlotPage({
   return (
     <main className="notatnik-page" data-analytics-disabled={qaBooking ? 'true' : undefined} data-qa-booking={qaBooking ? 'true' : 'false'}>
       <div className="notatnik-shell">
-        <NotatnikTopbar tag="Rezerwacja konsultacji" navItems={BOOKING_NAV_ITEMS} ctaHref={returnHref} ctaLabel="Wroc do tematow" ctaVariant="ghost" />
+        <NotatnikTopbar tag="Rezerwacja konsultacji" navItems={PUBLIC_BOOKING_FLOW_NAV_ITEMS} ctaHref={returnHref} ctaLabel="Wroc do tematow" ctaVariant="ghost" />
 
         <AnalyticsEventOnMount
           eventName="view_page"

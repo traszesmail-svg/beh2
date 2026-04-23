@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ContactLeadForm } from '@/components/ContactLeadForm'
-import { NotatnikFooter, NotatnikTopbar } from '@/components/NotatnikA'
+import { NotatnikFooter, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
 import { buildBookHref, readBookingSpeciesSearchParam } from '@/lib/booking-routing'
 import { COPY_HELPERS } from '@/lib/copy-governance'
@@ -15,13 +15,6 @@ export const metadata: Metadata = buildMarketingMetadata({
   path: '/kontakt',
   description: 'Kontakt i rezerwacja konsultacji | formularz, e-mail i spokojny pierwszy krok dla opiekunow psow i kotow.',
 })
-
-const navItems = [
-  { href: '/psy', label: 'Pies' },
-  { href: '/koty', label: 'Kot' },
-  { href: '/niezbednik', label: 'Niezbednik' },
-  { href: '/faq', label: 'FAQ' },
-]
 
 function getSpeciesCopy(species: 'pies' | 'kot' | null) {
   if (species === 'pies') {
@@ -57,7 +50,7 @@ export default function ContactPage({
     <main className="notatnik-page">
       <Schema data={structuredData} />
       <div className="notatnik-shell">
-        <NotatnikTopbar tag="Kontakt / napisz wiadomosc" navItems={navItems} ctaHref={quickHref} ctaLabel="Kwadrans / 69 zl" />
+        <NotatnikTopbar tag="Kontakt / napisz wiadomosc" navItems={PUBLIC_SITE_NAV_ITEMS} ctaHref={quickHref} ctaLabel="Kwadrans / 69 zl" />
 
         <div className="notatnik-contact">
           <div className="notatnik-contact-left">

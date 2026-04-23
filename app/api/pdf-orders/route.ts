@@ -34,15 +34,15 @@ function validatePayload(body: Record<string, unknown>): { payload?: PdfOrderSub
   const consentPolicy = body.consentPolicy === true
 
   if (!name || !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return { error: 'Podaj imiÄ™ i poprawny adres e-mail.' }
+    return { error: 'Podaj imie i poprawny adres e-mail.' }
   }
 
   if (!consentProcessing || !consentPolicy) {
-    return { error: 'Zaznacz zgody na kontakt i politykÄ™ prywatnoĹ›ci.' }
+    return { error: 'Zaznacz zgody na kontakt i polityke prywatnosci.' }
   }
 
   if (itemType !== 'guide' && itemType !== 'bundle') {
-    return { error: 'Nie udaĹ‚o siÄ™ rozpoznaÄ‡ produktu.' }
+    return { error: 'Nie udalo sie rozpoznac produktu.' }
   }
 
   if (!itemSlug) {
@@ -54,7 +54,7 @@ function validatePayload(body: Record<string, unknown>): { payload?: PdfOrderSub
   const item = guide ?? bundle
 
   if (!item) {
-    return { error: 'Ten produkt PDF nie jest juĹĽ dostÄ™pny.' }
+    return { error: 'Ten produkt PDF nie jest juz dostepny.' }
   }
 
   return {
@@ -77,23 +77,23 @@ export async function POST(request: Request) {
   try {
     body = (await request.json()) as Record<string, unknown>
   } catch {
-    return NextResponse.json({ error: 'Nie udaĹ‚o siÄ™ odczytaÄ‡ formularza.' }, { status: 400 })
+    return NextResponse.json({ error: 'Nie udalo sie odczytac formularza.' }, { status: 400 })
   }
 
   const { payload, error } = validatePayload(body)
 
   if (error || !payload) {
-    return NextResponse.json({ error: error ?? 'Nie udaĹ‚o siÄ™ wysĹ‚aÄ‡ formularza.' }, { status: 400 })
+    return NextResponse.json({ error: error ?? 'Nie udalo sie wyslac formularza.' }, { status: 400 })
   }
 
   if (payload.website) {
-    return NextResponse.json({ ok: true, message: 'Dziekuje. Potwierdzenie i dalszy krok platnosci wysylam mailowo. PayPal i BLIK na telefon sa dostepne bez publikowania numeru na stronie.' })
+    return NextResponse.json({ ok: true, message: 'Dziekuje. Potwierdzenie i dalszy krok platnosci wysylam mailowo. PayPal albo BLIK na telefon sa dostepne bez publikowania numeru na stronie.' })
   }
 
   const delivery = await sendPdfOrderEmail(payload)
 
   if (delivery.status !== 'sent') {
-    return NextResponse.json({ error: 'Formularz PDF jest chwilowo niedostÄ™pny. SprĂłbuj ponownie pĂłĹşniej.' }, { status: 503 })
+    return NextResponse.json({ error: 'Formularz PDF jest chwilowo niedostepny. Sprobuj ponownie pozniej.' }, { status: 503 })
   }
 
   const customerDelivery = await sendPdfOrderAutoReplyEmail(payload)
