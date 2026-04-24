@@ -69,7 +69,21 @@ const sections: LegalSection[] = [
     ),
   },
   {
-    title: '4. Rezerwacja terminu',
+    title: '4. Wymagania techniczne',
+    body: (
+      <>
+        <p>
+          Konsultacja odbywa sie przez Jitsi Meet — nie wymaga instalacji aplikacji ani konta. Wystarczy kliknac link przeslany e-mailem przed rozmowa.
+        </p>
+        <p>
+          Przy formacie 15 i 30 minut potrzebne jest tylko audio (mikrofon i glosnik albo sluchawki). Przy Pelnej konsultacji kamera moze pomoc, ale nie jest obowiazkowa.
+        </p>
+        <p>Wymagany jest dostep do internetu, aktualna przegladarka (Chrome, Firefox, Safari, Edge) oraz aktywny adres e-mail.</p>
+      </>
+    ),
+  },
+  {
+    title: '5. Rezerwacja terminu',
     body: (
       <>
           <p>Klient inicjuje rezerwacje przez formularz na stronie /book, wskazujac preferowane terminy oraz opis sytuacji.</p>
@@ -81,7 +95,7 @@ const sections: LegalSection[] = [
       ),
   },
   {
-    title: '5. Zmiana terminu i anulacja',
+    title: '6. Zmiana terminu i anulacja',
     body: (
       <>
         <p>Do 48 godzin przed konsultacja klient moze bezplatnie zmienic termin albo zrezygnowac i otrzymac zwrot 100% wplaty.</p>
@@ -91,7 +105,7 @@ const sections: LegalSection[] = [
     ),
   },
   {
-    title: '6. No-show i odwolanie przez uslugodawce',
+    title: '7. No-show i odwolanie przez uslugodawce',
     body: (
       <>
         <p>Jesli klient nie dolaczy do rozmowy w ciagu 15 minut od planowanego poczatku i nie skontaktuje sie z uslugodawca, konsultacja uznawana jest za zrealizowana bez prawa do zwrotu.</p>
@@ -101,7 +115,7 @@ const sections: LegalSection[] = [
     ),
   },
   {
-    title: '7. Prawo odstapienia od umowy',
+    title: '8. Prawo odstapienia od umowy',
     body: (
       <>
         <p>Konsument ma prawo odstapic od umowy zawartej na odleglosc w terminie 14 dni bez podania przyczyny, z zastrzezeniem przepisow szczegolnych o uslugach wykonanych za zgoda klienta.</p>
@@ -111,7 +125,7 @@ const sections: LegalSection[] = [
     ),
   },
   {
-    title: '8. Reklamacje',
+    title: '9. Reklamacje',
     body: (
       <>
         <p>Klient moze zlozyc reklamacje e-mailem na kontakt@regulskibehawiorysta.pl w ciagu 14 dni od konsultacji.</p>
@@ -121,7 +135,7 @@ const sections: LegalSection[] = [
     ),
   },
   {
-    title: '9. Ochrona danych osobowych i poufnosc',
+    title: '10. Ochrona danych osobowych i poufnosc',
     body: (
       <>
         <p>Administratorem danych osobowych klienta jest uslugodawca wskazany w naglowku dokumentu.</p>
@@ -131,7 +145,7 @@ const sections: LegalSection[] = [
     ),
   },
   {
-    title: '10. Postanowienia koncowe',
+    title: '11. Postanowienia koncowe',
     body: (
       <>
         <p>W sprawach nieuregulowanych regulaminem zastosowanie maja przepisy prawa polskiego, w szczegolnosci Kodeksu cywilnego i ustawy o prawach konsumenta.</p>

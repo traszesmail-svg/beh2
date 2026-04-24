@@ -12,9 +12,9 @@ export type AnyBookingServiceType = PublicBookingServiceType | LegacyBookingServ
 
 export const FUNNEL_CTA_LABELS = {
   primary: 'Zarezerwuj Kwadrans z behawiorysta',
-  bridge: 'Umow Dwa kwadranse z behawiorysta',
+  bridge: 'Zarezerwuj Dwa kwadranse z behawiorysta',
   secondary: 'Przejdz do Niezbednika',
-  consultation: 'Umow pelna konsultacje behawioralna',
+  consultation: 'Zarezerwuj pelna konsultacje behawioralna',
   contact: 'Napisz wiadomosc',
 } as const
 

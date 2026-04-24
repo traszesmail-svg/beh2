@@ -37,8 +37,6 @@ export default function ContactPage({
   const publicContact = getPublicContactDetails()
   const publicContactNote = getPublicContactEmailNote()
   const quickHref = buildBookHref(null, 'szybka-konsultacja-15-min', false, species)
-  const urgentNowHref = buildBookHref(null, 'kwadrans-na-juz', false, species)
-  const bridgeHref = buildBookHref(null, 'konsultacja-30-min', false, species)
   const consultationHref = buildBookHref(null, 'konsultacja-behawioralna-online', false, species)
   const faqItems = FAQ_SHORTLISTS.contact.slice(0, 2)
   const structuredData = [
@@ -103,11 +101,11 @@ export default function ContactPage({
             </div>
 
             <div className="notatnik-side-cta">
-              <div className="notatnik-mono notatnik-text-accent">Szybciej niz wiadomosc</div>
+              <div className="notatnik-mono notatnik-text-accent">Najprostszy start</div>
               <h3>Kwadrans z behawiorysta</h3>
-              <p>15 min audio / 69 zl. Jesli wiesz, ze chcesz porozmawiac, to najszybsza droga do pierwszego kroku.</p>
+              <p>15 min audio bez kamery / 69 zl. Jesli wiesz, ze chcesz porozmawiac, to najkrotszy pierwszy krok bez dlugiego przygotowania.</p>
               <Link href={quickHref} prefetch={false} className="notatnik-btn">
-                <span>Zarezerwuj termin</span>
+                <span>Zarezerwuj Kwadrans</span>
                 <span className="notatnik-btn-arrow" aria-hidden="true">
                   &rarr;
                 </span>
@@ -115,30 +113,16 @@ export default function ContactPage({
             </div>
 
             <div className="notatnik-side-cta">
-              <div className="notatnik-mono notatnik-text-accent">Pilny temat</div>
-              <h4>Kwadrans na juz</h4>
-              <p>15 min audio / 99 zl. To ten sam format co zwykly Kwadrans, ale z terminem w 15 minut i sciezka priorytetowa.</p>
-              <Link href={urgentNowHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
-                <span>Zarezerwuj Kwadrans na juz</span>
-              </Link>
-            </div>
-
-            <div className="notatnik-side-cta">
-              <div className="notatnik-mono notatnik-text-accent">Srodek lejka</div>
-              <h4>Dwa kwadranse</h4>
-              <p>30 min / 169 zl. Dobre rozwiazanie, gdy 15 minut to za malo, ale nie potrzebujesz jeszcze najszerszej konsultacji.</p>
-              <Link href={bridgeHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
-                <span>Przejdz do 30 minut</span>
-              </Link>
-            </div>
-
-            <div className="notatnik-side-cta">
-              <div className="notatnik-mono notatnik-text-accent">Szerszy temat</div>
+              <div className="notatnik-mono notatnik-text-accent">Sprawa zlozona albo przewlekla</div>
               <h4>Pelna konsultacja behawioralna</h4>
-              <p>60 min / 470 zl. Diagnoza, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp dla spraw zlozonych albo przewleklych.</p>
+              <p>60 min / 470 zl. Diagnoza sytuacji, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp. Dla tematow, ktore wymagaja wiecej czasu i szerszego wejscia.</p>
               <Link href={consultationHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
-                <span>Przejdz do konsultacji</span>
+                <span>Umow pelna konsultacje</span>
               </Link>
+            </div>
+
+            <div className="notatnik-contact-note notatnik-contact-note-compact">
+              <p>Jesli nie jestes pewien, ktory format pasuje do Twojej sytuacji, napisz krotka wiadomosc przez formularz. Odpiszemy z rekomendacja.</p>
             </div>
 
             <div className="notatnik-contact-note">

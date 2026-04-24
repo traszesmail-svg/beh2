@@ -114,23 +114,25 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
     {
       path: '/',
       required: [
-        'Problem z zachowaniem psa albo kota? Wybierz spokojny pierwszy krok.',
+        'Problem z zachowaniem psa albo kota? Zacznij od spokojnego pierwszego kroku.',
         'Kwadrans z behawiorysta',
-        'Trzy glowne formaty. Jedna logika wyboru.',
+        'Pies, kot albo Niezbednik.',
+        'Trzy formaty konsultacji. Jedna logika wyboru.',
         'Kwadrans na juz',
         'Trzy wejscia. Jasne roznice przed rezerwacja.',
-        'Co opiekunowie mowia po rozmowie.',
-        'Jesli wiesz juz, czy temat dotyczy psa, czy kota, wybierz wlasciwa strone.',
+        'Po rozmowie ma zostac porzadek, nie wiecej chaosu.',
+        'Przejdz do Niezbednika',
       ],
       requireBuildMarker: true,
     },
     {
       path: '/oferta',
       required: [
-        'Publicznie zostaja trzy czytelne wejscia: Kwadrans z behawiorysta, Dwa kwadranse i Pelna konsultacja behawioralna. Priorytetowy wariant pojawia sie dopiero przy rezerwacji Kwadransu.',
+        'Wybierz start dla swojej sytuacji.',
+        'Trzy glowne uslugi i jedna logika wyboru.',
         'Aktywna oferta',
-        'Kwadrans czy Pelna konsultacja',
-        'Kwadrans z behawiorysta sprawdza sie na start. Dwa kwadranse sa pomostem, a Pelna konsultacja daje diagnoze i wsparcie wdrozenia.',
+        'Jedna zasada wyboru przed rezerwacja.',
+        'Kwadrans z behawiorysta sprawdza sie na start. Dwa kwadranse porzadkuja temat szerzej, a Pelna konsultacja daje diagnoze i wsparcie wdrozenia.',
       ],
       requireBuildMarker: true,
     },
@@ -148,11 +150,11 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
     {
       path: '/behawiorysta-online-polska',
       required: [
-        'Behawiorysta psow i kotow online',
-        'Wybierz wlasciwa sciezke wejscia',
-        'Trzy glowne formaty, jedna logika wyboru.',
-        'Najczestsze pytania przed rezerwacja',
-        'Przejdz dalej tam, gdzie to ma sens',
+        'Behawiorysta online dla opiekunow psow i kotow',
+        '3 wejscia online',
+        'Wybierz wejscie, ktore pasuje do Twojej sytuacji.',
+        'Jedna logika wyboru przed rezerwacja.',
+        'Najczestsze pytania przed pierwszym ruchem.',
       ],
       requireBuildMarker: true,
     },
@@ -168,5 +170,3 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
     },
   ]
 }
-
-

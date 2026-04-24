@@ -2,7 +2,7 @@ import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Footer } from '@/components/Footer'
-import { Header } from '@/components/Header'
+import { NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
 import {
   CAPBT_PROFILE_URL,
@@ -74,7 +74,12 @@ export function LegalPageLayout({
     <main className="page-wrap marketing-page">
       {structuredData.length > 0 ? <Schema data={structuredData} /> : null}
       <div className="container">
-        <Header />
+        <NotatnikTopbar
+          tag="Regulaminy / dokumenty"
+          navItems={PUBLIC_SITE_NAV_ITEMS}
+          ctaHref="/book?service=szybka-konsultacja-15-min"
+          ctaLabel="Kwadrans / 69 zl"
+        />
 
         <section className="two-col-section legal-stage-layout">
           <div className="panel section-panel hero-surface legal-main-panel">

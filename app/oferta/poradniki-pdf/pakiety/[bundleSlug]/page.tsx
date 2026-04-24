@@ -63,8 +63,8 @@ export default function PdfBundleDetailPage({ params }: PdfBundleDetailPageProps
     <NotatnikPageShell
       tag="Poradniki PDF / pakiet"
       navItems={PUBLIC_SITE_NAV_ITEMS}
-      ctaHref={orderHref}
-      ctaLabel="Zamów pakiet"
+      ctaHref="/book?service=szybka-konsultacja-15-min"
+      ctaLabel="Kwadrans / 69 zl"
       footerPrimaryHref={orderHref}
       footerPrimaryLabel="Zamów pakiet"
     >

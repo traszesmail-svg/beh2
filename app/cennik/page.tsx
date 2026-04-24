@@ -1,9 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { NextSlot } from '@/components/NextSlot'
 import { NotatnikFinalCta, NotatnikPageShell, NotatnikSectionHead, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
-import { ServicesComparison } from '@/components/ServicesComparison'
 import { getBreadcrumbJsonLd, getServiceJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
 import {
@@ -19,7 +17,7 @@ export const metadata: Metadata = buildMarketingMetadata({
   title: 'Cennik konsultacji behawioralnych | Regulski COAPE',
   path: '/cennik',
   description:
-    'Kwadrans 69 zl, Dwa kwadranse 169 zl, Pelna konsultacja 470 zl. Przy Kwadransie moze byc dostepny wariant priorytetowy przy rezerwacji.',
+    'Kwadrans 69 zl, Dwa kwadranse 169 zl, Pelna konsultacja 470 zl. Kwadrans na juz (99 zl) to ten sam format z szybkim terminem - dostepny przy rezerwacji.',
 })
 
 const pricingFaqItems = [
@@ -36,7 +34,7 @@ const pricingFaqItems = [
   {
     question: 'Kiedy wybrac Dwa kwadranse za 169 zl?',
     answer:
-      'Wtedy, gdy 15 minut to za malo, temat ma 2-3 watki albo chcesz spokojniej uporzadkowac sytuacje przed decyzja o Pelnej konsultacji.',
+      'Wtedy, gdy 15 minut to za malo, temat ma kilka watkow albo chcesz spokojniej uporzadkowac sytuacje przed decyzja o Pelnej konsultacji.',
   },
   {
     question: 'Co obejmuje Pelna konsultacja 470 zl?',
@@ -44,15 +42,12 @@ const pricingFaqItems = [
       '60 minut rozmowy online audio albo audio/video, diagnoze sytuacji, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp. To osobny format dla spraw zlozonych, przewleklych albo wielowatkowych.',
   },
   {
-    question: 'Co jesli nie wiem, od czego zaczac?',
-    answer:
-      'Najprostszy start to zwykly Kwadrans za 69 zl. Jesli potrzebujesz tego samego formatu szybciej, wybierz Kwadrans na juz. Jesli temat jest szerszy, wejdz w Dwa kwadranse. Jesli sprawa jest zlozona albo przewlekla, wybierz Pelna konsultacje.',
-  },
-  {
     question: 'Jak wyglada platnosc?',
-    answer: PUBLIC_OFFER_BOOKING_PAYMENT,
+    answer: `${PUBLIC_OFFER_BOOKING_PAYMENT} ${PUBLIC_OFFER_CANCELLATION_COPY}`,
   },
-]
+] as const
+
+const visibleFaqItems = pricingFaqItems.slice(0, 4)
 
 export default function PricingPage() {
   return (
@@ -72,7 +67,8 @@ export default function PricingPage() {
           ]),
           getServiceJsonLd({
             name: 'Cennik konsultacji behawioralnych - psy i koty',
-            description: 'Trzy glowne formaty konsultacji: Kwadrans, Dwa kwadranse i Pelna konsultacja behawioralna. Przy Kwadransie moze byc dostepny wariant priorytetowy w rezerwacji.',
+            description:
+              'Trzy glowne formaty konsultacji: Kwadrans (69 zl), Dwa kwadranse (169 zl) i Pelna konsultacja behawioralna (470 zl). Kwadrans na juz (99 zl) to ten sam format z szybkim terminem.',
             serviceUrl: '/cennik',
             offerCatalog: [
               { name: 'Kwadrans z behawiorysta', description: '15 min audio bez kamery.', url: '/book?service=szybka-konsultacja-15-min', price: 69 },
@@ -86,15 +82,11 @@ export default function PricingPage() {
       <section className="notatnik-subhero">
         <div>
           <div className="notatnik-subhero-tag notatnik-mono">Cennik / psy i koty</div>
-          <h1>
-            Cennik konsultacji behawioralnych <em>- psy i koty</em>
-          </h1>
+          <h1>Cennik i zakres konsultacji.</h1>
           <p>
-            Trzy glowne formaty w jednej logice wyboru. Kwadrans to prosty start, Dwa kwadranse porzadkuja temat szerzej, a Pelna konsultacja sluzy
-            sprawom zlozonym. Przy Kwadransie moze pojawic sie tez wariant priorytetowy w rezerwacji.
+            Masz trzy glowne formaty konsultacji i jeden wariant priorytetowy. Wybierasz skale problemu, nie najdrozszy pakiet: 69 zl na start, 99 zl za
+            ten sam format szybciej, 169 zl przy szerszym temacie i 470 zl wtedy, gdy potrzebna jest diagnoza, plan i wsparcie wdrozenia.
           </p>
-          <NextSlot className="top-gap-small" />
-          <div className="info-box top-gap-small">Jesli nie wiesz, od czego zaczac, zacznij od Kwadransu. Nie trzeba wybierac najwiekszej uslugi na pierwszy ruch.</div>
           <div className="notatnik-subhero-actions">
             <Link href="/book?service=szybka-konsultacja-15-min" prefetch={false} className="notatnik-btn">
               <span>Zarezerwuj Kwadrans</span>
@@ -109,32 +101,50 @@ export default function PricingPage() {
         </div>
 
         <div className="summary-card tree-backed-card">
-          <div className="section-eyebrow">Sciezka wyboru</div>
-          <h3>Zacznij od tego, co pasuje do skali problemu.</h3>
-          <p>Kwadrans 69 zl = najprostszy start. 169 zl = szerszy temat. 470 zl = pelny plan i wsparcie po rozmowie.</p>
+          <div className="section-eyebrow">Szybki wybor</div>
+          <h3>69 / 99 / 169 / 470.</h3>
+          <p>Najpierw skala problemu, potem format. Kwadrans na juz zostaje tylko szybszym wariantem tego samego 15-minutowego startu.</p>
           <p className="muted">{PUBLIC_OFFER_PRIORITY_VARIANT_NOTE}</p>
         </div>
       </section>
 
       <section id="porownanie">
-        <NotatnikSectionHead index="I." kicker="Porownanie" title="Jedna tabela, trzy role w tym samym lejku." />
-        <p className="notatnik-service-description">
-          Kwadrans 69 zl to najprostszy start. Dwa kwadranse 169 zl porzadkuja temat szerzej, a Pelna konsultacja 470 zl daje diagnoze, plan poprawy i
-          7 dni wsparcia po rozmowie.
-        </p>
-        <ServicesComparison />
-        <div className="notatnik-faq-grid top-gap">
+        <NotatnikSectionHead index="I." kicker="3 formaty i ceny" title="Ktory format wybrac przy 69 / 99 / 169 / 470." />
+        <div className="card-grid three-up">
+          <article className="summary-card tree-backed-card">
+            <div className="section-eyebrow">69 zl</div>
+            <h3>Kwadrans z behawiorysta</h3>
+            <p>Najprostszy start przy jednym pytaniu, niepewnosci albo pierwszym uporzadkowaniu tematu.</p>
+          </article>
+          <article className="summary-card tree-backed-card">
+            <div className="section-eyebrow">169 zl</div>
+            <h3>Dwa kwadranse</h3>
+            <p>Dobry wybor, gdy 15 minut to za malo, temat ma kilka watkow albo chcesz spokojniej przejsc przez sytuacje.</p>
+          </article>
+          <article className="summary-card tree-backed-card">
+            <div className="section-eyebrow">470 zl</div>
+            <h3>Pelna konsultacja</h3>
+            <p>{PUBLIC_OFFER_FULL_CONSULTATION_VALUE}</p>
+          </article>
+        </div>
+
+        <div className="notatnik-quiet-grid top-gap">
           {PUBLIC_OFFER_START_GUIDE.map((snippet) => (
-            <article key={snippet} className="notatnik-faq-item">
+            <article key={snippet} className="notatnik-quiet-card">
               <p>{snippet}</p>
             </article>
           ))}
         </div>
-        <div className="info-box top-gap-small">{PUBLIC_OFFER_PRIORITY_VARIANT_NOTE}</div>
+
+        <div className="list-card accent-outline tree-backed-card top-gap-small">
+          <strong>Kwadrans na juz (99 zl)</strong>
+          <span>{PUBLIC_OFFER_PRIORITY_VARIANT_NOTE}</span>
+        </div>
       </section>
 
       <section style={{ background: 'var(--paper)' }}>
-        <NotatnikSectionHead index="II." kicker="Od czego zaczac" title="Prosty blok decyzji przed rezerwacja." />
+        <NotatnikSectionHead index="II." kicker="Platnosc i FAQ" title="Platnosc, termin i najwazniejsze odpowiedzi przed rezerwacja." />
+
         <div className="notatnik-steps">
           {PUBLIC_OFFER_BOOKING_PROCESS.map((step, index) => (
             <article key={step} className="notatnik-step">
@@ -143,38 +153,32 @@ export default function PricingPage() {
             </article>
           ))}
         </div>
+
         <div className="notatnik-quiet-grid top-gap">
-          {PUBLIC_OFFER_START_GUIDE.map((item) => (
-            <article key={item} className="notatnik-quiet-card">
-              <p>{item}</p>
-            </article>
-          ))}
-        </div>
-        <div className="info-box top-gap-small">{PUBLIC_OFFER_CANCELLATION_COPY}</div>
-      </section>
-
-      <section>
-        <NotatnikSectionHead index="III." kicker="Wartosc premium" title="Dlaczego Pelna konsultacja kosztuje 470 zl." />
-        <div className="notatnik-quiet-grid">
           <article className="notatnik-quiet-card">
-            <h3>To nie jest dluzszy Kwadrans</h3>
-            <p>{PUBLIC_OFFER_FULL_CONSULTATION_VALUE}</p>
+            <h3>Jak wyglada platnosc</h3>
+            <p>{PUBLIC_OFFER_BOOKING_PAYMENT}</p>
           </article>
           <article className="notatnik-quiet-card">
-            <h3>Co dochodzi poza samym czasem rozmowy</h3>
-            <ul className="notatnik-service-list">
-              <li>diagnoza sytuacji i priorytetow</li>
-              <li>plan poprawy po rozmowie</li>
-              <li>7 dni konsultacji tekstowych przez WhatsApp</li>
-            </ul>
+            <h3>Zmiana terminu i rezygnacja</h3>
+            <p>{PUBLIC_OFFER_CANCELLATION_COPY}</p>
+            <div className="hero-actions top-gap-small">
+              <Link href="/regulamin" prefetch={false} className="prep-inline-link">
+                Regulamin rezerwacji
+              </Link>
+              <Link href="/regulamin-pelna-konsultacja" prefetch={false} className="prep-inline-link">
+                Regulamin Pelnej konsultacji
+              </Link>
+            </div>
           </article>
         </div>
-      </section>
 
-      <section>
-        <NotatnikSectionHead index="IV." kicker="FAQ" title="Najczestsze pytania o uslugi i platnosc." />
-        <div className="notatnik-faq-grid">
-          {pricingFaqItems.map((item) => (
+        <div className="top-gap">
+          <div className="section-eyebrow">FAQ</div>
+          <h3>Najczestsze pytania o uslugi i platnosc.</h3>
+        </div>
+        <div className="notatnik-faq-grid top-gap-small">
+          {visibleFaqItems.map((item) => (
             <article key={item.question} className="notatnik-faq-item">
               <h4>{item.question}</h4>
               <p>{item.answer}</p>
@@ -183,36 +187,13 @@ export default function PricingPage() {
         </div>
       </section>
 
-      <section>
-        <NotatnikSectionHead index="V." kicker="Zwroty i zmiany" title="Zmiany terminu i zwroty sa opisane wprost." />
-        <div className="notatnik-quiet-grid">
-          <article className="notatnik-quiet-card">
-            <h3>Okno na zmiane lub rezygnacje</h3>
-            <p>{PUBLIC_OFFER_CANCELLATION_COPY}</p>
-            <Link href="/regulamin" prefetch={false} className="notatnik-inline-link">
-              Otworz regulamin rezerwacji
-            </Link>
-          </article>
-          <article className="notatnik-quiet-card">
-            <h3>Pelna konsultacja ma osobny regulamin</h3>
-            <p>
-              Dla pelnej konsultacji publikowany jest osobny dokument, bo ten format ma osobne warunki dotyczace zakresu,
-              diagnozy, 7 dni wsparcia przez WhatsApp i zasad przed rozpoczeciem uslugi.
-            </p>
-            <Link href="/regulamin-pelna-konsultacja" prefetch={false} className="notatnik-inline-link">
-              Otworz regulamin Pelnej konsultacji
-            </Link>
-          </article>
-        </div>
-      </section>
-
       <NotatnikFinalCta
         title="Jesli chcesz ruszyc z tematem, <em>zacznij od Kwadransu.</em>"
-        copy="To najprostszy pierwszy krok. Jesli temat okaze sie szerszy, od razu bedzie widac, czy lepiej przejsc do kolejnego formatu."
+        copy="To dalej najprostszy pierwszy krok. Jesli wolisz najpierw przygotowac sie materialami, przejdz do Niezbednika."
         primaryHref="/book?service=szybka-konsultacja-15-min"
         primaryLabel="Zarezerwuj Kwadrans ->"
-        secondaryHref="/kontakt#formularz"
-        secondaryLabel="Kontakt"
+        secondaryHref="/niezbednik"
+        secondaryLabel="Przejdz do Niezbednika"
       />
     </NotatnikPageShell>
   )

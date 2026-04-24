@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { PdfBundleCard } from '@/components/PdfBundleCard'
 import { PdfGuideCard } from '@/components/PdfGuideCard'
-import { NotatnikFinalCta, NotatnikFooter, NotatnikSectionHead, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
+import { NotatnikFinalCta, NotatnikPageShell, NotatnikSectionHead, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { buildBookHref } from '@/lib/booking-routing'
 import { getLeadMagnetBySlug } from '@/lib/growth-layer'
 import { listPdfBundles, listPdfGuides } from '@/lib/pdf-guides'
@@ -138,41 +138,27 @@ const paidGuideCategorySummary = [
   .filter((value): value is string => value !== null)
   .join(', ')
 
-const catalogShelves = [
+const entryShelves = [
   {
     id: 'polecane-starty',
     label: '3 darmowe materialy',
-    title: 'Darmowe starty',
+    title: 'Darmowy start',
     description: 'Trzy bezplatne materialy, od ktorych mozesz zaczac bez rozmowy i bez kupowania czegokolwiek.',
-    cta: 'Przejdz do darmowych startow',
+    cta: 'Zobacz od czego zaczac',
   },
   {
-    id: 'pdfy-do-kupienia',
-    label: `${paidGuides.length} tematow PDF`,
-    title: 'PDF-y do kupienia',
-    description: 'Pelniejszy katalog platnych poradnikow PDF do konkretnego problemu albo etapu pracy.',
-    cta: 'Przejdz do PDF-ow do kupienia',
-  },
-  {
-    id: 'pakiety-pdf',
-    label: `${pdfBundles.length} pakietow`,
-    title: 'Pakiety PDF',
-    description: 'Gotowe zestawy kilku materialow, gdy temat nie miesci sie w jednym poradniku.',
-    cta: 'Przejdz do pakietow PDF',
+    id: 'pdf-y',
+    label: `${paidGuides.length} PDF-ow i ${pdfBundles.length} pakiety`,
+    title: 'PDF-y i pakiety',
+    description: 'Platne materialy do konkretnego tematu albo szerszego obszaru pracy, bez skakania po kilku podstronach.',
+    cta: 'Przejdz do PDF-ow i pakietow',
   },
   {
     id: 'ksiazki',
-    label: `${books.length} rekomendacje`,
-    title: 'Ksiazki',
-    description: 'Wybrane pozycje do poglebienia rozumienia zachowania, nie do przypadkowego kolekcjonowania porad.',
-    cta: 'Przejdz do ksiazek',
-  },
-  {
-    id: 'przybory',
-    label: `${tools.length} przyborow`,
-    title: 'Przybory',
-    description: 'Sprzety i wsparcia srodowiskowe tylko tam, gdzie realnie wspieraja plan pracy.',
-    cta: 'Przejdz do przyborow',
+    label: `${books.length} ksiazki i ${tools.length} przyborow`,
+    title: 'Ksiazki i przybory',
+    description: 'Rzeczy, do ktorych warto wrocic dopiero wtedy, gdy realnie wspieraja plan pracy i porzadkuja temat.',
+    cta: 'Przejdz do rekomendacji',
   },
 ] as const
 
@@ -224,103 +210,113 @@ function EssentialsIcon({ kind }: { kind: 'file' | 'book' | 'check' }) {
 
 export default function EssentialsPage() {
   return (
-    <main className="notatnik-page">
-      <div className="notatnik-shell">
-        <NotatnikTopbar tag="Niezbednik / materialy" navItems={PUBLIC_SITE_NAV_ITEMS} ctaHref={quickHref} ctaLabel="Kwadrans / 69 zl" />
-
-        <section className="notatnik-subhero">
-          <div>
-            <div className="notatnik-subhero-tag notatnik-mono">Niezbednik / materialy i rekomendacje</div>
-            <h1>
-              Niezbednik do spokojnej pracy <em>z psem lub kotem</em>.
-            </h1>
-            <p>
-              Najpierw wybierz problem, dopiero potem format. Z top menu trafiasz tu od razu do darmowych startow, platnych PDF-ow, pakietow PDF,
-              wybranych ksiazek i przyborow, ktore maja sens tylko wtedy, gdy wspieraja realny plan pracy.
-            </p>
-          </div>
-
-          <div className="notatnik-subhero-media">
-            <div className="notatnik-quiet-card">
-              <div className="notatnik-mono">Szybkie przejscie</div>
-              <h3>Jedna polka z darmowym startem, platnymi PDF-ami, pakietami i rzeczami wspierajacymi plan.</h3>
-              <p>Kazda sekcja ma jeden cel: skrocic droge od wejscia z menu do materialu, ktory realnie pasuje do Twojej sytuacji.</p>
-            </div>
-          </div>
-        </section>
-
-        <section id="katalog-materialow">
-          <NotatnikSectionHead index="I." kicker="Mapa Niezbednika" title="Od razu wybierz polke, ktora pasuje do problemu albo etapu pracy." />
-          <p className="offer-section-intro" style={{ marginTop: '-24px', marginBottom: '32px' }}>
-            Z poziomu top menu trafiasz prosto do jednej strony, na ktorej widac caly katalog materialow: darmowe starty, pojedyncze PDF-y, pakiety,
-            ksiazki i przybory. Nie musisz juz zgadywac, gdzie sa materialy platne.
+    <NotatnikPageShell
+      tag="Niezbednik / materialy"
+      navItems={PUBLIC_SITE_NAV_ITEMS}
+      ctaHref={quickHref}
+      ctaLabel="Kwadrans / 69 zl"
+      footerPrimaryHref={quickHref}
+      footerPrimaryLabel="Kwadrans z behawiorysta"
+    >
+      <section className="notatnik-subhero">
+        <div>
+          <div className="notatnik-subhero-tag notatnik-mono">Niezbednik / materialy i rekomendacje</div>
+          <h1>
+            Niezbednik do spokojnej pracy <em>z psem lub kotem</em>.
+          </h1>
+          <p>
+            Najpierw wybierz problem, dopiero potem format. Tu masz trzy polki wejściowe: darmowy start, PDF-y i pakiety oraz rekomendacje do spokojnego
+            powrotu do tematu.
           </p>
-          <div className="notatnik-material-grid">
-            {catalogShelves.map((item) => (
-              <article key={item.id} className="notatnik-material-card">
-                <div className="notatnik-material-tag notatnik-mono">{item.label}</div>
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
-                <a href={`#${item.id}`}>{item.cta}</a>
-              </article>
-            ))}
+          <div className="notatnik-subhero-actions">
+            <Link href="#polecane-starty" prefetch={false} className="notatnik-btn">
+              <span>Zobacz od czego zaczac</span>
+              <span className="notatnik-btn-arrow" aria-hidden="true">
+                &rarr;
+              </span>
+            </Link>
+            <Link href={quickHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
+              <span>Kwadrans / 69 zl</span>
+            </Link>
           </div>
-        </section>
+        </div>
 
-        <section id="polecane-starty">
-          <NotatnikSectionHead index="II." kicker="Darmowy start" title="Trzy konkretne materialy startowe, do ktorych mozesz przejsc od razu." />
-          <p className="offer-section-intro" style={{ marginTop: '-24px', marginBottom: '32px' }}>
-            Te materialy maja sens wtedy, gdy chcesz najpierw uporzadkowac temat samodzielnie, zanim wejdziesz w Kwadrans albo pelna konsultacje.
-          </p>
-          <div className="notatnik-material-grid">
-            {leadMagnets.map((item) => (
-              <article key={item.href} className="notatnik-material-card">
-                <div className="notatnik-material-tag notatnik-mono">{item.label}</div>
-                <div className="essentials-icon" aria-hidden="true">
-                  <EssentialsIcon kind={item.icon} />
-                </div>
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
-                <Link href={item.href} prefetch={false}>
-                  {item.cta}
-                </Link>
-              </article>
-            ))}
-          </div>
-        </section>
+        <div className="summary-card tree-backed-card">
+          <div className="section-eyebrow">Szybkie przejscie</div>
+          <h3>Jedna strona, trzy polki, mniej chaosu.</h3>
+          <p>Kazda sekcja ma jeden cel: skrocic droge od wejscia z menu do materialu, ktory realnie pasuje do Twojej sytuacji.</p>
+        </div>
+      </section>
 
-        <section id="pdfy-do-kupienia" style={{ background: 'var(--paper)' }}>
-          <NotatnikSectionHead index="III." kicker="PDF-y do kupienia" title="Platne poradniki PDF, gdy chcesz od razu wejsc w konkretny temat." />
-          <p className="offer-section-intro" style={{ marginTop: '-24px', marginBottom: '32px' }}>
+      <section id="katalog-materialow">
+        <NotatnikSectionHead index="I." kicker="Mapa Niezbednika" title="3 polki Niezbednika." />
+        <div className="notatnik-material-grid">
+          {entryShelves.map((item) => (
+            <article key={item.id} className="notatnik-material-card">
+              <div className="notatnik-material-tag notatnik-mono">{item.label}</div>
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+              <a href={`#${item.id}`}>{item.cta}</a>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section id="polecane-starty">
+        <NotatnikSectionHead index="II." kicker="Darmowy start" title="Trzy konkretne materialy startowe, do ktorych mozesz przejsc od razu." />
+        <div className="notatnik-material-grid">
+          {leadMagnets.map((item) => (
+            <article key={item.href} className="notatnik-material-card">
+              <div className="notatnik-material-tag notatnik-mono">{item.label}</div>
+              <div className="essentials-icon" aria-hidden="true">
+                <EssentialsIcon kind={item.icon} />
+              </div>
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+              <Link href={item.href} prefetch={false}>
+                {item.cta}
+              </Link>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section id="pdf-y" style={{ background: 'var(--paper)' }}>
+        <NotatnikSectionHead index="III." kicker="PDF-y i pakiety" title="Platne materialy, gdy chcesz wejsc szerzej niz w jeden darmowy start." />
+
+        <div id="pdfy-do-kupienia">
+          <div className="section-eyebrow">PDF-y do kupienia</div>
+          <p className="offer-section-intro" style={{ marginTop: '8px', marginBottom: '24px' }}>
             Masz tu {paidGuides.length} gotowych tematow: {paidGuideCategorySummary}. Kazdy poradnik prowadzi do osobnej strony z opisem, zakresem i
-            zamowieniem bez schodzenia do innej sekcji serwisu.
+            zamowieniem.
           </p>
           <div className="offer-grid">
             {paidGuides.map((guide) => (
               <PdfGuideCard key={guide.slug} guide={guide} compact />
             ))}
           </div>
-        </section>
+        </div>
 
-        <section id="pakiety-pdf">
-          <NotatnikSectionHead index="IV." kicker="Pakiety PDF" title="Pakiety, gdy temat miesza kilka watkow albo chcesz gotowa sekwencje materialow." />
-          <p className="offer-section-intro" style={{ marginTop: '-24px', marginBottom: '32px' }}>
-            Tu sa {pdfBundles.length} pakiety PDF zlozone z kilku poradnikow. To najkrotsza droga, gdy potrzebujesz nie jednego tekstu, ale juz
-            ulozonej kolejnosci materialow do jednego obszaru pracy.
+        <div id="pakiety-pdf" className="top-gap">
+          <div className="section-eyebrow">Pakiety PDF</div>
+          <p className="offer-section-intro" style={{ marginTop: '8px', marginBottom: '24px' }}>
+            Tu sa {pdfBundles.length} pakiety PDF zlozone z kilku poradnikow. To najkrotsza droga, gdy potrzebujesz juz ulozonej kolejnosci materialow do
+            jednego obszaru pracy.
           </p>
           <div className="offer-grid">
             {pdfBundles.map((bundle) => (
               <PdfBundleCard key={bundle.slug} bundle={bundle} />
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section id="ksiazki" style={{ background: 'var(--paper)' }}>
-          <NotatnikSectionHead index="V." kicker="Ksiazki" title="Wybrane ksiazki, ktore realnie sa dobrym przedluzeniem tematu." />
-          <p className="offer-section-intro" style={{ marginTop: '-24px', marginBottom: '32px' }}>
-            Kazda z tych pozycji ma sens jako poglebienie rozumienia zachowania, nie jako zamiennik diagnozy i rozmowy o konkretnym przypadku.
-          </p>
-          <div className="notatnik-material-grid">
+      <section id="rekomendacje">
+        <NotatnikSectionHead index="IV." kicker="Ksiazki i przybory" title="Wybrane ksiazki i przybory, ktore maja sens dopiero w dobrym kontekscie." />
+
+        <div id="ksiazki">
+          <div className="section-eyebrow">Wybrane ksiazki</div>
+          <div className="notatnik-material-grid top-gap-small">
             {books.map((book) => (
               <article key={book.title} className="notatnik-material-card">
                 <div className="notatnik-material-tag notatnik-mono">Ksiazka</div>
@@ -335,15 +331,11 @@ export default function EssentialsPage() {
               </article>
             ))}
           </div>
-        </section>
+        </div>
 
-        <section id="przybory">
-          <NotatnikSectionHead index="VI." kicker="Przybory" title="Przybory, ktore moga wspierac plan pracy." />
-          <p className="offer-section-intro" style={{ marginTop: '-24px', marginBottom: '32px' }}>
-            Tu nie chodzi o zakupy dla samych zakupow. Kazdy z tych elementow ma sens tylko wtedy, gdy wspiera spokoj, bezpieczenstwo albo lepsze
-            zarzadzanie srodowiskiem.
-          </p>
-          <div className="notatnik-material-grid">
+        <div id="przybory" className="top-gap">
+          <div className="section-eyebrow">Przybory</div>
+          <div className="notatnik-material-grid top-gap-small">
             {tools.map((tool) => {
               const isExternal = tool.href.startsWith('http')
 
@@ -365,31 +357,29 @@ export default function EssentialsPage() {
               )
             })}
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section id="faq" style={{ background: 'var(--paper)' }}>
-          <NotatnikSectionHead index="VII." kicker="FAQ" title="Najczestsze pytania przed wyborem rekomendacji albo rozmowy." />
-          <div className="notatnik-faq-grid">
-            {faqItems.map((item) => (
-              <article key={item.question} className="notatnik-faq-item">
-                <h4>{item.question}</h4>
-                <p>{item.answer}</p>
-              </article>
-            ))}
-          </div>
-        </section>
+      <section id="faq" style={{ background: 'var(--paper)' }}>
+        <NotatnikSectionHead index="V." kicker="FAQ" title="Najczestsze pytania przed wyborem rekomendacji albo rozmowy." />
+        <div className="notatnik-faq-grid">
+          {faqItems.map((item) => (
+            <article key={item.question} className="notatnik-faq-item">
+              <h4>{item.question}</h4>
+              <p>{item.answer}</p>
+            </article>
+          ))}
+        </div>
+      </section>
 
-        <NotatnikFinalCta
-          title="Jesli ktorys z materialow okazal sie niewystarczajacy, <em>Kwadrans porzadkuje temat w 15 minut.</em>"
-          copy="Niezbednik jest dobrym startem, ale przy mieszanym albo wracajacym temacie rozmowa zwykle porzadkuje sytuacje szybciej. Mozesz zaczac od Kwadransu albo od razu przejsc do pelnej konsultacji."
-          primaryHref={quickHref}
-          primaryLabel="Zarezerwuj Kwadrans / 69 zl"
-          secondaryHref={consultationHref}
-          secondaryLabel="Przejdz do pelnej konsultacji"
-        />
-
-        <NotatnikFooter primaryHref={quickHref} primaryLabel="Kwadrans z behawiorysta" />
-      </div>
-    </main>
+      <NotatnikFinalCta
+        title="Jesli material nie wystarcza, <em>Kwadrans porzadkuje temat w 15 minut.</em>"
+        copy="Niezbednik jest dobrym startem, ale przy mieszanym albo wracajacym temacie rozmowa zwykle porzadkuje sytuacje szybciej."
+        primaryHref={quickHref}
+        primaryLabel="Zarezerwuj Kwadrans / 69 zl"
+        secondaryHref={consultationHref}
+        secondaryLabel="Przejdz do pelnej konsultacji"
+      />
+    </NotatnikPageShell>
   )
 }

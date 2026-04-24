@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { NotatnikPageShell, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
+import { NotatnikFinalCta, NotatnikPageShell, NotatnikSectionHead, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { PriceDisplay } from '@/components/PriceDisplay'
 import { buildBookHref } from '@/lib/booking-routing'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
@@ -15,26 +15,9 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = buildMarketingMetadata({
   title: 'Oferta: behawiorysta online dla psa i kota',
   path: '/oferta',
-  description: 'Aktualna oferta publiczna: Kwadrans 69 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl z diagnoza oraz 7 dniami wsparcia tekstowego przez WhatsApp. Priorytetowy wariant pojawia sie przy rezerwacji Kwadransu.',
+  description:
+    'Aktualna oferta publiczna: Kwadrans 69 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl z diagnoza oraz 7 dniami wsparcia tekstowego przez WhatsApp. Priorytetowy wariant pojawia sie przy rezerwacji Kwadransu.',
 })
-
-const SERVICE_COMPARISON_ROWS = [
-  {
-    label: 'Najlepszy wybor, gdy',
-    quick: 'masz jedno pytanie, chcesz sprawdzic pierwszy ruch albo nie wiesz jeszcze, jak szeroki jest temat',
-    full: 'problem trwa dluzej, wraca albo obejmuje kilka obszarow naraz i potrzebujesz diagnozy oraz szerszego uporzadkowania',
-  },
-  {
-    label: 'Format rozmowy',
-    quick: '15 minut audio bez kamery i bez rozbudowanego wejscia',
-    full: '60 minut rozmowy online + 7 dni konsultacji tekstowych przez WhatsApp',
-  },
-  {
-    label: 'Po rozmowie wychodzisz z',
-    quick: 'jasnym priorytetem i decyzja, jaki powinien byc pierwszy krok',
-    full: 'diagnoza, planem poprawy i mozliwoscia konsultowania wdrozenia przez 7 dni',
-  },
-] as const
 
 export default async function OfferPage() {
   const dataMode = getDataModeStatus()
@@ -65,14 +48,15 @@ export default async function OfferPage() {
       footerPrimaryHref={quickStartHref}
       footerPrimaryLabel={FUNNEL_CTA_LABELS.primary}
     >
-      <div className="container">
+      <div className="container editorial-stack">
         <section className="panel section-panel hero-surface offer-page-panel visual-scan-page">
           <div className="offer-page-hero-grid">
             <div className="offer-page-hero-copy">
               <div className="section-eyebrow">Oferta</div>
-              <h1>Trzy glowne uslugi, jedna jasna logika wyboru: start, szersze uporzadkowanie albo pelna konsultacja.</h1>
+              <h1>Wybierz start dla swojej sytuacji.</h1>
               <p className="hero-text">
-                Publicznie zostaja trzy czytelne wejscia: Kwadrans z behawiorysta, Dwa kwadranse i Pelna konsultacja behawioralna. Priorytetowy wariant pojawia sie dopiero przy rezerwacji Kwadransu.
+                Trzy glowne uslugi i jedna logika wyboru. Kwadrans jest najprostszym pierwszym krokiem, 30 minut daje szersze uporzadkowanie tematu, a
+                pelna konsultacja sluzy sprawom zlozonym i przewleklym.
               </p>
 
               <div className="hero-actions top-gap">
@@ -87,7 +71,7 @@ export default async function OfferPage() {
               <p className="muted top-gap-small">
                 Jesli temat jest zlozony i wiesz, ze potrzebujesz szerszego wejscia, wybierz{' '}
                 <Link href={fullConsultationHref} prefetch={false} className="prep-inline-link">
-                  {FUNNEL_CTA_LABELS.consultation.toLowerCase()}
+                  pelna konsultacje
                 </Link>
                 . Jesli nie rezerwujesz od razu, uzyj{' '}
                 <Link href={contactHref} prefetch={false} className="prep-inline-link">
@@ -99,7 +83,7 @@ export default async function OfferPage() {
 
             <aside className="offer-page-hero-card tree-backed-card">
               <span className="offer-page-hero-label">Jak zaczac</span>
-              <strong>Kwadrans z behawiorysta sprawdza sie na start. Dwa kwadranse sa pomostem, a Pelna konsultacja daje diagnoze i wsparcie wdrozenia.</strong>
+              <strong>Kwadrans z behawiorysta sprawdza sie na start. Dwa kwadranse porzadkuja temat szerzej, a Pelna konsultacja daje diagnoze i wsparcie wdrozenia.</strong>
               <div className="offer-page-hero-stats">
                 <div className="offer-page-hero-stat">
                   <span>15 min / {quickStartPriceAmount} zl</span>
@@ -107,12 +91,12 @@ export default async function OfferPage() {
                 </div>
                 <div className="offer-page-hero-stat">
                   <span>30 min / 169 zl</span>
-                  <strong>Pomost</strong>
+                  <strong>Szerszy zakres</strong>
                 </div>
-              <div className="offer-page-hero-stat">
-                <span>60 min / 470 zl</span>
-                <strong>Diagnoza + 7 dni</strong>
-              </div>
+                <div className="offer-page-hero-stat">
+                  <span>60 min / 470 zl</span>
+                  <strong>Diagnoza + 7 dni</strong>
+                </div>
               </div>
               <p className="muted top-gap-small">Priorytetowy wariant pojawia sie dopiero przy rezerwacji Kwadransu, nie jako osobna glowna usluga.</p>
             </aside>
@@ -120,30 +104,31 @@ export default async function OfferPage() {
         </section>
 
         <section className="panel section-panel editorial-section">
-          <div className="editorial-section-head">
-            <div className="editorial-section-head-copy">
-              <div className="section-eyebrow">Aktywna oferta</div>
-              <h2>Trzy glowne wejscia</h2>
-            </div>
-            <p className="editorial-section-lead">Czas i cena sa widoczne przed rezerwacja. 69 zl jest najprostszym startem, 169 zl porzadkuje temat szerzej, a 470 zl daje diagnoze i 7 dni wsparcia po rozmowie. Priorytetowy wariant pojawia sie dopiero przy Kwadransie.</p>
-          </div>
-
+          <NotatnikSectionHead index="I." kicker="Aktywna oferta" title="Trzy glowne wejscia." />
           <div className="card-grid three-up top-gap">
             {quickStartOffer ? (
-              <article className="summary-card tree-backed-card">
-                <div className="section-eyebrow">{quickStartOffer.eyebrow}</div>
-                <h3>{quickStartOffer.title}</h3>
-                <p>{quickStartOffer.cardSummary}</p>
-                <div className="editorial-hero-meta" aria-label="Parametry uslugi">
-                  <span>15 min</span>
-                  <span>
+              <article className="offer-card tree-backed-card">
+                <div className="offer-card-head">
+                  <div>
+                    <div className="section-eyebrow">{quickStartOffer.eyebrow}</div>
+                    <h3>{quickStartOffer.title}</h3>
+                  </div>
+                  <span className="offer-price">
                     <PriceDisplay amount={quickStartPriceAmount} />
                   </span>
-                  <span>cena wejscia</span>
+                </div>
+                <p className="offer-card-summary">{quickStartOffer.cardSummary}</p>
+                <div className="offer-card-meta">
+                  <span>15 min audio</span>
+                  <span>bez kamery</span>
+                </div>
+                <div className="offer-card-meta">
+                  <span>dla startu</span>
+                  <span>jedno pytanie albo pierwszy porzadek w temacie</span>
                 </div>
                 <p className="muted">{quickStartOffer.whenToChoose}</p>
-                <p className="muted">Jesli po wyborze terminu zalezy Ci na szybszym wejsciu, przy Kwadransie moze byc dostepny wariant priorytetowy.</p>
-                <div className="hero-actions top-gap-small">
+                <p className="muted">Jesli potrzebujesz szybkiego terminu, dostepny jest Kwadrans na juz (99 zl) - termin potwierdzany do 15 minut od wplaty.</p>
+                <div className="offer-card-actions top-gap-small">
                   <Link href={quickStartOffer.primaryHref} prefetch={false} className="button button-primary">
                     {quickStartOffer.primaryCtaLabel}
                   </Link>
@@ -152,17 +137,25 @@ export default async function OfferPage() {
             ) : null}
 
             {bridgeOffer ? (
-              <article className="summary-card tree-backed-card">
-                <div className="section-eyebrow">{bridgeOffer.eyebrow}</div>
-                <h3>{bridgeOffer.title}</h3>
-                <p>{bridgeOffer.cardSummary}</p>
-                <div className="editorial-hero-meta" aria-label="Parametry uslugi">
-                  <span>30 min</span>
-                  <span>169 zl</span>
-                  <span>pomost</span>
+              <article className="offer-card tree-backed-card">
+                <div className="offer-card-head">
+                  <div>
+                    <div className="section-eyebrow">{bridgeOffer.shortTitle}</div>
+                    <h3>Konsultacja 30 min</h3>
+                  </div>
+                  <span className="offer-price">169 zl</span>
+                </div>
+                <p className="offer-card-summary">{bridgeOffer.cardSummary}</p>
+                <div className="offer-card-meta">
+                  <span>30 min online</span>
+                  <span>2-3 watki</span>
+                </div>
+                <div className="offer-card-meta">
+                  <span>szerszy start</span>
+                  <span>gdy 15 minut to za malo</span>
                 </div>
                 <p className="muted">{bridgeOffer.whenToChoose}</p>
-                <div className="hero-actions top-gap-small">
+                <div className="offer-card-actions top-gap-small">
                   <Link href={bridgeOffer.primaryHref} prefetch={false} className="button button-ghost">
                     {bridgeOffer.primaryCtaLabel}
                   </Link>
@@ -171,17 +164,25 @@ export default async function OfferPage() {
             ) : null}
 
             {fullConsultationOffer ? (
-              <article className="summary-card tree-backed-card">
-                <div className="section-eyebrow">{fullConsultationOffer.eyebrow}</div>
-                <h3>{fullConsultationOffer.title}</h3>
-                <p>{fullConsultationOffer.cardSummary}</p>
-                <div className="editorial-hero-meta" aria-label="Parametry uslugi premium">
-                  <span>60 min</span>
-                  <span>470 zl</span>
-                  <span>diagnoza + 7 dni WhatsApp</span>
+              <article className="offer-card tree-backed-card">
+                <div className="offer-card-head">
+                  <div>
+                    <div className="section-eyebrow">Pelna konsultacja</div>
+                    <h3>Konsultacja behawioralna online</h3>
+                  </div>
+                  <span className="offer-price">470 zl</span>
+                </div>
+                <p className="offer-card-summary">{fullConsultationOffer.cardSummary}</p>
+                <div className="offer-card-meta">
+                  <span>60 min online</span>
+                  <span>diagnoza + plan</span>
+                </div>
+                <div className="offer-card-meta">
+                  <span>7 dni wsparcia</span>
+                  <span>WhatsApp po rozmowie</span>
                 </div>
                 <p className="muted">{fullConsultationOffer.whenToChoose}</p>
-                <div className="hero-actions top-gap-small">
+                <div className="offer-card-actions top-gap-small">
                   <Link href={fullConsultationOffer.primaryHref} prefetch={false} className="button button-ghost">
                     {FUNNEL_CTA_LABELS.consultation}
                   </Link>
@@ -189,103 +190,45 @@ export default async function OfferPage() {
               </article>
             ) : null}
           </div>
-
-          <p className="muted top-gap-small">Niezbednik zostaje materialem pomocniczym, a glowna drabinka sprzedazowa na tej stronie to trzy formaty: 69 / 169 / 470. Priorytetowy wariant Kwadransu pojawia sie dopiero przy rezerwacji.</p>
         </section>
 
         <section className="panel section-panel editorial-section">
-          <div className="editorial-section-head">
-            <div className="editorial-section-head-copy">
-              <div className="section-eyebrow">Wybor uslugi</div>
-              <h2>Kwadrans czy Pelna konsultacja</h2>
-            </div>
-            <p className="editorial-section-lead">
-              Jesli chcesz po prostu dobrze wybrac, najbezpieczniej zaczac od Kwadransu. Pelna konsultacja ma sens wtedy, gdy juz
-              wiesz, ze temat jest szerszy i potrzebuje wiekszej ilosci czasu oraz wsparcia wdrozenia.
-            </p>
-          </div>
-
-          <div className="premium-two-column-grid top-gap">
-            <article className="summary-card tree-backed-card">
-              <div className="section-eyebrow">Kwadrans z behawiorysta</div>
-              <h3>Najprostszy pierwszy krok</h3>
-              <ul className="premium-bullet-list">
-                <li>15 minut rozmowy audio bez kamery</li>
-                <li>jedno pytanie albo pierwszy kontakt z tematem</li>
-                <li>uporzadkowanie priorytetu i decyzja, co robic dalej</li>
-                <li>dobry wybor, gdy nie chcesz placic za szerszy start, zanim poznasz skale problemu</li>
-              </ul>
-              <div className="hero-actions top-gap-small">
-                <Link href={quickStartHref} prefetch={false} className="button button-primary">
-                  {FUNNEL_CTA_LABELS.primary}
-                </Link>
-              </div>
+          <NotatnikSectionHead index="II." kicker="Wybor przed rezerwacja" title="Jedna zasada wyboru przed rezerwacja." />
+          <div className="notatnik-quiet-grid">
+            <article className="notatnik-quiet-card">
+              <h3>69 zl</h3>
+              <p>Wybierz, gdy chcesz najprostszy start, jedno pytanie albo pierwsze uporzadkowanie sytuacji.</p>
             </article>
-
-            <article className="summary-card tree-backed-card">
-              <div className="section-eyebrow">Pelna konsultacja</div>
-              <h3>Szersze wejscie w problem</h3>
-              <ul className="premium-bullet-list">
-                <li>60 minut rozmowy online audio lub video</li>
-                <li>diagnoza sytuacji i plan poprawy po rozmowie</li>
-                <li>7 dni konsultacji tekstowych przez WhatsApp z mozliwoscia wysylania pytan i filmow</li>
-                <li>lepszy wybor przy tematach przewleklych, zlozonych albo wracajacych</li>
-              </ul>
-              <div className="hero-actions top-gap-small">
-                <Link href={fullConsultationHref} prefetch={false} className="button button-ghost">
-                  {FUNNEL_CTA_LABELS.consultation}
-                </Link>
-              </div>
+            <article className="notatnik-quiet-card">
+              <h3>169 zl</h3>
+              <p>Wybierz, gdy 15 minut to za malo i potrzebujesz spokojniej przejsc przez szerszy temat.</p>
+            </article>
+            <article className="notatnik-quiet-card">
+              <h3>470 zl</h3>
+              <p>Wybierz, gdy sprawa jest zlozona, wraca albo od razu potrzebujesz diagnozy, planu i wsparcia wdrozenia.</p>
             </article>
           </div>
 
           <div className="list-card accent-outline tree-backed-card top-gap">
-            <strong>Najkrotsza zasada wyboru</strong>
-              <span>69 zl wybierz, gdy chcesz najprostszy start. 169 zl wybierz, gdy 15 minut to za malo. 470 zl wybierz, gdy temat jest zlozony i chcesz diagnozy oraz 7 dni wsparcia po rozmowie. Priorytetowy wariant pojawia sie dopiero przy rezerwacji Kwadransu.</span>
+            <strong>Chcesz wejsc lzej?</strong>
+            <span>
+              Niezbednik zostaje materialem pomocniczym, a nie glowna usluga. Jesli chcesz najpierw zobaczyc materialy, przejdz do{' '}
+              <Link href="/niezbednik" prefetch={false} className="prep-inline-link">
+                Niezbednika
+              </Link>
+              .
+            </span>
           </div>
-
-          <div className="top-gap">
-            {SERVICE_COMPARISON_ROWS.map((row) => (
-              <div key={row.label} className="summary-card tree-backed-card top-gap-small">
-                <div className="section-eyebrow">{row.label}</div>
-                <div className="premium-two-column-grid">
-                  <div>
-                    <strong>Kwadrans z behawiorysta</strong>
-                    <p>{row.quick}</p>
-                  </div>
-                  <div>
-                    <strong>Pelna konsultacja</strong>
-                    <p>{row.full}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-
-            <div className="summary-card tree-backed-card top-gap-small">
-              <div className="section-eyebrow">Cena</div>
-              <div className="premium-two-column-grid">
-                <div>
-                  <strong>Kwadrans z behawiorysta</strong>
-                  <p>
-                    <PriceDisplay amount={quickStartPriceAmount} />
-                  </p>
-                </div>
-                <div>
-                  <strong>Pelna konsultacja</strong>
-                  <p>470 zl</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <p className="muted top-gap-small">
-            Jesli nadal chcesz tylko doprecyzowac, od czego zaczac, uzyj{' '}
-            <Link href={contactHref} prefetch={false} className="prep-inline-link">
-              krotkiej wiadomosci
-            </Link>
-            . Nie trzeba zgadywac idealnego formatu juz przy pierwszym wejsciu.
-          </p>
         </section>
+
+        <NotatnikFinalCta
+          title="Zacznij od formatu, ktory <em>pasuje do skali problemu.</em>"
+          copy="Jesli nadal nie masz pewnosci, zacznij od Kwadransu. To dalej najbezpieczniejszy pierwszy ruch."
+          primaryHref={quickStartHref}
+          primaryLabel="Zarezerwuj Kwadrans ->"
+          secondaryHref={contactHref}
+          secondaryLabel="Kontakt"
+        />
       </div>
     </NotatnikPageShell>
   )

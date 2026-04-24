@@ -272,19 +272,20 @@ test('home, dogs and cats pages point users to the canonical service page and ex
   assert.match(funnelActionsSource, /Jesli chcesz najpierw zobaczyc pelny opis uslugi/)
 
   assert.match(homeSource, /serviceLandingHref = '\/behawiorysta-online-polska'/)
-  assert.match(homeSource, /<ServiceDecisionSection/)
-  assert.match(homeSource, /serviceHref=\{serviceLandingHref\}/)
+  assert.match(homeSource, /href=\{serviceLandingHref\}/)
+  assert.match(homeSource, /pelnego opisu konsultacji online/)
+  assert.doesNotMatch(homeSource, /<ServiceDecisionSection/)
   assert.match(homeSource, /Behawiorysta psow i kotow online/)
 
-  assert.match(dogsSource, /title: 'Behawiorysta psów online - reaktywnosc, separacja i pomoc w domu'/)
+  assert.match(dogsSource, /title: 'Behawiorysta psow online - reaktywnosc, separacja i pomoc w domu'/)
   assert.match(dogsSource, /serviceLandingHref = '\/behawiorysta-online-polska'/)
-  assert.match(dogsSource, /<ServiceDecisionSection/)
-  assert.match(dogsSource, /Zobacz stronę usługi online/)
+  assert.match(dogsSource, /href=\{serviceLandingHref\}/)
+  assert.match(dogsSource, /pelnego opisu konsultacji online/)
 
-  assert.match(catsSource, /title: 'Behawiorysta kotów online - kuweta, stres i relacje miedzy kotami'/)
+  assert.match(catsSource, /title: 'Behawiorysta kotow online - kuweta, stres i relacje miedzy kotami'/)
   assert.match(catsSource, /serviceLandingHref = '\/behawiorysta-online-polska'/)
-  assert.match(catsSource, /<ServiceDecisionSection/)
-  assert.match(catsSource, /Zobacz stronę usługi online/)
+  assert.match(catsSource, /href=\{serviceLandingHref\}/)
+  assert.match(catsSource, /pelnego opisu konsultacji online/)
 })
 
 test.skip('offer and booking pages keep quick-scan language', () => {

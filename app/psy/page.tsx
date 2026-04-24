@@ -4,8 +4,6 @@ import Link from 'next/link'
 import { NextSlot } from '@/components/NextSlot'
 import { NotatnikFinalCta, NotatnikFooter, NotatnikSectionHead, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
-import { ServiceDecisionSection } from '@/components/ServiceDecisionSection'
-import { ServicesComparison } from '@/components/ServicesComparison'
 import { buildBookHref } from '@/lib/booking-routing'
 import { getBreadcrumbJsonLd, getFaqPageJsonLd, getServiceJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
@@ -14,7 +12,7 @@ import { FAQ_SHORTLISTS } from '@/lib/trust-layer'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: 'Behawiorysta psów online - reaktywnosc, separacja i pomoc w domu',
+  title: 'Behawiorysta psow online - reaktywnosc, separacja i pomoc w domu',
   path: '/psy',
   description: 'Pomoc behawioralna online dla opiekunow psow. Kwadrans 69 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl.',
 })
@@ -49,42 +47,54 @@ const topics = [
   {
     number: 'iv.',
     title: 'Mlody pies i start w domu',
-    copy: 'Szczeniak, gryzienie, skakanie, pierwsze spacery i codzienne granice bez chaosu.',
+    copy: 'Szczeniak, gryzienie, skakanie, pierwsze spacery i codzienne granice bez dokladania chaosu.',
     href: quickHref,
     label: 'Kwadrans',
   },
   {
     number: 'v.',
-    title: 'Szczekanie i czujnosc',
-    copy: 'Szczekanie przy oknie, w domu albo na spacerach zwykle jest objawem wiekszego napiecia.',
-    href: quickHref,
-    label: 'Kwadrans',
-  },
-  {
-    number: 'vi.',
-    title: 'Agresja i zasoby',
-    copy: 'Warczenie, bronienie jedzenia albo napiecie miedzy psami. Tu warto wejsc szerzej i bez pospiechu.',
+    title: 'Sprawa zlozona albo przewlekla',
+    copy: 'Gdy problem wraca, obejmuje kilka watkow naraz albo od razu widzisz, ze potrzebny jest szerszy plan.',
     href: consultationHref,
     label: 'Pelna konsultacja',
   },
+] as const
+
+const consultationFormats = [
   {
-    number: 'vii.',
-    title: 'Strach i fobie',
-    copy: 'Halasy, goscie, weterynarz, nowe miejsca. Pracujemy na poczuciu bezpieczenstwa i tempie psa.',
-    href: consultationHref,
-    label: 'Pelna konsultacja',
+    title: 'Kwadrans z behawiorysta',
+    eyebrow: '69 zl / pierwszy krok',
+    description: 'Najprostszy start, gdy chcesz nazwac problem, ustalic priorytet i wiedziec, co robic dalej.',
+    whenToChoose: 'gdy temat jest jeden, swiezy albo chcesz po prostu dobrze zaczac',
+    meta: ['15 min audio bez kamery', '69 zl', 'na start'],
+    href: quickHref,
+    ctaLabel: 'Zarezerwuj Kwadrans',
+    ctaClassName: 'button button-primary',
   },
   {
-    number: 'viii.',
-    title: 'Niepewny temat',
-    copy: 'Jesli nie wiesz, jak nazwac problem, od tego wlasnie jest Kwadrans z behawiorysta.',
-    href: quickHref,
-    label: 'Kwadrans',
+    title: 'Dwa kwadranse',
+    eyebrow: '169 zl / szerszy start',
+    description: 'Spokojniejszy etap posredni, gdy 15 minut to za malo, ale nie potrzebujesz jeszcze pelnej konsultacji.',
+    whenToChoose: 'gdy chcesz uporzadkowac 2-3 watki i wejsc w rozmowe szerzej',
+    meta: ['30 min online', '169 zl', 'pomost'],
+    href: bridgeHref,
+    ctaLabel: 'Wybierz Dwa kwadranse',
+    ctaClassName: 'button button-ghost',
+  },
+  {
+    title: 'Pelna konsultacja',
+    eyebrow: '470 zl / zlozona sprawa',
+    description: 'Format dla spraw utrwalonych albo wielowatkowych, gdy potrzebujesz diagnozy, planu i wsparcia po rozmowie.',
+    whenToChoose: 'gdy problem trwa dluzej, wraca albo od razu wymaga szerszego planu',
+    meta: ['60 min audio albo video', '470 zl', 'diagnoza + 7 dni WhatsApp'],
+    href: consultationHref,
+    ctaLabel: 'Wybierz Pelna konsultacje',
+    ctaClassName: 'button button-ghost',
   },
 ] as const
 
 export default function DogsPage() {
-  const faqItems = FAQ_SHORTLISTS.dogs.slice(0, 4)
+  const faqItems = FAQ_SHORTLISTS.dogs.slice(0, 3)
   const structuredData = [
     getBreadcrumbJsonLd([{ name: 'Strona glowna', path: '/' }, { name: 'Psy', path: '/psy' }]),
     getServiceJsonLd({
@@ -129,12 +139,12 @@ export default function DogsPage() {
               Twoj pies zachowuje sie w sposob, <em>ktory Cie niepokoi</em>.
             </h1>
             <p>
-              Pomagam opiekunom psow zrozumiec, co stoi za trudnym zachowaniem i jak zaczac to porzadkowac bez przymusu i bez karania.
+              Pomagam opiekunom psow zrozumiec, co stoi za trudnym zachowaniem i jak zaczac to porzadkowac bez przymusu i bez karania. Nie musisz
+              wiedziec, jak to nazwac. Wystarczy, ze opiszesz, co sie dzieje.
             </p>
             <NextSlot className="top-gap-small" />
             <p className="notatnik-service-description">
-              Nie musisz wiedziec, jak to nazwac. Dla psa obowiazuje ta sama drabinka: Kwadrans na start, Dwa kwadranse przy szerszym uporzadkowaniu i
-              Pelna konsultacja przy sprawach zlozonych.
+              Kwadrans 69 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl. Dla psa obowiazuje ta sama logika 3 formatow.
             </p>
             <div className="notatnik-subhero-actions">
               <Link href={quickHref} prefetch={false} className="notatnik-btn">
@@ -144,7 +154,7 @@ export default function DogsPage() {
                 </span>
               </Link>
               <Link href="/niezbednik" prefetch={false} className="notatnik-btn notatnik-btn-ghost">
-                <span>Przejdz do Niezbednika</span>
+                <span>Niezbednik dla opiekuna psa</span>
               </Link>
             </div>
           </div>
@@ -161,7 +171,7 @@ export default function DogsPage() {
         </section>
 
         <section id="tematy">
-          <NotatnikSectionHead index="I." kicker="Problemy / kategorie" title="Problemy psie - lista." />
+          <NotatnikSectionHead index="I." kicker="Najczestsze tematy" title="Problemy psie - lista." />
           <div className="notatnik-topic-grid">
             {topics.map((topic) => (
               <article key={topic.title} className="notatnik-topic-card">
@@ -174,84 +184,57 @@ export default function DogsPage() {
               </article>
             ))}
           </div>
-          <div className="notatnik-subhero-actions top-gap">
-            <Link href={quickHref} prefetch={false} className="notatnik-btn">
-              <span>Rozpoznajesz swoj problem? Zarezerwuj Kwadrans</span>
-              <span className="notatnik-btn-arrow" aria-hidden="true">
-                &rarr;
-              </span>
-            </Link>
-            <Link href="/niezbednik" prefetch={false} className="notatnik-btn notatnik-btn-ghost">
-              <span>Niezbednik dla opiekuna psa</span>
-            </Link>
+          <div className="list-card tree-backed-card top-gap-small">
+            <p>Nie widzisz swojego tematu na liscie? Zacznij od Kwadransu. To dalej najprostszy pierwszy krok przy problemach psa.</p>
           </div>
         </section>
-
-        <section style={{ background: 'var(--paper)' }}>
-          <NotatnikSectionHead
-            index="II."
-            kicker="Jak to dziala"
-            title="Dla psa najczesciej dziala ta sama spokojna sciezka."
-          />
-          <div className="notatnik-steps">
-            <article className="notatnik-step">
-              <div className="notatnik-step-number">01</div>
-              <h3>Wybierasz wlasciwy format</h3>
-              <p>Kwadrans jest najprostszym startem. Dwa kwadranse i Pelna konsultacja sa dla tematow szerszych.</p>
-            </article>
-            <article className="notatnik-step">
-              <div className="notatnik-step-number">02</div>
-              <h3>Opisujesz codziennosc psa</h3>
-              <p>Patrzymy na spacer, rytm dnia, wyzwalacze i momenty, w ktorych pies przestaje sobie radzic.</p>
-            </article>
-            <article className="notatnik-step">
-              <div className="notatnik-step-number">03</div>
-              <h3>Wiesz, czy zostac, czy wejsc szerzej</h3>
-              <p>Po rozmowie wiadomo, czy wystarcza ten etap, czy lepszym kolejnym krokiem beda Dwa kwadranse albo Pelna konsultacja.</p>
-            </article>
-          </div>
-        </section>
-
-        <ServiceDecisionSection
-          index="III."
-          eyebrow="Usluga online"
-          title="Dla psa obowiazuje ta sama logika 3 formatow."
-          description="Kwadrans porzadkuje temat na start, Dwa kwadranse daja etap posredni, a Pelna konsultacja zostaje dla spraw, ktore od razu wymagaja szerszego planu."
-          audioHref={quickHref}
-          consultationHref={consultationHref}
-          serviceHref={serviceLandingHref}
-          serviceLead="Jesli sytuacja psa ma kilka warstw naraz, od razu powiem, czy wystarczy lekki start, czy lepiej wejsc w pelna konsultacje."
-          quickBullets={[
-            'reaktywnosc, pobudzenie albo mlody pies na start',
-            'jeden priorytet i pierwszy ruch bez przeciagania',
-            'najprostsze wejscie bez dlugiej ankiety',
-          ]}
-          consultationBullets={[
-            'kilka trudnosci naraz lub dluzsza historia problemu',
-            'wiecej czasu na kontekst spaceru i domu',
-            'szerszy plan dalszej pracy po rozpoznaniu sytuacji',
-          ]}
-          serviceLinkLabel="Zobacz stronę usługi online"
-        />
 
         <section id="konsultacja">
-          <NotatnikSectionHead index="IV." kicker="Uslugi" title="Porownanie uslug dla opiekuna psa." />
+          <NotatnikSectionHead index="II." kicker="3 formaty konsultacji" title="Ktory format dla psa ma sens na start." />
           <p className="notatnik-service-description">
-            Przy problemach spacerowych, separacji albo pobudzeniu najwazniejsze jest, czy potrzebujesz prostego startu, spokojniejszego etapu
-            posredniego czy od razu pelnej konsultacji.
+            Najpierw wybierasz zakres, dopiero potem termin. Kwadrans porzadkuje pierwszy krok, Dwa kwadranse daja wiecej miejsca na szerszy temat, a
+            Pelna konsultacja sluzy sprawom zlozonym.
           </p>
-          <ServicesComparison species="pies" />
-          <p className="notatnik-service-note top-gap-small">
-            Jesli po wyborze zwyklego Kwadransu zalezy Ci na czasie, wariant priorytetowy moze pojawic sie dopiero przy rezerwacji.
-          </p>
+          <div className="card-grid three-up top-gap-small">
+            {consultationFormats.map((format) => (
+              <article key={format.title} className="summary-card tree-backed-card">
+                <div className="notatnik-mono">{format.eyebrow}</div>
+                <h3>{format.title}</h3>
+                <p>{format.description}</p>
+                <div className="editorial-hero-meta" aria-label={`Parametry uslugi ${format.title}`}>
+                  {format.meta.map((item) => (
+                    <span key={item}>{item}</span>
+                  ))}
+                </div>
+                <p>
+                  <strong>Kiedy wybrac:</strong> {format.whenToChoose}
+                </p>
+                <div className="hero-actions top-gap-small">
+                  <Link href={format.href} prefetch={false} className={format.ctaClassName}>
+                    {format.ctaLabel}
+                  </Link>
+                </div>
+              </article>
+            ))}
+          </div>
+          <div className="list-card tree-backed-card top-gap-small">
+            <p>
+              Kwadrans na juz (99 zl) - ten sam format, termin potwierdzany do 15 minut od wplaty. Jesli chcesz najpierw zobaczyc szerszy opis pracy
+              online, przejdz do{' '}
+              <Link href={serviceLandingHref} prefetch={false} className="notatnik-inline-link">
+                pelnego opisu konsultacji online
+              </Link>
+              .
+            </p>
+          </div>
         </section>
 
         <section id="faq">
-          <NotatnikSectionHead index="V." kicker="FAQ" title="Najczestsze pytania przy tematach psich." />
-          <div className="notatnik-faq-grid">
+          <NotatnikSectionHead index="III." kicker="FAQ" title="3 szybkie odpowiedzi przy tematach psich." />
+          <div className="card-grid three-up top-gap-small">
             {faqItems.map((item) => (
-              <article key={item.question} className="notatnik-faq-item">
-                <h4>{item.question}</h4>
+              <article key={item.question} className="summary-card tree-backed-card">
+                <h3>{item.question}</h3>
                 <p>{item.answer}</p>
               </article>
             ))}
@@ -260,7 +243,7 @@ export default function DogsPage() {
 
         <NotatnikFinalCta
           title="Jesli temat psa Cie niepokoi, <em>zacznij spokojnie.</em>"
-          copy="Nie musisz od razu wiedziec, czy to spacer, pobudzenie czy rozlaka. Wystarczy dobrze wybrac pierwszy format."
+          copy="Nie musisz od razu wiedziec, czy chodzi o spacer, pobudzenie czy rozlake. Wystarczy dobrze wybrac pierwszy format."
           primaryHref={quickHref}
           primaryLabel="Zarezerwuj Kwadrans / 69 zl"
           secondaryHref="/kontakt?species=pies#formularz"

@@ -17,8 +17,7 @@ const roomActiveTimeoutMs = 30000
 const retryActionTimeoutMs = 20000
 const uiSmokeOwnerName = 'UI Smoke'
 const uiSmokeEmail = 'ui-smoke@example.com'
-const primaryBookingLabel = 'Zarezerwuj Kwadrans z behawiorystą'
-const consultationBookingLabel = 'Umów konsultację 60 min'
+const primaryBookingLabel = /Zarezerwuj Kwadrans z behawiorysta|Zarezerwuj Kwadrans z behawiorystą/i
 
 function getWarsawSlotInMinutes(offsetMinutes: number) {
   const target = new Date(Date.now() + offsetMinutes * 60 * 1000)
@@ -118,7 +117,7 @@ function cleanText(value: string) {
 }
 
 async function waitForButtonLink(page: Page, label: string | RegExp) {
-  await page.locator('a.button:visible').filter({ hasText: label }).first().waitFor()
+  await page.locator('a.button:visible, a.notatnik-btn:visible').filter({ hasText: label }).first().waitFor()
 }
 
 async function verifyPublicRoute(
@@ -447,7 +446,7 @@ async function runUiSmokeOnce() {
     await publicPage
       .getByRole('heading', {
         level: 1,
-        name: /Jeśli coś w zachowaniu Twojego psa albo kota Cię niepokoi, zacznij od spokojnej rozmowy/i,
+        name: /Problem z zachowaniem psa albo kota\? Zacznij od spokojnego pierwszego kroku\./i,
       })
       .waitFor()
 
@@ -461,31 +460,31 @@ async function runUiSmokeOnce() {
         await page.goto(`${appUrl}/koty`, { waitUntil: 'domcontentloaded' })
         await page
           .getByRole('heading', {
-            name: /Pomoc dla opiekunów kotów/i,
+            name: /Twoj kot zachowuje sie w sposob, ktory Cie niepokoi|Twój kot zachowuje się w sposób, który Cię niepokoi/i,
           })
           .waitFor({ timeout: slowRouteTimeoutMs })
-        await page.locator('.home-primary-cta').first().waitFor()
-        await page.locator('.home-secondary-cta').first().waitFor()
+        await waitForButtonLink(page, /Kwadrans/i)
+        await waitForButtonLink(page, /Niezbednik/i)
         assert.ok((await page.locator('.summary-card').count()) >= 2, `${label}: expected cat page summary cards`)
 
         await page.goto(`${appUrl}/psy`, { waitUntil: 'domcontentloaded' })
         await page
           .getByRole('heading', {
-            name: /Pomoc dla opiekunów psów/i,
+            name: /Twoj pies zachowuje sie w sposob, ktory Cie niepokoi|Twój pies zachowuje się w sposób, który Cię niepokoi/i,
           })
           .waitFor({ timeout: slowRouteTimeoutMs })
-        await page.locator('.home-primary-cta').first().waitFor()
-        await page.locator('.home-secondary-cta').first().waitFor()
+        await waitForButtonLink(page, /Kwadrans/i)
+        await waitForButtonLink(page, /Niezbednik/i)
         assert.ok((await page.locator('.summary-card').count()) >= 2, `${label}: expected dog page summary cards`)
 
         await page.goto(`${appUrl}/oferta`, { waitUntil: 'domcontentloaded' })
-        await page.getByRole('heading', { name: /Kwadrans z behawiorystą/i }).first().waitFor()
-        await page.getByRole('heading', { name: /Kwadrans czy 60 minut/i }).waitFor({ timeout: slowRouteTimeoutMs })
-        assert.ok((await page.locator('.summary-card').count()) >= 6, `${label}: expected expanded public offer summary cards`)
+        await page.getByRole('heading', { level: 1, name: /Wybierz start dla swojej sytuacji\./i }).waitFor({ timeout: slowRouteTimeoutMs })
+        await page.getByRole('heading', { name: /Jedna zasada wyboru przed rezerwacja\./i }).waitFor({ timeout: slowRouteTimeoutMs })
+        assert.ok((await page.locator('.offer-card').count()) >= 3, `${label}: expected simplified public offer cards`)
 
         await page.goto(`${appUrl}/oferta/poradniki-pdf`, { waitUntil: 'domcontentloaded' })
         assert(page.url().includes('/niezbednik'), `${label}: expected poradniki-pdf route to redirect to /niezbednik`)
-        await page.getByRole('heading', { level: 1, name: /Niezbędnik/i }).waitFor({ timeout: slowRouteTimeoutMs })
+        await page.getByRole('heading', { level: 1, name: /Niezbednik|Niezbędnik/i }).waitFor({ timeout: slowRouteTimeoutMs })
         assert.equal(await page.locator('#pdf-y').count(), 1, `${label}: expected Niezbednik PDF section`)
         assert.equal(await page.locator('#ksiazki').count(), 1, `${label}: expected Niezbednik books section`)
         assert.equal(await page.locator('#przybory').count(), 1, `${label}: expected Niezbednik accessories section`)
@@ -500,33 +499,33 @@ async function runUiSmokeOnce() {
     for (const route of [
       {
         path: '/opinie',
-        heading: /Co opiekunowie mówią o konsultacjach/i,
-        buttonLabels: [primaryBookingLabel],
+        heading: /Co opiekunowie mowia o konsultacjach|Co opiekunowie mówią o konsultacjach/i,
+        buttonLabels: [/Kwadrans/i],
       },
       {
         path: '/o-mnie',
-        heading: /Krzysztof Regulski - behawiorysta psów i kotów/i,
-        buttonLabels: [primaryBookingLabel],
+        heading: /Krzysztof Regulski - behawiorysta psow i kotow|Krzysztof Regulski - behawiorysta psów i kotów/i,
+        buttonLabels: [/Kwadrans/i],
       },
       {
         path: '/kontakt',
-        heading: /Skontaktuj się, jeśli chcesz krótko opisać temat albo zadać pytanie\./i,
-        buttonLabels: [/Napisz (krótką )?wiadomość/i, primaryBookingLabel],
+        heading: /Napisz, zanim zarezerwujesz\./i,
+        buttonLabels: [/Kwadrans/i],
       },
       {
         path: '/niezbednik',
-        heading: /Niezbędnik/i,
-        buttonLabels: [/Zobacz od czego zacz[aą]ć/i, primaryBookingLabel],
+        heading: /Niezbednik|Niezbędnik/i,
+        buttonLabels: [/Zobacz od czego zaczac/i, /Kwadrans/i],
       },
       {
         path: '/cennik',
         heading: /Cennik i zakres konsultacji/i,
-        buttonLabels: [primaryBookingLabel, consultationBookingLabel],
+        buttonLabels: [/Kwadrans/i],
       },
       {
         path: '/konsultacja-behawioralna-online',
-        heading: /Konsultacja behawioralna online 60 min|Konsultacja behawioralna online - jak to wygląda/i,
-        buttonLabels: [primaryBookingLabel],
+        heading: /Pelna konsultacja behawioralna online|Konsultacja behawioralna online 60 min|Konsultacja behawioralna online - jak to wygląda/i,
+        buttonLabels: [/pelna konsultac|pełna konsultac|60 min/i],
       },
       {
         path: '/blog',
@@ -576,32 +575,32 @@ async function runUiSmokeOnce() {
       {
         path: '/oferta/konsultacja-behawioralna-online',
         destinationPath: '/konsultacja-behawioralna-online',
-        heading: /Konsultacja behawioralna online 60 min|Konsultacja behawioralna online - jak to wygląda/i,
-        buttonLabels: [primaryBookingLabel],
+        heading: /Pelna konsultacja behawioralna online|Konsultacja behawioralna online 60 min|Konsultacja behawioralna online - jak to wygląda/i,
+        buttonLabels: [/pelna konsultac|pełna konsultac|60 min/i],
       },
       {
         path: '/behawiorysta-olsztyn',
         destinationPath: '/behawiorysta-online-polska',
-        heading: /Behawiorysta online dla opiekunów psów i kotów|Behawiorysta psów i kotów online/i,
-        buttonLabels: [primaryBookingLabel],
+        heading: /Behawiorysta online dla opiekunow psow i kotow|Behawiorysta online dla opiekunów psów i kotów|Behawiorysta psów i kotów online/i,
+        buttonLabels: [/Kwadrans/i],
       },
       {
         path: '/behawiorysta-psow',
         destinationPath: '/psy',
-        heading: /Pomoc dla opiekunow psow|Pomoc dla opiekunów psów/i,
-        buttonLabels: [primaryBookingLabel],
+        heading: /Twoj pies zachowuje sie w sposob, ktory Cie niepokoi|Twój pies zachowuje się w sposób, który Cię niepokoi/i,
+        buttonLabels: [/Kwadrans/i],
       },
       {
         path: '/behawiorysta-kotow',
         destinationPath: '/koty',
-        heading: /Pomoc dla opiekunow kotow|Pomoc dla opiekunów kotów/i,
-        buttonLabels: [primaryBookingLabel],
+        heading: /Twoj kot zachowuje sie w sposob, ktory Cie niepokoi|Twój kot zachowuje się w sposób, który Cię niepokoi/i,
+        buttonLabels: [/Kwadrans/i],
       },
       {
         path: '/oferta/poradniki-pdf',
         destinationPath: '/niezbednik',
-        heading: /Niezbędnik/i,
-        buttonLabels: [/Zobacz od czego zacz[aą]ć/i, primaryBookingLabel],
+        heading: /Niezbednik|Niezbędnik/i,
+        buttonLabels: [/Zobacz od czego zaczac/i, /Kwadrans/i],
       },
     ] as const) {
       await verifyRedirectRoute(publicPage, route.path, route.destinationPath, route.heading, {
@@ -610,12 +609,12 @@ async function runUiSmokeOnce() {
     }
 
     await publicPage.goto(`${appUrl}/book`, { waitUntil: 'domcontentloaded' })
-    await publicPage.getByRole('heading', { name: /Wybierz, czy konsultacja dotyczy psa czy kota/i }).waitFor()
+    await publicPage.getByRole('heading', { name: /Rezerwacja konsultacji behawioralnych online/i }).waitFor()
 
     await publicPage.goto(`${appUrl}/slot?problem=szczeniak`, { waitUntil: 'domcontentloaded' })
-    await publicPage.getByRole('heading', { name: /Wybierz termin: Szczeniak/i }).waitFor()
+    await publicPage.getByRole('heading', { name: /Wybierz termin dla/i }).waitFor()
 
-    const slotLink = publicPage.locator(`a[href="/form?problem=szczeniak&slotId=${encodeURIComponent(slot.id)}"]`).first()
+    const slotLink = publicPage.locator(`a[href^="/form?problem=szczeniak&slotId=${encodeURIComponent(slot.id)}"]`).first()
     await slotLink.waitFor()
     assert.equal((await slotLink.getAttribute('href'))?.includes('%3A'), true)
     await Promise.all([
@@ -628,7 +627,7 @@ async function runUiSmokeOnce() {
     await publicPage
       .getByRole('heading', {
         level: 1,
-        name: /Uzupełnij dane|Formularz konsultacji/i,
+        name: /Uzupelnij potrzebne dane|Uzupełnij potrzebne dane/i,
       })
       .waitFor()
     assert.equal(new URL(publicPage.url()).searchParams.get('slotId'), slot.id)

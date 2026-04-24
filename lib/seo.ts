@@ -83,7 +83,7 @@ export function buildTechnicalMetadata({ title, path, description, noIndex = tru
 
 export async function buildHomeMetadata(): Promise<Metadata> {
   const description = appendLocalSeoContext(
-    'Behawiorysta psow i kotow online. Kwadrans 69 zl, Kwadrans na juz 99 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl - spokojny pierwszy krok i jasna drabinka wejscia.',
+    'Behawiorysta psow i kotow online. Kwadrans 69 zl, Kwadrans na juz 99 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl. Trzy formaty dopasowane do skali tematu.',
   )
   const title = 'Behawiorysta psow i kotow online'
   const fullTitle = buildMetadataTitle(title)

@@ -38,8 +38,8 @@ export default function PdfOrderPage({
     <NotatnikPageShell
       tag="PDF / zamowienie"
       navItems={PUBLIC_SITE_NAV_ITEMS}
-      ctaHref={detailHref}
-      ctaLabel="Wroc do opisu"
+      ctaHref="/book?service=szybka-konsultacja-15-min"
+      ctaLabel="Kwadrans / 69 zl"
       footerPrimaryHref={buildPdfOrderHref({ guideSlug, bundleSlug })}
       footerPrimaryLabel={guide ? 'Zamow PDF' : 'Zamow pakiet'}
     >

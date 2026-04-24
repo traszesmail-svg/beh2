@@ -106,6 +106,28 @@ export default function BookPage({ searchParams }: BookPageProps) {
     hasExplicitService && selectedOffer
       ? `Prosba o rezerwacje ${selectedOffer.title} z potwierdzeniem terminu oraz platnoscia PayPal albo BLIK po mailu.`
       : 'Prosba o rezerwacje Kwadransu, Dwoch kwadransow albo Pelnej konsultacji z potwierdzeniem PayPal albo BLIK po mailu.'
+  const heroFormHref = footerPrimaryHref
+  const decisionSectionTitle = hasExplicitService ? 'Co warto wiedziec przed wyslaniem prosby.' : 'Od czego zaczac, jesli nie masz pewnosci.'
+  const decisionCard =
+    service === 'konsultacja-30-min'
+      ? {
+          title: 'Dwa kwadranse dla szerszego tematu',
+          copy: '30 minut online daje wiecej miejsca na kontekst, dwa-trzy watki i spokojniejsze uporzadkowanie sytuacji niz sam Kwadrans.',
+        }
+      : service === 'konsultacja-behawioralna-online'
+        ? {
+            title: 'Pelna konsultacja dla spraw zlozonych',
+            copy: 'To osobny format 60 minut z diagnoza, planem poprawy i 7 dniami konsultacji tekstowych przez WhatsApp, a nie tylko dluzsza wersja krotkiej rozmowy.',
+          }
+        : service === 'kwadrans-na-juz'
+          ? {
+              title: 'Kwadrans na juz to ten sam format, tylko szybciej',
+              copy: 'Dalej rezerwujesz 15 minut audio bez kamery. Roznica dotyczy priorytetu i szybszego potwierdzenia terminu, nie zakresu rozmowy.',
+            }
+          : {
+              title: 'Kwadrans to bezpieczny start',
+              copy: 'Jesli nie wiesz, co wybrac, zacznij od Kwadransu za 69 zl. To najprostszy pierwszy krok, gdy chcesz nazwac problem i ustalic priorytet.',
+            }
 
   return (
     <NotatnikPageShell
@@ -158,12 +180,12 @@ export default function BookPage({ searchParams }: BookPageProps) {
                 &rarr;
               </span>
             </Link>
-            <Link href="#formularz" prefetch={false} className="notatnik-btn notatnik-btn-ghost">
+            <a href={heroFormHref} className="notatnik-btn notatnik-btn-ghost">
               <span>Przejdz do formularza</span>
               <span className="notatnik-btn-arrow" aria-hidden="true">
                 &rarr;
               </span>
-            </Link>
+            </a>
           </div>
         </div>
 
@@ -182,7 +204,7 @@ export default function BookPage({ searchParams }: BookPageProps) {
       </section>
 
       <section style={{ background: 'var(--paper)' }}>
-        <NotatnikSectionHead index="II." kicker="Decyzja" title="Od czego zaczac, jesli nie masz pewnosci." />
+        <NotatnikSectionHead index="II." kicker="Decyzja" title={decisionSectionTitle} />
         <div className="notatnik-steps">
           {PUBLIC_OFFER_BOOKING_PROCESS.map((step, index) => (
             <article key={step} className="notatnik-step">
@@ -197,8 +219,8 @@ export default function BookPage({ searchParams }: BookPageProps) {
             <p>Wystarczy krotki opis sytuacji i propozycja terminow. Jesli temat okaze sie szerszy, powiem to wprost.</p>
           </article>
           <article className="notatnik-quiet-card">
-            <h3>Kwadrans to bezpieczny start</h3>
-            <p>Jesli nie wiesz, co wybrac, zacznij od Kwadransu za 69 zl. To najprostszy pierwszy krok, gdy chcesz nazwac problem i ustalic priorytet.</p>
+            <h3>{decisionCard.title}</h3>
+            <p>{decisionCard.copy}</p>
           </article>
         </div>
         <div className="info-box top-gap-small">{PUBLIC_OFFER_BOOKING_PRIORITY_NOTE}</div>

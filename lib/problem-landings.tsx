@@ -8,7 +8,7 @@ import Link from 'next/link'
 import React, { type ReactNode } from 'react'
 import { Footer } from '@/components/Footer'
 import { FunnelPrimaryActions } from '@/components/FunnelPrimaryActions'
-import { Header } from '@/components/Header'
+import { NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { LeadMagnetSignup } from '@/components/LeadMagnetSignup'
 import { NewsletterSignup } from '@/components/NewsletterSignup'
 import { TrustSignalSection } from '@/components/TrustSignalSection'
@@ -714,7 +714,12 @@ export function ProblemLandingPage({ routePath }: { routePath: string }) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
 
       <div className="container editorial-stack">
-        <Header />
+        <NotatnikTopbar
+          tag={`${landing.categoryLabel} / problem`}
+          navItems={PUBLIC_SITE_NAV_ITEMS}
+          ctaHref={landing.audioHref}
+          ctaLabel="Kwadrans / 69 zl"
+        />
 
         <section className="panel section-panel blog-article-hero-panel">
           <div className="editorial-section-head">

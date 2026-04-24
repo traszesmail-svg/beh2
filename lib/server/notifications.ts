@@ -1683,3 +1683,62 @@ export async function sendUrgentNowAdminAlertEmail(submission: UrgentNowSubmissi
   return deliverEmail({ to: recipient, subject, html, text, replyTo }, 'internal')
 }
 
+export type ClientTestimonialSubmission = {
+  id: string
+  displayName: string
+  email: string
+  issueCategory: string
+  opinion: string
+  photoUrl: string | null
+}
+
+export async function sendClientTestimonialNotificationEmail(
+  submission: ClientTestimonialSubmission,
+): Promise<DeliveryResult> {
+  const recipient = 'krzyre@gmail.com'
+  const baseUrl = getBaseUrl()
+  const publishUrl = `${baseUrl}/api/admin/testimonials/${submission.id}?action=publish`
+  const skipUrl = `${baseUrl}/api/admin/testimonials/${submission.id}?action=skip`
+
+  const subject = `Nowa opinia od klienta - ${submission.displayName}`
+  const photoBlock = submission.photoUrl
+    ? `<p><strong>Zdjecie:</strong> <a href="${escapeHtml(submission.photoUrl)}">${escapeHtml(submission.photoUrl)}</a></p>`
+    : '<p><strong>Zdjecie:</strong> brak</p>'
+
+  const html = renderEmailShell(
+    'Nowa opinia od klienta',
+    'Klient wyslal opinie przez prywatny formularz. Zatwierdz lub odloz ponizej.',
+    `
+      <p><strong>Imie do publikacji:</strong> ${escapeHtml(submission.displayName)}</p>
+      <p><strong>Email:</strong> <a href="mailto:${escapeHtml(submission.email)}">${escapeHtml(submission.email)}</a></p>
+      <p><strong>Kategoria:</strong> ${escapeHtml(submission.issueCategory)}</p>
+      <p><strong>Tresc opinii:</strong><br />${formatMultilineHtml(submission.opinion)}</p>
+      ${photoBlock}
+      <div style="margin:28px 0 8px;display:flex;gap:12px;">
+        <a href="${escapeHtml(publishUrl)}" style="display:inline-block;padding:14px 22px;border-radius:999px;background:#1f7a1f;color:#ffffff;text-decoration:none;font-weight:700;margin-right:12px;">
+          Opublikuj opinie
+        </a>
+        <a href="${escapeHtml(skipUrl)}" style="display:inline-block;padding:14px 22px;border-radius:999px;background:#7a3a1f;color:#ffffff;text-decoration:none;font-weight:700;">
+          Odloz (zostaje w panelu)
+        </a>
+      </div>
+      <p style="font-size:13px;color:#6b625b;">Linki wymagaja autoryzacji admina. Po kliknieciu bedziesz musiec podac haslo.</p>
+    `,
+    'Opinia czeka w panelu /admin/opinie do momentu zatwierdzenia.',
+  )
+
+  const text = [
+    'Nowa opinia od klienta czeka na zatwierdzenie.',
+    `Imie: ${submission.displayName}`,
+    `Email: ${submission.email}`,
+    `Kategoria: ${submission.issueCategory}`,
+    `Tresc: ${submission.opinion}`,
+    `Zdjecie: ${submission.photoUrl ?? 'brak'}`,
+    '',
+    `Opublikuj: ${publishUrl}`,
+    `Odloz: ${skipUrl}`,
+  ].join('\n')
+
+  return deliverEmail({ to: recipient, subject, html, text }, 'internal')
+}
+

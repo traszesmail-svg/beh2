@@ -17,6 +17,7 @@ stripe-*.png
 *.tmp
 .tmp-*
 .tmp-*/
+supabase/.temp/
 *.tsbuildinfo
 qa-artifacts/
 .codex-deploy-*/

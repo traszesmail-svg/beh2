@@ -4,8 +4,6 @@ import Link from 'next/link'
 import { NextSlot } from '@/components/NextSlot'
 import { NotatnikFinalCta, NotatnikFooter, NotatnikSectionHead, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
-import { ServiceDecisionSection } from '@/components/ServiceDecisionSection'
-import { ServicesComparison } from '@/components/ServicesComparison'
 import { buildBookHref } from '@/lib/booking-routing'
 import { getBreadcrumbJsonLd, getFaqPageJsonLd, getServiceJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
@@ -14,7 +12,7 @@ import { FAQ_SHORTLISTS } from '@/lib/trust-layer'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: 'Behawiorysta kotów online - kuweta, stres i relacje miedzy kotami',
+  title: 'Behawiorysta kotow online - kuweta, stres i relacje miedzy kotami',
   path: '/koty',
   description: 'Pomoc behawioralna online dla opiekunow kotow. Kwadrans 69 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl.',
 })
@@ -34,17 +32,17 @@ const topics = [
   },
   {
     number: 'ii.',
-    title: 'Wycofanie i napiecie',
-    copy: 'Kot chowa sie, jest bardziej czujny albo trudniej mu odpoczac po zmianach w domu.',
-    href: quickHref,
-    label: 'Kwadrans',
-  },
-  {
-    number: 'iii.',
     title: 'Konflikt miedzy kotami',
     copy: 'Syk, pogon, blokowanie przejsc albo napiecie stale wiszace w domu. Tu liczy sie kolejnosc zmian.',
     href: '/koty/konflikt-miedzy-kotami',
     label: 'Zobacz temat',
+  },
+  {
+    number: 'iii.',
+    title: 'Wycofanie i napiecie',
+    copy: 'Kot chowa sie, jest bardziej czujny albo trudniej mu odpoczac po zmianach w domu.',
+    href: quickHref,
+    label: 'Kwadrans',
   },
   {
     number: 'iv.',
@@ -55,36 +53,48 @@ const topics = [
   },
   {
     number: 'v.',
-    title: 'Drapanie i napiecie srodowiskowe',
-    copy: 'Tu zwykle nie chodzi o zlosliwosc, tylko o potrzeby, rozmieszczenie zasobow i poczucie bezpieczenstwa.',
-    href: quickHref,
-    label: 'Kwadrans',
-  },
-  {
-    number: 'vi.',
-    title: 'Agresja przekierowana',
-    copy: 'Silne pobudzenie po bodzcu z zewnatrz, atak po napieciu i trudnosc w zatrzymaniu eskalacji.',
+    title: 'Niepewny albo szerszy temat',
+    copy: 'Jesli nie wiesz, czy chodzi o kuwete, stres, zdrowie czy relacje, najpierw ustalamy priorytet i zakres dalszej pracy.',
     href: consultationHref,
     label: 'Pelna konsultacja',
   },
+] as const
+
+const consultationFormats = [
   {
-    number: 'vii.',
-    title: 'Mlody kot i start w domu',
-    copy: 'Pierwsze tygodnie, socjalizacja, zabawa i codzienne granice bez wprowadzania presji.',
+    title: 'Kwadrans z behawiorysta',
+    eyebrow: '69 zl / pierwszy krok',
+    description: 'Najprostszy start, gdy chcesz ustalic pierwszy priorytet i zobaczyc, od czego najlepiej zaczac.',
+    whenToChoose: 'gdy temat jest jeden, swiezy albo chcesz najpierw uporzadkowac sytuacje kota',
+    meta: ['15 min audio bez kamery', '69 zl', 'na start'],
     href: quickHref,
-    label: 'Kwadrans',
+    ctaLabel: 'Zarezerwuj Kwadrans',
+    ctaClassName: 'button button-primary',
   },
   {
-    number: 'viii.',
-    title: 'Niepewny temat',
-    copy: 'Jesli nie wiesz, czy chodzi o kuwete, stres czy zdrowie, zaczynamy od ustalenia priorytetu.',
-    href: quickHref,
-    label: 'Kwadrans',
+    title: 'Dwa kwadranse',
+    eyebrow: '169 zl / szerszy start',
+    description: 'Spokojniejszy etap posredni, gdy 15 minut to za malo, ale nie potrzebujesz jeszcze pelnej konsultacji.',
+    whenToChoose: 'gdy temat ma kilka warstw i chcesz wejsc szerzej w dom, zasoby i rytm dnia',
+    meta: ['30 min online', '169 zl', 'pomost'],
+    href: bridgeHref,
+    ctaLabel: 'Wybierz Dwa kwadranse',
+    ctaClassName: 'button button-ghost',
+  },
+  {
+    title: 'Pelna konsultacja',
+    eyebrow: '470 zl / zlozona sprawa',
+    description: 'Format dla spraw utrwalonych albo wielowatkowych, gdy potrzebujesz diagnozy, planu i wsparcia po rozmowie.',
+    whenToChoose: 'gdy problem wraca, obejmuje relacje, srodowisko i codziennosc albo wymaga szerszego planu',
+    meta: ['60 min audio albo video', '470 zl', 'diagnoza + 7 dni WhatsApp'],
+    href: consultationHref,
+    ctaLabel: 'Wybierz Pelna konsultacje',
+    ctaClassName: 'button button-ghost',
   },
 ] as const
 
 export default function CatsPage() {
-  const faqItems = FAQ_SHORTLISTS.cats.slice(0, 4)
+  const faqItems = FAQ_SHORTLISTS.cats.slice(0, 3)
   const structuredData = [
     getBreadcrumbJsonLd([{ name: 'Strona glowna', path: '/' }, { name: 'Koty', path: '/koty' }]),
     getServiceJsonLd({
@@ -129,13 +139,17 @@ export default function CatsPage() {
               Twoj kot zachowuje sie w sposob, <em>ktory Cie niepokoi</em>.
             </h1>
             <p>
-              Pomagam opiekunom kotow zrozumiec, co stoi za trudnym zachowaniem i jak zaczac to porzadkowac bez stresu dla kota i dla Ciebie.
+              Pomagam opiekunom kotow zrozumiec, co stoi za trudnym zachowaniem i jak zaczac to porzadkowac bez stresu dla kota i dla Ciebie. Nie
+              oceniam. Szukam przyczyny, nie winy.
             </p>
             <NextSlot className="top-gap-small" />
             <p className="notatnik-service-description">
-              Nie oceniam. Szukam przyczyny, nie winy. Dla kota obowiazuje ta sama drabinka: Kwadrans na start, Dwa kwadranse przy szerszym
-              uporzadkowaniu i Pelna konsultacja przy sprawach zlozonych.
+              Kwadrans 69 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl. Dla kota obowiazuje ta sama logika 3 formatow.
             </p>
+            <div className="info-box top-gap-small">
+              Przy naglej zmianie zachowania albo problemie z kuweta pierwszym krokiem bywa weterynarz. To dalej moze byc poczatek dobrej diagnozy, nie
+              przeszkoda.
+            </div>
             <div className="notatnik-subhero-actions">
               <Link href={quickHref} prefetch={false} className="notatnik-btn">
                 <span>Zarezerwuj Kwadrans</span>
@@ -144,14 +158,14 @@ export default function CatsPage() {
                 </span>
               </Link>
               <Link href="/niezbednik" prefetch={false} className="notatnik-btn notatnik-btn-ghost">
-                <span>Przejdz do Niezbednika</span>
+                <span>Niezbednik dla opiekuna kota</span>
               </Link>
             </div>
           </div>
 
           <div className="notatnik-subhero-media">
             <div className="notatnik-subhero-figure">
-              <Image src="/branding/topic-cards/cats/cat-anxious-hiding.jpg" alt="Pręgowany kot siedzi spokojnie w lesie" fill sizes="(max-width: 980px) 100vw, 40vw" priority />
+              <Image src="/branding/topic-cards/cats/cat-anxious-hiding.jpg" alt="Pregowany kot siedzi spokojnie na zewnatrz" fill sizes="(max-width: 980px) 100vw, 40vw" priority />
             </div>
             <div className="notatnik-subhero-note">
               <span>Kuweta / stres / relacje miedzy kotami</span>
@@ -161,7 +175,7 @@ export default function CatsPage() {
         </section>
 
         <section id="tematy">
-          <NotatnikSectionHead index="I." kicker="Problemy / kategorie" title="Problemy kocie - lista." />
+          <NotatnikSectionHead index="I." kicker="Najczestsze tematy" title="Problemy kocie - lista." />
           <div className="notatnik-topic-grid">
             {topics.map((topic) => (
               <article key={topic.title} className="notatnik-topic-card">
@@ -174,85 +188,57 @@ export default function CatsPage() {
               </article>
             ))}
           </div>
-          <div className="notatnik-subhero-actions top-gap">
-            <Link href={quickHref} prefetch={false} className="notatnik-btn">
-              <span>Rozpoznajesz swoj problem? Zarezerwuj Kwadrans</span>
-              <span className="notatnik-btn-arrow" aria-hidden="true">
-                &rarr;
-              </span>
-            </Link>
-            <Link href="/niezbednik" prefetch={false} className="notatnik-btn notatnik-btn-ghost">
-              <span>Niezbednik dla opiekuna kota</span>
-            </Link>
+          <div className="list-card tree-backed-card top-gap-small">
+            <p>Nie widzisz swojego tematu na liscie? Zacznij od Kwadransu. To dalej najprostszy pierwszy krok przy problemach kota.</p>
           </div>
         </section>
-
-        <section style={{ background: 'var(--paper)' }}>
-          <NotatnikSectionHead index="II." kicker="Jak to dziala" title="Przy kocie bardzo czesto najpierw sprawdzamy porzadek sytuacji." />
-          <div className="notatnik-steps">
-            <article className="notatnik-step">
-              <div className="notatnik-step-number">00</div>
-              <h3>Najpierw zdrowie, jesli trzeba</h3>
-              <p>Przy naglej zmianie zachowania albo kuwecie pierwszym krokiem bywa weterynarz. To element bezpiecznej oceny.</p>
-            </article>
-            <article className="notatnik-step">
-              <div className="notatnik-step-number">01</div>
-              <h3>Wybierasz wlasciwy format</h3>
-              <p>Kwadrans jest najprostszym startem. Dwa kwadranse i Pelna konsultacja sa dla tematow szerszych.</p>
-            </article>
-            <article className="notatnik-step">
-              <div className="notatnik-step-number">02</div>
-              <h3>Opisujesz sytuacje kota</h3>
-              <p>Rozmawiamy o tym, co dzieje sie dzis w domu, i wybieramy pierwszy ruch z sensem dla kota i opiekuna.</p>
-            </article>
-            <article className="notatnik-step">
-              <div className="notatnik-step-number">03</div>
-              <h3>Wiesz, czy wejsc szerzej</h3>
-              <p>Jesli problem obejmuje zdrowie, srodowisko i relacje, po rozmowie wiadomo, czy kolejnym krokiem maja byc Dwa kwadranse albo Pelna konsultacja.</p>
-            </article>
-          </div>
-        </section>
-
-        <ServiceDecisionSection
-          index="III."
-          eyebrow="Usluga online"
-          title="Dla kota obowiazuje ta sama logika 3 formatow."
-          description="Kwadrans pomaga ustalic pierwszy priorytet, Dwa kwadranse daja etap posredni, a Pelna konsultacja zostaje dla spraw, ktore wymagaja szerszego porzadkowania."
-          audioHref={quickHref}
-          consultationHref={consultationHref}
-          serviceHref={serviceLandingHref}
-          serviceLead="Jesli temat kota obejmuje zdrowie, srodowisko i napiecia w domu, od razu ustawimy bezpieczny zakres dalszej pracy."
-          quickBullets={[
-            'kuweta, napiecie albo zmiana w domu na start',
-            'krotka rozmowa o priorytecie i pierwszym ruchu',
-            'lekki poczatek bez przeciazania opiekuna',
-          ]}
-          consultationBullets={[
-            'kilka warstw problemu lub konflikt miedzy kotami',
-            'wiecej czasu na zasoby, przestrzen i rytm dnia',
-            'szerszy plan zmian po pierwszym rozpoznaniu',
-          ]}
-          serviceLinkLabel="Zobacz stronę usługi online"
-        />
 
         <section id="konsultacja">
-          <NotatnikSectionHead index="IV." kicker="Uslugi" title="Porownanie uslug dla opiekuna kota." />
+          <NotatnikSectionHead index="II." kicker="3 formaty konsultacji" title="Ktory format dla kota ma sens na start." />
           <p className="notatnik-service-description">
-            Przy kuwecie, stresie i relacjach miedzy kotami dobrze od razu widziec roznice miedzy prostym startem, etapem posrednim i pelna
-            konsultacja.
+            Najpierw wybierasz zakres, dopiero potem termin. Kwadrans pomaga ustalic pierwszy priorytet, Dwa kwadranse daja wiecej czasu przy kilku
+            watkach, a Pelna konsultacja zostaje dla spraw zlozonych albo utrwalonych.
           </p>
-          <ServicesComparison species="kot" />
-          <p className="notatnik-service-note top-gap-small">
-            Jesli po wyborze zwyklego Kwadransu zalezy Ci na czasie, wariant priorytetowy moze pojawic sie dopiero przy rezerwacji.
-          </p>
+          <div className="card-grid three-up top-gap-small">
+            {consultationFormats.map((format) => (
+              <article key={format.title} className="summary-card tree-backed-card">
+                <div className="notatnik-mono">{format.eyebrow}</div>
+                <h3>{format.title}</h3>
+                <p>{format.description}</p>
+                <div className="editorial-hero-meta" aria-label={`Parametry uslugi ${format.title}`}>
+                  {format.meta.map((item) => (
+                    <span key={item}>{item}</span>
+                  ))}
+                </div>
+                <p>
+                  <strong>Kiedy wybrac:</strong> {format.whenToChoose}
+                </p>
+                <div className="hero-actions top-gap-small">
+                  <Link href={format.href} prefetch={false} className={format.ctaClassName}>
+                    {format.ctaLabel}
+                  </Link>
+                </div>
+              </article>
+            ))}
+          </div>
+          <div className="list-card tree-backed-card top-gap-small">
+            <p>
+              Kwadrans na juz (99 zl) - ten sam format, termin potwierdzany do 15 minut od wplaty. Jesli chcesz najpierw zobaczyc szerszy opis pracy
+              online, przejdz do{' '}
+              <Link href={serviceLandingHref} prefetch={false} className="notatnik-inline-link">
+                pelnego opisu konsultacji online
+              </Link>
+              .
+            </p>
+          </div>
         </section>
 
         <section id="faq">
-          <NotatnikSectionHead index="V." kicker="FAQ" title="Najczestsze pytania przy tematach kocich." />
-          <div className="notatnik-faq-grid">
+          <NotatnikSectionHead index="III." kicker="FAQ" title="3 szybkie odpowiedzi przy tematach kocich." />
+          <div className="card-grid three-up top-gap-small">
             {faqItems.map((item) => (
-              <article key={item.question} className="notatnik-faq-item">
-                <h4>{item.question}</h4>
+              <article key={item.question} className="summary-card tree-backed-card">
+                <h3>{item.question}</h3>
                 <p>{item.answer}</p>
               </article>
             ))}

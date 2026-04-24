@@ -272,7 +272,7 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
               onChange={() => updateField('service', 'kwadrans-na-juz')}
             />
             <span>
-              {URGENT_SERVICE_OPTION.label} / {URGENT_SERVICE_OPTION.price} (tryb priorytetowy)
+              {URGENT_SERVICE_OPTION.label} / {URGENT_SERVICE_OPTION.price} — szybki termin
             </span>
           </label>
         ) : null}
@@ -286,7 +286,7 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
             className="notatnik-inline-link"
             onClick={() => updateField('service', 'kwadrans-na-juz')}
           >
-            Przejdz do priorytetowego trybu
+            Przejdz do Kwadransu na juz
           </button>
           <div className="field-help top-gap-small">{PUBLIC_OFFER_BOOKING_PRIORITY_NOTE}</div>
         </div>

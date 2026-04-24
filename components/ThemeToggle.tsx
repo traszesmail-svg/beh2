@@ -68,7 +68,7 @@ export function ThemeToggle() {
       <span className="notatnik-theme-toggle-track" aria-hidden="true">
         <span className="notatnik-theme-toggle-thumb" />
       </span>
-      <span className="notatnik-theme-toggle-label">{isDark ? 'Ciemny' : 'Jasny'}</span>
+      <span className="notatnik-theme-toggle-label">{isDark ? 'Wlacz jasny' : 'Wlacz ciemny'}</span>
     </button>
   )
 }

@@ -12,13 +12,13 @@ export const PUBLIC_OFFER_SERVICE_ORDER = [
 ] as const
 
 export const PUBLIC_OFFER_LEAD =
-  'Masz do wyboru trzy glowne formaty konsultacji: krotki start, szersze uporzadkowanie tematu albo pelna konsultacja dla spraw zlozonych. Nie zaczynasz od najdrozszej opcji, tylko od tej, ktora pasuje do skali problemu.'
+  'Masz do wyboru trzy formaty konsultacji: Kwadrans (15 min, 69 zl), Dwa kwadranse (30 min, 169 zl) albo Pelna konsultacja dla spraw zlozonych (60 min, 470 zl). Wybierasz ten, ktory pasuje do skali problemu — nie zaczynasz od najdrozszego.'
 
 export const PUBLIC_OFFER_DECISION_COPY = {
   quick:
     'Kwadrans jest najprostszym startem, gdy chcesz nazwac problem, ustalic priorytet i wiedziec, co robic dalej.',
   urgent:
-    'Kwadrans na juz to ten sam 15-minutowy format, ale w trybie priorytetowym i z mozliwie szybszym terminem. To nie jest dluzsza konsultacja.',
+    'Kwadrans na juz to ten sam 15-minutowy format audio co Kwadrans za 69 zl — roznica polega tylko na szybszym potwierdzeniu terminu (do 15 minut od wplaty). To nie jest dluzsza konsultacja.',
   bridge:
     'Dwa kwadranse sa dla tematow szerszych, gdy 15 minut to za malo, ale pelna konsultacja bylaby jeszcze zbyt szerokim startem.',
   premium:
@@ -32,13 +32,13 @@ export const PUBLIC_OFFER_START_GUIDE = [
 ] as const
 
 export const PUBLIC_OFFER_PRIORITY_VARIANT_NOTE =
-  'Jesli po wyborze terminu zalezy Ci na szybszym wejsciu, przy Kwadransie moze byc dostepny wariant priorytetowy.'
+  'Jesli zalezy Ci na mozliwie szybkim terminie, przy Kwadransie dostepny jest Kwadrans na juz (99 zl) — ten sam format, termin potwierdzany do 15 minut.'
 
 export const PUBLIC_OFFER_BOOKING_PRIORITY_PROMPT =
-  'Chcesz szybciej? Przy Kwadransie moze byc dostepny priorytetowy tryb Kwadrans na juz. To ten sam 15-minutowy format, ale z szybszym terminem.'
+  'Potrzebujesz rozmowy szybciej? Kwadrans na juz to ten sam 15-minutowy format audio, z terminem potwierdzanym do 15 minut od wplaty.'
 
 export const PUBLIC_OFFER_BOOKING_PRIORITY_NOTE =
-  'Kwadrans na juz to ten sam format co zwykly Kwadrans. Roznica dotyczy priorytetu i szybszego terminu, nie zakresu rozmowy.'
+  'Kwadrans na juz ma identyczny zakres co zwykly Kwadrans. Roznica dotyczy tylko szybkosci potwierdzenia terminu, nie dlugosci ani tresci rozmowy.'
 
 export const PUBLIC_OFFER_BOOKING_LEAD =
   'Wybierasz zakres konsultacji, ktory pasuje do skali problemu. Kwadrans jest najprostszym startem, Dwa kwadranse sa dla tematow szerszych, a Pelna konsultacja dla spraw zlozonych i przewleklych.'

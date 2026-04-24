@@ -151,7 +151,7 @@ export default async function FormPage({
                   {isAudioOnlyBookingService(serviceType)
                     ? 'Kamera nie jest potrzebna.'
                     : serviceType === 'konsultacja-30-min'
-                      ? 'To spokojniejszy etap posredni, gdy sam Kwadrans to za malo.'
+                      ? 'Wiecej czasu na uporzadkowanie kilku watkow, gdy 15 minut to za malo.'
                       : 'To najszersza konsultacja online z wieksza iloscia czasu na temat i kilka watkow naraz.'}
                 </p>
               </div>

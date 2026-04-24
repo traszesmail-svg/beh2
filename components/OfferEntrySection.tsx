@@ -58,7 +58,7 @@ export function OfferEntrySection({
   species = null,
   sectionId,
   eyebrow = 'Oferta',
-  title = 'Masz trzy glowne formaty konsultacji i jeden wariant priorytetowy przy Kwadransie.',
+  title = 'Trzy glowne formaty konsultacji — Kwadrans, Dwa kwadranse i Pelna konsultacja.',
   description = PUBLIC_OFFER_BOOKING_LEAD,
 }: OfferEntrySectionProps) {
   const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min', false, species)
@@ -95,7 +95,7 @@ export function OfferEntrySection({
             {/* Kwadrans zostaje nazwa uslugi, a format idzie w descriptorze. */}
             <span>{COPY_SERVICE_NAMES.primaryDescriptor}</span>
             <span>{formatPricePln(PUBLIC_OFFER_PRICES.quick)}</span>
-            <span>cena wejscia</span>
+            <span>69 zl / 15 min</span>
           </div>
           <p className="muted">Dla {speciesLabel}, gdy temat jest jeden albo chcesz spokojnie ustalic kierunek bez przechodzenia od razu do dluzszej konsultacji.</p>
           <p className="muted">{PUBLIC_OFFER_PRIORITY_VARIANT_NOTE}</p>
@@ -109,13 +109,13 @@ export function OfferEntrySection({
         <article className="summary-card tree-backed-card">
           <div className="section-eyebrow">{COPY_SERVICE_NAMES.bridge}</div>
           <h3>{COPY_SERVICE_NAMES.bridge}</h3>
-          <p>Pomost miedzy szybkim startem a Pelna konsultacja, gdy 15 minut to za malo, ale nie potrzebujesz od razu najszerszej opcji.</p>
+          <p>Format dla tematow szerszych, gdy 15 minut to za malo, ale pelna konsultacja bylaby jeszcze zbyt szerokim startem.</p>
           <div className="editorial-hero-meta" aria-label="Parametry uslugi posredniej">
             <span>30 min online</span>
             <span>{formatPricePln(PUBLIC_OFFER_PRICES.bridge)}</span>
-            <span>pomost</span>
+            <span>szerszy zakres</span>
           </div>
-          <p className="muted">Dla {speciesLabel}, gdy chcesz spokojniej wejsc w 2-3 watki i po rozmowie dostac krotka notatke.</p>
+          <p className="muted">Dla {speciesLabel}, gdy chcesz uporzadkowac 2-3 watki i po rozmowie dostac krotka notatke.</p>
           <div className="hero-actions top-gap-small">
             <Link href={bridgeHref} prefetch={false} className="button button-ghost">
               {COPY_CTA.bridge}

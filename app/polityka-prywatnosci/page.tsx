@@ -125,8 +125,19 @@ const sections: LegalSection[] = [
           strony, materialu lub segmentu tematycznego oraz obslugi dalszego kroku wynikajacego z danego formularza.
         </p>
         <p>
-          Serwis zapisuje decyzje dotyczaca analityki w pamieci przegladarki i pliku cookie. Narzedzia analityczne nie sa
+          Serwis zapisuje decyzje dotyczaca analityki w pamieci przegladarki (localStorage) i pliku cookie. Narzedzia analityczne nie sa
           uruchamiane przed wyrazeniem zgody.
+        </p>
+        <p>
+          Serwis moze ustawiac nastepujace rodzaje cookies:
+        </p>
+        <ul className="premium-bullet-list">
+          <li><strong>Niezbedne technicznie</strong> — zapisuja decyzje o motywie (jasny/ciemny), sesje uzytkownika oraz token dostepu do strony rezerwacji. Czas waznosci: sesja przegladarki albo do 30 dni (trwale).</li>
+          <li><strong>Analityczne (za zgoda)</strong> — uruchamiane wylacznie po wyrazeniu zgody w banerze; sluza do pomiaru ruchu i zrodel odwiedzin. Czas waznosci: do 13 miesiecy.</li>
+        </ul>
+        <p>
+          Uzytkownik moze w kazdej chwili usunac pliki cookie przez ustawienia przegladarki lub wycofac zgode na analityke
+          ponownie otwierajac baner zgody.
         </p>
       </>
     ),

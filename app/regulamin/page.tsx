@@ -141,7 +141,23 @@ const sections: LegalSection[] = [
     ),
   },
   {
-    title: '9. Reklamacje',
+    title: '9. Ograniczenie odpowiedzialnosci i sila wyzsza',
+    body: (
+      <>
+        <p>
+          Usluga ma charakter konsultacji behawioralnej i nie stanowi porady weterynaryjnej ani diagnozy medycznej. Uslugodawca nie ponosi
+          odpowiedzialnosci za brak konkretnych efektow terapeutycznych, jezeli klient nie wdrozyl uzgodnionych zalecen lub zachowanie zwierzecia
+          wynika z przyczyn zdrowotnych wymagajacych interwencji weterynaryjnej.
+        </p>
+        <p>
+          W przypadku sily wyzszej (awaria lacznosci po stronie uslugodawcy, zdarzenia losowe, niedostepnosc platformy technicznej niezalezna od
+          uslugodawcy) realizacja uslugi zostanie przelozna na najblizszy mozliwy termin albo klient otrzyma pelny zwrot wplaty.
+        </p>
+      </>
+    ),
+  },
+  {
+    title: '10. Reklamacje',
     body: (
       <>
         <p>Reklamacje dotyczace dzialania serwisu, procesu rezerwacji albo realizacji uslugi mozna zglaszac przez formularz kontaktowy lub e-mail.</p>
@@ -150,7 +166,7 @@ const sections: LegalSection[] = [
     ),
   },
   {
-    title: '10. Dane osobowe',
+    title: '11. Dane osobowe',
     body: (
       <>
         <p>Zasady przetwarzania danych osobowych zwiazanych z serwisem, kontaktem, rezerwacja i realizacja uslug okresla odrebna Polityka prywatnosci.</p>
@@ -158,7 +174,7 @@ const sections: LegalSection[] = [
     ),
   },
   {
-    title: '11. Postanowienia koncowe',
+    title: '12. Postanowienia koncowe',
     body: (
       <>
         <p>Regulamin obowiazuje od dnia jego opublikowania w serwisie i ma zastosowanie do rezerwacji skladanych po tej dacie.</p>

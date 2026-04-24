@@ -69,8 +69,8 @@ export default function PdfGuideDetailPage({ params }: PdfGuideDetailPageProps) 
     <NotatnikPageShell
       tag="Poradniki PDF / detal"
       navItems={PUBLIC_SITE_NAV_ITEMS}
-      ctaHref={orderHref}
-      ctaLabel="Zamów ten PDF"
+      ctaHref="/book?service=szybka-konsultacja-15-min"
+      ctaLabel="Kwadrans / 69 zl"
       footerPrimaryHref={orderHref}
       footerPrimaryLabel="Zamów ten PDF"
     >
