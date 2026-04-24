@@ -436,6 +436,29 @@ async function assertLegacyHeaderLinksHidden(page: Page, routePath: string) {
   }
 }
 
+async function assertPublicSiteNavVisible(page: Page, routePath: string) {
+  const nav = page.locator('header.notatnik-topbar nav[aria-label="Glowne sekcje"]').first()
+  await waitForAnyVisible([nav], 20000)
+
+  for (const label of ['Pies', 'Kot', 'Niezbednik', 'Blog', 'O mnie', 'Cennik', 'Kontakt']) {
+    const link = nav.getByRole('link', { name: new RegExp(`^${escapeRegExp(label)}$`, 'i') }).first()
+
+    if (!(await isVisible(link))) {
+      throw new Error(`Brakuje linku ${label} w publicznym topbarze na ${routePath}.`)
+    }
+  }
+}
+
+async function assertBookingHeroJumpLink(page: Page, routePath: string, expectedHref: string, expectedLabel: RegExp) {
+  const link = page.locator('.notatnik-subhero-actions a').filter({ hasText: expectedLabel }).first()
+  await waitForAnyVisible([link], 20000)
+  const href = await link.getAttribute('href')
+
+  if (href !== expectedHref) {
+    throw new Error(`CTA hero na ${routePath} ma href ${href ?? 'null'} zamiast ${expectedHref}.`)
+  }
+}
+
 type OfferJourneyConfig = {
   stepName: string
   serviceType: BookingServiceType
@@ -1254,6 +1277,47 @@ async function main() {
       step.notes.push('Pobyty pozostają opcją dalszą, nie zimnym pierwszym krokiem.')
     })
 
+    await runStep(results, '/book 30 min hero CTA', publicPage, async (step) => {
+      await publicPage.goto(`${baseUrl}/book?service=konsultacja-30-min`, { waitUntil: 'domcontentloaded' })
+      await waitForAnyBodyText(publicPage, [/Rezerwacja Dwa kwadranse z behawiorysta/i, /Rezerwacja Dwoch kwadransow z behawiorysta/i], 20000)
+      await assertBookingHeroJumpLink(publicPage, '/book?service=konsultacja-30-min', '/book?service=konsultacja-30-min#formularz', /Przejdz do formularza: Dwa kwadranse/i)
+      const bodyText = cleanText(await publicPage.locator('main').innerText())
+      if (bodyText.includes('Kwadrans to bezpieczny start')) {
+        throw new Error('Book 30 min nadal pokazuje ogolny blok "Kwadrans to bezpieczny start".')
+      }
+      if (!bodyText.includes('Dwa kwadranse dla szerszego tematu')) {
+        throw new Error('Book 30 min nie pokazuje dopasowanego bloku decyzji.')
+      }
+      step.notes.push('Book 30 min ma aktywny hero CTA do formularza i bez generycznego bloku Kwadransu.')
+    })
+
+    await runStep(results, '/book full consultation hero CTA', publicPage, async (step) => {
+      await publicPage.goto(`${baseUrl}/book?service=konsultacja-behawioralna-online`, { waitUntil: 'domcontentloaded' })
+      await waitForAnyBodyText(publicPage, [/Rezerwacja Pelna konsultacja behawioralna/i, /Rezerwacja Pelnej konsultacji behawioralnej/i], 20000)
+      await assertBookingHeroJumpLink(
+        publicPage,
+        '/book?service=konsultacja-behawioralna-online',
+        '/book?service=konsultacja-behawioralna-online#formularz',
+        /Przejdz do formularza: Pelna konsultacja/i,
+      )
+      const bodyText = cleanText(await publicPage.locator('main').innerText())
+      if (bodyText.includes('Kwadrans to bezpieczny start')) {
+        throw new Error('Book pelna konsultacja nadal pokazuje ogolny blok "Kwadrans to bezpieczny start".')
+      }
+      if (!bodyText.includes('Pelna konsultacja dla spraw zlozonych')) {
+        throw new Error('Book pelna konsultacja nie pokazuje dopasowanego bloku decyzji.')
+      }
+      step.notes.push('Book pelna konsultacja ma aktywny hero CTA do formularza i bez generycznego bloku Kwadransu.')
+    })
+
+    await runStep(results, '/psy/reaktywnosc-na-smyczy', publicPage, async (step) => {
+      await publicPage.goto(`${baseUrl}/psy/reaktywnosc-na-smyczy`, { waitUntil: 'domcontentloaded' })
+      await waitForAnyVisible([publicPage.locator('main h1').first()], 20000)
+      await assertPublicSiteNavVisible(publicPage, '/psy/reaktywnosc-na-smyczy')
+      await assertLegacyHeaderLinksHidden(publicPage, '/psy/reaktywnosc-na-smyczy')
+      step.notes.push('Problem landing uzywa pelnego publicznego topbaru zamiast uproszczonego menu.')
+    })
+
     await runStep(results, '/kontakt', publicPage, async (step) => {
       await publicPage.goto(`${baseUrl}/kontakt`, { waitUntil: 'domcontentloaded' })
       await waitForAnyBodyText(publicPage, [/Napisz wiadomość/i, /Piszesz do mnie/i], 20000)
@@ -1266,6 +1330,7 @@ async function main() {
       await waitForAnyVisible([publicPage.getByRole('heading', { level: 1, name: /Zasady rezerwacji szybkiej konsultacji 15 min/i })], 20000)
       await waitForAnyVisible([publicPage.getByText(/Publiczny profil CAPBT \/ COAPE/i)], 20000)
       await assertNoPublicPhoneLinks(publicPage, '/regulamin')
+      await assertPublicSiteNavVisible(publicPage, '/regulamin')
       await assertLegacyHeaderLinksHidden(publicPage, '/regulamin')
       step.notes.push('Regulamin używa nowego shellu prawnego bez publicznego telefonu i starego menu.')
     })
@@ -1278,8 +1343,25 @@ async function main() {
         20000,
       )
       await assertNoPublicPhoneLinks(publicPage, '/polityka-prywatnosci')
+      await assertPublicSiteNavVisible(publicPage, '/polityka-prywatnosci')
       await assertLegacyHeaderLinksHidden(publicPage, '/polityka-prywatnosci')
       step.notes.push('Polityka prywatności używa nowego shellu prawnego bez publicznego telefonu i starego menu.')
+    })
+
+    await runStep(results, '/oferta/poradniki-pdf guide nav', publicPage, async (step) => {
+      await publicPage.goto(`${baseUrl}/oferta/poradniki-pdf/pies-zostaje-sam-plan-pierwszych-krokow`, { waitUntil: 'domcontentloaded' })
+      await waitForAnyVisible([publicPage.locator('main h1').first()], 20000)
+      await assertPublicSiteNavVisible(publicPage, '/oferta/poradniki-pdf/pies-zostaje-sam-plan-pierwszych-krokow')
+      await assertLegacyHeaderLinksHidden(publicPage, '/oferta/poradniki-pdf/pies-zostaje-sam-plan-pierwszych-krokow')
+      step.notes.push('Strona pojedynczego PDF ma ten sam publiczny topbar co glowne templatey.')
+    })
+
+    await runStep(results, '/oferta/poradniki-pdf bundle nav', publicPage, async (step) => {
+      await publicPage.goto(`${baseUrl}/oferta/poradniki-pdf/pakiety/pakiet-kot-bez-napiecia`, { waitUntil: 'domcontentloaded' })
+      await waitForAnyVisible([publicPage.locator('main h1').first()], 20000)
+      await assertPublicSiteNavVisible(publicPage, '/oferta/poradniki-pdf/pakiety/pakiet-kot-bez-napiecia')
+      await assertLegacyHeaderLinksHidden(publicPage, '/oferta/poradniki-pdf/pakiety/pakiet-kot-bez-napiecia')
+      step.notes.push('Strona pakietu PDF ma ten sam publiczny topbar co glowne templatey.')
     })
 
     await publicContext.close()

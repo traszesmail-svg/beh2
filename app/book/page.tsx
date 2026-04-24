@@ -94,13 +94,15 @@ export default function BookPage({ searchParams }: BookPageProps) {
       : '/book?service=szybka-konsultacja-15-min#formularz'
   const footerPrimaryLabel =
     hasExplicitService && selectedOffer ? `Przejdz do formularza: ${selectedOffer.shortTitle}` : 'Przejdz do formularza'
+  const heroFormLabel =
+    hasExplicitService && selectedOffer ? `Przejdz do formularza: ${selectedOffer.shortTitle}` : 'Przejdz do formularza'
   const heroTag = hasExplicitService && selectedOffer ? `Rezerwacja / ${selectedOffer.shortTitle}` : 'Rezerwacja / spokojny start'
   const heroLead = hasExplicitService && selectedOffer ? selectedOffer.whenToChoose : PUBLIC_OFFER_BOOKING_LEAD
   const heroSupport = hasExplicitService && selectedOffer ? selectedOffer.heroSummary : PUBLIC_OFFER_BOOKING_REASSURANCE
   const summaryTitle = hasExplicitService && selectedOffer ? `Startujesz juz od: ${selectedOffer.shortTitle}.` : 'Najpierw sens wyboru, potem platnosc.'
   const summaryLead = hasExplicitService && selectedOffer ? selectedOffer.nextStep : PUBLIC_OFFER_BOOKING_PAYMENT
   const formLead = hasExplicitService
-    ? 'Startujesz juz z wybranego formatu. Jesli chcesz, mozesz jeszcze zmienic usluge nizej, ale ten wariant jest ustawiony jako punkt wyjscia.'
+    ? `Startujesz juz od ${selectedOffer?.shortTitle ?? 'wybranego formatu'}. Jesli chcesz, mozesz jeszcze zmienic usluge nizej, ale ten wariant jest ustawiony jako punkt wyjscia.`
     : 'Wpisz gatunek, wybierz usluge i zaproponuj 2-3 terminy. Reszte potwierdzam mailem - bez telefonu na stronie i bez kalendarza do klikania.'
   const serviceJsonLdDescription =
     hasExplicitService && selectedOffer
@@ -180,12 +182,12 @@ export default function BookPage({ searchParams }: BookPageProps) {
                 &rarr;
               </span>
             </Link>
-            <a href={heroFormHref} className="notatnik-btn notatnik-btn-ghost">
-              <span>Przejdz do formularza</span>
+            <Link href={heroFormHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
+              <span>{heroFormLabel}</span>
               <span className="notatnik-btn-arrow" aria-hidden="true">
                 &rarr;
               </span>
-            </a>
+            </Link>
           </div>
         </div>
 

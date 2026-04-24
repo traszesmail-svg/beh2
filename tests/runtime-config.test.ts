@@ -260,6 +260,27 @@ test('copy governance keeps Kwadrans as the primary service name and format as s
   assert.match(bookSource, /format: 15 min audio bez kamery/)
 })
 
+test('book page keeps a distinct jump-to-form CTA for explicit services', () => {
+  const bookSource = readSource('app', 'book', 'page.tsx')
+
+  assert.match(bookSource, /const heroFormLabel =/)
+  assert.match(bookSource, /Przejdz do formularza: \$\{selectedOffer\.shortTitle\}/)
+  assert.match(bookSource, /<Link href=\{heroFormHref\} prefetch=\{false\} className="notatnik-btn notatnik-btn-ghost">/)
+  assert.match(bookSource, /Dwa kwadranse dla szerszego tematu/)
+  assert.match(bookSource, /Pelna konsultacja dla spraw zlozonych/)
+})
+
+test('booking form intro follows the selected service instead of a generic booking lead', () => {
+  const bookingFormSource = readSource('components', 'BookRequestForm.tsx')
+
+  assert.match(bookingFormSource, /function getSelectedServiceIntro/)
+  assert.match(bookingFormSource, /Wybrany format: \$\{option\.label\} \/ \$\{option\.price\}\./)
+  assert.match(bookingFormSource, /30 minut online daje wiecej miejsca na dwa-trzy watki/)
+  assert.match(bookingFormSource, /To osobny format 60 minut z diagnoza sytuacji, planem poprawy i 7 dniami konsultacji tekstowych przez WhatsApp\./)
+  assert.doesNotMatch(bookingFormSource, /PUBLIC_OFFER_BOOKING_LEAD/)
+  assert.doesNotMatch(bookingFormSource, /PUBLIC_OFFER_BOOKING_REASSURANCE/)
+})
+
 test('home, dogs and cats pages point users to the canonical service page and explain Kwadrans vs 60 min', () => {
   const homeSource = readSource('app', 'page.tsx')
   const dogsSource = readSource('app', 'psy', 'page.tsx')
@@ -1082,6 +1103,14 @@ test('verified deploy readiness can block a syntactically valid URL when externa
 test('live clickthrough keeps legal pages inside public production QA', () => {
   const liveClickthroughSource = readSource('scripts', 'live-clickthrough-report.ts')
 
+  assert.match(liveClickthroughSource, /assertPublicSiteNavVisible/)
+  assert.match(liveClickthroughSource, /\/book\?service=konsultacja-30-min/)
+  assert.match(liveClickthroughSource, /\/book\?service=konsultacja-behawioralna-online/)
+  assert.match(liveClickthroughSource, /Przejdz do formularza: Dwa kwadranse/)
+  assert.match(liveClickthroughSource, /Przejdz do formularza: Pelna konsultacja/)
+  assert.match(liveClickthroughSource, /\/psy\/reaktywnosc-na-smyczy/)
+  assert.match(liveClickthroughSource, /\/oferta\/poradniki-pdf\/pies-zostaje-sam-plan-pierwszych-krokow/)
+  assert.match(liveClickthroughSource, /\/oferta\/poradniki-pdf\/pakiety\/pakiet-kot-bez-napiecia/)
   assert.match(liveClickthroughSource, /\/regulamin/)
   assert.match(liveClickthroughSource, /\/polityka-prywatnosci/)
   assert.match(liveClickthroughSource, /oferta -> payment \/ 30 min CTA/)

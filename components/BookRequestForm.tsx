@@ -5,11 +5,9 @@ import { useMemo, useState, type FormEvent } from 'react'
 import type { BookingServiceType } from '@/lib/booking-services'
 import type { BookingSpecies } from '@/lib/booking-routing'
 import {
-  PUBLIC_OFFER_BOOKING_LEAD,
   PUBLIC_OFFER_PAYMENT_EMAIL_STEP,
   PUBLIC_OFFER_BOOKING_PRIORITY_NOTE,
   PUBLIC_OFFER_BOOKING_PRIORITY_PROMPT,
-  PUBLIC_OFFER_BOOKING_REASSURANCE,
 } from '@/lib/public-offer-copy'
 
 type FormState = 'idle' | 'loading' | 'success' | 'error'
@@ -80,15 +78,44 @@ function createInitialForm(initialService: BookingServiceType, initialSpecies: B
   }
 }
 
+function getSelectedServiceIntro(service: BookingServiceType) {
+  const option = getServiceOption(service)
+
+  switch (service) {
+    case 'konsultacja-30-min':
+      return {
+        title: `Wybrany format: ${option.label} / ${option.price}.`,
+        copy: '30 minut online daje wiecej miejsca na dwa-trzy watki i spokojniejsze uporzadkowanie sytuacji niz sam Kwadrans.',
+      }
+    case 'konsultacja-behawioralna-online':
+      return {
+        title: `Wybrany format: ${option.label} / ${option.price}.`,
+        copy: 'To osobny format 60 minut z diagnoza sytuacji, planem poprawy i 7 dniami konsultacji tekstowych przez WhatsApp.',
+      }
+    case 'kwadrans-na-juz':
+      return {
+        title: `Wybrany format: ${option.label} / ${option.price}.`,
+        copy: 'To ten sam 15-minutowy format co zwykly Kwadrans, tylko z priorytetem i szybszym potwierdzeniem terminu.',
+      }
+    case 'szybka-konsultacja-15-min':
+    default:
+      return {
+        title: `Wybrany format: ${option.label} / ${option.price}.`,
+        copy: 'To najprostszy start, gdy chcesz nazwac problem, ustalic priorytet i wiedziec, co robic dalej.',
+      }
+  }
+}
+
 export function BookRequestForm({ initialService, initialSpecies, entryService }: BookRequestFormProps) {
   const [form, setForm] = useState<BookingRequestPayload>(() => createInitialForm(initialService, initialSpecies))
   const [status, setStatus] = useState<FormState>('idle')
   const [feedback, setFeedback] = useState('')
   const selectedService = useMemo(() => getServiceOption(form.service), [form.service])
+  const selectedServiceIntro = useMemo(() => getSelectedServiceIntro(form.service), [form.service])
   const entryServiceOption = entryService ? getServiceOption(entryService) : null
   const isUrgentNow = form.service === 'kwadrans-na-juz'
   const showPriorityPrompt = form.service === 'szybka-konsultacja-15-min'
-  const showEntryServiceBox = entryServiceOption !== null && entryService !== 'kwadrans-na-juz'
+  const showEntryServiceBox = entryServiceOption !== null && entryService !== 'kwadrans-na-juz' && form.service !== entryService
   const showServiceChangeLegend = entryServiceOption !== null || isUrgentNow
 
   function updateField<K extends keyof BookingRequestPayload>(key: K, value: BookingRequestPayload[K]) {
@@ -219,12 +246,12 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
   return (
     <form className="form-grid top-gap" onSubmit={handleSubmit} noValidate>
       <div className="info-box full-width contact-form-intro">
-        {PUBLIC_OFFER_BOOKING_LEAD} {PUBLIC_OFFER_BOOKING_REASSURANCE}
+        <strong>{selectedServiceIntro.title}</strong> {selectedServiceIntro.copy}
       </div>
 
       {showEntryServiceBox && entryServiceOption ? (
         <div className="info-box full-width">
-          <strong>Startujesz juz z uslugi: {entryServiceOption.label}.</strong> Ten wariant jest ustawiony jako punkt wyjscia. Jesli chcesz, mozesz nizej zmienic format.
+          <strong>Ten formularz otworzyl sie z usluga: {entryServiceOption.label}.</strong> Nizej wybrales juz inny format, wiec po wyslaniu prosby zapisze sie aktualny wybor.
         </div>
       ) : null}
 
