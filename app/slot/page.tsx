@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 import { AnalyticsEventOnMount } from '@/components/AnalyticsEventOnMount'
 import { BookingStageEyebrow } from '@/components/BookingStageEyebrow'
 import { BookingServiceInfoCard } from '@/components/BookingServiceInfoCard'
-import { NotatnikFooter, NotatnikTopbar, PUBLIC_BOOKING_FLOW_NAV_ITEMS } from '@/components/NotatnikA'
+import { NotatnikFooter, NotatnikSideVisuals, NotatnikTopbar, PUBLIC_BOOKING_FLOW_NAV_ITEMS } from '@/components/NotatnikA'
 import { getServiceAnalyticsParams } from '@/lib/analytics-schema'
 import {
   type BookingServiceType,
@@ -229,6 +229,7 @@ export default async function SlotPage({
 
   return (
     <main className="notatnik-page" data-analytics-disabled={qaBooking ? 'true' : undefined} data-qa-booking={qaBooking ? 'true' : 'false'}>
+      <NotatnikSideVisuals variant={getProblemSpecies(problem) === 'kot' ? 'cat' : 'dog'} />
       <div className="notatnik-shell">
         <NotatnikTopbar tag="Rezerwacja konsultacji" navItems={PUBLIC_BOOKING_FLOW_NAV_ITEMS} ctaHref={returnHref} ctaLabel="Wroc do tematow" ctaVariant="ghost" />
 

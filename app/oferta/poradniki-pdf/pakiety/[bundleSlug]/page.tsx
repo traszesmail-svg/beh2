@@ -68,6 +68,7 @@ export default function PdfBundleDetailPage({ params }: PdfBundleDetailPageProps
       ctaLabel="Kwadrans / 69 zl"
       footerPrimaryHref={orderHref}
       footerPrimaryLabel="Zamów pakiet"
+      sideVisualVariant="materials"
     >
       <Schema
         data={getProductJsonLd({

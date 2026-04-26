@@ -53,6 +53,7 @@ export default function MaterialyLandingPage() {
       ctaLabel="Kwadrans / 69 zl"
       footerPrimaryHref={quickHref}
       footerPrimaryLabel="Kwadrans z behawiorysta"
+      sideVisualVariant="materials"
     >
       <section className="notatnik-subhero">
         <div>

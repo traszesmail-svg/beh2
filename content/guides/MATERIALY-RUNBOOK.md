@@ -29,8 +29,8 @@ W `.env.local` (lub Vercel project env):
 
 ```dotenv
 # Numer telefonu pokazywany klientowi w mailu z instrukcją BLIK.
-# Domyślnie: 512 992 026 (z lib/site.ts)
-OWNER_BLIK_PHONE=512 992 026
+# Domyślnie: 579163241
+OWNER_BLIK_PHONE=579163241
 
 # Sekret do nagłówkowego confirma /api/materialy/confirm (curl/Postman).
 # Wygeneruj długi losowy ciąg — 32+ znaków.

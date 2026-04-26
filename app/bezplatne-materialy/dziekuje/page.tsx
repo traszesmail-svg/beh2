@@ -31,6 +31,7 @@ export default function LeadMagnetThankYouPage({
       ctaLabel="Kwadrans / 69 zl"
       footerPrimaryHref={audioHref}
       footerPrimaryLabel="Kwadrans z behawiorysta"
+      sideVisualVariant="materials"
     >
       <div className="container editorial-stack">
 

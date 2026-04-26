@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ContactLeadForm } from '@/components/ContactLeadForm'
-import { NotatnikFooter, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
+import { NotatnikFooter, NotatnikSideVisuals, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
 import { buildBookHref, readBookingSpeciesSearchParam } from '@/lib/booking-routing'
 import { COPY_HELPERS } from '@/lib/copy-governance'
@@ -47,6 +47,7 @@ export default function ContactPage({
   return (
     <main className="notatnik-page">
       <Schema data={structuredData} />
+      <NotatnikSideVisuals variant="contact" />
       <div className="notatnik-shell">
         <NotatnikTopbar tag="Kontakt / napisz wiadomosc" navItems={PUBLIC_SITE_NAV_ITEMS} ctaHref={quickHref} ctaLabel="Kwadrans / 69 zl" />
 
@@ -86,7 +87,7 @@ export default function ContactPage({
                 <span>Instagram</span>
                 <span>
                   <Link href={INSTAGRAM_PROFILE_URL} target="_blank" rel="noopener noreferrer">
-                    @coapebehawiorysta
+                    @regulskibehawiorysta
                   </Link>
                 </span>
               </div>

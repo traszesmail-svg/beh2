@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
+import { NotatnikSideVisuals } from '@/components/NotatnikA'
 import { BookShelfCard, BundleShelfCard, PdfShelfCard, ShopAnchorNav } from '@/components/ShopCatalog'
 import { FUNNEL_SECONDARY_LABEL, FUNNEL_UPGRADE_HREF, FUNNEL_UPGRADE_LABEL } from '@/lib/offers'
 import {
@@ -104,6 +105,7 @@ export function SpeciesShopPage({
 
   return (
     <main className="page-wrap marketing-page">
+      <NotatnikSideVisuals variant={species === 'koty' ? 'cat' : 'dog'} />
       <div className="container">
         <Header />
 

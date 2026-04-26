@@ -83,6 +83,7 @@ export default function AboutPage() {
       ctaLabel="Kwadrans / 69 zl"
       footerPrimaryHref={quickHref}
       footerPrimaryLabel="Kwadrans z behawiorysta"
+      sideVisualVariant="about"
     >
       <Schema data={structuredData} />
       <section className="notatnik-subhero">

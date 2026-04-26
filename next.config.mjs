@@ -24,10 +24,10 @@ const nextConfig = {
   },
   experimental: {
     typedRoutes: false,
-    workerThreads: true,
+    workerThreads: false,
     cpus: 1,
     webpackBuildWorker: false,
-    optimizeCss: true,
+    optimizeCss: false,
     outputFileTracingIncludes: {
       '/*': ['./qa-reports/latest-report.md'],
     },

@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 import { BookingForm } from '@/components/BookingForm'
 import { BookingServiceInfoCard } from '@/components/BookingServiceInfoCard'
 import { BookingStageEyebrow } from '@/components/BookingStageEyebrow'
-import { NotatnikFooter, NotatnikTopbar, PUBLIC_BOOKING_FLOW_NAV_ITEMS } from '@/components/NotatnikA'
+import { NotatnikFooter, NotatnikSideVisuals, NotatnikTopbar, PUBLIC_BOOKING_FLOW_NAV_ITEMS } from '@/components/NotatnikA'
 import { PricingDisclosure } from '@/components/PricingDisclosure'
 import {
   DEFAULT_BOOKING_SERVICE,
@@ -100,6 +100,7 @@ export default async function FormPage({
 
   return (
     <main className="notatnik-page" data-analytics-disabled={qaBooking ? 'true' : undefined} data-qa-booking={qaBooking ? 'true' : 'false'}>
+      <NotatnikSideVisuals variant={getProblemSpecies(problem) === 'kot' ? 'cat' : 'dog'} />
       <div className="notatnik-shell">
         <NotatnikTopbar tag="Rezerwacja konsultacji" navItems={PUBLIC_BOOKING_FLOW_NAV_ITEMS} ctaHref={slotsHref} ctaLabel="Wroc do terminow" ctaVariant="ghost" />
 

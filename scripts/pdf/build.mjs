@@ -37,6 +37,8 @@ const CATEGORY_MAP = {
   'pies-szczeka-na-gosci': 'dog',
   'pies-trudny-spacer': 'dog',
   'pies-zostaje-sam': 'dog',
+  'kwadrans-podstawy-psa': 'dog',
+  'kwadrans-podstawy-kota': 'cat',
 }
 
 const TAG_MAP = {
@@ -162,6 +164,17 @@ async function buildOne(slug, browser, tpl, css) {
   const readingTime = readingTimeMinutes(body)
   const bulletsHtml = bullets.map((b) => `<li>${b}</li>`).join('\n      ')
 
+  // Embed cover photo if available
+  let coverImageTag = ''
+  const coverPath = path.join(srcDir, 'cover.jpg')
+  try {
+    const coverData = await fs.readFile(coverPath)
+    const b64 = coverData.toString('base64')
+    coverImageTag = `<img src="data:image/jpeg;base64,${b64}" alt="" />`
+  } catch {
+    // No cover photo — hero renders as solid dark background
+  }
+
   const html = renderTemplate(tpl, {
     title,
     subtitle,
@@ -173,6 +186,7 @@ async function buildOne(slug, browser, tpl, css) {
     readingTime,
     issueDate: issueDatePl(),
     styles: css,
+    coverImageTag,
   })
 
   // Save HTML for debugging

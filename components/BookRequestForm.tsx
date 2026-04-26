@@ -10,6 +10,7 @@ import {
   PUBLIC_OFFER_BOOKING_PRIORITY_NOTE,
   PUBLIC_OFFER_BOOKING_PRIORITY_PROMPT,
 } from '@/lib/public-offer-copy'
+import { SlotPicker, type SlotPickerMode } from '@/components/SlotPicker'
 
 type FormState = 'idle' | 'loading' | 'success' | 'error'
 
@@ -102,7 +103,7 @@ function getSelectedServiceIntro(service: BookingServiceType) {
     default:
       return {
         title: `Wybrany format: ${option.label} / ${option.price}.`,
-        copy: 'To najprostszy start, gdy chcesz nazwac problem, ustalic priorytet i wiedziec, co robic dalej.',
+        copy: 'Po rozmowie dostajesz diagnoze sytuacji i przewodnik PDF z podstawami dla psa lub kota (~20 stron).',
       }
   }
 }
@@ -116,6 +117,7 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
   const entryServiceOption = entryService ? getServiceOption(entryService) : null
   const isUrgentNow = form.service === 'kwadrans-na-juz'
   const showPriorityPrompt = form.service === 'szybka-konsultacja-15-min'
+  const slotPickerMode: SlotPickerMode = form.service === 'konsultacja-behawioralna-online' ? 'full-consultation' : 'standard'
   const showEntryServiceBox = entryServiceOption !== null && entryService !== 'kwadrans-na-juz' && form.service !== entryService
   const showServiceChangeLegend = entryServiceOption !== null || isUrgentNow
 
@@ -147,7 +149,7 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
     }
 
     if (!isUrgentNow && !preferredSlots) {
-      return 'Podaj co najmniej jeden preferowany termin.'
+      return 'Wybierz co najmniej jeden termin z kalendarza powyzej.'
     }
 
     if (!form.consentRodo || !form.consentRegulamin || !form.consentEarlyStart) {
@@ -396,18 +398,23 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
       </div>
 
       <div className="full-width form-field">
-        <label htmlFor="book-preferred-slots">3 preferowane terminy</label>
+        <label htmlFor="book-preferred-slots">Preferowane terminy</label>
         {isUrgentNow ? (
           <div className="info-box">Chce termin jak najszybciej - prosze o kontakt w ciagu 15 minut.</div>
         ) : (
-          <textarea
-            id="book-preferred-slots"
-            name="preferredSlots"
-            rows={4}
-            value={form.preferredSlots}
-            onChange={(event) => updateField('preferredSlots', event.target.value)}
-            placeholder="np. wtorek 18:00, sroda 10:00, piatek 15:00"
-          />
+          <>
+            <SlotPicker
+              onChange={(formatted) => updateField('preferredSlots', formatted)}
+              mode={slotPickerMode}
+              className="top-gap-small"
+            />
+            {form.preferredSlots ? (
+              <input type="hidden" name="preferredSlots" value={form.preferredSlots} />
+            ) : null}
+            <div className="field-help" style={{ marginTop: '8px' }}>
+              Kliknij dzien, wybierz godzine. Dodaj 2-3 opcje jako rezerwowe.
+            </div>
+          </>
         )}
       </div>
 

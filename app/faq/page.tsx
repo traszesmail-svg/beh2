@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { NotatnikFinalCta, NotatnikFooter, NotatnikSectionHead, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
+import { NotatnikFinalCta, NotatnikFooter, NotatnikSectionHead, NotatnikSideVisuals, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
 import { buildBookHref } from '@/lib/booking-routing'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
@@ -53,6 +53,7 @@ export default function FaqPage() {
   return (
     <main className="notatnik-page">
       <Schema data={structuredData} />
+      <NotatnikSideVisuals variant="mixed" />
       <div className="notatnik-shell">
         <NotatnikTopbar tag="FAQ / najczestsze pytania" navItems={PUBLIC_SITE_NAV_ITEMS} ctaHref={audioHref} ctaLabel={FUNNEL_CTA_LABELS.primary} />
 

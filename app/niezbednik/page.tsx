@@ -8,37 +8,56 @@ import { listMaterialyBundles, listMaterialyGuides } from '@/lib/materialy-catal
 import { buildMarketingMetadata } from '@/lib/seo'
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: 'Niezbednik - materialy dla opiekunow psow i kotow',
+  title: 'Niezbędnik - PDF-y, książki i przydatne rzeczy',
   path: '/niezbednik',
-  description: 'Niezbednik: materialy dla opiekunow psow i kotow, checklisty, przewodniki i spokojne punkty startu.',
+  description: 'Niezbędnik: darmowe materiały, PDF-y, pakiety, książki i praktyczne rzeczy dla opiekunów psów i kotów.',
 })
 
 const quickHref = buildBookHref(null, 'szybka-konsultacja-15-min', false)
 const consultationHref = buildBookHref(null, 'konsultacja-behawioralna-online', false)
 
+type EssentialsShopCard = {
+  label: string
+  price: string
+  title: string
+  description: string
+  image: string
+  imageAlt: string
+  href: string
+  cta: string
+  meta?: string
+  author?: string
+}
+
 const leadMagnets = ([
   {
-    icon: 'file',
     label: 'PDF startowy',
-    cta: 'Otworz przewodnik',
-    title: '5 pierwszych krokow, gdy pies szczeka na spacerach',
-    description: 'Pierwszy tydzien obserwacji i decyzji dla reaktywnego psa.',
+    price: '0 zł',
+    cta: 'Pobierz materiał',
+    title: 'Pies szczeka na spacerach',
+    description: 'Krótki plan na pierwsze dni: co obserwować, czego nie dokładać i kiedy szukać pomocy.',
+    image: '/branding/niezbednik/pdf-dog-walk.jpg',
+    imageAlt: 'Pies na spacerze przy smyczy',
     magnet: getLeadMagnetBySlug('pies-reaktywnosc-5-krokow'),
   },
   {
-    icon: 'check',
     label: 'Checklista',
-    cta: 'Otworz checkliste',
-    title: 'Checklista kuweta - krok po kroku',
-    description: 'Zdrowie, kuweta, srodowisko, zmiany w domu. Uporzadkuj temat zanim poglebi sie.',
+    price: '0 zł',
+    cta: 'Pobierz checklistę',
+    title: 'Kot załatwia się poza kuwetą',
+    description: 'Prosta lista spraw do sprawdzenia: zdrowie, kuweta, dom i ostatnie zmiany.',
+    image: '/branding/niezbednik/pdf-cat-litter.jpg',
+    imageAlt: 'Kuweta z czystym zwirkiem',
     magnet: getLeadMagnetBySlug('kot-kuweta-checklista'),
   },
   {
-    icon: 'book',
     label: 'Przygotowanie',
-    cta: 'Otworz material',
-    title: 'Jak przygotowac sie do konsultacji behawioralnej',
-    description: 'Co warto miec przed Kwadransem albo pelna konsultacja. Czego nie musisz przygotowywac.',
+    price: '0 zł',
+    cta: 'Pobierz listę',
+    title: 'Przed rozmową z behawiorystą',
+    description: 'Co przygotować, co nagrać i czym nie trzeba się stresować przed konsultacją.',
+    image: '/branding/niezbednik/pdf-cat-grooming.jpg',
+    imageAlt: 'Kot podczas spokojnej pielęgnacji',
     magnet: getLeadMagnetBySlug('przygotowanie-do-konsultacji-online'),
   },
 ] as const).map((item) => {
@@ -47,8 +66,15 @@ const leadMagnets = ([
   }
 
   return {
-    ...item,
+    label: item.label,
+    price: item.price,
+    title: item.title,
+    description: item.description,
+    image: item.image,
+    imageAlt: item.imageAlt,
     href: `/bezplatne-materialy/${item.magnet.slug}`,
+    cta: item.cta,
+    meta: 'bezpłatny materiał',
   }
 })
 
@@ -56,75 +82,94 @@ const books = [
   {
     title: 'The Other End of the Leash',
     author: 'Patricia McConnell',
-    price: 'ok. 55 zl',
+    price: 'ok. 55 zł',
     cover: '/branding/books/other-end-of-the-leash.jpg',
+    imageAlt: 'Okładka książki The Other End of the Leash',
     description:
-      'Dobra ksiazka na start, jesli chcesz lepiej czytac relacje czlowiek-pies i zobaczyc, jak wiele nieporozumien bierze sie z naszego sposobu komunikacji.',
+      'Dobra książka o tym, jak różnie ludzie i psy odczytują te same sytuacje. Pomaga zejść z tonu „pies robi na złość”.',
     href: 'https://www.randomhousebooks.com/books/110768',
-    linkLabel: 'Znajdz ksiazke',
+    linkLabel: 'Sprawdź książkę',
   },
   {
     title: 'The Power of Positive Dog Training',
     author: 'Pat Miller',
-    price: 'ok. 60 zl',
+    price: 'ok. 60 zł',
     cover: '/branding/books/power-of-positive-dog-training.jpg',
+    imageAlt: 'Okładka książki The Power of Positive Dog Training',
     description:
-      'Porzadkuje podstawy pracy opartej na wzmocnieniach. Ma sens szczegolnie wtedy, gdy chcesz przestac skakac miedzy przypadkowymi poradami treningowymi.',
+      'Dla opiekuna, który chce pracować spokojniej i konsekwentniej, bez przeskakiwania między losowymi poradami z internetu.',
     href: 'https://books.apple.com/us/book/the-power-of-positive-dog-training/id6757761816',
-    linkLabel: 'Znajdz ksiazke',
+    linkLabel: 'Sprawdź książkę',
   },
   {
     title: "Don't Shoot the Dog!",
     author: 'Karen Pryor',
-    price: 'ok. 45 zl',
+    price: 'ok. 45 zł',
     cover: '/branding/books/dont-shoot-the-dog.jpg',
+    imageAlt: "Okładka książki Don't Shoot the Dog!",
     description:
-      'To bardziej ksiazka o mechanice uczenia niz o jednym gatunku. Pomaga zrozumiec, dlaczego nagradzanie i czytelne kryteria zwykle daja lepszy efekt niz presja.',
+      'Klasyka o uczeniu zachowań. Przydatna, jeśli chcesz lepiej rozumieć nagradzanie, kryteria i sens prostych ćwiczeń.',
     href: 'https://www.penguinrandomhouse.com/books/177702/dont-shoot-the-dog-by-karen-pryor/',
-    linkLabel: 'Znajdz ksiazke',
+    linkLabel: 'Sprawdź książkę',
   },
   {
     title: 'Cat Sense',
     author: 'John Bradshaw',
-    price: 'ok. 65 zl',
+    price: 'ok. 65 zł',
     cover: '/branding/books/cat-sense.jpg',
+    imageAlt: 'Okładka książki Cat Sense',
     description:
-      'Przydatna, kiedy chcesz lepiej rozumiec kocie potrzeby i codzienne napiecie, zamiast interpretowac zachowanie kota wylacznie jako upor albo zlosliwosc.',
+      'Dobra pozycja do zrozumienia kocich potrzeb, stresu i tego, dlaczego „złośliwość” zwykle nie jest dobrym wyjaśnieniem.',
     href: 'https://www.penguinrandomhouse.com/books/222938/cat-sense-by-john-bradshaw/',
-    linkLabel: 'Znajdz ksiazke',
+    linkLabel: 'Sprawdź książkę',
   },
 ] as const
 
 const tools = [
   {
-    title: 'Szelki typu H lub dobrze dopasowane szelki spacerowe',
-    note: 'Dla psa, ktory ciagnie, nakreca sie na spacerach albo potrzebuje stabilniejszego prowadzenia bez nacisku na szyje.',
+    title: 'Dobrze dopasowane szelki spacerowe',
+    price: 'sprawdź cenę',
+    image: '/branding/niezbednik/product-dog-harness.jpg',
+    imageAlt: 'Prawdziwe szelki spacerowe dla psa',
+    note: 'Przydatne, gdy pies ciągnie albo szybko się nakręca, a obroża tylko dokłada napięcia.',
     href: 'https://idcpower.julius-k9.com/en',
-    linkLabel: 'Zobacz przyklad',
+    linkLabel: 'Zobacz przykład',
   },
   {
-    title: 'Dluga linka 5-10 m',
-    note: 'Ma sens wtedy, gdy chcesz dac psu wiecej swobody do obserwacji i wachania, ale nadal utrzymac bezpieczny margines.',
+    title: 'Długa linka 5-10 m',
+    price: 'sprawdź cenę',
+    image: '/branding/niezbednik/product-long-leash.jpg',
+    imageAlt: 'Prawdziwe długie linki spacerowe dla psów',
+    note: 'Daje psu więcej miejsca na węszenie i spokojne decyzje, bez puszczania go luzem w złym miejscu.',
     href: 'https://juliusk9.com/',
-    linkLabel: 'Zobacz marke',
+    linkLabel: 'Zobacz markę',
   },
   {
-    title: 'Drapak pionowy minimum 90 cm',
-    note: 'To realny zasob srodowiskowy dla kota, ktory potrzebuje pionu, rozladowania i bezpiecznego miejsca do zaznaczenia terenu.',
+    title: 'Wysoki drapak dla kota',
+    price: 'dobierz rozmiar',
+    image: '/branding/niezbednik/product-cat-scratcher.jpg',
+    imageAlt: 'Prawdziwy wysoki drapak dla kota',
+    note: 'Ma sens, gdy kot drapie meble, szuka wysokości albo potrzebuje własnego miejsca w mieszkaniu.',
     href: '/koty',
-    linkLabel: 'Wroc do strony kotow',
+    linkLabel: 'Wróć do strony kotów',
   },
   {
-    title: 'Mata wechowa lub spokojne zabawki do samodzielnej pracy',
-    note: 'Przydaje sie, gdy potrzebujesz kontrolowanego zajecia dla psa bez podbijania pobudzenia kolejnymi dynamicznymi aktywnosciami.',
+    title: 'Mata węchowa albo spokojna zabawka',
+    price: 'sprawdź cenę',
+    image: '/branding/niezbednik/product-dog-toy.jpg',
+    imageAlt: 'Prawdziwa zabawka do spokojnej pracy psa',
+    note: 'Dobre zajęcie na wyciszenie, nie kolejna nakręcająca zabawa na pełnych obrotach.',
     href: '/psy',
-    linkLabel: 'Wroc do strony psow',
+    linkLabel: 'Wróć do strony psów',
   },
   {
-    title: 'Feliway / Adaptil jako wsparcie srodowiskowe',
-    note: 'Czasem ma sens jako dodatek do planu, nie zamiennik diagnozy. Najbardziej przy zmianach w domu, napieciu i trudnosciach z powrotem do rownowagi.',
+    title: 'Feromony jako dodatek, nie plan',
+    price: 'sprawdź cenę',
+    image: '/branding/niezbednik/product-diffuser.jpg',
+    imageAlt: 'Prawdziwy domowy dyfuzor zapachowy',
+    note: 'Czasem pomagają przy zmianach w domu i napięciu, ale nie zastępują diagnozy ani pracy z przyczyną problemu.',
     href: 'https://us.feliway.com/',
-    linkLabel: 'Zobacz przyklad',
+    linkLabel: 'Zobacz przykład',
   },
 ] as const
 
@@ -132,122 +177,242 @@ const allMaterialyGuides = listMaterialyGuides()
 const materialyBundles = listMaterialyBundles()
 const paidMaterialyCount = allMaterialyGuides.filter((g) => g.tier !== 'free').length
 
+const featuredPdfs = [
+  {
+    label: 'PDF / pies',
+    price: '29 zł',
+    title: 'Trudny spacer',
+    description: 'Dla psa, który ciągnie, szczeka na mijankach albo wraca ze spaceru bardziej nakręcony niż przed wyjściem.',
+    meta: 'spacer, dystans, odpoczynek',
+    image: '/branding/niezbednik/pdf-dog-walk.jpg',
+    imageAlt: 'Pies na spacerze z opiekunem',
+    href: '/materialy/pies-trudny-spacer',
+    cta: 'Zobacz PDF',
+  },
+  {
+    label: 'PDF / kot',
+    price: '29 zł',
+    title: 'Problem poza kuwetą',
+    description: 'Gdy problem kuwetowy trwa, wraca falami albo łączy się z napięciem w domu.',
+    meta: 'kuweta, zdrowie, dom',
+    image: '/branding/niezbednik/pdf-cat-litter.jpg',
+    imageAlt: 'Kuweta z czystym zwirkiem',
+    href: '/materialy/kot-problem-poza-kuweta',
+    cta: 'Zobacz PDF',
+  },
+  {
+    label: 'PDF / pies',
+    price: '29 zł',
+    title: 'Pies zostaje sam',
+    description: 'Pomaga odróżnić panikę separacyjną od frustracji, nudy i chaosu po wyjściu opiekuna.',
+    meta: 'samotność, nagrania, plan',
+    image: '/branding/niezbednik/pdf-dog-window.jpg',
+    imageAlt: 'Pies patrzący przez okno',
+    href: '/materialy/pies-zostaje-sam',
+    cta: 'Zobacz PDF',
+  },
+  {
+    label: 'PDF / szczeniak',
+    price: '19 zł',
+    title: 'Szczeniak gryzie i skacze',
+    description: 'Na pierwsze tygodnie, kiedy gryzienie rąk, skakanie i emocje zaczynają rządzić domem.',
+    meta: 'sen, granice, codzienność',
+    image: '/branding/niezbednik/pdf-puppy.jpg',
+    imageAlt: 'Szczeniak jako ilustracja materiału PDF',
+    href: '/materialy/szczeniak-gryzie-i-skacze',
+    cta: 'Zobacz PDF',
+  },
+  {
+    label: 'PDF / kot',
+    price: '19 zł',
+    title: 'Konflikt między kotami',
+    description: 'Dla domu, w którym nie ma wielkiej bójki, ale są blokady, napięcie i omijanie się kotów.',
+    meta: 'zasoby, napięcie, sygnały',
+    image: '/branding/niezbednik/pdf-cats-conflict.jpg',
+    imageAlt: 'Dwa koty w konflikcie',
+    href: '/materialy/konflikt-miedzy-kotami',
+    cta: 'Zobacz PDF',
+  },
+  {
+    label: 'PDF / kot',
+    price: '29 zł',
+    title: 'Kot broni się przy pielęgnacji',
+    description: 'Dla opiekuna, który chce ogarniać czesanie, pazury albo transporter bez walki.',
+    meta: 'dotyk, pazury, transporter',
+    image: '/branding/niezbednik/pdf-cat-grooming.jpg',
+    imageAlt: 'Kot podczas pielęgnacji',
+    href: '/materialy/kot-broni-sie-przy-pielegnacji',
+    cta: 'Zobacz PDF',
+  },
+] as const
+
+const featuredBundles = [
+  {
+    label: 'Pakiet / kot',
+    price: '49 zł',
+    title: 'Pakiet kuwetowy',
+    description: 'Dla sytuacji, w której sama checklista to za mało: kuweta, lęk kuwetowy i napięcie między kotami.',
+    meta: '3 PDF-y razem',
+    image: '/branding/niezbednik/bundle-litter.jpg',
+    imageAlt: 'Kot przy pudełku i żwirku kuwetowym',
+    href: '/materialy/pakiet/pakiet-kuweta',
+    cta: 'Zobacz pakiet',
+  },
+  {
+    label: 'Pakiet / pies',
+    price: '49 zł',
+    title: 'Pakiet trudny spacer',
+    description: 'Dla psa, u którego spacer, smycz, mijanki i dzwonek szybko robią się jednym dużym problemem.',
+    meta: 'spacer, smycz, goście',
+    image: '/branding/topic-cards/french-bulldog-leash.jpg',
+    imageAlt: 'Pies na smyczy podczas spaceru',
+    href: '/materialy/pakiet/pakiet-trudny-pies',
+    cta: 'Zobacz pakiet',
+  },
+  {
+    label: 'Pakiet / szczeniak',
+    price: '49 zł',
+    title: 'Pakiet szczeniak',
+    description: 'Pierwsze tygodnie bez przypadkowego utrwalania gryzienia, skakania i nakręcania na smyczy.',
+    meta: 'start z młodym psem',
+    image: '/branding/topic-cards/puppy-hands.jpg',
+    imageAlt: 'Szczeniak trzymany w dłoniach opiekuna',
+    href: '/materialy/pakiet/pakiet-szczeniak-start',
+    cta: 'Zobacz pakiet',
+  },
+] as const
+
 const entryShelves = [
   {
     id: 'polecane-starty',
-    label: '3 darmowe materialy',
-    title: 'Darmowy start',
-    description: 'Trzy bezplatne materialy, od ktorych mozesz zaczac bez rozmowy i bez kupowania czegokolwiek.',
-    cta: 'Zobacz od czego zaczac',
+    label: '3 materiały za 0 zł',
+    title: 'Zacznij bez kupowania',
+    description: 'Krótki materiał o spacerach, checklista kuwety i lista rzeczy przed konsultacją.',
+    cta: 'Pokaż darmowe materiały',
   },
   {
     id: 'ksiazki',
-    label: `${books.length} ksiazki i ${tools.length} przyborow`,
-    title: 'Ksiazki i przybory',
-    description: 'Rzeczy, do ktorych warto wrocic dopiero wtedy, gdy realnie wspieraja plan pracy i porzadkuja temat.',
-    cta: 'Przejdz do rekomendacji',
+    label: `${books.length} książki i ${tools.length} rzeczy`,
+    title: 'Książki i sprzęt',
+    description: 'Kilka rzeczy, które mają sens wtedy, gdy pasują do konkretnego problemu.',
+    cta: 'Pokaż książki i sprzęt',
   },
   {
     id: 'pdfy-do-kupienia',
-    label: `${paidMaterialyCount} PDF-ow i ${materialyBundles.length} pakietow`,
-    title: 'PDF-y i pakiety',
-    description: 'Pojedyncze przewodniki od 19 zl i pakiety tematyczne 49 zl. Pelna lista i zamowienia w /materialy.',
-    cta: 'Przejdz do /materialy',
+    label: `${paidMaterialyCount} PDF-ów i ${materialyBundles.length} pakietów`,
+    title: 'Materiały do pobrania',
+    description: 'PDF-y do konkretnych problemów i pakiety, gdy temat łączy kilka wątków.',
+    cta: 'Pokaż PDF-y',
   },
 ] as const
 
 const faqItems = [
   {
-    question: 'Od czego tu najlepiej zaczac?',
+    question: 'Od czego zacząć?',
     answer:
-      'Najpierw wybierz problem, dopiero potem format. Jesli temat jest blisko reaktywnosci, kuwety albo przygotowania do rozmowy, zacznij od jednego z trzech materialow startowych.',
+      'Jeśli sprawa dotyczy spacerów, kuwety albo przygotowania do rozmowy, zacznij od darmowego materiału. Jeśli temat wraca od dawna, lepiej przejść od razu do PDF-a albo rozmowy.',
   },
   {
-    question: 'Czy Niezbednik zastepuje konsultacje?',
+    question: 'Czy to zastępuje konsultację?',
     answer:
-      'Nie zawsze. Materialy sa dobrym punktem startu, ale gdy temat wraca, miesza kilka watkow albo po prostu nie uklada sie w jeden prosty plan, rozmowa zwykle skraca droge.',
+      'Nie zawsze. Materiał pomaga poukładać temat, ale nie zobaczy Twojego psa, kota, domu ani nagrania. Przy mieszanych sprawach rozmowa zwykle szybciej porządkuje decyzje.',
   },
   {
-    question: 'Czy wszystkie rekomendacje trzeba kupowac?',
+    question: 'Czy trzeba kupować sprzęt?',
     answer:
-      'Nie. Przybory maja sens tylko wtedy, gdy wspieraja konkretny plan pracy, a nie jako kolejny zakup bez celu.',
+      'Nie. Sprzęt ma sens tylko wtedy, gdy pomaga w konkretnym planie. Sam zakup nie naprawia zachowania.',
   },
 ] as const
 
-function EssentialsIcon({ kind }: { kind: 'file' | 'book' | 'check' }) {
-  if (kind === 'book') {
-    return (
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M5 4.5A2.5 2.5 0 0 1 7.5 2H19v18H7.5A2.5 2.5 0 0 0 5 22Z" fill="none" stroke="currentColor" strokeWidth="1.8" />
-        <path d="M8.5 6.5h7" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-        <path d="M8.5 10h7" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-      </svg>
-    )
-  }
+function EssentialsProductCard({ item, variant = 'photo' }: { item: EssentialsShopCard; variant?: 'photo' | 'book' }) {
+  const isExternal = item.href.startsWith('http')
+  const className = `essentials-shop-card${variant === 'book' ? ' essentials-shop-card-book' : ''}`
+  const actionClassName = 'essentials-shop-link'
 
-  if (kind === 'check') {
-    return (
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <rect x="4" y="4" width="16" height="16" rx="3" fill="none" stroke="currentColor" strokeWidth="1.8" />
-        <path d="m8.5 12.2 2.3 2.3 4.7-5.2" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    )
-  }
+  const action = isExternal ? (
+    <a href={item.href} target="_blank" rel="noreferrer noopener" className={actionClassName}>
+      {item.cta}
+    </a>
+  ) : (
+    <Link href={item.href} prefetch={false} className={actionClassName}>
+      {item.cta}
+    </Link>
+  )
 
   return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M8 3.5h6.5L20 9v11.5H8A2.5 2.5 0 0 1 5.5 18V6A2.5 2.5 0 0 1 8 3.5Z" fill="none" stroke="currentColor" strokeWidth="1.8" />
-      <path d="M14.5 3.5V9H20" fill="none" stroke="currentColor" strokeWidth="1.8" />
-    </svg>
+    <article className={className}>
+      <div className="essentials-shop-media">
+        <Image
+          src={item.image}
+          alt={item.imageAlt}
+          fill
+          sizes="(max-width: 760px) 92vw, (max-width: 1100px) 44vw, 26vw"
+          className="essentials-shop-image"
+          unoptimized
+        />
+        <span className="essentials-shop-badge">{item.label}</span>
+      </div>
+      <div className="essentials-shop-body">
+        <div className="essentials-shop-topline">
+          <span>{item.meta ?? item.label}</span>
+          <strong>{item.price}</strong>
+        </div>
+        <h3>{item.title}</h3>
+        {item.author ? <div className="essentials-shop-author">{item.author}</div> : null}
+        <p>{item.description}</p>
+      </div>
+      <div className="essentials-shop-actions">{action}</div>
+    </article>
   )
 }
 
 export default function EssentialsPage() {
   return (
     <NotatnikPageShell
-      tag="Niezbednik / materialy"
+      tag="Niezbędnik / materiały"
       navItems={PUBLIC_SITE_NAV_ITEMS}
       ctaHref={quickHref}
-      ctaLabel="Kwadrans / 69 zl"
+      ctaLabel="Kwadrans / 69 zł"
       footerPrimaryHref={quickHref}
       footerPrimaryLabel="Kwadrans z behawiorysta"
+      sideVisualVariant="materials"
     >
       <section className="notatnik-subhero">
         <div>
-          <div className="notatnik-subhero-tag notatnik-mono">Niezbednik / materialy i rekomendacje</div>
+          <div className="notatnik-subhero-tag notatnik-mono">Niezbędnik / materiały i rzeczy pomocnicze</div>
           <h1>
-            Niezbednik do spokojnej pracy <em>z psem lub kotem</em>.
+            Materiały i rzeczy, które pomagają <em>zrobić pierwszy sensowny krok.</em>
           </h1>
           <p>
-            Najpierw wybierz problem, dopiero potem format. Tu masz trzy polki wejściowe: darmowy start, PDF-y i pakiety oraz rekomendacje do spokojnego
-            powrotu do tematu.
+            Nie wszystko trzeba kupować i nie każdy temat od razu wymaga pełnej konsultacji. Tu są darmowe
+            materiały, PDF-y i kilka praktycznych rzeczy, które mają sens w konkretnych sytuacjach.
           </p>
           <div className="notatnik-subhero-actions">
             <Link href="#polecane-starty" prefetch={false} className="notatnik-btn">
-              <span>Zobacz od czego zaczac</span>
+              <span>Zacznij od darmowych materiałów</span>
               <span className="notatnik-btn-arrow" aria-hidden="true">
                 &rarr;
               </span>
             </Link>
             <Link href={quickHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
-              <span>Kwadrans / 69 zl</span>
+              <span>Kwadrans / 69 zł</span>
             </Link>
           </div>
         </div>
 
         <div className="notatnik-subhero-media">
           <div className="notatnik-subhero-figure">
-            <Image src="/branding/topic-cards/puppy-hands.jpg" alt="Szczeniak trzymany w dloniach opiekuna" fill sizes="(max-width: 980px) 100vw, 40vw" priority />
+            <Image src="/branding/topic-cards/puppy-hands.jpg" alt="Szczeniak trzymany w dłoniach opiekuna" fill sizes="(max-width: 980px) 100vw, 40vw" priority />
           </div>
           <div className="notatnik-subhero-note">
-            <span>Materialy / rekomendacje</span>
-            <span>bezplatny start</span>
+            <span>Materiały / praktyczne rzeczy</span>
+            <span>zacznij spokojnie</span>
           </div>
         </div>
       </section>
 
       <section id="katalog-materialow">
-        <NotatnikSectionHead index="I." kicker="Mapa Niezbednika" title="3 polki Niezbednika." />
+        <NotatnikSectionHead index="I." kicker="Od czego zacząć" title="Wybierz najprostszy następny krok." />
         <div className="notatnik-material-grid">
           {entryShelves.map((item) => (
             <article key={item.id} className="notatnik-material-card">
@@ -261,103 +426,108 @@ export default function EssentialsPage() {
       </section>
 
       <section id="polecane-starty">
-        <NotatnikSectionHead index="II." kicker="Darmowy start" title="Trzy konkretne materialy startowe, do ktorych mozesz przejsc od razu." />
-        <div className="notatnik-material-grid">
+        <NotatnikSectionHead index="II." kicker="Darmowy start" title="Trzy materiały, które możesz pobrać od razu." />
+        <div className="essentials-shop-grid">
           {leadMagnets.map((item) => (
-            <article key={item.href} className="notatnik-material-card">
-              <div className="notatnik-material-tag notatnik-mono">{item.label}</div>
-              <div className="essentials-icon" aria-hidden="true">
-                <EssentialsIcon kind={item.icon} />
-              </div>
-              <h3>{item.title}</h3>
-              <p>{item.description}</p>
-              <Link href={item.href} prefetch={false}>
-                {item.cta}
-              </Link>
-            </article>
+            <EssentialsProductCard key={item.href} item={item} />
           ))}
         </div>
       </section>
-
 
       <section id="pdfy-do-kupienia" style={{ background: 'var(--paper)' }}>
         <NotatnikSectionHead
           index="III."
           kicker="PDF-y i pakiety"
-          title={`${paidMaterialyCount} przewodnikow i ${materialyBundles.length} pakietow w /materialy.`}
+          title="PDF-y do konkretnych problemów."
         />
         <p style={{ maxWidth: '720px', color: 'var(--ink-quiet)' }}>
-          Pojedyncze PDF-y od 19 zl, pakiety 49 zl, dwa darmowe lead magnety. Pelna lista, opisy i
-          zamowienia BLIK-iem znajdziesz na osobnej stronie.
+          Pojedynczy PDF jest dobry, gdy temat jest dość jasny. Pakiet ma sens, gdy problem rozlewa się
+          na kilka codziennych sytuacji.
         </p>
+
+        <div className="essentials-shop-subhead top-gap">
+          <strong>Najczęściej wybierane</strong>
+          <span>Najkrótsza droga do materiału, jeśli wiesz już, czego szukasz.</span>
+        </div>
+        <div className="essentials-shop-grid top-gap-small">
+          {featuredPdfs.map((item) => (
+            <EssentialsProductCard key={item.href} item={item} />
+          ))}
+        </div>
+
+        <div className="essentials-shop-subhead top-gap">
+          <strong>Pakiety</strong>
+          <span>Dla tematów, które rzadko mieszczą się w jednym prostym PDF-ie.</span>
+        </div>
+        <div className="essentials-shop-grid top-gap-small">
+          {featuredBundles.map((item) => (
+            <EssentialsProductCard key={item.href} item={item} />
+          ))}
+        </div>
+
         <div className="notatnik-subhero-actions top-gap">
           <Link href="/materialy" prefetch={false} className="notatnik-btn">
-            <span>Przejdz do /materialy</span>
+            <span>Zobacz wszystkie PDF-y</span>
             <span className="notatnik-btn-arrow" aria-hidden="true">
               &rarr;
             </span>
           </Link>
           <Link href="/materialy/pobranie" prefetch={false} className="notatnik-btn notatnik-btn-ghost">
-            <span>Mam juz kod — pobierz</span>
+            <span>Mam kod do pobrania</span>
           </Link>
         </div>
       </section>
 
       <section id="rekomendacje">
-        <NotatnikSectionHead index="IV." kicker="Ksiazki i przybory" title="Wybrane ksiazki i przybory, ktore maja sens dopiero w dobrym kontekscie." />
+        <NotatnikSectionHead index="IV." kicker="Książki i sprzęt" title="Kilka rzeczy, które mogą pomóc, ale nie zastąpią planu." />
 
         <div id="ksiazki">
-          <div className="section-eyebrow">Wybrane ksiazki</div>
-          <div className="notatnik-material-grid top-gap-small">
+          <div className="section-eyebrow">Książki</div>
+          <div className="essentials-shop-grid top-gap-small">
             {books.map((book) => (
-              <article key={book.title} className="notatnik-material-card">
-                <div className="notatnik-material-tag notatnik-mono">Ksiazka</div>
-                <div className="essentials-book-cover">
-                  <Image src={book.cover} alt={`Okładka: ${book.title}`} width={80} height={110} style={{ borderRadius: '4px', objectFit: 'cover' }} />
-                </div>
-                <h3>{book.title}</h3>
-                <p style={{ margin: 0 }}>
-                  <strong>{book.author}</strong>
-                </p>
-                <p className="notatnik-mono" style={{ fontSize: '13px', margin: '2px 0 0' }}>{book.price}</p>
-                <p>{book.description}</p>
-                <a href={book.href} target="_blank" rel="noreferrer noopener">
-                  {book.linkLabel} →
-                </a>
-              </article>
+              <EssentialsProductCard
+                key={book.title}
+                variant="book"
+                item={{
+                  label: 'Książka',
+                  price: book.price,
+                  title: book.title,
+                  author: book.author,
+                  description: book.description,
+                  image: book.cover,
+                  imageAlt: book.imageAlt,
+                  href: book.href,
+                  cta: book.linkLabel,
+                }}
+              />
             ))}
           </div>
         </div>
 
         <div id="przybory" className="top-gap">
-          <div className="section-eyebrow">Przybory</div>
-          <div className="notatnik-material-grid top-gap-small">
-            {tools.map((tool) => {
-              const isExternal = tool.href.startsWith('http')
-
-              return (
-                <article key={tool.title} className="notatnik-material-card">
-                  <div className="notatnik-material-tag notatnik-mono">Przybor</div>
-                  <h3>{tool.title}</h3>
-                  <p>{tool.note}</p>
-                  {isExternal ? (
-                    <a href={tool.href} target="_blank" rel="noreferrer noopener">
-                      {tool.linkLabel}
-                    </a>
-                  ) : (
-                    <Link href={tool.href} prefetch={false}>
-                      {tool.linkLabel}
-                    </Link>
-                  )}
-                </article>
-              )
-            })}
+          <div className="section-eyebrow">Sprzęt</div>
+          <div className="essentials-shop-grid top-gap-small">
+            {tools.map((tool) => (
+              <EssentialsProductCard
+                key={tool.title}
+                item={{
+                  label: 'Sprzęt',
+                  price: tool.price,
+                  title: tool.title,
+                  description: tool.note,
+                  image: tool.image,
+                  imageAlt: tool.imageAlt,
+                  href: tool.href,
+                  cta: tool.linkLabel,
+                }}
+              />
+            ))}
           </div>
         </div>
       </section>
 
       <section id="faq" style={{ background: 'var(--paper)' }}>
-        <NotatnikSectionHead index="V." kicker="FAQ" title="Najczestsze pytania przed wyborem rekomendacji albo rozmowy." />
+        <NotatnikSectionHead index="V." kicker="FAQ" title="Zanim coś kupisz albo pobierzesz." />
         <div className="notatnik-faq-grid">
           {faqItems.map((item) => (
             <article key={item.question} className="notatnik-faq-item">
@@ -369,12 +539,12 @@ export default function EssentialsPage() {
       </section>
 
       <NotatnikFinalCta
-        title="Jesli material nie wystarcza, <em>Kwadrans porzadkuje temat w 15 minut.</em>"
-        copy="Niezbednik jest dobrym startem, ale przy mieszanym albo wracajacym temacie rozmowa zwykle porzadkuje sytuacje szybciej."
+        title="Jeśli dalej nie wiesz, od czego zacząć, <em>weź Kwadrans.</em>"
+        copy="W 15 minut łatwiej ustalić, czy wystarczy materiał, czy problem wymaga dokładniejszego planu."
         primaryHref={quickHref}
-        primaryLabel="Zarezerwuj Kwadrans / 69 zl"
+        primaryLabel="Zarezerwuj Kwadrans / 69 zł"
         secondaryHref={consultationHref}
-        secondaryLabel="Przejdz do pelnej konsultacji"
+        secondaryLabel="Zobacz pełną konsultację"
       />
     </NotatnikPageShell>
   )

@@ -24,7 +24,7 @@ import {
   type MaterialyOrderEmailPayload,
 } from '@/lib/server/notifications'
 
-const BLIK_PHONE = process.env.OWNER_BLIK_PHONE?.trim() || '512 992 026'
+const BLIK_PHONE = process.env.OWNER_BLIK_PHONE?.trim() || '579163241'
 
 function trimString(value: unknown, max: number): string | null {
   if (typeof value !== 'string') return null

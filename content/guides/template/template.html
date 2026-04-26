@@ -8,19 +8,25 @@
 <body data-category="{{category}}">
 
 <section class="cover">
-  <div>
-    <div class="cover-brand">Regulski · Terapia behawioralna</div>
-    <div style="margin: 12mm 0 0 0;">
-      <div class="cover-tag">{{tag}}</div>
-      <h1 class="cover-title">{{title}}</h1>
-      <p class="cover-subtitle">{{subtitle}}</p>
+
+  <div class="cover-hero">
+    {{coverImageTag}}
+    <div class="cover-hero-overlay">
+      <span class="cover-brand">Regulski · Terapia behawioralna</span>
+      <span class="cover-tag">{{tag}}</span>
     </div>
+  </div>
+
+  <div class="cover-body">
+    <h1 class="cover-title">{{title}}</h1>
+    <p class="cover-subtitle">{{subtitle}}</p>
     <p class="cover-lead">{{lead}}</p>
     <ul class="cover-bullets">
       {{bullets}}
     </ul>
   </div>
-  <div>
+
+  <div class="cover-foot">
     <div class="cover-disclaimer">Materiał edukacyjny. Nie zastępuje badania lekarsko-weterynaryjnego ani indywidualnej konsultacji behawioralnej.</div>
     <div class="cover-meta">
       <div><strong>Format</strong><br>PDF A4, druk domowy</div>
@@ -29,6 +35,7 @@
       <div><strong>Autor</strong><br>Krzysztof Regulski</div>
     </div>
   </div>
+
 </section>
 
 <section class="body">

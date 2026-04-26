@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { NotatnikFinalCta, NotatnikFooter, NotatnikSectionHead, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
+import { NotatnikFinalCta, NotatnikFooter, NotatnikSectionHead, NotatnikSideVisuals, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
 import {
   FUNNEL_FULL_CONSULTATION_HREF,
@@ -236,12 +236,7 @@ export default function HomePage() {
   return (
     <main className="notatnik-page">
       <Schema data={structuredData} />
-      <div className="notatnik-side-visual notatnik-side-visual-left" aria-hidden="true">
-        <Image src="/branding/side-left.jpg" alt="" fill sizes="(max-width: 1600px) 180px, 280px" quality={72} />
-      </div>
-      <div className="notatnik-side-visual notatnik-side-visual-right" aria-hidden="true">
-        <Image src="/branding/side-right.jpg" alt="" fill sizes="(max-width: 1600px) 180px, 280px" quality={72} />
-      </div>
+      <NotatnikSideVisuals variant="mixed" />
       <div className="notatnik-shell">
         <NotatnikTopbar
           tag="Terapia behawioralna / psy i koty"

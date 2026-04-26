@@ -64,6 +64,7 @@ export default function PricingPage() {
       ctaLabel="Kwadrans / 69 zl"
       footerPrimaryHref="/book?service=szybka-konsultacja-15-min"
       footerPrimaryLabel="Kwadrans z behawiorysta"
+      sideVisualVariant="pricing"
     >
       <Schema
         data={[

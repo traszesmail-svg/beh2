@@ -2,7 +2,7 @@ import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Footer } from '@/components/Footer'
-import { NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
+import { NotatnikSideVisuals, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
 import {
   CAPBT_PROFILE_URL,
@@ -73,6 +73,7 @@ export function LegalPageLayout({
   return (
     <main className="page-wrap marketing-page">
       {structuredData.length > 0 ? <Schema data={structuredData} /> : null}
+      <NotatnikSideVisuals />
       <div className="container">
         <NotatnikTopbar
           tag="Regulaminy / dokumenty"
@@ -158,7 +159,7 @@ export function LegalPageLayout({
                   </a>{' '}
                   potwierdza kwalifikacje, a{' '}
                   <a href={INSTAGRAM_PROFILE_URL} target="_blank" rel="noopener noreferrer">
-                    Instagram @coapebehawiorysta
+                    Instagram @regulskibehawiorysta
                   </a>{' '}
                   zawiera publiczne informacje o marce.
                 </span>

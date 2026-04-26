@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { LeadMagnetSignup } from '@/components/LeadMagnetSignup'
 import { NewsletterSignup } from '@/components/NewsletterSignup'
@@ -44,6 +45,27 @@ const mainPathCards = [
   },
 ] as const
 
+function getBlogVisual(post: { categoryHref: string; slug: string }) {
+  if (post.categoryHref === '/koty') {
+    return {
+      src: post.slug.includes('kuweta') ? '/branding/side-visuals/cat-litter-home.jpg' : '/branding/side-visuals/cat-owner-home.jpg',
+      alt: 'Kot w domu jako ilustracja wpisu',
+    }
+  }
+
+  if (post.categoryHref === '/psy') {
+    return {
+      src: post.slug.includes('sam') ? '/branding/topic-cards/dog-window-alone.jpg' : '/branding/side-visuals/dog-forest-walk.jpg',
+      alt: 'Pies z opiekunem jako ilustracja wpisu',
+    }
+  }
+
+  return {
+    src: '/branding/side-visuals/blog-notebook-desk.jpg',
+    alt: 'Notatnik na biurku jako ilustracja wpisu',
+  }
+}
+
 export default function BlogPage() {
   const posts = listBlogPosts()
   const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min')
@@ -68,12 +90,14 @@ export default function BlogPage() {
 
   return (
     <NotatnikPageShell
-      tag="Blog / zachowanie psow i kotow"
+      tag="Blog / zachowanie psów i kotów"
       navItems={PUBLIC_SITE_NAV_ITEMS}
       ctaHref={audioHref}
       ctaLabel={FUNNEL_CTA_LABELS.primary}
       footerPrimaryHref={audioHref}
       footerPrimaryLabel={FUNNEL_CTA_LABELS.primary}
+      sideVisualVariant="blog"
+      pageClassName="blog-page"
     >
       <Schema data={structuredData} />
       <div className="container editorial-stack">
@@ -115,34 +139,41 @@ export default function BlogPage() {
           </div>
 
           <div className="blog-list-grid">
-            {posts.map((post) => (
-              <article key={post.slug} className="summary-card tree-backed-card blog-list-card">
-                <div className="blog-list-card-topline">
-                  <span className="section-eyebrow">{repairCopy(post.categoryLabel)}</span>
-                  <span className="blog-list-meta">
-                    <time dateTime={post.publishedAt}>{post.publishedAtLabel}</time>
-                    <span>·</span>
-                    <span>{post.readingTimeMinutes} min czytania</span>
-                  </span>
-                </div>
+            {posts.map((post) => {
+              const visual = getBlogVisual(post)
 
-                <h3>
-                  <Link href={post.path} prefetch={false} className="blog-list-title-link">
-                    {repairCopy(post.title)}
-                  </Link>
-                </h3>
-                <p>{repairCopy(post.excerpt)}</p>
+              return (
+                <article key={post.slug} className="summary-card tree-backed-card blog-list-card">
+                  <div className="blog-card-image">
+                    <Image src={visual.src} alt={visual.alt} fill sizes="(max-width: 760px) 92vw, 30vw" />
+                  </div>
+                  <div className="blog-list-card-topline">
+                    <span className="section-eyebrow">{repairCopy(post.categoryLabel)}</span>
+                    <span className="blog-list-meta">
+                      <time dateTime={post.publishedAt}>{post.publishedAtLabel}</time>
+                      <span>·</span>
+                      <span>{post.readingTimeMinutes} min czytania</span>
+                    </span>
+                  </div>
 
-                <div className="blog-list-card-footer">
-                  <Link href={post.path} prefetch={false} className="prep-inline-link">
-                    Czytaj wpis
-                  </Link>
-                  <Link href={post.categoryHref} prefetch={false} className="prep-inline-link">
-                    {repairCopy(post.categoryLabel)}
-                  </Link>
-                </div>
-              </article>
-            ))}
+                  <h3>
+                    <Link href={post.path} prefetch={false} className="blog-list-title-link">
+                      {repairCopy(post.title)}
+                    </Link>
+                  </h3>
+                  <p>{repairCopy(post.excerpt)}</p>
+
+                  <div className="blog-list-card-footer">
+                    <Link href={post.path} prefetch={false} className="prep-inline-link">
+                      Czytaj wpis
+                    </Link>
+                    <Link href={post.categoryHref} prefetch={false} className="prep-inline-link">
+                      {repairCopy(post.categoryLabel)}
+                    </Link>
+                  </div>
+                </article>
+              )
+            })}
           </div>
         </section>
 

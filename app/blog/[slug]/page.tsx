@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { NotatnikPageShell, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
@@ -25,6 +26,18 @@ type BlogPostPageProps = {
   params: {
     slug: string
   }
+}
+
+function getArticleVisual(post: { categoryHref: string; slug: string }) {
+  if (post.categoryHref === '/koty') {
+    return post.slug.includes('kuweta') ? '/branding/side-visuals/cat-litter-home.jpg' : '/branding/side-visuals/cat-owner-home.jpg'
+  }
+
+  if (post.categoryHref === '/psy') {
+    return post.slug.includes('sam') ? '/branding/topic-cards/dog-window-alone.jpg' : '/branding/side-visuals/dog-forest-walk.jpg'
+  }
+
+  return '/branding/side-visuals/blog-notebook-desk.jpg'
 }
 
 export function generateStaticParams() {
@@ -82,6 +95,8 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
       ctaLabel={FUNNEL_CTA_LABELS.primary}
       footerPrimaryHref={post.audioHref}
       footerPrimaryLabel={FUNNEL_CTA_LABELS.primary}
+      sideVisualVariant={post.categoryHref === '/koty' ? 'cat' : post.categoryHref === '/psy' ? 'dog' : 'blog'}
+      pageClassName="blog-page"
     >
       <Schema data={jsonLd} />
 
@@ -98,6 +113,10 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
               <h1>{repairCopy(post.h1)}</h1>
             </div>
             <p className="editorial-section-lead">{repairCopy(post.excerpt)}</p>
+          </div>
+
+          <div className="blog-article-hero-image">
+            <Image src={getArticleVisual(post)} alt="" fill sizes="(max-width: 980px) 92vw, 76vw" priority />
           </div>
 
           <div className="blog-article-meta-row" aria-label="Metadane wpisu">

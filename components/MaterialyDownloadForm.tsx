@@ -56,7 +56,8 @@ export function MaterialyDownloadForm() {
   return (
     <form className="materialy-form" onSubmit={handleSubmit} noValidate>
       <label>
-        E-mail (ten sam, na ktory dostales kod)
+        <span>E-mail</span>
+        <small>Ten sam adres, na który przyszedł kod.</small>
         <input
           type="email"
           name="email"
@@ -69,7 +70,8 @@ export function MaterialyDownloadForm() {
       </label>
 
       <label>
-        Kod (6 cyfr)
+        <span>Kod</span>
+        <small>6 cyfr z wiadomości e-mail.</small>
         <input
           type="text"
           inputMode="numeric"
@@ -79,12 +81,13 @@ export function MaterialyDownloadForm() {
           onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
           required
           maxLength={6}
-          style={{ letterSpacing: '4px', fontSize: '18px', textAlign: 'center' }}
+          className="materialy-code-input"
         />
       </label>
 
       <label>
-        Czesc pakietu (opcjonalnie — 0 = pierwszy PDF, 1 = drugi, itd.)
+        <span>Część pakietu</span>
+        <small>Opcjonalnie. Zostaw puste przy pojedynczym PDF-ie.</small>
         <input
           type="text"
           inputMode="numeric"
@@ -92,7 +95,7 @@ export function MaterialyDownloadForm() {
           name="part"
           value={part}
           onChange={(e) => setPart(e.target.value.replace(/\D/g, '').slice(0, 2))}
-          placeholder="dla pojedynczego PDF zostaw puste"
+          placeholder="0, 1, 2..."
           maxLength={2}
         />
       </label>
@@ -102,16 +105,16 @@ export function MaterialyDownloadForm() {
       {state.status === 'ok' && state.bundleParts !== null && (
         <div className="materialy-success">
           <p>
-            Pobieranie rozpoczete. Pakiet ma <strong>{state.bundleParts}</strong> czesci. Aby pobrac
-            kolejne, wpisz w pole „Czesc pakietu&quot; liczbe od 1 do {state.bundleParts - 1} i kliknij
-            ponownie. Kazde pobranie zuzywa 1 z 3 dostepnych.
+            Pobieranie rozpoczęte. Pakiet ma <strong>{state.bundleParts}</strong> części. Aby pobrać
+            kolejne, wpisz numer części od 1 do {state.bundleParts - 1} i kliknij ponownie.
+            Każde pobranie zużywa 1 z 3 dostępnych prób.
           </p>
         </div>
       )}
 
       {state.status === 'ok' && state.bundleParts === null && (
         <div className="materialy-success">
-          <p>Pobieranie rozpoczete. Sprawdz folder „Pobrane&quot;.</p>
+          <p>Pobieranie rozpoczęte. Sprawdź folder Pobrane.</p>
         </div>
       )}
 

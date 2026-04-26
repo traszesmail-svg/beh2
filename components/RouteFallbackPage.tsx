@@ -1,4 +1,5 @@
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
+import { NotatnikSideVisuals } from '@/components/NotatnikA'
 
 type RouteFallbackAction = {
   href: string
@@ -33,6 +34,7 @@ export function RouteFallbackPage({
 }: RouteFallbackPageProps) {
   return (
     <main className="page-wrap marketing-page">
+      <NotatnikSideVisuals />
       <div className="container">
         <section className="panel section-panel hero-surface">
           <div className="header-trust-strip" aria-label="Regulski">

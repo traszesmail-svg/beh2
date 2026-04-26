@@ -75,6 +75,7 @@ export default function PdfGuideDetailPage({ params }: PdfGuideDetailPageProps) 
       ctaLabel="Kwadrans / 69 zl"
       footerPrimaryHref={orderHref}
       footerPrimaryLabel="Zamów ten PDF"
+      sideVisualVariant="materials"
     >
       <Schema
         data={getProductJsonLd({

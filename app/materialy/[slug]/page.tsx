@@ -47,6 +47,7 @@ export default function MaterialyGuidePage({ params }: { params: Params }) {
       ctaLabel="Kwadrans / 69 zl"
       footerPrimaryHref={quickHref}
       footerPrimaryLabel="Kwadrans z behawiorysta"
+      sideVisualVariant={guide.category === 'cat' ? 'cat' : guide.category === 'dog' || guide.category === 'puppy' ? 'dog' : 'materials'}
     >
       <section className="notatnik-subhero">
         <div>

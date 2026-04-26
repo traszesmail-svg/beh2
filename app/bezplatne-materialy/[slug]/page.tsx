@@ -62,6 +62,7 @@ export default function LeadMagnetPage({ params }: LeadMagnetPageProps) {
       ctaLabel="Kwadrans / 69 zl"
       footerPrimaryHref={audioHref}
       footerPrimaryLabel="Kwadrans z behawiorysta"
+      sideVisualVariant={magnet.categoryHref === '/koty' ? 'cat' : magnet.categoryHref === '/psy' ? 'dog' : 'materials'}
     >
       <div className="container editorial-stack">
         <section className="editorial-hero-shell premium-hero-shell">

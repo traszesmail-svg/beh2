@@ -8,7 +8,7 @@ import Link from 'next/link'
 import React, { type ReactNode } from 'react'
 import { Footer } from '@/components/Footer'
 import { FunnelPrimaryActions } from '@/components/FunnelPrimaryActions'
-import { NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
+import { NotatnikSideVisuals, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { LeadMagnetSignup } from '@/components/LeadMagnetSignup'
 import { NewsletterSignup } from '@/components/NewsletterSignup'
 import { TrustSignalSection } from '@/components/TrustSignalSection'
@@ -712,6 +712,7 @@ export function ProblemLandingPage({ routePath }: { routePath: string }) {
   return (
     <main className="page-wrap editorial-home-page premium-home-page">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+      <NotatnikSideVisuals variant={landing.categoryHref === '/koty' ? 'cat' : 'dog'} />
 
       <div className="container editorial-stack">
         <NotatnikTopbar

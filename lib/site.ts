@@ -59,7 +59,7 @@ export const COAPE_INTL_URL = 'https://coape.org/'
 export const COAPE_ORG_URL = 'https://coape.pl/'
 export const CAPBT_ORG_URL = 'https://behawioryscicoape.pl/'
 export const CAPBT_PROFILE_URL = 'https://behawioryscicoape.pl/behawiorysta/Regulski'
-export const INSTAGRAM_PROFILE_URL = 'https://www.instagram.com/coapebehawiorysta/'
+export const INSTAGRAM_PROFILE_URL = 'https://www.instagram.com/regulskibehawiorysta/'
 export const PUBLIC_SOCIAL_LINKS = [
   {
     label: 'Instagram',

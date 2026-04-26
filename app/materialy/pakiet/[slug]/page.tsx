@@ -52,6 +52,7 @@ export default function MaterialyBundlePage({ params }: { params: Params }) {
       ctaLabel="Kwadrans / 69 zl"
       footerPrimaryHref={quickHref}
       footerPrimaryLabel="Kwadrans z behawiorysta"
+      sideVisualVariant={bundle.category === 'cat' ? 'cat' : bundle.category === 'dog' || bundle.category === 'puppy' ? 'dog' : 'materials'}
     >
       <section className="notatnik-subhero">
         <div>

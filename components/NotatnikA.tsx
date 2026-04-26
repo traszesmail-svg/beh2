@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { Footer } from '@/components/Footer'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { INSTAGRAM_PROFILE_URL } from '@/lib/site'
@@ -59,8 +60,12 @@ type NotatnikPageShellProps = {
   ctaLabel: string
   footerPrimaryHref: string
   footerPrimaryLabel: string
+  sideVisualVariant?: NotatnikSideVisualVariant
+  pageClassName?: string
   children: React.ReactNode
 }
+
+export type NotatnikSideVisualVariant = 'mixed' | 'dog' | 'cat' | 'materials' | 'blog' | 'about' | 'pricing' | 'contact'
 
 function getCtaClassName(variant: NotatnikTopbarProps['ctaVariant']) {
   if (variant === 'ghost') {
@@ -165,6 +170,56 @@ export function NotatnikTopbar({ tag, navItems, ctaHref, ctaLabel, ctaVariant = 
   )
 }
 
+const SIDE_VISUALS: Record<NotatnikSideVisualVariant, { left: string; right: string }> = {
+  mixed: {
+    left: '/branding/side-visuals/general-dog-walk.jpg',
+    right: '/branding/side-visuals/general-cat-owner.jpg',
+  },
+  dog: {
+    left: '/branding/side-visuals/dog-forest-walk.jpg',
+    right: '/branding/side-visuals/dog-training-forest.jpg',
+  },
+  cat: {
+    left: '/branding/side-visuals/cat-owner-home.jpg',
+    right: '/branding/side-visuals/cat-litter-home.jpg',
+  },
+  materials: {
+    left: '/branding/side-visuals/materials-notebook-desk.jpg',
+    right: '/branding/side-visuals/materials-laptop-notebook.jpg',
+  },
+  blog: {
+    left: '/branding/side-visuals/blog-notebook-desk.jpg',
+    right: '/branding/side-visuals/blog-laptop-notes.jpg',
+  },
+  about: {
+    left: '/branding/side-visuals/about-professional-desk.jpg',
+    right: '/branding/specialist-krzysztof-social.jpg',
+  },
+  pricing: {
+    left: '/branding/side-visuals/pricing-calculator-docs.jpg',
+    right: '/branding/side-visuals/pricing-calendar-desk.jpg',
+  },
+  contact: {
+    left: '/branding/side-visuals/contact-notebook-laptop.jpg',
+    right: '/branding/side-visuals/contact-writing-notebook.jpg',
+  },
+}
+
+export function NotatnikSideVisuals({ variant = 'mixed' }: { variant?: NotatnikSideVisualVariant }) {
+  const visuals = SIDE_VISUALS[variant]
+
+  return (
+    <>
+      <div className="notatnik-side-visual notatnik-side-visual-left" aria-hidden="true">
+        <Image src={visuals.left} alt="" fill sizes="(max-width: 1600px) 180px, 280px" quality={72} />
+      </div>
+      <div className="notatnik-side-visual notatnik-side-visual-right" aria-hidden="true">
+        <Image src={visuals.right} alt="" fill sizes="(max-width: 1600px) 180px, 280px" quality={72} />
+      </div>
+    </>
+  )
+}
+
 export function NotatnikSectionHead({ index, kicker, title }: NotatnikSectionHeadProps) {
   return (
     <div className="notatnik-section-head">
@@ -215,10 +270,13 @@ export function NotatnikPageShell({
   ctaLabel,
   footerPrimaryHref,
   footerPrimaryLabel,
+  sideVisualVariant = 'mixed',
+  pageClassName,
   children,
 }: NotatnikPageShellProps) {
   return (
-    <main className="notatnik-page">
+    <main className={pageClassName ? `notatnik-page ${pageClassName}` : 'notatnik-page'}>
+      <NotatnikSideVisuals variant={sideVisualVariant} />
       <div className="notatnik-shell">
         <NotatnikTopbar tag={tag} navItems={navItems} ctaHref={ctaHref} ctaLabel={ctaLabel} />
         {children}

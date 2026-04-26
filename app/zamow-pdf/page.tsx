@@ -36,6 +36,7 @@ export default function PdfOrderPage({
       ctaLabel="Kwadrans / 69 zl"
       footerPrimaryHref={buildPdfOrderHref({ guideSlug, bundleSlug })}
       footerPrimaryLabel={guide ? 'Zamow PDF' : 'Zamow pakiet'}
+      sideVisualVariant="materials"
     >
       <Schema
         data={[

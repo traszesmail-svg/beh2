@@ -16106,6 +16106,29 @@ select:focus-visible {
   text-decoration: none;
 }
 
+.blog-page .blog-card-image,
+.blog-page .blog-article-hero-image {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(92, 76, 58, 0.12);
+  border-radius: 18px;
+  background: #f3ede3;
+}
+
+.blog-page .blog-card-image {
+  aspect-ratio: 16 / 10;
+  margin: -2px -2px 4px;
+}
+
+.blog-page .blog-article-hero-image {
+  aspect-ratio: 21 / 8;
+}
+
+.blog-page .blog-card-image img,
+.blog-page .blog-article-hero-image img {
+  object-fit: cover;
+}
+
 .blog-page .blog-list-card-topline,
 .blog-page .blog-article-meta-row {
   display: flex;
@@ -16116,8 +16139,9 @@ select:focus-visible {
 
 .blog-page .blog-list-meta,
 .blog-page .blog-article-meta-row {
-  color: rgba(31, 26, 23, 0.64);
-  font-size: 13px;
+  color: rgba(31, 26, 23, 0.76);
+  font-size: 13.5px;
+  font-weight: 500;
   line-height: 1.55;
 }
 
@@ -16151,9 +16175,9 @@ select:focus-visible {
 .blog-page .blog-article-panel p,
 .blog-page .blog-article-panel li {
   margin: 0;
-  color: var(--muted);
-  font-size: 15px;
-  line-height: 1.72;
+  color: rgba(31, 26, 23, 0.78);
+  font-size: 16px;
+  line-height: 1.7;
   text-wrap: pretty;
 }
 
@@ -16673,6 +16697,141 @@ select:focus-visible {
   .money-page .hero-actions.editorial-hero-actions > *,
   .money-page .hero-actions.editorial-final-actions > * {
     width: 100%;
+  }
+}
+
+/* ─── SlotPicker ─────────────────────────────────────────────────────────── */
+
+.slot-picker-days {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.slot-day-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(92, 76, 58, 0.18);
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  font-size: 14px;
+}
+
+.slot-day-btn:hover {
+  border-color: rgba(92, 76, 58, 0.4);
+  background: rgba(255, 255, 255, 1);
+}
+
+.slot-day-btn--active {
+  border-color: var(--accent, #8b5e3c);
+  background: rgba(139, 94, 60, 0.06);
+}
+
+.slot-day-btn--picked {
+  border-color: rgba(34, 120, 80, 0.5);
+  background: rgba(34, 120, 80, 0.06);
+}
+
+.slot-day-label {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.slot-day-count {
+  font-size: 11px;
+  color: rgba(34, 120, 80, 0.9);
+  font-weight: 500;
+}
+
+.slot-times {
+  margin-bottom: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(92, 76, 58, 0.14);
+  background: rgba(250, 248, 245, 0.8);
+}
+
+.slot-times-label {
+  font-size: 13px;
+  color: rgba(31, 26, 23, 0.65);
+  margin-bottom: 10px;
+}
+
+.slot-times-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.slot-time-chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(92, 76, 58, 0.2);
+  background: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.slot-time-chip:hover:not(:disabled) {
+  border-color: rgba(139, 94, 60, 0.5);
+  background: rgba(139, 94, 60, 0.06);
+}
+
+.slot-time-chip--booked {
+  background: rgba(31, 26, 23, 0.05);
+  color: rgba(31, 26, 23, 0.35);
+  cursor: default;
+  border-color: transparent;
+}
+
+.slot-time-chip--picked {
+  background: rgba(34, 120, 80, 0.1);
+  border-color: rgba(34, 120, 80, 0.45);
+  color: rgba(21, 90, 56, 1);
+}
+
+.slot-time-chip-tag {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.7;
+}
+
+.slot-summary {
+  margin-top: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(34, 120, 80, 0.08);
+  font-size: 13px;
+  color: rgba(21, 90, 56, 1);
+  border: 1px solid rgba(34, 120, 80, 0.2);
+}
+
+.slot-summary-hint {
+  color: rgba(31, 26, 23, 0.5);
+}
+
+@media (max-width: 600px) {
+  .slot-picker-days {
+    gap: 6px;
+  }
+
+  .slot-day-btn {
+    padding: 6px 10px;
+    font-size: 13px;
   }
 }
 

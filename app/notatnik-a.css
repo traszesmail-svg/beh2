@@ -20,6 +20,8 @@
   font-family: var(--font-body), system-ui, sans-serif;
   position: relative;
   overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 html[data-theme='dark'] .notatnik-page {
@@ -63,10 +65,11 @@ html[data-theme='dark'] .notatnik-page {
 
 .notatnik-mono {
   font-family: var(--font-mono), monospace;
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--ink-mute);
+  color: var(--ink-soft);
 }
 
 .notatnik-kicker-spaced {
@@ -889,6 +892,168 @@ button.notatnik-inline-link {
   text-underline-offset: 3px;
 }
 
+.essentials-shop-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.essentials-shop-card {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100%;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 18px 42px rgba(48, 36, 20, 0.07);
+}
+
+.essentials-shop-media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.essentials-shop-image {
+  object-fit: cover;
+  transition: transform 0.24s ease;
+}
+
+.essentials-shop-card:hover .essentials-shop-image {
+  transform: scale(1.025);
+}
+
+.essentials-shop-card-book .essentials-shop-media {
+  aspect-ratio: 3 / 4;
+  background: linear-gradient(180deg, #fbf8f2, #efe4d3);
+}
+
+.essentials-shop-card-book .essentials-shop-image {
+  object-fit: contain;
+  padding: 14px;
+}
+
+.essentials-shop-badge {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  max-width: calc(100% - 24px);
+  padding: 0 10px;
+  border: 1px solid rgba(255, 255, 255, 0.68);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+  color: rgba(31, 26, 23, 0.76);
+  font-family: var(--font-mono), monospace;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1;
+  text-transform: uppercase;
+  backdrop-filter: blur(8px);
+}
+
+.essentials-shop-body {
+  display: grid;
+  align-content: start;
+  gap: 9px;
+  padding: 18px 18px 8px;
+}
+
+.essentials-shop-topline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--ink-mute);
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.essentials-shop-topline strong {
+  color: var(--accent);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 14px;
+  letter-spacing: 0;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.essentials-shop-card h3 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 20px;
+  font-style: normal;
+  letter-spacing: 0;
+  line-height: 1.16;
+}
+
+.essentials-shop-author {
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.essentials-shop-card p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.essentials-shop-actions {
+  padding: 14px 18px 18px;
+}
+
+.notatnik-page .essentials-shop-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  width: 100%;
+  padding: 0 14px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+}
+
+.notatnik-page .essentials-shop-link:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.essentials-shop-subhead {
+  display: grid;
+  gap: 4px;
+  max-width: 720px;
+}
+
+.essentials-shop-subhead strong {
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.essentials-shop-subhead span {
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
 .notatnik-pdf-highlight-grid,
 .notatnik-pdf-list-grid {
   display: grid;
@@ -1652,10 +1817,11 @@ button.notatnik-inline-link {
 
 .notatnik-contact .contact-form-card,
 .notatnik-contact .summary-card {
-  padding: 0;
-  border: none;
-  background: transparent;
-  box-shadow: none;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--shell-bg) 94%, var(--paper));
+  box-shadow: 0 18px 42px rgba(48, 36, 20, 0.06);
 }
 
 .notatnik-contact .form-grid {
@@ -1667,23 +1833,24 @@ button.notatnik-inline-link {
 .notatnik-page .form-grid .section-eyebrow {
   font-family: var(--font-mono), monospace;
   font-size: 10.5px;
-  letter-spacing: 0.14em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--ink-mute);
+  color: var(--ink-soft);
 }
 
 .notatnik-page .form-grid input,
 .notatnik-page .form-grid textarea,
 .notatnik-page .form-grid select {
   width: 100%;
-  padding: 10px 0;
-  border: none;
-  border-bottom: 1px solid var(--line);
-  background: transparent;
+  min-height: 46px;
+  padding: 11px 13px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--shell-bg);
   color: var(--ink);
   font: inherit;
   font-size: 15px;
-  border-radius: 0;
   box-shadow: none;
 }
 
@@ -1696,7 +1863,15 @@ button.notatnik-inline-link {
 .notatnik-page .form-grid textarea:focus,
 .notatnik-page .form-grid select:focus {
   border-color: var(--ink);
+  background: color-mix(in srgb, var(--shell-bg) 98%, var(--accent));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
   outline: none;
+}
+
+.notatnik-page .form-grid input::placeholder,
+.notatnik-page .form-grid textarea::placeholder {
+  color: var(--ink-mute);
+  opacity: 0.82;
 }
 
 .notatnik-page .contact-form-intro,
@@ -1724,18 +1899,24 @@ button.notatnik-inline-link {
   display: flex;
   gap: 12px;
   align-items: flex-start;
-  padding: 14px 0;
-  border-bottom: 1px dashed var(--line);
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--ink-soft);
+  line-height: 1.45;
 }
 
 .notatnik-page .checkbox-card:last-child {
-  border-bottom: none;
+  border-bottom: 1px solid var(--line);
 }
 
 .notatnik-page .checkbox-card input {
   width: 16px;
+  min-width: 16px;
   margin-top: 2px;
   border: 1px solid var(--line);
+  accent-color: var(--accent-warm);
 }
 
 .notatnik-page .button.big-button,
@@ -1757,6 +1938,160 @@ button.notatnik-inline-link {
 .notatnik-page .button.button-ghost {
   background: transparent;
   color: var(--ink);
+}
+
+.notatnik-page .materialy-form {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px 20px;
+  max-width: 980px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--shell-bg) 94%, var(--paper));
+  box-shadow: 0 18px 42px rgba(48, 36, 20, 0.06);
+}
+
+.notatnik-page .materialy-form .form-summary,
+.notatnik-page .materialy-form .form-error,
+.notatnik-page .materialy-form .materialy-success,
+.notatnik-page .materialy-form label:has(textarea),
+.notatnik-page .materialy-form .consent-line,
+.notatnik-page .materialy-form button {
+  grid-column: 1 / -1;
+}
+
+.notatnik-page .materialy-form label {
+  display: grid;
+  align-content: start;
+  gap: 7px;
+  min-width: 0;
+  color: var(--ink-mute);
+  font-family: var(--font-mono), monospace;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.notatnik-page .materialy-form label > small {
+  color: var(--ink-soft);
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.35;
+  text-transform: none;
+}
+
+.notatnik-page .materialy-form input,
+.notatnik-page .materialy-form textarea {
+  width: 100%;
+  min-height: 46px;
+  padding: 11px 13px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--shell-bg);
+  color: var(--ink);
+  font: inherit;
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 15px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.notatnik-page .materialy-form textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.notatnik-page .materialy-form input:focus,
+.notatnik-page .materialy-form textarea:focus {
+  border-color: var(--ink);
+  background: color-mix(in srgb, var(--shell-bg) 98%, var(--accent));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+  outline: none;
+}
+
+.notatnik-page .materialy-form .materialy-code-input {
+  font-size: 18px;
+  letter-spacing: 4px;
+  text-align: center;
+}
+
+.notatnik-page .materialy-form .consent-line {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 0;
+  border-top: 1px dashed var(--line);
+  color: var(--ink-soft);
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.5;
+  text-transform: none;
+}
+
+.notatnik-page .materialy-form .consent-line input {
+  flex: 0 0 auto;
+  width: 18px;
+  min-height: 18px;
+  margin-top: 2px;
+}
+
+.notatnik-page .materialy-form .form-summary,
+.notatnik-page .materialy-form .materialy-success,
+.notatnik-page .materialy-form .form-error {
+  margin: 0;
+  padding: 14px 16px;
+  border-radius: 6px;
+  background: var(--paper);
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+html[data-theme='dark'] .notatnik-contact .contact-form-card,
+html[data-theme='dark'] .notatnik-contact .summary-card,
+html[data-theme='dark'] .notatnik-page .materialy-form {
+  box-shadow: none;
+}
+
+html[data-theme='dark'] .notatnik-page .form-grid input,
+html[data-theme='dark'] .notatnik-page .form-grid textarea,
+html[data-theme='dark'] .notatnik-page .form-grid select,
+html[data-theme='dark'] .notatnik-page .materialy-form input,
+html[data-theme='dark'] .notatnik-page .materialy-form textarea {
+  background: #101311;
+  border-color: #465044;
+  color: var(--ink);
+}
+
+html[data-theme='dark'] .notatnik-page .form-grid input::placeholder,
+html[data-theme='dark'] .notatnik-page .form-grid textarea::placeholder,
+html[data-theme='dark'] .notatnik-page .materialy-form input::placeholder,
+html[data-theme='dark'] .notatnik-page .materialy-form textarea::placeholder {
+  color: #aaa493;
+  opacity: 1;
+}
+
+html[data-theme='dark'] .notatnik-page .checkbox-card,
+html[data-theme='dark'] .notatnik-page .materialy-form .consent-line {
+  background: #171b18;
+  border-color: #465044;
+  color: var(--ink-soft);
+}
+
+.notatnik-page .materialy-form .form-error {
+  border: 1px solid rgba(164, 72, 49, 0.35);
+  background: #fff5f1;
+  color: #8b2f1f;
+}
+
+.notatnik-page .materialy-form button {
+  justify-self: start;
 }
 
 .notatnik-kinfo h3 {
@@ -2275,6 +2610,8 @@ button.notatnik-inline-link {
 
   .notatnik-quiet-grid,
   .notatnik-material-grid,
+  .essentials-shop-grid,
+  .notatnik-page .materialy-form,
   .notatnik-pdf-highlight-grid,
   .notatnik-pdf-list-grid,
   .notatnik-steps,
@@ -2395,6 +2732,7 @@ button.notatnik-inline-link {
 
   .notatnik-quiet-grid,
   .notatnik-material-grid,
+  .essentials-shop-grid,
   .notatnik-pdf-highlight-grid,
   .notatnik-pdf-list-grid,
   .notatnik-topic-grid,
@@ -2884,10 +3222,11 @@ button.notatnik-inline-link {
 .page-wrap.opinions-page .section-eyebrow,
 .page-wrap.opinions-dowodowa-page .section-eyebrow {
   font-family: var(--font-mono), monospace;
-  font-size: 10.5px;
-  letter-spacing: 0.14em;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--ink-mute);
+  color: var(--ink-soft);
 }
 
 .page-wrap.marketing-page .editorial-section-head h2,
@@ -2928,9 +3267,9 @@ button.notatnik-inline-link {
 .page-wrap.opinions-page .editorial-hero-lead,
 .page-wrap.opinions-dowodowa-page .editorial-hero-lead {
   max-width: 56ch;
-  color: var(--ink-soft);
+  color: color-mix(in srgb, var(--ink) 78%, var(--ink-soft));
   font-size: 16px;
-  line-height: 1.6;
+  line-height: 1.68;
 }
 
 .page-wrap.marketing-page .hero-actions,
