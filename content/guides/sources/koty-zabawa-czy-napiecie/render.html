@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title> · Regulski | Terapia behawioralna</title>
+<style>/* PDF guide stylesheet — renders on A4 via Playwright page.pdf() */
+
+@page {
+  size: A4;
+  margin: 22mm 18mm 22mm 18mm;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.55;
+  color: #1f1a17;
+  background: #fdfbf7;
+}
+
+/* Cover page */
+.cover {
+  page: cover;
+  page-break-after: always;
+  min-height: 247mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 4mm 0;
+}
+
+.cover-brand {
+  font-size: 9pt;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8b6f5a;
+  font-weight: 600;
+}
+
+.cover-tag {
+  display: inline-block;
+  font-size: 9pt;
+  color: #5e4a3c;
+  background: #f0e5d6;
+  padding: 3mm 5mm;
+  border-radius: 2mm;
+  margin-bottom: 6mm;
+}
+
+.cover-title {
+  font-size: 32pt;
+  line-height: 1.1;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 0 0 6mm 0;
+  letter-spacing: -0.01em;
+}
+
+.cover-subtitle {
+  font-size: 14pt;
+  line-height: 1.35;
+  color: #5e4a3c;
+  font-weight: 500;
+  margin: 0 0 10mm 0;
+}
+
+.cover-lead {
+  font-size: 11pt;
+  line-height: 1.6;
+  color: #3f332a;
+  max-width: 140mm;
+}
+
+.cover-bullets {
+  margin-top: 8mm;
+  padding: 0;
+  list-style: none;
+}
+
+.cover-bullets li {
+  padding: 2mm 0 2mm 6mm;
+  position: relative;
+  font-size: 10.5pt;
+  color: #3f332a;
+}
+
+.cover-bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 5mm;
+  width: 3mm;
+  height: 0.7mm;
+  background: #c9a37a;
+}
+
+.cover-meta {
+  font-size: 9pt;
+  color: #8b6f5a;
+  border-top: 0.3mm solid #e5d8c6;
+  padding-top: 4mm;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6mm;
+}
+.cover-meta > div { min-width: 0; word-break: break-word; }
+
+.cover-meta strong { color: #1f1a17; }
+
+.cover-disclaimer {
+  margin-top: 6mm;
+  font-size: 9pt;
+  font-style: italic;
+  color: #8b6f5a;
+  border-left: 0.5mm solid #c9a37a;
+  padding: 2mm 0 2mm 4mm;
+}
+
+/* Body typography */
+.body h1 {
+  font-size: 18pt;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 10mm 0 4mm 0;
+  padding-bottom: 2mm;
+  border-bottom: 0.3mm solid #e5d8c6;
+}
+
+.body h2 {
+  font-size: 14pt;
+  line-height: 1.25;
+  font-weight: 700;
+  color: #3f332a;
+  margin: 8mm 0 3mm 0;
+}
+
+.body h3 {
+  font-size: 12pt;
+  font-weight: 600;
+  color: #3f332a;
+  margin: 6mm 0 2mm 0;
+}
+
+.body p {
+  margin: 0 0 3mm 0;
+  text-align: justify;
+  hyphens: auto;
+}
+
+.body ul, .body ol {
+  margin: 0 0 4mm 0;
+  padding-left: 6mm;
+}
+
+.body li {
+  margin: 1mm 0;
+}
+
+.body strong { color: #1f1a17; }
+
+.body em { color: #5e4a3c; }
+
+/* Callout boxes (from data-kind="callout") */
+.body table[data-kind="callout"] {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4mm 0;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="callout"] td {
+  padding: 4mm 5mm;
+  background: #faf1e3;
+  border-left: 1mm solid #c9a37a;
+  border-radius: 0 1.5mm 1.5mm 0;
+}
+
+.body table[data-kind="callout"] p { margin: 0 0 2mm 0; }
+.body table[data-kind="callout"] p:last-child { margin-bottom: 0; }
+.body table[data-kind="callout"] p strong:first-child {
+  display: block;
+  font-size: 11pt;
+  margin-bottom: 1mm;
+  color: #1f1a17;
+}
+
+/* Callout stack (vertical list of callouts in one table) */
+.body table[data-kind="callout-stack"] {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 2mm;
+  margin: 4mm 0;
+}
+
+.body table[data-kind="callout-stack"] td {
+  padding: 3.5mm 5mm;
+  background: #faf1e3;
+  border-left: 1mm solid #c9a37a;
+}
+
+/* Grid boxes (single row, multiple cells — feature grid) */
+.body table[data-kind="grid"] {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 2mm 0;
+  margin: 4mm 0;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="grid"] td {
+  padding: 3mm 4mm;
+  background: #f5ece0;
+  border-radius: 1.5mm;
+  vertical-align: top;
+  width: auto;
+}
+
+.body table[data-kind="grid"] p { margin: 0 0 1.5mm 0; font-size: 9.5pt; }
+.body table[data-kind="grid"] strong { display: block; margin-bottom: 1mm; }
+
+/* Data tables (multi-row comparison) */
+.body table[data-kind="data"] {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4mm 0;
+  font-size: 9.5pt;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="data"] th,
+.body table[data-kind="data"] td {
+  border: 0.2mm solid #e5d8c6;
+  padding: 2mm 3mm;
+  vertical-align: top;
+  text-align: left;
+}
+
+.body table[data-kind="data"] tr:first-child td,
+.body table[data-kind="data"] th {
+  background: #f5ece0;
+  font-weight: 600;
+  color: #1f1a17;
+}
+
+.body table[data-kind="data"] tr:nth-child(even) td {
+  background: #fcf8f1;
+}
+
+/* Footer section — CTA routing to services */
+.footer {
+  page-break-before: always;
+  padding: 2mm 0;
+}
+
+.footer-title {
+  font-size: 18pt;
+  font-weight: 700;
+  margin: 0 0 4mm 0;
+  color: #1f1a17;
+}
+
+.footer-lead {
+  color: #3f332a;
+  margin-bottom: 6mm;
+  max-width: 150mm;
+}
+
+.services {
+  display: flex;
+  flex-direction: column;
+  gap: 3mm;
+  margin-bottom: 8mm;
+}
+
+.service {
+  padding: 4mm 5mm;
+  background: #f5ece0;
+  border-left: 1mm solid #c9a37a;
+  border-radius: 0 2mm 2mm 0;
+  page-break-inside: avoid;
+}
+
+.service-price {
+  font-size: 9pt;
+  color: #8b6f5a;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.service-name {
+  font-size: 13pt;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 1mm 0;
+}
+
+.service-copy {
+  font-size: 10pt;
+  color: #3f332a;
+  margin: 0 0 2mm 0;
+}
+
+.service-url {
+  font-size: 9pt;
+  color: #8b6f5a;
+}
+
+.footer-contact {
+  border-top: 0.3mm solid #e5d8c6;
+  padding-top: 4mm;
+  font-size: 9.5pt;
+  color: #3f332a;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6mm;
+}
+.footer-contact > div { min-width: 0; word-break: break-word; }
+
+.footer-contact a { color: #5e4a3c; text-decoration: none; }
+
+.footer-fine {
+  margin-top: 4mm;
+  font-size: 8.5pt;
+  color: #8b6f5a;
+  font-style: italic;
+}
+
+/* Category accent colors: cat / dog / puppy — tinted cover */
+body[data-category="cat"] .cover-tag { background: #ecdad3; color: #6b463a; }
+body[data-category="cat"] .cover-bullets li::before { background: #b97865; }
+body[data-category="cat"] .body table[data-kind="callout"] td { background: #f8eae5; border-left-color: #b97865; }
+body[data-category="cat"] .body table[data-kind="callout-stack"] td { background: #f8eae5; border-left-color: #b97865; }
+body[data-category="cat"] .body table[data-kind="grid"] td { background: #f8eae5; }
+body[data-category="cat"] .body table[data-kind="data"] tr:first-child td { background: #f8eae5; }
+body[data-category="cat"] .service { background: #f8eae5; border-left-color: #b97865; }
+
+body[data-category="dog"] .cover-tag { background: #e9e2ce; color: #5c4a2e; }
+body[data-category="dog"] .cover-bullets li::before { background: #997947; }
+body[data-category="dog"] .body table[data-kind="callout"] td { background: #f4ecd7; border-left-color: #997947; }
+body[data-category="dog"] .body table[data-kind="callout-stack"] td { background: #f4ecd7; border-left-color: #997947; }
+body[data-category="dog"] .body table[data-kind="grid"] td { background: #f4ecd7; }
+body[data-category="dog"] .body table[data-kind="data"] tr:first-child td { background: #f4ecd7; }
+body[data-category="dog"] .service { background: #f4ecd7; border-left-color: #997947; }
+
+body[data-category="puppy"] .cover-tag { background: #e4ead3; color: #4b5730; }
+body[data-category="puppy"] .cover-bullets li::before { background: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="callout"] td { background: #edf2dd; border-left-color: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="callout-stack"] td { background: #edf2dd; border-left-color: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="grid"] td { background: #edf2dd; }
+body[data-category="puppy"] .body table[data-kind="data"] tr:first-child td { background: #edf2dd; }
+body[data-category="puppy"] .service { background: #edf2dd; border-left-color: #7a8d4f; }
+</style>
+</head>
+<body data-category="cat">
+
+<section class="cover">
+  <div>
+    <div class="cover-brand">Regulski · Terapia behawioralna</div>
+    <div style="margin: 12mm 0 0 0;">
+      <div class="cover-tag">Koty · przewodnik</div>
+      <h1 class="cover-title"></h1>
+      <p class="cover-subtitle"></p>
+    </div>
+    <p class="cover-lead"></p>
+    <ul class="cover-bullets">
+      
+    </ul>
+  </div>
+  <div>
+    <div class="cover-disclaimer">Materiał edukacyjny. Nie zastępuje badania lekarsko-weterynaryjnego ani indywidualnej konsultacji behawioralnej.</div>
+    <div class="cover-meta">
+      <div><strong>Format</strong><br>PDF A4, druk domowy</div>
+      <div><strong>Czytanie</strong><br>7 min</div>
+      <div><strong>Wydano</strong><br>25 kwietnia 2026</div>
+      <div><strong>Autor</strong><br>Krzysztof Regulski</div>
+    </div>
+  </div>
+</section>
+
+<section class="body">
+<table data-kind="callout" data-label="Koty: zabawa czy napięcie?"><tbody><tr><td><p><strong>Koty: zabawa czy napięcie?</strong></p><p>Jak odróżnić prawidłową aktywność społeczną od subtelnego konfliktu i uporządkować obserwacje w domu wielokotowym</p><p>Core / core+ PDF ścieżki relacyjnej między kotami</p></td></tr></tbody></table><table data-kind="callout" data-label="Po co jest ten materiał?"><tbody><tr><td><p><strong>Po co jest ten materiał?</strong></p><p>Ten PDF pomaga ocenić, czy dwa koty jeszcze regulują pobudzenie w zabawie, czy jeden z nich już ustępuje, unika i funkcjonuje pod presją społeczną. Zamiast zgadywać, porządkuje obserwację, pokazuje sygnały ostrzegawcze i prowadzi przez pierwszy plan działania.</p></td></tr></tbody></table><table data-kind="callout" data-label="Co znajdziesz w środku"><tbody><tr><td><p><strong>Co znajdziesz w środku</strong></p><ul><li>różnice między swobodną zabawą a napięciem / konfliktem</li><li>7 cichych znaków napięcia, które łatwo przeoczyć</li><li>znaczenie zasobów, przejść, przewidywalności i układu domu</li><li>algorytm obserwacji i 14-dniowy plan porządkowania sytuacji</li><li>moment, w którym trzeba myśleć o reintrodukcji lub pilnej konsultacji</li></ul></td></tr></tbody></table><p>Przewodnik • głębsze różnicowanie relacji między kotami</p><p>Materiał edukacyjny oparty na porządku klinicznym i praktyce pracy z opiekunem. Nie zastępuje diagnostyki lekarsko-weterynaryjnej, ale pomaga szybciej uporządkować problem i wybrać sensowny następny krok.</p><p><strong>Dla kogo jest ten materiał</strong></p><p>Dla opiekuna, który widzi konkretny objaw lub powtarzalny wzorzec zachowania i chce najpierw zrozumieć mechanizm problemu, a dopiero potem wdrażać zmiany.</p><p><strong>Co znajdziesz w środku</strong></p><p>Krótki filtr problemu, najważniejsze czerwone flagi, plan obserwacji oraz pierwszy zestaw działań, które pomagają zdecydować, czy materiał zwykle wystarcza, czy lepsza będzie konsultacja lub kolejny PDF z tej ścieżki.</p><p><strong>Najkrócej</strong></p><p>To nie jest materiał do zgadywania „co kot ma na myśli”, tylko do zauważenia wzorca, odróżnienia go od bólu lub przeciążenia i wybrania najbezpieczniejszego następnego kroku.</p><p><strong>1. Nie każda gonitwa to zabawa</strong></p><p>W domu wielokotowym najwięcej błędów zaczyna się od zbyt szybkiego wniosku: skoro nie ma jawnej bójki, to pewnie koty po prostu się bawią. Tymczasem klinicznie ważne napięcie częściej ma przebieg cichy: jeden kot ustępuje drogi, omija zasoby, czeka na ciszę albo zmienia trasę przejścia. Dlatego trzeba oceniać nie tylko sam moment kontaktu, ale także to, co dzieje się przed nim i po nim.</p><table data-kind="callout" data-label="Najkrócej"><tbody><tr><td><p><strong>Najkrócej</strong></p><p>Jeżeli interakcja regularnie wymusza na jednym kocie ustąpienie, wycofanie lub zmianę trasy dojścia do zasobu, nie mówimy już wyłącznie o zabawie. Pojawia się element presji społecznej.</p></td></tr></tbody></table><p><strong>Na co patrzeć najpierw</strong></p><table data-kind="data"><tbody><tr><td><p><strong>Naprzemienność ról</strong></p><p>W zabawie role nie muszą być idealnie równe, ale obie strony powinny choć częściowo wracać do kontaktu z własnej inicjatywy.</p></td><td><p><strong>Konsekwencje po epizodzie</strong></p><p>Najwięcej mówi to, czy po kontakcie koty wracają do normalnego funkcjonowania, czy jeden z nich zaczyna unikać, chować się lub ustępować zasobów.</p></td></tr><tr><td><p><strong>Kontekst miejsca</strong></p><p>Największą ostrożność zachowaj przy kuwecie, misce, drzwiach, korytarzu, schodach i wąskich przejściach. To nie są neutralne miejsca do zabawy.</p></td><td><p><strong>Płynność ciała</strong></p><p>Swobodna zabawa częściej ma luźniejszą postawę, pauzy i odskoki. Napięcie częściej wiąże się z usztywnieniem, wpatrywaniem i ruchem wypierającym.</p></td></tr></tbody></table><p><strong>2. Zabawa a napięcie — różnicowanie praktyczne</strong></p><table data-kind="data"><tbody><tr><td><p><strong>Obserwacja</strong></p></td><td><p><strong>Bardziej typowe dla zabawy</strong></p></td><td><p><strong>Bardziej typowe dla napięcia</strong></p></td></tr><tr><td><p>Rola i inicjatywa</p></td><td><p>przynajmniej częściowa wymiana ról, powrót do kontaktu</p></td><td><p>jednostronne ściganie, wypieranie lub blokowanie</p></td></tr><tr><td><p>Ciało i ruch</p></td><td><p>bardziej płynne ciało, wyraźne pauzy, samoregulacja</p></td><td><p>usztywnienie, staring, nisko noszony ogon, ruch w jednym kierunku</p></td></tr><tr><td><p>Miejsce epizodu</p></td><td><p>otwarta przestrzeń, bez przejmowania zasobów</p></td><td><p>przejścia, kuweta, miska, próg, wejście do pokoju</p></td></tr><tr><td><p>Po zakończeniu</p></td><td><p>brak wyraźnej straty funkcjonalnej</p></td><td><p>unikanie, zmiana trasy, rezygnacja z zasobu, czujność</p></td></tr></tbody></table><table data-kind="callout" data-label="Błąd najczęstszy"><tbody><tr><td><p><strong>Błąd najczęstszy</strong></p><p>Opiekun patrzy tylko na moment kontaktu fizycznego. Tymczasem klinicznie kluczowe są konsekwencje: czy kot po epizodzie nadal korzysta z domu tak samo, czy zaczyna funkcjonować ciszej i ostrożniej.</p></td></tr></tbody></table><p><strong>7 cichych znaków napięcia</strong></p><table data-kind="data"><tbody><tr><td><p><strong>1. Blokowanie przejść</strong></p><p>Jeden kot zajmuje strategiczny punkt w korytarzu, przy drzwiach lub na schodku, a drugi wybiera objazd albo rezygnuje.</p></td><td><p><strong>2. Staring i zamrożenie</strong></p><p>Długi nieruchomy kontakt wzrokowy, po którym drugi kot ustępuje lub zawraca.</p></td></tr><tr><td><p><strong>3. Ciche oddawanie zasobów</strong></p><p>Kot odchodzi od miski, kuwety, legowiska lub człowieka bez jawnej walki.</p></td><td><p><strong>4. Życie na obrzeżach domu</strong></p><p>Jeden kot częściej wybiera boczne pokoje, wyższe kryjówki albo aktywność nocą.</p></td></tr><tr><td><p><strong>5. Wzmożona czujność</strong></p><p>Nasłuchiwanie, zatrzymywanie się na progu i korzystanie z zasobów w pośpiechu.</p></td><td><p><strong>6. Uporczywe unikanie po epizodzie</strong></p><p>Po rzekomej zabawie kot nie wraca do kontaktu, tylko znika lub reorganizuje dzień wokół unikania.</p></td></tr><tr><td><p><strong>7. Skutki somatyczne i kuwetowe</strong></p><p>Nawracające objawy pęcherzowe, problemy z kuwetą lub nadmierne wylizywanie mogą być wtórne do napięcia.</p></td><td></td></tr></tbody></table><p><strong>3. Co w domu najczęściej nakręca konflikt</strong></p><p>Napięcie między kotami zwykle nie bierze się z jednego „złego charakteru”. Najczęstszym tłem są zasoby, przestrzeń i przewidywalność. Dwie kuwety ustawione obok siebie nadal mogą działać jak jedna stacja. Dwie miski w jednej linii nadal mogą wymuszać bliski kontakt. Wąskie przejście bez drogi odwrotu nadal może być punktem presji.</p><table data-kind="callout" data-label="Najczęstsze scenariusze problemowe"><tbody><tr><td><p><strong>Najczęstsze scenariusze problemowe</strong></p><ul><li>zbyt mało rozproszonych zasobów w różnych częściach domu</li><li>ślepe zaułki i przejścia bez możliwości wycofania się</li><li>powrót kota z lecznicy z obcym zapachem</li><li>koty za oknem i wzrost pobudzenia terytorialnego</li><li>niedobrana para: duża różnica wieku, stylu aktywności lub kompetencji społecznych</li></ul></td></tr></tbody></table><p><strong>Kot wywierający presję a kot zagrożony</strong></p><table data-kind="data"><tbody><tr><td><p><strong>Sfera</strong></p></td><td><p><strong>Kot wywierający presję</strong></p></td><td><p><strong>Kot zagrożony</strong></p></td></tr><tr><td><p>Przy zasobach</p></td><td><p>wchodzi pierwszy, zajmuje najlepsze miejsce, nie ustępuje</p></td><td><p>czeka, korzysta później albo rezygnuje</p></td></tr><tr><td><p>W korytarzu</p></td><td><p>zatrzymuje się frontalnie, patrzy, kontroluje próg</p></td><td><p>zawraca, kuli się, szuka obejścia</p></td></tr><tr><td><p>Kontakt z człowiekiem</p></td><td><p>wchodzi pierwszy, lepiej kontroluje dystans</p></td><td><p>podchodzi dopiero, gdy drugi kot zniknie</p></td></tr><tr><td><p>Rytm dnia</p></td><td><p>pozostaje aktywny i pewny</p></td><td><p>żyje ciszej, bardziej fragmentarycznie i ostrożnie</p></td></tr></tbody></table><table data-kind="callout" data-label="Pułapka interpretacyjna"><tbody><tr><td><p><strong>Pułapka interpretacyjna</strong></p><p>Najłatwiej skupić się na kocie wycofanym i próbować go „ośmielić”. Częściej trzeba najpierw odciążyć środowisko i ograniczyć społeczną presję drugiego kota.</p></td></tr></tbody></table><p><strong>4. Algorytm obserwacji i plan 14 dni</strong></p><p><strong>Algorytm szybkiej oceny</strong></p><table data-kind="data"><tbody><tr><td><p><strong>Krok 1. Zapisz kontekst</strong></p><p>Gdzie dzieje się epizod? Czy chodzi o kuwetę, miskę, próg, półkę, wejście do pokoju czy zabawę w otwartej przestrzeni?</p></td><td><p><strong>Krok 2. Oceń role</strong></p><p>Czy role częściowo się zmieniają? Czy kot, który uciekał, wraca później do kontaktu?</p></td></tr><tr><td><p><strong>Krok 3. Zobacz skutki</strong></p><p>Czy po epizodzie pojawia się unikanie, zawężenie przestrzeni, zmiana trasy lub korzystanie z zasobów tylko nocą?</p></td><td><p><strong>Krok 4. Sprawdź środowisko</strong></p><p>Rozrysuj kuwety, miski, drapaki, półki, kryjówki i przejścia. Często to mapa mieszkania pokazuje problem wyraźniej niż sam opis.</p></td></tr></tbody></table><p><strong>Plan na 14 dni</strong></p><table data-kind="callout" data-label="Plan porządkowania sytuacji"><tbody><tr><td><p><strong>Plan porządkowania sytuacji</strong></p><ul><li>Dni 1–3: zatrzymaj eskalujące sytuacje, rozprosz zasoby i ogranicz ryzykowne punkty styku.</li><li>Dni 4–7: obserwuj godziny korzystania z kuwety, misek i miejsc odpoczynku; nagrywaj spokojne przejścia przez mieszkanie.</li><li>Dni 8–10: wprowadź więcej tras pionowych, kryjówek i miejsc odejścia; unikaj wymuszania bliskiego kontaktu.</li><li>Dni 11–14: oceń, czy kot zagrożony wraca do części domu, czy nadal funkcjonuje głównie na obrzeżach i nocą.</li></ul></td></tr></tbody></table><table data-kind="callout" data-label="Po czym poznasz poprawę?"><tbody><tr><td><p><strong>Po czym poznasz poprawę?</strong></p><p>Lepszym wskaźnikiem niż „brak bójki” jest powrót do normalnych rytuałów: swobodniejsze przejścia, spokojniejsze korzystanie z zasobów, więcej aktywności dziennej i mniej ustępowania bez kontaktu.</p></td></tr></tbody></table><p><strong>5. Kiedy myśleć o reintrodukcji lub pilnej konsultacji</strong></p><table data-kind="callout" data-label="Sygnały, że czas wejść po pomoc"><tbody><tr><td><p><strong>Sygnały, że czas wejść po pomoc</strong></p><ul><li>gdy pojawiają się jawne bójki, regularne ambush albo trwałe wyparcie z części mieszkania</li><li>gdy kot zagrożony nie korzysta swobodnie z kuwety, miski lub miejsc odpoczynku mimo zmian środowiskowych</li><li>gdy w tle pojawiają się objawy medyczne: pęcherz, żołądek, ból, utrata masy ciała lub pogorszenie pielęgnacji</li><li>gdy po 2–4 tygodniach sensownej pracy środowiskowej nadal nie widać poprawy</li><li>gdy w domu są więcej niż dwa koty i opiekun nie potrafi uchwycić, kto realnie wywiera presję</li></ul></td></tr></tbody></table><table data-kind="callout" data-label="Co dalej?"><tbody><tr><td><p><strong>Co dalej?</strong></p><p>Jeżeli problem dopiero się rysuje, wróć też do PDF-u „Konflikt między kotami”. Jeżeli napięcie łączy się z wycofaniem po zmianach, sięgnij po „Kot chowa się po zmianach”. Jeżeli w tle pojawiają się problemy z kuwetą, przejdź do ścieżki kuwetowej. Gdy nie wiesz, która warstwa jest główna, najlepszym kolejnym krokiem będzie Kwadrans z behawiorystą.</p></td></tr></tbody></table><p><strong>Check-lista do obserwacji</strong></p><table data-kind="callout" data-label="Pytania kontrolne na 7–14 dni"><tbody><tr><td><p><strong>Pytania kontrolne na 7–14 dni</strong></p><ul><li>czy oba koty jedzą swobodnie o podobnych porach</li><li>czy oba koty korzystają z więcej niż jednego pokoju i więcej niż jednej strefy odpoczynku</li><li>czy któryś kot czeka, aż drugi odejdzie od zasobu</li><li>czy po epizodach pojawia się chowanie, nocna aktywność lub wzmożona czujność</li><li>czy problem nasilił się po zmianie w domu, lecznicy lub zmianie układu zasobów</li></ul></td></tr></tbody></table><p><strong>Kiedy ten materiał zwykle wystarcza</strong></p><p>• zwykle wystarcza, jeśli chcesz spokojnie ocenić relację, odróżnić zabawę od presji społecznej i wdrożyć plan obserwacji</p><p>• wzorzec nie obejmuje jawnych bójek ani trwałego wyparcia jednego kota z zasobów</p><p>• po 10–14 dniach widzisz większą przewidywalność kontaktów i mniej unikania po epizodach</p><p><strong>Co dalej?</strong></p><p>Jeśli obraz relacji jest już czytelny, wróć do planu 14 dni i oceń, czy potrzebna jest reintrodukcja. Jeśli w tle dominują objawy jednego kota — kuweta, wycofanie lub nocna aktywność — przejdź do odpowiedniej ścieżki PDF albo do konsultacji.</p>
+</section>
+
+<section class="footer">
+  <h2 class="footer-title">Co dalej, jeśli to nie wystarczy</h2>
+  <p class="footer-lead">
+    Ten przewodnik ma pomóc uporządkować pierwszy krok. Jeśli temat wraca, miesza kilka wątków albo
+    potrzebujesz kogoś kto zobaczy Twoją konkretną sytuację — rozmowa zwykle skraca drogę.
+  </p>
+
+  <div class="services">
+    <div class="service">
+      <div class="service-price">Kwadrans · 69 zł</div>
+      <div class="service-name">Kwadrans z behawiorystą</div>
+      <p class="service-copy">15 minut rozmowy audio. Najprostszy start przy jednym pytaniu, niepewności albo pierwszym uporządkowaniu tematu.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=szybka-konsultacja-15-min</div>
+    </div>
+
+    <div class="service">
+      <div class="service-price">Dwa kwadranse · 169 zł</div>
+      <div class="service-name">Dwa kwadranse</div>
+      <p class="service-copy">30 minut online, kiedy 15 minut to za mało, temat ma kilka wątków albo chcesz spokojniej przejść przez sytuację.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=konsultacja-30-min</div>
+    </div>
+
+    <div class="service">
+      <div class="service-price">Pełna konsultacja · 470 zł</div>
+      <div class="service-name">Pełna konsultacja behawioralna</div>
+      <p class="service-copy">60 minut rozmowy, diagnoza, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp. Dla spraw złożonych, przewlekłych albo wielowątkowych.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=konsultacja-behawioralna-online</div>
+    </div>
+  </div>
+
+  <div class="footer-contact">
+    <div>
+      <strong>Kontakt</strong><br>
+      <a href="mailto:kontakt@regulskibehawiorysta.pl">kontakt@regulskibehawiorysta.pl</a>
+    </div>
+    <div>
+      <strong>Strona</strong><br>
+      <a href="https://regulskibehawiorysta.pl">regulskibehawiorysta.pl</a>
+    </div>
+    <div>
+      <strong>Instagram</strong><br>
+      @regulskibehawiorysta
+    </div>
+  </div>
+
+  <div class="footer-fine">
+    © Krzysztof Regulski · Wszystkie prawa zastrzeżone. Materiał wyłącznie do użytku własnego, bez prawa dalszej dystrybucji i odsprzedaży.
+  </div>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title> · Regulski | Terapia behawioralna</title>
+<style>/* PDF guide stylesheet — renders on A4 via Playwright page.pdf() */
+
+@page {
+  size: A4;
+  margin: 22mm 18mm 22mm 18mm;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.55;
+  color: #1f1a17;
+  background: #fdfbf7;
+}
+
+/* Cover page */
+.cover {
+  page: cover;
+  page-break-after: always;
+  min-height: 247mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 4mm 0;
+}
+
+.cover-brand {
+  font-size: 9pt;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8b6f5a;
+  font-weight: 600;
+}
+
+.cover-tag {
+  display: inline-block;
+  font-size: 9pt;
+  color: #5e4a3c;
+  background: #f0e5d6;
+  padding: 3mm 5mm;
+  border-radius: 2mm;
+  margin-bottom: 6mm;
+}
+
+.cover-title {
+  font-size: 32pt;
+  line-height: 1.1;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 0 0 6mm 0;
+  letter-spacing: -0.01em;
+}
+
+.cover-subtitle {
+  font-size: 14pt;
+  line-height: 1.35;
+  color: #5e4a3c;
+  font-weight: 500;
+  margin: 0 0 10mm 0;
+}
+
+.cover-lead {
+  font-size: 11pt;
+  line-height: 1.6;
+  color: #3f332a;
+  max-width: 140mm;
+}
+
+.cover-bullets {
+  margin-top: 8mm;
+  padding: 0;
+  list-style: none;
+}
+
+.cover-bullets li {
+  padding: 2mm 0 2mm 6mm;
+  position: relative;
+  font-size: 10.5pt;
+  color: #3f332a;
+}
+
+.cover-bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 5mm;
+  width: 3mm;
+  height: 0.7mm;
+  background: #c9a37a;
+}
+
+.cover-meta {
+  font-size: 9pt;
+  color: #8b6f5a;
+  border-top: 0.3mm solid #e5d8c6;
+  padding-top: 4mm;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6mm;
+}
+.cover-meta > div { min-width: 0; word-break: break-word; }
+
+.cover-meta strong { color: #1f1a17; }
+
+.cover-disclaimer {
+  margin-top: 6mm;
+  font-size: 9pt;
+  font-style: italic;
+  color: #8b6f5a;
+  border-left: 0.5mm solid #c9a37a;
+  padding: 2mm 0 2mm 4mm;
+}
+
+/* Body typography */
+.body h1 {
+  font-size: 18pt;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 10mm 0 4mm 0;
+  padding-bottom: 2mm;
+  border-bottom: 0.3mm solid #e5d8c6;
+}
+
+.body h2 {
+  font-size: 14pt;
+  line-height: 1.25;
+  font-weight: 700;
+  color: #3f332a;
+  margin: 8mm 0 3mm 0;
+}
+
+.body h3 {
+  font-size: 12pt;
+  font-weight: 600;
+  color: #3f332a;
+  margin: 6mm 0 2mm 0;
+}
+
+.body p {
+  margin: 0 0 3mm 0;
+  text-align: justify;
+  hyphens: auto;
+}
+
+.body ul, .body ol {
+  margin: 0 0 4mm 0;
+  padding-left: 6mm;
+}
+
+.body li {
+  margin: 1mm 0;
+}
+
+.body strong { color: #1f1a17; }
+
+.body em { color: #5e4a3c; }
+
+/* Callout boxes (from data-kind="callout") */
+.body table[data-kind="callout"] {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4mm 0;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="callout"] td {
+  padding: 4mm 5mm;
+  background: #faf1e3;
+  border-left: 1mm solid #c9a37a;
+  border-radius: 0 1.5mm 1.5mm 0;
+}
+
+.body table[data-kind="callout"] p { margin: 0 0 2mm 0; }
+.body table[data-kind="callout"] p:last-child { margin-bottom: 0; }
+.body table[data-kind="callout"] p strong:first-child {
+  display: block;
+  font-size: 11pt;
+  margin-bottom: 1mm;
+  color: #1f1a17;
+}
+
+/* Callout stack (vertical list of callouts in one table) */
+.body table[data-kind="callout-stack"] {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 2mm;
+  margin: 4mm 0;
+}
+
+.body table[data-kind="callout-stack"] td {
+  padding: 3.5mm 5mm;
+  background: #faf1e3;
+  border-left: 1mm solid #c9a37a;
+}
+
+/* Grid boxes (single row, multiple cells — feature grid) */
+.body table[data-kind="grid"] {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 2mm 0;
+  margin: 4mm 0;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="grid"] td {
+  padding: 3mm 4mm;
+  background: #f5ece0;
+  border-radius: 1.5mm;
+  vertical-align: top;
+  width: auto;
+}
+
+.body table[data-kind="grid"] p { margin: 0 0 1.5mm 0; font-size: 9.5pt; }
+.body table[data-kind="grid"] strong { display: block; margin-bottom: 1mm; }
+
+/* Data tables (multi-row comparison) */
+.body table[data-kind="data"] {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4mm 0;
+  font-size: 9.5pt;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="data"] th,
+.body table[data-kind="data"] td {
+  border: 0.2mm solid #e5d8c6;
+  padding: 2mm 3mm;
+  vertical-align: top;
+  text-align: left;
+}
+
+.body table[data-kind="data"] tr:first-child td,
+.body table[data-kind="data"] th {
+  background: #f5ece0;
+  font-weight: 600;
+  color: #1f1a17;
+}
+
+.body table[data-kind="data"] tr:nth-child(even) td {
+  background: #fcf8f1;
+}
+
+/* Footer section — CTA routing to services */
+.footer {
+  page-break-before: always;
+  padding: 2mm 0;
+}
+
+.footer-title {
+  font-size: 18pt;
+  font-weight: 700;
+  margin: 0 0 4mm 0;
+  color: #1f1a17;
+}
+
+.footer-lead {
+  color: #3f332a;
+  margin-bottom: 6mm;
+  max-width: 150mm;
+}
+
+.services {
+  display: flex;
+  flex-direction: column;
+  gap: 3mm;
+  margin-bottom: 8mm;
+}
+
+.service {
+  padding: 4mm 5mm;
+  background: #f5ece0;
+  border-left: 1mm solid #c9a37a;
+  border-radius: 0 2mm 2mm 0;
+  page-break-inside: avoid;
+}
+
+.service-price {
+  font-size: 9pt;
+  color: #8b6f5a;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.service-name {
+  font-size: 13pt;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 1mm 0;
+}
+
+.service-copy {
+  font-size: 10pt;
+  color: #3f332a;
+  margin: 0 0 2mm 0;
+}
+
+.service-url {
+  font-size: 9pt;
+  color: #8b6f5a;
+}
+
+.footer-contact {
+  border-top: 0.3mm solid #e5d8c6;
+  padding-top: 4mm;
+  font-size: 9.5pt;
+  color: #3f332a;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6mm;
+}
+.footer-contact > div { min-width: 0; word-break: break-word; }
+
+.footer-contact a { color: #5e4a3c; text-decoration: none; }
+
+.footer-fine {
+  margin-top: 4mm;
+  font-size: 8.5pt;
+  color: #8b6f5a;
+  font-style: italic;
+}
+
+/* Category accent colors: cat / dog / puppy — tinted cover */
+body[data-category="cat"] .cover-tag { background: #ecdad3; color: #6b463a; }
+body[data-category="cat"] .cover-bullets li::before { background: #b97865; }
+body[data-category="cat"] .body table[data-kind="callout"] td { background: #f8eae5; border-left-color: #b97865; }
+body[data-category="cat"] .body table[data-kind="callout-stack"] td { background: #f8eae5; border-left-color: #b97865; }
+body[data-category="cat"] .body table[data-kind="grid"] td { background: #f8eae5; }
+body[data-category="cat"] .body table[data-kind="data"] tr:first-child td { background: #f8eae5; }
+body[data-category="cat"] .service { background: #f8eae5; border-left-color: #b97865; }
+
+body[data-category="dog"] .cover-tag { background: #e9e2ce; color: #5c4a2e; }
+body[data-category="dog"] .cover-bullets li::before { background: #997947; }
+body[data-category="dog"] .body table[data-kind="callout"] td { background: #f4ecd7; border-left-color: #997947; }
+body[data-category="dog"] .body table[data-kind="callout-stack"] td { background: #f4ecd7; border-left-color: #997947; }
+body[data-category="dog"] .body table[data-kind="grid"] td { background: #f4ecd7; }
+body[data-category="dog"] .body table[data-kind="data"] tr:first-child td { background: #f4ecd7; }
+body[data-category="dog"] .service { background: #f4ecd7; border-left-color: #997947; }
+
+body[data-category="puppy"] .cover-tag { background: #e4ead3; color: #4b5730; }
+body[data-category="puppy"] .cover-bullets li::before { background: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="callout"] td { background: #edf2dd; border-left-color: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="callout-stack"] td { background: #edf2dd; border-left-color: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="grid"] td { background: #edf2dd; }
+body[data-category="puppy"] .body table[data-kind="data"] tr:first-child td { background: #edf2dd; }
+body[data-category="puppy"] .service { background: #edf2dd; border-left-color: #7a8d4f; }
+</style>
+</head>
+<body data-category="puppy">
+
+<section class="cover">
+  <div>
+    <div class="cover-brand">Regulski · Terapia behawioralna</div>
+    <div style="margin: 12mm 0 0 0;">
+      <div class="cover-tag">Szczeniaki · przewodnik</div>
+      <h1 class="cover-title"></h1>
+      <p class="cover-subtitle"></p>
+    </div>
+    <p class="cover-lead"></p>
+    <ul class="cover-bullets">
+      
+    </ul>
+  </div>
+  <div>
+    <div class="cover-disclaimer">Materiał edukacyjny. Nie zastępuje badania lekarsko-weterynaryjnego ani indywidualnej konsultacji behawioralnej.</div>
+    <div class="cover-meta">
+      <div><strong>Format</strong><br>PDF A4, druk domowy</div>
+      <div><strong>Czytanie</strong><br>7 min</div>
+      <div><strong>Wydano</strong><br>25 kwietnia 2026</div>
+      <div><strong>Autor</strong><br>Krzysztof Regulski</div>
+    </div>
+  </div>
+</section>
+
+<section class="body">
+<table data-kind="callout" data-label="Starter PDF · Szczeniak i młody pies"><tbody><tr><td><p><strong>Starter PDF · Szczeniak i młody pies</strong></p><p><strong>Szczeniak gryzie i skacze?</strong></p><p>Jak odróżnić typowe zachowanie rozwojowe od przeciążenia, frustracji i braku planu dnia</p><p>Materiał porządkuje najczęstsze przyczyny podgryzania i skakania, pokazuje pierwsze kroki domowe oraz pomaga zdecydować, czy wystarczy plan pracy, czy lepsza będzie konsultacja.</p></td></tr></tbody></table><table data-kind="callout" data-label="Dla kogo jest ten PDF"><tbody><tr><td><p><strong>Dla kogo jest ten PDF</strong></p><p>Dla opiekuna szczeniaka lub młodego psa, który gryzie ręce, łapie ubrania, skacze na ludzi, trudno znosi pobudzenie i nie umie jeszcze dobrze zejść z ekscytacji.</p></td></tr></tbody></table><table data-kind="callout" data-label="Co znajdziesz w środku"><tbody><tr><td><p><strong>Co znajdziesz w środku</strong></p><p>Typowe vs niepokojące wzorce, 4 główne źródła problemu, mowę ciała przed skokiem i podgryzaniem, zarządzanie środowiskiem, sen i rytm dnia, plan 14 dni, checklistę i routing do kolejnego kroku.</p></td></tr></tbody></table><table data-kind="callout" data-label="Najkrócej"><tbody><tr><td><p><strong>Najkrócej</strong></p><p>Gryzienie i skakanie u szczeniaka zwykle nie oznacza dominacji. Najczęściej jest mieszanką ekscytacji, frustracji, zmęczenia, słabej samoregulacji i braku czytelnego planu dnia.</p></td></tr></tbody></table><p><strong>Jak czytać ten materiał</strong></p><p>Traktuj ten PDF jako starter: ma szybko uporządkować problem i pomóc Ci odróżnić zachowanie typowe dla wieku od wzorca, który zaczyna wymagać planu, większej ochrony środowiska albo konsultacji.</p><ul><li>jeśli widzisz nagłe nasilenie problemu, ból, wyraźne wybudzenie w nocy albo pogorszenie po dotyku — zacznij od ścieżki medycznej,</li><li>jeśli problem dotyczy głównie wyciszenia, snu i ciągłego nakręcania — kolejnym krokiem będzie PDF „Szczeniak nie umie się wyciszyć?”,</li><li>jeśli problem najmocniej wychodzi na spacerze albo smyczy — przejdź dalej do ścieżki spacerowej.</li></ul><p><strong>Mit dominacji — dlaczego ten skrót myślowy szkodzi</strong></p><p>Większość zachowań typu łapanie zębami, skakanie i napieranie nie wynika z chęci „ustawienia człowieka”, tylko z niedojrzałej regulacji pobudzenia, presji emocjonalnej i małej liczby skutecznych strategii wyhamowania.</p><table data-kind="data"><tbody><tr><td><p><strong>Popularne wyjaśnienie</strong></p></td><td><p><strong>Co zwykle stoi za zachowaniem</strong></p></td></tr><tr><td><p>„On chce mnie zdominować”</p></td><td><p>Ekscytacja, frustracja, zmęczenie albo niedojrzałość układu nerwowego.</p></td></tr><tr><td><p>„On mnie sprawdza”</p></td><td><p>Pies powtarza zachowanie, które kiedyś dawało efekt albo przynosiło ulgę.</p></td></tr></tbody></table><p><strong>Rozwój szczenięcia: co jest typowe, a co zaczyna wymagać planu</strong></p><p>W pierwszych miesiącach życia podgryzanie, skakanie i szybkie przechodzenie od ekscytacji do chaosu są częste. Niepokoić zaczyna sytuacja, w której zachowanie utrzymuje się bez wyraźnej poprawy, nasila mimo odpoczynku albo regularnie kończy się całkowitą utratą kontroli.</p><ul><li>typowe: krótkie epizody, poprawa po śnie, łatwiejsze wyhamowanie przy dobrym wsparciu,</li><li>do obserwacji: częste łapanie rąk przy przeciążeniu, skoki po wieczornym nakręceniu,</li><li>do planu: brak poprawy mimo rutyny, pogarszanie się przy gościach lub dzieciach, bardzo mały margines frustracji.</li></ul><table data-kind="data"><tbody><tr><td><p><strong>Bodziec</strong></p></td><td><p><strong>Pobudzenie</strong></p></td><td><p><strong>Zachowanie</strong></p></td><td><p><strong>Reakcja człowieka</strong></p></td></tr><tr><td><p>gość / ruch / zabawka</p></td><td><p>rośnie</p></td><td><p>skok, chwytanie rękawa, pysk na rękach</p></td><td><p>odcięcie bodźca, pauza, proste zachowanie zastępcze</p></td></tr><tr><td><p>zmęczenie / wieczór</p></td><td><p>wysokie</p></td><td><p>trudność z zejściem, więcej gryzienia</p></td><td><p>sen, wyciszenie, mniej aktywności</p></td></tr><tr><td><p>frustracja</p></td><td><p>rośnie szybko</p></td><td><p>napieranie, szczekanie, podgryzanie</p></td><td><p>upraszczanie zadania, rozdzielenie etapów</p></td></tr></tbody></table><p><strong>Cztery najczęstsze źródła problemu</strong></p><table data-kind="data"><tbody><tr><td><p><strong>Źródło</strong></p></td><td><p><strong>Jak wygląda w praktyce</strong></p></td><td><p><strong>Pierwszy sensowny ruch</strong></p></td></tr><tr><td><p>Ekscytacja i brak hamowania</p></td><td><p>Pies łapie, skacze i „odpala” przy ruchu, wejściu człowieka lub zabawie.</p></td><td><p>Mniej chaosu, krótkie sesje, przerwy, prosty rytuał start-stop.</p></td></tr><tr><td><p>Frustracja</p></td><td><p>Pies nie dostaje tego, czego chce, i szybko przechodzi w skakanie lub łapanie.</p></td><td><p>Obniżenie trudności, prostsze kryteria i więcej sukcesów.</p></td></tr><tr><td><p>Zmęczenie i przebodźcowanie</p></td><td><p>Wieczorem lub po aktywnym dniu pies robi się bardziej „gryzący”.</p></td><td><p>Sen, redukcja bodźców i spokojny wieczór.</p></td></tr><tr><td><p>Ból, dyskomfort lub lęk</p></td><td><p>Nagłe pogorszenie, większa drażliwość przy dotyku, nietypowa reakcja.</p></td><td><p>Ocena weterynaryjna i ostrożność w interpretacji.</p></td></tr></tbody></table><p><strong>Jak czytać mowę ciała przed skokiem i podgryzaniem</strong></p><p>Największy błąd opiekuna polega na reagowaniu dopiero wtedy, gdy zęby są już na ręce. Wcześniej zwykle pojawiają się sygnały: usztywnienie, zwężenie uwagi, szybszy ruch pyska, trudność z zatrzymaniem po zabawie, obniżenie jakości snu i coraz krótszy czas od pobudzenia do „wybuchu”.</p><table data-kind="data"><tbody><tr><td><p><strong>Sygnały wcześniejsze</strong></p></td><td><p><strong>Sygnały późne</strong></p></td></tr><tr><td><p>usztywnienie ciała; szybkie pobudzenie na bodziec; trudność z przerwą; przyspieszony kontakt pyska z ręką</p></td><td><p>mocne chwytanie rękawów; skoki w człowieka; pogoń za nogami; brak odpowiedzi na proste prośby</p></td></tr></tbody></table><table data-kind="callout" data-label="Różnicowanie"><tbody><tr><td><p><strong>Różnicowanie</strong></p><p>Ekscytacja zwykle szybko rośnie przy zabawie i ruchu. Frustracja rośnie, gdy pies czegoś nie dostaje. Ból lub lęk częściej daje nagłe pogorszenie, niższy próg i większą sztywność ciała.</p></td></tr></tbody></table><p><strong>Najczęstsze błędy po stronie człowieka</strong></p><ul><li>zbyt długie, chaotyczne zabawy bez przerw i końca,</li><li>nakręcanie szczeniaka wtedy, gdy widać już zmęczenie,</li><li>karanie za chwytanie zamiast zbudowania prostego zachowania zastępczego,</li><li>powtarzanie słów i komend, gdy pies jest już poza zakresem uczenia się.</li></ul><table data-kind="callout" data-label="Ważne"><tbody><tr><td><p><strong>Ważne</strong></p><p>Im więcej pościgu, krzyku i przepychanek, tym większa szansa, że zachowanie zostanie niechcący nagrodzone samą dynamiką sytuacji.</p></td></tr></tbody></table><p><strong>Zarządzanie środowiskiem: co zmienić od razu</strong></p><ul><li>krótsze aktywności i więcej prostych przejść między pobudzeniem a odpoczynkiem,</li><li>kontrola bodźców wysokiego ryzyka: wejścia gości, rozbieg dzieci, chaos przy drzwiach,</li><li>zabawki do żucia i lizania podawane wtedy, gdy pies może naprawdę zejść z napięcia,</li><li>mniej ciągłego pobudzania, więcej przewidywalnych rytuałów.</li></ul><p><strong>Nauka hamowania gryzienia i delikatnego pyska</strong></p><p>Nie chodzi o „wygranie z psem”, tylko o powtarzalne budowanie lepszych odpowiedzi: miękkiego pyska, krótszego kontaktu, odchodzenia od ręki i odzyskiwania spokoju po krótkiej przerwie.</p><ul><li>zaproponuj prostą zabawkę lub zadanie zastępcze zanim pobudzenie przekroczy próg,</li><li>kończ zabawę, zanim pies sam „odpali się” do maksimum,</li><li>nagradzaj miękki kontakt pyska i szybkie odpuszczanie,</li><li>pracuj w mikrosesjach, nie w długich maratonach.</li></ul><p><strong>Rytm dnia, sen i zmęczenie</strong></p><p>U wielu młodych psów największym brakującym elementem nie jest większa aktywność, lecz lepszy odpoczynek. Pies przemęczony bywa bardziej gryzący, bardziej skaczący i wyraźnie gorzej znosi frustrację.</p><ul><li>zadbaj o kilka spokojnych bloków snu w ciągu dnia,</li><li>wieczorem ogranicz pobudzające aktywności i długie treningi,</li><li>jeśli zachowanie nasila się pod koniec dnia, potraktuj zmęczenie jako realną przyczynę, nie „złośliwość”.</li></ul><p><strong>Wzbogacanie środowiska bez dokręcania pobudzenia</strong></p><table data-kind="data"><tbody><tr><td><p><strong>Rodzaj aktywności</strong></p></td><td><p><strong>Kiedy pomaga</strong></p></td><td><p><strong>Na co uważać</strong></p></td></tr><tr><td><p>lizanie / gryzienie</p></td><td><p>gdy pies ma zejść z napięcia i wyhamować</p></td><td><p>nie używaj jako jedynej odpowiedzi na każdy problem</p></td></tr><tr><td><p>prosta praca węchowa</p></td><td><p>gdy chcesz dać psu zadanie bez wysokiego pobudzenia</p></td><td><p>nie rób z niej kolejnego maratonu pobudzenia</p></td></tr><tr><td><p>krótka zabawa kontrolowana</p></td><td><p>gdy pies potrafi jeszcze wracać do przerwy</p></td><td><p>przerwij zanim pojawi się chaos</p></td></tr></tbody></table><p><strong>Dzieci, goście i sytuacje wysokiego ryzyka</strong></p><p>Szczeniak, który w zwykły dzień jest jeszcze do ogarnięcia, może kompletnie tracić regulację przy dzieciach, gościach i szybkim ruchu. W tych sytuacjach priorytetem jest bezpieczeństwo i zarządzanie, nie „ćwiczenie do oporu”.</p><ul><li>oddziel psa od chaosu, zanim zacznie skakać i łapać,</li><li>przy dzieciach nie zakładaj, że sam „z tego wyrośnie” bez planu,</li><li>goście powinni pomagać w spokoju sytuacji, a nie dokręcać nakręcenie.</li></ul><p><strong>14-dniowy plan pracy domowej</strong></p><table data-kind="data"><tbody><tr><td><p><strong>Okres</strong></p></td><td><p><strong>Priorytet</strong></p></td><td><p><strong>Działania</strong></p></td></tr><tr><td><p>Dni 1–3</p></td><td><p>zatrzymanie eskalacji</p></td><td><p>ogranicz chaos, skróć sesje, sprawdź sen i bodźce wysokiego ryzyka</p></td></tr><tr><td><p>Dni 4–6</p></td><td><p>czytelne rytuały</p></td><td><p>wprowadź spokojny start-stop, prostsze zabawy i więcej przerw</p></td></tr><tr><td><p>Dni 7–10</p></td><td><p>zachowanie zastępcze</p></td><td><p>nagradzaj miękki pysk, odchodzenie od ręki i szybsze wyhamowanie</p></td></tr><tr><td><p>Dni 11–14</p></td><td><p>generalizacja</p></td><td><p>sprawdź plan przy gościach, ruchu i krótkich ekscytujących sytuacjach</p></td></tr></tbody></table><p><strong>Kiedy trzeba poszerzyć diagnostykę</strong></p><ul><li>gdy zachowanie nasila się mimo snu i spokojniejszego planu,</li><li>gdy pojawia się nagła drażliwość przy dotyku lub ruchu,</li><li>gdy epizody robią się coraz bardziej intensywne i mniej przewidywalne,</li><li>gdy problem współwystępuje z wyraźnym lękiem, bólem albo nietypową sztywnością ciała.</li></ul><table data-kind="callout" data-label="Kiedy ten materiał zwykle wystarcza"><tbody><tr><td><p><strong>Kiedy ten materiał zwykle wystarcza</strong></p><p>Zwykle wystarcza wtedy, gdy problem dotyczy głównie typowego rozwojowo podgryzania i skakania, a po 7–14 dniach spokojniejszego planu widać pierwszą poprawę w rytmie dnia, jakości odpoczynku i łatwości wyhamowania.</p></td></tr></tbody></table><table data-kind="callout" data-label="Kiedy lepsza będzie konsultacja"><tbody><tr><td><p><strong>Kiedy lepsza będzie konsultacja</strong></p><p>Jeśli zachowanie jest mieszane, szybko eskaluje, nakłada się na spacer, dotyk, lęk lub ból albo nie ma poprawy po dwóch tygodniach uporządkowanej pracy domowej.</p></td></tr></tbody></table><p><strong>Dziennik obserwacji — wzór na 7 dni</strong></p><table data-kind="data"><tbody><tr><td><p><strong>Dzień</strong></p></td><td><p><strong>Sytuacja</strong></p></td><td><p><strong>Poziom pobudzenia 1–5</strong></p></td><td><p><strong>Co zrobił pies</strong></p></td><td><p><strong>Co zadziałało</strong></p></td></tr><tr><td><p>1</p></td><td></td><td></td><td></td><td></td></tr><tr><td><p>2</p></td><td></td><td></td><td></td><td></td></tr><tr><td><p>3</p></td><td></td><td></td><td></td><td></td></tr><tr><td><p>4</p></td><td></td><td></td><td></td><td></td></tr><tr><td><p>5</p></td><td></td><td></td><td></td><td></td></tr><tr><td><p>6</p></td><td></td><td></td><td></td><td></td></tr><tr><td><p>7</p></td><td></td><td></td><td></td><td></td></tr></tbody></table><p><strong>Najczęściej zadawane pytania</strong></p><ul><li>Czy to znaczy, że mój szczeniak jest agresywny? — Zwykle nie. Najczęściej to problem regulacji i zbyt małego marginesu na frustrację.</li><li>Czy mam ignorować gryzienie? — Nie. Trzeba uprościć sytuację, odciąć chaos i zaproponować bezpieczniejszą alternatywę.</li><li>Czy to minie samo? — Część zachowań z wiekiem słabnie, ale bez planu często utrwalasz niepożądany wzorzec.</li></ul><p><strong>Co dalej</strong></p><ul><li>jeśli głównym problemem jest wyciszenie i sen → przejdź do PDF-u „Szczeniak nie umie się wyciszyć?”,</li><li>jeśli problem najmocniej wychodzi na spacerze → przejdź do „Trudny spacer” albo „Dlaczego pies głupieje na smyczy?”,</li><li>jeśli pies goni, demoluje i traci hamulce szerzej niż tylko w relacji z człowiekiem → przejdź do „Pogoń, demolka i brak hamulców?”,</li><li>jeśli obraz jest mieszany albo czujesz, że utknąłeś → wybierz konsultację 15 min.</li></ul><p><strong>Checklista wdrożenia dla domu</strong></p><table data-kind="data"><tbody><tr><td><p><strong>Obszar</strong></p></td><td><p><strong>Pytanie kontrolne</strong></p></td><td><p><strong>Tak/Nie</strong></p></td></tr><tr><td><p>Sen</p></td><td><p>Czy pies ma kilka spokojnych bloków snu i nie żyje w ciągłym nakręceniu?</p></td><td></td></tr><tr><td><p>Powitania</p></td><td><p>Czy wejścia ludzi nie dokręcają od razu skakania i łapania?</p></td><td></td></tr><tr><td><p>Zabawa</p></td><td><p>Czy kończysz zabawę zanim pojawi się chaos?</p></td><td></td></tr><tr><td><p>Dzieci / goście</p></td><td><p>Czy masz plan separacji lub uproszczenia sytuacji wysokiego ryzyka?</p></td><td></td></tr><tr><td><p>Bezpieczeństwo</p></td><td><p>Czy wszyscy w domu wiedzą, jak reagować spokojnie i przewidywalnie?</p></td><td></td></tr></tbody></table>
+</section>
+
+<section class="footer">
+  <h2 class="footer-title">Co dalej, jeśli to nie wystarczy</h2>
+  <p class="footer-lead">
+    Ten przewodnik ma pomóc uporządkować pierwszy krok. Jeśli temat wraca, miesza kilka wątków albo
+    potrzebujesz kogoś kto zobaczy Twoją konkretną sytuację — rozmowa zwykle skraca drogę.
+  </p>
+
+  <div class="services">
+    <div class="service">
+      <div class="service-price">Kwadrans · 69 zł</div>
+      <div class="service-name">Kwadrans z behawiorystą</div>
+      <p class="service-copy">15 minut rozmowy audio. Najprostszy start przy jednym pytaniu, niepewności albo pierwszym uporządkowaniu tematu.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=szybka-konsultacja-15-min</div>
+    </div>
+
+    <div class="service">
+      <div class="service-price">Dwa kwadranse · 169 zł</div>
+      <div class="service-name">Dwa kwadranse</div>
+      <p class="service-copy">30 minut online, kiedy 15 minut to za mało, temat ma kilka wątków albo chcesz spokojniej przejść przez sytuację.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=konsultacja-30-min</div>
+    </div>
+
+    <div class="service">
+      <div class="service-price">Pełna konsultacja · 470 zł</div>
+      <div class="service-name">Pełna konsultacja behawioralna</div>
+      <p class="service-copy">60 minut rozmowy, diagnoza, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp. Dla spraw złożonych, przewlekłych albo wielowątkowych.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=konsultacja-behawioralna-online</div>
+    </div>
+  </div>
+
+  <div class="footer-contact">
+    <div>
+      <strong>Kontakt</strong><br>
+      <a href="mailto:kontakt@regulskibehawiorysta.pl">kontakt@regulskibehawiorysta.pl</a>
+    </div>
+    <div>
+      <strong>Strona</strong><br>
+      <a href="https://regulskibehawiorysta.pl">regulskibehawiorysta.pl</a>
+    </div>
+    <div>
+      <strong>Instagram</strong><br>
+      @regulskibehawiorysta
+    </div>
+  </div>
+
+  <div class="footer-fine">
+    © Krzysztof Regulski · Wszystkie prawa zastrzeżone. Materiał wyłącznie do użytku własnego, bez prawa dalszej dystrybucji i odsprzedaży.
+  </div>
+</section>
+
+</body>
+</html>

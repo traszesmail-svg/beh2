@@ -256,14 +256,6 @@ export function ContactLeadForm() {
 
   return (
     <form className="form-grid top-gap" onSubmit={handleSubmit} noValidate>
-      <div className="info-box full-width contact-form-intro">
-        {isUrgentNow
-          ? 'To jest prosba o Kwadrans na juz. Wpisz gatunek, temat i preferowana date z godzina, a odpowiem w ciagu 15 minut z konkretna propozycja terminu.'
-          : 'Napisz krotko: gatunek, temat i co Cie niepokoi. To wystarczy, zeby odpowiedziec na wiadomosc i wskazac wlasciwy dalszy krok.'}
-      </div>
-
-      <div className="section-eyebrow contact-form-kicker">{isUrgentNow ? 'Kwadrans na juz' : 'Krotka wiadomosc'}</div>
-
       <div className="form-field">
         <label htmlFor="contact-species">Gatunek</label>
         <select
@@ -272,17 +264,11 @@ export function ContactLeadForm() {
           value={form.species}
           onChange={(event) => updateField('species', event.target.value as SelectedSpecies)}
           onFocus={markStarted}
-          aria-describedby="contact-species-help"
         >
           <option value="">Wybierz gatunek</option>
           <option value="pies">Pies</option>
           <option value="kot">Kot</option>
         </select>
-        <div className="field-help" id="contact-species-help">
-          {form.species
-            ? `Lista tematow ponizej pokazuje teraz tylko opcje dla ${getSpeciesLabel(form.species).toLowerCase()}.`
-            : 'Najpierw wybierz, czy sprawa dotyczy psa czy kota. Potem pokaze wlasciwe tematy.'}
-        </div>
       </div>
 
       <div className="form-field">
@@ -294,7 +280,6 @@ export function ContactLeadForm() {
           onChange={(event) => updateField('topicId', event.target.value)}
           onFocus={markStarted}
           disabled={!form.species}
-          aria-describedby="contact-topic-help"
         >
           <option value="">{form.species ? 'Wybierz temat' : 'Najpierw wybierz gatunek'}</option>
           {topicOptions.map((topic) => (
@@ -303,11 +288,6 @@ export function ContactLeadForm() {
             </option>
           ))}
         </select>
-        <div className="field-help" id="contact-topic-help">
-          {form.species
-            ? `Dobierz temat mozliwie najblizszy sytuacji ${getSpeciesLabel(form.species).toLowerCase()}.`
-            : 'Po wyborze gatunku pojawi sie lista tematow tylko dla psa albo kota.'}
-        </div>
       </div>
 
       <div className="form-field">
@@ -338,13 +318,7 @@ export function ContactLeadForm() {
           autoCapitalize="off"
           enterKeyHint="next"
           spellCheck={false}
-          aria-describedby="contact-contact-help"
         />
-        <div className="field-help" id="contact-contact-help">
-          {isUrgentNow
-            ? 'Na ten adres odpowiem w sprawie Kwadransa na juz w ciagu 15 minut.'
-            : 'Na ten adres odpowiem w sprawie wiadomosci, zwykle w ciagu 1-2 dni roboczych.'}
-        </div>
       </div>
 
       {isUrgentNow ? (
@@ -376,11 +350,14 @@ export function ContactLeadForm() {
       ) : null}
 
       <div className="full-width form-field">
-        <label htmlFor="contact-message">{isUrgentNow ? 'Krotki opis i kontekst terminu' : 'Krotki opis problemu'}</label>
+        <div className="contact-message-label-row">
+          <label htmlFor="contact-message">{isUrgentNow ? 'Krotki opis i kontekst terminu' : 'Krotki opis problemu'}</label>
+          <span className="contact-message-count" aria-live="polite">{messageLength}/{MESSAGE_MAX_LENGTH}</span>
+        </div>
         <textarea
           id="contact-message"
           name="message"
-          rows={4}
+          rows={3}
           value={form.message}
           onChange={(event) => updateField('message', event.target.value.slice(0, MESSAGE_MAX_LENGTH))}
           onFocus={markStarted}
@@ -391,21 +368,10 @@ export function ContactLeadForm() {
           }
           enterKeyHint="send"
           maxLength={MESSAGE_MAX_LENGTH}
-          aria-describedby="contact-message-help contact-message-count"
         />
-        <div className="field-help" id="contact-message-help">
-          {isUrgentNow
-            ? 'Krotki opis wystarczy. Na tej podstawie wracam w ciagu 15 minut z propozycja terminu i dalszym krokiem.'
-            : 'Nie wysylaj dlugiej historii. Krotki opis wystarczy, zeby dobrac odpowiedz i wskazac kolejny krok.'}
-        </div>
-        <div className="field-help" id="contact-message-count">
-          {messageLength}/{MESSAGE_MAX_LENGTH} znakow
-        </div>
       </div>
 
       <fieldset className="full-width form-field consent-stack">
-        <legend className="field-legend">Zgody</legend>
-
         <label className="checkbox-card" htmlFor="contact-consent-processing">
           <input
             id="contact-consent-processing"
@@ -417,7 +383,7 @@ export function ContactLeadForm() {
             required
           />
           <span>
-            Wyrazam zgode na przetwarzanie danych w celu odpowiedzi na wiadomosc zgodnie z{' '}
+            Wyrazam zgode na przetwarzanie danych zgodnie z{' '}
             <Link href="/polityka-prywatnosci" target="_blank" rel="noopener noreferrer">
               polityka prywatnosci
             </Link>
@@ -436,15 +402,15 @@ export function ContactLeadForm() {
             required
           />
           <span>
-            Potwierdzam, ze zapoznalem sie z{' '}
+            Zapoznalem sie z{' '}
             <Link href="/polityka-prywatnosci" target="_blank" rel="noopener noreferrer">
               polityka prywatnosci
             </Link>{' '}
-            oraz{' '}
+            i{' '}
             <Link href="/regulamin" target="_blank" rel="noopener noreferrer">
               regulaminem
-            </Link>{' '}
-            w zakresie potrzebnym do kontaktu.
+            </Link>
+            .
           </span>
         </label>
       </fieldset>
@@ -473,7 +439,16 @@ export function ContactLeadForm() {
 
       {feedback ? (
         <div className={`info-box full-width ${status === 'error' ? 'error-box' : ''}`} role="status">
-          {feedback}
+          <p>{feedback}</p>
+          {status === 'success' ? (
+            <p style={{ marginTop: '12px' }}>
+              W międzyczasie możesz sięgnąć po PDF z{' '}
+              <a href="/materialy" className="prep-inline-link">
+                /materialy
+              </a>{' '}
+              — od 19&nbsp;zł, bez konieczności rozmowy.
+            </p>
+          ) : null}
         </div>
       ) : null}
 

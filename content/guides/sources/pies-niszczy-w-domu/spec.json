@@ -1,0 +1,30 @@
+{
+  "slug": "pies_niszczy_w_domu_v2",
+  "title": "Pies niszczy w domu?",
+  "subtitle": "5 scenariuszy, które trzeba odróżnić, zanim zaczniesz naprawiać problem",
+  "role_in_funnel": "starter",
+  "price_pln": 49,
+  "target_audience": "Opiekun psa, który wraca do domu i znajduje pogryzione rzeczy, zniszczone drzwi, rozerwane legowisko albo chaos — i chce zrozumieć, czy chodzi o rozwój, nudę, przeciążenie, samotność czy problem zdrowotny.",
+  "positioning": "Starter PDF w ścieżce samotność / niszczenie / dom. Ma być pierwszym filtrem diagnostycznym przed wejściem w ścieżkę separacji.",
+  "website_card": {
+    "eyebrow": "Starter PDF",
+    "headline": "Pies niszczy w domu?",
+    "subline": "PDF o 5 scenariuszach niszczenia w domu: rozwój, przeciążenie, frustracja, samotność i zdrowie.",
+    "cta": "Kup PDF"
+  },
+  "next_steps": [
+    "Pies zostaje sam i wpada w panikę?",
+    "Czy Twój pies naprawdę potrzebuje więcej ruchu?",
+    "Pogoń, demolka i brak hamulców?",
+    "Konsultacja 15 min"
+  ],
+  "must_have_blocks": [
+    "dla kogo",
+    "co znajdziesz w środku",
+    "najkrócej",
+    "kiedy ten materiał zwykle wystarcza",
+    "kiedy lepsza będzie konsultacja",
+    "co dalej / routing"
+  ],
+  "notes_for_offer": "Na stronie pokazuj jako pierwszy filtr objawu. Ten PDF ma prowadzić do ścieżki separacji, a nie z nią konkurować."
+}

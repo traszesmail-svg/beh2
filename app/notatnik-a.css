@@ -142,6 +142,74 @@ html[data-theme='dark'] .notatnik-page {
   gap: 12px;
 }
 
+.notatnik-mobile-menu {
+  display: none;
+  position: relative;
+  margin-left: auto;
+}
+
+.notatnik-mobile-menu summary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--theme-toggle-bg);
+  color: var(--ink);
+  cursor: pointer;
+  list-style: none;
+}
+
+.notatnik-mobile-menu summary::-webkit-details-marker {
+  display: none;
+}
+
+.notatnik-mobile-menu-bars {
+  display: grid;
+  gap: 4px;
+  width: 18px;
+}
+
+.notatnik-mobile-menu-bars span {
+  display: block;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.notatnik-mobile-menu-panel {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  z-index: 20;
+  display: grid;
+  gap: 14px;
+  width: min(78vw, 320px);
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--shell-bg);
+  box-shadow: var(--shell-shadow);
+}
+
+.notatnik-mobile-menu-panel nav {
+  display: grid;
+  gap: 2px;
+}
+
+.notatnik-mobile-menu-panel nav a {
+  padding: 12px 4px;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+
+.notatnik-mobile-menu-panel nav a:last-child {
+  border-bottom: 0;
+}
+
 .notatnik-social-link {
   display: inline-flex;
   align-items: center;
@@ -413,7 +481,7 @@ html[data-theme='dark'] .notatnik-theme-toggle-thumb {
   display: flex;
   justify-content: space-between;
   gap: 16px;
-  align-items: start;
+  align-items: flex-start;
 }
 
 .services-mobile-price {
@@ -560,6 +628,26 @@ html[data-theme='dark'] .notatnik-theme-toggle-thumb {
 .notatnik-hero-fine a {
   color: var(--ink);
   text-underline-offset: 3px;
+}
+
+.notatnik-hero-trust-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.notatnik-hero-trust-row span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink-soft);
+  font-size: 12px;
+  line-height: 1.3;
 }
 
 .notatnik-hero-card {
@@ -799,6 +887,20 @@ button.notatnik-inline-link {
   font-size: 13px;
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+
+.notatnik-pdf-highlight-grid,
+.notatnik-pdf-list-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.notatnik-pdf-highlight-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.notatnik-pdf-list-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .essentials-icon {
@@ -2173,6 +2275,8 @@ button.notatnik-inline-link {
 
   .notatnik-quiet-grid,
   .notatnik-material-grid,
+  .notatnik-pdf-highlight-grid,
+  .notatnik-pdf-list-grid,
   .notatnik-steps,
   .notatnik-topic-grid,
   .notatnik-foot {
@@ -2262,14 +2366,37 @@ button.notatnik-inline-link {
   }
 
   .notatnik-nav,
+  .notatnik-topbar-actions,
   .notatnik-hero-cta,
   .notatnik-final-actions {
     flex-direction: column;
     align-items: stretch;
   }
 
+  .notatnik-nav,
+  .notatnik-topbar-actions {
+    display: none;
+  }
+
+  .notatnik-mobile-menu {
+    display: block;
+  }
+
+  .notatnik-brand {
+    min-width: 0;
+  }
+
+  .notatnik-brand-tag {
+    max-width: 26ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .notatnik-quiet-grid,
   .notatnik-material-grid,
+  .notatnik-pdf-highlight-grid,
+  .notatnik-pdf-list-grid,
   .notatnik-topic-grid,
   .notatnik-foot {
     grid-template-columns: 1fr;

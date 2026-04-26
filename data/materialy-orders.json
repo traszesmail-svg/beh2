@@ -1,0 +1,65 @@
+[
+  {
+    "productKind": "guide",
+    "productSlug": "kot-zyje-w-napieciu",
+    "priceLabel": "Bezpłatne",
+    "priceAmount": 0,
+    "customerName": "Smoke Tester",
+    "customerEmail": "smoke-free@example.com",
+    "customerPhone": null,
+    "notes": null,
+    "consents": {
+      "processing": true,
+      "policy": true
+    },
+    "id": "M-F7NMCC-DE28",
+    "code": "476040",
+    "status": "used",
+    "createdAt": "2026-04-26T03:30:38.173Z",
+    "paidAt": "2026-04-26T03:30:38.174Z",
+    "usedCount": 3,
+    "expiresAt": "2026-04-29T03:30:38.174Z"
+  },
+  {
+    "productKind": "guide",
+    "productSlug": "kot-boi-sie-kuwety",
+    "priceLabel": "19 zł",
+    "priceAmount": 19,
+    "customerName": "Smoke Buyer",
+    "customerEmail": "smoke-paid@example.com",
+    "customerPhone": "600000000",
+    "notes": "BLIK incoming",
+    "consents": {
+      "processing": true,
+      "policy": true
+    },
+    "id": "M-F7NMCO-D6F7",
+    "code": "117851",
+    "status": "paid",
+    "createdAt": "2026-04-26T03:30:38.184Z",
+    "paidAt": "2026-04-26T03:30:38.186Z",
+    "usedCount": 1,
+    "expiresAt": "2026-04-29T03:30:38.186Z"
+  },
+  {
+    "productKind": "bundle",
+    "productSlug": "pakiet-kuweta",
+    "priceLabel": "49 zł",
+    "priceAmount": 49,
+    "customerName": "Smoke Bundle",
+    "customerEmail": "smoke-bundle@example.com",
+    "customerPhone": null,
+    "notes": null,
+    "consents": {
+      "processing": true,
+      "policy": true
+    },
+    "id": "M-F7NMCV-CFA7",
+    "code": "646344",
+    "status": "paid",
+    "createdAt": "2026-04-26T03:30:38.191Z",
+    "paidAt": "2026-04-26T03:30:38.193Z",
+    "usedCount": 1,
+    "expiresAt": "2026-04-29T03:30:38.193Z"
+  }
+]

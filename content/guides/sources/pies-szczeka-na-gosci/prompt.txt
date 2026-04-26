@@ -1,0 +1,19 @@
+Użyj tego PDF-u jako produktu starter-core w ścieżce „dom / wejście / alarm / goście”.
+
+CEL
+- Sprzedawaj go jako łatwy wejściowo, bardzo czytelny produkt dla problemu: pies szczeka na gości i dzwonek.
+- Ten materiał ma rozdzielać alarm, ekscytację i napięcie społeczne przy wejściu do domu.
+- Nie sprzedawaj go jako PDF o „niewychowanym psie”. To produkt o mechanice rytuału wejścia, sygnale dzwonka i chaosie przy progu.
+
+W KARCIE PRODUKTU POKAŻ
+- że szczekanie na gości nie ma jednego źródła,
+- że materiał porządkuje cały scenariusz wejścia do domu,
+- że zawiera plan 72 godzin, plan 14 dni i jasne wskazanie, kiedy potrzebna jest konsultacja.
+
+CTA
+- Kup PDF
+
+ROUTING PO ZAKUPIE
+- jeśli pies szerzej się nakręca i ma problem z globalnym pobudzeniem: kieruj do „Czy Twój pies naprawdę potrzebuje więcej ruchu?” albo „Pogoń, demolka i brak hamulców?”
+- jeśli problem dotyczy bardziej granic i zasobów w domu: kieruj do „Pies broni zasobów?”
+- jeśli reakcje są gwałtowne albo obraz mieszany: kieruj do konsultacji 15 min

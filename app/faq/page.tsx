@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { NotatnikFinalCta, NotatnikFooter, NotatnikSectionHead, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
@@ -7,7 +8,6 @@ import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { PUBLIC_OFFER_FAQ_ITEMS } from '@/lib/public-offer-faq'
 import { getBreadcrumbJsonLd, getFaqPageJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
-import { PUBLIC_OFFER_START_GUIDE } from '@/lib/public-offer-copy'
 
 const baseMetadata = buildMarketingMetadata({
   title: 'Najczestsze pytania o konsultacje behawioralne',
@@ -80,17 +80,12 @@ export default function FaqPage() {
           </div>
 
           <div className="notatnik-subhero-media">
-            <div className="notatnik-quiet-card">
-              <div className="notatnik-mono">Najczesciej pytacie o</div>
-              <h3>
-                69 czy 99, <em>kiedy 169</em>, kiedy 470.
-              </h3>
-              <p>Najwiecej watpliwosci dotyczy tego, od czego zaczac i kiedy zostac przy prostszym formacie, zamiast od razu wybierac najszersza usluge.</p>
-              <ul className="notatnik-service-list top-gap-small">
-                {PUBLIC_OFFER_START_GUIDE.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
+            <div className="notatnik-subhero-figure">
+              <Image src="/branding/topic-cards/french-bulldog-leash.jpg" alt="Buldog francuski na smyczy podczas spaceru" fill sizes="(max-width: 980px) 100vw, 40vw" priority />
+            </div>
+            <div className="notatnik-subhero-note">
+              <span>Psy i koty / online</span>
+              <span>69 / 99 / 169 / 470 zl</span>
             </div>
           </div>
         </section>

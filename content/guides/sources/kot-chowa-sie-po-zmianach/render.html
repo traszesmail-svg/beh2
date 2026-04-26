@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Core+ PDF • ścieżka zmian i wycofania · Regulski | Terapia behawioralna</title>
+<style>/* PDF guide stylesheet — renders on A4 via Playwright page.pdf() */
+
+@page {
+  size: A4;
+  margin: 22mm 18mm 22mm 18mm;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.55;
+  color: #1f1a17;
+  background: #fdfbf7;
+}
+
+/* Cover page */
+.cover {
+  page: cover;
+  page-break-after: always;
+  min-height: 247mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 4mm 0;
+}
+
+.cover-brand {
+  font-size: 9pt;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8b6f5a;
+  font-weight: 600;
+}
+
+.cover-tag {
+  display: inline-block;
+  font-size: 9pt;
+  color: #5e4a3c;
+  background: #f0e5d6;
+  padding: 3mm 5mm;
+  border-radius: 2mm;
+  margin-bottom: 6mm;
+}
+
+.cover-title {
+  font-size: 32pt;
+  line-height: 1.1;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 0 0 6mm 0;
+  letter-spacing: -0.01em;
+}
+
+.cover-subtitle {
+  font-size: 14pt;
+  line-height: 1.35;
+  color: #5e4a3c;
+  font-weight: 500;
+  margin: 0 0 10mm 0;
+}
+
+.cover-lead {
+  font-size: 11pt;
+  line-height: 1.6;
+  color: #3f332a;
+  max-width: 140mm;
+}
+
+.cover-bullets {
+  margin-top: 8mm;
+  padding: 0;
+  list-style: none;
+}
+
+.cover-bullets li {
+  padding: 2mm 0 2mm 6mm;
+  position: relative;
+  font-size: 10.5pt;
+  color: #3f332a;
+}
+
+.cover-bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 5mm;
+  width: 3mm;
+  height: 0.7mm;
+  background: #c9a37a;
+}
+
+.cover-meta {
+  font-size: 9pt;
+  color: #8b6f5a;
+  border-top: 0.3mm solid #e5d8c6;
+  padding-top: 4mm;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6mm;
+}
+.cover-meta > div { min-width: 0; word-break: break-word; }
+
+.cover-meta strong { color: #1f1a17; }
+
+.cover-disclaimer {
+  margin-top: 6mm;
+  font-size: 9pt;
+  font-style: italic;
+  color: #8b6f5a;
+  border-left: 0.5mm solid #c9a37a;
+  padding: 2mm 0 2mm 4mm;
+}
+
+/* Body typography */
+.body h1 {
+  font-size: 18pt;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 10mm 0 4mm 0;
+  padding-bottom: 2mm;
+  border-bottom: 0.3mm solid #e5d8c6;
+}
+
+.body h2 {
+  font-size: 14pt;
+  line-height: 1.25;
+  font-weight: 700;
+  color: #3f332a;
+  margin: 8mm 0 3mm 0;
+}
+
+.body h3 {
+  font-size: 12pt;
+  font-weight: 600;
+  color: #3f332a;
+  margin: 6mm 0 2mm 0;
+}
+
+.body p {
+  margin: 0 0 3mm 0;
+  text-align: justify;
+  hyphens: auto;
+}
+
+.body ul, .body ol {
+  margin: 0 0 4mm 0;
+  padding-left: 6mm;
+}
+
+.body li {
+  margin: 1mm 0;
+}
+
+.body strong { color: #1f1a17; }
+
+.body em { color: #5e4a3c; }
+
+/* Callout boxes (from data-kind="callout") */
+.body table[data-kind="callout"] {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4mm 0;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="callout"] td {
+  padding: 4mm 5mm;
+  background: #faf1e3;
+  border-left: 1mm solid #c9a37a;
+  border-radius: 0 1.5mm 1.5mm 0;
+}
+
+.body table[data-kind="callout"] p { margin: 0 0 2mm 0; }
+.body table[data-kind="callout"] p:last-child { margin-bottom: 0; }
+.body table[data-kind="callout"] p strong:first-child {
+  display: block;
+  font-size: 11pt;
+  margin-bottom: 1mm;
+  color: #1f1a17;
+}
+
+/* Callout stack (vertical list of callouts in one table) */
+.body table[data-kind="callout-stack"] {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 2mm;
+  margin: 4mm 0;
+}
+
+.body table[data-kind="callout-stack"] td {
+  padding: 3.5mm 5mm;
+  background: #faf1e3;
+  border-left: 1mm solid #c9a37a;
+}
+
+/* Grid boxes (single row, multiple cells — feature grid) */
+.body table[data-kind="grid"] {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 2mm 0;
+  margin: 4mm 0;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="grid"] td {
+  padding: 3mm 4mm;
+  background: #f5ece0;
+  border-radius: 1.5mm;
+  vertical-align: top;
+  width: auto;
+}
+
+.body table[data-kind="grid"] p { margin: 0 0 1.5mm 0; font-size: 9.5pt; }
+.body table[data-kind="grid"] strong { display: block; margin-bottom: 1mm; }
+
+/* Data tables (multi-row comparison) */
+.body table[data-kind="data"] {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4mm 0;
+  font-size: 9.5pt;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="data"] th,
+.body table[data-kind="data"] td {
+  border: 0.2mm solid #e5d8c6;
+  padding: 2mm 3mm;
+  vertical-align: top;
+  text-align: left;
+}
+
+.body table[data-kind="data"] tr:first-child td,
+.body table[data-kind="data"] th {
+  background: #f5ece0;
+  font-weight: 600;
+  color: #1f1a17;
+}
+
+.body table[data-kind="data"] tr:nth-child(even) td {
+  background: #fcf8f1;
+}
+
+/* Footer section — CTA routing to services */
+.footer {
+  page-break-before: always;
+  padding: 2mm 0;
+}
+
+.footer-title {
+  font-size: 18pt;
+  font-weight: 700;
+  margin: 0 0 4mm 0;
+  color: #1f1a17;
+}
+
+.footer-lead {
+  color: #3f332a;
+  margin-bottom: 6mm;
+  max-width: 150mm;
+}
+
+.services {
+  display: flex;
+  flex-direction: column;
+  gap: 3mm;
+  margin-bottom: 8mm;
+}
+
+.service {
+  padding: 4mm 5mm;
+  background: #f5ece0;
+  border-left: 1mm solid #c9a37a;
+  border-radius: 0 2mm 2mm 0;
+  page-break-inside: avoid;
+}
+
+.service-price {
+  font-size: 9pt;
+  color: #8b6f5a;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.service-name {
+  font-size: 13pt;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 1mm 0;
+}
+
+.service-copy {
+  font-size: 10pt;
+  color: #3f332a;
+  margin: 0 0 2mm 0;
+}
+
+.service-url {
+  font-size: 9pt;
+  color: #8b6f5a;
+}
+
+.footer-contact {
+  border-top: 0.3mm solid #e5d8c6;
+  padding-top: 4mm;
+  font-size: 9.5pt;
+  color: #3f332a;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6mm;
+}
+.footer-contact > div { min-width: 0; word-break: break-word; }
+
+.footer-contact a { color: #5e4a3c; text-decoration: none; }
+
+.footer-fine {
+  margin-top: 4mm;
+  font-size: 8.5pt;
+  color: #8b6f5a;
+  font-style: italic;
+}
+
+/* Category accent colors: cat / dog / puppy — tinted cover */
+body[data-category="cat"] .cover-tag { background: #ecdad3; color: #6b463a; }
+body[data-category="cat"] .cover-bullets li::before { background: #b97865; }
+body[data-category="cat"] .body table[data-kind="callout"] td { background: #f8eae5; border-left-color: #b97865; }
+body[data-category="cat"] .body table[data-kind="callout-stack"] td { background: #f8eae5; border-left-color: #b97865; }
+body[data-category="cat"] .body table[data-kind="grid"] td { background: #f8eae5; }
+body[data-category="cat"] .body table[data-kind="data"] tr:first-child td { background: #f8eae5; }
+body[data-category="cat"] .service { background: #f8eae5; border-left-color: #b97865; }
+
+body[data-category="dog"] .cover-tag { background: #e9e2ce; color: #5c4a2e; }
+body[data-category="dog"] .cover-bullets li::before { background: #997947; }
+body[data-category="dog"] .body table[data-kind="callout"] td { background: #f4ecd7; border-left-color: #997947; }
+body[data-category="dog"] .body table[data-kind="callout-stack"] td { background: #f4ecd7; border-left-color: #997947; }
+body[data-category="dog"] .body table[data-kind="grid"] td { background: #f4ecd7; }
+body[data-category="dog"] .body table[data-kind="data"] tr:first-child td { background: #f4ecd7; }
+body[data-category="dog"] .service { background: #f4ecd7; border-left-color: #997947; }
+
+body[data-category="puppy"] .cover-tag { background: #e4ead3; color: #4b5730; }
+body[data-category="puppy"] .cover-bullets li::before { background: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="callout"] td { background: #edf2dd; border-left-color: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="callout-stack"] td { background: #edf2dd; border-left-color: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="grid"] td { background: #edf2dd; }
+body[data-category="puppy"] .body table[data-kind="data"] tr:first-child td { background: #edf2dd; }
+body[data-category="puppy"] .service { background: #edf2dd; border-left-color: #7a8d4f; }
+</style>
+</head>
+<body data-category="cat">
+
+<section class="cover">
+  <div>
+    <div class="cover-brand">Regulski · Terapia behawioralna</div>
+    <div style="margin: 12mm 0 0 0;">
+      <div class="cover-tag">Koty · przewodnik</div>
+      <h1 class="cover-title">Core+ PDF • ścieżka zmian i wycofania</h1>
+      <p class="cover-subtitle"></p>
+    </div>
+    <p class="cover-lead"></p>
+    <ul class="cover-bullets">
+      
+    </ul>
+  </div>
+  <div>
+    <div class="cover-disclaimer">Materiał edukacyjny. Nie zastępuje badania lekarsko-weterynaryjnego ani indywidualnej konsultacji behawioralnej.</div>
+    <div class="cover-meta">
+      <div><strong>Format</strong><br>PDF A4, druk domowy</div>
+      <div><strong>Czytanie</strong><br>8 min</div>
+      <div><strong>Wydano</strong><br>25 kwietnia 2026</div>
+      <div><strong>Autor</strong><br>Krzysztof Regulski</div>
+    </div>
+  </div>
+</section>
+
+<section class="body">
+<table data-kind="callout" data-label="Kot chowa się po zmianach?"><tbody><tr><td><p><strong>Kot chowa się po zmianach?</strong></p><p>Jak odróżnić ostrożność od przeciążenia, odbudować poczucie bezpieczeństwa i zaplanować pierwsze 72 godziny oraz kolejne 14 dni pracy.</p><p><em>Kompendium dla opiekuna kota po przeprowadzce, remoncie, zmianie rytmu domu lub pojawieniu się nowego bodźca społecznego.</em></p></td></tr></tbody></table><table data-kind="callout" data-label="Dla kogo jest ten materiał?"><tbody><tr><td><p><strong>Dla kogo jest ten materiał?</strong></p><p>Dla opiekuna, który widzi, że kot po zmianach chowa się, funkcjonuje głównie nocą, przestał korzystać z części domu albo wyraźnie stracił poczucie swobody. Ten PDF pomaga odróżnić ostrożność adaptacyjną od przewlekłego przeciążenia i przygotować sensowny plan pierwszej pomocy środowiskowej.</p></td></tr></tbody></table><table data-kind="callout" data-label="W środku znajdziesz"><tbody><tr><td><p><strong>W środku znajdziesz</strong></p><ul><li>6 oznak przewlekłego napięcia po zmianach</li><li>różnicowanie: stres, konflikt, ból czy choroba</li><li>5 filarów zdrowego środowiska w praktyce</li><li>plan pierwszych 72 godzin i plan 14 dni</li><li>checklisty, monitoring 7 dni i kwestionariusz do konsultacji</li></ul></td></tr></tbody></table><h1>Co znajdziesz w środku</h1><p>Rozróżnienie ostrożności adaptacyjnej i przeciążenia, 6 oznak przewlekłego napięcia, wyzwalacze po zmianach, różnicowanie stres / konflikt / ból / choroba, plan 72 godzin, plan 14 dni, czerwone flagi, check-listę i pytania do konsultacji.</p><h1>Najkrócej</h1><p>To core+ PDF o zmianach i wycofaniu: ma pomóc ocenić, czy kot potrzebuje już aktywnej pomocy, jak uporządkować środowisko po zmianie i kiedy wyjść poza samą ścieżkę „dajmy mu jeszcze czas”.</p><p><strong>1. Kiedy chowanie się po zmianach przestaje być zwykłą ostrożnością</strong></p><p>Ukrywanie się samo w sobie jest biologicznie normalne. Problem zaczyna się wtedy, gdy kryjówka przestaje być jednym z narzędzi regulacji napięcia i staje się głównym sposobem funkcjonowania kota w domu. Wtedy liczy się nie sam fakt schowania, lecz to, czy kot nadal je, korzysta z kuwety, odpoczywa, eksploruje i odzyskuje kontakt z otoczeniem.</p><p>W praktyce opiekun łatwo słyszy, że kot jest „po prostu nieśmiały”. Tymczasem po zmianach w domu w tle może działać przeciążenie bodźcami, cichy konflikt społeczny, ból albo utrata przewidywalności. Najbardziej użyteczne pytanie brzmi: czy poza kryjówką kot nadal ma dostęp do normalnego życia?</p><table data-kind="callout" data-label="Praktyczny filtr"><tbody><tr><td><p><strong>Praktyczny filtr</strong></p><p>Nie oceniaj kota wyłącznie po tym, czy wyszedł z kryjówki. Sprawdzaj, czy wraca do normalnych rytuałów: jedzenia, toalety, pielęgnacji, spokojnego odpoczynku i swobodnego poruszania się po domu.</p></td></tr></tbody></table><p><strong>2. Ostrożność adaptacyjna a przewlekłe przeciążenie</strong></p><table data-kind="data"><tbody><tr><td><p><strong>Obszar</strong></p></td><td><p><strong>Ostrożność adaptacyjna</strong></p></td><td><p><strong>Przewlekłe napięcie</strong></p></td></tr><tr><td><p>Po zmianie</p></td><td><p>krótkie wycofanie, potem powrót do rytuałów</p></td><td><p>utrzymujące się ukrywanie i czujność</p></td></tr><tr><td><p>Apetyt</p></td><td><p>zwykle zachowany lub lekko obniżony tylko przejściowo</p></td><td><p>wyraźnie obniżony albo przesunięty na noc</p></td></tr><tr><td><p>Ruch po domu</p></td><td><p>stopniowo coraz swobodniejszy</p></td><td><p>przemykanie, zastyganie, unikanie przejść</p></td></tr><tr><td><p>Kontakt z opiekunem</p></td><td><p>ostrożny, ale stopniowo odzyskiwany</p></td><td><p>wycofanie, usztywnienie lub obrona</p></td></tr><tr><td><p>Zasoby</p></td><td><p>korzysta z nich po namyśle</p></td><td><p>rezygnuje z części zasobów albo czeka</p></td></tr></tbody></table><p>Jeśli po kilku dniach zamiast poprawy widzisz zawężanie świata kota, większą czujność albo przesuwanie podstawowych aktywności na noc, traktuj to jako sygnał, że potrzebna jest aktywna pomoc, a nie bierne czekanie.</p><p><strong>3. Sześć oznak, że kot po zmianach żyje w przewlekłym napięciu</strong></p><table data-kind="data"><tbody><tr><td><p><strong>1. Długie przebywanie w kryjówce</strong></p><p>Kot spędza wiele godzin pod łóżkiem, za sofą lub wysoko, ale bez spokojnej eksploracji reszty domu.</p></td><td><p><strong>2. Wzmożona czujność</strong></p><p>Nasłuchiwanie, zastyganie, rozszerzone źrenice, niepewne przekraczanie progów i otwartych przestrzeni.</p></td></tr><tr><td><p><strong>3. Zmiana rytmu dnia</strong></p><p>Jedzenie, picie, kuweta i eksploracja przesuwają się na noc lub na momenty pełnej ciszy.</p></td><td><p><strong>4. Ograniczenie kontaktu</strong></p><p>Kot szybciej wycofuje się z głaskania, zabawy i obecności domowników albo kończy interakcję nagle.</p></td></tr><tr><td><p><strong>5. Zmiany biologiczne</strong></p><p>Pojawiają się problemy z apetytem, snem, pielęgnacją, kuwetą lub nadmiernym wylizywaniem.</p></td><td><p><strong>6. Utrwalony wzorzec po zmianie</strong></p><p>Bodziec minął, ale kot nadal omija część domu, nie wraca do dawnych tras i zachowuje ostrożność.</p></td></tr></tbody></table><table data-kind="callout" data-label="Obserwuj całość obrazu"><tbody><tr><td><p><strong>Obserwuj całość obrazu</strong></p><p>Nigdy nie oceniaj kota na podstawie jednego objawu. Znaczenie ma wzorzec zachowania w całym dniu oraz to, czy po zmianie zakres normalnego życia kota wraca do dawnej szerokości.</p></td></tr></tbody></table><p><strong>4. Najczęstsze wyzwalacze po zmianach</strong></p><table data-kind="data"><tbody><tr><td><p><strong>Przeprowadzka i nowe mieszkanie</strong></p><p>utrata punktów orientacyjnych, nowe zapachy, akustyka i układ zasobów</p></td><td><p><strong>Remont i hałas</strong></p><p>wibracje, obce osoby, farby, zablokowane drogi odwrotu i chaos informacyjny</p></td></tr><tr><td><p><strong>Nowy kot, pies lub dziecko</strong></p><p>redystrybucja przestrzeni, inny rytm dnia i większa presja społeczna</p></td><td><p><strong>Zmiana trybu życia domowników</strong></p><p>praca zdalna, częste wideorozmowy, goście, nowy rozkład aktywności</p></td></tr><tr><td><p><strong>Klinika lub pobyt poza domem</strong></p><p>obcy zapach, większa ostrożność po powrocie i potrzeba dystansu</p></td><td><p><strong>Mniejsze, ale skumulowane zmiany</strong></p><p>nowy odkurzacz, detergent, kartony, przestawione meble, inna kuwe­ta lub miska</p></td></tr></tbody></table><p><strong>5. Różnicowanie: stres, konflikt, ból czy choroba</strong></p><p>Po zmianach łatwo uznać, że wszystko da się wyjaśnić samym stresem. To błąd. Część kotów chowa się dlatego, że środowisko stało się mniej przewidywalne. Część dlatego, że inny kot przejął przejście, miskę albo punkt obserwacyjny. Część dlatego, że ból ruchowy, problemy z pęcherzem, przewodem pokarmowym lub zębami obniżyły próg tolerancji na bodźce.</p><table data-kind="data"><tbody><tr><td><p><strong>Warstwa problemu</strong></p></td><td><p><strong>Na co zwrócić uwagę</strong></p></td><td><p><strong>Pierwszy kierunek działania</strong></p></td></tr><tr><td><p>Stres środowiskowy</p></td><td><p>ukrywanie, czujność, nocne funkcjonowanie, poprawa w ciszy</p></td><td><p>ogranicz bodźce, odbuduj przewidywalność i strefę bazową</p></td></tr><tr><td><p>Konflikt społeczny</p></td><td><p>blokowanie przejść, ustępowanie zasobów, ruch nocą</p></td><td><p>rozprosz zasoby, sprawdź trasy i relacje między kotami</p></td></tr><tr><td><p>Ból / choroba</p></td><td><p>spadek apetytu, kulawizna, problemy z kuwetą, wymioty, niechęć do skakania</p></td><td><p>najpierw ścieżka weterynaryjna</p></td></tr><tr><td><p>Mieszany obraz</p></td><td><p>stres i objawy somatyczne pojawiają się razem</p></td><td><p>prowadź równolegle konsultację medyczną i środowiskową</p></td></tr></tbody></table><table data-kind="callout" data-label="Czerwone flagi"><tbody><tr><td><p><strong>Czerwone flagi</strong></p><p>Nagła zmiana zachowania, ból przy ruchu, spadek apetytu, problemy kuwetowe, wymioty, biegunka, objawy neurologiczne lub szybka utrata masy ciała wymagają najpierw oceny weterynaryjnej.</p></td></tr></tbody></table><p><strong>6. Pięć filarów zdrowego środowiska po zmianach</strong></p><table data-kind="callout" data-label="To właśnie te filary najczęściej trzeba odbudować po zmianie"><tbody><tr><td><p><strong>To właśnie te filary najczęściej trzeba odbudować po zmianie</strong></p><ul><li>poczucie bezpieczeństwa: kryjówki, spokojne strefy i możliwość wycofania się bez pościgu</li><li>przewidywalność: stałe pory karmienia, podobne sekwencje dnia i mniej przypadkowego chaosu</li><li>kontrola: możliwość wyboru między kryjówką, otwartym miejscem i punktem obserwacyjnym</li><li>rozproszone zasoby: miski, kuwety, drapaki, legowiska i drogi przejścia w kilku punktach domu</li><li>zachowania gatunkowo typowe: spokojna eksploracja, pion, obserwacja, zabawa i rytuały łowieckie</li></ul></td></tr></tbody></table><p>Jedna dobra kryjówka nie wystarczy, jeśli dojście do niej kontroluje inny kot albo głośny korytarz. Podobnie jedna atrakcyjna półka nie pomaga, jeśli kot musi do niej przejść przez strefę ryzyka. W praktyce najwięcej zmienia rozproszenie zasobów i skrócenie drogi do bezpieczeństwa.</p><p><strong>7. Plan pierwszych 72 godzin</strong></p><table data-kind="data"><tbody><tr><td><p><strong>1. Strefa bazowa</strong></p><p>Przygotuj spokojne miejsce z wodą, jedzeniem, kuwetą, drapakiem, kryjówką i miękkim legowiskiem.</p></td><td><p><strong>2. Mniej bodźców</strong></p><p>Ogranicz hałas, intensywny kontakt, nowe zapachy i przypadkowe „testowanie odwagi” kota.</p></td></tr><tr><td><p><strong>3. Krótki kontakt</strong></p><p>Wchodź spokojnie, mów łagodnie, usiądź w dystansie, nie wyciągaj z kryjówki i nie narzucaj dotyku.</p></td><td><p><strong>4. Zbieranie danych</strong></p><p>Notuj godziny wychodzenia, apetyt, kuwetę, miejsca zastygania i to, co realnie obniża napięcie.</p></td></tr></tbody></table><table data-kind="callout" data-label="Zasada pierwszych trzech dni"><tbody><tr><td><p><strong>Zasada pierwszych trzech dni</strong></p><p>W tym okresie opiekun zbiera dane i osłania kota od nadmiaru bodźców. Mniej znaczy więcej. Celem nie jest szybka aktywizacja, lecz odzyskanie poczucia kontroli nad otoczeniem.</p></td></tr></tbody></table><p><strong>8. Plan pracy na 14 dni</strong></p><table data-kind="data"><tbody><tr><td><p><strong>Etap</strong></p></td><td><p><strong>Na czym się skupiasz</strong></p></td></tr><tr><td><p>Dni 1–3</p></td><td><p>utrzymaj strefę bazową, monitoring i przewidywalny rytm dnia</p></td></tr><tr><td><p>Dni 4–6</p></td><td><p>dodaj drugą kryjówkę, osłonięte trasy przejścia i rozproszone zasoby</p></td></tr><tr><td><p>Dni 7–9</p></td><td><p>wprowadź krótkie sesje eksploracji i zabawy z dystansu, bez presji kontaktu</p></td></tr><tr><td><p>Dni 10–12</p></td><td><p>sprawdź, czy kot częściej sam wybiera wyjście z kryjówki i odzyskuje rytuały</p></td></tr><tr><td><p>Dni 13–14</p></td><td><p>oceń trend: czy świat kota się poszerza, czy nadal się kurczy</p></td></tr></tbody></table><p>Po 10–14 dniach szukaj trendu, a nie idealnego dnia. Najważniejsze pytania brzmią: czy kot częściej korzysta z domu w ciągu dnia, czy mniej zastyga, czy wraca do normalnych rytuałów i czy łatwiej kończy kontakt bez gwałtownego wycofania.</p><p><strong>9. Czego nie robić</strong></p><table data-kind="data"><tbody><tr><td><p><strong>Błąd</strong></p></td><td><p><strong>Dlaczego szkodzi</strong></p></td><td><p><strong>Lepsza odpowiedź</strong></p></td></tr><tr><td><p>Wyciąganie z kryjówki</p></td><td><p>pogłębia utratę kontroli i utrwala lęk</p></td><td><p>zostaw wybór, pracuj przez strefę bazową</p></td></tr><tr><td><p>Zbyt szybkie udostępnienie całego domu</p></td><td><p>zwiększa chaos informacyjny i ryzyko utknięcia w strefach konfliktu</p></td><td><p>otwieraj przestrzeń etapami</p></td></tr><tr><td><p>Nadmierne głaskanie „dla uspokojenia”</p></td><td><p>kontakt może stać się kolejnym przeciążeniem</p></td><td><p>krótki, przewidywalny kontakt tylko jeśli kot go wybiera</p></td></tr><tr><td><p>Ignorowanie objawów somatycznych</p></td><td><p>ból i choroba mogą wyglądać jak stres</p></td><td><p>przy czerwonych flagach zacznij od lekarza</p></td></tr></tbody></table><p><strong>10. Kiedy potrzebna jest konsultacja</strong></p><table data-kind="callout" data-label="Wcześniejsza konsultacja skraca czas cierpienia kota i zmniejsza ryzyko utrwalenia niekorzystnego wzorca"><tbody><tr><td><p><strong>Wcześniejsza konsultacja skraca czas cierpienia kota i zmniejsza ryzyko utrwalenia niekorzystnego wzorca</strong></p><ul><li>gdy po 7–10 dniach kot nadal niemal nie opuszcza kryjówki</li><li>gdy pojawiają się problemy kuwetowe, spadek apetytu lub wyraźny ból przy ruchu</li><li>gdy w domu są inne zwierzęta i istnieje ryzyko konfliktu albo blokowania zasobów</li><li>gdy po zmianie obraz staje się mieszany i trudno odróżnić stres od warstwy medycznej</li><li>gdy chcesz przygotować konsultację na podstawie mapy domu, nagrań i 7-dniowego dziennika</li></ul></td></tr></tbody></table><p><strong>11. Narzędzia praktyczne</strong></p><table data-kind="callout" data-label="Kwestionariusz przed konsultacją"><tbody><tr><td><p><strong>Kwestionariusz przed konsultacją</strong></p><p>Zbierz: od kiedy kot się chowa, ile godzin spędza poza kryjówką, jakie zmiany zaszły w domu, czy pojawiły się objawy somatyczne, jak wyglądają zasoby, relacje i rytm doby. Przygotuj plan mieszkania, 3–5 krótkich nagrań zachowania oraz listę zmian z ostatnich 2–6 tygodni.</p></td></tr></tbody></table><table data-kind="data"><tbody><tr><td><p><strong>Dzień</strong></p></td><td><p><strong>Czas poza kryjówką</strong></p></td><td><p><strong>Apetyt</strong></p></td><td><p><strong>Kuweta</strong></p></td><td><p><strong>Eksploracja / zabawa</strong></p></td><td><p><strong>Uwagi</strong></p></td></tr><tr><td><p>1</p></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><p>2</p></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><p>3</p></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><p>4</p></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><p>5</p></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><p>6</p></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><p>7</p></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><p><strong>12. Co dalej?</strong></p><table data-kind="data"><tbody><tr><td><p><strong>Jeśli w tle widać cichy konflikt</strong></p><p>Przejdź do PDF: Konflikt między kotami. Sprawdź blokowanie przejść, ustępowanie zasobów i presję społeczną.</p></td><td><p><strong>Jeśli pojawiły się problemy kuwetowe</strong></p><p>Przejdź do PDF: Kot boi się kuwety? lub do pełnego przewodnika Problem poza kuwetą, jeśli obraz jest szeroki i mieszany.</p></td></tr><tr><td><p><strong>Jeśli problem dotyczy ogólnego przeciążenia</strong></p><p>Wróć do lead magnetu: Kot żyje w napięciu i porównaj 6 oznak napięcia z codziennym funkcjonowaniem kota.</p></td><td><p><strong>Jeśli nie wiesz, która warstwa jest główna</strong></p><p>Umów konsultację 15 min i przyjdź z mapą domu, nagraniami i 7-dniowym dziennikiem obserwacji.</p></td></tr></tbody></table><table data-kind="callout" data-label="Podsumowanie"><tbody><tr><td><p><strong>Podsumowanie</strong></p><p>Najskuteczniejsza pomoc opiera się na trzech zasadach: najpierw bezpieczeństwo, potem przewidywalność, a dopiero na końcu aktywizacja. To podejście pomaga odróżnić ostrożność adaptacyjną od przeciążenia i nie zamieniać zmiany w długotrwałe cierpienie.</p></td></tr></tbody></table><p><strong>Kiedy ten materiał zwykle wystarcza</strong></p><p>• zwykle wystarcza, jeśli wycofanie pojawiło się po zmianie w domu i nie towarzyszą mu silne objawy bólu lub choroby</p><p>• po 72 godzinach i kolejnych 10–14 dniach kot częściej korzysta z przestrzeni i odzyskuje dostęp do normalnego życia</p><p>• obraz jest spójny z przeciążeniem zmianą, a nie z gwałtownym pogorszeniem stanu zdrowia</p><p><strong>Co dalej?</strong></p><p>Jeśli w tle dominuje konflikt społeczny, przejdź do ścieżki relacyjnej. Jeśli po zmianach pojawił się problem kuwetowy, wybierz ścieżkę kuwetową. Jeśli obraz jest mieszany albo trwa zbyt długo, najlepszym następnym ruchem jest konsultacja.</p>
+</section>
+
+<section class="footer">
+  <h2 class="footer-title">Co dalej, jeśli to nie wystarczy</h2>
+  <p class="footer-lead">
+    Ten przewodnik ma pomóc uporządkować pierwszy krok. Jeśli temat wraca, miesza kilka wątków albo
+    potrzebujesz kogoś kto zobaczy Twoją konkretną sytuację — rozmowa zwykle skraca drogę.
+  </p>
+
+  <div class="services">
+    <div class="service">
+      <div class="service-price">Kwadrans · 69 zł</div>
+      <div class="service-name">Kwadrans z behawiorystą</div>
+      <p class="service-copy">15 minut rozmowy audio. Najprostszy start przy jednym pytaniu, niepewności albo pierwszym uporządkowaniu tematu.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=szybka-konsultacja-15-min</div>
+    </div>
+
+    <div class="service">
+      <div class="service-price">Dwa kwadranse · 169 zł</div>
+      <div class="service-name">Dwa kwadranse</div>
+      <p class="service-copy">30 minut online, kiedy 15 minut to za mało, temat ma kilka wątków albo chcesz spokojniej przejść przez sytuację.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=konsultacja-30-min</div>
+    </div>
+
+    <div class="service">
+      <div class="service-price">Pełna konsultacja · 470 zł</div>
+      <div class="service-name">Pełna konsultacja behawioralna</div>
+      <p class="service-copy">60 minut rozmowy, diagnoza, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp. Dla spraw złożonych, przewlekłych albo wielowątkowych.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=konsultacja-behawioralna-online</div>
+    </div>
+  </div>
+
+  <div class="footer-contact">
+    <div>
+      <strong>Kontakt</strong><br>
+      <a href="mailto:kontakt@regulskibehawiorysta.pl">kontakt@regulskibehawiorysta.pl</a>
+    </div>
+    <div>
+      <strong>Strona</strong><br>
+      <a href="https://regulskibehawiorysta.pl">regulskibehawiorysta.pl</a>
+    </div>
+    <div>
+      <strong>Instagram</strong><br>
+      @regulskibehawiorysta
+    </div>
+  </div>
+
+  <div class="footer-fine">
+    © Krzysztof Regulski · Wszystkie prawa zastrzeżone. Materiał wyłącznie do użytku własnego, bez prawa dalszej dystrybucji i odsprzedaży.
+  </div>
+</section>
+
+</body>
+</html>

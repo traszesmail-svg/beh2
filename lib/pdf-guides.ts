@@ -194,7 +194,8 @@ export function buildPdfOrderHref({
     params.set('bundle', bundleSlug)
   }
 
-  return `/zamow-pdf?${params.toString()}`
+  const query = params.toString()
+  return query ? `/zamow-pdf?${query}` : '/zamow-pdf'
 }
 
 export function getPdfGuideCoverSrc(guide: Pick<PdfGuide, 'coverFileName'>): string {

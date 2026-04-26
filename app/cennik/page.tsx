@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { NotatnikFinalCta, NotatnikPageShell, NotatnikSectionHead, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
@@ -21,6 +22,11 @@ export const metadata: Metadata = buildMarketingMetadata({
 })
 
 const pricingFaqItems = [
+  {
+    question: 'Nie wiem, czy chce jeszcze rozmawiac. Jest jakis tanszy start?',
+    answer:
+      'Tak. W /materialy znajdziesz 21 PDF-ow od 19 zl (pojedyncze) lub 49 zl (pakiet 3 PDF). Sa tansze niz Kwadrans (69 zl) i nie wymagaja rezerwacji terminu — odbierasz mailem po BLIK-u. Dwa materialy darmowe (kot w napieciu, pies a poziom ruchu) bez platnosci, tylko na e-mail.',
+  },
   {
     question: 'Czym jest Kwadrans z behawiorysta?',
     answer:
@@ -82,10 +88,10 @@ export default function PricingPage() {
       <section className="notatnik-subhero">
         <div>
           <div className="notatnik-subhero-tag notatnik-mono">Cennik / psy i koty</div>
-          <h1>Cennik i zakres konsultacji.</h1>
+          <h1>Cennik konsultacji behawioralnych.</h1>
           <p>
-            Masz trzy glowne formaty konsultacji i jeden wariant priorytetowy. Wybierasz skale problemu, nie najdrozszy pakiet: 69 zl na start, 99 zl za
-            ten sam format szybciej, 169 zl przy szerszym temacie i 470 zl wtedy, gdy potrzebna jest diagnoza, plan i wsparcie wdrozenia.
+            Trzy formaty i jeden wariant priorytetowy. Wybierasz skale, nie pakiet: 69 zl na start, 99 zl za ten sam format szybciej, 169 zl przy
+            szerszym temacie i 470 zl dla spraw zlozonych wymagajacych diagnozy i planu.
           </p>
           <div className="notatnik-subhero-actions">
             <Link href="/book?service=szybka-konsultacja-15-min" prefetch={false} className="notatnik-btn">
@@ -100,16 +106,19 @@ export default function PricingPage() {
           </div>
         </div>
 
-        <div className="summary-card tree-backed-card">
-          <div className="section-eyebrow">Szybki wybor</div>
-          <h3>69 / 99 / 169 / 470.</h3>
-          <p>Najpierw skala problemu, potem format. Kwadrans na juz zostaje tylko szybszym wariantem tego samego 15-minutowego startu.</p>
-          <p className="muted">{PUBLIC_OFFER_PRIORITY_VARIANT_NOTE}</p>
+        <div className="notatnik-subhero-media">
+          <div className="notatnik-subhero-figure">
+            <Image src="/branding/topic-cards/dog-resting-home.jpg" alt="Pies odpoczywa spokojnie w domu" fill sizes="(max-width: 980px) 100vw, 40vw" priority />
+          </div>
+          <div className="notatnik-subhero-note">
+            <span>69 / 99 / 169 / 470 zl</span>
+            <span>online / cala Polska</span>
+          </div>
         </div>
       </section>
 
       <section id="porownanie">
-        <NotatnikSectionHead index="I." kicker="3 formaty i ceny" title="Ktory format wybrac przy 69 / 99 / 169 / 470." />
+        <NotatnikSectionHead index="I." kicker="Formaty" title="Cztery opcje. Jeden prosty wybor." />
         <div className="card-grid three-up">
           <article className="summary-card tree-backed-card">
             <div className="section-eyebrow">69 zl</div>

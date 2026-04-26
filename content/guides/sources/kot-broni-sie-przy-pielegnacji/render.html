@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title> · Regulski | Terapia behawioralna</title>
+<style>/* PDF guide stylesheet — renders on A4 via Playwright page.pdf() */
+
+@page {
+  size: A4;
+  margin: 22mm 18mm 22mm 18mm;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.55;
+  color: #1f1a17;
+  background: #fdfbf7;
+}
+
+/* Cover page */
+.cover {
+  page: cover;
+  page-break-after: always;
+  min-height: 247mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 4mm 0;
+}
+
+.cover-brand {
+  font-size: 9pt;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8b6f5a;
+  font-weight: 600;
+}
+
+.cover-tag {
+  display: inline-block;
+  font-size: 9pt;
+  color: #5e4a3c;
+  background: #f0e5d6;
+  padding: 3mm 5mm;
+  border-radius: 2mm;
+  margin-bottom: 6mm;
+}
+
+.cover-title {
+  font-size: 32pt;
+  line-height: 1.1;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 0 0 6mm 0;
+  letter-spacing: -0.01em;
+}
+
+.cover-subtitle {
+  font-size: 14pt;
+  line-height: 1.35;
+  color: #5e4a3c;
+  font-weight: 500;
+  margin: 0 0 10mm 0;
+}
+
+.cover-lead {
+  font-size: 11pt;
+  line-height: 1.6;
+  color: #3f332a;
+  max-width: 140mm;
+}
+
+.cover-bullets {
+  margin-top: 8mm;
+  padding: 0;
+  list-style: none;
+}
+
+.cover-bullets li {
+  padding: 2mm 0 2mm 6mm;
+  position: relative;
+  font-size: 10.5pt;
+  color: #3f332a;
+}
+
+.cover-bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 5mm;
+  width: 3mm;
+  height: 0.7mm;
+  background: #c9a37a;
+}
+
+.cover-meta {
+  font-size: 9pt;
+  color: #8b6f5a;
+  border-top: 0.3mm solid #e5d8c6;
+  padding-top: 4mm;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6mm;
+}
+.cover-meta > div { min-width: 0; word-break: break-word; }
+
+.cover-meta strong { color: #1f1a17; }
+
+.cover-disclaimer {
+  margin-top: 6mm;
+  font-size: 9pt;
+  font-style: italic;
+  color: #8b6f5a;
+  border-left: 0.5mm solid #c9a37a;
+  padding: 2mm 0 2mm 4mm;
+}
+
+/* Body typography */
+.body h1 {
+  font-size: 18pt;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 10mm 0 4mm 0;
+  padding-bottom: 2mm;
+  border-bottom: 0.3mm solid #e5d8c6;
+}
+
+.body h2 {
+  font-size: 14pt;
+  line-height: 1.25;
+  font-weight: 700;
+  color: #3f332a;
+  margin: 8mm 0 3mm 0;
+}
+
+.body h3 {
+  font-size: 12pt;
+  font-weight: 600;
+  color: #3f332a;
+  margin: 6mm 0 2mm 0;
+}
+
+.body p {
+  margin: 0 0 3mm 0;
+  text-align: justify;
+  hyphens: auto;
+}
+
+.body ul, .body ol {
+  margin: 0 0 4mm 0;
+  padding-left: 6mm;
+}
+
+.body li {
+  margin: 1mm 0;
+}
+
+.body strong { color: #1f1a17; }
+
+.body em { color: #5e4a3c; }
+
+/* Callout boxes (from data-kind="callout") */
+.body table[data-kind="callout"] {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4mm 0;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="callout"] td {
+  padding: 4mm 5mm;
+  background: #faf1e3;
+  border-left: 1mm solid #c9a37a;
+  border-radius: 0 1.5mm 1.5mm 0;
+}
+
+.body table[data-kind="callout"] p { margin: 0 0 2mm 0; }
+.body table[data-kind="callout"] p:last-child { margin-bottom: 0; }
+.body table[data-kind="callout"] p strong:first-child {
+  display: block;
+  font-size: 11pt;
+  margin-bottom: 1mm;
+  color: #1f1a17;
+}
+
+/* Callout stack (vertical list of callouts in one table) */
+.body table[data-kind="callout-stack"] {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 2mm;
+  margin: 4mm 0;
+}
+
+.body table[data-kind="callout-stack"] td {
+  padding: 3.5mm 5mm;
+  background: #faf1e3;
+  border-left: 1mm solid #c9a37a;
+}
+
+/* Grid boxes (single row, multiple cells — feature grid) */
+.body table[data-kind="grid"] {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 2mm 0;
+  margin: 4mm 0;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="grid"] td {
+  padding: 3mm 4mm;
+  background: #f5ece0;
+  border-radius: 1.5mm;
+  vertical-align: top;
+  width: auto;
+}
+
+.body table[data-kind="grid"] p { margin: 0 0 1.5mm 0; font-size: 9.5pt; }
+.body table[data-kind="grid"] strong { display: block; margin-bottom: 1mm; }
+
+/* Data tables (multi-row comparison) */
+.body table[data-kind="data"] {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4mm 0;
+  font-size: 9.5pt;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="data"] th,
+.body table[data-kind="data"] td {
+  border: 0.2mm solid #e5d8c6;
+  padding: 2mm 3mm;
+  vertical-align: top;
+  text-align: left;
+}
+
+.body table[data-kind="data"] tr:first-child td,
+.body table[data-kind="data"] th {
+  background: #f5ece0;
+  font-weight: 600;
+  color: #1f1a17;
+}
+
+.body table[data-kind="data"] tr:nth-child(even) td {
+  background: #fcf8f1;
+}
+
+/* Footer section — CTA routing to services */
+.footer {
+  page-break-before: always;
+  padding: 2mm 0;
+}
+
+.footer-title {
+  font-size: 18pt;
+  font-weight: 700;
+  margin: 0 0 4mm 0;
+  color: #1f1a17;
+}
+
+.footer-lead {
+  color: #3f332a;
+  margin-bottom: 6mm;
+  max-width: 150mm;
+}
+
+.services {
+  display: flex;
+  flex-direction: column;
+  gap: 3mm;
+  margin-bottom: 8mm;
+}
+
+.service {
+  padding: 4mm 5mm;
+  background: #f5ece0;
+  border-left: 1mm solid #c9a37a;
+  border-radius: 0 2mm 2mm 0;
+  page-break-inside: avoid;
+}
+
+.service-price {
+  font-size: 9pt;
+  color: #8b6f5a;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.service-name {
+  font-size: 13pt;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 1mm 0;
+}
+
+.service-copy {
+  font-size: 10pt;
+  color: #3f332a;
+  margin: 0 0 2mm 0;
+}
+
+.service-url {
+  font-size: 9pt;
+  color: #8b6f5a;
+}
+
+.footer-contact {
+  border-top: 0.3mm solid #e5d8c6;
+  padding-top: 4mm;
+  font-size: 9.5pt;
+  color: #3f332a;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6mm;
+}
+.footer-contact > div { min-width: 0; word-break: break-word; }
+
+.footer-contact a { color: #5e4a3c; text-decoration: none; }
+
+.footer-fine {
+  margin-top: 4mm;
+  font-size: 8.5pt;
+  color: #8b6f5a;
+  font-style: italic;
+}
+
+/* Category accent colors: cat / dog / puppy — tinted cover */
+body[data-category="cat"] .cover-tag { background: #ecdad3; color: #6b463a; }
+body[data-category="cat"] .cover-bullets li::before { background: #b97865; }
+body[data-category="cat"] .body table[data-kind="callout"] td { background: #f8eae5; border-left-color: #b97865; }
+body[data-category="cat"] .body table[data-kind="callout-stack"] td { background: #f8eae5; border-left-color: #b97865; }
+body[data-category="cat"] .body table[data-kind="grid"] td { background: #f8eae5; }
+body[data-category="cat"] .body table[data-kind="data"] tr:first-child td { background: #f8eae5; }
+body[data-category="cat"] .service { background: #f8eae5; border-left-color: #b97865; }
+
+body[data-category="dog"] .cover-tag { background: #e9e2ce; color: #5c4a2e; }
+body[data-category="dog"] .cover-bullets li::before { background: #997947; }
+body[data-category="dog"] .body table[data-kind="callout"] td { background: #f4ecd7; border-left-color: #997947; }
+body[data-category="dog"] .body table[data-kind="callout-stack"] td { background: #f4ecd7; border-left-color: #997947; }
+body[data-category="dog"] .body table[data-kind="grid"] td { background: #f4ecd7; }
+body[data-category="dog"] .body table[data-kind="data"] tr:first-child td { background: #f4ecd7; }
+body[data-category="dog"] .service { background: #f4ecd7; border-left-color: #997947; }
+
+body[data-category="puppy"] .cover-tag { background: #e4ead3; color: #4b5730; }
+body[data-category="puppy"] .cover-bullets li::before { background: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="callout"] td { background: #edf2dd; border-left-color: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="callout-stack"] td { background: #edf2dd; border-left-color: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="grid"] td { background: #edf2dd; }
+body[data-category="puppy"] .body table[data-kind="data"] tr:first-child td { background: #edf2dd; }
+body[data-category="puppy"] .service { background: #edf2dd; border-left-color: #7a8d4f; }
+</style>
+</head>
+<body data-category="cat">
+
+<section class="cover">
+  <div>
+    <div class="cover-brand">Regulski · Terapia behawioralna</div>
+    <div style="margin: 12mm 0 0 0;">
+      <div class="cover-tag">Koty · przewodnik</div>
+      <h1 class="cover-title"></h1>
+      <p class="cover-subtitle"></p>
+    </div>
+    <p class="cover-lead"></p>
+    <ul class="cover-bullets">
+      
+    </ul>
+  </div>
+  <div>
+    <div class="cover-disclaimer">Materiał edukacyjny. Nie zastępuje badania lekarsko-weterynaryjnego ani indywidualnej konsultacji behawioralnej.</div>
+    <div class="cover-meta">
+      <div><strong>Format</strong><br>PDF A4, druk domowy</div>
+      <div><strong>Czytanie</strong><br>8 min</div>
+      <div><strong>Wydano</strong><br>25 kwietnia 2026</div>
+      <div><strong>Autor</strong><br>Krzysztof Regulski</div>
+    </div>
+  </div>
+</section>
+
+<section class="body">
+<table data-kind="callout" data-label="Kot broni się przy pielęgnacji albo noszeniu?"><tbody><tr><td><p><strong>Kot broni się przy pielęgnacji albo noszeniu?</strong></p><p>Jak rozpoznać ból, przeciążenie i lęk proceduralny — i krok po kroku odbudować spokojną zgodę kota na krótkie zabiegi</p><p>Core procedural / ścieżka dotyku i zabiegów</p></td></tr></tbody></table><table data-kind="callout" data-label="Po co jest ten materiał?"><tbody><tr><td><p><strong>Po co jest ten materiał?</strong></p><p>Ten PDF porządkuje najczęstsze sytuacje, w których kot broni się przy czesaniu, podnoszeniu, zakładaniu szelek, obcinaniu pazurów lub innych krótkich procedurach. Zamiast „przetrzymywania” proponuje logikę kooperacyjną: czytać sekwencję, obniżyć próg trudności, zbudować sygnał początku i końca oraz pracować małymi krokami.</p></td></tr></tbody></table><table data-kind="callout" data-label="Co znajdziesz w środku"><tbody><tr><td><p><strong>Co znajdziesz w środku</strong></p><ul><li>5 najczęstszych ścieżek problemu: ból, przeciążenie dotykiem, lęk proceduralny, utrata kontroli i stres ogólny</li><li>drabinę sygnałów ostrzegawczych przed obroną</li><li>kontrast: pielęgnacja kooperacyjna vs siłowa</li><li>plan 14 dni pracy z mikroetapami i zasadą cofania progu</li><li>trening krótkiego podnoszenia, autoocenę opiekuna i kartę 7 dni monitoringu</li></ul></td></tr></tbody></table><p>Przewodnik • ścieżka dotyku, procedur i pielęgnacji</p><p>Materiał edukacyjny oparty na porządku klinicznym i praktyce pracy z opiekunem. Nie zastępuje diagnostyki lekarsko-weterynaryjnej, ale pomaga szybciej uporządkować problem i wybrać sensowny następny krok.</p><p><strong>Dla kogo jest ten materiał</strong></p><p>Dla opiekuna, który widzi konkretny objaw lub powtarzalny wzorzec zachowania i chce najpierw zrozumieć mechanizm problemu, a dopiero potem wdrażać zmiany.</p><p><strong>Co znajdziesz w środku</strong></p><p>Krótki filtr problemu, najważniejsze czerwone flagi, plan obserwacji oraz pierwszy zestaw działań, które pomagają zdecydować, czy materiał zwykle wystarcza, czy lepsza będzie konsultacja lub kolejny PDF z tej ścieżki.</p><p><strong>Najkrócej</strong></p><p>To nie jest materiał do zgadywania „co kot ma na myśli”, tylko do zauważenia wzorca, odróżnienia go od bólu lub przeciążenia i wybrania najbezpieczniejszego następnego kroku.</p><p><strong>1. Obrona nie oznacza złośliwości</strong></p><p>Kot, który broni się przy pielęgnacji albo noszeniu, zwykle nie działa „przeciwko człowiekowi”. Najczęściej próbuje odzyskać kontrolę nad kontaktem cielesnym, który stał się zbyt trudny, bolesny, nieprzewidywalny albo nadmiernie długi. Z perspektywy kota funkcja zachowania pozostaje podobna: przerwać, odsunąć albo uprzedzić procedurę, której nie ufa.</p><table data-kind="callout" data-label="Najkrótsza definicja problemu"><tbody><tr><td><p><strong>Najkrótsza definicja problemu</strong></p><p>Obrona przy pielęgnacji albo noszeniu to sygnał przekroczenia progu tolerancji. Poprawa zaczyna się wtedy, gdy opiekun widzi sekwencję, a nie tylko finał w postaci syku, machnięcia łapą albo ugryzienia.</p></td></tr></tbody></table><p><strong>5 najczęstszych ścieżek prowadzących do obrony</strong></p><table data-kind="data"><tbody><tr><td><p><strong>Ból lub dyskomfort</strong></p><p>Kot reaguje przy dotyku konkretnej okolicy, przy podnoszeniu, czesaniu albo manipulacji przy pysku czy łapach.</p></td><td><p><strong>Przeciążenie dotykiem</strong></p><p>Kontakt trwa za długo, jest zbyt intensywny albo odbywa się w strefie słabo tolerowanej. Kot początkowo wytrzymuje, a potem nagle „wybucha”.</p></td></tr><tr><td><p><strong>Lęk proceduralny</strong></p><p>Ręcznik, szczotka, cążki lub dłonie zapowiadają coś nieprzyjemnego. Reakcja pojawia się coraz wcześniej w sekwencji.</p></td><td><p><strong>Utrata kontroli</strong></p><p>Kot nie może zejść z kolan, odwrócić się ani odejść. Narasta pobudzenie, a obrona staje się szybsza i gwałtowniejsza.</p></td></tr><tr><td><p><strong>Stres ogólny</strong></p><p>Po zmianach w domu, konflikcie lub przeciążeniu bodźcami próg tolerancji na dodatkowy dotyk wyraźnie spada.</p></td><td></td></tr></tbody></table><p><strong>Jak czytać sygnały zanim pojawi się ugryzienie</strong></p><p>Wielu opiekunów pamięta głównie finał incydentu. Tymczasem wcześniejsze sygnały bywają krótkie i subtelne: zastyganie, przyspieszona praca ogona, odwracanie głowy, napięcie pyska, rozszerzenie źrenic albo nagłe lizanie nosa. U części kotów „pozorne uspokojenie” nie oznacza poprawy, lecz krótkie zamrożenie przed eskalacją.</p><table data-kind="data"><tbody><tr><td><p><strong>Poziom</strong></p></td><td><p><strong>Co zwykle widać</strong></p></td><td><p><strong>Jak reagować</strong></p></td></tr><tr><td><p>1</p></td><td><p>odwracanie głowy, zastyganie, wolniejsze mruganie, napinanie pyska</p></td><td><p>natychmiast zwolnić tempo albo zakończyć kontakt</p></td></tr><tr><td><p>2</p></td><td><p>ogon zaczyna pracować, uszy idą na boki, źrenice się rozszerzają</p></td><td><p>przerwać sesję zanim kot będzie musiał prosić mocniej</p></td></tr><tr><td><p>3</p></td><td><p>przesuwanie ciała, szybkie lizanie nosa, warczenie lub syk</p></td><td><p>odsunąć bodziec i dać kotu drogę wyjścia</p></td></tr><tr><td><p>4</p></td><td><p>machnięcie łapą, gwałtowne odwrócenie, ugryzienie lub wyrywanie się</p></td><td><p>nie wracać od razu do procedury; przejść do protokołu pierwszej pomocy</p></td></tr></tbody></table><table data-kind="callout" data-label="Ważna zasada obserwacyjna"><tbody><tr><td><p><strong>Ważna zasada obserwacyjna</strong></p><p>Jeżeli po kilku sekundach kontaktu kot przestaje aktywnie „uczestniczyć” w interakcji i przechodzi w sztywne znieruchomienie, traktuj to jako sygnał ostrzegawczy, a nie dowód tolerancji.</p></td></tr></tbody></table><p><strong>2. Pielęgnacja kooperacyjna zamiast siłowej</strong></p><p>Wytyczne cat friendly podkreślają trzy praktyczne zasady: minimalizację przymusu, obserwację mowy ciała przed dotykiem oraz dostosowanie procedury do konkretnego kota, a nie do wygody człowieka. W domu przekłada się to na bardzo prostą zmianę: krótsze sesje, wyraźny początek i koniec, możliwość odejścia oraz stopniowanie trudności o milimetry, nie o skoki.</p><table data-kind="data"><tbody><tr><td><p><strong>Pielęgnacja kooperacyjna</strong></p></td><td><p><strong>Pielęgnacja siłowa</strong></p></td></tr><tr><td><p>krótkie sesje i zgoda kota</p></td><td><p>długie przytrzymanie</p></td></tr><tr><td><p>bodziec → nagroda → pauza</p></td><td><p>człowiek „musi dokończyć” za wszelką cenę</p></td></tr><tr><td><p>kot może odejść</p></td><td><p>brak przerwy i drogi odwrotu</p></td></tr><tr><td><p>trening w spokojnym etapie dnia</p></td><td><p>próba w pośpiechu lub po konflikcie</p></td></tr><tr><td><p>stopniowanie trudności o milimetry</p></td><td><p>eskalacja do syku, drapania i gryzienia</p></td></tr></tbody></table><p><strong>Noszenie kotów — czerwone flagi i lepsze alternatywy</strong></p><table data-kind="data"><tbody><tr><td><p><strong>Czerwona flaga</strong></p><p>łapanie kota z zaskoczenia, bez kontaktu zapowiadającego</p></td><td><p><strong>Czerwona flaga</strong></p><p>unoszenie bez podparcia zadu i klatki piersiowej</p></td></tr><tr><td><p><strong>Lepsza alternatywa</strong></p><p>uprzedzenie kota dotykiem w strefie dobrze tolerowanej</p></td><td><p><strong>Lepsza alternatywa</strong></p><p>krótkie podniesienie o 1–2 cm i natychmiastowe odstawienie</p></td></tr><tr><td><p><strong>Lepsza alternatywa</strong></p><p>praca przy stabilnej powierzchni i nagroda po każdym kroku</p></td><td><p><strong>Lepsza alternatywa</strong></p><p>najpierw zgoda na dotyk boków ciała, dopiero potem minimalne uniesienie</p></td></tr></tbody></table><p><strong>Lęk proceduralny: gdy kot reaguje jeszcze przed dotykiem</strong></p><p>Jeżeli po pojawieniu się szczotki, ręcznika lub cążków kilka razy nastąpiło coś nieprzyjemnego, kot może zacząć napinać się już na sam widok narzędzia. Próba „szybkiego zrobienia zabiegu” zwykle pogarsza sprawę. Najpierw trzeba odczarować sygnał zapowiadający: narzędzie pojawia się, nic złego się nie dzieje, jest nagroda, przerwa i koniec sesji.</p><table data-kind="callout" data-label="Pierwszy krok do zmiany"><tbody><tr><td><p><strong>Pierwszy krok do zmiany</strong></p><p>Nie zaczynaj terapii od pełnej procedury. Zacznij od tak małego kroku, że kot pozostaje zdolny do wyboru i nie przechodzi w usztywnienie ani obronę.</p></td></tr></tbody></table><p><strong>Domowe czynniki, które obniżają próg tolerancji</strong></p><table data-kind="data"><tbody><tr><td><p><strong>Czynnik tła</strong></p></td><td><p><strong>Jak działa</strong></p></td><td><p><strong>Co uprościć</strong></p></td></tr><tr><td><p>pośpiech człowieka</p></td><td><p>skraca obserwację i wydłuża przymus</p></td><td><p>planować sesję w spokojnym oknie dnia</p></td></tr><tr><td><p>konflikt w domu</p></td><td><p>podwyższa pobudzenie bazowe</p></td><td><p>oddzielić sesję od miejsc napięcia i wspólnych zasobów</p></td></tr><tr><td><p>brak rytuału końca</p></td><td><p>kot nie wie, kiedy procedura się skończy</p></td><td><p>wprowadzić stały sygnał końca i nagrodę lub drogę wyjścia</p></td></tr><tr><td><p>nadmierna długość sesji</p></td><td><p>przekracza próg tolerancji</p></td><td><p>kończyć po kilku sekundach, nie po kilku minutach</p></td></tr><tr><td><p>procedury łączone</p></td><td><p>kot przewiduje cały pakiet nieprzyjemności</p></td><td><p>rozdzielać czynności na osobne dni lub sesje</p></td></tr></tbody></table><p><strong>3. Plan 14 dni: odbudowa tolerancji</strong></p><p>Plan nie służy temu, żeby „przetrzymać” kota dłużej niż zwykle. Jego celem jest odbudowa przewidywalności i miękkości ciała. Jeśli w którymkolwiek punkcie pojawia się usztywnienie, gwałtowniejsza praca ogona, wpatrywanie się, napięcie pyska albo próba odejścia, plan należy cofnąć o krok.</p><table data-kind="data"><tbody><tr><td><p><strong>Zakres dni</strong></p></td><td><p><strong>Cel</strong></p></td><td><p><strong>Praktyka</strong></p></td></tr><tr><td><p>1–3</p></td><td><p>reset i zbieranie danych</p></td><td><p>brak pełnych procedur; obserwacja sygnałów i prowadzenie dziennika</p></td></tr><tr><td><p>4–6</p></td><td><p>sygnał start / stop</p></td><td><p>krótkie interakcje zakończone zanim kot zesztywnieje</p></td></tr><tr><td><p>7–10</p></td><td><p>pojedynczy element procedury</p></td><td><p>narzędzie pojawia się i znika; jest nagroda, pauza i powrót do miękkości</p></td></tr><tr><td><p>11–14</p></td><td><p>mikroprocedura</p></td><td><p>1 ruch szczotką lub minimalne podniesienie + odstawienie + wyraźny koniec</p></td></tr></tbody></table><p><strong>Jedna sesja = jeden bardzo mały cel</strong></p><table data-kind="callout" data-label="Zasady pracy kooperacyjnej"><tbody><tr><td><p><strong>Zasady pracy kooperacyjnej</strong></p><ul><li>pracuj wtedy, gdy kot jest wypoczęty, a nie nadmiernie pobudzony</li><li>wybieraj strefy ciała dobrze tolerowane na starcie</li><li>nie zwiększaj jednocześnie czasu i trudności zadania</li><li>kończ kilka sekund za wcześnie, nie kilka sekund za późno</li><li>rozdzielaj procedury na niezależne mikroetapy</li></ul></td></tr></tbody></table><p><strong>Podnoszenie i przenoszenie — trening od zera</strong></p><table data-kind="data"><tbody><tr><td><p><strong>Etap</strong></p></td><td><p><strong>Kryterium przejścia dalej</strong></p></td></tr><tr><td><p>dłoń po bokach ciała</p></td><td><p>kot pozostaje miękki, nie usztywnia się</p></td></tr><tr><td><p>lekki nacisk i natychmiastowa pauza</p></td><td><p>brak sygnałów ostrzegawczych</p></td></tr><tr><td><p>uniesienie na 1–2 cm</p></td><td><p>kot nie walczy o zejście i szybko wraca do równowagi</p></td></tr><tr><td><p>krótki transfer na bliską powierzchnię</p></td><td><p>utrzymuje spokój przez całą sekwencję</p></td></tr><tr><td><p>użycie w realnej sytuacji</p></td><td><p>wcześniejsze etapy są stabilne w różnych dniach</p></td></tr></tbody></table><p><strong>Protokół pierwszej pomocy po incydencie</strong></p><table data-kind="data"><tbody><tr><td><p><strong>1. Przerwij procedurę</strong></p><p>Odsuń bodziec i pozwól kotu wyjść z sytuacji bez dodatkowej presji.</p></td><td><p><strong>2. Zapisz sekwencję</strong></p><p>Odnotuj, co ją poprzedziło, po ilu sekundach pojawił się pierwszy sygnał i czy kot miał drogę odwrotu.</p></td></tr><tr><td><p><strong>3. Wróć do kroku zerowego</strong></p><p>Następnego dnia nie wracaj do pełnej procedury — wróć do punktu, w którym kot czuł się jeszcze bezpiecznie.</p></td><td><p><strong>4. Oceń tło medyczne</strong></p><p>Jeśli zachowanie dotyczy jednej okolicy ciała albo tolerancja zmieniła się nagle, uwzględnij konsultację weterynaryjną.</p></td></tr></tbody></table><p><strong>4. Kiedy iść głębiej: kontrola postępów i czerwone flagi</strong></p><p><strong>Jak ocenić, czy plan działa</strong></p><table data-kind="data"><tbody><tr><td><p><strong>Wskaźnik</strong></p></td><td><p><strong>Co oznacza poprawę</strong></p></td></tr><tr><td><p>wejście w sesję</p></td><td><p>kot nie odchodzi już na sam widok narzędzia lub dłoni</p></td></tr><tr><td><p>mowa ciała</p></td><td><p>więcej miękkości ciała, mniej zastygania i rozszerzonych źrenic</p></td></tr><tr><td><p>próg czasu</p></td><td><p>pierwsze sygnały pojawiają się później niż wcześniej</p></td></tr><tr><td><p>powrót po przerwie</p></td><td><p>kot wraca szybciej i z mniejszą ostrożnością</p></td></tr><tr><td><p>intensywność reakcji</p></td><td><p>zamiast ugryzienia pojawia się odejście albo krótki syk</p></td></tr></tbody></table><table data-kind="callout" data-label="Najważniejsze"><tbody><tr><td><p><strong>Najważniejsze</strong></p><p>Poprawa nie polega wyłącznie na tym, że „nie ugryzł”. Najbardziej wartościowe są wcześniejsze zmiany: dłuższy próg czasu, szybszy powrót do równowagi i mniej sztywności ciała.</p></td></tr></tbody></table><p><strong>Formularz szybkiej autooceny opiekuna</strong></p><table data-kind="data"><tbody><tr><td><p><strong>Pytanie</strong></p></td><td><p><strong>Tak / częściowo / nie</strong></p></td></tr><tr><td><p>Czy wiem, jaki był pierwszy subtelny sygnał w ostatnim incydencie?</p></td><td></td></tr><tr><td><p>Czy kot miał realną możliwość odejścia?</p></td><td></td></tr><tr><td><p>Czy procedura została rozbita na mikroetapy?</p></td><td></td></tr><tr><td><p>Czy uwzględniłem możliwość bólu lub dyskomfortu?</p></td><td></td></tr><tr><td><p>Czy każda sesja ma jasny sygnał końca?</p></td><td></td></tr><tr><td><p>Czy inni domownicy znają zasady planu?</p></td><td></td></tr><tr><td><p>Czy prowadzę zapis czasu do pierwszego sygnału?</p></td><td></td></tr><tr><td><p>Czy kończę sesję przed eskalacją, a nie po niej?</p></td><td></td></tr></tbody></table><p><strong>Karta 7 dni monitoringu</strong></p><table data-kind="data"><tbody><tr><td><p><strong>Dzień</strong></p></td><td><p><strong>Procedura</strong></p></td><td><p><strong>Pierwszy sygnał</strong></p></td><td><p><strong>Czas do sygnału</strong></p></td><td><p><strong>Jak zakończono</strong></p></td></tr><tr><td><p>1</p></td><td></td><td></td><td></td><td></td></tr><tr><td><p>2</p></td><td></td><td></td><td></td><td></td></tr><tr><td><p>3</p></td><td></td><td></td><td></td><td></td></tr><tr><td><p>4</p></td><td></td><td></td><td></td><td></td></tr><tr><td><p>5</p></td><td></td><td></td><td></td><td></td></tr><tr><td><p>6</p></td><td></td><td></td><td></td><td></td></tr><tr><td><p>7</p></td><td></td><td></td><td></td><td></td></tr></tbody></table><table data-kind="callout" data-label="Jak używać tej karty"><tbody><tr><td><p><strong>Jak używać tej karty</strong></p><p>Wystarczy 7 dni uczciwego notowania, aby zobaczyć, czy próg się przesuwa. Nawet niewielka poprawa w czasie do pierwszego sygnału jest cenna.</p></td></tr></tbody></table><p><strong>Lista awaryjna na dzień gorszego funkcjonowania kota</strong></p><table data-kind="callout" data-label="Dzień „na nie” nie jest porażką"><tbody><tr><td><p><strong>Dzień „na nie” nie jest porażką</strong></p><ul><li>odwołaj trudniejszy etap i wróć do kroku zerowego</li><li>skróć sesję o połowę albo całkowicie ją pomiń</li><li>zadbaj o ciszę, odpoczynek i nie łącz procedury z innymi stresorami</li><li>zapisz, co mogło obniżyć próg kota tego dnia</li><li>wróć do planu dopiero wtedy, gdy ciało kota znów jest miękkie i przewidywalne</li></ul></td></tr></tbody></table><p><strong>Kiedy ten materiał zwykle wystarcza</strong></p><p>• zwykle wystarcza, jeśli problem dotyczy procedur domowych i da się go rozłożyć na mikrokroki bez silnego przymusu</p><p>• po 10–14 dniach kot lepiej toleruje krótkie, przewidywalne sesje i wraca do równowagi szybciej niż wcześniej</p><p>• nie ma wyraźnego bólu, gwałtownej eskalacji ani potrzeby natychmiastowego wykonania zabiegu za wszelką cenę</p><p>Jeśli widzisz, że problem dotyczy także codziennego głaskania i kontaktu poza procedurami, wróć do PDF-u „Kot gryzie przy głaskaniu?”. Jeśli zabieg jest pilny albo kot reaguje coraz wcześniej i gwałtowniej, konsultacja zwykle oszczędza najwięcej stresu.</p><p><strong>Co dalej?</strong></p><table data-kind="callout" data-label="Routing do kolejnych kroków"><tbody><tr><td><p><strong>Routing do kolejnych kroków</strong></p><ul><li>jeśli problem wchodzi też w zwykłe głaskanie i nie wiesz jeszcze, gdzie leży próg — wróć do PDF-u „Kot gryzie przy głaskaniu?”</li><li>jeśli obrona przy procedurach nasila się po zmianach w domu, konflikcie albo ogólnym przeciążeniu — wróć do materiałów o napięciu i do PDF-u „Kot chowa się po zmianach”</li><li>jeśli oprócz dotyku pojawia się problem kuwetowy, spadek apetytu, ból przy ruchu albo nagła drażliwość — rozważ ścieżkę kuwetową lub konsultację weterynaryjną</li><li>jeśli po 10–14 dniach mikrokroków nie widać nawet niewielkiej poprawy — przejdź do konsultacji 15 min</li></ul></td></tr></tbody></table>
+</section>
+
+<section class="footer">
+  <h2 class="footer-title">Co dalej, jeśli to nie wystarczy</h2>
+  <p class="footer-lead">
+    Ten przewodnik ma pomóc uporządkować pierwszy krok. Jeśli temat wraca, miesza kilka wątków albo
+    potrzebujesz kogoś kto zobaczy Twoją konkretną sytuację — rozmowa zwykle skraca drogę.
+  </p>
+
+  <div class="services">
+    <div class="service">
+      <div class="service-price">Kwadrans · 69 zł</div>
+      <div class="service-name">Kwadrans z behawiorystą</div>
+      <p class="service-copy">15 minut rozmowy audio. Najprostszy start przy jednym pytaniu, niepewności albo pierwszym uporządkowaniu tematu.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=szybka-konsultacja-15-min</div>
+    </div>
+
+    <div class="service">
+      <div class="service-price">Dwa kwadranse · 169 zł</div>
+      <div class="service-name">Dwa kwadranse</div>
+      <p class="service-copy">30 minut online, kiedy 15 minut to za mało, temat ma kilka wątków albo chcesz spokojniej przejść przez sytuację.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=konsultacja-30-min</div>
+    </div>
+
+    <div class="service">
+      <div class="service-price">Pełna konsultacja · 470 zł</div>
+      <div class="service-name">Pełna konsultacja behawioralna</div>
+      <p class="service-copy">60 minut rozmowy, diagnoza, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp. Dla spraw złożonych, przewlekłych albo wielowątkowych.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=konsultacja-behawioralna-online</div>
+    </div>
+  </div>
+
+  <div class="footer-contact">
+    <div>
+      <strong>Kontakt</strong><br>
+      <a href="mailto:kontakt@regulskibehawiorysta.pl">kontakt@regulskibehawiorysta.pl</a>
+    </div>
+    <div>
+      <strong>Strona</strong><br>
+      <a href="https://regulskibehawiorysta.pl">regulskibehawiorysta.pl</a>
+    </div>
+    <div>
+      <strong>Instagram</strong><br>
+      @regulskibehawiorysta
+    </div>
+  </div>
+
+  <div class="footer-fine">
+    © Krzysztof Regulski · Wszystkie prawa zastrzeżone. Materiał wyłącznie do użytku własnego, bez prawa dalszej dystrybucji i odsprzedaży.
+  </div>
+</section>
+
+</body>
+</html>

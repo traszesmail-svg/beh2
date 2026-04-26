@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Pies zostaje sam i wpada w panikę? · Regulski | Terapia behawioralna</title>
+<style>/* PDF guide stylesheet — renders on A4 via Playwright page.pdf() */
+
+@page {
+  size: A4;
+  margin: 22mm 18mm 22mm 18mm;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.55;
+  color: #1f1a17;
+  background: #fdfbf7;
+}
+
+/* Cover page */
+.cover {
+  page: cover;
+  page-break-after: always;
+  min-height: 247mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 4mm 0;
+}
+
+.cover-brand {
+  font-size: 9pt;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8b6f5a;
+  font-weight: 600;
+}
+
+.cover-tag {
+  display: inline-block;
+  font-size: 9pt;
+  color: #5e4a3c;
+  background: #f0e5d6;
+  padding: 3mm 5mm;
+  border-radius: 2mm;
+  margin-bottom: 6mm;
+}
+
+.cover-title {
+  font-size: 32pt;
+  line-height: 1.1;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 0 0 6mm 0;
+  letter-spacing: -0.01em;
+}
+
+.cover-subtitle {
+  font-size: 14pt;
+  line-height: 1.35;
+  color: #5e4a3c;
+  font-weight: 500;
+  margin: 0 0 10mm 0;
+}
+
+.cover-lead {
+  font-size: 11pt;
+  line-height: 1.6;
+  color: #3f332a;
+  max-width: 140mm;
+}
+
+.cover-bullets {
+  margin-top: 8mm;
+  padding: 0;
+  list-style: none;
+}
+
+.cover-bullets li {
+  padding: 2mm 0 2mm 6mm;
+  position: relative;
+  font-size: 10.5pt;
+  color: #3f332a;
+}
+
+.cover-bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 5mm;
+  width: 3mm;
+  height: 0.7mm;
+  background: #c9a37a;
+}
+
+.cover-meta {
+  font-size: 9pt;
+  color: #8b6f5a;
+  border-top: 0.3mm solid #e5d8c6;
+  padding-top: 4mm;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6mm;
+}
+.cover-meta > div { min-width: 0; word-break: break-word; }
+
+.cover-meta strong { color: #1f1a17; }
+
+.cover-disclaimer {
+  margin-top: 6mm;
+  font-size: 9pt;
+  font-style: italic;
+  color: #8b6f5a;
+  border-left: 0.5mm solid #c9a37a;
+  padding: 2mm 0 2mm 4mm;
+}
+
+/* Body typography */
+.body h1 {
+  font-size: 18pt;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 10mm 0 4mm 0;
+  padding-bottom: 2mm;
+  border-bottom: 0.3mm solid #e5d8c6;
+}
+
+.body h2 {
+  font-size: 14pt;
+  line-height: 1.25;
+  font-weight: 700;
+  color: #3f332a;
+  margin: 8mm 0 3mm 0;
+}
+
+.body h3 {
+  font-size: 12pt;
+  font-weight: 600;
+  color: #3f332a;
+  margin: 6mm 0 2mm 0;
+}
+
+.body p {
+  margin: 0 0 3mm 0;
+  text-align: justify;
+  hyphens: auto;
+}
+
+.body ul, .body ol {
+  margin: 0 0 4mm 0;
+  padding-left: 6mm;
+}
+
+.body li {
+  margin: 1mm 0;
+}
+
+.body strong { color: #1f1a17; }
+
+.body em { color: #5e4a3c; }
+
+/* Callout boxes (from data-kind="callout") */
+.body table[data-kind="callout"] {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4mm 0;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="callout"] td {
+  padding: 4mm 5mm;
+  background: #faf1e3;
+  border-left: 1mm solid #c9a37a;
+  border-radius: 0 1.5mm 1.5mm 0;
+}
+
+.body table[data-kind="callout"] p { margin: 0 0 2mm 0; }
+.body table[data-kind="callout"] p:last-child { margin-bottom: 0; }
+.body table[data-kind="callout"] p strong:first-child {
+  display: block;
+  font-size: 11pt;
+  margin-bottom: 1mm;
+  color: #1f1a17;
+}
+
+/* Callout stack (vertical list of callouts in one table) */
+.body table[data-kind="callout-stack"] {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 2mm;
+  margin: 4mm 0;
+}
+
+.body table[data-kind="callout-stack"] td {
+  padding: 3.5mm 5mm;
+  background: #faf1e3;
+  border-left: 1mm solid #c9a37a;
+}
+
+/* Grid boxes (single row, multiple cells — feature grid) */
+.body table[data-kind="grid"] {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 2mm 0;
+  margin: 4mm 0;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="grid"] td {
+  padding: 3mm 4mm;
+  background: #f5ece0;
+  border-radius: 1.5mm;
+  vertical-align: top;
+  width: auto;
+}
+
+.body table[data-kind="grid"] p { margin: 0 0 1.5mm 0; font-size: 9.5pt; }
+.body table[data-kind="grid"] strong { display: block; margin-bottom: 1mm; }
+
+/* Data tables (multi-row comparison) */
+.body table[data-kind="data"] {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4mm 0;
+  font-size: 9.5pt;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="data"] th,
+.body table[data-kind="data"] td {
+  border: 0.2mm solid #e5d8c6;
+  padding: 2mm 3mm;
+  vertical-align: top;
+  text-align: left;
+}
+
+.body table[data-kind="data"] tr:first-child td,
+.body table[data-kind="data"] th {
+  background: #f5ece0;
+  font-weight: 600;
+  color: #1f1a17;
+}
+
+.body table[data-kind="data"] tr:nth-child(even) td {
+  background: #fcf8f1;
+}
+
+/* Footer section — CTA routing to services */
+.footer {
+  page-break-before: always;
+  padding: 2mm 0;
+}
+
+.footer-title {
+  font-size: 18pt;
+  font-weight: 700;
+  margin: 0 0 4mm 0;
+  color: #1f1a17;
+}
+
+.footer-lead {
+  color: #3f332a;
+  margin-bottom: 6mm;
+  max-width: 150mm;
+}
+
+.services {
+  display: flex;
+  flex-direction: column;
+  gap: 3mm;
+  margin-bottom: 8mm;
+}
+
+.service {
+  padding: 4mm 5mm;
+  background: #f5ece0;
+  border-left: 1mm solid #c9a37a;
+  border-radius: 0 2mm 2mm 0;
+  page-break-inside: avoid;
+}
+
+.service-price {
+  font-size: 9pt;
+  color: #8b6f5a;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.service-name {
+  font-size: 13pt;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 1mm 0;
+}
+
+.service-copy {
+  font-size: 10pt;
+  color: #3f332a;
+  margin: 0 0 2mm 0;
+}
+
+.service-url {
+  font-size: 9pt;
+  color: #8b6f5a;
+}
+
+.footer-contact {
+  border-top: 0.3mm solid #e5d8c6;
+  padding-top: 4mm;
+  font-size: 9.5pt;
+  color: #3f332a;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6mm;
+}
+.footer-contact > div { min-width: 0; word-break: break-word; }
+
+.footer-contact a { color: #5e4a3c; text-decoration: none; }
+
+.footer-fine {
+  margin-top: 4mm;
+  font-size: 8.5pt;
+  color: #8b6f5a;
+  font-style: italic;
+}
+
+/* Category accent colors: cat / dog / puppy — tinted cover */
+body[data-category="cat"] .cover-tag { background: #ecdad3; color: #6b463a; }
+body[data-category="cat"] .cover-bullets li::before { background: #b97865; }
+body[data-category="cat"] .body table[data-kind="callout"] td { background: #f8eae5; border-left-color: #b97865; }
+body[data-category="cat"] .body table[data-kind="callout-stack"] td { background: #f8eae5; border-left-color: #b97865; }
+body[data-category="cat"] .body table[data-kind="grid"] td { background: #f8eae5; }
+body[data-category="cat"] .body table[data-kind="data"] tr:first-child td { background: #f8eae5; }
+body[data-category="cat"] .service { background: #f8eae5; border-left-color: #b97865; }
+
+body[data-category="dog"] .cover-tag { background: #e9e2ce; color: #5c4a2e; }
+body[data-category="dog"] .cover-bullets li::before { background: #997947; }
+body[data-category="dog"] .body table[data-kind="callout"] td { background: #f4ecd7; border-left-color: #997947; }
+body[data-category="dog"] .body table[data-kind="callout-stack"] td { background: #f4ecd7; border-left-color: #997947; }
+body[data-category="dog"] .body table[data-kind="grid"] td { background: #f4ecd7; }
+body[data-category="dog"] .body table[data-kind="data"] tr:first-child td { background: #f4ecd7; }
+body[data-category="dog"] .service { background: #f4ecd7; border-left-color: #997947; }
+
+body[data-category="puppy"] .cover-tag { background: #e4ead3; color: #4b5730; }
+body[data-category="puppy"] .cover-bullets li::before { background: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="callout"] td { background: #edf2dd; border-left-color: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="callout-stack"] td { background: #edf2dd; border-left-color: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="grid"] td { background: #edf2dd; }
+body[data-category="puppy"] .body table[data-kind="data"] tr:first-child td { background: #edf2dd; }
+body[data-category="puppy"] .service { background: #edf2dd; border-left-color: #7a8d4f; }
+</style>
+</head>
+<body data-category="dog">
+
+<section class="cover">
+  <div>
+    <div class="cover-brand">Regulski · Terapia behawioralna</div>
+    <div style="margin: 12mm 0 0 0;">
+      <div class="cover-tag">Psy · przewodnik</div>
+      <h1 class="cover-title">Pies zostaje sam i wpada w panikę?</h1>
+      <p class="cover-subtitle">Jak odróżnić separację od frustracji, protestu i chaosu po wyjściu — i od czego zacząć</p>
+    </div>
+    <p class="cover-lead"></p>
+    <ul class="cover-bullets">
+      
+    </ul>
+  </div>
+  <div>
+    <div class="cover-disclaimer">Materiał edukacyjny. Nie zastępuje badania lekarsko-weterynaryjnego ani indywidualnej konsultacji behawioralnej.</div>
+    <div class="cover-meta">
+      <div><strong>Format</strong><br>PDF A4, druk domowy</div>
+      <div><strong>Czytanie</strong><br>5 min</div>
+      <div><strong>Wydano</strong><br>25 kwietnia 2026</div>
+      <div><strong>Autor</strong><br>Krzysztof Regulski</div>
+    </div>
+  </div>
+</section>
+
+<section class="body">
+<table data-kind="callout" data-label="Dla kogo jest ten materiał?"><tbody><tr><td><p><strong>Dla kogo jest ten materiał?</strong></p><p>Dla opiekuna psa, który podejrzewa, że problem z zostawaniem samemu to nie tylko nuda albo pojedynczy protest, lecz realna panika, frustracja separacyjna albo poważna trudność z regulacją po wyjściu człowieka.</p></td></tr></tbody></table><table data-kind="callout" data-label="Co znajdziesz w środku"><tbody><tr><td><p><strong>Co znajdziesz w środku</strong></p><p>Różnicowanie paniki separacyjnej, frustracji, protestu i przeciążenia, wskazówki do nagrania wideo, plan pierwszych 72 godzin, plan 14 dni oraz routing do dalszych kroków.</p></td></tr></tbody></table><table data-kind="callout" data-label="Najkrócej"><tbody><tr><td><p><strong>Najkrócej</strong></p><p>Nie każdy pies, który szczeka po wyjściu człowieka, ma lęk separacyjny. Ale jeśli po wyjściu szybko traci zdolność do uspokojenia się, potrzebuje ostrożnej, dobrze rozpoznanej pomocy — nie testowania ponad próg.</p></td></tr></tbody></table><table data-kind="data"><tbody><tr><td><p><strong>Scenariusz</strong></p></td><td><p><strong>Co częściej widać</strong></p></td><td><p><strong>Co podpowiada nagranie</strong></p></td></tr><tr><td><p>panika separacyjna</p></td><td><p>silny chaos, wycie, drapanie, próby ucieczki</p></td><td><p>pies szybko się rozpada i nie wraca do równowagi</p></td></tr><tr><td><p>frustracja separacyjna</p></td><td><p>pobudzenie i protest po wyjściu</p></td><td><p>pies może okresowo się regulować, ale mocno reaguje na brak dostępu do człowieka</p></td></tr><tr><td><p>wzorzec protestu / nauczony</p></td><td><p>szczekanie lub pobudzenie w określonych momentach</p></td><td><p>po chwili pies bywa w stanie wrócić do funkcjonowania</p></td></tr><tr><td><p>przeciążenie / zdrowie</p></td><td><p>obraz mieszany i niestabilny</p></td><td><p>nagranie pokazuje szerszy problem niż sama samotność</p></td></tr></tbody></table><table data-kind="data"><tbody><tr><td><p><strong>Na nagraniu zwróć uwagę na</strong></p></td><td><p><strong>Dlaczego to ważne</strong></p></td><td><p><strong>Co robić</strong></p></td></tr><tr><td><p>czas do pierwszej wokalizacji</p></td><td><p>pokazuje szybkość eskalacji</p></td><td><p>nagrywać początek rozłąki</p></td></tr><tr><td><p>czy pies umie odpocząć</p></td><td><p>mówi o zdolności do samoregulacji</p></td><td><p>nie zgadywać bez wideo</p></td></tr><tr><td><p>dyszenie, ślinienie, krążenie</p></td><td><p>mogą wskazywać wysokie przeciążenie</p></td><td><p>rozważyć konsultację szybciej</p></td></tr></tbody></table><table data-kind="data"><tbody><tr><td><p><strong>Pierwsze 72 godziny</strong></p></td><td><p><strong>Plan 14 dni</strong></p></td><td><p><strong>Kiedy szukać pomocy</strong></p></td></tr><tr><td><p>ograniczenie samotności, zebranie nagrań, przerwanie spirali paniki, uproszczenie dnia</p></td><td><p>małe kroki, spokojne rytuały, odbudowa przewidywalności, praca poniżej progu</p></td><td><p>silna panika, niszczenie drzwi/okien, brak snu, autoeskalacja, obraz mieszany lub podejrzenie bólu</p></td></tr></tbody></table><h1>1. Kiedy „nie lubi zostawać sam” przestaje być zwykłym dyskomfortem</h1><p>Wiele psów woli obecność człowieka od samotności i reaguje na wyjście chwilowym pobudzeniem. Problem zaczyna się wtedy, gdy po wyjściu opiekuna pies wpada w stan, którego nie potrafi sam wyregulować.</p><p>Prawdziwa panika nie wygląda jak złośliwość. To stan przeciążenia układu nerwowego, w którym pies może szczekać, wyć, drapać drzwi, dyszeć, krążyć, niszczyć albo próbować wydostać się z mieszkania.</p><h1>2. Dlaczego trzeba odróżnić panikę od protestu, frustracji i nudy</h1><p>Nie każde szczekanie po wyjściu człowieka oznacza lęk separacyjny. Czasem problemem jest frustracja, brak przygotowania do samotności, chaos dnia albo wzorzec zachowania, który się utrwalił.</p><p>Dobre rozpoznanie jest kluczowe, bo plan pracy dla psa w panice wygląda inaczej niż dla psa, który protestuje chwilę i potem wraca do równowagi.</p><h1>3. Cztery najczęstsze ścieżki problemu</h1><p>Najczęściej trzeba różnicować: panikę separacyjną, frustrację separacyjną, protest / wzorzec nauczony oraz szerszy problem przeciążenia lub zdrowia.</p><p>U części psów mechanizmy nakładają się na siebie, dlatego nie warto opierać się tylko na jednym objawie.</p><h1>4. Jak wygląda panika separacyjna w praktyce</h1><p>Pies w panice często szybko traci zdolność do uspokojenia się po wyjściu człowieka. Widać gwałtowne dyszenie, wokalizację, próbę podążania za człowiekiem, drapanie drzwi i wyraźny chaos ruchowy.</p><p>Charakterystyczne jest też to, że nawet gdy środowisko jest ciche i nie dzieje się nic dodatkowego, pies nadal nie odzyskuje równowagi.</p><h1>5. Frustracja separacyjna i wzorzec protestu</h1><p>U części psów problem ma bardziej charakter frustracji: pies nie chce, żeby człowiek odszedł, protestuje, ale nie zawsze wpada w pełny rozpad regulacji.</p><p>W innych przypadkach zachowanie utrwala się dlatego, że przez długi czas po wyjściu coś się wydarzało: szybki powrót człowieka, mówienie przez drzwi, intensywne rytuały wyjścia i powrotu.</p><h1>6. Co nagranie wideo mówi więcej niż zniszczone rzeczy</h1><p>W ścieżce samotności nagranie jest obowiązkowe. Bez wideo łatwo pomylić panikę, frustrację, chwilowy protest i zwykłe przemieszczanie się po domu.</p><p>Nagrywaj pierwsze 30–60 minut samotności. Najcenniejsze są pierwsze minuty po wyjściu, bo to wtedy najłatwiej widać, jak szybko pies traci lub odzyskuje równowagę.</p><h1>7. Na co patrzeć na nagraniu</h1><p>Zwróć uwagę na czas do pierwszej wokalizacji, dyszenie, krążenie, drapanie drzwi, patrzenie w jedno miejsce, próby jedzenia, momenty zatrzymania oraz to, czy pies choć na chwilę realnie odpoczywa.</p><p>Bardzo ważne jest też, czy pies umie wrócić do równowagi bez pomocy człowieka.</p><h1>8. Czynniki, które często dokręcają problem</h1><p>Silna więź bez treningu samotności, zbyt duże przeciążenie dnia, brak snu, trudne spacery, nieregularny rytm, gwałtowne rytuały wyjścia i nagłe znikanie człowieka często pogarszają obraz.</p><p>U części psów problem nasila się także po zmianie miejsca zamieszkania, po chorobie, po długim okresie pracy z domu albo po serii nieudanych, zbyt długich zostawień.</p><h1>9. Kiedy trzeba myśleć o zdrowiu i bólu</h1><p>Ból, problemy żołądkowo-jelitowe, świąd, zaburzenia snu, dyskomfort ortopedyczny i pogorszenie samopoczucia mogą obniżać tolerancję samotności.</p><p>Jeśli problem pojawił się nagle albo bardzo się nasilił, zdrowie trzeba brać pod uwagę od początku.</p><h1>10. Pierwsze 72 godziny: przerwać spiralę niepowodzeń</h1><p>Przez pierwsze trzy dni celem nie jest ćwiczenie długiej samotności. Priorytetem jest zatrzymanie codziennych epizodów paniki i zebranie danych z nagrania.</p><p>Jeśli to możliwe, ogranicz zostawianie psa samego do minimum, skróć rozłąki, uprość dzień psa i nie testuj go ponad możliwości.</p><h1>11. Plan 14 dni: małe kroki i odbudowa przewidywalności</h1><p>W planie 14 dni liczy się regularność, krótkie rozłąki możliwe do udźwignięcia, spokojne rytuały wyjścia i powrotu oraz odciążenie całego dnia psa.</p><p>Nie chodzi o pokaz siły ani ignorowanie paniki. Chodzi o pracę na poziomie, na którym pies w ogóle ma szansę uczyć się bezpieczeństwa.</p><h1>12. Najczęstsze błędy opiekuna</h1><p>Zostawianie psa „żeby się przyzwyczaił”, wydłużanie rozłąki mimo paniki, brak nagrania, mieszanie kilku metod naraz i karanie psa po powrocie do domu.</p><h1>13. Kiedy ten materiał zwykle wystarcza</h1><p>Gdy problem jest jeszcze umiarkowany, pies ma chwile realnego powrotu do równowagi, a opiekun może przez 7–14 dni ograniczyć zostawianie i pracować na bardzo małych krokach.</p><p>Gdy nagranie nie pokazuje pełnego rozpadu regulacji, a po zmianach środowiska i rytmu dnia widać wyraźny trend poprawy.</p><h1>14. Kiedy lepsza będzie konsultacja</h1><p>Gdy pies wpada w wyraźną panikę już w pierwszych minutach, gdy niszczy drzwi lub okna, gdy pojawia się autoeskalacja, ślinienie, długie wycie i brak snu podczas samotności.</p><p>Konsultacja jest też lepsza wtedy, gdy problem trwa długo, szybko się nasilił albo łączy się z trudnym spacerem, wysokim pobudzeniem lub bólem.</p><h1>15. Co dalej / routing</h1><p>• Jeśli dopiero rozpoznajesz, z czego wynika niszczenie w domu: wróć do „Pies niszczy w domu?”.</p><p>• Jeśli pies szerzej się nakręca i trudno mu wracać do równowagi także poza samotnością: przejdź do „Czy Twój pies naprawdę potrzebuje więcej ruchu?” albo „Pogoń, demolka i brak hamulców?”.</p><p>• Jeśli obraz jest ciężki lub niejasny: wybierz konsultację 15 min.</p>
+</section>
+
+<section class="footer">
+  <h2 class="footer-title">Co dalej, jeśli to nie wystarczy</h2>
+  <p class="footer-lead">
+    Ten przewodnik ma pomóc uporządkować pierwszy krok. Jeśli temat wraca, miesza kilka wątków albo
+    potrzebujesz kogoś kto zobaczy Twoją konkretną sytuację — rozmowa zwykle skraca drogę.
+  </p>
+
+  <div class="services">
+    <div class="service">
+      <div class="service-price">Kwadrans · 69 zł</div>
+      <div class="service-name">Kwadrans z behawiorystą</div>
+      <p class="service-copy">15 minut rozmowy audio. Najprostszy start przy jednym pytaniu, niepewności albo pierwszym uporządkowaniu tematu.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=szybka-konsultacja-15-min</div>
+    </div>
+
+    <div class="service">
+      <div class="service-price">Dwa kwadranse · 169 zł</div>
+      <div class="service-name">Dwa kwadranse</div>
+      <p class="service-copy">30 minut online, kiedy 15 minut to za mało, temat ma kilka wątków albo chcesz spokojniej przejść przez sytuację.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=konsultacja-30-min</div>
+    </div>
+
+    <div class="service">
+      <div class="service-price">Pełna konsultacja · 470 zł</div>
+      <div class="service-name">Pełna konsultacja behawioralna</div>
+      <p class="service-copy">60 minut rozmowy, diagnoza, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp. Dla spraw złożonych, przewlekłych albo wielowątkowych.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=konsultacja-behawioralna-online</div>
+    </div>
+  </div>
+
+  <div class="footer-contact">
+    <div>
+      <strong>Kontakt</strong><br>
+      <a href="mailto:kontakt@regulskibehawiorysta.pl">kontakt@regulskibehawiorysta.pl</a>
+    </div>
+    <div>
+      <strong>Strona</strong><br>
+      <a href="https://regulskibehawiorysta.pl">regulskibehawiorysta.pl</a>
+    </div>
+    <div>
+      <strong>Instagram</strong><br>
+      @regulskibehawiorysta
+    </div>
+  </div>
+
+  <div class="footer-fine">
+    © Krzysztof Regulski · Wszystkie prawa zastrzeżone. Materiał wyłącznie do użytku własnego, bez prawa dalszej dystrybucji i odsprzedaży.
+  </div>
+</section>
+
+</body>
+</html>

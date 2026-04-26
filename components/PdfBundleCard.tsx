@@ -43,7 +43,16 @@ export function PdfBundleCard({ bundle }: PdfBundleCardProps) {
         <Link href={bundle.routePath} prefetch={false} className="button button-ghost">
           Zobacz pakiet
         </Link>
-        <Link href={buildPdfOrderHref({ bundleSlug: bundle.slug })} prefetch={false} className="button button-primary">
+        <Link
+          href={buildPdfOrderHref({ bundleSlug: bundle.slug })}
+          prefetch={false}
+          className="button button-primary"
+          data-analytics-event="pdf_order_click"
+          data-analytics-location="pdf-bundle-card"
+          data-analytics-cta-label="Zamow pakiet"
+          data-analytics-item-type="bundle"
+          data-analytics-item-slug={bundle.slug}
+        >
           Zamów pakiet
         </Link>
       </div>

@@ -1,0 +1,21 @@
+Użyj tego PDF-u jako pierwszego, darmowego wejścia w psiej ofercie PDF.
+
+CEL
+- Wysoko na stronie pokaż go jako darmowy start do lejka.
+- Nie sprzedawaj go jak zwykłego płatnego PDF-u.
+- Ma prowadzić dalej do właściwych ścieżek: szczeniak, spacer / smycz, pobudzenie / pogoń albo konsultacja.
+
+W KARCIE PRODUKTU POKAŻ
+- że ten materiał porządkuje problem pobudzenia i regeneracji,
+- że obala mit „więcej ruchu zawsze pomaga”,
+- że zawiera plan 72 godzin i plan 14 dni,
+- że pomaga zdecydować, jaki powinien być następny krok.
+
+CTA
+- Pobierz darmowy PDF
+
+ROUTING PO POBRANIU
+- jeśli problem dotyczy szczeniaka: kieruj do „Szczeniak gryzie i skacze?” albo „Szczeniak nie umie się wyciszyć?”
+- jeśli problem wychodzi głównie na spacerze: kieruj do „Trudny spacer” albo „Dlaczego pies głupieje na smyczy?”
+- jeśli pies goni, demoluje i nie ma hamulców: kieruj do „Pogoń, demolka i brak hamulców?”
+- jeśli obraz jest mieszany: kieruj do konsultacji 15 min

@@ -1,11 +1,10 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
-import { PdfBundleCard } from '@/components/PdfBundleCard'
-import { PdfGuideCard } from '@/components/PdfGuideCard'
 import { NotatnikFinalCta, NotatnikPageShell, NotatnikSectionHead, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { buildBookHref } from '@/lib/booking-routing'
 import { getLeadMagnetBySlug } from '@/lib/growth-layer'
-import { listPdfBundles, listPdfGuides } from '@/lib/pdf-guides'
+import { listMaterialyBundles, listMaterialyGuides } from '@/lib/materialy-catalog'
 import { buildMarketingMetadata } from '@/lib/seo'
 
 export const metadata: Metadata = buildMarketingMetadata({
@@ -57,34 +56,42 @@ const books = [
   {
     title: 'The Other End of the Leash',
     author: 'Patricia McConnell',
+    price: 'ok. 55 zl',
+    cover: '/branding/books/other-end-of-the-leash.jpg',
     description:
       'Dobra ksiazka na start, jesli chcesz lepiej czytac relacje czlowiek-pies i zobaczyc, jak wiele nieporozumien bierze sie z naszego sposobu komunikacji.',
     href: 'https://www.randomhousebooks.com/books/110768',
-    linkLabel: 'Zobacz ksiazke',
+    linkLabel: 'Znajdz ksiazke',
   },
   {
     title: 'The Power of Positive Dog Training',
     author: 'Pat Miller',
+    price: 'ok. 60 zl',
+    cover: '/branding/books/power-of-positive-dog-training.jpg',
     description:
       'Porzadkuje podstawy pracy opartej na wzmocnieniach. Ma sens szczegolnie wtedy, gdy chcesz przestac skakac miedzy przypadkowymi poradami treningowymi.',
     href: 'https://books.apple.com/us/book/the-power-of-positive-dog-training/id6757761816',
-    linkLabel: 'Zobacz wydanie',
+    linkLabel: 'Znajdz ksiazke',
   },
   {
     title: "Don't Shoot the Dog!",
     author: 'Karen Pryor',
+    price: 'ok. 45 zl',
+    cover: '/branding/books/dont-shoot-the-dog.jpg',
     description:
       'To bardziej ksiazka o mechanice uczenia niz o jednym gatunku. Pomaga zrozumiec, dlaczego nagradzanie i czytelne kryteria zwykle daja lepszy efekt niz presja.',
     href: 'https://www.penguinrandomhouse.com/books/177702/dont-shoot-the-dog-by-karen-pryor/',
-    linkLabel: 'Zobacz ksiazke',
+    linkLabel: 'Znajdz ksiazke',
   },
   {
     title: 'Cat Sense',
     author: 'John Bradshaw',
+    price: 'ok. 65 zl',
+    cover: '/branding/books/cat-sense.jpg',
     description:
       'Przydatna, kiedy chcesz lepiej rozumiec kocie potrzeby i codzienne napiecie, zamiast interpretowac zachowanie kota wylacznie jako upor albo zlosliwosc.',
-    href: 'https://en.wikipedia.org/wiki/Cat_Sense',
-    linkLabel: 'Zobacz opis',
+    href: 'https://www.penguinrandomhouse.com/books/222938/cat-sense-by-john-bradshaw/',
+    linkLabel: 'Znajdz ksiazke',
   },
 ] as const
 
@@ -121,22 +128,9 @@ const tools = [
   },
 ] as const
 
-const paidGuides = listPdfGuides().filter((guide) => guide.accessType === 'low-ticket')
-const pdfBundles = listPdfBundles()
-
-const paidGuideCounts = {
-  dog: paidGuides.filter((guide) => guide.category === 'dog').length,
-  cat: paidGuides.filter((guide) => guide.category === 'cat').length,
-  mixed: paidGuides.filter((guide) => guide.category === 'mixed').length,
-}
-
-const paidGuideCategorySummary = [
-  paidGuideCounts.dog > 0 ? `${paidGuideCounts.dog} dla psow` : null,
-  paidGuideCounts.cat > 0 ? `${paidGuideCounts.cat} dla kotow` : null,
-  paidGuideCounts.mixed > 0 ? `${paidGuideCounts.mixed} mieszane` : null,
-]
-  .filter((value): value is string => value !== null)
-  .join(', ')
+const allMaterialyGuides = listMaterialyGuides()
+const materialyBundles = listMaterialyBundles()
+const paidMaterialyCount = allMaterialyGuides.filter((g) => g.tier !== 'free').length
 
 const entryShelves = [
   {
@@ -147,18 +141,18 @@ const entryShelves = [
     cta: 'Zobacz od czego zaczac',
   },
   {
-    id: 'pdf-y',
-    label: `${paidGuides.length} PDF-ow i ${pdfBundles.length} pakiety`,
-    title: 'PDF-y i pakiety',
-    description: 'Platne materialy do konkretnego tematu albo szerszego obszaru pracy, bez skakania po kilku podstronach.',
-    cta: 'Przejdz do PDF-ow i pakietow',
-  },
-  {
     id: 'ksiazki',
     label: `${books.length} ksiazki i ${tools.length} przyborow`,
     title: 'Ksiazki i przybory',
     description: 'Rzeczy, do ktorych warto wrocic dopiero wtedy, gdy realnie wspieraja plan pracy i porzadkuja temat.',
     cta: 'Przejdz do rekomendacji',
+  },
+  {
+    id: 'pdfy-do-kupienia',
+    label: `${paidMaterialyCount} PDF-ow i ${materialyBundles.length} pakietow`,
+    title: 'PDF-y i pakiety',
+    description: 'Pojedyncze przewodniki od 19 zl i pakiety tematyczne 49 zl. Pelna lista i zamowienia w /materialy.',
+    cta: 'Przejdz do /materialy',
   },
 ] as const
 
@@ -241,10 +235,14 @@ export default function EssentialsPage() {
           </div>
         </div>
 
-        <div className="summary-card tree-backed-card">
-          <div className="section-eyebrow">Szybkie przejscie</div>
-          <h3>Jedna strona, trzy polki, mniej chaosu.</h3>
-          <p>Kazda sekcja ma jeden cel: skrocic droge od wejscia z menu do materialu, ktory realnie pasuje do Twojej sytuacji.</p>
+        <div className="notatnik-subhero-media">
+          <div className="notatnik-subhero-figure">
+            <Image src="/branding/topic-cards/puppy-hands.jpg" alt="Szczeniak trzymany w dloniach opiekuna" fill sizes="(max-width: 980px) 100vw, 40vw" priority />
+          </div>
+          <div className="notatnik-subhero-note">
+            <span>Materialy / rekomendacje</span>
+            <span>bezplatny start</span>
+          </div>
         </div>
       </section>
 
@@ -281,33 +279,27 @@ export default function EssentialsPage() {
         </div>
       </section>
 
-      <section id="pdf-y" style={{ background: 'var(--paper)' }}>
-        <NotatnikSectionHead index="III." kicker="PDF-y i pakiety" title="Platne materialy, gdy chcesz wejsc szerzej niz w jeden darmowy start." />
 
-        <div id="pdfy-do-kupienia">
-          <div className="section-eyebrow">PDF-y do kupienia</div>
-          <p className="offer-section-intro" style={{ marginTop: '8px', marginBottom: '24px' }}>
-            Masz tu {paidGuides.length} gotowych tematow: {paidGuideCategorySummary}. Kazdy poradnik prowadzi do osobnej strony z opisem, zakresem i
-            zamowieniem.
-          </p>
-          <div className="offer-grid">
-            {paidGuides.map((guide) => (
-              <PdfGuideCard key={guide.slug} guide={guide} compact />
-            ))}
-          </div>
-        </div>
-
-        <div id="pakiety-pdf" className="top-gap">
-          <div className="section-eyebrow">Pakiety PDF</div>
-          <p className="offer-section-intro" style={{ marginTop: '8px', marginBottom: '24px' }}>
-            Tu sa {pdfBundles.length} pakiety PDF zlozone z kilku poradnikow. To najkrotsza droga, gdy potrzebujesz juz ulozonej kolejnosci materialow do
-            jednego obszaru pracy.
-          </p>
-          <div className="offer-grid">
-            {pdfBundles.map((bundle) => (
-              <PdfBundleCard key={bundle.slug} bundle={bundle} />
-            ))}
-          </div>
+      <section id="pdfy-do-kupienia" style={{ background: 'var(--paper)' }}>
+        <NotatnikSectionHead
+          index="III."
+          kicker="PDF-y i pakiety"
+          title={`${paidMaterialyCount} przewodnikow i ${materialyBundles.length} pakietow w /materialy.`}
+        />
+        <p style={{ maxWidth: '720px', color: 'var(--ink-quiet)' }}>
+          Pojedyncze PDF-y od 19 zl, pakiety 49 zl, dwa darmowe lead magnety. Pelna lista, opisy i
+          zamowienia BLIK-iem znajdziesz na osobnej stronie.
+        </p>
+        <div className="notatnik-subhero-actions top-gap">
+          <Link href="/materialy" prefetch={false} className="notatnik-btn">
+            <span>Przejdz do /materialy</span>
+            <span className="notatnik-btn-arrow" aria-hidden="true">
+              &rarr;
+            </span>
+          </Link>
+          <Link href="/materialy/pobranie" prefetch={false} className="notatnik-btn notatnik-btn-ghost">
+            <span>Mam juz kod — pobierz</span>
+          </Link>
         </div>
       </section>
 
@@ -320,13 +312,17 @@ export default function EssentialsPage() {
             {books.map((book) => (
               <article key={book.title} className="notatnik-material-card">
                 <div className="notatnik-material-tag notatnik-mono">Ksiazka</div>
+                <div className="essentials-book-cover">
+                  <Image src={book.cover} alt={`Okładka: ${book.title}`} width={80} height={110} style={{ borderRadius: '4px', objectFit: 'cover' }} />
+                </div>
                 <h3>{book.title}</h3>
-                <p>
+                <p style={{ margin: 0 }}>
                   <strong>{book.author}</strong>
                 </p>
+                <p className="notatnik-mono" style={{ fontSize: '13px', margin: '2px 0 0' }}>{book.price}</p>
                 <p>{book.description}</p>
                 <a href={book.href} target="_blank" rel="noreferrer noopener">
-                  {book.linkLabel}
+                  {book.linkLabel} →
                 </a>
               </article>
             ))}

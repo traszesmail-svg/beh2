@@ -1,0 +1,19 @@
+Użyj tego PDF-u jako core produktu w ścieżce „spacer / smycz / reaktywność”.
+
+CEL
+- Sprzedawaj go jako pogłębienie po starterze „Trudny spacer”.
+- Ten materiał ma tłumaczyć, jak działa smycz, dystans, geometria spaceru i frustracja bariery.
+- Nie sprzedawaj go jako pierwszego, prostego filtra objawu. To rola PDF-u „Trudny spacer”.
+
+W KARCIE PRODUKTU POKAŻ
+- że pies może być spokojniejszy w domu, a mimo to mocno reagować na smyczy, bo zmienia się układ sytuacji,
+- że materiał rozdziela strach, frustrację bariery, pobudzenie i ból,
+- że zawiera plan 72 godzin, plan 14 dni i zasady pracy poniżej progu.
+
+CTA
+- Kup PDF
+
+ROUTING PO ZAKUPIE
+- jeśli użytkownik potrzebuje prostszego wejścia: kieruj do „Trudny spacer”
+- jeśli pies szerzej się nakręca i nie umie schodzić z pobudzenia: kieruj do „Czy Twój pies naprawdę potrzebuje więcej ruchu?” albo „Pogoń, demolka i brak hamulców?”
+- jeśli próg jest bardzo niski albo obraz niejasny: kieruj do konsultacji 15 min

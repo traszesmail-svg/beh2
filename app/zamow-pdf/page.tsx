@@ -6,14 +6,8 @@ import { PdfOrderForm } from '@/components/PdfOrderForm'
 import { Schema } from '@/components/schema'
 import { buildPdfOrderHref, getPdfBundleBySlug, getPdfGuideBySlug } from '@/lib/pdf-guides'
 import { getBreadcrumbJsonLd } from '@/lib/schema'
-import { buildMarketingMetadata } from '@/lib/seo'
+import { buildTechnicalMetadata } from '@/lib/seo'
 import { PUBLIC_OFFER_PAYMENT_EMAIL_STEP, PUBLIC_OFFER_PAYMENT_METHODS } from '@/lib/public-offer-copy'
-
-export const metadata: Metadata = buildMarketingMetadata({
-  title: 'Zamowienie PDF i pakietow',
-  path: '/zamow-pdf',
-  description: 'Formularz zamowienia poradnikow PDF i pakietow. Potwierdzenie oraz dalszy krok platnosci przychodza mailowo.',
-})
 
 export default function PdfOrderPage({
   searchParams,
@@ -109,4 +103,27 @@ export default function PdfOrderPage({
       </section>
     </NotatnikPageShell>
   )
+}
+
+export function generateMetadata({
+  searchParams,
+}: {
+  searchParams?: Record<string, string | string[] | undefined>
+}): Metadata {
+  const guideSlug = typeof searchParams?.guide === 'string' ? searchParams.guide : null
+  const bundleSlug = typeof searchParams?.bundle === 'string' ? searchParams.bundle : null
+  const guide = guideSlug ? getPdfGuideBySlug(guideSlug) : null
+  const bundle = bundleSlug ? getPdfBundleBySlug(bundleSlug) : null
+  const item = guide ?? bundle
+  const path = buildPdfOrderHref({ guideSlug, bundleSlug })
+
+  return buildTechnicalMetadata({
+    title: item ? `Zamowienie: ${item.title}` : 'Zamowienie PDF i pakietow',
+    path,
+    description: item
+      ? `Formularz zamowienia: ${item.title}. Potwierdzenie oraz dalszy krok platnosci przychodza mailowo.`
+      : 'Formularz zamowienia poradnikow PDF i pakietow. Potwierdzenie oraz dalszy krok platnosci przychodza mailowo.',
+    noIndex: true,
+    follow: true,
+  })
 }

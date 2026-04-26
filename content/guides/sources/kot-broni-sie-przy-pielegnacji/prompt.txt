@@ -1,0 +1,109 @@
+Pracujesz wyłącznie nad stroną:
+https://coapebehawiorysta.vercel.app
+
+Nie używaj żadnego starego deploya ani drugiej wersji strony.
+Kanoniczna wersja to tylko:
+https://coapebehawiorysta.vercel.app
+
+W katalogu roboczym masz paczkę wdrożeniową dla jednego PDF-u z lejka:
+- kot_broni_sie_przy_pielegnacji_albo_noszeniu_v2.pdf
+- kot_broni_sie_przy_pielegnacji_albo_noszeniu_v2.docx
+- spec_kot_broni_sie_przy_pielegnacji_albo_noszeniu_v2.md
+
+## CEL
+Wdrożyć tylko ten jeden produkt PDF zgodnie ze specyfikacją z pliku:
+- spec_kot_broni_sie_przy_pielegnacji_albo_noszeniu_v2.md
+
+To jest **core procedural / ścieżka dotyku i zabiegów**.
+
+## NAJWAŻNIEJSZE ZAŁOŻENIA
+1. Nowa nazwa produktu:
+   Kot broni się przy pielęgnacji albo noszeniu?
+2. Podtytuł / obietnica:
+   Jak rozpoznać ból, przeciążenie i lęk proceduralny — i krok po kroku odbudować spokojną zgodę kota na krótkie zabiegi
+3. Cena docelowa:
+   59 zł
+4. Produkt ma działać jako kolejny krok po PDF-ie `Kot gryzie przy głaskaniu?`.
+5. Ma kierować dalej do:
+   - wcześniejszego PDF-u objawowego o głaskaniu
+   - materiałów o napięciu i zmianach w domu
+   - ścieżki kuwetowej, jeśli problem nie dotyczy tylko procedur
+   - konsultacji 15 min
+
+## ZADANIA
+### 1. Asset PDF
+- znajdź aktualny asset / wpis odpowiadający temu produktowi
+- podmień lub dodaj nowy asset na podstawie pliku `kot_broni_sie_przy_pielegnacji_albo_noszeniu_v2.pdf`
+- jeśli system wymaga konkretnej lokalizacji public/assets/static, dopasuj go do istniejącej architektury repo
+- nie zmieniaj innych PDF-ów
+
+### 2. Dane produktu
+- zaktualizuj nazwę, opis, CTA, rolę produktu i cenę zgodnie z `spec_kot_broni_sie_przy_pielegnacji_albo_noszeniu_v2.md`
+- ustaw produkt jako **core procedural**
+- jeśli obecny system ma pole typu badge / tag / category / funnel / price / featured, użyj go konsekwentnie
+
+### 3. Karta na stronie
+- wdroż copy karty z pliku spec
+- CTA główne: `Zobacz PDF`
+- CTA pomocnicze: `Zobacz kolejny krok`
+- wyeksponuj wartość: 5 ścieżek problemu, sygnały przed obroną, plan 14 dni, mikroetapy i monitoring
+
+### 4. Strona produktu / sekcja produktu
+- wdroż H1, lead, blok wartości i blok „dla kogo” zgodnie ze spec
+- pokaż ten materiał jako core procedural, nie jako ogólny poradnik o dotyku
+- zachowaj ton: spokojny, premium, klinicznie uporządkowany
+
+### 5. Routing do kolejnych kroków
+- dodaj sekcję lub logiczny moduł `Co dalej?` zgodny ze spec
+- ma kierować do PDF-u `Kot gryzie przy głaskaniu?`, materiałów o napięciu, ścieżki kuwetowej i konsultacji
+- nie zmieniaj nazw innych produktów, jeśli nie jest to konieczne w tym kroku
+
+### 6. Spójność lejka
+- jeśli obecny układ PDF-ów jest płaski, oznacz ten produkt wyraźnie jako kolejny krok w ścieżce dotyku i zabiegów
+- nie rób redesignu całej biblioteki PDF
+- uporządkuj tylko tyle, ile trzeba, by ten jeden produkt miał właściwą rolę
+
+### 7. Nie ruszaj
+- cen innych PDF-ów
+- logiki innych produktów poza minimalnym routingiem do nich
+- głównego shellu strony, jeśli jest OK
+
+## WALIDACJA
+Po zmianach uruchom:
+- lint
+- typecheck
+- testy, jeśli są sensowne
+- build
+
+## RAPORT
+Zwróć raport w formacie:
+
+## Potwierdzone live
+- cytat
+- URL
+- status: potwierdzone / nie potwierdziłem
+
+## Decyzje wdrożeniowe
+- asset PDF
+- dane produktu
+- karta produktu
+- strona produktu
+- routing `Co dalej?`
+- rola w lejku
+
+## Naprawione
+- ID
+- problem
+- zmienione pliki
+- opis zmiany
+
+## Walidacja techniczna
+- lint
+- typecheck
+- testy
+- build
+
+## Finalny werdykt
+- czy produkt ma już właściwą rolę w lejku
+- czy karta i strona sprzedają jasno problem proceduralny
+- co zostało jeszcze do ręcznego QA

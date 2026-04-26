@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 import { NotatnikPageShell, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { PdfGuideCard } from '@/components/PdfGuideCard'
 import { PdfGuideCoverStack } from '@/components/PdfGuideCoverStack'
+import { Schema } from '@/components/schema'
 import { repairCopy } from '@/lib/copy'
 import {
   buildPdfOrderHref,
@@ -15,7 +16,8 @@ import {
   listPdfBundles,
   PDF_GUIDES_LISTING_ROUTE,
 } from '@/lib/pdf-guides'
-import { buildMarketingMetadata, buildTechnicalMetadata } from '@/lib/seo'
+import { getProductJsonLd } from '@/lib/schema'
+import { buildMarketingMetadata } from '@/lib/seo'
 
 type PdfBundleDetailPageProps = {
   params: {
@@ -42,11 +44,10 @@ export function generateMetadata({ params }: PdfBundleDetailPageProps): Metadata
     })
   }
 
-  return buildTechnicalMetadata({
+  return buildMarketingMetadata({
     title: `${repairCopy(bundle.title)} | Pakiet PDF`,
     path: bundle.routePath,
     description: repairCopy(bundle.promise),
-    noIndex: true,
   })
 }
 
@@ -68,6 +69,16 @@ export default function PdfBundleDetailPage({ params }: PdfBundleDetailPageProps
       footerPrimaryHref={orderHref}
       footerPrimaryLabel="Zamów pakiet"
     >
+      <Schema
+        data={getProductJsonLd({
+          name: repairCopy(bundle.title),
+          description: repairCopy(bundle.promise),
+          url: bundle.routePath,
+          price: getPdfPricingBadge(bundle.pricing),
+          image: bundle.guides[0] ? `/branding/pdf-covers/${bundle.guides[0].coverFileName}` : null,
+          category: 'Pakiet PDF',
+        })}
+      />
       <div className="container">
         <section className="two-col-section offer-detail-layout pdf-detail-layout">
           <div className="panel section-panel hero-surface offer-detail-content-panel pdf-detail-content-panel">

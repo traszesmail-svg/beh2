@@ -1,0 +1,106 @@
+Pracujesz wyłącznie nad stroną:
+https://coapebehawiorysta.vercel.app
+
+Nie używaj żadnego starego deploya ani drugiej wersji strony.
+Kanoniczna wersja to tylko:
+https://coapebehawiorysta.vercel.app
+
+W katalogu roboczym masz paczkę wdrożeniową dla jednego PDF-u z lejka:
+- miauczenie_o_swicie_v2.pdf
+- miauczenie_o_swicie_v2.docx
+- spec_miauczenie_o_swicie_v2.md
+
+## CEL
+Wdrożyć tylko ten jeden produkt PDF zgodnie ze specyfikacją z pliku:
+- spec_miauczenie_o_swicie_v2.md
+
+To jest **siódmy PDF w lejku** i ma pełnić rolę:
+- starter / core-lite PDF w ścieżce nocnej wokalizacji
+
+## NAJWAŻNIEJSZE ZAŁOŻENIA
+1. Nowa nazwa produktu:
+   Miauczenie o świcie
+2. Podtytuł / obietnica:
+   4 powody, przez które kot nakręca ten schemat — i jak przerwać go bez walki z kotem
+3. Cena docelowa:
+   39 zł
+4. Produkt ma działać jako objawowy PDF dla opiekuna, który mierzy się głównie z poranną wokalizacją.
+5. Ma kierować dalej do:
+   - szerszego PDF-u `Kot budzi dom po nocy?`
+   - startera o konflikcie między kotami i lead magnetu `Kot żyje w napięciu`
+   - ścieżki kuwetowej
+   - konsultacji 15 min
+
+## ZADANIA
+### 1. Asset PDF
+- znajdź aktualny asset / wpis odpowiadający temu produktowi
+- podmień lub dodaj nowy asset na podstawie pliku `miauczenie_o_swicie_v2.pdf`
+- jeśli system wymaga konkretnej lokalizacji public/assets/static, dopasuj go do istniejącej architektury repo
+- nie zmieniaj innych PDF-ów
+
+### 2. Dane produktu
+- zaktualizuj nazwę, opis, CTA, rolę produktu i cenę zgodnie z `spec_miauczenie_o_swicie_v2.md`
+- ustaw produkt jako **starter / core-lite PDF**
+- jeśli obecny system ma pole typu badge / tag / category / funnel / price / featured, użyj go konsekwentnie
+
+### 3. Karta na stronie
+- wdroż copy karty z pliku spec
+- CTA główne: `Zobacz PDF`
+- CTA pomocnicze: `Sprawdź ścieżkę nocnej wokalizacji`
+- wyeksponuj wartość: 4 przyczyny, obserwacja 7 dni, plan 14 dni, senior i czerwone flagi
+
+### 4. Strona produktu / sekcja produktu
+- wdroż H1, lead, blok wartości i blok `dla kogo` zgodnie ze spec
+- pokaż ten materiał jako objawowy PDF dla świtu, nie jako flagowca nocnej ścieżki
+- zachowaj ton: spokojny, premium, klinicznie uporządkowany
+
+### 5. Routing do kolejnych kroków
+- dodaj sekcję lub logiczny moduł `Co dalej?` zgodny ze spec
+- ma kierować do `Kot budzi dom po nocy?`, konfliktu, lead magnetu, ścieżki kuwetowej i konsultacji
+- nie zmieniaj nazw innych produktów, jeśli nie jest to konieczne w tym kroku
+
+### 6. Spójność lejka
+- jeśli obecny układ PDF-ów jest płaski, oznacz ten produkt wyraźnie jako starter / core-lite
+- nie rób redesignu całej biblioteki PDF
+- uporządkuj tylko tyle, ile trzeba, by ten jeden produkt miał właściwą rolę
+
+### 7. Nie ruszaj
+- cen innych PDF-ów
+- logiki innych produktów poza minimalnym routingiem do nich
+- głównego shellu strony, jeśli jest OK
+
+## WALIDACJA
+Po zmianach uruchom:
+- lint
+- typecheck
+- testy, jeśli są sensowne
+- build
+
+## RAPORT
+Zwróć raport w formacie:
+
+## Potwierdzone live
+- cytat
+- URL
+- status: potwierdzone / nie potwierdziłem
+
+## Decyzje wdrożeniowe
+- asset PDF
+- nazwa i opis produktu
+- rola w lejku
+- karta produktu
+- strona produktu / sekcja produktu
+- routing do kolejnych kroków
+
+## Zmienione pliki
+- lista plików
+
+## Walidacja techniczna
+- lint
+- typecheck
+- testy
+- build
+
+## Finalny werdykt
+- czy ten PDF ma już właściwą rolę starter / core-lite
+- czy routing do dalszych kroków jest spójny

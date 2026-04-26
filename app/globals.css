@@ -808,6 +808,26 @@ textarea::placeholder {
   color: rgba(31, 26, 23, 0.34);
 }
 
+#CookiebotWidget {
+  right: 16px !important;
+  bottom: 16px !important;
+  z-index: 40 !important;
+  transform: scale(0.86);
+  transform-origin: right bottom;
+}
+
+#CybotCookiebotDialog {
+  z-index: 60 !important;
+}
+
+@media (max-width: 680px) {
+  #CookiebotWidget {
+    right: 10px !important;
+    bottom: 78px !important;
+    transform: scale(0.78);
+  }
+}
+
 .page-wrap {
   min-height: 100vh;
   padding: 22px 0 56px;
@@ -2148,6 +2168,10 @@ h1 span {
 .card-grid {
   display: grid;
   gap: 16px;
+}
+
+.two-up {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .three-up {
@@ -6843,6 +6867,7 @@ select:focus-visible {
   .pdf-path-section-head,
   .pdf-path-section-footer,
   .real-case-grid,
+  .two-up,
   .three-up,
   .stats-grid,
   .summary-grid,
@@ -7123,6 +7148,7 @@ select:focus-visible {
   .home-process-grid,
   .home-starter-grid,
   .pdf-form,
+  .two-up,
   .three-up,
   .stats-grid,
   .summary-grid,
@@ -10597,6 +10623,20 @@ select:focus-visible {
   font-size: 13px;
   line-height: 1.55;
   text-wrap: pretty;
+}
+
+.contact-message-label-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.contact-message-count {
+  color: rgba(31, 26, 23, 0.42);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .contact-page #formularz input,

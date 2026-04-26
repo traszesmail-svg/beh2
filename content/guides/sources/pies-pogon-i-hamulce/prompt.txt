@@ -1,0 +1,19 @@
+Użyj tego PDF-u jako core produktu w ścieżce „pobudzenie / pogoń / brak wyhamowania”.
+
+CEL
+- Sprzedawaj go jako pogłębienie po darmowym wejściu „Czy Twój pies naprawdę potrzebuje więcej ruchu?”.
+- Ten materiał ma łączyć pogoń, demolkę i brak hamulców jednym językiem: przeciążenie, frustracja, brak regulacji i słaba regeneracja.
+- Nie sprzedawaj go jako prostego PDF-u o zmęczeniu psa. To produkt o jakości dnia i odzyskiwaniu marginesu regulacji.
+
+W KARCIE PRODUKTU POKAŻ
+- że problem nie zawsze oznacza niedobór ruchu,
+- że materiał tłumaczy, kiedy pogoń i demolka są objawem, a nie tylko zachowaniem,
+- że zawiera plan 72 godzin, plan 14 dni i jasne wskazanie, kiedy potrzebna jest konsultacja.
+
+CTA
+- Kup PDF
+
+ROUTING PO ZAKUPIE
+- jeśli użytkownik potrzebuje szerokiego wejścia: kieruj do „Czy Twój pies naprawdę potrzebuje więcej ruchu?”
+- jeśli problem najmocniej wychodzi na spacerze: kieruj do „Trudny spacer” albo „Dlaczego pies głupieje na smyczy?”
+- jeśli obraz jest mieszany albo postęp mały: kieruj do konsultacji 15 min

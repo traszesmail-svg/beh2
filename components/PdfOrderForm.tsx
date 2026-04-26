@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, type FormEvent } from 'react'
+import { trackAnalyticsEvent } from '@/lib/analytics'
 import { PUBLIC_OFFER_PAYMENT_METHODS } from '@/lib/public-offer-copy'
 
 type PdfOrderFormProps = {
@@ -83,6 +84,10 @@ export function PdfOrderForm({ itemType, itemSlug, itemTitle, itemPrice }: PdfOr
 
       setStatus('success')
       setFeedback(payload.message ?? `Dziekuje. Wyslalem potwierdzenie mailowe z dalszym krokiem platnosci: ${PUBLIC_OFFER_PAYMENT_METHODS}.`)
+      trackAnalyticsEvent('pdf_order_submitted', {
+        item_type: itemType,
+        item_slug: itemSlug,
+      })
       resetForm()
     } catch (error) {
       setStatus('error')
@@ -91,7 +96,15 @@ export function PdfOrderForm({ itemType, itemSlug, itemTitle, itemPrice }: PdfOr
   }
 
   return (
-    <form className="form-grid top-gap" onSubmit={handleSubmit} noValidate>
+    <form
+      className="form-grid top-gap"
+      onSubmit={handleSubmit}
+      noValidate
+      data-analytics-form="pdf_order"
+      data-analytics-form-start-event="pdf_order_started"
+      data-analytics-item-type={itemType}
+      data-analytics-item-slug={itemSlug}
+    >
       <div className="info-box full-width">
         Zamowienie dotyczy: <strong>{itemTitle}</strong> ({itemPrice}). Po wyslaniu formularza dostajesz mail z dalszym krokiem platnosci: {PUBLIC_OFFER_PAYMENT_METHODS}. BLIK na telefon zostaje dostepny bez publikowania numeru na stronie.
       </div>

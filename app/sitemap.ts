@@ -13,6 +13,8 @@ const STATIC_ROUTES: Array<{ path: string; priority: number; changeFrequency: Me
   { path: '/koty/konflikt-miedzy-kotami', priority: 0.8, changeFrequency: 'monthly' },
   { path: '/o-mnie', priority: 0.7, changeFrequency: 'monthly' },
   { path: '/cennik', priority: 0.8, changeFrequency: 'weekly' },
+  { path: '/book', priority: 0.9, changeFrequency: 'weekly' },
+  { path: '/kontakt', priority: 0.8, changeFrequency: 'monthly' },
   { path: '/faq', priority: 0.7, changeFrequency: 'monthly' },
   { path: '/blog', priority: 0.8, changeFrequency: 'weekly' },
   { path: '/niezbednik', priority: 0.8, changeFrequency: 'weekly' },

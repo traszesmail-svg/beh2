@@ -24,7 +24,9 @@
     "live-clickthrough-report": "node --import tsx scripts/live-clickthrough-report.ts",
     "live-booking-matrix": "node --import tsx scripts/live-booking-matrix.ts",
     "funnel-metrics": "node --import tsx scripts/funnel-metrics.ts",
-    "reminder-smoke": "node --import tsx scripts/reminder-smoke.ts"
+    "reminder-smoke": "node --import tsx scripts/reminder-smoke.ts",
+    "materialy-smoke": "node --import tsx scripts/materialy-smoke.ts",
+    "materialy-build-pdfs": "node scripts/pdf/build.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.54.0",
@@ -42,9 +44,12 @@
     "@types/nodemailer": "^7.0.11",
     "@types/react": "18.3.21",
     "@types/react-dom": "^18.3.7",
+    "cheerio": "^1.2.0",
     "eslint": "8.57.1",
     "eslint-config-next": "14.2.35",
     "lighthouse": "^13.1.0",
+    "mammoth": "^1.12.0",
+    "marked": "^18.0.2",
     "playwright-core": "^1.58.2",
     "tsx": "4.21.0",
     "typescript": "^5.4.5"

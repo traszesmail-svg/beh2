@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Trudny spacer · Regulski | Terapia behawioralna</title>
+<style>/* PDF guide stylesheet — renders on A4 via Playwright page.pdf() */
+
+@page {
+  size: A4;
+  margin: 22mm 18mm 22mm 18mm;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.55;
+  color: #1f1a17;
+  background: #fdfbf7;
+}
+
+/* Cover page */
+.cover {
+  page: cover;
+  page-break-after: always;
+  min-height: 247mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 4mm 0;
+}
+
+.cover-brand {
+  font-size: 9pt;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8b6f5a;
+  font-weight: 600;
+}
+
+.cover-tag {
+  display: inline-block;
+  font-size: 9pt;
+  color: #5e4a3c;
+  background: #f0e5d6;
+  padding: 3mm 5mm;
+  border-radius: 2mm;
+  margin-bottom: 6mm;
+}
+
+.cover-title {
+  font-size: 32pt;
+  line-height: 1.1;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 0 0 6mm 0;
+  letter-spacing: -0.01em;
+}
+
+.cover-subtitle {
+  font-size: 14pt;
+  line-height: 1.35;
+  color: #5e4a3c;
+  font-weight: 500;
+  margin: 0 0 10mm 0;
+}
+
+.cover-lead {
+  font-size: 11pt;
+  line-height: 1.6;
+  color: #3f332a;
+  max-width: 140mm;
+}
+
+.cover-bullets {
+  margin-top: 8mm;
+  padding: 0;
+  list-style: none;
+}
+
+.cover-bullets li {
+  padding: 2mm 0 2mm 6mm;
+  position: relative;
+  font-size: 10.5pt;
+  color: #3f332a;
+}
+
+.cover-bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 5mm;
+  width: 3mm;
+  height: 0.7mm;
+  background: #c9a37a;
+}
+
+.cover-meta {
+  font-size: 9pt;
+  color: #8b6f5a;
+  border-top: 0.3mm solid #e5d8c6;
+  padding-top: 4mm;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6mm;
+}
+.cover-meta > div { min-width: 0; word-break: break-word; }
+
+.cover-meta strong { color: #1f1a17; }
+
+.cover-disclaimer {
+  margin-top: 6mm;
+  font-size: 9pt;
+  font-style: italic;
+  color: #8b6f5a;
+  border-left: 0.5mm solid #c9a37a;
+  padding: 2mm 0 2mm 4mm;
+}
+
+/* Body typography */
+.body h1 {
+  font-size: 18pt;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 10mm 0 4mm 0;
+  padding-bottom: 2mm;
+  border-bottom: 0.3mm solid #e5d8c6;
+}
+
+.body h2 {
+  font-size: 14pt;
+  line-height: 1.25;
+  font-weight: 700;
+  color: #3f332a;
+  margin: 8mm 0 3mm 0;
+}
+
+.body h3 {
+  font-size: 12pt;
+  font-weight: 600;
+  color: #3f332a;
+  margin: 6mm 0 2mm 0;
+}
+
+.body p {
+  margin: 0 0 3mm 0;
+  text-align: justify;
+  hyphens: auto;
+}
+
+.body ul, .body ol {
+  margin: 0 0 4mm 0;
+  padding-left: 6mm;
+}
+
+.body li {
+  margin: 1mm 0;
+}
+
+.body strong { color: #1f1a17; }
+
+.body em { color: #5e4a3c; }
+
+/* Callout boxes (from data-kind="callout") */
+.body table[data-kind="callout"] {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4mm 0;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="callout"] td {
+  padding: 4mm 5mm;
+  background: #faf1e3;
+  border-left: 1mm solid #c9a37a;
+  border-radius: 0 1.5mm 1.5mm 0;
+}
+
+.body table[data-kind="callout"] p { margin: 0 0 2mm 0; }
+.body table[data-kind="callout"] p:last-child { margin-bottom: 0; }
+.body table[data-kind="callout"] p strong:first-child {
+  display: block;
+  font-size: 11pt;
+  margin-bottom: 1mm;
+  color: #1f1a17;
+}
+
+/* Callout stack (vertical list of callouts in one table) */
+.body table[data-kind="callout-stack"] {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 2mm;
+  margin: 4mm 0;
+}
+
+.body table[data-kind="callout-stack"] td {
+  padding: 3.5mm 5mm;
+  background: #faf1e3;
+  border-left: 1mm solid #c9a37a;
+}
+
+/* Grid boxes (single row, multiple cells — feature grid) */
+.body table[data-kind="grid"] {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 2mm 0;
+  margin: 4mm 0;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="grid"] td {
+  padding: 3mm 4mm;
+  background: #f5ece0;
+  border-radius: 1.5mm;
+  vertical-align: top;
+  width: auto;
+}
+
+.body table[data-kind="grid"] p { margin: 0 0 1.5mm 0; font-size: 9.5pt; }
+.body table[data-kind="grid"] strong { display: block; margin-bottom: 1mm; }
+
+/* Data tables (multi-row comparison) */
+.body table[data-kind="data"] {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4mm 0;
+  font-size: 9.5pt;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="data"] th,
+.body table[data-kind="data"] td {
+  border: 0.2mm solid #e5d8c6;
+  padding: 2mm 3mm;
+  vertical-align: top;
+  text-align: left;
+}
+
+.body table[data-kind="data"] tr:first-child td,
+.body table[data-kind="data"] th {
+  background: #f5ece0;
+  font-weight: 600;
+  color: #1f1a17;
+}
+
+.body table[data-kind="data"] tr:nth-child(even) td {
+  background: #fcf8f1;
+}
+
+/* Footer section — CTA routing to services */
+.footer {
+  page-break-before: always;
+  padding: 2mm 0;
+}
+
+.footer-title {
+  font-size: 18pt;
+  font-weight: 700;
+  margin: 0 0 4mm 0;
+  color: #1f1a17;
+}
+
+.footer-lead {
+  color: #3f332a;
+  margin-bottom: 6mm;
+  max-width: 150mm;
+}
+
+.services {
+  display: flex;
+  flex-direction: column;
+  gap: 3mm;
+  margin-bottom: 8mm;
+}
+
+.service {
+  padding: 4mm 5mm;
+  background: #f5ece0;
+  border-left: 1mm solid #c9a37a;
+  border-radius: 0 2mm 2mm 0;
+  page-break-inside: avoid;
+}
+
+.service-price {
+  font-size: 9pt;
+  color: #8b6f5a;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.service-name {
+  font-size: 13pt;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 1mm 0;
+}
+
+.service-copy {
+  font-size: 10pt;
+  color: #3f332a;
+  margin: 0 0 2mm 0;
+}
+
+.service-url {
+  font-size: 9pt;
+  color: #8b6f5a;
+}
+
+.footer-contact {
+  border-top: 0.3mm solid #e5d8c6;
+  padding-top: 4mm;
+  font-size: 9.5pt;
+  color: #3f332a;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6mm;
+}
+.footer-contact > div { min-width: 0; word-break: break-word; }
+
+.footer-contact a { color: #5e4a3c; text-decoration: none; }
+
+.footer-fine {
+  margin-top: 4mm;
+  font-size: 8.5pt;
+  color: #8b6f5a;
+  font-style: italic;
+}
+
+/* Category accent colors: cat / dog / puppy — tinted cover */
+body[data-category="cat"] .cover-tag { background: #ecdad3; color: #6b463a; }
+body[data-category="cat"] .cover-bullets li::before { background: #b97865; }
+body[data-category="cat"] .body table[data-kind="callout"] td { background: #f8eae5; border-left-color: #b97865; }
+body[data-category="cat"] .body table[data-kind="callout-stack"] td { background: #f8eae5; border-left-color: #b97865; }
+body[data-category="cat"] .body table[data-kind="grid"] td { background: #f8eae5; }
+body[data-category="cat"] .body table[data-kind="data"] tr:first-child td { background: #f8eae5; }
+body[data-category="cat"] .service { background: #f8eae5; border-left-color: #b97865; }
+
+body[data-category="dog"] .cover-tag { background: #e9e2ce; color: #5c4a2e; }
+body[data-category="dog"] .cover-bullets li::before { background: #997947; }
+body[data-category="dog"] .body table[data-kind="callout"] td { background: #f4ecd7; border-left-color: #997947; }
+body[data-category="dog"] .body table[data-kind="callout-stack"] td { background: #f4ecd7; border-left-color: #997947; }
+body[data-category="dog"] .body table[data-kind="grid"] td { background: #f4ecd7; }
+body[data-category="dog"] .body table[data-kind="data"] tr:first-child td { background: #f4ecd7; }
+body[data-category="dog"] .service { background: #f4ecd7; border-left-color: #997947; }
+
+body[data-category="puppy"] .cover-tag { background: #e4ead3; color: #4b5730; }
+body[data-category="puppy"] .cover-bullets li::before { background: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="callout"] td { background: #edf2dd; border-left-color: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="callout-stack"] td { background: #edf2dd; border-left-color: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="grid"] td { background: #edf2dd; }
+body[data-category="puppy"] .body table[data-kind="data"] tr:first-child td { background: #edf2dd; }
+body[data-category="puppy"] .service { background: #edf2dd; border-left-color: #7a8d4f; }
+</style>
+</head>
+<body data-category="dog">
+
+<section class="cover">
+  <div>
+    <div class="cover-brand">Regulski · Terapia behawioralna</div>
+    <div style="margin: 12mm 0 0 0;">
+      <div class="cover-tag">Psy · przewodnik</div>
+      <h1 class="cover-title">Trudny spacer</h1>
+      <p class="cover-subtitle">Dlaczego pies warczy, rzuca się albo nakręca na smyczy — i od czego zacząć</p>
+    </div>
+    <p class="cover-lead">Starter PDF dla opiekuna psa: spacer, smycz, dystans, próg pobudzenia i pierwsze 14 dni pracy</p>
+    <ul class="cover-bullets">
+      
+    </ul>
+  </div>
+  <div>
+    <div class="cover-disclaimer">Materiał edukacyjny. Nie zastępuje badania lekarsko-weterynaryjnego ani indywidualnej konsultacji behawioralnej.</div>
+    <div class="cover-meta">
+      <div><strong>Format</strong><br>PDF A4, druk domowy</div>
+      <div><strong>Czytanie</strong><br>5 min</div>
+      <div><strong>Wydano</strong><br>25 kwietnia 2026</div>
+      <div><strong>Autor</strong><br>Krzysztof Regulski</div>
+    </div>
+  </div>
+</section>
+
+<section class="body">
+<table data-kind="callout" data-label="Dla kogo jest ten materiał?"><tbody><tr><td><p><strong>Dla kogo jest ten materiał?</strong></p><p>Dla opiekuna psa, który na spacerze mierzy się z warczeniem, szczekaniem, rzucaniem się na smyczy albo gwałtownym nakręcaniem się na widok innych psów, ludzi lub ruchu.</p></td></tr></tbody></table><table data-kind="callout" data-label="Co znajdziesz w środku"><tbody><tr><td><p><strong>Co znajdziesz w środku</strong></p><p>Praktyczne rozróżnienie strachu, frustracji, pobudzenia i bólu, sygnały przed wybuchem, zasady pierwszych 72 godzin, plan 14 dni oraz routing do dalszych kroków.</p></td></tr></tbody></table><table data-kind="callout" data-label="Najkrócej"><tbody><tr><td><p><strong>Najkrócej</strong></p><p>Pies zwykle nie robi scen na spacerze po to, by przejąć kontrolę nad człowiekiem. Najczęściej próbuje poradzić sobie z sytuacją, która jest dla niego zbyt trudna, zbyt bliska lub zbyt intensywna.</p></td></tr></tbody></table><table data-kind="data"><tbody><tr><td><p><strong>Mechanizm</strong></p></td><td><p><strong>Jak to zwykle wygląda</strong></p></td><td><p><strong>Co często podpowiada wywiad</strong></p></td></tr><tr><td><p>strach / niepewność</p></td><td><p>usztywnienie, dystansowanie, szczekanie gdy ktoś podejdzie za blisko</p></td><td><p>trudności także w innych sytuacjach społecznych, historia nieprzyjemnych zdarzeń</p></td></tr><tr><td><p>frustracja bariery</p></td><td><p>wyrywanie do psa i nakręcenie, bo nie może podejść</p></td><td><p>po zdjęciu smyczy bywa miększy społecznie, nasilenie przy blokowaniu kontaktów</p></td></tr><tr><td><p>nadmierne pobudzenie</p></td><td><p>szybkie rozkręcanie, problem z powrotem do równowagi</p></td><td><p>dużo pośpiechu, mało odpoczynku, wysokie pobudzenie także w domu</p></td></tr><tr><td><p>ból lub dyskomfort</p></td><td><p>gwałtowniejsze reakcje przy szarpnięciu i bliskim minięciu</p></td><td><p>nagła zmiana zachowania, niechęć do szelek, dotyku lub skrętów</p></td></tr></tbody></table><table data-kind="data"><tbody><tr><td><p><strong>Wczesne sygnały</strong></p></td><td><p><strong>Późniejsze sygnały</strong></p></td><td><p><strong>Co robić</strong></p></td></tr><tr><td><p>zatrzymanie węszenia, zamknięty pysk</p></td><td><p>szczekanie i rzut na smycz</p></td><td><p>zwiększyć dystans zanim pies wybuchnie</p></td></tr><tr><td><p>usztywnienie i wpatrywanie</p></td><td><p>ciągnięcie, zapieranie, skok</p></td><td><p>zrobić łuk albo odejść</p></td></tr><tr><td><p>krótki freeze</p></td><td><p>seria wokalizacji</p></td><td><p>nie czekać na pełną eskalację</p></td></tr></tbody></table><table data-kind="data"><tbody><tr><td><p><strong>Pierwsze 72 godziny</strong></p></td><td><p><strong>Plan 14 dni</strong></p></td><td><p><strong>Kiedy szukać pomocy</strong></p></td></tr><tr><td><p>prostsze trasy, mniej bodźców, większy dystans, spokojniejsze wyjścia</p></td><td><p>praca poniżej progu, ruch po łuku, przewidywalne końce, prostsze zadania</p></td><td><p>brak poprawy, bardzo mały próg, nagła zmiana lub podejrzenie bólu</p></td></tr></tbody></table><h1>1. Co naprawdę znaczy „trudny spacer”</h1><p>Wiele problemów spacerowych wygląda z zewnątrz jak agresja, ale forma reakcji nie mówi jeszcze, co ją napędza.</p><p>Pies może próbować zwiększyć dystans od czegoś, czego się obawia, może przeżywać frustrację wynikającą z bariery, może być silnie pobudzony albo reagować na ból i przewlekły dyskomfort.</p><p>Smycz zmienia sytuację społeczną. Ogranicza ruch, utrudnia odejście i podnosi znaczenie dystansu, dlatego nawet pies spokojniejszy luzem może reagować znacznie gorzej na uwięzi.</p><h1>2. Reaktywność na smyczy: definicja praktyczna</h1><p>Reaktywność na smyczy to nadmiernie intensywna odpowiedź na bodziec środowiskowy. Może obejmować szczekanie, warczenie, szarpanie, zapieranie się, skakanie i gwałtowny wzrost pobudzenia.</p><p>Nie każdy pies reagujący na psy chce atakować. Część chce uciec od bodźca, część desperacko chce podejść, a część po prostu wchodzi w wybuch, bo cały układ nerwowy jest już zbyt wysoko.</p><h1>3. Najczęstsze przyczyny: strach, frustracja, pobudzenie, ból</h1><p>Cztery najczęstsze mechanizmy to: strach lub niepewność, frustracja bariery, nadmierne pobudzenie oraz ból albo dyskomfort.</p><p>W praktyce te przyczyny często się łączą. Pies może być jednocześnie niepewny społecznie i bardzo sfrustrowany tym, że nie może odejść lub podejść.</p><h1>4. Mowa ciała przed wybuchem</h1><p>Zanim pojawi się szczekanie i rzucanie się na smyczy, zwykle widać zatrzymanie węszenia, zamknięty pysk, usztywnienie, zmianę ustawienia ogona, ciężar ciała idący do przodu i krótką fazę zamrożenia.</p><p>Im wcześniej opiekun zauważy ten moment, tym większa szansa, że zdąży zwiększyć dystans, zrobić łuk lub przerwać sytuację, zanim pies wejdzie w pełny wybuch.</p><h1>5. Dlaczego smycz tak często pogarsza sprawę</h1><p>Smycz sama w sobie nie tworzy problemu z niczego, ale może bardzo wyraźnie pogłębiać trudność. Utrudnia odejście, napina ciało, zmienia trajektorię ruchu i czasem przenosi napięcie człowieka na psa.</p><p>To dlatego plan pracy musi obejmować nie tylko psa, ale też mechanikę spaceru, sprzęt i zachowanie opiekuna.</p><h1>6. Co zwykle pogarsza sytuację</h1><p>Najczęściej pogarszają: zbyt mały dystans, czekanie aż pies wybuchnie, prowadzenie psa przez wąskie gardła, próby „oswajania” przez zbyt bliskie minięcia, napinanie smyczy i karcenie psa za emocję.</p><h1>7. Pierwsze 72 godziny: bezpieczeństwo i odciążenie</h1><p>W pierwszych trzech dniach priorytetem nie jest trening widowiskowy, tylko odciążenie układu nerwowego.</p><p>Wybieraj prostsze trasy, więcej przestrzeni, mniej bodźców, większy dystans i krótsze, spokojniejsze wyjścia. Celem jest przerwać serię niepowodzeń i dać psu kilka spacerów bez wybuchu.</p><h1>8. Plan 14 dni: poniżej progu, nie w ogniu problemu</h1><p>Przez dwa tygodnie ucz psa w warunkach, w których może myśleć i brać jedzenie. Nie ćwicz w szczycie trudności.</p><p>Pracuj poniżej progu: większy dystans, przewidywalne zakończenia, prostsze zadania, spokojne wzmacnianie kontaktu i ruch po łuku zamiast frontalnego minięcia.</p><h1>9. Sprzęt, trasa i organizacja spaceru</h1><p>W trudnym spacerze ważne są detale: szerokość chodnika, możliwość zejścia na bok, rodzaj szelek, długość smyczy i to, czy opiekun potrafi czytać przestrzeń odpowiednio wcześnie.</p><p>Nie chodzi o magiczny gadżet, tylko o warunki, które zwiększają wybór, płynność ruchu i szansę na bezpieczne minięcie.</p><h1>10. Kiedy trzeba myśleć o bólu i zdrowiu</h1><p>Jeżeli problem pojawił się nagle, wyraźnie się nasilił albo pies gorzej toleruje szarpnięcia, skręty, zakładanie szelek, dotyk szyi lub barków, trzeba myśleć o bólu i dyskomforcie.</p><p>Behawior i ciało są ze sobą połączone. Ból obniża próg reakcji i skraca czas do wybuchu.</p><h1>11. Kiedy ten materiał zwykle wystarcza</h1><p>Gdy problem spacerowy jest jeszcze na etapie, na którym da się go uporządkować przez większy dystans, lepsze prowadzenie trasy, spokojniejszy rytm wyjść i pracę poniżej progu.</p><p>Gdy po 7–14 dniach widać mniej wybuchów, łatwiejszy powrót do równowagi i lepszą przewidywalność spaceru.</p><h1>12. Kiedy lepsza będzie konsultacja</h1><p>Gdy pies reaguje bardzo gwałtownie, gdy trudno znaleźć bezpieczny dystans, gdy problem szybko narasta albo gdy obraz sugeruje mieszankę lęku, bólu i wysokiego pobudzenia.</p><p>Konsultacja jest też lepszym wyborem, gdy opiekun nie potrafi odróżnić strachu od frustracji albo mieszka w warunkach, gdzie nie da się łatwo obniżyć bodźców.</p><h1>13. Co dalej / routing</h1><p>• Jeśli chcesz głębiej zrozumieć mechanikę smyczy, dystansu i ograniczenia ruchu: przejdź do „Dlaczego pies głupieje na smyczy?”.</p><p>• Jeśli problem jest szerszy i pies stale się nakręca także poza spacerem: przejdź do „Czy Twój pies naprawdę potrzebuje więcej ruchu?” albo „Pogoń, demolka i brak hamulców?”.</p><p>• Jeśli obraz jest niejasny albo postęp mały: wybierz konsultację 15 min.</p>
+</section>
+
+<section class="footer">
+  <h2 class="footer-title">Co dalej, jeśli to nie wystarczy</h2>
+  <p class="footer-lead">
+    Ten przewodnik ma pomóc uporządkować pierwszy krok. Jeśli temat wraca, miesza kilka wątków albo
+    potrzebujesz kogoś kto zobaczy Twoją konkretną sytuację — rozmowa zwykle skraca drogę.
+  </p>
+
+  <div class="services">
+    <div class="service">
+      <div class="service-price">Kwadrans · 69 zł</div>
+      <div class="service-name">Kwadrans z behawiorystą</div>
+      <p class="service-copy">15 minut rozmowy audio. Najprostszy start przy jednym pytaniu, niepewności albo pierwszym uporządkowaniu tematu.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=szybka-konsultacja-15-min</div>
+    </div>
+
+    <div class="service">
+      <div class="service-price">Dwa kwadranse · 169 zł</div>
+      <div class="service-name">Dwa kwadranse</div>
+      <p class="service-copy">30 minut online, kiedy 15 minut to za mało, temat ma kilka wątków albo chcesz spokojniej przejść przez sytuację.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=konsultacja-30-min</div>
+    </div>
+
+    <div class="service">
+      <div class="service-price">Pełna konsultacja · 470 zł</div>
+      <div class="service-name">Pełna konsultacja behawioralna</div>
+      <p class="service-copy">60 minut rozmowy, diagnoza, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp. Dla spraw złożonych, przewlekłych albo wielowątkowych.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=konsultacja-behawioralna-online</div>
+    </div>
+  </div>
+
+  <div class="footer-contact">
+    <div>
+      <strong>Kontakt</strong><br>
+      <a href="mailto:kontakt@regulskibehawiorysta.pl">kontakt@regulskibehawiorysta.pl</a>
+    </div>
+    <div>
+      <strong>Strona</strong><br>
+      <a href="https://regulskibehawiorysta.pl">regulskibehawiorysta.pl</a>
+    </div>
+    <div>
+      <strong>Instagram</strong><br>
+      @regulskibehawiorysta
+    </div>
+  </div>
+
+  <div class="footer-fine">
+    © Krzysztof Regulski · Wszystkie prawa zastrzeżone. Materiał wyłącznie do użytku własnego, bez prawa dalszej dystrybucji i odsprzedaży.
+  </div>
+</section>
+
+</body>
+</html>

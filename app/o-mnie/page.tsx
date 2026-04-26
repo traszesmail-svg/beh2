@@ -145,7 +145,7 @@ export default function AboutPage() {
       </section>
 
       <section style={{ background: 'var(--paper)' }}>
-        <NotatnikSectionHead index="II." kicker="3 publiczne sygnaly zaufania" title="Co mozesz sprawdzic publicznie." />
+        <NotatnikSectionHead index="II." kicker="Weryfikacja" title="Co mozesz sprawdzic publicznie." />
         <div className="card-grid three-up top-gap-small">
           {trustCards.map((card) => (
             <article key={card.title} className="summary-card tree-backed-card">
@@ -159,10 +159,6 @@ export default function AboutPage() {
           ))}
         </div>
 
-        <div className="list-card accent-outline tree-backed-card top-gap-small">
-          <strong>To ma byc strona o osobie i sposobie pracy.</strong>
-          <span>Nie wybierasz tu pakietu. Sprawdzasz, czy sposob myslenia, jezyk i publiczne zrodla sa dla Ciebie wiarygodne.</span>
-        </div>
       </section>
 
       <section id="faq">

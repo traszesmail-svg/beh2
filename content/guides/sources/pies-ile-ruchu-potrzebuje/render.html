@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Czy Twój pies naprawdę potrzebuje więcej ruchu? · Regulski | Terapia behawioralna</title>
+<style>/* PDF guide stylesheet — renders on A4 via Playwright page.pdf() */
+
+@page {
+  size: A4;
+  margin: 22mm 18mm 22mm 18mm;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.55;
+  color: #1f1a17;
+  background: #fdfbf7;
+}
+
+/* Cover page */
+.cover {
+  page: cover;
+  page-break-after: always;
+  min-height: 247mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 4mm 0;
+}
+
+.cover-brand {
+  font-size: 9pt;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8b6f5a;
+  font-weight: 600;
+}
+
+.cover-tag {
+  display: inline-block;
+  font-size: 9pt;
+  color: #5e4a3c;
+  background: #f0e5d6;
+  padding: 3mm 5mm;
+  border-radius: 2mm;
+  margin-bottom: 6mm;
+}
+
+.cover-title {
+  font-size: 32pt;
+  line-height: 1.1;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 0 0 6mm 0;
+  letter-spacing: -0.01em;
+}
+
+.cover-subtitle {
+  font-size: 14pt;
+  line-height: 1.35;
+  color: #5e4a3c;
+  font-weight: 500;
+  margin: 0 0 10mm 0;
+}
+
+.cover-lead {
+  font-size: 11pt;
+  line-height: 1.6;
+  color: #3f332a;
+  max-width: 140mm;
+}
+
+.cover-bullets {
+  margin-top: 8mm;
+  padding: 0;
+  list-style: none;
+}
+
+.cover-bullets li {
+  padding: 2mm 0 2mm 6mm;
+  position: relative;
+  font-size: 10.5pt;
+  color: #3f332a;
+}
+
+.cover-bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 5mm;
+  width: 3mm;
+  height: 0.7mm;
+  background: #c9a37a;
+}
+
+.cover-meta {
+  font-size: 9pt;
+  color: #8b6f5a;
+  border-top: 0.3mm solid #e5d8c6;
+  padding-top: 4mm;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6mm;
+}
+.cover-meta > div { min-width: 0; word-break: break-word; }
+
+.cover-meta strong { color: #1f1a17; }
+
+.cover-disclaimer {
+  margin-top: 6mm;
+  font-size: 9pt;
+  font-style: italic;
+  color: #8b6f5a;
+  border-left: 0.5mm solid #c9a37a;
+  padding: 2mm 0 2mm 4mm;
+}
+
+/* Body typography */
+.body h1 {
+  font-size: 18pt;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 10mm 0 4mm 0;
+  padding-bottom: 2mm;
+  border-bottom: 0.3mm solid #e5d8c6;
+}
+
+.body h2 {
+  font-size: 14pt;
+  line-height: 1.25;
+  font-weight: 700;
+  color: #3f332a;
+  margin: 8mm 0 3mm 0;
+}
+
+.body h3 {
+  font-size: 12pt;
+  font-weight: 600;
+  color: #3f332a;
+  margin: 6mm 0 2mm 0;
+}
+
+.body p {
+  margin: 0 0 3mm 0;
+  text-align: justify;
+  hyphens: auto;
+}
+
+.body ul, .body ol {
+  margin: 0 0 4mm 0;
+  padding-left: 6mm;
+}
+
+.body li {
+  margin: 1mm 0;
+}
+
+.body strong { color: #1f1a17; }
+
+.body em { color: #5e4a3c; }
+
+/* Callout boxes (from data-kind="callout") */
+.body table[data-kind="callout"] {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4mm 0;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="callout"] td {
+  padding: 4mm 5mm;
+  background: #faf1e3;
+  border-left: 1mm solid #c9a37a;
+  border-radius: 0 1.5mm 1.5mm 0;
+}
+
+.body table[data-kind="callout"] p { margin: 0 0 2mm 0; }
+.body table[data-kind="callout"] p:last-child { margin-bottom: 0; }
+.body table[data-kind="callout"] p strong:first-child {
+  display: block;
+  font-size: 11pt;
+  margin-bottom: 1mm;
+  color: #1f1a17;
+}
+
+/* Callout stack (vertical list of callouts in one table) */
+.body table[data-kind="callout-stack"] {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 2mm;
+  margin: 4mm 0;
+}
+
+.body table[data-kind="callout-stack"] td {
+  padding: 3.5mm 5mm;
+  background: #faf1e3;
+  border-left: 1mm solid #c9a37a;
+}
+
+/* Grid boxes (single row, multiple cells — feature grid) */
+.body table[data-kind="grid"] {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 2mm 0;
+  margin: 4mm 0;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="grid"] td {
+  padding: 3mm 4mm;
+  background: #f5ece0;
+  border-radius: 1.5mm;
+  vertical-align: top;
+  width: auto;
+}
+
+.body table[data-kind="grid"] p { margin: 0 0 1.5mm 0; font-size: 9.5pt; }
+.body table[data-kind="grid"] strong { display: block; margin-bottom: 1mm; }
+
+/* Data tables (multi-row comparison) */
+.body table[data-kind="data"] {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4mm 0;
+  font-size: 9.5pt;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="data"] th,
+.body table[data-kind="data"] td {
+  border: 0.2mm solid #e5d8c6;
+  padding: 2mm 3mm;
+  vertical-align: top;
+  text-align: left;
+}
+
+.body table[data-kind="data"] tr:first-child td,
+.body table[data-kind="data"] th {
+  background: #f5ece0;
+  font-weight: 600;
+  color: #1f1a17;
+}
+
+.body table[data-kind="data"] tr:nth-child(even) td {
+  background: #fcf8f1;
+}
+
+/* Footer section — CTA routing to services */
+.footer {
+  page-break-before: always;
+  padding: 2mm 0;
+}
+
+.footer-title {
+  font-size: 18pt;
+  font-weight: 700;
+  margin: 0 0 4mm 0;
+  color: #1f1a17;
+}
+
+.footer-lead {
+  color: #3f332a;
+  margin-bottom: 6mm;
+  max-width: 150mm;
+}
+
+.services {
+  display: flex;
+  flex-direction: column;
+  gap: 3mm;
+  margin-bottom: 8mm;
+}
+
+.service {
+  padding: 4mm 5mm;
+  background: #f5ece0;
+  border-left: 1mm solid #c9a37a;
+  border-radius: 0 2mm 2mm 0;
+  page-break-inside: avoid;
+}
+
+.service-price {
+  font-size: 9pt;
+  color: #8b6f5a;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.service-name {
+  font-size: 13pt;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 1mm 0;
+}
+
+.service-copy {
+  font-size: 10pt;
+  color: #3f332a;
+  margin: 0 0 2mm 0;
+}
+
+.service-url {
+  font-size: 9pt;
+  color: #8b6f5a;
+}
+
+.footer-contact {
+  border-top: 0.3mm solid #e5d8c6;
+  padding-top: 4mm;
+  font-size: 9.5pt;
+  color: #3f332a;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6mm;
+}
+.footer-contact > div { min-width: 0; word-break: break-word; }
+
+.footer-contact a { color: #5e4a3c; text-decoration: none; }
+
+.footer-fine {
+  margin-top: 4mm;
+  font-size: 8.5pt;
+  color: #8b6f5a;
+  font-style: italic;
+}
+
+/* Category accent colors: cat / dog / puppy — tinted cover */
+body[data-category="cat"] .cover-tag { background: #ecdad3; color: #6b463a; }
+body[data-category="cat"] .cover-bullets li::before { background: #b97865; }
+body[data-category="cat"] .body table[data-kind="callout"] td { background: #f8eae5; border-left-color: #b97865; }
+body[data-category="cat"] .body table[data-kind="callout-stack"] td { background: #f8eae5; border-left-color: #b97865; }
+body[data-category="cat"] .body table[data-kind="grid"] td { background: #f8eae5; }
+body[data-category="cat"] .body table[data-kind="data"] tr:first-child td { background: #f8eae5; }
+body[data-category="cat"] .service { background: #f8eae5; border-left-color: #b97865; }
+
+body[data-category="dog"] .cover-tag { background: #e9e2ce; color: #5c4a2e; }
+body[data-category="dog"] .cover-bullets li::before { background: #997947; }
+body[data-category="dog"] .body table[data-kind="callout"] td { background: #f4ecd7; border-left-color: #997947; }
+body[data-category="dog"] .body table[data-kind="callout-stack"] td { background: #f4ecd7; border-left-color: #997947; }
+body[data-category="dog"] .body table[data-kind="grid"] td { background: #f4ecd7; }
+body[data-category="dog"] .body table[data-kind="data"] tr:first-child td { background: #f4ecd7; }
+body[data-category="dog"] .service { background: #f4ecd7; border-left-color: #997947; }
+
+body[data-category="puppy"] .cover-tag { background: #e4ead3; color: #4b5730; }
+body[data-category="puppy"] .cover-bullets li::before { background: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="callout"] td { background: #edf2dd; border-left-color: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="callout-stack"] td { background: #edf2dd; border-left-color: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="grid"] td { background: #edf2dd; }
+body[data-category="puppy"] .body table[data-kind="data"] tr:first-child td { background: #edf2dd; }
+body[data-category="puppy"] .service { background: #edf2dd; border-left-color: #7a8d4f; }
+</style>
+</head>
+<body data-category="dog">
+
+<section class="cover">
+  <div>
+    <div class="cover-brand">Regulski · Terapia behawioralna</div>
+    <div style="margin: 12mm 0 0 0;">
+      <div class="cover-tag">Psy · przewodnik</div>
+      <h1 class="cover-title">Czy Twój pies naprawdę potrzebuje więcej ruchu?</h1>
+      <p class="cover-subtitle">Prawda o pobudzeniu, które nie schodzi po spacerze</p>
+    </div>
+    <p class="cover-lead">Kompendium dla opiekuna psa: pobudzenie, regulacja, sen, spacer jakościowy i plan 14 dni</p>
+    <ul class="cover-bullets">
+      
+    </ul>
+  </div>
+  <div>
+    <div class="cover-disclaimer">Materiał edukacyjny. Nie zastępuje badania lekarsko-weterynaryjnego ani indywidualnej konsultacji behawioralnej.</div>
+    <div class="cover-meta">
+      <div><strong>Format</strong><br>PDF A4, druk domowy</div>
+      <div><strong>Czytanie</strong><br>5 min</div>
+      <div><strong>Wydano</strong><br>25 kwietnia 2026</div>
+      <div><strong>Autor</strong><br>Krzysztof Regulski</div>
+    </div>
+  </div>
+</section>
+
+<section class="body">
+<table data-kind="callout" data-label="Dla kogo jest ten materiał?"><tbody><tr><td><p><strong>Dla kogo jest ten materiał?</strong></p><p>Dla opiekuna psa, który ma wrażenie, że im więcej aktywności daje psu, tym bardziej pies się nakręca, gorzej odpoczywa, szybciej wybucha lub trudniej wraca do równowagi po spacerze.</p></td></tr></tbody></table><table data-kind="callout" data-label="Co znajdziesz w środku"><tbody><tr><td><p><strong>Co znajdziesz w środku</strong></p><p>Szybki filtr problemu, rozróżnienie energii, stresu i pobudzenia, sygnały przeciążenia, plan pierwszych 72 godzin, plan 14 dni, najczęstsze błędy oraz decyzję, kiedy PDF zwykle wystarcza, a kiedy lepsza będzie konsultacja.</p></td></tr></tbody></table><table data-kind="callout" data-label="Najkrócej"><tbody><tr><td><p><strong>Najkrócej</strong></p><p>Nie każdy pies z wysoką energią potrzebuje po prostu więcej ruchu. U części psów problemem jest przeciążenie pobudzeniem, brak regeneracji, słaba przewidywalność dnia albo trudność z wracaniem do stanu spokoju.</p></td></tr></tbody></table><h1>1. Dlaczego mit „zmęcz psa bardziej” bywa szkodliwy</h1><p>Wysoka ruchliwość nie zawsze oznacza zdrowo zaspokojoną potrzebę ruchu. Część psów po intensywnym spacerze, gonitwie albo piłce nie schodzi z pobudzenia, tylko jeszcze szybciej wpada w szczekanie, skakanie, łapanie smyczy albo trudność z odpoczynkiem.</p><p>Gdy opiekun interpretuje każdy przejaw nakręcenia jako sygnał „daj więcej”, łatwo powstaje błędne koło: pobudzenie → jeszcze więcej bodźców → jeszcze słabsza regulacja.</p><h1>2. Energia, stres i pobudzenie to nie to samo</h1><p>Skuteczny plan zaczyna się od odróżnienia trzech rzeczy: naturalnej aktywności psa, przeciążenia pobudzeniem i stresu. To, że pies dużo się rusza, nie odpowiada jeszcze na pytanie, czy dobrze funkcjonuje po aktywności.</p><table data-kind="data"><tbody><tr><td><p><strong>Stan psa</strong></p></td><td><p><strong>Co zwykle widzi opiekun</strong></p></td><td><p><strong>Co dzieje się funkcjonalnie</strong></p></td></tr><tr><td><p>Umiarkowane pobudzenie</p></td><td><p>chęć ruchu, gotowość do pracy, ruchliwość</p></td><td><p>pies nadal myśli, słucha i wraca do równowagi</p></td></tr><tr><td><p>Wysokie pobudzenie</p></td><td><p>ciągnięcie, skakanie, szczekanie, chaos</p></td><td><p>spada kontrola impulsów i rośnie reaktywność</p></td></tr><tr><td><p>Przeciążenie</p></td><td><p>pies „nie słyszy”, nie śpi dobrze, szybko wybucha</p></td><td><p>układ nerwowy ma za mało czasu na regenerację</p></td></tr></tbody></table><h1>3. Jak rozpoznać psa, który nie umie zejść z obrotów</h1><p>• po spacerze dalej kręci się po domu i szuka zaczepki</p><p>• pobudzenie rośnie szybciej niż kiedyś</p><p>• znane sygnały przestają działać w dynamicznym otoczeniu</p><p>• pies ma krótki lont do szczekania, skakania lub podgryzania</p><p>• sen jest płytki, przerywany albo pies budzi się na każdy ruch</p><table data-kind="callout" data-label="Dobra obserwacja"><tbody><tr><td><p><strong>Dobra obserwacja</strong></p><p>Oceny nie kończ na spacerze. Sprawdź, co dzieje się z psem przez 1–2 godziny po powrocie do domu: czy odpoczywa, czy dalej narasta.</p></td></tr></tbody></table><h1>4. Typowe źródła nakręcania psa</h1><table data-kind="data"><tbody><tr><td><p><strong>Źródło</strong></p></td><td><p><strong>Jak wygląda w praktyce</strong></p></td><td><p><strong>Skutek</strong></p></td></tr><tr><td><p>Zbyt intensywna zabawa</p></td><td><p>ciągłe gonitwy, rzucanie piłki, nakręcanie głosem</p></td><td><p>pies szybciej wchodzi na wysoki poziom pobudzenia</p></td></tr><tr><td><p>Środowisko pełne bodźców</p></td><td><p>ruchliwe ulice, tłok, inni psi, dzieci, hałas</p></td><td><p>spada zdolność filtrowania bodźców</p></td></tr><tr><td><p>Brak odpoczynku</p></td><td><p>krótkie drzemki, ciągłe wybudzanie, brak rutyny</p></td><td><p>układ nerwowy nie ma kiedy wrócić do równowagi</p></td></tr><tr><td><p>Niedopasowany trening</p></td><td><p>za trudne zadania w złym momencie</p></td><td><p>pies frustruje się i „rozsypuje” szybciej</p></td></tr></tbody></table><h1>5. Ruch versus regeneracja</h1><p>W praktyce nie chodzi o całkowite „ucięcie ruchu”, tylko o zmianę proporcji. Część psów potrzebuje mniej intensywności i więcej spacerów jakościowych, spokojnego węszenia, przewidywalnych rytuałów i prawdziwego snu.</p><p>Regeneracja nie jest lenistwem. To warunek, żeby układ nerwowy wrócił do stanu, w którym możliwe są uczenie się, sen, trawienie i elastyczne reagowanie.</p><p>• zadbaj o przewidywalne pory ciszy</p><p>• nie wybudzaj psa „bo szkoda dnia”</p><p>• ogranicz intensywne interakcje zaraz po aktywności</p><p>• twórz warunki, w których pies może naprawdę odpuścić</p><h1>6. Spacer jakościowy versus spacer „na wybieganie”</h1><table data-kind="data"><tbody><tr><td><p><strong>Spacer jakościowy</strong></p></td><td><p><strong>Spacer „na wybieganie”</strong></p></td></tr><tr><td><p>węszenie, eksploracja, tempo dostosowane do psa, mniej presji</p></td><td><p>dużo intensywności, mało przetwarzania bodźców</p></td></tr><tr><td><p>częściej poprawia stan emocjonalny i jakość odpoczynku po powrocie</p></td><td><p>może dać zmęczenie fizyczne bez poprawy regulacji</p></td></tr><tr><td><p>lepszy dla psów reaktywnych i łatwo przeciążających się</p></td><td><p>częściej dokręca psa, który i tak ma wysoki poziom pobudzenia</p></td></tr></tbody></table><h1>7. Czerwone flagi medyczne</h1><p>Nie każdy pies pobudzony jest „tylko nakręcony psychicznie”. Ból, świąd, problemy gastryczne, zaburzenia hormonalne, ograniczenia ruchowe i niektóre leki mogą obniżać tolerancję na bodźce albo utrudniać odpoczynek.</p><p>• nagła zmiana zachowania u wcześniej stabilnego psa</p><p>• problemy z położeniem się lub wstawaniem</p><p>• świąd, lizanie, częste otrzepywanie, napięcie przy dotyku</p><p>• nocne krążenie, dyszenie, trudność z zaśnięciem</p><p>• wyraźny spadek tolerancji na dotychczas znane sytuacje</p><table data-kind="callout" data-label="Kiedy lekarz najpierw"><tbody><tr><td><p><strong>Kiedy lekarz najpierw</strong></p><p>Jeżeli pojawia się ból, nietypowe objawy fizyczne albo gwałtowna zmiana zachowania, nie zakładaj od razu „problemu wychowawczego”.</p></td></tr></tbody></table><h1>8. Co robić przez pierwsze 72 godziny</h1><p>Przez trzy dni nie próbuj „naprawić wszystkiego”. Najpierw uprość plan dnia i zbierz dane.</p><p>• ogranicz najbardziej pobudzające aktywności i skróć serie, zanim pies „odleci”</p><p>• zwiększ udział spokojnych spacerów jakościowych</p><p>• pilnuj snu, ciszy i przewidywalnych rytuałów po powrocie</p><p>• notuj, po czym pies wraca do równowagi, a po czym rośnie</p><p>• nie dokładaj trudnych ćwiczeń w najgorszym stanie pobudzenia</p><h1>9. Plan pracy na 14 dni</h1><table data-kind="data"><tbody><tr><td><p><strong>Etap</strong></p></td><td><p><strong>Priorytet</strong></p></td><td><p><strong>Co robisz</strong></p></td></tr><tr><td><p>Dni 1–3</p></td><td><p>odciążenie</p></td><td><p>mniej intensywności, więcej snu i danych</p></td></tr><tr><td><p>Dni 4–7</p></td><td><p>stabilizacja</p></td><td><p>powtarzalny rytm dnia, spacer jakościowy, prosty trening w dobrym stanie</p></td></tr><tr><td><p>Dni 8–10</p></td><td><p>regulacja</p></td><td><p>krótkie serie pracy, większe przerwy, kontrola pobudzenia przy przejściach dnia</p></td></tr><tr><td><p>Dni 11–14</p></td><td><p>ocena efektu</p></td><td><p>sprawdzenie, czy pies szybciej schodzi, lepiej śpi i wraca do równowagi</p></td></tr></tbody></table><h1>10. Najczęstsze błędy opiekuna</h1><p>• dokładanie coraz większej intensywności zamiast zmiany proporcji</p><p>• mylenie zmęczenia fizycznego z prawdziwym wyciszeniem</p><p>• trening wtedy, gdy pies jest już poza możliwościami uczenia się</p><p>• zbyt mało snu i zbyt dużo mikro-pobudzeń w domu</p><p>• ignorowanie bólu albo innych medycznych czerwonych flag</p><h1>11. Kiedy ten materiał zwykle wystarcza</h1><p>• gdy problem jest wczesny albo umiarkowany</p><p>• gdy po 7–14 dniach widać lepszy sen, niższe napięcie i szybszy powrót do równowagi</p><p>• gdy pies nie ma czerwonych flag medycznych i nie wchodzi w zachowania wysokiego ryzyka</p><h1>12. Kiedy lepsza będzie konsultacja</h1><p>• gdy pies mimo zmian nadal szybko eskaluje i trudno mu zejść z obrotów</p><p>• gdy problem łączy się z reaktywnością, demolką, pogonią albo trudnością zostawania samemu</p><p>• gdy obraz jest mieszany i nie wiesz, czy dominują pobudzenie, stres, ból czy środowisko</p><h1>13. Co dalej</h1><p>• Jeśli główny problem dotyczy szczeniaka: przejdź do „Szczeniak gryzie i skacze?” albo „Szczeniak nie umie się wyciszyć?”.</p><p>• Jeśli główny problem wychodzi na spacerze: przejdź do „Trudny spacer” albo „Dlaczego pies głupieje na smyczy?”.</p><p>• Jeśli widzisz pogoń, demolkę i brak hamulców: przejdź do „Pogoń, demolka i brak hamulców?”.</p><p>• Jeśli potrzebujesz szybkiego rozpoznania i planu szytego pod Twojego psa: umów konsultację 15 min.</p><table data-kind="callout" data-label="Mini-checklista na koniec"><tbody><tr><td><p><strong>Mini-checklista na koniec</strong></p><p>Czy pies śpi głęboko po aktywności?<br>Czy po spacerze wraca do równowagi w 30–90 minut?<br>Czy znane sygnały działają w spokojnym środowisku?<br>Czy problem narasta po intensywnej zabawie?<br>Czy widzisz czerwone flagi bólu lub dyskomfortu?</p></td></tr></tbody></table><h1>FAQ</h1><p>Czy mam całkiem zabrać psu ruch? Nie. Najczęściej trzeba zmienić proporcje: mniej intensywności, więcej jakości i więcej regeneracji.</p><p>Skąd mam wiedzieć, czy spacer pomaga? Najlepsza miara to to, jak pies wraca do równowagi po powrocie do domu przez kolejne 1–2 godziny.</p>
+</section>
+
+<section class="footer">
+  <h2 class="footer-title">Co dalej, jeśli to nie wystarczy</h2>
+  <p class="footer-lead">
+    Ten przewodnik ma pomóc uporządkować pierwszy krok. Jeśli temat wraca, miesza kilka wątków albo
+    potrzebujesz kogoś kto zobaczy Twoją konkretną sytuację — rozmowa zwykle skraca drogę.
+  </p>
+
+  <div class="services">
+    <div class="service">
+      <div class="service-price">Kwadrans · 69 zł</div>
+      <div class="service-name">Kwadrans z behawiorystą</div>
+      <p class="service-copy">15 minut rozmowy audio. Najprostszy start przy jednym pytaniu, niepewności albo pierwszym uporządkowaniu tematu.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=szybka-konsultacja-15-min</div>
+    </div>
+
+    <div class="service">
+      <div class="service-price">Dwa kwadranse · 169 zł</div>
+      <div class="service-name">Dwa kwadranse</div>
+      <p class="service-copy">30 minut online, kiedy 15 minut to za mało, temat ma kilka wątków albo chcesz spokojniej przejść przez sytuację.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=konsultacja-30-min</div>
+    </div>
+
+    <div class="service">
+      <div class="service-price">Pełna konsultacja · 470 zł</div>
+      <div class="service-name">Pełna konsultacja behawioralna</div>
+      <p class="service-copy">60 minut rozmowy, diagnoza, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp. Dla spraw złożonych, przewlekłych albo wielowątkowych.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=konsultacja-behawioralna-online</div>
+    </div>
+  </div>
+
+  <div class="footer-contact">
+    <div>
+      <strong>Kontakt</strong><br>
+      <a href="mailto:kontakt@regulskibehawiorysta.pl">kontakt@regulskibehawiorysta.pl</a>
+    </div>
+    <div>
+      <strong>Strona</strong><br>
+      <a href="https://regulskibehawiorysta.pl">regulskibehawiorysta.pl</a>
+    </div>
+    <div>
+      <strong>Instagram</strong><br>
+      @regulskibehawiorysta
+    </div>
+  </div>
+
+  <div class="footer-fine">
+    © Krzysztof Regulski · Wszystkie prawa zastrzeżone. Materiał wyłącznie do użytku własnego, bez prawa dalszej dystrybucji i odsprzedaży.
+  </div>
+</section>
+
+</body>
+</html>

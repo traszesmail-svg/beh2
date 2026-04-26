@@ -1,0 +1,30 @@
+{
+  "slug": "trudny_spacer_v2",
+  "title": "Trudny spacer",
+  "subtitle": "Dlaczego pies warczy, rzuca się albo nakręca na smyczy — i od czego zacząć",
+  "role_in_funnel": "starter",
+  "price_pln": 49,
+  "target_audience": "Opiekun psa, który na spacerze mierzy się z warczeniem, szczekaniem, rzucaniem się na smyczy albo gwałtownym nakręcaniem się na widok innych psów, ludzi lub ruchu.",
+  "positioning": "Starter PDF w ścieżce spacer / smycz / reaktywność. Ma być pierwszym zakupem dla użytkownika z objawem trudnego spaceru.",
+  "website_card": {
+    "eyebrow": "Starter PDF",
+    "headline": "Trudny spacer",
+    "subline": "PDF o strachu, frustracji, pobudzeniu, bólu, progu i pierwszych 14 dniach pracy spacerowej.",
+    "cta": "Kup PDF"
+  },
+  "next_steps": [
+    "Dlaczego pies „głupieje” na smyczy?",
+    "Czy Twój pies naprawdę potrzebuje więcej ruchu?",
+    "Pogoń, demolka i brak hamulców?",
+    "Konsultacja 15 min"
+  ],
+  "must_have_blocks": [
+    "dla kogo",
+    "co znajdziesz w środku",
+    "najkrócej",
+    "kiedy ten materiał zwykle wystarcza",
+    "kiedy lepsza będzie konsultacja",
+    "co dalej / routing"
+  ],
+  "notes_for_offer": "Nie mieszaj z core o smyczy. Ten materiał sprzedaje pierwszy filtr problemu spacerowego: strach / frustracja / pobudzenie / ból i pierwszy ruch."
+}

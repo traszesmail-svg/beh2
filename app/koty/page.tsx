@@ -76,7 +76,7 @@ const consultationFormats = [
     eyebrow: '169 zl / szerszy start',
     description: 'Spokojniejszy etap posredni, gdy 15 minut to za malo, ale nie potrzebujesz jeszcze pelnej konsultacji.',
     whenToChoose: 'gdy temat ma kilka warstw i chcesz wejsc szerzej w dom, zasoby i rytm dnia',
-    meta: ['30 min online', '169 zl', 'pomost'],
+    meta: ['30 min online', '169 zl'],
     href: bridgeHref,
     ctaLabel: 'Wybierz Dwa kwadranse',
     ctaClassName: 'button button-ghost',
@@ -160,6 +160,9 @@ export default function CatsPage() {
               <Link href="/niezbednik" prefetch={false} className="notatnik-btn notatnik-btn-ghost">
                 <span>Niezbednik dla opiekuna kota</span>
               </Link>
+              <Link href={serviceLandingHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
+                <span>pelnego opisu konsultacji online</span>
+              </Link>
             </div>
           </div>
 
@@ -196,8 +199,7 @@ export default function CatsPage() {
         <section id="konsultacja">
           <NotatnikSectionHead index="II." kicker="3 formaty konsultacji" title="Ktory format dla kota ma sens na start." />
           <p className="notatnik-service-description">
-            Najpierw wybierasz zakres, dopiero potem termin. Kwadrans pomaga ustalic pierwszy priorytet, Dwa kwadranse daja wiecej czasu przy kilku
-            watkach, a Pelna konsultacja zostaje dla spraw zlozonych albo utrwalonych.
+            Kwadrans na jedno pytanie albo pierwsza orientacje. Dwa kwadranse przy szerszym temacie. Pelna konsultacja przy sprawie trwajacej lub zlozonej.
           </p>
           <div className="card-grid three-up top-gap-small">
             {consultationFormats.map((format) => (
@@ -223,12 +225,8 @@ export default function CatsPage() {
           </div>
           <div className="list-card tree-backed-card top-gap-small">
             <p>
-              Kwadrans na juz (99 zl) - ten sam format, termin potwierdzany do 15 minut od wplaty. Jesli chcesz najpierw zobaczyc szerszy opis pracy
-              online, przejdz do{' '}
-              <Link href={serviceLandingHref} prefetch={false} className="notatnik-inline-link">
-                pelnego opisu konsultacji online
-              </Link>
-              .
+              Potrzebujesz szybszego terminu? Przy rezerwacji Kwadransu dostepny jest wariant na juz (99 zl) — ten sam format, termin potwierdzany do 15
+              minut.
             </p>
           </div>
         </section>

@@ -1,0 +1,31 @@
+{
+  "slug": "szczeniak_nie_umie_sie_wyciszyc_v2",
+  "title": "Szczeniak nie umie się wyciszyć?",
+  "subtitle": "Jak odróżnić normalny rozwój od sygnału, że trzeba mu pomóc",
+  "role_in_funnel": "core",
+  "price_pln": 59,
+  "target_audience": "Opiekun szczeniaka lub młodego psa, który widzi stale wysokie pobudzenie, słaby sen, trudność z wyhamowaniem i chaos po bodźcach.",
+  "positioning": "Core PDF w ścieżce szczeniaka. Ma pogłębiać temat regulacji, snu, przeciążenia i planu pracy po starterze o gryzieniu i skakaniu.",
+  "website_card": {
+    "eyebrow": "Core PDF",
+    "headline": "Szczeniak nie umie się wyciszyć?",
+    "subline": "PDF o śnie, przeciążeniu, samoregulacji i planie 14 dni dla młodego psa.",
+    "cta": "Kup PDF"
+  },
+  "next_steps": [
+    "Szczeniak gryzie i skacze?",
+    "Trudny spacer",
+    "Dlaczego pies „głupieje” na smyczy?",
+    "Pogoń, demolka i brak hamulców?",
+    "Konsultacja 15 min"
+  ],
+  "must_have_blocks": [
+    "dla kogo",
+    "co znajdziesz w środku",
+    "najkrócej",
+    "kiedy ten materiał zwykle wystarcza",
+    "kiedy lepsza będzie konsultacja",
+    "co dalej / routing"
+  ],
+  "notes_for_offer": "Na stronie pokazuj jako core dla ścieżki szczeniaka. Nie mieszaj ze starterem o gryzieniu i skakaniu; ten materiał sprzedaje regulację, sen i wyhamowanie."
+}

@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Pies szczeka na gości i dzwonek? · Regulski | Terapia behawioralna</title>
+<style>/* PDF guide stylesheet — renders on A4 via Playwright page.pdf() */
+
+@page {
+  size: A4;
+  margin: 22mm 18mm 22mm 18mm;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.55;
+  color: #1f1a17;
+  background: #fdfbf7;
+}
+
+/* Cover page */
+.cover {
+  page: cover;
+  page-break-after: always;
+  min-height: 247mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 4mm 0;
+}
+
+.cover-brand {
+  font-size: 9pt;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8b6f5a;
+  font-weight: 600;
+}
+
+.cover-tag {
+  display: inline-block;
+  font-size: 9pt;
+  color: #5e4a3c;
+  background: #f0e5d6;
+  padding: 3mm 5mm;
+  border-radius: 2mm;
+  margin-bottom: 6mm;
+}
+
+.cover-title {
+  font-size: 32pt;
+  line-height: 1.1;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 0 0 6mm 0;
+  letter-spacing: -0.01em;
+}
+
+.cover-subtitle {
+  font-size: 14pt;
+  line-height: 1.35;
+  color: #5e4a3c;
+  font-weight: 500;
+  margin: 0 0 10mm 0;
+}
+
+.cover-lead {
+  font-size: 11pt;
+  line-height: 1.6;
+  color: #3f332a;
+  max-width: 140mm;
+}
+
+.cover-bullets {
+  margin-top: 8mm;
+  padding: 0;
+  list-style: none;
+}
+
+.cover-bullets li {
+  padding: 2mm 0 2mm 6mm;
+  position: relative;
+  font-size: 10.5pt;
+  color: #3f332a;
+}
+
+.cover-bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 5mm;
+  width: 3mm;
+  height: 0.7mm;
+  background: #c9a37a;
+}
+
+.cover-meta {
+  font-size: 9pt;
+  color: #8b6f5a;
+  border-top: 0.3mm solid #e5d8c6;
+  padding-top: 4mm;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6mm;
+}
+.cover-meta > div { min-width: 0; word-break: break-word; }
+
+.cover-meta strong { color: #1f1a17; }
+
+.cover-disclaimer {
+  margin-top: 6mm;
+  font-size: 9pt;
+  font-style: italic;
+  color: #8b6f5a;
+  border-left: 0.5mm solid #c9a37a;
+  padding: 2mm 0 2mm 4mm;
+}
+
+/* Body typography */
+.body h1 {
+  font-size: 18pt;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 10mm 0 4mm 0;
+  padding-bottom: 2mm;
+  border-bottom: 0.3mm solid #e5d8c6;
+}
+
+.body h2 {
+  font-size: 14pt;
+  line-height: 1.25;
+  font-weight: 700;
+  color: #3f332a;
+  margin: 8mm 0 3mm 0;
+}
+
+.body h3 {
+  font-size: 12pt;
+  font-weight: 600;
+  color: #3f332a;
+  margin: 6mm 0 2mm 0;
+}
+
+.body p {
+  margin: 0 0 3mm 0;
+  text-align: justify;
+  hyphens: auto;
+}
+
+.body ul, .body ol {
+  margin: 0 0 4mm 0;
+  padding-left: 6mm;
+}
+
+.body li {
+  margin: 1mm 0;
+}
+
+.body strong { color: #1f1a17; }
+
+.body em { color: #5e4a3c; }
+
+/* Callout boxes (from data-kind="callout") */
+.body table[data-kind="callout"] {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4mm 0;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="callout"] td {
+  padding: 4mm 5mm;
+  background: #faf1e3;
+  border-left: 1mm solid #c9a37a;
+  border-radius: 0 1.5mm 1.5mm 0;
+}
+
+.body table[data-kind="callout"] p { margin: 0 0 2mm 0; }
+.body table[data-kind="callout"] p:last-child { margin-bottom: 0; }
+.body table[data-kind="callout"] p strong:first-child {
+  display: block;
+  font-size: 11pt;
+  margin-bottom: 1mm;
+  color: #1f1a17;
+}
+
+/* Callout stack (vertical list of callouts in one table) */
+.body table[data-kind="callout-stack"] {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 2mm;
+  margin: 4mm 0;
+}
+
+.body table[data-kind="callout-stack"] td {
+  padding: 3.5mm 5mm;
+  background: #faf1e3;
+  border-left: 1mm solid #c9a37a;
+}
+
+/* Grid boxes (single row, multiple cells — feature grid) */
+.body table[data-kind="grid"] {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 2mm 0;
+  margin: 4mm 0;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="grid"] td {
+  padding: 3mm 4mm;
+  background: #f5ece0;
+  border-radius: 1.5mm;
+  vertical-align: top;
+  width: auto;
+}
+
+.body table[data-kind="grid"] p { margin: 0 0 1.5mm 0; font-size: 9.5pt; }
+.body table[data-kind="grid"] strong { display: block; margin-bottom: 1mm; }
+
+/* Data tables (multi-row comparison) */
+.body table[data-kind="data"] {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4mm 0;
+  font-size: 9.5pt;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="data"] th,
+.body table[data-kind="data"] td {
+  border: 0.2mm solid #e5d8c6;
+  padding: 2mm 3mm;
+  vertical-align: top;
+  text-align: left;
+}
+
+.body table[data-kind="data"] tr:first-child td,
+.body table[data-kind="data"] th {
+  background: #f5ece0;
+  font-weight: 600;
+  color: #1f1a17;
+}
+
+.body table[data-kind="data"] tr:nth-child(even) td {
+  background: #fcf8f1;
+}
+
+/* Footer section — CTA routing to services */
+.footer {
+  page-break-before: always;
+  padding: 2mm 0;
+}
+
+.footer-title {
+  font-size: 18pt;
+  font-weight: 700;
+  margin: 0 0 4mm 0;
+  color: #1f1a17;
+}
+
+.footer-lead {
+  color: #3f332a;
+  margin-bottom: 6mm;
+  max-width: 150mm;
+}
+
+.services {
+  display: flex;
+  flex-direction: column;
+  gap: 3mm;
+  margin-bottom: 8mm;
+}
+
+.service {
+  padding: 4mm 5mm;
+  background: #f5ece0;
+  border-left: 1mm solid #c9a37a;
+  border-radius: 0 2mm 2mm 0;
+  page-break-inside: avoid;
+}
+
+.service-price {
+  font-size: 9pt;
+  color: #8b6f5a;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.service-name {
+  font-size: 13pt;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 1mm 0;
+}
+
+.service-copy {
+  font-size: 10pt;
+  color: #3f332a;
+  margin: 0 0 2mm 0;
+}
+
+.service-url {
+  font-size: 9pt;
+  color: #8b6f5a;
+}
+
+.footer-contact {
+  border-top: 0.3mm solid #e5d8c6;
+  padding-top: 4mm;
+  font-size: 9.5pt;
+  color: #3f332a;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6mm;
+}
+.footer-contact > div { min-width: 0; word-break: break-word; }
+
+.footer-contact a { color: #5e4a3c; text-decoration: none; }
+
+.footer-fine {
+  margin-top: 4mm;
+  font-size: 8.5pt;
+  color: #8b6f5a;
+  font-style: italic;
+}
+
+/* Category accent colors: cat / dog / puppy — tinted cover */
+body[data-category="cat"] .cover-tag { background: #ecdad3; color: #6b463a; }
+body[data-category="cat"] .cover-bullets li::before { background: #b97865; }
+body[data-category="cat"] .body table[data-kind="callout"] td { background: #f8eae5; border-left-color: #b97865; }
+body[data-category="cat"] .body table[data-kind="callout-stack"] td { background: #f8eae5; border-left-color: #b97865; }
+body[data-category="cat"] .body table[data-kind="grid"] td { background: #f8eae5; }
+body[data-category="cat"] .body table[data-kind="data"] tr:first-child td { background: #f8eae5; }
+body[data-category="cat"] .service { background: #f8eae5; border-left-color: #b97865; }
+
+body[data-category="dog"] .cover-tag { background: #e9e2ce; color: #5c4a2e; }
+body[data-category="dog"] .cover-bullets li::before { background: #997947; }
+body[data-category="dog"] .body table[data-kind="callout"] td { background: #f4ecd7; border-left-color: #997947; }
+body[data-category="dog"] .body table[data-kind="callout-stack"] td { background: #f4ecd7; border-left-color: #997947; }
+body[data-category="dog"] .body table[data-kind="grid"] td { background: #f4ecd7; }
+body[data-category="dog"] .body table[data-kind="data"] tr:first-child td { background: #f4ecd7; }
+body[data-category="dog"] .service { background: #f4ecd7; border-left-color: #997947; }
+
+body[data-category="puppy"] .cover-tag { background: #e4ead3; color: #4b5730; }
+body[data-category="puppy"] .cover-bullets li::before { background: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="callout"] td { background: #edf2dd; border-left-color: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="callout-stack"] td { background: #edf2dd; border-left-color: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="grid"] td { background: #edf2dd; }
+body[data-category="puppy"] .body table[data-kind="data"] tr:first-child td { background: #edf2dd; }
+body[data-category="puppy"] .service { background: #edf2dd; border-left-color: #7a8d4f; }
+</style>
+</head>
+<body data-category="dog">
+
+<section class="cover">
+  <div>
+    <div class="cover-brand">Regulski · Terapia behawioralna</div>
+    <div style="margin: 12mm 0 0 0;">
+      <div class="cover-tag">Psy · przewodnik</div>
+      <h1 class="cover-title">Pies szczeka na gości i dzwonek?</h1>
+      <p class="cover-subtitle">Jak odróżnić alarm, ekscytację i napięcie przy wejściu do domu — i od czego zacząć</p>
+    </div>
+    <p class="cover-lead">Starter-Przewodnik dla opiekuna psa: goście, dzwonek, wejście do domu, alarm i pobudzenie</p>
+    <ul class="cover-bullets">
+      
+    </ul>
+  </div>
+  <div>
+    <div class="cover-disclaimer">Materiał edukacyjny. Nie zastępuje badania lekarsko-weterynaryjnego ani indywidualnej konsultacji behawioralnej.</div>
+    <div class="cover-meta">
+      <div><strong>Format</strong><br>PDF A4, druk domowy</div>
+      <div><strong>Czytanie</strong><br>5 min</div>
+      <div><strong>Wydano</strong><br>25 kwietnia 2026</div>
+      <div><strong>Autor</strong><br>Krzysztof Regulski</div>
+    </div>
+  </div>
+</section>
+
+<section class="body">
+<table data-kind="callout" data-label="Dla kogo jest ten materiał?"><tbody><tr><td><p><strong>Dla kogo jest ten materiał?</strong></p><p>Dla opiekuna psa, który mierzy się ze szczekaniem na dzwonek, gości, otwieranie drzwi i cały rytuał wejścia do domu — i chce zrozumieć, czy chodzi bardziej o alarm, ekscytację czy napięcie społeczne.</p></td></tr></tbody></table><table data-kind="callout" data-label="Co znajdziesz w środku"><tbody><tr><td><p><strong>Co znajdziesz w środku</strong></p><p>Rozróżnienie trzech głównych mechanizmów, rolę dzwonka jako wyzwalacza, znaczenie geometrii wejścia, plan pierwszych 72 godzin, plan 14 dni oraz routing do dalszych kroków.</p></td></tr></tbody></table><table data-kind="callout" data-label="Najkrócej"><tbody><tr><td><p><strong>Najkrócej</strong></p><p>Pies rzadko szczeka na gości tylko dlatego, że jest 'niewychowany'. Zwykle reaguje na mieszankę sygnału alarmowego, pobudzenia i trudności z przejściem przez chaotyczny rytuał wejścia.</p></td></tr></tbody></table><table data-kind="data"><tbody><tr><td><p><strong>Mechanizm</strong></p></td><td><p><strong>Jak zwykle wygląda</strong></p></td><td><p><strong>Co najczęściej podpowiada sytuacja</strong></p></td></tr><tr><td><p>alarm / kontrola wejścia</p></td><td><p>pies szybko szczeka po sygnale przy drzwiach</p></td><td><p>silna reakcja na dzwonek, kroki i ruch za drzwiami</p></td></tr><tr><td><p>ekscytacja rytuałem</p></td><td><p>bieganie, skakanie, szczekanie, chaos</p></td><td><p>wizyty same w sobie są bardzo pobudzające</p></td></tr><tr><td><p>napięcie społeczne</p></td><td><p>usztywnienie, trudność przy wejściu obcej osoby</p></td><td><p>pies nie czuje się bezpiecznie przy bliskim kontakcie w progu</p></td></tr></tbody></table><table data-kind="data"><tbody><tr><td><p><strong>Wczesne sygnały</strong></p></td><td><p><strong>Późniejsza eskalacja</strong></p></td><td><p><strong>Co robić</strong></p></td></tr><tr><td><p>napięcie pyska, wpatrywanie, krążenie</p></td><td><p>seria szczekania i biegu do drzwi</p></td><td><p>upraszczać sekwencję i wyprzedzać moment wejścia</p></td></tr><tr><td><p>usztywnienie i przyspieszenie ruchu</p></td><td><p>skakanie i chaos w progu</p></td><td><p>przygotować miejsce startowe, nie iść w chaos</p></td></tr><tr><td><p>reakcja już na sam dźwięk</p></td><td><p>nakręcenie przed pojawieniem się gościa</p></td><td><p>pracować także nad sygnałem dzwonka</p></td></tr></tbody></table><table data-kind="data"><tbody><tr><td><p><strong>Pierwsze 72 godziny</strong></p></td><td><p><strong>Plan 14 dni</strong></p></td><td><p><strong>Kiedy szukać pomocy</strong></p></td></tr><tr><td><p>uprościć rytuał wejścia, ograniczyć niespodzianki, przygotować miejsce psa i nie testować pełnych wizyt</p></td><td><p>uporządkować sekwencję: sygnał, ruch, miejsce psa, wyciszenie, dopiero wejście</p></td><td><p>gwałtowne reakcje, blokowanie wejścia, obawy o bezpieczeństwo, szerokie pobudzenie lub mały postęp</p></td></tr></tbody></table><h1>1. Dlaczego ten problem rzadko jest tylko „szczekaniem”</h1><p>Dla wielu opiekunów problem brzmi prosto: pies szczeka, gdy ktoś przychodzi albo gdy słychać dzwonek. W praktyce jednak pod tym jednym objawem kryją się różne mechanizmy.</p><p>U jednych psów dom uruchamia zachowanie alarmowe. U innych chodzi bardziej o ekscytację, frustrację, napięcie społeczne albo nakręcanie się całym rytuałem wejścia.</p><h1>2. Alarm, ekscytacja czy niepokój — trzy najczęstsze warianty</h1><p>Pies alarmowy zwykle reaguje szybko na sygnał przy wejściu: dźwięk, ruch na klatce, dzwonek albo krok przed drzwiami. Chce poinformować i kontrolować sytuację.</p><p>Pies ekscytacyjny bardziej się nakręca samym rytuałem wizyty: biega, skacze, szczeka i nie umie zejść z pobudzenia.</p><p>Pies napięciowy reaguje nie dlatego, że chce 'powitać' albo ostrzec, lecz dlatego, że obecność obcego człowieka przy wejściu jest dla niego zbyt trudna.</p><h1>3. Dlaczego wejście do domu jest takim trudnym momentem</h1><p>Wejście do mieszkania lub domu to wąska, intensywna sytuacja. Pojawia się dźwięk, ruch, otwieranie drzwi, napięcie człowieka, zmiana zapachu i oczekiwanie, że pies szybko 'zachowa się dobrze'.</p><p>To właśnie dlatego problem przy gościach trzeba czytać nie tylko przez sam dźwięk dzwonka, ale przez cały rytuał poprzedzający i następujący po wejściu.</p><h1>4. Co najczęściej dokręca problem</h1><p>Najczęściej dokręcają go: powtarzane komendy z wysokim napięciem, szybkie prowadzenie psa do drzwi, brak przygotowanego miejsca startowego, chaotyczne reakcje domowników i wzmacnianie emocji samym zamieszaniem.</p><p>Niektóre psy uczą się też, że dzwonek zawsze oznacza wystrzał pobudzenia — i zaczynają eskalować już po samym dźwięku.</p><h1>5. Mowa ciała przed pełną eskalacją</h1><p>Zanim pojawi się pełna seria szczekania, często widać napięcie pyska, zastyganie, przyspieszenie ruchu, usztywnienie ciała, mocniejsze patrzenie w stronę wejścia albo krążenie między drzwiami a człowiekiem.</p><p>Im wcześniej opiekun odczyta ten moment, tym większa szansa, że w ogóle nie dopuści do pełnej spirali.</p><h1>6. Rola miejsca, odległości i rytuału</h1><p>Przy wejściu ogromne znaczenie ma geometria sytuacji: gdzie stoi pies, gdzie stoi człowiek, jak szybko otwierają się drzwi i czy pies ma przewidywalne miejsce, w którym może zacząć sytuację z większym poczuciem bezpieczeństwa.</p><p>Nie chodzi o tłumienie psa na siłę, ale o zbudowanie prostego rytuału, który obniża chaos.</p><h1>7. Dzwonek jako wyzwalacz warunkowy</h1><p>U części psów problem zaczyna się jeszcze zanim pojawi się gość. Sam dźwięk dzwonka albo ruch przy domofonie uruchamia gotowość do szczekania i biegu.</p><p>To oznacza, że czasem trzeba pracować nie tylko nad wizytą, ale nad samym sygnałem zapowiadającym.</p><h1>8. Pierwsze 72 godziny: uprościć i przewidzieć</h1><p>W pierwszych trzech dniach celem nie jest testowanie psa kolejnymi wizytami. Priorytetem jest uproszczenie scenariusza: mniej niespodzianek, mniej przypadkowych wejść, prostszy rytuał i przygotowane miejsce startowe.</p><p>Jeśli to możliwe, ćwicz najpierw bez realnego gościa: z dźwiękiem, ruchem przy drzwiach i prostym odprowadzeniem psa do spokojniejszego punktu.</p><h1>9. Plan 14 dni: mniej chaosu, więcej rytmu</h1><p>W planie 14 dni ważniejsze od intensywności jest uporządkowanie sekwencji: sygnał, ruch człowieka, miejsce psa, chwila wyciszenia, dopiero potem ewentualne wejście.</p><p>Dla wielu psów lepiej działa krótsza, przewidywalna sekwencja niż heroiczna próba 'przyzwyczajenia' do pełnej wizyty od pierwszego dnia.</p><h1>10. Kiedy trzeba myśleć o szerszym problemie</h1><p>Jeśli pies jest podobnie pobudzony także w innych sytuacjach domowych, reaguje mocno na hałasy, słabo śpi albo łatwo się nakręca w ciągu dnia, problem może być częścią szerszego obrazu pobudzenia.</p><p>Wtedy sama praca nad dzwonkiem nie wystarczy.</p><h1>11. Kiedy ten materiał zwykle wystarcza</h1><p>Gdy problem dotyczy głównie rytuału wejścia, dzwonka, gości i chaosu organizacyjnego, a po 7–14 dniach widać mniej szczekania, szybszy powrót do równowagi i lepszą przewidywalność całej sekwencji.</p><p>Gdy pies nie wchodzi w głęboki lęk społeczny i nie ma silnych sygnałów agresji lub szerokiego przeciążenia całego dnia.</p><h1>12. Kiedy lepsza będzie konsultacja</h1><p>Gdy pies reaguje bardzo gwałtownie na gości, blokuje wejście, ma trudność z bezpiecznym minięciem człowieka, reaguje także poza rytuałem drzwi albo gdy sytuacja budzi obawy o bezpieczeństwo.</p><p>Konsultacja jest też lepsza wtedy, gdy problem łączy się z szerokim pobudzeniem, trudnym spacerem albo obroną zasobów i granic w domu.</p><h1>13. Co dalej / routing</h1><p>• Jeśli pies szerzej się nakręca i trudno mu zejść z pobudzenia także w innych kontekstach: przejdź do „Czy Twój pies naprawdę potrzebuje więcej ruchu?” albo „Pogoń, demolka i brak hamulców?”.</p><p>• Jeśli problem dotyczy bardziej granic i zasobów w domu niż samego wejścia: przejdź do „Pies broni zasobów?”.</p><p>• Jeśli obraz jest mieszany albo postęp mały: wybierz konsultację 15 min.</p>
+</section>
+
+<section class="footer">
+  <h2 class="footer-title">Co dalej, jeśli to nie wystarczy</h2>
+  <p class="footer-lead">
+    Ten przewodnik ma pomóc uporządkować pierwszy krok. Jeśli temat wraca, miesza kilka wątków albo
+    potrzebujesz kogoś kto zobaczy Twoją konkretną sytuację — rozmowa zwykle skraca drogę.
+  </p>
+
+  <div class="services">
+    <div class="service">
+      <div class="service-price">Kwadrans · 69 zł</div>
+      <div class="service-name">Kwadrans z behawiorystą</div>
+      <p class="service-copy">15 minut rozmowy audio. Najprostszy start przy jednym pytaniu, niepewności albo pierwszym uporządkowaniu tematu.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=szybka-konsultacja-15-min</div>
+    </div>
+
+    <div class="service">
+      <div class="service-price">Dwa kwadranse · 169 zł</div>
+      <div class="service-name">Dwa kwadranse</div>
+      <p class="service-copy">30 minut online, kiedy 15 minut to za mało, temat ma kilka wątków albo chcesz spokojniej przejść przez sytuację.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=konsultacja-30-min</div>
+    </div>
+
+    <div class="service">
+      <div class="service-price">Pełna konsultacja · 470 zł</div>
+      <div class="service-name">Pełna konsultacja behawioralna</div>
+      <p class="service-copy">60 minut rozmowy, diagnoza, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp. Dla spraw złożonych, przewlekłych albo wielowątkowych.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=konsultacja-behawioralna-online</div>
+    </div>
+  </div>
+
+  <div class="footer-contact">
+    <div>
+      <strong>Kontakt</strong><br>
+      <a href="mailto:kontakt@regulskibehawiorysta.pl">kontakt@regulskibehawiorysta.pl</a>
+    </div>
+    <div>
+      <strong>Strona</strong><br>
+      <a href="https://regulskibehawiorysta.pl">regulskibehawiorysta.pl</a>
+    </div>
+    <div>
+      <strong>Instagram</strong><br>
+      @regulskibehawiorysta
+    </div>
+  </div>
+
+  <div class="footer-fine">
+    © Krzysztof Regulski · Wszystkie prawa zastrzeżone. Materiał wyłącznie do użytku własnego, bez prawa dalszej dystrybucji i odsprzedaży.
+  </div>
+</section>
+
+</body>
+</html>

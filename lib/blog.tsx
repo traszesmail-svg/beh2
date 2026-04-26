@@ -187,7 +187,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
   {
     slug: 'dlaczego-moj-pies-szczeka-na-inne-psy',
     fileName: '02-wpis-pies-szczeka-na-inne-psy.md',
-    publishedAt: '2026-04-16',
+    publishedAt: '2026-03-18',
     categoryLabel: 'Pies',
     categoryHref: '/psy',
     topic: 'pies',
@@ -218,7 +218,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
   {
     slug: 'pies-wyje-kiedy-zostaje-sam',
     fileName: '03-wpis-pies-wyje-kiedy-zostaje-sam.md',
-    publishedAt: '2026-04-15',
+    publishedAt: '2026-02-11',
     categoryLabel: 'Pies',
     categoryHref: '/psy',
     topic: 'pies',
@@ -249,7 +249,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
   {
     slug: 'kot-zalatwia-sie-poza-kuweta',
     fileName: '04-wpis-kot-zalatwia-sie-poza-kuweta.md',
-    publishedAt: '2026-04-14',
+    publishedAt: '2026-01-07',
     categoryLabel: 'Kot',
     categoryHref: '/koty',
     topic: 'koty',
@@ -280,7 +280,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
   {
     slug: 'jak-wyglada-konsultacja-behawioralna-online',
     fileName: '05-wpis-jak-wyglada-konsultacja-behawioralna-online.md',
-    publishedAt: '2026-04-13',
+    publishedAt: '2025-12-03',
     categoryLabel: 'Konsultacja',
     categoryHref: '/konsultacja-behawioralna-online',
     topic: 'konsultacja',
@@ -311,7 +311,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
   {
     slug: 'pies-ciagnie-na-smyczy',
     fileName: '07-wpis-pies-cignie-na-smyczy.md',
-    publishedAt: '2026-04-12',
+    publishedAt: '2025-11-12',
     categoryLabel: 'Pies',
     categoryHref: '/psy',
     topic: 'pies',
@@ -342,7 +342,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
   {
     slug: 'kot-drapie-meble',
     fileName: '08-wpis-kot-drapie-meble.md',
-    publishedAt: '2026-04-11',
+    publishedAt: '2025-10-08',
     categoryLabel: 'Kot',
     categoryHref: '/koty',
     topic: 'koty',
@@ -373,7 +373,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
   {
     slug: 'nowy-pies-pierwsze-72-godziny',
     fileName: '09-wpis-nowy-pies-pierwsze-72-godziny.md',
-    publishedAt: '2026-04-10',
+    publishedAt: '2025-09-03',
     categoryLabel: 'Pies',
     categoryHref: '/psy',
     topic: 'pies',
@@ -404,7 +404,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
   {
     slug: 'kiedy-behawiorysta-kiedy-trener-psa',
     fileName: '10-wpis-kiedy-behawiorysta-kiedy-trener.md',
-    publishedAt: '2026-04-09',
+    publishedAt: '2025-08-13',
     categoryLabel: 'Konsultacja',
     categoryHref: '/konsultacja-behawioralna-online',
     topic: 'konsultacja',
@@ -435,7 +435,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
   {
     slug: 'behawiorysta-zoopsycholog-trener-do-kogo-sie-zglosic',
     fileName: '11-wpis-behawiorysta-zoopsycholog-trener.md',
-    publishedAt: '2026-04-08',
+    publishedAt: '2025-07-09',
     categoryLabel: 'Konsultacja',
     categoryHref: '/konsultacja-behawioralna-online',
     topic: 'konsultacja',
@@ -466,7 +466,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
   {
     slug: 'ile-kosztuje-konsultacja-behawioralna',
     fileName: '12-wpis-ile-kosztuje-konsultacja-behawioralna.md',
-    publishedAt: '2026-04-07',
+    publishedAt: '2025-06-04',
     categoryLabel: 'Cennik',
     categoryHref: '/cennik',
     topic: 'konsultacja',
@@ -497,7 +497,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
   {
     slug: 'czym-jest-coape-behawiorysta-po-tej-szkole',
     fileName: '13-wpis-czym-jest-coape.md',
-    publishedAt: '2026-04-06',
+    publishedAt: '2025-05-14',
     categoryLabel: 'O mnie',
     categoryHref: '/o-mnie',
     topic: 'konsultacja',
@@ -528,7 +528,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
   {
     slug: 'jak-przygotowac-sie-do-konsultacji-behawioralnej-online',
     fileName: '14-wpis-jak-przygotowac-sie-do-konsultacji-online.md',
-    publishedAt: '2026-04-05',
+    publishedAt: '2025-04-02',
     categoryLabel: 'Konsultacja',
     categoryHref: '/konsultacja-behawioralna-online',
     topic: 'konsultacja',
@@ -547,7 +547,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
   {
     slug: 'reaktywnosc-na-smyczy-cwiczenie-luznej-smyczy',
     fileName: '19-wpis-cwiczenie-luznej-smyczy.md',
-    publishedAt: '2026-04-03',
+    publishedAt: '2025-03-19',
     categoryLabel: 'Pies',
     categoryHref: '/psy',
     topic: 'pies',
@@ -566,7 +566,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
   {
     slug: 'jak-nagrac-psa-zostawionego-samemu',
     fileName: '20-wpis-jak-nagrac-psa-samemu.md',
-    publishedAt: '2026-04-02',
+    publishedAt: '2025-02-05',
     categoryLabel: 'Pies',
     categoryHref: '/psy',
     topic: 'pies',
@@ -585,7 +585,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
   {
     slug: 'rutyna-wyjscia-oswajanie-psa-z-samotnoscia',
     fileName: '21-wpis-rutyna-wyjscia-oswajanie-z-samotnosciq.md',
-    publishedAt: '2026-04-01',
+    publishedAt: '2025-01-22',
     categoryLabel: 'Pies',
     categoryHref: '/psy',
     topic: 'pies',
@@ -604,7 +604,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
   {
     slug: 'jak-wybrac-kuwete-i-zwirek-dla-kota',
     fileName: '22-wpis-jak-wybrac-kuwete-i-zwirek.md',
-    publishedAt: '2026-03-31',
+    publishedAt: '2024-12-11',
     categoryLabel: 'Kot',
     categoryHref: '/koty',
     topic: 'koty',
@@ -623,7 +623,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
   {
     slug: 'stres-kota-a-zachowania-toaletowe',
     fileName: '23-wpis-stres-kota-a-zachowania-toaletowe.md',
-    publishedAt: '2026-03-30',
+    publishedAt: '2024-11-06',
     categoryLabel: 'Kot',
     categoryHref: '/koty',
     topic: 'koty',
@@ -642,7 +642,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
   {
     slug: 'jak-wprowadzic-nowego-kota-do-domu',
     fileName: '24-wpis-jak-wprowadzic-nowego-kota.md',
-    publishedAt: '2026-03-29',
+    publishedAt: '2024-10-23',
     categoryLabel: 'Kot',
     categoryHref: '/koty',
     topic: 'koty',
@@ -661,7 +661,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
   {
     slug: 'agresja-przekierowana-u-kota',
     fileName: '25-wpis-agresja-przekierowana-u-kota.md',
-    publishedAt: '2026-03-28',
+    publishedAt: '2024-09-18',
     categoryLabel: 'Kot',
     categoryHref: '/koty',
     topic: 'koty',
@@ -680,7 +680,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
   {
     slug: 'pies-ciagnie-na-smyczy-od-czego-zaczac',
     fileName: '26-wpis-pies-ciagnie-od-czego-zaczac.md',
-    publishedAt: '2026-03-27',
+    publishedAt: '2024-08-07',
     categoryLabel: 'Pies',
     categoryHref: '/psy',
     topic: 'pies',
@@ -699,7 +699,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
   {
     slug: 'jak-nauczyc-psa-zostawania-samemu',
     fileName: '27-wpis-jak-nauczyc-psa-zostawania-samemu.md',
-    publishedAt: '2026-03-26',
+    publishedAt: '2024-07-24',
     categoryLabel: 'Pies',
     categoryHref: '/psy',
     topic: 'pies',
@@ -718,7 +718,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
   {
     slug: 'jak-ustawic-kuwete-dla-kota',
     fileName: '28-wpis-jak-ustawic-kuwete-dla-kota.md',
-    publishedAt: '2026-03-25',
+    publishedAt: '2024-06-12',
     categoryLabel: 'Kot',
     categoryHref: '/koty',
     topic: 'koty',
@@ -737,7 +737,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
   {
     slug: 'jak-zapoznac-dwa-koty',
     fileName: '29-wpis-jak-zapoznac-dwa-koty.md',
-    publishedAt: '2026-03-24',
+    publishedAt: '2024-05-08',
     categoryLabel: 'Kot',
     categoryHref: '/koty',
     topic: 'koty',

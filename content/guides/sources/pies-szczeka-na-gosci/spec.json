@@ -1,0 +1,30 @@
+{
+  "slug": "pies_szczeka_na_gosci_i_dzwonek_v2",
+  "title": "Pies szczeka na gości i dzwonek?",
+  "subtitle": "Jak odróżnić alarm, ekscytację i napięcie przy wejściu do domu — i od czego zacząć",
+  "role_in_funnel": "starter-core",
+  "price_pln": 49,
+  "target_audience": "Opiekun psa, który mierzy się ze szczekaniem na dzwonek, gości, otwieranie drzwi i cały rytuał wejścia do domu — i chce zrozumieć, czy chodzi bardziej o alarm, ekscytację czy napięcie społeczne.",
+  "positioning": "Starter-core w ścieżce dom / wejście / alarm / goście. Ma być łatwy wejściowo, ale wystarczająco konkretny, by zatrzymać część użytkowników bez pełnej konsultacji.",
+  "website_card": {
+    "eyebrow": "Starter-core PDF",
+    "headline": "Pies szczeka na gości i dzwonek?",
+    "subline": "PDF o szczekaniu na gości, dzwonek, wejście do domu, alarmie i rytuale wizyty.",
+    "cta": "Kup PDF"
+  },
+  "next_steps": [
+    "Pies broni zasobów?",
+    "Czy Twój pies naprawdę potrzebuje więcej ruchu?",
+    "Pogoń, demolka i brak hamulców?",
+    "Konsultacja 15 min"
+  ],
+  "must_have_blocks": [
+    "dla kogo",
+    "co znajdziesz w środku",
+    "najkrócej",
+    "kiedy ten materiał zwykle wystarcza",
+    "kiedy lepsza będzie konsultacja",
+    "co dalej / routing"
+  ],
+  "notes_for_offer": "Na stronie pokaż wysoko w kategorii problemów domowych. To nie jest tylko PDF o szczekaniu — sprzedaje też uporządkowanie rytuału wejścia i pracę nad dzwonkiem jako wyzwalaczem."
+}

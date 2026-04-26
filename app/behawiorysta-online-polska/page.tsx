@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { NotatnikFinalCta, NotatnikPageShell, NotatnikSectionHead, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
@@ -11,7 +12,7 @@ import { buildMarketingMetadata } from '@/lib/seo'
 const pageData = getLocalSeoPageByPath('/behawiorysta-online-polska')
 const pageTitle = 'Behawiorysta online dla opiekunow psow i kotow'
 const pageLead =
-  'Pomoc online dla calej Polski. Najpierw wybierasz wejscie: pies, kot albo spokojny start od formatu konsultacji.'
+  'Pomoc online dla calej Polski. Wybierasz wejscie: pies, kot albo bezposrednio format konsultacji.'
 
 const pageEntryCards = [
   {
@@ -160,15 +161,14 @@ export default function LocalSeoPolandOnlinePage() {
           </p>
         </div>
 
-        <div className="summary-card tree-backed-card">
-          <div className="section-eyebrow">Jedna logika online</div>
-          <h3>Trzy wejscia. Jedna spokojna decyzja przed rezerwacja.</h3>
-          <p>
-            Kwadrans pomaga ruszyc od razu. Dwa kwadranse daja wiecej miejsca na szerszy temat. Pelna konsultacja zostaje dla spraw zlozonych.
-          </p>
-          <p className="muted">
-            Priorytetowy wariant pojawia sie dopiero przy rezerwacji Kwadransu, nie jako osobna glowna usluga.
-          </p>
+        <div className="notatnik-subhero-media">
+          <div className="notatnik-subhero-figure">
+            <Image src="/branding/specialist-cat-support.jpg" alt="Behawiorysta wspiera kota podczas konsultacji online" fill sizes="(max-width: 980px) 100vw, 40vw" priority />
+          </div>
+          <div className="notatnik-subhero-note">
+            <span>Psy i koty / online</span>
+            <span>cala Polska</span>
+          </div>
         </div>
       </section>
 

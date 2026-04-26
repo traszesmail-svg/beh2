@@ -1,0 +1,32 @@
+{
+  "slug": "czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2",
+  "title": "Czy Twój pies naprawdę potrzebuje więcej ruchu?",
+  "subtitle": "Prawda o pobudzeniu, które nie schodzi po spacerze",
+  "role_in_funnel": "lead_magnet",
+  "price_pln": 0,
+  "target_audience": "Opiekun psa, który widzi nakręcanie po aktywności, słaby odpoczynek i trudność z zejściem z pobudzenia.",
+  "positioning": "Szerokie wejście do psiego lejka PDF. Materiał ma obalić mit „więcej ruchu = rozwiązanie”, uporządkować problem i skierować użytkownika do właściwej kolejnej ścieżki lub konsultacji.",
+  "website_card": {
+    "eyebrow": "Darmowy start",
+    "headline": "Czy Twój pies naprawdę potrzebuje więcej ruchu?",
+    "subline": "Szeroki PDF wejściowy o pobudzeniu, regeneracji i tym, kiedy więcej aktywności tylko dokręca problem.",
+    "cta": "Pobierz darmowy PDF"
+  },
+  "next_steps": [
+    "Szczeniak gryzie i skacze?",
+    "Szczeniak nie umie się wyciszyć?",
+    "Trudny spacer",
+    "Dlaczego pies „głupieje” na smyczy?",
+    "Pogoń, demolka i brak hamulców?",
+    "Konsultacja 15 min"
+  ],
+  "must_have_blocks": [
+    "dla kogo",
+    "co znajdziesz w środku",
+    "najkrócej",
+    "kiedy ten materiał zwykle wystarcza",
+    "kiedy lepsza będzie konsultacja",
+    "co dalej / routing"
+  ],
+  "notes_for_offer": "Na stronie pokazuj wysoko jako darmowy start. Nie sprzedawaj go jako równorzędnego z core PDF-ami."
+}

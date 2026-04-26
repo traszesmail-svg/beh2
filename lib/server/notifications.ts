@@ -1742,3 +1742,157 @@ export async function sendClientTestimonialNotificationEmail(
   return deliverEmail({ to: recipient, subject, html, text }, 'internal')
 }
 
+// ── /materialy funnel ───────────────────────────────────────────────────────
+// Notifications for the new low-friction PDF funnel that uses BLIK + manual
+// confirmation. Two flows: (1) free lead-magnet — code is generated immediately
+// and sent to the customer; (2) paid order — owner gets a "to confirm" mail,
+// then after manual confirmation the customer receives the unlock code.
+
+export type MaterialyOrderEmailPayload = {
+  orderId: string
+  productKind: 'guide' | 'bundle'
+  productSlug: string
+  productTitle: string
+  priceLabel: string
+  priceAmount: number
+  customerName: string
+  customerEmail: string
+  customerPhone?: string | null
+  notes?: string | null
+}
+
+export async function sendMaterialyOrderOwnerEmail(payload: MaterialyOrderEmailPayload): Promise<DeliveryResult> {
+  const recipient = getPublicContactDetails().email
+  if (!recipient) return { status: 'skipped', reason: 'public contact email missing or invalid' }
+
+  const replyTo = isValidPublicEmail(payload.customerEmail) ? payload.customerEmail : undefined
+  const isBundle = payload.productKind === 'bundle'
+  const isFree = payload.priceAmount === 0
+  const subject = isFree
+    ? `Materialy: nowy lead - ${payload.productTitle}`
+    : `Materialy: zamowienie ${payload.orderId} - ${payload.productTitle} (${payload.priceLabel})`
+
+  const phoneBlock = payload.customerPhone
+    ? `<p><strong>Telefon:</strong> ${escapeHtml(payload.customerPhone)}</p>`
+    : ''
+  const notesBlock = payload.notes
+    ? `<p><strong>Wiadomosc:</strong><br />${formatMultilineHtml(payload.notes)}</p>`
+    : ''
+
+  const intro = isFree
+    ? 'Klient pobral darmowy material. Kod do pobrania zostal juz wyslany automatycznie. To powiadomienie tylko do listy mailingowej i statystyk.'
+    : `Klient zamowil ${isBundle ? 'pakiet' : 'pojedynczy PDF'}. Po wplywie BLIK potwierdz zamowienie w panelu admina (lub przez API confirm), aby system wyslal klientowi kod do pobrania.`
+
+  const html = renderEmailShell(
+    isFree ? 'Nowy lead PDF (bezplatny)' : 'Nowe zamowienie PDF',
+    intro,
+    `
+      <p><strong>Order ID:</strong> <code>${escapeHtml(payload.orderId)}</code></p>
+      <p><strong>Produkt:</strong> ${escapeHtml(payload.productTitle)} ${isBundle ? '(pakiet)' : ''}</p>
+      <p><strong>Slug:</strong> ${escapeHtml(payload.productSlug)}</p>
+      <p><strong>Cena:</strong> ${escapeHtml(payload.priceLabel)}</p>
+      <p><strong>Imie:</strong> ${escapeHtml(payload.customerName)}</p>
+      <p><strong>E-mail:</strong> ${replyTo ? `<a href="mailto:${escapeHtml(payload.customerEmail)}">${escapeHtml(payload.customerEmail)}</a>` : escapeHtml(payload.customerEmail)}</p>
+      ${phoneBlock}
+      ${notesBlock}
+    `,
+    isFree
+      ? 'Material wyslany automatycznie. Mozesz dorzucic kontakt do listy nurturujacej.'
+      : 'Po BLIK na podany w polu nadawcy numer wykonaj POST /api/materialy/confirm z naglowkiem x-admin-secret i body { orderId }, lub potwierdz w panelu admina.',
+  )
+
+  const lines = [
+    isFree ? 'Nowy lead PDF (darmowy).' : 'Nowe zamowienie PDF.',
+    `Order ID: ${payload.orderId}`,
+    `Produkt: ${payload.productTitle}${isBundle ? ' (pakiet)' : ''}`,
+    `Slug: ${payload.productSlug}`,
+    `Cena: ${payload.priceLabel}`,
+    `Imie: ${payload.customerName}`,
+    `E-mail: ${payload.customerEmail}`,
+    payload.customerPhone ? `Telefon: ${payload.customerPhone}` : null,
+    payload.notes ? `Wiadomosc: ${payload.notes}` : null,
+  ]
+    .filter((line): line is string => Boolean(line))
+    .join('\n')
+
+  return deliverEmail({ to: recipient, subject, html, text: lines, replyTo }, 'internal')
+}
+
+export async function sendMaterialyOrderPendingCustomerEmail(payload: MaterialyOrderEmailPayload, blikPhone: string): Promise<DeliveryResult> {
+  const recipient = payload.customerEmail.trim()
+  if (!isValidPublicEmail(recipient)) return { status: 'skipped', reason: 'customer contact email missing or invalid' }
+
+  const subject = `Zamowienie ${payload.orderId}: jak oplacic i odebrac PDF`
+  const html = renderEmailShell(
+    `Czesc ${escapeHtml(payload.customerName)}, dostalem Twoje zamowienie.`,
+    'Wystarczy zrobic szybki BLIK i wysle Ci kod do pobrania PDF. To proces reczny — kod przychodzi do 60 minut w godzinach 8–18 (pon–pt). Poza tymi godzinami w nastepny dzien roboczy.',
+    `
+      <p><strong>Numer zamowienia:</strong> <code>${escapeHtml(payload.orderId)}</code></p>
+      <p><strong>Produkt:</strong> ${escapeHtml(payload.productTitle)}</p>
+      <p><strong>Kwota:</strong> ${escapeHtml(payload.priceLabel)}</p>
+      <h2 style="font-size:16px;margin-top:24px;">Jak oplacic</h2>
+      <p>Wykonaj BLIK <strong>na numer telefonu:</strong> <code>${escapeHtml(blikPhone)}</code></p>
+      <p><strong>Tytul przelewu:</strong> ${escapeHtml(payload.orderId)}</p>
+      <p>(Mozesz tez zrobic zwykly przelew z tym samym tytulem na konto, ktore podam w odpowiedzi mailowej, jesli nie korzystasz z BLIKa.)</p>
+      <h2 style="font-size:16px;margin-top:24px;">Co dalej</h2>
+      <p>Po zaksiegowaniu wplaty wysle Ci e-mail z 6-cyfrowym kodem. Kod wpisujesz na stronie <a href="https://regulskibehawiorysta.pl/materialy/pobranie">regulskibehawiorysta.pl/materialy/pobranie</a> i pobierasz PDF.</p>
+      <p>Kod jest wazny 72 godziny i pozwala na maksymalnie 3 pobrania.</p>
+    `,
+    'Jesli zamowienie wymaga zmiany albo dane sie nie zgadzaja, odpowiedz na ten e-mail.',
+  )
+  const text = [
+    `Czesc ${payload.customerName},`,
+    `Numer zamowienia: ${payload.orderId}`,
+    `Produkt: ${payload.productTitle}`,
+    `Kwota: ${payload.priceLabel}`,
+    '',
+    `BLIK na numer: ${blikPhone}`,
+    `Tytul: ${payload.orderId}`,
+    '',
+    'Po zaksiegowaniu wyslemy Ci kod do pobrania mailem.',
+    'Strona pobrania: https://regulskibehawiorysta.pl/materialy/pobranie',
+  ].join('\n')
+
+  return deliverEmail({ to: recipient, subject, html, text }, 'customer')
+}
+
+export async function sendMaterialyCodeCustomerEmail(payload: MaterialyOrderEmailPayload, code: string, expiresAt: string): Promise<DeliveryResult> {
+  const recipient = payload.customerEmail.trim()
+  if (!isValidPublicEmail(recipient)) return { status: 'skipped', reason: 'customer contact email missing or invalid' }
+
+  const expiresLabel = new Date(expiresAt).toLocaleString('pl-PL', { dateStyle: 'long', timeStyle: 'short' })
+  const isFree = payload.priceAmount === 0
+  const subject = isFree
+    ? `Twoj bezplatny material: ${payload.productTitle}`
+    : `Kod do pobrania: ${payload.productTitle}`
+
+  const html = renderEmailShell(
+    isFree
+      ? `Czesc ${escapeHtml(payload.customerName)}, oto Twoj bezplatny material.`
+      : `Czesc ${escapeHtml(payload.customerName)}, dostalem Twoja wplate. Oto kod.`,
+    isFree
+      ? 'Material jest darmowy. Kod ponizej dziala tak samo jak przy zamowieniach platnych.'
+      : 'Wpisz ponizszy kod razem z e-mailem na stronie pobrania, zeby otworzyc PDF.',
+    `
+      <p><strong>Numer zamowienia:</strong> <code>${escapeHtml(payload.orderId)}</code></p>
+      <p><strong>Produkt:</strong> ${escapeHtml(payload.productTitle)}</p>
+      <p style="margin-top:24px;"><strong>Kod do pobrania:</strong></p>
+      <p style="font-size:28px;letter-spacing:6px;font-weight:700;background:#f0e5d6;padding:16px 24px;border-radius:6px;display:inline-block;">${escapeHtml(code)}</p>
+      <p style="margin-top:24px;"><strong>Strona pobrania:</strong><br /><a href="https://regulskibehawiorysta.pl/materialy/pobranie">regulskibehawiorysta.pl/materialy/pobranie</a></p>
+      <p><strong>Wazny do:</strong> ${escapeHtml(expiresLabel)} (72 godziny od potwierdzenia, max 3 pobrania).</p>
+    `,
+    'Material wylacznie do uzytku wlasnego, bez prawa dalszej dystrybucji.',
+  )
+  const text = [
+    `Czesc ${payload.customerName},`,
+    `Numer zamowienia: ${payload.orderId}`,
+    `Produkt: ${payload.productTitle}`,
+    '',
+    `Kod do pobrania: ${code}`,
+    `Strona pobrania: https://regulskibehawiorysta.pl/materialy/pobranie`,
+    `Wazny do: ${expiresLabel} (max 3 pobrania).`,
+  ].join('\n')
+
+  return deliverEmail({ to: recipient, subject, html, text }, 'customer')
+}
+

@@ -276,3 +276,44 @@ export function getItemListJsonLd(
     })),
   }
 }
+
+export function getProductJsonLd({
+  name,
+  description,
+  url,
+  price,
+  image,
+  category = 'Poradnik PDF',
+}: {
+  name: string
+  description: string
+  url: string
+  price: string | number
+  image?: string | null
+  category?: string
+}) {
+  const priceValue =
+    typeof price === 'number'
+      ? price
+      : Number(String(price).replace(',', '.').match(/\d+(?:\.\d{1,2})?/)?.[0] ?? NaN)
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name,
+    description,
+    category,
+    url: toAbsoluteUrl(url),
+    ...(image ? { image: toAbsoluteUrl(image) } : {}),
+    brand: {
+      '@id': ORGANIZATION_ID,
+    },
+    offers: {
+      '@type': 'Offer',
+      url: toAbsoluteUrl(url),
+      priceCurrency: 'PLN',
+      ...(Number.isFinite(priceValue) ? { price: priceValue } : {}),
+      availability: 'https://schema.org/InStock',
+    },
+  }
+}

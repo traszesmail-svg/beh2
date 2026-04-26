@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Miauczenie o świcie · Regulski | Terapia behawioralna</title>
+<style>/* PDF guide stylesheet — renders on A4 via Playwright page.pdf() */
+
+@page {
+  size: A4;
+  margin: 22mm 18mm 22mm 18mm;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.55;
+  color: #1f1a17;
+  background: #fdfbf7;
+}
+
+/* Cover page */
+.cover {
+  page: cover;
+  page-break-after: always;
+  min-height: 247mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 4mm 0;
+}
+
+.cover-brand {
+  font-size: 9pt;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8b6f5a;
+  font-weight: 600;
+}
+
+.cover-tag {
+  display: inline-block;
+  font-size: 9pt;
+  color: #5e4a3c;
+  background: #f0e5d6;
+  padding: 3mm 5mm;
+  border-radius: 2mm;
+  margin-bottom: 6mm;
+}
+
+.cover-title {
+  font-size: 32pt;
+  line-height: 1.1;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 0 0 6mm 0;
+  letter-spacing: -0.01em;
+}
+
+.cover-subtitle {
+  font-size: 14pt;
+  line-height: 1.35;
+  color: #5e4a3c;
+  font-weight: 500;
+  margin: 0 0 10mm 0;
+}
+
+.cover-lead {
+  font-size: 11pt;
+  line-height: 1.6;
+  color: #3f332a;
+  max-width: 140mm;
+}
+
+.cover-bullets {
+  margin-top: 8mm;
+  padding: 0;
+  list-style: none;
+}
+
+.cover-bullets li {
+  padding: 2mm 0 2mm 6mm;
+  position: relative;
+  font-size: 10.5pt;
+  color: #3f332a;
+}
+
+.cover-bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 5mm;
+  width: 3mm;
+  height: 0.7mm;
+  background: #c9a37a;
+}
+
+.cover-meta {
+  font-size: 9pt;
+  color: #8b6f5a;
+  border-top: 0.3mm solid #e5d8c6;
+  padding-top: 4mm;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6mm;
+}
+.cover-meta > div { min-width: 0; word-break: break-word; }
+
+.cover-meta strong { color: #1f1a17; }
+
+.cover-disclaimer {
+  margin-top: 6mm;
+  font-size: 9pt;
+  font-style: italic;
+  color: #8b6f5a;
+  border-left: 0.5mm solid #c9a37a;
+  padding: 2mm 0 2mm 4mm;
+}
+
+/* Body typography */
+.body h1 {
+  font-size: 18pt;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 10mm 0 4mm 0;
+  padding-bottom: 2mm;
+  border-bottom: 0.3mm solid #e5d8c6;
+}
+
+.body h2 {
+  font-size: 14pt;
+  line-height: 1.25;
+  font-weight: 700;
+  color: #3f332a;
+  margin: 8mm 0 3mm 0;
+}
+
+.body h3 {
+  font-size: 12pt;
+  font-weight: 600;
+  color: #3f332a;
+  margin: 6mm 0 2mm 0;
+}
+
+.body p {
+  margin: 0 0 3mm 0;
+  text-align: justify;
+  hyphens: auto;
+}
+
+.body ul, .body ol {
+  margin: 0 0 4mm 0;
+  padding-left: 6mm;
+}
+
+.body li {
+  margin: 1mm 0;
+}
+
+.body strong { color: #1f1a17; }
+
+.body em { color: #5e4a3c; }
+
+/* Callout boxes (from data-kind="callout") */
+.body table[data-kind="callout"] {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4mm 0;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="callout"] td {
+  padding: 4mm 5mm;
+  background: #faf1e3;
+  border-left: 1mm solid #c9a37a;
+  border-radius: 0 1.5mm 1.5mm 0;
+}
+
+.body table[data-kind="callout"] p { margin: 0 0 2mm 0; }
+.body table[data-kind="callout"] p:last-child { margin-bottom: 0; }
+.body table[data-kind="callout"] p strong:first-child {
+  display: block;
+  font-size: 11pt;
+  margin-bottom: 1mm;
+  color: #1f1a17;
+}
+
+/* Callout stack (vertical list of callouts in one table) */
+.body table[data-kind="callout-stack"] {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 2mm;
+  margin: 4mm 0;
+}
+
+.body table[data-kind="callout-stack"] td {
+  padding: 3.5mm 5mm;
+  background: #faf1e3;
+  border-left: 1mm solid #c9a37a;
+}
+
+/* Grid boxes (single row, multiple cells — feature grid) */
+.body table[data-kind="grid"] {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 2mm 0;
+  margin: 4mm 0;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="grid"] td {
+  padding: 3mm 4mm;
+  background: #f5ece0;
+  border-radius: 1.5mm;
+  vertical-align: top;
+  width: auto;
+}
+
+.body table[data-kind="grid"] p { margin: 0 0 1.5mm 0; font-size: 9.5pt; }
+.body table[data-kind="grid"] strong { display: block; margin-bottom: 1mm; }
+
+/* Data tables (multi-row comparison) */
+.body table[data-kind="data"] {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4mm 0;
+  font-size: 9.5pt;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="data"] th,
+.body table[data-kind="data"] td {
+  border: 0.2mm solid #e5d8c6;
+  padding: 2mm 3mm;
+  vertical-align: top;
+  text-align: left;
+}
+
+.body table[data-kind="data"] tr:first-child td,
+.body table[data-kind="data"] th {
+  background: #f5ece0;
+  font-weight: 600;
+  color: #1f1a17;
+}
+
+.body table[data-kind="data"] tr:nth-child(even) td {
+  background: #fcf8f1;
+}
+
+/* Footer section — CTA routing to services */
+.footer {
+  page-break-before: always;
+  padding: 2mm 0;
+}
+
+.footer-title {
+  font-size: 18pt;
+  font-weight: 700;
+  margin: 0 0 4mm 0;
+  color: #1f1a17;
+}
+
+.footer-lead {
+  color: #3f332a;
+  margin-bottom: 6mm;
+  max-width: 150mm;
+}
+
+.services {
+  display: flex;
+  flex-direction: column;
+  gap: 3mm;
+  margin-bottom: 8mm;
+}
+
+.service {
+  padding: 4mm 5mm;
+  background: #f5ece0;
+  border-left: 1mm solid #c9a37a;
+  border-radius: 0 2mm 2mm 0;
+  page-break-inside: avoid;
+}
+
+.service-price {
+  font-size: 9pt;
+  color: #8b6f5a;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.service-name {
+  font-size: 13pt;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 1mm 0;
+}
+
+.service-copy {
+  font-size: 10pt;
+  color: #3f332a;
+  margin: 0 0 2mm 0;
+}
+
+.service-url {
+  font-size: 9pt;
+  color: #8b6f5a;
+}
+
+.footer-contact {
+  border-top: 0.3mm solid #e5d8c6;
+  padding-top: 4mm;
+  font-size: 9.5pt;
+  color: #3f332a;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6mm;
+}
+.footer-contact > div { min-width: 0; word-break: break-word; }
+
+.footer-contact a { color: #5e4a3c; text-decoration: none; }
+
+.footer-fine {
+  margin-top: 4mm;
+  font-size: 8.5pt;
+  color: #8b6f5a;
+  font-style: italic;
+}
+
+/* Category accent colors: cat / dog / puppy — tinted cover */
+body[data-category="cat"] .cover-tag { background: #ecdad3; color: #6b463a; }
+body[data-category="cat"] .cover-bullets li::before { background: #b97865; }
+body[data-category="cat"] .body table[data-kind="callout"] td { background: #f8eae5; border-left-color: #b97865; }
+body[data-category="cat"] .body table[data-kind="callout-stack"] td { background: #f8eae5; border-left-color: #b97865; }
+body[data-category="cat"] .body table[data-kind="grid"] td { background: #f8eae5; }
+body[data-category="cat"] .body table[data-kind="data"] tr:first-child td { background: #f8eae5; }
+body[data-category="cat"] .service { background: #f8eae5; border-left-color: #b97865; }
+
+body[data-category="dog"] .cover-tag { background: #e9e2ce; color: #5c4a2e; }
+body[data-category="dog"] .cover-bullets li::before { background: #997947; }
+body[data-category="dog"] .body table[data-kind="callout"] td { background: #f4ecd7; border-left-color: #997947; }
+body[data-category="dog"] .body table[data-kind="callout-stack"] td { background: #f4ecd7; border-left-color: #997947; }
+body[data-category="dog"] .body table[data-kind="grid"] td { background: #f4ecd7; }
+body[data-category="dog"] .body table[data-kind="data"] tr:first-child td { background: #f4ecd7; }
+body[data-category="dog"] .service { background: #f4ecd7; border-left-color: #997947; }
+
+body[data-category="puppy"] .cover-tag { background: #e4ead3; color: #4b5730; }
+body[data-category="puppy"] .cover-bullets li::before { background: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="callout"] td { background: #edf2dd; border-left-color: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="callout-stack"] td { background: #edf2dd; border-left-color: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="grid"] td { background: #edf2dd; }
+body[data-category="puppy"] .body table[data-kind="data"] tr:first-child td { background: #edf2dd; }
+body[data-category="puppy"] .service { background: #edf2dd; border-left-color: #7a8d4f; }
+</style>
+</head>
+<body data-category="cat">
+
+<section class="cover">
+  <div>
+    <div class="cover-brand">Regulski · Terapia behawioralna</div>
+    <div style="margin: 12mm 0 0 0;">
+      <div class="cover-tag">Koty · przewodnik</div>
+      <h1 class="cover-title">Miauczenie o świcie</h1>
+      <p class="cover-subtitle">4 powody, przez które kot nakręca ten schemat — i jak przerwać go bez walki z kotem</p>
+    </div>
+    <p class="cover-lead">Objawowy PDF dla opiekuna, który budzi się przez poranną wokalizację i chce szybko ocenić, czy chodzi o nawyk, rytm dnia, stres środowiskowy czy czerwone flagi medyczne. W środku dostajesz porządek diagnostyczny, obserwację 7 dni i plan 14 dni.</p>
+    <ul class="cover-bullets">
+      <li>4 główne grupy przyczyn porannej wokalizacji</li>
+      <li>obserwacja 7 dni + plan 14 dni bez przypadkowego wzmacniania schematu</li>
+      <li>moduł seniora, błędy opiekuna i routing do szerszego PDF-u nocnego oraz konsultacji</li>
+    </ul>
+  </div>
+  <div>
+    <div class="cover-disclaimer">Materiał edukacyjny. Nie zastępuje badania lekarsko-weterynaryjnego ani indywidualnej konsultacji behawioralnej.</div>
+    <div class="cover-meta">
+      <div><strong>Format</strong><br>PDF A4, druk domowy</div>
+      <div><strong>Czytanie</strong><br>5 min</div>
+      <div><strong>Wydano</strong><br>25 kwietnia 2026</div>
+      <div><strong>Autor</strong><br>Krzysztof Regulski</div>
+    </div>
+  </div>
+</section>
+
+<section class="body">
+<p><em>Starter / core-lite PDF • ścieżka nocnej wokalizacji</em></p><table data-kind="callout" data-label="Dla kogo jest ten materiał"><tbody><tr><td><p><strong>Dla kogo jest ten materiał</strong></p><p>Dla opiekuna, który mierzy się głównie z porannym miauczeniem i chce odróżnić wyuczony schemat od problemu zdrowotnego, napięcia w domu albo źle ustawionego rytmu dnia. To lżejszy, objawowy PDF w ścieżce nocnej aktywności.</p></td></tr></tbody></table><p><strong>Co znajdziesz w środku</strong></p><table data-kind="data"><tbody><tr><td><p><strong>4 grupy przyczyn</strong></p><p>uczenie się i nawyk, potrzeby środowiskowe, stres i napięcie oraz czerwone flagi medyczne</p></td><td><p><strong>Historia problemu</strong></p><p>jak czytać poranny epizod: co działo się przed, jak reagowali ludzie i co kot realnie zyskuje</p></td></tr><tr><td><p><strong>7-dniowa obserwacja</strong></p><p>prosty dziennik do złapania wzorca bez polegania na pamięci</p></td><td><p><strong>Plan 14 dni</strong></p><p>jak zmienić wieczór, poranek i reakcje domowników bez przypadkowego nakręcania schematu</p></td></tr><tr><td><p><strong>Kot senior</strong></p><p>kiedy poranna wokalizacja wymaga pytań o ból, nadczynność tarczycy, nadciśnienie i zmiany poznawcze</p></td><td><p><strong>Co dalej</strong></p><p>routing do szerszego PDF-u nocnego, konfliktu, ścieżki kuwetowej i konsultacji</p></td></tr></tbody></table><table data-kind="callout" data-label="Najkrócej"><tbody><tr><td><p><strong>Najkrócej</strong></p><p>Świt to pora, w której nakładają się trzy rzeczy: biologiczna gotowość kota do działania, lekki sen człowieka i historia wcześniejszych reakcji domowników. Dlatego poranna wokalizacja rzadko jest tylko jednym problemem. Ten PDF pomaga oddzielić nawyk od realnych potrzeb i czerwonych flag.</p></td></tr></tbody></table><p><strong>4 główne grupy przyczyn</strong></p><table data-kind="data"><tbody><tr><td><p><strong>1. Uczenie się i nawyk</strong></p><p>kot zauważył, że głos o świcie uruchamia uwagę, jedzenie, ruch człowieka albo wpuszczenie do sypialni</p></td><td><p><strong>2. Potrzeby środowiskowe</strong></p><p>za mało aktywności wieczorem, długa nocna przerwa, ubogie środowisko albo brak przewidywalnego rytuału</p></td></tr><tr><td><p><strong>3. Stres i napięcie</strong></p><p>konflikt między kotami, nocna czujność, zmiana w domu, niepewność lub pobudzenie środowiskowe</p></td><td><p><strong>4. Medycyna i senior</strong></p><p>ból, nadczynność tarczycy, nadciśnienie, zmiany poznawcze, głód wtórny do choroby albo zaburzenia snu</p></td></tr></tbody></table><p><strong>Jak korzystać z tego porządku</strong></p><p>Nie zaczynaj od mechanicznego ignorowania wszystkiego. Najpierw uporządkuj, czy problem jest wzmacniany reakcjami ludzi, czy kot ma sensowny wieczór, czy w tle nie ma napięcia w domu oraz czy pojawiają się sygnały zdrowotne lub senioralne. Dopiero z takiego porządku wynika rozsądny plan pracy.</p><table data-kind="callout" data-label="Trzy zasady, które oszczędzają chaos"><tbody><tr><td><p><strong>Trzy zasady, które oszczędzają chaos</strong></p><ul><li>jeżeli początek był nagły albo kot jest starszy, myśl najpierw o ścieżce medycznej</li><li>jeżeli zachowanie jest skuteczne tylko czasami, może utrwalać się jeszcze mocniej</li><li>jeżeli świt łączy się z konfliktem lub wycofaniem w dzień, nie redukuj wszystkiego do „głodu”</li></ul></td></tr></tbody></table><p><strong>Powód 1 i 2: nawyk oraz rytm dnia</strong></p><p>Poranne miauczenie bardzo często staje się zachowaniem skutecznym. Dla jednego kota nagrodą będzie mokra karma, dla innego samo wstanie człowieka, ruch po domu, rozmowa albo otwarcie drzwi. Równolegle wiele kotów ma źle ułożony wieczór: za mało sensownej aktywności, za wczesny ostatni posiłek i brak rytuału, który wygasza pobudzenie przed snem.</p><table data-kind="data"><tbody><tr><td><p><strong>Reakcja człowieka</strong></p></td><td><p><strong>Dlaczego wzmacnia schemat</strong></p></td></tr><tr><td><p>„Cicho, idź spać”</p></td><td><p>kot dostaje uwagę i informację, że dźwięk uruchamia kontakt</p></td></tr><tr><td><p>napełnienie miski „żeby ucichł”</p></td><td><p>poranna wokalizacja staje się skuteczną drogą do jedzenia</p></td></tr><tr><td><p>wstanie z łóżka lub spacer do kuchni</p></td><td><p>sam ruch człowieka może być dla kota bardzo nagradzający</p></td></tr><tr><td><p>wpuszczenie do sypialni</p></td><td><p>kot uczy się, że świt otwiera dostęp do bliskości i ciepła</p></td></tr></tbody></table><table data-kind="callout" data-label="Co zwykle daje najszybszą poprawę"><tbody><tr><td><p><strong>Co zwykle daje najszybszą poprawę</strong></p><ul><li>wieczorem lepsza jest krótka sekwencja łowiecka + posiłek + wyciszenie niż chaotyczne „zmęczenie kota”</li><li>u części kotów pomaga mały posiłek automatyczny przed świtem, ale dopiero po ocenie całości rytmu dnia</li><li>jeżeli różni domownicy reagują inaczej, kot uczy się próbować dłużej i głośniej</li></ul></td></tr></tbody></table><p><strong>Powód 3 i 4: stres, nocna czujność oraz medycyna</strong></p><p>Niektóre koty wokalizują nad ranem dlatego, że dopiero wtedy czują się wystarczająco bezpiecznie, by się poruszać, jeść albo szukać człowieka. Inne robią to dlatego, że noc uwydatnia ból, głód wtórny do choroby, nadciśnienie, nadczynność tarczycy albo dezorientację senioralną. Dlatego poranną wokalizację trzeba czytać w kontekście całego dnia, a nie tylko jednej godziny.</p><table data-kind="callout" data-label="Czerwone flagi"><tbody><tr><td><p><strong>Czerwone flagi</strong></p><ul><li>w domu wielokotowym patrz na blokowanie przejść, misek, drogi do sypialni i zmianę rytmu aktywności jednego kota</li><li>u seniora zwracaj uwagę na dezorientację, patrzenie w ścianę, chudnięcie, większe pragnienie i zmianę jakości snu</li><li>nagły początek, ból, zmiana apetytu lub aktywności dziennej to mocny argument za ścieżką medyczną</li></ul></td></tr></tbody></table><table data-kind="callout" data-label="Senior o świcie"><tbody><tr><td><p><strong>Senior o świcie</strong></p><p>U kota starszego poranna wokalizacja nie powinna być z góry traktowana jako „przyzwyczajenie”. Częściej trzeba pytać o ból zwyrodnieniowy, nadczynność tarczycy, nadciśnienie, pogorszenie widzenia lub słuchu oraz zmiany poznawcze.</p></td></tr></tbody></table><p><strong>Obserwacja 7 dni</strong></p><p>Ten PDF działa najlepiej wtedy, gdy przez tydzień zbierzesz prosty materiał obserwacyjny. Interesuje Cię nie tylko godzina, lecz także sekwencja: czy kot najpierw krąży, idzie do miski, zaczepia człowieka, wraca pod drzwi czy reaguje na drugiego kota.</p><table data-kind="data"><tbody><tr><td><p><strong>Dzień</strong></p></td><td><p><strong>Godzina pierwszej wokalizacji</strong></p></td><td><p><strong>Co zrobił człowiek</strong></p></td><td><p><strong>Co mogło poprzedzać epizod</strong></p></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p><strong>Na co patrzeć podczas tygodnia obserwacji</strong></p><table data-kind="callout" data-label="Cztery pytania kontrolne"><tbody><tr><td><p><strong>Cztery pytania kontrolne</strong></p><ul><li>czy problem nasila się w weekendy albo po gorszej nocy człowieka</li><li>czy wokalizacja pojawia się przed jedzeniem, po jedzeniu czy niezależnie od miski</li><li>czy kot śpi w dzień więcej niż dawniej albo funkcjonuje głównie nocą</li><li>czy w tle są wycofanie, konflikt, problemy kuwetowe albo inne zmiany biologiczne</li></ul></td></tr></tbody></table><p><strong>Plan naprawczy na 14 dni</strong></p><table data-kind="data"><tbody><tr><td><p><strong>Etap</strong></p></td><td><p><strong>Co robisz</strong></p></td><td><p><strong>Po co</strong></p></td></tr><tr><td><p>Dni 1-3</p></td><td><p>porządkujesz czerwone flagi, wieczorną rutynę i reakcje domowników</p></td><td><p>przestać dokładać chaosu i przypadkowych wzmocnień</p></td></tr><tr><td><p>Dni 4-7</p></td><td><p>wdrażasz stały wieczorny rytuał aktywności, jedzenia i wygaszania bodźców</p></td><td><p>obniżyć biologiczne ciśnienie o świcie</p></td></tr><tr><td><p>Dni 8-10</p></td><td><p>pilnujesz spójności reakcji ludzi i oceniasz, czy świt nadal przynosi kotu zysk</p></td><td><p>zobaczyć, ile było w tym czystego nawyku</p></td></tr><tr><td><p>Dni 11-14</p></td><td><p>sprawdzasz, czy trzeba pogłębić ścieżkę: konflikt, senior, środowisko lub konsultacja</p></td><td><p>wybrać następny krok na podstawie danych</p></td></tr></tbody></table><table data-kind="callout" data-label="Najczęstszy błąd"><tbody><tr><td><p><strong>Najczęstszy błąd</strong></p><p>Wiele osób próbuje wygaszać poranne miauczenie, nie zmieniając nic w wieczorze, jedzeniu, napięciu środowiskowym ani spójności reakcji domowników. Wtedy kot dostaje tylko trudniejsze warunki, ale problem pozostaje logiczny z jego perspektywy.</p></td></tr></tbody></table><p><strong>Kiedy ten materiał zwykle wystarcza</strong></p><p>• zwykle wystarcza, jeśli problem jest czytelnie związany ze świtem, porą karmienia albo reakcją człowieka</p><p>• po tygodniu obserwacji i 14 dniach zmian poranna wokalizacja staje się rzadsza lub krótsza</p><p>• nie pojawia się dezorientacja, chudnięcie, silne pragnienie ani inne objawy wymagające ścieżki medycznej</p><p>Jeśli poranna wokalizacja jest tylko fragmentem szerszego nocnego problemu, wróć do PDF-u „Kot budzi dom po nocy?”. Jeśli w tle pojawiają się czerwone flagi albo kilka mechanizmów naraz, konsultacja będzie szybsza niż dalsze zgadywanie.</p><p><strong>Co dalej po tym PDF-ie</strong></p><table data-kind="data"><tbody><tr><td><p><strong>Kot budzi dom po nocy?</strong></p><p>jeśli problem jest szerszy niż świt i obejmuje nocną aktywność, seniora, wieczór i różne wzorce wokalizacji</p></td><td><p><strong>Konflikt między kotami</strong></p><p>jeśli poranna wokalizacja łączy się z blokowaniem przejść, nocną aktywnością jednego kota albo cichą presją społeczną</p></td></tr><tr><td><p><strong>Kot żyje w napięciu</strong></p><p>jeśli nie masz pewności, czy główną warstwą jest stres, konflikt czy rozregulowane środowisko</p></td><td><p><strong>Kwadrans z behawiorystą</strong></p><p>jeśli nie wiesz, czy problem jest jeszcze nawykiem, czy trzeba zacząć od lekarza lub głębszej ścieżki</p></td></tr></tbody></table><table data-kind="callout" data-label="Finalny sens tego materiału"><tbody><tr><td><p><strong>Finalny sens tego materiału</strong></p><p>To objawowy PDF dla opiekuna, który chce szybko zrozumieć poranne miauczenie bez skakania między sprzecznymi radami z internetu. Ma pomóc zobaczyć mechanizm, a nie walczyć z samym dźwiękiem.</p></td></tr></tbody></table>
+</section>
+
+<section class="footer">
+  <h2 class="footer-title">Co dalej, jeśli to nie wystarczy</h2>
+  <p class="footer-lead">
+    Ten przewodnik ma pomóc uporządkować pierwszy krok. Jeśli temat wraca, miesza kilka wątków albo
+    potrzebujesz kogoś kto zobaczy Twoją konkretną sytuację — rozmowa zwykle skraca drogę.
+  </p>
+
+  <div class="services">
+    <div class="service">
+      <div class="service-price">Kwadrans · 69 zł</div>
+      <div class="service-name">Kwadrans z behawiorystą</div>
+      <p class="service-copy">15 minut rozmowy audio. Najprostszy start przy jednym pytaniu, niepewności albo pierwszym uporządkowaniu tematu.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=szybka-konsultacja-15-min</div>
+    </div>
+
+    <div class="service">
+      <div class="service-price">Dwa kwadranse · 169 zł</div>
+      <div class="service-name">Dwa kwadranse</div>
+      <p class="service-copy">30 minut online, kiedy 15 minut to za mało, temat ma kilka wątków albo chcesz spokojniej przejść przez sytuację.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=konsultacja-30-min</div>
+    </div>
+
+    <div class="service">
+      <div class="service-price">Pełna konsultacja · 470 zł</div>
+      <div class="service-name">Pełna konsultacja behawioralna</div>
+      <p class="service-copy">60 minut rozmowy, diagnoza, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp. Dla spraw złożonych, przewlekłych albo wielowątkowych.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=konsultacja-behawioralna-online</div>
+    </div>
+  </div>
+
+  <div class="footer-contact">
+    <div>
+      <strong>Kontakt</strong><br>
+      <a href="mailto:kontakt@regulskibehawiorysta.pl">kontakt@regulskibehawiorysta.pl</a>
+    </div>
+    <div>
+      <strong>Strona</strong><br>
+      <a href="https://regulskibehawiorysta.pl">regulskibehawiorysta.pl</a>
+    </div>
+    <div>
+      <strong>Instagram</strong><br>
+      @regulskibehawiorysta
+    </div>
+  </div>
+
+  <div class="footer-fine">
+    © Krzysztof Regulski · Wszystkie prawa zastrzeżone. Materiał wyłącznie do użytku własnego, bez prawa dalszej dystrybucji i odsprzedaży.
+  </div>
+</section>
+
+</body>
+</html>

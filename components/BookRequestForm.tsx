@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useMemo, useState, type FormEvent } from 'react'
+import { trackAnalyticsEvent } from '@/lib/analytics'
 import type { BookingServiceType } from '@/lib/booking-services'
 import type { BookingSpecies } from '@/lib/booking-routing'
 import {
@@ -200,6 +201,10 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
 
       setStatus('success')
       setFeedback(payload.message ?? 'Dostalem Twoja rezerwacje. Sprawdz skrzynke - wyslalem kopie.')
+      trackAnalyticsEvent('booking_form_submitted', {
+        service_key: form.service,
+        species: form.species,
+      })
       setForm(createInitialForm(form.service, form.species))
     } catch (error) {
       setStatus('error')
@@ -244,7 +249,15 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
   }
 
   return (
-    <form className="form-grid top-gap" onSubmit={handleSubmit} noValidate>
+    <form
+      className="form-grid top-gap"
+      onSubmit={handleSubmit}
+      noValidate
+      data-analytics-form="booking"
+      data-analytics-form-start-event="booking_form_started"
+      data-analytics-service={form.service}
+      data-analytics-species={form.species}
+    >
       <div className="info-box full-width contact-form-intro">
         <strong>{selectedServiceIntro.title}</strong> {selectedServiceIntro.copy}
       </div>

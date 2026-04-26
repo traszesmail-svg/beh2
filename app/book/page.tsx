@@ -96,7 +96,7 @@ export default function BookPage({ searchParams }: BookPageProps) {
     hasExplicitService && selectedOffer ? `Przejdz do formularza: ${selectedOffer.shortTitle}` : 'Przejdz do formularza'
   const heroFormLabel =
     hasExplicitService && selectedOffer ? `Przejdz do formularza: ${selectedOffer.shortTitle}` : 'Przejdz do formularza'
-  const heroTag = hasExplicitService && selectedOffer ? `Rezerwacja / ${selectedOffer.shortTitle}` : 'Rezerwacja / spokojny start'
+  const heroTag = hasExplicitService && selectedOffer ? `Rezerwacja / ${selectedOffer.shortTitle}` : 'Rezerwacja konsultacji'
   const heroLead = hasExplicitService && selectedOffer ? selectedOffer.whenToChoose : PUBLIC_OFFER_BOOKING_LEAD
   const heroSupport = hasExplicitService && selectedOffer ? selectedOffer.heroSummary : PUBLIC_OFFER_BOOKING_REASSURANCE
   const summaryTitle = hasExplicitService && selectedOffer ? `Startujesz juz od: ${selectedOffer.shortTitle}.` : 'Najpierw sens wyboru, potem platnosc.'
@@ -189,6 +189,17 @@ export default function BookPage({ searchParams }: BookPageProps) {
               </span>
             </Link>
           </div>
+          <p style={{ marginTop: '14px', fontSize: '14px', color: 'var(--ink-quiet)' }}>
+            Nie chcesz jeszcze rozmawiać?{' '}
+            <Link href="/materialy" prefetch={false} className="prep-inline-link">
+              PDF z /materialy od 19&nbsp;zł
+            </Link>{' '}
+            albo{' '}
+            <Link href="/materialy#tier-free" prefetch={false} className="prep-inline-link">
+              materiały bezpłatne
+            </Link>
+            .
+          </p>
         </div>
 
         <div className="summary-card tree-backed-card">
@@ -199,36 +210,7 @@ export default function BookPage({ searchParams }: BookPageProps) {
         </div>
       </section>
 
-      <section id="porownanie">
-        <NotatnikSectionHead index="I." kicker="Uslugi" title="Najpierw porownaj trzy glowne formaty." />
-        <ServicesComparison species={species} />
-        <div className="info-box top-gap-small">{PUBLIC_OFFER_CANCELLATION_COPY}</div>
-      </section>
-
-      <section style={{ background: 'var(--paper)' }}>
-        <NotatnikSectionHead index="II." kicker="Decyzja" title={decisionSectionTitle} />
-        <div className="notatnik-steps">
-          {PUBLIC_OFFER_BOOKING_PROCESS.map((step, index) => (
-            <article key={step} className="notatnik-step">
-              <div className="notatnik-step-number">{String(index + 1).padStart(2, '0')}</div>
-              <p>{step}</p>
-            </article>
-          ))}
-        </div>
-        <div className="notatnik-quiet-grid top-gap">
-          <article className="notatnik-quiet-card">
-            <h3>Nie musisz miec gotowej diagnozy</h3>
-            <p>Wystarczy krotki opis sytuacji i propozycja terminow. Jesli temat okaze sie szerszy, powiem to wprost.</p>
-          </article>
-          <article className="notatnik-quiet-card">
-            <h3>{decisionCard.title}</h3>
-            <p>{decisionCard.copy}</p>
-          </article>
-        </div>
-        <div className="info-box top-gap-small">{PUBLIC_OFFER_BOOKING_PRIORITY_NOTE}</div>
-      </section>
-
-      <section className="notatnik-contact">
+      <section className="notatnik-contact notatnik-book-fast-form">
         <div className="notatnik-contact-left">
           <div className="notatnik-mono notatnik-kicker-spaced">Formularz rezerwacji</div>
           {hasExplicitService && selectedOffer ? (
@@ -276,6 +258,36 @@ export default function BookPage({ searchParams }: BookPageProps) {
           </div>
         </div>
       </section>
+
+      <section id="porownanie">
+        <NotatnikSectionHead index="I." kicker="Uslugi" title="Najpierw porownaj trzy glowne formaty." />
+        <ServicesComparison species={species} />
+        <div className="info-box top-gap-small">{PUBLIC_OFFER_CANCELLATION_COPY}</div>
+      </section>
+
+      <section style={{ background: 'var(--paper)' }}>
+        <NotatnikSectionHead index="II." kicker="Decyzja" title={decisionSectionTitle} />
+        <div className="notatnik-steps">
+          {PUBLIC_OFFER_BOOKING_PROCESS.map((step, index) => (
+            <article key={step} className="notatnik-step">
+              <div className="notatnik-step-number">{String(index + 1).padStart(2, '0')}</div>
+              <p>{step}</p>
+            </article>
+          ))}
+        </div>
+        <div className="notatnik-quiet-grid top-gap">
+          <article className="notatnik-quiet-card">
+            <h3>Nie musisz miec gotowej diagnozy</h3>
+            <p>Wystarczy krotki opis sytuacji i propozycja terminow. Jesli temat okaze sie szerszy, powiem to wprost.</p>
+          </article>
+          <article className="notatnik-quiet-card">
+            <h3>{decisionCard.title}</h3>
+            <p>{decisionCard.copy}</p>
+          </article>
+        </div>
+        <div className="info-box top-gap-small">{PUBLIC_OFFER_BOOKING_PRIORITY_NOTE}</div>
+      </section>
+
     </NotatnikPageShell>
   )
 }

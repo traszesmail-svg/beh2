@@ -1,0 +1,31 @@
+{
+  "slug": "szczeniak_gryzie_i_skacze_v2",
+  "title": "Szczeniak gryzie i skacze?",
+  "subtitle": "Jak odróżnić typowe zachowanie rozwojowe od przeciążenia i braku planu",
+  "role_in_funnel": "starter",
+  "price_pln": 49,
+  "target_audience": "Opiekun szczeniaka lub młodego psa, który widzi podgryzanie, skakanie, łapanie rąk i chaos przy pobudzeniu.",
+  "positioning": "Pierwszy płatny PDF w ścieżce szczeniaka. Ma szybko wyjaśnić problem, dać prosty plan 14 dni i skierować dalej do core o wyciszeniu albo do konsultacji.",
+  "website_card": {
+    "eyebrow": "Starter PDF",
+    "headline": "Szczeniak gryzie i skacze?",
+    "subline": "Praktyczny PDF o podgryzaniu, skakaniu, frustracji i pierwszym domowym planie pracy.",
+    "cta": "Kup PDF"
+  },
+  "next_steps": [
+    "Szczeniak nie umie się wyciszyć?",
+    "Trudny spacer",
+    "Dlaczego pies „głupieje” na smyczy?",
+    "Pogoń, demolka i brak hamulców?",
+    "Konsultacja 15 min"
+  ],
+  "must_have_blocks": [
+    "dla kogo",
+    "co znajdziesz w środku",
+    "najkrócej",
+    "kiedy ten materiał zwykle wystarcza",
+    "kiedy lepsza będzie konsultacja",
+    "co dalej / routing"
+  ],
+  "notes_for_offer": "Na stronie pokazuj jako objawowy starter dla ścieżki szczeniaka. Nie mieszaj go z PDF-em o wyciszeniu; ten materiał sprzedaje pierwszy, widoczny problem."
+}

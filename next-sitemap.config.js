@@ -9,6 +9,12 @@ module.exports = {
       priority: 0.9,
       lastmod: new Date().toISOString(),
     },
+    {
+      loc: '/kontakt',
+      changefreq: 'monthly',
+      priority: 0.8,
+      lastmod: new Date().toISOString(),
+    },
   ],
   exclude: [
     '/api/*',

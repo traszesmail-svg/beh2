@@ -122,7 +122,7 @@ export default function ContactPage({
             </div>
 
             <div className="notatnik-contact-note notatnik-contact-note-compact">
-              <p>Jesli nie jestes pewien, ktory format pasuje do Twojej sytuacji, napisz krotka wiadomosc przez formularz. Odpiszemy z rekomendacja.</p>
+              <p>Jesli nie jestes pewien, ktory format pasuje do Twojej sytuacji, napisz krotka wiadomosc przez formularz. Odpiszę z rekomendacją.</p>
             </div>
 
             <div className="notatnik-contact-note">

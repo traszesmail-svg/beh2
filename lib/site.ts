@@ -31,11 +31,11 @@ export const HOME_HERO_PHOTO = {
 export const SITE_NAME = 'Regulski | Terapia behawioralna'
 export const SITE_SHORT_NAME = 'Regulski'
 export const SITE_HEADER_BRAND = 'Regulski Behawiorysta'
-export const SITE_HEADER_SUBTITLE = 'Spokojny start dla opiekunów psów i kotów'
+export const SITE_HEADER_SUBTITLE = 'Behawiorysta psów i kotów online'
 export const SITE_URL_FALLBACK = 'http://localhost:3000'
 export const SITE_PRODUCTION_URL = 'https://regulskibehawiorysta.pl'
 export const PUBLIC_CONTACT_EMAIL_FALLBACK = 'kontakt@regulskibehawiorysta.pl'
-export const SITE_TAGLINE = 'Spokojna pomoc dla opiekunów psów i kotów'
+export const SITE_TAGLINE = 'Profesjonalna pomoc behawioralna dla psów i kotów'
 export const SITE_DESCRIPTION =
   'Behawiorysta psow i kotow online. Spokojny pierwszy krok, konsultacje online i materialy pomocnicze z jasnym planem dzialania.'
 

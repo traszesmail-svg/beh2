@@ -119,11 +119,48 @@ export function NotatnikTopbar({ tag, navItems, ctaHref, ctaLabel, ctaVariant = 
         >
           <InstagramGlyph />
         </a>
-        <Link href={ctaHref} prefetch={false} className={getCtaClassName(ctaVariant)}>
+        <Link
+          href={ctaHref}
+          prefetch={false}
+          className={getCtaClassName(ctaVariant)}
+          data-analytics-event="cta_click"
+          data-analytics-location="topbar"
+          data-analytics-cta-label={ctaLabel}
+        >
           <span>{ctaLabel}</span>
           <NotatnikButtonArrow />
         </Link>
       </div>
+
+      <details className="notatnik-mobile-menu">
+        <summary aria-label="Otworz menu">
+          <span className="notatnik-mobile-menu-bars" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+          </span>
+        </summary>
+        <div className="notatnik-mobile-menu-panel">
+          <nav aria-label="Menu mobilne">
+            {navItems.map((item) => (
+              <Link key={item.href} href={item.href} prefetch={false}>
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+          <Link
+            href={ctaHref}
+            prefetch={false}
+            className={getCtaClassName(ctaVariant)}
+            data-analytics-event="cta_click"
+            data-analytics-location="mobile-menu"
+            data-analytics-cta-label={ctaLabel}
+          >
+            <span>{ctaLabel}</span>
+            <NotatnikButtonArrow />
+          </Link>
+        </div>
+      </details>
     </header>
   )
 }

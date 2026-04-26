@@ -83,7 +83,7 @@ export function buildTechnicalMetadata({ title, path, description, noIndex = tru
 
 export async function buildHomeMetadata(): Promise<Metadata> {
   const description = appendLocalSeoContext(
-    'Behawiorysta psow i kotow online. Kwadrans 69 zl, Kwadrans na juz 99 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl. Trzy formaty dopasowane do skali tematu.',
+    'Behawiorysta psow i kotow online. Zacznij od spokojnego pierwszego kroku: Kwadrans, Dwa kwadranse, Pelna konsultacja albo materialy startowe w Niezbedniku.',
   )
   const title = 'Behawiorysta psow i kotow online'
   const fullTitle = buildMetadataTitle(title)
@@ -117,14 +117,12 @@ export async function buildBookMetadata(serviceType: BookingServiceType = DEFAUL
   const serviceSummary = getBookingServiceRoomSummary(serviceType)
   const isQuick = serviceType === 'szybka-konsultacja-15-min'
 
-  return buildTechnicalMetadata({
+  return buildMarketingMetadata({
     title: isQuick ? 'Rezerwacja konsultacji - Kwadrans z behawiorysta' : `Rezerwacja konsultacji: ${serviceTitle}`,
     path: '/book',
     description: isQuick
       ? 'Zarezerwuj Kwadrans z behawiorysta: 15 minut audio bez kamery, pierwszy krok i spokojne uporzadkowanie tematu.'
       : `${serviceSummary} Wybierz gatunek i temat konsultacji, a potem przejdz do terminow i kolejnego kroku rezerwacji ze specjalista ${SPECIALIST_NAME}.`,
-    noIndex: true,
-    follow: true,
   })
 }
 

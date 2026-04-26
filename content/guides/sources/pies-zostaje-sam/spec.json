@@ -1,0 +1,30 @@
+{
+  "slug": "pies_zostaje_sam_i_wpada_w_panike_v2",
+  "title": "Pies zostaje sam i wpada w panikę?",
+  "subtitle": "Jak odróżnić separację od frustracji, protestu i chaosu po wyjściu — i od czego zacząć",
+  "role_in_funnel": "core",
+  "price_pln": 79,
+  "target_audience": "Opiekun psa, który podejrzewa, że problem z zostawaniem samemu to nie tylko nuda albo pojedynczy protest, lecz realna panika, frustracja separacyjna albo poważna trudność z regulacją po wyjściu człowieka.",
+  "positioning": "Core PDF w ścieżce samotność / niszczenie / dom. Ma pogłębiać starter „Pies niszczy w domu?” i prowadzić do ostrożnej pracy przy separacji.",
+  "website_card": {
+    "eyebrow": "Core PDF",
+    "headline": "Pies zostaje sam i wpada w panikę?",
+    "subline": "PDF o panice separacyjnej, frustracji, nagraniu wideo, pierwszych 72 godzinach i planie 14 dni.",
+    "cta": "Kup PDF"
+  },
+  "next_steps": [
+    "Pies niszczy w domu?",
+    "Czy Twój pies naprawdę potrzebuje więcej ruchu?",
+    "Pogoń, demolka i brak hamulców?",
+    "Konsultacja 15 min"
+  ],
+  "must_have_blocks": [
+    "dla kogo",
+    "co znajdziesz w środku",
+    "najkrócej",
+    "kiedy ten materiał zwykle wystarcza",
+    "kiedy lepsza będzie konsultacja",
+    "co dalej / routing"
+  ],
+  "notes_for_offer": "To nie jest starter o niszczeniu. Na stronie pokazuj jako główny core ścieżki samotności / separacji. Materiał ma wysoką intencję zakupową i powinien siedzieć wyżej niż reszta core tej gałęzi."
+}

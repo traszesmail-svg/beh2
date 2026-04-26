@@ -61,7 +61,16 @@ export function PdfGuideCard({ guide, primaryHref, primaryLabel, compact = false
         <Link href={guide.routePath} prefetch={false} className="button button-ghost">
           Zobacz poradnik
         </Link>
-        <Link href={primaryHref ?? buildPdfOrderHref({ guideSlug: guide.slug })} prefetch={false} className="button button-primary">
+        <Link
+          href={primaryHref ?? buildPdfOrderHref({ guideSlug: guide.slug })}
+          prefetch={false}
+          className="button button-primary"
+          data-analytics-event="pdf_order_click"
+          data-analytics-location="pdf-guide-card"
+          data-analytics-cta-label={primaryLabel ?? getPdfGuideInquiryLabel(guide)}
+          data-analytics-item-type="guide"
+          data-analytics-item-slug={guide.slug}
+        >
           {primaryLabel ?? getPdfGuideInquiryLabel(guide)}
         </Link>
       </div>

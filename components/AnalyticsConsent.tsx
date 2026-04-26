@@ -92,6 +92,8 @@ export function AnalyticsConsent({ measurementId, cookiebotDomainGroupId }: Anal
       return
     }
 
+    const startedForms = new WeakSet<HTMLFormElement>()
+
     function handleTrackedClick(event: MouseEvent) {
       const target = (event.target as HTMLElement | null)?.closest<HTMLElement>('[data-analytics-event]')
 
@@ -118,13 +120,37 @@ export function AnalyticsConsent({ measurementId, cookiebotDomainGroupId }: Anal
         service_duration: target.dataset.analyticsServiceDuration,
         service_price: target.dataset.analyticsServicePrice,
         cta_label: target.dataset.analyticsCtaLabel,
+        item_type: target.dataset.analyticsItemType,
+        item_slug: target.dataset.analyticsItemSlug,
         slot_date: target.dataset.analyticsSlotDate,
         slot_time: target.dataset.analyticsSlotTime,
       })
     }
 
+    function handleTrackedFormStart(event: FocusEvent) {
+      const form = (event.target as HTMLElement | null)?.closest<HTMLFormElement>('form[data-analytics-form]')
+
+      if (!form || startedForms.has(form)) {
+        return
+      }
+
+      startedForms.add(form)
+      trackAnalyticsEvent(form.dataset.analyticsFormStartEvent ?? 'form_started', {
+        form_name: form.dataset.analyticsForm,
+        source_page: pathname,
+        service_key: form.dataset.analyticsService,
+        species: form.dataset.analyticsSpecies,
+        item_type: form.dataset.analyticsItemType,
+        item_slug: form.dataset.analyticsItemSlug,
+      })
+    }
+
     document.addEventListener('click', handleTrackedClick)
-    return () => document.removeEventListener('click', handleTrackedClick)
+    document.addEventListener('focusin', handleTrackedFormStart)
+    return () => {
+      document.removeEventListener('click', handleTrackedClick)
+      document.removeEventListener('focusin', handleTrackedFormStart)
+    }
   }, [measurementId, pathname])
 
   useEffect(() => {

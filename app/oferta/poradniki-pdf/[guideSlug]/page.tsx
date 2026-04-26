@@ -5,12 +5,14 @@ import { notFound } from 'next/navigation'
 import { NotatnikPageShell, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { PdfBundleCard } from '@/components/PdfBundleCard'
 import { PdfGuideCover } from '@/components/PdfGuideCover'
+import { Schema } from '@/components/schema'
 import { repairCopy } from '@/lib/copy'
 import {
   buildPdfOrderHref,
   getPdfAccessDescription,
   getPdfAccessLabel,
   getPdfCategoryLabel,
+  getPdfGuideCoverSrc,
   getPdfGuideBySlug,
   getPdfGuideInquiryLabel,
   getPdfKindLabel,
@@ -19,7 +21,8 @@ import {
   listPdfGuides,
   PDF_GUIDES_LISTING_ROUTE,
 } from '@/lib/pdf-guides'
-import { buildMarketingMetadata, buildTechnicalMetadata } from '@/lib/seo'
+import { getProductJsonLd } from '@/lib/schema'
+import { buildMarketingMetadata } from '@/lib/seo'
 
 type PdfGuideDetailPageProps = {
   params: {
@@ -46,11 +49,10 @@ export function generateMetadata({ params }: PdfGuideDetailPageProps): Metadata 
     })
   }
 
-  return buildTechnicalMetadata({
+  return buildMarketingMetadata({
     title: `${repairCopy(guide.title)} | Poradnik PDF`,
     path: guide.routePath,
     description: repairCopy(guide.description),
-    noIndex: true,
   })
 }
 
@@ -74,6 +76,16 @@ export default function PdfGuideDetailPage({ params }: PdfGuideDetailPageProps) 
       footerPrimaryHref={orderHref}
       footerPrimaryLabel="Zamów ten PDF"
     >
+      <Schema
+        data={getProductJsonLd({
+          name: repairCopy(guide.title),
+          description: repairCopy(guide.description),
+          url: guide.routePath,
+          price: getPdfPricingBadge(guide.pricing),
+          image: getPdfGuideCoverSrc(guide),
+          category: 'Poradnik PDF',
+        })}
+      />
       <div className="container">
         <section className="two-col-section offer-detail-layout pdf-detail-layout">
           <div className="panel section-panel hero-surface offer-detail-content-panel pdf-detail-content-panel">
