@@ -27,7 +27,7 @@ const nextConfig = {
     workerThreads: false,
     cpus: 1,
     webpackBuildWorker: false,
-    optimizeCss: false,
+    optimizeCss: true,
     outputFileTracingIncludes: {
       '/*': ['./qa-reports/latest-report.md'],
     },
@@ -130,6 +130,21 @@ const nextConfig = {
       {
         source: '/oferta/poradniki-pdf/pies_do_pracy_z_ludzmi_v2',
         destination: '/oferta/poradniki-pdf/pies-do-pracy-z-ludzmi',
+        statusCode: 301,
+      },
+      {
+        source: '/oferta/poradniki-pdf/szczeniak-pierwsze-30-dni',
+        destination: '/materialy/szczeniak-gryzie-i-skacze',
+        statusCode: 301,
+      },
+      {
+        source: '/oferta/poradniki-pdf/kot-stres-srodowisko-i-bledy-opiekuna',
+        destination: '/materialy/kot-zyje-w-napieciu',
+        statusCode: 301,
+      },
+      {
+        source: '/oferta/poradniki-pdf/pakiety/pakiet-kota-domowego',
+        destination: '/materialy/pakiet/pakiet-kocie-napiecie',
         statusCode: 301,
       },
     ]

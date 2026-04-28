@@ -1,7 +1,10 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { HeroIllustration } from '@/components/HeroIllustration'
 import { NextSlot } from '@/components/NextSlot'
+import { Breadcrumbs } from '@/components/Breadcrumbs'
+import { LeadMagnetSection } from '@/components/LeadMagnetSection'
 import { NotatnikFinalCta, NotatnikFooter, NotatnikSectionHead, NotatnikSideVisuals, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
 import { buildBookHref } from '@/lib/booking-routing'
@@ -132,6 +135,7 @@ export default function CatsPage() {
       <NotatnikSideVisuals variant="cat" />
       <div className="notatnik-shell">
         <NotatnikTopbar tag="Kot / strona gatunku" navItems={PUBLIC_SITE_NAV_ITEMS} ctaHref={quickHref} ctaLabel="Kwadrans / 69 zl" />
+        <Breadcrumbs items={[{ name: 'Koty', url: '/koty' }]} />
 
         <section className="notatnik-subhero">
           <div>
@@ -168,13 +172,7 @@ export default function CatsPage() {
           </div>
 
           <div className="notatnik-subhero-media">
-            <div className="notatnik-subhero-figure">
-              <Image src="/branding/topic-cards/cats/cat-anxious-hiding.jpg" alt="Pregowany kot siedzi spokojnie na zewnatrz" fill sizes="(max-width: 980px) 100vw, 40vw" priority />
-            </div>
-            <div className="notatnik-subhero-note">
-              <span>Kuweta / stres / relacje miedzy kotami</span>
-              <span>online / cala Polska</span>
-            </div>
+            <HeroIllustration slug="koty" emojiPlaceholder="🐈" className="w-full h-full min-h-[340px]" />
           </div>
         </section>
 
@@ -243,6 +241,8 @@ export default function CatsPage() {
             ))}
           </div>
         </section>
+
+        <LeadMagnetSection pathname="/koty" />
 
         <NotatnikFinalCta
           title="Jesli temat kota Ci nie daje spokoju, <em>zacznij od porzadku.</em>"

@@ -1,7 +1,10 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
 import Link from 'next/link'
+import { HeroIllustration } from '@/components/HeroIllustration'
+import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { NotatnikFinalCta, NotatnikPageShell, NotatnikSectionHead, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
+import { OfferCards } from '@/components/OfferCards'
+import { KwadransNaJuzBadge } from '@/components/KwadransNaJuzBadge'
 import { Schema } from '@/components/schema'
 import { getBreadcrumbJsonLd, getServiceJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
@@ -86,6 +89,7 @@ export default function PricingPage() {
         ]}
       />
 
+      <Breadcrumbs items={[{ name: 'Cennik', url: '/cennik' }]} />
       <section className="notatnik-subhero">
         <div>
           <div className="notatnik-subhero-tag notatnik-mono">Cennik / psy i koty</div>
@@ -108,47 +112,17 @@ export default function PricingPage() {
         </div>
 
         <div className="notatnik-subhero-media">
-          <div className="notatnik-subhero-figure">
-            <Image src="/branding/topic-cards/dog-resting-home.jpg" alt="Pies odpoczywa spokojnie w domu" fill sizes="(max-width: 980px) 100vw, 40vw" priority />
-          </div>
-          <div className="notatnik-subhero-note">
-            <span>69 / 99 / 169 / 470 zl</span>
-            <span>online / cala Polska</span>
-          </div>
+          <HeroIllustration slug="cennik" emojiPlaceholder="💰" className="w-full h-full min-h-[340px]" />
         </div>
       </section>
 
       <section id="porownanie">
         <NotatnikSectionHead index="I." kicker="Formaty" title="Cztery opcje. Jeden prosty wybor." />
-        <div className="card-grid three-up">
-          <article className="summary-card tree-backed-card">
-            <div className="section-eyebrow">69 zl</div>
-            <h3>Kwadrans z behawiorysta</h3>
-            <p>Najprostszy start przy jednym pytaniu, niepewnosci albo pierwszym uporzadkowaniu tematu.</p>
-          </article>
-          <article className="summary-card tree-backed-card">
-            <div className="section-eyebrow">169 zl</div>
-            <h3>Dwa kwadranse</h3>
-            <p>Dobry wybor, gdy 15 minut to za malo, temat ma kilka watkow albo chcesz spokojniej przejsc przez sytuacje.</p>
-          </article>
-          <article className="summary-card tree-backed-card">
-            <div className="section-eyebrow">470 zl</div>
-            <h3>Pelna konsultacja</h3>
-            <p>{PUBLIC_OFFER_FULL_CONSULTATION_VALUE}</p>
-          </article>
+        <div className="top-gap-small">
+          <KwadransNaJuzBadge />
         </div>
-
-        <div className="notatnik-quiet-grid top-gap">
-          {PUBLIC_OFFER_START_GUIDE.map((snippet) => (
-            <article key={snippet} className="notatnik-quiet-card">
-              <p>{snippet}</p>
-            </article>
-          ))}
-        </div>
-
-        <div className="list-card accent-outline tree-backed-card top-gap-small">
-          <strong>Kwadrans na juz (99 zl)</strong>
-          <span>{PUBLIC_OFFER_PRIORITY_VARIANT_NOTE}</span>
+        <div className="top-gap-small">
+          <OfferCards />
         </div>
       </section>
 
@@ -201,7 +175,7 @@ export default function PricingPage() {
         title="Jesli chcesz ruszyc z tematem, <em>zacznij od Kwadransu.</em>"
         copy="To dalej najprostszy pierwszy krok. Jesli wolisz najpierw przygotowac sie materialami, przejdz do Niezbednika."
         primaryHref="/book?service=szybka-konsultacja-15-min"
-        primaryLabel="Zarezerwuj Kwadrans ->"
+        primaryLabel="Zarezerwuj Kwadrans"
         secondaryHref="/niezbednik"
         secondaryLabel="Przejdz do Niezbednika"
       />

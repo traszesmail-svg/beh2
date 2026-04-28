@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
 import Link from 'next/link'
+import { HeroIllustration } from '@/components/HeroIllustration'
+import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { NotatnikFinalCta, NotatnikPageShell, NotatnikSectionHead, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
+import { CredentialsGrid } from '@/components/CredentialsGrid'
 import { Schema } from '@/components/schema'
 import { buildBookHref } from '@/lib/booking-routing'
 import { getBreadcrumbJsonLd, getFaqPageJsonLd, getPersonJsonLd } from '@/lib/schema'
@@ -86,6 +88,7 @@ export default function AboutPage() {
       sideVisualVariant="about"
     >
       <Schema data={structuredData} />
+      <Breadcrumbs items={[{ name: 'O mnie', url: '/o-mnie' }]} />
       <section className="notatnik-subhero">
         <div>
           <div className="notatnik-subhero-tag notatnik-mono">O mnie / podejscie</div>
@@ -108,33 +111,15 @@ export default function AboutPage() {
         </div>
 
         <div className="notatnik-subhero-media">
-          <div className="notatnik-hero-card">
-            <div className="notatnik-hero-card-corner notatnik-mono">Publiczny status</div>
-            <div className="notatnik-hero-card-media" style={{ height: 360 }}>
-              <Image
-                src="/branding/specialist-krzysztof-portrait.jpg"
-                alt="Krzysztof Regulski, behawiorysta i technik weterynarii"
-                fill
-                sizes="(max-width: 980px) 100vw, 40vw"
-                priority
-              />
-            </div>
-            <div className="notatnik-hero-card-body">
-              <h3>{SPECIALIST_NAME}</h3>
-              <p>{SPECIALIST_PUBLIC_STATUS}</p>
-              <span>{SPECIALIST_PUBLIC_PROOF_SUMMARY}</span>
-              <div className="notatnik-price-row notatnik-price-row-plain">
-                <Link href={CAPBT_PROFILE_URL} target="_blank" rel="noreferrer noopener" className="notatnik-inline-link">
-                  Zobacz profil CAPBT
-                </Link>
-              </div>
-            </div>
-          </div>
+          <HeroIllustration slug="o-mnie" emojiPlaceholder="🧑‍💻" className="w-full h-full min-h-[340px]" />
         </div>
       </section>
 
       <section>
-        <NotatnikSectionHead index="I." kicker="3 filary pracy" title="Jak pracuje z problemem psa albo kota." />
+        <NotatnikSectionHead index="I." kicker="Kwalifikacje" title="Jak pracuje z problemem psa albo kota." />
+        <div className="top-gap-small">
+          <CredentialsGrid />
+        </div>
         <div className="card-grid three-up top-gap-small">
           {workStyleCards.map((card) => (
             <article key={card.title} className="summary-card tree-backed-card">

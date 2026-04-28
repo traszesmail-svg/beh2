@@ -26,7 +26,6 @@ import { canSelfCancelBooking, getRemainingSelfCancellationSeconds } from '@/lib
 import { getBookingForViewer } from '@/lib/server/db'
 import { getDataModeStatus } from '@/lib/server/env'
 import { getCustomerEmailDeliveryStatus } from '@/lib/server/notifications'
-import { finalizeStripeCheckoutSession } from '@/lib/server/stripe'
 import { buildTechnicalMetadata } from '@/lib/seo'
 import { SmsConfirmationStatus } from '@/lib/types'
 
@@ -153,6 +152,15 @@ function getConfirmedFlowCards(
   ]
 }
 
+async function finalizeLegacyCheckoutSession(
+  _sessionId: string,
+  _options?: {
+    triggerPaymentConfirmationSms?: boolean
+  },
+): Promise<void> {
+  return
+}
+
 export default async function ConfirmationPage({
   searchParams,
 }: {
@@ -176,7 +184,7 @@ export default async function ConfirmationPage({
 
   if (!flowError && bookingId && sessionId) {
     try {
-      await finalizeStripeCheckoutSession(sessionId, {
+      await finalizeLegacyCheckoutSession(sessionId, {
         triggerPaymentConfirmationSms: false,
       })
     } catch (error) {

@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="100 100 330 260" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Cat sitting, elegant profile -->
+  <!-- body -->
+  <path d="M195 318 Q178 290 180 255 Q182 218 208 205 Q232 194 258 202 Q282 212 288 242 Q293 268 284 300 Q274 325 248 330 Q218 334 195 318Z" stroke="#1a2e2a" stroke-width="2.5" fill="#f8f5f0"/>
+  <!-- head -->
+  <circle cx="270" cy="178" r="38" stroke="#1a2e2a" stroke-width="2.5" fill="#f8f5f0"/>
+  <!-- ears pointed -->
+  <path d="M248 155 Q240 128 252 118 Q260 130 262 150" stroke="#1a2e2a" stroke-width="2" fill="#f8f5f0"/>
+  <path d="M291 153 Q300 126 290 116 Q282 128 280 148" stroke="#1a2e2a" stroke-width="2" fill="#f8f5f0"/>
+  <!-- inner ear -->
+  <path d="M250 153 Q244 133 252 124 Q257 133 258 148" stroke="#1a2e2a" stroke-width="1" fill="#f0d0d0" opacity="0.5"/>
+  <path d="M289 151 Q295 131 289 122 Q285 131 283 146" stroke="#1a2e2a" stroke-width="1" fill="#f0d0d0" opacity="0.5"/>
+  <!-- eyes closed/half - serene -->
+  <path d="M252 175 Q260 170 268 175" stroke="#1a2e2a" stroke-width="2" fill="none"/>
+  <path d="M273 176 Q281 171 289 176" stroke="#1a2e2a" stroke-width="2" fill="none"/>
+  <!-- nose small triangle -->
+  <path d="M270 186 L265 192 L275 192Z" stroke="#1a2e2a" stroke-width="1.5" fill="none"/>
+  <!-- mouth -->
+  <path d="M265 193 Q270 198 275 193" stroke="#1a2e2a" stroke-width="1.5" fill="none"/>
+  <!-- whiskers -->
+  <line x1="230" y1="184" x2="260" y2="186" stroke="#1a2e2a" stroke-width="1.2" opacity="0.5"/>
+  <line x1="228" y1="190" x2="260" y2="190" stroke="#1a2e2a" stroke-width="1.2" opacity="0.5"/>
+  <line x1="280" y1="186" x2="310" y2="184" stroke="#1a2e2a" stroke-width="1.2" opacity="0.5"/>
+  <line x1="280" y1="190" x2="312" y2="190" stroke="#1a2e2a" stroke-width="1.2" opacity="0.5"/>
+  <!-- tail curled elegantly -->
+  <path d="M184 290 Q155 278 148 255 Q143 238 152 228 Q164 220 168 235 Q170 248 162 258 Q158 268 165 275" stroke="#1a2e2a" stroke-width="2.5" fill="none"/>
+  <!-- front paws tucked -->
+  <path d="M210 325 Q200 335 198 326 Q205 315 218 318" stroke="#1a2e2a" stroke-width="2" fill="#f8f5f0"/>
+  <path d="M248 330 Q238 340 236 331 Q243 320 255 323" stroke="#1a2e2a" stroke-width="2" fill="#f8f5f0"/>
+
+  <!-- Human hand gently reaching -->
+  <line x1="410" y1="148" x2="342" y2="175" stroke="#1a2e2a" stroke-width="3"/>
+  <path d="M342 175 Q332 183 327 177 Q324 170 333 165 Q338 162 344 167Z" stroke="#1a2e2a" stroke-width="2" fill="#f4c89a"/>
+
+  <!-- Small hearts floating -->
+  <path d="M355 118 Q357 114 361 116 Q365 114 367 118 Q367 122 361 126 Q355 122 355 118Z" stroke="#2f7667" stroke-width="1.5" fill="none"/>
+  <path d="M378 100 Q380 96 384 98 Q388 96 390 100 Q390 104 384 108 Q378 104 378 100Z" stroke="#2f7667" stroke-width="1.5" fill="none"/>
+
+  <!-- Decorative curve / cozy feel -->
+  <path d="M100 280 Q115 260 130 270 Q145 280 140 295" stroke="#b07b3f" stroke-width="1.5" fill="none" opacity="0.4"/>
+
+  <!-- Ground -->
+  <line x1="80" y1="335" x2="420" y2="335" stroke="#d4ede6" stroke-width="2"/>
+</svg>

@@ -85,12 +85,19 @@ export const faq = [
   },
 ]
 
-const rollingAvailabilityTimeGroups = [
-  ['09:00', '09:20', '09:40', '10:00', '10:20', '10:40'],
-  ['11:00', '11:20', '11:40', '16:00', '16:20', '16:40'],
-  ['09:00', '09:20', '17:00', '17:20', '17:40', '18:00'],
-  ['10:00', '10:20', '10:40', '11:00', '18:00', '18:20'],
+// Standard slot times: 08:00–12:00, max 2 per hour (every 30 min), Mon–Fri only
+// Used by: Kwadrans zwykły, Dwa Kwadranse (start from day +4)
+// Used by: Kwadrans na już confirmed window (days 0–2)
+const STANDARD_SLOT_TIMES = [
+  '08:00', '08:30',
+  '09:00', '09:30',
+  '10:00', '10:30',
+  '11:00', '11:30',
 ] as const
+
+// Pełna konsultacja: Mon–Fri at 09:00, Sat at 10:00
+const FULL_CONSULT_WEEKDAY_TIME = '09:00'
+const FULL_CONSULT_SAT_TIME = '10:00'
 
 function formatWarsawDate(date: Date): string {
   return new Intl.DateTimeFormat('sv-SE', {
@@ -155,17 +162,75 @@ export function isFutureAvailabilitySlot(bookingDate: string, bookingTime: strin
   return `${bookingDate}T${bookingTime}` >= `${boundary.date}T${boundary.time}`
 }
 
-export function buildRollingAvailabilitySeed(now = new Date(), dayCount = 6): AvailabilitySeed[] {
-  return Array.from({ length: dayCount }, (_, index) => {
-    const date = new Date(now.getTime() + index * 24 * 60 * 60 * 1000)
+function getWarsawDayOfWeek(date: Date): number {
+  // 0=Mon, 1=Tue, 2=Wed, 3=Thu, 4=Fri, 5=Sat, 6=Sun
+  const d = new Intl.DateTimeFormat('sv-SE', {
+    timeZone: 'Europe/Warsaw',
+    weekday: 'short',
+  }).format(date)
+  // sv-SE weekday: mån=Mon, tis=Tue, ons=Wed, tor=Thu, fre=Fri, lör=Sat, sön=Sun
+  const map: Record<string, number> = { mån: 0, tis: 1, ons: 2, tor: 3, fre: 4, lör: 5, sön: 6 }
+  return map[d] ?? new Date(formatWarsawDate(date)).getDay()
+}
+
+// Kwadrans zwykły + Dwa Kwadranse: 08:00–12:00 co 30 min, skip first 3 days, 30 days ahead, Mon–Fri only
+export function buildStandardAvailabilitySeed(now = new Date()): AvailabilitySeed[] {
+  const result: AvailabilitySeed[] = []
+  for (let offset = 4; offset <= 34; offset++) {
+    const date = new Date(now.getTime() + offset * 24 * 60 * 60 * 1000)
     const bookingDate = formatWarsawDate(date)
-    return {
-      date: bookingDate,
-      times: [...rollingAvailabilityTimeGroups[index % rollingAvailabilityTimeGroups.length]].filter((time) =>
-        isFutureAvailabilitySlot(bookingDate, time, now),
-      ),
+    const dow = getWarsawDayOfWeek(date)
+    if (dow >= 5) continue // skip Sat (5) and Sun (6)
+    const times = STANDARD_SLOT_TIMES.filter((t) => isFutureAvailabilitySlot(bookingDate, t, now))
+    if (times.length > 0) result.push({ date: bookingDate, times })
+  }
+  return result
+}
+
+// Kwadrans na już: days 0–2, standard slots (confirmed), remaining hours = question mark placeholder
+// We represent "question mark" slots with a special prefix "?HH:MM" — UI reads this
+export function buildUrgentAvailabilitySeed(now = new Date()): AvailabilitySeed[] {
+  const result: AvailabilitySeed[] = []
+  for (let offset = 0; offset <= 2; offset++) {
+    const date = new Date(now.getTime() + offset * 24 * 60 * 60 * 1000)
+    const bookingDate = formatWarsawDate(date)
+    const dow = getWarsawDayOfWeek(date)
+    if (dow >= 5) continue // skip Sat (5) and Sun (6)
+    const confirmedTimes = STANDARD_SLOT_TIMES.filter((t) => isFutureAvailabilitySlot(bookingDate, t, now))
+    // Question mark slots: every 20 min from 12:20 to 16:40 (outside standard window)
+    const questionTimes: string[] = []
+    for (let h = 12; h <= 16; h++) {
+      for (const m of [0, 20, 40]) {
+        if (h === 12 && m === 0) continue // 12:00 skip (standard ends at 11:40)
+        const t = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`
+        if (isFutureAvailabilitySlot(bookingDate, t, now)) questionTimes.push(`?${t}`)
+      }
     }
-  }).filter((entry) => entry.times.some((time) => isFutureAvailabilitySlot(entry.date, time, now)))
+    const allTimes = [...confirmedTimes, ...questionTimes]
+    if (allTimes.length > 0) result.push({ date: bookingDate, times: allTimes })
+  }
+  return result
+}
+
+// Pełna konsultacja: Mon–Fri at 09:00, Sat at 10:00, starting from day+1, 60 days ahead
+export function buildFullConsultAvailabilitySeed(now = new Date()): AvailabilitySeed[] {
+  const result: AvailabilitySeed[] = []
+  for (let offset = 1; offset <= 60; offset++) {
+    const date = new Date(now.getTime() + offset * 24 * 60 * 60 * 1000)
+    const bookingDate = formatWarsawDate(date)
+    const dow = getWarsawDayOfWeek(date)
+    if (dow === 6) continue // skip Sunday
+    const time = dow === 5 ? FULL_CONSULT_SAT_TIME : FULL_CONSULT_WEEKDAY_TIME
+    if (isFutureAvailabilitySlot(bookingDate, time, now)) {
+      result.push({ date: bookingDate, times: [time] })
+    }
+  }
+  return result
+}
+
+// Legacy export used by local-store seed (generic pool, same as standard)
+export function buildRollingAvailabilitySeed(now = new Date()): AvailabilitySeed[] {
+  return buildStandardAvailabilitySeed(now)
 }
 
 export function getSecondsUntilBookingStart(bookingDate: string, bookingTime: string, now = new Date()): number {

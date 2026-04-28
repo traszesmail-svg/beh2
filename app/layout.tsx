@@ -3,8 +3,13 @@ import type { Metadata, Viewport } from 'next'
 import { Fraunces, Inter, JetBrains_Mono, Manrope } from 'next/font/google'
 import { AnalyticsConsent } from '@/components/AnalyticsConsent'
 import { Schema } from '@/components/schema'
+import { ScrollProgress } from '@/components/ScrollProgress'
+import { ThemeProvider } from '@/components/ThemeProvider'
+import { LeadMagnetGlobal } from '@/components/LeadMagnetGlobal'
 import { APP_THEME_ATTRIBUTE, THEME_STORAGE_KEY } from '@/lib/theme'
 import { getRootSchemaGraphJsonLd } from '@/lib/schema'
+import { generateReviewsSchema } from '@/lib/reviewsSchema'
+import { reviews, aggregateRating } from '@/lib/reviews.config'
 import { getCanonicalBaseUrl, shouldBlockSearchIndexing } from '@/lib/server/env'
 import { SITE_DESCRIPTION, SITE_NAME, SITE_OG_IMAGE, SITE_SHORT_NAME, SITE_TAGLINE } from '@/lib/site'
 import './globals.css'
@@ -96,19 +101,25 @@ const themeBootstrapScript = `
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const rootJsonLd = getRootSchemaGraphJsonLd()
+  const reviewsJsonLd = generateReviewsSchema(reviews, aggregateRating)
 
   return (
     <html lang="pl" suppressHydrationWarning>
       <body className={`${manrope.variable} ${inter.variable} ${fraunces.variable} ${jetbrainsMono.variable}`} data-release-id={RELEASE_ID}>
         <script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
         <Schema data={rootJsonLd} />
-        {children}
-        <Suspense fallback={null}>
-          <AnalyticsConsent
-            measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim() || null}
-            cookiebotDomainGroupId={process.env.NEXT_PUBLIC_COOKIEBOT_DOMAIN_GROUP_ID?.trim() || null}
-          />
-        </Suspense>
+        <Schema data={reviewsJsonLd} />
+        <ThemeProvider>
+          <ScrollProgress />
+          {children}
+          <LeadMagnetGlobal />
+          <Suspense fallback={null}>
+            <AnalyticsConsent
+              measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim() || null}
+              cookiebotDomainGroupId={process.env.NEXT_PUBLIC_COOKIEBOT_DOMAIN_GROUP_ID?.trim() || null}
+            />
+          </Suspense>
+        </ThemeProvider>
       </body>
     </html>
   )

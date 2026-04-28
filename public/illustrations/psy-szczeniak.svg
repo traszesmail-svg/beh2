@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Playful puppy jumping/rolling -->
+  <!-- body tilted playfully -->
+  <ellipse cx="245" cy="220" rx="58" ry="38" stroke="#1a2e2a" stroke-width="2.5" fill="#f8f5f0" transform="rotate(-15 245 220)"/>
+  <!-- big puppy head -->
+  <circle cx="300" cy="178" r="46" stroke="#1a2e2a" stroke-width="2.5" fill="#f8f5f0"/>
+  <!-- big floppy ears -->
+  <path d="M272 152 Q255 128 260 110 Q270 120 276 145" stroke="#1a2e2a" stroke-width="2" fill="#f0ebe4"/>
+  <path d="M322 150 Q338 126 335 108 Q325 118 318 143" stroke="#1a2e2a" stroke-width="2" fill="#f0ebe4"/>
+  <!-- big puppy eyes -->
+  <circle cx="284" cy="172" r="12" stroke="#1a2e2a" stroke-width="1.5" fill="white"/>
+  <circle cx="285" cy="174" r="8" fill="#1a2e2a"/>
+  <circle cx="287" cy="172" r="3" fill="white"/>
+  <circle cx="316" cy="175" r="11" stroke="#1a2e2a" stroke-width="1.5" fill="white"/>
+  <circle cx="317" cy="177" r="7" fill="#1a2e2a"/>
+  <circle cx="319" cy="175" r="2.5" fill="white"/>
+  <!-- snout big -->
+  <ellipse cx="308" cy="192" rx="16" ry="11" stroke="#1a2e2a" stroke-width="1.5" fill="#f8f5f0"/>
+  <ellipse cx="310" cy="187" rx="7" ry="5" fill="#1a2e2a"/>
+  <!-- happy open mouth tongue -->
+  <path d="M296 200 Q308 210 320 202" stroke="#1a2e2a" stroke-width="2" fill="none"/>
+  <ellipse cx="308" cy="208" rx="8" ry="6" stroke="#1a2e2a" stroke-width="1.5" fill="#f0c0c0"/>
+  <!-- paws up/out -->
+  <path d="M218 238 Q198 255 185 265 L190 270 Q205 262 225 248" stroke="#1a2e2a" stroke-width="2.5" fill="none"/>
+  <path d="M175 268 Q170 278 178 280 Q185 275 188 268Z" stroke="#1a2e2a" stroke-width="1.5" fill="#f8f5f0"/>
+  <path d="M215 252 Q200 268 188 278 L194 282 Q208 273 222 258" stroke="#1a2e2a" stroke-width="2" fill="none"/>
+  <!-- back paws -->
+  <path d="M265 248 Q275 268 285 272" stroke="#1a2e2a" stroke-width="2.5" fill="none"/>
+  <ellipse cx="288" cy="275" rx="12" ry="7" stroke="#1a2e2a" stroke-width="1.5" fill="#f8f5f0"/>
+  <!-- tail wagging enthusiastically - curved -->
+  <path d="M196 218 Q165 195 158 165 Q155 148 168 148 Q175 158 170 175 Q168 188 180 202" stroke="#1a2e2a" stroke-width="2.5" fill="none"/>
+
+  <!-- Ball toy -->
+  <circle cx="110" cy="250" r="22" stroke="#2f7667" stroke-width="2" fill="white"/>
+  <path d="M92 240 Q110 232 128 240" stroke="#2f7667" stroke-width="1.5" fill="none"/>
+  <path d="M90 254 Q110 262 130 254" stroke="#2f7667" stroke-width="1.5" fill="none"/>
+
+  <!-- Bone toy -->
+  <line x1="370" y1="255" x2="420" y2="255" stroke="#1a2e2a" stroke-width="3"/>
+  <circle cx="368" cy="255" r="7" stroke="#1a2e2a" stroke-width="1.5" fill="white"/>
+  <circle cx="368" cy="248" r="5" stroke="#1a2e2a" stroke-width="1.5" fill="white"/>
+  <circle cx="422" cy="255" r="7" stroke="#1a2e2a" stroke-width="1.5" fill="white"/>
+  <circle cx="422" cy="248" r="5" stroke="#1a2e2a" stroke-width="1.5" fill="white"/>
+
+  <!-- Energy sparkles -->
+  <path d="M388 152 L391 143 L394 152 L403 155 L394 158 L391 167 L388 158 L379 155Z" stroke="#b07b3f" stroke-width="1.5" fill="none"/>
+  <path d="M140 135 L142 128 L144 135 L151 137 L144 139 L142 146 L140 139 L133 137Z" stroke="#b07b3f" stroke-width="1.2" fill="none" opacity="0.7"/>
+
+  <!-- Ground -->
+  <line x1="60" y1="282" x2="440" y2="282" stroke="#d4ede6" stroke-width="2"/>
+</svg>

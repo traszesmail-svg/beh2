@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Box/hiding spot outline -->
+  <rect x="80" y="195" width="150" height="130" rx="4" stroke="#1a2e2a" stroke-width="2" fill="#f8f5f0"/>
+  <!-- Box flap open -->
+  <path d="M80 195 L95 162 L185 162 L205 195" stroke="#1a2e2a" stroke-width="1.5" fill="none"/>
+  <path d="M205 195 L230 165 L240 195" stroke="#1a2e2a" stroke-width="1.5" fill="none"/>
+
+  <!-- Cat hiding inside box - only head/eyes visible peeking -->
+  <!-- just ears and big eyes above box edge -->
+  <path d="M122 194 Q116 174 122 165 Q128 173 128 192" stroke="#1a2e2a" stroke-width="2" fill="#f8f5f0"/>
+  <path d="M152 192 Q158 172 152 163 Q146 171 146 190" stroke="#1a2e2a" stroke-width="2" fill="#f8f5f0"/>
+  <!-- head barely peeking over -->
+  <path d="M112 196 Q118 184 137 182 Q156 183 162 196" stroke="#1a2e2a" stroke-width="2" fill="#f8f5f0"/>
+  <!-- big stressed dilated eyes -->
+  <circle cx="124" cy="193" r="9" stroke="#1a2e2a" stroke-width="1.5" fill="white"/>
+  <circle cx="124" cy="194" r="8" fill="#1a2e2a"/>
+  <circle cx="126" cy="192" r="3" fill="white"/>
+  <circle cx="150" cy="193" r="9" stroke="#1a2e2a" stroke-width="1.5" fill="white"/>
+  <circle cx="150" cy="194" r="8" fill="#1a2e2a"/>
+  <circle cx="152" cy="192" r="3" fill="white"/>
+  <!-- whiskers stiff -->
+  <line x1="100" y1="194" x2="116" y2="194" stroke="#1a2e2a" stroke-width="1.2" opacity="0.5"/>
+  <line x1="158" y1="194" x2="174" y2="194" stroke="#1a2e2a" stroke-width="1.2" opacity="0.5"/>
+
+  <!-- Hiding cat body inside box - tail tip visible -->
+  <path d="M95 310 Q88 298 82 286 Q80 272 88 268" stroke="#1a2e2a" stroke-width="2" opacity="0.5"/>
+
+  <!-- Stress indicators -->
+  <path d="M195 175 L202 164 L209 175 L220 178 L209 181 L202 192 L195 181 L184 178Z" stroke="#b07b3f" stroke-width="1.5" fill="none"/>
+  <path d="M80 165 L85 157 L90 165 L98 167 L90 169 L85 177 L80 169 L72 167Z" stroke="#b07b3f" stroke-width="1.2" fill="none" opacity="0.6"/>
+
+  <!-- Cat tree / safe spot -->
+  <!-- post -->
+  <rect x="330" y="150" width="22" height="180" rx="11" stroke="#1a2e2a" stroke-width="1.5" fill="#f0ebe4"/>
+  <!-- platform -->
+  <rect x="310" y="140" width="62" height="18" rx="6" stroke="#1a2e2a" stroke-width="1.5" fill="#f0ebe4"/>
+  <!-- hideout cube at top -->
+  <rect x="315" y="82" width="52" height="62" rx="6" stroke="#1a2e2a" stroke-width="2" fill="#f8f5f0"/>
+  <!-- circular entrance -->
+  <circle cx="341" cy="113" r="18" stroke="#1a2e2a" stroke-width="1.5" fill="white"/>
+
+  <!-- Person at distance crouching, calm body language -->
+  <circle cx="398" cy="185" r="18" stroke="#1a2e2a" stroke-width="2" fill="#f8f5f0"/>
+  <path d="M388 160 Q398 148 408 160" stroke="#1a2e2a" stroke-width="1.5" fill="#d4b07a"/>
+  <!-- crouching body -->
+  <path d="M398 203 Q392 228 385 248" stroke="#1a2e2a" stroke-width="2.5"/>
+  <path d="M398 203 Q406 225 410 245" stroke="#1a2e2a" stroke-width="2.5"/>
+  <!-- kneeling legs -->
+  <path d="M385 248 Q380 265 390 268" stroke="#1a2e2a" stroke-width="2.5"/>
+  <path d="M410 245 Q415 262 405 265" stroke="#1a2e2a" stroke-width="2.5"/>
+  <!-- arm extended slowly toward box -->
+  <path d="M392 215 Q360 228 310 230" stroke="#1a2e2a" stroke-width="2" opacity="0.6"/>
+
+  <!-- Ground -->
+  <line x1="60" y1="328" x2="440" y2="328" stroke="#d4ede6" stroke-width="2"/>
+</svg>

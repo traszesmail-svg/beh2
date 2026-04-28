@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paczka #4 — Mikro-animacje</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: #faf9f7; color: #1c1a18; line-height: 1.6; padding: 60px 40px; }
+  .wrap { max-width: 980px; margin: 0 auto; }
+  h1 { font-family: 'DM Serif Display', serif; font-size: 2.4rem; margin-bottom: 8px; letter-spacing: -.01em; }
+  h2 { font-family: 'DM Serif Display', serif; font-size: 1.5rem; margin: 40px 0 16px; letter-spacing: -.01em; }
+  h3 { font-family: 'DM Serif Display', serif; font-size: 1.15rem; margin: 24px 0 12px; }
+  p { color: #5a5650; margin-bottom: 12px; }
+  .lead { font-size: 1.05rem; color: #2d5f52; margin-bottom: 24px; }
+  table { border-collapse: collapse; width: 100%; margin: 16px 0; background: #fff; border-radius: 10px; overflow: hidden; border: 1px solid #e5e2dc; }
+  th, td { padding: 11px 14px; text-align: left; border-bottom: 1px solid #e5e2dc; font-size: 0.85rem; }
+  th { background: #f0ece6; font-weight: 600; font-size: 0.78rem; letter-spacing: .03em; }
+  tr:last-child td { border-bottom: none; }
+  td code { background: #f0ece6; padding: 1px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; }
+  .file { display: flex; align-items: center; gap: 14px; background: #fff; border: 1px solid #e5e2dc; border-radius: 10px; padding: 14px 18px; margin-bottom: 8px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; }
+  .file .ico { width: 32px; height: 32px; border-radius: 8px; background: #e8f3f0; color: #4a8d7a; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 700; font-family: 'DM Sans', sans-serif; }
+  .file .desc { color: #5a5650; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; margin-left: auto; text-align: right; }
+  .file a { color: #4a8d7a; text-decoration: none; }
+  .badge { display: inline-block; background: #4a8d7a; color: #fff; font-size: 0.7rem; padding: 3px 10px; border-radius: 20px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; margin-right: 8px; }
+  .info-box { background: #e8f3f0; border-left: 4px solid #4a8d7a; padding: 16px 20px; margin: 24px 0; border-radius: 6px; color: #2d5f52; font-size: 0.92rem; }
+  .info-box strong { color: #1c1a18; }
+  .step-list { list-style: none; counter-reset: stepc; padding: 0; margin: 16px 0; }
+  .step-list li { counter-increment: stepc; padding: 12px 0 12px 50px; position: relative; border-bottom: 1px solid #e5e2dc; }
+  .step-list li:last-child { border-bottom: none; }
+  .step-list li::before { content: counter(stepc); position: absolute; left: 0; top: 12px; width: 32px; height: 32px; background: #1c1a18; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; }
+  ul { padding-left: 22px; color: #5a5650; }
+  ul li { margin-bottom: 6px; }
+  code { background: #f0ece6; padding: 1px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.85em; }
+  .anti { background: #fef2f2; border-left: 4px solid #dc2626; padding: 16px 20px; margin: 24px 0; border-radius: 6px; color: #991b1b; font-size: 0.92rem; }
+  .anti strong { color: #7f1d1d; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>📦 Paczka #4 — Mikro-animacje</h1>
+<p class="lead">Subtelne animacje wejścia sekcji, hover effects, loading states i page transitions. Strona "żyje" bez efekciarstwa.</p>
+
+<div class="info-box">
+  <strong>Filozofia:</strong> animacje 200-600ms, easing natural, każda animacja ma znaczenie. Pełen respekt dla <code>prefers-reduced-motion</code>. Stack: <strong>Framer Motion</strong> (~25KB lazy-loaded).
+</div>
+
+<h2>📂 Zawartość paczki</h2>
+
+<h3><span class="badge">DOC</span>Dokumentacja</h3>
+<div class="file"><div class="ico">📘</div><span><a href="README.md">README.md</a></span><span class="desc">Filozofia + zasady stosowania</span></div>
+<div class="file"><div class="ico">▶</div><span><a href="PROMPT-FOR-CLAUDE-CLI.md">PROMPT-FOR-CLAUDE-CLI.md</a></span><span class="desc">Gotowy prompt dla Claude CLI</span></div>
+
+<h3><span class="badge">CODE</span>Komponenty</h3>
+<div class="file"><div class="ico">👀</div><span><a href="components/Reveal.tsx">Reveal.tsx</a></span><span class="desc">Scroll reveal — fade up gdy widoczne</span></div>
+<div class="file"><div class="ico">📜</div><span><a href="components/StaggerList.tsx">StaggerList.tsx</a></span><span class="desc">Lista z opóźnieniem dziecka 0.1s</span></div>
+<div class="file"><div class="ico">🃏</div><span><a href="components/HoverCard.tsx">HoverCard.tsx</a></span><span class="desc">Hover lift / tilt / glow / scale</span></div>
+<div class="file"><div class="ico">🔢</div><span><a href="components/AnimatedNumber.tsx">AnimatedNumber.tsx</a></span><span class="desc">Liczenie 0 → N (statystyki)</span></div>
+<div class="file"><div class="ico">⇄</div><span><a href="components/PageTransition.tsx">PageTransition.tsx</a></span><span class="desc">Fade między stronami</span></div>
+<div class="file"><div class="ico">⏳</div><span><a href="components/LoadingSpinner.tsx">LoadingSpinner.tsx</a></span><span class="desc">Spinner + Skeleton dla loading</span></div>
+<div class="file"><div class="ico">📊</div><span><a href="components/ScrollProgress.tsx">ScrollProgress.tsx</a></span><span class="desc">Pasek postępu scroll na górze</span></div>
+
+<h3><span class="badge">CODE</span>Logika</h3>
+<div class="file"><div class="ico">🎬</div><span><a href="lib/motionVariants.ts">motionVariants.ts</a></span><span class="desc">Reużywalne variants + EASING</span></div>
+
+<h2>🎯 Zasady stosowania</h2>
+<table>
+  <thead><tr><th>Element</th><th>Animacja</th><th>Czas</th></tr></thead>
+  <tbody>
+    <tr><td>Hero — heading</td><td>Fade up + delay 0.1s</td><td>600ms</td></tr>
+    <tr><td>Hero — CTA</td><td>Fade up + delay 0.3s</td><td>600ms</td></tr>
+    <tr><td>Sekcje (scroll)</td><td>Fade up gdy 30% widoczne</td><td>500ms</td></tr>
+    <tr><td>Karty oferty</td><td>Stagger 0.1s każda</td><td>400ms</td></tr>
+    <tr><td>Liczby/statystyki</td><td>Liczenie 0→N</td><td>1500ms</td></tr>
+    <tr><td>Karta hover</td><td>Lift -4px + shadow</td><td>250ms</td></tr>
+    <tr><td>Przyciski hover</td><td>Scale 1.02</td><td>150ms</td></tr>
+    <tr><td>Page transition</td><td>Fade</td><td>200ms</td></tr>
+  </tbody>
+</table>
+
+<h2>🚀 Wdrożenie</h2>
+<ol class="step-list">
+  <li><strong>Pobierz folder <code>handoff-4/</code></strong> i wgraj do roota</li>
+  <li><strong>Otwórz Claude CLI</strong> w katalogu repo</li>
+  <li><strong>Wklej prompt</strong> z <a href="PROMPT-FOR-CLAUDE-CLI.md">PROMPT-FOR-CLAUDE-CLI.md</a></li>
+  <li><strong>Build + deploy</strong> — bundle wzrośnie ~25-35KB (lazy)</li>
+  <li><strong>Test:</strong> mobile, desktop, włączony "reduce motion" w systemie</li>
+</ol>
+
+<h2>❌ Anti-patterns (czego NIE robić)</h2>
+<div class="anti">
+  <strong>Unikaj:</strong>
+  <ul style="margin-top: 8px;">
+    <li>Bouncing/spring na wszystkim → wygląda dziecinnie</li>
+    <li>Long delays (&gt;800ms) → frustrujące przy scroll</li>
+    <li>Confetti / falling leaves / particles → slop</li>
+    <li>Auto-rotating elementy → odwracają uwagę od czytania</li>
+    <li>Parallax tła → motion sickness</li>
+    <li>Animowane gradient tła → spowalnia stronę</li>
+  </ul>
+</div>
+
+<h2>📋 Recommended dla każdej strony</h2>
+<table>
+  <thead><tr><th>Strona</th><th>Co dodać</th></tr></thead>
+  <tbody>
+    <tr><td><code>/</code></td><td>Reveal sekcje + StaggerList oferty + AnimatedNumber statystyki</td></tr>
+    <tr><td><code>/cennik</code></td><td>StaggerList na 3 wariantach</td></tr>
+    <tr><td><code>/o-mnie</code></td><td>Reveal na osi czasu kwalifikacji</td></tr>
+    <tr><td><code>/blog</code></td><td>StaggerList postów + ScrollProgress w artykule</td></tr>
+    <tr><td><code>/faq</code></td><td>StaggerList na pytaniach</td></tr>
+    <tr><td><code>/book</code></td><td>LoadingSpinner przy submitach</td></tr>
+  </tbody>
+</table>
+
+</div>
+</body>
+</html>

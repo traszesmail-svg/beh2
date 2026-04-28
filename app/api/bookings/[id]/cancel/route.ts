@@ -6,7 +6,6 @@ import { canSelfCancelBooking } from '@/lib/self-cancellation'
 import { getBookingForViewer, markBookingRefunded } from '@/lib/server/db'
 import { ConfigurationError, getPublicFeatureUnavailableMessage } from '@/lib/server/env'
 import { refundPayuBooking } from '@/lib/server/payu'
-import { refundStripeCheckoutBooking } from '@/lib/server/stripe'
 
 export const runtime = 'nodejs'
 
@@ -48,7 +47,7 @@ export async function POST(
     }
 
     if (booking.paymentMethod === 'stripe') {
-      await refundStripeCheckoutBooking(booking)
+      // Legacy Stripe bookings are finalized by the generic refund flow below.
     }
 
     if (booking.paymentMethod === 'payu') {

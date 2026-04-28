@@ -163,7 +163,7 @@ export const OFFERS: Offer[] = [
       'Po rozmowie dostajesz diagnoze sytuacji, indywidualny plan pracy i codzienne zalecenia przez 7 dni pod nadzorem behawiorysty dostepnego na WhatsApp 8h dziennie.',
     ],
     bestFor: ['temat zlozony', 'kilka problemow naraz', 'gdy potrzebujesz diagnozy i codziennego wsparcia wdrozenia'],
-    outcomes: ['diagnoza sytuacji i priorytetow', 'aktualizowany plan pracy krok po kroku', '7 dni codziennych zalecen — behawiorysyta dostepny 8h/dzien przez WhatsApp'],
+    outcomes: ['diagnoza sytuacji i priorytetow', 'aktualizowany plan pracy krok po kroku', '7 dni codziennych zalecen — behawiorysta dostepny 8h/dzien przez WhatsApp'],
     primaryCtaLabel: FUNNEL_CTA_LABELS.consultation,
     primaryHref: buildBookHref(null, 'konsultacja-behawioralna-online'),
     detailHref: '/konsultacja-behawioralna-online',
@@ -173,7 +173,7 @@ export const OFFERS: Offer[] = [
     imageAlt: SPECIALIST_ONLINE_PHOTO.alt,
     imageWidth: SPECIALIST_ONLINE_PHOTO.width,
     imageHeight: SPECIALIST_ONLINE_PHOTO.height,
-    note: PUBLIC_OFFER_FULL_CONSULTATION_VALUE + ' Po pelnej konsultacji dostajesz 7 dni codziennych zalecen: behawiorysyta dostepny na WhatsApp 8h dziennie — mozesz zadawac pytania, wysylac filmy i konsultowac kazdy krok wdrazania planu.',
+    note: PUBLIC_OFFER_FULL_CONSULTATION_VALUE + ' Po pelnej konsultacji dostajesz 7 dni codziennych zalecen: behawiorysta dostepny na WhatsApp 8h dziennie — mozesz zadawac pytania, wysylac filmy i konsultowac kazdy krok wdrazania planu.',
   },
   {
     slug: 'poradniki-pdf',

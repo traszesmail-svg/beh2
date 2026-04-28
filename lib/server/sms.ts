@@ -382,6 +382,15 @@ export async function sendUrgentCustomerAckSms(
   return sendRawSms(`urgent-ack-${requestId}`, phone, message, 'urgent-customer-ack')
 }
 
+export async function sendManualPaymentPendingSms(
+  booking: Pick<BookingRecord, 'id' | 'ownerName' | 'phone' | 'customerPhoneNormalized'>,
+  holdMinutes: number,
+): Promise<PaymentConfirmationSmsResult> {
+  const firstName = booking.ownerName.split(' ')[0] ?? booking.ownerName
+  const message = `Czesc ${firstName}, otrzymalismy zgloszenie wplaty. Jesli to godziny 8-18, potwierdzenie otrzymasz w ciagu ${holdMinutes} minut. Dziekuje, Krzysztof Regulski`
+  return sendRawSms(`manual-pending-${booking.id}`, booking.customerPhoneNormalized ?? booking.phone, message, 'manual-payment-pending')
+}
+
 export async function sendAdminUrgentReminderSms(
   requestId: string,
   customerName: string,

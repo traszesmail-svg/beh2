@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paczka #6 — SEO + Open Graph + Structured Data</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: #faf9f7; color: #1c1a18; line-height: 1.6; padding: 60px 40px; }
+  .wrap { max-width: 980px; margin: 0 auto; }
+  h1 { font-family: 'DM Serif Display', serif; font-size: 2.4rem; margin-bottom: 8px; letter-spacing: -.01em; }
+  h2 { font-family: 'DM Serif Display', serif; font-size: 1.5rem; margin: 40px 0 16px; letter-spacing: -.01em; }
+  h3 { font-family: 'DM Serif Display', serif; font-size: 1.15rem; margin: 24px 0 12px; }
+  p { color: #5a5650; margin-bottom: 12px; }
+  .lead { font-size: 1.05rem; color: #2d5f52; margin-bottom: 24px; }
+  .file { display: flex; align-items: center; gap: 14px; background: #fff; border: 1px solid #e5e2dc; border-radius: 10px; padding: 14px 18px; margin-bottom: 8px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; }
+  .file .ico { width: 32px; height: 32px; border-radius: 8px; background: #e8f3f0; color: #4a8d7a; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 700; font-family: 'DM Sans', sans-serif; }
+  .file .desc { color: #5a5650; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; margin-left: auto; text-align: right; }
+  .file a { color: #4a8d7a; text-decoration: none; }
+  .file a:hover { text-decoration: underline; }
+  .badge { display: inline-block; background: #4a8d7a; color: #fff; font-size: 0.7rem; padding: 3px 10px; border-radius: 20px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; margin-right: 8px; }
+  .info-box { background: #e8f3f0; border-left: 4px solid #4a8d7a; padding: 16px 20px; margin: 24px 0; border-radius: 6px; color: #2d5f52; font-size: 0.92rem; }
+  .info-box strong { color: #1c1a18; }
+  .step-list { list-style: none; counter-reset: stepc; padding: 0; margin: 16px 0; }
+  .step-list li { counter-increment: stepc; padding: 12px 0 12px 50px; position: relative; border-bottom: 1px solid #e5e2dc; }
+  .step-list li:last-child { border-bottom: none; }
+  .step-list li::before { content: counter(stepc); position: absolute; left: 0; top: 12px; width: 32px; height: 32px; background: #1c1a18; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; }
+  ul { padding-left: 22px; color: #5a5650; }
+  ul li { margin-bottom: 6px; }
+  code { background: #f0ece6; padding: 1px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.85em; }
+  .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 16px 0; }
+  .feature { background: #fff; border: 1px solid #e5e2dc; border-radius: 10px; padding: 14px 18px; }
+  .feature .title { font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; color: #1c1a18; }
+  .feature .desc { font-size: 0.78rem; color: #5a5650; }
+  @media (max-width: 700px) { .feature-grid { grid-template-columns: 1fr; } }
+  table { border-collapse: collapse; width: 100%; margin: 16px 0; background: #fff; border-radius: 10px; overflow: hidden; border: 1px solid #e5e2dc; }
+  th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid #e5e2dc; font-size: 0.82rem; }
+  th { background: #f0ece6; font-weight: 600; font-size: 0.78rem; }
+  tr:last-child td { border-bottom: none; }
+  td code { background: #e8f3f0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>📦 Paczka #6 — SEO + Open Graph</h1>
+<p class="lead">Pełna optymalizacja SEO. Meta tags per strona, dynamiczne OG images, structured data, sitemap, robots.txt, breadcrumbs.</p>
+
+<div class="info-box">
+  <strong>Stack:</strong> Next.js Metadata API + native sitemap.ts/robots.ts + next/og dla dynamicznych obrazków + Schema.org JSON-LD. Zero zewnętrznych zależności.
+</div>
+
+<h2>✨ Co dostajesz</h2>
+<div class="feature-grid">
+  <div class="feature">
+    <div class="title">📋 Meta tags per strona</div>
+    <div class="desc">15+ stron, każda z unikalnym title (≤60 znaków), description (≤160), keywords, canonical URL, robots.</div>
+  </div>
+  <div class="feature">
+    <div class="title">🖼️ Open Graph + Twitter</div>
+    <div class="desc">Dynamicznie generowane obrazki 1200×630 dla każdej strony. Tytuł, gradient, badges.</div>
+  </div>
+  <div class="feature">
+    <div class="title">🏷️ Structured Data</div>
+    <div class="desc">LocalBusiness, Service, FAQPage, Article, Person, BreadcrumbList, AggregateRating.</div>
+  </div>
+  <div class="feature">
+    <div class="title">🗺️ Sitemap + Robots</div>
+    <div class="desc">Auto-generowane przez Next.js. Z priorytetami i częstotliwością. Ready do submit w GSC.</div>
+  </div>
+  <div class="feature">
+    <div class="title">🍞 Breadcrumbs</div>
+    <div class="desc">Komponent UI + JSON-LD. Pokazuje się w wynikach Google + ułatwia nawigację.</div>
+  </div>
+  <div class="feature">
+    <div class="title">📱 PWA Manifest</div>
+    <div class="desc">manifest.webmanifest — instalowalne na telefonie. Theme color, icons, standalone display.</div>
+  </div>
+</div>
+
+<h2>📂 Zawartość paczki</h2>
+
+<h3><span class="badge">DOC</span>Dokumentacja</h3>
+<div class="file"><div class="ico">📘</div><span><a href="README.md">README.md</a></span><span class="desc">Strategia SEO + słowa kluczowe</span></div>
+<div class="file"><div class="ico">▶</div><span><a href="PROMPT-FOR-CLAUDE-CLI.md">PROMPT-FOR-CLAUDE-CLI.md</a></span><span class="desc">Gotowy prompt dla Claude CLI</span></div>
+
+<h3><span class="badge">CODE</span>Logika SEO</h3>
+<div class="file"><div class="ico">⚙️</div><span><a href="lib/seo.config.ts">seo.config.ts</a></span><span class="desc">Konfiguracja 15 stron — title, desc, keywords</span></div>
+<div class="file"><div class="ico">🛠️</div><span><a href="lib/metadata-helpers.ts">metadata-helpers.ts</a></span><span class="desc">buildPageMetadata() — Next.js Metadata builder</span></div>
+<div class="file"><div class="ico">🏷️</div><span><a href="lib/structured-data.ts">structured-data.ts</a></span><span class="desc">Generatory JSON-LD (7 typów)</span></div>
+
+<h3><span class="badge">CODE</span>Next.js App Router</h3>
+<div class="file"><div class="ico">🗺️</div><span><a href="app/sitemap.ts">app/sitemap.ts</a></span><span class="desc">→ /sitemap.xml</span></div>
+<div class="file"><div class="ico">🤖</div><span><a href="app/robots.ts">app/robots.ts</a></span><span class="desc">→ /robots.txt</span></div>
+<div class="file"><div class="ico">📱</div><span><a href="app/manifest.ts">app/manifest.ts</a></span><span class="desc">→ /manifest.webmanifest (PWA)</span></div>
+<div class="file"><div class="ico">🖼️</div><span><a href="app/opengraph-image.tsx">app/opengraph-image.tsx</a></span><span class="desc">Dynamiczny OG image 1200×630</span></div>
+
+<h3><span class="badge">CODE</span>Komponenty</h3>
+<div class="file"><div class="ico">🍞</div><span><a href="components/Breadcrumbs.tsx">Breadcrumbs.tsx</a></span><span class="desc">Breadcrumbs UI + JSON-LD BreadcrumbList</span></div>
+
+<h2>🔍 Mapa: strona → słowa kluczowe</h2>
+<table>
+  <thead><tr><th>Strona</th><th>Główne słowa kluczowe</th></tr></thead>
+  <tbody>
+    <tr><td><code>/</code></td><td>behawiorysta online, behawiorysta psów, kotów</td></tr>
+    <tr><td><code>/psy</code></td><td>behawiorysta psów, pies reaktywny, lęk separacyjny</td></tr>
+    <tr><td><code>/psy/reaktywnosc-na-smyczy</code></td><td>pies reaktywny, pies ciągnie smycz, agresja na inne psy</td></tr>
+    <tr><td><code>/psy/lek-separacyjny</code></td><td>lęk separacyjny pies, pies sam w domu, pies wyje</td></tr>
+    <tr><td><code>/koty</code></td><td>behawiorysta kotów, kot poza kuwetą, konflikt kotów</td></tr>
+    <tr><td><code>/koty/zalatwianie-poza-kuweta</code></td><td>kot sika poza kuwetą, kot kuweta problem</td></tr>
+    <tr><td><code>/koty/konflikt-miedzy-kotami</code></td><td>konflikt kotów, koty walczą, dwa koty w domu</td></tr>
+    <tr><td><code>/cennik</code></td><td>cennik behawiorysta, cena konsultacji</td></tr>
+    <tr><td><code>/o-mnie</code></td><td>krzysztof regulski, behawiorysta COAPE</td></tr>
+    <tr><td><code>/behawiorysta-online-polska</code></td><td>behawiorysta online polska, konsultacja zdalnie</td></tr>
+  </tbody>
+</table>
+
+<h2>🚀 Wdrożenie</h2>
+<ol class="step-list">
+  <li><strong>Pobierz folder <code>handoff-6/</code></strong> i wgraj do roota repo</li>
+  <li><strong>Otwórz Claude CLI</strong> w katalogu repo</li>
+  <li><strong>Wklej prompt</strong> z <a href="PROMPT-FOR-CLAUDE-CLI.md">PROMPT-FOR-CLAUDE-CLI.md</a></li>
+  <li><strong>Edytuj <code>seo.config.ts</code></strong> jeśli chcesz dostosować titles/descriptions</li>
+  <li><strong>Sprawdź favicony</strong> w <code>/public/</code> — wygeneruj z logo jeśli brak</li>
+  <li><strong>Build + deploy</strong></li>
+  <li><strong>Submit sitemap</strong> w Google Search Console</li>
+</ol>
+
+<div class="info-box">
+  <strong>📊 Po deployu — test:</strong>
+  <ul style="margin-top: 8px;">
+    <li><a href="https://search.google.com/test/rich-results" target="_blank">Google Rich Results Test</a> — Schema.org</li>
+    <li><a href="https://www.opengraph.xyz/" target="_blank">OpenGraph.xyz</a> — podgląd FB / Twitter / LinkedIn</li>
+    <li><a href="https://pagespeed.web.dev/" target="_blank">PageSpeed Insights</a> — Core Web Vitals</li>
+    <li><a href="https://search.google.com/search-console" target="_blank">Google Search Console</a> — submit sitemap, monitoring</li>
+  </ul>
+</div>
+
+</div>
+</body>
+</html>

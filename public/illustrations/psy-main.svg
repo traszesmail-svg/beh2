@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="100 80 330 270" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Dog sitting - profile/3/4 view, line art -->
+  <!-- body sitting -->
+  <path d="M185 310 Q170 280 172 245 Q174 210 200 195 Q230 182 258 192 Q285 202 292 230 Q298 255 290 290 Q282 315 260 320 Q225 325 185 310Z" stroke="#1a2e2a" stroke-width="2.5" fill="#f8f5f0"/>
+  <!-- chest lighter area -->
+  <path d="M205 310 Q198 285 200 255 Q202 230 218 222 Q235 215 250 222 Q265 230 268 255 Q270 278 265 308" stroke="#1a2e2a" stroke-width="1.5" fill="none" opacity="0.4"/>
+  <!-- head -->
+  <circle cx="290" cy="175" r="42" stroke="#1a2e2a" stroke-width="2.5" fill="#f8f5f0"/>
+  <!-- ear floppy left -->
+  <path d="M266 150 Q252 128 256 108 Q265 115 274 135 Q278 145 274 154" stroke="#1a2e2a" stroke-width="2" fill="#f0ebe4"/>
+  <!-- ear right -->
+  <path d="M310 148 Q322 126 320 106 Q311 113 304 133 Q300 143 304 152" stroke="#1a2e2a" stroke-width="2" fill="#f0ebe4"/>
+  <!-- snout -->
+  <path d="M308 185 Q325 182 328 192 Q328 202 316 206 Q305 208 298 200 Q296 193 300 188Z" stroke="#1a2e2a" stroke-width="2" fill="#f8f5f0"/>
+  <!-- nose -->
+  <ellipse cx="318" cy="188" rx="6" ry="4" fill="#1a2e2a"/>
+  <!-- nostril highlights -->
+  <circle cx="315" cy="187" r="1.5" fill="white" opacity="0.6"/>
+  <!-- eye -->
+  <circle cx="276" cy="170" r="7" stroke="#1a2e2a" stroke-width="1.5" fill="white"/>
+  <circle cx="277" cy="171" r="4" fill="#1a2e2a"/>
+  <circle cx="278" cy="170" r="1.5" fill="white"/>
+  <!-- eyebrow -->
+  <path d="M268 162 Q276 158 284 162" stroke="#1a2e2a" stroke-width="1.5" fill="none"/>
+  <!-- mouth smile -->
+  <path d="M298 202 Q306 210 316 204" stroke="#1a2e2a" stroke-width="2" fill="none"/>
+  <!-- tongue out -->
+  <path d="M304 207 Q308 216 312 213 Q316 210 312 207" stroke="#1a2e2a" stroke-width="1.5" fill="#f0c0c0"/>
+  <!-- tail wagging up -->
+  <path d="M178 260 Q148 238 142 210 Q140 192 152 188 Q158 196 155 215 Q155 228 165 242" stroke="#1a2e2a" stroke-width="2.5" fill="none"/>
+  <!-- front paws -->
+  <path d="M195 315 Q188 325 185 318 Q192 308 202 310" stroke="#1a2e2a" stroke-width="2" fill="#f8f5f0"/>
+  <path d="M240 320 Q233 330 230 323 Q237 313 248 315" stroke="#1a2e2a" stroke-width="2" fill="#f8f5f0"/>
+
+  <!-- Person hand reaching in from right -->
+  <line x1="420" y1="140" x2="360" y2="172" stroke="#1a2e2a" stroke-width="3"/>
+  <!-- hand -->
+  <path d="M360 172 Q350 180 345 175 Q342 168 350 163 Q356 160 362 165Z" stroke="#1a2e2a" stroke-width="2" fill="#f4c89a"/>
+
+  <!-- Motion lines / wagging energy -->
+  <path d="M132 175 Q125 168 130 162" stroke="#2f7667" stroke-width="1.5" fill="none" opacity="0.7"/>
+  <path d="M122 185 Q112 180 115 172" stroke="#2f7667" stroke-width="1.5" fill="none" opacity="0.5"/>
+
+  <!-- Ground -->
+  <line x1="80" y1="325" x2="420" y2="325" stroke="#d4ede6" stroke-width="2"/>
+
+  <!-- Small paw print top left -->
+  <circle cx="110" cy="120" r="5" stroke="#b07b3f" stroke-width="1.5" fill="none"/>
+  <circle cx="100" cy="110" r="3" stroke="#b07b3f" stroke-width="1.5" fill="none"/>
+  <circle cx="111" cy="108" r="3" stroke="#b07b3f" stroke-width="1.5" fill="none"/>
+  <circle cx="122" cy="110" r="3" stroke="#b07b3f" stroke-width="1.5" fill="none"/>
+</svg>

@@ -357,8 +357,8 @@ export default async function PaymentPage({
                   }
                   manualAvailable={manualPayment.isAvailable}
                   manualPhoneDisplay={manualPayment.phoneDisplay}
-                  manualPaypalMeDisplay={null}
-                  manualPaypalMeHref={null}
+                  manualPaypalMeDisplay={manualPayment.paypalMeDisplay}
+                  manualPaypalMeHref={manualPayment.paypalMeUrl}
                   manualAccountName={manualPayment.accountName}
                   manualInstructions={manualPayment.instructions}
                   manualSummary={manualPayment.summary}

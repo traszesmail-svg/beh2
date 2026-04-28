@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Laptop screen -->
+  <rect x="120" y="120" width="240" height="165" rx="8" stroke="#1a2e2a" stroke-width="2.5" fill="#f8f5f0"/>
+  <rect x="132" y="132" width="216" height="140" rx="4" stroke="#1a2e2a" stroke-width="1.5" fill="white"/>
+  <!-- laptop base -->
+  <path d="M100 285 L380 285 L360 305 L120 305Z" stroke="#1a2e2a" stroke-width="2" fill="#f0ebe4"/>
+  <line x1="210" y1="285" x2="270" y2="285" stroke="#1a2e2a" stroke-width="1" opacity="0.3"/>
+
+  <!-- Screen content: split view call -->
+  <!-- Left person on screen -->
+  <rect x="138" y="138" width="96" height="92" rx="3" stroke="#1a2e2a" stroke-width="1" fill="#e8f4f1"/>
+  <circle cx="186" cy="165" r="16" stroke="#1a2e2a" stroke-width="1.5" fill="white"/>
+  <!-- person head details -->
+  <path d="M174 160 Q186 150 198 160" stroke="#1a2e2a" stroke-width="1" fill="#e0d0c0"/>
+  <line x1="178" y1="163" x2="184" y2="163" stroke="#1a2e2a" stroke-width="1.2" opacity="0.5"/>
+  <line x1="188" y1="163" x2="194" y2="163" stroke="#1a2e2a" stroke-width="1.2" opacity="0.5"/>
+  <!-- shoulders/body -->
+  <path d="M165 200 Q175 182 186 180 Q197 182 207 200" stroke="#1a2e2a" stroke-width="1.5" fill="#d4ede6"/>
+
+  <!-- Right person on screen (behaviorist with glasses) -->
+  <rect x="242" y="138" width="100" height="92" rx="3" stroke="#1a2e2a" stroke-width="1" fill="#fdf3e3"/>
+  <circle cx="292" cy="165" r="16" stroke="#1a2e2a" stroke-width="1.5" fill="white"/>
+  <!-- glasses -->
+  <circle cx="285" cy="163" r="5" stroke="#1a2e2a" stroke-width="1.2" fill="none"/>
+  <circle cx="299" cy="163" r="5" stroke="#1a2e2a" stroke-width="1.2" fill="none"/>
+  <line x1="290" y1="163" x2="294" y2="163" stroke="#1a2e2a" stroke-width="1.2"/>
+  <line x1="280" y1="163" x2="276" y2="163" stroke="#1a2e2a" stroke-width="1.2"/>
+  <line x1="304" y1="163" x2="308" y2="163" stroke="#1a2e2a" stroke-width="1.2"/>
+  <!-- hair -->
+  <path d="M278 158 Q292 148 306 158" stroke="#1a2e2a" stroke-width="1.2" fill="#8b6343"/>
+  <!-- shoulders -->
+  <path d="M272 200 Q281 182 292 180 Q303 182 312 200" stroke="#1a2e2a" stroke-width="1.5" fill="#2f7667" opacity="0.5"/>
+
+  <!-- Status bar bottom of screen -->
+  <rect x="138" y="235" width="204" height="28" rx="2" fill="#f5f5f5"/>
+  <!-- mic icon -->
+  <rect x="148" y="241" width="8" height="12" rx="4" stroke="#1a2e2a" stroke-width="1" fill="none"/>
+  <path d="M144 249 Q144 257 152 258 Q160 257 160 249" stroke="#1a2e2a" stroke-width="1" fill="none"/>
+  <!-- sound waves -->
+  <path d="M175 243 Q178 249 175 255" stroke="#2f7667" stroke-width="1.5" fill="none"/>
+  <path d="M180 240 Q185 249 180 258" stroke="#2f7667" stroke-width="1.5" fill="none" opacity="0.6"/>
+
+  <!-- Dog icon in corner of screen -->
+  <circle cx="318" cy="158" r="10" stroke="#1a2e2a" stroke-width="1.2" fill="white"/>
+  <!-- dog simplified -->
+  <path d="M312 154 Q310 148 314 146 Q316 150 318 152" stroke="#1a2e2a" stroke-width="1" fill="none"/>
+  <path d="M322 153 Q326 147 322 145 Q320 149 318 152" stroke="#1a2e2a" stroke-width="1" fill="none"/>
+  <circle cx="320" cy="155" r="1.5" fill="#1a2e2a"/>
+
+  <!-- Certificate frame on wall (behind laptop) -->
+  <rect x="60" y="80" width="55" height="70" rx="2" stroke="#b07b3f" stroke-width="1.5" fill="white" opacity="0.8"/>
+  <line x1="68" y1="98" x2="107" y2="98" stroke="#b07b3f" stroke-width="1.5" opacity="0.6"/>
+  <line x1="68" y1="107" x2="100" y2="107" stroke="#1a2e2a" stroke-width="1" opacity="0.3"/>
+  <line x1="68" y1="115" x2="104" y2="115" stroke="#1a2e2a" stroke-width="1" opacity="0.3"/>
+  <line x1="68" y1="123" x2="96" y2="123" stroke="#1a2e2a" stroke-width="1" opacity="0.3"/>
+  <circle cx="88" cy="136" r="7" stroke="#b07b3f" stroke-width="1.2" fill="none" opacity="0.6"/>
+
+  <!-- Desk surface -->
+  <line x1="60" y1="310" x2="420" y2="310" stroke="#1a2e2a" stroke-width="2"/>
+  <!-- desk legs -->
+  <line x1="100" y1="310" x2="100" y2="340" stroke="#1a2e2a" stroke-width="2"/>
+  <line x1="380" y1="310" x2="380" y2="340" stroke="#1a2e2a" stroke-width="2"/>
+</svg>

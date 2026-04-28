@@ -76,5 +76,5 @@ export const PUBLIC_OFFER_FULL_VALUE_POINTS = [
   '60 minut rozmowy online audio albo audio/video',
   'diagnoza sytuacji i kolejnych priorytetow',
   'aktualizowany plan pracy po rozmowie',
-  '7 dni codziennych zalecen — behawiorysyta dostepny 8h/dzien przez WhatsApp',
+  '7 dni codziennych zalecen — behawiorysta dostepny 8h/dzien przez WhatsApp',
 ] as const

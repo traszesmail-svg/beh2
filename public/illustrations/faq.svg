@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Main large speech bubble with ? -->
+  <path d="M80 80 Q80 60 100 60 L300 60 Q320 60 320 80 L320 180 Q320 200 300 200 L170 200 L140 230 L148 200 L100 200 Q80 200 80 180Z" stroke="#1a2e2a" stroke-width="2.5" fill="#f8f5f0"/>
+  <!-- Big question mark -->
+  <path d="M178 95 Q178 85 188 80 Q198 75 210 80 Q222 86 222 98 Q222 112 210 120 Q200 127 198 138" stroke="#2f7667" stroke-width="3" fill="none"/>
+  <circle cx="198" cy="152" r="4" fill="#2f7667"/>
+
+  <!-- Second smaller answer bubble -->
+  <path d="M250 210 Q250 195 265 195 L400 195 Q415 195 415 210 L415 275 Q415 290 400 290 L320 290 L305 315 L308 290 L265 290 Q250 290 250 275Z" stroke="#1a2e2a" stroke-width="2" fill="#f8f5f0"/>
+  <!-- Answer lines -->
+  <line x1="270" y1="218" x2="396" y2="218" stroke="#1a2e2a" stroke-width="1.5" opacity="0.3"/>
+  <line x1="270" y1="233" x2="380" y2="233" stroke="#1a2e2a" stroke-width="1.5" opacity="0.3"/>
+  <line x1="270" y1="248" x2="390" y2="248" stroke="#1a2e2a" stroke-width="1.5" opacity="0.3"/>
+  <line x1="270" y1="263" x2="370" y2="263" stroke="#1a2e2a" stroke-width="1.5" opacity="0.3"/>
+  <!-- checkmark before first line = answer confirmed -->
+  <path d="M260 214 L264 218 L272 210" stroke="#2f7667" stroke-width="1.8" fill="none"/>
+
+  <!-- Dog silhouette simple, small, in corner of main bubble -->
+  <path d="M270 110 Q268 100 274 95 Q278 100 280 108" stroke="#1a2e2a" stroke-width="1.5" fill="none"/>
+  <path d="M280 108 Q286 98 284 92 Q280 97 278 106" stroke="#1a2e2a" stroke-width="1.5" fill="none"/>
+  <circle cx="280" cy="120" r="14" stroke="#1a2e2a" stroke-width="1.5" fill="white"/>
+  <circle cx="284" cy="117" r="2" fill="#1a2e2a"/>
+  <path d="M279 126 Q284 130 289 126" stroke="#1a2e2a" stroke-width="1.2" fill="none"/>
+
+  <!-- Magnifying glass -->
+  <circle cx="90" cy="285" r="28" stroke="#b07b3f" stroke-width="2.5" fill="white"/>
+  <line x1="110" y1="305" x2="128" y2="323" stroke="#b07b3f" stroke-width="3.5"/>
+  <!-- search lines in glass -->
+  <line x1="76" y1="280" x2="100" y2="280" stroke="#b07b3f" stroke-width="1.5" opacity="0.4"/>
+  <line x1="76" y1="288" x2="98" y2="288" stroke="#b07b3f" stroke-width="1.5" opacity="0.4"/>
+  <line x1="76" y1="296" x2="92" y2="296" stroke="#b07b3f" stroke-width="1.5" opacity="0.4"/>
+</svg>

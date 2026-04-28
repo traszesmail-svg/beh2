@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Cat 1 - left, standing puffed/arched -->
+  <!-- body arched -->
+  <path d="M72 280 Q65 255 75 228 Q85 205 110 198 Q135 193 152 205 Q165 218 162 248 Q158 272 142 290 Q120 305 95 300 Q75 295 72 280Z" stroke="#1a2e2a" stroke-width="2.5" fill="#f8f5f0"/>
+  <!-- arched back line -->
+  <path d="M85 202 Q112 185 148 200" stroke="#1a2e2a" stroke-width="1.5" fill="none" opacity="0.4"/>
+  <!-- head -->
+  <circle cx="162" cy="180" r="32" stroke="#1a2e2a" stroke-width="2.5" fill="#f8f5f0"/>
+  <!-- ears pinned flat aggressive -->
+  <path d="M147 158 Q142 138 150 132 Q155 142 156 157" stroke="#1a2e2a" stroke-width="1.8" fill="#f8f5f0"/>
+  <path d="M174 156 Q180 136 172 130 Q168 140 167 155" stroke="#1a2e2a" stroke-width="1.8" fill="#f8f5f0"/>
+  <!-- narrowed aggressive eyes -->
+  <path d="M148 176 Q156 172 164 176" stroke="#1a2e2a" stroke-width="2" fill="none"/>
+  <path d="M166 177 Q174 173 182 177" stroke="#1a2e2a" stroke-width="2" fill="none"/>
+  <!-- open hissing mouth -->
+  <path d="M152 190 Q163 200 174 192" stroke="#1a2e2a" stroke-width="2" fill="none"/>
+  <!-- whiskers forward/stiff -->
+  <line x1="126" y1="183" x2="148" y2="185" stroke="#1a2e2a" stroke-width="1.2" opacity="0.5"/>
+  <line x1="124" y1="190" x2="148" y2="191" stroke="#1a2e2a" stroke-width="1.2" opacity="0.5"/>
+  <line x1="176" y1="185" x2="200" y2="183" stroke="#1a2e2a" stroke-width="1.2" opacity="0.5"/>
+  <line x1="176" y1="191" x2="202" y2="190" stroke="#1a2e2a" stroke-width="1.2" opacity="0.5"/>
+  <!-- puffed tail up -->
+  <path d="M68 262 Q42 245 40 220 Q40 202 52 200 Q58 210 55 225 Q53 238 62 248" stroke="#1a2e2a" stroke-width="3" fill="none"/>
+  <!-- paws -->
+  <path d="M82 292 Q72 302 70 294 Q76 283 90 287Z" stroke="#1a2e2a" stroke-width="1.5" fill="#f8f5f0"/>
+  <path d="M122 300 Q112 310 110 302 Q116 291 130 294Z" stroke="#1a2e2a" stroke-width="1.5" fill="#f8f5f0"/>
+
+  <!-- Cat 2 - right, defensive/scared hiss -->
+  <!-- body -->
+  <path d="M340 282 Q328 258 330 228 Q333 200 358 192 Q382 185 400 198 Q415 212 412 245 Q408 272 390 290 Q368 308 348 305 Q335 298 340 282Z" stroke="#1a2e2a" stroke-width="2.5" fill="#f8f5f0"/>
+  <!-- head -->
+  <circle cx="330" cy="176" r="32" stroke="#1a2e2a" stroke-width="2.5" fill="#f8f5f0"/>
+  <!-- ears flattened back too -->
+  <path d="M315 155 Q308 134 317 128 Q322 138 322 154" stroke="#1a2e2a" stroke-width="1.8" fill="#f8f5f0"/>
+  <path d="M341 153 Q346 132 339 126 Q335 136 334 153" stroke="#1a2e2a" stroke-width="1.8" fill="#f8f5f0"/>
+  <!-- wide scared eyes -->
+  <circle cx="318" cy="172" r="8" stroke="#1a2e2a" stroke-width="1.5" fill="white"/>
+  <circle cx="318" cy="173" r="7" fill="#1a2e2a"/>
+  <circle cx="320" cy="171" r="2.5" fill="white"/>
+  <circle cx="342" cy="174" r="8" stroke="#1a2e2a" stroke-width="1.5" fill="white"/>
+  <circle cx="342" cy="175" r="7" fill="#1a2e2a"/>
+  <circle cx="344" cy="173" r="2.5" fill="white"/>
+  <!-- hissing mouth -->
+  <path d="M318 188 Q330 197 342 190" stroke="#1a2e2a" stroke-width="2" fill="none"/>
+  <!-- whiskers -->
+  <line x1="296" y1="180" x2="316" y2="182" stroke="#1a2e2a" stroke-width="1.2" opacity="0.5"/>
+  <line x1="294" y1="187" x2="316" y2="188" stroke="#1a2e2a" stroke-width="1.2" opacity="0.5"/>
+  <line x1="344" y1="182" x2="366" y2="180" stroke="#1a2e2a" stroke-width="1.2" opacity="0.5"/>
+  <line x1="344" y1="188" x2="368" y2="187" stroke="#1a2e2a" stroke-width="1.2" opacity="0.5"/>
+  <!-- puffed tail other direction -->
+  <path d="M412 265 Q440 248 442 222 Q443 204 430 202 Q425 212 428 228 Q430 242 420 252" stroke="#1a2e2a" stroke-width="3" fill="none"/>
+
+  <!-- Tension / confrontation lines between them -->
+  <line x1="208" y1="210" x2="222" y2="200" stroke="#b07b3f" stroke-width="1.5" opacity="0.5"/>
+  <line x1="215" y1="220" x2="235" y2="215" stroke="#b07b3f" stroke-width="1.5" opacity="0.4"/>
+  <line x1="210" y1="230" x2="228" y2="230" stroke="#b07b3f" stroke-width="1.5" opacity="0.3"/>
+
+  <!-- Ground -->
+  <line x1="40" y1="310" x2="440" y2="310" stroke="#d4ede6" stroke-width="2"/>
+
+  <!-- Food bowl (resource guarding context) top center -->
+  <ellipse cx="240" cy="110" rx="28" ry="10" stroke="#1a2e2a" stroke-width="1.5" fill="#f8f5f0"/>
+  <path d="M212 110 Q220 128 240 130 Q260 128 268 110" stroke="#1a2e2a" stroke-width="1.5" fill="none"/>
+  <ellipse cx="240" cy="128" rx="26" ry="5" stroke="#1a2e2a" stroke-width="1" fill="none" opacity="0.3"/>
+  <text x="240" y="96" font-size="9" text-anchor="middle" fill="#1a2e2a" font-family="sans-serif" opacity="0.5">2 miski</text>
+</svg>

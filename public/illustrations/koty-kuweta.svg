@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Litter box -->
+  <rect x="258" y="230" width="140" height="70" rx="6" stroke="#1a2e2a" stroke-width="2" fill="#f8f5f0"/>
+  <rect x="258" y="218" width="140" height="22" rx="5" stroke="#1a2e2a" stroke-width="1.5" fill="#f0ebe4"/>
+  <!-- litter surface texture lines -->
+  <line x1="272" y1="255" x2="312" y2="255" stroke="#1a2e2a" stroke-width="1" opacity="0.2"/>
+  <line x1="284" y1="265" x2="330" y2="265" stroke="#1a2e2a" stroke-width="1" opacity="0.2"/>
+  <line x1="295" y1="275" x2="345" y2="275" stroke="#1a2e2a" stroke-width="1" opacity="0.2"/>
+  <!-- scoop -->
+  <line x1="252" y1="200" x2="258" y2="235" stroke="#1a2e2a" stroke-width="2.5"/>
+  <path d="M242 210 Q250 205 258 210 L258 228 Q250 232 242 228Z" stroke="#1a2e2a" stroke-width="1.5" fill="#f0ebe4"/>
+
+  <!-- Cat sitting, looking at box thoughtfully -->
+  <!-- body -->
+  <path d="M118 310 Q105 282 108 252 Q110 222 135 210 Q158 200 180 208 Q202 218 206 246 Q210 270 202 300 Q194 322 168 328 Q138 332 118 310Z" stroke="#1a2e2a" stroke-width="2.5" fill="#f8f5f0"/>
+  <!-- head -->
+  <circle cx="200" cy="188" r="38" stroke="#1a2e2a" stroke-width="2.5" fill="#f8f5f0"/>
+  <!-- ears pointed -->
+  <path d="M178 162 Q170 138 178 128 Q184 140 186 160" stroke="#1a2e2a" stroke-width="2" fill="#f8f5f0"/>
+  <path d="M220 160 Q228 136 220 126 Q214 138 212 158" stroke="#1a2e2a" stroke-width="2" fill="#f8f5f0"/>
+  <!-- eyes - looking sideways toward box, attentive -->
+  <circle cx="186" cy="184" r="7" stroke="#1a2e2a" stroke-width="1.5" fill="white"/>
+  <circle cx="188" cy="185" r="5" fill="#1a2e2a"/>
+  <circle cx="189" cy="184" r="2" fill="white"/>
+  <circle cx="214" cy="186" r="7" stroke="#1a2e2a" stroke-width="1.5" fill="white"/>
+  <circle cx="216" cy="187" r="5" fill="#1a2e2a"/>
+  <circle cx="217" cy="186" r="2" fill="white"/>
+  <!-- nose -->
+  <path d="M200 196 L195 202 L205 202Z" stroke="#1a2e2a" stroke-width="1.5" fill="none"/>
+  <!-- whiskers -->
+  <line x1="163" y1="192" x2="192" y2="194" stroke="#1a2e2a" stroke-width="1.2" opacity="0.4"/>
+  <line x1="160" y1="200" x2="192" y2="200" stroke="#1a2e2a" stroke-width="1.2" opacity="0.4"/>
+  <line x1="208" y1="194" x2="238" y2="192" stroke="#1a2e2a" stroke-width="1.2" opacity="0.4"/>
+  <line x1="208" y1="200" x2="240" y2="200" stroke="#1a2e2a" stroke-width="1.2" opacity="0.4"/>
+  <!-- tail curled around body -->
+  <path d="M108 288 Q80 278 76 258 Q73 242 85 238 Q94 246 88 260 Q85 270 95 274" stroke="#1a2e2a" stroke-width="2.5" fill="none"/>
+  <!-- paws -->
+  <path d="M128 322 Q118 332 115 323 Q122 312 135 316Z" stroke="#1a2e2a" stroke-width="1.5" fill="#f8f5f0"/>
+  <path d="M168 328 Q158 338 155 329 Q162 318 175 322Z" stroke="#1a2e2a" stroke-width="1.5" fill="#f8f5f0"/>
+
+  <!-- Clean checkmark badge -->
+  <circle cx="88" cy="138" r="30" stroke="#2f7667" stroke-width="2" fill="white"/>
+  <path d="M72 138 L82 148 L104 126" stroke="#2f7667" stroke-width="3" fill="none"/>
+
+  <!-- X mark - problem indicator -->
+  <circle cx="385" cy="168" r="22" stroke="#b07b3f" stroke-width="1.5" fill="white"/>
+  <line x1="374" y1="157" x2="396" y2="179" stroke="#b07b3f" stroke-width="2"/>
+  <line x1="396" y1="157" x2="374" y2="179" stroke="#b07b3f" stroke-width="2"/>
+
+  <!-- Ground -->
+  <line x1="60" y1="330" x2="430" y2="330" stroke="#d4ede6" stroke-width="2"/>
+</svg>

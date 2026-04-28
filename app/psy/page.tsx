@@ -1,7 +1,10 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { HeroIllustration } from '@/components/HeroIllustration'
 import { NextSlot } from '@/components/NextSlot'
+import { Breadcrumbs } from '@/components/Breadcrumbs'
+import { LeadMagnetSection } from '@/components/LeadMagnetSection'
 import { NotatnikFinalCta, NotatnikFooter, NotatnikSectionHead, NotatnikSideVisuals, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
 import { buildBookHref } from '@/lib/booking-routing'
@@ -132,6 +135,7 @@ export default function DogsPage() {
       <NotatnikSideVisuals variant="dog" />
       <div className="notatnik-shell">
         <NotatnikTopbar tag="Pies / strona gatunku" navItems={PUBLIC_SITE_NAV_ITEMS} ctaHref={quickHref} ctaLabel="Kwadrans / 69 zl" />
+        <Breadcrumbs items={[{ name: 'Psy', url: '/psy' }]} />
 
         <section className="notatnik-subhero">
           <div>
@@ -164,13 +168,7 @@ export default function DogsPage() {
           </div>
 
           <div className="notatnik-subhero-media">
-            <div className="notatnik-subhero-figure">
-              <Image src="/branding/topic-cards/dog-window-alone.jpg" alt="Pies siedzacy sam przy oknie" fill sizes="(max-width: 980px) 100vw, 40vw" priority />
-            </div>
-            <div className="notatnik-subhero-note">
-              <span>Spacery / pobudzenie / rozlaka</span>
-              <span>online / cala Polska</span>
-            </div>
+            <HeroIllustration slug="psy" emojiPlaceholder="🐕" className="w-full h-full min-h-[340px]" />
           </div>
         </section>
 
@@ -239,6 +237,8 @@ export default function DogsPage() {
             ))}
           </div>
         </section>
+
+        <LeadMagnetSection pathname="/psy" />
 
         <NotatnikFinalCta
           title="Jesli temat psa Cie niepokoi, <em>zacznij spokojnie.</em>"

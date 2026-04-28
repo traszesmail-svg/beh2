@@ -1,6 +1,15 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
 import Link from 'next/link'
+import { HeroIllustration } from '@/components/HeroIllustration'
+import { ReviewsSection } from '@/components/ReviewsSection'
+import { LeadMagnetSection } from '@/components/LeadMagnetSection'
+import { Reveal } from '@/components/Reveal'
+import { HowItWorksSteps } from '@/components/HowItWorksSteps'
+import { OfferCards } from '@/components/OfferCards'
+import { FAQSection } from '@/components/FAQSection'
+import { PetTopicsSection } from '@/components/PetTopicCard'
+import { CredentialsGrid } from '@/components/CredentialsGrid'
+import { KwadransNaJuzBadge } from '@/components/KwadransNaJuzBadge'
 import { NotatnikFinalCta, NotatnikFooter, NotatnikSectionHead, NotatnikSideVisuals, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
 import {
@@ -10,7 +19,6 @@ import {
 } from '@/lib/offers'
 import { getBreadcrumbJsonLd, getFaqPageJsonLd, getServiceJsonLd } from '@/lib/schema'
 import { buildHomeMetadata } from '@/lib/seo'
-import { PUBLIC_OFFER_PRIORITY_VARIANT_NOTE, PUBLIC_OFFER_PRICES } from '@/lib/public-offer-copy'
 
 export async function generateMetadata(): Promise<Metadata> {
   return buildHomeMetadata()
@@ -41,7 +49,7 @@ const speciesSections = [
       },
       {
         title: 'Szczeniak',
-        href: '/oferta/poradniki-pdf/szczeniak-pierwsze-30-dni',
+        href: '/materialy/szczeniak-gryzie-i-skacze',
         copy: 'Pierwsze tygodnie i rytm dnia szczeniaka: jak spokojnie wdrozyc codzienny plan.',
       },
     ],
@@ -60,7 +68,7 @@ const speciesSections = [
       },
       {
         title: 'Stres',
-        href: '/oferta/poradniki-pdf/kot-stres-srodowisko-i-bledy-opiekuna',
+        href: '/materialy/kot-zyje-w-napieciu',
         copy: 'Strategie redukcji napiecia u kota w domu i po zmianach.',
       },
       {
@@ -142,21 +150,10 @@ const essentialsSections = [
       {
         title: 'Pakiet Kot Domowy',
         description: 'Rozwiazania dla stresu, konfliktu i zachowan trudnych.',
-        href: '/oferta/poradniki-pdf/pakiety/pakiet-kota-domowego',
+        href: '/materialy/pakiet/pakiet-kocie-napiecie',
         cta: 'Kup pakiet',
       },
     ],
-  },
-] as const
-
-const quotes = [
-  {
-    quote: 'Po rozmowie wiedzialam, co zrobic od razu i co spokojnie odlozyc. W domu zrobilo sie lzej.',
-    footer: 'Opiekunka psa / po pierwszej rozmowie',
-  },
-  {
-    quote: 'Przy kuwecie dostalam porzadek zamiast kolejnych domyslow. Wreszcie wiedzialam, od czego zaczac.',
-    footer: 'Opiekunka kota / po uporzadkowaniu tematu',
   },
 ] as const
 
@@ -290,97 +287,40 @@ export default function HomePage() {
             </div>
 
             <aside className="notatnik-hero-card">
-              <div className="notatnik-hero-card-media">
-                <Image
-                  src="/branding/omnie-hero.webp"
-                  alt="Krzysztof Regulski podczas spokojnej konsultacji"
-                  fill
-                  priority
-                  sizes="(max-width: 1180px) 100vw, 420px"
-                />
-                <div className="notatnik-hero-card-media-note notatnik-mono">rozmowa audio / online</div>
-              </div>
-              <div className="notatnik-hero-card-body">
-                <h3>Kwadrans z behawiorysta</h3>
-                <p>15 minut rozmowy audio bez kamery. Najprostszy start, gdy chcesz nazwac problem, ustalic priorytet i wiedziec, od czego zaczac.</p>
-                <div className="notatnik-price-row">
-                  <div className="notatnik-price-big">{PUBLIC_OFFER_PRICES.quick} zl</div>
-                  <div className="notatnik-price-small">15 min / audio / bez kamery</div>
-                </div>
-                <p className="notatnik-hero-fine">{PUBLIC_OFFER_PRIORITY_VARIANT_NOTE}</p>
-              </div>
+              <HeroIllustration slug="home" emojiPlaceholder="🐕" className="w-full h-full min-h-[420px]" />
             </aside>
           </div>
         </section>
 
         <section>
           <NotatnikSectionHead index="I." kicker="Pies i kot" title="Wybierz najblizszy temat." />
-
-          <div className="notatnik-quiet-grid">
-            {speciesSections.map((item) => (
-              <article key={item.key} className="notatnik-quiet-card">
-                <div className="notatnik-mono">{item.key === 'pies' ? 'Pies' : 'Kot'}</div>
-                <h3>{item.headline}</h3>
-                <p>{item.subtitle}</p>
-                <div className="top-gap-small">
-                  {item.items.map((landing) => (
-                    <p key={landing.title}>
-                      <Link href={landing.href} prefetch={false} className="notatnik-inline-link">
-                        {landing.title}
-                      </Link>
-                      <span> - {landing.copy}</span>
-                    </p>
-                  ))}
-                </div>
-                <Link href={item.href} prefetch={false} className="notatnik-inline-link">
-                  {item.ctaLabel}
-                </Link>
-              </article>
-            ))}
+          <div className="top-gap-small">
+            <PetTopicsSection />
           </div>
         </section>
 
-        <section>
-          <NotatnikSectionHead index="II." kicker="Jak to dziala" title="Jak wspolnie uporzadkujemy problem Twojego pupila." />
-          <div className="card-grid four-up top-gap-small">
-            {processSteps.map((step, index) => (
-              <article key={step} className="summary-card tree-backed-card">
-                <div className="notatnik-mono">Krok {index + 1}</div>
-                <p>{step}</p>
-              </article>
-            ))}
-          </div>
-        </section>
+        <Reveal>
+          <section>
+            <NotatnikSectionHead index="II." kicker="Jak to dziala" title="Jak wspolnie uporzadkujemy problem Twojego pupila." />
+            <div className="top-gap-small">
+              <HowItWorksSteps />
+            </div>
+          </section>
+        </Reveal>
 
         <section>
           <NotatnikSectionHead index="III." kicker="Oferta" title="Trzy formaty konsultacji." />
           <p className="notatnik-service-description">
-            Wybierz najmniejszy format, ktory pasuje do sytuacji. Kwadrans na juz 99 zl pozostaje szybszym terminem tego samego Kwadransu.
+            Wybierz najmniejszy format, ktory pasuje do sytuacji.
           </p>
-
-          <div className="card-grid three-up top-gap-small">
-            {consultationFormats.map((format) => (
-              <article key={format.title} className="summary-card tree-backed-card">
-                <div className="notatnik-mono">{format.eyebrow}</div>
-                <h3>{format.title}</h3>
-                <p>{format.description}</p>
-                <div className="editorial-hero-meta" aria-label={`Parametry uslugi ${format.title}`}>
-                  {format.meta.map((item) => (
-                    <span key={item}>{item}</span>
-                  ))}
-                </div>
-                <p>
-                  <strong>Kiedy wybrac:</strong> {format.whenToChoose}
-                </p>
-                <div className="hero-actions top-gap-small">
-                  <Link href={format.href} prefetch={false} className={format.ctaClassName}>
-                    {format.ctaLabel}
-                  </Link>
-                </div>
-              </article>
-            ))}
+          <div className="top-gap-small">
+            <KwadransNaJuzBadge />
           </div>
-
+          <Reveal delay={0.1}>
+            <div className="top-gap-small">
+              <OfferCards />
+            </div>
+          </Reveal>
           <div className="list-card tree-backed-card top-gap-small">
             <p>
               Jesli chcesz najpierw przeczytac szerszy opis pracy online, przejdz do{' '}
@@ -420,48 +360,33 @@ export default function HomePage() {
 
         <section>
           <NotatnikSectionHead index="V." kicker="Opinie" title="Co mowia opiekunowie po rozmowie." />
-          <p className="notatnik-service-description">Spokoj w domu i jasny pierwszy kierunek dzieki konsultacjom.</p>
-
-          <div className="notatnik-quote-grid">
-            {quotes.map((item) => (
-              <article key={item.footer} className="notatnik-quote">
-                <blockquote>
-                  <p>{item.quote}</p>
-                  <footer>{item.footer}</footer>
-                </blockquote>
-              </article>
-            ))}
-          </div>
+          <ReviewsSection
+            variant="carousel"
+            showBadge
+            limit={8}
+            title="Co mówią klienci"
+            subtitle="Opinie opiekunów psów i kotów po konsultacjach behawioralnych"
+          />
         </section>
 
-        <section>
-          <NotatnikSectionHead index="VI." kicker="O mnie" title="Spokojne podejscie i konkretne doswiadczenie." />
-
-          <div className="list-card tree-backed-card top-gap-small">
-            <p>
-              Pomagam krok po kroku, bez przymusu i kar, z uwzglednieniem codziennosci i dobrostanu.
-            </p>
-          </div>
-
-          <div className="notatnik-cred-grid top-gap-small">
-            {credentials.map((item) => (
-              <article key={item.title} className="notatnik-cred">
-                <div className="notatnik-cred-title">{item.title}</div>
-                <div className="notatnik-cred-copy">{item.copy}</div>
-              </article>
-            ))}
-          </div>
-        </section>
+        <Reveal>
+          <section>
+            <NotatnikSectionHead index="VI." kicker="O mnie" title="Spokojne podejscie i konkretne doswiadczenie." />
+            <div className="list-card tree-backed-card top-gap-small">
+              <p>
+                Pomagam krok po kroku, bez przymusu i kar, z uwzglednieniem codziennosci i dobrostanu.
+              </p>
+            </div>
+            <div className="top-gap-small">
+              <CredentialsGrid />
+            </div>
+          </section>
+        </Reveal>
 
         <section>
           <NotatnikSectionHead index="VII." kicker="FAQ" title="Najczestsze pytania przed pierwszym krokiem." />
-          <div className="card-grid two-up top-gap-small">
-            {faqItems.map((item) => (
-              <article key={item.question} className="summary-card tree-backed-card">
-                <h3>{item.question}</h3>
-                <p>{item.answer}</p>
-              </article>
-            ))}
+          <div className="top-gap-small">
+            <FAQSection />
           </div>
         </section>
 
@@ -476,6 +401,8 @@ export default function HomePage() {
             ))}
           </div>
         </section>
+
+        <LeadMagnetSection pathname="/" />
 
         <NotatnikFinalCta
           title="Jesli cos Cie niepokoi, <em>zacznij od pierwszego kroku.</em>"

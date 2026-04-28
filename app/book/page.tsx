@@ -4,6 +4,8 @@ import type { BookingServiceType } from '@/lib/booking-services'
 import { BookRequestForm } from '@/components/BookRequestForm'
 import { NextSlot } from '@/components/NextSlot'
 import { NotatnikPageShell, NotatnikSectionHead, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
+import { OfferCards } from '@/components/OfferCards'
+import { KwadransNaJuzBadge } from '@/components/KwadransNaJuzBadge'
 import { Schema } from '@/components/schema'
 import { ServicesComparison } from '@/components/ServicesComparison'
 import { readBookingServiceSearchParam, readBookingSpeciesSearchParam } from '@/lib/booking-routing'
@@ -261,6 +263,12 @@ export default function BookPage({ searchParams }: BookPageProps) {
 
       <section id="porownanie">
         <NotatnikSectionHead index="I." kicker="Uslugi" title="Najpierw porownaj trzy glowne formaty." />
+        <div className="top-gap-small">
+          <KwadransNaJuzBadge />
+        </div>
+        <div className="top-gap-small">
+          <OfferCards />
+        </div>
         <ServicesComparison species={species} />
         <div className="info-box top-gap-small">{PUBLIC_OFFER_CANCELLATION_COPY}</div>
       </section>

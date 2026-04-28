@@ -892,7 +892,7 @@ test('go-live checks expose external blockers for Resend testing mode and PayU s
     {
       RESEND_API_KEY: 're_test_key',
       RESEND_FROM_EMAIL: 'Behawior 15 <onboarding@resend.dev>',
-      BEHAVIOR15_CONTACT_EMAIL: 'coapebehawiorysta@gmail.com',
+      BEHAVIOR15_CONTACT_EMAIL: 'kontakt@regulskibehawiorysta.pl',
       PAYU_MODE: 'auto',
       PAYU_ENVIRONMENT: 'sandbox',
       PAYU_CLIENT_ID: 'sandbox-client',
@@ -923,8 +923,8 @@ test('go-live checks mark verified Resend and production PayU as ready', () => {
   withEnv(
     {
       RESEND_API_KEY: 're_live_key',
-      RESEND_FROM_EMAIL: 'Behawior 15 <kontakt@example.com>',
-      BEHAVIOR15_CONTACT_EMAIL: 'coapebehawiorysta@gmail.com',
+      RESEND_FROM_EMAIL: 'Regulski <kontakt@regulskibehawiorysta.pl>',
+      BEHAVIOR15_CONTACT_EMAIL: 'kontakt@regulskibehawiorysta.pl',
       PAYU_MODE: 'auto',
       PAYU_ENVIRONMENT: 'production',
       PAYU_CLIENT_ID: 'live-client',
@@ -953,9 +953,9 @@ test('go-live checks mark Gmail SMTP customer email delivery as ready', () => {
     {
       MAIL_PROVIDER: 'gmail',
       CUSTOMER_EMAIL_MODE: 'auto',
-      GMAIL_SMTP_USER: 'coapebehawiorysta@gmail.com',
+      GMAIL_SMTP_USER: 'kontakt@regulskibehawiorysta.pl',
       GMAIL_SMTP_APP_PASSWORD: 'gmail-app-password',
-      GMAIL_FROM_EMAIL: 'coapebehawiorysta@gmail.com',
+      GMAIL_FROM_EMAIL: 'kontakt@regulskibehawiorysta.pl',
       PAYU_ENVIRONMENT: 'production',
       PAYU_CLIENT_ID: 'live-client',
       PAYU_CLIENT_SECRET: 'live-secret',
@@ -987,7 +987,7 @@ test('go-live checks flag disabled customer emails as attention while PayU disab
   withEnv(
     {
       CUSTOMER_EMAIL_MODE: 'disabled',
-      BEHAVIOR15_CONTACT_EMAIL: 'coapebehawiorysta@gmail.com',
+      BEHAVIOR15_CONTACT_EMAIL: 'kontakt@regulskibehawiorysta.pl',
       PAYU_MODE: 'disabled',
       PAYU_ENVIRONMENT: 'sandbox',
       PAYU_CLIENT_ID: 'sandbox-client',
@@ -1021,7 +1021,7 @@ test('deploy readiness checks fail on local fallback and localhost base url', ()
       SUPABASE_SERVICE_ROLE_KEY: null,
       RESEND_API_KEY: 're_test_key',
       RESEND_FROM_EMAIL: 'Behawior 15 <onboarding@resend.dev>',
-      BEHAVIOR15_CONTACT_EMAIL: 'coapebehawiorysta@gmail.com',
+      BEHAVIOR15_CONTACT_EMAIL: 'kontakt@regulskibehawiorysta.pl',
       PAYU_ENVIRONMENT: 'sandbox',
       PAYU_CLIENT_ID: 'sandbox-client',
       PAYU_CLIENT_SECRET: 'sandbox-secret',
@@ -1050,8 +1050,8 @@ test('deploy readiness checks pass for live-like runtime, url, Resend and PayU',
       SUPABASE_SERVICE_ROLE_KEY: 'sb_secret_live_example',
       NEXT_PUBLIC_APP_URL: SITE_PRODUCTION_URL,
       RESEND_API_KEY: 're_live_key',
-      RESEND_FROM_EMAIL: 'Behawior 15 <kontakt@example.com>',
-      BEHAVIOR15_CONTACT_EMAIL: 'coapebehawiorysta@gmail.com',
+      RESEND_FROM_EMAIL: 'Regulski <kontakt@regulskibehawiorysta.pl>',
+      BEHAVIOR15_CONTACT_EMAIL: 'kontakt@regulskibehawiorysta.pl',
       PAYU_ENVIRONMENT: 'production',
       PAYU_CLIENT_ID: 'live-client',
       PAYU_CLIENT_SECRET: 'live-secret',
@@ -1082,9 +1082,9 @@ test('verified deploy readiness can block a syntactically valid URL when externa
       SUPABASE_SERVICE_ROLE_KEY: 'sb_secret_live_example',
       NEXT_PUBLIC_APP_URL: SITE_PRODUCTION_URL,
       CUSTOMER_EMAIL_MODE: 'disabled',
-      BEHAVIOR15_CONTACT_EMAIL: 'coapebehawiorysta@gmail.com',
+      BEHAVIOR15_CONTACT_EMAIL: 'kontakt@regulskibehawiorysta.pl',
       PAYU_MODE: 'disabled',
-      },
+    },
       async () => {
         const checks = await getVerifiedDeployReadinessChecks()
         const urlCheck = checks.find((check) => check.id === 'app-url')

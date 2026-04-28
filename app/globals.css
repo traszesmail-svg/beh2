@@ -10639,17 +10639,31 @@ select:focus-visible {
   white-space: nowrap;
 }
 
+.notatnik-page #formularz input,
+.notatnik-page #formularz textarea,
+.notatnik-page #formularz select,
 .contact-page #formularz input,
 .contact-page #formularz textarea,
 .contact-page #formularz select {
+  font-size: 16px;
+  padding: 14px 16px;
   min-height: 56px;
   border-radius: 20px;
   border-color: rgba(92, 76, 58, 0.12);
   background: rgba(255, 255, 255, 0.96);
 }
 
+.notatnik-page #formularz textarea,
 .contact-page #formularz textarea {
   min-height: 146px;
+}
+
+.notatnik-page #formularz input::placeholder,
+.notatnik-page #formularz textarea::placeholder,
+.contact-page #formularz input::placeholder,
+.contact-page #formularz textarea::placeholder {
+  font-size: 16px;
+  color: rgba(31, 26, 23, 0.52);
 }
 
 .contact-page #formularz .checkout-box {

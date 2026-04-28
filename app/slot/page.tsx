@@ -23,7 +23,7 @@ import {
   readProblemTypeSearchParam,
   readQaBookingSearchParam,
 } from '@/lib/booking-routing'
-import { getProblemLabel, getProblemSpecies } from '@/lib/data'
+import { buildUrgentAvailabilitySeed, getProblemLabel, getProblemSpecies } from '@/lib/data'
 import { FUNNEL_CTA_LABELS, FUNNEL_SERVICE_CONFIG } from '@/lib/funnel'
 import { buildTechnicalMetadata } from '@/lib/seo'
 import { listAvailability } from '@/lib/server/db'
@@ -173,6 +173,15 @@ export default async function SlotPage({
   const hasAdditionalGroups = additionalGroups.length > 0
   const hasOnlyAdditionalGroups = isFullConsultation && visibleGroups.length === 0 && hasAdditionalGroups
 
+  const isUrgentService = serviceType === 'kwadrans-na-juz'
+  const urgentQuestionGroups = isUrgentService
+    ? buildUrgentAvailabilitySeed().map((entry) => ({
+        date: entry.date,
+        label: entry.date,
+        questionTimes: entry.times.filter((t) => t.startsWith('?')).map((t) => t.slice(1)),
+      })).filter((g) => g.questionTimes.length > 0)
+    : []
+
   const renderSlotGroups = (groups: GroupedAvailability[], slotTier: 'standard' | 'additional' = 'standard') =>
     groups.map((group) => (
       <div key={`${slotTier}-${group.date}`} className="notatnik-slot-day" data-slot-tier={slotTier}>
@@ -223,6 +232,33 @@ export default async function SlotPage({
               </Link>
             )
           })}
+        </div>
+      </div>
+    ))
+
+  const renderUrgentQuestionGroups = () =>
+    urgentQuestionGroups.map((group) => (
+      <div key={`urgent-q-${group.date}`} className="notatnik-slot-day" data-slot-tier="question">
+        <div className="notatnik-slot-day-head">
+          <div className="notatnik-slot-day-copy">
+            <strong>{group.date}</strong>
+            <p>Napisz zapytanie o ten termin. Odpowiedź i link do płatności w 15 minut.</p>
+          </div>
+          <span className="notatnik-slot-day-badge">zapytaj o termin</span>
+        </div>
+        <div className="notatnik-slot-grid">
+          {group.questionTimes.map((time) => (
+            <Link
+              key={`${group.date}-?${time}`}
+              href={`/kontakt?species=${getProblemSpecies(problem)}&service=kwadrans-na-juz&requestedDate=${group.date}&requestedTime=${time}#formularz`}
+              prefetch={false}
+              className="notatnik-slot-button notatnik-slot-button-question"
+              data-slot-type="question"
+              aria-label={`Zapytaj o termin ${group.date} o ${time} dla ${getProblemLabel(problem)}`}
+            >
+              ?{time}
+            </Link>
+          ))}
         </div>
       </div>
     ))
@@ -352,6 +388,14 @@ export default async function SlotPage({
               ) : (
                 <>
                   <div className="notatnik-slot-stack">{renderSlotGroups(visibleGroups)}</div>
+                  {isUrgentService && urgentQuestionGroups.length > 0 ? (
+                    <>
+                      <div className="notatnik-callout" style={{ marginTop: '1.5rem' }}>
+                        Godziny ze znakiem ? to orientacyjne okna — napisz zapytanie, a potwierdzę termin i wyślę link do płatności w 15 minut.
+                      </div>
+                      <div className="notatnik-slot-stack">{renderUrgentQuestionGroups()}</div>
+                    </>
+                  ) : null}
                   {hasAdditionalGroups ? (
                     <details className="notatnik-slot-extra">
                       <summary>Pokaz dodatkowe terminy pelnej konsultacji</summary>

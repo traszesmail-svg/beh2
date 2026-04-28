@@ -225,7 +225,7 @@ export default async function OfferPage() {
           title="Zacznij od formatu, ktory <em>pasuje do skali problemu.</em>"
           copy="Jesli nadal nie masz pewnosci, zacznij od Kwadransu. To dalej najbezpieczniejszy pierwszy ruch."
           primaryHref={quickStartHref}
-          primaryLabel="Zarezerwuj Kwadrans ->"
+          primaryLabel="Zarezerwuj Kwadrans"
           secondaryHref={contactHref}
           secondaryLabel="Kontakt"
         />

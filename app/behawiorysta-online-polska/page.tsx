@@ -163,7 +163,7 @@ export default function LocalSeoPolandOnlinePage() {
 
         <div className="notatnik-subhero-media">
           <div className="notatnik-subhero-figure">
-            <Image src="/branding/specialist-cat-support.jpg" alt="Behawiorysta wspiera kota podczas konsultacji online" fill sizes="(max-width: 980px) 100vw, 40vw" priority />
+            <Image src="/branding/side-visuals/general-dog-walk.jpg" alt="Opiekun na spacerze z psem — konsultacja behawioralna online dla całej Polski" fill sizes="(max-width: 980px) 100vw, 40vw" priority />
           </div>
           <div className="notatnik-subhero-note">
             <span>Psy i koty / online</span>

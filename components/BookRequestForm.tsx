@@ -117,7 +117,12 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
   const entryServiceOption = entryService ? getServiceOption(entryService) : null
   const isUrgentNow = form.service === 'kwadrans-na-juz'
   const showPriorityPrompt = form.service === 'szybka-konsultacja-15-min'
-  const slotPickerMode: SlotPickerMode = form.service === 'konsultacja-behawioralna-online' ? 'full-consultation' : 'standard'
+  const slotPickerMode: SlotPickerMode =
+    form.service === 'konsultacja-behawioralna-online'
+      ? 'full-consultation'
+      : form.service === 'kwadrans-na-juz'
+        ? 'urgent'
+        : 'standard'
   const showEntryServiceBox = entryServiceOption !== null && entryService !== 'kwadrans-na-juz' && form.service !== entryService
   const showServiceChangeLegend = entryServiceOption !== null || isUrgentNow
 
@@ -304,20 +309,18 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
             </span>
           </label>
         ))}
-        {isUrgentNow ? (
-          <label className="checkbox-card" htmlFor="service-kwadrans-na-juz">
-            <input
-              id="service-kwadrans-na-juz"
-              type="radio"
-              name="service"
-              checked
-              onChange={() => updateField('service', 'kwadrans-na-juz')}
-            />
-            <span>
-              {URGENT_SERVICE_OPTION.label} / {URGENT_SERVICE_OPTION.price} — szybki termin
-            </span>
-          </label>
-        ) : null}
+        <label className="checkbox-card" htmlFor="service-kwadrans-na-juz">
+          <input
+            id="service-kwadrans-na-juz"
+            type="radio"
+            name="service"
+            checked={form.service === 'kwadrans-na-juz'}
+            onChange={() => updateField('service', 'kwadrans-na-juz')}
+          />
+          <span>
+            ⚡ {URGENT_SERVICE_OPTION.label} / {URGENT_SERVICE_OPTION.price} — termin na dzis, sytuacje kryzysowe
+          </span>
+        </label>
       </fieldset>
 
       {showPriorityPrompt ? (
@@ -334,7 +337,7 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
         </div>
       ) : null}
 
-      <div className="form-field">
+      <div className="form-field full-width">
         <label htmlFor="book-name">Imie</label>
         <input
           id="book-name"
@@ -346,7 +349,7 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
         />
       </div>
 
-      <div className="form-field">
+      <div className="form-field full-width">
         <label htmlFor="book-email">E-mail</label>
         <input
           id="book-email"

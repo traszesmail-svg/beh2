@@ -5,7 +5,7 @@ const DEFAULT_JITSI_BASE_URL = 'https://meet.jit.si'
 const DEFAULT_RESERVATION_WINDOW_MINUTES = 15
 
 const DATA_MODE_VALUES = ['auto', 'supabase', 'local'] as const
-const PAYMENT_MODE_VALUES = ['auto', 'manual', 'stripe', 'mock'] as const
+const PAYMENT_MODE_VALUES = ['auto', 'manual', 'mock'] as const
 
 const reportedRuntimeMessages = new Set<string>()
 
@@ -13,7 +13,7 @@ export type DataMode = (typeof DATA_MODE_VALUES)[number]
 export type PaymentMode = (typeof PAYMENT_MODE_VALUES)[number]
 
 type ActiveDataMode = 'supabase' | 'local'
-type ActivePaymentMode = 'manual' | 'stripe' | 'mock'
+type ActivePaymentMode = 'manual' | 'mock'
 
 type RuntimeModeStatus<TConfigured extends string, TActive extends string> = {
   configured: TConfigured
@@ -24,9 +24,6 @@ type RuntimeModeStatus<TConfigured extends string, TActive extends string> = {
   summary: string
 }
 
-type StripeConfigOptions = {
-  requireWebhookSecret?: boolean
-}
 
 export class ConfigurationError extends Error {
   constructor(message: string) {
@@ -182,22 +179,8 @@ function buildSupabaseConfigMessage(
   return fallbackMessage ? `${base} ${fallbackMessage}` : base
 }
 
-function getMissingStripeVars(options?: StripeConfigOptions): string[] {
-  const required = ['STRIPE_SECRET_KEY']
-
-  if (options?.requireWebhookSecret) {
-    required.push('STRIPE_WEBHOOK_SECRET')
-  }
-
-  return required.filter((name) => !readEnv(name))
-}
-
 function hasManualPaymentConfig(): boolean {
   return Boolean(readEnv('MANUAL_PAYMENT_BLIK_PHONE') || readEnv('MANUAL_PAYMENT_PAYPAL_ME_URL') || readEnv('MANUAL_PAYMENT_PAYPAL_ME'))
-}
-
-function hasProductionStripeTestKey(): boolean {
-  return process.env.VERCEL_ENV === 'production' && Boolean(readEnv('STRIPE_SECRET_KEY')?.startsWith('sk_test_'))
 }
 
 function logRuntimeMessage(key: string, summary: string, level: 'info' | 'warn') {
@@ -349,8 +332,6 @@ export function getDataModeStatus(): RuntimeModeStatus<DataMode, ActiveDataMode>
 export function getPaymentModeStatus(): RuntimeModeStatus<PaymentMode, ActivePaymentMode> {
   const configured = parseMode('APP_PAYMENT_MODE', PAYMENT_MODE_VALUES, 'auto')
   const manualPaymentAvailable = hasManualPaymentConfig()
-  const missing = getMissingStripeVars()
-  const productionTestKey = hasProductionStripeTestKey()
 
   if (configured === 'mock') {
     return {
@@ -359,7 +340,7 @@ export function getPaymentModeStatus(): RuntimeModeStatus<PaymentMode, ActivePay
       isValid: true,
       usesFallback: true,
       missing: [],
-      summary: 'APP_PAYMENT_MODE=mock -> aktywny jest testowy bypass płatności do pełnego QA flow bez Stripe.',
+      summary: 'APP_PAYMENT_MODE=mock -> aktywny jest testowy bypass płatności (QA flow).',
     }
   }
 
@@ -385,70 +366,25 @@ export function getPaymentModeStatus(): RuntimeModeStatus<PaymentMode, ActivePay
     }
   }
 
-  if (configured === 'stripe') {
-    if (missing.length > 0) {
-      return {
-        configured,
-        active: null,
-        isValid: false,
-        usesFallback: false,
-        missing,
-        summary: buildMissingConfigMessage('APP_PAYMENT_MODE=stripe', missing, 'real Stripe Checkout'),
-      }
-    }
-
-    if (productionTestKey) {
-      return {
-        configured,
-        active: null,
-        isValid: false,
-        usesFallback: false,
-        missing: [],
-        summary: 'APP_PAYMENT_MODE=stripe -> produkcyjny checkout jest zablokowany, bo STRIPE_SECRET_KEY wskazuje na testowy klucz Stripe.',
-      }
-    }
-
+  // auto — fallback do manual jeśli skonfigurowane, inaczej mock (dev/QA)
+  if (manualPaymentAvailable) {
     return {
       configured,
-      active: 'stripe',
-      isValid: true,
-      usesFallback: false,
-      missing: [],
-      summary: 'APP_PAYMENT_MODE=stripe -> aktywny jest Stripe Checkout.',
-    }
-  }
-
-  if (missing.length > 0) {
-    return {
-      configured,
-      active: 'mock',
+      active: 'manual',
       isValid: true,
       usesFallback: true,
-      missing,
-      summary: `APP_PAYMENT_MODE=auto -> aktywny jest testowy bypass płatności, bo brakuje ${formatEnvList(
-        missing,
-      )}.`,
-    }
-  }
-
-  if (productionTestKey) {
-    return {
-      configured,
-      active: null,
-      isValid: false,
-      usesFallback: false,
       missing: [],
-      summary: 'APP_PAYMENT_MODE=auto -> produkcyjny checkout jest zablokowany, bo STRIPE_SECRET_KEY wskazuje na testowy klucz Stripe.',
+      summary: 'APP_PAYMENT_MODE=auto -> aktywna jest wplata reczna (BLIK/PayPal.me skonfigurowane).',
     }
   }
 
   return {
     configured,
-    active: 'stripe',
+    active: 'mock',
     isValid: true,
-    usesFallback: false,
+    usesFallback: true,
     missing: [],
-    summary: 'APP_PAYMENT_MODE=auto -> aktywny jest Stripe Checkout.',
+    summary: 'APP_PAYMENT_MODE=auto -> aktywny jest testowy bypass platnosci, bo brak konfiguracji platnosci recznej.',
   }
 }
 
@@ -483,28 +419,6 @@ export function getSupabaseServerConfig(blockedFeature: string) {
   return {
     url: readEnv('NEXT_PUBLIC_SUPABASE_URL')!,
     serviceRoleKey: readEnv('SUPABASE_SERVICE_ROLE_KEY')!,
-  }
-}
-
-export function getStripeServerConfig(blockedFeature: string, options?: StripeConfigOptions) {
-  const status = getPaymentModeStatus()
-  const missing = getMissingStripeVars(options)
-
-  if (!status.isValid || status.active !== 'stripe') {
-    throw new ConfigurationError(
-      `${status.summary} Blokowany feature: ${blockedFeature}.`,
-    )
-  }
-
-  if (missing.length > 0) {
-    throw new ConfigurationError(
-      buildMissingConfigMessage('Stripe', missing, blockedFeature),
-    )
-  }
-
-  return {
-    secretKey: readEnv('STRIPE_SECRET_KEY')!,
-    webhookSecret: options?.requireWebhookSecret ? readEnv('STRIPE_WEBHOOK_SECRET')! : null,
   }
 }
 

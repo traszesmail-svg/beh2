@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paczka #2 — Ilustracje hero</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #faf9f7;
+    color: #1c1a18;
+    line-height: 1.6;
+    padding: 60px 40px;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; }
+  h1 { font-family: 'DM Serif Display', serif; font-size: 2.4rem; margin-bottom: 8px; letter-spacing: -.01em; }
+  h2 { font-family: 'DM Serif Display', serif; font-size: 1.5rem; margin: 40px 0 16px; letter-spacing: -.01em; }
+  h3 { font-family: 'DM Serif Display', serif; font-size: 1.15rem; margin: 24px 0 12px; }
+  p { color: #5a5650; margin-bottom: 12px; }
+  .lead { font-size: 1.05rem; color: #2d5f52; margin-bottom: 24px; }
+  table { border-collapse: collapse; width: 100%; margin: 16px 0; background: #fff; border-radius: 10px; overflow: hidden; border: 1px solid #e5e2dc; }
+  th, td { padding: 11px 14px; text-align: left; border-bottom: 1px solid #e5e2dc; font-size: 0.85rem; }
+  th { background: #f0ece6; font-weight: 600; font-size: 0.78rem; letter-spacing: .03em; }
+  tr:last-child td { border-bottom: none; }
+  td code { background: #f0ece6; padding: 1px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; }
+  .file {
+    display: flex; align-items: center; gap: 14px;
+    background: #fff; border: 1px solid #e5e2dc; border-radius: 10px;
+    padding: 14px 18px; margin-bottom: 8px;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;
+  }
+  .file .ico { width: 32px; height: 32px; border-radius: 8px; background: #e8f3f0; color: #4a8d7a;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 700; }
+  .file .desc { color: #5a5650; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; margin-left: auto; text-align: right; }
+  .file a { color: #4a8d7a; text-decoration: none; }
+  .file a:hover { text-decoration: underline; }
+  .badge { display: inline-block; background: #4a8d7a; color: #fff; font-size: 0.7rem;
+    padding: 3px 10px; border-radius: 20px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; margin-right: 8px; }
+  .info-box { background: #e8f3f0; border-left: 4px solid #4a8d7a; padding: 16px 20px;
+    margin: 24px 0; border-radius: 6px; color: #2d5f52; font-size: 0.92rem; }
+  .info-box strong { color: #1c1a18; }
+  .step-list { list-style: none; counter-reset: stepc; padding: 0; margin: 16px 0; }
+  .step-list li { counter-increment: stepc; padding: 12px 0 12px 50px; position: relative; border-bottom: 1px solid #e5e2dc; }
+  .step-list li:last-child { border-bottom: none; }
+  .step-list li::before { content: counter(stepc); position: absolute; left: 0; top: 12px;
+    width: 32px; height: 32px; background: #1c1a18; color: #fff; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; }
+  ul { padding-left: 22px; color: #5a5650; }
+  ul li { margin-bottom: 6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>📦 Paczka #2 — Ilustracje hero</h1>
+<p class="lead">Boczne ilustracje line-art (Wariant B) na <strong>każdej stronie i podstronie</strong> w hero.</p>
+
+<div class="info-box">
+  <strong>Stack:</strong> Storyset.com (rekomendacja) + komponenty React. Komponent <code>&lt;HeroLayout&gt;</code> ma fallback z emoji — działa nawet zanim SVG zostaną wrzucone.
+</div>
+
+<h2>📂 Zawartość paczki</h2>
+
+<h3><span class="badge">DOC</span>Dokumentacja</h3>
+<div class="file">
+  <div class="ico">📘</div>
+  <span><a href="README.md">README.md</a></span>
+  <span class="desc">Mapa stron → ilustracje + biblioteka</span>
+</div>
+<div class="file">
+  <div class="ico">▶</div>
+  <span><a href="PROMPT-FOR-CLAUDE-CLI.md">PROMPT-FOR-CLAUDE-CLI.md</a></span>
+  <span class="desc">Gotowy prompt dla Claude CLI</span>
+</div>
+
+<h3><span class="badge">CODE</span>Komponenty React</h3>
+<div class="file">
+  <div class="ico">🗺️</div>
+  <span><a href="components/pageHeroes.config.ts">pageHeroes.config.ts</a></span>
+  <span class="desc">Mapa: slug strony → ilustracja + alt</span>
+</div>
+<div class="file">
+  <div class="ico">🖼️</div>
+  <span><a href="components/HeroIllustration.tsx">HeroIllustration.tsx</a></span>
+  <span class="desc">Komponent obrazka + fallback z emoji</span>
+</div>
+<div class="file">
+  <div class="ico">📐</div>
+  <span><a href="components/HeroLayout.tsx">HeroLayout.tsx</a></span>
+  <span class="desc">Layout split content + ilustracja</span>
+</div>
+
+<h2>🎨 Mapa stron → ilustracje Storyset</h2>
+<table>
+  <thead>
+    <tr><th>Strona</th><th>Slug</th><th>Search query Storyset</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>/</td><td><code>home</code></td><td>dog walking owner</td></tr>
+    <tr><td>/psy</td><td><code>psy</code></td><td>playing with dog</td></tr>
+    <tr><td>/psy/reaktywnosc-na-smyczy</td><td><code>psy-reaktywnosc</code></td><td>dog leash</td></tr>
+    <tr><td>/psy/lek-separacyjny</td><td><code>psy-separacja</code></td><td>lonely dog home</td></tr>
+    <tr><td>/koty</td><td><code>koty</code></td><td>petting cat</td></tr>
+    <tr><td>/koty/zalatwianie-poza-kuweta</td><td><code>koty-kuweta</code></td><td>cat home</td></tr>
+    <tr><td>/koty/konflikt-miedzy-kotami</td><td><code>koty-konflikt</code></td><td>two cats</td></tr>
+    <tr><td>/o-mnie</td><td><code>o-mnie</code></td><td>vet online consultation</td></tr>
+    <tr><td>/cennik</td><td><code>cennik</code></td><td>price plans</td></tr>
+    <tr><td>/book</td><td><code>book</code></td><td>online booking</td></tr>
+    <tr><td>/faq</td><td><code>faq</code></td><td>questions chat</td></tr>
+    <tr><td>/blog</td><td><code>blog</code></td><td>reading blog</td></tr>
+    <tr><td>/niezbednik</td><td><code>niezbednik</code></td><td>download files</td></tr>
+    <tr><td>/kontakt</td><td><code>kontakt</code></td><td>contact email</td></tr>
+  </tbody>
+</table>
+
+<h2>🚀 Wdrożenie</h2>
+<ol class="step-list">
+  <li><strong>Otwórz Claude CLI</strong> w katalogu repo</li>
+  <li><strong>Wgraj folder <code>handoff-2/</code></strong> do roota</li>
+  <li><strong>Wklej prompt</strong> z <a href="PROMPT-FOR-CLAUDE-CLI.md">PROMPT-FOR-CLAUDE-CLI.md</a></li>
+  <li><strong>Pobierz ilustracje ze Storyset</strong> (14 plików SVG zgodnie z mapą wyżej)</li>
+  <li><strong>Wrzuć do <code>public/illustrations/</code></strong> z nazwami z config-a</li>
+  <li><strong>Build + deploy</strong></li>
+</ol>
+
+<div class="info-box">
+  <strong>📝 Storyset — ustawienia kolorów:</strong>
+  <ul style="margin-top: 8px; color: #2d5f52;">
+    <li>Style: <strong>Pana</strong> (line-art z lekkim wypełnieniem) lub <strong>Bro</strong> (flat color)</li>
+    <li>Primary: <code>#4a8d7a</code> (zielony marki)</li>
+    <li>Secondary: <code>#1c1a18</code> (ciemny ink)</li>
+    <li>Background: <strong>transparent</strong></li>
+    <li>Eksport: <strong>SVG</strong></li>
+  </ul>
+</div>
+
+<h2>⚠️ Ważne uwagi</h2>
+<ul>
+  <li><strong>Atrybucja:</strong> Storyset darmowy = link w stopce. Pro (~$12/mies) = bez atrybucji.</li>
+  <li><strong>Spójność stylu:</strong> wszystkie ilustracje z <strong>jednego stylu Storyset</strong> — nie mieszać.</li>
+  <li><strong>Optymalizacja:</strong> przepuść SVG przez <a href="https://jakearchibald.github.io/svgomg/" target="_blank">SVGOMG</a> — redukcja 30-60%.</li>
+  <li><strong>Komponent działa bez SVG</strong> — ma fallback emoji + gradient. Możesz wdrożyć paczkę zanim zdobędziesz wszystkie ilustracje.</li>
+</ul>
+
+</div>
+</body>
+</html>

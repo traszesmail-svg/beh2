@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paczka #7 — Lead Magnet</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: #faf9f7; color: #1c1a18; line-height: 1.6; padding: 60px 40px; }
+  .wrap { max-width: 980px; margin: 0 auto; }
+  h1 { font-family: 'DM Serif Display', serif; font-size: 2.4rem; margin-bottom: 8px; letter-spacing: -.01em; }
+  h2 { font-family: 'DM Serif Display', serif; font-size: 1.5rem; margin: 40px 0 16px; letter-spacing: -.01em; }
+  h3 { font-family: 'DM Serif Display', serif; font-size: 1.15rem; margin: 24px 0 12px; }
+  p { color: #5a5650; margin-bottom: 12px; }
+  .lead { font-size: 1.05rem; color: #2d5f52; margin-bottom: 24px; }
+  .file { display: flex; align-items: center; gap: 14px; background: #fff; border: 1px solid #e5e2dc; border-radius: 10px; padding: 14px 18px; margin-bottom: 8px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; }
+  .file .ico { width: 32px; height: 32px; border-radius: 8px; background: #e8f3f0; color: #4a8d7a; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 700; font-family: 'DM Sans', sans-serif; }
+  .file .desc { color: #5a5650; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; margin-left: auto; text-align: right; }
+  .file a { color: #4a8d7a; text-decoration: none; }
+  .file a:hover { text-decoration: underline; }
+  .badge { display: inline-block; background: #4a8d7a; color: #fff; font-size: 0.7rem; padding: 3px 10px; border-radius: 20px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; margin-right: 8px; }
+  .info-box { background: #e8f3f0; border-left: 4px solid #4a8d7a; padding: 16px 20px; margin: 24px 0; border-radius: 6px; color: #2d5f52; font-size: 0.92rem; }
+  .info-box strong { color: #1c1a18; }
+  .step-list { list-style: none; counter-reset: stepc; padding: 0; margin: 16px 0; }
+  .step-list li { counter-increment: stepc; padding: 12px 0 12px 50px; position: relative; border-bottom: 1px solid #e5e2dc; }
+  .step-list li:last-child { border-bottom: none; }
+  .step-list li::before { content: counter(stepc); position: absolute; left: 0; top: 12px; width: 32px; height: 32px; background: #1c1a18; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; }
+  ul { padding-left: 22px; color: #5a5650; }
+  ul li { margin-bottom: 6px; }
+  code { background: #f0ece6; padding: 1px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.85em; }
+  .magnet-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 16px 0; }
+  .magnet { padding: 18px; border-radius: 14px; background: #fff; border: 1px solid #e5e2dc; }
+  .magnet .emoji { font-size: 2rem; margin-bottom: 8px; }
+  .magnet h4 { font-family: 'DM Serif Display', serif; font-size: 1rem; margin-bottom: 6px; }
+  .magnet p { font-size: 0.78rem; margin-bottom: 0; }
+  .magnet.recommended { border-color: #4a8d7a; background: linear-gradient(135deg, #fff 0%, #e8f3f0 100%); }
+  .magnet.recommended::before { content: '⭐ Zacznij od tego'; display: inline-block; background: #4a8d7a; color: #fff; font-size: 0.65rem; padding: 2px 8px; border-radius: 4px; margin-bottom: 8px; font-weight: 700; letter-spacing: .04em; }
+  @media (max-width: 700px) { .magnet-grid { grid-template-columns: 1fr; } }
+  .touchpoints { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 16px 0; }
+  .tp { padding: 14px; border-radius: 10px; background: #fff; border: 1px solid #e5e2dc; text-align: center; }
+  .tp .num { display: inline-flex; width: 28px; height: 28px; background: #4a8d7a; color: #fff; border-radius: 50%; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; margin-bottom: 6px; }
+  .tp .name { font-weight: 600; font-size: 0.85rem; margin-bottom: 4px; }
+  .tp .desc { font-size: 0.72rem; color: #5a5650; }
+  @media (max-width: 700px) { .touchpoints { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>📦 Paczka #7 — Lead Magnet</h1>
+<p class="lead">Pozyskiwanie maili przez darmowy poradnik PDF. 3 punkty kontaktu, exit-intent popup, sticky banner, inline sekcja.</p>
+
+<div class="info-box">
+  <strong>Mechanika:</strong> User wprowadza email → API zapisuje subscriber-a (Resend / Mailerlite) → automatycznie idzie email z linkiem do PDF (signed URL, expires 7 dni).
+</div>
+
+<h2>📚 3 magnety do wyboru</h2>
+<div class="magnet-grid">
+  <div class="magnet">
+    <div class="emoji">🐕</div>
+    <h4>Pies sam w domu</h4>
+    <p><strong>14 stron</strong> · 7 kroków pracy z lękiem separacyjnym. Target: opiekunowie psów z problemem.</p>
+  </div>
+  <div class="magnet">
+    <div class="emoji">🐈</div>
+    <h4>Pierwszy tydzień z kotem</h4>
+    <p><strong>8 stron</strong> · Checklist + plan na 7 dni. Target: świeży opiekunowie kotów.</p>
+  </div>
+  <div class="magnet recommended">
+    <div class="emoji">🐾</div>
+    <h4>30 zachowań do obserwacji</h4>
+    <p><strong>6 stron</strong> · Sygnały u psa i kota. Najszerszy target → najwięcej zapisów.</p>
+  </div>
+</div>
+
+<h2>📍 3 punkty kontaktu</h2>
+<div class="touchpoints">
+  <div class="tp">
+    <div class="num">1</div>
+    <div class="name">Section inline</div>
+    <div class="desc">Na home, /psy, /koty. Pełna sekcja z wizualem i formularzem.</div>
+  </div>
+  <div class="tp">
+    <div class="num">2</div>
+    <div class="name">Exit-intent popup</div>
+    <div class="desc">Mysz idzie do paska adresu (desktop) lub 60% scroll + 30s (mobile).</div>
+  </div>
+  <div class="tp">
+    <div class="num">3</div>
+    <div class="name">Sticky banner</div>
+    <div class="desc">Bottom-right, pojawia się po 15s. Compact → expand on click.</div>
+  </div>
+</div>
+
+<h2>📂 Zawartość paczki</h2>
+
+<h3><span class="badge">DOC</span>Dokumentacja</h3>
+<div class="file"><div class="ico">📘</div><span><a href="README.md">README.md</a></span><span class="desc">Strategia + 3 magnety</span></div>
+<div class="file"><div class="ico">▶</div><span><a href="PROMPT-FOR-CLAUDE-CLI.md">PROMPT-FOR-CLAUDE-CLI.md</a></span><span class="desc">Gotowy prompt dla Claude CLI</span></div>
+<div class="file"><div class="ico">📝</div><span><a href="content/poradnik-template.md">content/poradnik-template.md</a></span><span class="desc">Szkic PDF "30 zachowań" do wypełnienia</span></div>
+
+<h3><span class="badge">CODE</span>Konfiguracja + helpers</h3>
+<div class="file"><div class="ico">⚙️</div><span><a href="lib/lead-magnet.config.ts">lead-magnet.config.ts</a></span><span class="desc">3 magnety + ustawienia popup/banner</span></div>
+<div class="file"><div class="ico">🚪</div><span><a href="lib/exit-intent.ts">exit-intent.ts</a></span><span class="desc">Hook detekcji wyjścia + scroll fallback</span></div>
+
+<h3><span class="badge">CODE</span>Komponenty React</h3>
+<div class="file"><div class="ico">📋</div><span><a href="components/LeadMagnetForm.tsx">LeadMagnetForm.tsx</a></span><span class="desc">Email + RODO + states (loading/success/error)</span></div>
+<div class="file"><div class="ico">💬</div><span><a href="components/LeadMagnetPopup.tsx">LeadMagnetPopup.tsx</a></span><span class="desc">Exit-intent popup, 2-kolumnowy</span></div>
+<div class="file"><div class="ico">📌</div><span><a href="components/LeadMagnetBanner.tsx">LeadMagnetBanner.tsx</a></span><span class="desc">Sticky bottom banner, compact + expanded</span></div>
+<div class="file"><div class="ico">📄</div><span><a href="components/LeadMagnetSection.tsx">LeadMagnetSection.tsx</a></span><span class="desc">Inline sekcja, card + inline variants</span></div>
+
+<h3><span class="badge">CODE</span>API</h3>
+<div class="file"><div class="ico">🔌</div><span><a href="app/api/lead-magnet/route.ts">app/api/lead-magnet/route.ts</a></span><span class="desc">POST endpoint — Resend + Mailerlite warianty</span></div>
+
+<h2>✋ Co musisz przygotować PRZED wdrożeniem</h2>
+<ol class="step-list">
+  <li><strong>PDF lead magneta</strong> — uzupełnij szkic z <code>content/poradnik-template.md</code> i wgraj do <code>/public/poradniki/30-zachowan.pdf</code></li>
+  <li><strong>Cover image</strong> 600×800 px → <code>/public/poradniki/cover-mix.png</code></li>
+  <li><strong>Konto email provider</strong> — Resend (3000/mies free) lub Mailerlite (1000 subs free)</li>
+  <li><strong>DNS records</strong> — SPF, DKIM dla domeny (provider da gotowe)</li>
+  <li><strong>Polityka prywatności</strong> — strona <code>/polityka-prywatnosci</code> z RODO clause</li>
+</ol>
+
+<h2>🚀 Wdrożenie</h2>
+<ol class="step-list">
+  <li><strong>Pobierz folder <code>handoff-7/</code></strong></li>
+  <li><strong>Wybierz magnet</strong> — rekomendowane "30 zachowań" (najszerszy)</li>
+  <li><strong>Stwórz PDF</strong> — z szkicu w content/</li>
+  <li><strong>Wybierz provider email</strong> — Resend lub Mailerlite</li>
+  <li><strong>Otwórz Claude CLI</strong> i wklej prompt</li>
+  <li><strong>Test:</strong> popup po 30s+scroll, banner po 15s, section na 3 stronach</li>
+  <li><strong>Wyślij testowy email</strong> i sprawdź czy PDF dochodzi</li>
+</ol>
+
+<div class="info-box">
+  <strong>📊 KPI do śledzenia:</strong>
+  <ul style="margin-top: 8px;">
+    <li>Conversion rate <code>popup</code>: cel 2-5%</li>
+    <li>Conversion rate <code>banner</code>: cel 0.5-2%</li>
+    <li>Conversion rate <code>section</code>: cel 1-3%</li>
+    <li>Open rate emaila z PDF: cel 50%+</li>
+  </ul>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
 import Link from 'next/link'
+import { HeroIllustration } from '@/components/HeroIllustration'
+import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { NotatnikFinalCta, NotatnikFooter, NotatnikSectionHead, NotatnikSideVisuals, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
+import { FAQSection } from '@/components/FAQSection'
 import { Schema } from '@/components/schema'
 import { buildBookHref } from '@/lib/booking-routing'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
@@ -56,6 +58,7 @@ export default function FaqPage() {
       <NotatnikSideVisuals variant="mixed" />
       <div className="notatnik-shell">
         <NotatnikTopbar tag="FAQ / najczestsze pytania" navItems={PUBLIC_SITE_NAV_ITEMS} ctaHref={audioHref} ctaLabel={FUNNEL_CTA_LABELS.primary} />
+        <Breadcrumbs items={[{ name: 'FAQ', url: '/faq' }]} />
 
         <section className="notatnik-subhero">
           <div>
@@ -81,25 +84,14 @@ export default function FaqPage() {
           </div>
 
           <div className="notatnik-subhero-media">
-            <div className="notatnik-subhero-figure">
-              <Image src="/branding/topic-cards/french-bulldog-leash.jpg" alt="Buldog francuski na smyczy podczas spaceru" fill sizes="(max-width: 980px) 100vw, 40vw" priority />
-            </div>
-            <div className="notatnik-subhero-note">
-              <span>Psy i koty / online</span>
-              <span>69 / 99 / 169 / 470 zl</span>
-            </div>
+            <HeroIllustration slug="faq" emojiPlaceholder="❓" className="w-full h-full min-h-[340px]" />
           </div>
         </section>
 
         <section id="faq">
           <NotatnikSectionHead index="I." kicker="Najczestsze pytania" title="Najczesciej zadawane pytania o oferte." />
-          <div className="notatnik-faq-grid">
-            {PUBLIC_OFFER_FAQ_ITEMS.map((item) => (
-              <article key={item.question} className="notatnik-faq-item">
-                <h4>{item.question}</h4>
-                <p>{item.answer}</p>
-              </article>
-            ))}
+          <div className="top-gap-small">
+            <FAQSection />
           </div>
         </section>
 

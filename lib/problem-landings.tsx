@@ -3,11 +3,12 @@ import 'server-only'
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
 import type { Metadata } from 'next'
-import Image from 'next/image'
 import Link from 'next/link'
 import React, { type ReactNode } from 'react'
 import { Footer } from '@/components/Footer'
+import { HeroIllustration } from '@/components/HeroIllustration'
 import { FunnelPrimaryActions } from '@/components/FunnelPrimaryActions'
+import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { NotatnikSideVisuals, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { LeadMagnetSignup } from '@/components/LeadMagnetSignup'
 import { NewsletterSignup } from '@/components/NewsletterSignup'
@@ -721,6 +722,10 @@ export function ProblemLandingPage({ routePath }: { routePath: string }) {
           ctaHref={landing.audioHref}
           ctaLabel="Kwadrans / 69 zl"
         />
+        <Breadcrumbs items={[
+          { name: landing.categoryLabel, url: landing.categoryHref },
+          { name: landing.h1, url: landing.path },
+        ]} />
 
         <section className="panel section-panel blog-article-hero-panel">
           <div className="editorial-section-head">
@@ -763,23 +768,16 @@ export function ProblemLandingPage({ routePath }: { routePath: string }) {
             </div>
 
             <aside className="editorial-hero-visual" aria-label={landing.visualAlt}>
-              <div className="editorial-hero-photo-frame">
-                <Image
-                  src={landing.visualSrc}
-                  alt={landing.visualAlt}
-                  width={landing.visualWidth}
-                  height={landing.visualHeight}
-                  sizes="(max-width: 980px) 100vw, 520px"
-                  priority
-                  loading="eager"
-                  fetchPriority="high"
-                  className="editorial-hero-photo"
-                />
-                <div className="editorial-hero-photo-caption">
-                  <span>{landing.categoryLabel}</span>
-                  <strong>{landing.title}</strong>
-                </div>
-              </div>
+              <HeroIllustration
+                slug={
+                  landing.slug === 'reaktywnosc-na-smyczy' ? 'psy-reaktywnosc'
+                  : landing.slug === 'lek-separacyjny' ? 'psy-separacja'
+                  : landing.slug === 'zalatwianie-poza-kuweta' ? 'koty-kuweta'
+                  : 'koty-konflikt'
+                }
+                emojiPlaceholder={landing.species === 'pies' ? '🐕' : '🐈'}
+                className="w-full h-full min-h-[380px]"
+              />
             </aside>
           </div>
         </section>

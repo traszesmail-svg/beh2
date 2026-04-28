@@ -5,6 +5,8 @@ import { formatPricePln } from '@/lib/pricing'
 import { getContactDetails, getPublicContactDetails } from '@/lib/site'
 import { getBaseUrl } from '@/lib/server/env'
 import { getManualPaymentConfig } from '@/lib/server/payment-options'
+import { buildGoogleCalendarUrl } from '@/lib/server/google-calendar'
+import { getPrepGuideUrl } from '@/lib/server/prep-guide'
 import { BookingRecord } from '@/lib/types'
 
 const DEFAULT_RESEND_FROM_EMAIL = 'Behawior 15 <onboarding@resend.dev>'
@@ -1278,28 +1280,36 @@ export async function sendUrgentNowResponseEmail(payload: UrgentNowResponseEmail
 export async function sendBookingConfirmationEmail(booking: BookingRecord): Promise<DeliveryResult> {
   const summary = buildBookingSummary(booking)
   const subject = `Potwierdzenie konsultacji - Behawior 15 - ${summary}`
+  const prepGuideUrl = getPrepGuideUrl(booking)
+  const prepGuideBlock = prepGuideUrl
+    ? `<p><strong>Jak się przygotować:</strong> <a href="${escapeHtml(prepGuideUrl)}">Przeczytaj krótki poradnik</a> — zajmuje 3 minuty i sprawi, że wyciągniesz z rozmowy maksimum.</p>`
+    : ''
+  const prepGuideText = prepGuideUrl
+    ? `Jak się przygotować: ${prepGuideUrl}`
+    : ''
+
   const html = renderEmailShell(
     'Konsultacja potwierdzona',
-    'PĹ‚atnoĹ›Ä‡ zostaĹ‚a przyjÄ™ta, a TwĂłj termin jest juĹĽ przypisany do Ciebie.',
+    'Płatność została przyjęta, a Twój termin jest już przypisany do Ciebie.',
     `
       <p><strong>Termin:</strong> ${formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}</p>
       <p><strong>Temat:</strong> ${getProblemLabel(booking.problemType)}</p>
-      <p><strong>Opis zgĹ‚oszenia:</strong> ${booking.description}</p>
-      <p><strong>Link do rozmowy:</strong> <a href="${booking.meetingUrl}">${booking.meetingUrl}</a></p>
-      <p><strong>Co dalej:</strong> wejdĹş 3-5 minut przed czasem i przygotuj najwaĹĽniejsze obserwacje oraz pytania. Po rozmowie dostaniesz jasny nastÄ™pny krok zamiast ogĂłlnych porad.</p>
+      <p><strong>Link do rozmowy:</strong> <a href="${escapeHtml(booking.meetingUrl)}">${escapeHtml(booking.meetingUrl)}</a></p>
+      ${prepGuideBlock}
+      <p><strong>Co dalej:</strong> wejdź 3–5 minut przed czasem. Miej gotową jedną najważniejszą obserwację — to wystarczy, żeby zacząć.</p>
       ${renderContactBlockHtml()}
     `,
-    'JeĹ›li bÄ™dzie potrzebny kolejny krok po rozmowie, dostaniesz jasnÄ… rekomendacjÄ™ zamiast ogĂłlnych porad.',
+    'Jeśli będzie potrzebny kolejny krok po rozmowie, dostaniesz jasną rekomendację zamiast ogólnych porad.',
   )
   const text = [
-    'Twoja konsultacja Behawior 15 zostaĹ‚a potwierdzona.',
+    'Twoja konsultacja Behawior 15 została potwierdzona.',
     `Termin: ${formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}`,
     `Temat: ${getProblemLabel(booking.problemType)}`,
-    `Opis: ${booking.description}`,
     `Link do rozmowy: ${booking.meetingUrl}`,
-    'Co dalej: wejdĹş 3-5 minut przed czasem i przygotuj najwaĹĽniejsze obserwacje oraz pytania. Po rozmowie dostaniesz jasny nastÄ™pny krok zamiast ogĂłlnych porad.',
+    prepGuideText,
+    'Co dalej: wejdź 3–5 minut przed czasem. Miej gotową jedną najważniejszą obserwację.',
     renderContactBlockText(),
-  ].join('\n')
+  ].filter(Boolean).join('\n')
 
   return deliverEmail({ to: booking.email, subject, html, text }, 'customer')
 }
@@ -1432,38 +1442,41 @@ export async function sendManualPaymentReportedAdminEmail(
     }
   }
 
-  const subject = `PĹ‚atnoĹ›Ä‡ do potwierdzenia do 15 min - Behawior 15 - ${buildBookingSummary(booking)}`
+  const calendarUrl = buildGoogleCalendarUrl(booking)
+  const subject = `Płatność do potwierdzenia do 15 min - Behawior 15 - ${buildBookingSummary(booking)}`
   const html = renderEmailShell(
-    'WpĹ‚ata czeka na decyzjÄ™',
-    'Klient kliknÄ…Ĺ‚ "ZapĹ‚aciĹ‚em". SprawdĹş wpĹ‚yw i kliknij wĹ‚aĹ›ciwÄ… decyzjÄ™.',
+    'Wpłata czeka na decyzję',
+    'Klient kliknął "Zapłaciłem". Sprawdź wpływ i kliknij właściwą decyzję.',
     `
       <p><strong>Booking ID:</strong> ${escapeHtml(booking.id)}</p>
-      <p><strong>TytuĹ‚ pĹ‚atnoĹ›ci:</strong> ${escapeHtml(booking.paymentReference ?? booking.id)}</p>
+      <p><strong>Tytuł płatności:</strong> ${escapeHtml(booking.paymentReference ?? booking.id)}</p>
       <p><strong>Termin:</strong> ${formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}</p>
       <p><strong>Temat:</strong> ${getProblemLabel(booking.problemType)}</p>
       <p><strong>Kwota:</strong> ${formatPricePln(booking.amount)}</p>
       <p><strong>Klient:</strong> ${escapeHtml(booking.ownerName)} | <a href="mailto:${escapeHtml(booking.email)}">${escapeHtml(booking.email)}</a> | ${escapeHtml(booking.phone)}</p>
       <p><strong>Opis:</strong> ${formatMultilineHtml(booking.description)}</p>
       <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:20px;">
-        <a href="${links.approveUrl}" style="display:inline-block;padding:12px 18px;border-radius:999px;background:#0a5c36;color:#ffffff;text-decoration:none;font-weight:700;">Jest wpĹ‚ata - potwierdĹş i otwĂłrz pokĂłj</a>
-        <a href="${links.rejectUrl}" style="display:inline-block;padding:12px 18px;border-radius:999px;background:#8a3022;color:#ffffff;text-decoration:none;font-weight:700;">Nie ma wpĹ‚aty</a>
+        <a href="${links.approveUrl}" style="display:inline-block;padding:12px 18px;border-radius:999px;background:#0a5c36;color:#ffffff;text-decoration:none;font-weight:700;">Jest wpłata — potwierdź i otwórz pokój</a>
+        <a href="${links.rejectUrl}" style="display:inline-block;padding:12px 18px;border-radius:999px;background:#8a3022;color:#ffffff;text-decoration:none;font-weight:700;">Nie ma wpłaty</a>
+        <a href="${escapeHtml(calendarUrl)}" style="display:inline-block;padding:12px 18px;border-radius:999px;background:#1a56b0;color:#ffffff;text-decoration:none;font-weight:700;">Dodaj do Google Calendar</a>
       </div>
     `,
     customerEmailStatus.state !== 'ready'
-      ? 'Po potwierdzeniu klient od razu zobaczy aktywne potwierdzenie i pokĂłj na swojej stronie rezerwacji. WysyĹ‚ka maili do innych adresĂłw ruszy po weryfikacji domeny nadawcy w Resend.'
-      : 'Po potwierdzeniu klient automatycznie dostanie mail z linkiem do pokoju rozmowy, a przy braku wpĹ‚aty wrĂłci do pĹ‚atnoĹ›ci.',
+      ? 'Po potwierdzeniu klient od razu zobaczy aktywne potwierdzenie i pokój na swojej stronie rezerwacji. Wysyłka maili do innych adresów ruszy po weryfikacji domeny nadawcy w Resend.'
+      : 'Po potwierdzeniu klient automatycznie dostanie mail z linkiem do pokoju rozmowy, a przy braku wpłaty wróci do płatności.',
   )
   const text = [
-    'PĹ‚atnoĹ›Ä‡ czeka na potwierdzenie do 15 min.',
+    'Płatność czeka na potwierdzenie do 15 min.',
     `Booking ID: ${booking.id}`,
-    `TytuĹ‚ pĹ‚atnoĹ›ci: ${booking.paymentReference ?? booking.id}`,
+    `Tytuł płatności: ${booking.paymentReference ?? booking.id}`,
     `Termin: ${formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}`,
     `Temat: ${getProblemLabel(booking.problemType)}`,
     `Kwota: ${formatPricePln(booking.amount)}`,
     `Klient: ${booking.ownerName} | ${booking.email} | ${booking.phone}`,
     `Opis: ${booking.description}`,
-    `Jest wpĹ‚ata: ${links.approveUrl}`,
-    `Nie ma wpĹ‚aty: ${links.rejectUrl}`,
+    `Jest wpłata: ${links.approveUrl}`,
+    `Nie ma wpłaty: ${links.rejectUrl}`,
+    `Dodaj do Google Calendar: ${calendarUrl}`,
   ].join('\n')
 
   return deliverEmail({ to: recipient, subject, html, text }, 'internal')
@@ -1695,7 +1708,14 @@ export type ClientTestimonialSubmission = {
 export async function sendClientTestimonialNotificationEmail(
   submission: ClientTestimonialSubmission,
 ): Promise<DeliveryResult> {
-  const recipient = 'krzyre@gmail.com'
+  const recipient = getAdminNotificationRecipientEmail()
+  if (!recipient) {
+    return {
+      status: 'skipped',
+      reason: 'ADMIN_NOTIFICATION_EMAIL missing',
+    }
+  }
+
   const baseUrl = getBaseUrl()
   const publishUrl = `${baseUrl}/api/admin/testimonials/${submission.id}?action=publish`
   const skipUrl = `${baseUrl}/api/admin/testimonials/${submission.id}?action=skip`

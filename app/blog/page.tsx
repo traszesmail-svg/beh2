@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { HeroIllustration } from '@/components/HeroIllustration'
+import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { LeadMagnetSignup } from '@/components/LeadMagnetSignup'
 import { NewsletterSignup } from '@/components/NewsletterSignup'
 import { NotatnikPageShell, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
@@ -100,32 +102,41 @@ export default function BlogPage() {
       pageClassName="blog-page"
     >
       <Schema data={structuredData} />
+      <Breadcrumbs items={[{ name: 'Blog', url: '/blog' }]} />
       <div className="container editorial-stack">
         <section className="panel section-panel blog-hero-panel">
-          <div className="editorial-section-head">
-            <div className="editorial-section-head-copy">
-              <div className="section-eyebrow">Blog</div>
-              <h1>Teksty o zachowaniu psów i kotów - konkretnie, bez ogólników.</h1>
-            </div>
-            <p className="editorial-section-lead">
-              Znajdziesz tu krótkie i praktyczne teksty o najczęstszych problemach psów i kotów. Jeśli po lekturze chcesz przejść dalej,
-              pod ręką jest Kwadrans z behawiorystą, strony tematyczne i Niezbędnik.
-            </p>
-          </div>
+          <div className="editorial-hero-grid">
+            <div>
+              <div className="editorial-section-head">
+                <div className="editorial-section-head-copy">
+                  <div className="section-eyebrow">Blog</div>
+                  <h1>Teksty o zachowaniu psów i kotów - konkretnie, bez ogólników.</h1>
+                </div>
+                <p className="editorial-section-lead">
+                  Znajdziesz tu krótkie i praktyczne teksty o najczęstszych problemach psów i kotów. Jeśli po lekturze chcesz przejść dalej,
+                  pod ręką jest Kwadrans z behawiorystą, strony tematyczne i Niezbędnik.
+                </p>
+              </div>
 
-          <div className="hero-actions blog-hero-actions">
-            <Link href={audioHref} prefetch={false} className="button button-primary big-button">
-              {FUNNEL_CTA_LABELS.primary}
-            </Link>
-            <Link href={FUNNEL_SECONDARY_HREF} prefetch={false} className="button button-ghost big-button">
-              {FUNNEL_CTA_LABELS.secondary}
-            </Link>
-            <Link href="/psy" prefetch={false} className="prep-inline-link">
-              Psy
-            </Link>
-            <Link href="/koty" prefetch={false} className="prep-inline-link">
-              Koty
-            </Link>
+              <div className="hero-actions blog-hero-actions">
+                <Link href={audioHref} prefetch={false} className="button button-primary big-button">
+                  {FUNNEL_CTA_LABELS.primary}
+                </Link>
+                <Link href={FUNNEL_SECONDARY_HREF} prefetch={false} className="button button-ghost big-button">
+                  {FUNNEL_CTA_LABELS.secondary}
+                </Link>
+                <Link href="/psy" prefetch={false} className="prep-inline-link">
+                  Psy
+                </Link>
+                <Link href="/koty" prefetch={false} className="prep-inline-link">
+                  Koty
+                </Link>
+              </div>
+            </div>
+
+            <aside className="editorial-hero-visual hidden lg:block">
+              <HeroIllustration slug="blog" emojiPlaceholder="📖" className="w-full h-full min-h-[320px]" />
+            </aside>
           </div>
         </section>
 

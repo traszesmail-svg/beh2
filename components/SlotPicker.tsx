@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react'
 
-export type SlotPickerMode = 'standard' | 'full-consultation'
+export type SlotPickerMode = 'standard' | 'urgent' | 'full-consultation'
 
 type SlotPickerProps = {
   onChange: (formatted: string) => void
@@ -10,63 +10,53 @@ type SlotPickerProps = {
   className?: string
 }
 
-// Available times per day-of-week index (0=Mon, 1=Tue … 5=Sat, Sun skipped)
-const AVAIL: Record<number, string[]> = {
-  0: ['09:00', '17:00', '17:40'],
-  1: ['10:20', '11:00', '18:00'],
-  2: ['09:40', '16:20', '17:20'],
-  3: ['09:20', '10:40', '18:20'],
-  4: ['09:00', '11:20', '16:40'],
-  5: ['10:00', '10:40', '11:00'],
+// Confirmed slots: 08:00–11:30 every 30 min, Mon–Fri only
+const CONFIRMED_TIMES = [
+  '08:00', '08:30',
+  '09:00', '09:30',
+  '10:00', '10:30',
+  '11:00', '11:30',
+]
+
+// Question-mark slots for urgent mode: 12:20–16:40 every 20 min
+const QUESTION_TIMES = [
+  '12:20', '12:40',
+  '13:00', '13:20', '13:40',
+  '14:00', '14:20', '14:40',
+  '15:00', '15:20', '15:40',
+  '16:00', '16:20', '16:40',
+]
+
+// Social-proof "already booked" ghost slots for standard mode (Kwadrans/Dwa kwadranse)
+// Times must not overlap CONFIRMED_TIMES — show realistic ~2 booked per day
+const BOOKED_STANDARD: Record<number, string[]> = {
+  0: ['07:30', '07:00'],
+  1: ['07:30', '07:00'],
+  2: ['07:30', '07:00'],
+  3: ['07:30', '07:00'],
+  4: ['07:30', '07:00'],
 }
 
-// Ghost "already booked" times per day-of-week (social proof)
-const BOOKED: Record<number, string[]> = {
-  0: ['08:40', '09:20', '10:20', '11:00'],
-  1: ['09:00', '09:20', '09:40', '16:40'],
-  2: ['09:00', '09:20', '10:00', '11:00'],
-  3: ['09:00', '09:40', '10:00', '11:00'],
-  4: ['09:20', '09:40', '10:20', '11:40'],
-  5: ['09:20', '09:40', '11:20', '11:40'],
+// Social-proof for full-consultation — slots are ~2h so show 1 booked per day, min 3h gap
+const BOOKED_FULL: Record<number, string[]> = {
+  0: ['06:00'],
+  1: ['06:00'],
+  2: ['06:00'],
+  3: ['06:00'],
+  4: ['06:00'],
+  5: ['07:00'],
 }
-
-// Full-consultation mode: always Mon+Thu at 09:00 only
-const FULL_CONSULT_DAYS = [1, 4] // Tue + Fri (1=Tue, 4=Fri in 0=Mon index)
-const FULL_CONSULT_BOOKED = ['09:40', '10:00', '10:20', '11:00']
 
 const PL_DAYS = ['pon', 'wt', 'śr', 'czw', 'pt', 'sob']
 
-function getWorkingDays(count: number, minDaysAhead: number): Date[] {
-  const days: Date[] = []
-  const d = new Date()
-  d.setHours(0, 0, 0, 0)
-  // Skip ahead the minimum required days first
-  d.setDate(d.getDate() + minDaysAhead)
-  // Then keep advancing until we have enough working days (skip Sunday only)
-  const limit = new Date(d)
-  limit.setDate(limit.getDate() - 1)
-  // Reset to start point and collect
-  const start = new Date()
-  start.setHours(0, 0, 0, 0)
-  start.setDate(start.getDate() + minDaysAhead)
-  // Make sure we land on a working day first
-  while (start.getDay() === 0) start.setDate(start.getDate() + 1)
-
-  const cur = new Date(start)
-  while (days.length < count) {
-    if (cur.getDay() !== 0) days.push(new Date(cur))
-    cur.setDate(cur.getDate() + 1)
-  }
-  return days
-}
-
-function dayIndex(d: Date): number {
-  // 0=Mon … 5=Sat
-  return d.getDay() === 0 ? 5 : d.getDay() - 1
+// Returns 0=Mon … 5=Sat, 6=Sun
+function jsToWeekIndex(d: Date): number {
+  const day = d.getDay()
+  return day === 0 ? 6 : day - 1
 }
 
 function dayLabel(d: Date): string {
-  return `${PL_DAYS[dayIndex(d)]} ${d.getDate()}.${String(d.getMonth() + 1).padStart(2, '0')}`
+  return `${PL_DAYS[jsToWeekIndex(d)]} ${d.getDate()}.${String(d.getMonth() + 1).padStart(2, '0')}`
 }
 
 function slotId(d: Date, time: string): string {
@@ -84,16 +74,58 @@ function formatForField(selected: string[], days: Date[]): string {
     .join('; ')
 }
 
-export function SlotPicker({ onChange, mode = 'standard', className }: SlotPickerProps) {
-  const isFullConsult = mode === 'full-consultation'
+function addDays(base: Date, n: number): Date {
+  const d = new Date(base)
+  d.setDate(d.getDate() + n)
+  d.setHours(0, 0, 0, 0)
+  return d
+}
 
-  // Standard: earliest slot in 3 days; Full consultation: also 3 days min, but filter Mon+Thu only
+function getStandardDays(minDaysAhead: number, count: number): Date[] {
+  const days: Date[] = []
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  let offset = minDaysAhead
+  while (days.length < count) {
+    const d = addDays(today, offset)
+    if (jsToWeekIndex(d) < 5) days.push(d) // Mon–Fri only
+    offset++
+  }
+  return days
+}
+
+function getUrgentDays(): Date[] {
+  const days: Date[] = []
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  for (let i = 0; i <= 2; i++) {
+    const d = addDays(today, i)
+    if (jsToWeekIndex(d) < 5) days.push(d) // Mon–Fri only
+  }
+  return days
+}
+
+function getFullConsultDays(count: number): Date[] {
+  const days: Date[] = []
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  let offset = 1
+  while (days.length < count) {
+    const d = addDays(today, offset)
+    const wi = jsToWeekIndex(d)
+    if (wi !== 6) days.push(d) // Mon–Sat, 1 slot each
+    offset++
+  }
+  return days.slice(0, count)
+}
+
+export function SlotPicker({ onChange, mode = 'standard', className }: SlotPickerProps) {
   const days = useMemo(() => {
-    const all = getWorkingDays(isFullConsult ? 14 : 7, 3)
-    if (!isFullConsult) return all
-    // Keep only Tue (dayIndex 1) and Fri (dayIndex 4), up to 4 dates
-    return all.filter((d) => FULL_CONSULT_DAYS.includes(dayIndex(d))).slice(0, 4)
-  }, [isFullConsult])
+    if (mode === 'urgent') return getUrgentDays()
+    if (mode === 'full-consultation') return getFullConsultDays(10)
+    // standard: skip 3 days, show 14 working days
+    return getStandardDays(4, 14)
+  }, [mode])
 
   const [activeDay, setActiveDay] = useState<Date | null>(null)
   const [selected, setSelected] = useState<string[]>([])
@@ -111,27 +143,43 @@ export function SlotPicker({ onChange, mode = 'standard', className }: SlotPicke
     onChange(formatForField(next, days))
   }
 
-  function getAvailTimes(d: Date): string[] {
-    return isFullConsult ? ['09:00'] : AVAIL[dayIndex(d)]
+  function getConfirmedTimes(d: Date): string[] {
+    if (mode === 'full-consultation') {
+      return jsToWeekIndex(d) === 5 ? ['10:00'] : ['09:00']
+    }
+    return CONFIRMED_TIMES
+  }
+
+  function getQuestionTimes(): string[] {
+    return mode === 'urgent' ? QUESTION_TIMES : []
   }
 
   function getBookedTimes(d: Date): string[] {
-    return isFullConsult ? FULL_CONSULT_BOOKED : BOOKED[dayIndex(d)]
+    if (mode === 'full-consultation') return BOOKED_FULL[jsToWeekIndex(d)] ?? []
+    return BOOKED_STANDARD[jsToWeekIndex(d)] ?? []
   }
 
   return (
     <div className={className}>
-      {isFullConsult && (
+      {mode === 'full-consultation' && (
         <div className="field-help" style={{ marginBottom: '10px' }}>
-          Pełna konsultacja odbywa się we wtorek i piątek o godz. 09:00.
+          Pełna konsultacja: pon–pt godz. 09:00, sobota godz. 10:00.
+          Potwierdzenie terminu następuje do 24 h od rezerwacji.
+        </div>
+      )}
+      {mode === 'urgent' && (
+        <div className="field-help" style={{ marginBottom: '10px' }}>
+          Terminy oznaczone pytajnikiem ? wymagaja potwierdzenia - odpowiedz w ciagu 15 minut w godzinach dyzuru.
         </div>
       )}
 
       <div className="slot-picker-days">
         {days.map((d) => {
-          const avail = getAvailTimes(d)
+          const confirmed = getConfirmedTimes(d)
+          const question = getQuestionTimes()
           const isActive = activeDay?.toISOString().slice(0, 10) === d.toISOString().slice(0, 10)
-          const hasSelected = avail.some((t) => selected.includes(slotId(d, t)))
+          const hasSelected = confirmed.some((t) => selected.includes(slotId(d, t)))
+          const totalFree = confirmed.length + question.length
           return (
             <button
               key={d.toISOString()}
@@ -141,41 +189,71 @@ export function SlotPicker({ onChange, mode = 'standard', className }: SlotPicke
               aria-expanded={isActive}
             >
               <span className="slot-day-label">{dayLabel(d)}</span>
-              <span className="slot-day-count">{avail.length} {avail.length === 1 ? 'wolny' : 'wolne'}</span>
+              <span className="slot-day-count">
+                {confirmed.length} wolne{question.length > 0 ? ` + ${question.length} ?` : ''}
+              </span>
             </button>
           )
         })}
       </div>
 
       {activeDay && (() => {
-        const avail = getAvailTimes(activeDay)
+        const confirmed = getConfirmedTimes(activeDay)
+        const question = getQuestionTimes()
         const booked = getBookedTimes(activeDay)
-        const allTimes = [...booked, ...avail].sort()
+        const allTimes = [...booked, ...confirmed].sort()
+
         return (
           <div className="slot-times">
             <div className="slot-times-label">
-              {dayLabel(activeDay)} — {avail.length} {avail.length === 1 ? 'wolny' : avail.length >= 2 && avail.length <= 4 ? 'wolne' : 'wolnych'} z {allTimes.length} terminów
+              {dayLabel(activeDay)} — {confirmed.length} wolne z {allTimes.length} terminów
+              {question.length > 0 && `, ${question.length} do potwierdzenia`}
             </div>
             <div className="slot-times-grid">
               {allTimes.map((t) => {
-                const isAvail = avail.includes(t)
+                const isConfirmed = confirmed.includes(t)
                 const id = slotId(activeDay, t)
                 const isPicked = selected.includes(id)
                 return (
                   <button
                     key={t}
                     type="button"
-                    disabled={!isAvail}
+                    disabled={!isConfirmed}
                     aria-pressed={isPicked}
-                    className={`slot-time-chip${!isAvail ? ' slot-time-chip--booked' : ''}${isPicked ? ' slot-time-chip--picked' : ''}`}
-                    onClick={() => isAvail && toggleSlot(id)}
+                    className={`slot-time-chip${!isConfirmed ? ' slot-time-chip--booked' : ''}${isPicked ? ' slot-time-chip--picked' : ''}`}
+                    onClick={() => isConfirmed && toggleSlot(id)}
                   >
                     {t}
-                    {!isAvail && <span className="slot-time-chip-tag">zajęte</span>}
+                    {!isConfirmed && <span className="slot-time-chip-tag">zajęte</span>}
                     {isPicked && <span className="slot-time-chip-tag">✓</span>}
                   </button>
                 )
               })}
+
+              {question.length > 0 && (
+                <>
+                  <div className="slot-times-section-label" style={{ gridColumn: '1/-1', marginTop: 8, fontSize: 12, opacity: 0.7 }}>
+                    Poniższe terminy wymagają potwierdzenia — odpowiedź w ciągu 15 min
+                  </div>
+                  {question.map((t) => {
+                    const id = slotId(activeDay, t)
+                    const isPicked = selected.includes(id)
+                    return (
+                      <button
+                        key={`q-${t}`}
+                        type="button"
+                        aria-pressed={isPicked}
+                        className={`slot-time-chip slot-time-chip--question${isPicked ? ' slot-time-chip--picked' : ''}`}
+                        onClick={() => toggleSlot(id)}
+                      >
+                        {t}
+                        <span className="slot-time-chip-tag">?</span>
+                        {isPicked && <span className="slot-time-chip-tag">✓</span>}
+                      </button>
+                    )
+                  })}
+                </>
+              )}
             </div>
           </div>
         )
@@ -184,7 +262,7 @@ export function SlotPicker({ onChange, mode = 'standard', className }: SlotPicke
       {selected.length > 0 && (
         <div className="slot-summary">
           <strong>Wybrane terminy:</strong> {formatForField(selected, days)}
-          {selected.length < 2 && <span className="slot-summary-hint"> — dodaj 1–2 rezerwowe</span>}
+          {selected.length < 2 && <span className="slot-summary-hint"> — mozesz dodac wiecej opcji</span>}
         </div>
       )}
     </div>

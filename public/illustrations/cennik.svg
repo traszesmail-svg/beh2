@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <!-- 3 pricing tiers as vertical cards, clean line art -->
+
+  <!-- Card 1 small -->
+  <rect x="68" y="100" width="100" height="190" rx="6" stroke="#1a2e2a" stroke-width="2" fill="#f8f5f0"/>
+  <line x1="68" y1="135" x2="168" y2="135" stroke="#1a2e2a" stroke-width="1.5"/>
+  <!-- 15 min -->
+  <text x="118" y="125" font-size="13" text-anchor="middle" fill="#1a2e2a" font-family="Georgia, serif">15 min</text>
+  <!-- price -->
+  <text x="118" y="160" font-size="22" text-anchor="middle" fill="#b07b3f" font-family="Georgia, serif" font-weight="bold">69 zł</text>
+  <!-- feature lines -->
+  <line x1="82" y1="178" x2="154" y2="178" stroke="#d4ede6" stroke-width="1.5"/>
+  <line x1="82" y1="195" x2="148" y2="195" stroke="#d4ede6" stroke-width="1.5"/>
+  <line x1="82" y1="212" x2="150" y2="212" stroke="#d4ede6" stroke-width="1.5"/>
+  <!-- checkmarks -->
+  <path d="M82 174 L86 178 L94 170" stroke="#2f7667" stroke-width="1.8" fill="none"/>
+  <path d="M82 191 L86 195 L94 187" stroke="#2f7667" stroke-width="1.8" fill="none"/>
+  <path d="M82 208 L86 212 L94 204" stroke="#2f7667" stroke-width="1.8" fill="none"/>
+  <!-- cta button outline -->
+  <rect x="82" y="258" width="86" height="22" rx="4" stroke="#1a2e2a" stroke-width="1.5" fill="none"/>
+
+  <!-- Card 2 highlighted (middle, taller) -->
+  <rect x="190" y="75" width="100" height="210" rx="6" stroke="#2f7667" stroke-width="2.5" fill="#f0f8f5"/>
+  <line x1="190" y1="112" x2="290" y2="112" stroke="#2f7667" stroke-width="1.5"/>
+  <text x="240" y="100" font-size="13" text-anchor="middle" fill="#2f7667" font-family="Georgia, serif">30 min</text>
+  <text x="240" y="138" font-size="22" text-anchor="middle" fill="#2f7667" font-family="Georgia, serif" font-weight="bold">169 zł</text>
+  <line x1="204" y1="156" x2="276" y2="156" stroke="#2f7667" stroke-width="1.2" opacity="0.4"/>
+  <line x1="204" y1="173" x2="270" y2="173" stroke="#2f7667" stroke-width="1.2" opacity="0.4"/>
+  <line x1="204" y1="190" x2="272" y2="190" stroke="#2f7667" stroke-width="1.2" opacity="0.4"/>
+  <line x1="204" y1="207" x2="268" y2="207" stroke="#2f7667" stroke-width="1.2" opacity="0.4"/>
+  <path d="M204 152 L208 156 L216 148" stroke="#2f7667" stroke-width="1.8" fill="none"/>
+  <path d="M204 169 L208 173 L216 165" stroke="#2f7667" stroke-width="1.8" fill="none"/>
+  <path d="M204 186 L208 190 L216 182" stroke="#2f7667" stroke-width="1.8" fill="none"/>
+  <path d="M204 203 L208 207 L216 199" stroke="#2f7667" stroke-width="1.8" fill="none"/>
+  <!-- popular badge -->
+  <rect x="210" y="60" width="60" height="18" rx="9" stroke="#2f7667" stroke-width="1.5" fill="none"/>
+  <text x="240" y="72" font-size="8" text-anchor="middle" fill="#2f7667" font-family="sans-serif" letter-spacing="1">POPULAR</text>
+  <!-- filled CTA -->
+  <rect x="204" y="258" width="82" height="22" rx="4" stroke="#2f7667" stroke-width="1.5" fill="#2f7667"/>
+
+  <!-- Card 3 large -->
+  <rect x="312" y="100" width="100" height="190" rx="6" stroke="#1a2e2a" stroke-width="2" fill="#f8f5f0"/>
+  <line x1="312" y1="135" x2="412" y2="135" stroke="#1a2e2a" stroke-width="1.5"/>
+  <text x="362" y="125" font-size="13" text-anchor="middle" fill="#1a2e2a" font-family="Georgia, serif">60 min</text>
+  <text x="362" y="160" font-size="22" text-anchor="middle" fill="#b07b3f" font-family="Georgia, serif" font-weight="bold">470 zł</text>
+  <line x1="326" y1="178" x2="398" y2="178" stroke="#d4ede6" stroke-width="1.5"/>
+  <line x1="326" y1="195" x2="392" y2="195" stroke="#d4ede6" stroke-width="1.5"/>
+  <line x1="326" y1="212" x2="394" y2="212" stroke="#d4ede6" stroke-width="1.5"/>
+  <line x1="326" y1="229" x2="396" y2="229" stroke="#d4ede6" stroke-width="1.5"/>
+  <path d="M326 174 L330 178 L338 170" stroke="#2f7667" stroke-width="1.8" fill="none"/>
+  <path d="M326 191 L330 195 L338 187" stroke="#2f7667" stroke-width="1.8" fill="none"/>
+  <path d="M326 208 L330 212 L338 204" stroke="#2f7667" stroke-width="1.8" fill="none"/>
+  <path d="M326 225 L330 229 L338 221" stroke="#2f7667" stroke-width="1.8" fill="none"/>
+  <rect x="326" y="258" width="86" height="22" rx="4" stroke="#1a2e2a" stroke-width="1.5" fill="none"/>
+</svg>

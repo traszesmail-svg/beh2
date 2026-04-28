@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { HeroIllustration } from '@/components/HeroIllustration'
+import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { ContactLeadForm } from '@/components/ContactLeadForm'
 import { NotatnikFooter, NotatnikSideVisuals, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
@@ -50,6 +52,7 @@ export default function ContactPage({
       <NotatnikSideVisuals variant="contact" />
       <div className="notatnik-shell">
         <NotatnikTopbar tag="Kontakt / napisz wiadomosc" navItems={PUBLIC_SITE_NAV_ITEMS} ctaHref={quickHref} ctaLabel="Kwadrans / 69 zl" />
+        <Breadcrumbs items={[{ name: 'Kontakt', url: '/kontakt' }]} />
 
         <div className="notatnik-contact">
           <div className="notatnik-contact-left">
@@ -67,6 +70,7 @@ export default function ContactPage({
           </div>
 
           <div className="notatnik-contact-right notatnik-kinfo">
+            <HeroIllustration slug="kontakt" emojiPlaceholder="✉️" className="w-full min-h-[220px] rounded-lg mb-6 hidden lg:flex" />
             <h3>Co stanie sie dalej</h3>
             <p>Odpowiem na adres e-mail z formularza i wskaze najprostszy kolejny krok: Kwadrans, Kwadrans na juz, Dwa kwadranse, Pelna konsultacje albo material startowy.</p>
 

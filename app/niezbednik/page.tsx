@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { HeroIllustration } from '@/components/HeroIllustration'
+import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { NotatnikFinalCta, NotatnikPageShell, NotatnikSectionHead, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { buildBookHref } from '@/lib/booking-routing'
 import { getLeadMagnetBySlug } from '@/lib/growth-layer'
@@ -56,8 +58,8 @@ const leadMagnets = ([
     cta: 'Pobierz listę',
     title: 'Przed rozmową z behawiorystą',
     description: 'Co przygotować, co nagrać i czym nie trzeba się stresować przed konsultacją.',
-    image: '/branding/niezbednik/pdf-cat-grooming.jpg',
-    imageAlt: 'Kot podczas spokojnej pielęgnacji',
+    image: '/branding/side-visuals/contact-writing-notebook.jpg',
+    imageAlt: 'Notatnik i długopis — przygotowanie do rozmowy',
     magnet: getLeadMagnetBySlug('przygotowanie-do-konsultacji-online'),
   },
 ] as const).map((item) => {
@@ -377,6 +379,7 @@ export default function EssentialsPage() {
       footerPrimaryLabel="Kwadrans z behawiorysta"
       sideVisualVariant="materials"
     >
+      <Breadcrumbs items={[{ name: 'Niezbędnik', url: '/niezbednik' }]} />
       <section className="notatnik-subhero">
         <div>
           <div className="notatnik-subhero-tag notatnik-mono">Niezbędnik / materiały i rzeczy pomocnicze</div>
@@ -401,13 +404,7 @@ export default function EssentialsPage() {
         </div>
 
         <div className="notatnik-subhero-media">
-          <div className="notatnik-subhero-figure">
-            <Image src="/branding/topic-cards/puppy-hands.jpg" alt="Szczeniak trzymany w dłoniach opiekuna" fill sizes="(max-width: 980px) 100vw, 40vw" priority />
-          </div>
-          <div className="notatnik-subhero-note">
-            <span>Materiały / praktyczne rzeczy</span>
-            <span>zacznij spokojnie</span>
-          </div>
+          <HeroIllustration slug="niezbednik" emojiPlaceholder="📚" className="w-full h-full min-h-[340px]" />
         </div>
       </section>
 

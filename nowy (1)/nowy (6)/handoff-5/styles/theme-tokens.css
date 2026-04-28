@@ -1,0 +1,67 @@
+/* handoff-5/styles/theme-tokens.css
+   CSS custom properties dla light + dark mode
+   Importuj w globals.css PRZED tailwind directives
+*/
+
+:root {
+  /* Light mode (domyślny) */
+  --color-bg: #faf9f7;
+  --color-surface: #ffffff;
+  --color-surface-2: #f5f3ee;
+  --color-ink: #1c1a18;
+  --color-muted: #5a5650;
+  --color-muted-2: #8b8680;
+
+  --color-accent: #4a8d7a;
+  --color-accent-dark: #2d5f52;
+  --color-accent-light: #e8f3f0;
+  --color-accent-fg: #ffffff;
+
+  --color-border: #e5e2dc;
+  --color-border-strong: #d4cfc6;
+
+  --color-warning: #d97706;
+  --color-warning-bg: #fef3c7;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 12px -2px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 10px 30px -5px rgb(0 0 0 / 0.12);
+}
+
+.dark {
+  /* Dark mode */
+  --color-bg: #0f0e0c;
+  --color-surface: #1c1a18;
+  --color-surface-2: #25221f;
+  --color-ink: #f5f4f0;
+  --color-muted: #a8a39c;
+  --color-muted-2: #6f6a63;
+
+  /* Accent JAŚNIEJSZY w dark mode dla kontrastu WCAG */
+  --color-accent: #6db89e;
+  --color-accent-dark: #4a8d7a;
+  --color-accent-light: #1f3530;
+  --color-accent-fg: #0f0e0c;
+
+  --color-border: #2d2a27;
+  --color-border-strong: #3d3935;
+
+  --color-warning: #fbbf24;
+  --color-warning-bg: #2d2008;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+  --shadow-md: 0 4px 12px -2px rgb(0 0 0 / 0.5);
+  --shadow-lg: 0 10px 30px -5px rgb(0 0 0 / 0.6);
+}
+
+/* Smooth transition przy przełączaniu — ale bez efektu na pierwszym renderze */
+html.theme-ready * {
+  transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease;
+}
+
+/* Wyłącz tranzycje dla osób z motion-sensitivity */
+@media (prefers-reduced-motion: reduce) {
+  html.theme-ready * {
+    transition: none !important;
+  }
+}

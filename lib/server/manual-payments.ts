@@ -2,6 +2,7 @@ import { getBookingById, getBookingForViewer, markBookingManualPaymentPending, m
 import { buildManualPaymentReviewUrl } from '@/lib/server/manual-payment-review'
 import { sendManualPaymentReportedAdminEmail } from '@/lib/server/notifications'
 import { getManualPaymentConfig, getManualPaymentReference } from '@/lib/server/payment-options'
+import { sendManualPaymentPendingSms } from '@/lib/server/sms'
 
 const MANUAL_PAYMENT_ADMIN_NOTIFICATION_TIMEOUT_MS = 3_000
 
@@ -66,6 +67,11 @@ export async function reportManualPayment(
   const adminNotification = await sendManualPaymentReportedAdminEmailWithTimeout(updatedBooking, {
     approveUrl: buildManualPaymentReviewUrl(updatedBooking.id, 'approve', updatedBooking.paymentReportedAt),
     rejectUrl: buildManualPaymentReviewUrl(updatedBooking.id, 'reject', updatedBooking.paymentReportedAt),
+  })
+
+  // SMS do klienta: potwierdzenie zgłoszenia, info o czasie oczekiwania
+  sendManualPaymentPendingSms(updatedBooking, manualPayment.holdMinutes).catch((err) => {
+    console.warn('[behawior15][manual-payment] pending SMS failed', err)
   })
 
   if (adminNotification.status === 'queued') {

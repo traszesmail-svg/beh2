@@ -10,6 +10,13 @@ import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import type { AnimalType, BookingStatus, ProblemType, QaCheckoutEligibility } from '@/lib/types'
 import type { BookingServiceType } from '@/lib/booking-services'
 
+const GUMROAD_SLUGS: Record<BookingServiceType, string> = {
+  'szybka-konsultacja-15-min': 'gsqry',
+  'kwadrans-na-juz': 'szogjg',
+  'konsultacja-30-min': 'prifq',
+  'konsultacja-behawioralna-online': 'yfnkcy',
+}
+
 interface PaymentActionsProps {
   bookingId: string
   accessToken: string
@@ -353,6 +360,22 @@ export function PaymentActions({
             <span>{manualInstructions}</span>
           </div>
         ) : null}
+
+        <div className="list-card tree-backed-card">
+          <strong>Alternatywna opcja — Gumroad</strong>
+          <span>
+            Możesz też opłacić rezerwację przez Gumroad (karta, PayPal). Po zakupie wróć tutaj i zgłoś wpłatę podając tytuł płatności.
+          </span>
+          <a
+            href={`https://krzyre.gumroad.com/l/${GUMROAD_SLUGS[serviceType]}`}
+            target="_blank"
+            rel="noreferrer"
+            className="button button-ghost"
+            style={{ marginTop: '0.5rem', display: 'inline-block' }}
+          >
+            Zapłać przez Gumroad
+          </a>
+        </div>
 
         <div className="hero-actions">
           <button

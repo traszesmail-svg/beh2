@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="80 50 340 280" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Open book -->
+  <path d="M100 100 Q100 88 115 85 L235 78 L235 290 Q120 295 100 308Z" stroke="#1a2e2a" stroke-width="2.5" fill="#f8f5f0"/>
+  <path d="M245 78 L365 85 Q380 88 380 100 L380 308 Q358 295 245 290Z" stroke="#1a2e2a" stroke-width="2.5" fill="#f8f5f0"/>
+  <!-- spine -->
+  <line x1="240" y1="78" x2="240" y2="290" stroke="#1a2e2a" stroke-width="3"/>
+  <!-- shadow under book -->
+  <ellipse cx="240" cy="310" rx="148" ry="12" stroke="none" fill="#d4ede6" opacity="0.5"/>
+
+  <!-- Left page - article about dog -->
+  <line x1="118" y1="108" x2="226" y2="105" stroke="#2f7667" stroke-width="2" opacity="0.7"/>
+  <line x1="118" y1="122" x2="222" y2="120" stroke="#1a2e2a" stroke-width="1.2" opacity="0.3"/>
+  <line x1="118" y1="133" x2="228" y2="131" stroke="#1a2e2a" stroke-width="1.2" opacity="0.3"/>
+  <line x1="118" y1="144" x2="218" y2="142" stroke="#1a2e2a" stroke-width="1.2" opacity="0.3"/>
+  <!-- dog mini illustration left page -->
+  <!-- dog head profile -->
+  <circle cx="158" cy="185" r="22" stroke="#1a2e2a" stroke-width="1.5" fill="white"/>
+  <path d="M146 170 Q140 156 145 148 Q151 155 154 168" stroke="#1a2e2a" stroke-width="1.2" fill="#f0ebe4"/>
+  <path d="M168 168 Q175 155 172 147 Q166 154 163 167" stroke="#1a2e2a" stroke-width="1.2" fill="#f0ebe4"/>
+  <ellipse cx="168" cy="190" rx="8" ry="5" stroke="#1a2e2a" stroke-width="1.2" fill="white"/>
+  <circle cx="149" cy="180" r="3" fill="#1a2e2a"/>
+  <circle cx="150" cy="179" r="1" fill="white"/>
+  <line x1="118" y1="215" x2="222" y2="213" stroke="#1a2e2a" stroke-width="1.2" opacity="0.3"/>
+  <line x1="118" y1="226" x2="218" y2="224" stroke="#1a2e2a" stroke-width="1.2" opacity="0.3"/>
+  <line x1="118" y1="237" x2="225" y2="235" stroke="#1a2e2a" stroke-width="1.2" opacity="0.3"/>
+  <line x1="118" y1="248" x2="210" y2="246" stroke="#1a2e2a" stroke-width="1.2" opacity="0.3"/>
+  <line x1="118" y1="259" x2="220" y2="257" stroke="#1a2e2a" stroke-width="1.2" opacity="0.3"/>
+
+  <!-- Right page - article about cat -->
+  <line x1="254" y1="108" x2="362" y2="105" stroke="#b07b3f" stroke-width="2" opacity="0.7"/>
+  <line x1="254" y1="122" x2="358" y2="120" stroke="#1a2e2a" stroke-width="1.2" opacity="0.3"/>
+  <line x1="254" y1="133" x2="365" y2="131" stroke="#1a2e2a" stroke-width="1.2" opacity="0.3"/>
+  <line x1="254" y1="144" x2="355" y2="142" stroke="#1a2e2a" stroke-width="1.2" opacity="0.3"/>
+  <!-- cat mini right page -->
+  <circle cx="302" cy="183" r="20" stroke="#1a2e2a" stroke-width="1.5" fill="white"/>
+  <path d="M290 168 Q285 155 291 148 Q296 155 296 166" stroke="#1a2e2a" stroke-width="1.2" fill="#f8f5f0"/>
+  <path d="M314 167 Q320 154 315 147 Q310 154 310 165" stroke="#1a2e2a" stroke-width="1.2" fill="#f8f5f0"/>
+  <!-- cat eyes closed happy -->
+  <path d="M291 181 Q297 177 303 181" stroke="#1a2e2a" stroke-width="1.5" fill="none"/>
+  <path d="M303 182 Q309 178 315 182" stroke="#1a2e2a" stroke-width="1.5" fill="none"/>
+  <!-- cat whiskers -->
+  <line x1="275" y1="186" x2="290" y2="187" stroke="#1a2e2a" stroke-width="1" opacity="0.4"/>
+  <line x1="314" y1="187" x2="329" y2="186" stroke="#1a2e2a" stroke-width="1" opacity="0.4"/>
+  <line x1="254" y1="215" x2="358" y2="213" stroke="#1a2e2a" stroke-width="1.2" opacity="0.3"/>
+  <line x1="254" y1="226" x2="355" y2="224" stroke="#1a2e2a" stroke-width="1.2" opacity="0.3"/>
+  <line x1="254" y1="237" x2="362" y2="235" stroke="#1a2e2a" stroke-width="1.2" opacity="0.3"/>
+  <line x1="254" y1="248" x2="348" y2="246" stroke="#1a2e2a" stroke-width="1.2" opacity="0.3"/>
+  <line x1="254" y1="259" x2="356" y2="257" stroke="#1a2e2a" stroke-width="1.2" opacity="0.3"/>
+</svg>

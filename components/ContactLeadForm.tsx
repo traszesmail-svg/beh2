@@ -69,8 +69,14 @@ export function ContactLeadForm() {
   const searchParams = useSearchParams()
   const presetSpecies = normalizeSpeciesPreset(searchParams?.get('species') ?? null)
   const intent = searchParams?.get('intent') ?? searchParams?.get('service') ?? null
+  const presetDate = searchParams?.get('requestedDate') ?? null
+  const presetTime = searchParams?.get('requestedTime') ?? null
   const isUrgentNow = isUrgentNowIntent(intent)
-  const [form, setForm] = useState<SubmissionPayload>(createInitialForm(presetSpecies ?? ''))
+  const [form, setForm] = useState<SubmissionPayload>({
+    ...createInitialForm(presetSpecies ?? ''),
+    requestedDate: presetDate ?? '',
+    requestedTime: presetTime ?? '',
+  })
   const [status, setStatus] = useState<FormState>('idle')
   const [feedback, setFeedback] = useState('')
   const startedRef = useRef(false)

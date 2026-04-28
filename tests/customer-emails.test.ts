@@ -118,9 +118,9 @@ test('customer emails cover reservation, review, confirmation and cancel outcome
       {
         MAIL_PROVIDER: 'resend',
         RESEND_API_KEY: 're_test_key',
-        RESEND_FROM_EMAIL: 'Behawior 15 <kontakt@behawior15.pl>',
+        RESEND_FROM_EMAIL: 'Regulski <kontakt@regulskibehawiorysta.pl>',
         CUSTOMER_EMAIL_MODE: 'auto',
-        BEHAVIOR15_CONTACT_EMAIL: 'kontakt@behawior15.pl',
+        BEHAVIOR15_CONTACT_EMAIL: 'kontakt@regulskibehawiorysta.pl',
       },
       async () => {
         const bookingDate = '2030-01-15'
@@ -135,7 +135,7 @@ test('customer emails cover reservation, review, confirmation and cancel outcome
         assert.equal(bookingA.booking.paymentStatus, 'unpaid')
         assert.equal(sentEmails[0].to?.[0], 'klient@example.com')
         assert.equal(includesNormalized(sentEmails[0].subject, 'Behawior 15'), true)
-        assert.equal(sentEmails[1].to?.[0], 'kontakt@behawior15.pl')
+        assert.equal(sentEmails[1].to?.[0], 'kontakt@regulskibehawiorysta.pl')
         assert.equal(includesNormalized(sentEmails[1].subject, 'Kwadrans z behawiorysta'), true)
 
         const reviewBooking = await markBookingManualPaymentPending(bookingA.booking.id, {
@@ -167,7 +167,7 @@ test('customer emails cover reservation, review, confirmation and cancel outcome
         const bookingB = await createPendingBooking(makeBookingForm(`${bookingDate}-10:20`))
         assert.equal(sentEmails.length, 6)
         assert.equal(includesNormalized(sentEmails[4].subject, 'Behawior 15'), true)
-        assert.equal(sentEmails[5].to?.[0], 'kontakt@behawior15.pl')
+        assert.equal(sentEmails[5].to?.[0], 'kontakt@regulskibehawiorysta.pl')
 
         const rejectedBooking = await markBookingManualPaymentRejected(bookingB.booking.id, 'Brak potwierdzenia wplaty')
         assert.equal(rejectedBooking?.bookingStatus, 'cancelled')
@@ -183,7 +183,7 @@ test('customer emails cover reservation, review, confirmation and cancel outcome
         const bookingC = await createPendingBooking(makeBookingForm(`${bookingDate}-10:40`))
         assert.equal(sentEmails.length, 9)
         assert.equal(includesNormalized(sentEmails[7].subject, 'Behawior 15'), true)
-        assert.equal(sentEmails[8].to?.[0], 'kontakt@behawior15.pl')
+        assert.equal(sentEmails[8].to?.[0], 'kontakt@regulskibehawiorysta.pl')
 
         const failedBooking = await markBookingPaymentFailed(bookingC.booking.id)
         assert.equal(failedBooking?.bookingStatus, 'cancelled')
@@ -221,9 +221,9 @@ test('customer emails stay on the confirmation page when disabled', async () => 
       {
         MAIL_PROVIDER: 'resend',
         RESEND_API_KEY: 're_test_key',
-        RESEND_FROM_EMAIL: 'Behawior 15 <kontakt@behawior15.pl>',
+        RESEND_FROM_EMAIL: 'Regulski <kontakt@regulskibehawiorysta.pl>',
         CUSTOMER_EMAIL_MODE: 'disabled',
-        BEHAVIOR15_CONTACT_EMAIL: 'kontakt@behawior15.pl',
+        BEHAVIOR15_CONTACT_EMAIL: 'kontakt@regulskibehawiorysta.pl',
       },
       async () => {
         const bookingDate = '2030-01-16'
@@ -237,7 +237,7 @@ test('customer emails stay on the confirmation page when disabled', async () => 
         assert.equal(includesNormalized(status.summary, 'swiadomie wylaczone'), true)
         assert.match(status.nextStep, /CUSTOMER_EMAIL_MODE=auto/i)
         assert.equal(sentEmails.length, 1)
-        assert.equal(sentEmails[0].to?.[0], 'kontakt@behawior15.pl')
+        assert.equal(sentEmails[0].to?.[0], 'kontakt@regulskibehawiorysta.pl')
 
         const pendingBooking = await markBookingManualPaymentPending(booking.booking.id, {
           paymentReference: 'MANUAL-DISABLED',
@@ -285,8 +285,8 @@ test('contact route sends leads to the public inbox and replies to the sender', 
       {
         MAIL_PROVIDER: 'resend',
         RESEND_API_KEY: 're_test_key',
-        RESEND_FROM_EMAIL: 'Behawior 15 <kontakt@behawior15.pl>',
-        BEHAVIOR15_CONTACT_EMAIL: 'coapebehawiorysta@gmail.com',
+        RESEND_FROM_EMAIL: 'Regulski <kontakt@regulskibehawiorysta.pl>',
+        BEHAVIOR15_CONTACT_EMAIL: 'kontakt@regulskibehawiorysta.pl',
       },
       async () => {
         const response = await postContactLead(
@@ -306,7 +306,7 @@ test('contact route sends leads to the public inbox and replies to the sender', 
         assert.equal(payload.ok, true)
         assert.match(payload.message ?? '', /Odpowiem na podany adres e-mail/i)
         assert.equal(sentEmails.length, 2)
-        assert.equal(sentEmails[0].to?.[0], 'coapebehawiorysta@gmail.com')
+        assert.equal(sentEmails[0].to?.[0], 'kontakt@regulskibehawiorysta.pl')
         assert.equal(sentEmails[0].reply_to, 'klient@example.com')
         assert.match(sentEmails[0].subject ?? '', /Kontakt - .*Anna Nowak/)
         assert.match(sentEmails[0].text ?? '', /Kontekst:/)
@@ -343,8 +343,8 @@ test('contact route silently accepts honeypot submissions without sending emails
       {
         MAIL_PROVIDER: 'resend',
         RESEND_API_KEY: 're_test_key',
-        RESEND_FROM_EMAIL: 'Behawior 15 <kontakt@behawior15.pl>',
-        BEHAVIOR15_CONTACT_EMAIL: 'coapebehawiorysta@gmail.com',
+        RESEND_FROM_EMAIL: 'Regulski <kontakt@regulskibehawiorysta.pl>',
+        BEHAVIOR15_CONTACT_EMAIL: 'kontakt@regulskibehawiorysta.pl',
       },
       async () => {
         const response = await postContactLead(
@@ -395,8 +395,8 @@ test('contact route rate limits repeated submissions from the same IP', async ()
       {
         MAIL_PROVIDER: 'resend',
         RESEND_API_KEY: 're_test_key',
-        RESEND_FROM_EMAIL: 'Behawior 15 <kontakt@behawior15.pl>',
-        BEHAVIOR15_CONTACT_EMAIL: 'coapebehawiorysta@gmail.com',
+        RESEND_FROM_EMAIL: 'Regulski <kontakt@regulskibehawiorysta.pl>',
+        BEHAVIOR15_CONTACT_EMAIL: 'kontakt@regulskibehawiorysta.pl',
       },
       async () => {
         for (let attempt = 0; attempt < 3; attempt += 1) {
