@@ -1,6 +1,6 @@
 ---
 slug: dlaczego-moj-pies-szczeka-na-inne-psy
-title_seo: Dlaczego mój pies szczeka na inne psy? Co to naprawdę znaczy
+title_seo: Dlaczego mój pies szczeka na inne psy?
 meta_description: Szczekanie na inne psy rzadko oznacza agresję. Najczęściej to mieszanka napięcia, frustracji i zbyt małego dystansu. Sprawdź, co zrobić pierwsze.
 h1: Dlaczego mój pies szczeka na inne psy?
 ---

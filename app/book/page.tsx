@@ -69,7 +69,7 @@ export function generateMetadata({ searchParams }: BookPageProps): Metadata {
       title: 'Rezerwacja konsultacji behawioralnych online',
       path: '/book',
       description:
-        'Prosba o rezerwacje Kwadransu 69 zl, Dwoch kwadransow 169 zl albo Pelnej konsultacji 470 zl z diagnoza i 7 dniami wsparcia tekstowego przez WhatsApp. Priorytetowy wariant moze pojawic sie dopiero przy wyborze terminu Kwadransu.',
+        'Zarezerwuj Kwadrans 69 zl, Dwa kwadranse 169 zl albo Pelna konsultacja 470 zl. Wybierz gatunek i temat, potem dostepne terminy.',
     })
   }
 

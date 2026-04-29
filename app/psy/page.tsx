@@ -15,7 +15,7 @@ import { FAQ_SHORTLISTS } from '@/lib/trust-layer'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: 'Behawiorysta psow online - reaktywnosc, separacja i pomoc w domu',
+  title: 'Behawiorysta psow online - reaktywnosc i separacja',
   path: '/psy',
   description: 'Pomoc behawioralna online dla opiekunow psow. Kwadrans 69 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl.',
 })

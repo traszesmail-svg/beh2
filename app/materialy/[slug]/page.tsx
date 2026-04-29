@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   const guide = getMaterialyGuideBySlug(params.slug)
   if (!guide) return { title: 'Material nieznaleziony' }
   return buildMarketingMetadata({
-    title: `${guide.title} | Materialy PDF`,
+    title: guide.title,
     path: `/materialy/${guide.slug}`,
     description: `${guide.subtitle}. ${guide.shortPromise}`,
   })

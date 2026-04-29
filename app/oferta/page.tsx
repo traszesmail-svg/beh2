@@ -16,7 +16,7 @@ export const metadata: Metadata = buildMarketingMetadata({
   title: 'Oferta: behawiorysta online dla psa i kota',
   path: '/oferta',
   description:
-    'Aktualna oferta publiczna: Kwadrans 69 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl z diagnoza oraz 7 dniami wsparcia tekstowego przez WhatsApp. Priorytetowy wariant pojawia sie przy rezerwacji Kwadransu.',
+    'Oferta: Kwadrans 69 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl z diagnoza i 7 dniami wsparcia przez WhatsApp.',
 })
 
 export default async function OfferPage() {

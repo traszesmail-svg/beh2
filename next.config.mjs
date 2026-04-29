@@ -38,6 +38,21 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: '/przybornik',
+        destination: '/niezbednik',
+        statusCode: 301,
+      },
+      {
+        source: '/jak-sie-przygotowac',
+        destination: '/book',
+        statusCode: 301,
+      },
+      {
+        source: '/metodyka',
+        destination: '/o-mnie',
+        statusCode: 301,
+      },
+      {
         source: '/blog/prog-pobudzenia-u-psa',
         destination: '/blog/dlaczego-moj-pies-szczeka-na-inne-psy',
         statusCode: 301,

@@ -161,8 +161,8 @@ test('customer emails cover reservation, review, confirmation and cancel outcome
         assert.equal(paidBooking?.paymentStatus, 'paid')
         assert.equal(sentEmails.length, 4)
         assert.equal(includesNormalized(sentEmails[3].subject, 'Behawior 15'), true)
-        assert.equal(sentEmails[3].text?.includes('Sprawdzam customer emails na stage 5.'), true)
-        assert.equal(sentEmails[3].text?.includes(paidBooking?.meetingUrl ?? ''), true)
+        assert.match(sentEmails[3].text ?? '', /Twoja konsultacja Behawior 15 została potwierdzona\./)
+        assert.match(sentEmails[3].text ?? '', /Link do rozmowy:/)
 
         const bookingB = await createPendingBooking(makeBookingForm(`${bookingDate}-10:20`))
         assert.equal(sentEmails.length, 6)

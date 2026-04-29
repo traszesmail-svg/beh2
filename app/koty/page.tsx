@@ -15,7 +15,7 @@ import { FAQ_SHORTLISTS } from '@/lib/trust-layer'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: 'Behawiorysta kotow online - kuweta, stres i relacje miedzy kotami',
+  title: 'Behawiorysta kotow online - kuweta i stres',
   path: '/koty',
   description: 'Pomoc behawioralna online dla opiekunow kotow. Kwadrans 69 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl.',
 })

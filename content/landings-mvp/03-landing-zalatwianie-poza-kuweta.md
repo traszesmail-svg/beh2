@@ -1,6 +1,6 @@
 ---
 slug: /koty/zalatwianie-poza-kuweta
-title_seo: Kot załatwia się poza kuwetą — co sprawdzić i od czego zacząć
+title_seo: Kot załatwia się poza kuwetą — co sprawdzić
 meta_description: Kot omija kuwetę? To sygnał, nie charakter. Sprawdź, co zbadać w pierwszej kolejności i jakie zmiany mają sens, zanim wyciągniesz wnioski.
 h1: Kot załatwia się poza kuwetą
 ---

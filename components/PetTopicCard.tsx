@@ -52,30 +52,26 @@ export function PetTopicCard({ emoji, heading, intro, links }: PetTopicCardProps
 export function PetTopicsSection() {
   return (
     <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <Link href="/book?species=pies" className="block no-underline text-inherit hover:no-underline">
-        <PetTopicCard
-          emoji="🐕"
-          heading="Masz psa i nie wiesz, od czego zacząć?"
-          intro="Pomogę Ci uporządkować spacer, pobudzenie, separację lub rytm dnia młodego psa."
-          links={[
-            { href: '/psy/reaktywnosc-na-smyczy', icon: 'zap', bold: 'Reaktywność', desc: 'krok po kroku, jak wprowadzić spokój' },
-            { href: '/psy/lek-separacyjny', icon: 'home', bold: 'Separacja', desc: 'jak pomóc psu zostawać samemu' },
-            { href: '/oferta/poradniki-pdf/szczeniak-pierwsze-30-dni', icon: 'calendar-days', bold: 'Szczeniak', desc: 'pierwsze 30 dni i rytm dnia' },
-          ]}
-        />
-      </Link>
-      <Link href="/book?species=kot" className="block no-underline text-inherit hover:no-underline">
-        <PetTopicCard
-          emoji="🐈"
-          heading="Masz kota i chcesz wprowadzić spokój w domu?"
-          intro="Przejrzymy kuwetę, stres, zmiany w domu i relacje między kotami."
-          links={[
-            { href: '/koty/zalatwianie-poza-kuweta', icon: 'droplets', bold: 'Kuweta', desc: 'jak zorganizować środowisko' },
-            { href: '/oferta/poradniki-pdf/kot-stres-srodowisko-i-bledy-opiekuna', icon: 'leaf', bold: 'Stres', desc: 'strategie redukcji napięcia' },
-            { href: '/koty/konflikt-miedzy-kotami', icon: 'users', bold: 'Konflikt', desc: 'relacje między kotami' },
-          ]}
-        />
-      </Link>
+      <PetTopicCard
+        emoji="🐕"
+        heading="Masz psa i nie wiesz, od czego zacząć?"
+        intro="Pomogę Ci uporządkować spacer, pobudzenie, separację lub rytm dnia młodego psa."
+        links={[
+          { href: '/psy/reaktywnosc-na-smyczy', icon: 'zap', bold: 'Reaktywność', desc: 'krok po kroku, jak wprowadzić spokój' },
+          { href: '/psy/lek-separacyjny', icon: 'home', bold: 'Separacja', desc: 'jak pomóc psu zostawać samemu' },
+          { href: '/oferta/poradniki-pdf/szczeniak-pierwsze-30-dni', icon: 'calendar-days', bold: 'Szczeniak', desc: 'pierwsze 30 dni i rytm dnia' },
+        ]}
+      />
+      <PetTopicCard
+        emoji="🐈"
+        heading="Masz kota i chcesz wprowadzić spokój w domu?"
+        intro="Przejrzymy kuwetę, stres, zmiany w domu i relacje między kotami."
+        links={[
+          { href: '/koty/zalatwianie-poza-kuweta', icon: 'droplets', bold: 'Kuweta', desc: 'jak zorganizować środowisko' },
+          { href: '/oferta/poradniki-pdf/kot-stres-srodowisko-i-bledy-opiekuna', icon: 'leaf', bold: 'Stres', desc: 'strategie redukcji napięcia' },
+          { href: '/koty/konflikt-miedzy-kotami', icon: 'users', bold: 'Konflikt', desc: 'relacje między kotami' },
+        ]}
+      />
     </section>
   );
 }

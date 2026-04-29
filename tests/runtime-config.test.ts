@@ -297,12 +297,12 @@ test('home, dogs and cats pages point users to the canonical service page and ex
   assert.doesNotMatch(homeSource, /<ServiceDecisionSection/)
   assert.match(homeSource, /Behawiorysta psow i kotow online/)
 
-  assert.match(dogsSource, /title: 'Behawiorysta psow online - reaktywnosc, separacja i pomoc w domu'/)
+  assert.match(dogsSource, /title: 'Behawiorysta psow online - reaktywnosc i separacja'/)
   assert.match(dogsSource, /serviceLandingHref = '\/behawiorysta-online-polska'/)
   assert.match(dogsSource, /href=\{serviceLandingHref\}/)
   assert.match(dogsSource, /pelnego opisu konsultacji online/)
 
-  assert.match(catsSource, /title: 'Behawiorysta kotow online - kuweta, stres i relacje miedzy kotami'/)
+  assert.match(catsSource, /title: 'Behawiorysta kotow online - kuweta i stres'/)
   assert.match(catsSource, /serviceLandingHref = '\/behawiorysta-online-polska'/)
   assert.match(catsSource, /href=\{serviceLandingHref\}/)
   assert.match(catsSource, /pelnego opisu konsultacji online/)

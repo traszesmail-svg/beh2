@@ -1,6 +1,6 @@
 ---
 slug: pies-wyje-kiedy-zostaje-sam
-title_seo: Pies wyje, kiedy zostaje sam — co to znaczy i od czego zacząć
+title_seo: Pies wyje, kiedy zostaje sam — co robić
 meta_description: Wycie, szczekanie i niszczenie po wyjściu z domu to najczęściej lęk, nie złośliwość. Zobacz, co sprawdzić, zanim zaczniesz trening zostawania samemu.
 h1: Pies wyje, kiedy zostaje sam
 ---

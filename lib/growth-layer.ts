@@ -80,13 +80,13 @@ const TOPICAL_CLUSTERS: TopicalCluster[] = [
     blogLinks: [
       {
         href: '/blog/dlaczego-moj-pies-szczeka-na-inne-psy',
-        label: 'Blog: pies szczeka na inne psy',
-        copy: 'Punkt wejscia do tematu, jesli chcesz zaczac od rozroznienia emocji i najczestszych przyczyn.',
-      },
-      {
-        href: '/blog/dlaczego-moj-pies-szczeka-na-inne-psy',
         label: 'Blog: dlaczego moj pies szczeka na inne psy',
         copy: 'Pomaga szybciej nazwac wzorzec spacerowy i zobaczyc, co realnie napedza reakcje psa.',
+      },
+      {
+        href: '/blog/pies-ciagnie-na-smyczy',
+        label: 'Blog: pies ciagnie na smyczy',
+        copy: 'Praktyczny wpis o tym, dlaczego pies ciagnie i jak zaczac to zmieniac na spacerze.',
       },
       {
         href: '/blog/reaktywnosc-na-smyczy-cwiczenie-luznej-smyczy',
