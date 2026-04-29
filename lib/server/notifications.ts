@@ -451,6 +451,18 @@ function buildAbsoluteUrl(pathname: string): string {
   return new URL(pathname, getBaseUrl()).toString()
 }
 
+function buildBookingViewerUrl(pathname: '/payment' | '/confirmation', bookingId: string, accessToken?: string | null) {
+  const searchParams = new URLSearchParams({
+    bookingId,
+  })
+
+  if (accessToken) {
+    searchParams.set('access', accessToken)
+  }
+
+  return buildAbsoluteUrl(`${pathname}?${searchParams.toString()}`)
+}
+
 type BookingEmailFact = {
   label: string
   htmlValue: string
@@ -471,14 +483,17 @@ function buildBookingCustomerEmail(
   intro: string,
   facts: BookingEmailFact[],
   outro: string,
+  actionButton?: EmailActionButton | null,
 ) {
   const renderedFacts = renderBookingEmailFacts(facts)
+  const actionHtml = actionButton ? renderEmailActionButton(actionButton) : ''
+  const actionText = actionButton ? `Strona rezerwacji: ${actionButton.href}` : ''
 
   return {
     to: booking.email,
     subject,
-    html: renderEmailShell(title, intro, renderedFacts.html, outro),
-    text: [intro, renderedFacts.text, outro, renderContactBlockText()].join('\n'),
+    html: renderEmailShell(title, intro, `${renderedFacts.html}${actionHtml}`, outro),
+    text: [intro, renderedFacts.text, outro, actionText, renderContactBlockText()].filter(Boolean).join('\n'),
   }
 }
 
@@ -636,10 +651,14 @@ async function deliverEmail(payload: SendEmailPayload, audience: EmailAudience =
   }
 }
 
-export async function sendBookingReservationCreatedEmail(booking: BookingRecord): Promise<DeliveryResult> {
+export async function sendBookingReservationCreatedEmail(
+  booking: BookingRecord,
+  accessToken?: string | null,
+): Promise<DeliveryResult> {
   const summary = buildBookingSummary(booking)
   const subject = `Rezerwacja przyjÄ™ta - Behawior 15 - ${summary}`
   const customerEmailStatus = getCustomerEmailDeliveryStatus(booking.email)
+  const bookingPageUrl = buildBookingViewerUrl('/payment', booking.id, accessToken)
   const emailDeliveryNote =
     customerEmailStatus.state === 'ready'
       ? 'Po potwierdzeniu klient automatycznie dostanie mail z linkiem do pokoju rozmowy, a przy braku wpĹ‚aty wrĂłci do pĹ‚atnoĹ›ci.'
@@ -654,6 +673,7 @@ export async function sendBookingReservationCreatedEmail(booking: BookingRecord)
       <p><strong>Temat:</strong> ${getProblemLabel(booking.problemType)}</p>
       <p><strong>Kwota:</strong> ${formatPricePln(booking.amount)}</p>
       <p><strong>Co dalej:</strong> dokoĹ„cz pĹ‚atnoĹ›Ä‡, aby ostatecznie potwierdziÄ‡ konsultacjÄ™ i odblokowaÄ‡ link do rozmowy.</p>
+      ${renderEmailActionButton({ href: bookingPageUrl, label: 'Otwórz stronę rezerwacji' })}
       ${renderContactBlockHtml()}
     `,
     emailDeliveryNote,
@@ -664,6 +684,7 @@ export async function sendBookingReservationCreatedEmail(booking: BookingRecord)
     `Temat: ${getProblemLabel(booking.problemType)}`,
     `Kwota: ${formatPricePln(booking.amount)}`,
     'Co dalej: dokoĹ„cz pĹ‚atnoĹ›Ä‡, aby ostatecznie potwierdziÄ‡ konsultacjÄ™ i odblokowaÄ‡ link do rozmowy.',
+    `Strona rezerwacji: ${bookingPageUrl}`,
     emailDeliveryNote,
     renderContactBlockText(),
   ].join('\n')
@@ -705,6 +726,7 @@ export async function sendBookingOwnerNotificationEmail(booking: BookingRecord):
       <p><strong>Termin:</strong> ${escapeHtml(summary)}</p>
       <p><strong>Opis sytuacji:</strong><br />${formatMultilineHtml(booking.description)}</p>
       <p><strong>Status:</strong> ${escapeHtml(booking.bookingStatus)} / ${escapeHtml(booking.paymentStatus)}</p>
+      <p><strong>Co dalej:</strong> gdy klient kliknie „Zrobiłem płatność”, dostaniesz osobny mail z linkami do potwierdzenia albo odrzucenia wpłaty.</p>
       <p><strong>ID rezerwacji:</strong> ${escapeHtml(booking.id)}</p>
     `,
     'Ten flow nie zbiera oddzielnych checkboxow zgod klienta. Slot czeka teraz na oplaty i dalsza obsluge.',
@@ -721,6 +743,7 @@ export async function sendBookingOwnerNotificationEmail(booking: BookingRecord):
     booking.description,
     '',
     `Status: ${booking.bookingStatus} / ${booking.paymentStatus}`,
+    'Co dalej: gdy klient kliknie "Zrobiłem płatność", dostaniesz osobny mail z linkami do potwierdzenia albo odrzucenia wpłaty.',
     `ID rezerwacji: ${booking.id}`,
     'Zgody: ten flow nie zbiera oddzielnych checkboxow zgod klienta.',
   ].join('\n')
@@ -1314,9 +1337,13 @@ export async function sendBookingConfirmationEmail(booking: BookingRecord): Prom
   return deliverEmail({ to: booking.email, subject, html, text }, 'customer')
 }
 
-export async function sendBookingManualPaymentPendingEmail(booking: BookingRecord): Promise<DeliveryResult> {
+export async function sendBookingManualPaymentPendingEmail(
+  booking: BookingRecord,
+  accessToken?: string | null,
+): Promise<DeliveryResult> {
   const summary = buildBookingSummary(booking)
   const paymentReference = booking.paymentReference ?? booking.id
+  const confirmationUrl = buildBookingViewerUrl('/confirmation', booking.id, accessToken)
   const subject = `WpĹ‚ata zgĹ‚oszona - czekamy na potwierdzenie - Behawior 15 - ${summary}`
   const intro = 'DostaĹ‚em zgĹ‚oszenie wpĹ‚aty rÄ™cznej. SprawdzÄ™ je do 15 minut.'
   const facts = [
@@ -1347,7 +1374,15 @@ export async function sendBookingManualPaymentPendingEmail(booking: BookingRecor
     },
   ]
   const outro = 'Do czasu potwierdzenia status rezerwacji pozostaje na stronie potwierdzenia.'
-  const email = buildBookingCustomerEmail(booking, subject, 'WpĹ‚ata jest w weryfikacji', intro, facts, outro)
+  const email = buildBookingCustomerEmail(
+    booking,
+    subject,
+    'WpĹ‚ata jest w weryfikacji',
+    intro,
+    facts,
+    outro,
+    { href: confirmationUrl, label: 'Zobacz stronę rezerwacji' },
+  )
 
   return deliverEmail(email, 'customer')
 }
@@ -1446,7 +1481,7 @@ export async function sendManualPaymentReportedAdminEmail(
   const subject = `Płatność do potwierdzenia do 15 min - Behawior 15 - ${buildBookingSummary(booking)}`
   const html = renderEmailShell(
     'Wpłata czeka na decyzję',
-    'Klient kliknął "Zapłaciłem". Sprawdź wpływ i kliknij właściwą decyzję.',
+    'Klient kliknął "Zrobiłem płatność". Sprawdź wpływ i kliknij właściwą decyzję.',
     `
       <p><strong>Booking ID:</strong> ${escapeHtml(booking.id)}</p>
       <p><strong>Tytuł płatności:</strong> ${escapeHtml(booking.paymentReference ?? booking.id)}</p>

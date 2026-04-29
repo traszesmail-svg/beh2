@@ -135,20 +135,27 @@ test('customer emails cover reservation, review, confirmation and cancel outcome
         assert.equal(bookingA.booking.paymentStatus, 'unpaid')
         assert.equal(sentEmails[0].to?.[0], 'klient@example.com')
         assert.equal(includesNormalized(sentEmails[0].subject, 'Behawior 15'), true)
+        assert.match(sentEmails[0].text ?? '', new RegExp(`Strona rezerwacji: .*\\/payment\\?bookingId=${bookingA.booking.id}`))
+        assert.match(sentEmails[0].text ?? '', /access=/)
         assert.equal(sentEmails[1].to?.[0], 'kontakt@regulskibehawiorysta.pl')
         assert.equal(includesNormalized(sentEmails[1].subject, 'Kwadrans z behawiorysta'), true)
+        assert.match(sentEmails[1].html ?? '', /osobny mail z linkami do potwierdzenia albo odrzucenia wpłaty/i)
 
         const reviewBooking = await markBookingManualPaymentPending(bookingA.booking.id, {
           paymentReference: 'MANUAL-A',
+          customerAccessToken: bookingA.accessToken,
         })
         assert.equal(reviewBooking?.bookingStatus, 'pending_manual_payment')
         assert.equal(reviewBooking?.paymentStatus, 'pending_manual_review')
         assert.equal(sentEmails.length, 3)
         assert.equal(includesNormalized(sentEmails[2].subject, 'Behawior 15'), true)
         assert.equal(sentEmails[2].text?.includes('MANUAL-A'), true)
+        assert.match(sentEmails[2].text ?? '', new RegExp(`Strona rezerwacji: .*\\/confirmation\\?bookingId=${bookingA.booking.id}`))
+        assert.match(sentEmails[2].text ?? '', /access=/)
 
         const reviewBookingRepeat = await markBookingManualPaymentPending(bookingA.booking.id, {
           paymentReference: 'MANUAL-A',
+          customerAccessToken: bookingA.accessToken,
         })
         assert.equal(reviewBookingRepeat?.paymentStatus, 'pending_manual_review')
         assert.equal(sentEmails.length, 3)

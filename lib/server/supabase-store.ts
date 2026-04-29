@@ -1195,7 +1195,7 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
   }
 
   const booking = mapBookingRow(inserted.data as unknown as BookingRow)
-  await sendBookingReservationCreatedEmail(booking)
+  await sendBookingReservationCreatedEmail(booking, accessToken.rawToken)
   const ownerNotification = await sendBookingOwnerNotificationEmail(booking)
   if (ownerNotification.status !== 'sent') {
     console.error('[behawior15][booking-owner-notification] failed', {
@@ -1495,7 +1495,7 @@ export async function attachPayuOrder(
 
 export async function markBookingManualPaymentPending(
   bookingId: string,
-  paymentData?: { paymentReference?: string | null },
+  paymentData?: { paymentReference?: string | null; customerAccessToken?: string | null },
 ): Promise<BookingRecord | null> {
   const supabase = getSupabaseAdmin()
   const current = await getBookingById(bookingId)
@@ -1614,7 +1614,7 @@ export async function markBookingManualPaymentPending(
   }
 
   if (shouldSendManualReviewEmail && updatedBooking) {
-    await sendBookingManualPaymentPendingEmail(updatedBooking)
+    await sendBookingManualPaymentPendingEmail(updatedBooking, paymentData?.customerAccessToken ?? null)
   }
 
   return updatedBooking

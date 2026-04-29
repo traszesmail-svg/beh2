@@ -58,6 +58,7 @@ export async function reportManualPayment(
 
   const updatedBooking = await markBookingManualPaymentPending(booking.id, {
     paymentReference: booking.paymentReference ?? getManualPaymentReference(booking.id),
+    customerAccessToken: accessToken ?? null,
   })
 
   if (!updatedBooking) {

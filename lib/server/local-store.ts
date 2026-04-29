@@ -555,7 +555,7 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
 
     store.bookings.unshift(booking)
     await persistStore(store)
-    await sendBookingReservationCreatedEmail(booking)
+    await sendBookingReservationCreatedEmail(booking, accessToken.rawToken)
     const ownerNotification = await sendBookingOwnerNotificationEmail(booking)
     if (ownerNotification.status !== 'sent') {
       console.error('[behawior15][booking-owner-notification] failed', {
@@ -726,7 +726,7 @@ export async function attachPayuOrder(
 
 export async function markBookingManualPaymentPending(
   bookingId: string,
-  paymentData?: { paymentReference?: string | null },
+  paymentData?: { paymentReference?: string | null; customerAccessToken?: string | null },
 ): Promise<BookingRecord | null> {
   return withLock(async () => {
     const store = await readStore()
@@ -786,7 +786,7 @@ export async function markBookingManualPaymentPending(
     await persistStore(store)
 
     if (shouldSendManualReviewEmail) {
-      await sendBookingManualPaymentPendingEmail(booking)
+      await sendBookingManualPaymentPendingEmail(booking, paymentData?.customerAccessToken ?? null)
     }
 
     return booking

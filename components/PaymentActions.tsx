@@ -326,8 +326,8 @@ export function PaymentActions({
             <span>Skorzystaj z danych płatności poniżej i zachowaj tytuł płatności bez zmian.</span>
           </div>
           <div className="summary-card trust-card tree-backed-card">
-            <strong>2. Zgłoś wpłatę</strong>
-            <span>Po wysłaniu wpłaty kliknij przycisk poniżej. Ten ekran od razu przeniesie Cię do potwierdzenia.</span>
+            <strong>2. Zrobiłem płatność</strong>
+            <span>Po wysłaniu wpłaty kliknij „Zrobiłem płatność”. Ten ekran od razu przeniesie Cię do potwierdzenia.</span>
           </div>
           <div className="summary-card trust-card tree-backed-card">
             <strong>3. Poczekaj spokojnie na potwierdzenie</strong>
@@ -344,11 +344,11 @@ export function PaymentActions({
           <span>
             {customerEmailAvailable ? (
               <>
-                Wyślij płatność z tytułem <strong>{paymentReference}</strong>, kliknij przycisk poniżej i poczekaj na ręczne potwierdzenie do 15 minut. Po akceptacji dostaniesz mail, a na stronie potwierdzenia od razu zobaczysz {roomAccessLabel}.
+                Wyślij płatność z tytułem <strong>{paymentReference}</strong>, kliknij „Zrobiłem płatność” i poczekaj na ręczne potwierdzenie do 15 minut. Po akceptacji dostaniesz mail, a na stronie potwierdzenia od razu zobaczysz {roomAccessLabel}.
               </>
             ) : (
               <>
-                Wyślij płatność z tytułem <strong>{paymentReference}</strong>, kliknij przycisk poniżej i poczekaj na ręczne potwierdzenie do 15 minut. Po akceptacji zobaczysz aktywne potwierdzenie i {roomAccessLabel} na tej stronie, więc zachowaj ten link.
+                Wyślij płatność z tytułem <strong>{paymentReference}</strong>, kliknij „Zrobiłem płatność” i poczekaj na ręczne potwierdzenie do 15 minut. Po akceptacji zobaczysz aktywne potwierdzenie i {roomAccessLabel} na tej stronie, więc zachowaj ten link.
               </>
             )}
           </span>
@@ -385,7 +385,7 @@ export function PaymentActions({
             onClick={handleManualSubmit}
             disabled={loadingMethod !== null}
           >
-            {loadingMethod === 'manual' ? 'Zapisuję zgłoszenie wpłaty...' : 'Zgłoś wpłatę i pokaż status'}
+            {loadingMethod === 'manual' ? 'Zapisuję zgłoszenie wpłaty...' : 'Zrobiłem płatność'}
           </button>
         </div>
 
@@ -399,4 +399,3 @@ export function PaymentActions({
     </div>
   )
 }
-
