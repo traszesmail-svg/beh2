@@ -41,7 +41,7 @@ const DOG_BARKING = (color: string) => (
 const DOG_WINDOW = (color: string) => (
   <svg viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg" style={{width:'100%',height:'100%'}}>
     {/* Okno */}
-    <rect x="15" y="20" width="55" height="60" rx="4" fill="white" opacity="0.5" stroke={color} strokeWidth="2" opacity="0.3"/>
+    <rect x="15" y="20" width="55" height="60" rx="4" fill="white"  stroke={color} strokeWidth="2" opacity="0.3"/>
     <line x1="42" y1="20" x2="42" y2="80" stroke={color} strokeWidth="1.5" opacity="0.3"/>
     <line x1="15" y1="50" x2="70" y2="50" stroke={color} strokeWidth="1.5" opacity="0.3"/>
     {/* Pies przy oknie - głowa */}
@@ -65,7 +65,7 @@ const DOG_WINDOW = (color: string) => (
 const CAT_LITTER = (color: string) => (
   <svg viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg" style={{width:'100%',height:'100%'}}>
     {/* Kuweta */}
-    <rect x="20" y="65" width="70" height="25" rx="6" fill={color} opacity="0.2" stroke={color} strokeWidth="2" opacity="0.4"/>
+    <rect x="20" y="65" width="70" height="25" rx="6" fill={color}  stroke={color} strokeWidth="2" opacity="0.4"/>
     <rect x="25" y="68" width="60" height="18" rx="4" fill={color} opacity="0.1"/>
     {/* Kot - sylwetka */}
     <ellipse cx="60" cy="55" rx="20" ry="15" fill={color} opacity="0.85"/>
@@ -96,7 +96,7 @@ const LAPTOP_CONSULT = (color: string) => (
     {/* Laptop - podstawa */}
     <rect x="10" y="75" width="100" height="8" rx="4" fill={color} opacity="0.3"/>
     {/* Laptop - ekran */}
-    <rect x="20" y="30" width="80" height="48" rx="6" fill={color} opacity="0.2" stroke={color} strokeWidth="2" opacity="0.5"/>
+    <rect x="20" y="30" width="80" height="48" rx="6" fill={color}  stroke={color} strokeWidth="2" opacity="0.5"/>
     <rect x="24" y="34" width="72" height="40" rx="4" fill="white" opacity="0.7"/>
     {/* Na ekranie: twarz kota/psa */}
     <circle cx="60" cy="52" r="14" fill={color} opacity="0.3"/>
@@ -145,7 +145,7 @@ const DOG_LEASH = (color: string) => (
 const CAT_SCRATCH = (color: string) => (
   <svg viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg" style={{width:'100%',height:'100%'}}>
     {/* Mebel - sofa/kanapa */}
-    <rect x="10" y="55" width="80" height="35" rx="8" fill={color} opacity="0.15" stroke={color} strokeWidth="2" opacity="0.3"/>
+    <rect x="10" y="55" width="80" height="35" rx="8" fill={color}  stroke={color} strokeWidth="2" opacity="0.3"/>
     <rect x="10" y="50" width="80" height="18" rx="6" fill={color} opacity="0.2"/>
     <rect x="8" y="48" width="18" height="42" rx="6" fill={color} opacity="0.25"/>
     <rect x="74" y="48" width="18" height="42" rx="6" fill={color} opacity="0.25"/>
@@ -183,7 +183,7 @@ const SPECIALIST = (color: string) => (
     <path d="M35 85 Q35 60 60 58 Q85 60 85 85" fill={color} opacity="0.25"/>
     <path d="M40 85 Q40 63 60 61 Q80 63 80 85" fill={color} opacity="0.3"/>
     {/* Stetoskop / certyfikat */}
-    <circle cx="90" cy="40" r="12" fill={color} opacity="0.2" stroke={color} strokeWidth="1.5" opacity="0.5"/>
+    <circle cx="90" cy="40" r="12" fill={color}  stroke={color} strokeWidth="1.5" opacity="0.5"/>
     <text x="84" y="45" fontSize="14" fill={color} opacity="0.7">✓</text>
     {/* Pies i kot obok */}
     <circle cx="22" cy="68" r="10" fill={color} opacity="0.35"/>
@@ -197,13 +197,13 @@ const SPECIALIST = (color: string) => (
 const MONEY = (color: string) => (
   <svg viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg" style={{width:'100%',height:'100%'}}>
     {/* Banknot */}
-    <rect x="15" y="35" width="90" height="50" rx="8" fill={color} opacity="0.15" stroke={color} strokeWidth="2" opacity="0.4"/>
+    <rect x="15" y="35" width="90" height="50" rx="8" fill={color}  stroke={color} strokeWidth="2" opacity="0.4"/>
     <rect x="20" y="40" width="80" height="40" rx="5" fill={color} opacity="0.1"/>
     {/* Znak PLN */}
     <text x="44" y="68" fontSize="28" fontWeight="bold" fill={color} opacity="0.5">zł</text>
     {/* Ozdobne kółka banknotu */}
-    <circle cx="28" cy="60" r="10" fill={color} opacity="0.08" stroke={color} strokeWidth="1.5" opacity="0.3"/>
-    <circle cx="92" cy="60" r="10" fill={color} opacity="0.08" stroke={color} strokeWidth="1.5" opacity="0.3"/>
+    <circle cx="28" cy="60" r="10" fill={color}  stroke={color} strokeWidth="1.5" opacity="0.3"/>
+    <circle cx="92" cy="60" r="10" fill={color}  stroke={color} strokeWidth="1.5" opacity="0.3"/>
     {/* Pies/kot mały */}
     <circle cx="60" cy="20" r="10" fill={color} opacity="0.4"/>
     <polygon points="54,13 52,6 58,12" fill={color} opacity="0.4"/>
@@ -215,7 +215,7 @@ const NEW_DOG = (color: string) => (
   <svg viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg" style={{width:'100%',height:'100%'}}>
     {/* Dom */}
     <polygon points="60,15 15,45 105,45" fill={color} opacity="0.2"/>
-    <rect x="20" y="45" width="80" height="45" rx="3" fill={color} opacity="0.15" stroke={color} strokeWidth="1.5" opacity="0.3"/>
+    <rect x="20" y="45" width="80" height="45" rx="3" fill={color}  stroke={color} strokeWidth="1.5" opacity="0.3"/>
     {/* Drzwi */}
     <rect x="48" y="65" width="24" height="25" rx="3" fill={color} opacity="0.25"/>
     {/* Szczeniak */}
@@ -236,7 +236,7 @@ const NEW_DOG = (color: string) => (
 const CLIPBOARD = (color: string) => (
   <svg viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg" style={{width:'100%',height:'100%'}}>
     {/* Notatnik/schowek */}
-    <rect x="25" y="20" width="70" height="70" rx="8" fill={color} opacity="0.15" stroke={color} strokeWidth="2" opacity="0.4"/>
+    <rect x="25" y="20" width="70" height="70" rx="8" fill={color}  stroke={color} strokeWidth="2" opacity="0.4"/>
     <rect x="45" y="14" width="30" height="14" rx="5" fill={color} opacity="0.3"/>
     {/* Linie tekstu */}
     <line x1="35" y1="42" x2="85" y2="42" stroke={color} strokeWidth="2.5" strokeLinecap="round" opacity="0.4"/>
