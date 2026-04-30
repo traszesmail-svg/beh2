@@ -1,5 +1,3 @@
-import path from 'node:path'
-
 const INVALID_ENV_SENTINELS = new Set(['undefined', 'null', ''])
 
 for (const envName of ['__NEXT_INCREMENTAL_CACHE_IPC_PORT', '__NEXT_INCREMENTAL_CACHE_IPC_KEY']) {
@@ -18,15 +16,10 @@ const blockSearchIndexing = process.env.VERCEL_ENV
 const nextConfig = {
   images: {
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'upload.wikimedia.org',
-      },
+      { protocol: 'https', hostname: 'upload.wikimedia.org' },
+      { protocol: 'https', hostname: 'images.unsplash.com' },
+      { protocol: 'https', hostname: 'plus.unsplash.com' },
     ],
-  },
-  webpack(config) {
-    config.resolve.alias['next/image'] = path.resolve(process.cwd(), 'components/BlankImage.tsx')
-    return config
   },
   experimental: {
     typedRoutes: false,
