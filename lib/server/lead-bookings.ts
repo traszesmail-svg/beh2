@@ -123,7 +123,7 @@ function getSupabaseClient() {
   return createClient(url, key, { auth: { persistSession: false } })
 }
 
-function useSupabase() {
+function shouldUseSupabase() {
   const mode = process.env.APP_DATA_MODE?.trim()
   return mode === 'supabase' && Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) && Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY)
 }
@@ -163,7 +163,7 @@ export async function createLeadBooking(input: CreateLeadBookingInput): Promise<
   const id = randomUUID()
   const accessToken = createAccessToken()
 
-  if (useSupabase()) {
+  if (shouldUseSupabase()) {
     const supabase = getSupabaseClient()!
     const { data, error } = await supabase
       .from('lead_bookings')
@@ -204,7 +204,7 @@ export async function createLeadBooking(input: CreateLeadBookingInput): Promise<
 }
 
 export async function listLeadBookings(): Promise<LeadBookingRecord[]> {
-  if (useSupabase()) {
+  if (shouldUseSupabase()) {
     const supabase = getSupabaseClient()!
     const { data, error } = await supabase
       .from('lead_bookings')
@@ -219,7 +219,7 @@ export async function listLeadBookings(): Promise<LeadBookingRecord[]> {
 }
 
 export async function getLeadBookingById(id: string): Promise<LeadBookingRecord | null> {
-  if (useSupabase()) {
+  if (shouldUseSupabase()) {
     const supabase = getSupabaseClient()!
     const { data, error } = await supabase
       .from('lead_bookings')
@@ -235,7 +235,7 @@ export async function getLeadBookingById(id: string): Promise<LeadBookingRecord 
 }
 
 export async function getLeadBookingByToken(id: string, accessToken: string): Promise<LeadBookingRecord | null> {
-  if (useSupabase()) {
+  if (shouldUseSupabase()) {
     const supabase = getSupabaseClient()!
     const { data, error } = await supabase
       .from('lead_bookings')
@@ -254,7 +254,7 @@ export async function getLeadBookingByToken(id: string, accessToken: string): Pr
 export async function updateLeadBooking(input: UpdateLeadBookingInput): Promise<LeadBookingRecord | null> {
   const now = new Date().toISOString()
 
-  if (useSupabase()) {
+  if (shouldUseSupabase()) {
     const supabase = getSupabaseClient()!
     const patch: Record<string, unknown> = { updated_at: now }
     if (input.status !== undefined) patch.status = input.status
