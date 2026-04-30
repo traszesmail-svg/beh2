@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
 import Link from 'next/link'
 import { HeroIllustration } from '@/components/HeroIllustration'
+import { BlogCardCover } from '@/components/BlogCardCover'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { LeadMagnetSignup } from '@/components/LeadMagnetSignup'
 import { NewsletterSignup } from '@/components/NewsletterSignup'
@@ -47,26 +47,6 @@ const mainPathCards = [
   },
 ] as const
 
-function getBlogVisual(post: { categoryHref: string; slug: string }) {
-  if (post.categoryHref === '/koty') {
-    return {
-      src: post.slug.includes('kuweta') ? '/branding/side-visuals/cat-litter-home.jpg' : '/branding/side-visuals/cat-owner-home.jpg',
-      alt: 'Kot w domu jako ilustracja wpisu',
-    }
-  }
-
-  if (post.categoryHref === '/psy') {
-    return {
-      src: post.slug.includes('sam') ? '/branding/topic-cards/dog-window-alone.jpg' : '/branding/side-visuals/dog-forest-walk.jpg',
-      alt: 'Pies z opiekunem jako ilustracja wpisu',
-    }
-  }
-
-  return {
-    src: '/branding/side-visuals/blog-notebook-desk.jpg',
-    alt: 'Notatnik na biurku jako ilustracja wpisu',
-  }
-}
 
 export default function BlogPage() {
   const posts = listBlogPosts()
@@ -151,12 +131,10 @@ export default function BlogPage() {
 
           <div className="blog-list-grid">
             {posts.map((post) => {
-              const visual = getBlogVisual(post)
-
               return (
                 <article key={post.slug} className="summary-card tree-backed-card blog-list-card">
                   <div className="blog-card-image">
-                    <Image src={visual.src} alt={visual.alt} fill sizes="(max-width: 760px) 92vw, 30vw" />
+                    <BlogCardCover slug={post.slug} categoryHref={post.categoryHref} title={repairCopy(post.title)} />
                   </div>
                   <div className="blog-list-card-topline">
                     <span className="section-eyebrow">{repairCopy(post.categoryLabel)}</span>
