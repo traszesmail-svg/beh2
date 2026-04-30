@@ -3,6 +3,7 @@ export const revalidate = 0
 
 import { NextResponse } from 'next/server'
 import { sendBookRequestAutoReplyEmail, sendBookRequestEmail } from '@/lib/server/notifications'
+import { createLeadBooking } from '@/lib/server/lead-bookings'
 import type { BookingSpecies } from '@/lib/booking-routing'
 
 type BookingServiceId = 'kwadrans-na-juz' | 'szybka-konsultacja-15-min' | 'konsultacja-30-min' | 'konsultacja-behawioralna-online'
@@ -124,27 +125,68 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: true, message: payload.service === 'kwadrans-na-juz' ? URGENT_SUCCESS_MESSAGE : SUCCESS_MESSAGE })
     }
 
-    const adminDelivery = await sendBookRequestEmail(payload)
+    // Create persistent lead booking record (with unique token for the customer page)
+    let leadBooking = null
+    try {
+      leadBooking = await createLeadBooking({
+        service: payload.service,
+        serviceLabel: payload.serviceLabel,
+        servicePrice: payload.servicePrice,
+        name: payload.name,
+        email: payload.email,
+        species: payload.species,
+        description: payload.description,
+        preferredSlots: payload.preferredSlots,
+      })
+    } catch (storageError) {
+      console.error('[behawior15][book] lead booking storage failed', storageError)
+      // Continue with email-only flow if storage fails
+    }
 
-    if (adminDelivery.status === 'sent') {
-      const customerDelivery = await sendBookRequestAutoReplyEmail(payload)
+    const submissionWithToken = {
+      ...payload,
+      leadBookingId: leadBooking?.id,
+      leadBookingAccessToken: leadBooking?.accessToken,
+    }
+
+    // Try sending notifications (best-effort)
+    const adminDelivery = await sendBookRequestEmail(submissionWithToken)
+
+    if (adminDelivery.status !== 'sent') {
+      console.warn('[behawior15][book] admin email not sent', { status: adminDelivery.status, reason: adminDelivery.reason })
+    }
+
+    if (adminDelivery.status !== 'failed') {
+      const customerDelivery = await sendBookRequestAutoReplyEmail(submissionWithToken)
 
       if (customerDelivery.status === 'failed') {
         console.error('[behawior15][book] auto-reply failed', customerDelivery.reason)
       } else if (customerDelivery.status === 'skipped') {
         console.warn('[behawior15][book] auto-reply skipped', customerDelivery.reason)
       }
-
-      return NextResponse.json({ ok: true, message: payload.service === 'kwadrans-na-juz' ? URGENT_SUCCESS_MESSAGE : SUCCESS_MESSAGE })
     }
 
-    if (adminDelivery.status === 'skipped') {
-      console.warn('[behawior15][book] submission skipped', adminDelivery.reason)
-      return NextResponse.json({ error: UNAVAILABLE_MESSAGE }, { status: 503 })
+    // Return success if booking was created (emails are best-effort)
+    if (leadBooking) {
+      return NextResponse.json({
+        ok: true,
+        message: payload.service === 'kwadrans-na-juz' ? URGENT_SUCCESS_MESSAGE : SUCCESS_MESSAGE,
+        bookingId: leadBooking?.id,
+      })
     }
 
-    console.error('[behawior15][book] submission failed', adminDelivery.reason)
-    return NextResponse.json({ error: GENERIC_ERROR_MESSAGE }, { status: 500 })
+    // If no booking was created and admin email failed, return error
+    if (adminDelivery.status === 'failed') {
+      console.error('[behawior15][book] submission failed', adminDelivery.reason)
+      return NextResponse.json({ error: GENERIC_ERROR_MESSAGE }, { status: 500 })
+    }
+
+    // Otherwise emails were skipped but booking should have been created
+    return NextResponse.json({
+      ok: true,
+      message: payload.service === 'kwadrans-na-juz' ? URGENT_SUCCESS_MESSAGE : SUCCESS_MESSAGE,
+      bookingId: leadBooking?.id,
+    })
   } catch (error) {
     console.error('[behawior15][book] unexpected error', error)
     return NextResponse.json({ error: GENERIC_ERROR_MESSAGE }, { status: 500 })

@@ -1,0 +1,136 @@
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
+import { NextResponse } from 'next/server'
+import { headers } from 'next/headers'
+import { getAdminAccessSecret, hasValidAdminAuthorization } from '@/lib/admin-auth'
+import {
+  getLeadBookingById,
+  updateLeadBooking,
+  type LeadBookingStatus,
+} from '@/lib/server/lead-bookings'
+
+function toGoogleCalendarDate(date: Date): string {
+  return date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')
+}
+
+function buildLeadCalendarUrl(input: {
+  title: string
+  details: string
+  location: string
+  startsAt: Date
+  endsAt: Date
+}): string {
+  const params = new URLSearchParams({
+    action: 'TEMPLATE',
+    text: input.title,
+    dates: `${toGoogleCalendarDate(input.startsAt)}/${toGoogleCalendarDate(input.endsAt)}`,
+    details: input.details,
+    location: input.location,
+  })
+  return `https://calendar.google.com/calendar/render?${params.toString()}`
+}
+
+function checkAuth() {
+  const secret = getAdminAccessSecret()
+  if (!secret) {
+    return { ok: false as const, response: NextResponse.json({ error: 'Admin secret not configured.' }, { status: 503 }) }
+  }
+  const authHeader = headers().get('authorization')
+  if (!hasValidAdminAuthorization(authHeader, secret)) {
+    return {
+      ok: false as const,
+      response: NextResponse.json({ error: 'Unauthorized' }, {
+        status: 401,
+        headers: { 'WWW-Authenticate': 'Basic realm="admin"' },
+      }),
+    }
+  }
+  return { ok: true as const }
+}
+
+export async function GET(_: Request, { params }: { params: { id: string } }) {
+  const auth = checkAuth()
+  if (!auth.ok) return auth.response
+
+  const booking = await getLeadBookingById(params.id)
+  if (!booking) {
+    return NextResponse.json({ error: 'Not found' }, { status: 404 })
+  }
+
+  return NextResponse.json({ booking })
+}
+
+const VALID_STATUSES: LeadBookingStatus[] = ['pending', 'awaiting_payment', 'paid', 'cancelled']
+const SERVICE_DURATION_MINUTES: Record<string, number> = {
+  'kwadrans-na-juz': 15,
+  'szybka-konsultacja-15-min': 15,
+  'konsultacja-30-min': 30,
+  'konsultacja-behawioralna-online': 60,
+}
+
+export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+  const auth = checkAuth()
+  if (!auth.ok) return auth.response
+
+  let body: Record<string, unknown>
+  try {
+    body = (await request.json()) as Record<string, unknown>
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
+  }
+
+  const existing = await getLeadBookingById(params.id)
+  if (!existing) {
+    return NextResponse.json({ error: 'Not found' }, { status: 404 })
+  }
+
+  const update: Parameters<typeof updateLeadBooking>[0] = { id: params.id }
+
+  if (typeof body.status === 'string') {
+    if (!VALID_STATUSES.includes(body.status as LeadBookingStatus)) {
+      return NextResponse.json({ error: 'Invalid status' }, { status: 400 })
+    }
+    update.status = body.status as LeadBookingStatus
+  }
+
+  if (typeof body.confirmedDate === 'string') update.confirmedDate = body.confirmedDate
+  if (typeof body.confirmedTime === 'string') update.confirmedTime = body.confirmedTime
+  if (typeof body.paymentLink === 'string') update.paymentLink = body.paymentLink
+  if (typeof body.paymentMethod === 'string') update.paymentMethod = body.paymentMethod
+  if (typeof body.callRoomUrl === 'string') update.callRoomUrl = body.callRoomUrl
+  if (typeof body.adminNotes === 'string') update.adminNotes = body.adminNotes
+
+  // When marked as paid: set paidAt, generate calendar URL and call room
+  if (update.status === 'paid' || (existing.status !== 'paid' && body.markPaid === true)) {
+    update.status = 'paid'
+    update.paidAt = new Date().toISOString()
+
+    const date = update.confirmedDate ?? existing.confirmedDate
+    const time = update.confirmedTime ?? existing.confirmedTime
+
+    if (date && time) {
+      const durationMin = SERVICE_DURATION_MINUTES[existing.service] ?? 30
+      const startIso = `${date}T${time}:00+02:00`
+      const startDate = new Date(startIso)
+      const endDate = new Date(startDate.getTime() + durationMin * 60 * 1000)
+
+      const calendarUrl = buildLeadCalendarUrl({
+        title: `Konsultacja: ${existing.serviceLabel}`,
+        details: `Konsultacja behawioralna z ${existing.name}.\n\nGatunek: ${existing.species === 'kot' ? 'Kot' : 'Pies'}\n\nOpis sytuacji:\n${existing.description}`,
+        location: update.callRoomUrl ?? existing.callRoomUrl ?? 'Online (Jitsi)',
+        startsAt: startDate,
+        endsAt: endDate,
+      })
+      update.calendarUrl = calendarUrl
+
+      // Auto-generate Jitsi room URL if not provided
+      if (!update.callRoomUrl && !existing.callRoomUrl) {
+        update.callRoomUrl = `https://meet.jit.si/regulski-${existing.id.substring(0, 8)}`
+      }
+    }
+  }
+
+  const updated = await updateLeadBooking(update)
+  return NextResponse.json({ booking: updated })
+}
