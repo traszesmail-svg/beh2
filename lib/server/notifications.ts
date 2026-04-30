@@ -1071,12 +1071,12 @@ export async function sendPdfOrderAutoReplyEmail(submission: PdfOrderSubmission)
 }
 
 export async function sendBookRequestEmail(submission: BookRequestSubmission): Promise<DeliveryResult> {
-  const recipient = getPublicContactDetails().email
+  const recipient = getAdminNotificationRecipientEmail()
 
   if (!recipient) {
     return {
       status: 'skipped',
-      reason: 'public contact email missing or invalid',
+      reason: 'admin notification email missing or invalid',
     }
   }
 
