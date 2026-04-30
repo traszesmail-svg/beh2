@@ -35,8 +35,13 @@ export async function POST(req: NextRequest) {
       newsletter: !!body.consentNewsletter,
     });
 
-    const pdfUrl = `${process.env.NEXT_PUBLIC_SITE_URL || ''}${magnet.pdfPath}`;
-    await sendPdfEmail({ to: body.email, magnetTitle: magnet.title, pdfUrl });
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://regulskibehawiorysta.pl';
+    const pdfUrl = `${baseUrl}${magnet.pdfPath}`;
+    try {
+      await sendPdfEmail({ to: body.email, magnetTitle: magnet.title, pdfUrl });
+    } catch (emailErr) {
+      console.error('[lead-magnet-subscribe] email send failed (non-fatal):', emailErr);
+    }
 
     return NextResponse.json({ ok: true });
   } catch (err) {
