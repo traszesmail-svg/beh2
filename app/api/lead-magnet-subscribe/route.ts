@@ -91,7 +91,7 @@ async function sendPdfEmail(args: { to: string; magnetTitle: string; pdfUrl: str
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Krzysztof Regulski <kontakt@regulskibehawiorysta.pl>',
+        from: process.env.RESEND_FROM_EMAIL ?? 'Krzysztof Regulski <kontakt@regulskibehawiorysta.pl>',
         to: [args.to],
         subject: `Twój PDF: ${args.magnetTitle}`,
         html: `

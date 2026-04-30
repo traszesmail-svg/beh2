@@ -40,11 +40,11 @@ export function LeadMagnetPopup({ magnetId, pathname = '/' }: LeadMagnetPopupPro
 
   // Block scroll gdy popup otwarty
   useEffect(() => {
-    if (shouldShow) {
+    if (shouldShow && !alreadySubmitted) {
       document.body.style.overflow = 'hidden';
       return () => { document.body.style.overflow = ''; };
     }
-  }, [shouldShow]);
+  }, [shouldShow, alreadySubmitted]);
 
   // Esc to close
   useEffect(() => {

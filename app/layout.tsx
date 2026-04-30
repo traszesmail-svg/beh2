@@ -5,6 +5,7 @@ import { AnalyticsConsent } from '@/components/AnalyticsConsent'
 import { Schema } from '@/components/schema'
 import { ScrollProgress } from '@/components/ScrollProgress'
 import { ThemeProvider } from '@/components/ThemeProvider'
+import { LeadMagnetGlobal } from '@/components/LeadMagnetGlobal'
 import { APP_THEME_ATTRIBUTE, THEME_STORAGE_KEY } from '@/lib/theme'
 import { getRootSchemaGraphJsonLd } from '@/lib/schema'
 import { generateReviewsSchema } from '@/lib/reviewsSchema'
@@ -111,6 +112,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProvider>
           <ScrollProgress />
           {children}
+          <LeadMagnetGlobal />
           <Suspense fallback={null}>
             <AnalyticsConsent
               measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim() || null}
