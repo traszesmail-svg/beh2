@@ -1,0 +1,41 @@
+Lista promptow obrazkow i grafik:
+
+Hero / page illustrations:
+- hero-home.txt
+- hero-psy-main.txt
+- hero-psy-reaktywnosc.txt
+- hero-psy-separacja.txt
+- hero-psy-szczeniak.txt
+- hero-koty-main.txt
+- hero-koty-kuweta.txt
+- hero-koty-stres.txt
+- hero-koty-konflikt.txt
+- hero-o-mnie.txt
+- hero-cennik.txt
+- hero-book.txt
+- hero-faq.txt
+- hero-blog.txt
+- hero-niezbednik.txt
+- hero-kontakt.txt
+
+Side visuals:
+- side-general-dog-walk.txt
+- side-general-cat-owner.txt
+- side-dog-forest-walk.txt
+- side-dog-training-forest.txt
+- side-cat-owner-home.txt
+- side-cat-litter-home.txt
+- side-materials-notebook-desk.txt
+- side-materials-laptop-notebook.txt
+- side-blog-notebook-desk.txt
+- side-blog-laptop-notes.txt
+- side-about-professional-desk.txt
+- side-specialist-krzysztof-social.txt
+- side-pricing-calculator-docs.txt
+- side-pricing-calendar-desk.txt
+- side-contact-notebook-laptop.txt
+- side-contact-writing-notebook.txt
+
+Extra public images:
+- consultation-online-hero.txt
+- opinions-profile.txt

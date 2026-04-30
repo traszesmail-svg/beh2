@@ -40,10 +40,10 @@ export default function ContactPage({
   const publicContactNote = getPublicContactEmailNote()
   const quickHref = buildBookHref(null, 'szybka-konsultacja-15-min', false, species)
   const consultationHref = buildBookHref(null, 'konsultacja-behawioralna-online', false, species)
-  const faqItems = FAQ_SHORTLISTS.contact.slice(0, 2)
+  const contactFaqItems = FAQ_SHORTLISTS.contact.slice(0, 2)
   const structuredData = [
-    getBreadcrumbJsonLd([{ name: 'Strona glowna', path: '/' }, { name: 'Kontakt', path: '/kontakt' }]),
-    getFaqPageJsonLd(faqItems),
+    getBreadcrumbJsonLd([{ name: 'Strona g\u0142\u00f3wna', path: '/' }, { name: 'Kontakt', path: '/kontakt' }]),
+    getFaqPageJsonLd(contactFaqItems),
   ]
 
   return (
@@ -135,51 +135,49 @@ export default function ContactPage({
               </div>
             </div>
 
-            <div className="notatnik-side-cta">
-              <div className="notatnik-mono notatnik-text-accent">Najprostszy start</div>
-              <h3>Kwadrans z behawiorysta</h3>
-              <p>15 min audio bez kamery / 69 zl. Jesli wiesz, ze chcesz porozmawiac, to najkrotszy pierwszy krok bez dlugiego przygotowania.</p>
-              <Link href={quickHref} prefetch={false} className="notatnik-btn">
-                <span>Zarezerwuj Kwadrans</span>
-                <span className="notatnik-btn-arrow" aria-hidden="true">
-                  &rarr;
-                </span>
-              </Link>
-            </div>
-
-            <div className="notatnik-side-cta">
-              <div className="notatnik-mono notatnik-text-accent">Sprawa zlozona albo przewlekla</div>
-              <h4>Pelna konsultacja behawioralna</h4>
-              <p>
-                60 min / 470 zl. Diagnoza sytuacji, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp. Dla tematow, ktore wymagaja wiecej
-                czasu i szerszego wejscia.{' '}
-                <Link href={consultationHref} prefetch={false} className="notatnik-inline-link">
-                  Umow pelna konsultacje
+            <div className="notatnik-contact-support-grid">
+              <div className="notatnik-side-cta">
+                <div className="notatnik-mono notatnik-text-accent">Najprostszy start</div>
+                <h3>Kwadrans z behawiorysta</h3>
+                <p>15 min audio bez kamery / 69 zl. Jesli wiesz, ze chcesz porozmawiac, to najkrotszy pierwszy krok bez dlugiego przygotowania.</p>
+                <Link href={quickHref} prefetch={false} className="notatnik-btn">
+                  <span>Zarezerwuj Kwadrans</span>
+                  <span className="notatnik-btn-arrow" aria-hidden="true">
+                    &rarr;
+                  </span>
                 </Link>
-              </p>
-            </div>
+              </div>
 
-            <div className="notatnik-contact-note notatnik-contact-note-compact">
-              <p>Jesli nie jestes pewien, ktory format pasuje do Twojej sytuacji, napisz krotka wiadomosc przez formularz. Odpisze z rekomendacja.</p>
-            </div>
-
-            <div className="notatnik-contact-note">
-              <strong>Nota</strong>
-              <p>{publicContactNote}</p>
-            </div>
-
-            <div className="notatnik-contact-faq">
-              <div className="notatnik-faq-grid">
-                {faqItems.map((item) => (
-                  <article key={item.question} className="notatnik-faq-item">
-                    <h4>{item.question}</h4>
-                    <p>{item.answer}</p>
-                  </article>
-                ))}
+              <div className="notatnik-side-cta">
+                <div className="notatnik-mono notatnik-text-accent">Sprawa zlozona albo przewlekla</div>
+                <h4>Pelna konsultacja behawioralna</h4>
+                <p>
+                  60 min / 470 zl. Diagnoza sytuacji, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp. Dla tematow, ktore wymagaja wiecej
+                  czasu i szerszego wejscia.{' '}
+                  <Link href={consultationHref} prefetch={false} className="notatnik-inline-link">
+                    Umow pelna konsultacje
+                  </Link>
+                </p>
               </div>
             </div>
           </div>
         </div>
+
+        <section className="notatnik-contact-bottom" aria-label="Nota i szybkie odpowiedzi">
+          <div className="notatnik-contact-bottom-grid">
+            <article className="notatnik-contact-bottom-card notatnik-contact-bottom-note">
+              <strong>Nota</strong>
+              <p>{publicContactNote}</p>
+            </article>
+
+            {contactFaqItems.map((item) => (
+              <article key={item.question} className="notatnik-contact-bottom-card notatnik-contact-bottom-faq">
+                <h4>{item.question}</h4>
+                <p>{item.answer}</p>
+              </article>
+            ))}
+          </div>
+        </section>
 
         <NotatnikFooter primaryHref={quickHref} primaryLabel="Kwadrans z behawiorysta" />
       </div>

@@ -363,7 +363,7 @@ export function ContactLeadForm() {
         <textarea
           id="contact-message"
           name="message"
-          rows={3}
+          rows={4}
           value={form.message}
           onChange={(event) => updateField('message', event.target.value.slice(0, MESSAGE_MAX_LENGTH))}
           onFocus={markStarted}

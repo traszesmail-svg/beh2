@@ -5,6 +5,7 @@ import { formatDateTimeLabel, getProblemLabel } from '@/lib/data'
 import { formatPricePln } from '@/lib/pricing'
 import { getContactDetails, getPublicContactDetails } from '@/lib/site'
 import { getBaseUrl } from '@/lib/server/env'
+import { generateConfirmToken } from '@/lib/admin-confirm-token'
 import { getManualPaymentConfig } from '@/lib/server/payment-options'
 import { buildGoogleCalendarUrl } from '@/lib/server/google-calendar'
 import { getPrepGuideUrl } from '@/lib/server/prep-guide'
@@ -1085,6 +1086,10 @@ export async function sendBookRequestEmail(submission: BookRequestSubmission): P
   const adminPanelHref = submission.leadBookingId
     ? buildAbsoluteUrl(`/admin/lead-bookings/${submission.leadBookingId}`)
     : null
+  const confirmToken = submission.leadBookingId ? generateConfirmToken(submission.leadBookingId) : null
+  const quickConfirmHref = submission.leadBookingId && confirmToken
+    ? buildAbsoluteUrl(`/admin/quick-confirm/${submission.leadBookingId}?token=${confirmToken}`)
+    : null
   const subject =
     submission.service === 'kwadrans-na-juz'
       ? `PILNE - Kwadrans na juz: ${submission.name}`
@@ -1101,8 +1106,9 @@ export async function sendBookRequestEmail(submission: BookRequestSubmission): P
       <p><strong>E-mail:</strong> ${replyTo ? `<a href="mailto:${escapeHtml(submission.email)}">${escapeHtml(submission.email)}</a>` : escapeHtml(submission.email)}</p>
       <p><strong>Preferowane terminy:</strong><br />${formatMultilineHtml(submission.preferredSlots)}</p>
       <p><strong>Opis sytuacji:</strong><br />${formatMultilineHtml(submission.description)}</p>
-      <p><strong>Nastepny krok:</strong> ${submission.service === 'kwadrans-na-juz' ? 'odpisz w ciagu 15 minut z pierwszym wolnym terminem i dalszym krokiem platnosci.' : 'potwierdz termin i wyslij klientowi PayPal albo instrukcje BLIK na telefon.'}</p>
-      ${adminPanelHref ? renderEmailActionButton({ href: adminPanelHref, label: 'Otworz w panelu admina' }) : ''}
+      <p><strong>Nastepny krok:</strong> ${submission.service === 'kwadrans-na-juz' ? 'odpisz w ciagu 15 minut z pierwszym wolnym terminem i dalszym krokiem platnosci.' : 'Gdy klient wplaci — kliknij przycisk nizej, wpisz termin i system wysle klientowi link do pokoju.'}</p>
+      ${quickConfirmHref ? renderEmailActionButton({ href: quickConfirmHref, label: 'Potwierdz platnosc i wyslij termin klientowi' }) : ''}
+      ${adminPanelHref ? `<p style="margin-top:12px;font-size:13px"><a href="${escapeHtml(adminPanelHref)}" style="color:#666">lub otwórz pełny panel admina</a></p>` : ''}
     `,
     'To jest manualny flow rezerwacji po potwierdzeniu terminu, bez publicznego numeru telefonu.',
   )
@@ -1997,3 +2003,51 @@ export async function sendMaterialyCodeCustomerEmail(payload: MaterialyOrderEmai
 }
 
 
+
+export type LeadBookingConfirmedPayload = {
+  name: string
+  email: string
+  serviceLabel: string
+  confirmedDate: string
+  confirmedTime: string
+  callRoomUrl: string
+  calendarUrl?: string | null
+}
+
+export async function sendLeadBookingConfirmedEmail(payload: LeadBookingConfirmedPayload): Promise<DeliveryResult> {
+  const recipient = payload.email.trim()
+  if (!isValidPublicEmail(recipient)) {
+    return { status: 'skipped', reason: 'customer email missing or invalid' }
+  }
+
+  const subject = `Potwierdzona konsultacja: ${payload.serviceLabel} - ${payload.confirmedDate} ${payload.confirmedTime}`
+  const calendarBlock = payload.calendarUrl
+    ? renderEmailActionButton({ href: payload.calendarUrl, label: 'Dodaj do kalendarza Google' })
+    : ''
+
+  const html = renderEmailShell(
+    `Czesc ${escapeHtml(payload.name)}, konsultacja potwierdzona!`,
+    'Platnosc dotarla. Ponizej znajdziesz termin i link do pokoju rozmowy.',
+    `
+      <p><strong>Usluga:</strong> ${escapeHtml(payload.serviceLabel)}</p>
+      <p><strong>Data i godzina:</strong> ${escapeHtml(payload.confirmedDate)} o ${escapeHtml(payload.confirmedTime)}</p>
+      <p><strong>Link do rozmowy:</strong> <a href="${escapeHtml(payload.callRoomUrl)}">${escapeHtml(payload.callRoomUrl)}</a></p>
+      <p>Polaczenie jest audio (bez kamery). Wejdz na powyzszy link o ustalonej porze — bez instalacji, bezposrednio w przegladarce.</p>
+      ${calendarBlock}
+    `,
+    'Jesli masz pytania przed konsultacja, odpisz na tego maila.',
+  )
+
+  const text = [
+    `Czesc ${payload.name}, konsultacja potwierdzona!`,
+    '',
+    `Usluga: ${payload.serviceLabel}`,
+    `Data i godzina: ${payload.confirmedDate} o ${payload.confirmedTime}`,
+    `Link do rozmowy: ${payload.callRoomUrl}`,
+    payload.calendarUrl ? `Dodaj do kalendarza: ${payload.calendarUrl}` : '',
+    '',
+    'Jesli masz pytania przed konsultacja, odpisz na tego maila.',
+  ].filter(Boolean).join('\n')
+
+  return deliverEmail({ to: recipient, subject, html, text }, 'customer')
+}

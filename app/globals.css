@@ -778,7 +778,7 @@ body {
 }
 
 body[data-consent-banner-visible='true'] {
-  padding-bottom: clamp(108px, 14vw, 156px);
+  padding-bottom: clamp(96px, 12vw, 132px);
 }
 
 a {
@@ -3967,6 +3967,16 @@ select:focus-visible {
 
   .consent-actions {
     grid-template-columns: 1fr;
+  }
+}
+
+@media print {
+  body[data-consent-banner-visible='true'] {
+    padding-bottom: 0 !important;
+  }
+
+  .consent-banner {
+    display: none !important;
   }
 }
 
@@ -10611,7 +10621,7 @@ select:focus-visible {
 
 .contact-page #formularz .form-grid {
   margin-top: 6px;
-  gap: 18px 16px;
+  gap: 20px 18px;
 }
 
 .contact-page #formularz .contact-form-intro {
@@ -10626,7 +10636,7 @@ select:focus-visible {
 
 .contact-page #formularz .form-field {
   display: grid;
-  gap: 8px;
+  gap: 10px;
 }
 
 .contact-page #formularz .form-field label {
@@ -10645,14 +10655,14 @@ select:focus-visible {
 
 .contact-message-label-row {
   display: flex;
-  align-items: baseline;
+  align-items: flex-end;
   justify-content: space-between;
-  gap: 8px;
+  gap: 10px;
 }
 
 .contact-message-count {
-  color: rgba(31, 26, 23, 0.42);
-  font-size: 12px;
+  color: rgba(31, 26, 23, 0.5);
+  font-size: 12.5px;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
@@ -10664,8 +10674,8 @@ select:focus-visible {
 .contact-page #formularz textarea,
 .contact-page #formularz select {
   font-size: 16px;
-  padding: 14px 16px;
-  min-height: 56px;
+  padding: 15px 18px;
+  min-height: 58px;
   border-radius: 20px;
   border-color: rgba(92, 76, 58, 0.12);
   background: rgba(255, 255, 255, 0.96);
@@ -10673,7 +10683,7 @@ select:focus-visible {
 
 .notatnik-page #formularz textarea,
 .contact-page #formularz textarea {
-  min-height: 146px;
+  min-height: 164px;
 }
 
 .notatnik-page #formularz input::placeholder,
@@ -10681,7 +10691,48 @@ select:focus-visible {
 .contact-page #formularz input::placeholder,
 .contact-page #formularz textarea::placeholder {
   font-size: 16px;
-  color: rgba(31, 26, 23, 0.52);
+  color: rgba(31, 26, 23, 0.46);
+  opacity: 0.95;
+}
+
+.contact-page #formularz .checkbox-card {
+  gap: 10px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  border-radius: 20px;
+  border-color: rgba(92, 76, 58, 0.12);
+  background: rgba(255, 255, 255, 0.86);
+  color: rgba(31, 26, 23, 0.76);
+  font-size: 14.5px;
+  font-weight: 400;
+  line-height: 1.72;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.contact-page #formularz .checkbox-card input {
+  margin-top: 3px;
+  width: 18px;
+  height: 18px;
+  flex: none;
+  accent-color: var(--accent-2);
+}
+
+.contact-page #formularz .checkbox-card span {
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.contact-page #formularz .checkbox-card a {
+  font-weight: 600;
+}
+
+.contact-page #formularz .button.button-primary.big-button {
+  width: 100%;
+  min-height: 60px;
+  padding-inline: 24px;
+  font-size: 16px;
+  box-shadow: 0 16px 34px rgba(47, 118, 103, 0.16);
 }
 
 .contact-page #formularz .checkout-box {
@@ -16866,4 +16917,3 @@ select:focus-visible {
     font-size: 13px;
   }
 }
-
