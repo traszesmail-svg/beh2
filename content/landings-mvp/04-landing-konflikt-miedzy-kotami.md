@@ -1,6 +1,6 @@
 ---
 slug: /koty/konflikt-miedzy-kotami
-title_seo: Konflikt między kotami w domu — jak wygląda i co robić
+title_seo: Konflikt między kotami — od czego zacząć
 meta_description: Koty w domu, które się biją albo żyją w napiętej ciszy — to konflikt, który rzadko rozwiązuje się sam. Sprawdź, jak go rozpoznać i od czego zacząć.
 h1: Konflikt między kotami w domu
 ---

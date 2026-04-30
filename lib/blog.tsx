@@ -1322,7 +1322,7 @@ export function getBlogListingMetadata({ title, description, path: routePath }: 
 
 export function getBlogPostMetadata({ post, description }: BlogPostMetadataInput): Metadata {
   return {
-    title: `${post.seoTitle} | Blog Regulski`,
+    title: post.seoTitle,
     description,
     alternates: {
       canonical: post.path,

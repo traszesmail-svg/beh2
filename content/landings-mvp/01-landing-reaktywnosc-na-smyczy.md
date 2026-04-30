@@ -1,7 +1,7 @@
 ---
 slug: /psy/reaktywnosc-na-smyczy
-title_seo: Reaktywność psa na smyczy — co to znaczy i jak zacząć pracę
-meta_description: Pies, który szczeka, ciągnie i wybucha na smyczy przy innych psach lub ludziach — to reaktywność. Sprawdź, co za tym stoi i jak spokojnie zacząć, bez presji i bez szarpania.
+title_seo: Reaktywność psa na smyczy — od czego zacząć
+meta_description: Pies szczeka, ciągnie i wybucha na smyczy? To reaktywność. Sprawdź, co za tym stoi i jak spokojnie zacząć — bez presji i szarpania.
 h1: Reaktywność psa na smyczy
 ---
 

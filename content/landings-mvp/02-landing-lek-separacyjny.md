@@ -1,7 +1,7 @@
 ---
 slug: /psy/lek-separacyjny
-title_seo: Lęk separacyjny u psa — objawy, przyczyny i pierwsze kroki
-meta_description: Pies wyje, niszczy rzeczy albo nie daje rady zostać sam? To może być lęk separacyjny. Sprawdź, jak go rozpoznać i od czego zacząć — bez przyspieszania na siłę.
+title_seo: Lęk separacyjny u psa — od czego zacząć
+meta_description: Pies wyje, niszczy rzeczy lub nie daje rady zostać sam? To może być lęk separacyjny. Sprawdź, jak go rozpoznać i od czego zacząć.
 h1: Lęk separacyjny u psa
 ---
 

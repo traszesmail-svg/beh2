@@ -77,6 +77,9 @@ Cel:
 - Usunac resztki `Ä`, `Ĺ`, `â` i podobnych z widocznych tresci.
 - Po naprawie odpalic szybki `rg` na mojibake i sprawdzic, czy nie zostaly publiczne wycieki.
 
+Status:
+- **Wykonane 2026-04-30** w publicznym UI, helperach i mailach. Widoczny text cleanup zostal doprowadzony do poprawnego polskiego.
+
 ### Etap 3. Przyciac nadmiar CTA
 Pliki:
 - `app/page.tsx`
@@ -92,6 +95,9 @@ Cel:
 - Gorny poziom: `Kwadrans` i `Pelna konsultacja` albo `Kwadrans` i `Niezbednik`, zaleznosc od strony.
 - Reszte przeniesc nizej albo do blokow pomocniczych.
 
+Status:
+- **Wykonane 2026-04-30** w homepage, stronach ofertowych i formulazach wejscia. Nadmiar CTA zostal zredukowany.
+
 ### Etap 4. Weryfikacja SEO technicznego
 Pliki:
 - `app/robots.ts`
@@ -105,6 +111,9 @@ Cel:
 - Potwierdzic canonicale, sitemap i indexability.
 - Sprawdzic, czy title tagi sa opisowe i spójne.
 - Nie przepisywac schema bez potrzeby, tylko uzupelnic tam, gdzie audyt albo live crawl pokazza realna luke.
+
+Status:
+- **Wykonane 2026-04-30** po live weryfikacji `robots.txt`, `sitemap.xml`, canonicali i metadata na kluczowych podstronach.
 
 ### Etap 5. Formularze i UX techniczny
 Pliki:

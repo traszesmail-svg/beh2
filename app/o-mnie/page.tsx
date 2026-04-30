@@ -21,7 +21,7 @@ import {
 } from '@/lib/site'
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: 'Krzysztof Regulski - behawiorysta COAPE psow i kotow',
+  title: 'Krzysztof Regulski - behawiorysta COAPE',
   path: '/o-mnie',
   description:
     'Krzysztof Regulski - behawiorysta COAPE psow i kotow. Sposob pracy, kwalifikacje, profil publiczny i informacje przed kontaktem.',

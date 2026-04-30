@@ -18,7 +18,7 @@ import {
 } from '@/lib/public-offer-copy'
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: 'Cennik konsultacji behawioralnych | Regulski COAPE',
+  title: 'Cennik konsultacji behawioralnych',
   path: '/cennik',
   description:
     'Kwadrans 69 zl, Dwa kwadranse 169 zl, Pelna konsultacja 470 zl. Kwadrans na juz (99 zl) to ten sam format z szybkim terminem - dostepny przy rezerwacji.',
