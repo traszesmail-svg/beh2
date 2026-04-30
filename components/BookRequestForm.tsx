@@ -87,23 +87,23 @@ function getSelectedServiceIntro(service: BookingServiceType) {
     case 'konsultacja-30-min':
       return {
         title: `Wybrany format: ${option.label} / ${option.price}.`,
-        copy: '30 minut online daje wiecej miejsca na dwa-trzy watki i spokojniejsze uporzadkowanie sytuacji niz sam Kwadrans.',
+        copy: '30 minut online daje więcej miejsca na 2-3 wątki i spokojniejsze uporządkowanie sytuacji niż sam Kwadrans.',
       }
     case 'konsultacja-behawioralna-online':
       return {
         title: `Wybrany format: ${option.label} / ${option.price}.`,
-        copy: 'To osobny format 60 minut z diagnoza sytuacji, planem poprawy i 7 dniami konsultacji tekstowych przez WhatsApp.',
+        copy: 'To osobny format 60 minut na spokojną diagnozę sytuacji, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.',
       }
     case 'kwadrans-na-juz':
       return {
         title: `Wybrany format: ${option.label} / ${option.price}.`,
-        copy: 'To ten sam 15-minutowy format co zwykly Kwadrans, tylko z priorytetem i szybszym potwierdzeniem terminu.',
+        copy: 'To ten sam 15-minutowy format co zwykły Kwadrans, tylko z priorytetem i szybszym potwierdzeniem terminu.',
       }
     case 'szybka-konsultacja-15-min':
     default:
       return {
         title: `Wybrany format: ${option.label} / ${option.price}.`,
-        copy: 'Kwadrans to 15 minut audio bez kamery. Najprostszy start do nazwania problemu i ustalenia priorytetu.',
+        copy: 'Kwadrans to 15 minut audio bez kamery. Dobry pierwszy krok, gdy chcesz spokojnie nazwać problem i ustalić priorytet.',
       }
   }
 }
@@ -154,7 +154,7 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
     }
 
     if (!isUrgentNow && !preferredSlots) {
-      return 'Wybierz co najmniej jeden termin z kalendarza powyzej.'
+      return 'Wybierz przynajmniej jeden termin z kalendarza.'
     }
 
     if (!form.consentRodo || !form.consentRegulamin || !form.consentEarlyStart) {
@@ -207,7 +207,7 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
       }
 
       setStatus('success')
-      setFeedback(payload.message ?? 'Dostalem Twoja rezerwacje. Sprawdz skrzynke - wyslalem kopie.')
+      setFeedback(payload.message ?? 'Dostałem Twoją rezerwację. Sprawdź skrzynkę - wysłałem kopię.')
       trackAnalyticsEvent('booking_form_submitted', {
         service_key: form.service,
         species: form.species,
@@ -223,16 +223,16 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
     return (
       <div className="contact-form-card top-gap" role="status">
         <div className="notatnik-mono notatnik-kicker-spaced">Rezerwacja przyjeta</div>
-        <h2>{isUrgentNow ? 'Dostalem Twoja prosbe o Kwadrans na juz.' : 'Dostalem Twoja rezerwacje.'}</h2>
+        <h2>{isUrgentNow ? 'Dostałem Twoją prośbę o Kwadrans na już.' : 'Dostałem Twoją rezerwację.'}</h2>
         <p>
           {isUrgentNow
-            ? 'Twoja prosba o Kwadrans na juz dotarla. Odpisze w ciagu 15 minut z terminem i dalszym krokiem platnosci. Sprawdz skrzynke - wyslalem Ci kopie.'
+            ? 'Twoja prosba o Kwadrans na juz dotarla. Odpowiem w ciagu 15 minut z terminem i dalszym krokiem platnosci. Sprawdz skrzynke - wyslalem Ci kopie.'
             : 'W ciagu kilku godzin, miedzy 9 a 21, odezwe sie z potwierdzeniem terminu i dalszym krokiem platnosci. Sprawdz skrzynke - wyslalem Ci kopie.'}
         </p>
         <div className="notatnik-steps top-gap-small">
           <article className="notatnik-step">
             <div className="notatnik-step-number">01</div>
-            <p>{isUrgentNow ? 'Wracam z szybka odpowiedzia i pierwsza wolna chwila na dzis.' : 'Potwierdzam jeden z terminow albo odsylam najblizsza alternatywe.'}</p>
+            <p>{isUrgentNow ? 'Wracam z szybką odpowiedzią i pierwszą wolną chwilą na dziś.' : 'Potwierdzam jeden z terminów albo odsyłam najbliższą alternatywę.'}</p>
           </article>
           <article className="notatnik-step">
             <div className="notatnik-step-number">02</div>
@@ -240,7 +240,7 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
           </article>
           <article className="notatnik-step">
             <div className="notatnik-step-number">03</div>
-            <p>Po wplacie potwierdzam rezerwacje i odsylam link do rozmowy.</p>
+            <p>Po wpłacie potwierdzam rezerwację i odsyłam link do rozmowy.</p>
           </article>
         </div>
         <div className="notatnik-subhero-actions top-gap-small">
@@ -280,7 +280,7 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
           <strong>
             Wybrany tryb: {URGENT_SERVICE_OPTION.label} / {URGENT_SERVICE_OPTION.price}.
           </strong>{' '}
-          To ten sam 15-minutowy format co zwykly Kwadrans, ale z priorytetem i szybszym terminem.{' '}
+          To ten sam 15-minutowy format co zwykły Kwadrans, ale z priorytetem i szybszym terminem.{' '}
           <button
             type="button"
             className="notatnik-inline-link"
@@ -414,11 +414,11 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
             {form.preferredSlots ? (
               <input type="hidden" name="preferredSlots" value={form.preferredSlots} />
             ) : null}
-            <div className="field-help" style={{ marginTop: '8px' }}>
-              Kliknij dzien, wybierz godzine. Dodaj 2-3 opcje jako rezerwowe.
-            </div>
-          </>
-        )}
+          <div className="field-help" style={{ marginTop: '8px' }}>
+            Kliknij dzień i wybierz godzinę. Dodaj 2-3 opcje na wszelki wypadek.
+          </div>
+        </>
+      )}
       </div>
 
       <fieldset className="full-width form-field consent-stack">
@@ -470,27 +470,17 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
         </label>
       </fieldset>
 
-      <div
-        style={{
-          position: 'absolute',
-          left: '-9999px',
-          top: 'auto',
-          width: '1px',
-          height: '1px',
-          overflow: 'hidden',
-        }}
+      <input
+        id="book-company"
+        name="company"
+        type="text"
+        value={form.honeypot}
+        onChange={(event) => updateField('honeypot', event.target.value)}
+        tabIndex={-1}
+        autoComplete="off"
         aria-hidden="true"
-      >
-        <label htmlFor="book-company">Firma</label>
-        <input
-          id="book-company"
-          name="company"
-          tabIndex={-1}
-          autoComplete="off"
-          value={form.honeypot}
-          onChange={(event) => updateField('honeypot', event.target.value)}
-        />
-      </div>
+        className="sr-only"
+      />
 
       {feedback ? (
         <div className={`info-box full-width ${status === 'error' ? 'error-box' : ''}`} role="status">
@@ -500,7 +490,7 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
 
       <div className="full-width">
         <button type="submit" className="button button-primary big-button" disabled={status === 'loading'}>
-          {status === 'loading' ? `Wysylam prosbe o ${selectedService.label.toLowerCase()}...` : 'Wyslij prosbe o rezerwacje'}
+          {status === 'loading' ? `Wysyłam prośbę o ${selectedService.label.toLowerCase()}...` : 'Wyślij prośbę o rezerwację'}
         </button>
       </div>
     </form>

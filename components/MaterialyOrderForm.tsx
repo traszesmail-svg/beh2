@@ -65,14 +65,14 @@ export function MaterialyOrderForm({ productKind, productSlug, productTitle, pri
         })
       }
     } catch (err) {
-      setState({ status: 'error', message: 'Brak polaczenia. Sprobuj ponownie.' })
+      setState({ status: 'error', message: 'Brak połączenia. Spróbuj ponownie.' })
     }
   }
 
   if (state.status === 'free-ok') {
     return (
       <div className="materialy-success">
-        <h2>Sprawdz skrzynke e-mail</h2>
+        <h2>Sprawdź skrzynkę e-mail</h2>
         <p>
           Wyslalem kod do pobrania na <strong>{email}</strong>. Numer zamowienia: <code>{state.orderId}</code>.
         </p>
@@ -90,7 +90,7 @@ export function MaterialyOrderForm({ productKind, productSlug, productTitle, pri
   if (state.status === 'paid-ok') {
     return (
       <div className="materialy-success">
-        <h2>Zamowienie przyjete</h2>
+        <h2>Zamówienie przyjęte</h2>
         <p>
           Numer: <code>{state.orderId}</code>. Kwota: <strong>{state.priceLabel}</strong>.
         </p>
@@ -99,11 +99,11 @@ export function MaterialyOrderForm({ productKind, productSlug, productTitle, pri
           <code>{state.orderId}</code>.
         </p>
         <p>
-          Po zaksiegowaniu wplaty wysle Ci kod do pobrania na <strong>{email}</strong>. Zwykle do 60 minut
-          (pon–pt 8–18).
+          Po zaksięgowaniu wpłaty wyślę Ci kod do pobrania na <strong>{email}</strong>. Zwykle do 60 minut
+          (pon.-pt. 8:00-18:00).
         </p>
         <p>
-          Pelna instrukcja jest tez w mailu, ktory wlasnie do Ciebie poszedl.
+          Pełna instrukcja jest też w mailu, który właśnie do Ciebie poszedł.
         </p>
       </div>
     )
@@ -144,7 +144,7 @@ export function MaterialyOrderForm({ productKind, productSlug, productTitle, pri
 
       {!isFree && (
         <label>
-          Telefon (opcjonalnie — pomocny, jesli BLIK z trudnego numeru)
+          Telefon (opcjonalnie — przyda się, jeśli płatność BLIK idzie z innego numeru)
           <input
             type="tel"
             name="phone"
@@ -157,7 +157,7 @@ export function MaterialyOrderForm({ productKind, productSlug, productTitle, pri
       )}
 
       <label>
-        Krotka notatka (opcjonalnie)
+        Krótka notatka (opcjonalnie)
         <textarea
           name="notes"
           value={notes}
@@ -167,13 +167,16 @@ export function MaterialyOrderForm({ productKind, productSlug, productTitle, pri
         />
       </label>
 
-      {/* honeypot */}
-      <div style={{ position: 'absolute', left: '-9999px', height: 0, overflow: 'hidden' }} aria-hidden="true">
-        <label>
-          Strona internetowa
-          <input type="text" name="website" value={website} onChange={(e) => setWebsite(e.target.value)} tabIndex={-1} />
-        </label>
-      </div>
+      <input
+        type="text"
+        name="website"
+        value={website}
+        onChange={(e) => setWebsite(e.target.value)}
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="sr-only"
+      />
 
       <label className="consent-line">
         <input

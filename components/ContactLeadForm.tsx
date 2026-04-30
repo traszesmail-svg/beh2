@@ -236,8 +236,8 @@ export function ContactLeadForm() {
       setFeedback(
         payload.message ??
           (isUrgentNow
-            ? 'Dziekuje. Prosba o Kwadrans na juz zostala przyjeta. Odpowiem na podany adres e-mail w ciagu 15 minut z propozycja terminu.'
-            : 'Wyslane. Odpowiem w 1-2 dni roboczych. Sprawdz skrzynke - masz tez kopie.'),
+            ? 'Dziękuję. Prośba o Kwadrans na już została przyjęta. Odpowiem na podany adres e-mail w ciągu 15 minut z propozycją terminu.'
+            : 'Wysłane. Odpowiem w 1-2 dni robocze. Sprawdź skrzynkę - masz też kopię.'),
       )
       setForm(createInitialForm(presetSpecies ?? ''))
       startedRef.current = false
@@ -250,14 +250,14 @@ export function ContactLeadForm() {
   const submitLabel =
     status === 'loading'
       ? isUrgentNow
-        ? 'Wysylam prosbe o termin...'
+        ? 'Wysyłam prośbę o termin...'
         : 'Wysylam krotka wiadomosc...'
       : status === 'success'
         ? isUrgentNow
           ? 'Wyslij kolejna prosbe'
           : 'Wyslij kolejna krotka wiadomosc'
         : isUrgentNow
-          ? 'Wyslij prosbe o termin'
+          ? 'Wyślij prośbę o termin'
           : 'Wyslij krotka wiadomosc'
 
   return (
@@ -421,38 +421,28 @@ export function ContactLeadForm() {
         </label>
       </fieldset>
 
-      <div
-        style={{
-          position: 'absolute',
-          left: '-9999px',
-          top: 'auto',
-          width: '1px',
-          height: '1px',
-          overflow: 'hidden',
-        }}
+      <input
+        id="contact-website"
+        name="website"
+        type="text"
+        value={form.website}
+        onChange={(event) => setForm((current) => ({ ...current, website: event.target.value }))}
+        tabIndex={-1}
+        autoComplete="off"
         aria-hidden="true"
-      >
-        <label htmlFor="contact-website">Strona internetowa</label>
-        <input
-          id="contact-website"
-          name="website"
-          tabIndex={-1}
-          autoComplete="off"
-          value={form.website}
-          onChange={(event) => setForm((current) => ({ ...current, website: event.target.value }))}
-        />
-      </div>
+        className="sr-only"
+      />
 
       {feedback ? (
         <div className={`info-box full-width ${status === 'error' ? 'error-box' : ''}`} role="status">
           <p>{feedback}</p>
           {status === 'success' ? (
             <p style={{ marginTop: '12px' }}>
-              W międzyczasie możesz sięgnąć po PDF z{' '}
+              W międzyczasie możesz zajrzeć po PDF-y w{' '}
               <a href="/materialy" className="prep-inline-link">
                 /materialy
               </a>{' '}
-              — od 19&nbsp;zł, bez konieczności rozmowy.
+              — od 19&nbsp;zł, bez dodatkowej rozmowy.
             </p>
           ) : null}
         </div>

@@ -110,7 +110,7 @@ export default async function FormPage({
             {qaBooking ? (
               <div className="notatnik-contact-note" style={{ marginTop: 18 }}>
                 <strong>Tryb testowy</strong>
-                <p>Przejdziesz przez kontrolowana platnosc testowa bez realnego obciazenia klienta.</p>
+                <p>Przejdziesz przez kontrolowaną płatność testową bez realnego obciążenia klienta.</p>
               </div>
             ) : null}
 
@@ -118,7 +118,7 @@ export default async function FormPage({
               Uzupelnij <em>potrzebne dane</em>.
             </h1>
             <p className="notatnik-booking-lede">
-              Wpisz tylko informacje potrzebne do rezerwacji. Po zapisaniu formularza przejdziesz do wpłaty ręcznej i końcowego potwierdzenia terminu.
+              Wpisz tylko to, co potrzebne. Po zapisaniu formularza przejdziesz do płatności i końcowego potwierdzenia terminu.
             </p>
 
             <div className="notatnik-detail-stack">
@@ -187,10 +187,10 @@ export default async function FormPage({
                 </>
               ) : activeSlot ? (
                 <>
-                  <div className="notatnik-contact-note">
-                    <strong>Formularz rezerwacji</strong>
-                    <p>Wpisz tylko informacje potrzebne do rezerwacji i przejscia do platnosci.</p>
-                  </div>
+              <div className="notatnik-contact-note">
+                <strong>Formularz rezerwacji</strong>
+                <p>Wpisz tylko informacje potrzebne do rezerwacji i przejścia do płatności.</p>
+              </div>
                   <BookingForm
                     problemType={problem}
                     serviceType={serviceType}
@@ -203,7 +203,7 @@ export default async function FormPage({
               ) : (
                 <>
                   <div className="notatnik-callout notatnik-callout-error">
-                    Ten termin nie jest juz dostepny dla wybranej uslugi. Wroc do listy albo wyslij krotka wiadomosc.
+                    Ten termin nie jest już dostępny dla wybranej usługi. Wróć do listy albo wyślij krótką wiadomość.
                   </div>
                   <div className="notatnik-actions">
                     <Link href={slotsHref} prefetch={false} className="notatnik-btn notatnik-btn-accent">

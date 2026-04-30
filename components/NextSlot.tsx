@@ -25,6 +25,10 @@ function getWarsawNowParts() {
   }
 }
 
+function formatFutureSlotCount(count: number) {
+  return count === 1 ? '1 dostępny termin' : `${count} dostępnych terminów`
+}
+
 export async function NextSlot({ className }: NextSlotProps) {
   try {
     const groupedAvailability = await listAvailability()
@@ -48,8 +52,8 @@ export async function NextSlot({ className }: NextSlotProps) {
       <div className={className ? `next-slot-badge ${className}` : 'next-slot-badge'}>
         <span className="next-slot-dot" aria-hidden="true" />
         <span>
-          Najblizszy wolny termin: <strong>{formatDateLabel(nextSlot.bookingDate)}, {nextSlot.bookingTime}</strong>
-          {futureSlotCount > 1 ? ` · wolnych slotow w puli: ${futureSlotCount}` : ''}
+          Najbliższy dostępny termin: <strong>{formatDateLabel(nextSlot.bookingDate)}, {nextSlot.bookingTime}</strong>
+          {futureSlotCount > 1 ? ` · ${formatFutureSlotCount(futureSlotCount)}` : ''}
         </span>
       </div>
     )

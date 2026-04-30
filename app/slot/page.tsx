@@ -188,13 +188,13 @@ export default async function SlotPage({
         <div className="notatnik-slot-day-head">
           <div className="notatnik-slot-day-copy">
             <strong>{group.label}</strong>
-            <p>
-              {getBookingServiceSlotSummary(serviceType)}
-              {slotTier === 'additional'
-                ? ' To dodatkowe okno poza standardowym grafikiem tej usługi.'
-                : serviceConfig.limitedAvailabilityNote
-                  ? ` ${serviceConfig.limitedAvailabilityNote}`
-                  : ''}
+                <p>
+                  {getBookingServiceSlotSummary(serviceType)}
+                  {slotTier === 'additional'
+                    ? ' To dodatkowe okno poza standardowym harmonogramem tej usługi.'
+                  : serviceConfig.limitedAvailabilityNote
+                    ? ` ${serviceConfig.limitedAvailabilityNote}`
+                    : ''}
             </p>
           </div>
           <span className="notatnik-slot-day-badge">

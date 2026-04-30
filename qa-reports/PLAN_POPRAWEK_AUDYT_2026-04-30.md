@@ -119,6 +119,9 @@ Cel:
 - Uproscic teksty pomocnicze w kalendarzu i formularzach.
 - Doprowadzic rezerwacje do bardziej ludzkiego i mniej technicznego brzmienia.
 
+Status:
+- **Wykonane 2026-04-30** w formularzach rezerwacji, kontaktu i materialow. Honeypoty sa ukryte, a teksty kalendarza i CTA sa uproszczone.
+
 ## Kolejnosc wdrozenia
 
 1. Oferta i Kwadrans.

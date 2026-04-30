@@ -67,18 +67,18 @@ function isSlotUnavailableBookingMessage(value: string) {
 // "Ten termin został właśnie zajęty"
 function getCheckoutComparisonCopy(serviceType: BookingServiceType) {
   if (serviceType === 'konsultacja-30-min') {
-    return 'To rezerwacja Dwoch kwadransow z behawiorysta, czyli 30 minut spokojniejszej rozmowy online.'
+    return 'To rezerwacja 30 minut spokojniejszej rozmowy online.'
   }
 
   if (serviceType === 'konsultacja-behawioralna-online') {
-    return 'To rezerwacja pelnej konsultacji behawioralnej z wieksza iloscia czasu na temat i prace nad kilkoma watkami naraz.'
+    return 'To rezerwacja pełnej konsultacji behawioralnej z większą ilością czasu na temat i kilka wątków naraz.'
   }
 
   if (!isAudioOnlyBookingService(serviceType)) {
-    return 'To rezerwacja dluzszej konsultacji z wieksza iloscia czasu na temat.'
+    return 'To rezerwacja dłuższej konsultacji z większą ilością czasu na temat.'
   }
 
-  return 'Jesli po rozmowie okaze sie, ze temat wymaga szerszego omowienia, kolejnym krokiem moga byc Dwa kwadranse albo pelna konsultacja behawioralna.'
+  return 'Jeśli po rozmowie okaże się, że temat wymaga szerszego omówienia, kolejnym krokiem mogą być Dwa kwadranse albo pełna konsultacja behawioralna.'
 }
 
 export function BookingForm({
@@ -128,12 +128,12 @@ export function BookingForm({
     setError('')
 
     if (!ownerName.trim() || !email.trim() || !description.trim() || !petAge.trim() || !durationNotes.trim()) {
-      setError('Uzupełnij wszystkie pola, aby zapisać rezerwację i przejść do płatności.')
+      setError('Uzupełnij wszystkie pola, żeby zapisać rezerwację i przejść do płatności.')
       return
     }
 
     if (!isEmailValid(email.trim())) {
-      setError('Podaj poprawny adres e-mail. Na ten adres wyślemy potwierdzenie rozmowy.')
+      setError('Podaj poprawny adres e-mail. Na ten adres wyślę potwierdzenie rozmowy.')
       return
     }
 
@@ -174,7 +174,7 @@ export function BookingForm({
 
       if (!response.ok || !payload.bookingId || !payload.accessToken) {
         if (payload.errorCode === 'slot_unavailable' || (typeof payload.error === 'string' && isSlotUnavailableBookingMessage(payload.error))) {
-          setError('Ten termin został właśnie zajęty. Wróć do listy terminów i wybierz inną godzinę rozmowy.')
+          setError('Ten termin właśnie się zapełnił. Wróć do listy terminów i wybierz inną godzinę rozmowy.')
         } else {
           setError(payload.error ?? 'Rezerwacja chwilowo jest niedostępna. Odśwież stronę za moment i spróbuj ponownie.')
         }
@@ -206,7 +206,7 @@ export function BookingForm({
       console.error('[behawior15][booking-form] submit failed', submissionError)
       const message = submissionError instanceof Error ? submissionError.message : 'Wystąpił błąd formularza.'
       if (isSlotUnavailableBookingMessage(message)) {
-        setError('Ten termin został właśnie zajęty. Wróć do listy terminów i wybierz inną godzinę rozmowy.')
+        setError('Ten termin właśnie się zapełnił. Wróć do listy terminów i wybierz inną godzinę rozmowy.')
       } else {
         setError(message)
       }
