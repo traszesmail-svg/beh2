@@ -32,8 +32,7 @@ export function LeadMagnetPopup({ magnetId, pathname = '/' }: LeadMagnetPopupPro
   const { shouldShow, dismiss } = useExitIntent({
     enabled: !alreadySubmitted,
     delayMs: POPUP_CONFIG.exitIntentDelayMs,
-    scrollFallbackPercent: POPUP_CONFIG.scrollFallbackPercent,
-    scrollFallbackTimeMs: POPUP_CONFIG.scrollFallbackTimeMs,
+    timerFallbackMs: POPUP_CONFIG.timerFallbackMs,
     storageKey: POPUP_CONFIG.storageKey,
     hideForDays: POPUP_CONFIG.hideForDays,
   });

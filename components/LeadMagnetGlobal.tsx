@@ -8,7 +8,7 @@ import { LeadMagnetBanner } from '@/components/LeadMagnetBanner';
 const EXCLUDED_PATHS = ['/book', '/admin', '/polityka-prywatnosci', '/regulamin'];
 
 export function LeadMagnetGlobal() {
-  const pathname = usePathname();
+  const pathname = usePathname() ?? '/';
   if (EXCLUDED_PATHS.some(p => pathname.startsWith(p))) return null;
 
   return (
