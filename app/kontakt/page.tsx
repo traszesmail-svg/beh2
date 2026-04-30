@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
-import { HeroIllustration } from '@/components/HeroIllustration'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { ContactLeadForm } from '@/components/ContactLeadForm'
 import { NotatnikFooter, NotatnikSideVisuals, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
@@ -47,7 +47,7 @@ export default function ContactPage({
   ]
 
   return (
-    <main className="notatnik-page">
+    <main className="notatnik-page contact-page">
       <Schema data={structuredData} />
       <NotatnikSideVisuals variant="contact" />
       <div className="notatnik-shell">
@@ -64,13 +64,43 @@ export default function ContactPage({
               Wystarczy gatunek, temat i kilka zdan. {COPY_HELPERS.contactResponseWindow} {getSpeciesCopy(species)}
             </p>
 
-            <div className="contact-form-card" id="formularz">
-              <ContactLeadForm />
+            <div className="contact-promo-grid">
+              <figure className="contact-visual-card" aria-labelledby="contact-visual-title" aria-describedby="contact-visual-copy">
+                <div className="contact-photo-wrap">
+                  <Image
+                    src="/branding/specialist-training.jpg"
+                    alt="Spokojna konsultacja behawioralna z opiekunem psa"
+                    fill
+                    priority
+                    quality={84}
+                    sizes="(max-width: 760px) 100vw, (max-width: 1200px) 42vw, 420px"
+                    className="contact-photo"
+                  />
+                </div>
+                <figcaption className="contact-photo-caption">
+                  <div className="notatnik-mono">Pierwszy kontakt</div>
+                  <h3 id="contact-visual-title" className="contact-trust-title">
+                    Spokojna rozmowa przed decyzja
+                  </h3>
+                  <p id="contact-visual-copy">
+                    Nie musisz od razu wiedziec, jaki rodzaj pomocy bedzie najlepszy. Napisz krotko, co sie dzieje - pomozemy uporzadkowac
+                    sytuacje i wybrac kolejny krok.
+                  </p>
+                  <div className="contact-trust-row" aria-label="Co zyskasz">
+                    <span className="contact-trust-chip">Bez oceniania</span>
+                    <span className="contact-trust-chip">Z uwaga na psa</span>
+                    <span className="contact-trust-chip">Konkretny nastepny krok</span>
+                  </div>
+                </figcaption>
+              </figure>
+
+              <div className="contact-form-card" id="formularz">
+                <ContactLeadForm />
+              </div>
             </div>
           </div>
 
           <div className="notatnik-contact-right notatnik-kinfo">
-            <HeroIllustration slug="kontakt" emojiPlaceholder="✉️" className="w-full min-h-[220px] rounded-lg mb-6 hidden lg:flex" />
             <h3>Co stanie sie dalej</h3>
             <p>Odpowiem na adres e-mail z formularza i wskaze najprostszy kolejny krok: Kwadrans, Kwadrans na juz, Dwa kwadranse, Pelna konsultacje albo material startowy.</p>
 
@@ -130,7 +160,7 @@ export default function ContactPage({
             </div>
 
             <div className="notatnik-contact-note notatnik-contact-note-compact">
-              <p>Jesli nie jestes pewien, ktory format pasuje do Twojej sytuacji, napisz krotka wiadomosc przez formularz. Odpiszę z rekomendacją.</p>
+              <p>Jesli nie jestes pewien, ktory format pasuje do Twojej sytuacji, napisz krotka wiadomosc przez formularz. Odpisze z rekomendacja.</p>
             </div>
 
             <div className="notatnik-contact-note">
