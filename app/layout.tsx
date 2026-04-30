@@ -116,7 +116,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Suspense fallback={null}>
             <AnalyticsConsent
               measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim() || null}
-              cookiebotDomainGroupId={process.env.NEXT_PUBLIC_COOKIEBOT_DOMAIN_GROUP_ID?.trim() || null}
+              cookiebotDomainGroupId={null}
             />
           </Suspense>
         </ThemeProvider>
