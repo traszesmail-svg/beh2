@@ -103,7 +103,7 @@ function getSelectedServiceIntro(service: BookingServiceType) {
     default:
       return {
         title: `Wybrany format: ${option.label} / ${option.price}.`,
-        copy: 'Po rozmowie dostajesz diagnoze sytuacji i przewodnik PDF z podstawami dla psa lub kota (~20 stron).',
+        copy: 'Kwadrans to 15 minut audio bez kamery. Najprostszy start do nazwania problemu i ustalenia priorytetu.',
       }
   }
 }

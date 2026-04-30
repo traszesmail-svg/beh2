@@ -16,7 +16,7 @@ export const metadata: Metadata = buildMarketingMetadata({
   title: 'Oferta: behawiorysta online dla psa i kota',
   path: '/oferta',
   description:
-    'Oferta: Kwadrans 69 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl z diagnoza i 7 dniami wsparcia przez WhatsApp.',
+    'Oferta: Kwadrans 69 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl. Kwadrans to pierwszy krok, a Pelna konsultacja daje diagnoze i 7 dni wsparcia przez WhatsApp.',
 })
 
 export default async function OfferPage() {
@@ -83,7 +83,7 @@ export default async function OfferPage() {
 
             <aside className="offer-page-hero-card tree-backed-card">
               <span className="offer-page-hero-label">Jak zaczac</span>
-              <strong>Kwadrans z behawiorysta sprawdza sie na start. Dwa kwadranse porzadkuja temat szerzej, a Pelna konsultacja daje diagnoze i wsparcie wdrozenia.</strong>
+              <strong>Kwadrans z behawiorysta to najprostszy start. Dwa kwadranse porzadkuja temat szerzej, a Pelna konsultacja daje diagnoze i wsparcie wdrozenia.</strong>
               <div className="offer-page-hero-stats">
                 <div className="offer-page-hero-stat">
                   <span>15 min / {quickStartPriceAmount} zl</span>
