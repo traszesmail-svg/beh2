@@ -1,17 +1,13 @@
-// handoff-7/components/LeadMagnetPopup.tsx
-// Exit-intent popup z formularzem
-// Wstaw raz w app/layout.tsx — auto-detektuje exit intent
-
 'use client';
 
 import { useEffect, useState } from 'react';
-import { X, BookOpen } from 'lucide-react';
+import { X } from 'lucide-react';
 import { useExitIntent } from '@/lib/exit-intent';
 import { LEAD_MAGNETS, POPUP_CONFIG, pickLeadMagnet } from '@/lib/lead-magnet.config';
 import { LeadMagnetForm } from './LeadMagnetForm';
 
 interface LeadMagnetPopupProps {
-  magnetId?: string;          // jeśli pominięte — pickLeadMagnet wybiera po pathname
+  magnetId?: string;
   pathname?: string;
 }
 
@@ -20,12 +16,12 @@ export function LeadMagnetPopup({ magnetId, pathname = '/' }: LeadMagnetPopupPro
     ? LEAD_MAGNETS.find(m => m.id === magnetId) ?? pickLeadMagnet(pathname)
     : pickLeadMagnet(pathname);
 
-  // Sprawdź czy już zapisany
   const [alreadySubmitted, setAlreadySubmitted] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
   useEffect(() => {
     try {
-      const v = localStorage.getItem(POPUP_CONFIG.submittedKey);
-      if (v) setAlreadySubmitted(true);
+      if (localStorage.getItem(POPUP_CONFIG.submittedKey)) setAlreadySubmitted(true);
     } catch {}
   }, []);
 
@@ -37,8 +33,6 @@ export function LeadMagnetPopup({ magnetId, pathname = '/' }: LeadMagnetPopupPro
     hideForDays: POPUP_CONFIG.hideForDays,
   });
 
-
-  // Esc to close
   useEffect(() => {
     if (!shouldShow) return;
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') dismiss(); };
@@ -46,69 +40,78 @@ export function LeadMagnetPopup({ magnetId, pathname = '/' }: LeadMagnetPopupPro
     return () => document.removeEventListener('keydown', onKey);
   }, [shouldShow, dismiss]);
 
+  // Zamknij po 2s od potwierdzenia
+  useEffect(() => {
+    if (!submitted) return;
+    const t = setTimeout(() => dismiss(), 2000);
+    return () => clearTimeout(t);
+  }, [submitted, dismiss]);
+
   if (!shouldShow || alreadySubmitted) return null;
 
+  const overlay: React.CSSProperties = {
+    position: 'fixed', inset: 0, zIndex: 9999,
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    padding: '16px', backgroundColor: 'rgba(0,0,0,0.6)',
+  };
+  const card: React.CSSProperties = {
+    backgroundColor: '#fff', borderRadius: '20px',
+    boxShadow: '0 24px 64px rgba(0,0,0,0.25)',
+    width: '100%', maxWidth: '480px', overflow: 'hidden',
+    fontFamily: 'inherit',
+  };
+
   return (
-    <div
-      style={{ position: 'fixed', inset: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px', backgroundColor: 'rgba(0,0,0,0.65)' }}
-      onClick={(e) => { if (e.target === e.currentTarget) dismiss(); }}
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="lm-popup-title"
-    >
-      <div style={{ backgroundColor: '#fff', borderRadius: '24px', boxShadow: '0 20px 60px rgba(0,0,0,0.3)', maxWidth: '680px', width: '100%', overflow: 'hidden', display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1.4fr)' }}>
+    <div style={overlay} onClick={(e) => { if (e.target === e.currentTarget) dismiss(); }}>
+      <div style={card}>
 
-        {/* Lewa kolumna — wizual + opis */}
-        <div style={{ background: 'linear-gradient(135deg, #e8f5f0, #c5e8db)', padding: '40px 32px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-          <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent text-accent-fg text-xs font-bold tracking-wide uppercase mb-4">
-              <BookOpen size={12} />
-              Darmowy PDF
+        {/* Nagłówek */}
+        <div style={{ background: 'linear-gradient(135deg, #d4ede6, #a8d9c8)', padding: '28px 28px 20px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div>
+              <span style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#2f7667', background: '#fff', padding: '3px 10px', borderRadius: '99px' }}>
+                Darmowy PDF
+              </span>
+              <p style={{ margin: '12px 0 4px', fontSize: '20px', fontWeight: 700, color: '#1a1a1a', lineHeight: 1.3 }}>
+                {magnet.title}
+              </p>
+              <p style={{ margin: 0, fontSize: '13px', color: '#555' }}>{magnet.subtitle}</p>
             </div>
-            <p className="text-3xl font-serif font-bold text-ink leading-tight tracking-tight">
-              {magnet.title}
-            </p>
-            <p className="text-sm text-muted mt-3">{magnet.subtitle}</p>
-          </div>
-
-          {/* Mock cover PDF */}
-          <div className="mt-6 relative">
-            <div className="aspect-[3/4] bg-surface rounded-xl shadow-lg border border-border flex items-center justify-center transform rotate-[-3deg] -ml-2">
-              <div className="text-center px-4">
-                <BookOpen className="mx-auto text-accent mb-2" size={32} />
-                <p className="text-xs font-mono text-muted">{magnet.pages} stron PDF</p>
-              </div>
-            </div>
+            <button
+              onClick={dismiss}
+              style={{ marginLeft: '12px', flexShrink: 0, width: '32px', height: '32px', borderRadius: '50%', border: 'none', background: 'rgba(0,0,0,0.1)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#333' }}
+              aria-label="Zamknij"
+            >
+              <X size={16} />
+            </button>
           </div>
         </div>
 
-        {/* Prawa kolumna — formularz */}
-        <div style={{ padding: '40px 32px', position: 'relative', backgroundColor: '#fff' }}>
-          <button
-            onClick={dismiss}
-            className="absolute top-4 right-4 w-9 h-9 rounded-full bg-surface-2 hover:bg-border flex items-center justify-center transition-colors text-muted hover:text-ink"
-            aria-label="Zamknij"
-          >
-            <X size={18} />
-          </button>
-
-          <h2 id="lm-popup-title" className="text-2xl font-serif font-bold text-ink leading-tight tracking-tight pr-10">
-            Zanim pójdziesz — weź to ze sobą
-          </h2>
-          <p className="text-sm text-muted mt-2 mb-5">
-            {magnet.description}
-          </p>
-
-          <ul className="space-y-1.5 mb-5">
-            {magnet.bullets.map((b, i) => (
-              <li key={i} className="flex gap-2 text-sm text-ink">
-                <span className="text-accent shrink-0">✓</span>
-                <span>{b}</span>
-              </li>
-            ))}
-          </ul>
-
-          <LeadMagnetForm magnetId={magnet.id} source="popup" onSuccess={() => setTimeout(dismiss, 3000)} />
+        {/* Treść */}
+        <div style={{ padding: '24px 28px 28px' }}>
+          {submitted ? (
+            <div style={{ textAlign: 'center', padding: '16px 0' }}>
+              <div style={{ fontSize: '40px', marginBottom: '12px' }}>📬</div>
+              <p style={{ fontSize: '17px', fontWeight: 700, color: '#1a1a1a', margin: '0 0 6px' }}>Sprawdź skrzynkę!</p>
+              <p style={{ fontSize: '13px', color: '#666', margin: 0 }}>PDF już leci na Twój email. Zamykam za chwilę…</p>
+            </div>
+          ) : (
+            <>
+              <ul style={{ margin: '0 0 20px', padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                {magnet.bullets.map((b, i) => (
+                  <li key={i} style={{ display: 'flex', gap: '8px', fontSize: '13px', color: '#333' }}>
+                    <span style={{ color: '#2f7667', fontWeight: 700, flexShrink: 0 }}>✓</span>
+                    {b}
+                  </li>
+                ))}
+              </ul>
+              <LeadMagnetForm
+                magnetId={magnet.id}
+                source="popup"
+                onSuccess={() => setSubmitted(true)}
+              />
+            </>
+          )}
         </div>
       </div>
     </div>
