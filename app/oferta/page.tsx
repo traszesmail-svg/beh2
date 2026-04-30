@@ -69,15 +69,8 @@ export default async function OfferPage() {
               </div>
 
               <p className="muted top-gap-small">
-                Jesli temat jest zlozony i wiesz, ze potrzebujesz szerszego wejscia, wybierz{' '}
-                <Link href={fullConsultationHref} prefetch={false} className="prep-inline-link">
-                  pelna konsultacje
-                </Link>
-                . Jesli nie rezerwujesz od razu, uzyj{' '}
-                <Link href={contactHref} prefetch={false} className="prep-inline-link">
-                  krotkiej wiadomosci
-                </Link>
-                .
+                Jesli temat jest zlozony i wiesz, ze potrzebujesz szerszego wejscia, przejdz nizej do pelnej konsultacji. Jesli nie rezerwujesz od razu,
+                napisz krotka wiadomosc.
               </p>
             </div>
 

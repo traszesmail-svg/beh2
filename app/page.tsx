@@ -27,7 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
 const serviceLandingHref = '/behawiorysta-online-polska'
 
 const homeLead =
-  'Wybierz format konsultacji dopasowany do sytuacji: Kwadrans, Dwa kwadranse albo Pelna konsultacja.'
+  'Wybierz start dopasowany do sytuacji: Kwadrans jako pierwszy krok, a gdy problem jest wiekszy, pozostaja szersze formaty.'
 
 const speciesSections = [
   {
@@ -194,8 +194,6 @@ const faqItems = [
 
 const globalCtas = [
   { label: 'Zarezerwuj Kwadrans', href: FUNNEL_PRIMARY_HREF },
-  { label: 'Zarezerwuj Dwa kwadranse', href: FUNNEL_UPGRADE_HREF },
-  { label: 'Umow Pelna konsultacje', href: FUNNEL_FULL_CONSULTATION_HREF },
   { label: 'Zobacz Niezbednik / pobierz material', href: '/niezbednik' },
   { label: 'Zobacz pelny cennik', href: '/cennik' },
 ] as const
@@ -267,16 +265,7 @@ export default function HomePage() {
               </div>
 
               <div className="notatnik-hero-fine">
-                Potrzebujesz szybszego terminu? Przy Kwadransie dostepny jest Kwadrans na juz (99 zl) - termin potwierdzany do 15 minut. Gdy 15 minut to za
-                malo, wybierz{' '}
-                <Link href={FUNNEL_UPGRADE_HREF} prefetch={false}>
-                  Dwa kwadranse
-                </Link>
-                . Przy sprawie zlozonej albo przewleklej przejdz do{' '}
-                <Link href={FUNNEL_FULL_CONSULTATION_HREF} prefetch={false}>
-                  Pelnej konsultacji
-                </Link>
-                .
+                Kwadrans na juz (99 zl) zostaje dla pilnych terminow. Szersze formaty sa opisane nizej.
               </div>
 
               <div className="notatnik-hero-trust-row" aria-label="Najwazniejsze informacje o pracy i rezerwacji">

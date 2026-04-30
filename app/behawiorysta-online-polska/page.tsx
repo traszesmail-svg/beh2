@@ -81,7 +81,6 @@ export default function LocalSeoPolandOnlinePage() {
   const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min')
   const bridgeHref = buildBookHref(null, 'konsultacja-30-min')
   const consultationHref = buildBookHref(null, 'konsultacja-behawioralna-online')
-  const contactHref = '/kontakt#formularz'
   const structuredData = [
     getServiceJsonLd({
       name: pageTitle,
@@ -145,19 +144,7 @@ export default function LocalSeoPolandOnlinePage() {
             </Link>
           </div>
           <p className="notatnik-service-description">
-            Jesli 15 minut to za malo, przejdz do{' '}
-            <Link href={bridgeHref} prefetch={false} className="notatnik-inline-link">
-              Dwoch kwadransow
-            </Link>{' '}
-            albo{' '}
-            <Link href={consultationHref} prefetch={false} className="notatnik-inline-link">
-              Pelnej konsultacji
-            </Link>
-            . Jesli chcesz najpierw zadac krotkie pytanie, napisz{' '}
-            <Link href={contactHref} prefetch={false} className="notatnik-inline-link">
-              wiadomosc
-            </Link>
-            .
+            Jesli 15 minut to za malo, dalej jest szerszy format. Jesli chcesz najpierw zadac krotkie pytanie, napisz wiadomosc.
           </p>
         </div>
 

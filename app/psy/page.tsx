@@ -158,11 +158,8 @@ export default function DogsPage() {
                   &rarr;
                 </span>
               </Link>
-              <Link href="/niezbednik" prefetch={false} className="notatnik-btn notatnik-btn-ghost">
-                <span>Niezbednik dla opiekuna psa</span>
-              </Link>
-              <Link href={serviceLandingHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
-                <span>pelnego opisu konsultacji online</span>
+              <Link href={consultationHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
+                <span>Umow Pelna konsultacje</span>
               </Link>
             </div>
           </div>

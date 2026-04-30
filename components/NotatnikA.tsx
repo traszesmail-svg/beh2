@@ -250,9 +250,11 @@ export function NotatnikFinalCta({
           <NotatnikButtonArrow />
         </Link>
         {secondaryHref && secondaryLabel ? (
-          <Link href={secondaryHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
-            <span>{secondaryLabel}</span>
-          </Link>
+          <div>
+            <Link href={secondaryHref} prefetch={false} className="notatnik-inline-link">
+              {secondaryLabel}
+            </Link>
+          </div>
         ) : null}
       </div>
     </section>

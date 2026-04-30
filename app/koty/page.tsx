@@ -162,11 +162,8 @@ export default function CatsPage() {
                   &rarr;
                 </span>
               </Link>
-              <Link href="/niezbednik" prefetch={false} className="notatnik-btn notatnik-btn-ghost">
-                <span>Niezbednik dla opiekuna kota</span>
-              </Link>
-              <Link href={serviceLandingHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
-                <span>pelnego opisu konsultacji online</span>
+              <Link href={consultationHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
+                <span>Umow Pelna konsultacje</span>
               </Link>
             </div>
           </div>

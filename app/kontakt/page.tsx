@@ -120,10 +120,13 @@ export default function ContactPage({
             <div className="notatnik-side-cta">
               <div className="notatnik-mono notatnik-text-accent">Sprawa zlozona albo przewlekla</div>
               <h4>Pelna konsultacja behawioralna</h4>
-              <p>60 min / 470 zl. Diagnoza sytuacji, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp. Dla tematow, ktore wymagaja wiecej czasu i szerszego wejscia.</p>
-              <Link href={consultationHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
-                <span>Umow pelna konsultacje</span>
-              </Link>
+              <p>
+                60 min / 470 zl. Diagnoza sytuacji, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp. Dla tematow, ktore wymagaja wiecej
+                czasu i szerszego wejscia.{' '}
+                <Link href={consultationHref} prefetch={false} className="notatnik-inline-link">
+                  Umow pelna konsultacje
+                </Link>
+              </p>
             </div>
 
             <div className="notatnik-contact-note notatnik-contact-note-compact">
