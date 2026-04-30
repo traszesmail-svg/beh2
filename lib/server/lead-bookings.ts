@@ -1,13 +1,14 @@
 import { randomBytes, randomUUID } from 'node:crypto'
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
+import { createClient } from '@supabase/supabase-js'
 import { getLocalStoreDataDir } from './local-store-path'
 
 export type LeadBookingStatus =
-  | 'pending' // dostalismy zgloszenie, czekamy na manualne potwierdzenie terminu
-  | 'awaiting_payment' // termin potwierdzony, klient otrzymal link do platnosci
-  | 'paid' // platnosc zaksiegowana, rezerwacja potwierdzona
-  | 'cancelled' // rezerwacja anulowana
+  | 'pending'
+  | 'awaiting_payment'
+  | 'paid'
+  | 'cancelled'
 
 export type LeadBookingService =
   | 'kwadrans-na-juz'
@@ -29,7 +30,6 @@ export type LeadBookingRecord = {
   species: 'pies' | 'kot'
   description: string
   preferredSlots: string
-  // Filled by admin after booking confirmed
   confirmedDate: string | null
   confirmedTime: string | null
   paymentLink: string | null
@@ -38,37 +38,6 @@ export type LeadBookingRecord = {
   callRoomUrl: string | null
   calendarUrl: string | null
   adminNotes: string | null
-}
-
-type StoreShape = {
-  bookings: LeadBookingRecord[]
-}
-
-function getStorePath(rootDir = process.cwd()) {
-  return path.join(getLocalStoreDataDir(rootDir), 'lead-bookings.json')
-}
-
-async function readStore(): Promise<StoreShape> {
-  const filePath = getStorePath()
-  try {
-    const raw = await readFile(filePath, 'utf8')
-    const parsed = JSON.parse(raw) as Partial<StoreShape>
-    return {
-      bookings: Array.isArray(parsed.bookings) ? parsed.bookings : [],
-    }
-  } catch {
-    return { bookings: [] }
-  }
-}
-
-async function writeStore(store: StoreShape) {
-  const filePath = getStorePath()
-  await mkdir(path.dirname(filePath), { recursive: true })
-  await writeFile(filePath, JSON.stringify(store, null, 2), 'utf8')
-}
-
-function createAccessToken(): string {
-  return randomBytes(24).toString('hex')
 }
 
 export type CreateLeadBookingInput = {
@@ -80,57 +49,6 @@ export type CreateLeadBookingInput = {
   species: 'pies' | 'kot'
   description: string
   preferredSlots: string
-}
-
-export async function createLeadBooking(input: CreateLeadBookingInput): Promise<LeadBookingRecord> {
-  const now = new Date().toISOString()
-  const store = await readStore()
-  const record: LeadBookingRecord = {
-    id: randomUUID(),
-    accessToken: createAccessToken(),
-    createdAt: now,
-    updatedAt: now,
-    status: 'pending',
-    service: input.service,
-    serviceLabel: input.serviceLabel,
-    servicePrice: input.servicePrice,
-    name: input.name,
-    email: input.email,
-    species: input.species,
-    description: input.description,
-    preferredSlots: input.preferredSlots,
-    confirmedDate: null,
-    confirmedTime: null,
-    paymentLink: null,
-    paymentMethod: null,
-    paidAt: null,
-    callRoomUrl: null,
-    calendarUrl: null,
-    adminNotes: null,
-  }
-
-  store.bookings.unshift(record)
-  await writeStore(store)
-  return record
-}
-
-export async function listLeadBookings(): Promise<LeadBookingRecord[]> {
-  const store = await readStore()
-  return [...store.bookings].sort((a, b) => b.createdAt.localeCompare(a.createdAt))
-}
-
-export async function getLeadBookingByToken(
-  id: string,
-  accessToken: string,
-): Promise<LeadBookingRecord | null> {
-  const store = await readStore()
-  const booking = store.bookings.find((b) => b.id === id && b.accessToken === accessToken)
-  return booking ?? null
-}
-
-export async function getLeadBookingById(id: string): Promise<LeadBookingRecord | null> {
-  const store = await readStore()
-  return store.bookings.find((b) => b.id === id) ?? null
 }
 
 export type UpdateLeadBookingInput = {
@@ -146,14 +64,223 @@ export type UpdateLeadBookingInput = {
   adminNotes?: string | null
 }
 
-export async function updateLeadBooking(
-  input: UpdateLeadBookingInput,
-): Promise<LeadBookingRecord | null> {
+// ─── Supabase row shape ────────────────────────────────────────────────────
+
+type SupabaseRow = {
+  id: string
+  access_token: string
+  created_at: string
+  updated_at: string
+  status: string
+  service: string
+  service_label: string
+  service_price: string
+  name: string
+  email: string
+  species: string
+  description: string
+  preferred_slots: string
+  confirmed_date: string | null
+  confirmed_time: string | null
+  payment_link: string | null
+  payment_method: string | null
+  paid_at: string | null
+  call_room_url: string | null
+  calendar_url: string | null
+  admin_notes: string | null
+}
+
+function rowToRecord(row: SupabaseRow): LeadBookingRecord {
+  return {
+    id: row.id,
+    accessToken: row.access_token,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+    status: row.status as LeadBookingStatus,
+    service: row.service as LeadBookingService,
+    serviceLabel: row.service_label,
+    servicePrice: row.service_price,
+    name: row.name,
+    email: row.email,
+    species: row.species as 'pies' | 'kot',
+    description: row.description,
+    preferredSlots: row.preferred_slots,
+    confirmedDate: row.confirmed_date,
+    confirmedTime: row.confirmed_time,
+    paymentLink: row.payment_link,
+    paymentMethod: row.payment_method,
+    paidAt: row.paid_at,
+    callRoomUrl: row.call_room_url,
+    calendarUrl: row.calendar_url,
+    adminNotes: row.admin_notes,
+  }
+}
+
+function getSupabaseClient() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!url || !key) return null
+  return createClient(url, key, { auth: { persistSession: false } })
+}
+
+function useSupabase() {
+  const mode = process.env.APP_DATA_MODE?.trim()
+  return mode === 'supabase' && Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) && Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY)
+}
+
+// ─── File storage (local dev) ──────────────────────────────────────────────
+
+type StoreShape = { bookings: LeadBookingRecord[] }
+
+function getStorePath() {
+  return path.join(getLocalStoreDataDir(), 'lead-bookings.json')
+}
+
+async function readStore(): Promise<StoreShape> {
+  try {
+    const raw = await readFile(getStorePath(), 'utf8')
+    const parsed = JSON.parse(raw) as Partial<StoreShape>
+    return { bookings: Array.isArray(parsed.bookings) ? parsed.bookings : [] }
+  } catch {
+    return { bookings: [] }
+  }
+}
+
+async function writeStore(store: StoreShape) {
+  const filePath = getStorePath()
+  await mkdir(path.dirname(filePath), { recursive: true })
+  await writeFile(filePath, JSON.stringify(store, null, 2), 'utf8')
+}
+
+function createAccessToken() {
+  return randomBytes(24).toString('hex')
+}
+
+// ─── Public API ────────────────────────────────────────────────────────────
+
+export async function createLeadBooking(input: CreateLeadBookingInput): Promise<LeadBookingRecord> {
+  const now = new Date().toISOString()
+  const id = randomUUID()
+  const accessToken = createAccessToken()
+
+  if (useSupabase()) {
+    const supabase = getSupabaseClient()!
+    const { data, error } = await supabase
+      .from('lead_bookings')
+      .insert({
+        id,
+        access_token: accessToken,
+        created_at: now,
+        updated_at: now,
+        status: 'pending',
+        service: input.service,
+        service_label: input.serviceLabel,
+        service_price: input.servicePrice,
+        name: input.name,
+        email: input.email,
+        species: input.species,
+        description: input.description,
+        preferred_slots: input.preferredSlots,
+      })
+      .select()
+      .single()
+
+    if (error) throw new Error(`Supabase insert error: ${error.message}`)
+    return rowToRecord(data as SupabaseRow)
+  }
+
+  const record: LeadBookingRecord = {
+    id, accessToken, createdAt: now, updatedAt: now, status: 'pending',
+    service: input.service, serviceLabel: input.serviceLabel, servicePrice: input.servicePrice,
+    name: input.name, email: input.email, species: input.species,
+    description: input.description, preferredSlots: input.preferredSlots,
+    confirmedDate: null, confirmedTime: null, paymentLink: null,
+    paymentMethod: null, paidAt: null, callRoomUrl: null, calendarUrl: null, adminNotes: null,
+  }
+  const store = await readStore()
+  store.bookings.unshift(record)
+  await writeStore(store)
+  return record
+}
+
+export async function listLeadBookings(): Promise<LeadBookingRecord[]> {
+  if (useSupabase()) {
+    const supabase = getSupabaseClient()!
+    const { data, error } = await supabase
+      .from('lead_bookings')
+      .select('*')
+      .order('created_at', { ascending: false })
+    if (error) throw new Error(`Supabase select error: ${error.message}`)
+    return (data as SupabaseRow[]).map(rowToRecord)
+  }
+
+  const store = await readStore()
+  return [...store.bookings].sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+}
+
+export async function getLeadBookingById(id: string): Promise<LeadBookingRecord | null> {
+  if (useSupabase()) {
+    const supabase = getSupabaseClient()!
+    const { data, error } = await supabase
+      .from('lead_bookings')
+      .select('*')
+      .eq('id', id)
+      .maybeSingle()
+    if (error) throw new Error(`Supabase select error: ${error.message}`)
+    return data ? rowToRecord(data as SupabaseRow) : null
+  }
+
+  const store = await readStore()
+  return store.bookings.find((b) => b.id === id) ?? null
+}
+
+export async function getLeadBookingByToken(id: string, accessToken: string): Promise<LeadBookingRecord | null> {
+  if (useSupabase()) {
+    const supabase = getSupabaseClient()!
+    const { data, error } = await supabase
+      .from('lead_bookings')
+      .select('*')
+      .eq('id', id)
+      .eq('access_token', accessToken)
+      .maybeSingle()
+    if (error) throw new Error(`Supabase select error: ${error.message}`)
+    return data ? rowToRecord(data as SupabaseRow) : null
+  }
+
+  const store = await readStore()
+  return store.bookings.find((b) => b.id === id && b.accessToken === accessToken) ?? null
+}
+
+export async function updateLeadBooking(input: UpdateLeadBookingInput): Promise<LeadBookingRecord | null> {
+  const now = new Date().toISOString()
+
+  if (useSupabase()) {
+    const supabase = getSupabaseClient()!
+    const patch: Record<string, unknown> = { updated_at: now }
+    if (input.status !== undefined) patch.status = input.status
+    if (input.confirmedDate !== undefined) patch.confirmed_date = input.confirmedDate
+    if (input.confirmedTime !== undefined) patch.confirmed_time = input.confirmedTime
+    if (input.paymentLink !== undefined) patch.payment_link = input.paymentLink
+    if (input.paymentMethod !== undefined) patch.payment_method = input.paymentMethod
+    if (input.paidAt !== undefined) patch.paid_at = input.paidAt
+    if (input.callRoomUrl !== undefined) patch.call_room_url = input.callRoomUrl
+    if (input.calendarUrl !== undefined) patch.calendar_url = input.calendarUrl
+    if (input.adminNotes !== undefined) patch.admin_notes = input.adminNotes
+
+    const { data, error } = await supabase
+      .from('lead_bookings')
+      .update(patch)
+      .eq('id', input.id)
+      .select()
+      .maybeSingle()
+    if (error) throw new Error(`Supabase update error: ${error.message}`)
+    return data ? rowToRecord(data as SupabaseRow) : null
+  }
+
   const store = await readStore()
   const booking = store.bookings.find((b) => b.id === input.id)
   if (!booking) return null
 
-  const now = new Date().toISOString()
   if (input.status !== undefined) booking.status = input.status
   if (input.confirmedDate !== undefined) booking.confirmedDate = input.confirmedDate
   if (input.confirmedTime !== undefined) booking.confirmedTime = input.confirmedTime
