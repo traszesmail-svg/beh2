@@ -1,7 +1,7 @@
 import React from 'react'
 import { existsSync } from 'node:fs'
 import path from 'node:path'
-import Image from 'next/image'
+import Image from '@/components/BlankImage'
 import Link from 'next/link'
 import { AddTestimonialForm } from '@/components/AddTestimonialForm'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'

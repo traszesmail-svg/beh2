@@ -3,8 +3,6 @@
 // Większa, bardziej widoczna niż banner
 
 'use client';
-
-import Image from 'next/image';
 import { BookOpen, FileText } from 'lucide-react';
 import { LEAD_MAGNETS, pickLeadMagnet } from '@/lib/lead-magnet.config';
 import { LeadMagnetForm } from './LeadMagnetForm';

@@ -1,6 +1,6 @@
 import React from 'react'
 import type { Metadata } from 'next'
-import Image from 'next/image'
+import Image from '@/components/BlankImage'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { NotatnikPageShell, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'

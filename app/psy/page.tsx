@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
+import Image from '@/components/BlankImage'
 import Link from 'next/link'
 import { HeroIllustration } from '@/components/HeroIllustration'
 import { NextSlot } from '@/components/NextSlot'
@@ -15,7 +15,7 @@ import { FAQ_SHORTLISTS } from '@/lib/trust-layer'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: 'Behawiorysta psow online - reaktywnosc i separacja',
+  title: 'Behawiorysta psow online',
   path: '/psy',
   description: 'Pomoc behawioralna online dla opiekunow psow. Kwadrans 69 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl.',
 })
