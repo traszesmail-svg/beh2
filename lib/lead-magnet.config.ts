@@ -80,9 +80,9 @@ export function pickLeadMagnet(pathname: string): LeadMagnet {
 // Konfiguracja zachowania popup
 export const POPUP_CONFIG = {
   exitIntentEnabled: true,
-  exitIntentDelayMs: 3000,        // minimum czas na stronie zanim popup może się pojawić
-  scrollFallbackPercent: 60,      // mobile: pokaż po przescrollowaniu 60% strony
-  scrollFallbackTimeMs: 30000,    // ...i po 30s
+  exitIntentDelayMs: 5000,        // minimum czas na stronie zanim popup może się pojawić
+  scrollFallbackPercent: 40,      // mobile: pokaż po przescrollowaniu 40% strony
+  scrollFallbackTimeMs: 8000,     // ...i po 8s
   hideForDays: 7,                 // po zamknięciu nie pokazuj przez 7 dni
   hideForDaysAfterSubmit: 365,    // po zapisie nie pokazuj 1 rok
   storageKey: 'regulski-lm-dismissed',

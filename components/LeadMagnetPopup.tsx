@@ -38,13 +38,6 @@ export function LeadMagnetPopup({ magnetId, pathname = '/' }: LeadMagnetPopupPro
     hideForDays: POPUP_CONFIG.hideForDays,
   });
 
-  // Block scroll gdy popup otwarty
-  useEffect(() => {
-    if (shouldShow && !alreadySubmitted) {
-      document.body.style.overflow = 'hidden';
-      return () => { document.body.style.overflow = ''; };
-    }
-  }, [shouldShow, alreadySubmitted]);
 
   // Esc to close
   useEffect(() => {
