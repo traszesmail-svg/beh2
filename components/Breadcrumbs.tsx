@@ -19,15 +19,15 @@ export function Breadcrumbs({ items }: BreadcrumbsProps) {
       <Schema data={breadcrumbSchema(allCrumbs)} />
 
       <nav aria-label="Breadcrumb" className="px-4 py-2 text-sm">
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center">
           {allCrumbs.map((crumb, index) => {
             const isLast = index === allCrumbs.length - 1
 
             return (
-              <span key={crumb.url} className="flex items-center gap-2">
+              <span key={crumb.url} className="inline-flex items-center">
                 {index > 0 ? (
-                  <span aria-hidden="true" className="text-muted-2 shrink-0">
-                    /
+                  <span aria-hidden="true" className="shrink-0 text-muted-2">
+                    {' / '}
                   </span>
                 ) : null}
                 {isLast ? (

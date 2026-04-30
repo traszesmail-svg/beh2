@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Pies reaktywny na spacerze · Regulski | Terapia behawioralna</title>
+<style>/* PDF guide stylesheet — renders on A4 via Playwright page.pdf() */
+
+@page {
+  size: A4;
+  margin: 22mm 18mm 22mm 18mm;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.55;
+  color: #1f1a17;
+  background: #fdfbf7;
+}
+
+/* Cover page */
+.cover {
+  page: cover;
+  page-break-after: always;
+  min-height: 247mm;
+  display: flex;
+  flex-direction: column;
+  margin: -22mm -18mm -22mm -18mm; /* bleed to page edge */
+  background: #fdfbf7;
+}
+
+/* Hero photo strip */
+.cover-hero {
+  position: relative;
+  width: 100%;
+  height: 92mm;
+  overflow: hidden;
+  background: #2c1f14;
+  flex-shrink: 0;
+}
+
+.cover-hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  display: block;
+  opacity: 0.82;
+}
+
+.cover-hero-overlay {
+  position: absolute;
+  inset: 0;
+  padding: 7mm 10mm;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.05) 60%, rgba(0,0,0,0.55) 100%);
+}
+
+.cover-brand {
+  font-size: 8.5pt;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.92);
+  font-weight: 600;
+}
+
+.cover-tag {
+  display: inline-block;
+  font-size: 8.5pt;
+  color: #3a2615;
+  background: rgba(240, 225, 200, 0.94);
+  padding: 2mm 4mm;
+  border-radius: 1.5mm;
+  font-weight: 600;
+}
+
+/* Body section (inside page margins) */
+.cover-body {
+  flex: 1;
+  padding: 9mm 10mm 6mm 10mm;
+}
+
+.cover-title {
+  font-size: 30pt;
+  line-height: 1.08;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 0 0 5mm 0;
+  letter-spacing: -0.02em;
+}
+
+.cover-subtitle {
+  font-size: 13pt;
+  line-height: 1.35;
+  color: #5e4a3c;
+  font-weight: 500;
+  margin: 0 0 6mm 0;
+}
+
+.cover-lead {
+  font-size: 10.5pt;
+  line-height: 1.6;
+  color: #3f332a;
+}
+
+.cover-bullets {
+  margin: 5mm 0 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cover-bullets li {
+  padding: 1.5mm 0 1.5mm 6mm;
+  position: relative;
+  font-size: 10.5pt;
+  color: #3f332a;
+  line-height: 1.45;
+}
+
+.cover-bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 4.5mm;
+  width: 3mm;
+  height: 0.6mm;
+  background: #c9a37a;
+}
+
+/* Footer section */
+.cover-foot {
+  padding: 0 10mm 7mm 10mm;
+}
+
+.cover-meta {
+  font-size: 8.5pt;
+  color: #8b6f5a;
+  border-top: 0.3mm solid #e5d8c6;
+  padding-top: 4mm;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5mm;
+}
+.cover-meta > div { min-width: 0; word-break: break-word; }
+.cover-meta strong { color: #1f1a17; }
+
+.cover-disclaimer {
+  margin-bottom: 4mm;
+  font-size: 8.5pt;
+  font-style: italic;
+  color: #8b6f5a;
+  border-left: 0.5mm solid #c9a37a;
+  padding: 2mm 0 2mm 4mm;
+}
+
+/* Body typography */
+.body h1 {
+  font-size: 18pt;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 10mm 0 4mm 0;
+  padding-bottom: 2mm;
+  border-bottom: 0.3mm solid #e5d8c6;
+}
+
+.body h2 {
+  font-size: 14pt;
+  line-height: 1.25;
+  font-weight: 700;
+  color: #3f332a;
+  margin: 8mm 0 3mm 0;
+}
+
+.body h3 {
+  font-size: 12pt;
+  font-weight: 600;
+  color: #3f332a;
+  margin: 6mm 0 2mm 0;
+}
+
+.body p {
+  margin: 0 0 3mm 0;
+  text-align: justify;
+  hyphens: auto;
+}
+
+.body ul, .body ol {
+  margin: 0 0 4mm 0;
+  padding-left: 6mm;
+}
+
+.body li {
+  margin: 1mm 0;
+}
+
+.body strong { color: #1f1a17; }
+
+.body em { color: #5e4a3c; }
+
+/* Callout boxes (from data-kind="callout") */
+.body table[data-kind="callout"] {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4mm 0;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="callout"] td {
+  padding: 4mm 5mm;
+  background: #faf1e3;
+  border-left: 1mm solid #c9a37a;
+  border-radius: 0 1.5mm 1.5mm 0;
+}
+
+.body table[data-kind="callout"] p { margin: 0 0 2mm 0; }
+.body table[data-kind="callout"] p:last-child { margin-bottom: 0; }
+.body table[data-kind="callout"] p strong:first-child {
+  display: block;
+  font-size: 11pt;
+  margin-bottom: 1mm;
+  color: #1f1a17;
+}
+
+/* Callout stack (vertical list of callouts in one table) */
+.body table[data-kind="callout-stack"] {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 2mm;
+  margin: 4mm 0;
+}
+
+.body table[data-kind="callout-stack"] td {
+  padding: 3.5mm 5mm;
+  background: #faf1e3;
+  border-left: 1mm solid #c9a37a;
+}
+
+/* Grid boxes (single row, multiple cells — feature grid) */
+.body table[data-kind="grid"] {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 2mm 0;
+  margin: 4mm 0;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="grid"] td {
+  padding: 3mm 4mm;
+  background: #f5ece0;
+  border-radius: 1.5mm;
+  vertical-align: top;
+  width: auto;
+}
+
+.body table[data-kind="grid"] p { margin: 0 0 1.5mm 0; font-size: 9.5pt; }
+.body table[data-kind="grid"] strong { display: block; margin-bottom: 1mm; }
+
+/* Data tables (multi-row comparison) */
+.body table[data-kind="data"] {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4mm 0;
+  font-size: 9.5pt;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="data"] th,
+.body table[data-kind="data"] td {
+  border: 0.2mm solid #e5d8c6;
+  padding: 2mm 3mm;
+  vertical-align: top;
+  text-align: left;
+}
+
+.body table[data-kind="data"] tr:first-child td,
+.body table[data-kind="data"] th {
+  background: #f5ece0;
+  font-weight: 600;
+  color: #1f1a17;
+}
+
+.body table[data-kind="data"] tr:nth-child(even) td {
+  background: #fcf8f1;
+}
+
+/* Footer section — CTA routing to services */
+.footer {
+  page-break-before: always;
+  padding: 2mm 0;
+}
+
+.footer-title {
+  font-size: 18pt;
+  font-weight: 700;
+  margin: 0 0 4mm 0;
+  color: #1f1a17;
+}
+
+.footer-lead {
+  color: #3f332a;
+  margin-bottom: 6mm;
+  max-width: 150mm;
+}
+
+.services {
+  display: flex;
+  flex-direction: column;
+  gap: 3mm;
+  margin-bottom: 8mm;
+}
+
+.service {
+  padding: 4mm 5mm;
+  background: #f5ece0;
+  border-left: 1mm solid #c9a37a;
+  border-radius: 0 2mm 2mm 0;
+  page-break-inside: avoid;
+}
+
+.service-price {
+  font-size: 9pt;
+  color: #8b6f5a;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.service-name {
+  font-size: 13pt;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 1mm 0;
+}
+
+.service-copy {
+  font-size: 10pt;
+  color: #3f332a;
+  margin: 0 0 2mm 0;
+}
+
+.service-url {
+  font-size: 9pt;
+  color: #8b6f5a;
+}
+
+.footer-contact {
+  border-top: 0.3mm solid #e5d8c6;
+  padding-top: 4mm;
+  font-size: 9.5pt;
+  color: #3f332a;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6mm;
+}
+.footer-contact > div { min-width: 0; word-break: break-word; }
+
+.footer-contact a { color: #5e4a3c; text-decoration: none; }
+
+.footer-fine {
+  margin-top: 4mm;
+  font-size: 8.5pt;
+  color: #8b6f5a;
+  font-style: italic;
+}
+
+/* Category accent colors: cat / dog / puppy — tinted cover */
+body[data-category="cat"] .cover-tag { background: #ecdad3; color: #6b463a; }
+body[data-category="cat"] .cover-bullets li::before { background: #b97865; }
+body[data-category="cat"] .body table[data-kind="callout"] td { background: #f8eae5; border-left-color: #b97865; }
+body[data-category="cat"] .body table[data-kind="callout-stack"] td { background: #f8eae5; border-left-color: #b97865; }
+body[data-category="cat"] .body table[data-kind="grid"] td { background: #f8eae5; }
+body[data-category="cat"] .body table[data-kind="data"] tr:first-child td { background: #f8eae5; }
+body[data-category="cat"] .service { background: #f8eae5; border-left-color: #b97865; }
+
+body[data-category="dog"] .cover-tag { background: #e9e2ce; color: #5c4a2e; }
+body[data-category="dog"] .cover-bullets li::before { background: #997947; }
+body[data-category="dog"] .body table[data-kind="callout"] td { background: #f4ecd7; border-left-color: #997947; }
+body[data-category="dog"] .body table[data-kind="callout-stack"] td { background: #f4ecd7; border-left-color: #997947; }
+body[data-category="dog"] .body table[data-kind="grid"] td { background: #f4ecd7; }
+body[data-category="dog"] .body table[data-kind="data"] tr:first-child td { background: #f4ecd7; }
+body[data-category="dog"] .service { background: #f4ecd7; border-left-color: #997947; }
+
+body[data-category="puppy"] .cover-tag { background: #e4ead3; color: #4b5730; }
+body[data-category="puppy"] .cover-bullets li::before { background: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="callout"] td { background: #edf2dd; border-left-color: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="callout-stack"] td { background: #edf2dd; border-left-color: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="grid"] td { background: #edf2dd; }
+body[data-category="puppy"] .body table[data-kind="data"] tr:first-child td { background: #edf2dd; }
+body[data-category="puppy"] .service { background: #edf2dd; border-left-color: #7a8d4f; }
+</style>
+</head>
+<body data-category="dog">
+
+<section class="cover">
+
+  <div class="cover-hero">
+    
+    <div class="cover-hero-overlay">
+      <span class="cover-brand">Regulski · Terapia behawioralna</span>
+      <span class="cover-tag">Psy · przewodnik</span>
+    </div>
+  </div>
+
+  <div class="cover-body">
+    <h1 class="cover-title">Pies reaktywny na spacerze</h1>
+    <p class="cover-subtitle">Pierwszy plan pracy przy szczekaniu, spinaniu się i trudnych mijankach</p>
+    <p class="cover-lead">Krótki poradnik porządkujący pierwsze decyzje przy reaktywności spacerowej.</p>
+    <ul class="cover-bullets">
+      
+    </ul>
+  </div>
+
+  <div class="cover-foot">
+    <div class="cover-disclaimer">Materiał edukacyjny. Nie zastępuje badania lekarsko-weterynaryjnego ani indywidualnej konsultacji behawioralnej.</div>
+    <div class="cover-meta">
+      <div><strong>Format</strong><br>PDF A4, druk domowy</div>
+      <div><strong>Czytanie</strong><br>5 min</div>
+      <div><strong>Wydano</strong><br>30 kwietnia 2026</div>
+      <div><strong>Autor</strong><br>Krzysztof Regulski</div>
+    </div>
+  </div>
+
+</section>
+
+<section class="body">
+
+
+
+<h2>Dla kogo jest ten poradnik</h2>
+<p>Ten poradnik jest dla opiekunów psów, które spinają się, szczekają, ciągną, wyrywają się albo trudno im minąć inne psy, ludzi, hulajnogi czy rowery na spacerze. To materiał dla osób, które chcą przestać improwizować i zamiast tego ułożyć pierwszy spokojny plan spacerowy.</p>
+<h2>Co się dzieje i jak to interpretować</h2>
+<p>Reaktywność spacerowa nie oznacza automatycznie agresji. Często jest mieszanką napięcia, braku umiejętności regulacji, zbyt małego dystansu, frustracji i słabego przygotowania środowiskowego. Pies nie musi chcieć atakować. Może po prostu nie umie przejść przez trudną sytuację spokojnie.</p>
+<p>Najważniejsze jest to, żeby patrzeć na cały łańcuch zachowania:</p>
+<ul>
+<li>co pies zauważa jako pierwsze,</li>
+<li>z jakiej odległości zaczyna się napięcie,</li>
+<li>jak szybko rośnie pobudzenie,</li>
+<li>czy pies jest jeszcze w stanie jeść, myśleć i zawracać,</li>
+<li>co dzieje się po minięciu bodźca.</li>
+</ul>
+<h2>Co bywa błędnie odczytywane</h2>
+<p>Najczęstszy błąd to założenie, że pies jest uparty albo dominuje na spacerze. Drugi błąd to ćwiczenie za blisko bodźca, bo opiekun chce jak najszybciej mieć sukces w realnej sytuacji. Trzeci błąd to spacerowanie tylko w trudnych miejscach, przez co pies codziennie wchodzi ponad próg pobudzenia.</p>
+<p>Mylące bywa też ocenianie spaceru tylko po tym, czy pies zaszczekał. Czasem najważniejsza zmiana jest wcześniejsza: późniejsze zauważanie bodźca, większa możliwość wzięcia jedzenia, mniejsze napięcie ciała albo szybszy powrót do równowagi.</p>
+<h2>Plan działania krok po kroku</h2>
+<h3>Krok 1. Ogranicz powtarzanie złych prób</h3>
+<p>Jeśli każdy spacer kończy się przeciążeniem, pies nie ma kiedy budować lepszej reakcji. Na pierwszym etapie trzeba zmniejszyć liczbę sytuacji, w których codziennie się rozsypuje. To może oznaczać prostsze trasy, inne godziny spacerów i mniej ambitnych mijanek.</p>
+<h3>Krok 2. Szukaj dystansu, nie odwagi</h3>
+<p>Najbardziej pomocne pytanie brzmi: z jakiej odległości mój pies jest jeszcze w stanie myśleć. Dystans jest narzędziem, nie porażką. Czasem lepiej przejść na drugą stronę ulicy niż ćwiczyć bohaterstwo.</p>
+<h3>Krok 3. Buduj prostą procedurę</h3>
+<p>Na start wystarczy jeden prosty schemat:</p>
+<ol>
+<li>Pies zauważa bodziec.</li>
+<li>Ty zwiększasz dystans albo ustawiasz łagodniejszy kąt.</li>
+<li>Pies dostaje prostą przewidywalną czynność: zawrócenie, kontakt, odejście po łuku albo spokojne jedzenie.</li>
+<li>Kończysz zanim napięcie przejdzie w eksplozję.</li>
+</ol>
+<h3>Krok 4. Uporządkuj dobór tras</h3>
+<p>Potrzebujesz dwóch rodzajów spacerów:</p>
+<ul>
+<li>spacerów higienicznych, prostszych i spokojniejszych,</li>
+<li>krótkich spacerów treningowych z większą kontrolą środowiska.</li>
+</ul>
+<p>Nie każdy spacer ma być polem ćwiczeń. Część ma po prostu nie dokładać napięcia.</p>
+<h3>Krok 5. Notuj próg i wzory</h3>
+<p>Zapisuj:</p>
+<ul>
+<li>jakie bodźce są najtrudniejsze,</li>
+<li>z jakiej odległości pies jeszcze funkcjonuje,</li>
+<li>o jakiej porze dnia jest gorzej,</li>
+<li>czy problem rośnie po słabym śnie, stresie domowym albo trudniejszym spacerze dzień wcześniej.</li>
+</ul>
+<h2>Jak wygląda spacer ratunkowy</h2>
+<p>Spacer ratunkowy nie służy do treningu mijanek. Jego celem jest zejście z obciążenia po trudniejszym dniu, skrócenie ekspozycji na bodźce i zabezpieczenie snu oraz regeneracji. To może oznaczać krótsze wyjście o spokojniejszej porze, dojazd do cichszego miejsca albo prosty spacer higieniczny bez ambitnych zadań.</p>
+<p>Jeśli w danym tygodniu pies ma kilka trudnych spacerów pod rząd, zwykle lepiej zmniejszyć liczbę prób niż dokładać kolejne. Układ nerwowy nie uczy się dobrze w stałym przeciążeniu. Dobre pytanie brzmi nie „cz y dziś damy radę przejść obok”, tylko „czy po tym spacerze pies wróci do domu spokojniejszy niż wyszedł”.</p>
+<p>Nie każdy dzień nadaje się do pracy treningowej. Jeśli pies miał gorszą noc, już rano był spięty albo poprzednie dwa spacery były trudne, zrób spacer ratunkowy. Taki spacer nie służy treningowi mijanek. Służy temu, żeby nie dokładać kolejnego przeciążenia.</p>
+<p>Spacer ratunkowy zwykle oznacza prostszą trasę, mniej bodźców, krótszy czas, więcej swobodnego węszenia i szybszy powrót, zanim napięcie zacznie rosnąć. To nie jest cofanie postępu. To zarządzanie zasobem psa.</p>
+<h2>Checklist do wdrożenia</h2>
+<ul>
+<li><input disabled="" type="checkbox"> Wiem, co uruchamia psa najmocniej.</li>
+<li><input disabled="" type="checkbox"> Mam prostsze trasy spacerowe na dni przeciążenia.</li>
+<li><input disabled="" type="checkbox"> Ćwiczę z dystansu, a nie zbyt blisko.</li>
+<li><input disabled="" type="checkbox"> Mam jedną przewidywalną procedurę zamiast pięciu przypadkowych reakcji.</li>
+<li><input disabled="" type="checkbox"> Zapisuję odległość i wzory zamiast oceniać spacer po emocjach.</li>
+</ul>
+<h2>Najczęstsze błędy</h2>
+<p>Najczęstsze błędy to ciągłe testowanie psa w tych samych trudnych miejscach, reagowanie dopiero wtedy, gdy już wybuchł, używanie nacisku zamiast zarządzania dystansem i oczekiwanie, że pojedyncza komenda rozwiąże cały problem.</p>
+<h2>Kiedy warto szukać dalszej pomocy</h2>
+<p>Warto wejść w konsultację, jeśli pies reaguje na wielu bodźców, bardzo szybko przechodzi z napięcia do eksplozji, trudno mu wrócić do równowagi po spacerze albo problem wpływa już na codzienne funkcjonowanie domu.</p>
+<h2>Kiedy potrzebna jest konsultacja weterynaryjna</h2>
+<p>Jeśli reaktywność pojawiła się nagle, nasiliła się bez czytelnej przyczyny albo towarzyszy jej większa drażliwość przy dotyku, zmiana chodu, problemy ze snem lub apetyt, trzeba pomyśleć też o tle zdrowotnym.</p>
+<h2>Końcowe CTA</h2>
+<p>Jeśli czujesz, że temat spacerów robi się ciężki i coraz bardziej organizuje cały dzień, sensownym progiem wejścia jest szybka konsultacja 15 min albo konsultacja behawioralna online. Z nagraniem lub krótkim opisem spacerów łatwiej od razu ustawić realny plan niż dalej zgadywać.</p>
+
+</section>
+
+<section class="footer">
+  <h2 class="footer-title">Co dalej, jeśli to nie wystarczy</h2>
+  <p class="footer-lead">
+    Ten przewodnik ma pomóc uporządkować pierwszy krok. Jeśli temat wraca, miesza kilka wątków albo
+    potrzebujesz kogoś kto zobaczy Twoją konkretną sytuację — rozmowa zwykle skraca drogę.
+  </p>
+
+  <div class="services">
+    <div class="service">
+      <div class="service-price">Kwadrans · 69 zł</div>
+      <div class="service-name">Kwadrans z behawiorystą</div>
+      <p class="service-copy">15 minut rozmowy audio. Najprostszy start przy jednym pytaniu, niepewności albo pierwszym uporządkowaniu tematu.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=szybka-konsultacja-15-min</div>
+    </div>
+
+    <div class="service">
+      <div class="service-price">Dwa kwadranse · 169 zł</div>
+      <div class="service-name">Dwa kwadranse</div>
+      <p class="service-copy">30 minut online, kiedy 15 minut to za mało, temat ma kilka wątków albo chcesz spokojniej przejść przez sytuację.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=konsultacja-30-min</div>
+    </div>
+
+    <div class="service">
+      <div class="service-price">Pełna konsultacja · 470 zł</div>
+      <div class="service-name">Pełna konsultacja behawioralna</div>
+      <p class="service-copy">60 minut rozmowy, diagnoza, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp. Dla spraw złożonych, przewlekłych albo wielowątkowych.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=konsultacja-behawioralna-online</div>
+    </div>
+  </div>
+
+  <div class="footer-contact">
+    <div>
+      <strong>Kontakt</strong><br>
+      <a href="mailto:kontakt@regulskibehawiorysta.pl">kontakt@regulskibehawiorysta.pl</a>
+    </div>
+    <div>
+      <strong>Strona</strong><br>
+      <a href="https://regulskibehawiorysta.pl">regulskibehawiorysta.pl</a>
+    </div>
+    <div>
+      <strong>Instagram</strong><br>
+      @regulskibehawiorysta
+    </div>
+  </div>
+
+  <div class="footer-fine">
+    © Krzysztof Regulski · Wszystkie prawa zastrzeżone. Materiał wyłącznie do użytku własnego, bez prawa dalszej dystrybucji i odsprzedaży.
+  </div>
+</section>
+
+</body>
+</html>

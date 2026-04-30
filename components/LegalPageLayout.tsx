@@ -1,5 +1,5 @@
 import React from 'react'
-import Image from '@/components/BlankImage'
+import Image from 'next/image'
 import Link from 'next/link'
 import { Footer } from '@/components/Footer'
 import { NotatnikSideVisuals, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'

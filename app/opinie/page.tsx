@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Image from '@/components/BlankImage'
+import Image from 'next/image'
 import Link from 'next/link'
 import { EditorialFaqSection } from '@/components/EditorialFaqSection'
 import { FunnelPrimaryActions } from '@/components/FunnelPrimaryActions'

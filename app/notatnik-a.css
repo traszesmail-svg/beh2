@@ -2177,7 +2177,7 @@ html[data-theme='dark'] .notatnik-page .materialy-form .consent-line {
 
 .notatnik-page.contact-page .notatnik-contact-support-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: 18px;
   align-items: start;
 }
@@ -2296,13 +2296,14 @@ html[data-theme='dark'] .notatnik-page .materialy-form .consent-line {
   padding: 0 40px 72px;
 }
 
-.notatnik-page.contact-page .contact-bottom-grid {
+.notatnik-page.contact-page .notatnik-contact-bottom-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
+  align-items: start;
 }
 
-.notatnik-page.contact-page .contact-bottom-card {
+.notatnik-page.contact-page .notatnik-contact-bottom-card {
   display: grid;
   gap: 10px;
   padding: 22px 24px;
@@ -2314,11 +2315,13 @@ html[data-theme='dark'] .notatnik-page .materialy-form .consent-line {
   box-shadow: 0 16px 36px rgba(88, 63, 32, 0.06);
 }
 
-.notatnik-page.contact-page .contact-bottom-note {
-  grid-column: 1 / -1;
+.notatnik-page.contact-page .notatnik-contact-bottom-faq-column {
+  display: grid;
+  gap: 18px;
+  align-content: start;
 }
 
-.notatnik-page.contact-page .contact-bottom-note strong {
+.notatnik-page.contact-page .notatnik-contact-bottom-note strong {
   display: block;
   color: var(--muted-strong);
   font-family: var(--font-display), Georgia, serif;
@@ -2327,7 +2330,7 @@ html[data-theme='dark'] .notatnik-page .materialy-form .consent-line {
   line-height: 1.16;
 }
 
-.notatnik-page.contact-page .contact-bottom-card h4 {
+.notatnik-page.contact-page .notatnik-contact-bottom-card h4 {
   margin: 0;
   color: var(--muted-strong);
   font-family: var(--font-display), Georgia, serif;
@@ -2335,7 +2338,7 @@ html[data-theme='dark'] .notatnik-page .materialy-form .consent-line {
   line-height: 1.14;
 }
 
-.notatnik-page.contact-page .contact-bottom-card p {
+.notatnik-page.contact-page .notatnik-contact-bottom-card p {
   margin: 0;
   color: rgba(31, 26, 23, 0.72);
   font-size: 15px;
@@ -2901,7 +2904,8 @@ html[data-theme='dark'] .notatnik-page .materialy-form .consent-line {
   }
 
   .notatnik-page.contact-page .notatnik-contact-support-grid,
-  .notatnik-page.contact-page .contact-bottom-grid {
+  .notatnik-page.contact-page .notatnik-contact-bottom-grid,
+  .notatnik-page.contact-page .notatnik-contact-bottom-faq-column {
     grid-template-columns: 1fr;
   }
 

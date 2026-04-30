@@ -35,25 +35,27 @@ export function Footer(props: FooterProps) {
           <p>Spokojna pomoc w zrozumieniu problemow zachowania psow i kotow.</p>
         </div>
 
-        <div className="site-footer-nav">
-          <div className="section-eyebrow">Nawigacja</div>
-          <div className="site-footer-links">
-            {FOOTER_NAV_ITEMS.map((item) => (
-              <Link key={item.href} href={item.href} prefetch={false} className="site-footer-link">
-                {item.label}
-              </Link>
-            ))}
+        <div className="site-footer-meta">
+          <div className="site-footer-nav">
+            <div className="section-eyebrow">Nawigacja</div>
+            <div className="site-footer-links">
+              {FOOTER_NAV_ITEMS.map((item) => (
+                <Link key={item.href} href={item.href} prefetch={false} className="site-footer-link">
+                  {item.label}
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
 
-        <div className="site-footer-contact">
-          <div className="section-eyebrow">Kontakt</div>
-          <div className="site-footer-links">
-            {contact.email ? (
-              <a href={`mailto:${contact.email}`} className="site-footer-link site-footer-link-primary">
-                {contact.email}
-              </a>
-            ) : null}
+          <div className="site-footer-contact">
+            <div className="section-eyebrow">Kontakt</div>
+            <div className="site-footer-links">
+              {contact.email ? (
+                <a href={`mailto:${contact.email}`} className="site-footer-link site-footer-link-primary">
+                  {contact.email}
+                </a>
+              ) : null}
+            </div>
           </div>
         </div>
       </div>

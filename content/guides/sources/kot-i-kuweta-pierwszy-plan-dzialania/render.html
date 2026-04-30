@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Kot i kuweta · Regulski | Terapia behawioralna</title>
+<style>/* PDF guide stylesheet — renders on A4 via Playwright page.pdf() */
+
+@page {
+  size: A4;
+  margin: 22mm 18mm 22mm 18mm;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.55;
+  color: #1f1a17;
+  background: #fdfbf7;
+}
+
+/* Cover page */
+.cover {
+  page: cover;
+  page-break-after: always;
+  min-height: 247mm;
+  display: flex;
+  flex-direction: column;
+  margin: -22mm -18mm -22mm -18mm; /* bleed to page edge */
+  background: #fdfbf7;
+}
+
+/* Hero photo strip */
+.cover-hero {
+  position: relative;
+  width: 100%;
+  height: 92mm;
+  overflow: hidden;
+  background: #2c1f14;
+  flex-shrink: 0;
+}
+
+.cover-hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  display: block;
+  opacity: 0.82;
+}
+
+.cover-hero-overlay {
+  position: absolute;
+  inset: 0;
+  padding: 7mm 10mm;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.05) 60%, rgba(0,0,0,0.55) 100%);
+}
+
+.cover-brand {
+  font-size: 8.5pt;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.92);
+  font-weight: 600;
+}
+
+.cover-tag {
+  display: inline-block;
+  font-size: 8.5pt;
+  color: #3a2615;
+  background: rgba(240, 225, 200, 0.94);
+  padding: 2mm 4mm;
+  border-radius: 1.5mm;
+  font-weight: 600;
+}
+
+/* Body section (inside page margins) */
+.cover-body {
+  flex: 1;
+  padding: 9mm 10mm 6mm 10mm;
+}
+
+.cover-title {
+  font-size: 30pt;
+  line-height: 1.08;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 0 0 5mm 0;
+  letter-spacing: -0.02em;
+}
+
+.cover-subtitle {
+  font-size: 13pt;
+  line-height: 1.35;
+  color: #5e4a3c;
+  font-weight: 500;
+  margin: 0 0 6mm 0;
+}
+
+.cover-lead {
+  font-size: 10.5pt;
+  line-height: 1.6;
+  color: #3f332a;
+}
+
+.cover-bullets {
+  margin: 5mm 0 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cover-bullets li {
+  padding: 1.5mm 0 1.5mm 6mm;
+  position: relative;
+  font-size: 10.5pt;
+  color: #3f332a;
+  line-height: 1.45;
+}
+
+.cover-bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 4.5mm;
+  width: 3mm;
+  height: 0.6mm;
+  background: #c9a37a;
+}
+
+/* Footer section */
+.cover-foot {
+  padding: 0 10mm 7mm 10mm;
+}
+
+.cover-meta {
+  font-size: 8.5pt;
+  color: #8b6f5a;
+  border-top: 0.3mm solid #e5d8c6;
+  padding-top: 4mm;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5mm;
+}
+.cover-meta > div { min-width: 0; word-break: break-word; }
+.cover-meta strong { color: #1f1a17; }
+
+.cover-disclaimer {
+  margin-bottom: 4mm;
+  font-size: 8.5pt;
+  font-style: italic;
+  color: #8b6f5a;
+  border-left: 0.5mm solid #c9a37a;
+  padding: 2mm 0 2mm 4mm;
+}
+
+/* Body typography */
+.body h1 {
+  font-size: 18pt;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 10mm 0 4mm 0;
+  padding-bottom: 2mm;
+  border-bottom: 0.3mm solid #e5d8c6;
+}
+
+.body h2 {
+  font-size: 14pt;
+  line-height: 1.25;
+  font-weight: 700;
+  color: #3f332a;
+  margin: 8mm 0 3mm 0;
+}
+
+.body h3 {
+  font-size: 12pt;
+  font-weight: 600;
+  color: #3f332a;
+  margin: 6mm 0 2mm 0;
+}
+
+.body p {
+  margin: 0 0 3mm 0;
+  text-align: justify;
+  hyphens: auto;
+}
+
+.body ul, .body ol {
+  margin: 0 0 4mm 0;
+  padding-left: 6mm;
+}
+
+.body li {
+  margin: 1mm 0;
+}
+
+.body strong { color: #1f1a17; }
+
+.body em { color: #5e4a3c; }
+
+/* Callout boxes (from data-kind="callout") */
+.body table[data-kind="callout"] {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4mm 0;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="callout"] td {
+  padding: 4mm 5mm;
+  background: #faf1e3;
+  border-left: 1mm solid #c9a37a;
+  border-radius: 0 1.5mm 1.5mm 0;
+}
+
+.body table[data-kind="callout"] p { margin: 0 0 2mm 0; }
+.body table[data-kind="callout"] p:last-child { margin-bottom: 0; }
+.body table[data-kind="callout"] p strong:first-child {
+  display: block;
+  font-size: 11pt;
+  margin-bottom: 1mm;
+  color: #1f1a17;
+}
+
+/* Callout stack (vertical list of callouts in one table) */
+.body table[data-kind="callout-stack"] {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 2mm;
+  margin: 4mm 0;
+}
+
+.body table[data-kind="callout-stack"] td {
+  padding: 3.5mm 5mm;
+  background: #faf1e3;
+  border-left: 1mm solid #c9a37a;
+}
+
+/* Grid boxes (single row, multiple cells — feature grid) */
+.body table[data-kind="grid"] {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 2mm 0;
+  margin: 4mm 0;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="grid"] td {
+  padding: 3mm 4mm;
+  background: #f5ece0;
+  border-radius: 1.5mm;
+  vertical-align: top;
+  width: auto;
+}
+
+.body table[data-kind="grid"] p { margin: 0 0 1.5mm 0; font-size: 9.5pt; }
+.body table[data-kind="grid"] strong { display: block; margin-bottom: 1mm; }
+
+/* Data tables (multi-row comparison) */
+.body table[data-kind="data"] {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4mm 0;
+  font-size: 9.5pt;
+  page-break-inside: avoid;
+}
+
+.body table[data-kind="data"] th,
+.body table[data-kind="data"] td {
+  border: 0.2mm solid #e5d8c6;
+  padding: 2mm 3mm;
+  vertical-align: top;
+  text-align: left;
+}
+
+.body table[data-kind="data"] tr:first-child td,
+.body table[data-kind="data"] th {
+  background: #f5ece0;
+  font-weight: 600;
+  color: #1f1a17;
+}
+
+.body table[data-kind="data"] tr:nth-child(even) td {
+  background: #fcf8f1;
+}
+
+/* Footer section — CTA routing to services */
+.footer {
+  page-break-before: always;
+  padding: 2mm 0;
+}
+
+.footer-title {
+  font-size: 18pt;
+  font-weight: 700;
+  margin: 0 0 4mm 0;
+  color: #1f1a17;
+}
+
+.footer-lead {
+  color: #3f332a;
+  margin-bottom: 6mm;
+  max-width: 150mm;
+}
+
+.services {
+  display: flex;
+  flex-direction: column;
+  gap: 3mm;
+  margin-bottom: 8mm;
+}
+
+.service {
+  padding: 4mm 5mm;
+  background: #f5ece0;
+  border-left: 1mm solid #c9a37a;
+  border-radius: 0 2mm 2mm 0;
+  page-break-inside: avoid;
+}
+
+.service-price {
+  font-size: 9pt;
+  color: #8b6f5a;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.service-name {
+  font-size: 13pt;
+  font-weight: 700;
+  color: #1f1a17;
+  margin: 1mm 0;
+}
+
+.service-copy {
+  font-size: 10pt;
+  color: #3f332a;
+  margin: 0 0 2mm 0;
+}
+
+.service-url {
+  font-size: 9pt;
+  color: #8b6f5a;
+}
+
+.footer-contact {
+  border-top: 0.3mm solid #e5d8c6;
+  padding-top: 4mm;
+  font-size: 9.5pt;
+  color: #3f332a;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6mm;
+}
+.footer-contact > div { min-width: 0; word-break: break-word; }
+
+.footer-contact a { color: #5e4a3c; text-decoration: none; }
+
+.footer-fine {
+  margin-top: 4mm;
+  font-size: 8.5pt;
+  color: #8b6f5a;
+  font-style: italic;
+}
+
+/* Category accent colors: cat / dog / puppy — tinted cover */
+body[data-category="cat"] .cover-tag { background: #ecdad3; color: #6b463a; }
+body[data-category="cat"] .cover-bullets li::before { background: #b97865; }
+body[data-category="cat"] .body table[data-kind="callout"] td { background: #f8eae5; border-left-color: #b97865; }
+body[data-category="cat"] .body table[data-kind="callout-stack"] td { background: #f8eae5; border-left-color: #b97865; }
+body[data-category="cat"] .body table[data-kind="grid"] td { background: #f8eae5; }
+body[data-category="cat"] .body table[data-kind="data"] tr:first-child td { background: #f8eae5; }
+body[data-category="cat"] .service { background: #f8eae5; border-left-color: #b97865; }
+
+body[data-category="dog"] .cover-tag { background: #e9e2ce; color: #5c4a2e; }
+body[data-category="dog"] .cover-bullets li::before { background: #997947; }
+body[data-category="dog"] .body table[data-kind="callout"] td { background: #f4ecd7; border-left-color: #997947; }
+body[data-category="dog"] .body table[data-kind="callout-stack"] td { background: #f4ecd7; border-left-color: #997947; }
+body[data-category="dog"] .body table[data-kind="grid"] td { background: #f4ecd7; }
+body[data-category="dog"] .body table[data-kind="data"] tr:first-child td { background: #f4ecd7; }
+body[data-category="dog"] .service { background: #f4ecd7; border-left-color: #997947; }
+
+body[data-category="puppy"] .cover-tag { background: #e4ead3; color: #4b5730; }
+body[data-category="puppy"] .cover-bullets li::before { background: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="callout"] td { background: #edf2dd; border-left-color: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="callout-stack"] td { background: #edf2dd; border-left-color: #7a8d4f; }
+body[data-category="puppy"] .body table[data-kind="grid"] td { background: #edf2dd; }
+body[data-category="puppy"] .body table[data-kind="data"] tr:first-child td { background: #edf2dd; }
+body[data-category="puppy"] .service { background: #edf2dd; border-left-color: #7a8d4f; }
+</style>
+</head>
+<body data-category="dog">
+
+<section class="cover">
+
+  <div class="cover-hero">
+    
+    <div class="cover-hero-overlay">
+      <span class="cover-brand">Regulski · Terapia behawioralna</span>
+      <span class="cover-tag">Psy · przewodnik</span>
+    </div>
+  </div>
+
+  <div class="cover-body">
+    <h1 class="cover-title">Kot i kuweta</h1>
+    <p class="cover-subtitle">Pierwszy plan działania przy sikaniu lub załatwianiu się poza kuwetą</p>
+    <p class="cover-lead">Szczegółowy poradnik porządkujący diagnozę wstępną, środowisko, kuwetę, lokalizacje i plan monitorowania.</p>
+    <ul class="cover-bullets">
+      
+    </ul>
+  </div>
+
+  <div class="cover-foot">
+    <div class="cover-disclaimer">Materiał edukacyjny. Nie zastępuje badania lekarsko-weterynaryjnego ani indywidualnej konsultacji behawioralnej.</div>
+    <div class="cover-meta">
+      <div><strong>Format</strong><br>PDF A4, druk domowy</div>
+      <div><strong>Czytanie</strong><br>7 min</div>
+      <div><strong>Wydano</strong><br>30 kwietnia 2026</div>
+      <div><strong>Autor</strong><br>Krzysztof Regulski</div>
+    </div>
+  </div>
+
+</section>
+
+<section class="body">
+
+
+
+<h2>Dla kogo jest ten poradnik</h2>
+<p>Ten poradnik jest dla opiekunów kotów, które sikają lub załatwiają się poza kuwetą, korzystają z niej wybiórczo, zaczęły omijać kuwetę po zmianie w domu albo robią to od dłuższego czasu i nikt nie potrafi powiedzieć, od czego zacząć. To materiał dla osób, które chcą przerwać losowe testowanie żwirków, kuwet i domowych patentów i zamiast tego ułożyć porządek diagnostyczny oraz środowiskowy.</p>
+<p>Problemy około-kuwetowe bardzo szybko obciążają dom. Wstyd, zapach, sprzątanie, napięcie między domownikami i lęk, że problem się nasila, sprawiają, że człowiek zaczyna działać chaotycznie. Tymczasem właśnie tutaj najbardziej potrzebny jest spokój, bo przyczyna może być medyczna, środowiskowa, społeczna albo mieszana.</p>
+<h2>Co się dzieje i jak to interpretować</h2>
+<p>Kiedy kot załatwia się poza kuwetą, opiekun zwykle zadaje jedno pytanie: dlaczego on to robi. W praktyce lepsze jest pytanie bardziej szczegółowe: co dokładnie robi, w jakim wzorze, w jakich miejscach i z czym to się łączy. Inaczej wygląda problem kota, który oddaje małe ilości moczu w wielu punktach pionowych, a inaczej kota, który oddaje duże ilości na miękkie podłoże. Inaczej interpretujesz kota, który wchodzi do kuwety i po chwili z niej wyskakuje, a inaczej tego, który w ogóle omija konkretną lokalizację.</p>
+<p>Na początku trzeba odróżnić co najmniej cztery obszary:</p>
+<ul>
+<li>możliwe przyczyny medyczne,</li>
+<li>trudność związana z samą kuwetą lub żwirkiem,</li>
+<li>problem środowiskowy lub społeczny,</li>
+<li>oznaczanie moczem i wzór silniej związany z napięciem.</li>
+</ul>
+<h3>Co warto obserwować zamiast zgadywać</h3>
+<p>Zapisuj:</p>
+<ul>
+<li>czy problem dotyczy moczu, kału czy obu rzeczy,</li>
+<li>jaka jest objętość i częstotliwość epizodów,</li>
+<li>czy kot wchodzi do kuwety i rezygnuje,</li>
+<li>gdzie dokładnie pojawiają się incydenty,</li>
+<li>czy są to miejsca miękkie, chłonne, pionowe, przy drzwiach albo przy oknie,</li>
+<li>czy problem pojawił się po zmianie w domu, w kuwecie, żwirku, relacji między zwierzętami albo zdrowiu kota.</li>
+</ul>
+<h2>Co bywa błędnie odczytywane</h2>
+<p>Najczęstszy błąd to założenie, że skoro kot wygląda normalnie, to przyczyna musi być behawioralna. Tymczasem problemy z układem moczowym, ból, dyskomfort ortopedyczny czy inne kwestie zdrowotne nie zawsze dają dramatyczne objawy poza samym zachowaniem przy kuwecie.</p>
+<p>Drugim błędem jest mówienie o zemście. Kot nie załatwia się poza kuwetą po to, żeby ukarać człowieka. Jeśli wybiera inne miejsce, to dlatego, że z jakiegoś powodu jest mu tam łatwiej, bezpieczniej, mniej boleśnie albo bardziej przewidywalnie.</p>
+<p>Trzecim błędem jest zbyt szybkie uznanie każdej próby oddania moczu poza kuwetą za znakowanie. Oznaczanie istnieje, ale nie wszystko jest znakowaniem. Liczy się wzór zachowania, pozycja ciała, ilość moczu, lokalizacja i cały kontekst.</p>
+<h2>Plan działania krok po kroku</h2>
+<h3>Krok 1. Sprawdź czerwone flagi natychmiast</h3>
+<p>Jeżeli kot często chodzi do kuwety i oddaje mało moczu, napina się, ale niewiele oddaje, wokalizuje przy próbie, liże okolice cewki częściej niż zwykle albo pojawia się krew w moczu, nie zaczynaj od behawioralnych eksperymentów. Taki obraz wymaga pilnej konsultacji weterynaryjnej.</p>
+<h3>Krok 2. Opisz problem precyzyjnie</h3>
+<p>Zanim zmienisz trzy rzeczy naraz, zatrzymaj się i opisz obraz wyjściowy:</p>
+<ol>
+<li>Co dokładnie dzieje się poza kuwetą.</li>
+<li>W jakich miejscach.</li>
+<li>O jakich porach.</li>
+<li>Jak długo trwa problem.</li>
+<li>Co wydarzyło się tuż przed jego pojawieniem się.</li>
+</ol>
+<p>Szczególnie ważne są ostatnie zmiany: nowy zwierzak albo goście, remont, przeprowadzka, nowe meble, inna kuweta lub inny żwirek, zmiana lokalizacji zasobów, leczenie, ból lub inna zmiana zdrowotna, wzrost napięcia między zwierzętami.</p>
+<h3>Krok 3. Oceniaj kuwetę jak narzędzie, nie dekorację</h3>
+<p>Kuweta ma być wygodna dla kota, a nie tylko akceptowalna estetycznie dla człowieka. Sprawdź wielkość, typ, wejście, lokalizację, łatwość dojścia oraz to, czy żwirek odpowiada kotu pod względem struktury, głębokości i czystości.</p>
+<h3>Krok 4. Rozprosz zasoby i obniż napięcie społeczne</h3>
+<p>Jeśli w domu jest więcej niż jeden kot, temat kuwety prawie nigdy nie dotyczy tylko samej kuwety. Nawet bez otwartej agresji drugi kot może blokować dojście, obserwować z napięciem albo przejmować strategiczne miejsce po wyjściu z kuwety.</p>
+<h3>Krok 5. Wróć do podstaw środowiska</h3>
+<p>Nawet jeśli główny problem jest około-kuwetowy, cały dom ma znaczenie. Kot w przewlekłym napięciu ma większą szansę na utrwalenie trudnych skojarzeń. Dlatego równolegle popraw miejsca odpoczynku, przewidywalność dnia, rozkład jedzenia i wody, możliwość wycofania się oraz jakość relacji między zwierzętami.</p>
+<h3>Krok 6. Sprzątaj tak, żeby nie utrwalać wzoru</h3>
+<p>Miejsce, które raz zostało użyte, może przyciągać kota ponownie. Dlatego usuwaj zabrudzenie jak najszybciej, używaj środków odpowiednich do neutralizacji zapachu, nie stosuj mocno drażniących aromatów i jeśli miejsce jest szczególnie atrakcyjne dla kota, czasowo zmień jego funkcję albo dostępność.</p>
+<h3>Krok 7. Wprowadzaj zmiany etapami i notuj efekty</h3>
+<p>Najgorsze, co można zrobić, to zmienić naraz kuwetę, żwirek, lokalizację, karmę i jeszcze zacząć intensywnie zabawiać kota, a potem próbować zgadnąć, co pomogło. Zmieniaj rzeczy etapami i zapisuj efekt.</p>
+<h3>Krok 8. Oceń, czy nie potrzebujesz wsparcia behawioralnego szybciej</h3>
+<p>Jeżeli problem trwa długo, łączy się z wycofaniem, napięciem, konfliktem między kotami albo wyraźną historią niepowodzeń, warto szybciej wejść do konsultacji. W takich przypadkach problem rzadko sprowadza się do jednego elementu i łatwo przegapić rzecz najważniejszą.</p>
+<h2>Jak odróżniać oddawanie moczu od oznaczania</h2>
+<p>To rozróżnienie nie zawsze jest oczywiste, ale bardzo pomaga. Przy oddawaniu moczu poza kuwetą kot zwykle zostawia większą ilość moczu na powierzchni poziomej, często chłonnej: łóżku, dywanie, kanapie, kocu. Przy oznaczaniu częściej pojawiają się mniejsze ilości moczu na powierzchniach pionowych albo przy strategicznych punktach domu, choć praktyka bywa mieszana.</p>
+<p>Ważniejszy niż sam opis miejsca jest cały kontekst: czy kot ma historię bólu albo dyskomfortu przy kuwecie, czy problem nasilił się po zmianie w relacjach społecznych, czy pojawia się blisko drzwi, okien, przejść albo rzeczy nowych i czy kot ma wyraźne napięcie terytorialne w domu.</p>
+<h2>Dziennik kuwetowy na 7 dni</h2>
+<p>Przez tydzień zapisuj w jednej tabeli albo notatniku:</p>
+<ol>
+<li>Godzinę incydentu albo skorzystania z kuwety.</li>
+<li>Miejsce.</li>
+<li>Rodzaj: mocz, kał, wejście do kuwety bez efektu, wycofanie się z kuwety.</li>
+<li>Co działo się w domu wcześniej.</li>
+<li>Która kuweta była dostępna i w jakim stanie.</li>
+<li>Czy w pobliżu był drugi kot, pies albo człowiek.</li>
+</ol>
+<p>Taki dziennik szybko pokazuje rzeczy, których na co dzień się nie zauważa. Czasem problem występuje głównie rano, przy konkretnej kuwecie albo po określonej sytuacji społecznej.</p>
+<h2>Jak odbudowywać zaufanie do kuwety</h2>
+<p>Jeżeli kot miał z kuwetą złe skojarzenie, trzeba myśleć nie tylko o technicznym ustawieniu zasobu, ale też o odbudowie bezpieczeństwa. Pomaga w tym poprawa komfortu fizycznego i medycznego, zapewnienie bardzo łatwego dojścia do kuwety, ograniczenie presji społecznej przy kuwecie, dokładne sprzątanie miejsc wcześniejszych incydentów oraz cierpliwość i brak gwałtownych zmian co dwa dni.</p>
+<h2>Checklist do wdrożenia</h2>
+<ul>
+<li><input disabled="" type="checkbox"> Sprawdziłem czerwone flagi wymagające szybkiej konsultacji weterynaryjnej.</li>
+<li><input disabled="" type="checkbox"> Mam opis problemu: mocz, kał, miejsca, pory, objętość i kontekst.</li>
+<li><input disabled="" type="checkbox"> Wiem, jakie zmiany poprzedziły początek trudności.</li>
+<li><input disabled="" type="checkbox"> Oceniłem wielkość, typ i lokalizację kuwety.</li>
+<li><input disabled="" type="checkbox"> Sprawdziłem, czy dojście do kuwety jest spokojne i przewidywalne.</li>
+<li><input disabled="" type="checkbox"> W domu wielokotowym rozproszyłem zasoby zamiast stawiać wszystko razem.</li>
+<li><input disabled="" type="checkbox"> Równolegle poprawiam ogólne środowisko kota, nie tylko samą kuwetę.</li>
+<li><input disabled="" type="checkbox"> Sprzątam incydenty w sposób neutralizujący zapach, a nie tylko maskujący.</li>
+<li><input disabled="" type="checkbox"> Nie karzę kota po fakcie.</li>
+<li><input disabled="" type="checkbox"> Wprowadzam zmiany etapami i notuję reakcję kota.</li>
+</ul>
+<h2>Najczęstsze błędy</h2>
+<p>Najpoważniejszym błędem jest zbyt późne pójście do lekarza weterynarii. Im dłużej człowiek zakłada, że to na pewno tylko zachowanie, tym większe ryzyko, że przeoczy ból albo stan zapalny.</p>
+<p>Drugim błędem jest koncentracja wyłącznie na żwirku. Żwirek ma znaczenie, ale problem około-kuwetowy rzadko sprowadza się tylko do niego. Jeśli lokalizacja jest zła, relacje napięte, a kot ma złe skojarzenie z miejscem, sam żwirek nie rozwiąże wszystkiego.</p>
+<p>Trzeci błąd to ustawianie kuwety tam, gdzie wygodnie ją ukryć. Ładne i dyskretne miejsce dla człowieka może być fatalnym miejscem dla kota.</p>
+<p>Czwarty błąd to emocjonalna reakcja po fakcie: krzyk, noszenie kota do kuwety albo zamykanie w łazience. To nie tylko nie pomaga, ale potrafi jeszcze pogorszyć związek kota z opiekunem i z samym tematem kuwety.</p>
+<h2>Kiedy warto szukać dalszej pomocy</h2>
+<p>Warto rozważyć konsultację behawioralną, jeśli weterynarz wykluczył lub opanował przyczynę medyczną, a problem trwa, temat łączy się z napięciem w domu, wycofaniem albo relacją między kotami, zmiany w kuwecie i środowisku dają tylko częściową poprawę albo problem wraca falami po pozornie udanych zmianach.</p>
+<h2>Kiedy potrzebna jest konsultacja weterynaryjna</h2>
+<p>Pilnie skontaktuj się z lekarzem weterynarii, jeśli kot często siada do oddawania moczu, ale oddaje go mało lub wcale, pojawia się krew w moczu, kot wokalizuje przy próbie, jest osowiały, nie je, wymiotuje albo wygląda gorzej ogólnie. Warto umówić konsultację także wtedy, gdy temat trwa już jakiś czas, nawet jeśli nie wygląda dramatycznie.</p>
+<h2>Końcowe CTA</h2>
+<p>Jeśli chcesz uporządkować temat bez kolejnych przypadkowych prób, dobrym krokiem jest konsultacja dla kota albo konsultacja behawioralna online, zwłaszcza gdy problem trwa dłużej niż kilka dni, wraca falami albo łączy się z napięciem domowym.</p>
+<p>Przed kontaktem przygotuj zdjęcia lub krótki opis ustawienia kuwet i innych zasobów, informację, od kiedy trwa problem i co wydarzyło się wcześniej, notatkę, gdzie dokładnie pojawiają się incydenty oraz wynik lub plan konsultacji weterynaryjnej, jeśli była lub jest potrzebna.</p>
+
+</section>
+
+<section class="footer">
+  <h2 class="footer-title">Co dalej, jeśli to nie wystarczy</h2>
+  <p class="footer-lead">
+    Ten przewodnik ma pomóc uporządkować pierwszy krok. Jeśli temat wraca, miesza kilka wątków albo
+    potrzebujesz kogoś kto zobaczy Twoją konkretną sytuację — rozmowa zwykle skraca drogę.
+  </p>
+
+  <div class="services">
+    <div class="service">
+      <div class="service-price">Kwadrans · 69 zł</div>
+      <div class="service-name">Kwadrans z behawiorystą</div>
+      <p class="service-copy">15 minut rozmowy audio. Najprostszy start przy jednym pytaniu, niepewności albo pierwszym uporządkowaniu tematu.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=szybka-konsultacja-15-min</div>
+    </div>
+
+    <div class="service">
+      <div class="service-price">Dwa kwadranse · 169 zł</div>
+      <div class="service-name">Dwa kwadranse</div>
+      <p class="service-copy">30 minut online, kiedy 15 minut to za mało, temat ma kilka wątków albo chcesz spokojniej przejść przez sytuację.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=konsultacja-30-min</div>
+    </div>
+
+    <div class="service">
+      <div class="service-price">Pełna konsultacja · 470 zł</div>
+      <div class="service-name">Pełna konsultacja behawioralna</div>
+      <p class="service-copy">60 minut rozmowy, diagnoza, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp. Dla spraw złożonych, przewlekłych albo wielowątkowych.</p>
+      <div class="service-url">regulskibehawiorysta.pl/book?service=konsultacja-behawioralna-online</div>
+    </div>
+  </div>
+
+  <div class="footer-contact">
+    <div>
+      <strong>Kontakt</strong><br>
+      <a href="mailto:kontakt@regulskibehawiorysta.pl">kontakt@regulskibehawiorysta.pl</a>
+    </div>
+    <div>
+      <strong>Strona</strong><br>
+      <a href="https://regulskibehawiorysta.pl">regulskibehawiorysta.pl</a>
+    </div>
+    <div>
+      <strong>Instagram</strong><br>
+      @regulskibehawiorysta
+    </div>
+  </div>
+
+  <div class="footer-fine">
+    © Krzysztof Regulski · Wszystkie prawa zastrzeżone. Materiał wyłącznie do użytku własnego, bez prawa dalszej dystrybucji i odsprzedaży.
+  </div>
+</section>
+
+</body>
+</html>

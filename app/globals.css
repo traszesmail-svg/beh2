@@ -4976,8 +4976,15 @@ select:focus-visible {
 
 .site-footer-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr) minmax(0, 0.9fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 24px;
+}
+
+.site-footer-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
+  min-width: 0;
 }
 
 .site-footer-brand,
@@ -8816,6 +8823,10 @@ select:focus-visible {
   }
 
   .site-footer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .site-footer-meta {
     grid-template-columns: 1fr;
   }
 

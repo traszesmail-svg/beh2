@@ -1,5 +1,5 @@
 import React from 'react'
-import Image from '@/components/BlankImage'
+import Image from 'next/image'
 import { getPdfGuideCoverAlt, getPdfGuideCoverSrc, type PdfGuide } from '@/lib/pdf-guides'
 
 type PdfGuideCoverProps = {

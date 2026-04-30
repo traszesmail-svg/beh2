@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Image from '@/components/BlankImage'
+import Image from 'next/image'
 import Link from 'next/link'
 import { NotatnikFinalCta, NotatnikPageShell, NotatnikSectionHead, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'

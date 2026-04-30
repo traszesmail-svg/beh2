@@ -1,4 +1,4 @@
-import Image from '@/components/BlankImage'
+import Image from 'next/image'
 import Link from 'next/link'
 import type { PdfBundle } from '@/lib/pdf-guides'
 import type { ShopAccessoryCard, ShopBookCard, ShopBundleShelfCard, ShopEntranceCard, ShopPdfCard } from '@/lib/shop-catalog'
