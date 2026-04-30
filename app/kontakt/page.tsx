@@ -64,74 +64,74 @@ export default function ContactPage({
               Wystarczy gatunek, temat i kilka zdan. {COPY_HELPERS.contactResponseWindow} {getSpeciesCopy(species)}
             </p>
 
-            <div className="contact-promo-grid">
-              <figure className="contact-visual-card" aria-labelledby="contact-visual-title" aria-describedby="contact-visual-copy">
-                <div className="contact-photo-wrap">
-                  <Image
-                    src="/branding/specialist-training.jpg"
-                    alt="Spokojna konsultacja behawioralna z opiekunem psa"
-                    fill
-                    priority
-                    quality={84}
-                    sizes="(max-width: 760px) 100vw, (max-width: 1200px) 42vw, 420px"
-                    className="contact-photo"
-                  />
-                </div>
-                <figcaption className="contact-photo-caption">
-                  <div className="notatnik-mono">Pierwszy kontakt</div>
-                  <h3 id="contact-visual-title" className="contact-trust-title">
-                    Spokojna rozmowa przed decyzja
-                  </h3>
-                  <p id="contact-visual-copy">
-                    Nie musisz od razu wiedziec, jaki rodzaj pomocy bedzie najlepszy. Napisz krotko, co sie dzieje - pomozemy uporzadkowac
-                    sytuacje i wybrac kolejny krok.
-                  </p>
-                  <div className="contact-trust-row" aria-label="Co zyskasz">
-                    <span className="contact-trust-chip">Bez oceniania</span>
-                    <span className="contact-trust-chip">Z uwaga na psa</span>
-                    <span className="contact-trust-chip">Konkretny nastepny krok</span>
-                  </div>
-                </figcaption>
-              </figure>
-
-              <div className="contact-form-card" id="formularz">
-                <ContactLeadForm />
+            <figure className="contact-visual-card" aria-labelledby="contact-visual-title" aria-describedby="contact-visual-copy">
+              <div className="contact-photo-wrap">
+                <Image
+                  src="/branding/specialist-training.jpg"
+                  alt="Spokojna konsultacja behawioralna z opiekunem psa"
+                  fill
+                  priority
+                  quality={84}
+                  sizes="(max-width: 760px) 100vw, (max-width: 1200px) 42vw, 420px"
+                  className="contact-photo"
+                />
               </div>
-            </div>
+              <figcaption className="contact-photo-caption">
+                <div className="notatnik-mono">Pierwszy kontakt</div>
+                <h3 id="contact-visual-title" className="contact-trust-title">
+                  Spokojna rozmowa przed decyzja
+                </h3>
+                <p id="contact-visual-copy">
+                  Nie musisz od razu wiedziec, jaki rodzaj pomocy bedzie najlepszy. Napisz krotko, co sie dzieje - pomozemy uporzadkowac
+                  sytuacje i wybrac kolejny krok.
+                </p>
+                <div className="contact-trust-row" aria-label="Co zyskasz">
+                  <span className="contact-trust-chip">Bez oceniania</span>
+                  <span className="contact-trust-chip">Z uwaga na psa</span>
+                  <span className="contact-trust-chip">Konkretny nastepny krok</span>
+                </div>
+              </figcaption>
+            </figure>
           </div>
 
-          <div className="notatnik-contact-right notatnik-kinfo">
-            <h3>Co stanie sie dalej</h3>
-            <p>Odpowiem na adres e-mail z formularza i wskaze najprostszy kolejny krok: Kwadrans, Kwadrans na juz, Dwa kwadranse, Pelna konsultacje albo material startowy.</p>
+          <div className="notatnik-contact-right">
+            <div className="contact-form-card" id="formularz">
+              <ContactLeadForm />
+            </div>
 
-            <div className="notatnik-info-stack">
-              <div className="notatnik-kinfo-row">
-                <span>E-mail</span>
-                <span>{publicContact.email}</span>
-              </div>
-              <div className="notatnik-kinfo-row">
-                <span>Odpowiedz</span>
-                <span>1-2 dni robocze</span>
-              </div>
-              <div className="notatnik-kinfo-row">
-                <span>Forma</span>
-                <span>Formularz / e-mail</span>
-              </div>
-              <div className="notatnik-kinfo-row">
-                <span>Instagram</span>
-                <span>
-                  <Link href={INSTAGRAM_PROFILE_URL} target="_blank" rel="noopener noreferrer">
-                    @regulskibehawiorysta
-                  </Link>
-                </span>
-              </div>
-              <div className="notatnik-kinfo-row">
-                <span>Profil</span>
-                <span>
-                  <Link href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer">
-                    behawioryscicoape.pl/Regulski
-                  </Link>
-                </span>
+            <div className="notatnik-kinfo contact-next-card">
+              <h3>Co stanie sie dalej</h3>
+              <p>Odpowiem na adres e-mail z formularza i wskaze najprostszy kolejny krok: Kwadrans, Kwadrans na juz, Dwa kwadranse, Pelna konsultacje albo material startowy.</p>
+
+              <div className="notatnik-info-stack">
+                <div className="notatnik-kinfo-row">
+                  <span>E-mail</span>
+                  <span>{publicContact.email}</span>
+                </div>
+                <div className="notatnik-kinfo-row">
+                  <span>Odpowiedz</span>
+                  <span>1-2 dni robocze</span>
+                </div>
+                <div className="notatnik-kinfo-row">
+                  <span>Forma</span>
+                  <span>Formularz / e-mail</span>
+                </div>
+                <div className="notatnik-kinfo-row">
+                  <span>Instagram</span>
+                  <span>
+                    <Link href={INSTAGRAM_PROFILE_URL} target="_blank" rel="noopener noreferrer">
+                      @regulskibehawiorysta
+                    </Link>
+                  </span>
+                </div>
+                <div className="notatnik-kinfo-row">
+                  <span>Profil</span>
+                  <span>
+                    <Link href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer">
+                      behawioryscicoape.pl/Regulski
+                    </Link>
+                  </span>
+                </div>
               </div>
             </div>
 
