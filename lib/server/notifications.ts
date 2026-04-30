@@ -841,7 +841,7 @@ function getPdfOrderCustomerCta(submission: PdfOrderSubmission): EmailActionButt
 }
 
 export async function sendContactLeadEmail(submission: ContactLeadSubmission): Promise<DeliveryResult> {
-  const recipient = getPublicContactDetails().email
+  const recipient = getAdminNotificationRecipientEmail()
 
   if (!recipient) {
     return {
@@ -953,7 +953,7 @@ export async function sendContactLeadAutoReplyEmail(submission: ContactLeadSubmi
   )
 }
 export async function sendPdfOrderEmail(submission: PdfOrderSubmission): Promise<DeliveryResult> {
-  const recipient = getPublicContactDetails().email
+  const recipient = getAdminNotificationRecipientEmail()
 
   if (!recipient) {
     return {
@@ -1730,7 +1730,7 @@ export async function sendUrgentNowCustomerAckEmail(submission: UrgentNowSubmiss
 }
 
 export async function sendUrgentNowAdminAlertEmail(submission: UrgentNowSubmission): Promise<DeliveryResult> {
-  const recipient = getPublicContactDetails().email
+  const recipient = getAdminNotificationRecipientEmail()
 
   if (!recipient) {
     return { status: 'skipped', reason: 'admin email missing or invalid' }
@@ -1862,7 +1862,7 @@ export type MaterialyOrderEmailPayload = {
 }
 
 export async function sendMaterialyOrderOwnerEmail(payload: MaterialyOrderEmailPayload): Promise<DeliveryResult> {
-  const recipient = getPublicContactDetails().email
+  const recipient = getAdminNotificationRecipientEmail()
   if (!recipient) return { status: 'skipped', reason: 'public contact email missing or invalid' }
 
   const replyTo = isValidPublicEmail(payload.customerEmail) ? payload.customerEmail : undefined
@@ -1995,4 +1995,5 @@ export async function sendMaterialyCodeCustomerEmail(payload: MaterialyOrderEmai
 
   return deliverEmail({ to: recipient, subject, html, text }, 'customer')
 }
+
 
