@@ -7,14 +7,19 @@ type Props = {
   token: string
   defaultDate: string
   defaultTime: string
+  slotWasParsed: boolean
 }
 
-export function QuickConfirmForm({ bookingId, token, defaultDate, defaultTime }: Props) {
+export function QuickConfirmForm({ bookingId, token, defaultDate, defaultTime, slotWasParsed }: Props) {
   const [date, setDate] = useState(defaultDate)
   const [time, setTime] = useState(defaultTime)
+  const [showOverride, setShowOverride] = useState(false)
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
+
+  const hasPrefilledSlot = Boolean(defaultDate && defaultTime)
+  const showFields = !hasPrefilledSlot || showOverride
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -65,26 +70,52 @@ export function QuickConfirmForm({ bookingId, token, defaultDate, defaultTime }:
 
   return (
     <form onSubmit={handleSubmit} style={{ display: 'grid', gap: '16px' }}>
-      <label style={{ display: 'grid', gap: '6px', fontSize: '14px', fontWeight: 600 }}>
-        Data konsultacji
-        <input
-          type="date"
-          value={date}
-          onChange={e => setDate(e.target.value)}
-          required
-          style={inputStyle}
-        />
-      </label>
-      <label style={{ display: 'grid', gap: '6px', fontSize: '14px', fontWeight: 600 }}>
-        Godzina konsultacji
-        <input
-          type="time"
-          value={time}
-          onChange={e => setTime(e.target.value)}
-          required
-          style={inputStyle}
-        />
-      </label>
+
+      {hasPrefilledSlot && !showOverride && (
+        <div style={{ background: '#eaf4f1', border: '1px solid #b2d8cf', borderRadius: '10px', padding: '16px' }}>
+          <div style={{ fontSize: '13px', color: '#555', marginBottom: '4px' }}>Termin do potwierdzenia</div>
+          <div style={{ fontSize: '20px', fontWeight: 700, color: '#1f1a17' }}>
+            {date} o {time}
+          </div>
+          {slotWasParsed && (
+            <div style={{ fontSize: '12px', color: '#888', marginTop: '4px' }}>
+              (wczytany z wyboru klienta)
+            </div>
+          )}
+          <button
+            type="button"
+            onClick={() => setShowOverride(true)}
+            style={{ marginTop: '10px', background: 'none', border: 'none', color: '#888', fontSize: '13px', cursor: 'pointer', textDecoration: 'underline', padding: 0 }}
+          >
+            Zmień termin
+          </button>
+        </div>
+      )}
+
+      {showFields && (
+        <>
+          <label style={{ display: 'grid', gap: '6px', fontSize: '14px', fontWeight: 600 }}>
+            Data konsultacji
+            <input
+              type="date"
+              value={date}
+              onChange={e => setDate(e.target.value)}
+              required
+              style={inputStyle}
+            />
+          </label>
+          <label style={{ display: 'grid', gap: '6px', fontSize: '14px', fontWeight: 600 }}>
+            Godzina konsultacji
+            <input
+              type="time"
+              value={time}
+              onChange={e => setTime(e.target.value)}
+              required
+              style={inputStyle}
+            />
+          </label>
+        </>
+      )}
 
       {error && <p style={{ color: '#8a3022', margin: 0, fontSize: '14px' }}>{error}</p>}
 

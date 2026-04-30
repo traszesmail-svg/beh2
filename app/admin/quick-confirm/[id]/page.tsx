@@ -6,6 +6,34 @@ import { QuickConfirmForm } from './QuickConfirmForm'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
+// Parsuje pierwszy slot z tekstu "Poniedziałek 14.04 godz. 10:00; ..."
+// albo z raw ID "2026-04-14-10:00"
+function parseFirstSlot(preferredSlots: string): { date: string; time: string } | null {
+  if (!preferredSlots) return null
+  const first = preferredSlots.split(';')[0].trim()
+
+  // Raw format: "2026-04-14-10:00"
+  const rawMatch = first.match(/^(\d{4}-\d{2}-\d{2})-(\d{2}:\d{2})$/)
+  if (rawMatch) return { date: rawMatch[1], time: rawMatch[2] }
+
+  // Formatted: "Poniedziałek 14.04 godz. 10:00"
+  const fmtMatch = first.match(/(\d{1,2})\.(\d{2})\s+godz\.\s+(\d{2}:\d{2})/)
+  if (fmtMatch) {
+    const day = fmtMatch[1].padStart(2, '0')
+    const month = fmtMatch[2]
+    const time = fmtMatch[3]
+    const year = new Date().getFullYear()
+    // Jeśli miesiąc już minął w tym roku, użyj przyszłego roku
+    const candidate = new Date(`${year}-${month}-${day}`)
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    const finalYear = candidate < today ? year + 1 : year
+    return { date: `${finalYear}-${month}-${day}`, time }
+  }
+
+  return null
+}
+
 export default async function QuickConfirmPage({
   params,
   searchParams,
@@ -48,6 +76,12 @@ export default async function QuickConfirmPage({
     )
   }
 
+  // Pre-filluj datę: najpierw z confirmedDate (jeśli admin już ustawił), potem z wyboru klienta
+  const parsedSlot = parseFirstSlot(booking.preferredSlots ?? '')
+  const defaultDate = booking.confirmedDate ?? parsedSlot?.date ?? ''
+  const defaultTime = booking.confirmedTime ?? parsedSlot?.time ?? ''
+  const slotWasParsed = !booking.confirmedDate && Boolean(parsedSlot)
+
   return (
     <main style={{ maxWidth: '520px', margin: '80px auto', padding: '32px 20px', fontFamily: 'sans-serif' }}>
       <h1 style={{ fontSize: '22px', marginBottom: '4px' }}>Potwierdź płatność</h1>
@@ -56,15 +90,16 @@ export default async function QuickConfirmPage({
       </p>
 
       <div style={{ background: '#f5f1ea', borderRadius: '10px', padding: '14px 16px', marginBottom: '24px', fontSize: '14px' }}>
-        <strong>Preferowane terminy klienta:</strong>
-        <pre style={{ margin: '6px 0 0', whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}>{booking.preferredSlots}</pre>
+        <strong>Termin wybrany przez klienta:</strong>
+        <div style={{ marginTop: '6px', fontWeight: 600 }}>{booking.preferredSlots}</div>
       </div>
 
       <QuickConfirmForm
         bookingId={booking.id}
         token={token}
-        defaultDate={booking.confirmedDate ?? ''}
-        defaultTime={booking.confirmedTime ?? ''}
+        defaultDate={defaultDate}
+        defaultTime={defaultTime}
+        slotWasParsed={slotWasParsed}
       />
     </main>
   )
