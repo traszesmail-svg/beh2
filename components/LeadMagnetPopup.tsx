@@ -50,16 +50,16 @@ export function LeadMagnetPopup({ magnetId, pathname = '/' }: LeadMagnetPopupPro
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300"
+      style={{ position: 'fixed', inset: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px', backgroundColor: 'rgba(0,0,0,0.65)' }}
       onClick={(e) => { if (e.target === e.currentTarget) dismiss(); }}
       role="dialog"
       aria-modal="true"
       aria-labelledby="lm-popup-title"
     >
-      <div className="bg-surface rounded-3xl shadow-lg max-w-2xl w-full overflow-hidden animate-in zoom-in-95 duration-300 grid md:grid-cols-[1fr_1.4fr]">
+      <div style={{ backgroundColor: '#fff', borderRadius: '24px', boxShadow: '0 20px 60px rgba(0,0,0,0.3)', maxWidth: '680px', width: '100%', overflow: 'hidden', display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1.4fr)' }}>
 
         {/* Lewa kolumna — wizual + opis */}
-        <div className="relative bg-gradient-to-br from-accent-light to-accent/20 p-8 md:p-10 hidden md:flex flex-col justify-between">
+        <div style={{ background: 'linear-gradient(135deg, #e8f5f0, #c5e8db)', padding: '40px 32px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           <div>
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent text-accent-fg text-xs font-bold tracking-wide uppercase mb-4">
               <BookOpen size={12} />
@@ -83,7 +83,7 @@ export function LeadMagnetPopup({ magnetId, pathname = '/' }: LeadMagnetPopupPro
         </div>
 
         {/* Prawa kolumna — formularz */}
-        <div className="p-8 md:p-10 relative">
+        <div style={{ padding: '40px 32px', position: 'relative', backgroundColor: '#fff' }}>
           <button
             onClick={dismiss}
             className="absolute top-4 right-4 w-9 h-9 rounded-full bg-surface-2 hover:bg-border flex items-center justify-center transition-colors text-muted hover:text-ink"
