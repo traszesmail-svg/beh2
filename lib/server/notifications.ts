@@ -1,5 +1,6 @@
 ﻿import nodemailer from 'nodemailer'
 import type { LeadMagnet } from '@/lib/growth-layer'
+import { repairCopy } from '@/lib/copy'
 import { formatDateTimeLabel, getProblemLabel } from '@/lib/data'
 import { formatPricePln } from '@/lib/pricing'
 import { getContactDetails, getPublicContactDetails } from '@/lib/site'
@@ -230,144 +231,157 @@ export function getTestimonialSubmissionConfigIssue(): string | null {
   return null
 }
 
+function repairCustomerEmailDeliveryStatus(status: CustomerEmailDeliveryStatus): CustomerEmailDeliveryStatus {
+  return {
+    ...status,
+    issue: status.issue ? repairCopy(status.issue) : null,
+    summary: repairCopy(status.summary),
+    nextStep: repairCopy(status.nextStep),
+  }
+}
+
 export function getCustomerEmailDeliveryStatus(recipientEmail?: string | null): CustomerEmailDeliveryStatus {
   const modeConfig = getCustomerEmailModeConfig()
   const mail = getMailProviderConfig()
 
-  if (modeConfig.mode === 'invalid') {
-    return {
-      state: 'blocked',
-      mode: 'invalid',
-      issue: `CUSTOMER_EMAIL_MODE has invalid value "${modeConfig.raw}".`,
-      summary: 'Tryb maili klienta jest zablokowany, bo CUSTOMER_EMAIL_MODE ma nieprawidĹ‚owÄ… wartoĹ›Ä‡.',
-      nextStep: 'Ustaw CUSTOMER_EMAIL_MODE=auto albo CUSTOMER_EMAIL_MODE=disabled.',
-    }
-  }
-
-  if (modeConfig.mode === 'disabled') {
-    return {
-      state: 'disabled',
-      mode: 'disabled',
-      issue: 'CUSTOMER_EMAIL_MODE=disabled',
-      summary:
-        'Maile klienta sa swiadomie wylaczone. Status platnosci, materialy i link do rozmowy pozostaja na stronie potwierdzenia rezerwacji.',
-      nextStep:
-        'Zostaw ten tryb tymczasowo albo po weryfikacji domeny nadawcy przeĹ‚Ä…cz CUSTOMER_EMAIL_MODE=auto i ustaw RESEND_FROM_EMAIL na zweryfikowany adres.',
-    }
-  }
-
-  if (mail.provider === 'invalid') {
-    return {
-      state: 'blocked',
-      mode: 'auto',
-      issue: 'MAIL_PROVIDER invalid',
-      summary: 'WysyĹ‚ka maili do klientĂłw jest zablokowana, bo MAIL_PROVIDER ma nieprawidĹ‚owÄ… wartoĹ›Ä‡.',
-      nextStep: 'Ustaw MAIL_PROVIDER=resend albo MAIL_PROVIDER=gmail.',
-    }
-  }
-
-  if (mail.provider === 'gmail') {
-    if (!mail.smtpUser) {
+  const status = (() => {
+    if (modeConfig.mode === 'invalid') {
       return {
         state: 'blocked',
-        mode: 'auto',
-        issue: 'GMAIL_SMTP_USER missing',
-        summary: 'WysyĹ‚ka maili do klientĂłw jest zablokowana, bo brakuje GMAIL_SMTP_USER.',
-        nextStep: 'Ustaw GMAIL_SMTP_USER i powtĂłrz prĂłbÄ™ wysyĹ‚ki.',
+        mode: 'invalid',
+        issue: `CUSTOMER_EMAIL_MODE has invalid value "${modeConfig.raw}".`,
+        summary: 'Tryb maili klienta jest zablokowany, bo CUSTOMER_EMAIL_MODE ma nieprawidĹ‚owÄ… wartoĹ›Ä‡.',
+        nextStep: 'Ustaw CUSTOMER_EMAIL_MODE=auto albo CUSTOMER_EMAIL_MODE=disabled.',
       }
     }
 
-    if (!mail.smtpAppPassword) {
+    if (modeConfig.mode === 'disabled') {
       return {
-        state: 'blocked',
-        mode: 'auto',
-        issue: 'GMAIL_SMTP_APP_PASSWORD missing',
-        summary: 'WysyĹ‚ka maili do klientĂłw jest zablokowana, bo brakuje GMAIL_SMTP_APP_PASSWORD.',
-        nextStep: 'Wygeneruj Gmail App Password i ustaw GMAIL_SMTP_APP_PASSWORD.',
+        state: 'disabled',
+        mode: 'disabled',
+        issue: 'CUSTOMER_EMAIL_MODE=disabled',
+        summary:
+          'Maile klienta sa swiadomie wylaczone. Status platnosci, materialy i link do rozmowy pozostaja na stronie potwierdzenia rezerwacji.',
+        nextStep:
+          'Zostaw ten tryb tymczasowo albo po weryfikacji domeny nadawcy przeĹ‚Ä…cz CUSTOMER_EMAIL_MODE=auto i ustaw RESEND_FROM_EMAIL na zweryfikowany adres.',
       }
     }
 
-    if (mail.fromStatus !== 'valid' || !mail.from) {
+    if (mail.provider === 'invalid') {
       return {
         state: 'blocked',
         mode: 'auto',
-        issue: 'GMAIL_FROM_EMAIL missing or invalid',
-        summary: 'WysyĹ‚ka maili do klientĂłw jest zablokowana, bo GMAIL_FROM_EMAIL jest pusty albo nieprawidĹ‚owy.',
-        nextStep: 'Ustaw poprawny adres nadawcy w GMAIL_FROM_EMAIL albo uĹĽyj poprawnego GMAIL_SMTP_USER.',
+        issue: 'MAIL_PROVIDER invalid',
+        summary: 'WysyĹ‚ka maili do klientĂłw jest zablokowana, bo MAIL_PROVIDER ma nieprawidĹ‚owÄ… wartoĹ›Ä‡.',
+        nextStep: 'Ustaw MAIL_PROVIDER=resend albo MAIL_PROVIDER=gmail.',
+      }
+    }
+
+    if (mail.provider === 'gmail') {
+      if (!mail.smtpUser) {
+        return {
+          state: 'blocked',
+          mode: 'auto',
+          issue: 'GMAIL_SMTP_USER missing',
+          summary: 'WysyĹ‚ka maili do klientĂłw jest zablokowana, bo brakuje GMAIL_SMTP_USER.',
+          nextStep: 'Ustaw GMAIL_SMTP_USER i powtĂłrz prĂłbÄ™ wysyĹ‚ki.',
+        }
+      }
+
+      if (!mail.smtpAppPassword) {
+        return {
+          state: 'blocked',
+          mode: 'auto',
+          issue: 'GMAIL_SMTP_APP_PASSWORD missing',
+          summary: 'WysyĹ‚ka maili do klientĂłw jest zablokowana, bo brakuje GMAIL_SMTP_APP_PASSWORD.',
+          nextStep: 'Wygeneruj Gmail App Password i ustaw GMAIL_SMTP_APP_PASSWORD.',
+        }
+      }
+
+      if (mail.fromStatus !== 'valid' || !mail.from) {
+        return {
+          state: 'blocked',
+          mode: 'auto',
+          issue: 'GMAIL_FROM_EMAIL missing or invalid',
+          summary: 'WysyĹ‚ka maili do klientĂłw jest zablokowana, bo GMAIL_FROM_EMAIL jest pusty albo nieprawidĹ‚owy.',
+          nextStep: 'Ustaw poprawny adres nadawcy w GMAIL_FROM_EMAIL albo uĹĽyj poprawnego GMAIL_SMTP_USER.',
+        }
+      }
+
+      return {
+        state: 'ready',
+        mode: 'auto',
+        issue: null,
+        summary: 'WysyĹ‚ka maili do klientĂłw zewnÄ™trznych jest gotowa z aktualnej konfiguracji Gmail SMTP.',
+        nextStep: 'Brak blokera po stronie konfiguracji maili klienta.',
+      }
+    }
+
+    if (!mail.apiKey) {
+      return {
+        state: 'blocked',
+        mode: 'auto',
+        issue: 'RESEND_API_KEY missing',
+        summary: 'WysyĹ‚ka maili do klientĂłw jest zablokowana, bo brakuje RESEND_API_KEY.',
+        nextStep: 'UzupeĹ‚nij RESEND_API_KEY i powtĂłrz prĂłbÄ™ wysyĹ‚ki na zewnÄ™trzny adres testowy.',
+      }
+    }
+
+    if (mail.configuredFromStatus === 'invalid') {
+      return {
+        state: 'blocked',
+        mode: 'auto',
+        issue: 'RESEND_FROM_EMAIL missing or invalid',
+        summary: 'WysyĹ‚ka maili do klientĂłw jest zablokowana, bo RESEND_FROM_EMAIL jest pusty albo nieprawidĹ‚owy.',
+        nextStep: 'Ustaw poprawny adres nadawcy w RESEND_FROM_EMAIL.',
+      }
+    }
+
+    if (!isValidResendFrom(mail.from)) {
+      return {
+        state: 'blocked',
+        mode: 'auto',
+        issue: 'RESEND_FROM_EMAIL missing or invalid',
+        summary: 'WysyĹ‚ka maili do klientĂłw jest zablokowana, bo RESEND_FROM_EMAIL jest pusty albo nieprawidĹ‚owy.',
+        nextStep: 'Ustaw poprawny adres nadawcy w RESEND_FROM_EMAIL.',
+      }
+    }
+
+    if (!isResendTestingSender(mail.from)) {
+      return {
+        state: 'ready',
+        mode: 'auto',
+        issue: null,
+        summary: 'WysyĹ‚ka maili do klientĂłw zewnÄ™trznych jest gotowa z aktualnej konfiguracji Resend.',
+        nextStep: 'Brak blokera po stronie konfiguracji maili klienta.',
+      }
+    }
+
+    const allowedRecipient = getNotificationRecipientEmail()?.toLowerCase() ?? null
+    const normalizedRecipient = recipientEmail?.trim().toLowerCase() ?? null
+
+    if (allowedRecipient && normalizedRecipient === allowedRecipient) {
+      return {
+        state: 'ready',
+        mode: 'auto',
+        issue: null,
+        summary: 'WysyĹ‚ka maili do klientĂłw zewnÄ™trznych jest gotowa z aktualnej konfiguracji Resend.',
+        nextStep: 'Brak blokera po stronie konfiguracji maili klienta.',
       }
     }
 
     return {
-      state: 'ready',
-      mode: 'auto',
-      issue: null,
-      summary: 'WysyĹ‚ka maili do klientĂłw zewnÄ™trznych jest gotowa z aktualnej konfiguracji Gmail SMTP.',
-      nextStep: 'Brak blokera po stronie konfiguracji maili klienta.',
-    }
-  }
-
-  if (!mail.apiKey) {
-    return {
       state: 'blocked',
       mode: 'auto',
-      issue: 'RESEND_API_KEY missing',
-      summary: 'WysyĹ‚ka maili do klientĂłw jest zablokowana, bo brakuje RESEND_API_KEY.',
-      nextStep: 'UzupeĹ‚nij RESEND_API_KEY i powtĂłrz prĂłbÄ™ wysyĹ‚ki na zewnÄ™trzny adres testowy.',
+      issue: allowedRecipient
+        ? `RESEND_FROM_EMAIL uses resend.dev testing mode. Verify a domain to send customer emails to recipients other than ${allowedRecipient}.`
+        : 'RESEND_FROM_EMAIL uses resend.dev testing mode. Verify a domain to send customer emails to external recipients.',
+      summary: 'WysyĹ‚ka maili do klientĂłw zewnÄ™trznych jest zablokowana, bo RESEND_FROM_EMAIL nadal korzysta z resend.dev testing mode.',
+      nextStep: 'Zweryfikuj domene nadawcy w Resend i ustaw RESEND_FROM_EMAIL na adres z tej domeny.',
     }
-  }
+  })()
 
-  if (mail.configuredFromStatus === 'invalid') {
-    return {
-      state: 'blocked',
-      mode: 'auto',
-      issue: 'RESEND_FROM_EMAIL missing or invalid',
-      summary: 'WysyĹ‚ka maili do klientĂłw jest zablokowana, bo RESEND_FROM_EMAIL jest pusty albo nieprawidĹ‚owy.',
-      nextStep: 'Ustaw poprawny adres nadawcy w RESEND_FROM_EMAIL.',
-    }
-  }
-
-  if (!isValidResendFrom(mail.from)) {
-    return {
-      state: 'blocked',
-      mode: 'auto',
-      issue: 'RESEND_FROM_EMAIL missing or invalid',
-      summary: 'WysyĹ‚ka maili do klientĂłw jest zablokowana, bo RESEND_FROM_EMAIL jest pusty albo nieprawidĹ‚owy.',
-      nextStep: 'Ustaw poprawny adres nadawcy w RESEND_FROM_EMAIL.',
-    }
-  }
-
-  if (!isResendTestingSender(mail.from)) {
-    return {
-      state: 'ready',
-      mode: 'auto',
-      issue: null,
-      summary: 'WysyĹ‚ka maili do klientĂłw zewnÄ™trznych jest gotowa z aktualnej konfiguracji Resend.',
-      nextStep: 'Brak blokera po stronie konfiguracji maili klienta.',
-    }
-  }
-
-  const allowedRecipient = getNotificationRecipientEmail()?.toLowerCase() ?? null
-  const normalizedRecipient = recipientEmail?.trim().toLowerCase() ?? null
-
-  if (allowedRecipient && normalizedRecipient === allowedRecipient) {
-    return {
-      state: 'ready',
-      mode: 'auto',
-      issue: null,
-      summary: 'WysyĹ‚ka maili do klientĂłw zewnÄ™trznych jest gotowa z aktualnej konfiguracji Resend.',
-      nextStep: 'Brak blokera po stronie konfiguracji maili klienta.',
-    }
-  }
-
-  return {
-    state: 'blocked',
-    mode: 'auto',
-    issue: allowedRecipient
-      ? `RESEND_FROM_EMAIL uses resend.dev testing mode. Verify a domain to send customer emails to recipients other than ${allowedRecipient}.`
-      : 'RESEND_FROM_EMAIL uses resend.dev testing mode. Verify a domain to send customer emails to external recipients.',
-    summary: 'WysyĹ‚ka maili do klientĂłw zewnÄ™trznych jest zablokowana, bo RESEND_FROM_EMAIL nadal korzysta z resend.dev testing mode.',
-    nextStep: 'Zweryfikuj domene nadawcy w Resend i ustaw RESEND_FROM_EMAIL na adres z tej domeny.',
-  }
+  return repairCustomerEmailDeliveryStatus(status)
 }
 
 export function getCustomerEmailDeliveryConfigIssue(recipientEmail?: string | null): string | null {
@@ -447,6 +461,15 @@ function renderEmailActionButton(action: EmailActionButton) {
   `
 }
 
+function repairEmailPayload(payload: SendEmailPayload): SendEmailPayload {
+  return {
+    ...payload,
+    subject: repairCopy(payload.subject),
+    html: repairCopy(payload.html),
+    text: repairCopy(payload.text),
+  }
+}
+
 function buildAbsoluteUrl(pathname: string): string {
   return new URL(pathname, getBaseUrl()).toString()
 }
@@ -507,13 +530,14 @@ export function shouldSendBookingConfirmationAfterPayment(
 }
 
 async function deliverEmail(payload: SendEmailPayload, audience: EmailAudience = 'internal'): Promise<DeliveryResult> {
+  const cleanedPayload = repairEmailPayload(payload)
   const mail = getMailProviderConfig()
 
   if (mail.provider === 'invalid') {
     console.warn('[behawior15][email] skip', {
       reason: 'MAIL_PROVIDER invalid',
-      to: payload.to,
-      subject: payload.subject,
+      to: cleanedPayload.to,
+      subject: cleanedPayload.subject,
     })
     return {
       status: 'skipped',
@@ -524,8 +548,8 @@ async function deliverEmail(payload: SendEmailPayload, audience: EmailAudience =
   if (mail.provider === 'resend' && !mail.apiKey) {
     console.warn('[behawior15][email] skip', {
       reason: 'RESEND_API_KEY missing',
-      to: payload.to,
-      subject: payload.subject,
+      to: cleanedPayload.to,
+      subject: cleanedPayload.subject,
     })
     return {
       status: 'skipped',
@@ -536,21 +560,21 @@ async function deliverEmail(payload: SendEmailPayload, audience: EmailAudience =
   if (mail.provider === 'resend' && audience === 'internal' && mail.configuredFromStatus === 'invalid') {
     console.warn('[behawior15][email] invalid RESEND_FROM_EMAIL, using resend.dev fallback for internal delivery only', {
       configuredFrom: mail.configuredFrom,
-      to: payload.to,
-      subject: payload.subject,
+      to: cleanedPayload.to,
+      subject: cleanedPayload.subject,
     })
   }
 
   if (audience === 'customer') {
-    const customerEmailStatus = getCustomerEmailDeliveryStatus(payload.to)
+    const customerEmailStatus = getCustomerEmailDeliveryStatus(cleanedPayload.to)
 
     if (customerEmailStatus.state !== 'ready') {
       const reason = customerEmailStatus.issue ?? customerEmailStatus.summary
       console.warn('[behawior15][email] skip', {
         reason,
         state: customerEmailStatus.state,
-        to: payload.to,
-        subject: payload.subject,
+        to: cleanedPayload.to,
+        subject: cleanedPayload.subject,
       })
       return {
         status: 'skipped',
@@ -578,21 +602,21 @@ async function deliverEmail(payload: SendEmailPayload, audience: EmailAudience =
         })
       }
 
-      const replyTo = payload.replyTo ?? getPublicContactDetails().email ?? undefined
+      const replyTo = cleanedPayload.replyTo ?? getPublicContactDetails().email ?? undefined
 
       await gmailTransport.sendMail({
         from: mail.from,
-        to: payload.to,
-        subject: payload.subject,
-        html: payload.html,
-        text: payload.text,
+        to: cleanedPayload.to,
+        subject: cleanedPayload.subject,
+        html: cleanedPayload.html,
+        text: cleanedPayload.text,
         replyTo,
       })
 
       console.info('[behawior15][email] sent', {
         provider: mail.provider,
-        to: payload.to,
-        subject: payload.subject,
+        to: cleanedPayload.to,
+        subject: cleanedPayload.subject,
       })
       return {
         status: 'sent',
@@ -607,22 +631,22 @@ async function deliverEmail(payload: SendEmailPayload, audience: EmailAudience =
       },
       body: JSON.stringify({
         from: mail.from,
-        to: [payload.to],
-        subject: payload.subject,
-        html: payload.html,
-        text: payload.text,
-        reply_to: payload.replyTo,
+        to: [cleanedPayload.to],
+        subject: cleanedPayload.subject,
+        html: cleanedPayload.html,
+        text: cleanedPayload.text,
+        reply_to: cleanedPayload.replyTo,
       }),
     })
 
     if (!response.ok) {
       const body = await response.text()
-      console.error('[behawior15][email] failed', {
-        status: response.status,
-        body,
-        to: payload.to,
-        subject: payload.subject,
-      })
+    console.error('[behawior15][email] failed', {
+      status: response.status,
+      body,
+      to: cleanedPayload.to,
+      subject: cleanedPayload.subject,
+    })
       return {
         status: 'failed',
         reason: `Resend HTTP ${response.status}`,
@@ -631,8 +655,8 @@ async function deliverEmail(payload: SendEmailPayload, audience: EmailAudience =
 
     console.info('[behawior15][email] sent', {
       provider: mail.provider,
-      to: payload.to,
-      subject: payload.subject,
+      to: cleanedPayload.to,
+      subject: cleanedPayload.subject,
     })
     return {
       status: 'sent',
@@ -641,8 +665,8 @@ async function deliverEmail(payload: SendEmailPayload, audience: EmailAudience =
     const reason = error instanceof Error ? error.message : 'Unknown Resend error'
     console.error('[behawior15][email] failed', {
       reason,
-      to: payload.to,
-      subject: payload.subject,
+      to: cleanedPayload.to,
+      subject: cleanedPayload.subject,
     })
     return {
       status: 'failed',
@@ -793,6 +817,8 @@ export type BookRequestSubmission = {
   species: 'pies' | 'kot'
   description: string
   preferredSlots: string
+  leadBookingId?: string
+  leadBookingAccessToken?: string
 }
 
 function getPdfOrderCustomerCta(submission: PdfOrderSubmission): EmailActionButton {
@@ -1056,6 +1082,9 @@ export async function sendBookRequestEmail(submission: BookRequestSubmission): P
 
   const replyTo = isValidPublicEmail(submission.email) ? submission.email : undefined
   const speciesLabel = submission.species === 'kot' ? 'Kot' : 'Pies'
+  const adminPanelHref = submission.leadBookingId
+    ? buildAbsoluteUrl(`/admin/lead-bookings/${submission.leadBookingId}`)
+    : null
   const subject =
     submission.service === 'kwadrans-na-juz'
       ? `PILNE - Kwadrans na juz: ${submission.name}`
@@ -1073,6 +1102,7 @@ export async function sendBookRequestEmail(submission: BookRequestSubmission): P
       <p><strong>Preferowane terminy:</strong><br />${formatMultilineHtml(submission.preferredSlots)}</p>
       <p><strong>Opis sytuacji:</strong><br />${formatMultilineHtml(submission.description)}</p>
       <p><strong>Nastepny krok:</strong> ${submission.service === 'kwadrans-na-juz' ? 'odpisz w ciagu 15 minut z pierwszym wolnym terminem i dalszym krokiem platnosci.' : 'potwierdz termin i wyslij klientowi PayPal albo instrukcje BLIK na telefon.'}</p>
+      ${adminPanelHref ? renderEmailActionButton({ href: adminPanelHref, label: 'Otworz w panelu admina' }) : ''}
     `,
     'To jest manualny flow rezerwacji po potwierdzeniu terminu, bez publicznego numeru telefonu.',
   )
@@ -1116,7 +1146,13 @@ export async function sendBookRequestAutoReplyEmail(submission: BookRequestSubmi
     }
   }
 
-  const requestHref = buildAbsoluteUrl(`/book?service=${encodeURIComponent(submission.service)}`)
+  const faqHref = buildAbsoluteUrl('/faq')
+  const reservationHref =
+    submission.leadBookingId && submission.leadBookingAccessToken
+      ? buildAbsoluteUrl(
+          `/rezerwacja/${submission.leadBookingId}?token=${submission.leadBookingAccessToken}`,
+        )
+      : null
   const subject = `Dostalem Twoja rezerwacje - ${submission.serviceLabel}`
   const html = renderEmailShell(
     `Czesc ${escapeHtml(submission.name)}, dostalem Twoja rezerwacje.`,
@@ -1125,9 +1161,14 @@ export async function sendBookRequestAutoReplyEmail(submission: BookRequestSubmi
       <p><strong>Co dalej:</strong></p>
       <p>${submission.service === 'kwadrans-na-juz' ? '1. Odezwe sie w ciagu 15 minut z pierwszym wolnym terminem i dalszym krokiem platnosci.' : '1. Odezwe sie w ciagu kilku godzin, miedzy 9 a 21, z potwierdzeniem terminu i dalszym krokiem platnosci.'}</p>
       <p>2. Dostaniesz PayPal albo instrukcje BLIK na telefon, zaleznie od najprostszego wariantu dla tej rezerwacji.</p>
-      <p>3. Po platnosci potwierdzam rezerwacje do 15 minut i odsylam link do rozmowy.</p>
+      <p>3. Po platnosci potwierdzam rezerwacje do 15 minut i odsylam link do rozmowy oraz wpis do kalendarza.</p>
       <p><strong>Twoje preferowane terminy:</strong><br />${formatMultilineHtml(submission.preferredSlots)}</p>
-      ${renderEmailActionButton({ href: requestHref, label: 'Zobacz szczegoly rezerwacji' })}
+      <p><strong>Status:</strong> Czeka na potwierdzenie terminu.</p>
+      ${
+        reservationHref
+          ? renderEmailActionButton({ href: reservationHref, label: 'Zobacz status rezerwacji' })
+          : renderEmailActionButton({ href: faqHref, label: 'Najczesciej zadawane pytania' })
+      }
       ${renderContactBlockHtml()}
     `,
     'Jesli chcesz cos dopowiedziec, po prostu odpowiedz na tego maila.',
@@ -1143,12 +1184,16 @@ export async function sendBookRequestAutoReplyEmail(submission: BookRequestSubmi
       ? '1. Odezwe sie w ciagu 15 minut z pierwszym wolnym terminem i dalszym krokiem platnosci.'
       : '1. Odezwe sie w ciagu kilku godzin, miedzy 9 a 21, z potwierdzeniem terminu i dalszym krokiem platnosci.',
     '2. Dostaniesz PayPal albo instrukcje BLIK na telefon.',
-    '3. Po platnosci potwierdzam rezerwacje do 15 minut i odsylam link do rozmowy.',
+    '3. Po platnosci potwierdzam rezerwacje do 15 minut i odsylam link do rozmowy oraz wpis do kalendarza.',
     '',
     'Twoje preferowane terminy:',
     submission.preferredSlots,
     '',
-    `Szczegoly rezerwacji: ${requestHref}`,
+    'Status: Czeka na potwierdzenie terminu.',
+    '',
+    reservationHref
+      ? `Zobacz status rezerwacji: ${reservationHref}`
+      : `Najczesciej zadawane pytania: ${faqHref}`,
     '',
     'Jesli chcesz cos dopowiedziec, po prostu odpowiedz na tego maila.',
     renderContactBlockText(),
