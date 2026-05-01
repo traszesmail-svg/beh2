@@ -1,11 +1,10 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { HeroIllustration } from '@/components/HeroIllustration'
 import { NextSlot } from '@/components/NextSlot'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
-import { LeadMagnetSection } from '@/components/LeadMagnetSection'
-import { NotatnikFinalCta, NotatnikFooter, NotatnikSectionHead, NotatnikSideVisuals, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
+import { NotatnikFooter, NotatnikSectionHead, NotatnikSideVisuals, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
+import { OfferCards } from '@/components/OfferCards'
 import { Schema } from '@/components/schema'
 import { buildBookHref } from '@/lib/booking-routing'
 import { getBreadcrumbJsonLd, getFaqPageJsonLd, getServiceJsonLd } from '@/lib/schema'
@@ -28,6 +27,7 @@ const serviceLandingHref = '/behawiorysta-online-polska'
 const topics = [
   {
     number: 'i.',
+    icon: 'cat-litter',
     title: 'Kuweta',
     copy: 'Sikanie poza kuweta, wybor miejsca, zwirek i liczba kuwet. Najpierw porzadek, potem zmiany.',
     href: '/koty/zalatwianie-poza-kuweta',
@@ -35,6 +35,7 @@ const topics = [
   },
   {
     number: 'ii.',
+    icon: 'cat-conflict',
     title: 'Konflikt miedzy kotami',
     copy: 'Syk, pogon, blokowanie przejsc albo napiecie stale wiszace w domu. Tu liczy sie kolejnosc zmian.',
     href: '/koty/konflikt-miedzy-kotami',
@@ -42,6 +43,7 @@ const topics = [
   },
   {
     number: 'iii.',
+    icon: 'cat-stress',
     title: 'Wycofanie i napiecie',
     copy: 'Kot chowa sie, jest bardziej czujny albo trudniej mu odpoczac po zmianach w domu.',
     href: quickHref,
@@ -49,6 +51,7 @@ const topics = [
   },
   {
     number: 'iv.',
+    icon: 'cat-stress',
     title: 'Zmiany w domu',
     copy: 'Przeprowadzka, dziecko, remont, nowy domownik albo rozchwiany rytm dnia potrafia mocno obciazyc kota.',
     href: quickHref,
@@ -56,43 +59,11 @@ const topics = [
   },
   {
     number: 'v.',
+    icon: 'cat-other',
     title: 'Niepewny albo szerszy temat',
     copy: 'Jesli nie wiesz, czy chodzi o kuwete, stres, zdrowie czy relacje, najpierw ustalamy priorytet i zakres dalszej pracy.',
     href: consultationHref,
     label: 'Pelna konsultacja',
-  },
-] as const
-
-const consultationFormats = [
-  {
-    title: 'Kwadrans z behawiorysta',
-    eyebrow: '69 zl / pierwszy krok',
-    description: 'Najprostszy start, gdy chcesz ustalic pierwszy priorytet i zobaczyc, od czego najlepiej zaczac.',
-    whenToChoose: 'gdy temat jest jeden, swiezy albo chcesz najpierw uporzadkowac sytuacje kota',
-    meta: ['15 min audio bez kamery', '69 zl', 'na start'],
-    href: quickHref,
-    ctaLabel: 'Zarezerwuj Kwadrans',
-    ctaClassName: 'button button-primary',
-  },
-  {
-    title: 'Dwa kwadranse',
-    eyebrow: '169 zl / szerszy start',
-    description: 'Spokojniejszy etap posredni, gdy 15 minut to za malo, ale nie potrzebujesz jeszcze pelnej konsultacji.',
-    whenToChoose: 'gdy temat ma kilka warstw i chcesz wejsc szerzej w dom, zasoby i rytm dnia',
-    meta: ['30 min online', '169 zl'],
-    href: bridgeHref,
-    ctaLabel: 'Wybierz Dwa kwadranse',
-    ctaClassName: 'button button-ghost',
-  },
-  {
-    title: 'Pelna konsultacja',
-    eyebrow: '470 zl / zlozona sprawa',
-    description: 'Format dla spraw utrwalonych albo wielowatkowych, gdy potrzebujesz diagnozy, planu i wsparcia po rozmowie.',
-    whenToChoose: 'gdy problem wraca, obejmuje relacje, srodowisko i codziennosc albo wymaga szerszego planu',
-    meta: ['60 min audio albo video', '470 zl', 'diagnoza + 7 dni WhatsApp'],
-    href: consultationHref,
-    ctaLabel: 'Wybierz Pelna konsultacje',
-    ctaClassName: 'button button-ghost',
   },
 ] as const
 
@@ -137,8 +108,8 @@ export default function CatsPage() {
         <NotatnikTopbar tag="Kot / strona gatunku" navItems={PUBLIC_SITE_NAV_ITEMS} ctaHref={quickHref} ctaLabel="Kwadrans / 69 zl" />
         <Breadcrumbs items={[{ name: 'Koty', url: '/koty' }]} />
 
-        <section className="notatnik-subhero">
-          <div>
+        <section className="notatnik-subhero notatnik-subhero-pet">
+          <div className="notatnik-subhero-copy">
             <div className="notatnik-subhero-tag notatnik-mono">Kot / strona gatunku</div>
             <h1>
               Twoj kot zachowuje sie w sposob, <em>ktory Cie niepokoi</em>.
@@ -169,22 +140,38 @@ export default function CatsPage() {
           </div>
 
           <div className="notatnik-subhero-media">
-            <HeroIllustration slug="koty" emojiPlaceholder="🐈" className="w-full h-full min-h-[340px]" />
+            <div className="notatnik-subhero-pet-figure notatnik-subhero-consultation-figure" aria-hidden="true">
+              <Image
+                src="/2.png"
+                alt=""
+                width={1024}
+                height={1536}
+                priority
+                className="notatnik-subhero-consultation-image"
+              />
+            </div>
           </div>
         </section>
 
-        <section id="tematy">
+        <section id="tematy" className="notatnik-dog-topic-section">
           <NotatnikSectionHead index="I." kicker="Najczestsze tematy" title="Problemy kocie - lista." />
-          <div className="notatnik-topic-grid">
+          <div className="notatnik-topic-grid notatnik-topic-grid-with-icons">
             {topics.map((topic) => (
-              <article key={topic.title} className="notatnik-topic-card">
+              <Link key={topic.title} href={topic.href} prefetch={false} className="notatnik-topic-card notatnik-topic-card-with-icon">
+                <Image
+                  src={`/branding/pet-topics/subcategories/${topic.icon}.png`}
+                  alt=""
+                  width={126}
+                  height={126}
+                  className="notatnik-topic-card-icon"
+                />
                 <div className="notatnik-topic-number">{topic.number}</div>
                 <h3>{topic.title}</h3>
                 <p>{topic.copy}</p>
-                <Link href={topic.href} prefetch={false}>
+                <span className="notatnik-topic-card-action">
                   {topic.label}
-                </Link>
-              </article>
+                </span>
+              </Link>
             ))}
           </div>
           <div className="list-card tree-backed-card top-gap-small">
@@ -192,43 +179,8 @@ export default function CatsPage() {
           </div>
         </section>
 
-        <section id="konsultacja">
-          <NotatnikSectionHead index="II." kicker="3 formaty konsultacji" title="Ktory format dla kota ma sens na start." />
-          <p className="notatnik-service-description">
-            Kwadrans na jedno pytanie albo pierwsza orientacje. Dwa kwadranse przy szerszym temacie. Pelna konsultacja przy sprawie trwajacej lub zlozonej.
-          </p>
-          <div className="card-grid three-up top-gap-small">
-            {consultationFormats.map((format) => (
-              <article key={format.title} className="summary-card tree-backed-card">
-                <div className="notatnik-mono">{format.eyebrow}</div>
-                <h3>{format.title}</h3>
-                <p>{format.description}</p>
-                <div className="editorial-hero-meta" aria-label={`Parametry uslugi ${format.title}`}>
-                  {format.meta.map((item) => (
-                    <span key={item}>{item}</span>
-                  ))}
-                </div>
-                <p>
-                  <strong>Kiedy wybrac:</strong> {format.whenToChoose}
-                </p>
-                <div className="hero-actions top-gap-small">
-                  <Link href={format.href} prefetch={false} className={format.ctaClassName}>
-                    {format.ctaLabel}
-                  </Link>
-                </div>
-              </article>
-            ))}
-          </div>
-          <div className="list-card tree-backed-card top-gap-small">
-            <p>
-              Potrzebujesz szybszego terminu? Przy rezerwacji Kwadransu dostepny jest wariant na juz (99 zl) — ten sam format, termin potwierdzany do 15
-              minut.
-            </p>
-          </div>
-        </section>
-
         <section id="faq">
-          <NotatnikSectionHead index="III." kicker="FAQ" title="3 szybkie odpowiedzi przy tematach kocich." />
+          <NotatnikSectionHead index="II." kicker="FAQ" title="3 szybkie odpowiedzi przy tematach kocich." />
           <div className="card-grid three-up top-gap-small">
             {faqItems.map((item) => (
               <article key={item.question} className="summary-card tree-backed-card">
@@ -239,18 +191,20 @@ export default function CatsPage() {
           </div>
         </section>
 
-        <LeadMagnetSection pathname="/koty" />
+        <section id="cennik">
+          <NotatnikSectionHead index="III." kicker="Cennik / wybor sciezki" title="Najpierw cena, potem najprostsza sciezka." />
+          <div className="top-gap-small">
+            <OfferCards />
+          </div>
+          <div className="notatnik-pdf-fallback top-gap-small">
+            <span>Jesli nie rezerwujesz rozmowy, przejdz do materialow PDF.</span>
+            <Link href="/materialy" prefetch={false} className="notatnik-inline-link">
+              Zobacz materialy
+            </Link>
+          </div>
+        </section>
 
-        <NotatnikFinalCta
-          title="Jesli temat kota Ci nie daje spokoju, <em>zacznij od porzadku.</em>"
-          copy="Nie musisz od razu wiedziec, czy chodzi o kuwete, stres czy relacje. Wystarczy dobrze wybrac pierwszy format."
-          primaryHref={quickHref}
-          primaryLabel="Zarezerwuj Kwadrans / 69 zl"
-          secondaryHref="/kontakt?species=kot#formularz"
-          secondaryLabel="Napisz wiadomosc"
-        />
-
-        <NotatnikFooter primaryHref={quickHref} primaryLabel="Kwadrans z behawiorysta" />
+        <NotatnikFooter primaryHref={quickHref} primaryLabel="Kwadrans z behawiorysta" showReviews={false} />
       </div>
     </main>
   )

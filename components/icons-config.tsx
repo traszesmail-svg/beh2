@@ -26,6 +26,12 @@ import {
   Lightbulb,
   Star,
   PawPrint,
+  Dog,
+  Cat,
+  ShieldCheck,
+  Footprints,
+  Utensils,
+  HeartHandshake,
   Home,
   CalendarDays,
   Droplets,
@@ -43,6 +49,8 @@ export const iconMap = {
   'hand-heart': HandHeart,
   'phone-off': PhoneOff,
   'credit-card': CreditCard,
+  utensils: Utensils,
+  'heart-handshake': HeartHandshake,
 
   // CTA / nawigacja
   zap: Zap,
@@ -75,6 +83,10 @@ export const iconMap = {
 
   // Pies
   'paw-print': PawPrint,
+  dog: Dog,
+  cat: Cat,
+  'shield-check': ShieldCheck,
+  footprints: Footprints,
   home: Home,
   'calendar-days': CalendarDays,
 

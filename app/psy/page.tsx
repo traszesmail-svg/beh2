@@ -1,11 +1,10 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { HeroIllustration } from '@/components/HeroIllustration'
 import { NextSlot } from '@/components/NextSlot'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
-import { LeadMagnetSection } from '@/components/LeadMagnetSection'
-import { NotatnikFinalCta, NotatnikFooter, NotatnikSectionHead, NotatnikSideVisuals, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
+import { NotatnikFooter, NotatnikSectionHead, NotatnikSideVisuals, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
+import { OfferCards } from '@/components/OfferCards'
 import { Schema } from '@/components/schema'
 import { buildBookHref } from '@/lib/booking-routing'
 import { getBreadcrumbJsonLd, getFaqPageJsonLd, getServiceJsonLd } from '@/lib/schema'
@@ -28,6 +27,7 @@ const serviceLandingHref = '/behawiorysta-online-polska'
 const topics = [
   {
     number: 'i.',
+    icon: 'dog-reactivity',
     title: 'Reaktywnosc na smyczy',
     copy: 'Pies reaguje na inne psy, ludzi albo rowery. Najpierw porzadkujemy wyzwalacze, dystans i rytm spaceru.',
     href: '/psy/reaktywnosc-na-smyczy',
@@ -35,6 +35,7 @@ const topics = [
   },
   {
     number: 'ii.',
+    icon: 'dog-separation',
     title: 'Lek separacyjny',
     copy: 'Wycie, niszczenie, napiecie po wyjsciu opiekuna. To temat do spokojnego planu, nie do zgadywania.',
     href: '/psy/lek-separacyjny',
@@ -42,6 +43,7 @@ const topics = [
   },
   {
     number: 'iii.',
+    icon: 'dog-puppy',
     title: 'Pobudzenie i wyciszenie',
     copy: 'Pies nie umie odpoczac, trudno mu zejsc z napiecia i zlapac codzienny rytm domu.',
     href: quickHref,
@@ -49,6 +51,7 @@ const topics = [
   },
   {
     number: 'iv.',
+    icon: 'dog-puppy',
     title: 'Mlody pies i start w domu',
     copy: 'Szczeniak, gryzienie, skakanie, pierwsze spacery i codzienne granice bez dokladania chaosu.',
     href: quickHref,
@@ -56,43 +59,11 @@ const topics = [
   },
   {
     number: 'v.',
+    icon: 'topic-other',
     title: 'Sprawa zlozona albo przewlekla',
     copy: 'Gdy problem wraca, obejmuje kilka watkow naraz albo od razu widzisz, ze potrzebny jest szerszy plan.',
     href: consultationHref,
     label: 'Pelna konsultacja',
-  },
-] as const
-
-const consultationFormats = [
-  {
-    title: 'Kwadrans z behawiorysta',
-    eyebrow: '69 zl / pierwszy krok',
-    description: 'Najprostszy start, gdy chcesz nazwac problem, ustalic priorytet i wiedziec, co robic dalej.',
-    whenToChoose: 'gdy temat jest jeden, swiezy albo chcesz po prostu dobrze zaczac',
-    meta: ['15 min audio bez kamery', '69 zl', 'na start'],
-    href: quickHref,
-    ctaLabel: 'Zarezerwuj Kwadrans',
-    ctaClassName: 'button button-primary',
-  },
-  {
-    title: 'Dwa kwadranse',
-    eyebrow: '169 zl / szerszy start',
-    description: 'Spokojniejszy etap posredni, gdy 15 minut to za malo, ale nie potrzebujesz jeszcze pelnej konsultacji.',
-    whenToChoose: 'gdy chcesz uporzadkowac 2-3 watki i wejsc w rozmowe szerzej',
-    meta: ['30 min online', '169 zl'],
-    href: bridgeHref,
-    ctaLabel: 'Wybierz Dwa kwadranse',
-    ctaClassName: 'button button-ghost',
-  },
-  {
-    title: 'Pelna konsultacja',
-    eyebrow: '470 zl / zlozona sprawa',
-    description: 'Format dla spraw utrwalonych albo wielowatkowych, gdy potrzebujesz diagnozy, planu i wsparcia po rozmowie.',
-    whenToChoose: 'gdy problem trwa dluzej, wraca albo od razu wymaga szerszego planu',
-    meta: ['60 min audio albo video', '470 zl', 'diagnoza + 7 dni WhatsApp'],
-    href: consultationHref,
-    ctaLabel: 'Wybierz Pelna konsultacje',
-    ctaClassName: 'button button-ghost',
   },
 ] as const
 
@@ -137,7 +108,7 @@ export default function DogsPage() {
         <NotatnikTopbar tag="Pies / strona gatunku" navItems={PUBLIC_SITE_NAV_ITEMS} ctaHref={quickHref} ctaLabel="Kwadrans / 69 zl" />
         <Breadcrumbs items={[{ name: 'Psy', url: '/psy' }]} />
 
-        <section className="notatnik-subhero">
+        <section className="notatnik-subhero notatnik-subhero-pet">
           <div>
             <div className="notatnik-subhero-tag notatnik-mono">Pies / strona gatunku</div>
             <h1>
@@ -165,22 +136,38 @@ export default function DogsPage() {
           </div>
 
           <div className="notatnik-subhero-media">
-            <HeroIllustration slug="psy" emojiPlaceholder="🐕" className="w-full h-full min-h-[340px]" />
+            <div className="notatnik-subhero-pet-figure notatnik-subhero-consultation-figure" aria-hidden="true">
+              <Image
+                src="/2.png"
+                alt=""
+                width={1024}
+                height={1536}
+                priority
+                className="notatnik-subhero-consultation-image"
+              />
+            </div>
           </div>
         </section>
 
-        <section id="tematy">
+        <section id="tematy" className="notatnik-dog-topic-section">
           <NotatnikSectionHead index="I." kicker="Najczestsze tematy" title="Problemy psie - lista." />
-          <div className="notatnik-topic-grid">
+          <div className="notatnik-topic-grid notatnik-topic-grid-with-icons">
             {topics.map((topic) => (
-              <article key={topic.title} className="notatnik-topic-card">
+              <Link key={topic.title} href={topic.href} prefetch={false} className="notatnik-topic-card notatnik-topic-card-with-icon">
+                <Image
+                  src={`/branding/pet-topics/subcategories/${topic.icon}.png`}
+                  alt=""
+                  width={126}
+                  height={126}
+                  className="notatnik-topic-card-icon"
+                />
                 <div className="notatnik-topic-number">{topic.number}</div>
                 <h3>{topic.title}</h3>
                 <p>{topic.copy}</p>
-                <Link href={topic.href} prefetch={false}>
+                <span className="notatnik-topic-card-action">
                   {topic.label}
-                </Link>
-              </article>
+                </span>
+              </Link>
             ))}
           </div>
           <div className="list-card tree-backed-card top-gap-small">
@@ -188,43 +175,8 @@ export default function DogsPage() {
           </div>
         </section>
 
-        <section id="konsultacja">
-          <NotatnikSectionHead index="II." kicker="3 formaty konsultacji" title="Ktory format dla psa ma sens na start." />
-          <p className="notatnik-service-description">
-            Kwadrans na jedno pytanie albo pierwsza orientacje. Dwa kwadranse przy szerszym temacie. Pelna konsultacja przy sprawie trwajacej lub zlozonej.
-          </p>
-          <div className="card-grid three-up top-gap-small">
-            {consultationFormats.map((format) => (
-              <article key={format.title} className="summary-card tree-backed-card">
-                <div className="notatnik-mono">{format.eyebrow}</div>
-                <h3>{format.title}</h3>
-                <p>{format.description}</p>
-                <div className="editorial-hero-meta" aria-label={`Parametry uslugi ${format.title}`}>
-                  {format.meta.map((item) => (
-                    <span key={item}>{item}</span>
-                  ))}
-                </div>
-                <p>
-                  <strong>Kiedy wybrac:</strong> {format.whenToChoose}
-                </p>
-                <div className="hero-actions top-gap-small">
-                  <Link href={format.href} prefetch={false} className={format.ctaClassName}>
-                    {format.ctaLabel}
-                  </Link>
-                </div>
-              </article>
-            ))}
-          </div>
-          <div className="list-card tree-backed-card top-gap-small">
-            <p>
-              Potrzebujesz szybszego terminu? Przy rezerwacji Kwadransu dostepny jest wariant na juz (99 zl) — ten sam format, termin potwierdzany do 15
-              minut.
-            </p>
-          </div>
-        </section>
-
         <section id="faq">
-          <NotatnikSectionHead index="III." kicker="FAQ" title="3 szybkie odpowiedzi przy tematach psich." />
+          <NotatnikSectionHead index="II." kicker="FAQ" title="3 szybkie odpowiedzi przy tematach psich." />
           <div className="card-grid three-up top-gap-small">
             {faqItems.map((item) => (
               <article key={item.question} className="summary-card tree-backed-card">
@@ -235,18 +187,20 @@ export default function DogsPage() {
           </div>
         </section>
 
-        <LeadMagnetSection pathname="/psy" />
+        <section id="cennik">
+          <NotatnikSectionHead index="III." kicker="Cennik / wybor sciezki" title="Najpierw cena, potem najprostsza sciezka." />
+          <div className="top-gap-small">
+            <OfferCards />
+          </div>
+          <div className="notatnik-pdf-fallback top-gap-small">
+            <span>Jesli nie rezerwujesz rozmowy, przejdz do materialow PDF.</span>
+            <Link href="/materialy" prefetch={false} className="notatnik-inline-link">
+              Zobacz materialy
+            </Link>
+          </div>
+        </section>
 
-        <NotatnikFinalCta
-          title="Jesli temat psa Cie niepokoi, <em>zacznij spokojnie.</em>"
-          copy="Nie musisz od razu wiedziec, czy chodzi o spacer, pobudzenie czy rozlake. Wystarczy dobrze wybrac pierwszy format."
-          primaryHref={quickHref}
-          primaryLabel="Zarezerwuj Kwadrans / 69 zl"
-          secondaryHref="/kontakt?species=pies#formularz"
-          secondaryLabel="Napisz wiadomosc"
-        />
-
-        <NotatnikFooter primaryHref={quickHref} primaryLabel="Kwadrans z behawiorysta" />
+        <NotatnikFooter primaryHref={quickHref} primaryLabel="Kwadrans z behawiorysta" showReviews={false} />
       </div>
     </main>
   )

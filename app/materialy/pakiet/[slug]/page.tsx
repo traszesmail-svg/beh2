@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { NotatnikFinalCta, NotatnikPageShell, NotatnikSectionHead, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
@@ -12,6 +13,7 @@ import {
   categoryLabel,
   getMaterialyBundleBySlug,
   getMaterialyGuideBySlug,
+  getMaterialyGuideCoverSrc,
   listMaterialyBundles,
 } from '@/lib/materialy-catalog'
 
@@ -91,18 +93,36 @@ export default function MaterialyBundlePage({ params }: { params: Params }) {
       <section>
         <NotatnikSectionHead index="I." kicker="W pakiecie" title="Co dostajesz w tym zestawie." />
         <div className="notatnik-material-grid top-gap-small">
-          {guides.map((g) => (
-            <article key={g.slug} className="notatnik-material-card">
-              <div className="notatnik-material-tag notatnik-mono">
-                {categoryLabel(g.category)} · pojedynczo {PRICE_LABEL[g.priceCode]}
-              </div>
-              <h3>{g.title}</h3>
-              <p style={{ minHeight: '3.6em' }}>{g.subtitle}</p>
-              <Link href={`/materialy/${g.slug}`} prefetch={false}>
-                Zobacz osobno &rarr;
-              </Link>
-            </article>
-          ))}
+          {guides.map((g) => {
+            const coverSrc = getMaterialyGuideCoverSrc(g)
+
+            return (
+              <article key={g.slug} className={coverSrc ? 'notatnik-material-card notatnik-material-card-with-cover' : 'notatnik-material-card'}>
+                {coverSrc ? (
+                  <Link href={`/materialy/${g.slug}`} prefetch={false} className="notatnik-material-cover-link" aria-label={`Zobacz ${g.title}`}>
+                    <span className="notatnik-material-cover-frame">
+                      <Image
+                        src={coverSrc}
+                        alt={`Okładka PDF: ${g.title}`}
+                        fill
+                        sizes="(max-width: 760px) 58vw, (max-width: 1100px) 24vw, 180px"
+                        className="notatnik-material-cover-image"
+                        unoptimized
+                      />
+                    </span>
+                  </Link>
+                ) : null}
+                <div className="notatnik-material-tag notatnik-mono">
+                  {categoryLabel(g.category)} · pojedynczo {PRICE_LABEL[g.priceCode]}
+                </div>
+                <h3>{g.title}</h3>
+                <p style={{ minHeight: '3.6em' }}>{g.subtitle}</p>
+                <Link href={`/materialy/${g.slug}`} prefetch={false}>
+                  Zobacz osobno &rarr;
+                </Link>
+              </article>
+            )
+          })}
         </div>
       </section>
 

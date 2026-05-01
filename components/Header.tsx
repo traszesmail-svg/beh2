@@ -7,7 +7,6 @@ import { usePathname } from 'next/navigation'
 import { getServiceAnalyticsParams } from '@/lib/analytics-schema'
 import { buildBookHref } from '@/lib/booking-routing'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
-import { FUNNEL_SECONDARY_HREF } from '@/lib/offers'
 import { INSTAGRAM_PROFILE_URL, SITE_HEADER_BRAND, SITE_HEADER_SUBTITLE, SITE_NAME } from '@/lib/site'
 
 // Legacy header kept only for older marketing layouts and special/internal flows.
@@ -83,6 +82,8 @@ const blogNavItems: NavItem[] = [
   { href: '/niezbednik', label: 'Niezbędnik' },
 ]
 
+const HEADER_PRIMARY_CTA_LABEL = 'Zarezerwuj Kwadrans'
+
 function getNavItems(pathname: string): NavItem[] {
   if (pathname === '/blog' || pathname.startsWith('/blog/')) {
     return blogNavItems
@@ -154,7 +155,6 @@ export function Header() {
   const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min', false, species)
   const consultationHref = buildBookHref(null, 'konsultacja-behawioralna-online', false, species)
   const messageHref = species ? `/kontakt?species=${species}#formularz` : '/kontakt#formularz'
-  const toolkitHref = FUNNEL_SECONDARY_HREF
   const navItems = getNavItems(pathname)
   const [menuOpen, setMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
@@ -305,17 +305,7 @@ export function Header() {
             data-analytics-service-duration={String(quickService.service_duration)}
             data-analytics-service-price={String(quickService.service_price)}
           >
-            {FUNNEL_CTA_LABELS.primary}
-          </Link>
-          <Link
-            href={toolkitHref}
-            prefetch={false}
-            className="button button-ghost header-secondary-cta"
-            data-analytics-event="funnel_entry_niezbednik"
-            data-analytics-location="header-toolkit"
-            data-analytics-cta-label={FUNNEL_CTA_LABELS.secondary}
-          >
-            {FUNNEL_CTA_LABELS.secondary}
+            {HEADER_PRIMARY_CTA_LABEL}
           </Link>
 
           <button
@@ -370,18 +360,7 @@ export function Header() {
               data-analytics-service-price={String(quickService.service_price)}
               onClick={handleNavClick}
             >
-              {FUNNEL_CTA_LABELS.primary}
-            </Link>
-            <Link
-              href={toolkitHref}
-              prefetch={false}
-              className="button button-ghost big-button header-mobile-secondary"
-              data-analytics-event="funnel_entry_niezbednik"
-              data-analytics-location="header-mobile-toolkit"
-              data-analytics-cta-label={FUNNEL_CTA_LABELS.secondary}
-              onClick={handleNavClick}
-            >
-              {FUNNEL_CTA_LABELS.secondary}
+              {HEADER_PRIMARY_CTA_LABEL}
             </Link>
             <div className="header-mobile-soft-card">
               <Link

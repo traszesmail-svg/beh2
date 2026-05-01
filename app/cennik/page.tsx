@@ -2,9 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { HeroIllustration } from '@/components/HeroIllustration'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
-import { NotatnikFinalCta, NotatnikPageShell, NotatnikSectionHead, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { OfferCards } from '@/components/OfferCards'
-import { KwadransNaJuzBadge } from '@/components/KwadransNaJuzBadge'
+import { NotatnikFinalCta, NotatnikPageShell, NotatnikSectionHead, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
 import { getBreadcrumbJsonLd, getServiceJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
@@ -12,9 +11,6 @@ import {
   PUBLIC_OFFER_BOOKING_PROCESS,
   PUBLIC_OFFER_BOOKING_PAYMENT,
   PUBLIC_OFFER_CANCELLATION_COPY,
-  PUBLIC_OFFER_FULL_CONSULTATION_VALUE,
-  PUBLIC_OFFER_PRIORITY_VARIANT_NOTE,
-  PUBLIC_OFFER_START_GUIDE,
 } from '@/lib/public-offer-copy'
 
 export const metadata: Metadata = buildMarketingMetadata({
@@ -57,6 +53,25 @@ const pricingFaqItems = [
 ] as const
 
 const visibleFaqItems = pricingFaqItems.slice(0, 4)
+
+const pricingDecisionCards = [
+  {
+    title: 'Kwadrans',
+    copy: 'Najprostszy start, gdy chcesz nazwac problem, ustalic priorytet i wyjsc z jednym konkretnym kierunkiem.',
+  },
+  {
+    title: 'Kwadrans na juz',
+    copy: 'Ten sam format 15 minut audio, tylko z priorytetowym potwierdzeniem terminu do 15 minut od wplaty.',
+  },
+  {
+    title: 'Dwa kwadranse',
+    copy: 'Lepszy wybor, gdy temat ma kilka watkow i chcesz spokojniej uporzadkowac sytuacje przed dalsza decyzja.',
+  },
+  {
+    title: 'Pelna konsultacja',
+    copy: 'Format dla spraw zlozonych, przewleklych albo wielowatkowych, gdy potrzebujesz diagnozy, planu i dalszego wsparcia.',
+  },
+] as const
 
 export default function PricingPage() {
   return (
@@ -117,17 +132,28 @@ export default function PricingPage() {
       </section>
 
       <section id="porownanie">
-        <NotatnikSectionHead index="I." kicker="Formaty" title="Cztery opcje. Jeden prosty wybor." />
-        <div className="top-gap-small">
-          <KwadransNaJuzBadge />
-        </div>
+        <NotatnikSectionHead index="I." kicker="Oferta" title="Trzy formaty konsultacji." />
+        <p className="notatnik-service-description">Wybierz najmniejszy format, ktory pasuje do sytuacji.</p>
         <div className="top-gap-small">
           <OfferCards />
+        </div>
+        <div className="card-grid two-up top-gap-small">
+          {pricingDecisionCards.map((item) => (
+            <article key={item.title} className="summary-card tree-backed-card">
+              <h3>{item.title}</h3>
+              <p>{item.copy}</p>
+            </article>
+          ))}
+        </div>
+        <div className="list-card tree-backed-card top-gap-small">
+          <p>
+            <strong>Wazne:</strong> Kwadrans na juz nie jest osobna, dluzsza konsultacja. To ten sam zakres co zwykly Kwadrans, tylko z szybszym terminem.
+          </p>
         </div>
       </section>
 
       <section style={{ background: 'var(--paper)' }}>
-        <NotatnikSectionHead index="II." kicker="Platnosc i FAQ" title="Platnosc, termin i najwazniejsze odpowiedzi przed rezerwacja." />
+        <NotatnikSectionHead index="II." kicker="Rezerwacja" title="Jak wyglada rezerwacja i potwierdzenie terminu." />
 
         <div className="notatnik-steps">
           {PUBLIC_OFFER_BOOKING_PROCESS.map((step, index) => (
@@ -137,8 +163,11 @@ export default function PricingPage() {
             </article>
           ))}
         </div>
+      </section>
 
-        <div className="notatnik-quiet-grid top-gap">
+      <section>
+        <NotatnikSectionHead index="III." kicker="Platnosc" title="Platnosc, zmiana terminu i regulaminy." />
+        <div className="notatnik-quiet-grid top-gap-small">
           <article className="notatnik-quiet-card">
             <h3>Jak wyglada platnosc</h3>
             <p>{PUBLIC_OFFER_BOOKING_PAYMENT}</p>
@@ -156,18 +185,26 @@ export default function PricingPage() {
             </div>
           </article>
         </div>
+      </section>
 
-        <div className="top-gap">
-          <div className="section-eyebrow">FAQ</div>
-          <h3>Najczestsze pytania o uslugi i platnosc.</h3>
-        </div>
+      <section>
+        <NotatnikSectionHead index="IV." kicker="FAQ" title="Najczestsze pytania przed wyborem formatu." />
         <div className="notatnik-faq-grid top-gap-small">
           {visibleFaqItems.map((item) => (
-            <article key={item.question} className="notatnik-faq-item">
+            <article key={item.question} className="summary-card tree-backed-card">
               <h4>{item.question}</h4>
               <p>{item.answer}</p>
             </article>
           ))}
+        </div>
+        <div className="list-card tree-backed-card top-gap-small">
+          <p>
+            Nie chcesz jeszcze rezerwowac rozmowy? Zacznij od tanszych albo darmowych materialow w{' '}
+            <Link href="/niezbednik" prefetch={false} className="notatnik-inline-link">
+              Niezbedniku
+            </Link>
+            .
+          </p>
         </div>
       </section>
 

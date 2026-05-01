@@ -45,7 +45,7 @@ export const PRICE_AMOUNT_PLN: Record<MaterialyPriceCode, number> = {
   p49: 49,
 }
 
-// 21 guides total. 2 free lead magnets + 4 flagship singles (29 zł) + 15 standard singles (19 zł).
+// 23 guides total. 2 free lead magnets + 6 flagship singles (29 zł) + 15 standard singles (19 zł).
 const RAW_GUIDES: MaterialyGuide[] = [
   // ─── FREE LEAD MAGNETS ─────────────────────────────────────────────────
   {
@@ -75,6 +75,18 @@ const RAW_GUIDES: MaterialyGuide[] = [
 
   // ─── FLAGSHIPS (29 zł) ────────────────────────────────────────────────
   {
+    slug: 'kot-i-kuweta-pierwszy-plan-dzialania',
+    title: 'Kot i kuweta — pierwszy plan działania',
+    subtitle: 'Pierwszy plan przy sikaniu lub załatwianiu się poza kuwetą',
+    category: 'cat',
+    tier: 'single',
+    priceCode: 'p29',
+    shortPromise: 'Szczegółowy poradnik porządkujący diagnozę wstępną, środowisko, kuwetę, lokalizacje i plan monitorowania.',
+    forWhom: 'Dla opiekuna kota z problemami około-kuwetowymi, który chce uporządkować temat bez przypadkowych rad z internetu.',
+    pdfFile: 'kot-i-kuweta-pierwszy-plan-dzialania.pdf',
+    highlights: ['diagnoza wstępna i audyt kuwety', 'plan monitorowania i działań na 14 dni', 'kiedy lekarz, kiedy zmiana środowiska'],
+  },
+  {
     slug: 'kot-problem-poza-kuweta',
     title: 'Problem poza kuwetą',
     subtitle: 'Pełny przewodnik diagnostyczny — od bólu po napięcie społeczne',
@@ -97,6 +109,18 @@ const RAW_GUIDES: MaterialyGuide[] = [
     forWhom: 'Dla opiekuna psa, który podejrzewa, że to nie jest tylko nuda albo protest, lecz realna panika.',
     pdfFile: 'pies-zostaje-sam.pdf',
     highlights: ['różnicowanie paniki, frustracji, protestu i przeciążenia', 'plan 72 godzin + 14 dni', 'co nagrywać i na co patrzeć'],
+  },
+  {
+    slug: 'pies-reaktywny-na-spacerze',
+    title: 'Pies reaktywny na spacerze',
+    subtitle: 'Pierwszy plan pracy przy szczekaniu, spinaniu się i trudnych mijankach',
+    category: 'dog',
+    tier: 'single',
+    priceCode: 'p29',
+    shortPromise: 'Krótki poradnik porządkujący pierwsze decyzje przy reaktywności spacerowej.',
+    forWhom: 'Dla opiekuna psa, które źle znoszą mijanie psów, ludzi albo innych bodźców na spacerze.',
+    pdfFile: 'pies-reaktywny-na-spacerze.pdf',
+    highlights: ['diagnoza reaktywności spacerowej', 'plan dystansu i separacji', 'kiedy specjalista'],
   },
   {
     slug: 'pies-trudny-spacer',
@@ -138,15 +162,15 @@ const RAW_GUIDES: MaterialyGuide[] = [
   },
   {
     slug: 'konflikt-miedzy-kotami',
-    title: 'Konflikt między kotami',
-    subtitle: 'Cichy konflikt, blokady, zasoby — jak to czytać',
+    title: 'Czy to jeszcze zabawa?',
+    subtitle: '7 cichych oznak konfliktu między kotami',
     category: 'cat',
     tier: 'single',
     priceCode: 'p19',
-    shortPromise: 'Jak rozpoznać konflikt, zanim pojawią się blizny i sikanie poza kuwetą.',
+    shortPromise: 'Starter, który pomaga rozpoznać presję społeczną, blokowanie zasobów i pierwszy plan zmian.',
     forWhom: 'Dla opiekuna 2+ kotów, gdzie napięcie jest „ciche", ale w domu coś nie gra.',
     pdfFile: 'konflikt-miedzy-kotami.pdf',
-    highlights: ['mapa zasobów', 'sygnały cichego konfliktu', 'kolejność introdukcji i reintrodukcji'],
+    highlights: ['7 cichych oznak napięcia', 'mapa zasobów i przejść', 'plan zmian na 14 dni'],
   },
   {
     slug: 'kot-budzi-dom-po-nocy',
@@ -382,6 +406,19 @@ export function getMaterialyGuideBySlug(slug: string): MaterialyGuide | null {
 
 export function getMaterialyBundleBySlug(slug: string): MaterialyBundle | null {
   return bundlesBySlug.get(slug) ?? null
+}
+
+const MATERIALY_GUIDE_COVER_SLUGS = new Set([
+  'konflikt-miedzy-kotami',
+  'kot-boi-sie-kuwety',
+  'kot-budzi-dom-po-nocy',
+  'kot-chowa-sie-po-zmianach',
+  'kot-zyje-w-napieciu',
+  'pies-ile-ruchu-potrzebuje',
+])
+
+export function getMaterialyGuideCoverSrc(guide: Pick<MaterialyGuide, 'slug'>): string | null {
+  return MATERIALY_GUIDE_COVER_SLUGS.has(guide.slug) ? `/branding/pdf-covers/${guide.slug}.png` : null
 }
 
 export function listMaterialyByTier(tier: MaterialyTier): (MaterialyGuide | MaterialyBundle)[] {

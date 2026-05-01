@@ -4,6 +4,15 @@ node_modules
 .vercel
 .tmp-local-data
 .codex-deploy-*
+qa-screenshots/**
+pedeefy/**
+tmp-pdf-cover-previews/**
+tmp-pdf-cover-puppeteer.png
+tmp-podkategorie-infografiki/**
+.home.html
+.kontakt.html
+.omnie.html
+content/guides/sources/**/temp.html
 qa-reports/**
 !qa-reports/latest-report.md
 *.log

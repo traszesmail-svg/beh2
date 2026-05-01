@@ -1,0 +1,32 @@
+{
+  "slug": "kot-i-kuweta-pierwszy-plan-dzialania",
+  "title": "Kot i kuweta — pierwszy plan działania",
+  "subtitle": "Pierwszy plan przy sikaniu lub załatwianiu się poza kuwetą",
+  "role_in_funnel": "entry",
+  "price_pln": 29,
+  "target_audience": "Opiekun kota z problemami około-kuwetowymi, który chce uporządkować temat bez przypadkowych rad z internetu.",
+  "positioning": "Poradnik diagnozujący i porządkujący pierwszą ścieżkę przy problemach kuwetowych. Bardziej praktyczny niż 'Problem poza kuwetą', skupiony na diagnozie i monitorowaniu.",
+  "website_card": {
+    "eyebrow": "Poradnik",
+    "headline": "Kot i kuweta — pierwszy plan",
+    "subline": "Diagnoza, audyt kuwety i plan monitorowania w pierwszych 14 dniach.",
+    "cta": "Kup PDF"
+  },
+  "next_steps": [
+    "Kot boi się kuwety?",
+    "Problem poza kuwetą",
+    "Konflikt między kotami",
+    "Konsultacja 15 min"
+  ],
+  "must_have_blocks": [
+    "dla kogo",
+    "co znajdziesz w środku",
+    "najkrócej",
+    "diagnoza (pytania diagnostyczne)",
+    "audyt kuwety",
+    "plan monitorowania",
+    "kiedy lekarz",
+    "co dalej / routing"
+  ],
+  "notes_for_offer": "Dobre uzupełnienie do 'Problem poza kuwetą' dla opiekunów, którzy chcą zacząć od czegoś mniej obszernego."
+}

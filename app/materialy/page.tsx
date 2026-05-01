@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { NotatnikFinalCta, NotatnikPageShell, NotatnikSectionHead, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { buildBookHref } from '@/lib/booking-routing'
@@ -7,8 +8,10 @@ import {
   PRICE_LABEL,
   bundleSavings,
   categoryLabel,
+  getMaterialyGuideCoverSrc,
   listMaterialyBundles,
   listMaterialyGuides,
+  type MaterialyGuide,
 } from '@/lib/materialy-catalog'
 
 export const metadata: Metadata = buildMarketingMetadata({
@@ -37,6 +40,29 @@ const TIER_INTRO = {
     lead: 'Tematy ulozone razem dla konkretnej sytuacji. Tansze niz osobno, tansze niz Kwadrans (69 zl).',
   },
 } as const
+
+function MaterialyGuideCoverPreview({ guide }: { guide: MaterialyGuide }) {
+  const coverSrc = getMaterialyGuideCoverSrc(guide)
+
+  if (!coverSrc) {
+    return null
+  }
+
+  return (
+    <Link href={`/materialy/${guide.slug}`} prefetch={false} className="notatnik-material-cover-link" aria-label={`Zobacz ${guide.title}`}>
+      <span className="notatnik-material-cover-frame">
+        <Image
+          src={coverSrc}
+          alt={`Okładka PDF: ${guide.title}`}
+          fill
+          sizes="(max-width: 760px) 58vw, (max-width: 1100px) 24vw, 180px"
+          className="notatnik-material-cover-image"
+          unoptimized
+        />
+      </span>
+    </Link>
+  )
+}
 
 export default function MaterialyLandingPage() {
   const guides = listMaterialyGuides()
@@ -93,21 +119,26 @@ export default function MaterialyLandingPage() {
         <NotatnikSectionHead index="I." kicker={TIER_INTRO.free.eyebrow} title={TIER_INTRO.free.title} />
         <p style={{ maxWidth: '720px', color: 'var(--ink-quiet)' }}>{TIER_INTRO.free.lead}</p>
         <div className="notatnik-material-grid top-gap-small">
-          {free.map((g) => (
-            <article key={g.slug} className="notatnik-material-card">
-              <div className="notatnik-material-tag notatnik-mono">{categoryLabel(g.category)} · {PRICE_LABEL.free}</div>
-              <h3>{g.title}</h3>
-              <p style={{ minHeight: '4em' }}>{g.subtitle}</p>
-              <ul style={{ margin: '6px 0 12px', padding: '0 0 0 16px', fontSize: '13px', color: 'var(--ink-quiet)' }}>
-                {g.highlights.map((h) => (
-                  <li key={h}>{h}</li>
-                ))}
-              </ul>
-              <Link href={`/materialy/${g.slug}`} prefetch={false}>
-                Pobierz bezplatnie &rarr;
-              </Link>
-            </article>
-          ))}
+          {free.map((g) => {
+            const hasCover = getMaterialyGuideCoverSrc(g) !== null
+
+            return (
+              <article key={g.slug} className={hasCover ? 'notatnik-material-card notatnik-material-card-with-cover' : 'notatnik-material-card'}>
+                <MaterialyGuideCoverPreview guide={g} />
+                <div className="notatnik-material-tag notatnik-mono">{categoryLabel(g.category)} · {PRICE_LABEL.free}</div>
+                <h3>{g.title}</h3>
+                <p style={{ minHeight: '4em' }}>{g.subtitle}</p>
+                <ul style={{ margin: '6px 0 12px', padding: '0 0 0 16px', fontSize: '13px', color: 'var(--ink-quiet)' }}>
+                  {g.highlights.map((h) => (
+                    <li key={h}>{h}</li>
+                  ))}
+                </ul>
+                <Link href={`/materialy/${g.slug}`} prefetch={false}>
+                  Pobierz bezplatnie &rarr;
+                </Link>
+              </article>
+            )
+          })}
         </div>
       </section>
 
@@ -119,32 +150,42 @@ export default function MaterialyLandingPage() {
           <div className="section-eyebrow">Flagowce · 29 zl</div>
         </div>
         <div className="notatnik-material-grid top-gap-small">
-          {flagships.map((g) => (
-            <article key={g.slug} className="notatnik-material-card">
-              <div className="notatnik-material-tag notatnik-mono">{categoryLabel(g.category)} · {PRICE_LABEL[g.priceCode]}</div>
-              <h3>{g.title}</h3>
-              <p style={{ minHeight: '3.6em' }}>{g.subtitle}</p>
-              <Link href={`/materialy/${g.slug}`} prefetch={false}>
-                Zobacz / zamow &rarr;
-              </Link>
-            </article>
-          ))}
+          {flagships.map((g) => {
+            const hasCover = getMaterialyGuideCoverSrc(g) !== null
+
+            return (
+              <article key={g.slug} className={hasCover ? 'notatnik-material-card notatnik-material-card-with-cover' : 'notatnik-material-card'}>
+                <MaterialyGuideCoverPreview guide={g} />
+                <div className="notatnik-material-tag notatnik-mono">{categoryLabel(g.category)} · {PRICE_LABEL[g.priceCode]}</div>
+                <h3>{g.title}</h3>
+                <p style={{ minHeight: '3.6em' }}>{g.subtitle}</p>
+                <Link href={`/materialy/${g.slug}`} prefetch={false}>
+                  Zobacz / zamow &rarr;
+                </Link>
+              </article>
+            )
+          })}
         </div>
 
         <div className="top-gap">
           <div className="section-eyebrow">Pojedyncze · 19 zl</div>
         </div>
         <div className="notatnik-material-grid top-gap-small">
-          {standards.map((g) => (
-            <article key={g.slug} className="notatnik-material-card">
-              <div className="notatnik-material-tag notatnik-mono">{categoryLabel(g.category)} · {PRICE_LABEL[g.priceCode]}</div>
-              <h3>{g.title}</h3>
-              <p style={{ minHeight: '3.6em' }}>{g.subtitle}</p>
-              <Link href={`/materialy/${g.slug}`} prefetch={false}>
-                Zobacz / zamow &rarr;
-              </Link>
-            </article>
-          ))}
+          {standards.map((g) => {
+            const hasCover = getMaterialyGuideCoverSrc(g) !== null
+
+            return (
+              <article key={g.slug} className={hasCover ? 'notatnik-material-card notatnik-material-card-with-cover' : 'notatnik-material-card'}>
+                <MaterialyGuideCoverPreview guide={g} />
+                <div className="notatnik-material-tag notatnik-mono">{categoryLabel(g.category)} · {PRICE_LABEL[g.priceCode]}</div>
+                <h3>{g.title}</h3>
+                <p style={{ minHeight: '3.6em' }}>{g.subtitle}</p>
+                <Link href={`/materialy/${g.slug}`} prefetch={false}>
+                  Zobacz / zamow &rarr;
+                </Link>
+              </article>
+            )
+          })}
         </div>
       </section>
 

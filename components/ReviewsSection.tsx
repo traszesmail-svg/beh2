@@ -1,26 +1,23 @@
-import { ReviewsCarousel } from '@/components/ReviewsCarousel';
-import { ReviewsGrid } from '@/components/ReviewsGrid';
-import { GoogleRatingBadge } from '@/components/GoogleRatingBadge';
-import { reviews, aggregateRating } from '@/lib/reviews.config';
+import { ReviewsCarousel } from '@/components/ReviewsCarousel'
+import { ReviewsGrid } from '@/components/ReviewsGrid'
+import { reviews, aggregateRating } from '@/lib/reviews.config'
 
 interface ReviewsSectionProps {
-  variant?: 'carousel' | 'grid';
-  showBadge?: boolean;
-  limit?: number;
-  title?: string;
-  subtitle?: string;
-  googleProfileUrl?: string;
+  variant?: 'carousel' | 'grid'
+  showBadge?: boolean
+  limit?: number
+  title?: string
+  subtitle?: string
 }
 
 export function ReviewsSection({
   variant = 'carousel',
   showBadge = true,
   limit = 8,
-  title = 'Co mówią klienci',
-  subtitle = 'Prawdziwe opinie z Google i bezpośrednich konsultacji',
-  googleProfileUrl,
+  title = 'Co mowia klienci',
+  subtitle = 'Opinie po konsultacjach zapisane w lokalnym pliku opinii',
 }: ReviewsSectionProps) {
-  const displayReviews = reviews.slice(0, limit);
+  const displayReviews = reviews.slice(0, limit)
 
   return (
     <section className="py-16" style={{ background: 'var(--paper, #faf9f7)' }}>
@@ -29,18 +26,15 @@ export function ReviewsSection({
           <h2 className="text-3xl lg:text-4xl mb-4" style={{ fontFamily: 'var(--font-display, Georgia, serif)', color: 'var(--ink, #1c1a18)' }}>
             {title}
           </h2>
-          <p className="text-neutral-600 text-lg mb-6 max-w-xl mx-auto">
-            {subtitle}
-          </p>
-          {showBadge && (
+          <p className="text-neutral-600 text-lg mb-6 max-w-xl mx-auto">{subtitle}</p>
+          {showBadge ? (
             <div className="flex justify-center">
-              <GoogleRatingBadge
-                ratingValue={aggregateRating.ratingValue}
-                reviewCount={aggregateRating.reviewCount}
-                googleProfileUrl={googleProfileUrl}
-              />
+              <div className="inline-flex items-center gap-3 rounded-2xl border-2 border-neutral-200 bg-white px-5 py-3">
+                <strong style={{ color: 'var(--ink, #1c1a18)' }}>{aggregateRating.ratingValue.toFixed(1)} / 5</strong>
+                <span className="text-sm text-neutral-600">{aggregateRating.reviewCount} opinii w bazie</span>
+              </div>
             </div>
-          )}
+          ) : null}
         </header>
 
         {variant === 'carousel' ? (
@@ -48,24 +42,7 @@ export function ReviewsSection({
         ) : (
           <ReviewsGrid reviews={displayReviews} initialCount={6} />
         )}
-
-        {googleProfileUrl && (
-          <div className="text-center mt-12 pt-8 border-t border-neutral-200">
-            <p className="text-neutral-600 mb-4">
-              Byłeś moim klientem? Twoja opinia pomoże innym opiekunom.
-            </p>
-            <a
-              href={googleProfileUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 border-2 rounded-full font-medium transition-colors hover:text-white"
-              style={{ borderColor: 'var(--ink, #1c1a18)', color: 'var(--ink, #1c1a18)' }}
-            >
-              Wystaw opinię w Google →
-            </a>
-          </div>
-        )}
       </div>
     </section>
-  );
+  )
 }

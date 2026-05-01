@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { NotatnikFinalCta, NotatnikPageShell, NotatnikSectionHead, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
@@ -10,6 +11,7 @@ import {
   PRICE_AMOUNT_PLN,
   categoryLabel,
   getMaterialyGuideBySlug,
+  getMaterialyGuideCoverSrc,
   listMaterialyGuides,
 } from '@/lib/materialy-catalog'
 
@@ -38,6 +40,7 @@ export default function MaterialyGuidePage({ params }: { params: Params }) {
   const isFree = guide.priceCode === 'free'
   const priceAmount = PRICE_AMOUNT_PLN[guide.priceCode]
   const priceLabel = PRICE_LABEL[guide.priceCode]
+  const coverSrc = getMaterialyGuideCoverSrc(guide)
 
   return (
     <NotatnikPageShell
@@ -79,10 +82,25 @@ export default function MaterialyGuidePage({ params }: { params: Params }) {
           </div>
         </div>
 
-        <div className="summary-card tree-backed-card">
-          <div className="section-eyebrow">Dla kogo</div>
-          <h3>{guide.subtitle}</h3>
-          <p>{guide.forWhom}</p>
+        <div className="notatnik-material-detail-side">
+          {coverSrc ? (
+            <div className="notatnik-material-detail-cover-card" aria-label={`Okładka PDF: ${guide.title}`}>
+              <Image
+                src={coverSrc}
+                alt={`Okładka PDF: ${guide.title}`}
+                fill
+                sizes="(max-width: 760px) 72vw, (max-width: 1200px) 30vw, 320px"
+                className="notatnik-material-detail-cover-image"
+                priority
+                unoptimized
+              />
+            </div>
+          ) : null}
+          <div className="summary-card tree-backed-card">
+            <div className="section-eyebrow">Dla kogo</div>
+            <h3>{guide.subtitle}</h3>
+            <p>{guide.forWhom}</p>
+          </div>
         </div>
       </section>
 

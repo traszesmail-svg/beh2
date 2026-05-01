@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
-import { HeroIllustration } from '@/components/HeroIllustration'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { NotatnikFinalCta, NotatnikPageShell, NotatnikSectionHead, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { CredentialsGrid } from '@/components/CredentialsGrid'
@@ -111,7 +111,17 @@ export default function AboutPage() {
         </div>
 
         <div className="notatnik-subhero-media">
-          <HeroIllustration slug="o-mnie" emojiPlaceholder="🧑‍💻" className="w-full h-full min-h-[340px]" />
+          <figure className="notatnik-subhero-figure notatnik-about-hero-figure">
+            <Image
+              src="/2.png"
+              alt="Krzysztof Regulski przy biurku, fotografia do sekcji o mnie"
+              width={1024}
+              height={1536}
+              priority
+              sizes="(max-width: 760px) 100vw, 44vw"
+              className="notatnik-about-hero-image"
+            />
+          </figure>
         </div>
       </section>
 

@@ -11,7 +11,7 @@ export interface Review {
   rating: 1 | 2 | 3 | 4 | 5;
   date: string;
   text: string;
-  source: 'google' | 'direct' | 'email';
+  source: 'file' | 'google' | 'direct' | 'email';
   consultationType?: 'kwadrans' | 'standardowa' | 'wyjazdowa';
   highlight?: boolean;
 }
@@ -27,7 +27,7 @@ export const reviews: Review[] = [
     rating: 5,
     date: '2024-11-15',
     text: 'Burek po dwóch sesjach przestał ciągnąć i szczekać na inne psy. Krzysztof tłumaczy wszystko bardzo spokojnie i logicznie — żadnej presji, zero kar. Polecam każdemu komu się wydaje, że "już nic się nie da zrobić".',
-    source: 'google',
+    source: 'file',
     consultationType: 'standardowa',
     highlight: true,
   },
@@ -41,7 +41,7 @@ export const reviews: Review[] = [
     rating: 5,
     date: '2024-10-28',
     text: 'Po roku problemu z Mią (sikanie poza kuwetą), jedna konsultacja online z panem Krzysztofem rozwiązała sprawę. Okazało się, że problem był banalny, ale nikt wcześniej nie wpadł na właściwy trop.',
-    source: 'google',
+    source: 'file',
     consultationType: 'standardowa',
   },
   {
@@ -68,7 +68,7 @@ export const reviews: Review[] = [
     rating: 5,
     date: '2024-09-14',
     text: 'Dwa koty po 3 latach wreszcie się tolerują. Krzysztof podpowiedział co z resocjalizacją, jak rozłożyć zasoby w mieszkaniu, jak czytać sygnały. Teraz śpią razem. Bezcenne.',
-    source: 'google',
+    source: 'file',
     consultationType: 'standardowa',
   },
   {
@@ -93,7 +93,7 @@ export const reviews: Review[] = [
     rating: 4,
     date: '2024-08-22',
     text: 'Konsultacja merytoryczna i bardzo profesjonalna. Plan dostałam w mailu, krok po kroku. Nie wszystko wyszło od razu, ale Krzysztof odpowiedział na maile z dodatkowymi pytaniami i pomógł skorygować podejście.',
-    source: 'google',
+    source: 'file',
     consultationType: 'standardowa',
   },
   {

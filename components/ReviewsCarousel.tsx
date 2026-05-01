@@ -1,103 +1,132 @@
-'use client';
+'use client'
 
-import { useState, useEffect, useRef } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { ReviewCard } from '@/components/ReviewCard';
-import type { Review } from '@/lib/reviews.config';
+import { useEffect, useRef, useState, type TouchEvent } from 'react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ReviewCard } from '@/components/ReviewCard'
+import type { Review } from '@/lib/reviews.config'
 
 interface ReviewsCarouselProps {
-  reviews: Review[];
-  autoplay?: boolean;
-  autoplayDelay?: number;
+  reviews: Review[]
+  autoplay?: boolean
+  autoplayDelay?: number
+  maxItems?: number
 }
 
 export function ReviewsCarousel({
   reviews,
-  autoplay = true,
-  autoplayDelay = 6000,
+  autoplay = false,
+  autoplayDelay = 7000,
+  maxItems = 3,
 }: ReviewsCarouselProps) {
-  const [index, setIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const total = reviews.length;
+  const visibleReviews = reviews.slice(0, maxItems)
+  const total = visibleReviews.length
+  const [index, setIndex] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
+  const touchStart = useRef<number | null>(null)
 
-  const goNext = () => setIndex(i => (i + 1) % total);
-  const goPrev = () => setIndex(i => (i - 1 + total) % total);
-  const goTo = (i: number) => setIndex(i);
+  const hasMultipleReviews = total > 1
+  const activeReview = visibleReviews[index] ?? visibleReviews[0]
+
+  function goNext() {
+    if (!hasMultipleReviews) {
+      return
+    }
+
+    setIndex((current) => (current + 1) % total)
+  }
+
+  function goPrev() {
+    if (!hasMultipleReviews) {
+      return
+    }
+
+    setIndex((current) => (current - 1 + total) % total)
+  }
+
+  function goTo(nextIndex: number) {
+    setIndex(Math.max(0, Math.min(nextIndex, total - 1)))
+  }
 
   useEffect(() => {
-    if (!autoplay || isPaused) return;
-    const timer = setInterval(goNext, autoplayDelay);
-    return () => clearInterval(timer);
-  }, [autoplay, autoplayDelay, isPaused, total]);
+    if (!autoplay || isPaused || !hasMultipleReviews) {
+      return
+    }
 
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft') goPrev();
-      if (e.key === 'ArrowRight') goNext();
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, []);
+    const timer = window.setInterval(() => {
+      setIndex((current) => (current + 1) % total)
+    }, autoplayDelay)
+    return () => window.clearInterval(timer)
+  }, [autoplay, autoplayDelay, isPaused, hasMultipleReviews, total])
 
-  const touchStart = useRef<number | null>(null);
-  const onTouchStart = (e: React.TouchEvent) => { touchStart.current = e.touches[0]!.clientX; };
-  const onTouchEnd = (e: React.TouchEvent) => {
-    if (touchStart.current === null) return;
-    const diff = touchStart.current - e.changedTouches[0]!.clientX;
-    if (Math.abs(diff) > 50) (diff > 0 ? goNext : goPrev)();
-    touchStart.current = null;
-  };
+  function onTouchStart(event: TouchEvent) {
+    touchStart.current = event.touches[0]?.clientX ?? null
+  }
+
+  function onTouchEnd(event: TouchEvent) {
+    if (touchStart.current === null) {
+      return
+    }
+
+    const diff = touchStart.current - (event.changedTouches[0]?.clientX ?? touchStart.current)
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) {
+        goNext()
+      } else {
+        goPrev()
+      }
+    }
+    touchStart.current = null
+  }
+
+  if (!activeReview) {
+    return null
+  }
 
   return (
     <div
-      className="relative"
+      className="relative reviews-carousel"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
-      <div className="overflow-hidden rounded-2xl">
-        <div
-          ref={trackRef}
-          className="flex transition-transform duration-500 ease-out"
-          style={{ transform: `translateX(-${index * 100}%)` }}
-        >
-          {reviews.map(review => (
-            <div key={review.id} className="w-full flex-shrink-0 px-2">
-              <ReviewCard review={review} variant="featured" />
-            </div>
-          ))}
-        </div>
+      <div className="reviews-carousel-frame">
+        <ReviewCard key={activeReview.id} review={activeReview} variant="featured" />
       </div>
 
-      <button
-        onClick={goPrev}
-        className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-12 h-12 bg-white border border-neutral-200 rounded-full flex items-center justify-center hover:bg-accent hover:text-white hover:border-accent transition-all shadow-md z-10"
-        aria-label="Poprzednia opinia"
-      >
-        <ChevronLeft size={20} />
-      </button>
-      <button
-        onClick={goNext}
-        className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-12 h-12 bg-white border border-neutral-200 rounded-full flex items-center justify-center hover:bg-accent hover:text-white hover:border-accent transition-all shadow-md z-10"
-        aria-label="Następna opinia"
-      >
-        <ChevronRight size={20} />
-      </button>
-
-      <div className="flex justify-center gap-2 mt-6">
-        {reviews.map((_, i) => (
+      {hasMultipleReviews ? (
+        <>
           <button
-            key={i}
-            onClick={() => goTo(i)}
-            className={`h-2 rounded-full transition-all ${
-              i === index ? 'w-8 bg-accent' : 'w-2 bg-neutral-300 hover:bg-neutral-400'
-            }`}
-            aria-label={`Opinia ${i + 1}`}
-          />
-        ))}
-      </div>
+            type="button"
+            onClick={goPrev}
+            className="reviews-carousel-button reviews-carousel-button-prev"
+            aria-label="Poprzednia opinia"
+          >
+            <ChevronLeft size={20} />
+          </button>
+          <button
+            type="button"
+            onClick={goNext}
+            className="reviews-carousel-button reviews-carousel-button-next"
+            aria-label="Nastepna opinia"
+          >
+            <ChevronRight size={20} />
+          </button>
+
+          <div className="reviews-carousel-dots" aria-label="Wybierz opinie">
+            {visibleReviews.map((review, dotIndex) => (
+              <button
+                key={review.id}
+                type="button"
+                onClick={() => goTo(dotIndex)}
+                className={dotIndex === index ? 'is-active' : ''}
+                aria-label={`Opinia ${dotIndex + 1}`}
+                aria-current={dotIndex === index ? 'true' : undefined}
+              />
+            ))}
+          </div>
+        </>
+      ) : null}
     </div>
-  );
+  )
 }

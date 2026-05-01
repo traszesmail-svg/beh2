@@ -1,77 +1,99 @@
-// handoff/components/PetTopicCard.tsx
-// Karty tematyczne Pies / Kot — strona główna /
-// Każdy link ma ikonę po lewej + arrow po prawej
+import Image from 'next/image'
+import Link from 'next/link'
 
-import Link from 'next/link';
-import { Icon, type IconName } from '@/components/icons-config';
+type PetKind = 'dog' | 'cat'
+type TopicIconName = 'dog-reactivity' | 'dog-separation' | 'dog-puppy' | 'cat-litter' | 'cat-stress' | 'cat-conflict' | 'topic-other' | 'cat-other'
 
 interface TopicLink {
-  href: string;
-  icon: IconName;
-  bold: string;
-  desc: string;
+  href: string
+  icon: TopicIconName
+  title: string
+  desc: string
 }
 
 interface PetTopicCardProps {
-  emoji: string;
-  heading: string;
-  intro: string;
-  links: TopicLink[];
+  href: string
+  icon: PetKind
+  heading: string
+  links: TopicLink[]
 }
 
-export function PetTopicCard({ emoji, heading, intro, links }: PetTopicCardProps) {
+function PetTopicSymbol({ icon }: { icon: PetKind }) {
+  if (icon === 'dog') {
+    return <Image src="/branding/pet-topics/pet-dog-cutout.png" alt="" aria-hidden="true" width={909} height={751} className="notatnik-pet-symbol-image" />
+  }
+
+  return <Image src="/branding/pet-topics/pet-cat-cutout.png" alt="" aria-hidden="true" width={939} height={761} className="notatnik-pet-symbol-image" />
+}
+
+function PetTopicLinkIcon({ icon }: { icon: TopicIconName }) {
   return (
-    <article className="bg-white border border-neutral-200 rounded-3xl p-9 flex flex-col gap-4">
-      <header className="flex items-center gap-4">
-        <div className="w-16 h-16 rounded-2xl bg-accent-light flex items-center justify-center text-3xl">
-          {emoji}
-        </div>
-        <h3 className="font-serif text-xl">{heading}</h3>
+    <Image
+      src={`/branding/pet-topics/subcategories/${icon}.png`}
+      alt=""
+      aria-hidden="true"
+      width={126}
+      height={126}
+      className="notatnik-pet-topic-link-icon-image"
+    />
+  )
+}
+
+export function PetTopicCard({ href, icon, heading, links }: PetTopicCardProps) {
+  return (
+    <article className="notatnik-pet-topic-card">
+      <header className="notatnik-pet-topic-head">
+        <Link href={href} prefetch={false} className="notatnik-pet-topic-head-link">
+          <h3>{heading}</h3>
+          <span className="notatnik-pet-topic-icon" aria-hidden="true">
+            <PetTopicSymbol icon={icon} />
+          </span>
+        </Link>
       </header>
-      <p className="text-neutral-600">{intro}</p>
-      <div className="flex flex-col mt-3">
-        {links.map((l, i) => (
-          <Link
-            key={l.href}
-            href={l.href}
-            className={`flex items-center gap-2.5 py-3 text-sm font-medium text-neutral-900 hover:text-accent hover:pl-1 transition-all ${
-              i < links.length - 1 ? 'border-b border-neutral-200' : ''
-            }`}
-          >
-            <Icon name={l.icon} size={16} className="text-accent shrink-0" />
-            <span><strong>{l.bold}</strong> — {l.desc}</span>
-            <Icon name="arrow-right" size={16} className="text-accent ml-auto shrink-0" />
+
+      <div className="notatnik-pet-topic-links">
+        {links.map((link) => (
+          <Link key={link.href} href={link.href} prefetch={false} className="notatnik-pet-topic-link">
+            <span className="notatnik-pet-topic-link-icon" aria-hidden="true">
+              <PetTopicLinkIcon icon={link.icon} />
+            </span>
+            <span>
+              <strong>{link.title}</strong>
+              <small>{link.desc}</small>
+            </span>
+            <span className="notatnik-pet-topic-arrow" aria-hidden="true">→</span>
           </Link>
         ))}
       </div>
     </article>
-  );
+  )
 }
 
-// Gotowe instancje — wklej bezpośrednio w stronę główną
 export function PetTopicsSection() {
   return (
-    <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <section className="notatnik-pet-topic-grid">
       <PetTopicCard
-        emoji="🐕"
-        heading="Masz psa i nie wiesz, od czego zacząć?"
-        intro="Pomogę Ci uporządkować spacer, pobudzenie, separację lub rytm dnia młodego psa."
+        href="/psy"
+        icon="dog"
+        heading="Pies"
         links={[
-          { href: '/psy/reaktywnosc-na-smyczy', icon: 'zap', bold: 'Reaktywność', desc: 'krok po kroku, jak wprowadzić spokój' },
-          { href: '/psy/lek-separacyjny', icon: 'home', bold: 'Separacja', desc: 'jak pomóc psu zostawać samemu' },
-          { href: '/oferta/poradniki-pdf/szczeniak-pierwsze-30-dni', icon: 'calendar-days', bold: 'Szczeniak', desc: 'pierwsze 30 dni i rytm dnia' },
+          { href: '#cennik', icon: 'dog-reactivity', title: 'Reaktywność', desc: 'emocje i bodźce' },
+          { href: '#cennik', icon: 'dog-separation', title: 'Separacja', desc: 'zostawanie samemu' },
+          { href: '#cennik', icon: 'dog-puppy', title: 'Szczeniak', desc: 'start i nauka' },
+          { href: '#cennik', icon: 'topic-other', title: 'Pozostałe', desc: 'inne tematy' },
         ]}
       />
       <PetTopicCard
-        emoji="🐈"
-        heading="Masz kota i chcesz wprowadzić spokój w domu?"
-        intro="Przejrzymy kuwetę, stres, zmiany w domu i relacje między kotami."
+        href="/koty"
+        icon="cat"
+        heading="Kot"
         links={[
-          { href: '/koty/zalatwianie-poza-kuweta', icon: 'droplets', bold: 'Kuweta', desc: 'jak zorganizować środowisko' },
-          { href: '/oferta/poradniki-pdf/kot-stres-srodowisko-i-bledy-opiekuna', icon: 'leaf', bold: 'Stres', desc: 'strategie redukcji napięcia' },
-          { href: '/koty/konflikt-miedzy-kotami', icon: 'users', bold: 'Konflikt', desc: 'relacje między kotami' },
+          { href: '#cennik', icon: 'cat-litter', title: 'Kuweta', desc: 'higiena i nawyki' },
+          { href: '#cennik', icon: 'cat-stress', title: 'Stres', desc: 'emocje i zmiany' },
+          { href: '#cennik', icon: 'cat-conflict', title: 'Konflikt', desc: 'relacje z innymi' },
+          { href: '#cennik', icon: 'cat-other', title: 'Pozostałe', desc: 'inne tematy' },
         ]}
       />
     </section>
-  );
+  )
 }

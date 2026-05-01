@@ -34,11 +34,6 @@ export function ReviewCard({ review, variant = 'default' }: ReviewCardProps) {
             className={i < review.rating ? 'fill-amber-400 text-amber-400' : 'text-neutral-300'}
           />
         ))}
-        {review.source === 'google' && (
-          <span className="ml-2 text-[10px] uppercase tracking-wider text-neutral-500 font-mono">
-            Google
-          </span>
-        )}
       </div>
 
       <blockquote

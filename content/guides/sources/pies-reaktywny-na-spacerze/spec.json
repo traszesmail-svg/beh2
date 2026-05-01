@@ -1,0 +1,32 @@
+{
+  "slug": "pies-reaktywny-na-spacerze",
+  "title": "Pies reaktywny na spacerze",
+  "subtitle": "Pierwszy plan pracy przy szczekaniu, spinaniu się i trudnych mijankach",
+  "role_in_funnel": "quick-entry",
+  "price_pln": 29,
+  "target_audience": "Opiekun psa, które źle znoszą mijanie psów, ludzi albo innych bodźców na spacerze i szuka pierwszego planu działania.",
+  "positioning": "Krótki poradnik porządkujący reaktywność spacerową. Materiał wejściowy dla psów z problemami na spacerze — mniej obszerny niż 'Trudny spacer', bardziej skierowany na diagnozę i pierwsze kroki.",
+  "website_card": {
+    "eyebrow": "Poradnik",
+    "headline": "Pies reaktywny na spacerze",
+    "subline": "Diagnoza reaktywności, plan dystansu i separacji w pierwszych 14 dniach.",
+    "cta": "Kup PDF"
+  },
+  "next_steps": [
+    "Czy Twój pies naprawdę potrzebuje więcej ruchu?",
+    "Trudny spacer",
+    "Pies szczeka na gości i dzwonek",
+    "Konsultacja 15 min"
+  ],
+  "must_have_blocks": [
+    "dla kogo",
+    "co znajdziesz w środku",
+    "najkrócej",
+    "diagnoza reaktywności (pytania)",
+    "plan dystansu i separacji",
+    "co nagrywać",
+    "kiedy specjalista",
+    "co dalej / routing"
+  ],
+  "notes_for_offer": "Materiał pełnowartościowy ale skrócony — idealna opcja dla opiekunów chcących zacząć od czegoś mniejszego niż 'Trudny spacer'."
+}

@@ -1,0 +1,11 @@
+Generate a concise Polish guide PDF for dog owners dealing with reactivity on walks (barking, tension, difficult encounters).
+Focus on:
+- Quick diagnosis of reactivity type
+- Distance and separation strategy
+- Video recording guide
+- First 14-day plan
+- When to consult a specialist
+
+Target: dog owner looking for quick entry point
+Tone: practical, actionable, encouraging
+Format: A4 PDF (shorter than full guides, ~8 pages)

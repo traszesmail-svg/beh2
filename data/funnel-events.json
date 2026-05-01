@@ -1,1 +1,13 @@
-[]
+[
+  {
+    "id": "1a116174-8765-4eb8-beb8-bb5fd2462a79",
+    "eventType": "view_page",
+    "bookingId": null,
+    "qaBooking": false,
+    "source": "client",
+    "pagePath": "/",
+    "location": null,
+    "properties": {},
+    "createdAt": "2026-04-30T17:37:54.280Z"
+  }
+]

@@ -5,6 +5,7 @@
   "scripts": {
     "prebuild": "node scripts/patch-next-revalidate.js",
     "dev": "next dev",
+    "local": "npm run build && npm run start -- --hostname 127.0.0.1 --port 3000",
     "build": "next lint --no-cache && next build --no-lint",
     "postbuild": "next-sitemap",
     "start": "next start",

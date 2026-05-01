@@ -1,6 +1,7 @@
 # Side visual photo sources
 
-Downloaded from Pexels for local use as side-background category photos.
+Downloaded from Pexels and Pixabay for local use as side-background category photos.
+The current global side visual across public Notatnik pages is `home-forest-sun-rays.jpg`.
 
 - `general-dog-walk.jpg`, `dog-forest-walk.jpg`: https://www.pexels.com/photo/man-walking-dog-in-forest-20168400/
 - `general-cat-owner.jpg`, `cat-owner-home.jpg`: https://www.pexels.com/photo/woman-holding-cat-10068013/
@@ -15,3 +16,5 @@ Downloaded from Pexels for local use as side-background category photos.
 - `pricing-calendar-desk.jpg`: https://www.pexels.com/photo/a-calendar-and-laptop-on-a-desk-5240008/
 - `blog-notebook-desk.jpg`: https://www.pexels.com/photo/white-notebook-and-pen-606539/
 - `blog-laptop-notes.jpg`: https://www.pexels.com/photo/person-writing-in-notebook-at-laptop-desk-29440531/
+- `home-forest-sun-rays.jpg`: https://pixabay.com/photos/forest-sunlight-light-rays-1032457/ downloaded from Pixabay CDN for home side visuals.
+- `home-botanical-left.svg`, `home-botanical-right.svg`: custom in-repo botanical side visuals inspired by the direction 3 contact mockup.

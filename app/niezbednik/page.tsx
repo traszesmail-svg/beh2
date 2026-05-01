@@ -25,6 +25,7 @@ type EssentialsShopCard = {
   description: string
   image: string
   imageAlt: string
+  imageMode?: 'photo' | 'pdf-cover'
   href: string
   cta: string
   meta?: string
@@ -227,11 +228,12 @@ const featuredPdfs = [
   {
     label: 'PDF / kot',
     price: '19 zł',
-    title: 'Konflikt między kotami',
+    title: 'Czy to jeszcze zabawa?',
     description: 'Dla domu, w którym nie ma wielkiej bójki, ale są blokady, napięcie i omijanie się kotów.',
     meta: 'zasoby, napięcie, sygnały',
-    image: '/branding/niezbednik/pdf-cats-conflict.jpg',
-    imageAlt: 'Dwa koty w konflikcie',
+    image: '/branding/pdf-covers/konflikt-miedzy-kotami.png',
+    imageAlt: 'Okładka PDF Czy to jeszcze zabawa?',
+    imageMode: 'pdf-cover',
     href: '/materialy/konflikt-miedzy-kotami',
     cta: 'Zobacz PDF',
   },
@@ -328,7 +330,7 @@ const faqItems = [
 
 function EssentialsProductCard({ item, variant = 'photo' }: { item: EssentialsShopCard; variant?: 'photo' | 'book' }) {
   const isExternal = item.href.startsWith('http')
-  const className = `essentials-shop-card${variant === 'book' ? ' essentials-shop-card-book' : ''}`
+  const className = `essentials-shop-card${variant === 'book' ? ' essentials-shop-card-book' : ''}${item.imageMode === 'pdf-cover' ? ' essentials-shop-card-pdf-cover' : ''}`
   const actionClassName = 'essentials-shop-link'
 
   const action = isExternal ? (

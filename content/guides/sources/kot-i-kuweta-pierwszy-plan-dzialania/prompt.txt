@@ -1,0 +1,12 @@
+Generate a comprehensive Polish guide PDF for cat owners dealing with litter box avoidance or inappropriate elimination.
+Focus on:
+- Initial diagnosis with specific questions
+- Litter box assessment checklist
+- Environmental factors and setup
+- Medical vs behavioral considerations
+- 14-day monitoring plan
+- When to consult a vet vs behaviorist
+
+Target: beginner to intermediate cat owner
+Tone: practical, reassuring, diagnostic
+Format: A4 PDF with clear sections and checkboxes

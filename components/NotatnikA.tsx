@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { Cat, Dog } from 'lucide-react'
 import { Footer } from '@/components/Footer'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { INSTAGRAM_PROFILE_URL } from '@/lib/site'
@@ -7,16 +8,12 @@ import { INSTAGRAM_PROFILE_URL } from '@/lib/site'
 export type NotatnikNavItem = {
   href: string
   label: string
+  icon?: 'dog' | 'cat'
 }
 
 export const PUBLIC_SITE_NAV_ITEMS: readonly NotatnikNavItem[] = [
-  { href: '/psy', label: 'Pies' },
-  { href: '/koty', label: 'Kot' },
-  { href: '/niezbednik', label: 'Niezbednik' },
-  { href: '/blog', label: 'Blog' },
-  { href: '/o-mnie', label: 'O mnie' },
-  { href: '/cennik', label: 'Cennik' },
-  { href: '/kontakt#formularz', label: 'Kontakt' },
+  { href: '/psy', label: 'Pies', icon: 'dog' },
+  { href: '/koty', label: 'Kot', icon: 'cat' },
 ]
 
 export const PUBLIC_BOOKING_FLOW_NAV_ITEMS: readonly NotatnikNavItem[] = [
@@ -35,7 +32,7 @@ type NotatnikTopbarProps = {
 
 type NotatnikSectionHeadProps = {
   index: string
-  kicker: string
+  kicker?: string
   title: string
 }
 
@@ -51,6 +48,7 @@ type NotatnikFinalCtaProps = {
 type NotatnikFooterProps = {
   primaryHref?: string
   primaryLabel?: string
+  showReviews?: boolean
 }
 
 type NotatnikPageShellProps = {
@@ -65,7 +63,9 @@ type NotatnikPageShellProps = {
   children: React.ReactNode
 }
 
-export type NotatnikSideVisualVariant = 'mixed' | 'dog' | 'cat' | 'materials' | 'blog' | 'about' | 'pricing' | 'contact'
+export type NotatnikSideVisualVariant = 'home' | 'mixed' | 'dog' | 'cat' | 'materials' | 'blog' | 'about' | 'pricing' | 'contact'
+
+const HOME_SIDE_VISUAL = '/branding/side-visuals/home-forest-sun-rays.jpg'
 
 function getCtaClassName(variant: NotatnikTopbarProps['ctaVariant']) {
   if (variant === 'ghost') {
@@ -97,17 +97,35 @@ function InstagramGlyph() {
   )
 }
 
+function NotatnikBrandLockup() {
+  return (
+    <Link href="/" prefetch={false} className="notatnik-brand" aria-label="Wroc na strone glowna Regulski">
+      <span className="notatnik-brand-credential" aria-hidden="true">
+        <Image src="/branding/credentials/coapemale.png" alt="" width={132} height={62} priority />
+      </span>
+      <span className="notatnik-brand-copy">
+        <span className="notatnik-brand-mark">Regulski</span>
+        <span className="notatnik-brand-tag">Terapia behawioralna</span>
+      </span>
+    </Link>
+  )
+}
+
+function NotatnikNavIcon({ icon }: { icon?: NotatnikNavItem['icon'] }) {
+  if (icon === 'dog') return <Dog size={16} strokeWidth={1.9} aria-hidden="true" />
+  if (icon === 'cat') return <Cat size={16} strokeWidth={1.9} aria-hidden="true" />
+  return null
+}
+
 export function NotatnikTopbar({ tag, navItems, ctaHref, ctaLabel, ctaVariant = 'solid' }: NotatnikTopbarProps) {
   return (
     <header className="notatnik-topbar">
-      <Link href="/" prefetch={false} className="notatnik-brand" aria-label="Wroc na strone glowna Regulski">
-        <div className="notatnik-brand-mark">Regulski.</div>
-        <div className="notatnik-brand-tag">{tag}</div>
-      </Link>
+      <NotatnikBrandLockup />
 
       <nav className="notatnik-nav" aria-label="Glowne sekcje">
         {navItems.map((item) => (
           <Link key={item.href} href={item.href} prefetch={false}>
+            <NotatnikNavIcon icon={item.icon} />
             {item.label}
           </Link>
         ))}
@@ -124,17 +142,6 @@ export function NotatnikTopbar({ tag, navItems, ctaHref, ctaLabel, ctaVariant = 
         >
           <InstagramGlyph />
         </a>
-        <Link
-          href={ctaHref}
-          prefetch={false}
-          className={getCtaClassName(ctaVariant)}
-          data-analytics-event="cta_click"
-          data-analytics-location="topbar"
-          data-analytics-cta-label={ctaLabel}
-        >
-          <span>{ctaLabel}</span>
-          <NotatnikButtonArrow />
-        </Link>
       </div>
 
       <details className="notatnik-mobile-menu">
@@ -149,21 +156,11 @@ export function NotatnikTopbar({ tag, navItems, ctaHref, ctaLabel, ctaVariant = 
           <nav aria-label="Menu mobilne">
             {navItems.map((item) => (
               <Link key={item.href} href={item.href} prefetch={false}>
+                <NotatnikNavIcon icon={item.icon} />
                 {item.label}
               </Link>
             ))}
           </nav>
-          <Link
-            href={ctaHref}
-            prefetch={false}
-            className={getCtaClassName(ctaVariant)}
-            data-analytics-event="cta_click"
-            data-analytics-location="mobile-menu"
-            data-analytics-cta-label={ctaLabel}
-          >
-            <span>{ctaLabel}</span>
-            <NotatnikButtonArrow />
-          </Link>
         </div>
       </details>
     </header>
@@ -171,50 +168,61 @@ export function NotatnikTopbar({ tag, navItems, ctaHref, ctaLabel, ctaVariant = 
 }
 
 const SIDE_VISUALS: Record<NotatnikSideVisualVariant, { left: string; right: string }> = {
+  home: {
+    left: HOME_SIDE_VISUAL,
+    right: HOME_SIDE_VISUAL,
+  },
   mixed: {
-    left: '/branding/side-visuals/general-dog-walk.jpg',
-    right: '/branding/side-visuals/general-cat-owner.jpg',
+    left: HOME_SIDE_VISUAL,
+    right: HOME_SIDE_VISUAL,
   },
   dog: {
-    left: '/branding/side-visuals/dog-forest-walk.jpg',
-    right: '/branding/side-visuals/dog-training-forest.jpg',
+    left: HOME_SIDE_VISUAL,
+    right: HOME_SIDE_VISUAL,
   },
   cat: {
-    left: '/branding/side-visuals/cat-owner-home.jpg',
-    right: '/branding/side-visuals/cat-litter-home.jpg',
+    left: HOME_SIDE_VISUAL,
+    right: HOME_SIDE_VISUAL,
   },
   materials: {
-    left: '/branding/side-visuals/materials-notebook-desk.jpg',
-    right: '/branding/side-visuals/materials-laptop-notebook.jpg',
+    left: HOME_SIDE_VISUAL,
+    right: HOME_SIDE_VISUAL,
   },
   blog: {
-    left: '/branding/side-visuals/blog-notebook-desk.jpg',
-    right: '/branding/side-visuals/blog-laptop-notes.jpg',
+    left: HOME_SIDE_VISUAL,
+    right: HOME_SIDE_VISUAL,
   },
   about: {
-    left: '/branding/side-visuals/about-professional-desk.jpg',
-    right: '/branding/specialist-krzysztof-social.jpg',
+    left: HOME_SIDE_VISUAL,
+    right: HOME_SIDE_VISUAL,
   },
   pricing: {
-    left: '/branding/side-visuals/pricing-calculator-docs.jpg',
-    right: '/branding/side-visuals/pricing-calendar-desk.jpg',
+    left: HOME_SIDE_VISUAL,
+    right: HOME_SIDE_VISUAL,
   },
   contact: {
-    left: '/branding/side-visuals/contact-notebook-laptop.jpg',
-    right: '/branding/side-visuals/contact-writing-notebook.jpg',
+    left: HOME_SIDE_VISUAL,
+    right: HOME_SIDE_VISUAL,
   },
 }
 
 export function NotatnikSideVisuals({ variant = 'mixed' }: { variant?: NotatnikSideVisualVariant }) {
   const visuals = SIDE_VISUALS[variant]
+  const isHome = variant === 'home'
 
   return (
     <>
-      <div className="notatnik-side-visual notatnik-side-visual-left" aria-hidden="true">
-        <Image src={visuals.left} alt="" fill sizes="(max-width: 1600px) 180px, 280px" quality={72} />
+      <div
+        className="notatnik-side-visual notatnik-side-visual-left notatnik-side-visual-forest-left"
+        aria-hidden="true"
+      >
+        <img className="notatnik-side-visual-image" src={visuals.left} alt="" aria-hidden="true" loading="eager" decoding="async" />
       </div>
-      <div className="notatnik-side-visual notatnik-side-visual-right" aria-hidden="true">
-        <Image src={visuals.right} alt="" fill sizes="(max-width: 1600px) 180px, 280px" quality={72} />
+      <div
+        className="notatnik-side-visual notatnik-side-visual-right notatnik-side-visual-forest-right"
+        aria-hidden="true"
+      >
+        <img className="notatnik-side-visual-image" src={visuals.right} alt="" aria-hidden="true" loading="eager" decoding="async" />
       </div>
     </>
   )
@@ -225,7 +233,7 @@ export function NotatnikSectionHead({ index, kicker, title }: NotatnikSectionHea
     <div className="notatnik-section-head">
       <div className="notatnik-section-index">{index}</div>
       <div className="notatnik-section-head-copy">
-        <div className="notatnik-mono">{kicker}</div>
+        {kicker ? <div className="notatnik-mono">{kicker}</div> : null}
         <h2>{title}</h2>
       </div>
     </div>
@@ -250,19 +258,17 @@ export function NotatnikFinalCta({
           <NotatnikButtonArrow />
         </Link>
         {secondaryHref && secondaryLabel ? (
-          <div>
-            <Link href={secondaryHref} prefetch={false} className="notatnik-inline-link">
-              {secondaryLabel}
-            </Link>
-          </div>
+          <Link href={secondaryHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
+            <span>{secondaryLabel}</span>
+          </Link>
         ) : null}
       </div>
     </section>
   )
 }
 
-export function NotatnikFooter(_: NotatnikFooterProps) {
-  return <Footer variant="full" />
+export function NotatnikFooter({ showReviews = true }: NotatnikFooterProps) {
+  return <Footer variant="full" showReviews={showReviews} />
 }
 
 export function NotatnikPageShell({

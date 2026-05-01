@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { Moon, Sun } from 'lucide-react'
 import { APP_THEME_ATTRIBUTE, THEME_STORAGE_KEY, isAppTheme, type AppTheme } from '@/lib/theme'
 
 function getSystemTheme(): AppTheme {
@@ -68,7 +69,10 @@ export function ThemeToggle() {
       <span className="notatnik-theme-toggle-track" aria-hidden="true">
         <span className="notatnik-theme-toggle-thumb" />
       </span>
-      <span className="notatnik-theme-toggle-label">{isDark ? 'Wlacz jasny' : 'Wlacz ciemny'}</span>
+      <span className="notatnik-theme-toggle-icon" aria-hidden="true">
+        {isDark ? <Sun size={13} strokeWidth={2} /> : <Moon size={13} strokeWidth={2} />}
+      </span>
+      <span className="notatnik-theme-toggle-label">{isDark ? 'Jasny motyw' : 'Ciemny motyw'}</span>
     </button>
   )
 }

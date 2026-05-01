@@ -66,8 +66,8 @@ export default function ContactPage({
             <figure className="contact-visual-card" aria-labelledby="contact-visual-title" aria-describedby="contact-visual-copy">
               <div className="contact-photo-wrap">
                 <Image
-                  src="/branding/specialist-training.jpg"
-                  alt="Spokojna konsultacja behawioralna z opiekunem psa"
+                  src="/branding/omnie3.png"
+                  alt="Krzysztof Regulski, behawiorysta zwierzat towarzyszacych"
                   fill
                   priority
                   quality={84}
