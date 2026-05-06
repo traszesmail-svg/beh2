@@ -34,6 +34,7 @@ type NotatnikTopbarProps = {
   ctaHref: string
   ctaLabel: string
   ctaVariant?: 'solid' | 'ghost' | 'accent'
+  showUtilityLinks?: boolean
 }
 
 type NotatnikSectionHeadProps = {
@@ -121,7 +122,7 @@ function NotatnikNavIcon({ icon }: { icon?: NotatnikNavItem['icon'] }) {
   return null
 }
 
-export function NotatnikTopbar({ navItems, ctaHref, ctaLabel, ctaVariant = 'solid' }: NotatnikTopbarProps) {
+export function NotatnikTopbar({ navItems, ctaHref, ctaLabel, ctaVariant = 'solid', showUtilityLinks = true }: NotatnikTopbarProps) {
   const hasNavItems = navItems.length > 0
 
   return (
@@ -144,16 +145,18 @@ export function NotatnikTopbar({ navItems, ctaHref, ctaLabel, ctaVariant = 'soli
           <span>{ctaLabel}</span>
           <NotatnikButtonArrow />
         </Link>
-        <ThemeToggle />
-        <a
-          href={INSTAGRAM_PROFILE_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="notatnik-social-link"
-          aria-label="Otwórz Instagram"
-        >
-          <InstagramGlyph />
-        </a>
+        {showUtilityLinks ? <ThemeToggle /> : null}
+        {showUtilityLinks ? (
+          <a
+            href={INSTAGRAM_PROFILE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="notatnik-social-link"
+            aria-label="Otwórz Instagram"
+          >
+            <InstagramGlyph />
+          </a>
+        ) : null}
       </div>
 
       {hasNavItems ? (

@@ -1,15 +1,14 @@
-import React from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
-import { Footer } from '@/components/Footer'
-import { NotatnikSideVisuals, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
+import type { ReactNode } from 'react'
+import { FileText, Globe2, Mail, ShieldCheck, UserRound } from 'lucide-react'
+import { ReferenceContactCard, ReferenceFinalCta, ReferencePageShell } from '@/components/ReferencePageShell'
 import { Schema } from '@/components/schema'
+import { buildBookHref } from '@/lib/booking-routing'
 import {
   CAPBT_PROFILE_URL,
   INSTAGRAM_PROFILE_URL,
   SPECIALIST_CREDENTIALS,
   SPECIALIST_NAME,
-  SPECIALIST_WIDE_PHOTO,
   buildMailtoHref,
   getPublicContactDetails,
 } from '@/lib/site'
@@ -21,7 +20,7 @@ export type LegalSummaryItem = {
 
 export type LegalSection = {
   title: string
-  body: React.ReactNode
+  body: ReactNode
 }
 
 type LegalPageLayoutProps = {
@@ -36,22 +35,6 @@ type LegalPageLayoutProps = {
   supportNoteTitle: string
   supportNoteText: string
   structuredData?: Record<string, unknown>[]
-}
-
-function renderAction(href: string, label: string, className: string) {
-  if (href.startsWith('mailto:')) {
-    return (
-      <a href={href} className={className}>
-        {label}
-      </a>
-    )
-  }
-
-  return (
-    <Link href={href} prefetch={false} className={className}>
-      {label}
-    </Link>
-  )
 }
 
 export function LegalPageLayout({
@@ -69,114 +52,141 @@ export function LegalPageLayout({
 }: LegalPageLayoutProps) {
   const contact = getPublicContactDetails()
   const contactMailtoHref = contact.email ? buildMailtoHref(contact.email, contactSubject) : null
+  const bookHref = buildBookHref(null, 'szybka-konsultacja-15-min')
 
   return (
-    <main className="page-wrap marketing-page">
+    <ReferencePageShell className="reference-legal-page" ctaHref={bookHref}>
       {structuredData.length > 0 ? <Schema data={structuredData} /> : null}
-      <NotatnikSideVisuals />
-      <div className="container">
-        <NotatnikTopbar
-          tag="Regulaminy / dokumenty"
-          navItems={PUBLIC_SITE_NAV_ITEMS}
-          ctaHref="/book?service=szybka-konsultacja-15-min"
-          ctaLabel="Kwadrans / 69 zl"
-        />
 
-        <section className="two-col-section legal-stage-layout">
-          <div className="panel section-panel hero-surface legal-main-panel">
-            <div className="section-eyebrow">{eyebrow}</div>
-            <h1>{title}</h1>
-            <p className="hero-text">{intro}</p>
+      <section className="reference-hero reference-legal-hero">
+        <div className="reference-hero-copy">
+          <span className="reference-pill">{eyebrow}</span>
+          <h1>{title}</h1>
+          <p>{intro}</p>
+          <div className="reference-hero-actions">
+            <Link href="/cennik" prefetch={false} className="reference-btn reference-btn-primary">
+              Wróć do cennika
+            </Link>
+            <Link href="/kontakt#formularz" prefetch={false} className="reference-btn reference-btn-secondary">
+              Kontakt
+            </Link>
+          </div>
+        </div>
 
-            <div className="legal-summary-grid top-gap">
-              {summaryItems.map((item) => (
-                <div key={item.label} className="list-card tree-backed-card legal-summary-card">
+        <aside className="reference-legal-summary" aria-label="Skrót dokumentu">
+          <div className="reference-legal-summary-icon" aria-hidden="true">
+            <FileText size={34} strokeWidth={1.7} />
+          </div>
+          <h2>Najważniejsze informacje</h2>
+          <div className="reference-info-list">
+            {summaryItems.map((item) => (
+              <div key={item.label} className="reference-info-row">
+                <ShieldCheck size={22} strokeWidth={1.7} aria-hidden="true" />
+                <span>
                   <strong>{item.label}</strong>
-                  <div>{item.value}</div>
+                  <small>{item.value}</small>
+                </span>
+              </div>
+            ))}
+          </div>
+        </aside>
+      </section>
+
+      <section className="reference-main-layout">
+        <div className="reference-content-column">
+          <section className="reference-section-card reference-legal-document">
+            {sections.map((section, index) => (
+              <article key={section.title} className="reference-legal-section">
+                <div className="reference-legal-number">{String(index + 1).padStart(2, '0')}</div>
+                <div>
+                  <h2>{section.title}</h2>
+                  <div className="reference-legal-body">{section.body}</div>
                 </div>
-              ))}
+              </article>
+            ))}
+          </section>
+
+          <section className="reference-section-card reference-legal-note">
+            <h2>{supportNoteTitle}</h2>
+            <p>{supportNoteText}</p>
+            <div className="reference-hero-actions">
+              {contactMailtoHref ? (
+                <a href={contactMailtoHref} className="reference-btn reference-btn-primary">
+                  Napisz e-mail
+                </a>
+              ) : null}
+              <Link href="/kontakt#formularz" prefetch={false} className="reference-btn reference-btn-secondary">
+                Formularz kontaktowy
+              </Link>
             </div>
+          </section>
+        </div>
 
-            <div className="legal-section-grid top-gap">
-              {sections.map((section) => (
-                <article key={section.title} className="list-card tree-backed-card legal-section-card">
-                  <strong>{section.title}</strong>
-                  <div className="legal-section-body">{section.body}</div>
-                </article>
-              ))}
+        <aside className="reference-sidebar">
+          <div className="reference-side-card reference-help-card">
+            <h2>{supportTitle}</h2>
+            <p>{supportText}</p>
+            <div className="reference-info-list">
+              {contact.email ? (
+                <a href={contactMailtoHref ?? `mailto:${contact.email}`} className="reference-info-row">
+                  <Mail size={22} strokeWidth={1.7} aria-hidden="true" />
+                  <span>
+                    <strong>E-mail</strong>
+                    <small>{contact.email}</small>
+                  </span>
+                </a>
+              ) : null}
+              <div className="reference-info-row">
+                <Globe2 size={22} strokeWidth={1.7} aria-hidden="true" />
+                <span>
+                  <strong>Obszar działania</strong>
+                  <small>Kontakt online / cała Polska</small>
+                </span>
+              </div>
+              <div className="reference-info-row">
+                <UserRound size={22} strokeWidth={1.7} aria-hidden="true" />
+                <span>
+                  <strong>Kto odpowiada</strong>
+                  <small>
+                    {SPECIALIST_NAME}, {SPECIALIST_CREDENTIALS}.
+                  </small>
+                </span>
+              </div>
             </div>
-
-            <article className="list-card tree-backed-card legal-section-card top-gap">
-              <strong>{supportNoteTitle}</strong>
-              <div className="legal-section-body">
-                <p>{supportNoteText}</p>
-              </div>
-
-              <div className="hero-actions top-gap-small">
-                {contactMailtoHref ? renderAction(contactMailtoHref, 'Napisz e-mail', 'button button-primary big-button') : null}
-                {renderAction('/kontakt#formularz', 'Formularz kontaktowy', 'button button-ghost big-button')}
-              </div>
-            </article>
           </div>
 
-          <aside className="panel section-panel contact-support-panel legal-support-panel">
-            <div className="contact-visual-shell">
-              <Image
-                src={SPECIALIST_WIDE_PHOTO.src}
-                alt=""
-                aria-hidden="true"
-                width={SPECIALIST_WIDE_PHOTO.width}
-                height={SPECIALIST_WIDE_PHOTO.height}
-                sizes="(max-width: 980px) 100vw, 38vw"
-                className="contact-feature-image"
-              />
-            </div>
-
-            <div className="section-eyebrow">Dane kontaktowe</div>
-            <h2>{supportTitle}</h2>
-            <p className="hero-text">{supportText}</p>
-
-            <div className="legal-support-grid">
-              {contact.email ? (
-                <div className="list-card tree-backed-card">
-                  <strong>E-mail</strong>
-                  <span>
-                    <a href={contactMailtoHref ?? `mailto:${contact.email}`}>{contact.email}</a>
-                  </span>
-                </div>
-              ) : null}
-
-              <div className="list-card tree-backed-card">
-                <strong>Obszar dzialania</strong>
-                <span>Kontakt online / cala Polska</span>
-              </div>
-
-              <div className="list-card tree-backed-card">
-                <strong>Profile publiczne</strong>
+          <div className="reference-side-card">
+            <h2>Profile publiczne</h2>
+            <div className="reference-info-list">
+              <a href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="reference-info-row">
+                <ShieldCheck size={22} strokeWidth={1.7} aria-hidden="true" />
                 <span>
-                  <a href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer">
-                    Profil CAPBT / COAPE
-                  </a>{' '}
-                  potwierdza kwalifikacje, a{' '}
-                  <a href={INSTAGRAM_PROFILE_URL} target="_blank" rel="noopener noreferrer">
-                    Instagram @regulskibehawiorysta
-                  </a>{' '}
-                  zawiera publiczne informacje o marce.
+                  <strong>Profil CAPBT / COAPE</strong>
+                  <small>Publiczny profil kwalifikacji.</small>
                 </span>
-              </div>
-
-              <div className="list-card tree-backed-card">
-                <strong>Kto odpowiada</strong>
+              </a>
+              <a href={INSTAGRAM_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="reference-info-row">
+                <Globe2 size={22} strokeWidth={1.7} aria-hidden="true" />
                 <span>
-                  {SPECIALIST_NAME}, {SPECIALIST_CREDENTIALS}.
+                  <strong>Instagram</strong>
+                  <small>@regulskibehawiorysta</small>
                 </span>
-              </div>
+              </a>
             </div>
-          </aside>
-        </section>
+          </div>
 
-        <Footer variant="legal" />
-      </div>
-    </main>
+          <ReferenceContactCard />
+        </aside>
+      </section>
+
+      <ReferenceFinalCta
+        title="Masz pytanie do dokumentu?"
+        copy="Napisz krótko, którego zapisu dotyczy pytanie. Odpowiem przez e-mail albo formularz kontaktowy."
+        primaryHref="/kontakt#formularz"
+        primaryLabel="Napisz wiadomość"
+        secondaryHref="/cennik"
+        secondaryLabel="Wróć do cennika"
+      />
+    </ReferencePageShell>
   )
 }

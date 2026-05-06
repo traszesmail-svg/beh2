@@ -1,226 +1,331 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { OfferCards } from '@/components/OfferCards'
-import { NotatnikFinalCta, NotatnikPageShell, NotatnikSectionHead, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
-import { RegulskiWebHero } from '@/components/RegulskiWebHero'
-import { Schema } from '@/components/schema'
-import { getBreadcrumbJsonLd, getServiceJsonLd } from '@/lib/schema'
-import { buildMarketingMetadata } from '@/lib/seo'
 import {
-  PUBLIC_OFFER_BOOKING_PROCESS,
+  CalendarCheck,
+  CheckCircle2,
+  Clock3,
+  CreditCard,
+  FileText,
+  HelpCircle,
+  MessageCircle,
+  Monitor,
+  WalletCards,
+} from 'lucide-react'
+import { ReferenceContactCard, ReferenceFinalCta, ReferencePageShell } from '@/components/ReferencePageShell'
+import { Schema } from '@/components/schema'
+import { buildBookHref } from '@/lib/booking-routing'
+import { FUNNEL_SERVICE_CONFIG, type PublicBookingServiceType } from '@/lib/funnel'
+import {
   PUBLIC_OFFER_BOOKING_PAYMENT,
+  PUBLIC_OFFER_BOOKING_PROCESS,
   PUBLIC_OFFER_CANCELLATION_COPY,
 } from '@/lib/public-offer-copy'
+import { getBreadcrumbJsonLd, getServiceJsonLd } from '@/lib/schema'
+import { buildMarketingMetadata } from '@/lib/seo'
 
 export const metadata: Metadata = buildMarketingMetadata({
   title: 'Cennik konsultacji behawioralnych',
   path: '/cennik',
   description:
-    'Kwadrans 69 zl, Dwa kwadranse 169 zl, Pelna konsultacja 470 zl. Kwadrans na juz (99 zl) to ten sam format z szybkim terminem - dostepny przy rezerwacji.',
+    'Kwadrans 69 zł, Dwa kwadranse 169 zł, Pełna konsultacja 470 zł. Kwadrans na już (99 zł) to ten sam format z szybkim terminem - dostępny przy rezerwacji.',
 })
+
+const bookHref = buildBookHref(null, 'szybka-konsultacja-15-min')
+const contactHref = '/kontakt#formularz'
+
+const pricingCards: Array<{
+  service: PublicBookingServiceType
+  badge: string
+  title: string
+  price: string
+  copy: string
+  features: string[]
+  cta: string
+  featured?: boolean
+}> = [
+  {
+    service: 'szybka-konsultacja-15-min',
+    badge: 'najprostszy start',
+    title: 'Kwadrans',
+    price: '69 zł',
+    copy: '15 minut audio bez kamery, gdy chcesz nazwać problem i ustalić pierwszy sensowny krok.',
+    features: ['jedno pytanie albo pierwszy porządek', 'audio bez kamery', 'dobry start przed większą decyzją'],
+    cta: 'Zarezerwuj Kwadrans',
+    featured: true,
+  },
+  {
+    service: 'kwadrans-na-juz',
+    badge: 'priorytet',
+    title: 'Kwadrans na już',
+    price: '99 zł',
+    copy: 'Ten sam 15-minutowy format, ale z priorytetem i możliwie szybkim potwierdzeniem terminu.',
+    features: ['ten sam zakres co Kwadrans', 'szybsze potwierdzenie', 'dla tematów pilnych, ale krótkich'],
+    cta: 'Sprawdź termin',
+  },
+  {
+    service: 'konsultacja-30-min',
+    badge: 'więcej czasu',
+    title: 'Dwa kwadranse',
+    price: '169 zł',
+    copy: '30 minut online, gdy temat ma kilka wątków albo potrzebujesz spokojniejszego wejścia.',
+    features: ['więcej kontekstu niż w Kwadransie', 'dla kilku pytań naraz', 'dobry most przed pełną konsultacją'],
+    cta: 'Zarezerwuj 30 min',
+  },
+  {
+    service: 'konsultacja-behawioralna-online',
+    badge: 'pełny zakres',
+    title: 'Pełna konsultacja',
+    price: '470 zł',
+    copy: 'Rozmowa online, analiza sytuacji, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.',
+    features: ['sprawy złożone i przewlekłe', 'plan pracy po konsultacji', '7 dni kontaktu tekstowego'],
+    cta: 'Zarezerwuj pełną konsultację',
+  },
+]
 
 const pricingFaqItems = [
   {
-    question: 'Nie wiem, czy chce jeszcze rozmawiac. Jest jakis tanszy start?',
+    question: 'Czym różni się Kwadrans od Kwadransu na już?',
     answer:
-      'Tak. W /materialy znajdziesz 21 PDF-ow od 19 zl (pojedyncze) lub 49 zl (pakiet 3 PDF). Sa tansze niz Kwadrans (69 zl) i nie wymagaja rezerwacji terminu — odbierasz mailem po BLIK-u. Dwa materialy darmowe (kot w napieciu, pies a poziom ruchu) bez platnosci, tylko na e-mail.',
+      'Zakres jest taki sam: 15 minut audio bez kamery. Wariant za 99 zł dotyczy priorytetu i możliwie szybkiego terminu, a nie dłuższej konsultacji.',
   },
   {
-    question: 'Czym jest Kwadrans z behawiorysta?',
+    question: 'Kiedy wybrać Dwa kwadranse?',
     answer:
-      'To 15 minut rozmowy audio bez kamery. Przy jednym pytaniu albo pierwszym uporzadkowaniu tematu wystarcza, zeby ustalic priorytet i pierwszy kierunek dzialania.',
+      'Gdy jedno pytanie rozlewa się na kilka wątków, a 15 minut byłoby za ciasne na spokojne uporządkowanie sytuacji.',
   },
   {
-    question: 'Czym rozni sie Kwadrans za 69 zl od Kwadransu na juz za 99 zl?',
+    question: 'Kiedy od razu pełna konsultacja?',
     answer:
-      'Forma rozmowy jest ta sama: 15 minut audio bez kamery. Przy 99 zl placisz za priorytet i mozliwie szybki termin, a nie za dluzsza konsultacje.',
+      'Przy sprawach złożonych, przewlekłych albo takich, które wymagają diagnozy, planu pracy i dalszego kontaktu po rozmowie.',
   },
   {
-    question: 'Kiedy wybrac Dwa kwadranse za 169 zl?',
-    answer:
-      'Wtedy, gdy 15 minut to za malo, temat ma kilka watkow albo chcesz spokojniej uporzadkowac sytuacje przed decyzja o Pelnej konsultacji.',
-  },
-  {
-    question: 'Co obejmuje Pelna konsultacja 470 zl?',
-    answer:
-      'Rozmowa online audio albo audio/video, diagnoza sytuacji, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp. To osobny format dla spraw zlozonych, przewleklych albo wielowatkowych.',
-  },
-  {
-    question: 'Jak wyglada platnosc?',
+    question: 'Jak wygląda płatność?',
     answer: `${PUBLIC_OFFER_BOOKING_PAYMENT} ${PUBLIC_OFFER_CANCELLATION_COPY}`,
   },
-] as const
-
-const visibleFaqItems = pricingFaqItems.slice(0, 4)
-
-const pricingDecisionCards = [
-  {
-    title: 'Kwadrans',
-    copy: 'Najprostszy start, gdy chcesz nazwac problem, ustalic priorytet i wyjsc z jednym konkretnym kierunkiem.',
-    href: '/book?service=szybka-konsultacja-15-min',
-  },
-  {
-    title: 'Kwadrans na juz',
-    copy: 'Ten sam format 15 minut audio, tylko z priorytetowym potwierdzeniem terminu do 15 minut od wplaty.',
-    href: '/book?service=kwadrans-na-juz',
-  },
-  {
-    title: 'Dwa kwadranse',
-    copy: 'Lepszy wybor, gdy temat ma kilka watkow i chcesz spokojniej uporzadkowac sytuacje przed dalsza decyzja.',
-    href: '/book?service=konsultacja-30-min',
-  },
-  {
-    title: 'Pelna konsultacja',
-    copy: 'Format dla spraw zlozonych, przewleklych albo wielowatkowych, gdy potrzebujesz diagnozy, planu i dalszego wsparcia.',
-    href: '/book?service=konsultacja-behawioralna-online',
-  },
-] as const
+]
 
 export default function PricingPage() {
   return (
-    <NotatnikPageShell
-      tag="Cennik / konsultacje"
-      navItems={PUBLIC_SITE_NAV_ITEMS}
-      ctaHref="/book?service=szybka-konsultacja-15-min"
-      ctaLabel="Kwadrans / 69 zl"
-      footerPrimaryHref="/book?service=szybka-konsultacja-15-min"
-      footerPrimaryLabel="Kwadrans z behawiorysta"
-      sideVisualVariant="pricing"
-    >
+    <ReferencePageShell className="reference-pricing-page" ctaHref={bookHref}>
       <Schema
         data={[
           getBreadcrumbJsonLd([
-            { name: 'Strona glowna', path: '/' },
+            { name: 'Strona główna', path: '/' },
             { name: 'Cennik', path: '/cennik' },
           ]),
           getServiceJsonLd({
             name: 'Cennik konsultacji behawioralnych - psy i koty',
             description:
-              'Trzy glowne formaty konsultacji: Kwadrans (69 zl), Dwa kwadranse (169 zl) i Pelna konsultacja behawioralna (470 zl). Kwadrans na juz (99 zl) to ten sam format z szybkim terminem.',
+              'Formaty konsultacji: Kwadrans, Kwadrans na już, Dwa kwadranse i Pełna konsultacja behawioralna online.',
             serviceUrl: '/cennik',
-            offerCatalog: [
-              { name: 'Kwadrans z behawiorysta', description: '15 min audio bez kamery.', url: '/book?service=szybka-konsultacja-15-min', price: 69 },
-              { name: 'Dwa kwadranse', description: '30 min online, gdy 15 minut to za malo.', url: '/book?service=konsultacja-30-min', price: 169 },
-              { name: 'Pelna konsultacja', description: 'Audio albo video, diagnoza, plan poprawy i 7 dni wsparcia tekstowego przez WhatsApp.', url: '/book?service=konsultacja-behawioralna-online', price: 470 },
-            ],
+            offerCatalog: pricingCards.map((card) => {
+              const service = FUNNEL_SERVICE_CONFIG[card.service]
+
+              return {
+                name: service.title,
+                description: service.publicSummary,
+                url: buildBookHref(null, card.service),
+                price: service.priceAmount,
+              }
+            }),
           }),
         ]}
       />
 
-      <section className="notatnik-subhero">
-        <div>
-          <div className="notatnik-subhero-tag notatnik-mono">Cennik / psy i koty</div>
+      <section className="reference-hero reference-pricing-hero">
+        <div className="reference-hero-copy">
+          <span className="reference-pill">Cennik</span>
           <h1>Cennik konsultacji behawioralnych.</h1>
           <p>
-            Trzy formaty i jeden wariant priorytetowy. Wybierasz skale, nie pakiet: 69 zl na start, 99 zl za ten sam format szybciej, 169 zl przy
-            szerszym temacie i 470 zl dla spraw zlozonych wymagajacych diagnozy i planu.
+            Wybierz najmniejszy format, który pasuje do sytuacji. Kwadrans jest pierwszym krokiem, Dwa kwadranse dają
+            więcej miejsca, a pełna konsultacja obejmuje plan i dalsze wsparcie.
           </p>
-          <div className="notatnik-subhero-actions">
-            <Link href="/book?service=szybka-konsultacja-15-min" prefetch={false} className="notatnik-btn">
-              <span>Zarezerwuj Kwadrans</span>
-              <span className="notatnik-btn-arrow" aria-hidden="true">
-                &rarr;
-              </span>
+          <div className="reference-hero-actions">
+            <Link href={bookHref} prefetch={false} className="reference-btn reference-btn-primary">
+              Umów pierwszy krok
             </Link>
-            <Link href="/kontakt#formularz" prefetch={false} className="notatnik-btn notatnik-btn-ghost">
-              <span>Napisz wiadomosc</span>
+            <Link href={contactHref} prefetch={false} className="reference-btn reference-btn-secondary">
+              Wyślij krótką wiadomość
             </Link>
           </div>
         </div>
-
-        <div className="notatnik-subhero-media">
-          <RegulskiWebHero variant="cennik" priority className="notatnik-pricing-hero-visual" />
+        <div className="reference-pricing-summary" aria-label="Skrót cennika">
+          <div className="reference-pricing-badge">
+            <WalletCards size={24} strokeWidth={1.7} aria-hidden="true" />
+            <span>od 69 zł</span>
+          </div>
+          <div className="reference-price-ladder">
+            {pricingCards.map((card) => (
+              <Link key={card.service} href={buildBookHref(null, card.service)} prefetch={false}>
+                <span>{card.title}</span>
+                <strong>{card.price}</strong>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
-      <section id="porownanie">
-        <NotatnikSectionHead index="I." kicker="Oferta" title="Trzy formaty konsultacji." />
-        <p className="notatnik-service-description">Wybierz najmniejszy format, ktory pasuje do sytuacji.</p>
-        <div className="top-gap-small">
-          <OfferCards />
-        </div>
-        <div className="card-grid two-up top-gap-small">
-          {pricingDecisionCards.map((item) => (
-            <article key={item.title} className="summary-card tree-backed-card">
-              <h3>{item.title}</h3>
-              <p>{item.copy}</p>
-              <Link href={item.href} prefetch={false} className="notatnik-btn notatnik-btn-ghost cennik-card-reserve">
-                Zarezerwuj
-              </Link>
-            </article>
-          ))}
-        </div>
-        <div className="list-card tree-backed-card top-gap-small">
-          <p>
-            <strong>Wazne:</strong> Kwadrans na juz nie jest osobna, dluzsza konsultacja. To ten sam zakres co zwykly Kwadrans, tylko z szybszym terminem.
-          </p>
-        </div>
+      <section className="reference-category-grid" aria-label="Najważniejsze informacje o płatności">
+        <article className="reference-category-card reference-static-card">
+          <CalendarCheck size={25} strokeWidth={1.7} aria-hidden="true" />
+          <span>
+            <strong>Termin po wyborze</strong>
+            <small>Rezerwujesz format i wybierasz dostępny termin.</small>
+          </span>
+        </article>
+        <article className="reference-category-card reference-static-card">
+          <CreditCard size={25} strokeWidth={1.7} aria-hidden="true" />
+          <span>
+            <strong>Płatność ręczna</strong>
+            <small>Po potwierdzeniu widzisz instrukcję płatności.</small>
+          </span>
+        </article>
+        <article className="reference-category-card reference-static-card">
+          <Monitor size={25} strokeWidth={1.7} aria-hidden="true" />
+          <span>
+            <strong>Online w Polsce</strong>
+            <small>Spokojna rozmowa bez stresu dla zwierzęcia.</small>
+          </span>
+        </article>
       </section>
 
-      <section style={{ background: 'var(--paper)' }}>
-        <NotatnikSectionHead index="II." kicker="Rezerwacja" title="Jak wyglada rezerwacja i potwierdzenie terminu." />
-
-        <div className="notatnik-steps">
-          {PUBLIC_OFFER_BOOKING_PROCESS.map((step, index) => (
-            <article key={step} className="notatnik-step">
-              <div className="notatnik-step-number">{String(index + 1).padStart(2, '0')}</div>
-              <p>{step}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section>
-        <NotatnikSectionHead index="III." kicker="Platnosc" title="Platnosc, zmiana terminu i regulaminy." />
-        <div className="notatnik-quiet-grid top-gap-small">
-          <article className="notatnik-quiet-card">
-            <h3>Jak wyglada platnosc</h3>
-            <p>{PUBLIC_OFFER_BOOKING_PAYMENT}</p>
-          </article>
-          <article className="notatnik-quiet-card">
-            <h3>Zmiana terminu i rezygnacja</h3>
-            <p>{PUBLIC_OFFER_CANCELLATION_COPY}</p>
-            <div className="hero-actions top-gap-small">
-              <Link href="/regulamin" prefetch={false} className="prep-inline-link">
-                Regulamin rezerwacji
-              </Link>
-              <Link href="/regulamin-pelna-konsultacja" prefetch={false} className="prep-inline-link">
-                Regulamin Pelnej konsultacji
-              </Link>
+      <section className="reference-main-layout">
+        <div className="reference-content-column">
+          <section className="reference-section-card">
+            <h2>Wybierz format</h2>
+            <div className="reference-pricing-grid">
+              {pricingCards.map((card) => (
+                <article key={card.service} className={`reference-price-card${card.featured ? ' is-featured' : ''}`}>
+                  <span className="reference-price-badge">{card.badge}</span>
+                  <div className="reference-price-heading">
+                    <h3>{card.title}</h3>
+                    <strong>{card.price}</strong>
+                  </div>
+                  <p>{card.copy}</p>
+                  <ul>
+                    {card.features.map((feature) => (
+                      <li key={feature}>
+                        <CheckCircle2 size={17} strokeWidth={1.8} aria-hidden="true" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                  <Link
+                    href={buildBookHref(null, card.service)}
+                    prefetch={false}
+                    className={card.featured ? 'reference-btn reference-btn-primary' : 'reference-btn reference-btn-secondary'}
+                  >
+                    {card.cta}
+                  </Link>
+                </article>
+              ))}
             </div>
-          </article>
-        </div>
-      </section>
+          </section>
 
-      <section>
-        <NotatnikSectionHead index="IV." kicker="FAQ" title="Najczestsze pytania przed wyborem formatu." />
-        <div className="notatnik-faq-grid top-gap-small">
-          {visibleFaqItems.map((item) => (
-            <article key={item.question} className="summary-card tree-backed-card">
-              <h4>{item.question}</h4>
-              <p>{item.answer}</p>
-            </article>
-          ))}
+          <section className="reference-section-card">
+            <h2>Jak wygląda rezerwacja</h2>
+            <div className="reference-steps">
+              {PUBLIC_OFFER_BOOKING_PROCESS.map((step, index) => (
+                <article key={step} className="reference-step">
+                  <span>{String(index + 1).padStart(2, '0')}</span>
+                  <p>{step}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <section className="reference-section-card">
+            <h2>Najczęstsze pytania przed wyborem</h2>
+            <div className="reference-compact-faq">
+              {pricingFaqItems.map((item, index) => (
+                <details key={item.question} open={index === 0}>
+                  <summary>
+                    <span>{String(index + 1).padStart(2, '0')}</span>
+                    {item.question}
+                  </summary>
+                  <p>{item.answer}</p>
+                </details>
+              ))}
+            </div>
+          </section>
         </div>
-        <div className="list-card tree-backed-card top-gap-small">
-          <p>
-            Nie chcesz jeszcze rezerwowac rozmowy? Zacznij od tanszych albo darmowych materialow w{' '}
-            <Link href="/niezbednik" prefetch={false} className="notatnik-inline-link">
-              Niezbedniku
+
+        <aside className="reference-sidebar">
+          <div className="reference-side-card reference-help-card">
+            <h2>Nie wiesz, co wybrać?</h2>
+            <p>
+              Zacznij od Kwadransu, jeśli chcesz nazwać problem i ustalić pierwszy kierunek. Jeśli temat jest większy,
+              wybierz Dwa kwadranse albo pełną konsultację.
+            </p>
+            <Link href={bookHref} prefetch={false} className="reference-btn reference-btn-primary">
+              Umów pierwszy krok
             </Link>
-            .
-          </p>
-        </div>
+            <Link href={contactHref} prefetch={false} className="reference-btn reference-btn-secondary">
+              Wyślij pytanie
+            </Link>
+          </div>
+
+          <div className="reference-side-card">
+            <h2>Szybkie odpowiedzi</h2>
+            <div className="reference-info-list">
+              <div className="reference-info-row">
+                <Clock3 size={24} strokeWidth={1.7} aria-hidden="true" />
+                <span>
+                  <strong>15 albo 30 minut</strong>
+                  <small>Krótki format pomaga uporządkować decyzję bez dużego zobowiązania.</small>
+                </span>
+              </div>
+              <div className="reference-info-row">
+                <FileText size={24} strokeWidth={1.7} aria-hidden="true" />
+                <span>
+                  <strong>Regulaminy</strong>
+                  <small>
+                    <Link href="/regulamin" prefetch={false}>
+                      Regulamin rezerwacji
+                    </Link>{' '}
+                    i{' '}
+                    <Link href="/regulamin-pelna-konsultacja" prefetch={false}>
+                      pełnej konsultacji
+                    </Link>
+                    .
+                  </small>
+                </span>
+              </div>
+              <div className="reference-info-row">
+                <HelpCircle size={24} strokeWidth={1.7} aria-hidden="true" />
+                <span>
+                  <strong>Materiały zamiast rozmowy</strong>
+                  <small>
+                    Jeśli nie chcesz jeszcze rezerwować, sprawdź{' '}
+                    <Link href="/niezbednik" prefetch={false}>
+                      Niezbędnik
+                    </Link>
+                    .
+                  </small>
+                </span>
+              </div>
+              <div className="reference-info-row">
+                <MessageCircle size={24} strokeWidth={1.7} aria-hidden="true" />
+                <span>
+                  <strong>Krótka wiadomość</strong>
+                  <small>Napisz, jeśli wahasz się między formatami.</small>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <ReferenceContactCard />
+        </aside>
       </section>
 
-      <NotatnikFinalCta
-        title="Jesli chcesz ruszyc z tematem, <em>zacznij od Kwadransu.</em>"
-        copy="To dalej najprostszy pierwszy krok. Jesli wolisz najpierw przygotowac sie materialami, przejdz do Niezbednika."
-        primaryHref="/book?service=szybka-konsultacja-15-min"
-        primaryLabel="Zarezerwuj Kwadrans"
-        secondaryHref="/niezbednik"
-        secondaryLabel="Przejdz do Niezbednika"
+      <ReferenceFinalCta
+        title="Gotowy na pierwszy krok?"
+        copy="Wybierz dogodny termin albo napisz krótko, co się dzieje - podpowiem, od którego formatu zacząć."
+        primaryHref={bookHref}
+        primaryLabel="Umów pierwszy krok"
+        secondaryHref={contactHref}
+        secondaryLabel="Wyślij krótką wiadomość"
       />
-    </NotatnikPageShell>
+    </ReferencePageShell>
   )
 }
