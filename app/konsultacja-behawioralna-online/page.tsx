@@ -22,7 +22,7 @@ const consultationFaqItems: TrustFaqItem[] = [
   {
     question: 'Co dostaje po Pelnej konsultacji?',
     answer:
-      '60 minut rozmowy online, diagnoze sytuacji, indywidualny plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp, gdzie mozesz zadawac pytania, wysylac filmy i konsultowac wdrozenie planu.',
+      'Rozmowe online, diagnoze sytuacji, indywidualny plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp, gdzie mozesz zadawac pytania, wysylac filmy i konsultowac wdrozenie planu.',
   },
   {
     question: 'Czy moge zaczac od Kwadransu zamiast Pelnej konsultacji?',
@@ -39,7 +39,7 @@ const consultationSummaryCards = [
   },
   {
     eyebrow: 'Co dostajesz',
-    title: '60 minut, diagnoza i 7 dni wsparcia',
+    title: 'Diagnoza, plan i 7 dni wsparcia',
     copy: 'To osobny format pracy: rozmowa online, plan poprawy i konsultacje tekstowe przez WhatsApp po rozmowie.',
   },
   {
@@ -68,7 +68,7 @@ export const metadata: Metadata = buildMarketingMetadata({
   title: 'Pelna konsultacja behawioralna online',
   path: '/konsultacja-behawioralna-online',
   description:
-    'Pelna konsultacja behawioralna dla psa i kota: 60 minut rozmowy, diagnoza, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.',
+    'Pelna konsultacja behawioralna dla psa i kota: rozmowa online, diagnoza, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.',
 })
 
 export default function ConsultationOnlinePage() {
@@ -84,7 +84,7 @@ export default function ConsultationOnlinePage() {
     ]),
     getServiceJsonLd({
       name: 'Pelna konsultacja behawioralna',
-      description: 'Pelna konsultacja behawioralna online dla psa lub kota: 60 minut rozmowy, diagnoza, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.',
+      description: 'Pelna konsultacja behawioralna online dla psa lub kota: rozmowa, diagnoza, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.',
       serviceUrl: consultationHref,
       offerPrice: 470,
     }),
@@ -103,7 +103,7 @@ export default function ConsultationOnlinePage() {
       <Schema data={structuredData} />
       <section className="notatnik-subhero">
         <div>
-          <div className="notatnik-subhero-tag notatnik-mono">Pelna konsultacja / 60 min</div>
+          <div className="notatnik-subhero-tag notatnik-mono">Pelna konsultacja</div>
           <h1>Pelna konsultacja behawioralna online</h1>
           <p>{PUBLIC_OFFER_DECISION_COPY.premium}</p>
           <div className="notatnik-subhero-actions">
@@ -139,7 +139,7 @@ export default function ConsultationOnlinePage() {
             <Image src={heroImage.src} alt="" aria-hidden="true" fill sizes="(max-width: 980px) 100vw, 40vw" priority />
           </div>
           <div className="notatnik-subhero-note">
-            <span>60 min online</span>
+            <span>pelny zakres online</span>
             <span>diagnoza + 7 dni WhatsApp</span>
           </div>
         </div>

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { NotatnikFinalCta, NotatnikPageShell, NotatnikSectionHead, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
+import { RegulskiWebHero } from '@/components/RegulskiWebHero'
 import { buildBookHref } from '@/lib/booking-routing'
 import { buildMarketingMetadata } from '@/lib/seo'
 import {
@@ -105,7 +106,8 @@ export default function MaterialyLandingPage() {
           </div>
         </div>
 
-        <div className="summary-card tree-backed-card">
+        <div className="summary-card tree-backed-card regulski-web-summary-card">
+          <RegulskiWebHero variant="materialy" priority />
           <div className="section-eyebrow">3 polki</div>
           <h3>Bezplatne · 19/29 zl · pakiet 49 zl</h3>
           <p>

@@ -2,7 +2,7 @@
 
 import React, { useState, type FormEvent } from 'react'
 import { trackAnalyticsEvent } from '@/lib/analytics'
-import { NEWSLETTER_SIGNUP_COPY, type GrowthSpecies } from '@/lib/growth-layer'
+import type { GrowthSpecies } from '@/lib/growth-layer'
 
 type FormState = 'idle' | 'loading' | 'success' | 'error'
 
@@ -14,6 +14,15 @@ type NewsletterSignupProps = {
   lead?: string
   className?: string
 }
+
+const NEWSLETTER_SIGNUP_COPY = {
+  title: 'Newsletter dla opiekunow psow i kotow',
+  lead: 'Pisze raz na jakis czas, tylko kiedy mam cos konkretnego. Glownie o tym, co napedza zachowanie zwierzat i co z tym zrobic bez nadmiaru teorii.',
+  buttonLabel: 'Zapisz sie',
+  note: 'Raz na 1-2 tygodnie. Mozesz wypisac sie w kazdej chwili.',
+  successTitle: 'Dziekuje za zapis',
+  successBody: 'Na liscie zostajesz po to, zeby dostawac praktyczne tresci, a nie czeste kampanie sprzedazowe.',
+} as const
 
 function isEmailValid(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
@@ -62,7 +71,7 @@ export function NewsletterSignup({
       const payload = (await response.json()) as { ok?: boolean; message?: string; error?: string }
 
       if (!response.ok || !payload.ok) {
-        throw new Error(payload.error ?? 'Nie udało się zapisać do newslettera.')
+        throw new Error(payload.error ?? 'Nie udalo sie zapisac do newslettera.')
       }
 
       trackAnalyticsEvent('newsletter_signup', {
@@ -77,7 +86,7 @@ export function NewsletterSignup({
       setSegment('oba')
     } catch (error) {
       setStatus('error')
-      setFeedback(error instanceof Error ? error.message : 'Nie udało się zapisać do newslettera.')
+      setFeedback(error instanceof Error ? error.message : 'Nie udalo sie zapisac do newslettera.')
     }
   }
 
@@ -102,7 +111,7 @@ export function NewsletterSignup({
         </div>
 
         <div className="form-field">
-          <label htmlFor={`newsletter-segment-${location}`}>Temat najbliższy</label>
+          <label htmlFor={`newsletter-segment-${location}`}>Temat najblizszy</label>
           <select
             id={`newsletter-segment-${location}`}
             name="segment"
@@ -117,7 +126,7 @@ export function NewsletterSignup({
 
         <div className="full-width hero-actions top-gap-small">
           <button type="submit" className="button button-primary" disabled={status === 'loading'}>
-            {status === 'loading' ? 'Zapisuję...' : NEWSLETTER_SIGNUP_COPY.buttonLabel}
+            {status === 'loading' ? 'Zapisuje...' : NEWSLETTER_SIGNUP_COPY.buttonLabel}
           </button>
         </div>
 

@@ -3,12 +3,13 @@ import Link from 'next/link'
 import { NotatnikFinalCta, NotatnikPageShell, NotatnikSectionHead, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { MaterialyDownloadForm } from '@/components/MaterialyDownloadForm'
 import { buildBookHref } from '@/lib/booking-routing'
-import { buildMarketingMetadata } from '@/lib/seo'
+import { buildTechnicalMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = buildMarketingMetadata({
+export const metadata: Metadata = buildTechnicalMetadata({
   title: 'Pobierz PDF | Materialy Regulski',
   path: '/materialy/pobranie',
   description: 'Wpisz e-mail i 6-cyfrowy kod, by pobrać zamówiony PDF. Kod jest ważny 72 godziny.',
+  follow: false,
 })
 
 const quickHref = buildBookHref(null, 'szybka-konsultacja-15-min', false)

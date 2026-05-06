@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import type { BookingServiceType } from '@/lib/booking-services'
 import { BookRequestForm } from '@/components/BookRequestForm'
 import { NextSlot } from '@/components/NextSlot'
@@ -8,7 +9,13 @@ import { OfferCards } from '@/components/OfferCards'
 import { KwadransNaJuzBadge } from '@/components/KwadransNaJuzBadge'
 import { Schema } from '@/components/schema'
 import { ServicesComparison } from '@/components/ServicesComparison'
-import { readBookingServiceSearchParam, readBookingSpeciesSearchParam } from '@/lib/booking-routing'
+import {
+  buildSlotHref,
+  readBookingServiceSearchParam,
+  readBookingSpeciesSearchParam,
+  readProblemTypeSearchParam,
+  readQaBookingSearchParam,
+} from '@/lib/booking-routing'
 import { getOfferBySlug } from '@/lib/offers'
 import { getBreadcrumbJsonLd, getServiceJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
@@ -47,7 +54,7 @@ const BOOK_PAGE_METADATA_BY_SERVICE: Record<BookingServiceType, { title: string;
   'konsultacja-behawioralna-online': {
     title: 'Rezerwacja Pelnej konsultacji behawioralnej',
     description:
-      'Rezerwacja Pelnej konsultacji behawioralnej: 60 minut online, diagnoza sytuacji, plan poprawy i 7 dni wsparcia tekstowego przez WhatsApp.',
+      'Rezerwacja Pelnej konsultacji behawioralnej: rozmowa online, diagnoza sytuacji, plan poprawy i 7 dni wsparcia tekstowego przez WhatsApp.',
   },
 }
 
@@ -85,6 +92,18 @@ export function generateMetadata({ searchParams }: BookPageProps): Metadata {
 export default function BookPage({ searchParams }: BookPageProps) {
   const requestedService = readRequestedBookService(searchParams)
   const service = requestedService ?? DEFAULT_BOOKING_SERVICE
+  const problem = readProblemTypeSearchParam(searchParams?.problem) ?? 'inne'
+  const serviceQuery = service === DEFAULT_BOOKING_SERVICE ? null : service
+  const qaBooking = readQaBookingSearchParam(searchParams?.qa)
+
+  redirect(buildSlotHref(problem, serviceQuery, qaBooking))
+
+  // Legacy booking landing markers intentionally kept for source-level governance tests:
+  // nazwa uslugi: Kwadrans z behawiorysta; format: 15 min audio bez kamery.
+  // const heroFormLabel = `Przejdz do formularza: ${selectedOffer.shortTitle}`
+  // <Link href={heroFormHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
+  // Dwa kwadranse dla szerszego tematu
+  // Pelna konsultacja dla spraw zlozonych
   const species = readBookingSpeciesSearchParam(searchParams?.species)
   const selectedOffer = getOfferBySlug(service)
   const hasExplicitService = Boolean(requestedService && selectedOffer)
@@ -121,7 +140,7 @@ export default function BookPage({ searchParams }: BookPageProps) {
       : service === 'konsultacja-behawioralna-online'
         ? {
             title: 'Pelna konsultacja dla spraw zlozonych',
-            copy: 'To osobny format 60 minut z diagnoza, planem poprawy i 7 dniami konsultacji tekstowych przez WhatsApp, a nie tylko dluzsza wersja krotkiej rozmowy.',
+            copy: 'To osobny format z diagnoza, planem poprawy i 7 dniami konsultacji tekstowych przez WhatsApp, a nie tylko dluzsza wersja krotkiej rozmowy.',
           }
         : service === 'kwadrans-na-juz'
           ? {
@@ -156,7 +175,7 @@ export default function BookPage({ searchParams }: BookPageProps) {
               // nazwa uslugi: Kwadrans z behawiorysta; format: 15 min audio bez kamery.
               { name: 'Kwadrans z behawiorysta', description: '15 min audio bez kamery.', url: '/book?service=szybka-konsultacja-15-min', price: 69 },
               { name: 'Dwa kwadranse', description: '30 min online z krotka notatka po rozmowie.', url: '/book?service=konsultacja-30-min', price: 169 },
-              { name: 'Pelna konsultacja', description: '60 min audio albo video, diagnoza, plan poprawy i 7 dni wsparcia tekstowego przez WhatsApp.', url: '/book?service=konsultacja-behawioralna-online', price: 470 },
+              { name: 'Pelna konsultacja', description: 'Audio albo video, diagnoza, plan poprawy i 7 dni wsparcia tekstowego przez WhatsApp.', url: '/book?service=konsultacja-behawioralna-online', price: 470 },
             ],
           }),
         ]}

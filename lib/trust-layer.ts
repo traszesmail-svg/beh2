@@ -25,7 +25,7 @@ export const FAQ_SHORTLISTS = {
         'Przy jednym pytaniu albo przy pierwszym uporządkowaniu tematu często tak. Przy sprawie złożonej pomaga zdecydować, czy potrzebujesz szerszej konsultacji.',
     },
     {
-      question: 'Czy konsultacja online 60 min ma sens?',
+      question: 'Czy pełna konsultacja online ma sens?',
       answer:
         'Tak. Przy wielu problemach ważne są historia, środowisko i codzienny rytm, a nie tylko sam objaw.',
     },
@@ -122,7 +122,7 @@ export const FAQ_SHORTLISTS = {
     {
       question: 'Czy krótka wiadomość zastępuje konsultację?',
       answer:
-        'Nie. To krótka wiadomość, po której wskażę, czy lepszy będzie Kwadrans z behawiorystą, konsultacja online 60 min czy jeszcze samo doprecyzowanie tematu.',
+        'Nie. To krótka wiadomość, po której wskażę, czy lepszy będzie Kwadrans z behawiorystą, pełna konsultacja czy jeszcze samo doprecyzowanie tematu.',
     },
     {
       question: 'Czy Kwadrans z behawiorystą wymaga kamery?',
@@ -146,17 +146,17 @@ export const FAQ_SHORTLISTS = {
         'Nie. To osobna usługa z własnym zastosowaniem. Dla wielu osób ten format w pełni wystarcza na start.',
     },
     {
-      question: 'Kiedy wybrać 60 min zamiast Kwadransu?',
+      question: 'Kiedy wybrać pełną konsultację zamiast Kwadransu?',
       answer:
         'Gdy problem trwa dłużej, ma kilka wątków albo od razu wiesz, że potrzebujesz pełniejszej analizy i planu.',
     },
     {
-      question: 'Co dostaję po konsultacji 60 min?',
+      question: 'Co dostaję po pełnej konsultacji?',
       answer:
         'Pełniejszy obraz sytuacji, plan pierwszych kroków, wiedzę czego nie robić i podsumowanie pisemne wysyłane e-mailem.',
     },
     {
-      question: 'Czy mogę od razu wejść w 60 min?',
+      question: 'Czy mogę od razu wejść w pełną konsultację?',
       answer: 'Tak. Nie ma obowiązku zaczynania od Kwadransu, jeśli wiesz, że temat wymaga szerszej pracy.',
     },
   ] satisfies TrustFaqItem[],
@@ -310,11 +310,11 @@ export const TRUST_SIGNAL_SETS = {
   pricing: [
     {
       title: 'Dwa formaty, nie lepszy i gorszy',
-      copy: 'Kwadrans z behawiorystą i konsultacja 60 min rozwiązują różne potrzeby. Wybór zależy od złożoności tematu.',
+      copy: 'Kwadrans z behawiorystą i pełna konsultacja rozwiązują różne potrzeby. Wybór zależy od złożoności tematu.',
     },
     {
       title: 'Bez kamery, jeśli nie chcesz',
-      copy: 'Kwadrans jest zawsze rozmową głosową. Przy 60 min kamera pozostaje opcjonalna.',
+      copy: 'Kwadrans jest zawsze rozmową głosową. Przy pełnej konsultacji kamera pozostaje opcjonalna.',
     },
     {
       title: 'Bez obietnic na zapas',
@@ -331,7 +331,7 @@ export const TRUST_SIGNAL_SETS = {
       copy: 'Jeśli temat wymaga innego specjalisty albo formatu stacjonarnego, komunikuję to jasno.',
     },
     {
-      title: 'Podsumowanie po 60 min',
+      title: 'Podsumowanie po pełnej konsultacji',
       copy: 'Po pełnej konsultacji dostajesz plan i podsumowanie pisemne, żeby nie opierać wszystkiego na pamięci z rozmowy.',
     },
   ] satisfies TrustSignalItem[],

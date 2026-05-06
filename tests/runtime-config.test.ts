@@ -275,12 +275,12 @@ test('booking form intro follows the selected service instead of a generic booki
   assert.match(bookingFormSource, /function getSelectedServiceIntro/)
   assert.match(bookingFormSource, /Wybrany format: \$\{option\.label\} \/ \$\{option\.price\}\./)
   assert.match(bookingFormSource, /30 minut online daje wiecej miejsca na dwa-trzy watki/)
-  assert.match(bookingFormSource, /To osobny format 60 minut z diagnoza sytuacji, planem poprawy i 7 dniami konsultacji tekstowych przez WhatsApp\./)
+  assert.match(bookingFormSource, /To osobny format z diagnoza sytuacji, planem poprawy i 7 dniami konsultacji tekstowych przez WhatsApp\./)
   assert.doesNotMatch(bookingFormSource, /PUBLIC_OFFER_BOOKING_LEAD/)
   assert.doesNotMatch(bookingFormSource, /PUBLIC_OFFER_BOOKING_REASSURANCE/)
 })
 
-test('home, dogs and cats pages point users to the canonical service page and explain Kwadrans vs 60 min', () => {
+test('home, dogs and cats pages point users to the canonical service page and explain Kwadrans vs full consultation', () => {
   const homeSource = readSource('app', 'page.tsx')
   const dogsSource = readSource('app', 'psy', 'page.tsx')
   const catsSource = readSource('app', 'koty', 'page.tsx')
@@ -292,8 +292,8 @@ test('home, dogs and cats pages point users to the canonical service page and ex
   assert.match(funnelActionsSource, /Jesli chcesz najpierw zobaczyc pelny opis uslugi/)
 
   assert.match(homeSource, /serviceLandingHref = '\/behawiorysta-online-polska'/)
-  assert.match(homeSource, /href=\{serviceLandingHref\}/)
-  assert.match(homeSource, /pelnego opisu konsultacji online/)
+  assert.doesNotMatch(homeSource, /href=\{serviceLandingHref\}/)
+  assert.doesNotMatch(homeSource, /pelnego opisu konsultacji online/)
   assert.doesNotMatch(homeSource, /<ServiceDecisionSection/)
   assert.match(homeSource, /Behawiorysta psow i kotow online/)
 
@@ -530,7 +530,7 @@ test('qa checkout routing stays isolated and allowlist-gated', () => {
   assert.equal(readQaBookingSearchParam(undefined), false)
 
   assert.equal(buildBookHref(null, null, true), '/book?qa=1')
-  assert.equal(buildSlotHref('szczeniak', null, true), '/slot?problem=szczeniak&qa=1')
+  assert.equal(buildSlotHref('szczeniak', null, true), '/termin?problem=szczeniak&qa=1')
   assert.equal(buildFormHref('szczeniak', 'slot-123', 'konsultacja-30-min', true), '/form?problem=szczeniak&slotId=slot-123&service=konsultacja-30-min&qa=1')
   assert.equal(buildPaymentHref('booking-123', 'access-token', 'konsultacja-30-min', true), '/payment?bookingId=booking-123&access=access-token&service=konsultacja-30-min&qa=1')
 

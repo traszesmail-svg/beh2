@@ -320,7 +320,7 @@ export const LEAD_MAGNETS: LeadMagnet[] = [
     lead: 'Nie musisz przychodzić z gotową diagnozą. Ten materiał pokazuje, co warto mieć, a czego na pewno nie musisz przygotowywać przed 15 min audio albo pełną konsultacją.',
     bullets: [
       'czym jest konsultacja behawioralna, a czym nie jest',
-      'co wystarczy przed 15 min audio i co warto mieć przed 60 min',
+      'co wystarczy przed 15 min audio i co warto miec przed pelna konsultacja',
       'jak opisać problem w kilku zdaniach bez terminologii',
       'czego naprawdę nie musisz przygotowywać przed rozmową',
     ],
@@ -331,7 +331,7 @@ export const LEAD_MAGNETS: LeadMagnet[] = [
       },
       {
         title: 'Lepszy opis bez przegrzewania',
-        copy: 'Dostajesz prostą formułę opisu problemu, która wystarcza zarówno do 15 min audio, jak i do 60 min.',
+        copy: 'Dostajesz prostą formułę opisu problemu, która wystarcza zarówno do 15 min audio, jak i do pełnej konsultacji.',
       },
       {
         title: 'Szybsze przejście do konkretu',
@@ -345,7 +345,7 @@ export const LEAD_MAGNETS: LeadMagnet[] = [
           'Nie. Materiał porządkuje przygotowanie, ale nie wymaga pełnej dokumentacji. Wystarczy to, co dziś realnie masz.',
       },
       {
-        question: 'Czy ten materiał jest tylko przed 60 min?',
+        question: 'Czy ten materiał jest tylko przed pełną konsultacją?',
         answer:
           'Nie. Przydaje się zarówno przed 15 min audio, jak i przed pełną konsultacją, bo skraca drogę do konkretu.',
       },
@@ -371,7 +371,7 @@ export const LEAD_MAGNETS: LeadMagnet[] = [
       { href: '/konsultacja-behawioralna-online', label: 'Jak wygląda konsultacja online' },
       { href: '/blog/jak-przygotowac-sie-do-konsultacji-behawioralnej-online', label: 'Blog: jak przygotowac sie do konsultacji online' },
       { href: '/behawiorysta-online-polska', label: 'Behawiorysta psow i kotow online' },
-      { href: '/cennik', label: 'Cennik i porównanie 15 min vs 60 min' },
+      { href: '/cennik', label: 'Cennik i porównanie formatów' },
       { href: '/kontakt', label: 'Krotka wiadomosc przed rezerwacja' },
     ],
     asset: {
@@ -389,7 +389,7 @@ export const LEAD_MAGNETS: LeadMagnet[] = [
         '- Wystarczy kilka zdań: gatunek, wiek, co się dzieje, od kiedy i jeden konkretny przykład.',
         '- Nie musisz mieć nagrania ani gotowej diagnozy.',
         '',
-        '3. Przed 60 min',
+        '3. Przed pelna konsultacja',
         '- Warto mieć krótki opis historii problemu i tego, co już było próbowane.',
         '- Przydatne są informacje o środowisku, rytmie dnia i zmianach w domu.',
         '- Nagranie jest opcjonalne, nie obowiązkowe.',
@@ -404,7 +404,7 @@ export const LEAD_MAGNETS: LeadMagnet[] = [
         '',
         '6. Jak wygląda rozmowa',
         '- Przy 15 min audio: opisujesz sytuację, odpowiadasz na pytania i dostajesz jeden priorytet.',
-        '- Przy 60 min: pełna rozmowa online z planem i podsumowaniem pisemnym.',
+        '- Przy pelnej konsultacji: rozmowa online z planem i podsumowaniem pisemnym.',
         '',
         'Jeśli po tym materiale chcesz przejść dalej:',
         '- 15 min audio: https://regulskibehawiorysta.pl/call',
@@ -420,7 +420,7 @@ export const LOCAL_SEO_PAGES: LocalSeoPage[] = [
   {
     path: '/behawiorysta-online-polska',
     title: 'Behawiorysta psow i kotow online - cala Polska',
-    description: 'Behawiorysta psow i kotow online dla opiekunow z calej Polski. 15 min audio na start, konsultacja 60 min przy sprawach szerszych.',
+    description: 'Behawiorysta psow i kotow online dla opiekunow z calej Polski. 15 min audio na start, pelna konsultacja przy sprawach szerszych.',
     h1: 'Behawiorysta psow i kotow online',
     intro: [
       'Pracuje online z opiekunami psow i kotow z calej Polski.',
@@ -437,25 +437,25 @@ export const LOCAL_SEO_PAGES: LocalSeoPage[] = [
     supportBody: [
       'W pracy behawioralnej najwazniejsze sa kontekst, historia problemu, srodowisko i codzienne sytuacje, w ktorych zachowanie wraca. To wlasnie porzadkujemy na rozmowie.',
       'Do startu wystarczy krotki opis. Nagrania bywaja pomocne, ale nie sa warunkiem, a kamera nie jest potrzebna przy 15 min audio.',
-      'Opis procesu konsultacji 60 min znajduje sie na osobnej stronie uslugi. Tutaj najpierw ustalasz, czy pracujemy o psie, o kocie, czy od razu potrzebujesz szerszej rozmowy online.',
+      'Opis procesu pelnej konsultacji znajduje sie na osobnej stronie uslugi. Tutaj najpierw ustalasz, czy pracujemy o psie, o kocie, czy od razu potrzebujesz szerszej rozmowy online.',
     ],
     firstStepCards: [
       { title: '15 min audio', copy: 'Krótka rozmowa głosowa bez kamery. Dobra na jedno pytanie, pierwszy ogląd sytuacji i ustalenie priorytetu.' },
       { title: 'Niezbędnik', copy: 'Materiały startowe, jeśli chcesz najpierw coś spokojnie przeczytać i uporządkować obserwacje.' },
-      { title: 'Konsultacja 60 min', copy: 'Dłuższa rozmowa online dla spraw złożonych, utrwalonych albo wielowątkowych.' },
+      { title: 'Pelna konsultacja', copy: 'Dłuższa rozmowa online dla spraw złożonych, utrwalonych albo wielowątkowych.' },
     ],
     faq: [
       { question: 'Czy konsultacja online jest dostępna dla całej Polski?', answer: 'Tak. Pracuję online z opiekunami z całej Polski, w tej samej formule niezależnie od miejsca.' },
-      { question: 'Czy potrzebuję kamery albo specjalnego sprzętu?', answer: 'Nie. Przy 15 min audio wystarcza rozmowa głosowa. Przy konsultacji 60 min wideo może pomóc, ale nie jest obowiązkowe.' },
+      { question: 'Czy potrzebuję kamery albo specjalnego sprzętu?', answer: 'Nie. Przy 15 min audio wystarcza rozmowa głosowa. Przy pełnej konsultacji wideo może pomóc, ale nie jest obowiązkowe.' },
       { question: 'Czy mogę zgłosić temat przed adopcją albo przed zmianą w domu?', answer: 'Tak. Możesz omówić przygotowanie domu, plan działania i rzeczy, które warto sprawdzić wcześniej.' },
-      { question: 'Od czego najlepiej zacząć?', answer: 'Jeśli nie wiesz jeszcze, jak duży jest temat, zacznij od 15 min audio. Jeśli problem jest złożony i trwa od dawna, wybierz konsultację 60 min.' },
+      { question: 'Od czego najlepiej zacząć?', answer: 'Jeśli nie wiesz jeszcze, jak duży jest temat, zacznij od 15 min audio. Jeśli problem jest złożony i trwa od dawna, wybierz pełną konsultację.' },
       { question: 'Gdzie sprawdzić dostępne terminy?', answer: 'Aktualną dostępność najłatwiej sprawdzić w kalendarzu przy rezerwacji.' },
     ],
     relatedLinks: [
       { href: '/psy', label: 'Pomoc dla opiekunow psow', copy: 'Jesli problem dotyczy psa, tutaj znajdziesz szerszy opis najczestszych tematow i problemow.' },
       { href: '/koty', label: 'Pomoc dla opiekunow kotow', copy: 'Jesli problem dotyczy kota, tutaj znajdziesz szerszy opis najczestszych tematow i problemow.' },
-      { href: '/konsultacja-behawioralna-online', label: 'Jak wyglada konsultacja 60 min', copy: 'Osobna strona procesu i przebiegu dluzszej konsultacji online.' },
-      { href: '/cennik', label: 'Cennik', copy: 'Porownanie 15 min audio i konsultacji 60 min.' },
+      { href: '/konsultacja-behawioralna-online', label: 'Jak wyglada pelna konsultacja', copy: 'Osobna strona procesu i przebiegu dluzszej konsultacji online.' },
+      { href: '/cennik', label: 'Cennik', copy: 'Porownanie 15 min audio i pelnej konsultacji.' },
       { href: '/kontakt', label: 'Kontakt', copy: 'Krotka wiadomosc, jesli chcesz cos doprecyzowac przed rezerwacja.' },
     ],
   },

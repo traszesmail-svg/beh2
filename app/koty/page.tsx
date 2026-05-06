@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { NextSlot } from '@/components/NextSlot'
-import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { NotatnikFooter, NotatnikSectionHead, NotatnikSideVisuals, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { OfferCards } from '@/components/OfferCards'
+import { RegulskiWebHero } from '@/components/RegulskiWebHero'
 import { Schema } from '@/components/schema'
 import { buildBookHref } from '@/lib/booking-routing'
 import { getBreadcrumbJsonLd, getFaqPageJsonLd, getServiceJsonLd } from '@/lib/schema'
@@ -24,46 +24,96 @@ const bridgeHref = buildBookHref(null, 'konsultacja-30-min', false, 'kot')
 const consultationHref = buildBookHref(null, 'konsultacja-behawioralna-online', false, 'kot')
 const serviceLandingHref = '/behawiorysta-online-polska'
 
-const topics = [
+const catProblemTopics = [
   {
+    id: 'problemy-kuwetowe',
     number: 'i.',
     icon: 'cat-litter',
-    title: 'Kuweta',
-    copy: 'Sikanie poza kuweta, wybor miejsca, zwirek i liczba kuwet. Najpierw porzadek, potem zmiany.',
+    title: 'Kot sika albo robi kupę poza kuwetą',
+    description:
+      'Sikanie na łóżko, kanapę, dywan, ubrania albo załatwianie się obok kuwety. Najpierw trzeba rozdzielić zdrowie, stres, kuwetę i relacje w domu.',
     href: '/koty/zalatwianie-poza-kuweta',
-    label: 'Zobacz temat',
+    ctaLabel: 'Omów problem',
   },
   {
+    id: 'agresja-gryzienie-drapanie',
     number: 'ii.',
-    icon: 'cat-conflict',
-    title: 'Konflikt miedzy kotami',
-    copy: 'Syk, pogon, blokowanie przejsc albo napiecie stale wiszace w domu. Tu liczy sie kolejnosc zmian.',
-    href: '/koty/konflikt-miedzy-kotami',
-    label: 'Zobacz temat',
+    icon: 'cat-stress',
+    title: 'Agresja, gryzienie i drapanie',
+    description:
+      'Kot atakuje ręce, rzuca się na domowników, gryzie przy głaskaniu albo drapie w kontakcie. Sprawdzamy, czy chodzi o ból, strach, frustrację, zabawę czy przekroczone granice.',
+    href: quickHref,
+    ctaLabel: 'Omów problem',
   },
   {
+    id: 'konflikt-miedzy-kotami',
     number: 'iii.',
-    icon: 'cat-stress',
-    title: 'Wycofanie i napiecie',
-    copy: 'Kot chowa sie, jest bardziej czujny albo trudniej mu odpoczac po zmianach w domu.',
-    href: quickHref,
-    label: 'Kwadrans',
+    icon: 'cat-conflict',
+    title: 'Koty nie dogadują się w domu',
+    description:
+      'Syczenie, gonitwy, blokowanie przejść, napięcie przy misce, kuwecie albo legowisku. Układamy przestrzeń, zasoby i bezpieczne zasady kontaktu.',
+    href: '/koty/konflikt-miedzy-kotami',
+    ctaLabel: 'Umów konsultację',
   },
   {
+    id: 'dokocenie',
     number: 'iv.',
-    icon: 'cat-stress',
-    title: 'Zmiany w domu',
-    copy: 'Przeprowadzka, dziecko, remont, nowy domownik albo rozchwiany rytm dnia potrafia mocno obciazyc kota.',
+    icon: 'cat-conflict',
+    title: 'Dokocenie i wprowadzenie nowego kota',
+    description:
+      'Nowy kot w domu, trudne zapoznanie, stres rezydenta albo konflikty po połączeniu kotów. Pomagamy zaplanować tempo, przestrzeń i pierwsze kontakty.',
     href: quickHref,
-    label: 'Kwadrans',
+    ctaLabel: 'Omów dokocenie',
   },
   {
+    id: 'lek-stres-wycofanie',
     number: 'v.',
+    icon: 'cat-stress',
+    title: 'Kot się boi, chowa albo żyje w napięciu',
+    description:
+      'Kot unika kontaktu, chowa się, zamiera, reaguje paniką na ludzi, dźwięki albo zmiany w domu. Szukamy źródła stresu i sposobu na odzyskanie poczucia bezpieczeństwa.',
+    href: quickHref,
+    ctaLabel: 'Omów problem',
+  },
+  {
+    id: 'miauczenie-nocna-aktywnosc',
+    number: 'vi.',
     icon: 'cat-other',
-    title: 'Niepewny albo szerszy temat',
-    copy: 'Jesli nie wiesz, czy chodzi o kuwete, stres, zdrowie czy relacje, najpierw ustalamy priorytet i zakres dalszej pracy.',
-    href: consultationHref,
-    label: 'Pelna konsultacja',
+    title: 'Kot miauczy, nawołuje albo budzi w nocy',
+    description:
+      'Nadmierne miauczenie, nocne bieganie, domaganie się uwagi albo jedzenia. Sprawdzamy rytm dnia, potrzeby, stres, zdrowie i schematy utrwalone w domu.',
+    href: quickHref,
+    ctaLabel: 'Zacznij od Kwadransa',
+  },
+  {
+    id: 'drapanie-mebli-niszczenie',
+    number: 'vii.',
+    icon: 'cat-other',
+    title: 'Kot drapie meble albo niszczy rzeczy',
+    description:
+      'Drapanie kanapy, foteli, dywanów, gryzienie roślin albo przedmiotów. Nie walczymy z naturalnym zachowaniem - ustawiamy środowisko tak, żeby kot miał lepsze opcje.',
+    href: quickHref,
+    ctaLabel: 'Omów problem',
+  },
+  {
+    id: 'wylizywanie-siersci',
+    number: 'viii.',
+    icon: 'cat-stress',
+    title: 'Kot nadmiernie się wylizuje albo wygryza sierść',
+    description:
+      'Łysiejące miejsca, wygryzanie futra, kompulsywne mycie albo rany od lizania. Najpierw trzeba wykluczyć przyczyny zdrowotne, a potem ocenić stres i środowisko.',
+    href: quickHref,
+    ctaLabel: 'Omów problem',
+  },
+  {
+    id: 'sprawa-zlozona-kot',
+    number: 'ix.',
+    icon: 'cat-other',
+    title: 'Nie wiesz, który temat wybrać?',
+    description:
+      'Problem pasuje do kilku kategorii albo trudno go nazwać jednym słowem. Zacznij od krótkiego omówienia sytuacji i ustalenia pierwszego priorytetu.',
+    href: quickHref,
+    ctaLabel: 'Zacznij od Kwadransa',
   },
 ] as const
 
@@ -106,11 +156,9 @@ export default function CatsPage() {
       <NotatnikSideVisuals variant="cat" />
       <div className="notatnik-shell">
         <NotatnikTopbar tag="Kot / strona gatunku" navItems={PUBLIC_SITE_NAV_ITEMS} ctaHref={quickHref} ctaLabel="Kwadrans / 69 zl" />
-        <Breadcrumbs items={[{ name: 'Koty', url: '/koty' }]} />
 
         <section className="notatnik-subhero notatnik-subhero-pet">
           <div className="notatnik-subhero-copy">
-            <div className="notatnik-subhero-tag notatnik-mono">Kot / strona gatunku</div>
             <h1>
               Twoj kot zachowuje sie w sposob, <em>ktory Cie niepokoi</em>.
             </h1>
@@ -140,24 +188,18 @@ export default function CatsPage() {
           </div>
 
           <div className="notatnik-subhero-media">
-            <div className="notatnik-subhero-pet-figure notatnik-subhero-consultation-figure" aria-hidden="true">
-              <Image
-                src="/2.png"
-                alt=""
-                width={1024}
-                height={1536}
-                priority
-                className="notatnik-subhero-consultation-image"
-              />
-            </div>
+            <RegulskiWebHero variant="cats" priority className="notatnik-pet-hero-visual" />
           </div>
         </section>
 
-        <section id="tematy" className="notatnik-dog-topic-section">
-          <NotatnikSectionHead index="I." kicker="Najczestsze tematy" title="Problemy kocie - lista." />
+        <section id="tematy" className="notatnik-pet-topic-section">
+          <NotatnikSectionHead index="I." kicker="Najczestsze tematy" title="Najczęstsze problemy behawioralne kotów" />
+          <p className="notatnik-service-description top-gap-small">
+            Wybierz temat najbliższy temu, co dzieje się u Twojego kota. Nie musisz trafić idealnie - wiele problemów się łączy. Jeśli nie wiesz, od czego zacząć, wybierz Kwadrans.
+          </p>
           <div className="notatnik-topic-grid notatnik-topic-grid-with-icons">
-            {topics.map((topic) => (
-              <Link key={topic.title} href={topic.href} prefetch={false} className="notatnik-topic-card notatnik-topic-card-with-icon">
+            {catProblemTopics.map((topic) => (
+              <Link key={topic.id} href={topic.href} prefetch={false} className="notatnik-topic-card notatnik-topic-card-with-icon">
                 <Image
                   src={`/branding/pet-topics/subcategories/${topic.icon}.png`}
                   alt=""
@@ -167,15 +209,12 @@ export default function CatsPage() {
                 />
                 <div className="notatnik-topic-number">{topic.number}</div>
                 <h3>{topic.title}</h3>
-                <p>{topic.copy}</p>
+                <p>{topic.description}</p>
                 <span className="notatnik-topic-card-action">
-                  {topic.label}
+                  {topic.ctaLabel}
                 </span>
               </Link>
             ))}
-          </div>
-          <div className="list-card tree-backed-card top-gap-small">
-            <p>Nie widzisz swojego tematu na liscie? Zacznij od Kwadransu. To dalej najprostszy pierwszy krok przy problemach kota.</p>
           </div>
         </section>
 
@@ -200,6 +239,9 @@ export default function CatsPage() {
             <span>Jesli nie rezerwujesz rozmowy, przejdz do materialow PDF.</span>
             <Link href="/materialy" prefetch={false} className="notatnik-inline-link">
               Zobacz materialy
+            </Link>
+            <Link href={serviceLandingHref} prefetch={false} className="notatnik-inline-link">
+              Przejdz do pelnego opisu konsultacji online
             </Link>
           </div>
         </section>

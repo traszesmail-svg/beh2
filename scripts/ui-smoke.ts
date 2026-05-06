@@ -117,7 +117,7 @@ function cleanText(value: string) {
 }
 
 async function waitForButtonLink(page: Page, label: string | RegExp) {
-  await page.locator('a.button:visible, a.notatnik-btn:visible').filter({ hasText: label }).first().waitFor()
+  await page.locator('a.button:visible, a.notatnik-btn:visible, a.essentials-index-button:visible').filter({ hasText: label }).first().waitFor()
 }
 
 async function verifyPublicRoute(
@@ -446,7 +446,7 @@ async function runUiSmokeOnce() {
     await publicPage
       .getByRole('heading', {
         level: 1,
-        name: /Problem z zachowaniem psa albo kota\? Zacznij od spokojnego pierwszego kroku\./i,
+        name: /Jak mogę Ci pomóc\?/i,
       })
       .waitFor()
 
@@ -464,7 +464,7 @@ async function runUiSmokeOnce() {
           })
           .waitFor({ timeout: slowRouteTimeoutMs })
         await waitForButtonLink(page, /Kwadrans/i)
-        await waitForButtonLink(page, /Niezbednik/i)
+        await page.getByRole('link', { name: /Zobacz materialy/i }).first().waitFor({ timeout: slowRouteTimeoutMs })
         assert.ok((await page.locator('.summary-card').count()) >= 2, `${label}: expected cat page summary cards`)
 
         await page.goto(`${appUrl}/psy`, { waitUntil: 'domcontentloaded' })
@@ -474,7 +474,7 @@ async function runUiSmokeOnce() {
           })
           .waitFor({ timeout: slowRouteTimeoutMs })
         await waitForButtonLink(page, /Kwadrans/i)
-        await waitForButtonLink(page, /Niezbednik/i)
+        await page.getByRole('link', { name: /Zobacz materialy/i }).first().waitFor({ timeout: slowRouteTimeoutMs })
         assert.ok((await page.locator('.summary-card').count()) >= 2, `${label}: expected dog page summary cards`)
 
         await page.goto(`${appUrl}/oferta`, { waitUntil: 'domcontentloaded' })
@@ -484,10 +484,10 @@ async function runUiSmokeOnce() {
 
         await page.goto(`${appUrl}/oferta/poradniki-pdf`, { waitUntil: 'domcontentloaded' })
         assert(page.url().includes('/niezbednik'), `${label}: expected poradniki-pdf route to redirect to /niezbednik`)
-        await page.getByRole('heading', { level: 1, name: /Niezbednik|Niezbędnik/i }).waitFor({ timeout: slowRouteTimeoutMs })
-        assert.equal(await page.locator('#pdf-y').count(), 1, `${label}: expected Niezbednik PDF section`)
-        assert.equal(await page.locator('#ksiazki').count(), 1, `${label}: expected Niezbednik books section`)
-        assert.equal(await page.locator('#przybory').count(), 1, `${label}: expected Niezbednik accessories section`)
+        await page.getByRole('heading', { level: 1, name: /Praktyczne materiały, które naprawdę pomagają\./i }).waitFor({ timeout: slowRouteTimeoutMs })
+        assert.ok((await page.locator('.essentials-index-resource-card').count()) >= 3, `${label}: expected Niezbednik resource cards`)
+        assert.ok((await page.locator('.essentials-index-bundle-card').count()) >= 2, `${label}: expected Niezbednik bundle cards`)
+        assert.equal(await page.locator('.essentials-index-newsletter-form').count(), 1, `${label}: expected Niezbednik newsletter form`)
       }
     }
 
@@ -514,12 +514,12 @@ async function runUiSmokeOnce() {
       },
       {
         path: '/niezbednik',
-        heading: /Niezbednik|Niezbędnik/i,
-        buttonLabels: [/Zobacz od czego zaczac/i, /Kwadrans/i],
+        heading: /Praktyczne materiały, które naprawdę pomagają\./i,
+        buttonLabels: [/Umów pierwszy krok/i],
       },
       {
         path: '/cennik',
-        heading: /Cennik i zakres konsultacji/i,
+        heading: /Cennik konsultacji behawioralnych\./i,
         buttonLabels: [/Kwadrans/i],
       },
       {
@@ -529,7 +529,7 @@ async function runUiSmokeOnce() {
       },
       {
         path: '/blog',
-        heading: /Teksty o zachowaniu psów i kotów - konkretnie, bez ogólników/i,
+        heading: /Wiedza, która pomaga zrozumieć i działać|Teksty o zachowaniu psów i kotów - konkretnie, bez ogólników/i,
       },
       {
         path: '/blog/dlaczego-moj-pies-szczeka-na-inne-psy',
@@ -599,8 +599,8 @@ async function runUiSmokeOnce() {
       {
         path: '/oferta/poradniki-pdf',
         destinationPath: '/niezbednik',
-        heading: /Niezbednik|Niezbędnik/i,
-        buttonLabels: [/Zobacz od czego zaczac/i, /Kwadrans/i],
+        heading: /Praktyczne materiały, które naprawdę pomagają\./i,
+        buttonLabels: [/Umów pierwszy krok/i],
       },
     ] as const) {
       await verifyRedirectRoute(publicPage, route.path, route.destinationPath, route.heading, {
@@ -609,10 +609,11 @@ async function runUiSmokeOnce() {
     }
 
     await publicPage.goto(`${appUrl}/book`, { waitUntil: 'domcontentloaded' })
-    await publicPage.getByRole('heading', { name: /Rezerwacja konsultacji behawioralnych online/i }).waitFor()
+    await publicPage.waitForURL(/\/termin/, { timeout: routeNavigationTimeoutMs, waitUntil: 'domcontentloaded' })
+    await publicPage.getByRole('heading', { name: /Wybierz termin konsultacji/i }).waitFor()
 
     await publicPage.goto(`${appUrl}/slot?problem=szczeniak`, { waitUntil: 'domcontentloaded' })
-    await publicPage.getByRole('heading', { name: /Wybierz termin dla/i }).waitFor()
+    await publicPage.getByRole('heading', { name: /Wybierz termin konsultacji/i }).waitFor()
 
     const slotLink = publicPage.locator(`a[href^="/form?problem=szczeniak&slotId=${encodeURIComponent(slot.id)}"]`).first()
     await slotLink.waitFor()

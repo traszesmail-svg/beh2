@@ -87,7 +87,7 @@ export default async function OfferPage() {
                   <strong>Szerszy zakres</strong>
                 </div>
                 <div className="offer-page-hero-stat">
-                  <span>60 min / 470 zl</span>
+                  <span>470 zl / pelny zakres</span>
                   <strong>Diagnoza + 7 dni</strong>
                 </div>
               </div>
@@ -167,7 +167,7 @@ export default async function OfferPage() {
                 </div>
                 <p className="offer-card-summary">{fullConsultationOffer.cardSummary}</p>
                 <div className="offer-card-meta">
-                  <span>60 min online</span>
+                  <span>pelny zakres online</span>
                   <span>diagnoza + plan</span>
                 </div>
                 <div className="offer-card-meta">

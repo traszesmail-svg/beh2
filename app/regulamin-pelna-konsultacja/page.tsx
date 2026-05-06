@@ -13,7 +13,7 @@ export const metadata: Metadata = buildLegalMetadata(
 const summaryItems: LegalSummaryItem[] = [
   {
     label: 'Produkt objety dokumentem',
-    value: 'Pelna konsultacja behawioralna online: 60 min rozmowy, 470 zl, diagnoza i 7 dni konsultacji tekstowych przez WhatsApp.',
+    value: 'Pelna konsultacja behawioralna online: 470 zl, diagnoza i 7 dni konsultacji tekstowych przez WhatsApp.',
   },
   {
     label: 'Platnosc',
@@ -42,7 +42,7 @@ const sections: LegalSection[] = [
     body: (
       <>
         <ul className="premium-bullet-list">
-          <li>Konsultacja trwa 60 minut i odbywa sie online w formie rozmowy audio lub audio/video.</li>
+          <li>Konsultacja odbywa sie online w formie rozmowy audio lub audio/video.</li>
           <li>W ramach konsultacji uslugodawca analizuje opisana sytuacje psa lub kota, porzadkuje priorytety i przekazuje diagnoze behawioralna sytuacji.</li>
           <li>Po konsultacji klient otrzymuje diagnoze behawioralna sytuacji i indywidualny plan poprawy.</li>
           <li>Przez 7 dni od konsultacji klient moze przez WhatsApp zadawac pytania, wysylac wiadomosci tekstowe i filmy oraz konsultowac wdrazanie planu.</li>

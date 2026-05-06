@@ -46,8 +46,8 @@ const offers: Offer[] = [
     icon: 'clipboard-list',
     title: 'Pelna konsultacja',
     price: '470 zl',
-    desc: '60 minut online, diagnoza, plan poprawy i 7 dni konsultacji WhatsApp.',
-    features: ['60 min online', 'Plan poprawy', '7 dni WhatsApp'],
+    desc: 'Rozmowa online, diagnoza, plan poprawy i 7 dni konsultacji WhatsApp.',
+    features: ['Pelny zakres online', 'Plan poprawy', '7 dni WhatsApp'],
     bookUrl: '/book?service=konsultacja-behawioralna-online',
   },
 ]

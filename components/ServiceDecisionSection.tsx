@@ -63,7 +63,7 @@ export function ServiceDecisionSection({
           <h3>{PUBLIC_OFFER_DECISION_COPY.premium}</h3>
           <p>{PUBLIC_OFFER_FULL_CONSULTATION_VALUE}</p>
           <div className="notatnik-service-meta" aria-label="Parametry pelnej konsultacji">
-            <span>60 min online</span>
+            <span>pelny zakres online</span>
             <span>{getPublicServicePriceLabel('konsultacja-behawioralna-online')}</span>
             <span>diagnoza + 7 dni</span>
           </div>

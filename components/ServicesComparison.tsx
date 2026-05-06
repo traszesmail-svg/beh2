@@ -41,7 +41,7 @@ const SERVICES = [
     title: 'Pelna konsultacja',
     badge: null,
     price: PUBLIC_OFFER_PRICES.premium,
-    duration: '60 min',
+    duration: 'pelny zakres',
     mode: 'audio lub video',
     who: 'gdy sprawa jest zlozona, przewlekla albo obejmuje kilka obszarow naraz',
     plan: 'diagnoza sytuacji, plan poprawy i ustalenie priorytetow',

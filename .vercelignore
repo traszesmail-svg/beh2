@@ -5,13 +5,36 @@ node_modules
 .tmp-local-data
 .codex-deploy-*
 qa-screenshots/**
+qa-screenshots-*/**
 pedeefy/**
 tmp-pdf-cover-previews/**
 tmp-pdf-cover-puppeteer.png
 tmp-podkategorie-infografiki/**
+tmp/**
+tmp-*/**
+tmp_*/**
+przyciski/**
+scripts/__pycache__/**
 .home.html
 .kontakt.html
 .omnie.html
+nowy (1)/**
+Nowy folder/**
+strona (1)/**
+regulski/**
+prompty/**
+gumroad/**
+qa-*.js
+qa-*.png
+book-debug-*.png
+make-*.js
+design-canvas.jsx
+Regulski Design*.html
+strona (1).zip
+vercel.com_*.report.html
+setup_pdf_tools_report.md
+tmp_reference_contact_sheet.png
+resend.txt
 content/guides/sources/**/temp.html
 qa-reports/**
 !qa-reports/latest-report.md

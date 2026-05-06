@@ -103,7 +103,7 @@ export default function LocalSeoPolandOnlinePage() {
         },
         {
           name: 'Pelna konsultacja behawioralna',
-          description: '60 minut rozmowy, diagnoza, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.',
+          description: 'Rozmowa online, diagnoza, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.',
           url: consultationHref,
           price: 470,
         },

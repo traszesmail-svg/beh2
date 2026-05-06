@@ -28,18 +28,6 @@ type BlogPostPageProps = {
   }
 }
 
-function getArticleVisual(post: { categoryHref: string; slug: string }) {
-  if (post.categoryHref === '/koty') {
-    return post.slug.includes('kuweta') ? '/branding/side-visuals/cat-litter-home.jpg' : '/branding/side-visuals/cat-owner-home.jpg'
-  }
-
-  if (post.categoryHref === '/psy') {
-    return post.slug.includes('sam') ? '/branding/topic-cards/dog-window-alone.jpg' : '/branding/side-visuals/dog-forest-walk.jpg'
-  }
-
-  return '/branding/side-visuals/blog-notebook-desk.jpg'
-}
-
 export function generateStaticParams() {
   return listBlogPosts().map((post) => ({
     slug: post.slug,
@@ -116,7 +104,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
           </div>
 
           <div className="blog-article-hero-image">
-            <Image src={getArticleVisual(post)} alt="" fill sizes="(max-width: 980px) 92vw, 76vw" priority />
+            <Image src={post.cover.src} alt={post.cover.alt} fill sizes="(max-width: 980px) 92vw, 76vw" priority />
           </div>
 
           <div className="blog-article-meta-row" aria-label="Metadane wpisu">

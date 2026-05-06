@@ -1,6 +1,8 @@
 import type { MetadataRoute } from 'next'
 import { listBlogRoutePaths } from '@/lib/blog'
+import { listLeadMagnetPaths } from '@/lib/growth-layer'
 import { listPdfRoutePaths } from '@/lib/pdf-guides'
+import { listRealCaseStudyPaths } from '@/lib/real-case-studies'
 import { getCanonicalBaseUrl } from '@/lib/server/env'
 
 const STATIC_ROUTES: Array<{ path: string; priority: number; changeFrequency: MetadataRoute.Sitemap[number]['changeFrequency'] }> = [
@@ -17,6 +19,8 @@ const STATIC_ROUTES: Array<{ path: string; priority: number; changeFrequency: Me
   { path: '/kontakt', priority: 0.8, changeFrequency: 'monthly' },
   { path: '/faq', priority: 0.7, changeFrequency: 'monthly' },
   { path: '/blog', priority: 0.8, changeFrequency: 'weekly' },
+  { path: '/newsletter', priority: 0.5, changeFrequency: 'monthly' },
+  { path: '/quiz', priority: 0.7, changeFrequency: 'monthly' },
   { path: '/niezbednik', priority: 0.8, changeFrequency: 'weekly' },
   { path: '/behawiorysta-online-polska', priority: 0.8, changeFrequency: 'monthly' },
   { path: '/konsultacja-behawioralna-online', priority: 0.7, changeFrequency: 'monthly' },
@@ -56,6 +60,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
       changeFrequency: path === '/niezbednik' ? 'weekly' : 'monthly',
       priority: path === '/niezbednik' ? 0.8 : 0.7,
+    })
+  }
+
+  for (const path of listLeadMagnetPaths()) {
+    routeMap.set(path, {
+      url: buildAbsoluteUrl(baseUrl, path),
+      lastModified,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    })
+  }
+
+  for (const path of listRealCaseStudyPaths()) {
+    routeMap.set(path, {
+      url: buildAbsoluteUrl(baseUrl, path),
+      lastModified,
+      changeFrequency: 'monthly',
+      priority: path === '/historie' ? 0.7 : 0.6,
     })
   }
 

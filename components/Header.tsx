@@ -19,7 +19,6 @@ type NavItem = {
 
 const homeNavItems: NavItem[] = [
   { href: '/#start', label: 'Start', sectionId: 'start' },
-  { href: '/#pies-i-kot', label: 'Pies i kot', sectionId: 'pies-i-kot' },
   { href: '/#opinie', label: 'Opinie', sectionId: 'opinie' },
   { href: '/#faq', label: 'FAQ', sectionId: 'faq' },
 ]

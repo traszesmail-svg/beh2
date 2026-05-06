@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { staggerContainer, fadeUp, VIEWPORT_DEFAULTS } from '@/lib/motionVariants';
 
 interface StaggerListProps {
@@ -11,12 +11,14 @@ interface StaggerListProps {
 
 export function StaggerList({ children, className, as = 'div' }: StaggerListProps) {
   const MotionComponent = motion[as];
+  const shouldReduceMotion = useReducedMotion();
 
   return (
     <MotionComponent
       className={className}
-      initial="hidden"
-      whileInView="visible"
+      initial={shouldReduceMotion ? false : 'hidden'}
+      animate={shouldReduceMotion ? 'visible' : undefined}
+      whileInView={shouldReduceMotion ? undefined : 'visible'}
       viewport={VIEWPORT_DEFAULTS}
       variants={staggerContainer}
     >
@@ -33,9 +35,10 @@ interface StaggerItemProps {
 
 export function StaggerItem({ children, className, as = 'div' }: StaggerItemProps) {
   const MotionComponent = motion[as];
+  const shouldReduceMotion = useReducedMotion();
 
   return (
-    <MotionComponent className={className} variants={fadeUp}>
+    <MotionComponent className={className} variants={shouldReduceMotion ? undefined : fadeUp}>
       {children}
     </MotionComponent>
   );

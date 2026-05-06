@@ -128,7 +128,7 @@ export function OfferEntrySection({
           <h3>Pelna konsultacja behawioralna</h3>
           <p>{getFullConsultationDescription(species)} Po rozmowie dostajesz diagnoze, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.</p>
           <div className="editorial-hero-meta" aria-label="Parametry uslugi">
-            <span>60 min online</span>
+            <span>pelny zakres online</span>
             <span>{formatPricePln(PUBLIC_OFFER_PRICES.premium)}</span>
             <span>diagnoza + 7 dni WhatsApp</span>
           </div>

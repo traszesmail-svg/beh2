@@ -11,7 +11,7 @@ import { getBookingAnalyticsContextParams } from '@/lib/analytics-schema'
 import { compareDateAndTime, formatDateLabel, isFutureAvailabilitySlot } from '@/lib/data'
 import { normalizePolishPhone } from '@/lib/phone'
 import { createActiveConsultationPrice, DEFAULT_PRICE_PLN, parseConsultationPriceInput } from '@/lib/pricing'
-import { buildSeedAvailabilitySlots } from '@/lib/server/availability-seed'
+import { buildSeedAvailabilitySlots, hasFutureAvailabilitySlots } from '@/lib/server/availability-seed'
 import { createCustomerAccessToken, hasValidCustomerAccessToken } from '@/lib/server/customer-access'
 import { getReservationWindowMinutes } from '@/lib/server/env'
 import { createMeetingUrl } from '@/lib/server/jitsi'
@@ -245,6 +245,26 @@ function normalizeExpiredReservations(store: LocalStoreData): LocalStoreData {
   return changed ? { availability, bookings, funnelEvents, pricingSettings, users } : { ...store, pricingSettings, funnelEvents }
 }
 
+function ensureFutureLocalAvailability(store: LocalStoreData): LocalStoreData {
+  if (hasFutureAvailabilitySlots(store.availability)) {
+    return store
+  }
+
+  const nowIso = new Date().toISOString()
+  const seeded = buildSeedAvailabilitySlots(new Date(nowIso), nowIso)
+  const existingIds = new Set(store.availability.map((slot) => slot.id))
+  const nextSlots = seeded.filter((slot) => !existingIds.has(slot.id))
+
+  if (nextSlots.length === 0) {
+    return store
+  }
+
+  return {
+    ...store,
+    availability: [...store.availability, ...nextSlots].sort(sortAvailability),
+  }
+}
+
 async function readStore(): Promise<LocalStoreData> {
   const { availabilityFile, bookingsFile, funnelEventsFile, pricingSettingsFile, usersFile } = getStorePaths()
   await ensureStoreFiles()
@@ -257,7 +277,9 @@ async function readStore(): Promise<LocalStoreData> {
     readJson<UserRecord[]>(usersFile),
   ])
 
-  const normalized = normalizeExpiredReservations({ availability, bookings, funnelEvents, pricingSettings, users })
+  const normalized = ensureFutureLocalAvailability(
+    normalizeExpiredReservations({ availability, bookings, funnelEvents, pricingSettings, users }),
+  )
 
   await Promise.all([
     writeJson(availabilityFile, normalized.availability),

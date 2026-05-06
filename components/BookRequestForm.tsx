@@ -87,12 +87,12 @@ function getSelectedServiceIntro(service: BookingServiceType) {
     case 'konsultacja-30-min':
       return {
         title: `Wybrany format: ${option.label} / ${option.price}.`,
-        copy: '30 minut online daje więcej miejsca na 2-3 wątki i spokojniejsze uporządkowanie sytuacji niż sam Kwadrans.',
+        copy: '30 minut online daje wiecej miejsca na dwa-trzy watki i spokojniejsze uporzadkowanie sytuacji niz sam Kwadrans.',
       }
     case 'konsultacja-behawioralna-online':
       return {
         title: `Wybrany format: ${option.label} / ${option.price}.`,
-        copy: 'To osobny format 60 minut na spokojną diagnozę sytuacji, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.',
+        copy: 'To osobny format z diagnoza sytuacji, planem poprawy i 7 dniami konsultacji tekstowych przez WhatsApp.',
       }
     case 'kwadrans-na-juz':
       return {

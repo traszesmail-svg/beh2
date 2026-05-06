@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { trackAnalyticsEvent } from '@/lib/analytics'
@@ -59,10 +60,6 @@ function normalizeSpeciesPreset(value: string | null): Species | null {
   }
 
   return null
-}
-
-function getSpeciesLabel(species: Species) {
-  return species === 'kot' ? 'Kot' : 'Pies'
 }
 
 export function ContactLeadForm() {
@@ -129,6 +126,21 @@ export function ContactLeadForm() {
     }
 
     setForm((current) => ({ ...current, [key]: value }))
+  }
+
+  function chooseSpecies(species: Species) {
+    markStarted()
+
+    if (status === 'success') {
+      setStatus('idle')
+      setFeedback('')
+    }
+
+    setForm((current) => ({
+      ...current,
+      species,
+      topicId: current.species === species ? current.topicId : '',
+    }))
   }
 
   function validate(): string | null {
@@ -262,20 +274,35 @@ export function ContactLeadForm() {
 
   return (
     <form className="form-grid top-gap" onSubmit={handleSubmit} noValidate>
-      <div className="form-field">
-        <label htmlFor="contact-species">Gatunek</label>
-        <select
-          id="contact-species"
-          name="species"
-          value={form.species}
-          onChange={(event) => updateField('species', event.target.value as SelectedSpecies)}
-          onFocus={markStarted}
-        >
-          <option value="">Wybierz gatunek</option>
-          <option value="pies">Pies</option>
-          <option value="kot">Kot</option>
-        </select>
-      </div>
+      <fieldset className="full-width form-field contact-species-field">
+        <legend>Gatunek</legend>
+        <div className="contact-species-toggle" aria-label="Wybierz gatunek">
+          <button
+            type="button"
+            className={`contact-species-card${form.species === 'pies' ? ' is-selected' : ''}`}
+            aria-pressed={form.species === 'pies'}
+            onClick={() => chooseSpecies('pies')}
+            onFocus={markStarted}
+          >
+            <Image src="/branding/homepage/choice-dog-clean.png" alt="" width={44} height={38} aria-hidden="true" />
+            <span>Pies</span>
+          </button>
+          <button
+            type="button"
+            className={`contact-species-card${form.species === 'kot' ? ' is-selected' : ''}`}
+            aria-pressed={form.species === 'kot'}
+            onClick={() => chooseSpecies('kot')}
+            onFocus={markStarted}
+          >
+            <Image src="/branding/homepage/choice-cat-clean.png" alt="" width={40} height={46} aria-hidden="true" />
+            <span>Kot</span>
+          </button>
+          <Link href="/od-czego-zaczac" prefetch={false} className="contact-species-card contact-species-card-link">
+            <Image src="/branding/homepage/choice-question-clean.png" alt="" width={38} height={38} aria-hidden="true" />
+            <span>Nie wiem</span>
+          </Link>
+        </div>
+      </fieldset>
 
       <div className="form-field">
         <label htmlFor="contact-topic">Temat</label>

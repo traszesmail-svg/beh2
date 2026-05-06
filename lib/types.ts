@@ -61,6 +61,9 @@ export type FunnelEventType =
   | 'faq_open'
   | 'opinion_add'
   | 'room_entered'
+  | 'quiz_completed'
+  | 'notification_optin_submitted'
+  | 'notification_optout_submitted'
 
 export type FunnelEventSource = 'client' | 'server'
 

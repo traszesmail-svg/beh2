@@ -71,7 +71,7 @@ export function serviceSchema() {
         {
           '@type': 'Offer',
           name: 'Pełna konsultacja',
-          description: '60 minut online, plan poprawy, 7 dni WhatsApp',
+          description: 'Rozmowa online, plan poprawy, 7 dni WhatsApp',
           price: '470',
           priceCurrency: 'PLN',
         },

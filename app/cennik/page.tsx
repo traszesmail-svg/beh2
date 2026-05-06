@@ -1,9 +1,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { HeroIllustration } from '@/components/HeroIllustration'
-import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { OfferCards } from '@/components/OfferCards'
 import { NotatnikFinalCta, NotatnikPageShell, NotatnikSectionHead, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
+import { RegulskiWebHero } from '@/components/RegulskiWebHero'
 import { Schema } from '@/components/schema'
 import { getBreadcrumbJsonLd, getServiceJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
@@ -44,7 +43,7 @@ const pricingFaqItems = [
   {
     question: 'Co obejmuje Pelna konsultacja 470 zl?',
     answer:
-      '60 minut rozmowy online audio albo audio/video, diagnoze sytuacji, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp. To osobny format dla spraw zlozonych, przewleklych albo wielowatkowych.',
+      'Rozmowa online audio albo audio/video, diagnoza sytuacji, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp. To osobny format dla spraw zlozonych, przewleklych albo wielowatkowych.',
   },
   {
     question: 'Jak wyglada platnosc?',
@@ -58,18 +57,22 @@ const pricingDecisionCards = [
   {
     title: 'Kwadrans',
     copy: 'Najprostszy start, gdy chcesz nazwac problem, ustalic priorytet i wyjsc z jednym konkretnym kierunkiem.',
+    href: '/book?service=szybka-konsultacja-15-min',
   },
   {
     title: 'Kwadrans na juz',
     copy: 'Ten sam format 15 minut audio, tylko z priorytetowym potwierdzeniem terminu do 15 minut od wplaty.',
+    href: '/book?service=kwadrans-na-juz',
   },
   {
     title: 'Dwa kwadranse',
     copy: 'Lepszy wybor, gdy temat ma kilka watkow i chcesz spokojniej uporzadkowac sytuacje przed dalsza decyzja.',
+    href: '/book?service=konsultacja-30-min',
   },
   {
     title: 'Pelna konsultacja',
     copy: 'Format dla spraw zlozonych, przewleklych albo wielowatkowych, gdy potrzebujesz diagnozy, planu i dalszego wsparcia.',
+    href: '/book?service=konsultacja-behawioralna-online',
   },
 ] as const
 
@@ -98,13 +101,12 @@ export default function PricingPage() {
             offerCatalog: [
               { name: 'Kwadrans z behawiorysta', description: '15 min audio bez kamery.', url: '/book?service=szybka-konsultacja-15-min', price: 69 },
               { name: 'Dwa kwadranse', description: '30 min online, gdy 15 minut to za malo.', url: '/book?service=konsultacja-30-min', price: 169 },
-              { name: 'Pelna konsultacja', description: '60 min audio albo video, diagnoza, plan poprawy i 7 dni wsparcia tekstowego przez WhatsApp.', url: '/book?service=konsultacja-behawioralna-online', price: 470 },
+              { name: 'Pelna konsultacja', description: 'Audio albo video, diagnoza, plan poprawy i 7 dni wsparcia tekstowego przez WhatsApp.', url: '/book?service=konsultacja-behawioralna-online', price: 470 },
             ],
           }),
         ]}
       />
 
-      <Breadcrumbs items={[{ name: 'Cennik', url: '/cennik' }]} />
       <section className="notatnik-subhero">
         <div>
           <div className="notatnik-subhero-tag notatnik-mono">Cennik / psy i koty</div>
@@ -127,7 +129,7 @@ export default function PricingPage() {
         </div>
 
         <div className="notatnik-subhero-media">
-          <HeroIllustration slug="cennik" emojiPlaceholder="💰" className="w-full h-full min-h-[340px]" />
+          <RegulskiWebHero variant="cennik" priority className="notatnik-pricing-hero-visual" />
         </div>
       </section>
 
@@ -142,6 +144,9 @@ export default function PricingPage() {
             <article key={item.title} className="summary-card tree-backed-card">
               <h3>{item.title}</h3>
               <p>{item.copy}</p>
+              <Link href={item.href} prefetch={false} className="notatnik-btn notatnik-btn-ghost cennik-card-reserve">
+                Zarezerwuj
+              </Link>
             </article>
           ))}
         </div>

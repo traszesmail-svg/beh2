@@ -12,7 +12,7 @@ export const PUBLIC_OFFER_SERVICE_ORDER = [
 ] as const
 
 export const PUBLIC_OFFER_LEAD =
-  'Masz do wyboru trzy formaty konsultacji: Kwadrans (15 min, 69 zl), Dwa kwadranse (30 min, 169 zl) albo Pelna konsultacja dla spraw zlozonych (60 min, 470 zl). Wybierasz ten, ktory pasuje do skali problemu — nie zaczynasz od najdrozszego.'
+  'Masz do wyboru trzy formaty konsultacji: Kwadrans (15 min, 69 zl), Dwa kwadranse (30 min, 169 zl) albo Pelna konsultacja dla spraw zlozonych (470 zl). Wybierasz ten, ktory pasuje do skali problemu — nie zaczynasz od najdrozszego.'
 
 export const PUBLIC_OFFER_DECISION_COPY = {
   quick:
@@ -61,7 +61,7 @@ export const PUBLIC_OFFER_BOOKING_PAYMENT =
   `Najpierw uzgadniamy termin, dopiero potem wysylam dane do platnosci. Rezerwacje mozesz oplacic przez ${PUBLIC_OFFER_PAYMENT_METHODS}. Po wplacie wraca potwierdzenie i link do rozmowy.`
 
 export const PUBLIC_OFFER_FULL_CONSULTATION_VALUE =
-  'Pelna konsultacja nie jest dluzsza wersja Kwadransu. To osobny format dla spraw, ktore wymagaja wiecej czasu, szerszego tla i wsparcia po rozmowie. Obejmuje 60 minut konsultacji online, diagnoze sytuacji, aktualizowany plan pracy i 7 dni codziennych zalecen pod nadzorem behawiorysty dostepnego 8h dziennie przez WhatsApp.'
+  'Pelna konsultacja nie jest dluzsza wersja Kwadransu. To osobny format dla spraw, ktore wymagaja wiecej czasu, szerszego tla i wsparcia po rozmowie. Obejmuje konsultacje online, diagnoze sytuacji, aktualizowany plan pracy i 7 dni codziennych zalecen pod nadzorem behawiorysty dostepnego 8h dziennie przez WhatsApp.'
 
 export const PUBLIC_OFFER_CANCELLATION_COPY =
   'Krotkie formaty maja 24 godziny na bezplatna rezygnacje po potwierdzeniu wplaty. Zmiane terminu ustalamy w tym samym oknie. Pelna konsultacja ma osobny regulamin.'
@@ -73,7 +73,7 @@ export const PUBLIC_OFFER_PRICING_DECISION_COPY = [
 ] as const
 
 export const PUBLIC_OFFER_FULL_VALUE_POINTS = [
-  '60 minut rozmowy online audio albo audio/video',
+  'Rozmowa online audio albo audio/video',
   'diagnoza sytuacji i kolejnych priorytetow',
   'aktualizowany plan pracy po rozmowie',
   '7 dni codziennych zalecen — behawiorysta dostepny 8h/dzien przez WhatsApp',

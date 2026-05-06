@@ -14,7 +14,7 @@ export const PUBLIC_OFFER_FAQ_ITEMS: TrustFaqItem[] = [
   {
     question: 'Co obejmuje Pelna konsultacja 470 zl?',
     answer:
-      '60 minut rozmowy online audio albo audio/video, diagnoze sytuacji, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp. W tym czasie mozna zadawac pytania, wysylac filmy i konsultowac kolejne kroki.',
+      'Rozmowe online audio albo audio/video, diagnoze sytuacji, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp. W tym czasie mozna zadawac pytania, wysylac filmy i konsultowac kolejne kroki.',
   },
   {
     question: 'Kiedy nie warto zaczynac od Kwadransu?',

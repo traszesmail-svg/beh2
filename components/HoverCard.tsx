@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { EASING } from '@/lib/motionVariants';
 
 interface HoverCardProps {
@@ -19,6 +19,7 @@ export function HoverCard({
   onClick,
 }: HoverCardProps) {
   const Component = href ? motion.a : motion.div;
+  const shouldReduceMotion = useReducedMotion();
 
   const variants = {
     lift: {
@@ -56,8 +57,8 @@ export function HoverCard({
       href={href}
       onClick={onClick}
       initial="rest"
-      whileHover="hover"
-      whileTap={{ scale: 0.98 }}
+      whileHover={shouldReduceMotion ? undefined : 'hover'}
+      whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
       animate="rest"
       variants={variants[variant]}
     >

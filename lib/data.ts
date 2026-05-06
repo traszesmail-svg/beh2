@@ -250,6 +250,10 @@ export function isCallRoomUnlocked(bookingDate: string, bookingTime: string, now
 }
 
 export function getProblemLabel(problem: string): string {
+  if (problem === 'inne') {
+    return 'Inny temat'
+  }
+
   return problemOptions.find((item) => item.id === problem)?.title ?? LEGACY_PROBLEM_LABELS[problem] ?? 'Konsultacja'
 }
 
@@ -316,7 +320,7 @@ export function formatDateTimeLabel(date: string, time: string): string {
 }
 
 export function isProblemType(value: string | null | undefined): value is ProblemType {
-  return problemOptions.some((option) => option.id === value)
+  return value === 'inne' || problemOptions.some((option) => option.id === value)
 }
 
 export function compareDateAndTime(leftDate: string, leftTime: string, rightDate: string, rightTime: string): number {

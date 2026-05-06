@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { HeroIllustration } from '@/components/HeroIllustration'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { NotatnikFinalCta, NotatnikFooter, NotatnikSectionHead, NotatnikSideVisuals, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { FAQSection } from '@/components/FAQSection'
+import { RegulskiWebHero } from '@/components/RegulskiWebHero'
 import { Schema } from '@/components/schema'
 import { buildBookHref } from '@/lib/booking-routing'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
@@ -84,7 +84,7 @@ export default function FaqPage() {
           </div>
 
           <div className="notatnik-subhero-media">
-            <HeroIllustration slug="faq" emojiPlaceholder="❓" className="w-full h-full min-h-[340px]" />
+            <RegulskiWebHero variant="faq" priority />
           </div>
         </section>
 

@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { NextSlot } from '@/components/NextSlot'
-import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { NotatnikFooter, NotatnikSectionHead, NotatnikSideVisuals, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { OfferCards } from '@/components/OfferCards'
+import { RegulskiWebHero } from '@/components/RegulskiWebHero'
 import { Schema } from '@/components/schema'
 import { buildBookHref } from '@/lib/booking-routing'
 import { getBreadcrumbJsonLd, getFaqPageJsonLd, getServiceJsonLd } from '@/lib/schema'
@@ -14,7 +14,7 @@ import { FAQ_SHORTLISTS } from '@/lib/trust-layer'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: 'Behawiorysta psow online',
+  title: 'Behawiorysta psow online - reaktywnosc i separacja',
   path: '/psy',
   description: 'Pomoc behawioralna online dla opiekunow psow. Kwadrans 69 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl.',
 })
@@ -24,46 +24,96 @@ const bridgeHref = buildBookHref(null, 'konsultacja-30-min', false, 'pies')
 const consultationHref = buildBookHref(null, 'konsultacja-behawioralna-online', false, 'pies')
 const serviceLandingHref = '/behawiorysta-online-polska'
 
-const topics = [
+const dogProblemTopics = [
   {
+    id: 'reaktywnosc-na-smyczy',
     number: 'i.',
     icon: 'dog-reactivity',
-    title: 'Reaktywnosc na smyczy',
-    copy: 'Pies reaguje na inne psy, ludzi albo rowery. Najpierw porzadkujemy wyzwalacze, dystans i rytm spaceru.',
+    title: 'Pies reaguje na psy, ludzi albo rowery',
+    description:
+      'Szczekanie, rzucanie się na smyczy, napięcie przy mijaniu bodźców albo trudne spacery. Najpierw porządkujemy wyzwalacze, dystans i rytm spaceru.',
     href: '/psy/reaktywnosc-na-smyczy',
-    label: 'Zobacz temat',
+    ctaLabel: 'Zobacz temat',
   },
   {
+    id: 'problemy-separacyjne',
     number: 'ii.',
     icon: 'dog-separation',
-    title: 'Lek separacyjny',
-    copy: 'Wycie, niszczenie, napiecie po wyjsciu opiekuna. To temat do spokojnego planu, nie do zgadywania.',
+    title: 'Problemy separacyjne',
+    description:
+      'Pies źle znosi zostawanie samemu: wyje, szczeka, niszczy, chodzi za opiekunem albo napina się przy szykowaniu do wyjścia.',
     href: '/psy/lek-separacyjny',
-    label: 'Zobacz temat',
+    ctaLabel: 'Zobacz temat',
   },
   {
+    id: 'pobudzenie-brak-wyciszenia',
     number: 'iii.',
     icon: 'dog-puppy',
-    title: 'Pobudzenie i wyciszenie',
-    copy: 'Pies nie umie odpoczac, trudno mu zejsc z napiecia i zlapac codzienny rytm domu.',
+    title: 'Pobudzenie i brak wyciszenia',
+    description:
+      'Pies trudno odpoczywa, skacze, wymusza uwagę, szybko się nakręca albo nie umie wrócić do spokoju po spacerze, zabawie lub gościach.',
     href: quickHref,
-    label: 'Kwadrans',
+    ctaLabel: 'Zacznij od Kwadransa',
   },
   {
+    id: 'szczeniak-start-w-domu',
     number: 'iv.',
     icon: 'dog-puppy',
-    title: 'Mlody pies i start w domu',
-    copy: 'Szczeniak, gryzienie, skakanie, pierwsze spacery i codzienne granice bez dokladania chaosu.',
+    title: 'Szczeniak gryzie, skacze albo nie odpoczywa',
+    description:
+      'Młody pies gryzie ręce, skacze, trudno mu zasnąć, pobudza się przy kontakcie albo potrzebuje spokojnego planu pierwszych tygodni w domu.',
     href: quickHref,
-    label: 'Kwadrans',
+    ctaLabel: 'Omów start',
   },
   {
+    id: 'lek-stres-wycofanie',
     number: 'v.',
+    icon: 'dog-reactivity',
+    title: 'Pies się boi, wycofuje albo żyje w napięciu',
+    description:
+      'Pies unika kontaktu, chowa się, zamiera, reaguje paniką na ludzi, dźwięki albo zmiany. Szukamy źródła stresu i pierwszego bezpiecznego kroku.',
+    href: quickHref,
+    ctaLabel: 'Omów problem',
+  },
+  {
+    id: 'agresja-warczenie-gryzienie',
+    number: 'vi.',
+    icon: 'dog-reactivity',
+    title: 'Warczenie, kłapanie i gryzienie',
+    description:
+      'Pies warczy, pokazuje zęby, kłapie pyskiem, pilnuje zasobów albo gryzie w kontakcie. Sprawdzamy strach, ból, frustrację, granice i sytuacje zapalne.',
+    href: quickHref,
+    ctaLabel: 'Omów problem',
+  },
+  {
+    id: 'spacery-ciagniecie-trudnosci',
+    number: 'vii.',
+    icon: 'dog-reactivity',
+    title: 'Spacery, ciągnięcie i trudności na zewnątrz',
+    description:
+      'Pies ciągnie, zamiera, oszczekuje bodźce, nie wraca do kontaktu albo spacer kończy się napięciem. Układamy prostszy rytm i pierwsze zasady pracy.',
+    href: quickHref,
+    ctaLabel: 'Omów spacer',
+  },
+  {
+    id: 'niszczenie-szczekanie-dom',
+    number: 'viii.',
+    icon: 'dog-separation',
+    title: 'Niszczenie, szczekanie i trudności w domu',
+    description:
+      'Pies niszczy rzeczy, szczeka, kradnie przedmioty albo trudno mu wejść w spokojny rytm dnia. Sprawdzamy potrzeby, napięcie i zasady w domu.',
+    href: quickHref,
+    ctaLabel: 'Omów problem',
+  },
+  {
+    id: 'sprawa-zlozona-pies',
+    number: 'ix.',
     icon: 'topic-other',
-    title: 'Sprawa zlozona albo przewlekla',
-    copy: 'Gdy problem wraca, obejmuje kilka watkow naraz albo od razu widzisz, ze potrzebny jest szerszy plan.',
-    href: consultationHref,
-    label: 'Pelna konsultacja',
+    title: 'Nie wiesz, który temat wybrać?',
+    description:
+      'Problem pasuje do kilku kategorii albo trudno go nazwać jednym słowem. Zacznij od krótkiego omówienia sytuacji i ustalenia pierwszego priorytetu.',
+    href: quickHref,
+    ctaLabel: 'Zacznij od Kwadransa',
   },
 ] as const
 
@@ -106,11 +156,9 @@ export default function DogsPage() {
       <NotatnikSideVisuals variant="dog" />
       <div className="notatnik-shell">
         <NotatnikTopbar tag="Pies / strona gatunku" navItems={PUBLIC_SITE_NAV_ITEMS} ctaHref={quickHref} ctaLabel="Kwadrans / 69 zl" />
-        <Breadcrumbs items={[{ name: 'Psy', url: '/psy' }]} />
 
         <section className="notatnik-subhero notatnik-subhero-pet">
           <div>
-            <div className="notatnik-subhero-tag notatnik-mono">Pies / strona gatunku</div>
             <h1>
               Twoj pies zachowuje sie w sposob, <em>ktory Cie niepokoi</em>.
             </h1>
@@ -136,24 +184,18 @@ export default function DogsPage() {
           </div>
 
           <div className="notatnik-subhero-media">
-            <div className="notatnik-subhero-pet-figure notatnik-subhero-consultation-figure" aria-hidden="true">
-              <Image
-                src="/2.png"
-                alt=""
-                width={1024}
-                height={1536}
-                priority
-                className="notatnik-subhero-consultation-image"
-              />
-            </div>
+            <RegulskiWebHero variant="dogs" priority className="notatnik-pet-hero-visual" />
           </div>
         </section>
 
-        <section id="tematy" className="notatnik-dog-topic-section">
-          <NotatnikSectionHead index="I." kicker="Najczestsze tematy" title="Problemy psie - lista." />
+        <section id="tematy" className="notatnik-pet-topic-section">
+          <NotatnikSectionHead index="I." kicker="Najczestsze tematy" title="Najczęstsze problemy behawioralne psów" />
+          <p className="notatnik-service-description top-gap-small">
+            Wybierz temat najbliższy temu, co dzieje się u Twojego psa. Nie musisz trafić idealnie - wiele problemów się łączy. Jeśli nie wiesz, od czego zacząć, wybierz Kwadrans.
+          </p>
           <div className="notatnik-topic-grid notatnik-topic-grid-with-icons">
-            {topics.map((topic) => (
-              <Link key={topic.title} href={topic.href} prefetch={false} className="notatnik-topic-card notatnik-topic-card-with-icon">
+            {dogProblemTopics.map((topic) => (
+              <Link key={topic.id} href={topic.href} prefetch={false} className="notatnik-topic-card notatnik-topic-card-with-icon">
                 <Image
                   src={`/branding/pet-topics/subcategories/${topic.icon}.png`}
                   alt=""
@@ -163,15 +205,12 @@ export default function DogsPage() {
                 />
                 <div className="notatnik-topic-number">{topic.number}</div>
                 <h3>{topic.title}</h3>
-                <p>{topic.copy}</p>
+                <p>{topic.description}</p>
                 <span className="notatnik-topic-card-action">
-                  {topic.label}
+                  {topic.ctaLabel}
                 </span>
               </Link>
             ))}
-          </div>
-          <div className="list-card tree-backed-card top-gap-small">
-            <p>Nie widzisz swojego tematu na liscie? Zacznij od Kwadransu. To dalej najprostszy pierwszy krok przy problemach psa.</p>
           </div>
         </section>
 
@@ -196,6 +235,9 @@ export default function DogsPage() {
             <span>Jesli nie rezerwujesz rozmowy, przejdz do materialow PDF.</span>
             <Link href="/materialy" prefetch={false} className="notatnik-inline-link">
               Zobacz materialy
+            </Link>
+            <Link href={serviceLandingHref} prefetch={false} className="notatnik-inline-link">
+              Przejdz do pelnego opisu konsultacji online
             </Link>
           </div>
         </section>

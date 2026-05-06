@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { REGULSKI_WEB_TILE } from '@/lib/regulski-web-assets'
 
 type PetKind = 'dog' | 'cat'
 type TopicIconName = 'dog-reactivity' | 'dog-separation' | 'dog-puppy' | 'cat-litter' | 'cat-stress' | 'cat-conflict' | 'topic-other' | 'cat-other'
@@ -20,10 +21,10 @@ interface PetTopicCardProps {
 
 function PetTopicSymbol({ icon }: { icon: PetKind }) {
   if (icon === 'dog') {
-    return <Image src="/branding/pet-topics/pet-dog-cutout.png" alt="" aria-hidden="true" width={909} height={751} className="notatnik-pet-symbol-image" />
+    return <Image src={REGULSKI_WEB_TILE.dog} alt="" aria-hidden="true" width={720} height={720} className="notatnik-pet-symbol-image" />
   }
 
-  return <Image src="/branding/pet-topics/pet-cat-cutout.png" alt="" aria-hidden="true" width={939} height={761} className="notatnik-pet-symbol-image" />
+  return <Image src={REGULSKI_WEB_TILE.cat} alt="" aria-hidden="true" width={720} height={720} className="notatnik-pet-symbol-image" />
 }
 
 function PetTopicLinkIcon({ icon }: { icon: TopicIconName }) {
@@ -61,7 +62,7 @@ export function PetTopicCard({ href, icon, heading, links }: PetTopicCardProps) 
               <strong>{link.title}</strong>
               <small>{link.desc}</small>
             </span>
-            <span className="notatnik-pet-topic-arrow" aria-hidden="true">→</span>
+            <span className="notatnik-pet-topic-arrow" aria-hidden="true">&rarr;</span>
           </Link>
         ))}
       </div>
@@ -77,10 +78,10 @@ export function PetTopicsSection() {
         icon="dog"
         heading="Pies"
         links={[
-          { href: '#cennik', icon: 'dog-reactivity', title: 'Reaktywność', desc: 'emocje i bodźce' },
+          { href: '#cennik', icon: 'dog-reactivity', title: 'Reaktywnosc', desc: 'emocje i bodzce' },
           { href: '#cennik', icon: 'dog-separation', title: 'Separacja', desc: 'zostawanie samemu' },
           { href: '#cennik', icon: 'dog-puppy', title: 'Szczeniak', desc: 'start i nauka' },
-          { href: '#cennik', icon: 'topic-other', title: 'Pozostałe', desc: 'inne tematy' },
+          { href: '#cennik', icon: 'topic-other', title: 'Pozostale', desc: 'inne tematy' },
         ]}
       />
       <PetTopicCard
@@ -91,7 +92,7 @@ export function PetTopicsSection() {
           { href: '#cennik', icon: 'cat-litter', title: 'Kuweta', desc: 'higiena i nawyki' },
           { href: '#cennik', icon: 'cat-stress', title: 'Stres', desc: 'emocje i zmiany' },
           { href: '#cennik', icon: 'cat-conflict', title: 'Konflikt', desc: 'relacje z innymi' },
-          { href: '#cennik', icon: 'cat-other', title: 'Pozostałe', desc: 'inne tematy' },
+          { href: '#cennik', icon: 'cat-other', title: 'Pozostale', desc: 'inne tematy' },
         ]}
       />
     </section>

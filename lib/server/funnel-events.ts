@@ -39,6 +39,9 @@ const FUNNEL_EVENT_TYPES = new Set<FunnelEventType>([
   'faq_open',
   'opinion_add',
   'room_entered',
+  'quiz_completed',
+  'notification_optin_submitted',
+  'notification_optout_submitted',
 ])
 
 export type FunnelEventQueryWindow = '24h' | '7d' | 'all'

@@ -1,5 +1,61 @@
 [
   {
+    "id": "e8096bbb-5d80-4491-b5e4-7a1fc7e2faa2",
+    "eventType": "cta_click",
+    "bookingId": null,
+    "qaBooking": false,
+    "source": "client",
+    "pagePath": "/",
+    "location": "home-router-choice",
+    "properties": {
+      "location": "home-router-choice",
+      "choice": "cat"
+    },
+    "createdAt": "2026-05-05T17:44:41.414Z"
+  },
+  {
+    "id": "b96fa6b6-7c74-4962-9762-81fcf1cbae61",
+    "eventType": "view_page",
+    "bookingId": null,
+    "qaBooking": false,
+    "source": "client",
+    "pagePath": "/",
+    "location": null,
+    "properties": {
+      "source_page": "/",
+      "page_path": "/"
+    },
+    "createdAt": "2026-05-05T17:44:40.490Z"
+  },
+  {
+    "id": "93856bf8-b76b-4452-9abe-35b471b0e170",
+    "eventType": "cta_click",
+    "bookingId": null,
+    "qaBooking": false,
+    "source": "client",
+    "pagePath": "/",
+    "location": "home-router-choice",
+    "properties": {
+      "location": "home-router-choice",
+      "choice": "dog"
+    },
+    "createdAt": "2026-05-05T17:44:35.476Z"
+  },
+  {
+    "id": "5120a0ce-1780-4753-8ca0-ffe8f50a529c",
+    "eventType": "cta_click",
+    "bookingId": null,
+    "qaBooking": false,
+    "source": "client",
+    "pagePath": "/",
+    "location": "home-router-choice",
+    "properties": {
+      "location": "home-router-choice",
+      "choice": "dog"
+    },
+    "createdAt": "2026-05-05T17:44:34.946Z"
+  },
+  {
     "id": "1a116174-8765-4eb8-beb8-bb5fd2462a79",
     "eventType": "view_page",
     "bookingId": null,

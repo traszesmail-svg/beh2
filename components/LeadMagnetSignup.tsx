@@ -84,7 +84,7 @@ export function LeadMagnetSignup({
 
   return (
     <article className={className ?? 'summary-card tree-backed-card'}>
-      <div className="section-eyebrow">Lead magnet</div>
+      <div className="section-eyebrow">Bezpłatny materiał</div>
       <h3>{magnet.title}</h3>
       <p className="muted">{magnet.lead}</p>
 

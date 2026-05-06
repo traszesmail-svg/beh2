@@ -6,7 +6,7 @@ import { FunnelPrimaryActions } from '@/components/FunnelPrimaryActions'
 import { NotatnikPageShell, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { buildBookHref } from '@/lib/booking-routing'
 import { CASE_STUDY_SELECTIONS, FAQ_SHORTLISTS } from '@/lib/trust-layer'
-import { REAL_CASE_STUDIES, getRealCaseProofPills } from '@/lib/real-case-studies'
+import { REAL_CASE_STUDIES, getRealCaseProofPills, getRealCaseStudyPath } from '@/lib/real-case-studies'
 import { getBreadcrumbJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
 import { getCanonicalBaseUrl } from '@/lib/server/env'
@@ -88,7 +88,7 @@ const opinionCards: OpinionCard[] = [
     label: 'Pies',
     problemType: 'spacery i pobudzenie',
     cooperationStage: 'po pierwszej konsultacji',
-    format: 'po 60 min',
+    format: 'po pelnej konsultacji',
     outcome: 'jeden plan spacerow i czytelne obserwacje zamiast wielu technik naraz',
   },
   {
@@ -99,7 +99,7 @@ const opinionCards: OpinionCard[] = [
     label: 'Kot',
     problemType: 'kuweta i srodowisko',
     cooperationStage: 'po pierwszej konsultacji',
-    format: 'po 60 min',
+    format: 'po pelnej konsultacji',
     outcome: 'porzadek w srodowisku i mniej napiecia zamiast kolejnych losowych zmian',
   },
   {
@@ -146,8 +146,8 @@ const trustCards: TrustCard[] = [
     eyebrow: 'Przypadki',
     title: `${REAL_CASE_STUDIES.length} opisanych sytuacji startowych`,
     copy: 'Na tej stronie zostaja skrocone historie z kontekstem problemu, pierwszym krokiem i pierwszym efektem.',
-    href: '#przypadki',
-    cta: 'Zobacz przypadki',
+    href: '/historie',
+    cta: 'Zobacz historie',
   },
 ]
 
@@ -357,6 +357,11 @@ export default function OpinionsPage() {
                     <span className="opinions-case-label">{caseStudy.nextStepLabel}</span>
                     <p>{caseStudy.nextStepText}</p>
                   </div>
+                </div>
+                <div className="top-gap-small">
+                  <Link href={getRealCaseStudyPath(caseStudy)} prefetch={false} className="prep-inline-link">
+                    Czytaj cala historie
+                  </Link>
                 </div>
               </article>
             ))}

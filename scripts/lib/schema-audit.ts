@@ -84,7 +84,7 @@ const REQUIRED_SCHEMA_MARKERS: SchemaMarker[] = [
 
 const REQUIRED_FILES = [
   'supabase/migrations/20260325_manual_payment_and_payu.sql',
-  'supabase/migrations/20260406_qa_checkout.sql',
+  'supabase/migrations/20260406002_qa_checkout.sql',
 ]
 
 function normalizeSchemaText(schemaText: string) {

@@ -17,10 +17,20 @@ stripe-*.png
 *.tmp
 .tmp-*
 .tmp-*/
+tmp/
+tmp-*/
+tmp_*/
 supabase/.temp/
 *.tsbuildinfo
 qa-artifacts/
 qa-screenshots/
+qa-screenshots-*/
+qa-*.js
+qa-*.png
+book-debug-*.png
+.tmp-browser-*.png
+tmp_reference_contact_sheet.png
+setup_pdf_tools_report.md
 .codex-deploy-*/
 .npm-cache/
 .next-start*.err
@@ -34,6 +44,18 @@ pedeefy/
 tmp-pdf-cover-previews/
 tmp-pdf-cover-puppeteer.png
 tmp-podkategorie-infografiki/
+przyciski/
+nowy*/
+Nowy folder/
+strona (1)/
+strona (1).zip
+regulski/
+prompty/
+gumroad/
+design-canvas.jsx
+Regulski Design*.html
+vercel.com_*.report.html
+resend.txt
 content/guides/sources/**/temp.html
 qa-reports/**/*.png
 qa-reports/**/*.pid

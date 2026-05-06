@@ -18,6 +18,10 @@ module.exports = {
   ],
   exclude: [
     '/api/*',
+    '/icon.svg',
+    '/manifest.webmanifest',
+    '/robots.txt',
+    '/sitemap.xml',
     '/admin',
     '/admin/*',
     '/__internal/*',
@@ -26,7 +30,8 @@ module.exports = {
     '/room/*',
     '/pokoj',
     '/problem',
-    '/materialy',
+    '/materialy/pobranie',
+    '/bezplatne-materialy/dziekuje',
     '/przybornik',
   ],
   robotsTxtOptions: {

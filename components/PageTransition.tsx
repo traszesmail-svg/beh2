@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { pageTransition } from '@/lib/motionVariants';
 
@@ -10,15 +10,16 @@ interface PageTransitionProps {
 
 export function PageTransition({ children }: PageTransitionProps) {
   const pathname = usePathname();
+  const shouldReduceMotion = useReducedMotion();
 
   return (
     <AnimatePresence mode="wait">
       <motion.div
         key={pathname}
-        variants={pageTransition}
-        initial="initial"
-        animate="animate"
-        exit="exit"
+        variants={shouldReduceMotion ? undefined : pageTransition}
+        initial={shouldReduceMotion ? false : 'initial'}
+        animate={shouldReduceMotion ? undefined : 'animate'}
+        exit={shouldReduceMotion ? undefined : 'exit'}
       >
         {children}
       </motion.div>

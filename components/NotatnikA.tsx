@@ -4,6 +4,7 @@ import { Cat, Dog } from 'lucide-react'
 import { Footer } from '@/components/Footer'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { INSTAGRAM_PROFILE_URL } from '@/lib/site'
+import { REGULSKI_WEB_LOGO } from '@/lib/regulski-web-assets'
 
 export type NotatnikNavItem = {
   href: string
@@ -14,11 +15,16 @@ export type NotatnikNavItem = {
 export const PUBLIC_SITE_NAV_ITEMS: readonly NotatnikNavItem[] = [
   { href: '/psy', label: 'Pies', icon: 'dog' },
   { href: '/koty', label: 'Kot', icon: 'cat' },
+  { href: '/o-mnie', label: 'O mnie' },
+  { href: '/cennik', label: 'Cennik' },
+  { href: '/niezbednik', label: 'Niezbędnik' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/kontakt', label: 'Kontakt' },
 ]
 
 export const PUBLIC_BOOKING_FLOW_NAV_ITEMS: readonly NotatnikNavItem[] = [
   { href: '/cennik', label: 'Cennik' },
-  { href: '/niezbednik', label: 'Niezbednik' },
+  { href: '/niezbednik', label: 'Niezbędnik' },
   { href: '/kontakt#formularz', label: 'Kontakt' },
 ]
 
@@ -63,9 +69,7 @@ type NotatnikPageShellProps = {
   children: React.ReactNode
 }
 
-export type NotatnikSideVisualVariant = 'home' | 'mixed' | 'dog' | 'cat' | 'materials' | 'blog' | 'about' | 'pricing' | 'contact'
-
-const HOME_SIDE_VISUAL = '/branding/side-visuals/home-forest-sun-rays.jpg'
+export type NotatnikSideVisualVariant = 'home' | 'mixed' | 'dog' | 'cat' | 'materials' | 'blog' | 'about' | 'pricing' | 'contact' | 'booking'
 
 function getCtaClassName(variant: NotatnikTopbarProps['ctaVariant']) {
   if (variant === 'ghost') {
@@ -99,9 +103,9 @@ function InstagramGlyph() {
 
 function NotatnikBrandLockup() {
   return (
-    <Link href="/" prefetch={false} className="notatnik-brand" aria-label="Wroc na strone glowna Regulski">
+    <Link href="/" prefetch={false} className="notatnik-brand" aria-label="Wróć na stronę główną Regulski">
       <span className="notatnik-brand-credential" aria-hidden="true">
-        <Image src="/branding/credentials/coapemale.png" alt="" width={132} height={62} priority />
+        <Image src={REGULSKI_WEB_LOGO} alt="" width={512} height={512} priority />
       </span>
       <span className="notatnik-brand-copy">
         <span className="notatnik-brand-mark">Regulski</span>
@@ -117,112 +121,145 @@ function NotatnikNavIcon({ icon }: { icon?: NotatnikNavItem['icon'] }) {
   return null
 }
 
-export function NotatnikTopbar({ tag, navItems, ctaHref, ctaLabel, ctaVariant = 'solid' }: NotatnikTopbarProps) {
+export function NotatnikTopbar({ navItems, ctaHref, ctaLabel, ctaVariant = 'solid' }: NotatnikTopbarProps) {
+  const hasNavItems = navItems.length > 0
+
   return (
     <header className="notatnik-topbar">
       <NotatnikBrandLockup />
 
-      <nav className="notatnik-nav" aria-label="Glowne sekcje">
-        {navItems.map((item) => (
-          <Link key={item.href} href={item.href} prefetch={false}>
-            <NotatnikNavIcon icon={item.icon} />
-            {item.label}
-          </Link>
-        ))}
-      </nav>
+      {hasNavItems ? (
+        <nav className="notatnik-nav" aria-label="Główne sekcje">
+          {navItems.map((item) => (
+            <Link key={item.href} href={item.href} prefetch={false}>
+              <NotatnikNavIcon icon={item.icon} />
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+      ) : null}
 
       <div className="notatnik-topbar-actions">
+        <Link href={ctaHref} prefetch={false} className={getCtaClassName(ctaVariant)}>
+          <span>{ctaLabel}</span>
+          <NotatnikButtonArrow />
+        </Link>
         <ThemeToggle />
         <a
           href={INSTAGRAM_PROFILE_URL}
           target="_blank"
           rel="noopener noreferrer"
           className="notatnik-social-link"
-          aria-label="Otworz Instagram"
+          aria-label="Otwórz Instagram"
         >
           <InstagramGlyph />
         </a>
       </div>
 
-      <details className="notatnik-mobile-menu">
-        <summary aria-label="Otworz menu">
-          <span className="notatnik-mobile-menu-bars" aria-hidden="true">
-            <span />
-            <span />
-            <span />
-          </span>
-        </summary>
-        <div className="notatnik-mobile-menu-panel">
-          <nav aria-label="Menu mobilne">
-            {navItems.map((item) => (
-              <Link key={item.href} href={item.href} prefetch={false}>
-                <NotatnikNavIcon icon={item.icon} />
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-        </div>
-      </details>
+      {hasNavItems ? (
+        <details className="notatnik-mobile-menu">
+          <summary aria-label="Otwórz menu">
+            <span className="notatnik-mobile-menu-bars" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </span>
+          </summary>
+          <div className="notatnik-mobile-menu-panel">
+            <nav aria-label="Menu mobilne">
+              {navItems.map((item) => (
+                <Link key={item.href} href={item.href} prefetch={false}>
+                  <NotatnikNavIcon icon={item.icon} />
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
+            <Link href={ctaHref} prefetch={false} className={getCtaClassName(ctaVariant)}>
+              <span>{ctaLabel}</span>
+              <NotatnikButtonArrow />
+            </Link>
+          </div>
+        </details>
+      ) : null}
     </header>
   )
 }
 
 const SIDE_VISUALS: Record<NotatnikSideVisualVariant, { left: string; right: string }> = {
   home: {
-    left: HOME_SIDE_VISUAL,
-    right: HOME_SIDE_VISUAL,
+    left: '/images/homepage/home-bg-dog-1to1.png',
+    right: '/images/homepage/home-bg-cat-1to1.png',
   },
   mixed: {
-    left: HOME_SIDE_VISUAL,
-    right: HOME_SIDE_VISUAL,
+    left: '/images/homepage/home-bg-dog-1to1.png',
+    right: '/images/homepage/home-bg-cat-1to1.png',
   },
   dog: {
-    left: HOME_SIDE_VISUAL,
-    right: HOME_SIDE_VISUAL,
+    left: '/images/homepage/home-bg-dog-1to1.png',
+    right: '/images/homepage/home-bg-cat-1to1.png',
   },
   cat: {
-    left: HOME_SIDE_VISUAL,
-    right: HOME_SIDE_VISUAL,
+    left: '/images/homepage/home-bg-dog-1to1.png',
+    right: '/images/homepage/home-bg-cat-1to1.png',
   },
   materials: {
-    left: HOME_SIDE_VISUAL,
-    right: HOME_SIDE_VISUAL,
+    left: '/images/homepage/home-bg-dog-1to1.png',
+    right: '/images/homepage/home-bg-cat-1to1.png',
   },
   blog: {
-    left: HOME_SIDE_VISUAL,
-    right: HOME_SIDE_VISUAL,
+    left: '/images/homepage/home-bg-dog-1to1.png',
+    right: '/images/homepage/home-bg-cat-1to1.png',
   },
   about: {
-    left: HOME_SIDE_VISUAL,
-    right: HOME_SIDE_VISUAL,
+    left: '/images/homepage/home-bg-dog-1to1.png',
+    right: '/images/homepage/home-bg-cat-1to1.png',
   },
   pricing: {
-    left: HOME_SIDE_VISUAL,
-    right: HOME_SIDE_VISUAL,
+    left: '/images/homepage/home-bg-dog-1to1.png',
+    right: '/images/homepage/home-bg-cat-1to1.png',
   },
   contact: {
-    left: HOME_SIDE_VISUAL,
-    right: HOME_SIDE_VISUAL,
+    left: '/images/homepage/home-bg-dog-1to1.png',
+    right: '/images/homepage/home-bg-cat-1to1.png',
+  },
+  booking: {
+    left: '/images/homepage/home-bg-dog-1to1.png',
+    right: '/images/homepage/home-bg-cat-1to1.png',
   },
 }
 
 export function NotatnikSideVisuals({ variant = 'mixed' }: { variant?: NotatnikSideVisualVariant }) {
   const visuals = SIDE_VISUALS[variant]
-  const isHome = variant === 'home'
 
   return (
     <>
       <div
-        className="notatnik-side-visual notatnik-side-visual-left notatnik-side-visual-forest-left"
+        className="notatnik-side-visual notatnik-side-visual-left"
         aria-hidden="true"
       >
-        <img className="notatnik-side-visual-image" src={visuals.left} alt="" aria-hidden="true" loading="eager" decoding="async" />
+        <Image
+          className="notatnik-side-visual-image"
+          src={visuals.left}
+          alt=""
+          aria-hidden="true"
+          fill
+          priority
+          sizes="(max-width: 980px) 0px, (max-width: 1280px) 210px, 320px"
+        />
       </div>
       <div
-        className="notatnik-side-visual notatnik-side-visual-right notatnik-side-visual-forest-right"
+        className="notatnik-side-visual notatnik-side-visual-right"
         aria-hidden="true"
       >
-        <img className="notatnik-side-visual-image" src={visuals.right} alt="" aria-hidden="true" loading="eager" decoding="async" />
+        <Image
+          className="notatnik-side-visual-image"
+          src={visuals.right}
+          alt=""
+          aria-hidden="true"
+          fill
+          priority
+          sizes="(max-width: 980px) 0px, (max-width: 1280px) 220px, 340px"
+        />
       </div>
     </>
   )

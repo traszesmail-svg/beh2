@@ -119,7 +119,7 @@ function getConfirmedFlowCards(
       return [
         {
           title: 'Termin jest zapisany',
-          body: 'Konsultacja 60 min jest potwierdzona. Wróć do tego linku kilka minut przed spotkaniem.',
+          body: 'Pelna konsultacja jest potwierdzona. Wróć do tego linku kilka minut przed spotkaniem.',
         },
       {
         title: 'Dalszy link i instrukcja',
@@ -490,7 +490,7 @@ export default async function ConfirmationPage({
                         <span>
                           {bookingServiceType === 'konsultacja-behawioralna-online'
                             ? 'Po konsultacji możesz wrócić do zaleceń, materiałów do sprawy albo ustalić dalsze kroki.'
-                            : 'Jeśli po rozmowie temat okaże się szerszy, kolejnym krokiem może być konsultacja 60 min.'}
+                            : 'Jeśli po rozmowie temat okaże się szerszy, kolejnym krokiem może być pełna konsultacja.'}
                         </span>
                       </div>
                     </>

@@ -1,0 +1,397 @@
+import type { Metadata } from 'next'
+import Link from 'next/link'
+import { unstable_noStore as noStore } from 'next/cache'
+import { BadgeCheck, CalendarDays, Cat, Check, ChevronDown, ChevronRight, Dog, Headphones, Monitor, PawPrint, ShieldCheck, Stethoscope } from 'lucide-react'
+import { EditorialIndexTopbar } from '@/components/EditorialIndexTopbar'
+import { NotatnikFooter, NotatnikSideVisuals } from '@/components/NotatnikA'
+import { TerminCalendarPicker, type TerminCalendarDay as PickerCalendarDay } from '@/components/TerminCalendarPicker'
+import { Schema } from '@/components/schema'
+import {
+  DEFAULT_BOOKING_SERVICE,
+  filterGroupedAvailabilityForService,
+  getBookingServiceSlotBadge,
+  getBookingServiceSlotSummary,
+  normalizeBookingServiceType,
+  type BookingServiceType,
+} from '@/lib/booking-services'
+import {
+  buildFormHref,
+  buildSlotHref,
+  readBookingServiceSearchParam,
+  readProblemTypeSearchParam,
+  readQaBookingSearchParam,
+} from '@/lib/booking-routing'
+import { getProblemLabel, getProblemSpecies } from '@/lib/data'
+import { FUNNEL_CTA_LABELS, FUNNEL_SERVICE_CONFIG } from '@/lib/funnel'
+import { homepageTrustBadges } from '@/lib/homepage-data'
+import { formatPricePln } from '@/lib/pricing'
+import { getBreadcrumbJsonLd } from '@/lib/schema'
+import { buildMarketingMetadata } from '@/lib/seo'
+import { listAvailability } from '@/lib/server/db'
+import { getDataModeStatus } from '@/lib/server/env'
+import type { GroupedAvailability, ProblemType } from '@/lib/types'
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
+export const metadata: Metadata = buildMarketingMetadata({
+  title: 'Wybierz termin konsultacji',
+  path: '/termin',
+  description: 'Prosty widok wyboru terminu po krótkim wyborze tematu psa albo kota.',
+})
+
+const trustIcons = [BadgeCheck, Stethoscope, PawPrint, ShieldCheck, Monitor] as const
+
+const terminSteps = ['Gatunek', 'Temat', 'Termin', 'Dane'] as const
+
+const bookingFaqItems = [
+  'Jak wygląda konsultacja online?',
+  'Czy muszę instalować jakąś aplikację?',
+  'Czy mogę zmienić lub odwołać termin?',
+] as const
+
+type CalendarDay = {
+  date: string
+  dayNumber: number
+  monthLabel: string
+  isInPrimaryMonth: boolean
+  group: GroupedAvailability | null
+}
+
+function parseDate(value: string) {
+  return new Date(`${value}T12:00:00`)
+}
+
+function formatDateKey(date: Date) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+}
+
+function formatMonthTitle(date: Date) {
+  return date.toLocaleDateString('pl-PL', { month: 'long', year: 'numeric' })
+}
+
+function formatReadableDate(date: Date) {
+  return date.toLocaleDateString('pl-PL', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  })
+}
+
+function getMondayStart(date: Date) {
+  const start = new Date(date)
+  const dayIndex = (start.getDay() + 6) % 7
+  start.setDate(start.getDate() - dayIndex)
+  return start
+}
+
+function getSundayEnd(date: Date) {
+  const end = new Date(date)
+  const dayIndex = (end.getDay() + 6) % 7
+  end.setDate(end.getDate() + (6 - dayIndex))
+  return end
+}
+
+function buildCalendarDays(groups: GroupedAvailability[]): { days: CalendarDay[]; label: string; slotCount: number } {
+  const groupsByDate = new Map(groups.map((group) => [group.date, group]))
+  const fallbackDate = new Date()
+  fallbackDate.setHours(12, 0, 0, 0)
+  const firstDate = groups[0] ? parseDate(groups[0].date) : fallbackDate
+  const lastDate = groups[groups.length - 1] ? parseDate(groups[groups.length - 1].date) : fallbackDate
+  const primaryMonth = firstDate.getMonth()
+  const primaryYear = firstDate.getFullYear()
+  const visibleRangeStart = new Date(primaryYear, primaryMonth, 1, 12)
+  const visibleRangeEnd = new Date(lastDate.getFullYear(), lastDate.getMonth() + 1, 0, 12)
+  const calendarStart = getMondayStart(visibleRangeStart)
+  const calendarEnd = getSundayEnd(visibleRangeEnd)
+  const days: CalendarDay[] = []
+
+  for (const cursor = new Date(calendarStart); cursor <= calendarEnd; cursor.setDate(cursor.getDate() + 1)) {
+    const date = new Date(cursor)
+    const dateKey = formatDateKey(date)
+
+    days.push({
+      date: dateKey,
+      dayNumber: date.getDate(),
+      monthLabel: date.toLocaleDateString('pl-PL', { month: 'short' }),
+      isInPrimaryMonth: date >= visibleRangeStart && date <= visibleRangeEnd,
+      group: groupsByDate.get(dateKey) ?? null,
+    })
+  }
+
+  const label =
+    firstDate.getMonth() === lastDate.getMonth() && firstDate.getFullYear() === lastDate.getFullYear()
+      ? formatMonthTitle(firstDate)
+      : `${formatMonthTitle(firstDate)} - ${formatMonthTitle(lastDate)}`
+
+  return {
+    days,
+    label,
+    slotCount: groups.reduce((total, group) => total + group.slots.length, 0),
+  }
+}
+
+function getServiceQuery(serviceType: BookingServiceType) {
+  return serviceType === DEFAULT_BOOKING_SERVICE ? null : serviceType
+}
+
+function selectedUrlFallback(
+  problem: ProblemType,
+  groupedAvailability: GroupedAvailability[],
+  serviceQuery: BookingServiceType | null,
+  qaBooking: boolean,
+) {
+  const firstSlot = groupedAvailability[0]?.slots[0]
+
+  return firstSlot ? buildFormHref(problem, firstSlot.id, serviceQuery, qaBooking) : buildSlotHref(problem, serviceQuery, qaBooking)
+}
+
+export default async function TerminPage({
+  searchParams,
+}: {
+  searchParams?: Record<string, string | string[] | undefined>
+}) {
+  noStore()
+
+  const requestedProblem = readProblemTypeSearchParam(searchParams?.problem)
+  const problem = requestedProblem ?? 'inne'
+  const serviceType = normalizeBookingServiceType(readBookingServiceSearchParam(searchParams?.service))
+  const serviceQuery = getServiceQuery(serviceType)
+  const qaBooking = readQaBookingSearchParam(searchParams?.qa)
+  const serviceConfig = FUNNEL_SERVICE_CONFIG[serviceType]
+
+  const retryHref = buildSlotHref(problem, serviceQuery, qaBooking)
+  const dataMode = getDataModeStatus()
+  let groupedAvailability: GroupedAvailability[] = []
+  let publicFlowMessage: string | null = null
+
+  if (dataMode.isValid) {
+    try {
+      groupedAvailability = filterGroupedAvailabilityForService(await listAvailability(), serviceType)
+    } catch (error) {
+      console.warn('[regulski][termin] failed to load availability', {
+        dataMode: dataMode.summary,
+        error: error instanceof Error ? { name: error.name, message: error.message, stack: error.stack } : String(error),
+      })
+      publicFlowMessage = 'Terminy chwilowo się odświeżają. Spróbuj ponownie za moment.'
+    }
+  } else {
+    console.warn('[regulski][termin] booking data mode is invalid', dataMode.summary)
+    publicFlowMessage = 'Terminy chwilowo się odświeżają. Spróbuj ponownie za moment.'
+  }
+
+  const calendar = buildCalendarDays(groupedAvailability)
+  const problemSpecies = problem === 'inne' ? 'inne' : getProblemSpecies(problem)
+  const contactHref = problemSpecies === 'inne' ? '/kontakt#formularz' : `/kontakt?species=${problemSpecies}#formularz`
+  const isUrgentBooking = serviceType === 'kwadrans-na-juz'
+  const sideVisualVariant = 'booking'
+  const nextStepHref = selectedUrlFallback(problem, groupedAvailability, serviceQuery, qaBooking)
+  const modeLabel =
+    serviceType === 'konsultacja-behawioralna-online'
+      ? 'Audio lub video online'
+      : serviceConfig.mode === 'audio'
+        ? 'Online (audio)'
+        : 'Online'
+  const calendarDays: PickerCalendarDay[] = calendar.days.map((day) => ({
+    date: day.date,
+    dayNumber: day.dayNumber,
+    monthLabel: day.monthLabel,
+    isInPrimaryMonth: day.isInPrimaryMonth,
+    label: day.group?.label ?? formatReadableDate(parseDate(day.date)),
+    slots:
+      day.group?.slots.map((slot) => ({
+        id: slot.id,
+        date: day.date,
+        dateLabel: formatReadableDate(parseDate(day.date)),
+        time: slot.bookingTime,
+        href: buildFormHref(problem, slot.id, serviceQuery, qaBooking),
+        serviceType,
+        serviceTitle: serviceConfig.title,
+      })) ?? [],
+  }))
+  const inlineChoicePanel = (
+    <div className="termin-inline-choice-panel" aria-label="Szybka zmiana wyboru">
+      <div>
+        <span>Gatunek</span>
+        <div className="termin-inline-choice-options">
+          <Link href={buildSlotHref('separacja', serviceQuery, qaBooking)} prefetch={false} className={problemSpecies === 'pies' ? 'is-selected' : ''}>
+            <Dog size={18} strokeWidth={1.9} aria-hidden="true" />
+            Pies
+          </Link>
+          <Link href={buildSlotHref('kot-stres', serviceQuery, qaBooking)} prefetch={false} className={problemSpecies === 'kot' ? 'is-selected' : ''}>
+            <Cat size={18} strokeWidth={1.9} aria-hidden="true" />
+            Kot
+          </Link>
+          <Link href={buildSlotHref('inne', serviceQuery, qaBooking)} prefetch={false} className={problemSpecies === 'inne' ? 'is-selected' : ''}>
+            <PawPrint size={18} strokeWidth={1.9} aria-hidden="true" />
+            Nie wiem
+          </Link>
+        </div>
+      </div>
+      <div>
+        <span>Temat konsultacji</span>
+        <Link href="/wybor" prefetch={false} className="termin-inline-topic-select">
+          {getProblemLabel(problem)}
+          <ChevronDown size={18} strokeWidth={1.9} aria-hidden="true" />
+        </Link>
+      </div>
+      <Link href={nextStepHref} prefetch={false} className="termin-inline-next">
+        Przejdź dalej
+        <ChevronRight size={18} strokeWidth={1.9} aria-hidden="true" />
+      </Link>
+    </div>
+  )
+
+  return (
+    <main className="notatnik-page termin-page" data-analytics-disabled={qaBooking ? 'true' : undefined}>
+      <Schema
+        data={getBreadcrumbJsonLd([
+          { name: 'Strona główna', path: '/' },
+          { name: 'Krótki wybór', path: '/wybor' },
+          { name: 'Termin', path: '/termin' },
+        ])}
+      />
+      <NotatnikSideVisuals variant={sideVisualVariant} />
+      <div className="notatnik-shell termin-shell">
+        <EditorialIndexTopbar />
+
+        <section className="termin-calendar-section">
+          <div className="termin-calendar-head">
+            <div className="termin-breadcrumb">
+              <CalendarDays size={17} strokeWidth={1.8} aria-hidden="true" />
+              <span>Umów konsultację</span>
+              <span>/</span>
+              <strong>booking</strong>
+            </div>
+            {isUrgentBooking ? (
+              <h1>Rezerwacja Kwadrans na już</h1>
+            ) : (
+              <h1>Wybierz termin konsultacji</h1>
+            )}
+            <p>
+              {isUrgentBooking
+                ? 'Wybierz najbliższy dostępny termin krótkiej konsultacji. Zajmie Ci to tylko chwilę.'
+                : 'Wybierz dogodną dla Ciebie datę i godzinę krótkiej konsultacji. Zajmie Ci to tylko chwilę.'}
+            </p>
+          </div>
+
+          <div className="termin-step-track" aria-label="Etapy rezerwacji">
+            {terminSteps.map((step, index) => (
+              <span key={step} className={index === 2 ? 'is-active' : ''}>
+                <strong>{index + 1}</strong>
+                {step}
+              </span>
+            ))}
+          </div>
+
+          <div className="termin-calendar-shell">
+            {publicFlowMessage ? (
+              <div className="notatnik-callout termin-calendar-callout">
+                {publicFlowMessage}{' '}
+                <Link href={retryHref} prefetch={false}>
+                  Odśwież terminy
+                </Link>
+                .
+              </div>
+            ) : null}
+
+            {!publicFlowMessage && groupedAvailability.length === 0 ? (
+              <div className="notatnik-callout termin-calendar-callout">
+                {serviceConfig.noAvailabilityMessage}{' '}
+                <Link href={contactHref} prefetch={false}>
+                  {FUNNEL_CTA_LABELS.contact}
+                </Link>
+                .
+              </div>
+            ) : null}
+
+            <TerminCalendarPicker
+              monthLabel={calendar.label}
+              slotCount={calendar.slotCount}
+              days={calendarDays}
+              summary={{
+                serviceTitle: serviceConfig.title,
+                serviceShortTitle: serviceConfig.shortTitle,
+                serviceBadge: getBookingServiceSlotBadge(serviceType),
+                problemLabel: getProblemLabel(problem),
+                species: problemSpecies,
+                modeLabel,
+                priceLabel: formatPricePln(serviceConfig.priceAmount),
+                slotSummary: getBookingServiceSlotSummary(serviceType),
+                contactHref,
+              }}
+              choicePanel={inlineChoicePanel}
+            />
+          </div>
+        </section>
+
+        {!isUrgentBooking ? (
+          <>
+            <section className="notatnik-home-trust-section compact-home-section">
+              <div className="trust-bar trust-bar-compact" aria-label="Najważniejsze informacje">
+                {homepageTrustBadges.map((badge, index) => {
+                  const Icon = trustIcons[index] ?? BadgeCheck
+
+                  return (
+                    <span key={badge.title} className="trust-item">
+                      <Icon size={18} strokeWidth={1.8} aria-hidden="true" />
+                      <strong>{badge.title}</strong>
+                      {badge.helper ? <small>{badge.helper}</small> : null}
+                    </span>
+                  )
+                })}
+              </div>
+            </section>
+
+            <section className="termin-process-section compact-home-section">
+              <h2>Jak to działa?</h2>
+              <div className="termin-process-grid">
+                <article>
+                  <CalendarDays size={30} strokeWidth={1.7} aria-hidden="true" />
+                  <strong>1. Wybierz termin</strong>
+                  <span>Wybierz datę i godzinę, która Ci odpowiada.</span>
+                </article>
+                <article>
+                  <Headphones size={30} strokeWidth={1.7} aria-hidden="true" />
+                  <strong>2. Wejdź w konsultację</strong>
+                  <span>Połączymy się online w formie audio lub wideo.</span>
+                </article>
+                <article>
+                  <Check size={30} strokeWidth={1.7} aria-hidden="true" />
+                  <strong>3. Otrzymaj wskazówki</strong>
+                  <span>Dostajesz konkretne zalecenia i plan pierwszych kroków.</span>
+                </article>
+              </div>
+            </section>
+
+            <section className="termin-bottom-section compact-home-section">
+              <div className="termin-faq-card">
+                <h2>Najczęściej zadawane pytania</h2>
+                {bookingFaqItems.map((item) => (
+                  <details key={item}>
+                    <summary>{item}</summary>
+                    <p>Po rezerwacji dostaniesz krótkie potwierdzenie i dalsze kroki mailowo.</p>
+                  </details>
+                ))}
+                <Link href="/faq" prefetch={false}>Zobacz wszystkie pytania</Link>
+              </div>
+
+              <div className="termin-final-card">
+                <h2>Gotowy na pierwszy krok?</h2>
+                <p>Krótka konsultacja to najprostszy sposób, aby szybko uzyskać jasność i konkretne wskazówki.</p>
+                <Link href={nextStepHref} prefetch={false} className="termin-inline-next">
+                  Zarezerwuj termin
+                  <ChevronRight size={18} strokeWidth={1.9} aria-hidden="true" />
+                </Link>
+                <small>albo wróć do wyboru tematu</small>
+              </div>
+            </section>
+
+            <NotatnikFooter primaryHref="/wybor" primaryLabel="Wróć do wyboru" />
+          </>
+        ) : null}
+      </div>
+    </main>
+  )
+}

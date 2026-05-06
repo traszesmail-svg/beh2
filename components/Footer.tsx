@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { BookOpen, CircleHelp, Mail, ReceiptText, ShieldCheck } from 'lucide-react'
 import { FinalReviewsQuoteCarousel } from '@/components/FinalReviewsQuoteCarousel'
 import { getBuildMarkerSnapshot } from '@/lib/build-marker'
+import { REGULSKI_WEB_LOGO } from '@/lib/regulski-web-assets'
 import { reviews } from '@/lib/reviews.config'
 import { CAPBT_PROFILE_URL, COAPE_ORG_URL, SPECIALIST_NAME } from '@/lib/site'
 
@@ -19,6 +20,7 @@ type FooterProps = {
 
 const FOOTER_NAV_ITEMS = [
   { href: '/cennik', label: 'Cennik', icon: ReceiptText },
+  { href: '/niezbednik', label: 'Niezbędnik', icon: BookOpen },
   { href: '/o-mnie', label: 'O mnie', icon: ShieldCheck },
   { href: '/faq', label: 'FAQ', icon: CircleHelp },
   { href: '/blog', label: 'Blog', icon: BookOpen },
@@ -34,16 +36,16 @@ export function Footer(props: FooterProps) {
       <footer className="site-footer" aria-label="Stopka" data-build-marker={buildMarker.value}>
         <div className="site-footer-grid">
           <div className="site-footer-brand">
-            <Link href="/" prefetch={false} className="site-footer-brand-lockup" aria-label="Wroc na strone glowna Regulski">
+            <Link href="/" prefetch={false} className="site-footer-brand-lockup" aria-label="Wróć na stronę główną Regulski">
               <span className="site-footer-brand-mark">
-                <Image src="/branding/credentials/coapemale.png" alt="" width={132} height={62} />
+                <Image src={REGULSKI_WEB_LOGO} alt="" width={512} height={512} />
               </span>
               <span className="site-footer-brand-copy">
                 <span>Regulski</span>
                 <small>Terapia behawioralna</small>
               </span>
             </Link>
-            <p>Spokojna pomoc w zrozumieniu problemow zachowania psow i kotow.</p>
+            <p>Spokojna pomoc w zrozumieniu problemów zachowania psów i kotów.</p>
           </div>
 
           <div className="site-footer-meta">
@@ -70,10 +72,10 @@ export function Footer(props: FooterProps) {
         <div className="site-footer-bottom">
           <div className="site-footer-credit-block">
             <div className="site-footer-credentials" aria-label="Akredytacje i organizacje">
-              <Link href={COAPE_ORG_URL} target="_blank" rel="noopener noreferrer" aria-label="Otworz strone COAPE">
+              <Link href={COAPE_ORG_URL} target="_blank" rel="noopener noreferrer" aria-label="Otwórz stronę COAPE">
                 <Image src="/branding/credentials/coape-logo.jpg" alt="COAPE" width={220} height={72} />
               </Link>
-              <Link href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer" aria-label="Otworz profil CAPBT">
+              <Link href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer" aria-label="Otwórz profil CAPBT">
                 <Image src="/branding/credentials/capbt-logo.png" alt="CAPBT" width={162} height={72} />
               </Link>
             </div>
@@ -84,7 +86,7 @@ export function Footer(props: FooterProps) {
 
           <div className="site-footer-legal">
             <Link href="/polityka-prywatnosci" prefetch={false}>
-              Polityka prywatnosci
+              Polityka prywatności
             </Link>
             <span>&bull;</span>
             <Link href="/regulamin" prefetch={false}>
@@ -92,7 +94,7 @@ export function Footer(props: FooterProps) {
             </Link>
             <span>&bull;</span>
             <Link href="/regulamin-pelna-konsultacja" prefetch={false}>
-              Regulamin Pelnej konsultacji
+              Regulamin Pełnej konsultacji
             </Link>
           </div>
         </div>

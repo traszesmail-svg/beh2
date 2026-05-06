@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import type { Review } from '@/lib/reviews.config'
 
 type FinalReviewsQuoteCarouselProps = {
@@ -31,7 +31,7 @@ export function FinalReviewsQuoteCarousel({ reviews, intervalMs = 4000 }: FinalR
   }
 
   return (
-    <section className="notatnik-final notatnik-final-reviews" aria-label="Opinie klientow">
+    <section className="notatnik-final notatnik-final-reviews" aria-label="Opinie klientów">
       <p className="notatnik-final-review-kicker">Opinie po konsultacji</p>
       <blockquote key={review.id} className="notatnik-final-review-quote">
         <p>&ldquo;{review.text}&rdquo;</p>

@@ -155,9 +155,9 @@ export const OFFERS: Offer[] = [
     priceAmount: 470,
     forWho: 'Dla spraw zlozonych, utrwalonych albo wielowatkowych, gdy od razu potrzebujesz szerokiego wejscia w temat.',
     whenToChoose: 'Gdy problem trwa dluzej, wraca albo obejmuje kilka obszarow naraz i potrzebuje pelniejszej analizy.',
-    nextStep: 'Rezerwujesz 60-minutowy termin online. Po rozmowie dostajesz diagnoze, aktualizowany plan pracy i zalecenia dzienne pod nadzorem behawiorysty przez 7 dni.',
+    nextStep: 'Rezerwujesz pelna konsultacje online. Po rozmowie dostajesz diagnoze, aktualizowany plan pracy i zalecenia dzienne pod nadzorem behawiorysty przez 7 dni.',
     cardSummary: 'Diagnoza, plan pracy i 7 dni codziennych zalecen pod nadzorem.',
-    heroSummary: '60 minut rozmowy online z diagnoza, indywidualnym planem i 7 dniami codziennych zalecen pod nadzorem behawiorysty (8h/dzien przez WhatsApp).',
+    heroSummary: 'Rozmowa online z diagnoza, indywidualnym planem i 7 dniami codziennych zalecen pod nadzorem behawiorysty (8h/dzien przez WhatsApp).',
     descriptions: [
       'To format dla sytuacji, w ktorych szybki start bylby zbyt plytki: problem wraca, narasta albo dotyka kilku rzeczy naraz.',
       'Po rozmowie dostajesz diagnoze sytuacji, indywidualny plan pracy i codzienne zalecenia przez 7 dni pod nadzorem behawiorysty dostepnego na WhatsApp 8h dziennie.',

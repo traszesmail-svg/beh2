@@ -1,0 +1,28 @@
+{
+  "source_file": "a_clean_flat_design_website_homepage_mockup_with.png",
+  "source_size": [
+    1402,
+    1122
+  ],
+  "left_dog_crop_box_xyxy": [
+    0,
+    0,
+    237,
+    1122
+  ],
+  "right_cat_crop_box_xyxy": [
+    1131,
+    0,
+    1402,
+    1122
+  ],
+  "left_dog_output_size": [
+    237,
+    1122
+  ],
+  "right_cat_output_size": [
+    271,
+    1122
+  ],
+  "note": "PNG files are lossless 1:1 crops from the supplied mockup. WebP files are implementation-optimized copies."
+}
