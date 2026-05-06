@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Cat, Dog } from 'lucide-react'
 import { Footer } from '@/components/Footer'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { INSTAGRAM_PROFILE_URL } from '@/lib/site'
@@ -9,12 +8,9 @@ import { REGULSKI_WEB_LOGO } from '@/lib/regulski-web-assets'
 export type NotatnikNavItem = {
   href: string
   label: string
-  icon?: 'dog' | 'cat'
 }
 
 export const PUBLIC_SITE_NAV_ITEMS: readonly NotatnikNavItem[] = [
-  { href: '/psy', label: 'Pies', icon: 'dog' },
-  { href: '/koty', label: 'Kot', icon: 'cat' },
   { href: '/o-mnie', label: 'O mnie' },
   { href: '/cennik', label: 'Cennik' },
   { href: '/niezbednik', label: 'Niezbędnik' },
@@ -31,8 +27,8 @@ export const PUBLIC_BOOKING_FLOW_NAV_ITEMS: readonly NotatnikNavItem[] = [
 type NotatnikTopbarProps = {
   tag: string
   navItems: readonly NotatnikNavItem[]
-  ctaHref: string
-  ctaLabel: string
+  ctaHref?: string
+  ctaLabel?: string
   ctaVariant?: 'solid' | 'ghost' | 'accent'
   showUtilityLinks?: boolean
 }
@@ -72,18 +68,6 @@ type NotatnikPageShellProps = {
 
 export type NotatnikSideVisualVariant = 'home' | 'mixed' | 'dog' | 'cat' | 'materials' | 'blog' | 'about' | 'pricing' | 'contact' | 'booking'
 
-function getCtaClassName(variant: NotatnikTopbarProps['ctaVariant']) {
-  if (variant === 'ghost') {
-    return 'notatnik-btn notatnik-btn-ghost'
-  }
-
-  if (variant === 'accent') {
-    return 'notatnik-btn notatnik-btn-accent'
-  }
-
-  return 'notatnik-btn'
-}
-
 function NotatnikButtonArrow() {
   return (
     <span className="notatnik-btn-arrow" aria-hidden="true">
@@ -116,13 +100,7 @@ function NotatnikBrandLockup() {
   )
 }
 
-function NotatnikNavIcon({ icon }: { icon?: NotatnikNavItem['icon'] }) {
-  if (icon === 'dog') return <Dog size={16} strokeWidth={1.9} aria-hidden="true" />
-  if (icon === 'cat') return <Cat size={16} strokeWidth={1.9} aria-hidden="true" />
-  return null
-}
-
-export function NotatnikTopbar({ navItems, ctaHref, ctaLabel, ctaVariant = 'solid', showUtilityLinks = true }: NotatnikTopbarProps) {
+export function NotatnikTopbar({ navItems, showUtilityLinks = true }: NotatnikTopbarProps) {
   const hasNavItems = navItems.length > 0
 
   return (
@@ -133,7 +111,6 @@ export function NotatnikTopbar({ navItems, ctaHref, ctaLabel, ctaVariant = 'soli
         <nav className="notatnik-nav" aria-label="Główne sekcje">
           {navItems.map((item) => (
             <Link key={item.href} href={item.href} prefetch={false}>
-              <NotatnikNavIcon icon={item.icon} />
               {item.label}
             </Link>
           ))}
@@ -141,10 +118,6 @@ export function NotatnikTopbar({ navItems, ctaHref, ctaLabel, ctaVariant = 'soli
       ) : null}
 
       <div className="notatnik-topbar-actions">
-        <Link href={ctaHref} prefetch={false} className={getCtaClassName(ctaVariant)}>
-          <span>{ctaLabel}</span>
-          <NotatnikButtonArrow />
-        </Link>
         {showUtilityLinks ? <ThemeToggle /> : null}
         {showUtilityLinks ? (
           <a
@@ -172,15 +145,10 @@ export function NotatnikTopbar({ navItems, ctaHref, ctaLabel, ctaVariant = 'soli
             <nav aria-label="Menu mobilne">
               {navItems.map((item) => (
                 <Link key={item.href} href={item.href} prefetch={false}>
-                  <NotatnikNavIcon icon={item.icon} />
                   {item.label}
                 </Link>
               ))}
             </nav>
-            <Link href={ctaHref} prefetch={false} className={getCtaClassName(ctaVariant)}>
-              <span>{ctaLabel}</span>
-              <NotatnikButtonArrow />
-            </Link>
           </div>
         </details>
       ) : null}

@@ -1,11 +1,10 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
 import { CalendarCheck, Headphones, MessageSquareText, Video } from 'lucide-react'
 import { EditorialIndexTopbar } from '@/components/EditorialIndexTopbar'
 import { FaqAccordion } from '@/components/FaqAccordion'
 import { HomepageServiceSelector } from '@/components/HomepageServiceSelector'
 import { Reveal } from '@/components/Reveal'
-import { NotatnikFooter } from '@/components/NotatnikA'
+import { NotatnikFooter, NotatnikSideVisuals } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
 import { homepageProcessSteps } from '@/lib/homepage-data'
 import { getBreadcrumbJsonLd, getFaqPageJsonLd, getServiceJsonLd } from '@/lib/schema'
@@ -64,26 +63,7 @@ export default function HomePage() {
   return (
     <main className="notatnik-page homepage-shell">
       <Schema data={structuredData} />
-      <div className="side-bg side-bg-left home-side-bg-left" aria-hidden="true">
-        <Image
-          src="/images/homepage/home-bg-dog-1to1.png"
-          alt=""
-          fill
-          priority
-          sizes="(max-width: 980px) 0px, (max-width: 1280px) 210px, 320px"
-          aria-hidden="true"
-        />
-      </div>
-      <div className="side-bg side-bg-right home-side-bg-right" aria-hidden="true">
-        <Image
-          src="/images/homepage/home-bg-cat-1to1.png"
-          alt=""
-          fill
-          priority
-          sizes="(max-width: 980px) 0px, (max-width: 1280px) 220px, 340px"
-          aria-hidden="true"
-        />
-      </div>
+      <NotatnikSideVisuals variant="contact" />
       <div className="notatnik-shell homepage-main">
         <EditorialIndexTopbar />
 

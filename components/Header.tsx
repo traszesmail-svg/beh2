@@ -1,12 +1,8 @@
 'use client'
 
-import React from 'react'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { getServiceAnalyticsParams } from '@/lib/analytics-schema'
-import { buildBookHref } from '@/lib/booking-routing'
-import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { INSTAGRAM_PROFILE_URL, SITE_HEADER_BRAND, SITE_HEADER_SUBTITLE, SITE_NAME } from '@/lib/site'
 
 // Legacy header kept only for older marketing layouts and special/internal flows.
@@ -45,10 +41,8 @@ const opinionNavItems: NavItem[] = [
 ]
 
 const contactNavItems: NavItem[] = [
-  { href: '/kontakt#kontakt', label: 'Kontakt', sectionId: 'kontakt' },
-  { href: '/kontakt#jak-umowic-konsultacje', label: 'Jak umówić konsultację', sectionId: 'jak-umowic-konsultacje' },
+  { href: '/kontakt#formularz', label: 'Formularz', sectionId: 'formularz' },
   { href: '/kontakt#faq', label: 'FAQ', sectionId: 'faq' },
-  { href: '/kontakt#rezerwacja', label: 'Rezerwacja', sectionId: 'rezerwacja' },
 ]
 
 const materialNavItems: NavItem[] = [
@@ -60,8 +54,6 @@ const materialNavItems: NavItem[] = [
 
 const faqNavItems: NavItem[] = [
   { href: '/konsultacja-behawioralna-online#faq', label: 'Konsultacja' },
-  { href: '/psy#faq', label: 'Psy' },
-  { href: '/koty#faq', label: 'Koty' },
   { href: '/o-mnie#faq', label: 'Podejście' },
   { href: '/faq#kontakt', label: 'Kontakt', sectionId: 'kontakt' },
 ]
@@ -76,46 +68,18 @@ const aboutNavItems: NavItem[] = [
 
 const blogNavItems: NavItem[] = [
   { href: '/blog', label: 'Blog' },
-  { href: '/psy', label: 'Psy' },
-  { href: '/koty', label: 'Koty' },
   { href: '/niezbednik', label: 'Niezbędnik' },
 ]
 
-const HEADER_PRIMARY_CTA_LABEL = 'Zarezerwuj Kwadrans'
-
 function getNavItems(pathname: string): NavItem[] {
-  if (pathname === '/blog' || pathname.startsWith('/blog/')) {
-    return blogNavItems
-  }
-
-  if (pathname === '/psy') {
-    return dogNavItems
-  }
-
-  if (pathname === '/koty') {
-    return catNavItems
-  }
-
-  if (pathname === '/opinie') {
-    return opinionNavItems
-  }
-
-  if (pathname === '/o-mnie') {
-    return aboutNavItems
-  }
-
-  if (pathname === '/kontakt') {
-    return contactNavItems
-  }
-
-  if (pathname === '/materialy' || pathname === '/przybornik' || pathname === '/niezbednik') {
-    return materialNavItems
-  }
-
-  if (pathname === '/faq') {
-    return faqNavItems
-  }
-
+  if (pathname === '/blog' || pathname.startsWith('/blog/')) return blogNavItems
+  if (pathname === '/psy') return dogNavItems
+  if (pathname === '/koty') return catNavItems
+  if (pathname === '/opinie') return opinionNavItems
+  if (pathname === '/o-mnie') return aboutNavItems
+  if (pathname === '/kontakt') return contactNavItems
+  if (pathname === '/materialy' || pathname === '/przybornik' || pathname === '/niezbednik') return materialNavItems
+  if (pathname === '/faq') return faqNavItems
   return homeNavItems
 }
 
@@ -150,10 +114,6 @@ function InstagramGlyph() {
 export function Header() {
   const pathname = usePathname() ?? '/'
   const isHome = pathname === '/'
-  const species = pathname === '/psy' ? 'pies' : pathname === '/koty' ? 'kot' : null
-  const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min', false, species)
-  const consultationHref = buildBookHref(null, 'konsultacja-behawioralna-online', false, species)
-  const messageHref = species ? `/kontakt?species=${species}#formularz` : '/kontakt#formularz'
   const navItems = getNavItems(pathname)
   const [menuOpen, setMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
@@ -186,11 +146,6 @@ export function Header() {
     const observer = new IntersectionObserver(
       (entries) => {
         const visibleEntries = entries.filter((entry) => entry.isIntersecting)
-
-        if (visibleEntries.length === 0) {
-          return
-        }
-
         const topEntry = visibleEntries.sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
         const sectionId = topEntry?.target instanceof HTMLElement ? topEntry.target.id : null
 
@@ -227,8 +182,6 @@ export function Header() {
   }, [])
 
   const activeHref = activeSection ? buildSectionHref(pathname, activeSection) : pathname
-  const quickService = getServiceAnalyticsParams('szybka-konsultacja-15-min')
-  const fullService = getServiceAnalyticsParams('konsultacja-behawioralna-online')
 
   function getLinkState(item: NavItem) {
     if ((pathname === '/blog' || pathname.startsWith('/blog/')) && item.href === '/blog') {
@@ -250,7 +203,6 @@ export function Header() {
   const headerMainClassName = `${isHome ? 'premium-home-header-inner header-main' : 'header-main'}${isScrolled ? ' is-scrolled' : ''}`
   const brandClassName = isHome ? 'premium-home-brand header-branding' : 'header-branding'
   const navClassName = isHome ? 'premium-home-nav header-nav' : 'header-nav'
-  const ctaClassName = isHome ? 'button button-primary header-cta premium-home-header-cta' : 'button button-primary header-cta'
 
   return (
     <header className={headerClassName}>
@@ -288,24 +240,10 @@ export function Header() {
             target="_blank"
             rel="noopener noreferrer"
             className="header-social-link"
-            aria-label="Otworz Instagram"
+            aria-label="Otwórz Instagram"
           >
             <InstagramGlyph />
           </a>
-          <Link
-            href={audioHref}
-            prefetch={false}
-            className={ctaClassName}
-            data-analytics-event="funnel_entry_15_min"
-            data-analytics-location="header"
-            data-analytics-cta-label={FUNNEL_CTA_LABELS.primary}
-            data-analytics-service="szybka-konsultacja-15-min"
-            data-analytics-service-name={String(quickService.service_name)}
-            data-analytics-service-duration={String(quickService.service_duration)}
-            data-analytics-service-price={String(quickService.service_price)}
-          >
-            {HEADER_PRIMARY_CTA_LABEL}
-          </Link>
 
           <button
             type="button"
@@ -344,48 +282,6 @@ export function Header() {
               )
             })}
           </nav>
-
-          <div className="header-mobile-actions">
-            <Link
-              href={audioHref}
-              prefetch={false}
-              className="button button-primary big-button header-mobile-cta"
-              data-analytics-event="funnel_entry_15_min"
-              data-analytics-location="header-mobile-audio"
-              data-analytics-cta-label={FUNNEL_CTA_LABELS.primary}
-              data-analytics-service="szybka-konsultacja-15-min"
-              data-analytics-service-name={String(quickService.service_name)}
-              data-analytics-service-duration={String(quickService.service_duration)}
-              data-analytics-service-price={String(quickService.service_price)}
-              onClick={handleNavClick}
-            >
-              {HEADER_PRIMARY_CTA_LABEL}
-            </Link>
-            <div className="header-mobile-soft-card">
-              <Link
-                href={consultationHref}
-                prefetch={false}
-                className="header-mobile-soft-link"
-                data-analytics-event="funnel_entry_60_min"
-                data-analytics-location="header-mobile-consultation"
-                data-analytics-cta-label={FUNNEL_CTA_LABELS.consultation}
-                data-analytics-service="konsultacja-behawioralna-online"
-                data-analytics-service-name={String(fullService.service_name)}
-                data-analytics-service-duration={String(fullService.service_duration)}
-                data-analytics-service-price={String(fullService.service_price)}
-                onClick={handleNavClick}
-              >
-                {FUNNEL_CTA_LABELS.consultation}
-              </Link>
-              <span className="header-mobile-soft-note">
-                Dla szerszych tematów albo{' '}
-                <Link href={messageHref} prefetch={false} onClick={handleNavClick}>
-                  {FUNNEL_CTA_LABELS.contact}
-                </Link>
-                .
-              </span>
-            </div>
-          </div>
         </div>
       ) : null}
     </header>

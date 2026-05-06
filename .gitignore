@@ -25,6 +25,7 @@ supabase/.temp/
 qa-artifacts/
 qa-screenshots/
 qa-screenshots-*/
+blog-image-review/
 qa-*.js
 qa-*.png
 book-debug-*.png

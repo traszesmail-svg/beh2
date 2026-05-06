@@ -37,7 +37,7 @@ if (!globalRateLimitStore.__behawior15ContactRateLimitStore) {
 type ValidatedContactLeadPayload = {
   name: string
   email: string
-  species: FunnelSpecies
+  species: ContactLeadSpecies
   topicId: ProblemType
   topic: string
   message: string
@@ -51,6 +51,8 @@ type ValidatedContactLeadPayload = {
   consentProcessing: boolean
   consentPolicy: boolean
 }
+
+type ContactLeadSpecies = FunnelSpecies | 'nie-wiem'
 
 function getUnavailableMessage(): string {
   const contact = getContactDetails()
@@ -94,17 +96,25 @@ function pickContactCandidate(body: Record<string, unknown>): string | null {
   return normalizeSingleLine(body.email, 160) ?? normalizeSingleLine(body.contact, 160) ?? normalizeSingleLine(body.phone, 160)
 }
 
-function normalizeSpecies(value: unknown): FunnelSpecies | null {
+function normalizeSpecies(value: unknown): ContactLeadSpecies | null {
   const species = normalizeSingleLine(value, 32)?.toLowerCase() ?? null
 
   if (species === 'pies' || species === 'kot') {
     return species
   }
 
+  if (species === 'nie-wiem' || species === 'nie wiem' || species === 'unknown') {
+    return 'nie-wiem'
+  }
+
   return null
 }
 
-function getSpeciesLabel(species: FunnelSpecies) {
+function getSpeciesLabel(species: ContactLeadSpecies) {
+  if (species === 'nie-wiem') {
+    return 'Nie wiem'
+  }
+
   return species === 'kot' ? 'Kot' : 'Pies'
 }
 
@@ -154,9 +164,10 @@ function validatePayload(body: Record<string, unknown>): { payload?: ValidatedCo
   const contact = pickContactCandidate(body)
   const species = normalizeSpecies(body.species)
   const topicId = normalizeSingleLine(body.topicId, 80)
-  const topicOption = species ? getPublicProblemOptionById(species, topicId) : null
+  const knownSpecies = species === 'pies' || species === 'kot' ? species : null
+  const topicOption = knownSpecies ? getPublicProblemOptionById(knownSpecies, topicId) : null
   const legacyTopic = normalizeSingleLine(body.topic, 120)
-  const topic = topicOption?.title ?? legacyTopic ?? null
+  const topic = species === 'nie-wiem' ? legacyTopic : topicOption?.title ?? legacyTopic ?? null
   const message = normalizeLongText(body.message, 1200)
   const bookingId = normalizeSingleLine(body.bookingId, 120) ?? null
   const website = normalizeSingleLine(body.website, 120) ?? ''
@@ -168,8 +179,12 @@ function validatePayload(body: Record<string, unknown>): { payload?: ValidatedCo
   const contextLabel =
     species && topic ? `${getSpeciesLabel(species)} • ${topic}` : topic ? `Kontakt • ${topic}` : null
 
-  if (!name || !contact || !species || !topic || !topicOption || !message || !contextLabel) {
+  if (!name || !contact || !species || !topic || !message || !contextLabel) {
     return { error: 'Uzupelnij imie, adres e-mail, gatunek, temat i krotki opis problemu.' }
+  }
+
+  if (species !== 'nie-wiem' && !topicOption) {
+    return { error: 'Wybierz temat.' }
   }
 
   if (message.length < 20) {
@@ -184,12 +199,16 @@ function validatePayload(body: Record<string, unknown>): { payload?: ValidatedCo
     return { error: 'Przy Kwadransie na juz podaj preferowana date i godzine.' }
   }
 
+  if (isUrgentNowIntent(intent) && species === 'nie-wiem') {
+    return { error: 'Przy prosbie o pilny termin wybierz, czy sprawa dotyczy psa czy kota.' }
+  }
+
   return {
     payload: {
       name,
       email: contact,
       species,
-      topicId: topicOption.id,
+      topicId: topicOption?.id ?? 'inne',
       topic,
       message,
       contextLabel,
@@ -239,7 +258,7 @@ export async function POST(request: Request) {
       )
     }
 
-    if (isUrgentNowIntent(payload.intent)) {
+    if (isUrgentNowIntent(payload.intent) && payload.species !== 'nie-wiem') {
       await createUrgentNowRequest({
         name: payload.name,
         email: payload.email,

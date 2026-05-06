@@ -1,13 +1,13 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
-import { BadgeCheck, Monitor, PawPrint, ShieldCheck, Star, Stethoscope } from 'lucide-react'
+import Link from 'next/link'
+import { BadgeCheck, BookOpen, CalendarCheck, Globe2, HeartHandshake, Mail } from 'lucide-react'
 import { HomepageServiceSelector } from '@/components/HomepageServiceSelector'
-import { Reveal } from '@/components/Reveal'
-import { NotatnikFooter, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
+import { NotatnikFooter, NotatnikSideVisuals, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
-import { homepageTrustBadges, type HomepageSelectorAnimal } from '@/lib/homepage-data'
+import { type HomepageSelectorAnimal } from '@/lib/homepage-data'
 import { getBreadcrumbJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
+import { CAPBT_PROFILE_URL, INSTAGRAM_PROFILE_URL, getPublicContactDetails } from '@/lib/site'
 
 export const metadata: Metadata = buildMarketingMetadata({
   title: 'Krotki wybor pierwszego kroku',
@@ -15,23 +15,21 @@ export const metadata: Metadata = buildMarketingMetadata({
   description: 'Krotki wybor dla opiekunow psow i kotow: wybierz zwierze, temat i zakres sprawy.',
 })
 
-const trustIcons = [BadgeCheck, Stethoscope, PawPrint, ShieldCheck, Monitor] as const
-
-const opinionCards = [
+const quickInfoCards = [
   {
-    species: 'Pies',
-    quote: 'Po 15 minutach wiedzialam, co robic ze spacerami. W koncu mamy spokoj.',
-    note: 'opiekunka Mii',
+    icon: BadgeCheck,
+    title: 'Dyplomant COAPE',
+    copy: 'Publiczny profil CAPBT / COAPE.',
   },
   {
-    species: 'Kot',
-    quote: 'Problem z kuweta wreszcie mial konkretna przyczyne. Duza ulga dla nas i kota.',
-    note: 'opiekunka Luny',
+    icon: BookOpen,
+    title: 'Psy i koty',
+    copy: 'Sprawy behawioralne, start i dalsze kroki.',
   },
   {
-    species: 'Pies',
-    quote: 'Kwadrans wystarczyl, zeby ustalic pierwszy krok i odzyskac spokoj.',
-    note: 'opiekun Bruno',
+    icon: HeartHandshake,
+    title: 'Bez oceniania',
+    copy: 'Praca z sytuacją, nie z poczuciem winy opiekuna.',
   },
 ] as const
 
@@ -45,6 +43,7 @@ function getInitialAnimal(value: string | string[] | undefined): HomepageSelecto
 
 export default function ChoicePage({ searchParams }: { searchParams?: { animal?: string | string[] } }) {
   const initialAnimal = getInitialAnimal(searchParams?.animal)
+  const publicContact = getPublicContactDetails()
 
   return (
     <main className="notatnik-page homepage-shell">
@@ -54,26 +53,7 @@ export default function ChoicePage({ searchParams }: { searchParams?: { animal?:
           { name: 'Krotki wybor', path: '/wybor' },
         ])}
       />
-      <div className="side-bg side-bg-left home-side-bg-left" aria-hidden="true">
-        <Image
-          src="/images/homepage/home-bg-dog-1to1.png"
-          alt=""
-          fill
-          priority
-          sizes="(max-width: 980px) 0px, (max-width: 1280px) 210px, 320px"
-          aria-hidden="true"
-        />
-      </div>
-      <div className="side-bg side-bg-right home-side-bg-right" aria-hidden="true">
-        <Image
-          src="/images/homepage/home-bg-cat-1to1.png"
-          alt=""
-          fill
-          priority
-          sizes="(max-width: 980px) 0px, (max-width: 1280px) 220px, 340px"
-          aria-hidden="true"
-        />
-      </div>
+      <NotatnikSideVisuals variant="contact" />
 
       <div className="notatnik-shell homepage-main">
         <NotatnikTopbar
@@ -92,43 +72,65 @@ export default function ChoicePage({ searchParams }: { searchParams?: { animal?:
           <HomepageServiceSelector mode="quiz" initialAnimal={initialAnimal} />
         </section>
 
-        <Reveal as="section" className="notatnik-home-trust-section compact-home-section">
-          <div className="trust-bar trust-bar-compact" aria-label="Najwazniejsze informacje">
-            {homepageTrustBadges.map((badge, index) => {
-              const Icon = trustIcons[index] ?? BadgeCheck
+        <section className="choice-contact-section">
+          <article className="choice-info-card">
+            <h2>Szybkie informacje</h2>
+            <div className="choice-info-list">
+              {quickInfoCards.map((card) => {
+                const Icon = card.icon
 
-              return (
-                <span key={badge.title} className="trust-item">
-                  <Icon size={18} strokeWidth={1.8} aria-hidden="true" />
-                  <strong>{badge.title}</strong>
-                  {badge.helper ? <small>{badge.helper}</small> : null}
+                return (
+                  <div key={card.title} className="choice-info-row">
+                    <Icon size={24} strokeWidth={1.7} aria-hidden="true" />
+                    <span>
+                      <strong>{card.title}</strong>
+                      <small>{card.copy}</small>
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
+            <Link href="/konsultacja-behawioralna-online" prefetch={false} className="choice-secondary-link">
+              Jak wygląda pełna konsultacja
+            </Link>
+          </article>
+
+          <article className="choice-info-card">
+            <h2>Kontakt bez formularza</h2>
+            <div className="choice-info-list">
+              <a href={`mailto:${publicContact.email}`} className="choice-info-row">
+                <Mail size={22} strokeWidth={1.7} aria-hidden="true" />
+                <span>
+                  <strong>E-mail</strong>
+                  <small>{publicContact.email}</small>
                 </span>
-              )
-            })}
-          </div>
-        </Reveal>
+              </a>
+              <div className="choice-info-row">
+                <CalendarCheck size={22} strokeWidth={1.7} aria-hidden="true" />
+                <span>
+                  <strong>Odpowiedź</strong>
+                  <small>1-2 dni robocze</small>
+                </span>
+              </div>
+              <a href={INSTAGRAM_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="choice-info-row">
+                <Globe2 size={22} strokeWidth={1.7} aria-hidden="true" />
+                <span>
+                  <strong>Instagram</strong>
+                  <small>@regulskibehawiorysta</small>
+                </span>
+              </a>
+              <a href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="choice-info-row">
+                <Globe2 size={22} strokeWidth={1.7} aria-hidden="true" />
+                <span>
+                  <strong>Profil COAPE</strong>
+                  <small>behawioryscicoape.pl/Regulski</small>
+                </span>
+              </a>
+            </div>
+          </article>
+        </section>
 
-        <Reveal as="section" className="compact-home-section">
-          <div className="home-section-title">
-            <h2>Co mowia opiekunowie?</h2>
-          </div>
-          <div className="notatnik-home-opinion-grid notatnik-home-opinion-grid-short top-gap-small">
-            {opinionCards.map((opinion) => (
-              <article key={`${opinion.species}-${opinion.note}`} className="notatnik-home-opinion-card">
-                <div className="opinion-stars" aria-label="5 gwiazdek">
-                  {Array.from({ length: 5 }).map((_, index) => (
-                    <Star key={index} size={15} fill="currentColor" strokeWidth={1.6} aria-hidden="true" />
-                  ))}
-                </div>
-                <div className="notatnik-mono">{opinion.species}</div>
-                <blockquote>{opinion.quote}</blockquote>
-                <span>{opinion.note}</span>
-              </article>
-            ))}
-          </div>
-        </Reveal>
-
-        <NotatnikFooter primaryHref="/wybor" primaryLabel="Wroc do wyboru" />
+        <NotatnikFooter showReviews={false} />
       </div>
     </main>
   )

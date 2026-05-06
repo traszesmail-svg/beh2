@@ -6,6 +6,7 @@ node_modules
 .codex-deploy-*
 qa-screenshots/**
 qa-screenshots-*/**
+blog-image-review/**
 pedeefy/**
 tmp-pdf-cover-previews/**
 tmp-pdf-cover-puppeteer.png

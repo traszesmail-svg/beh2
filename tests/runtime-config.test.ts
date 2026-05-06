@@ -254,7 +254,9 @@ test('copy governance keeps Kwadrans as the primary service name and format as s
   assert.match(bookingServiceInfoCardSource, /const formatLabel = service\.mode === 'audio' \? COPY_SERVICE_NAMES\.primaryDescriptor : 'rozmowa online'/)
   assert.match(bookingServiceInfoCardSource, /COPY_SERVICE_NAMES\.primaryShort/)
 
-  assert.match(contactSource, /<h3>Kwadrans z behawiorysta<\/h3>/)
+  assert.match(contactSource, /Napisz, zanim zarezerwujesz/)
+  assert.doesNotMatch(contactSource, /<h3>Kwadrans z behawiorysta<\/h3>/)
+  assert.doesNotMatch(contactSource, /contact-booking-panel/)
   assert.match(bookSource, /nazwa uslugi: Kwadrans z behawiorysta/)
   assert.match(bookSource, /format: 15 min audio bez kamery/)
 })
@@ -891,7 +893,7 @@ test('go-live checks expose external blockers for Resend testing mode and PayU s
   withEnv(
     {
       RESEND_API_KEY: 're_test_key',
-      RESEND_FROM_EMAIL: 'Behawior 15 <onboarding@resend.dev>',
+      RESEND_FROM_EMAIL: 'RegulskiTerapiaBehawioralna <onboarding@resend.dev>',
       BEHAVIOR15_CONTACT_EMAIL: 'kontakt@regulskibehawiorysta.pl',
       PAYU_MODE: 'auto',
       PAYU_ENVIRONMENT: 'sandbox',
@@ -923,7 +925,7 @@ test('go-live checks mark verified Resend and production PayU as ready', () => {
   withEnv(
     {
       RESEND_API_KEY: 're_live_key',
-      RESEND_FROM_EMAIL: 'Regulski <kontakt@regulskibehawiorysta.pl>',
+      RESEND_FROM_EMAIL: 'RegulskiTerapiaBehawioralna <kontakt@regulskibehawiorysta.pl>',
       BEHAVIOR15_CONTACT_EMAIL: 'kontakt@regulskibehawiorysta.pl',
       PAYU_MODE: 'auto',
       PAYU_ENVIRONMENT: 'production',
@@ -1020,7 +1022,7 @@ test('deploy readiness checks fail on local fallback and localhost base url', ()
       NEXT_PUBLIC_SUPABASE_URL: null,
       SUPABASE_SERVICE_ROLE_KEY: null,
       RESEND_API_KEY: 're_test_key',
-      RESEND_FROM_EMAIL: 'Behawior 15 <onboarding@resend.dev>',
+      RESEND_FROM_EMAIL: 'RegulskiTerapiaBehawioralna <onboarding@resend.dev>',
       BEHAVIOR15_CONTACT_EMAIL: 'kontakt@regulskibehawiorysta.pl',
       PAYU_ENVIRONMENT: 'sandbox',
       PAYU_CLIENT_ID: 'sandbox-client',
@@ -1050,7 +1052,7 @@ test('deploy readiness checks pass for live-like runtime, url, Resend and PayU',
       SUPABASE_SERVICE_ROLE_KEY: 'sb_secret_live_example',
       NEXT_PUBLIC_APP_URL: SITE_PRODUCTION_URL,
       RESEND_API_KEY: 're_live_key',
-      RESEND_FROM_EMAIL: 'Regulski <kontakt@regulskibehawiorysta.pl>',
+      RESEND_FROM_EMAIL: 'RegulskiTerapiaBehawioralna <kontakt@regulskibehawiorysta.pl>',
       BEHAVIOR15_CONTACT_EMAIL: 'kontakt@regulskibehawiorysta.pl',
       PAYU_ENVIRONMENT: 'production',
       PAYU_CLIENT_ID: 'live-client',

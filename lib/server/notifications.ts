@@ -11,7 +11,8 @@ import { buildGoogleCalendarUrl } from '@/lib/server/google-calendar'
 import { getPrepGuideUrl } from '@/lib/server/prep-guide'
 import { BookingRecord } from '@/lib/types'
 
-const DEFAULT_RESEND_FROM_EMAIL = 'Behawior 15 <onboarding@resend.dev>'
+const EMAIL_BRAND_NAME = 'RegulskiTerapiaBehawioralna'
+const DEFAULT_RESEND_FROM_EMAIL = `${EMAIL_BRAND_NAME} <kontakt@regulskibehawiorysta.pl>`
 const DEFAULT_MAIL_PROVIDER = 'resend'
 
 type SendEmailPayload = {
@@ -430,14 +431,14 @@ function renderEmailShell(title: string, intro: string, content: string, outro: 
     <div style="background:#f6f3ee;padding:24px 12px;font-family:Arial,sans-serif;color:#1f1a17;">
       <div style="max-width:640px;margin:0 auto;background:#ffffff;border:1px solid #e9dfcf;border-radius:18px;overflow:hidden;box-shadow:0 12px 40px rgba(31,26,23,0.06);">
         <div style="background:linear-gradient(135deg,#1f1a17,#6f5a48);padding:24px 28px;color:#ffffff;">
-          <div style="font-size:12px;letter-spacing:0.08em;text-transform:uppercase;opacity:0.82;">Behawior 15</div>
+          <div style="font-size:12px;letter-spacing:0.08em;text-transform:uppercase;opacity:0.82;">${EMAIL_BRAND_NAME}</div>
           <h1 style="margin:10px 0 0;font-size:28px;line-height:1.2;">${escapeHtml(title)}</h1>
         </div>
         <div style="padding:28px;line-height:1.65;font-size:15px;">
           <p style="margin-top:0;">${escapeHtml(intro)}</p>
           ${content}
           <p>${escapeHtml(outro)}</p>
-          <p style="margin-bottom:0;color:#6b625b;font-size:13px;">Wiadomość wysłana automatycznie przez Behawior 15.</p>
+          <p style="margin-bottom:0;color:#6b625b;font-size:13px;">Wiadomość wysłana automatycznie przez ${EMAIL_BRAND_NAME}.</p>
         </div>
       </div>
     </div>
@@ -681,7 +682,7 @@ export async function sendBookingReservationCreatedEmail(
   accessToken?: string | null,
 ): Promise<DeliveryResult> {
   const summary = buildBookingSummary(booking)
-  const subject = `Rezerwacja przyjęta - Behawior 15 - ${summary}`
+  const subject = `Rezerwacja przyjęta - ${EMAIL_BRAND_NAME} - ${summary}`
   const customerEmailStatus = getCustomerEmailDeliveryStatus(booking.email)
   const bookingPageUrl = buildBookingViewerUrl('/payment', booking.id, accessToken)
   const emailDeliveryNote =
@@ -704,7 +705,7 @@ export async function sendBookingReservationCreatedEmail(
     emailDeliveryNote,
   )
   const text = [
-    'Behawior 15 - rezerwacja przyjęta.',
+    `${EMAIL_BRAND_NAME} - rezerwacja przyjęta.`,
     `Termin: ${formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}`,
     `Temat: ${getProblemLabel(booking.problemType)}`,
     `Kwota: ${formatPricePln(booking.amount)}`,
@@ -1353,7 +1354,7 @@ export async function sendUrgentNowResponseEmail(payload: UrgentNowResponseEmail
 
 export async function sendBookingConfirmationEmail(booking: BookingRecord): Promise<DeliveryResult> {
   const summary = buildBookingSummary(booking)
-  const subject = `Potwierdzenie konsultacji - Behawior 15 - ${summary}`
+  const subject = `Potwierdzenie konsultacji - ${EMAIL_BRAND_NAME} - ${summary}`
   const prepGuideUrl = getPrepGuideUrl(booking)
   const prepGuideBlock = prepGuideUrl
     ? `<p><strong>Jak się przygotować:</strong> <a href="${escapeHtml(prepGuideUrl)}">Przeczytaj krótki poradnik</a> — zajmuje 3 minuty i sprawi, że wyciągniesz z rozmowy maksimum.</p>`
@@ -1376,7 +1377,7 @@ export async function sendBookingConfirmationEmail(booking: BookingRecord): Prom
     'Jeśli będzie potrzebny kolejny krok po rozmowie, dostaniesz jasną rekomendację zamiast ogólnych porad.',
   )
   const text = [
-    'Twoja konsultacja Behawior 15 została potwierdzona.',
+    `Twoja konsultacja ${EMAIL_BRAND_NAME} została potwierdzona.`,
     `Termin: ${formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}`,
     `Temat: ${getProblemLabel(booking.problemType)}`,
     `Link do rozmowy: ${booking.meetingUrl}`,
@@ -1395,7 +1396,7 @@ export async function sendBookingManualPaymentPendingEmail(
   const summary = buildBookingSummary(booking)
   const paymentReference = booking.paymentReference ?? booking.id
   const confirmationUrl = buildBookingViewerUrl('/confirmation', booking.id, accessToken)
-  const subject = `Wpłata zgłoszona - czekamy na potwierdzenie - Behawior 15 - ${summary}`
+  const subject = `Wpłata zgłoszona - czekamy na potwierdzenie - ${EMAIL_BRAND_NAME} - ${summary}`
   const intro = 'Dostałem zgłoszenie wpłaty ręcznej. Sprawdzę je do 15 minut.'
   const facts = [
     {
@@ -1443,7 +1444,7 @@ export async function sendBookingStatusOutcomeEmail(booking: BookingRecord): Pro
   const outcome =
     booking.paymentStatus === 'refunded'
       ? {
-          subject: `Rezerwacja anulowana - Behawior 15 - ${summary}`,
+          subject: `Rezerwacja anulowana - ${EMAIL_BRAND_NAME} - ${summary}`,
           title: 'Rezerwacja została anulowana',
           intro: 'Zwrot został uruchomiony, a termin wrócił do kalendarza.',
           statusLabel: 'Zwrot',
@@ -1452,7 +1453,7 @@ export async function sendBookingStatusOutcomeEmail(booking: BookingRecord): Pro
         }
       : booking.paymentStatus === 'rejected'
         ? {
-            subject: `Wpłata nie została potwierdzona - Behawior 15 - ${summary}`,
+            subject: `Wpłata nie została potwierdzona - ${EMAIL_BRAND_NAME} - ${summary}`,
             title: 'Wpłata nie została potwierdzona',
             intro: 'Nie udało się potwierdzić wpłaty, więc termin wrócił do kalendarza.',
             statusLabel: 'Status',
@@ -1461,7 +1462,7 @@ export async function sendBookingStatusOutcomeEmail(booking: BookingRecord): Pro
           }
         : booking.paymentStatus === 'failed'
           ? {
-              subject: `Płatność nie została dokończona - Behawior 15 - ${summary}`,
+              subject: `Płatność nie została dokończona - ${EMAIL_BRAND_NAME} - ${summary}`,
               title: 'Płatność nie została dokończona',
               intro: 'Płatność online nie została zakończona i termin wrócił do kalendarza.',
               statusLabel: 'Status',
@@ -1469,7 +1470,7 @@ export async function sendBookingStatusOutcomeEmail(booking: BookingRecord): Pro
               nextStep: 'Jeśli chcesz wrócić do konsultacji, wybierz nowy termin albo napisz wiadomość.',
             }
           : {
-              subject: `Rezerwacja wygasła - Behawior 15 - ${summary}`,
+              subject: `Rezerwacja wygasła - ${EMAIL_BRAND_NAME} - ${summary}`,
               title: 'Rezerwacja wygasła',
               intro: 'Czas na potwierdzenie minął, więc termin wrócił do kalendarza.',
               statusLabel: 'Status',
@@ -1529,7 +1530,7 @@ export async function sendManualPaymentReportedAdminEmail(
   }
 
   const calendarUrl = buildGoogleCalendarUrl(booking)
-  const subject = `Płatność do potwierdzenia do 15 min - Behawior 15 - ${buildBookingSummary(booking)}`
+  const subject = `Płatność do potwierdzenia do 15 min - ${EMAIL_BRAND_NAME} - ${buildBookingSummary(booking)}`
   const html = renderEmailShell(
     'Wpłata czeka na decyzję',
     'Klient kliknął "Zrobiłem płatność". Sprawdź wpływ i kliknij właściwą decyzję.',
@@ -1569,7 +1570,7 @@ export async function sendManualPaymentReportedAdminEmail(
 }
 
 export async function sendBookingReminderEmail(booking: BookingRecord): Promise<DeliveryResult> {
-  const subject = 'Przypomnienie: konsultacja Behawior 15 startuje za mniej niż godzinę'
+  const subject = `Przypomnienie: konsultacja ${EMAIL_BRAND_NAME} startuje za mniej niż godzinę`
   const html = renderEmailShell(
     'Przypomnienie o konsultacji',
     'Za mniej niż godzinę startuje Twoja rozmowa. Warto wejść chwilę wcześniej, żeby zacząć spokojnie i bez pośpiechu.',
@@ -1583,7 +1584,7 @@ export async function sendBookingReminderEmail(booking: BookingRecord): Promise<
     'Do usłyszenia. To będzie krótka rozmowa, ale z konkretnym kierunkiem działania.',
   )
   const text = [
-    'Przypomnienie o konsultacji Behawior 15.',
+    `Przypomnienie o konsultacji ${EMAIL_BRAND_NAME}.`,
     `Termin: ${formatDateTimeLabel(booking.bookingDate, booking.bookingTime)}`,
     `Temat: ${getProblemLabel(booking.problemType)}`,
     `Link do rozmowy: ${booking.meetingUrl}`,
@@ -1605,7 +1606,7 @@ export async function sendTestimonialSubmissionEmail(submission: TestimonialSubm
     }
   }
 
-  const subject = `Nowe zgłoszenie opinii do weryfikacji - Behawior 15 - ${submission.displayName}`
+  const subject = `Nowe zgłoszenie opinii do weryfikacji - ${EMAIL_BRAND_NAME} - ${submission.displayName}`
   const photoBlock = submission.photoUrl
     ? `<p><strong>Link do zdjęcia:</strong> <a href="${escapeHtml(submission.photoUrl)}">${escapeHtml(submission.photoUrl)}</a></p>`
     : '<p><strong>Link do zdjęcia:</strong> klient nie dodał linku.</p>'
@@ -1656,7 +1657,7 @@ export async function sendOpinionSubmissionEmail(submission: OpinionSubmission):
   }
 
   const speciesLabel = submission.species === 'kot' ? 'Kot' : 'Pies'
-  const subject = `Nowa opinia do ręcznej akceptacji - Behawior 15 - ${submission.displayName}`
+  const subject = `Nowa opinia do ręcznej akceptacji - ${EMAIL_BRAND_NAME} - ${submission.displayName}`
   const html = renderEmailShell(
     'Nowa opinia do sprawdzenia',
     'Klient wysłał opinię przez ukryty formularz po konsultacji. To nie jest jeszcze wpis publikowany.',

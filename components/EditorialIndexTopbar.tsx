@@ -4,8 +4,6 @@ import { Menu } from 'lucide-react'
 import { REGULSKI_WEB_LOGO } from '@/lib/regulski-web-assets'
 
 const EDITORIAL_INDEX_NAV_ITEMS = [
-  { href: '/psy', label: 'Pies' },
-  { href: '/koty', label: 'Kot' },
   { href: '/o-mnie', label: 'O mnie' },
   { href: '/cennik', label: 'Cennik' },
   { href: '/niezbednik', label: 'Niezbędnik' },
@@ -34,10 +32,6 @@ export function EditorialIndexTopbar() {
         ))}
       </nav>
 
-      <Link href="/wybor" prefetch={false} className="blog-index-topbar-cta">
-        Umów pierwszy krok
-      </Link>
-
       <details className="blog-index-mobile-menu">
         <summary aria-label="Otwórz menu">
           <Menu size={20} strokeWidth={2} aria-hidden="true" />
@@ -48,9 +42,6 @@ export function EditorialIndexTopbar() {
               {item.label}
             </Link>
           ))}
-          <Link href="/wybor" prefetch={false}>
-            Umów pierwszy krok
-          </Link>
         </div>
       </details>
     </header>

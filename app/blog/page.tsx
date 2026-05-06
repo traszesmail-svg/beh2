@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { Fragment } from 'react'
 import { ArrowRight, CalendarDays, ChevronLeft, ChevronRight, Clock3, Mail, Search } from 'lucide-react'
 import { Footer } from '@/components/Footer'
 import { EditorialIndexTopbar } from '@/components/EditorialIndexTopbar'
-import { PetLeafHeroArt } from '@/components/PetLeafHeroArt'
 import { Schema } from '@/components/schema'
 import { BLOG_ROUTE_BASE, getBlogListingMetadata, listBlogPosts, type BlogPost } from '@/lib/blog'
 import { buildBookHref } from '@/lib/booking-routing'
@@ -12,8 +12,6 @@ import { repairCopy } from '@/lib/copy'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { getBreadcrumbJsonLd, getItemListJsonLd } from '@/lib/schema'
 import { getCanonicalBaseUrl } from '@/lib/server/env'
-
-export const dynamic = 'force-static'
 
 export const metadata: Metadata = getBlogListingMetadata({
   title: 'Blog o zachowaniu psów i kotów',
@@ -33,12 +31,36 @@ const FEATURED_BLOG_SLUGS = [
   'reaktywnosc-na-smyczy-cwiczenie-luznej-smyczy',
 ] as const
 
-function pickFeaturedPosts(posts: BlogPost[]) {
+const BLOG_PAGE_SIZE = 9
+
+type BlogSearchParams = {
+  category?: string | string[]
+  page?: string | string[]
+  q?: string | string[]
+}
+
+type BlogCategory = {
+  id: string
+  label: string
+  href: string
+  count: number
+  predicate?: (post: BlogPost) => boolean
+}
+
+function getSingleParam(value: string | string[] | undefined) {
+  return Array.isArray(value) ? value[0] : value
+}
+
+function normalizeParam(value: string | string[] | undefined) {
+  return repairCopy(getSingleParam(value) ?? '').trim().toLowerCase()
+}
+
+function orderBlogPosts(posts: BlogPost[]) {
   const bySlug = new Map(posts.map((post) => [post.slug, post] as const))
   const featured = FEATURED_BLOG_SLUGS.map((slug) => bySlug.get(slug)).filter((post): post is BlogPost => Boolean(post))
   const rest = posts.filter((post) => !FEATURED_BLOG_SLUGS.includes(post.slug as (typeof FEATURED_BLOG_SLUGS)[number]))
 
-  return [...featured, ...rest].slice(0, 9)
+  return [...featured, ...rest]
 }
 
 function getSpeciesBadge(post: BlogPost) {
@@ -57,26 +79,123 @@ function countBy(posts: BlogPost[], predicate: (post: BlogPost) => boolean) {
   return posts.filter(predicate).length
 }
 
-function buildCategories(posts: BlogPost[]) {
-  const articleListHref = '#artykuly'
-
-  return [
-    { label: 'Pies', href: articleListHref, count: countBy(posts, (post) => post.categoryHref === '/psy') },
-    { label: 'Kot', href: articleListHref, count: countBy(posts, (post) => post.categoryHref === '/koty') },
-    { label: 'Zachowanie', href: articleListHref, count: posts.length },
-    { label: 'Emocje', href: articleListHref, count: countBy(posts, (post) => /stres|lek|lęk|wyje|boi|napieciu|napięciu/i.test(post.slug)) },
-    { label: 'Relacja', href: articleListHref, count: countBy(posts, (post) => /relac|zapoznac|wprowadzic|nowy|trener/i.test(post.slug)) },
-    { label: 'Dom', href: articleListHref, count: countBy(posts, (post) => /dom|kuwet|meble|sam|samotnos/i.test(post.slug)) },
-    { label: 'Szczeniak / Kocię', href: articleListHref, count: countBy(posts, (post) => /szczeniak|nowy-pies|nowego-kota/i.test(post.slug)) },
-    { label: 'Niezbędnik', href: articleListHref, count: 8 },
-  ]
+function isDogPost(post: BlogPost) {
+  return post.categoryHref === '/psy'
 }
 
-export default function BlogPage() {
+function isCatPost(post: BlogPost) {
+  return post.categoryHref === '/koty'
+}
+
+function isBehaviorPost(post: BlogPost) {
+  return isDogPost(post) || isCatPost(post)
+}
+
+function getCategoryHref(categoryId: string) {
+  if (categoryId === 'all') return `${BLOG_ROUTE_BASE}#artykuly`
+
+  return `${BLOG_ROUTE_BASE}?category=${encodeURIComponent(categoryId)}#artykuly`
+}
+
+function buildCategories(posts: BlogPost[]): BlogCategory[] {
+  const categories: BlogCategory[] = [
+    { id: 'all', label: 'Wszystkie', href: getCategoryHref('all'), count: posts.length },
+    { id: 'pies', label: 'Pies', href: getCategoryHref('pies'), count: countBy(posts, isDogPost), predicate: isDogPost },
+    { id: 'kot', label: 'Kot', href: getCategoryHref('kot'), count: countBy(posts, isCatPost), predicate: isCatPost },
+    {
+      id: 'zachowanie',
+      label: 'Zachowanie',
+      href: getCategoryHref('zachowanie'),
+      count: countBy(posts, isBehaviorPost),
+      predicate: isBehaviorPost,
+    },
+    {
+      id: 'emocje',
+      label: 'Emocje',
+      href: getCategoryHref('emocje'),
+      count: countBy(posts, (post) => /stres|lek|lęk|wyje|boi|napieciu|napięciu/i.test(post.slug)),
+      predicate: (post) => /stres|lek|lęk|wyje|boi|napieciu|napięciu/i.test(post.slug),
+    },
+    {
+      id: 'relacja',
+      label: 'Relacja',
+      href: getCategoryHref('relacja'),
+      count: countBy(posts, (post) => /relac|zapoznac|wprowadzic|nowy|trener/i.test(post.slug)),
+      predicate: (post) => /relac|zapoznac|wprowadzic|nowy|trener/i.test(post.slug),
+    },
+    {
+      id: 'dom',
+      label: 'Dom',
+      href: getCategoryHref('dom'),
+      count: countBy(posts, (post) => /dom|kuwet|meble|sam|samotnos/i.test(post.slug)),
+      predicate: (post) => /dom|kuwet|meble|sam|samotnos/i.test(post.slug),
+    },
+    {
+      id: 'mlode',
+      label: 'Szczeniak / Kocię',
+      href: getCategoryHref('mlode'),
+      count: countBy(posts, (post) => /szczeniak|nowy-pies|nowego-kota/i.test(post.slug)),
+      predicate: (post) => /szczeniak|nowy-pies|nowego-kota/i.test(post.slug),
+    },
+    { id: 'niezbednik', label: 'Niezbędnik', href: '/niezbednik', count: 8 },
+  ]
+
+  return categories
+}
+
+function filterBlogPosts(posts: BlogPost[], category: BlogCategory | undefined, query: string) {
+  const byCategory = category?.predicate ? posts.filter(category.predicate) : posts
+  const normalizedQuery = repairCopy(query).trim().toLowerCase()
+
+  if (!normalizedQuery) return byCategory
+
+  return byCategory.filter((post) => {
+    const haystack = [post.title, post.h1, post.excerpt, post.categoryLabel, post.slug]
+      .map((value) => repairCopy(value).toLowerCase())
+      .join(' ')
+
+    return haystack.includes(normalizedQuery)
+  })
+}
+
+function getPageHref(page: number, categoryId: string, query: string) {
+  const params = new URLSearchParams()
+
+  if (categoryId !== 'all') params.set('category', categoryId)
+  if (query) params.set('q', query)
+  if (page > 1) params.set('page', String(page))
+
+  const queryString = params.toString()
+
+  return `${BLOG_ROUTE_BASE}${queryString ? `?${queryString}` : ''}#artykuly`
+}
+
+function getPaginationPages(currentPage: number, totalPages: number) {
+  if (totalPages <= 7) {
+    return Array.from({ length: totalPages }, (_, index) => index + 1)
+  }
+
+  const pages = new Set([1, totalPages, currentPage - 1, currentPage, currentPage + 1])
+
+  return Array.from(pages)
+    .filter((page) => page >= 1 && page <= totalPages)
+    .sort((a, b) => a - b)
+}
+
+export default function BlogPage({ searchParams }: { searchParams?: BlogSearchParams }) {
   const posts = listBlogPosts()
-  const featuredPosts = pickFeaturedPosts(posts)
-  const popularPosts = featuredPosts.slice(0, 5)
   const categories = buildCategories(posts)
+  const categoryId = normalizeParam(searchParams?.category) || 'all'
+  const activeCategory = categories.find((category) => category.id === categoryId && category.id !== 'niezbednik') ?? categories[0]
+  const query = repairCopy(getSingleParam(searchParams?.q) ?? '').trim()
+  const orderedPosts = orderBlogPosts(posts)
+  const filteredPosts = filterBlogPosts(orderedPosts, activeCategory, query)
+  const totalPages = Math.max(1, Math.ceil(filteredPosts.length / BLOG_PAGE_SIZE))
+  const requestedPage = Number.parseInt(getSingleParam(searchParams?.page) ?? '1', 10)
+  const currentPage = Number.isFinite(requestedPage) ? Math.min(Math.max(requestedPage, 1), totalPages) : 1
+  const paginatedPosts = filteredPosts.slice((currentPage - 1) * BLOG_PAGE_SIZE, currentPage * BLOG_PAGE_SIZE)
+  const popularPosts = orderedPosts.slice(0, 5)
+  const paginationPages = getPaginationPages(currentPage, totalPages)
   const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min')
   const urgentHref = buildBookHref(null, 'kwadrans-na-juz')
   const structuredData = [
@@ -113,18 +232,19 @@ export default function BlogPage() {
                 <label className="sr-only" htmlFor="blog-search">
                   Szukaj w artykułach
                 </label>
-                <input id="blog-search" name="q" type="search" placeholder="Szukaj w artykułach..." />
+                {activeCategory?.id !== 'all' ? <input type="hidden" name="category" value={activeCategory?.id} /> : null}
+                <input id="blog-search" name="q" type="search" placeholder="Szukaj w artykułach..." defaultValue={query} />
               </form>
             </div>
 
             <div className="blog-index-hero-art" aria-hidden="true">
-              <PetLeafHeroArt />
+              <Image src="/blog-covers/blog-index-hero-photo.webp" alt="" width={640} height={400} priority />
             </div>
           </section>
 
           <section id="artykuly" className="blog-index-layout" aria-label="Artykuły i kategorie">
             <div className="blog-index-grid">
-              {featuredPosts.map((post) => (
+              {paginatedPosts.map((post) => (
                 <article key={post.slug} className="blog-index-card">
                   <Link href={post.path} prefetch={false} className="blog-index-card-media" aria-label={repairCopy(post.title)}>
                     <Image src={post.cover.src} alt={post.cover.alt} fill sizes="(max-width: 760px) 92vw, (max-width: 1180px) 42vw, 300px" />
@@ -153,6 +273,15 @@ export default function BlogPage() {
                   </div>
                 </article>
               ))}
+              {paginatedPosts.length === 0 ? (
+                <div className="blog-index-empty">
+                  <h2>Brak artykułów dla tego filtra</h2>
+                  <p>Zmień kategorię albo wyczyść wyszukiwanie, żeby zobaczyć pełną listę wpisów.</p>
+                  <Link href={`${BLOG_ROUTE_BASE}#artykuly`} prefetch={false} className="blog-index-button is-secondary">
+                    Pokaż wszystkie artykuły
+                  </Link>
+                </div>
+              ) : null}
             </div>
 
             <aside className="blog-index-sidebar" aria-label="Panel bloga">
@@ -160,8 +289,14 @@ export default function BlogPage() {
                 <h2>Kategorie</h2>
                 <div className="blog-index-category-list">
                   {categories.map((category) => (
-                    <Link key={category.label} href={category.href} prefetch={false}>
-                      <span>{category.label}</span>
+                    <Link
+                      key={category.id}
+                      href={category.href}
+                      prefetch={false}
+                      className={category.id === activeCategory?.id ? 'is-active' : undefined}
+                      aria-current={category.id === activeCategory?.id ? 'page' : undefined}
+                    >
+                      <span>{repairCopy(category.label)}</span>
                       <small>{category.count}</small>
                       <ChevronRight size={17} strokeWidth={1.8} aria-hidden="true" />
                     </Link>
@@ -219,27 +354,38 @@ export default function BlogPage() {
             </aside>
           </section>
 
-          <nav className="blog-index-pagination" aria-label="Paginacja bloga">
-            <Link href="/blog" prefetch={false} aria-label="Poprzednia strona">
-              <ChevronLeft size={17} strokeWidth={1.9} />
-            </Link>
-            <Link href="/blog" prefetch={false} aria-current="page">
-              1
-            </Link>
-            <Link href="/blog?page=2" prefetch={false}>
-              2
-            </Link>
-            <Link href="/blog?page=3" prefetch={false}>
-              3
-            </Link>
-            <span>...</span>
-            <Link href="/blog?page=12" prefetch={false}>
-              12
-            </Link>
-            <Link href="/blog?page=2" prefetch={false} aria-label="Następna strona">
-              <ChevronRight size={17} strokeWidth={1.9} />
-            </Link>
-          </nav>
+          {filteredPosts.length > BLOG_PAGE_SIZE ? (
+            <nav className="blog-index-pagination" aria-label="Paginacja bloga">
+              {currentPage > 1 ? (
+                <Link href={getPageHref(currentPage - 1, activeCategory?.id ?? 'all', query)} prefetch={false} aria-label="Poprzednia strona">
+                  <ChevronLeft size={17} strokeWidth={1.9} />
+                </Link>
+              ) : (
+                <span aria-disabled="true">
+                  <ChevronLeft size={17} strokeWidth={1.9} />
+                </span>
+              )}
+
+              {paginationPages.map((page, index) => (
+                <Fragment key={page}>
+                  {index > 0 && page - paginationPages[index - 1] > 1 ? <span aria-hidden="true">...</span> : null}
+                  <Link href={getPageHref(page, activeCategory?.id ?? 'all', query)} prefetch={false} aria-current={page === currentPage ? 'page' : undefined}>
+                    {page}
+                  </Link>
+                </Fragment>
+              ))}
+
+              {currentPage < totalPages ? (
+                <Link href={getPageHref(currentPage + 1, activeCategory?.id ?? 'all', query)} prefetch={false} aria-label="Następna strona">
+                  <ChevronRight size={17} strokeWidth={1.9} />
+                </Link>
+              ) : (
+                <span aria-disabled="true">
+                  <ChevronRight size={17} strokeWidth={1.9} />
+                </span>
+              )}
+            </nav>
+          ) : null}
 
           <section className="blog-index-support">
             <span className="blog-index-support-icon" aria-hidden="true">
