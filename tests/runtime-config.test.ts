@@ -295,7 +295,7 @@ test('home, dogs and cats pages point users to the canonical service page and ex
   assert.doesNotMatch(homeSource, /href=\{serviceLandingHref\}/)
   assert.doesNotMatch(homeSource, /pelnego opisu konsultacji online/)
   assert.doesNotMatch(homeSource, /<ServiceDecisionSection/)
-  assert.match(homeSource, /Behawiorysta psow i kotow online/)
+  assert.match(homeSource, /Behawiorysta psów i kotów online/)
 
   assert.match(dogsSource, /title: 'Behawiorysta psow online - reaktywnosc i separacja'/)
   assert.match(dogsSource, /serviceLandingHref = '\/behawiorysta-online-polska'/)

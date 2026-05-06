@@ -114,13 +114,13 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
     {
       path: '/',
       required: [
-        'Jak mogę Ci pomóc?',
+        'Z czym potrzebujesz pomocy u psa lub kota?',
         'Wybierz zwierzę albo odpowiedz na kilka krótkich pytań',
         'Mam psa',
         'Mam kota',
         'Nie wiem, od czego zacząć',
-        'Jak wygląda nasza współpraca?',
-        'Najczesciej zadawane pytania',
+        'Jak wygląda współpraca?',
+        'Najczęściej zadawane pytania',
       ],
       requireBuildMarker: true,
     },
