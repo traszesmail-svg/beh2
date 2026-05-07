@@ -1,0 +1,86 @@
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
+import { NextResponse } from 'next/server'
+import {
+  createEbookCommerceOrder,
+  createOrReuseConsultationCommerceOrder,
+  fulfillCommerceOrderAndNotify,
+} from '@/lib/server/commerce-service'
+
+export async function POST(request: Request) {
+  let body: Record<string, unknown>
+
+  try {
+    body = (await request.json()) as Record<string, unknown>
+  } catch {
+    return NextResponse.json({ error: 'Niepoprawny format zapytania.' }, { status: 400 })
+  }
+
+  if (typeof body.website === 'string' && body.website.trim()) {
+    return NextResponse.json({ ok: true, ignored: true })
+  }
+
+  try {
+    if (body.kind === 'consultation') {
+      const bookingId = typeof body.bookingId === 'string' ? body.bookingId.trim() : ''
+      const accessToken = typeof body.accessToken === 'string' ? body.accessToken.trim() : null
+
+      if (!bookingId) {
+        return NextResponse.json({ error: 'Brak bookingId.' }, { status: 400 })
+      }
+
+      const order = await createOrReuseConsultationCommerceOrder(
+        bookingId,
+        accessToken,
+        request.headers.get('authorization'),
+      )
+
+      return NextResponse.json({
+        ok: true,
+        orderNumber: order.orderNumber,
+        redirectTo: `/checkout?orderNumber=${encodeURIComponent(order.orderNumber)}`,
+      })
+    }
+
+    if (body.kind === 'ebook') {
+      if (body.consentProcessing !== true || body.consentPolicy !== true) {
+        return NextResponse.json({ error: 'Zaznacz wymagane zgody.' }, { status: 400 })
+      }
+
+      const productKind = body.productKind === 'bundle' ? 'bundle' : 'guide'
+      const order = await createEbookCommerceOrder({
+        productKind,
+        productSlug: typeof body.productSlug === 'string' ? body.productSlug : '',
+        name: typeof body.name === 'string' ? body.name : '',
+        email: typeof body.email === 'string' ? body.email : '',
+        phone: typeof body.phone === 'string' ? body.phone : null,
+        notes: typeof body.notes === 'string' ? body.notes : null,
+      })
+
+      if (order.amount === 0) {
+        const fulfilled = await fulfillCommerceOrderAndNotify(order.orderNumber, 'mock')
+        return NextResponse.json({
+          ok: true,
+          orderNumber: fulfilled.orderNumber,
+          free: true,
+          redirectTo: `/oczekiwanie/${encodeURIComponent(fulfilled.orderNumber)}`,
+        })
+      }
+
+      return NextResponse.json({
+        ok: true,
+        orderNumber: order.orderNumber,
+        redirectTo: `/checkout?orderNumber=${encodeURIComponent(order.orderNumber)}`,
+      })
+    }
+
+    return NextResponse.json({ error: 'Nieznany typ zamówienia.' }, { status: 400 })
+  } catch (error) {
+    console.error('[commerce][orders] create failed', error)
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : 'Nie udało się utworzyć zamówienia.' },
+      { status: 500 },
+    )
+  }
+}

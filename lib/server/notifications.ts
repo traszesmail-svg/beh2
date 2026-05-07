@@ -10,6 +10,7 @@ import { getManualPaymentConfig } from '@/lib/server/payment-options'
 import { buildGoogleCalendarUrl } from '@/lib/server/google-calendar'
 import { getPrepGuideUrl } from '@/lib/server/prep-guide'
 import { BookingRecord } from '@/lib/types'
+import type { CommerceOrder } from '@/lib/commerce'
 
 const EMAIL_BRAND_NAME = 'RegulskiTerapiaBehawioralna'
 const DEFAULT_RESEND_FROM_EMAIL = `${EMAIL_BRAND_NAME} <kontakt@regulskibehawiorysta.pl>`
@@ -2048,6 +2049,104 @@ export async function sendLeadBookingConfirmedEmail(payload: LeadBookingConfirme
     payload.calendarUrl ? `Dodaj do kalendarza: ${payload.calendarUrl}` : '',
     '',
     'Jesli masz pytania przed konsultacja, odpisz na tego maila.',
+  ].filter(Boolean).join('\n')
+
+  return deliverEmail({ to: recipient, subject, html, text }, 'customer')
+}
+
+export async function sendCommerceManualPaymentReportedAdminEmail(
+  order: CommerceOrder,
+  links: { approveUrl: string; rejectUrl?: string | null },
+): Promise<DeliveryResult> {
+  const recipient = getAdminNotificationRecipientEmail()
+
+  if (!recipient) {
+    return {
+      status: 'skipped',
+      reason: 'ADMIN_NOTIFICATION_EMAIL missing',
+    }
+  }
+
+  const subject = `Potwierdzenie płatności BLIK - ${order.orderNumber}`
+  const createdLabel = new Date(order.createdAt).toLocaleString('pl-PL', { dateStyle: 'long', timeStyle: 'short' })
+  const rejectButton = links.rejectUrl
+    ? renderEmailActionButton({ href: links.rejectUrl, label: 'Odrzuć płatność' })
+    : ''
+
+  const html = renderEmailShell(
+    'Płatność BLIK czeka na potwierdzenie',
+    'Klient kliknął "Zapłaciłem/am". Sprawdź wpływ i potwierdź płatność bez logowania.',
+    `
+      <p><strong>Numer zamówienia:</strong> <code>${escapeHtml(order.orderNumber)}</code></p>
+      <p><strong>Produkt:</strong> ${escapeHtml(order.productName)}</p>
+      <p><strong>Typ:</strong> ${order.productType === 'consultation' ? 'konsultacja' : 'ebook / materiał cyfrowy'}</p>
+      <p><strong>Kwota:</strong> ${escapeHtml(formatPricePln(order.manualAmount))}</p>
+      <p><strong>E-mail klienta:</strong> <a href="mailto:${escapeHtml(order.customerEmail)}">${escapeHtml(order.customerEmail)}</a></p>
+      <p><strong>Imię:</strong> ${escapeHtml(order.customerName || '-')}</p>
+      <p><strong>Data utworzenia:</strong> ${escapeHtml(createdLabel)}</p>
+      <p><strong>Metoda płatności:</strong> BLIK na telefon</p>
+      ${renderEmailActionButton({ href: links.approveUrl, label: 'Potwierdzam płatność' })}
+      ${rejectButton}
+    `,
+    'Link potwierdzenia jest jednorazowy i przypisany do tego zamówienia.',
+  )
+
+  const text = [
+    `Potwierdzenie płatności BLIK - ${order.orderNumber}`,
+    `Produkt: ${order.productName}`,
+    `Kwota: ${formatPricePln(order.manualAmount)}`,
+    `E-mail klienta: ${order.customerEmail}`,
+    `Imię: ${order.customerName || '-'}`,
+    `Data utworzenia: ${createdLabel}`,
+    'Metoda płatności: BLIK na telefon',
+    `Potwierdzam płatność: ${links.approveUrl}`,
+    links.rejectUrl ? `Odrzuć płatność: ${links.rejectUrl}` : '',
+  ].filter(Boolean).join('\n')
+
+  return deliverEmail({ to: recipient, subject, html, text }, 'internal')
+}
+
+export async function sendCommerceAccessCodeCustomerEmail(order: CommerceOrder): Promise<DeliveryResult> {
+  const recipient = order.customerEmail.trim()
+  if (!isValidPublicEmail(recipient)) {
+    return { status: 'skipped', reason: 'customer email missing or invalid' }
+  }
+
+  if (!order.accessCode) {
+    return { status: 'skipped', reason: 'access code missing' }
+  }
+
+  const accessUrl = buildAbsoluteUrl('/dostep')
+  const subject = 'Twój kod dostępu'
+  const expiresLabel = order.accessCodeExpiresAt
+    ? new Date(order.accessCodeExpiresAt).toLocaleString('pl-PL', { dateStyle: 'long', timeStyle: 'short' })
+    : null
+
+  const html = renderEmailShell(
+    `Cześć ${escapeHtml(order.customerName || '')}, płatność została potwierdzona.`,
+    'Poniżej znajdziesz kod dostępu. Wpisz go na stronie dostępu razem z adresem e-mail użytym przy zamówieniu.',
+    `
+      <p><strong>Numer zamówienia:</strong> <code>${escapeHtml(order.orderNumber)}</code></p>
+      <p><strong>Produkt:</strong> ${escapeHtml(order.productName)}</p>
+      <p style="margin-top:24px;"><strong>Twój kod dostępu:</strong></p>
+      <p style="font-size:28px;letter-spacing:4px;font-weight:700;background:#f0e5d6;padding:16px 24px;border-radius:6px;display:inline-block;">${escapeHtml(order.accessCode)}</p>
+      <p style="margin-top:24px;"><strong>Wejdź tutaj:</strong><br /><a href="${escapeHtml(accessUrl)}">${escapeHtml(accessUrl)}</a></p>
+      ${expiresLabel ? `<p><strong>Ważny do:</strong> ${escapeHtml(expiresLabel)}</p>` : ''}
+    `,
+    'Dziękujemy.',
+  )
+
+  const text = [
+    'Cześć,',
+    'Twoja płatność została potwierdzona.',
+    '',
+    `Numer zamówienia: ${order.orderNumber}`,
+    `Produkt: ${order.productName}`,
+    `Twój kod dostępu: ${order.accessCode}`,
+    `Wejdź tutaj: ${accessUrl}`,
+    expiresLabel ? `Ważny do: ${expiresLabel}` : '',
+    '',
+    'Dziękujemy.',
   ].filter(Boolean).join('\n')
 
   return deliverEmail({ to: recipient, subject, html, text }, 'customer')

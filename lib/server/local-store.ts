@@ -748,7 +748,7 @@ export async function attachPayuOrder(
 
 export async function markBookingManualPaymentPending(
   bookingId: string,
-  paymentData?: { paymentReference?: string | null; customerAccessToken?: string | null },
+  paymentData?: { paymentReference?: string | null; customerAccessToken?: string | null; suppressAdminEmail?: boolean },
 ): Promise<BookingRecord | null> {
   return withLock(async () => {
     const store = await readStore()
@@ -772,7 +772,8 @@ export async function markBookingManualPaymentPending(
     const paymentReportedAt = booking.paymentReportedAt ?? nowIso
     const slots = resolveBookingSlots(store.availability, booking)
     const shouldSendManualReviewEmail =
-      booking.bookingStatus !== 'pending_manual_payment' || booking.paymentStatus !== 'pending_manual_review'
+      !paymentData?.suppressAdminEmail &&
+      (booking.bookingStatus !== 'pending_manual_payment' || booking.paymentStatus !== 'pending_manual_review')
 
     booking.bookingStatus = 'pending_manual_payment'
     booking.paymentStatus = 'pending_manual_review'

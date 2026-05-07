@@ -1495,7 +1495,7 @@ export async function attachPayuOrder(
 
 export async function markBookingManualPaymentPending(
   bookingId: string,
-  paymentData?: { paymentReference?: string | null; customerAccessToken?: string | null },
+  paymentData?: { paymentReference?: string | null; customerAccessToken?: string | null; suppressAdminEmail?: boolean },
 ): Promise<BookingRecord | null> {
   const supabase = getSupabaseAdmin()
   const current = await getBookingById(bookingId)
@@ -1518,7 +1518,8 @@ export async function markBookingManualPaymentPending(
   const paymentReference = paymentData?.paymentReference ?? current.paymentReference ?? null
   const paymentReportedAt = current.paymentReportedAt ?? nowIso
   const shouldSendManualReviewEmail =
-    current.bookingStatus !== 'pending_manual_payment' || current.paymentStatus !== 'pending_manual_review'
+    !paymentData?.suppressAdminEmail &&
+    (current.bookingStatus !== 'pending_manual_payment' || current.paymentStatus !== 'pending_manual_review')
   const legacyMeta = encodeLegacyPaymentMeta({
     version: 1,
     method: 'manual',

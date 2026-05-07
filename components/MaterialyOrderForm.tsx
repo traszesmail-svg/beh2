@@ -15,7 +15,6 @@ type SubmitState =
   | { status: 'idle' }
   | { status: 'submitting' }
   | { status: 'free-ok'; orderId: string }
-  | { status: 'paid-ok'; orderId: string; blikPhone: string; priceLabel: string }
   | { status: 'error'; message: string }
 
 export function MaterialyOrderForm({ productKind, productSlug, productTitle, priceLabel, priceAmount }: Props) {
@@ -24,7 +23,7 @@ export function MaterialyOrderForm({ productKind, productSlug, productTitle, pri
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [notes, setNotes] = useState('')
-  const [website, setWebsite] = useState('') // honeypot
+  const [website, setWebsite] = useState('')
   const [consentProcessing, setConsentProcessing] = useState(false)
   const [consentPolicy, setConsentPolicy] = useState(false)
   const [state, setState] = useState<SubmitState>({ status: 'idle' })
@@ -33,11 +32,13 @@ export function MaterialyOrderForm({ productKind, productSlug, productTitle, pri
     e.preventDefault()
     if (state.status === 'submitting') return
     setState({ status: 'submitting' })
+
     try {
-      const res = await fetch('/api/materialy/order', {
+      const res = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
+          kind: 'ebook',
           productKind,
           productSlug,
           name,
@@ -50,21 +51,19 @@ export function MaterialyOrderForm({ productKind, productSlug, productTitle, pri
         }),
       })
       const data = (await res.json()) as Record<string, unknown>
+
       if (!res.ok) {
-        setState({ status: 'error', message: typeof data.error === 'string' ? data.error : 'Cos poszlo nie tak.' })
+        setState({ status: 'error', message: typeof data.error === 'string' ? data.error : 'Coś poszło nie tak.' })
         return
       }
+
       if (data.free === true) {
-        setState({ status: 'free-ok', orderId: String(data.orderId) })
-      } else {
-        setState({
-          status: 'paid-ok',
-          orderId: String(data.orderId),
-          blikPhone: String(data.blikPhone),
-          priceLabel: String(data.priceLabel),
-        })
+        setState({ status: 'free-ok', orderId: String(data.orderNumber ?? data.orderId) })
+        return
       }
-    } catch (err) {
+
+      window.location.assign(String(data.redirectTo ?? '/checkout'))
+    } catch {
       setState({ status: 'error', message: 'Brak połączenia. Spróbuj ponownie.' })
     }
   }
@@ -74,36 +73,14 @@ export function MaterialyOrderForm({ productKind, productSlug, productTitle, pri
       <div className="materialy-success">
         <h2>Sprawdź skrzynkę e-mail</h2>
         <p>
-          Wyslalem kod do pobrania na <strong>{email}</strong>. Numer zamowienia: <code>{state.orderId}</code>.
+          Wysłałem kod dostępu na <strong>{email}</strong>. Numer zamówienia: <code>{state.orderId}</code>.
         </p>
         <p>
           Wpisz kod razem z e-mailem na stronie{' '}
-          <Link href="/materialy/pobranie" className="notatnik-inline-link">
-            /materialy/pobranie
+          <Link href="/dostep" className="notatnik-inline-link">
+            /dostep
           </Link>
-          , zeby otworzyc PDF.
-        </p>
-      </div>
-    )
-  }
-
-  if (state.status === 'paid-ok') {
-    return (
-      <div className="materialy-success">
-        <h2>Zamówienie przyjęte</h2>
-        <p>
-          Numer: <code>{state.orderId}</code>. Kwota: <strong>{state.priceLabel}</strong>.
-        </p>
-        <p>
-          Zaplac BLIK-iem na numer <strong>{state.blikPhone}</strong>. W tytule wpisz{' '}
-          <code>{state.orderId}</code>.
-        </p>
-        <p>
-          Po zaksięgowaniu wpłaty wyślę Ci kod do pobrania na <strong>{email}</strong>. Zwykle do 60 minut
-          (pon.-pt. 8:00-18:00).
-        </p>
-        <p>
-          Pełna instrukcja jest też w mailu, który właśnie do Ciebie poszedł.
+          , żeby otworzyć materiał.
         </p>
       </div>
     )
@@ -112,12 +89,12 @@ export function MaterialyOrderForm({ productKind, productSlug, productTitle, pri
   return (
     <form className="materialy-form" onSubmit={handleSubmit} noValidate>
       <p className="form-summary">
-        Zamawiasz: <strong>{productTitle}</strong> — <strong>{priceLabel}</strong>
-        {!isFree && ' (BLIK na telefon, kod przyjdzie mailem)'}
+        Zamawiasz: <strong>{productTitle}</strong> - <strong>{priceLabel}</strong>
+        {!isFree && ' (płatność online albo BLIK na telefon w kolejnym kroku)'}
       </p>
 
       <label>
-        Imie
+        Imię
         <input
           type="text"
           name="name"
@@ -142,9 +119,9 @@ export function MaterialyOrderForm({ productKind, productSlug, productTitle, pri
         />
       </label>
 
-      {!isFree && (
+      {!isFree ? (
         <label>
-          Telefon (opcjonalnie — przyda się, jeśli płatność BLIK idzie z innego numeru)
+          Telefon (opcjonalnie, jeśli płatność BLIK idzie z innego numeru)
           <input
             type="tel"
             name="phone"
@@ -154,7 +131,7 @@ export function MaterialyOrderForm({ productKind, productSlug, productTitle, pri
             autoComplete="tel"
           />
         </label>
-      )}
+      ) : null}
 
       <label>
         Krótka notatka (opcjonalnie)
@@ -186,9 +163,9 @@ export function MaterialyOrderForm({ productKind, productSlug, productTitle, pri
           required
         />
         <span>
-          Wyrazam zgode na przetwarzanie danych zgodnie z{' '}
+          Wyrażam zgodę na przetwarzanie danych zgodnie z{' '}
           <Link href="/polityka-prywatnosci" className="notatnik-inline-link">
-            polityka prywatnosci
+            polityką prywatności
           </Link>
           .
         </span>
@@ -202,9 +179,9 @@ export function MaterialyOrderForm({ productKind, productSlug, productTitle, pri
           required
         />
         <span>
-          Zapoznalem sie z{' '}
+          Zapoznałem się z{' '}
           <Link href="/polityka-prywatnosci" className="notatnik-inline-link">
-            polityka prywatnosci
+            polityką prywatności
           </Link>{' '}
           i{' '}
           <Link href="/regulamin" className="notatnik-inline-link">
@@ -214,15 +191,15 @@ export function MaterialyOrderForm({ productKind, productSlug, productTitle, pri
         </span>
       </label>
 
-      {state.status === 'error' && <p className="form-error">{state.message}</p>}
+      {state.status === 'error' ? <p className="form-error">{state.message}</p> : null}
 
       <button type="submit" className="notatnik-btn" disabled={state.status === 'submitting'}>
-        <span>{state.status === 'submitting' ? 'Wysylam...' : isFree ? 'Pobierz bezplatnie' : 'Zamow i zaplac BLIK'}</span>
-        {state.status !== 'submitting' && (
+        <span>{state.status === 'submitting' ? 'Wysyłam...' : isFree ? 'Pobierz bezpłatnie' : 'Przejdź do płatności'}</span>
+        {state.status !== 'submitting' ? (
           <span className="notatnik-btn-arrow" aria-hidden="true">
             &rarr;
           </span>
-        )}
+        ) : null}
       </button>
     </form>
   )

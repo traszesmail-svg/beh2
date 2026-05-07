@@ -14,6 +14,10 @@ function createUnauthorizedResponse(message: string, status: number) {
 }
 
 export function middleware(request: NextRequest) {
+  if (request.nextUrl.pathname.startsWith('/api/admin/confirm-payment/')) {
+    return NextResponse.next()
+  }
+
   const secret = getAdminAccessSecret()
 
   if (!secret) {
