@@ -2,6 +2,10 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { CommerceWaitingStatus } from '@/components/CommerceWaitingStatus'
 import { NotatnikPageShell, PUBLIC_BOOKING_FLOW_NAV_ITEMS } from '@/components/NotatnikA'
+import {
+  buildCommerceManualReviewUrl,
+  isCommerceTestModeAllowed,
+} from '@/lib/server/commerce-service'
 import { canUseCommerceAccess, getCommerceOrder } from '@/lib/server/commerce-store'
 import { buildTechnicalMetadata } from '@/lib/seo'
 
@@ -24,6 +28,14 @@ export default async function WaitingPage({ params }: { params: { orderNumber: s
   const accessUrl = order && accessReady
     ? `/pokoj?code=${encodeURIComponent(order.accessCode!)}&email=${encodeURIComponent(order.customerEmail)}`
     : null
+  const testAdminConfirmUrl =
+    order &&
+    isCommerceTestModeAllowed() &&
+    order.status === 'payment_reported' &&
+    order.adminConfirmationToken &&
+    !order.adminConfirmationTokenUsedAt
+      ? buildCommerceManualReviewUrl(order, 'approve')
+      : null
 
   return (
     <NotatnikPageShell
@@ -56,6 +68,7 @@ export default async function WaitingPage({ params }: { params: { orderNumber: s
                 initialStatus={order.status}
                 initialAccessCode={accessReady ? order.accessCode : null}
                 initialAccessUrl={accessUrl}
+                initialTestAdminConfirmUrl={testAdminConfirmUrl}
               />
             </>
           )}

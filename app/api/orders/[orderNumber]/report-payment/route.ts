@@ -4,6 +4,7 @@ export const revalidate = 0
 import { NextResponse } from 'next/server'
 import {
   buildCommerceManualReviewUrl,
+  isCommerceTestModeAllowed,
 } from '@/lib/server/commerce-service'
 import { reportCommerceManualPayment } from '@/lib/server/commerce-store'
 import { markBookingManualPaymentPending } from '@/lib/server/db'
@@ -36,6 +37,7 @@ export async function POST(request: Request, { params }: { params: { orderNumber
       status: order.status,
       adminNotification: emailResult.status,
       redirectTo: `/oczekiwanie/${encodeURIComponent(order.orderNumber)}`,
+      testAdminConfirmUrl: isCommerceTestModeAllowed() ? buildCommerceManualReviewUrl(order, 'approve') : null,
     })
   } catch (error) {
     console.error('[commerce][orders] report manual payment failed', error)

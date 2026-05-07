@@ -8,6 +8,7 @@ type StatusPayload = {
   accessReady: boolean
   accessCode: string | null
   accessUrl: string | null
+  testAdminConfirmUrl: string | null
   error?: string
 }
 
@@ -16,6 +17,7 @@ type Props = {
   initialStatus: string
   initialAccessCode: string | null
   initialAccessUrl: string | null
+  initialTestAdminConfirmUrl: string | null
 }
 
 export function CommerceWaitingStatus({
@@ -23,10 +25,12 @@ export function CommerceWaitingStatus({
   initialStatus,
   initialAccessCode,
   initialAccessUrl,
+  initialTestAdminConfirmUrl,
 }: Props) {
   const [status, setStatus] = useState(initialStatus)
   const [accessCode, setAccessCode] = useState(initialAccessCode)
   const [accessUrl, setAccessUrl] = useState(initialAccessUrl)
+  const [testAdminConfirmUrl, setTestAdminConfirmUrl] = useState(initialTestAdminConfirmUrl)
   const [error, setError] = useState('')
 
   useEffect(() => {
@@ -44,6 +48,7 @@ export function CommerceWaitingStatus({
           setAccessCode(payload.accessCode)
           setAccessUrl(payload.accessUrl)
         }
+        setTestAdminConfirmUrl(payload.testAdminConfirmUrl)
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Nie udało się sprawdzić statusu.')
       }
@@ -70,6 +75,15 @@ export function CommerceWaitingStatus({
       <span>
         Aktualny status: <code>{status}</code>. Nie musisz odświeżać strony, status sprawdzi się automatycznie.
       </span>
+      {testAdminConfirmUrl ? (
+        <div className="list-card accent-outline tree-backed-card">
+          <strong>Tryb testowy</strong>
+          <span>Ten link symuluje kliknięcie przycisku „Potwierdzam płatność” z maila administratora.</span>
+          <a href={testAdminConfirmUrl} className="button button-ghost" target="_blank" rel="noreferrer">
+            Potwierdź płatność testowo
+          </a>
+        </div>
+      ) : null}
       {error ? <span className="form-error">{error}</span> : null}
     </div>
   )
