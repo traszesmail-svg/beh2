@@ -2,13 +2,16 @@ export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 import { NextResponse } from 'next/server'
-import {
-  buildCommerceManualReviewUrl,
-  isCommerceTestModeAllowed,
-} from '@/lib/server/commerce-service'
+import { isCommerceTestModeAllowed } from '@/lib/server/commerce-service'
 import { canUseCommerceAccess, getCommerceOrder } from '@/lib/server/commerce-store'
 
-export async function GET(_request: Request, { params }: { params: { orderNumber: string } }) {
+function buildRequestReviewUrl(request: Request, token: string, action: 'approve' | 'reject') {
+  const url = new URL(`/api/admin/confirm-payment/${encodeURIComponent(token)}`, request.url)
+  url.searchParams.set('action', action)
+  return url.toString()
+}
+
+export async function GET(request: Request, { params }: { params: { orderNumber: string } }) {
   const order = await getCommerceOrder(params.orderNumber)
 
   if (!order) {
@@ -31,14 +34,14 @@ export async function GET(_request: Request, { params }: { params: { orderNumber
       order.status === 'payment_reported' &&
       order.adminConfirmationToken &&
       !order.adminConfirmationTokenUsedAt
-        ? buildCommerceManualReviewUrl(order, 'approve')
+        ? buildRequestReviewUrl(request, order.adminConfirmationToken, 'approve')
         : null,
     testAdminRejectUrl:
       isCommerceTestModeAllowed() &&
       order.status === 'payment_reported' &&
       order.adminConfirmationToken &&
       !order.adminConfirmationTokenUsedAt
-        ? buildCommerceManualReviewUrl(order, 'reject')
+        ? buildRequestReviewUrl(request, order.adminConfirmationToken, 'reject')
         : null,
   })
 }

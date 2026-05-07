@@ -1,11 +1,9 @@
 import type { Metadata } from 'next'
+import { headers } from 'next/headers'
 import Link from 'next/link'
 import { CommerceWaitingStatus } from '@/components/CommerceWaitingStatus'
 import { NotatnikPageShell, PUBLIC_BOOKING_FLOW_NAV_ITEMS } from '@/components/NotatnikA'
-import {
-  buildCommerceManualReviewUrl,
-  isCommerceTestModeAllowed,
-} from '@/lib/server/commerce-service'
+import { isCommerceTestModeAllowed } from '@/lib/server/commerce-service'
 import { canUseCommerceAccess, getCommerceOrder } from '@/lib/server/commerce-store'
 import { buildTechnicalMetadata } from '@/lib/seo'
 
@@ -22,6 +20,15 @@ export function generateMetadata(): Metadata {
   })
 }
 
+function buildRequestReviewUrl(token: string, action: 'approve' | 'reject') {
+  const incomingHeaders = headers()
+  const host = incomingHeaders.get('x-forwarded-host') ?? incomingHeaders.get('host') ?? 'localhost:3000'
+  const proto = incomingHeaders.get('x-forwarded-proto') ?? 'https'
+  const url = new URL(`/api/admin/confirm-payment/${encodeURIComponent(token)}`, `${proto}://${host}`)
+  url.searchParams.set('action', action)
+  return url.toString()
+}
+
 export default async function WaitingPage({ params }: { params: { orderNumber: string } }) {
   const order = await getCommerceOrder(params.orderNumber)
   const accessReady = order ? canUseCommerceAccess(order) : false
@@ -34,7 +41,7 @@ export default async function WaitingPage({ params }: { params: { orderNumber: s
     order.status === 'payment_reported' &&
     order.adminConfirmationToken &&
     !order.adminConfirmationTokenUsedAt
-      ? buildCommerceManualReviewUrl(order, 'approve')
+      ? buildRequestReviewUrl(order.adminConfirmationToken, 'approve')
       : null
 
   return (

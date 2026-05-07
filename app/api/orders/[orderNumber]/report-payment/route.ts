@@ -10,6 +10,12 @@ import { reportCommerceManualPayment } from '@/lib/server/commerce-store'
 import { markBookingManualPaymentPending } from '@/lib/server/db'
 import { sendCommerceManualPaymentReportedAdminEmail } from '@/lib/server/notifications'
 
+function buildRequestReviewUrl(request: Request, token: string, action: 'approve' | 'reject') {
+  const url = new URL(`/api/admin/confirm-payment/${encodeURIComponent(token)}`, request.url)
+  url.searchParams.set('action', action)
+  return url.toString()
+}
+
 export async function POST(request: Request, { params }: { params: { orderNumber: string } }) {
   try {
     const order = await reportCommerceManualPayment(params.orderNumber)
@@ -37,7 +43,10 @@ export async function POST(request: Request, { params }: { params: { orderNumber
       status: order.status,
       adminNotification: emailResult.status,
       redirectTo: `/oczekiwanie/${encodeURIComponent(order.orderNumber)}`,
-      testAdminConfirmUrl: isCommerceTestModeAllowed() ? buildCommerceManualReviewUrl(order, 'approve') : null,
+      testAdminConfirmUrl:
+        isCommerceTestModeAllowed() && order.adminConfirmationToken
+          ? buildRequestReviewUrl(request, order.adminConfirmationToken, 'approve')
+          : null,
     })
   } catch (error) {
     console.error('[commerce][orders] report manual payment failed', error)
