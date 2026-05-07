@@ -1,19 +1,18 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { unstable_noStore as noStore } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { CalendarDays, CircleHelp, GraduationCap, Heart, Leaf, Mail, PawPrint, Phone, ShieldCheck, Video } from 'lucide-react'
 import { BookingForm } from '@/components/BookingForm'
-import { BookingServiceInfoCard } from '@/components/BookingServiceInfoCard'
-import { BookingStageEyebrow } from '@/components/BookingStageEyebrow'
 import { NotatnikFooter, NotatnikSideVisuals, NotatnikTopbar, PUBLIC_BOOKING_FLOW_NAV_ITEMS } from '@/components/NotatnikA'
-import { PricingDisclosure } from '@/components/PricingDisclosure'
 import {
   DEFAULT_BOOKING_SERVICE,
   getBookableServiceAvailabilityWindow,
+  getBookingServiceDurationLabel,
   getBookingServicePriceLabel,
   getBookingServiceRoomSummary,
   getBookingServiceTitle,
-  isAudioOnlyBookingService,
   normalizeBookingServiceType,
 } from '@/lib/booking-services'
 import {
@@ -30,6 +29,7 @@ import { DEFAULT_PRICE_PLN } from '@/lib/pricing'
 import { getAvailabilitySlot, getActiveConsultationPrice, listAvailability } from '@/lib/server/db'
 import { getDataModeStatus } from '@/lib/server/env'
 import { buildTechnicalMetadata } from '@/lib/seo'
+import { getPublicContactDetails } from '@/lib/site'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -63,6 +63,14 @@ export default async function FormPage({
   const messageHref = `/kontakt?species=${getProblemSpecies(problem)}#formularz`
   const quickAudioHref = buildBookHref(null, 'szybka-konsultacja-15-min', qaBooking, getProblemSpecies(problem))
   const slotsHref = buildSlotHref(problem, serviceQuery, qaBooking)
+  const species = getProblemSpecies(problem)
+  const isCat = species === 'kot'
+  const publicContact = getPublicContactDetails()
+  const petImage = isCat ? '/images/homepage/home-bg-cat-1to1.png' : '/images/homepage/home-bg-dog-1to1.png'
+  const petNoun = isCat ? 'kotem' : 'psem'
+  const heroImageAlt = isCat
+    ? 'Kot siedzący w spokojnym domowym świetle'
+    : 'Pies siedzący w spokojnym leśnym świetle'
   const dataMode = getDataModeStatus()
   let slot: Awaited<ReturnType<typeof getAvailabilitySlot>> = null
   let flowError: string | null = null
@@ -99,127 +107,190 @@ export default async function FormPage({
   const activeSlot = slotIsBookable ? slot : null
 
   return (
-    <main className="notatnik-page" data-analytics-disabled={qaBooking ? 'true' : undefined} data-qa-booking={qaBooking ? 'true' : 'false'}>
-      <NotatnikSideVisuals variant={getProblemSpecies(problem) === 'kot' ? 'cat' : 'dog'} />
-      <div className="notatnik-shell">
+    <main className={`notatnik-page booking-form-page booking-form-page-${isCat ? 'cat' : 'dog'}`} data-analytics-disabled={qaBooking ? 'true' : undefined} data-qa-booking={qaBooking ? 'true' : 'false'}>
+      <NotatnikSideVisuals variant={isCat ? 'cat' : 'dog'} />
+      <div className="notatnik-shell booking-form-shell">
         <NotatnikTopbar tag="Rezerwacja konsultacji" navItems={PUBLIC_BOOKING_FLOW_NAV_ITEMS} ctaHref={slotsHref} ctaLabel="Wroc do terminow" ctaVariant="ghost" />
 
-        <div className="notatnik-booking">
-          <div className="notatnik-booking-left">
-            <BookingStageEyebrow stage="details" />
+        <section className="booking-form-hero">
+          <div className="booking-form-hero-copy">
+            <h1>Zarezerwuj swój pierwszy krok do spokojniejszego życia z {petNoun}.</h1>
+            <p>Wypełnij formularz, aby potwierdzić termin konsultacji. Otrzymasz e-mail z potwierdzeniem i wskazówkami.</p>
             {qaBooking ? (
-              <div className="notatnik-contact-note" style={{ marginTop: 18 }}>
+              <div className="notatnik-contact-note">
                 <strong>Tryb testowy</strong>
                 <p>Przejdziesz przez kontrolowaną płatność testową bez realnego obciążenia klienta.</p>
               </div>
             ) : null}
+          </div>
+          <figure className="booking-form-hero-media">
+            <Image src={petImage} alt={heroImageAlt} fill priority sizes="(max-width: 980px) 100vw, 430px" />
+          </figure>
+        </section>
 
-            <h1>
-              Uzupelnij <em>potrzebne dane</em>.
-            </h1>
-            <p className="notatnik-booking-lede">
-              Wpisz tylko to, co potrzebne. Po zapisaniu formularza przejdziesz do płatności i końcowego potwierdzenia terminu.
-            </p>
+        <section className="booking-form-summary-strip" aria-label="Skrót rezerwacji">
+          <article>
+            <CircleHelp size={28} strokeWidth={1.75} aria-hidden="true" />
+            <span>
+              <strong>Problem</strong>
+              <small>{getProblemLabel(problem)}</small>
+            </span>
+          </article>
+          <article>
+            <CalendarDays size={28} strokeWidth={1.75} aria-hidden="true" />
+            <span>
+              <strong>Termin</strong>
+              <small>{slot ? formatDateTimeLabel(slot.bookingDate, slot.bookingTime) : 'Termin niedostępny'}</small>
+            </span>
+          </article>
+          <article>
+            <Video size={28} strokeWidth={1.75} aria-hidden="true" />
+            <span>
+              <strong>Forma</strong>
+              <small>{getBookingServiceRoomSummary(serviceType)}</small>
+            </span>
+          </article>
+        </section>
 
-            <div className="notatnik-detail-stack">
-              <BookingServiceInfoCard
+        <section className="booking-form-layout">
+          <article className="booking-form-card" id="formularz">
+            <h2>Twoje dane kontaktowe</h2>
+
+            {flowError ? (
+              <>
+                <div className="notatnik-callout">
+                  {flowError} Jeśli temat jest pilny, wyślij krótką wiadomość i wróć do terminów później.
+                </div>
+                <div className="notatnik-actions">
+                  <Link href={slotsHref} prefetch={false} className="notatnik-btn notatnik-btn-accent">
+                    Wróć do terminów
+                  </Link>
+                  <Link href={messageHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
+                    {FUNNEL_CTA_LABELS.contact}
+                  </Link>
+                </div>
+              </>
+            ) : activeSlot ? (
+              <BookingForm
+                problemType={problem}
                 serviceType={serviceType}
-                quickConsultationPrice={amount}
-                title="Parametry tej rezerwacji"
-                stageLabel="Dane do potwierdzenia"
-                emphasis="To ostatni spokojny krok przed platnoscia. Po zapisaniu formularza wybrane okno zostanie tymczasowo zablokowane."
+                slotId={activeSlot.id}
+                slotLabel={formatDateTimeLabel(activeSlot.bookingDate, activeSlot.bookingTime)}
+                amountLabel={amountLabel}
+                qaBooking={qaBooking}
               />
+            ) : (
+              <>
+                <div className="notatnik-callout notatnik-callout-error">
+                  Ten termin nie jest już dostępny dla wybranej usługi. Wróć do listy albo wyślij krótką wiadomość.
+                </div>
+                <div className="notatnik-actions">
+                  <Link href={slotsHref} prefetch={false} className="notatnik-btn notatnik-btn-accent">
+                    Wróć do terminów
+                  </Link>
+                  <Link href={messageHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
+                    {FUNNEL_CTA_LABELS.contact}
+                  </Link>
+                </div>
+              </>
+            )}
+          </article>
 
-              <div className="notatnik-detail-card">
-                <strong>Usluga</strong>
-                <p>{getBookingServiceTitle(serviceType)}</p>
+          <aside className="booking-form-side">
+            <section className="booking-form-side-card">
+              <h2>Podsumowanie konsultacji</h2>
+              <div className="booking-form-side-list">
+                <span>
+                  <CalendarDays size={27} strokeWidth={1.75} aria-hidden="true" />
+                  <strong>Termin</strong>
+                  <small>{slot ? formatDateTimeLabel(slot.bookingDate, slot.bookingTime) : 'Termin niedostępny'}</small>
+                </span>
+                <span>
+                  <Video size={27} strokeWidth={1.75} aria-hidden="true" />
+                  <strong>Forma</strong>
+                  <small>{getBookingServiceTitle(serviceType)}</small>
+                </span>
+                <span>
+                  <CircleHelp size={27} strokeWidth={1.75} aria-hidden="true" />
+                  <strong>Problem</strong>
+                  <small>{getProblemLabel(problem)}</small>
+                </span>
+                <span>
+                  <CalendarDays size={27} strokeWidth={1.75} aria-hidden="true" />
+                  <strong>Czas trwania</strong>
+                  <small>{getBookingServiceDurationLabel(serviceType)}</small>
+                </span>
               </div>
 
-              <div className="notatnik-detail-card">
-                <strong>Temat</strong>
-                <p>{getProblemLabel(problem)}</p>
+              <div className="booking-form-question">
+                <h3>Masz pytania?</h3>
+                <p>Napisz do mnie - chętnie pomogę.</p>
+                <a href={`mailto:${publicContact.email}`}>
+                  <Mail size={18} strokeWidth={1.8} aria-hidden="true" />
+                  {publicContact.email}
+                </a>
+                <span>
+                  <Phone size={18} strokeWidth={1.8} aria-hidden="true" />
+                  Online w całej Polsce
+                </span>
               </div>
+            </section>
 
-              <div className="notatnik-detail-card">
-                <strong>Termin rozmowy</strong>
-                <p>{slot ? formatDateTimeLabel(slot.bookingDate, slot.bookingTime) : 'Ten termin nie jest juz dostepny.'}</p>
-              </div>
+            <section className="booking-form-safe-card">
+              <ShieldCheck size={34} strokeWidth={1.65} aria-hidden="true" />
+              <span>
+                <strong>Bezpieczeństwo i zaufanie</strong>
+                <small>Twoje dane traktuję poufnie i wykorzystuję wyłącznie w celu realizacji konsultacji.</small>
+              </span>
+            </section>
+          </aside>
+        </section>
 
-              <div className="notatnik-detail-card">
-                <strong>Format</strong>
-                <p>
-                  {getBookingServiceRoomSummary(serviceType)}{' '}
-                  {isAudioOnlyBookingService(serviceType)
-                    ? 'Kamera nie jest potrzebna.'
-                    : serviceType === 'konsultacja-30-min'
-                      ? 'Wiecej czasu na uporzadkowanie kilku watkow, gdy 15 minut to za malo.'
-                      : 'To najszersza konsultacja online z wieksza iloscia czasu na temat i kilka watkow naraz.'}
-                </p>
-              </div>
+        <section className="booking-form-proof-strip" aria-label="Najważniejsze informacje">
+          {[
+            { icon: PawPrint, title: 'Indywidualne podejście', copy: 'Plan dopasowany do potrzeb.' },
+            { icon: GraduationCap, title: 'Wiedza i doświadczenie', copy: 'Praktyka oparta na nauce.' },
+            { icon: Heart, title: 'Empatia i zrozumienie', copy: 'Wsparcie dla Ciebie i zwierzęcia.' },
+            { icon: ShieldCheck, title: 'Bez presji i oceniania', copy: 'Pracujemy w tempie, które jest dobre dla Was.' },
+            { icon: Leaf, title: 'Skuteczność i trwała zmiana', copy: 'Pomagam rozwiązywać problemy u źródła.' },
+          ].map((item) => {
+            const Icon = item.icon
 
-              <div className="notatnik-detail-card">
-                <PricingDisclosure
-                  stage="pre-payment"
-                  labelAs="strong"
-                  message={`${amountLabel}. To finalna kwota dla tej uslugi przed przejsciem do platnosci.`}
-                />
-              </div>
-            </div>
+            return (
+              <article key={item.title}>
+                <Icon size={27} strokeWidth={1.7} aria-hidden="true" />
+                <span>
+                  <strong>{item.title}</strong>
+                  <small>{item.copy}</small>
+                </span>
+              </article>
+            )
+          })}
+        </section>
+
+        <section className="booking-form-final-cta">
+          <span className="booking-form-final-icon" aria-hidden="true">
+            <CalendarDays size={34} strokeWidth={1.7} />
+          </span>
+          <div>
+            <h2>Gotowy na pierwszy krok?</h2>
+            <p>Zarezerwuj termin i zacznijcie wspólnie pracę nad spokojniejszym życiem.</p>
           </div>
-
-          <div className="notatnik-booking-right">
-            <div className="notatnik-booking-panel">
-              <div className="notatnik-mono">Krok 04 / 04 · Formularz</div>
-
-              {flowError ? (
-                <>
-                  <div className="notatnik-callout">
-                    {flowError} Jesli temat jest pilny, wyslij krotka wiadomosc i wroc do terminow pozniej.
-                  </div>
-                  <div className="notatnik-actions">
-                    <Link href={slotsHref} prefetch={false} className="notatnik-btn notatnik-btn-accent">
-                      Wroc do terminow
-                    </Link>
-                    <Link href={messageHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
-                      {FUNNEL_CTA_LABELS.contact}
-                    </Link>
-                  </div>
-                </>
-              ) : activeSlot ? (
-                <>
-              <div className="notatnik-contact-note">
-                <strong>Formularz rezerwacji</strong>
-                <p>Wpisz tylko informacje potrzebne do rezerwacji i przejścia do płatności.</p>
-              </div>
-                  <BookingForm
-                    problemType={problem}
-                    serviceType={serviceType}
-                    slotId={activeSlot.id}
-                    slotLabel={formatDateTimeLabel(activeSlot.bookingDate, activeSlot.bookingTime)}
-                    amountLabel={amountLabel}
-                    qaBooking={qaBooking}
-                  />
-                </>
-              ) : (
-                <>
-                  <div className="notatnik-callout notatnik-callout-error">
-                    Ten termin nie jest już dostępny dla wybranej usługi. Wróć do listy albo wyślij krótką wiadomość.
-                  </div>
-                  <div className="notatnik-actions">
-                    <Link href={slotsHref} prefetch={false} className="notatnik-btn notatnik-btn-accent">
-                      Wroc do terminow
-                    </Link>
-                    <Link href={messageHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
-                      {FUNNEL_CTA_LABELS.contact}
-                    </Link>
-                  </div>
-                </>
-              )}
-            </div>
+          <div className="booking-form-final-actions">
+            <a href="#formularz" className="notatnik-btn notatnik-btn-accent">
+              Potwierdzam termin i przechodzę dalej
+            </a>
+            <Link href={slotsHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
+              Wróć do wyboru
+            </Link>
           </div>
-        </div>
+        </section>
 
-        <NotatnikFooter primaryHref={quickAudioHref} primaryLabel={FUNNEL_CTA_LABELS.primary} />
+        <NotatnikFooter
+          primaryHref={quickAudioHref}
+          primaryLabel={FUNNEL_CTA_LABELS.primary}
+          reviewSpecies={isCat ? 'cat' : 'dog'}
+        />
       </div>
     </main>
   )

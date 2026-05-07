@@ -89,6 +89,40 @@ export default function ContactPage() {
                 })}
               </div>
             </section>
+            <section id="kontakt-bez-formularza" className="contact-direct-panel contact-direct-panel-hero" aria-labelledby="contact-direct-title">
+              <h2 id="contact-direct-title">Kontakt bez formularza</h2>
+              <div className="contact-direct-grid">
+                <span>
+                  <Mail size={20} strokeWidth={1.8} aria-hidden="true" />
+                  <strong>E-mail</strong>
+                  <a href={`mailto:${publicContact.email}`}>{publicContact.email}</a>
+                </span>
+                <span>
+                  <Headphones size={20} strokeWidth={1.8} aria-hidden="true" />
+                  <strong>Odpowiedź</strong>
+                  1-2 dni robocze
+                </span>
+                <span>
+                  <MessageCircle size={20} strokeWidth={1.8} aria-hidden="true" />
+                  <strong>Forma</strong>
+                  formularz / e-mail
+                </span>
+                <span>
+                  <AtSign size={20} strokeWidth={1.8} aria-hidden="true" />
+                  <strong>Instagram</strong>
+                  <Link href={INSTAGRAM_PROFILE_URL} target="_blank" rel="noopener noreferrer">
+                    @regulskibehawiorysta
+                  </Link>
+                </span>
+                <span>
+                  <Globe2 size={20} strokeWidth={1.8} aria-hidden="true" />
+                  <strong>Profil</strong>
+                  <Link href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer">
+                    behawioryscicoape.pl/Regulski
+                  </Link>
+                </span>
+              </div>
+            </section>
             <div className="contact-hero-proof" aria-label="Najważniejsze informacje">
               <span>
                 <Heart size={20} strokeWidth={1.8} aria-hidden="true" />
@@ -136,41 +170,6 @@ export default function ContactPage() {
                   <p>{item.answer}</p>
                 </details>
               ))}
-            </div>
-          </section>
-
-          <section id="kontakt-bez-formularza" className="contact-direct-panel" aria-labelledby="contact-direct-title">
-            <h2 id="contact-direct-title">Kontakt bez formularza</h2>
-            <div className="contact-direct-grid">
-              <span>
-                <Mail size={20} strokeWidth={1.8} aria-hidden="true" />
-                <strong>E-mail</strong>
-                <a href={`mailto:${publicContact.email}`}>{publicContact.email}</a>
-              </span>
-              <span>
-                <Headphones size={20} strokeWidth={1.8} aria-hidden="true" />
-                <strong>Odpowiedź</strong>
-                1-2 dni robocze
-              </span>
-              <span>
-                <MessageCircle size={20} strokeWidth={1.8} aria-hidden="true" />
-                <strong>Forma</strong>
-                formularz / e-mail
-              </span>
-              <span>
-                <AtSign size={20} strokeWidth={1.8} aria-hidden="true" />
-                <strong>Instagram</strong>
-                <Link href={INSTAGRAM_PROFILE_URL} target="_blank" rel="noopener noreferrer">
-                  @regulskibehawiorysta
-                </Link>
-              </span>
-              <span>
-                <Globe2 size={20} strokeWidth={1.8} aria-hidden="true" />
-                <strong>Profil</strong>
-                <Link href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer">
-                  behawioryscicoape.pl/Regulski
-                </Link>
-              </span>
             </div>
           </section>
         </section>

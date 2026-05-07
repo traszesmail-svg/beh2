@@ -52,6 +52,7 @@ type NotatnikFooterProps = {
   primaryHref?: string
   primaryLabel?: string
   showReviews?: boolean
+  reviewSpecies?: 'dog' | 'cat' | 'all'
 }
 
 type NotatnikPageShellProps = {
@@ -275,8 +276,8 @@ export function NotatnikFinalCta({
   )
 }
 
-export function NotatnikFooter({ showReviews = true }: NotatnikFooterProps) {
-  return <Footer variant="full" showReviews={showReviews} />
+export function NotatnikFooter({ showReviews = true, reviewSpecies = 'all' }: NotatnikFooterProps) {
+  return <Footer variant="full" showReviews={showReviews} reviewSpecies={reviewSpecies} />
 }
 
 export function NotatnikPageShell({

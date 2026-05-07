@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { unstable_noStore as noStore } from 'next/cache'
-import { BadgeCheck, CalendarDays, Cat, Check, ChevronDown, ChevronRight, Dog, Headphones, Monitor, PawPrint, ShieldCheck, Stethoscope } from 'lucide-react'
+import { CalendarDays, Cat, Check, ChevronDown, Dog, Headphones, PawPrint } from 'lucide-react'
 import { EditorialIndexTopbar } from '@/components/EditorialIndexTopbar'
 import { NotatnikFooter, NotatnikSideVisuals } from '@/components/NotatnikA'
 import { TerminCalendarPicker, type TerminCalendarDay as PickerCalendarDay } from '@/components/TerminCalendarPicker'
@@ -23,7 +23,6 @@ import {
 } from '@/lib/booking-routing'
 import { getProblemLabel, getProblemSpecies } from '@/lib/data'
 import { FUNNEL_CTA_LABELS, FUNNEL_SERVICE_CONFIG } from '@/lib/funnel'
-import { homepageTrustBadges } from '@/lib/homepage-data'
 import { formatPricePln } from '@/lib/pricing'
 import { getBreadcrumbJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
@@ -39,8 +38,6 @@ export const metadata: Metadata = buildMarketingMetadata({
   path: '/termin',
   description: 'Prosty widok wyboru terminu po krótkim wyborze tematu psa albo kota.',
 })
-
-const trustIcons = [BadgeCheck, Stethoscope, PawPrint, ShieldCheck, Monitor] as const
 
 const terminSteps = ['Gatunek', 'Temat', 'Termin', 'Dane'] as const
 
@@ -136,17 +133,6 @@ function getServiceQuery(serviceType: BookingServiceType) {
   return serviceType === DEFAULT_BOOKING_SERVICE ? null : serviceType
 }
 
-function selectedUrlFallback(
-  problem: ProblemType,
-  groupedAvailability: GroupedAvailability[],
-  serviceQuery: BookingServiceType | null,
-  qaBooking: boolean,
-) {
-  const firstSlot = groupedAvailability[0]?.slots[0]
-
-  return firstSlot ? buildFormHref(problem, firstSlot.id, serviceQuery, qaBooking) : buildSlotHref(problem, serviceQuery, qaBooking)
-}
-
 export default async function TerminPage({
   searchParams,
 }: {
@@ -186,7 +172,6 @@ export default async function TerminPage({
   const contactHref = problemSpecies === 'inne' ? '/kontakt#formularz' : `/kontakt?species=${problemSpecies}#formularz`
   const isUrgentBooking = serviceType === 'kwadrans-na-juz'
   const sideVisualVariant = 'booking'
-  const nextStepHref = selectedUrlFallback(problem, groupedAvailability, serviceQuery, qaBooking)
   const modeLabel =
     serviceType === 'konsultacja-behawioralna-online'
       ? 'Audio lub video online'
@@ -236,10 +221,6 @@ export default async function TerminPage({
           <ChevronDown size={18} strokeWidth={1.9} aria-hidden="true" />
         </Link>
       </div>
-      <Link href={nextStepHref} prefetch={false} className="termin-inline-next">
-        Przejdź dalej
-        <ChevronRight size={18} strokeWidth={1.9} aria-hidden="true" />
-      </Link>
     </div>
   )
 
@@ -328,22 +309,6 @@ export default async function TerminPage({
 
         {!isUrgentBooking ? (
           <>
-            <section className="notatnik-home-trust-section compact-home-section">
-              <div className="trust-bar trust-bar-compact" aria-label="Najważniejsze informacje">
-                {homepageTrustBadges.map((badge, index) => {
-                  const Icon = trustIcons[index] ?? BadgeCheck
-
-                  return (
-                    <span key={badge.title} className="trust-item">
-                      <Icon size={18} strokeWidth={1.8} aria-hidden="true" />
-                      <strong>{badge.title}</strong>
-                      {badge.helper ? <small>{badge.helper}</small> : null}
-                    </span>
-                  )
-                })}
-              </div>
-            </section>
-
             <section className="termin-process-section compact-home-section">
               <h2>Jak to działa?</h2>
               <div className="termin-process-grid">
@@ -375,16 +340,6 @@ export default async function TerminPage({
                   </details>
                 ))}
                 <Link href="/faq" prefetch={false}>Zobacz wszystkie pytania</Link>
-              </div>
-
-              <div className="termin-final-card">
-                <h2>Gotowy na pierwszy krok?</h2>
-                <p>Krótka konsultacja to najprostszy sposób, aby szybko uzyskać jasność i konkretne wskazówki.</p>
-                <Link href={nextStepHref} prefetch={false} className="termin-inline-next">
-                  Zarezerwuj termin
-                  <ChevronRight size={18} strokeWidth={1.9} aria-hidden="true" />
-                </Link>
-                <small>albo wróć do wyboru tematu</small>
               </div>
             </section>
 

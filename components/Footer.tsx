@@ -5,7 +5,7 @@ import { BookOpen, CircleHelp, Mail, ReceiptText, ShieldCheck } from 'lucide-rea
 import { FinalReviewsQuoteCarousel } from '@/components/FinalReviewsQuoteCarousel'
 import { getBuildMarkerSnapshot } from '@/lib/build-marker'
 import { REGULSKI_WEB_LOGO } from '@/lib/regulski-web-assets'
-import { reviews } from '@/lib/reviews.config'
+import { catReviews, dogReviews, reviews } from '@/lib/reviews.config'
 import { CAPBT_PROFILE_URL, COAPE_ORG_URL, SPECIALIST_NAME } from '@/lib/site'
 
 type FooterProps = {
@@ -15,6 +15,7 @@ type FooterProps = {
   secondaryHref?: string
   secondaryLabel?: string
   showReviews?: boolean
+  reviewSpecies?: 'dog' | 'cat' | 'all'
   sectionBasePath?: '/' | '/blog' | '/psy' | '/koty' | '/opinie' | '/o-mnie' | '/faq' | '/kontakt' | '/materialy' | '/niezbednik'
 }
 
@@ -29,10 +30,11 @@ const FOOTER_NAV_ITEMS = [
 
 export function Footer(props: FooterProps) {
   const buildMarker = getBuildMarkerSnapshot()
+  const footerReviews = props.reviewSpecies === 'dog' ? dogReviews : props.reviewSpecies === 'cat' ? catReviews : reviews
 
   return (
     <>
-      {props.showReviews === false ? null : <FinalReviewsQuoteCarousel reviews={reviews} intervalMs={10000} />}
+      {props.showReviews === false ? null : <FinalReviewsQuoteCarousel reviews={footerReviews} intervalMs={10000} />}
       <footer className="site-footer" aria-label="Stopka" data-build-marker={buildMarker.value}>
         <div className="site-footer-grid">
           <div className="site-footer-brand">
