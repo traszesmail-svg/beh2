@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { Suspense } from 'react'
 import {
@@ -62,6 +63,15 @@ export default function ContactPage() {
 
         <section className="contact-hero-grid" id="formularz">
           <div className="contact-hero-copy">
+            <figure className="contact-intro-photo">
+              <Image
+                src="/branding/omnie3.png"
+                alt="Krzysztof Regulski w granatowym stroju medycznym podczas kontaktu online"
+                width={320}
+                height={480}
+                priority
+              />
+            </figure>
             <h1>Napisz, zanim zarezerwujesz.</h1>
             <p>
               Wystarczy gatunek, temat i kilka zdań. Odpowiem w ciągu 1-2 dni roboczych i wskażę

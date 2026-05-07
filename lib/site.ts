@@ -118,6 +118,12 @@ export const LANDING_SPECIALIST_PHOTO = {
 }
 
 export const SPECIALIST_PHOTO = LANDING_SPECIALIST_PHOTO
+export const ABOUT_SPECIALIST_PHOTO = {
+  src: '/branding/omnie2.png',
+  width: 1024,
+  height: 1536,
+  alt: 'Krzysztof Regulski w granatowym stroju medycznym z informacją o pomocy behawioralnej dla psów i kotów',
+}
 
 export const SPECIALIST_WIDE_PHOTO = {
   src: '/images/cutover/therapy-animals.png',

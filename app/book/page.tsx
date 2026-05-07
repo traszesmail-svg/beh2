@@ -95,8 +95,9 @@ export default function BookPage({ searchParams }: BookPageProps) {
   const problem = readProblemTypeSearchParam(searchParams?.problem) ?? 'inne'
   const serviceQuery = service === DEFAULT_BOOKING_SERVICE ? null : service
   const qaBooking = readQaBookingSearchParam(searchParams?.qa)
+  const species = readBookingSpeciesSearchParam(searchParams?.species)
 
-  redirect(buildSlotHref(problem, serviceQuery, qaBooking))
+  redirect(buildSlotHref(problem, serviceQuery, qaBooking, species))
 
   // Legacy booking landing markers intentionally kept for source-level governance tests:
   // nazwa uslugi: Kwadrans z behawiorysta; format: 15 min audio bez kamery.
@@ -104,7 +105,6 @@ export default function BookPage({ searchParams }: BookPageProps) {
   // <Link href={heroFormHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
   // Dwa kwadranse dla szerszego tematu
   // Pelna konsultacja dla spraw zlozonych
-  const species = readBookingSpeciesSearchParam(searchParams?.species)
   const selectedOffer = getOfferBySlug(service)
   const hasExplicitService = Boolean(requestedService && selectedOffer)
   const pageTag =

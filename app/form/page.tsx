@@ -18,6 +18,7 @@ import {
 import {
   buildBookHref,
   buildSlotHref,
+  readBookingSpeciesSearchParam,
   readBookingServiceSearchParam,
   readProblemTypeSearchParam,
   readQaBookingSearchParam,
@@ -55,15 +56,16 @@ export default async function FormPage({
   const serviceQuery = serviceType === DEFAULT_BOOKING_SERVICE ? null : serviceType
   const slotId = readSearchParam(searchParams?.slotId)
   const qaBooking = readQaBookingSearchParam(searchParams?.qa)
+  const requestedSpecies = readBookingSpeciesSearchParam(searchParams?.species)
 
   if (!problem || !slotId) {
-    redirect(buildBookHref(null, serviceQuery, qaBooking))
+    redirect(buildBookHref(null, serviceQuery, qaBooking, requestedSpecies))
   }
 
-  const messageHref = `/kontakt?species=${getProblemSpecies(problem)}#formularz`
-  const quickAudioHref = buildBookHref(null, 'szybka-konsultacja-15-min', qaBooking, getProblemSpecies(problem))
-  const slotsHref = buildSlotHref(problem, serviceQuery, qaBooking)
-  const species = getProblemSpecies(problem)
+  const species = requestedSpecies ?? getProblemSpecies(problem)
+  const messageHref = `/kontakt?species=${species}#formularz`
+  const quickAudioHref = buildBookHref(null, 'szybka-konsultacja-15-min', qaBooking, species)
+  const slotsHref = buildSlotHref(problem, serviceQuery, qaBooking, species)
   const isCat = species === 'kot'
   const publicContact = getPublicContactDetails()
   const petImage = isCat ? '/images/homepage/home-bg-cat-1to1.png' : '/images/homepage/home-bg-dog-1to1.png'

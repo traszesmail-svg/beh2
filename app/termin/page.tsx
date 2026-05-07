@@ -17,6 +17,7 @@ import {
 import {
   buildFormHref,
   buildSlotHref,
+  readBookingSpeciesSearchParam,
   readBookingServiceSearchParam,
   readProblemTypeSearchParam,
   readQaBookingSearchParam,
@@ -145,9 +146,10 @@ export default async function TerminPage({
   const serviceType = normalizeBookingServiceType(readBookingServiceSearchParam(searchParams?.service))
   const serviceQuery = getServiceQuery(serviceType)
   const qaBooking = readQaBookingSearchParam(searchParams?.qa)
+  const requestedSpecies = readBookingSpeciesSearchParam(searchParams?.species)
   const serviceConfig = FUNNEL_SERVICE_CONFIG[serviceType]
 
-  const retryHref = buildSlotHref(problem, serviceQuery, qaBooking)
+  const retryHref = buildSlotHref(problem, serviceQuery, qaBooking, requestedSpecies)
   const dataMode = getDataModeStatus()
   let groupedAvailability: GroupedAvailability[] = []
   let publicFlowMessage: string | null = null
@@ -168,7 +170,7 @@ export default async function TerminPage({
   }
 
   const calendar = buildCalendarDays(groupedAvailability)
-  const problemSpecies = problem === 'inne' ? 'inne' : getProblemSpecies(problem)
+  const problemSpecies = requestedSpecies ?? (problem === 'inne' ? 'inne' : getProblemSpecies(problem))
   const contactHref = problemSpecies === 'inne' ? '/kontakt#formularz' : `/kontakt?species=${problemSpecies}#formularz`
   const isUrgentBooking = serviceType === 'kwadrans-na-juz'
   const sideVisualVariant = 'booking'
@@ -190,7 +192,7 @@ export default async function TerminPage({
         date: day.date,
         dateLabel: formatReadableDate(parseDate(day.date)),
         time: slot.bookingTime,
-        href: buildFormHref(problem, slot.id, serviceQuery, qaBooking),
+        href: buildFormHref(problem, slot.id, serviceQuery, qaBooking, requestedSpecies),
         serviceType,
         serviceTitle: serviceConfig.title,
       })) ?? [],
@@ -200,11 +202,11 @@ export default async function TerminPage({
       <div>
         <span>Gatunek</span>
         <div className="termin-inline-choice-options">
-          <Link href={buildSlotHref('separacja', serviceQuery, qaBooking)} prefetch={false} className={problemSpecies === 'pies' ? 'is-selected' : ''}>
+          <Link href={buildSlotHref('separacja', serviceQuery, qaBooking, 'pies')} prefetch={false} className={problemSpecies === 'pies' ? 'is-selected' : ''}>
             <Dog size={18} strokeWidth={1.9} aria-hidden="true" />
             Pies
           </Link>
-          <Link href={buildSlotHref('kot-stres', serviceQuery, qaBooking)} prefetch={false} className={problemSpecies === 'kot' ? 'is-selected' : ''}>
+          <Link href={buildSlotHref('kot-stres', serviceQuery, qaBooking, 'kot')} prefetch={false} className={problemSpecies === 'kot' ? 'is-selected' : ''}>
             <Cat size={18} strokeWidth={1.9} aria-hidden="true" />
             Kot
           </Link>

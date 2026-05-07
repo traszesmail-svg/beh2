@@ -74,11 +74,13 @@ export function buildSlotHref(
   problem: ProblemType,
   serviceType?: BookingServiceType | null,
   qaBooking?: boolean,
+  species?: BookingSpecies | null,
 ): string {
   return buildQueryHref('/termin', {
     problem,
     service: serviceType ?? null,
     qa: qaBooking ? '1' : null,
+    species: species ?? null,
   })
 }
 
@@ -87,12 +89,14 @@ export function buildFormHref(
   slotId: string,
   serviceType?: BookingServiceType | null,
   qaBooking?: boolean,
+  species?: BookingSpecies | null,
 ): string {
   return buildQueryHref('/form', {
     problem,
     slotId,
     service: serviceType ?? null,
     qa: qaBooking ? '1' : null,
+    species: species ?? null,
   })
 }
 

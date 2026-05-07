@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, ChevronDown } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { trackAnalyticsEvent } from '@/lib/analytics'
 import {
   homepageAnimalQuestion,
@@ -45,12 +45,17 @@ function getAnimal(value: string | undefined): HomepageSelectorAnimal | null {
 function buildSelectorHref(answers: HomepageSelectorAnswers, resultKey: HomepageSelectorRecommendationKey) {
   const recommendation = homepageSelectorRecommendations[resultKey]
   const problem = answers.problem ? problemToBookingProblem[answers.problem] ?? 'inne' : null
+  const species = answers.animal === 'cat' ? 'kot' : answers.animal === 'dog' ? 'pies' : null
   const params = new URLSearchParams()
 
   params.set('service', recommendation.service)
 
   if (problem) {
     params.set('problem', problem)
+  }
+
+  if (species) {
+    params.set('species', species)
   }
 
   return `/termin?${params.toString()}`
@@ -159,6 +164,14 @@ export function HomepageServiceSelector({ mode = 'home', initialAnimal = null }:
   const recommendation = homepageSelectorRecommendations[resultKey]
   const resultHref = buildSelectorHref(answers, resultKey)
 
+  useEffect(() => {
+    if (!initialAnimal) {
+      return
+    }
+
+    setAnswers((current) => (current.animal === initialAnimal ? current : { animal: initialAnimal }))
+  }, [initialAnimal])
+
   function chooseAnswer(questionId: HomepageSelectorQuestionId, option: HomepageSelectorOption) {
     const nextAnswers: HomepageSelectorAnswers =
       questionId === 'animal'
@@ -236,16 +249,23 @@ export function HomepageServiceSelector({ mode = 'home', initialAnimal = null }:
               </div>
               <div className="home-guided-animal-options">
                 {homepageAnimalQuestion.options.map((option) => (
-                  <button
+                  <Link
                     key={option.id}
-                    type="button"
+                    href={`/wybor?animal=${option.id}`}
+                    prefetch={false}
                     className={answers.animal === option.id ? 'is-selected' : ''}
-                    aria-pressed={answers.animal === option.id}
-                    onClick={() => chooseAnswer('animal', option)}
+                    aria-current={answers.animal === option.id ? 'true' : undefined}
+                    onClick={() =>
+                      trackAnalyticsEvent('topic_selected', {
+                        location: 'home-router',
+                        question: 'animal',
+                        answer: option.id,
+                      })
+                    }
                   >
                     {option.id === 'dog' ? <RouterChoiceIcon choiceId="dog" /> : <RouterChoiceIcon choiceId="cat" />}
                     <span>{option.label}</span>
-                  </button>
+                  </Link>
                 ))}
               </div>
             </article>

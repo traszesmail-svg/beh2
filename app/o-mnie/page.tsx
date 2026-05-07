@@ -13,8 +13,8 @@ import {
   CAPBT_PROFILE_URL,
   INSTAGRAM_PROFILE_URL,
   MEDIA_MENTIONS,
+  ABOUT_SPECIALIST_PHOTO,
   SPECIALIST_NAME,
-  SPECIALIST_PHOTO,
   SPECIALIST_PUBLIC_STATUS,
   SPECIALIST_STATUS_EXPLANATION,
 } from '@/lib/site'
@@ -108,10 +108,10 @@ export default function AboutPage() {
         </div>
         <figure className="reference-photo-card">
           <Image
-            src={SPECIALIST_PHOTO.src}
-            alt={SPECIALIST_PHOTO.alt}
-            width={SPECIALIST_PHOTO.width}
-            height={SPECIALIST_PHOTO.height}
+            src={ABOUT_SPECIALIST_PHOTO.src}
+            alt={ABOUT_SPECIALIST_PHOTO.alt}
+            width={ABOUT_SPECIALIST_PHOTO.width}
+            height={ABOUT_SPECIALIST_PHOTO.height}
             priority
             sizes="(max-width: 760px) 82vw, 360px"
           />

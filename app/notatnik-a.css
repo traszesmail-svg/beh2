@@ -8340,6 +8340,7 @@ button.selector-step {
   gap: 10px;
 }
 
+.home-guided-animal-options a,
 .home-guided-animal-options button,
 .home-guided-urgency-options button,
 .home-guided-select select {
@@ -8358,6 +8359,7 @@ button.selector-step {
     transform 160ms ease;
 }
 
+.home-guided-animal-options a,
 .home-guided-animal-options button,
 .home-guided-urgency-options button {
   display: inline-flex;
@@ -8369,6 +8371,12 @@ button.selector-step {
   cursor: pointer;
 }
 
+.home-guided-animal-options a {
+  text-decoration: none;
+}
+
+.home-guided-animal-options a:hover,
+.home-guided-animal-options a:focus-visible,
 .home-guided-animal-options button:hover,
 .home-guided-animal-options button:focus-visible,
 .home-guided-urgency-options button:hover,
@@ -8397,6 +8405,7 @@ button.selector-step {
   height: 32px;
 }
 
+.home-guided-animal-options a.is-selected,
 .home-guided-animal-options button.is-selected,
 .home-guided-urgency-options button.is-selected {
   border-color: #164828;
@@ -10500,6 +10509,25 @@ button.selector-step {
   padding-top: clamp(20px, 3vw, 42px);
 }
 
+.contact-intro-photo {
+  width: min(178px, 42vw);
+  aspect-ratio: 3 / 4;
+  margin: 0 0 -2px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--accent) 12%, var(--line));
+  border-radius: 18px;
+  background: #f5f0e7;
+  box-shadow: 0 16px 34px rgba(31, 29, 23, 0.12);
+}
+
+.contact-intro-photo img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: 53% 26%;
+}
+
 .contact-hero-copy h1 {
   max-width: 11ch;
   color: var(--accent);
@@ -10905,11 +10933,20 @@ button.selector-step {
   .contact-hero-copy h1 {
     max-width: none;
   }
+
+  .contact-intro-photo {
+    width: 148px;
+  }
 }
 
 @media (max-width: 640px) {
   .contact-hero-grid {
     padding-top: 36px;
+  }
+
+  .contact-intro-photo {
+    width: 132px;
+    border-radius: 16px;
   }
 
   .contact-hero-proof,
