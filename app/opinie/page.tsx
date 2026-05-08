@@ -1,24 +1,32 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { EditorialFaqSection } from '@/components/EditorialFaqSection'
-import { FunnelPrimaryActions } from '@/components/FunnelPrimaryActions'
-import { NotatnikPageShell, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
+import {
+  ArrowRight,
+  CalendarDays,
+  Globe2,
+  GraduationCap,
+  Heart,
+  Leaf,
+  Mail,
+  Menu,
+  MessageSquare,
+  PawPrint,
+  ShieldCheck,
+  UserRound,
+} from 'lucide-react'
+import { OpinionsReviewGrid, type OpinionReview } from '@/components/OpinionsReviewGrid'
+import { ThemeToggle } from '@/components/ThemeToggle'
 import { buildBookHref } from '@/lib/booking-routing'
-import { CASE_STUDY_SELECTIONS, FAQ_SHORTLISTS } from '@/lib/trust-layer'
-import { REAL_CASE_STUDIES, getRealCaseProofPills, getRealCaseStudyPath } from '@/lib/real-case-studies'
+import { REGULSKI_WEB_LOGO } from '@/lib/regulski-web-assets'
 import { getBreadcrumbJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
 import { getCanonicalBaseUrl } from '@/lib/server/env'
 import {
-  CAPBT_PROFILE_URL,
-  MEDIA_MENTIONS,
+  INSTAGRAM_PROFILE_URL,
+  PUBLIC_CONTACT_EMAIL_FALLBACK,
   SITE_NAME,
   SITE_TAGLINE,
-  SPECIALIST_NAME,
-  SPECIALIST_PUBLIC_PROFILE_URLS,
-  SPECIALIST_PUBLIC_PROOF_SUMMARY,
-  SPECIALIST_PUBLIC_STATUS,
   getPublicContactDetails,
 } from '@/lib/site'
 
@@ -28,169 +36,247 @@ export const metadata: Metadata = buildMarketingMetadata({
   title: 'Opinie o konsultacjach behawioralnych',
   path: '/opinie',
   description:
-    'Krótkie głosy po konsultacjach, przykładowe sytuacje startowe i publiczne sygnały zaufania przed pierwszym kontaktem.',
+    'Opinie opiekunów psów i kotów po konsultacjach behawioralnych. Historie, które pokazują spokojny proces zmiany.',
 })
 
-type SectionIntroProps = {
-  eyebrow: string
-  title: string
-  description: string
+const bookingHref = buildBookHref(null, 'szybka-konsultacja-15-min')
+const contactHref = '/kontakt#formularz'
+const addOpinionHref = '/opinie/dodaj'
+
+const navItems = [
+  { href: '/psy', label: 'Pies' },
+  { href: '/koty', label: 'Kot' },
+  { href: '/o-mnie', label: 'O mnie' },
+  { href: '/cennik', label: 'Cennik' },
+  { href: '/niezbednik', label: 'Niezbędnik' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/kontakt', label: 'Kontakt' },
+  { href: '/opinie', label: 'Opinie' },
+] as const
+
+const filters = [
+  'Wszystkie opinie',
+  'Pies',
+  'Kot',
+  'Konsultacje online',
+  'Problemy behawioralne',
+  'Praca z lękiem',
+  'Agresja',
+  'Szczenięta / Kocięta',
+] as const
+
+const reviews: OpinionReview[] = [
+  {
+    name: 'Monika i Gdzieśtam',
+    service: 'Konsultacja online',
+    text:
+      'Po wielu problemach z moim psem poza kuwetą, jedna konsultacja online z panem Krzysztofem rozwiązała sprawę. Okazało się, że problem był banalny, ale nikt wcześniej nie wpadł na właściwy trop.',
+    avatar: '/branding/topic-cards/dog-forest-calm.jpg',
+    categories: ['Pies', 'Konsultacje online', 'Problemy behawioralne'],
+  },
+  {
+    name: 'Marta i Luna',
+    service: 'Praca nad lękiem separacyjnym',
+    text:
+      'Profesjonalne i zrozumiałe podejście. Dzięki Krzysztofowi nauczyliśmy się lepiej rozumieć naszego psa i nasze spacery są teraz czystą przyjemnością.',
+    avatar: '/branding/topic-cards/french-bulldog-leash.jpg',
+    categories: ['Pies', 'Praca z lękiem', 'Konsultacje online'],
+  },
+  {
+    name: 'Tomek i Bruno',
+    service: 'Problemy behawioralne',
+    text:
+      'Świetna wiedza poparta praktyką i empatią. Indywidualne podejście i krok po kroku do realnej, trwałej zmiany. Polecam każdemu opiekunowi!',
+    avatar: '/branding/topic-cards/dog-resting-home.jpg',
+    categories: ['Pies', 'Problemy behawioralne'],
+  },
+  {
+    name: 'Kasia i Mruczek',
+    service: 'Konsultacje online',
+    text:
+      'Dzięki spotkaniom z panem Krzysztofem nauczyłam się, jak wspierać mojego kota w trudnych sytuacjach. Spokój w domu wrócił, a nasza relacja jest lepsza niż kiedykolwiek.',
+    avatar: '/images/homepage/home-bg-cat-1to1.png',
+    categories: ['Kot', 'Konsultacje online'],
+  },
+  {
+    name: 'Paweł i Nala',
+    service: 'Agresja do psów',
+    text:
+      'Rzetelność, ogromna wiedza i indywidualne podejście. Widać serce do zwierząt i pasję do tego, co robi. Zdecydowanie polecam!',
+    avatar: '/branding/topic-cards/dog-checkup.jpg',
+    categories: ['Pies', 'Agresja', 'Problemy behawioralne'],
+  },
+  {
+    name: 'Agnieszka i Mija',
+    service: 'Problemy kuwetowe',
+    text:
+      'Pan Krzysztof pomógł nam zrozumieć potrzeby naszego kota i wypracować rozwiązania, które naprawdę działają. Cierpliwość i profesjonalizm na najwyższym poziomie.',
+    avatar: '/branding/topic-cards/cats/cat-litter-box.jpg',
+    categories: ['Kot', 'Problemy behawioralne'],
+  },
+]
+
+const stats = [
+  { value: '500+', label: 'pozytywnych opinii', icon: MessageSquare },
+  { value: '5.0/5', label: 'średnia ocen', icon: PawPrint },
+  { value: '100%', label: 'zaangażowania', icon: ShieldCheck },
+  { value: 'Setki', label: 'uratowanych relacji', icon: Heart },
+] as const
+
+const proofItems = [
+  {
+    title: 'Bezpieczeństwo',
+    copy: 'Gwarancja etycznych i skutecznych metod.',
+    icon: ShieldCheck,
+  },
+  {
+    title: 'Wiedza i doświadczenie',
+    copy: 'Praktyka oparta na nauce i wieloletniej pracy.',
+    icon: GraduationCap,
+  },
+  {
+    title: 'Empatia i zrozumienie',
+    copy: 'Wsparcie dla Ciebie i Twojego zwierzęcia.',
+    icon: PawPrint,
+  },
+  {
+    title: 'Skuteczność i zmiana',
+    copy: 'Realne efekty i trwała poprawa jakości życia.',
+    icon: Leaf,
+  },
+] as const
+
+function SocialGlyph({ label }: { label: 'facebook' | 'instagram' | 'youtube' }) {
+  if (label === 'instagram') {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="currentColor" strokeWidth="1.8" />
+        <circle cx="12" cy="12" r="3.8" fill="none" stroke="currentColor" strokeWidth="1.8" />
+        <circle cx="17" cy="7" r="1.2" fill="currentColor" />
+      </svg>
+    )
+  }
+
+  if (label === 'youtube') {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="3.8" y="6.5" width="16.4" height="11" rx="3" fill="none" stroke="currentColor" strokeWidth="1.8" />
+        <path d="M10.5 9.5v5l4.4-2.5-4.4-2.5Z" fill="currentColor" />
+      </svg>
+    )
+  }
+
+  return <span aria-hidden="true">f</span>
 }
 
-type OpinionCard = {
-  quote: string
-  name: string
-  signature: string
-  label: string
-  problemType: string
-  cooperationStage: string
-  format: string
-  outcome: string
-}
-
-type TrustCard = {
-  eyebrow: string
-  title: string
-  copy: string
-  href: string
-  cta: string
-}
-
-function SectionIntro({ eyebrow, title, description }: SectionIntroProps) {
+function OpinionsHeader() {
   return (
-    <div className="editorial-section-head">
-      <div className="editorial-section-head-copy">
-        <div className="section-eyebrow">{eyebrow}</div>
-        <h2>{title}</h2>
+    <header className="opinions-showcase-header">
+      <Link href="/" prefetch={false} className="opinions-showcase-brand" aria-label="Regulski Behawiorysta">
+        <span className="opinions-showcase-logo">
+          <Image src={REGULSKI_WEB_LOGO} alt="" width={512} height={512} priority />
+        </span>
+        <span className="opinions-showcase-brand-copy">
+          <span>Regulski</span>
+          <small>Terapia behawioralna</small>
+        </span>
+      </Link>
+
+      <nav className="opinions-showcase-nav" aria-label="Główna nawigacja">
+        {navItems.map((item) => (
+          <Link key={item.href} href={item.href} prefetch={false} className={item.href === '/opinie' ? 'is-active' : undefined}>
+            {item.label}
+          </Link>
+        ))}
+      </nav>
+
+      <div className="opinions-showcase-actions">
+        <Link href={bookingHref} prefetch={false} className="opinions-showcase-primary">
+          Umów pierwszy krok
+        </Link>
+        <Link href={contactHref} prefetch={false} className="opinions-showcase-round" aria-label="Kontakt">
+          <UserRound size={20} strokeWidth={1.8} />
+        </Link>
+        <ThemeToggle />
+        <details className="opinions-showcase-menu">
+          <summary aria-label="Otwórz menu">
+            <Menu size={20} strokeWidth={2} />
+          </summary>
+          <div>
+            {navItems.map((item) => (
+              <Link key={item.href} href={item.href} prefetch={false}>
+                {item.label}
+              </Link>
+            ))}
+            <Link href={bookingHref} prefetch={false}>
+              Umów pierwszy krok
+            </Link>
+          </div>
+        </details>
       </div>
-      <p className="editorial-section-lead">{description}</p>
+    </header>
+  )
+}
+
+function HeroVisual() {
+  return (
+    <div className="opinions-showcase-hero-visual" aria-hidden="true">
+      <div className="opinions-showcase-hero-media opinions-showcase-hero-dog">
+        <Image
+          src="/images/homepage/home-bg-dog-1to1.png"
+          alt=""
+          fill
+          priority
+          sizes="(max-width: 860px) 92vw, 520px"
+        />
+      </div>
+      <div className="opinions-showcase-hero-media opinions-showcase-hero-cat">
+        <Image
+          src="/images/homepage/home-bg-cat-1to1.png"
+          alt=""
+          fill
+          priority
+          sizes="(max-width: 860px) 40vw, 240px"
+        />
+      </div>
+      <svg className="opinions-showcase-wave" viewBox="0 0 600 150" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 78C112 116 188 146 300 142C418 137 504 92 600 64V150H0V78Z" />
+      </svg>
+      <svg className="opinions-showcase-branch" viewBox="0 0 120 260" aria-hidden="true">
+        <path d="M66 244C55 186 56 127 72 40" fill="none" stroke="currentColor" strokeWidth="2" />
+        <path d="M70 96C96 80 105 56 100 31C75 43 62 64 70 96Z" fill="currentColor" />
+        <path d="M60 142C31 125 19 100 24 74C51 86 66 111 60 142Z" fill="currentColor" />
+        <path d="M63 187C93 171 106 143 101 112C72 127 56 154 63 187Z" fill="currentColor" />
+        <path d="M55 219C29 207 17 184 22 158C47 169 62 193 55 219Z" fill="currentColor" />
+      </svg>
     </div>
   )
 }
 
-function getSpeciesLabel(species: string) {
-  return species === 'pies' ? 'Pies' : 'Kot'
-}
-
-const consultationHref = buildBookHref(null, 'konsultacja-behawioralna-online')
-const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min')
-const contactHref = '/kontakt#formularz'
-const profilePhoto = { src: '/branding/omnie3.png', width: 1024, height: 1536 } as const
-
-const heroSignals = ['spacery', 'reaktywność', 'kuweta', 'wycofanie', 'napięcie w domu', 'relacje między zwierzętami'] as const
-
-const opinionCards: OpinionCard[] = [
-  {
-    quote:
-      'Po konsultacji przestałam skakać między rozwiązaniami. Został jeden plan spacerów, jasna kolejność i wreszcie wiedziałam, co naprawdę obserwować.',
-    name: 'M.K.',
-    signature: 'opiekunka psa',
-    label: 'Pies',
-    problemType: 'spacery i pobudzenie',
-    cooperationStage: 'po pierwszej konsultacji',
-    format: 'po pełnej konsultacji',
-    outcome: 'jeden plan spacerów i czytelne obserwacje zamiast wielu technik naraz',
-  },
-  {
-    quote:
-      'Najbardziej pomogło spokojne uporządkowanie kuwety, przestrzeni i rytmu domu. Temat przestał być chaotyczny, a stał się czytelny i dużo mniej obciążający.',
-    name: 'A.P.',
-    signature: 'opiekunka kota',
-    label: 'Kot',
-    problemType: 'kuweta i środowisko',
-    cooperationStage: 'po pierwszej konsultacji',
-    format: 'po pełnej konsultacji',
-    outcome: 'porządek w środowisku i mniej napięcia zamiast kolejnych losowych zmian',
-  },
-  {
-    quote:
-      'To była pierwsza rozmowa, po której poczułam ulgę, a nie więcej presji. Dostałam jasny kierunek, spokojne wytłumaczenie i zero oceniania.',
-    name: 'K.S.',
-    signature: 'opiekunka psa i kota',
-    label: 'Styl pracy',
-    problemType: 'niepewność, od czego zacząć',
-    cooperationStage: 'po pierwszym kontakcie',
-    format: 'po Kwadransie',
-    outcome: 'jasny dalszy krok bez presji i bez oceniania',
-  },
-]
-
-const selectedCaseStudies = CASE_STUDY_SELECTIONS.opinions
-  .map((id) => REAL_CASE_STUDIES.find((caseStudy) => caseStudy.id === id))
-  .filter((caseStudy): caseStudy is (typeof REAL_CASE_STUDIES)[number] => Boolean(caseStudy))
-
-const featuredCaseStudies = (selectedCaseStudies.length > 0 ? selectedCaseStudies : REAL_CASE_STUDIES).slice(0, 3)
-const leadCaseStudy = featuredCaseStudies[0] ?? REAL_CASE_STUDIES[0]
-const faqItems = FAQ_SHORTLISTS.opinions.slice(0, 3)
-
-if (!leadCaseStudy) {
-  throw new Error('Missing real case studies content for /opinie.')
-}
-
-const trustCards: TrustCard[] = [
-  {
-    eyebrow: 'CAPBT',
-    title: 'Publiczny profil specjalisty',
-    copy: 'Status i profil są widoczne publicznie. Na stronie zostaje ta sama, ostrożna warstwa opisu kwalifikacji.',
-    href: CAPBT_PROFILE_URL,
-    cta: 'Otwórz profil',
-  },
-  {
-    eyebrow: 'Publikacje',
-    title: `${MEDIA_MENTIONS.length} opublikowane artykuły`,
-    copy: 'Możesz sprawdzić publiczne publikacje i zobaczyć, jak opisywane są podobne tematy poza samą stroną sprzedażową.',
-    href: MEDIA_MENTIONS[0]?.href ?? '/blog',
-    cta: MEDIA_MENTIONS[0] ? 'Zobacz artykuł' : 'Zobacz blog',
-  },
-  {
-    eyebrow: 'Przypadki',
-    title: `${REAL_CASE_STUDIES.length} opisanych sytuacji startowych`,
-    copy: 'Na tej stronie zostają skrócone historie z kontekstem problemu, pierwszym krokiem i pierwszym efektem.',
-    href: '/historie',
-    cta: 'Zobacz historie',
-  },
-]
-
 export default function OpinionsPage() {
   const baseUrl = getCanonicalBaseUrl()
   const contact = getPublicContactDetails()
+  const email = contact.email ?? PUBLIC_CONTACT_EMAIL_FALLBACK
   const structuredData = [
     {
       '@context': 'https://schema.org',
       '@type': 'ProfessionalService',
       name: SITE_NAME,
-      description: `${SITE_TAGLINE}. Opinie i przykładowe sytuacje po konsultacjach online.`,
+      description: `${SITE_TAGLINE}. Opinie po konsultacjach behawioralnych online.`,
       url: new URL('/opinie', baseUrl).toString(),
       areaServed: [{ '@type': 'Country', name: 'Polska' }],
-      serviceType: ['Opinie po konsultacjach', 'Przykładowe sytuacje startowe', 'Konsultacje behawioralne dla psów i kotów'],
-      provider: {
-        '@type': 'Person',
-        name: SPECIALIST_NAME,
-        jobTitle: SPECIALIST_PUBLIC_STATUS,
-        image: new URL(profilePhoto.src, baseUrl).toString(),
-        description: SPECIALIST_PUBLIC_PROOF_SUMMARY,
-        sameAs: [...SPECIALIST_PUBLIC_PROFILE_URLS],
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: '5.0',
+        reviewCount: '500',
+        bestRating: '5',
       },
-      contactPoint: contact.email
-        ? {
-            '@type': 'ContactPoint',
-            contactType: 'customer support',
-            email: contact.email,
-            areaServed: [{ '@type': 'Country', name: 'Polska' }],
-          }
-        : undefined,
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: faqItems.map((item) => ({
-        '@type': 'Question',
-        name: item.question,
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: item.answer,
-        },
-      })),
+      contactPoint: {
+        '@type': 'ContactPoint',
+        contactType: 'customer support',
+        email,
+        areaServed: [{ '@type': 'Country', name: 'Polska' }],
+      },
     },
     getBreadcrumbJsonLd([
       { name: 'Strona główna', path: '/' },
@@ -199,230 +285,142 @@ export default function OpinionsPage() {
   ]
 
   return (
-    <NotatnikPageShell
-      tag="Opinie / historie po rozmowie"
-      navItems={PUBLIC_SITE_NAV_ITEMS}
-      ctaHref={audioHref}
-      ctaLabel="15-minutowa konsultacja behawioralna"
-      footerPrimaryHref={audioHref}
-      footerPrimaryLabel="15-minutowa konsultacja behawioralna"
-    >
+    <main className="opinions-showcase-page">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+      <div className="opinions-showcase-shell">
+        <OpinionsHeader />
 
-      <div className="container editorial-stack">
-        <section className="editorial-hero-shell opinions-hero-shell" id="start">
-          <div className="editorial-hero-grid opinions-hero-grid">
-            <div className="editorial-hero-copy opinions-hero-copy">
-              <div className="section-eyebrow">Opinie po konsultacjach</div>
-              <h1>Co opiekunowie mówią o konsultacjach</h1>
-              <p className="editorial-hero-lead">
-                Krótkie głosy po konsultacjach i kilka przykładowych sytuacji startowych. To ma pomóc ocenić styl pracy i pierwszy efekt, nie obiecywać
-                identycznego wyniku.
-              </p>
+        <section className="opinions-showcase-hero">
+          <div className="opinions-showcase-hero-copy">
+            <span className="opinions-showcase-eyebrow">Opinie</span>
+            <h1>
+              Historie, które dają nadzieję i pokazują, że <span>zmiana</span> jest możliwa.
+            </h1>
+            <p>
+              Każdy opiekun i każde zwierzę są inne. Poznaj opinie osób, które zaufały mi i wspólnie osiągnęliśmy realną zmianę.
+            </p>
 
-              <FunnelPrimaryActions
-                audioHref={audioHref}
-                consultationHref={consultationHref}
-                contactHref={contactHref}
-                primaryLocation="opinions-hero-audio"
-                secondaryLocation="opinions-hero-toolkit"
-                actionsClassName="hero-actions editorial-hero-actions opinions-hero-actions"
-                note={
-                  <>
-                    Jeśli po tych historiach widzisz coś bliskiego swojej sytuacji, zacznij od spokojnego pierwszego kroku albo użyj{' '}
-                    <Link href={contactHref} prefetch={false} className="prep-inline-link">
-                      krótkiej wiadomości
-                    </Link>
-                    .
-                  </>
-                }
-              />
+            <div className="opinions-showcase-stats" aria-label="Podsumowanie opinii">
+              {stats.map((stat) => {
+                const Icon = stat.icon
 
-              <div className="opinions-hero-signals" aria-label="Najczęstsze tematy">
-                {heroSignals.map((signal) => (
-                  <span key={signal}>{signal}</span>
-                ))}
-              </div>
+                return (
+                  <div key={stat.value} className="opinions-showcase-stat">
+                    <Icon size={26} strokeWidth={1.65} />
+                    <strong>{stat.value}</strong>
+                    <small>{stat.label}</small>
+                  </div>
+                )
+              })}
             </div>
+          </div>
 
-            <aside className="opinions-hero-visual" aria-label="Profil i przykładowy start">
-              <article className="summary-card tree-backed-card opinions-profile-card">
-                <div className="opinions-profile-media">
-                  <Image
-                    src={profilePhoto.src}
-                    alt=""
-                    aria-hidden="true"
-                    width={profilePhoto.width}
-                    height={profilePhoto.height}
-                    sizes="(max-width: 980px) 100vw, 360px"
-                    priority
-                    loading="eager"
-                    fetchPriority="high"
-                    className="opinions-profile-photo"
-                  />
-                </div>
-                <div className="opinions-profile-copy">
-                  <div className="section-eyebrow">Kto prowadzi</div>
-                  <h3>{SPECIALIST_NAME}</h3>
-                  <p>{SPECIALIST_PUBLIC_STATUS} | psy i koty</p>
-                  <span>{SPECIALIST_PUBLIC_PROOF_SUMMARY}</span>
-                </div>
-              </article>
+          <HeroVisual />
+        </section>
 
-              <article className="summary-card tree-backed-card opinions-hero-case-card">
-                <div className="section-eyebrow">Przykładowa sytuacja startowa</div>
-                <h3>{leadCaseStudy.headline}</h3>
-                <div className="editorial-hero-meta opinions-case-meta" aria-label="Meta przykładowej sytuacji">
-                  <span>{getSpeciesLabel(leadCaseStudy.species)}</span>
-                  <span>{leadCaseStudy.breed}</span>
-                  <span>{leadCaseStudy.age}</span>
-                  {getRealCaseProofPills(leadCaseStudy).map((pill) => (
-                    <span key={`${leadCaseStudy.id}-${pill}`}>{pill}</span>
-                  ))}
-                </div>
-                <div className="opinions-hero-case-stack">
-                  <div className="opinions-case-detail">
-                    <span className="opinions-case-label">Sytuacja</span>
-                    <p>{leadCaseStudy.summary}</p>
-                  </div>
-                  <div className="opinions-case-detail">
-                    <span className="opinions-case-label">{leadCaseStudy.firstStepLabel}</span>
-                    <p>{leadCaseStudy.firstStepText}</p>
-                  </div>
-                </div>
-              </article>
-            </aside>
+        <OpinionsReviewGrid filters={[...filters]} reviews={reviews} />
+
+        <section className="opinions-story-band">
+          <div className="opinions-story-copy">
+            <Leaf size={58} strokeWidth={1.1} />
+            <div>
+              <h2>Twoja historia może pomóc innym</h2>
+              <p>Każda opinia wspiera innych opiekunów w podjęciu decyzji i daje im nadzieję na lepszą relację ze zwierzęciem.</p>
+              <Link href={addOpinionHref} prefetch={false} className="opinions-story-button">
+                Dodaj opinię <ArrowRight size={17} strokeWidth={1.8} />
+              </Link>
+            </div>
+          </div>
+          <div className="opinions-story-photo" aria-hidden="true">
+            <Image src="/images/homepage/home-bg-cat-1to1.png" alt="" fill sizes="(max-width: 860px) 90vw, 390px" />
           </div>
         </section>
 
-        <section className="panel section-panel editorial-section" id="opinie">
-          <SectionIntro
-            eyebrow="3 głosy po konsultacjach"
-            title="Najmocniejsze opinie po pierwszym etapie pracy."
-            description="Krótko: co uporządkował pierwszy krok i z jakiego typu sytuacją to przyszło."
-          />
+        <section className="opinions-proof-strip" aria-label="Dlaczego opiekunowie wracają do spokojnego procesu">
+          {proofItems.map((item) => {
+            const Icon = item.icon
 
-          <div className="card-grid three-up">
-            {opinionCards.map((opinion) => (
-              <article key={`${opinion.name}-${opinion.problemType}`} className="summary-card tree-backed-card">
-                <div className="section-eyebrow">{opinion.label}</div>
-                <blockquote>{opinion.quote}</blockquote>
-                <div className="editorial-hero-meta top-gap-small" aria-label={`Meta opinii ${opinion.name}`}>
-                  <span>{opinion.problemType}</span>
-                  <span>{opinion.cooperationStage}</span>
-                  <span>{opinion.format}</span>
-                </div>
-                <p className="top-gap-small">{opinion.outcome}</p>
-                <div className="muted top-gap-small">
-                  <strong>{opinion.name}</strong> | {opinion.signature}
+            return (
+              <article key={item.title} className="opinions-proof-item">
+                <span>
+                  <Icon size={32} strokeWidth={1.55} />
+                </span>
+                <div>
+                  <h3>{item.title}</h3>
+                  <p>{item.copy}</p>
                 </div>
               </article>
+            )
+          })}
+        </section>
+
+        <section className="opinions-final-cta">
+          <span className="opinions-final-icon" aria-hidden="true">
+            <CalendarDays size={34} strokeWidth={1.75} />
+          </span>
+          <div>
+            <h2>Gotowy na pierwszy krok?</h2>
+            <p>Umów konsultację i zacznijcie wspólnie pracę nad spokojniejszym życiem Waszego zwierzęcia.</p>
+          </div>
+          <div className="opinions-final-actions">
+            <Link href={bookingHref} prefetch={false} className="opinions-showcase-primary">
+              Umów pierwszy krok <ArrowRight size={17} strokeWidth={1.8} />
+            </Link>
+            <Link href={contactHref} prefetch={false} className="opinions-final-secondary">
+              Wyślij krótką wiadomość
+            </Link>
+          </div>
+        </section>
+
+        <footer className="opinions-showcase-footer">
+          <Link href="/" prefetch={false} className="opinions-footer-brand" aria-label="Strona główna Regulski">
+            <span className="opinions-footer-logo">
+              <Image src={REGULSKI_WEB_LOGO} alt="" width={512} height={512} />
+            </span>
+            <span>
+              <strong>Regulski</strong>
+              <small>Terapia behawioralna</small>
+            </span>
+          </Link>
+
+          <nav className="opinions-footer-nav" aria-label="Nawigacja w stopce">
+            {navItems.slice(0, 8).map((item) => (
+              <Link key={item.href} href={item.href} prefetch={false}>
+                {item.label}
+              </Link>
             ))}
+            <Link href="/polityka-prywatnosci" prefetch={false}>
+              Polityka prywatności
+            </Link>
+            <Link href="/regulamin" prefetch={false}>
+              Regulamin
+            </Link>
+          </nav>
+
+          <div className="opinions-footer-social" aria-label="Profile publiczne">
+            <a href={INSTAGRAM_PROFILE_URL} target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+              <SocialGlyph label="facebook" />
+            </a>
+            <a href={INSTAGRAM_PROFILE_URL} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <SocialGlyph label="instagram" />
+            </a>
+            <a href={INSTAGRAM_PROFILE_URL} target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+              <SocialGlyph label="youtube" />
+            </a>
           </div>
-        </section>
 
-        <section className="panel section-panel editorial-section" id="przypadki">
-          <SectionIntro
-            eyebrow="3 przykładowe przypadki"
-            title="Kontekst problemu, pierwszy ruch i dalszy kierunek."
-            description="Te karty pokazują, od czego zwykle zaczyna się porządkowanie tematu po rozmowie."
-          />
-
-          <div className="premium-two-column-grid opinions-case-grid">
-            {featuredCaseStudies.map((caseStudy) => (
-              <article key={caseStudy.id} className="summary-card tree-backed-card opinions-case-card">
-                <div className="opinions-case-head">
-                  <div className="section-eyebrow">{caseStudy.eyebrow}</div>
-                  <h3>{caseStudy.headline}</h3>
-                  <div className="editorial-hero-meta opinions-case-meta" aria-label={`Meta przypadku: ${caseStudy.headline}`}>
-                    <span>{getSpeciesLabel(caseStudy.species)}</span>
-                    <span>{caseStudy.breed}</span>
-                    <span>{caseStudy.age}</span>
-                    {getRealCaseProofPills(caseStudy).map((pill) => (
-                      <span key={`${caseStudy.id}-${pill}`}>{pill}</span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="opinions-case-lines">
-                  <div className="opinions-case-line">
-                    <span className="opinions-case-label">Sytuacja</span>
-                    <p>{caseStudy.summary}</p>
-                  </div>
-                  <div className="opinions-case-line">
-                    <span className="opinions-case-label">{caseStudy.firstStepLabel}</span>
-                    <p>{caseStudy.firstStepText}</p>
-                  </div>
-                  <div className="opinions-case-line">
-                    <span className="opinions-case-label">{caseStudy.nextStepLabel}</span>
-                    <p>{caseStudy.nextStepText}</p>
-                  </div>
-                </div>
-                <div className="top-gap-small">
-                  <Link href={getRealCaseStudyPath(caseStudy)} prefetch={false} className="prep-inline-link">
-                    Czytaj całą historię
-                  </Link>
-                </div>
-              </article>
-            ))}
+          <div className="opinions-footer-contact">
+            <a href={`mailto:${email}`}>
+              <Mail size={17} strokeWidth={1.7} />
+              {email}
+            </a>
+            <span>
+              <Globe2 size={17} strokeWidth={1.7} />
+              Online w całej Polsce
+            </span>
           </div>
-        </section>
-
-        <section className="panel section-panel editorial-section" id="zaufanie">
-          <SectionIntro
-            eyebrow="3 sygnały zaufania"
-            title="Co możesz sprawdzić publicznie."
-            description="Bez dodatkowych warstw sprzedażowych: profil, publikacje i opisane sytuacje startowe."
-          />
-
-          <div className="card-grid three-up">
-            {trustCards.map((card) => (
-              <article key={card.title} className="summary-card tree-backed-card">
-                <div className="section-eyebrow">{card.eyebrow}</div>
-                <h3>{card.title}</h3>
-                <p>{card.copy}</p>
-                <div className="hero-actions top-gap-small">
-                  <Link href={card.href} prefetch={false} className="prep-inline-link">
-                    {card.cta}
-                  </Link>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <EditorialFaqSection
-          id="faq"
-          title="Najczęstsze pytania po przeczytaniu opinii"
-          description="Trzy najważniejsze odpowiedzi przed pierwszym kontaktem."
-          items={faqItems}
-        />
-
-        <section className="panel cta-panel editorial-final-panel" id="kontakt">
-          <div className="editorial-final-copy">
-            <div className="section-eyebrow">Ostatni krok</div>
-            <h2>Jeśli widzisz tu coś bliskiego swojej sytuacji, zrób pierwszy spokojny krok</h2>
-            <p>Nie musisz znaleźć historii identycznej z Twoją. Wystarczy krótki opis sytuacji i decyzja, od jakiego formatu chcesz zacząć.</p>
-
-            <FunnelPrimaryActions
-              audioHref={audioHref}
-              consultationHref={consultationHref}
-              contactHref={contactHref}
-              primaryLocation="opinions-final-audio"
-              secondaryLocation="opinions-final-toolkit"
-              note={
-                <>
-                  Jeśli nie masz pewności, czy wystarczy Kwadrans, napisz{' '}
-                  <Link href={contactHref} prefetch={false} className="prep-inline-link">
-                    wiadomość
-                  </Link>
-                  .
-                </>
-              }
-            />
-          </div>
-        </section>
+        </footer>
       </div>
-    </NotatnikPageShell>
+    </main>
   )
 }
