@@ -183,6 +183,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: false, ignored: true, reason: 'analytics_unavailable_local' }, { status: 202 })
     }
 
-    return NextResponse.json({ error: 'Nie udalo sie zapisac zdarzenia.' }, { status: 500 })
+    return NextResponse.json({ error: 'Nie udało się zapisać zdarzenia.' }, { status: 500 })
   }
 }

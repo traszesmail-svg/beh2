@@ -18,17 +18,17 @@ export type TestimonialIssueOption = {
 }
 
 export const TESTIMONIAL_ISSUE_OPTIONS: TestimonialIssueOption[] = [
-  { value: 'szczeniak', label: 'Szczeniak i mlody pies' },
+  { value: 'szczeniak', label: 'Szczeniak i młody pies' },
   { value: 'separacja', label: 'Problemy separacyjne' },
   { value: 'spacer', label: 'Spacer i reakcje' },
   { value: 'pobudzenie', label: 'Pobudzenie i pogon' },
   { value: 'agresja', label: 'Agresja i obrona zasobow' },
-  { value: 'reaktywnosc-pies', label: 'Reaktywnosc i napiecie na spacerach' },
+  { value: 'reaktywnosc-pies', label: 'Reaktywność i napięcie na spacerach' },
   { value: 'kot-kuweta', label: 'Kuweta i zachowania toaletowe' },
-  { value: 'kot-konflikt', label: 'Konflikt miedzy kotami' },
+  { value: 'kot-konflikt', label: 'Konflikt między kotami' },
   { value: 'kot-dotyk', label: 'Dotyk, pielegnacja i obrona' },
-  { value: 'kot-stres', label: 'Lek, stres i wycofanie' },
-  { value: 'kot-nocna-wokalizacja', label: 'Nocna aktywnosc i rytm dnia' },
+  { value: 'kot-stres', label: 'Lęk, stres i wycofanie' },
+  { value: 'kot-nocna-wokalizacja', label: 'Nocna aktywność i rytm dnia' },
   { value: 'inne', label: 'Inny problem lub temat pokrewny' },
 ]
 
@@ -60,11 +60,11 @@ export function getTestimonialSubjectLine(testimonial: TestimonialRecord): strin
 
 export function getTestimonialServiceLabel(service: string): string {
   if (service === 'kwadrans') {
-    return 'Kwadrans z behawiorysta'
+    return '15-minutowa konsultacja behawioralna'
   }
 
   if (service === 'konsultacja') {
-    return 'Pelna konsultacja'
+    return 'Pełna konsultacja'
   }
 
   return service

@@ -93,8 +93,8 @@ export function renderOgImage({ title, subtitle }: OgImageInput) {
               color: '#6d5a4d',
             }}
           >
-            <div>Behawiorysta psow i kotow online</div>
-            <div>Kwadrans z behawiorysta / konsultacje / blog</div>
+            <div>Behawiorysta psów i kotów online</div>
+            <div>15-minutowa konsultacja behawioralna / konsultacje / blog</div>
           </div>
           <div
             style={{

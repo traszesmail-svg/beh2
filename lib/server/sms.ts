@@ -141,7 +141,7 @@ export function buildPaymentConfirmationSmsMessage(
   const withDetails = `Potwierdzenie płatności: ${serviceName}, termin: ${formatBookingDateTimeForSms(
     booking.bookingDate,
     booking.bookingTime,
-  )}. Szczegoly: ${SITE_PRODUCTION_URL}. Dziekuje, Krzysztof Regulski`
+  )}. Szczegoly: ${SITE_PRODUCTION_URL}. Dziękuję, Krzysztof Regulski`
 
   if (withDetails.length <= 160) {
     return withDetails
@@ -150,7 +150,7 @@ export function buildPaymentConfirmationSmsMessage(
   return `Potwierdzenie płatności: ${serviceName}, termin: ${formatBookingDateTimeForSms(
     booking.bookingDate,
     booking.bookingTime,
-  )}. Dziekuje, Krzysztof Regulski`
+  )}. Dziękuję, Krzysztof Regulski`
 }
 
 async function sendViaSmsApi(
@@ -269,7 +269,7 @@ export async function sendPaymentConfirmationSms(
   const hasPhone = Boolean(booking.customerPhoneNormalized?.trim() || booking.phone?.trim())
 
   if (!hasPhone) {
-    console.warn('[behawior15][sms] skip', {
+    console.warn('[regulski-behawiorysta][sms] skip', {
       bookingId: booking.id,
       reason: 'booking phone missing',
     })
@@ -284,7 +284,7 @@ export async function sendPaymentConfirmationSms(
   const normalizedPhone = normalizePolishPhone(booking.customerPhoneNormalized ?? booking.phone)
 
   if (!normalizedPhone) {
-    console.warn('[behawior15][sms] skip', {
+    console.warn('[regulski-behawiorysta][sms] skip', {
       bookingId: booking.id,
       reason: 'invalid phone',
       phoneHint: maskPhoneForLogs(booking.phone),
@@ -300,7 +300,7 @@ export async function sendPaymentConfirmationSms(
   const config = getSmsProviderConfig()
 
   if (!config.isAvailable || !config.provider) {
-    console.warn('[behawior15][sms] skip', {
+    console.warn('[regulski-behawiorysta][sms] skip', {
       bookingId: booking.id,
       reason: config.summary,
       phoneHint: maskPhoneForLogs(normalizedPhone.e164),
@@ -320,7 +320,7 @@ export async function sendPaymentConfirmationSms(
       : await sendViaWebhook(config, booking, normalizedPhone.e164, message)
 
   const level = result.status === 'sent' ? 'info' : 'error'
-  console[level]('[behawior15][sms] payment-confirmation', {
+  console[level]('[regulski-behawiorysta][sms] payment-confirmation', {
     bookingId: booking.id,
     status: result.status,
     phoneHint: maskPhoneForLogs(normalizedPhone.e164),
@@ -352,7 +352,7 @@ async function sendRawSms(
   const config = getSmsProviderConfig()
 
   if (!config.isAvailable || !config.provider) {
-    console.warn(`[behawior15][sms] skip ${logTag}`, { reason: config.summary, phoneHint: maskPhoneForLogs(normalizedPhone.e164) })
+    console.warn(`[regulski-behawiorysta][sms] skip ${logTag}`, { reason: config.summary, phoneHint: maskPhoneForLogs(normalizedPhone.e164) })
     return { status: 'skipped_not_configured', normalizedPhone: normalizedPhone.e164, errorCode: 'SMS_NOT_CONFIGURED', errorMessage: config.summary }
   }
 
@@ -363,7 +363,7 @@ async function sendRawSms(
       : await sendViaWebhook(config, fakeBooking, normalizedPhone.e164, message)
 
   const level = result.status === 'sent' ? 'info' : 'error'
-  console[level](`[behawior15][sms] ${logTag}`, {
+  console[level](`[regulski-behawiorysta][sms] ${logTag}`, {
     idempotencyKey,
     status: result.status,
     phoneHint: maskPhoneForLogs(normalizedPhone.e164),
@@ -378,7 +378,7 @@ export async function sendUrgentCustomerAckSms(
   customerName: string,
   phone: string | null | undefined,
 ): Promise<PaymentConfirmationSmsResult> {
-  const message = `Czesc ${customerName.split(' ')[0]}, dostalem Twoja prosbe o Kwadrans na juz. Odpowiem w ciagu 15 minut z terminem. Krzysztof Regulski`
+  const message = `Cześć ${customerName.split(' ')[0]}, dostałem Twoją prośbę o Kwadrans na już. Odpowiem w ciągu 15 minut z terminem. Krzysztof Regulski`
   return sendRawSms(`urgent-ack-${requestId}`, phone, message, 'urgent-customer-ack')
 }
 
@@ -387,7 +387,7 @@ export async function sendManualPaymentPendingSms(
   holdMinutes: number,
 ): Promise<PaymentConfirmationSmsResult> {
   const firstName = booking.ownerName.split(' ')[0] ?? booking.ownerName
-  const message = `Czesc ${firstName}, otrzymalismy zgloszenie wplaty. Jesli to godziny 8-18, potwierdzenie otrzymasz w ciagu ${holdMinutes} minut. Dziekuje, Krzysztof Regulski`
+  const message = `Cześć ${firstName}, otrzymaliśmy zgłoszenie wpłaty. Jeśli to godziny 8-18, potwierdzenie otrzymasz w ciągu ${holdMinutes} minut. Dziękuję, Krzysztof Regulski`
   return sendRawSms(`manual-pending-${booking.id}`, booking.customerPhoneNormalized ?? booking.phone, message, 'manual-payment-pending')
 }
 

@@ -89,13 +89,13 @@ function InstagramGlyph() {
 
 function NotatnikBrandLockup() {
   return (
-    <Link href="/" prefetch={false} className="notatnik-brand" aria-label="Wróć na stronę główną Regulski">
+    <Link href="/" prefetch={false} className="notatnik-brand" aria-label="Wróć na stronę główną Regulski Behawiorysta">
       <span className="notatnik-brand-credential" aria-hidden="true">
         <Image src={REGULSKI_WEB_LOGO} alt="" width={512} height={512} priority />
       </span>
       <span className="notatnik-brand-copy">
-        <span className="notatnik-brand-mark">Regulski</span>
-        <span className="notatnik-brand-tag">Terapia behawioralna</span>
+        <span className="notatnik-brand-mark">Regulski Behawiorysta</span>
+        <span className="notatnik-brand-tag">Krzysztof Regulski - behawiorysta zwierzęcy</span>
       </span>
     </Link>
   )

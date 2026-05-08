@@ -8,6 +8,7 @@ node_modules/
 data/
 !data/
 !data/testimonials.json
+data/payment-orders.json
 
 CHATGPT_*.txt
 FINAL_*REPORT*.txt

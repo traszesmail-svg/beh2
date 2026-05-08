@@ -2,7 +2,7 @@ create extension if not exists pg_net with schema extensions;
 create extension if not exists pg_cron with schema extensions;
 create extension if not exists supabase_vault with schema vault;
 
-create or replace function public.behavior15_read_scheduler_secret(secret_name text)
+create or replace function public.regulski_read_scheduler_secret(secret_name text)
 returns text
 language sql
 security definer
@@ -15,7 +15,7 @@ as $$
   limit 1
 $$;
 
-create or replace function public.behavior15_trigger_reminder_run()
+create or replace function public.regulski_trigger_reminder_run()
 returns bigint
 language plpgsql
 security definer
@@ -26,15 +26,15 @@ declare
   cron_secret text;
   request_id bigint;
 begin
-  app_url := trim(public.behavior15_read_scheduler_secret('behavior15_app_url'));
-  cron_secret := trim(public.behavior15_read_scheduler_secret('behavior15_cron_secret'));
+  app_url := trim(public.regulski_read_scheduler_secret('regulski_app_url'));
+  cron_secret := trim(public.regulski_read_scheduler_secret('regulski_cron_secret'));
 
   if app_url is null or app_url = '' then
-    raise exception 'Brak vault secret behavior15_app_url';
+    raise exception 'Brak vault secret regulski_app_url';
   end if;
 
   if cron_secret is null or cron_secret = '' then
-    raise exception 'Brak vault secret behavior15_cron_secret';
+    raise exception 'Brak vault secret regulski_cron_secret';
   end if;
 
   select net.http_post(
@@ -54,20 +54,20 @@ begin
 end;
 $$;
 
-create or replace function public.behavior15_unschedule_reminder_job()
+create or replace function public.regulski_unschedule_reminder_job()
 returns void
 language plpgsql
 security definer
 set search_path = public, extensions
 as $$
 begin
-  if exists(select 1 from cron.job where jobname = 'behavior15-booking-reminders') then
-    perform cron.unschedule('behavior15-booking-reminders');
+  if exists(select 1 from cron.job where jobname = 'regulski-booking-reminders') then
+    perform cron.unschedule('regulski-booking-reminders');
   end if;
 end;
 $$;
 
-create or replace function public.behavior15_schedule_reminder_job(job_schedule text default '*/5 * * * *')
+create or replace function public.regulski_schedule_reminder_job(job_schedule text default '*/5 * * * *')
 returns bigint
 language plpgsql
 security definer
@@ -76,12 +76,12 @@ as $$
 declare
   job_id bigint;
 begin
-  perform public.behavior15_unschedule_reminder_job();
+  perform public.regulski_unschedule_reminder_job();
 
   select cron.schedule(
-    'behavior15-booking-reminders',
+    'regulski-booking-reminders',
     job_schedule,
-    $job$select public.behavior15_trigger_reminder_run();$job$
+    $job$select public.regulski_trigger_reminder_run();$job$
   )
   into job_id;
 
@@ -89,7 +89,7 @@ begin
 end;
 $$;
 
-revoke all on function public.behavior15_read_scheduler_secret(text) from public;
-revoke all on function public.behavior15_trigger_reminder_run() from public;
-revoke all on function public.behavior15_unschedule_reminder_job() from public;
-revoke all on function public.behavior15_schedule_reminder_job(text) from public;
+revoke all on function public.regulski_read_scheduler_secret(text) from public;
+revoke all on function public.regulski_trigger_reminder_run() from public;
+revoke all on function public.regulski_unschedule_reminder_job() from public;
+revoke all on function public.regulski_schedule_reminder_job(text) from public;

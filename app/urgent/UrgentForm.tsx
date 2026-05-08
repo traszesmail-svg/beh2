@@ -101,7 +101,7 @@ export function UrgentForm() {
     }
 
     if (!name.trim()) {
-      setFeedback('Podaj imie.')
+      setFeedback('Podaj imię.')
       return
     }
 
@@ -111,7 +111,7 @@ export function UrgentForm() {
     }
 
     if (message.trim().length < 10) {
-      setFeedback('Opisz krotko sytuacje (minimum 10 znakow).')
+      setFeedback('Opisz krótko sytuację (minimum 10 znakow).')
       return
     }
 
@@ -145,14 +145,14 @@ export function UrgentForm() {
 
       if (!response.ok || !data.ok) {
         setStatus('error')
-        setFeedback(data.error ?? 'Nie udalo sie wyslac prosby. Sprobuj ponownie.')
+        setFeedback(data.error ?? 'Nie udało się wysłać prośby. Spróbuj ponownie.')
         return
       }
 
       setStatus('success')
     } catch {
       setStatus('error')
-      setFeedback('Blad sieci. Sprawdz polaczenie i sprobuj ponownie.')
+      setFeedback('Błąd sieci. Sprawdź połączenie i spróbuj ponownie.')
     }
   }
 
@@ -160,9 +160,9 @@ export function UrgentForm() {
     return (
       <div className="contact-form-card urgent-success">
         <div className="urgent-success-head">
-          <div className="notatnik-mono notatnik-kicker-spaced">Prosba wyslana</div>
-          <h2>Dostalem Twoja prosbe. Odpowiem w ciagu 15 minut.</h2>
-          <p>Sprawdz skrzynke e-mail - zaraz powinna pojawic sie wiadomosc z potwierdzeniem. Termin wysle na ten sam adres.</p>
+          <div className="notatnik-mono notatnik-kicker-spaced">Prośba wysłana</div>
+          <h2>Dostałem Twoją prośbę. Odpowiem w ciągu 15 minut.</h2>
+          <p>Sprawdź skrzynkę e-mail - zaraz powinna pojawić się wiadomość z potwierdzeniem. Termin wyślę na ten sam adres.</p>
         </div>
 
         {secondsLeft !== null && secondsLeft > 0 && (
@@ -171,13 +171,13 @@ export function UrgentForm() {
             <div className="urgent-countdown-clock" aria-live="polite" aria-label={`Pozostalo ${formatCountdown(secondsLeft)}`}>
               {formatCountdown(secondsLeft)}
             </div>
-            <p className="urgent-countdown-note">Jesli nic nie dostaniesz po tym czasie, napisz bezposrednio.</p>
+            <p className="urgent-countdown-note">Jeśli nic nie dostaniesz po tym czasie, napisz bezpośrednio.</p>
           </div>
         )}
 
         {secondsLeft === 0 && (
           <div className="urgent-countdown urgent-countdown-expired">
-            <p>Czas minal. Jesli nie dostales odpowiedzi, napisz bezposrednio przez formularz kontaktu.</p>
+            <p>Czas minal. Jeśli nie dostales odpowiedzi, napisz bezpośrednio przez formularz kontaktu.</p>
             <a href="/kontakt#formularz" className="notatnik-inline-link">Formularz kontaktu</a>
           </div>
         )}
@@ -206,8 +206,8 @@ export function UrgentForm() {
         </select>
         <div className="notatnik-field-help">
           {species
-            ? `Po wyborze gatunku lista tematow pokazuje tylko opcje dla ${species === 'kot' ? 'kota' : 'psa'}.`
-            : 'Najpierw wybierz, czy sprawa dotyczy psa czy kota. Potem pokaze wlasciwe tematy.'}
+            ? `Po wyborze gatunku lista tematów pokazuje tylko opcje dla ${species === 'kot' ? 'kota' : 'psa'}.`
+            : 'Najpierw wybierz, czy sprawa dotyczy psa czy kota. Potem pokaże właściwe tematy.'}
         </div>
       </div>
 
@@ -222,7 +222,7 @@ export function UrgentForm() {
           ))}
         </select>
         <div className="notatnik-field-help">
-          {species ? 'Wybierz temat najblizszy temu, co dzieje sie teraz.' : 'Po wyborze gatunku pojawi sie lista tematow tylko dla psa albo kota.'}
+          {species ? 'Wybierz temat najbliższy temu, co dzieje się teraz.' : 'Po wyborze gatunku pojawi się lista tematów tylko dla psa albo kota.'}
         </div>
       </div>
 
@@ -231,7 +231,7 @@ export function UrgentForm() {
         <input
           id="urgent-name"
           type="text"
-          placeholder="Twoje imie"
+          placeholder="Twoje imię"
           value={name}
           onChange={(event) => setName(event.target.value)}
           autoComplete="given-name"
@@ -265,11 +265,11 @@ export function UrgentForm() {
       </div>
 
       <div className="form-field">
-        <label htmlFor="urgent-message" className="form-label">Krotki opis sytuacji</label>
+        <label htmlFor="urgent-message" className="form-label">Krótki opis sytuacji</label>
         <textarea
           id="urgent-message"
           rows={3}
-          placeholder="2-3 zdania o tym, co sie dzieje i co Cie niepokoi."
+          placeholder="2-3 zdania o tym, co się dzieje i co Cię niepokoi."
           value={message}
           onChange={(event) => setMessage(event.target.value)}
         />
@@ -289,7 +289,7 @@ export function UrgentForm() {
       <div className="form-field form-field-checkbox">
         <label className="form-checkbox-label">
           <input type="checkbox" checked={consentProcessing} onChange={(event) => setConsentProcessing(event.target.checked)} />
-          <span>Wyrazam zgode na przetwarzanie danych osobowych w celu odpowiedzi na moja prosbe.</span>
+          <span>Wyrażam zgodę na przetwarzanie danych osobowych w celu odpowiedzi na moją prośbę.</span>
         </label>
       </div>
 
@@ -297,7 +297,7 @@ export function UrgentForm() {
         <label className="form-checkbox-label">
           <input type="checkbox" checked={consentPolicy} onChange={(event) => setConsentPolicy(event.target.checked)} />
           <span>
-            Zapoznalam/em sie z{' '}
+            Zapoznalam/em się z{' '}
             <a href="/polityka-prywatnosci" target="_blank" className="notatnik-inline-link">polityka prywatnosci</a>
             {' '}i akceptuje jej warunki.
           </span>
@@ -311,14 +311,14 @@ export function UrgentForm() {
       )}
 
       <button type="submit" className="notatnik-btn urgent-submit-btn" disabled={status === 'loading'}>
-        <span>{status === 'loading' ? 'Wysylanie...' : 'Wyslij prosbe o Kwadrans na juz'}</span>
+        <span>{status === 'loading' ? 'Wysyłanie...' : 'Wyślij prośbę o Kwadrans na już'}</span>
         {status !== 'loading' && (
           <span className="notatnik-btn-arrow" aria-hidden="true">&rarr;</span>
         )}
       </button>
 
       <p className="form-submit-note">
-        Platnosc przychodzi dopiero po potwierdzeniu terminu. Termin dostaniesz mailem w ciagu 15 minut.
+        Płatność przychodzi dopiero po potwierdzeniu terminu. Termin dostaniesz mailem w ciągu 15 minut.
       </p>
     </form>
   )

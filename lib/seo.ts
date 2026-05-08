@@ -57,7 +57,9 @@ export function buildTechnicalMetadata({ title, path, description, noIndex = tru
   const fullTitle = buildMetadataTitle(title)
 
   return {
-    title,
+    title: {
+      absolute: title,
+    },
     description: localizedDescription,
     alternates: {
       canonical: path,
@@ -83,19 +85,20 @@ export function buildTechnicalMetadata({ title, path, description, noIndex = tru
 
 export async function buildHomeMetadata(): Promise<Metadata> {
   const description = appendLocalSeoContext(
-    'Behawiorysta psow i kotow online. Zacznij od spokojnego pierwszego kroku: Kwadrans, Dwa kwadranse, Pelna konsultacja albo materialy startowe w Niezbedniku.',
+    'Krótkie konsultacje behawioralne dla opiekunów psów i kotów. Rozmowa z Krzysztofem Regulskim, behawiorystą zwierzęcym i trenerem COAPE.',
   )
-  const title = 'Behawiorysta psow i kotow online'
-  const fullTitle = buildMetadataTitle(title)
+  const title = 'Regulski Behawiorysta | Konsultacje behawioralne psów i kotów'
 
   return {
-    title,
+    title: {
+      absolute: title,
+    },
     description,
     alternates: {
       canonical: '/',
     },
     openGraph: {
-      title: fullTitle,
+      title,
       description,
       siteName: SITE_NAME,
       type: 'website',
@@ -105,7 +108,7 @@ export async function buildHomeMetadata(): Promise<Metadata> {
     },
     twitter: {
       card: 'summary_large_image',
-      title: fullTitle,
+      title,
       description,
       images: [DEFAULT_OG_IMAGE.url],
     },
@@ -118,11 +121,11 @@ export async function buildBookMetadata(serviceType: BookingServiceType = DEFAUL
   const isQuick = serviceType === 'szybka-konsultacja-15-min'
 
   return buildMarketingMetadata({
-    title: isQuick ? 'Rezerwacja konsultacji - Kwadrans z behawiorysta' : `Rezerwacja konsultacji: ${serviceTitle}`,
+    title: isQuick ? 'Rezerwacja 15-minutowej konsultacji behawioralnej' : `Rezerwacja konsultacji: ${serviceTitle}`,
     path: '/book',
     description: isQuick
-      ? 'Zarezerwuj Kwadrans z behawiorysta: 15 minut audio bez kamery, pierwszy krok i spokojne uporzadkowanie tematu.'
-      : `${serviceSummary} Wybierz gatunek i temat konsultacji, a potem przejdz do terminow i kolejnego kroku rezerwacji ze specjalista ${SPECIALIST_NAME}.`,
+      ? 'Zarezerwuj 15-minutową konsultację behawioralną: rozmowa audio bez kamery, szybki pierwszy krok i spokojne uporządkowanie tematu.'
+      : `${serviceSummary} Wybierz gatunek i temat konsultacji, a potem przejdź do terminów i kolejnego kroku rezerwacji że specjalistą ${SPECIALIST_NAME}.`,
   })
 }
 

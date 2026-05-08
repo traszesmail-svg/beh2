@@ -77,7 +77,7 @@ export function SpeciesShopPage({
           id: `${species}-specialist`,
           eyebrow: 'Specjalistyczne',
           title: 'Pies do pracy z ludźmi? niżej, jako materiał ekspercki.',
-          intro: 'Ten PDF nie jest pierwszym wyborem. Siedzi niżej, bo ma służyć bardziej precyzyjnej ocenie i dalszej decyzji.',
+          intro: 'Ten PDF nie jest pierwszym wybórem. Siedzi niżej, bo ma służyć bardziej precyzyjnej ocenie i dalszej decyzji.',
           cards: pdfCardsOnly.filter((card) => card.kindLabel === 'Specjalistyczny PDF'),
         },
       ]

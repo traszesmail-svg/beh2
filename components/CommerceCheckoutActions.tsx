@@ -1,8 +1,18 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
+import { CreditCard, LockKeyhole, PlayCircle } from 'lucide-react'
 import { formatCommercePrice } from '@/lib/commerce'
+
+type OnlinePaymentRuntime = {
+  provider: 'naffy' | 'stripe' | 'none'
+  available: boolean
+  label: string
+  buttonLabel: string
+  description: string
+  unavailableMessage: string
+  naffyUrl: string | null
+}
 
 type Props = {
   orderNumber: string
@@ -10,7 +20,7 @@ type Props = {
   onlineAmount: number
   manualAmount: number
   testModeAllowed: boolean
-  stripeAvailable: boolean
+  onlinePayment: OnlinePaymentRuntime
 }
 
 export function CommerceCheckoutActions({
@@ -19,10 +29,11 @@ export function CommerceCheckoutActions({
   onlineAmount,
   manualAmount,
   testModeAllowed,
-  stripeAvailable,
+  onlinePayment,
 }: Props) {
   const [error, setError] = useState('')
-  const [loading, setLoading] = useState<'online' | 'mock' | null>(null)
+  const [loading, setLoading] = useState<'online' | 'manual' | 'mock' | null>(null)
+  const [selectedMethod, setSelectedMethod] = useState<'online' | 'manual'>('manual')
 
   async function startOnline(mock = false) {
     setError('')
@@ -47,44 +58,99 @@ export function CommerceCheckoutActions({
     }
   }
 
-  return (
-    <div className="stack-gap top-gap">
-      <div className="summary-grid trust-grid">
-        <div className="summary-card trust-card tree-backed-card">
-          <strong>Płatność online - {formatCommercePrice(onlineAmount)}</strong>
-          <span>Karta, Apple Pay, Google Pay lub BLIK online, jeśli bramka go udostępnia. Dostęp nadamy automatycznie po płatności.</span>
-          <button
-            type="button"
-            className="button button-primary big-button"
-            onClick={() => startOnline(false)}
-            disabled={loading !== null || !stripeAvailable}
-          >
-            {loading === 'online' ? 'Otwieram checkout...' : 'Zapłać online'}
-          </button>
-          {!stripeAvailable ? <span className="muted">Stripe/naffy nie jest jeszcze skonfigurowany w środowisku.</span> : null}
-        </div>
+  function startManual() {
+    setError('')
+    setLoading('manual')
+    window.location.assign(`/platnosc/blik/${encodeURIComponent(orderNumber)}`)
+  }
 
-        <div className="summary-card trust-card tree-backed-card payment-method-card-active">
-          <strong>BLIK na telefon - {formatCommercePrice(manualAmount)}</strong>
+  return (
+    <div className="payment-ref-action" data-payment-method-selected={selectedMethod}>
+      <div className="payment-ref-method-lead">
+        <LockKeyhole aria-hidden="true" />
+        <span>Najtaniej: BLIK na telefon, bez prowizji pośrednika. Zamówienie pozostaje przypisane do numeru {orderNumber}.</span>
+      </div>
+
+      <div className="payment-ref-method-tabs" role="radiogroup" aria-label="Metoda płatności">
+        <button
+          type="button"
+          className="payment-ref-method-tab payment-ref-method-tab--blik"
+          data-selected={selectedMethod === 'manual' ? 'true' : 'false'}
+          data-payment-method="manual"
+          onClick={() => setSelectedMethod('manual')}
+          role="radio"
+          aria-checked={selectedMethod === 'manual'}
+        >
+          <span className="payment-ref-blik-mark" aria-hidden="true">BLIK</span>
           <span>
-            {manualAmount < onlineAmount
-              ? `Oszczędzasz ${formatCommercePrice(onlineAmount - manualAmount)}. `
-              : ''}
-            Płacisz BLIK-iem na telefon. Dostęp aktywujemy po ręcznym potwierdzeniu.
+            <strong>BLIK na telefon</strong>
+            <em>Najtaniej, bez prowizji operatora płatności</em>
+            <small>polecane</small>
           </span>
-          <Link href={`/platnosc/blik/${encodeURIComponent(orderNumber)}`} className="button button-primary big-button">
-            Wybieram BLIK na telefon
-          </Link>
+        </button>
+        <button
+          type="button"
+          className="payment-ref-method-tab"
+          data-selected={selectedMethod === 'online' ? 'true' : 'false'}
+          data-payment-method="online"
+          onClick={() => setSelectedMethod('online')}
+          disabled={!onlinePayment.available}
+          role="radio"
+          aria-checked={selectedMethod === 'online'}
+        >
+          <CreditCard aria-hidden="true" />
+          <span>
+            <strong>{onlinePayment.label}</strong>
+            <em>{onlinePayment.available ? onlinePayment.description : onlinePayment.unavailableMessage}</em>
+          </span>
+        </button>
+      </div>
+
+      <div className="payment-ref-method-panel">
+        <h3>{selectedMethod === 'online' ? 'Płatność online' : 'BLIK na telefon'}</h3>
+        <p>
+          {selectedMethod === 'online'
+            ? 'Po kliknięciu otworzy się checkout online z kartą oraz, gdy urządzenie je udostępnia, Apple Pay i Google Pay. Dostęp aktywuje się po zaksięgowaniu płatności.'
+            : 'Przejdziesz do instrukcji BLIK na telefon i zgłosisz wpłatę. To najtańsza ścieżka, bo nie dolicza prowizji pośrednika. Numer nie jest publicznym kanałem kontaktu.'}
+        </p>
+        <div className="payment-ref-field">
+          <span>Kwota online</span>
+          <strong>{formatCommercePrice(onlineAmount)}</strong>
+        </div>
+        <div className="payment-ref-field">
+          <span>BLIK na telefon</span>
+          <strong>{formatCommercePrice(manualAmount)}</strong>
         </div>
       </div>
 
+      <div className="payment-ref-submit-row">
+        <button
+          type="button"
+          className="payment-ref-submit"
+          data-payment-submit={selectedMethod === 'online' ? 'online' : 'manual'}
+          onClick={() => (selectedMethod === 'online' ? startOnline(false) : startManual())}
+          disabled={loading !== null || (selectedMethod === 'online' && !onlinePayment.available)}
+        >
+          {loading === 'online'
+            ? 'Otwieram checkout...'
+            : loading === 'manual'
+                ? 'Otwieram BLIK...'
+                : selectedMethod === 'online'
+                  ? onlinePayment.buttonLabel
+                  : `Zapłać BLIK na telefon - ${formatCommercePrice(manualAmount)}`}
+        </button>
+      </div>
+
       {testModeAllowed ? (
-        <div className="list-card tree-backed-card">
-          <strong>Test bez realnej płatności</strong>
-          <span>Do sprawdzenia flow: symuluje udaną płatność online, wysyłkę kodu i stronę dostępu.</span>
+        <div className="payment-ref-test-card">
+          <PlayCircle aria-hidden="true" />
+          <span>
+            <strong>Test bez realnej płatności</strong>
+            <em>Symuluje udaną płatność online i dalszy krok po potwierdzeniu.</em>
+          </span>
           <button
             type="button"
-            className="button button-ghost"
+            className="payment-ref-secondary-button"
             onClick={() => startOnline(true)}
             disabled={loading !== null}
           >

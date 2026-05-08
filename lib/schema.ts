@@ -130,7 +130,7 @@ export function getProfessionalServiceJsonLd() {
     '@context': 'https://schema.org',
     '@type': 'ProfessionalService',
     '@id': BUSINESS_ID,
-    name: 'Regulski - Behawiorysta psow i kotow online',
+    name: 'Regulski - Behawiorysta psów i kotów online',
     url: SITE_PRODUCTION_URL,
     email: publicContact.email,
     areaServed: {
@@ -203,7 +203,7 @@ export function getServiceJsonLd({
       ? {
           hasOfferCatalog: {
             '@type': 'OfferCatalog',
-            name: `${name} - dostepne formaty`,
+            name: `${name} - dostępne formaty`,
             itemListElement: offerCatalog.map((item) => ({
               '@type': 'Offer',
               itemOffered: {

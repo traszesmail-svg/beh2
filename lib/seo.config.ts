@@ -75,7 +75,7 @@ export const pageSeo: Record<string, PageSeo> = {
   },
   '/koty/zalatwianie-poza-kuweta': {
     title: 'Kot sika poza kuwetą — pomoc behawiorysty | Regulski',
-    description: 'Kot załatwia się poza kuwetą? Sprawdzimy ustawienie kuwety, środowisko, stres i zdrowie. Konkretny plan poprawy w 1 konsultacji.',
+    description: 'Kot załatwia się poza kuwetą? Sprawdźimy ustawienie kuwety, środowisko, stres i zdrowie. Konkretny plan poprawy w 1 konsultacji.',
     keywords: ['kot sika poza kuwetą', 'kot kuweta problem', 'kot załatwia się w domu'],
     priority: 0.8,
     changefreq: 'monthly',
@@ -101,6 +101,13 @@ export const pageSeo: Record<string, PageSeo> = {
     priority: 0.9,
     changefreq: 'monthly',
   },
+  '/cennik/pelny': {
+    title: 'Pełny cennik konsultacji behawioralnych | Regulski',
+    description: 'Pełna tabela formatów: Kwadrans 69 zł, Kwadrans na już 99 zł, Dwa kwadranse 169 zł i Pełna konsultacja 470 zł.',
+    keywords: ['pełny cennik behawiorysta', 'cena konsultacji behawioralnej', 'kwadrans behawiorysta cena'],
+    priority: 0.8,
+    changefreq: 'monthly',
+  },
   '/book': {
     title: 'Zarezerwuj konsultację online | Regulski',
     description: 'Wybierz termin konsultacji online z behawiorystą. Kwadrans, Dwa kwadranse lub Pełna konsultacja. Płatność po potwierdzeniu.',
@@ -124,7 +131,7 @@ export const pageSeo: Record<string, PageSeo> = {
   },
   '/niezbednik': {
     title: 'Darmowe materiały dla opiekunów psów i kotów | Regulski',
-    description: 'PDF-y, listy, ściągawki — gotowe materiały do pobrania dla opiekunów. Pierwszy tydzień ze szczeniakiem, jak wprowadzić kota, lista zachowań do obserwacji.',
+    description: 'PDF-y, listy, ściągawki — gotowe materiały do pobrania dla opiekunów. Pierwszy tydzień że szczeniakiem, jak wprowadzić kota, lista zachowań do obserwacji.',
     keywords: ['darmowe materiały behawiorysta', 'PDF szczeniak', 'lista zachowań kota'],
     priority: 0.6,
     changefreq: 'monthly',

@@ -17,9 +17,9 @@ export const revalidate = 0
 
 export function generateMetadata(): Metadata {
   return buildTechnicalMetadata({
-    title: 'Pokój / dostęp',
+    title: 'Dostęp do materiałów',
     path: '/pokoj',
-    description: 'Dostęp do opłaconej konsultacji albo materiału cyfrowego.',
+    description: 'Dostęp do opłaconych materiałów cyfrowych.',
     noIndex: false,
     follow: true,
   })
@@ -37,7 +37,7 @@ export default async function RoomAccessPage({
   const code = readParam(searchParams?.code)?.trim().toUpperCase() ?? ''
   const email = readParam(searchParams?.email)?.trim().toLowerCase() ?? ''
   const order = code && email ? await getCommerceOrderByAccessCode(code, email) : null
-  const hasAccess = Boolean(order && canUseCommerceAccess(order))
+  const hasAccess = Boolean(order?.productType === 'ebook' && canUseCommerceAccess(order))
 
   const guide = order?.productType === 'ebook' && order.meta.productKind === 'guide' && order.meta.productSlug
     ? getMaterialyGuideBySlug(order.meta.productSlug)
@@ -63,7 +63,9 @@ export default async function RoomAccessPage({
           {!hasAccess || !order ? (
             <div className="stack-gap">
               <h1>Kod jest nieprawidłowy albo wygasł.</h1>
-              <div className="error-box">Wpisz kod ponownie na stronie dostępu albo napisz wiadomość, jeśli płatność była potwierdzona.</div>
+              <div className="error-box">
+                Wpisz kod ponownie na stronie dostępu albo napisz wiadomość, jeśli płatność była potwierdzona.
+              </div>
               <div className="hero-actions centered-actions">
                 <Link href="/dostep" className="button button-primary big-button">
                   Wpisz kod ponownie
@@ -78,21 +80,8 @@ export default async function RoomAccessPage({
               <div className="section-eyebrow">Dostęp aktywny</div>
               <h1>{order.productName}</h1>
               <p className="hero-text small-width center-text">
-                Kod jest poprawny. Poniżej masz dostęp do opłaconej konsultacji albo materiału.
+                Kod jest poprawny. Poniżej masz dostęp do opłaconego materiału.
               </p>
-
-              {order.productType === 'consultation' && order.meta.bookingId ? (
-                <div className="list-card accent-outline tree-backed-card top-gap">
-                  <strong>Pokój konsultacji</strong>
-                  <span>Przejdź do pokoju rozmowy. Jeśli termin jeszcze nie nadszedł, zachowaj ten link.</span>
-                  <Link
-                    href={`/call/${order.meta.bookingId}${order.meta.bookingAccessToken ? `?access=${encodeURIComponent(order.meta.bookingAccessToken)}` : ''}`}
-                    className="button button-primary big-button"
-                  >
-                    Wejdź do pokoju
-                  </Link>
-                </div>
-              ) : null}
 
               {guide ? (
                 <div className="list-card accent-outline tree-backed-card top-gap">
@@ -130,9 +119,11 @@ export default async function RoomAccessPage({
                 </div>
               ) : null}
 
-              <div className="disclaimer">
-                Kod: <strong>{order.accessCode}</strong>. Limit użyć: {order.accessCodeUsageCount}/{order.accessCodeUsageLimit}.
-              </div>
+              {order.accessCode ? (
+                <div className="disclaimer">
+                  Kod potwierdza dostęp do opłaconego materiału PDF.
+                </div>
+              ) : null}
             </>
           )}
         </section>

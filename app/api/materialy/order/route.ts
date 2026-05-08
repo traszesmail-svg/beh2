@@ -1,8 +1,8 @@
-// POST /api/materialy/order — accepts a customer order for a guide or bundle.
+// POST /api/materiały/order — accepts a customer order for a guide or bundle.
 // Free items: code is generated immediately and emailed to the customer.
 // Paid items: order is queued as 'pending'; owner gets a notification, customer
 // receives BLIK instructions. After manual BLIK confirmation the owner triggers
-// /api/materialy/confirm to release the unlock code.
+// /api/materiały/confirm to release the unlock code.
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -61,7 +61,7 @@ export async function POST(request: Request) {
   const consentPolicy = body.consentPolicy === true
 
   if (!name || !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return NextResponse.json({ error: 'Podaj imie i poprawny adres e-mail.' }, { status: 400 })
+    return NextResponse.json({ error: 'Podaj imię i poprawny adres e-mail.' }, { status: 400 })
   }
   if (!consentProcessing || !consentPolicy) {
     return NextResponse.json({ error: 'Zaznacz wymagane zgody.' }, { status: 400 })
@@ -77,7 +77,7 @@ export async function POST(request: Request) {
   const bundle = productKindRaw === 'bundle' ? getMaterialyBundleBySlug(productSlug) : null
   const item: MaterialyGuide | MaterialyBundle | null = guide ?? bundle
   if (!item) {
-    return NextResponse.json({ error: 'Ten produkt nie jest juz dostepny.' }, { status: 400 })
+    return NextResponse.json({ error: 'Ten produkt nie jest już dostępny.' }, { status: 400 })
   }
 
   const order = await createOrder({
@@ -107,20 +107,20 @@ export async function POST(request: Request) {
 
   // Always notify the owner; failures here shouldn't block the customer flow.
   void sendMaterialyOrderOwnerEmail(emailPayload).catch((err) => {
-    console.error('[materialy/order] owner email failed', err)
+    console.error('[materiały/order] owner email failed', err)
   })
 
   if (order.status === 'paid' && order.code && order.expiresAt) {
     // Free lead-magnet: send the code straight to the customer.
     void sendMaterialyCodeCustomerEmail(emailPayload, order.code, order.expiresAt).catch((err) => {
-      console.error('[materialy/order] free code email failed', err)
+      console.error('[materiały/order] free code email failed', err)
     })
     return NextResponse.json({ ok: true, orderId: order.id, free: true })
   }
 
   // Paid order: send BLIK instructions to the customer.
   void sendMaterialyOrderPendingCustomerEmail(emailPayload, BLIK_PHONE).catch((err) => {
-    console.error('[materialy/order] pending email failed', err)
+    console.error('[materiały/order] pending email failed', err)
   })
 
   return NextResponse.json({

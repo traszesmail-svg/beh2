@@ -26,14 +26,14 @@ export function MaterialyDownloadForm() {
       })
       if (!res.ok) {
         const data = (await res.json().catch(() => ({}))) as Record<string, unknown>
-        const msg = typeof data.error === 'string' ? data.error : 'Cos poszlo nie tak.'
+        const msg = typeof data.error === 'string' ? data.error : 'Coś poszło nie tak.'
         setState({ status: 'error', message: msg })
         return
       }
       const blob = await res.blob()
       const cd = res.headers.get('content-disposition') || ''
       const match = /filename="([^"]+)"/.exec(cd)
-      const filename = match ? match[1] : 'material.pdf'
+      const filename = match ? match[1] : 'materiał.pdf'
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
@@ -49,12 +49,12 @@ export function MaterialyDownloadForm() {
         bundleParts: Number.isFinite(totalParts) && totalParts > 1 ? totalParts : null,
       })
     } catch {
-      setState({ status: 'error', message: 'Brak polaczenia. Sprobuj ponownie.' })
+      setState({ status: 'error', message: 'Brak połączenia. Spróbuj ponownie.' })
     }
   }
 
   return (
-    <form className="materialy-form" onSubmit={handleSubmit} noValidate>
+    <form className="materiały-form" onSubmit={handleSubmit} noValidate>
       <label>
         <span>E-mail</span>
         <small>Ten sam adres, na który przyszedł kod.</small>
@@ -81,7 +81,7 @@ export function MaterialyDownloadForm() {
           onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
           required
           maxLength={6}
-          className="materialy-code-input"
+          className="materiały-code-input"
         />
       </label>
 
@@ -103,17 +103,16 @@ export function MaterialyDownloadForm() {
       {state.status === 'error' && <p className="form-error">{state.message}</p>}
 
       {state.status === 'ok' && state.bundleParts !== null && (
-        <div className="materialy-success">
+        <div className="materiały-success">
           <p>
             Pobieranie rozpoczęte. Pakiet ma <strong>{state.bundleParts}</strong> części. Aby pobrać
             kolejne, wpisz numer części od 1 do {state.bundleParts - 1} i kliknij ponownie.
-            Każde pobranie zużywa 1 z 3 dostępnych prób.
           </p>
         </div>
       )}
 
       {state.status === 'ok' && state.bundleParts === null && (
-        <div className="materialy-success">
+        <div className="materiały-success">
           <p>Pobieranie rozpoczęte. Sprawdź folder Pobrane.</p>
         </div>
       )}

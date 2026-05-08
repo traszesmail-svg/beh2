@@ -54,7 +54,7 @@ export async function GET(request: Request) {
 
   const filePath = safePdfPath(pdfFile)
   if (!filePath) {
-    return NextResponse.json({ error: 'Niepoprawna sciezka pliku.' }, { status: 500 })
+    return NextResponse.json({ error: 'Niepoprawna ścieżka pliku.' }, { status: 500 })
   }
 
   let buffer: Buffer

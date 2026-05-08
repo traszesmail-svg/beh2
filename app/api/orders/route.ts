@@ -7,6 +7,7 @@ import {
   createOrReuseConsultationCommerceOrder,
   fulfillCommerceOrderAndNotify,
 } from '@/lib/server/commerce-service'
+import { buildNaffyCheckoutUrl, getOnlinePaymentRuntime } from '@/lib/server/online-payments'
 
 export async function POST(request: Request) {
   let body: Record<string, unknown>
@@ -35,10 +36,16 @@ export async function POST(request: Request) {
         accessToken,
         request.headers.get('authorization'),
       )
+      const onlinePayment = getOnlinePaymentRuntime(order)
+      const onlineCheckoutUrl =
+        onlinePayment.provider === 'naffy' && onlinePayment.naffyUrl
+          ? buildNaffyCheckoutUrl(onlinePayment.naffyUrl, order)
+          : null
 
       return NextResponse.json({
         ok: true,
         orderNumber: order.orderNumber,
+        onlineCheckoutUrl,
         redirectTo: `/checkout?orderNumber=${encodeURIComponent(order.orderNumber)}`,
       })
     }
@@ -60,11 +67,18 @@ export async function POST(request: Request) {
 
       if (order.amount === 0) {
         const fulfilled = await fulfillCommerceOrderAndNotify(order.orderNumber, 'mock')
+        const downloadUrl =
+          fulfilled.accessCode && fulfilled.customerEmail
+            ? `/api/access/download?code=${encodeURIComponent(fulfilled.accessCode)}&email=${encodeURIComponent(fulfilled.customerEmail)}`
+            : null
+
         return NextResponse.json({
           ok: true,
           orderNumber: fulfilled.orderNumber,
           free: true,
-          redirectTo: `/oczekiwanie/${encodeURIComponent(fulfilled.orderNumber)}`,
+          accessCode: fulfilled.accessCode,
+          downloadUrl,
+          redirectTo: `/dostep?email=${encodeURIComponent(fulfilled.customerEmail)}`,
         })
       }
 

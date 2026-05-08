@@ -9,6 +9,7 @@ import {
   fulfillCommerceOrderAndNotify,
   isCommerceTestModeAllowed,
 } from '@/lib/server/commerce-service'
+import { buildNaffyCheckoutUrl, getOnlinePaymentRuntime } from '@/lib/server/online-payments'
 
 function toStripeAmount(amount: number) {
   return Math.round(amount * 100)
@@ -52,11 +53,21 @@ export async function POST(request: Request) {
     })
   }
 
+  const onlinePayment = getOnlinePaymentRuntime(order)
+
+  if (onlinePayment.provider === 'naffy' && onlinePayment.naffyUrl) {
+    return NextResponse.json({
+      ok: true,
+      provider: 'naffy',
+      url: buildNaffyCheckoutUrl(onlinePayment.naffyUrl, order),
+    })
+  }
+
   const secretKey = process.env.STRIPE_SECRET_KEY?.trim()
 
   if (!secretKey) {
     return NextResponse.json(
-      { error: 'Płatność online nie jest jeszcze skonfigurowana. Użyj BLIK na telefon albo trybu testowego.' },
+      { error: onlinePayment.unavailableMessage },
       { status: 503 },
     )
   }
@@ -89,7 +100,7 @@ export async function POST(request: Request) {
   })
 
   if (!session.url || !session.id) {
-    return NextResponse.json({ error: 'Stripe nie zwrocil adresu checkoutu.' }, { status: 500 })
+    return NextResponse.json({ error: 'Stripe nie zwróćil adresu checkoutu.' }, { status: 500 })
   }
 
   await attachCommerceStripeSession(order.orderNumber, session.id)

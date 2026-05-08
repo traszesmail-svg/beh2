@@ -14,7 +14,7 @@ export function ReviewsSection({
   variant = 'carousel',
   showBadge = true,
   limit = 8,
-  title = 'Co mowia klienci',
+  title = 'Co mówią klienci',
   subtitle = 'Opinie po konsultacjach zapisane w lokalnym pliku opinii',
 }: ReviewsSectionProps) {
   const displayReviews = reviews.slice(0, limit)

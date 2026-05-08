@@ -69,7 +69,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
   const jsonLd = [
     getBlogArticleJsonLd(post, baseUrl),
     getBreadcrumbJsonLd([
-      { name: 'Strona glowna', path: '/' },
+      { name: 'Strona główna', path: '/' },
       { name: 'Blog', path: BLOG_ROUTE_BASE },
       { name: repairCopy(post.h1), path: post.path },
     ]),
@@ -183,7 +183,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
           <div className="editorial-final-copy">
             <div className="section-eyebrow">Po lekturze</div>
             <h2>Jeśli chcesz przejść od artykułu do konkretu, zrób pierwszy ruch tutaj</h2>
-            <p>Najprostszy start to Kwadrans z behawiorystą. Jeśli wolisz jeszcze zostać przy materiałach, przejdź do Niezbędnika.</p>
+            <p>Najprostszy start to 15-minutowa konsultacja behawioralna. Jeśli wolisz jeszcze zostać przy materiałach, przejdź do Niezbędnika.</p>
 
             <div className="hero-actions editorial-final-actions">
               <Link href={post.audioHref} prefetch={false} className="button button-primary big-button">

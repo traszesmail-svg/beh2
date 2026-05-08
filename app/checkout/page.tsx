@@ -3,13 +3,25 @@ import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { CommerceCheckoutActions } from '@/components/CommerceCheckoutActions'
-import { NotatnikPageShell, PUBLIC_BOOKING_FLOW_NAV_ITEMS } from '@/components/NotatnikA'
+import {
+  PaymentReferenceCardTitle,
+  PaymentReferenceLayout,
+  type PaymentReferenceSummaryRow,
+} from '@/components/PaymentReferenceLayout'
 import { formatCommercePrice } from '@/lib/commerce'
+import {
+  getBookingServiceDurationLabel,
+  getBookingServiceRoomAccessLabel,
+  resolveBookingServiceType,
+} from '@/lib/booking-services'
+import { formatDateTimeLabel, getProblemLabel } from '@/lib/data'
 import {
   createOrReuseConsultationCommerceOrder,
   isCommerceTestModeAllowed,
 } from '@/lib/server/commerce-service'
 import { getCommerceOrder } from '@/lib/server/commerce-store'
+import { getBookingForViewer } from '@/lib/server/db'
+import { getOnlinePaymentRuntime } from '@/lib/server/online-payments'
 import { buildTechnicalMetadata } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
@@ -37,69 +49,139 @@ export default async function CheckoutPage({
   const orderNumber = readParam(searchParams?.orderNumber)
   const bookingId = readParam(searchParams?.bookingId)
   const access = readParam(searchParams?.access)
+  const authorizationHeader = headers().get('authorization')
 
   if (!orderNumber && bookingId) {
-    const order = await createOrReuseConsultationCommerceOrder(bookingId, access, headers().get('authorization'))
+    const order = await createOrReuseConsultationCommerceOrder(bookingId, access, authorizationHeader)
     redirect(`/checkout?orderNumber=${encodeURIComponent(order.orderNumber)}`)
   }
 
   const order = orderNumber ? await getCommerceOrder(orderNumber) : null
-  const stripeAvailable = Boolean(process.env.STRIPE_SECRET_KEY?.trim())
+  const onlinePayment = getOnlinePaymentRuntime(order)
+  const isConsultation = order?.productType === 'consultation'
+  const consultationServiceType = resolveBookingServiceType(order?.meta.serviceType, order?.amount)
+  const consultationBooking =
+    order?.productType === 'consultation' && order.meta.bookingId
+      ? await getBookingForViewer(order.meta.bookingId, order.meta.bookingAccessToken ?? access, authorizationHeader).catch(() => null)
+      : null
+
+  const summaryRows: PaymentReferenceSummaryRow[] = order
+    ? isConsultation
+      ? [
+          {
+            icon: 'calendar',
+            label: 'Termin',
+            value: consultationBooking
+              ? formatDateTimeLabel(consultationBooking.bookingDate, consultationBooking.bookingTime)
+              : 'Termin z rezerwacji',
+          },
+          {
+            icon: 'form',
+            label: 'Forma',
+            value: getBookingServiceRoomAccessLabel(consultationServiceType),
+          },
+          {
+            icon: 'problem',
+            label: 'Problem',
+            value: consultationBooking?.problemType
+              ? getProblemLabel(consultationBooking.problemType)
+              : order.meta.problemType ?? 'Temat konsultacji',
+          },
+          {
+            icon: 'duration',
+            label: 'Czas trwania',
+            value: getBookingServiceDurationLabel(consultationServiceType),
+          },
+        ]
+      : [
+          {
+            icon: 'order',
+            label: 'Zamówienie',
+            value: order.orderNumber,
+          },
+          {
+            icon: 'receipt',
+            label: 'Produkt',
+            value: order.productName,
+          },
+          {
+            icon: 'form',
+            label: 'Dostęp',
+            value: 'Kod po płatności',
+          },
+          {
+            icon: 'duration',
+            label: 'Wysyłka',
+            value: 'Po potwierdzeniu',
+          },
+        ]
+    : [
+        {
+          icon: 'order',
+          label: 'Zamówienie',
+          value: 'Nie znaleziono',
+        },
+        {
+          icon: 'receipt',
+          label: 'Produkt',
+          value: 'Do sprawdzenia',
+        },
+        {
+          icon: 'form',
+          label: 'Płatność',
+          value: 'Niedostępna',
+        },
+        {
+          icon: 'duration',
+          label: 'Status',
+          value: 'Link wygasł',
+        },
+      ]
 
   return (
-    <NotatnikPageShell
-      tag="Płatność"
-      navItems={PUBLIC_BOOKING_FLOW_NAV_ITEMS}
-      ctaHref="/dostep"
-      ctaLabel="Wpisz kod"
-      footerPrimaryHref="/dostep"
-      footerPrimaryLabel="Wpisz kod dostępu"
+    <PaymentReferenceLayout
+      title={isConsultation ? 'Ostatni krok do potwierdzenia konsultacji.' : 'Ostatni krok do dostępu do materiału.'}
+      lead={
+        isConsultation
+          ? 'Wybierz BLIK na telefon albo płatność online kartą, Apple Pay lub Google Pay. Po potwierdzeniu dostaniesz termin i link do pokoju rozmowy.'
+          : 'Wybierz BLIK na telefon albo płatność online kartą, Apple Pay lub Google Pay. Po potwierdzeniu dostaniesz kod dostępu do materiału.'
+      }
+      heroImage={order?.meta.animalType === 'Kot' ? 'cat' : 'dog'}
+      variant="compact"
+      summaryRows={summaryRows}
+      lineItemLabel={order?.productName ?? 'Zamówienie'}
+      lineItemAmount={order ? formatCommercePrice(order.manualAmount) : 'Do ustalenia'}
+      totalLabel={order ? 'BLIK na telefon' : undefined}
     >
-      <div className="container">
-        <section className="panel centered-panel hero-surface booking-stage-panel transaction-panel booking-flow-panel">
-          {!order ? (
-            <div className="stack-gap">
-              <h1>Nie znaleziono zamówienia</h1>
-              <div className="error-box">Ten link do checkoutu jest nieprawidłowy albo wygasł.</div>
-              <div className="hero-actions centered-actions">
-                <Link href="/kontakt#formularz" className="button button-primary big-button">
-                  Napisz wiadomość
-                </Link>
-              </div>
+      <div className="payment-ref-checkout-content">
+        {!order ? (
+          <div className="payment-ref-stack">
+            <PaymentReferenceCardTitle title="Nie znaleziono zamówienia">
+              Ten link do checkoutu jest nieprawidłowy albo wygasł.
+            </PaymentReferenceCardTitle>
+            <div className="error-box">Wróć do formularza albo napisz wiadomość, jeśli rezerwacja została już utworzona.</div>
+            <div className="payment-ref-button-row">
+              <Link href="/kontakt#formularz" className="payment-ref-submit">
+                Napisz wiadomość
+              </Link>
             </div>
-          ) : (
-            <>
-              <div className="section-eyebrow">Wybierz metodę płatności</div>
-              <h1>Opłać zamówienie {order.orderNumber}</h1>
-              <p className="hero-text small-width center-text">
-                Wybierz wygodną płatność online albo tańszy, ręczny BLIK na telefon. Po potwierdzeniu dostaniesz kod dostępu.
-              </p>
-              <div className="summary-grid">
-                <div className="summary-card tree-backed-card">
-                  <div className="stat-label">Produkt</div>
-                  <div className="summary-value">{order.productName}</div>
-                </div>
-                <div className="summary-card tree-backed-card">
-                  <div className="stat-label">Online</div>
-                  <div className="summary-value">{formatCommercePrice(order.onlineAmount)}</div>
-                </div>
-                <div className="summary-card tree-backed-card">
-                  <div className="stat-label">BLIK na telefon</div>
-                  <div className="summary-value">{formatCommercePrice(order.manualAmount)}</div>
-                </div>
-              </div>
-              <CommerceCheckoutActions
-                orderNumber={order.orderNumber}
-                productName={order.productName}
-                onlineAmount={order.onlineAmount}
-                manualAmount={order.manualAmount}
-                stripeAvailable={stripeAvailable}
-                testModeAllowed={isCommerceTestModeAllowed()}
-              />
-            </>
-          )}
-        </section>
+          </div>
+        ) : (
+          <>
+            <PaymentReferenceCardTitle title={`Płatność za ${isConsultation ? 'konsultację' : 'zamówienie'}`}>
+              Zamówienie {order.orderNumber}. Wybierz metodę płatności i dokończ rezerwację bez publicznego numeru telefonu.
+            </PaymentReferenceCardTitle>
+            <CommerceCheckoutActions
+              orderNumber={order.orderNumber}
+              productName={order.productName}
+              onlineAmount={order.onlineAmount}
+              manualAmount={order.manualAmount}
+              onlinePayment={onlinePayment}
+              testModeAllowed={isCommerceTestModeAllowed()}
+            />
+          </>
+        )}
       </div>
-    </NotatnikPageShell>
+    </PaymentReferenceLayout>
   )
 }

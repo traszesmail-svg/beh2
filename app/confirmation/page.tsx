@@ -37,8 +37,8 @@ export function generateMetadata(): Metadata {
     title: 'Potwierdzenie rezerwacji',
     path: '/confirmation',
     description: 'Sprawdź status wpłaty, potwierdzenie rezerwacji i dalszy krok do rozmowy.',
-    noIndex: false,
-    follow: true,
+    noIndex: true,
+    follow: false,
   })
 }
 
@@ -90,7 +90,7 @@ function getConfirmedChecklist(serviceType: BookingServiceType) {
       items: [
         'Zachowaj termin i wróć do tego linku kilka minut przed konsultacją online.',
         'Przygotuj 2-3 najważniejsze obserwacje, krótki kontekst problemu i materiały, które chcesz omówić.',
-        'Jeśli chcesz, dodaj przed rozmową nagranie MP4, link do materiałów albo krótki opis sytuacji, żeby wejść od razu w sedno.',
+        'Możesz dodać krótkie nagranie zachowania psa lub kota, żeby specjalista lepiej przygotował się do rozmowy. To nie oznacza konsultacji wideo.',
       ],
       materialsLead:
         'To nie jest obowiązkowe. Materiały pomagają skrócić wstęp i szybciej przejść do zaleceń po pełnej konsultacji.',
@@ -101,7 +101,7 @@ function getConfirmedChecklist(serviceType: BookingServiceType) {
     title: 'Przed rozmową audio',
     items: [
       'Zachowaj termin i wróć do tego linku kilka minut przed rozmową audio.',
-      'Jeśli chcesz, dodaj teraz nagranie MP4, link do materiałów albo krótki opis sytuacji.',
+      'Możesz dodać krótkie nagranie zachowania psa lub kota, żeby specjalista lepiej przygotował się do rozmowy. To nie oznacza konsultacji wideo.',
       'Przed rozmową możesz też spokojnie przejrzeć Niezbędnik, jeśli chcesz uporządkować temat jeszcze lepiej.',
     ],
     materialsLead:
@@ -119,7 +119,7 @@ function getConfirmedFlowCards(
       return [
         {
           title: 'Termin jest zapisany',
-          body: 'Pelna konsultacja jest potwierdzona. Wróć do tego linku kilka minut przed spotkaniem.',
+      body: 'Pełna konsultacja jest potwierdzona. Wróć do tego linku kilka minut przed spotkaniem.',
         },
       {
         title: 'Dalszy link i instrukcja',
@@ -188,7 +188,7 @@ export default async function ConfirmationPage({
         triggerPaymentConfirmationSms: false,
       })
     } catch (error) {
-      console.warn('[behawior15][confirmation] stripe return finalize failed', {
+      console.warn('[regulski-behawiorysta][confirmation] stripe return finalize failed', {
         bookingId,
         sessionId,
         error,
@@ -201,7 +201,7 @@ export default async function ConfirmationPage({
     try {
       booking = await getBookingForViewer(bookingId, accessToken, headers().get('authorization'))
     } catch (error) {
-      console.warn('[behawior15][confirmation] failed to load booking', {
+      console.warn('[regulski-behawiorysta][confirmation] failed to load booking', {
         bookingId,
         hasAccessToken: Boolean(accessToken),
         error,

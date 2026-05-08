@@ -5,6 +5,10 @@ import Link from 'next/link'
 
 type StatusPayload = {
   status: string
+  ready: boolean
+  readyUrl: string | null
+  readyLabel: string | null
+  readyText: string | null
   accessReady: boolean
   accessCode: string | null
   accessUrl: string | null
@@ -17,7 +21,37 @@ type Props = {
   initialStatus: string
   initialAccessCode: string | null
   initialAccessUrl: string | null
+  initialReady: boolean
+  initialReadyUrl: string | null
+  initialReadyLabel: string
+  initialReadyText: string | null
   initialTestAdminConfirmUrl: string | null
+}
+
+function getStatusLabel(status: string) {
+  switch (status) {
+    case 'created':
+      return 'oczekuje na wybór płatności'
+    case 'waiting_manual_payment':
+      return 'czeka na wpłatę BLIK'
+    case 'payment_reported':
+      return 'wpłata zgłoszona'
+    case 'paid':
+    case 'access_sent':
+      return 'opłacone'
+    case 'cancelled':
+      return 'anulowane'
+    case 'expired':
+      return 'wygasło'
+    default:
+      return status
+  }
+}
+
+function getStatusTitle(status: string) {
+  return status === 'payment_reported' || status === 'paid' || status === 'access_sent'
+    ? 'Zgłoszenie płatności zostało wysłane'
+    : 'Płatność nie została jeszcze potwierdzona'
 }
 
 export function CommerceWaitingStatus({
@@ -25,16 +59,24 @@ export function CommerceWaitingStatus({
   initialStatus,
   initialAccessCode,
   initialAccessUrl,
+  initialReady,
+  initialReadyUrl,
+  initialReadyLabel,
+  initialReadyText,
   initialTestAdminConfirmUrl,
 }: Props) {
   const [status, setStatus] = useState(initialStatus)
   const [accessCode, setAccessCode] = useState(initialAccessCode)
   const [accessUrl, setAccessUrl] = useState(initialAccessUrl)
+  const [ready, setReady] = useState(initialReady)
+  const [readyUrl, setReadyUrl] = useState(initialReadyUrl)
+  const [readyLabel, setReadyLabel] = useState(initialReadyLabel)
+  const [readyText, setReadyText] = useState(initialReadyText)
   const [testAdminConfirmUrl, setTestAdminConfirmUrl] = useState(initialTestAdminConfirmUrl)
   const [error, setError] = useState('')
 
   useEffect(() => {
-    if (accessCode) return
+    if (ready && readyUrl) return
 
     const timer = window.setInterval(async () => {
       try {
@@ -44,37 +86,48 @@ export function CommerceWaitingStatus({
         const payload = (await response.json()) as StatusPayload
         if (!response.ok) throw new Error(payload.error ?? 'Nie udało się sprawdzić statusu.')
         setStatus(payload.status)
-        if (payload.accessReady && payload.accessCode && payload.accessUrl) {
+        setTestAdminConfirmUrl(payload.testAdminConfirmUrl)
+
+        if (payload.ready && payload.readyUrl) {
+          setReady(true)
+          setReadyUrl(payload.readyUrl)
+          setReadyLabel(payload.readyLabel ?? 'Przejdź dalej')
+          setReadyText(payload.readyText ?? null)
           setAccessCode(payload.accessCode)
           setAccessUrl(payload.accessUrl)
         }
-        setTestAdminConfirmUrl(payload.testAdminConfirmUrl)
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Nie udało się sprawdzić statusu.')
       }
     }, 4000)
 
     return () => window.clearInterval(timer)
-  }, [accessCode, orderNumber])
+  }, [orderNumber, ready, readyUrl])
 
-  if (accessCode && accessUrl) {
+  if (ready && readyUrl) {
     return (
       <div className="list-card accent-outline tree-backed-card top-gap">
         <strong>Dostęp jest aktywny</strong>
-        <span>Twój kod dostępu: <code>{accessCode}</code></span>
-        <Link href={accessUrl} className="button button-primary big-button">
-          Przejdź do dostępu
+        <span>{readyText ?? 'Płatność została potwierdzona. Możesz przejść dalej.'}</span>
+        {accessCode && accessUrl ? (
+          <span>
+            Kod dostępu: <code>{accessCode}</code>
+          </span>
+        ) : null}
+        <Link href={readyUrl} className="button button-primary big-button">
+          {readyLabel}
         </Link>
       </div>
     )
   }
 
   return (
-    <div className="list-card tree-backed-card top-gap">
-      <strong>Zgłoszenie płatności zostało wysłane.</strong>
+    <div className="list-card tree-backed-card top-gap commerce-status-card">
+      <strong>{getStatusTitle(status)}</strong>
       <span>
-        Aktualny status: <code>{status}</code>. Nie musisz odświeżać strony, status sprawdzi się automatycznie.
+        Aktualny status: <code>{getStatusLabel(status)}</code>.
       </span>
+      <span>Nie musisz odświeżać strony, status sprawdzi się automatycznie.</span>
       {testAdminConfirmUrl ? (
         <div className="list-card accent-outline tree-backed-card">
           <strong>Tryb testowy</strong>

@@ -40,7 +40,7 @@ export default async function AdminOpiniePage() {
 
       {loadError && (
         <p style={{ color: '#b91c1c', background: '#fef2f2', padding: '12px 16px', borderRadius: 8 }}>
-          Blad ladowania danych: {loadError}
+          Błąd ladowania danych: {loadError}
         </p>
       )}
 

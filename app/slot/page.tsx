@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import {
   buildBookHref,
@@ -8,9 +9,18 @@ import {
   readQaBookingSearchParam,
 } from '@/lib/booking-routing'
 import { DEFAULT_BOOKING_SERVICE, normalizeBookingServiceType } from '@/lib/booking-services'
+import { buildTechnicalMetadata } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
+
+export const metadata: Metadata = buildTechnicalMetadata({
+  title: 'Wybór terminu rozmowy',
+  path: '/slot',
+  description: 'Wybierz termin 15-minutowej konsultacji behawioralnej z Krzysztofem Regulskim.',
+  noIndex: true,
+  follow: false,
+})
 
 export default function SlotPage({
   searchParams,

@@ -41,28 +41,28 @@ export default function AddOpinionPage() {
         setStatus('sent')
       } else {
         setStatus('error')
-        setErrorMessage(data.error ?? 'Wystapil nieoczekiwany blad.')
+        setErrorMessage(data.error ?? 'Wystąpił nieoczekiwany błąd.')
       }
     } catch {
       setStatus('error')
-      setErrorMessage('Blad polaczenia. Sprawdz internet i sprobuj ponownie.')
+      setErrorMessage('Błąd połączenia. Sprawdź internet i spróbuj ponownie.')
     }
   }
 
   if (status === 'sent') {
     return (
       <main style={{ maxWidth: 560, margin: '60px auto', padding: '0 20px', fontFamily: 'sans-serif', color: '#1f1a17' }}>
-        <h1 style={{ fontSize: '1.5rem' }}>Dzieki za opinie</h1>
-        <p>Opinia trafila do weryfikacji. Odezwe sie po sprawdzeniu — najczesciej w ciagu 1-2 dni roboczych.</p>
+        <h1 style={{ fontSize: '1.5rem' }}>Dzięki za opinię</h1>
+        <p>Opinia trafiła do weryfikacji. Odezwę się po sprawdzeniu - najczęściej w ciągu 1-2 dni roboczych.</p>
       </main>
     )
   }
 
   return (
     <main style={{ maxWidth: 560, margin: '60px auto', padding: '0 20px', fontFamily: 'sans-serif', color: '#1f1a17' }}>
-      <h1 style={{ fontSize: '1.5rem', marginBottom: 8 }}>Dodaj opinie</h1>
+      <h1 style={{ fontSize: '1.5rem', marginBottom: 8 }}>Dodaj opinię</h1>
       <p style={{ color: '#6b625b', marginBottom: 32 }}>
-        Ta strona jest dostepna tylko dla osob, ktore przeszly konsultacje. Opinia trafia do weryfikacji przed
+        Ta strona jest dostępna tylko dla osób, które przeszły konsultacje. Opinia trafia do weryfikacji przed
         publikacja.
       </p>
 
@@ -100,7 +100,7 @@ export default function AddOpinionPage() {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <label htmlFor="issueCategory" style={{ fontWeight: 600 }}>Czego dotyczyla konsultacja? *</label>
+          <label htmlFor="issueCategory" style={{ fontWeight: 600 }}>Czego dotyczyła konsultacja? *</label>
           <select id="issueCategory" name="issueCategory" value={fields.issueCategory} onChange={handleChange} required style={inputStyle}>
             <option value="">Wybierz temat</option>
             {TESTIMONIAL_ISSUE_OPTIONS.map((opt) => (
@@ -119,7 +119,7 @@ export default function AddOpinionPage() {
             required
             maxLength={600}
             rows={5}
-            placeholder="Co konkretnie pomoglo? Co sie zmienilo po konsultacji?"
+            placeholder="Co konkretnie pomogło? Co się zmieniło po konsultacji?"
             style={{ ...inputStyle, resize: 'vertical' }}
           />
           <span style={{ fontSize: 12, color: '#6b625b' }}>{fields.opinion.length}/600 znakow</span>
@@ -137,7 +137,7 @@ export default function AddOpinionPage() {
             placeholder="https://..."
             style={inputStyle}
           />
-          <span style={{ fontSize: 12, color: '#6b625b' }}>Mozesz wrzucic zdjecie na Google Drive, Dropbox itp. i wkleic link.</span>
+          <span style={{ fontSize: 12, color: '#6b625b' }}>Możesz wrzucić zdjęcie na Google Drive, Dropbox itp. i wkleić link.</span>
         </div>
 
         <label style={{ display: 'flex', gap: 10, alignItems: 'flex-start', cursor: 'pointer' }}>
@@ -150,7 +150,7 @@ export default function AddOpinionPage() {
             style={{ marginTop: 3, flexShrink: 0 }}
           />
           <span style={{ fontSize: 14 }}>
-            Wyrazam zgode na publikacje tej opinii na stronie regulskibehawiorysta.pl pod podanym imieniem lub inicjalami. *
+            Wyrażam zgodę na publikację tej opinii na stronie regulskibehawiorysta.pl pod podanym imieniem lub inicjałami. *
           </span>
         </label>
 
@@ -174,11 +174,11 @@ export default function AddOpinionPage() {
             cursor: status === 'sending' ? 'not-allowed' : 'pointer',
           }}
         >
-          {status === 'sending' ? 'Wysylam...' : 'Wyslij opinie'}
+          {status === 'sending' ? 'Wysyłam...' : 'Wyślij opinię'}
         </button>
 
         <p style={{ fontSize: 12, color: '#6b625b' }}>
-          Pola oznaczone * sa wymagane. Opinia trafia do weryfikacji przed publikacja — nie pojawia sie automatycznie na
+          Pola oznaczone * są wymagane. Opinia trafia do weryfikacji przed publikacją - nie pojawia się automatycznie na
           stronie.
         </p>
       </form>

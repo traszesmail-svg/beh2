@@ -15,7 +15,7 @@ export function BookingServiceInfoCard({
   serviceType,
   quickConsultationPrice,
   title = 'Informacje o usludze',
-  stageLabel = 'Ta usluga',
+  stageLabel = 'Ta usługa',
   emphasis,
 }: BookingServiceInfoCardProps) {
   const service = FUNNEL_SERVICE_CONFIG[serviceType]

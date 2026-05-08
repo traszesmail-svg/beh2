@@ -7,6 +7,6 @@ export const contentType = 'image/png'
 export default function OpenGraphImage() {
   return renderOgImage({
     title: 'Krzysztof Regulski',
-    subtitle: 'Behawiorysta COAPE psow i kotow. Sposob pracy, profil i publiczne punkty odniesienia.',
+    subtitle: 'Behawiorysta COAPE psów i kotów. Sposób pracy, profil i publiczne punkty odniesienia.',
   })
 }

@@ -15,7 +15,8 @@ import { NewsletterSignup } from '@/components/NewsletterSignup'
 import { TrustSignalSection } from '@/components/TrustSignalSection'
 import { buildBookHref } from '@/lib/booking-routing'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
-import { getLeadMagnetBySlug, getProblemLandingLeadMagnetSlug, getTopicalClusterByRoutePath } from '@/lib/growth-layer'
+import { getLeadMagnetBySlug, getProblemLandingLeadMagnetSlug } from '@/lib/active-lead-magnets'
+import { getTopicalClusterByRoutePath } from '@/lib/growth-layer'
 import { REAL_CASE_STUDIES } from '@/lib/real-case-studies'
 import { getBreadcrumbJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
@@ -130,8 +131,8 @@ const PROBLEM_LANDING_CONFIGS: ProblemLandingConfig[] = [
     visualAlt: TOPIC_VISUALS.spacer.alt,
     visualWidth: 1024,
     visualHeight: 1536,
-    toolkitHref: '/bezplatne-materialy/pies-reaktywnosc-5-krokow',
-    toolkitLabel: 'Bezpłatny materiał: 5 kroków dla reaktywnego psa',
+    toolkitHref: '/bezplatne-materialy/pies-ile-ruchu-potrzebuje',
+    toolkitLabel: 'Bezpłatny materiał: pies i poziom ruchu',
     crossLinks: [
       {
         href: '/psy/lek-separacyjny',
@@ -139,9 +140,9 @@ const PROBLEM_LANDING_CONFIGS: ProblemLandingConfig[] = [
         copy: 'Jeśli obok spacerów widzisz też trudność z rozłąką albo z wyciszeniem po wyjściu opiekuna, sprawdź też ten temat.',
       },
       {
-        href: '/oferta/poradniki-pdf/pakiety/pakiet-spacerowy-pies',
-        label: 'Pakiet spacerowy dla psa',
-        copy: 'Jeśli jeden materiał to za mało, zobacz też szerszy pakiet PDF związany ze spacerami i regulacją emocji.',
+        href: '/materialy/pies-ile-ruchu-potrzebuje',
+        label: 'PDF: pies i poziom ruchu',
+        copy: 'Jeśli jeden materiał to za mało, zacznij od sprawdzenia rytmu dnia, odpoczynku i przeciążenia.',
       },
     ],
   },
@@ -157,7 +158,7 @@ const PROBLEM_LANDING_CONFIGS: ProblemLandingConfig[] = [
     visualAlt: TOPIC_VISUALS.separacja.alt,
     visualWidth: 1024,
     visualHeight: 1536,
-    toolkitHref: '/oferta/poradniki-pdf/pies-zostaje-sam-plan-pierwszych-krokow',
+    toolkitHref: '/materialy/pies-sam-w-domu',
     toolkitLabel: 'PDF: pies zostaje sam',
     crossLinks: [
       {
@@ -184,8 +185,8 @@ const PROBLEM_LANDING_CONFIGS: ProblemLandingConfig[] = [
     visualAlt: TOPIC_VISUALS['kot-kuweta'].alt,
     visualWidth: 1024,
     visualHeight: 1536,
-    toolkitHref: '/bezplatne-materialy/kot-kuweta-checklista',
-    toolkitLabel: 'Bezpłatna checklista kuwety',
+    toolkitHref: '/bezplatne-materialy/kot-zyje-w-napieciu',
+    toolkitLabel: 'Bezpłatny materiał: kot żyje w napięciu',
     crossLinks: [
       {
         href: '/koty/konflikt-miedzy-kotami',
@@ -206,8 +207,8 @@ const PROBLEM_LANDING_CONFIGS: ProblemLandingConfig[] = [
     visualAlt: TOPIC_VISUALS['kot-konflikt'].alt,
     visualWidth: 1024,
     visualHeight: 1536,
-    toolkitHref: '/oferta/poradniki-pdf/pakiety/pakiet-kot-bez-napiecia',
-    toolkitLabel: 'Poradnik: konflikt między kotami',
+    toolkitHref: '/bezplatne-materialy/kot-zyje-w-napieciu',
+    toolkitLabel: 'PDF: kot żyje w napięciu',
     crossLinks: [
       {
         href: '/koty/zalatwianie-poza-kuweta',
@@ -649,7 +650,7 @@ export function getProblemLandingMetadata(routePath: string): Metadata {
     return buildMarketingMetadata({
       title: SITE_NAME,
       path: '/',
-      description: 'Regulski | Terapia behawioralna.',
+      description: 'Regulski Behawiorysta.',
     })
   }
 
@@ -720,7 +721,7 @@ export function ProblemLandingPage({ routePath }: { routePath: string }) {
           tag={`${landing.categoryLabel} / problem`}
           navItems={PUBLIC_SITE_NAV_ITEMS}
           ctaHref={landing.audioHref}
-          ctaLabel="Kwadrans / 69 zl"
+          ctaLabel="Kwadrans / 69 zł"
         />
         <Breadcrumbs items={[
           { name: landing.categoryLabel, url: landing.categoryHref },
@@ -770,8 +771,8 @@ export function ProblemLandingPage({ routePath }: { routePath: string }) {
             <aside className="editorial-hero-visual" aria-label={landing.visualAlt}>
               <HeroIllustration
                 slug={
-                  landing.slug === 'reaktywnosc-na-smyczy' ? 'psy-reaktywnosc'
-                  : landing.slug === 'lek-separacyjny' ? 'psy-separacja'
+                  landing.slug === 'reaktywność-na-smyczy' ? 'psy-reaktywność'
+                  : landing.slug === 'lęk-separacyjny' ? 'psy-separacja'
                   : landing.slug === 'zalatwianie-poza-kuweta' ? 'koty-kuweta'
                   : 'koty-konflikt'
                 }
@@ -828,7 +829,7 @@ export function ProblemLandingPage({ routePath }: { routePath: string }) {
           items={[
             {
               title: 'Najpierw diagnoza, potem technika',
-              copy: 'Najważniejsze jest zrozumienie wyzwalaczy, tła i priorytetu, zanim wejdziesz w kolejne ćwiczenia.',
+              copy: 'Najważniejsze jest zrozumienie wyzwalaczy, tła i priorytetu, zanim wejdziesz w kolejne ćwrócićzenia.',
             },
             {
               title: 'Jeśli online nie wystarczy, powiem to wprost',

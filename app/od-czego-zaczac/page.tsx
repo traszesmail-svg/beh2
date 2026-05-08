@@ -10,9 +10,9 @@ import { buildMarketingMetadata } from '@/lib/seo'
 export const dynamic = 'force-static'
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: 'Nie wiem, od czego zaczac',
+  title: 'Nie wiem, od czego zacząć',
   path: '/od-czego-zaczac',
-  description: 'Trzy spokojne sciezki startu: materialy, wiadomosc albo pelniejszy quiz prowadzacy do najlepszego kolejnego kroku.',
+  description: 'Trzy spokojne ścieżki startu: materiały, wiadomość albo pełniejszy quiz prowadzący do najlepszego kolejnego kroku.',
 })
 
 const startChoices = [
@@ -53,8 +53,8 @@ export default function StartHerePage() {
     >
       <Schema
         data={getBreadcrumbJsonLd([
-          { name: 'Strona glowna', path: '/' },
-          { name: 'Od czego zaczac', path: '/od-czego-zaczac' },
+          { name: 'Strona główna', path: '/' },
+          { name: 'Od czego zacząć', path: '/od-czego-zaczac' },
         ])}
       />
 

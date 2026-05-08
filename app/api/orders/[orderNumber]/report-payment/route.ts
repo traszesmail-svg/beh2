@@ -37,11 +37,34 @@ export async function POST(request: Request, { params }: { params: { orderNumber
       rejectUrl: buildCommerceManualReviewUrl(order, 'reject'),
     })
 
+    if (emailResult.status !== 'sent') {
+      console.error('[commerce][orders] admin payment notification not sent', {
+        orderNumber: order.orderNumber,
+        status: emailResult.status,
+        reason: emailResult.reason,
+      })
+
+      return NextResponse.json(
+        {
+          ok: false,
+          orderNumber: order.orderNumber,
+          status: order.status,
+          adminNotification: emailResult.status,
+          adminNotificationReason: emailResult.reason ?? null,
+          redirectTo: `/oczekiwanie/${encodeURIComponent(order.orderNumber)}`,
+          error:
+            'Zgłoszenie wpłaty zostało zapisane, ale mail do behawiorysty nie wyszedł. Spróbuj kliknąć ponownie za chwilę albo napisz przez formularz kontaktowy.',
+        },
+        { status: 502 },
+      )
+    }
+
     return NextResponse.json({
       ok: true,
       orderNumber: order.orderNumber,
       status: order.status,
       adminNotification: emailResult.status,
+      adminNotificationReason: null,
       redirectTo: `/oczekiwanie/${encodeURIComponent(order.orderNumber)}`,
       testAdminConfirmUrl:
         isCommerceTestModeAllowed() && order.adminConfirmationToken

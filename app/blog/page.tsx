@@ -92,9 +92,9 @@ function isBehaviorPost(post: BlogPost) {
 }
 
 function getCategoryHref(categoryId: string) {
-  if (categoryId === 'all') return `${BLOG_ROUTE_BASE}#artykuly`
+  if (categoryId === 'all') return `${BLOG_ROUTE_BASE}#artykuły`
 
-  return `${BLOG_ROUTE_BASE}?category=${encodeURIComponent(categoryId)}#artykuly`
+  return `${BLOG_ROUTE_BASE}?category=${encodeURIComponent(categoryId)}#artykuły`
 }
 
 function buildCategories(posts: BlogPost[]): BlogCategory[] {
@@ -113,8 +113,8 @@ function buildCategories(posts: BlogPost[]): BlogCategory[] {
       id: 'emocje',
       label: 'Emocje',
       href: getCategoryHref('emocje'),
-      count: countBy(posts, (post) => /stres|lek|lęk|wyje|boi|napieciu|napięciu/i.test(post.slug)),
-      predicate: (post) => /stres|lek|lęk|wyje|boi|napieciu|napięciu/i.test(post.slug),
+      count: countBy(posts, (post) => /stres|lęk|lęk|wyje|boi|napieciu|napięciu/i.test(post.slug)),
+      predicate: (post) => /stres|lęk|lęk|wyje|boi|napieciu|napięciu/i.test(post.slug),
     },
     {
       id: 'relacja',
@@ -137,7 +137,7 @@ function buildCategories(posts: BlogPost[]): BlogCategory[] {
       count: countBy(posts, (post) => /szczeniak|nowy-pies|nowego-kota/i.test(post.slug)),
       predicate: (post) => /szczeniak|nowy-pies|nowego-kota/i.test(post.slug),
     },
-    { id: 'niezbednik', label: 'Niezbędnik', href: '/niezbednik', count: 8 },
+    { id: 'niezbędnik', label: 'Niezbędnik', href: '/niezbednik', count: 8 },
   ]
 
   return categories
@@ -167,7 +167,7 @@ function getPageHref(page: number, categoryId: string, query: string) {
 
   const queryString = params.toString()
 
-  return `${BLOG_ROUTE_BASE}${queryString ? `?${queryString}` : ''}#artykuly`
+  return `${BLOG_ROUTE_BASE}${queryString ? `?${queryString}` : ''}#artykuły`
 }
 
 function getPaginationPages(currentPage: number, totalPages: number) {
@@ -186,7 +186,7 @@ export default function BlogPage({ searchParams }: { searchParams?: BlogSearchPa
   const posts = listBlogPosts()
   const categories = buildCategories(posts)
   const categoryId = normalizeParam(searchParams?.category) || 'all'
-  const activeCategory = categories.find((category) => category.id === categoryId && category.id !== 'niezbednik') ?? categories[0]
+  const activeCategory = categories.find((category) => category.id === categoryId && category.id !== 'niezbędnik') ?? categories[0]
   const query = repairCopy(getSingleParam(searchParams?.q) ?? '').trim()
   const orderedPosts = orderBlogPosts(posts)
   const filteredPosts = filterBlogPosts(orderedPosts, activeCategory, query)
@@ -200,7 +200,7 @@ export default function BlogPage({ searchParams }: { searchParams?: BlogSearchPa
   const urgentHref = buildBookHref(null, 'kwadrans-na-juz')
   const structuredData = [
     getBreadcrumbJsonLd([
-      { name: 'Strona glowna', path: '/' },
+      { name: 'Strona główna', path: '/' },
       { name: 'Blog', path: '/blog' },
     ]),
     getItemListJsonLd(
@@ -242,7 +242,7 @@ export default function BlogPage({ searchParams }: { searchParams?: BlogSearchPa
             </div>
           </section>
 
-          <section id="artykuly" className="blog-index-layout" aria-label="Artykuły i kategorie">
+          <section id="artykuły" className="blog-index-layout" aria-label="Artykuły i kategorie">
             <div className="blog-index-grid">
               {paginatedPosts.map((post) => (
                 <article key={post.slug} className="blog-index-card">
@@ -277,7 +277,7 @@ export default function BlogPage({ searchParams }: { searchParams?: BlogSearchPa
                 <div className="blog-index-empty">
                   <h2>Brak artykułów dla tego filtra</h2>
                   <p>Zmień kategorię albo wyczyść wyszukiwanie, żeby zobaczyć pełną listę wpisów.</p>
-                  <Link href={`${BLOG_ROUTE_BASE}#artykuly`} prefetch={false} className="blog-index-button is-secondary">
+                  <Link href={`${BLOG_ROUTE_BASE}#artykuły`} prefetch={false} className="blog-index-button is-secondary">
                     Pokaż wszystkie artykuły
                   </Link>
                 </div>

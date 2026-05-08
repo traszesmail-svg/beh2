@@ -84,7 +84,7 @@ export function getManualPaymentDetailCards({
   cards.push({
     key: 'account',
     label: 'Odbiorca',
-    value: accountName ?? 'Behawior 15',
+    value: accountName ?? 'Regulski Behawiorysta',
   })
 
   return cards

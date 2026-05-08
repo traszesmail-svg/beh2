@@ -2,10 +2,11 @@ export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 import { NextResponse } from 'next/server'
-import { getLeadMagnetBySlug } from '@/lib/growth-layer'
+import { getLeadMagnetBySlug } from '@/lib/active-lead-magnets'
 import { recordFunnelEvent } from '@/lib/server/db'
 import { upsertGrowthSignup } from '@/lib/server/growth-signups'
 import { syncNewsletterSubscriber } from '@/lib/server/mailerlite'
+import { sendLeadMagnetDownloadEmail } from '@/lib/server/notifications'
 
 type SignupKind = 'newsletter' | 'lead_magnet'
 
@@ -28,7 +29,7 @@ export async function POST(request: Request) {
   try {
     body = (await request.json()) as Record<string, unknown>
   } catch {
-    return NextResponse.json({ error: 'Nie udalo sie odczytac formularza.' }, { status: 400 })
+    return NextResponse.json({ error: 'Nie udało się odczytać formularza.' }, { status: 400 })
   }
 
   const kind = normalizeSingleLine(body.kind, 32) as SignupKind | null
@@ -47,13 +48,13 @@ export async function POST(request: Request) {
   }
 
   if (kind === 'lead_magnet' && !leadMagnetSlug) {
-    return NextResponse.json({ error: 'Brakuje identyfikatora materialu.' }, { status: 400 })
+    return NextResponse.json({ error: 'Brakuje identyfikatora materiału.' }, { status: 400 })
   }
 
   const magnet = leadMagnetSlug ? getLeadMagnetBySlug(leadMagnetSlug) : null
 
   if (kind === 'lead_magnet' && !magnet) {
-    return NextResponse.json({ error: 'Nie znaleziono materialu.' }, { status: 404 })
+    return NextResponse.json({ error: 'Nie znaleziono materiału.' }, { status: 404 })
   }
 
   let signupId: string | null = null
@@ -69,8 +70,11 @@ export async function POST(request: Request) {
     })
     signupId = signup.id
   } catch (error) {
-    console.error('[behawior15][growth-signup] signup save failed', error)
-    return NextResponse.json({ error: 'Nie udalo sie zapisac formularza.' }, { status: 500 })
+    console.warn('[regulski-behawiorysta][growth-signup] signup save skipped', error)
+
+    if (kind !== 'lead_magnet') {
+      return NextResponse.json({ error: 'Nie udało się zapisać formularza.' }, { status: 500 })
+    }
   }
 
   try {
@@ -87,13 +91,18 @@ export async function POST(request: Request) {
       },
     })
   } catch (error) {
-    console.warn('[behawior15][growth-signup] event record skipped', error)
+    console.warn('[regulski-behawiorysta][growth-signup] event record skipped', error)
   }
 
   if (kind === 'lead_magnet' && magnet) {
+    void sendLeadMagnetDownloadEmail(email, magnet).catch((error) => {
+      console.error('[regulski-behawiorysta][growth-signup] lead magnet email failed', error)
+    })
+
     return NextResponse.json({
       ok: true,
       signupId,
+      downloadUrl: `/api/lead-magnet/${encodeURIComponent(magnet.slug)}`,
       redirectTo: `/bezplatne-materialy/dziekuje?leadMagnet=${encodeURIComponent(magnet.slug)}`,
     })
   }
@@ -106,13 +115,13 @@ export async function POST(request: Request) {
   })
 
   if (provider.status === 'failed') {
-    console.warn('[behawior15][growth-signup] mailerlite sync failed', provider.reason)
+    console.warn('[regulski-behawiorysta][growth-signup] mailerlite sync failed', provider.reason)
   }
 
   return NextResponse.json({
     ok: true,
     signupId,
     provider: provider.status,
-    message: 'Dziekuje. Zapis jest przyjety. Bede pisac tylko wtedy, gdy bedzie cos uzytecznego.',
+    message: 'Dziękuję. Zapis jest przyjęty. Będę pisać tylko wtedy, gdy będzie coś użytecznego.',
   })
 }

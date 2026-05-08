@@ -2,7 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import type { ReactNode } from 'react'
 import { CalendarCheck, Globe2, Mail, ShieldCheck } from 'lucide-react'
-import { NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
+import { NotatnikFooter, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { REGULSKI_WEB_LOGO } from '@/lib/regulski-web-assets'
 import { CAPBT_PROFILE_URL, INSTAGRAM_PROFILE_URL, getPublicContactDetails } from '@/lib/site'
 
@@ -39,7 +39,7 @@ export function ReferencePageShell({
           showUtilityLinks={false}
         />
         {children}
-        <ReferenceFooter />
+        <NotatnikFooter />
       </div>
     </main>
   )

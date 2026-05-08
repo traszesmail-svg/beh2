@@ -6,7 +6,14 @@ import { FinalReviewsQuoteCarousel } from '@/components/FinalReviewsQuoteCarouse
 import { getBuildMarkerSnapshot } from '@/lib/build-marker'
 import { REGULSKI_WEB_LOGO } from '@/lib/regulski-web-assets'
 import { catReviews, dogReviews, reviews } from '@/lib/reviews.config'
-import { CAPBT_PROFILE_URL, COAPE_ORG_URL, SPECIALIST_NAME } from '@/lib/site'
+import {
+  CAPBT_PROFILE_URL,
+  COAPE_ORG_URL,
+  SITE_HEADER_BRAND,
+  SPECIALIST_NAME,
+  buildMailtoHref,
+  getPublicContactDetails,
+} from '@/lib/site'
 
 type FooterProps = {
   variant?: 'landing' | 'lean' | 'full' | 'home' | 'legal'
@@ -31,6 +38,8 @@ const FOOTER_NAV_ITEMS = [
 export function Footer(props: FooterProps) {
   const buildMarker = getBuildMarkerSnapshot()
   const footerReviews = props.reviewSpecies === 'dog' ? dogReviews : props.reviewSpecies === 'cat' ? catReviews : reviews
+  const contact = getPublicContactDetails()
+  const contactHref = contact.email ? buildMailtoHref(contact.email, 'Pytanie że stopki - Regulski Behawiorysta') : null
 
   return (
     <>
@@ -38,16 +47,24 @@ export function Footer(props: FooterProps) {
       <footer className="site-footer" aria-label="Stopka" data-build-marker={buildMarker.value}>
         <div className="site-footer-grid">
           <div className="site-footer-brand">
-            <Link href="/" prefetch={false} className="site-footer-brand-lockup" aria-label="Wróć na stronę główną Regulski">
+            <Link href="/" prefetch={false} className="site-footer-brand-lockup" aria-label="Wróć na stronę główną Regulski Behawiorysta">
               <span className="site-footer-brand-mark">
                 <Image src={REGULSKI_WEB_LOGO} alt="" width={512} height={512} />
               </span>
               <span className="site-footer-brand-copy">
-                <span>Regulski</span>
-                <small>Terapia behawioralna</small>
+                <span>{SITE_HEADER_BRAND}</span>
+                <small>{SPECIALIST_NAME} - behawiorysta zwierzęcy</small>
               </span>
             </Link>
-            <p>Spokojna pomoc w zrozumieniu problemów zachowania psów i kotów.</p>
+            <p>Konsultacja odbywa się po rezerwacji i opłaceniu terminu. Pracuję online oraz lokalnie w Olsztynie.</p>
+            {contact.email && contactHref ? (
+              <p>
+                E-mail:{' '}
+                <a href={contactHref}>
+                  {contact.email}
+                </a>
+              </p>
+            ) : null}
           </div>
 
           <div className="site-footer-meta">

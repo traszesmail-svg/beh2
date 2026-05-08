@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { listBlogRoutePaths } from '@/lib/blog'
-import { listLeadMagnetPaths } from '@/lib/growth-layer'
-import { listPdfRoutePaths } from '@/lib/pdf-guides'
+import { listLeadMagnetPaths } from '@/lib/active-lead-magnets'
+import { listMaterialyBundles, listMaterialyGuides } from '@/lib/materialy-catalog'
 import { listRealCaseStudyPaths } from '@/lib/real-case-studies'
 import { getCanonicalBaseUrl } from '@/lib/server/env'
 
@@ -15,13 +15,17 @@ const STATIC_ROUTES: Array<{ path: string; priority: number; changeFrequency: Me
   { path: '/koty/konflikt-miedzy-kotami', priority: 0.8, changeFrequency: 'monthly' },
   { path: '/o-mnie', priority: 0.7, changeFrequency: 'monthly' },
   { path: '/cennik', priority: 0.8, changeFrequency: 'weekly' },
+  { path: '/cennik/pelny', priority: 0.72, changeFrequency: 'weekly' },
   { path: '/book', priority: 0.9, changeFrequency: 'weekly' },
   { path: '/kontakt', priority: 0.8, changeFrequency: 'monthly' },
   { path: '/faq', priority: 0.7, changeFrequency: 'monthly' },
   { path: '/blog', priority: 0.8, changeFrequency: 'weekly' },
+  { path: '/regulamin', priority: 0.4, changeFrequency: 'yearly' },
+  { path: '/polityka-prywatnosci', priority: 0.4, changeFrequency: 'yearly' },
   { path: '/newsletter', priority: 0.5, changeFrequency: 'monthly' },
   { path: '/quiz', priority: 0.7, changeFrequency: 'monthly' },
   { path: '/niezbednik', priority: 0.8, changeFrequency: 'weekly' },
+  { path: '/materialy', priority: 0.8, changeFrequency: 'weekly' },
   { path: '/behawiorysta-online-polska', priority: 0.8, changeFrequency: 'monthly' },
   { path: '/konsultacja-behawioralna-online', priority: 0.7, changeFrequency: 'monthly' },
   { path: '/opinie', priority: 0.6, changeFrequency: 'monthly' },
@@ -54,12 +58,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })
   }
 
-  for (const path of listPdfRoutePaths()) {
+  for (const guide of listMaterialyGuides()) {
+    const path = `/materialy/${guide.slug}`
     routeMap.set(path, {
       url: buildAbsoluteUrl(baseUrl, path),
       lastModified,
-      changeFrequency: path === '/niezbednik' ? 'weekly' : 'monthly',
-      priority: path === '/niezbednik' ? 0.8 : 0.7,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    })
+  }
+
+  for (const bundle of listMaterialyBundles()) {
+    const path = `/materialy/pakiet/${bundle.slug}`
+    routeMap.set(path, {
+      url: buildAbsoluteUrl(baseUrl, path),
+      lastModified,
+      changeFrequency: 'monthly',
+      priority: 0.6,
     })
   }
 

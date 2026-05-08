@@ -78,7 +78,7 @@ export function PetTopicsSection() {
         icon="dog"
         heading="Pies"
         links={[
-          { href: '#cennik', icon: 'dog-reactivity', title: 'Reaktywnosc', desc: 'emocje i bodzce' },
+          { href: '#cennik', icon: 'dog-reactivity', title: 'Reaktywność', desc: 'emocje i bodźce' },
           { href: '#cennik', icon: 'dog-separation', title: 'Separacja', desc: 'zostawanie samemu' },
           { href: '#cennik', icon: 'dog-puppy', title: 'Szczeniak', desc: 'start i nauka' },
           { href: '#cennik', icon: 'topic-other', title: 'Pozostale', desc: 'inne tematy' },

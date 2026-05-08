@@ -1,6 +1,7 @@
 import { mkdir, readFile, rename, rm, writeFile } from 'fs/promises'
 import path from 'path'
 import { createClient } from '@supabase/supabase-js'
+import { resolveDataMode } from '@/lib/server/env'
 import { getLocalStoreDataDir } from '@/lib/server/local-store-path'
 
 export type GrowthSignupKind = 'newsletter' | 'lead_magnet'
@@ -33,7 +34,10 @@ function getSignupId(input: GrowthSignupInput) {
 }
 
 function shouldUseSupabase() {
-  return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() && process.env.SUPABASE_SERVICE_ROLE_KEY?.trim())
+  return (
+    resolveDataMode('growth signups') === 'supabase' &&
+    Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() && process.env.SUPABASE_SERVICE_ROLE_KEY?.trim())
+  )
 }
 
 function getSupabaseAdmin() {

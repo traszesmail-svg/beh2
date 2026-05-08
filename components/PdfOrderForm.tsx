@@ -39,7 +39,7 @@ export function PdfOrderForm({ itemType, itemSlug, itemTitle, itemPrice }: PdfOr
 
     if (!name.trim()) {
       setStatus('error')
-      setFeedback('Podaj imie.')
+      setFeedback('Podaj imię.')
       return
     }
 
@@ -79,11 +79,11 @@ export function PdfOrderForm({ itemType, itemSlug, itemTitle, itemPrice }: PdfOr
       const payload = (await response.json()) as { ok?: boolean; message?: string; error?: string }
 
       if (!response.ok || !payload.ok) {
-        throw new Error(payload.error ?? 'Nie udalo sie wyslac zamowienia. Sprobuj ponownie pozniej.')
+        throw new Error(payload.error ?? 'Nie udało się wysłać zamówienia. Spróbuj ponownie później.')
       }
 
       setStatus('success')
-      setFeedback(payload.message ?? `Dziekuje. Wyslalem potwierdzenie mailowe z dalszym krokiem platnosci: ${PUBLIC_OFFER_PAYMENT_METHODS}.`)
+      setFeedback(payload.message ?? `Dziękuję. Wysłałem potwierdzenie mailowe z dalszym krokiem płatności: ${PUBLIC_OFFER_PAYMENT_METHODS}.`)
       trackAnalyticsEvent('pdf_order_submitted', {
         item_type: itemType,
         item_slug: itemSlug,
@@ -91,7 +91,7 @@ export function PdfOrderForm({ itemType, itemSlug, itemTitle, itemPrice }: PdfOr
       resetForm()
     } catch (error) {
       setStatus('error')
-      setFeedback(error instanceof Error ? error.message : 'Nie udalo sie wyslac zamowienia. Sprobuj ponownie pozniej.')
+      setFeedback(error instanceof Error ? error.message : 'Nie udało się wysłać zamówienia. Spróbuj ponownie później.')
     }
   }
 
@@ -106,7 +106,7 @@ export function PdfOrderForm({ itemType, itemSlug, itemTitle, itemPrice }: PdfOr
       data-analytics-item-slug={itemSlug}
     >
       <div className="info-box full-width">
-        Zamowienie dotyczy: <strong>{itemTitle}</strong> ({itemPrice}). Po wyslaniu formularza dostajesz mail z dalszym krokiem platnosci: {PUBLIC_OFFER_PAYMENT_METHODS}. BLIK na telefon zostaje dostepny bez publikowania numeru na stronie.
+        Zamówienie dotyczy: <strong>{itemTitle}</strong> ({itemPrice}). Po wysłaniu formularza dostajesz mail z dalszym krokiem płatności: {PUBLIC_OFFER_PAYMENT_METHODS}. BLIK na telefon zostaje dostępny bez publikowania numeru na stronie.
       </div>
 
       <div className="form-field">
@@ -127,13 +127,13 @@ export function PdfOrderForm({ itemType, itemSlug, itemTitle, itemPrice }: PdfOr
       </div>
 
       <div className="full-width form-field">
-        <label htmlFor="pdf-order-notes">Krotka wiadomosc</label>
+        <label htmlFor="pdf-order-notes">Krótka wiadomość</label>
         <textarea
           id="pdf-order-notes"
           rows={4}
           value={notes}
           onChange={(event) => setNotes(event.target.value)}
-          placeholder="Jesli chcesz, dopisz krotko, czego dotyczy sytuacja albo czy wolisz PayPal albo BLIK na telefon."
+          placeholder="Jeśli chcesz, dopisz krótko, czego dotyczy sytuacja albo czy wolisz PayPal albo BLIK na telefon."
         />
       </div>
 
@@ -147,7 +147,7 @@ export function PdfOrderForm({ itemType, itemSlug, itemTitle, itemPrice }: PdfOr
             checked={consentProcessing}
             onChange={(event) => setConsentProcessing(event.target.checked)}
           />
-          <span>Wyrazam zgode na przetwarzanie danych w celu obslugi zamowienia PDF.</span>
+          <span>Wyrażam zgodę na przetwarzanie danych w celu obsługi zamówienia PDF.</span>
         </label>
 
         <label className="checkbox-card" htmlFor="pdf-order-consent-policy">
@@ -190,7 +190,7 @@ export function PdfOrderForm({ itemType, itemSlug, itemTitle, itemPrice }: PdfOr
 
       <div className="full-width">
         <button type="submit" className="button button-primary big-button" disabled={isSubmitting}>
-          {isSubmitting ? 'Wysylam zamowienie...' : `Zamow ${itemType === 'bundle' ? 'pakiet PDF' : 'PDF'}`}
+          {isSubmitting ? 'Wysyłam zamówienie...' : `Zamów ${itemType === 'bundle' ? 'pakiet PDF' : 'PDF'}`}
         </button>
       </div>
     </form>

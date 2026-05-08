@@ -14,9 +14,9 @@ import { FAQ_SHORTLISTS } from '@/lib/trust-layer'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: 'Behawiorysta psow online - reaktywnosc i separacja',
+  title: 'Behawiorysta psów online - reaktywność i separacja',
   path: '/psy',
-  description: 'Pomoc behawioralna online dla opiekunow psow. Kwadrans 69 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl.',
+  description: 'Pomoc behawioralna online dla opiekunów psów. Kwadrans 69 zł, Dwa kwadranse 169 zł i Pełna konsultacja 470 zł.',
 })
 
 const quickHref = buildBookHref(null, 'szybka-konsultacja-15-min', false, 'pies')
@@ -120,28 +120,28 @@ const dogProblemTopics = [
 export default function DogsPage() {
   const faqItems = FAQ_SHORTLISTS.dogs.slice(0, 3)
   const structuredData = [
-    getBreadcrumbJsonLd([{ name: 'Strona glowna', path: '/' }, { name: 'Psy', path: '/psy' }]),
+    getBreadcrumbJsonLd([{ name: 'Strona główna', path: '/' }, { name: 'Psy', path: '/psy' }]),
     getServiceJsonLd({
-      name: 'Pomoc behawioralna dla opiekunow psow online',
-      description: 'Konsultacje online dla opiekunow psow: spacery, reaktywnosc, rozlaka, pobudzenie i pierwszy spokojny krok.',
+      name: 'Pomoc behawioralna dla opiekunów psów online',
+      description: 'Konsultacje online dla opiekunów psów: spacery, reaktywność, rozłąka, pobudzenie i pierwszy spokojny krok.',
       serviceUrl: serviceLandingHref,
       offerPrice: 69,
       offerCatalog: [
         {
-          name: 'Kwadrans z behawiorysta',
+          name: 'Kwadrans z behawiorystą',
           description: '15 minut rozmowy audio bez kamery dla opiekuna psa.',
           url: quickHref,
           price: 69,
         },
         {
           name: 'Dwa kwadranse',
-          description: '30 minut online na spokojniejsze uporzadkowanie tematu psa.',
+          description: '30 minut online na spokojniejsze uporządkowanie tematu psa.',
           url: bridgeHref,
           price: 169,
         },
         {
-          name: 'Pelna konsultacja behawioralna',
-          description: 'Szersza konsultacja online dla tematow psich wielowatkowych albo dlugotrwalych.',
+          name: 'Pełna konsultacja behawioralna',
+          description: 'Szersza konsultacja online dla tematów psich wielowątkowych albo długotrwałych.',
           url: consultationHref,
           price: 470,
         },
@@ -155,20 +155,20 @@ export default function DogsPage() {
       <Schema data={structuredData} />
       <NotatnikSideVisuals variant="dog" />
       <div className="notatnik-shell">
-        <NotatnikTopbar tag="Pies / strona gatunku" navItems={PUBLIC_SITE_NAV_ITEMS} ctaHref={quickHref} ctaLabel="Kwadrans / 69 zl" />
+        <NotatnikTopbar tag="Pies / strona gatunku" navItems={PUBLIC_SITE_NAV_ITEMS} ctaHref={quickHref} ctaLabel="Kwadrans / 69 zł" />
 
         <section className="notatnik-subhero notatnik-subhero-pet">
           <div>
             <h1>
-              Twoj pies zachowuje sie w sposob, <em>ktory Cie niepokoi</em>.
+              Twój pies zachowuje się w sposób, <em>który Cię niepokoi</em>.
             </h1>
             <p>
-              Pomagam opiekunom psow zrozumiec, co stoi za trudnym zachowaniem i jak zaczac to porzadkowac bez przymusu i bez karania. Nie musisz
-              wiedziec, jak to nazwac. Wystarczy, ze opiszesz, co sie dzieje.
+              Pomagam opiekunom psów zrozumieć, co stoi za trudnym zachowaniem i jak zacząć to porządkować bez przymusu i bez karania. Nie musisz
+              wiedzieć, jak to nazwać. Wystarczy, że opiszesz, co się dzieje.
             </p>
             <NextSlot className="top-gap-small" />
             <p className="notatnik-service-description">
-              Kwadrans 69 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl. Dla psa obowiazuje ta sama logika 3 formatow.
+              Kwadrans 69 zł, Dwa kwadranse 169 zł i Pełna konsultacja 470 zł. Dla psa obowiązuje ta sama logika 3 formatów.
             </p>
             <div className="notatnik-subhero-actions">
               <Link href={quickHref} prefetch={false} className="notatnik-btn">
@@ -178,7 +178,7 @@ export default function DogsPage() {
                 </span>
               </Link>
               <Link href={consultationHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
-                <span>Umow Pelna konsultacje</span>
+                <span>Umów Pełną konsultację</span>
               </Link>
             </div>
           </div>
@@ -189,7 +189,7 @@ export default function DogsPage() {
         </section>
 
         <section id="tematy" className="notatnik-pet-topic-section">
-          <NotatnikSectionHead index="I." kicker="Najczestsze tematy" title="Najczęstsze problemy behawioralne psów" />
+          <NotatnikSectionHead index="I." kicker="Najczęstsze tematy" title="Najczęstsze problemy behawioralne psów" />
           <p className="notatnik-service-description top-gap-small">
             Wybierz temat najbliższy temu, co dzieje się u Twojego psa. Nie musisz trafić idealnie - wiele problemów się łączy. Jeśli nie wiesz, od czego zacząć, wybierz Kwadrans.
           </p>
@@ -232,9 +232,9 @@ export default function DogsPage() {
             <OfferCards />
           </div>
           <div className="notatnik-pdf-fallback top-gap-small">
-            <span>Jesli nie rezerwujesz rozmowy, przejdz do materialow PDF.</span>
+            <span>Jeśli nie rezerwujesz rozmowy, przejdź do materiałów PDF.</span>
             <Link href="/materialy" prefetch={false} className="notatnik-inline-link">
-              Zobacz materialy
+                  Zobacz materiały
             </Link>
             <Link href={serviceLandingHref} prefetch={false} className="notatnik-inline-link">
               Przejdz do pelnego opisu konsultacji online
@@ -242,7 +242,7 @@ export default function DogsPage() {
           </div>
         </section>
 
-        <NotatnikFooter primaryHref={quickHref} primaryLabel="Kwadrans z behawiorysta" showReviews={false} />
+        <NotatnikFooter primaryHref={quickHref} primaryLabel="Kwadrans z behawiorystą" showReviews={false} />
       </div>
     </main>
   )

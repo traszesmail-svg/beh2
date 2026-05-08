@@ -142,6 +142,10 @@ export function getBookingServicePriceLabel(serviceType: BookingServiceType, qui
 }
 
 export function inferBookingServiceTypeFromAmount(amount: number): BookingServiceType {
+  if (Math.round(amount * 100) / 100 === FUNNEL_SERVICE_CONFIG['kwadrans-na-juz'].priceAmount) {
+    return 'kwadrans-na-juz'
+  }
+
   if (Math.round(amount * 100) / 100 === BOOKING_SERVICE_30_PRICE) {
     return 'konsultacja-30-min'
   }

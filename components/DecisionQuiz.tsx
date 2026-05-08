@@ -94,7 +94,7 @@ export function DecisionQuiz({ bookingHrefs }: DecisionQuizProps) {
       const payload = (await response.json()) as { ok?: boolean; error?: string; message?: string }
 
       if (!response.ok || !payload.ok) {
-        throw new Error(payload.error ?? 'Nie udalo sie zapisac adresu.')
+        throw new Error(payload.error ?? 'Nie udało się zapisać adresu.')
       }
 
       trackAnalyticsEvent('newsletter_signup', {
@@ -105,10 +105,10 @@ export function DecisionQuiz({ bookingHrefs }: DecisionQuizProps) {
 
       setEmail('')
       setEmailStatus('success')
-      setEmailFeedback(payload.message ?? 'Zapis przyjety.')
+      setEmailFeedback(payload.message ?? 'Zapis przyjęty.')
     } catch (error) {
       setEmailStatus('error')
-      setEmailFeedback(error instanceof Error ? error.message : 'Nie udalo sie zapisac adresu.')
+      setEmailFeedback(error instanceof Error ? error.message : 'Nie udało się zapisać adresu.')
     }
   }
 
@@ -145,7 +145,7 @@ export function DecisionQuiz({ bookingHrefs }: DecisionQuizProps) {
 
           <div className="hero-actions top-gap-small">
             <Link href={result.materialHref} prefetch={false} className="button button-ghost">
-              Zobacz materialy
+              Zobacz materiały
             </Link>
             <Link
               href={bookingHrefs[result.serviceKey]}
@@ -169,9 +169,9 @@ export function DecisionQuiz({ bookingHrefs }: DecisionQuizProps) {
         <div className="decision-quiz-followups">
           <article className="summary-card tree-backed-card">
             <div className="section-eyebrow">Zachowaj wynik</div>
-            <h3>Dostan informacje o nowych tekstach i materialach.</h3>
+            <h3>Dostanę informacje o nowych tekstach i materiałach.</h3>
             <p className="muted">
-              To zwykly zapis newsletterowy. Nie musisz go robic, zeby przejsc do rezerwacji.
+              To zwykły zapis newsletterowy. Nie musisz go robić, żeby przejść do rezerwacji.
             </p>
             <form className="form-grid top-gap-small compact-form-grid" onSubmit={submitEmail} noValidate>
               <div className="form-field">
@@ -243,7 +243,7 @@ export function DecisionQuiz({ bookingHrefs }: DecisionQuizProps) {
 
         {stepIndex > 0 ? (
           <button type="button" className="button button-ghost decision-quiz-back" onClick={goBack}>
-            Wroc
+            Wróć
           </button>
         ) : null}
       </article>

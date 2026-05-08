@@ -7,7 +7,7 @@ import { LeadMagnetSignup } from '@/components/LeadMagnetSignup'
 import { NotatnikPageShell, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { TrustSignalSection } from '@/components/TrustSignalSection'
 import { buildBookHref } from '@/lib/booking-routing'
-import { getLeadMagnetBySlug, LEAD_MAGNETS } from '@/lib/growth-layer'
+import { getLeadMagnetBySlug, LEAD_MAGNETS } from '@/lib/active-lead-magnets'
 import { buildMarketingMetadata } from '@/lib/seo'
 import { TRUST_SIGNAL_SETS } from '@/lib/trust-layer'
 
@@ -56,12 +56,12 @@ export default function LeadMagnetPage({ params }: LeadMagnetPageProps) {
 
   return (
     <NotatnikPageShell
-      tag="Bezplatny material / start"
+      tag="Bezpłatny materiał / start"
       navItems={PUBLIC_SITE_NAV_ITEMS}
       ctaHref={audioHref}
-      ctaLabel="Kwadrans / 69 zl"
+      ctaLabel="Kwadrans / 69 zł"
       footerPrimaryHref={audioHref}
-      footerPrimaryLabel="Kwadrans z behawiorysta"
+      footerPrimaryLabel="15-minutowa konsultacja behawioralna"
       sideVisualVariant={magnet.categoryHref === '/koty' ? 'cat' : magnet.categoryHref === '/psy' ? 'dog' : 'materials'}
     >
       <div className="container editorial-stack">
@@ -79,7 +79,7 @@ export default function LeadMagnetPage({ params }: LeadMagnetPageProps) {
                 contactHref="/kontakt#formularz"
                 primaryLocation={`${magnet.slug}-hero-audio`}
                 secondaryLocation={`${magnet.slug}-hero-toolkit`}
-                note={<span>Jeśli po materiale chcesz od razu odnieść temat do swojej sytuacji, wybierz Kwadrans z behawiorystą.</span>}
+                note={<span>Jeśli po materiale chcesz od razu odnieść temat do swojej sytuacji, wybierz 15-minutową konsultację behawioralną.</span>}
               />
             </div>
           </div>
@@ -116,7 +116,7 @@ export default function LeadMagnetPage({ params }: LeadMagnetPageProps) {
           items={magnet.faq}
           afterContent={
             <p className="muted top-gap-small">
-              Jeśli po materiale temat nadal będzie niejasny, kolejnym krokiem będzie Kwadrans z behawiorystą.
+              Jeśli po materiale temat nadal będzie niejasny, kolejnym krokiem będzie 15-minutowa konsultacja behawioralna.
             </p>
           }
         />

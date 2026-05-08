@@ -30,7 +30,7 @@ export async function POST(request: Request) {
       redirectTo: `/confirmation?${redirectParams.toString()}`,
     })
   } catch (error) {
-    console.error('[behawior15][payment-api] manual report failed', error)
+    console.error('[regulski-behawiorysta][payment-api] manual report failed', error)
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Nie udało się zgłosić płatności.' },
       { status: 500 },

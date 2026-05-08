@@ -1,7 +1,7 @@
 import path from 'node:path'
 import { readFile } from 'node:fs/promises'
 import { NextResponse } from 'next/server'
-import { getLeadMagnetBySlug } from '@/lib/growth-layer'
+import { getLeadMagnetBySlug } from '@/lib/active-lead-magnets'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0

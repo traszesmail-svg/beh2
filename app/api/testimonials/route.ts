@@ -131,7 +131,7 @@ export async function POST(request: Request) {
 
     const configIssue = getTestimonialSubmissionConfigIssue()
     if (configIssue) {
-      console.warn('[behawior15][testimonials] missing mail config', configIssue)
+      console.warn('[regulski-behawiorysta][testimonials] missing mail config', configIssue)
       return NextResponse.json({ error: getUnavailableMessage() }, { status: 503 })
     }
 
@@ -141,14 +141,14 @@ export async function POST(request: Request) {
     }
 
     if (delivery.status === 'skipped') {
-      console.warn('[behawior15][testimonials] submission skipped', delivery.reason)
+      console.warn('[regulski-behawiorysta][testimonials] submission skipped', delivery.reason)
       return NextResponse.json({ error: getUnavailableMessage() }, { status: 503 })
     }
 
-    console.error('[behawior15][testimonials] submission failed', delivery.reason)
+    console.error('[regulski-behawiorysta][testimonials] submission failed', delivery.reason)
     return NextResponse.json({ error: GENERIC_ERROR_MESSAGE }, { status: 500 })
   } catch (error) {
-    console.error('[behawior15][testimonials] unexpected error', error)
+    console.error('[regulski-behawiorysta][testimonials] unexpected error', error)
 
     if (error instanceof ConfigurationError) {
       return NextResponse.json({ error: getUnavailableMessage() }, { status: 503 })

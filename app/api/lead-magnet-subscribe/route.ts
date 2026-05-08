@@ -96,7 +96,7 @@ async function sendPdfEmail(args: { to: string; magnetTitle: string; pdfUrl: str
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'RegulskiTerapiaBehawioralna <kontakt@regulskibehawiorysta.pl>',
+        from: 'Regulski Behawiorysta <kontakt@regulskibehawiorysta.pl>',
         to: [args.to],
         subject: `Twój PDF: ${args.magnetTitle}`,
         html: `

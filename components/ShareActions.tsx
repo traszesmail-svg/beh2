@@ -34,7 +34,7 @@ export function ShareActions({ url, text, label = 'Udostępnij znajomemu, który
           target="_blank"
           rel="noopener noreferrer"
           className="share-chip"
-          aria-label="Udostępnij stronę Behawior 15 przez WhatsApp"
+          aria-label="Udostępnij stronę Regulski Behawiorysta przez WhatsApp"
         >
           WhatsApp
         </a>
@@ -43,11 +43,11 @@ export function ShareActions({ url, text, label = 'Udostępnij znajomemu, który
           target="_blank"
           rel="noopener noreferrer"
           className="share-chip"
-          aria-label="Udostępnij stronę Behawior 15 na Facebooku"
+          aria-label="Udostępnij stronę Regulski Behawiorysta na Facebooku"
         >
           Facebook
         </a>
-        <button type="button" className="share-chip" onClick={handleCopyLink} aria-label="Skopiuj link do strony Behawior 15">
+        <button type="button" className="share-chip" onClick={handleCopyLink} aria-label="Skopiuj link do strony Regulski Behawiorysta">
           {copyState === 'done' ? 'Skopiowano link' : copyState === 'error' ? 'Nie udało się skopiować' : 'Kopiuj link'}
         </button>
       </div>

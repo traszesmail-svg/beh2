@@ -1,23 +1,23 @@
-# Behawior15
+# Regulski Behawiorysta
 
-Lekka aplikacja Next.js dla jednego specjalisty prowadzacego 15-minutowe konsultacje glosowe online.
+Lekka aplikacja Next.js dla marki Regulski Behawiorysta i jednego specjalisty prowadzącego 15-minutowe konsultacje głosowe online.
 
 ## Co zawiera
 
 - flow klienta: `problem -> slot -> form -> payment -> confirmation -> call`
-- panel `/admin` z zarzadzaniem cena, terminami i podgladem rezerwacji
-- materialy przed rozmowa: MP4, link, notatki
-- zintegrowany katalog poradnikow PDF trzymany w `content/guides/`
+- panel `/admin` z zarządzaniem ceną, terminami i podglądem rezerwacji
+- materiały przed rozmową: MP4, link, notatki
+- zintegrowany katalog poradników PDF trzymany w `content/guides/`
 - przypomnienia mailowe i flow maili przez Resend albo Gmail SMTP
-- manual review jako aktywny flow platnosci live, z PayU jako opcjonalna sciezka do ponownego wlaczenia oraz legacy Stripe/mock zachowanym do zgodnosci i QA
-- kontrolowany test checkout QA z jawna flaga bookingu, env gate i allowlista kontaktow
-- first-party funnel ledger oraz wewnetrzny KPI dashboard w `/admin`; GA4 jest opcjonalne i dziala tylko po zgodzie
-- serwerowe potwierdzenia platnosci SMS z idempotencja po webhooku / finalnym sukcesie po stronie backendu
-- lokalny fallback JSON do developmentu, ktory tworzy katalog `data/` runtime tylko wtedy, gdy pracujesz w trybie local; statyczne tresci produktowe nie powinny byc tam trzymane
+- manual review jako aktywny flow płatności live, z PayU jako opcjonalna ścieżka do ponownego włączenia oraz legacy Stripe/mock zachowanym do zgodnosci i QA
+- kontrolowany test checkout QA z jawną flagą bookingu, env gate i allowlistą kontaktów
+- first-party funnel ledger oraz wewnętrzny KPI dashboard w `/admin`; GA4 jest opcjonalne i działa tylko po zgodzie
+- serwerowe potwierdzenia płatności SMS z idempotencja po webhooku / finalnym sukcesie po stronie backendu
+- lokalny fallback JSON do developmentu, który tworzy katalog `data/` runtime tylko wtedy, gdy pracujesz w trybie local; statyczne treści produktowe nie powinny być tam trzymane
 
 ## Operacyjnie
 
-- Aktualizacja dostepnosci: odswiez najblizsze wolne sloty w panelu admin albo w lokalnym fallbacku danych tak, aby `NextSlot` pokazywal realny najblizszy termin. Aktualizuj co najmniej raz w tygodniu.
+- Aktualizacja dostępności: odśwież najbliższe wolne sloty w panelu admin albo w lokalnym fallbacku danych tak, aby `NextSlot` pokazywał realny najbliższy termin. Aktualizuj co najmniej raz w tygodniu.
 
 ## Wymagania
 
@@ -30,11 +30,11 @@ Lekka aplikacja Next.js dla jednego specjalisty prowadzacego 15-minutowe konsult
 npm install
 ```
 
-## Zmienne srodowiskowe
+## Zmienne środowiskowe
 
-Skopiuj `.env.example` do `.env.local` i uzupelnij wartosci.
+Skopiuj `.env.example` do `.env.local` i uzupełnij wartości.
 
-Najwazniejsze zmienne:
+Najważniejsze zmienne:
 
 - `APP_DATA_MODE`
 - `APP_PAYMENT_MODE`
@@ -63,14 +63,14 @@ Uwaga:
 - `SUPABASE_SERVICE_ROLE_KEY` musi byc prawdziwym kluczem service role (`sb_secret_...` albo legacy JWT z rola `service_role`).
 - Klucz `sb_publishable_...` nie wystarczy do zapisu ceny, bookingow ani adminowych operacji.
 - `ADMIN_NOTIFICATION_EMAIL` odbiera maile o kliknieciu `Zaplacilem, czekam na potwierdzenie` dla manualnych wplat.
-- `MAIL_PROVIDER=gmail` pozwala wysylac maile klienta i admina przez Gmail SMTP zamiast Resend.
+- `MAIL_PROVIDER=gmail` pozwala wysyłac maile klienta i admina przez Gmail SMTP zamiast Resend.
 - dla Gmail SMTP potrzebujesz `GMAIL_SMTP_USER`, `GMAIL_SMTP_APP_PASSWORD` i opcjonalnie `GMAIL_FROM_EMAIL` (domyslnie bierze `GMAIL_SMTP_USER`).
-- `NEXT_PUBLIC_GA_MEASUREMENT_ID` wlacza tylko consent-gated GA4; wewnetrzny KPI dashboard korzysta z first-party event ledger, nie z GA4.
-- Jesli `RESEND_FROM_EMAIL` nadal korzysta z testowego nadawcy `onboarding@resend.dev`, customer maile do zewnetrznych adresow pozostaja zablokowane do czasu weryfikacji domeny w Resend. W tym trybie `ADMIN_NOTIFICATION_EMAIL` powinien wskazywac adres konta Resend, inaczej powiadomienie adminowe tez moze skonczyc sie `403`.
+- `NEXT_PUBLIC_GA_MEASUREMENT_ID` włącza tylko consent-gated GA4; wewnetrzny KPI dashboard korzysta z first-party event ledger, nie z GA4.
+- Jeśli `RESEND_FROM_EMAIL` nadal korzysta z testowego nadawcy `onboarding@resend.dev`, maile do zewnętrznych adresów pozostają zablokowane do czasu weryfikacji domeny w Resend. W tym trybie `ADMIN_NOTIFICATION_EMAIL` powinien wskazywać adres konta Resend, inaczej powiadomienie adminowe też może skończyć się `403`.
 - `CUSTOMER_EMAIL_MODE=auto` i `PAYU_MODE=disabled` sa obecnym launch mode dla manual payment. `CUSTOMER_EMAIL_MODE=disabled` zostaw tylko jako tymczasowy override diagnostyczny.
-- `TEST_CHECKOUT_ENABLED=true` razem z `QA_CHECKOUT_EMAIL_ALLOWLIST` albo `QA_CHECKOUT_PHONE_ALLOWLIST` odblokowuje kontrolowany flow QA bez publicznego 0 zl.
+- `TEST_CHECKOUT_ENABLED=true` razem z `QA_CHECKOUT_EMAIL_ALLOWLIST` albo `QA_CHECKOUT_PHONE_ALLOWLIST` odblokowuje kontrolowany flow QA bez publicznego 0 zł.
 
-Pelna lista znajduje sie w `.env.example`.
+Pełna lista znajduje się w `.env.example`.
 
 ## Migracje SQL
 
@@ -85,9 +85,9 @@ Uruchom w Supabase:
 
 Nastepnie wykonaj setup scheduler:
 
-- `supabase/behavior15_reminder_scheduler_setup.sql`
+- skrypt setupu schedulera przypomnień w katalogu `supabase/`
 
-Pelniejsze notatki wdrozeniowe sa w `LIVE_SETUP.md`.
+Pelniejsze notatki wdrożeniowe są w `LIVE_SETUP.md`.
 
 ## Lokalny start
 
@@ -121,7 +121,7 @@ Warianty PayU smoke:
 - sandbox: `npm run payu-smoke`
 - production: `npm run payu-smoke:production`
 
-`npm run schema-audit` sprawdza, czy kanoniczny plik `supabase/schema.sql` i wymagane migracje dla booking/payment/QA rollout nadal sa spójne z aktualnym kodem.
+`npm run schema-audit` sprawdza, czy kanoniczny plik `supabase/schema.sql` i wymagane migracje dla booking/payment/QA rollout nadal są spójne z aktualnym kodem.
 
 ## Build produkcyjny
 
@@ -132,7 +132,7 @@ npm run start
 
 ## Deploy na Vercel Hobby
 
-Nowy projekt Vercel powinien wskazywac root repo `/`.
+Nowy projekt Vercel powinien wskazywać root repo `/`.
 
 Canonical production URL:
 
@@ -149,20 +149,20 @@ Ustawienia:
 Wazne:
 
 - `vercel.json` nie zawiera aktywnego Vercel Cron
-- scheduler remindera dziala po stronie Supabase
+- scheduler remindera działa po stronie Supabase
 - aplikacja wystawia chroniony endpoint `POST /api/reminders/run`
 - deploye, smoke testy i linki zwrotne powinny celowac w canonical `https://regulskibehawiorysta.pl`
 - jeśli chcesz, żeby domena zaczęła rozwiązywać publicznie, przepnij nameserwery w OVH na `ns1.vercel-dns.com` i `ns2.vercel-dns.com`
 
-Po deployu sprawdz:
+Po deployu sprawdzić:
 
 - `npm run live-readiness`
 - `/admin` wymaga Basic Auth
 - w `/admin` widoczny jest marker builda `CLEAN_START_REPO_V1`
-- sekcja ceny konsultacji dziala
-- job `behavior15-booking-reminders` istnieje po stronie Supabase
+- sekcja ceny konsultacji działa
+- job przypomnień istnieje po stronie Supabase
 
-## Glowne moduly
+## Główne moduly
 
 - `app/admin/page.tsx`
 - `app/api/analytics/events/route.ts`

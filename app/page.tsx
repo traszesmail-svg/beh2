@@ -46,7 +46,7 @@ export default function HomePage() {
         'Konsultacje behawioralne online dla opiekunów psów i kotów. Podstawowa usługa to Kwadrans 69 zł. Dostępny jest też wariant pilny Kwadrans na już 99 zł, Dwa kwadranse 169 zł i Pełna konsultacja 470 zł.',
       serviceUrl: serviceLandingHref,
       offerCatalog: [
-        { name: 'Kwadrans z behawiorystą', description: '15 min audio bez kamery, najprostszy start.', url: '/book?service=szybka-konsultacja-15-min', price: 69 },
+        { name: '15-minutowa konsultacja behawioralna', description: '15 min audio bez kamery, najprostszy start.', url: '/book?service=szybka-konsultacja-15-min', price: 69 },
         { name: 'Kwadrans na już', description: 'Ten sam zakres co Kwadrans, ale dla pilniejszego terminu.', url: '/book?service=kwadrans-na-juz', price: 99 },
         { name: 'Dwa kwadranse', description: '30 min online na szersze uporządkowanie tematu.', url: '/book?service=konsultacja-30-min', price: 169 },
         {
@@ -63,7 +63,7 @@ export default function HomePage() {
   return (
     <main className="notatnik-page homepage-shell">
       <Schema data={structuredData} />
-      <NotatnikSideVisuals variant="contact" />
+      <NotatnikSideVisuals variant="home" />
       <div className="notatnik-shell homepage-main">
         <EditorialIndexTopbar />
 
@@ -71,7 +71,7 @@ export default function HomePage() {
           <HomepageServiceSelector />
         </section>
 
-        <Reveal as="section" className="compact-home-section" id="jak-to-dziala">
+        <Reveal as="section" className="compact-home-section" id="jak-to-działa">
           <div className="home-section-title">
             <h2>Jak wygląda współpraca?</h2>
           </div>

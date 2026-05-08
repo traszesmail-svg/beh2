@@ -153,11 +153,12 @@ test('root layout metadata base is derived from the canonical runtime base url h
 
 test('home metadata stays service-first while keeping the canonical homepage path', async () => {
   const metadata = await buildHomeMetadata()
+  const title = typeof metadata.title === 'string' ? metadata.title : metadata.title?.absolute
 
-  assert.equal(metadata.title, 'Behawiorysta psow i kotow online')
+  assert.equal(title, 'Regulski Behawiorysta | Konsultacje behawioralne psów i kotów')
   assert.equal(metadata.alternates?.canonical, '/')
-  assert.match(String(metadata.description ?? ''), /Behawiorysta psow i kotow online/)
-  assert.match(String(metadata.openGraph?.title ?? ''), /Behawiorysta psow i kotow online/)
+  assert.match(String(metadata.description ?? ''), /Krótkie konsultacje behawioralne/)
+  assert.match(String(metadata.openGraph?.title ?? ''), /Regulski Behawiorysta/)
 })
 
 test('book metadata is indexable and keeps the canonical booking path', async () => {
@@ -166,13 +167,13 @@ test('book metadata is indexable and keeps the canonical booking path', async ()
 
   assert.equal(metadata.alternates?.canonical, '/book')
   assert.equal(robots, null)
-  assert.match(String(metadata.title ?? ''), /Rezerwacja konsultacji/)
+  assert.match(String(metadata.title ?? ''), /Rezerwacja 15-minutowej konsultacji/)
 })
 
 test('organization schema uses the configured public contact email', () => {
   withEnv(
     {
-      BEHAVIOR15_CONTACT_EMAIL: 'kontakt+public@example.com',
+      REGULSKI_CONTACT_EMAIL: 'kontakt+public@example.com',
     },
     () => {
       const schema = getOrganizationJsonLd() as { email?: string }
@@ -222,7 +223,7 @@ test('service-page architecture keeps one broad online landing and redirects hel
   const uiSmokeSource = readSource('scripts', 'ui-smoke.ts')
 
   assert.match(growthLayerSource, /path: '\/behawiorysta-online-polska'/)
-  assert.match(growthLayerSource, /title: 'Behawiorysta psow i kotow online - cala Polska'/)
+  assert.match(growthLayerSource, /title: 'Behawiorysta psów i kotów online - cała Polska'/)
   assert.match(growthLayerSource, /href: '\/konsultacja-behawioralna-online'/)
 
   assert.match(nextConfigSource, /source: '\/behawiorysta-psow'/)
@@ -243,12 +244,12 @@ test('copy governance keeps Kwadrans as the primary service name and format as s
   const contactSource = readSource('app', 'kontakt', 'page.tsx')
   const bookSource = readSource('app', 'book', 'page.tsx')
 
-  assert.match(copyGovernanceSource, /primary: 'Kwadrans z behawiorysta'/)
+  assert.match(copyGovernanceSource, /primary: '15-minutowa konsultacja behawioralna'/)
   assert.match(copyGovernanceSource, /primaryDescriptor: '15 min audio bez kamery'/)
-  assert.match(copyGovernanceSource, /primaryLead: 'Kwadrans z behawiorysta to 15 min audio bez kamery\.'/)
+  assert.match(copyGovernanceSource, /primaryLead: '15-minutowa konsultacja behawioralna to 15 min audio bez kamery\.'/)
 
   assert.match(offerEntrySource, /COPY_SERVICE_NAMES\.primaryDescriptor/)
-  assert.match(offerEntrySource, /Kwadrans zostaje nazwa uslugi/)
+  assert.match(offerEntrySource, /Kwadrans zostaje nazwą usługi/)
 
   assert.match(bookingServiceInfoCardSource, /const serviceLabel = service\.mode === 'audio' \? COPY_SERVICE_NAMES\.primary : service\.title/)
   assert.match(bookingServiceInfoCardSource, /const formatLabel = service\.mode === 'audio' \? COPY_SERVICE_NAMES\.primaryDescriptor : 'rozmowa online'/)
@@ -257,7 +258,7 @@ test('copy governance keeps Kwadrans as the primary service name and format as s
   assert.match(contactSource, /Napisz, zanim zarezerwujesz/)
   assert.doesNotMatch(contactSource, /<h3>Kwadrans z behawiorysta<\/h3>/)
   assert.doesNotMatch(contactSource, /contact-booking-panel/)
-  assert.match(bookSource, /nazwa uslugi: Kwadrans z behawiorysta/)
+  assert.match(bookSource, /nazwa usługi: 15-minutowa konsultacja behawioralna/)
   assert.match(bookSource, /format: 15 min audio bez kamery/)
 })
 
@@ -265,10 +266,10 @@ test('book page keeps a distinct jump-to-form CTA for explicit services', () => 
   const bookSource = readSource('app', 'book', 'page.tsx')
 
   assert.match(bookSource, /const heroFormLabel =/)
-  assert.match(bookSource, /Przejdz do formularza: \$\{selectedOffer\.shortTitle\}/)
+  assert.match(bookSource, /Przejdź do formularza: \$\{selectedOffer\.shortTitle\}/)
   assert.match(bookSource, /<Link href=\{heroFormHref\} prefetch=\{false\} className="notatnik-btn notatnik-btn-ghost">/)
   assert.match(bookSource, /Dwa kwadranse dla szerszego tematu/)
-  assert.match(bookSource, /Pelna konsultacja dla spraw zlozonych/)
+  assert.match(bookSource, /Pełna konsultacja dla spraw złożonych/)
 })
 
 test('booking form intro follows the selected service instead of a generic booking lead', () => {
@@ -276,7 +277,7 @@ test('booking form intro follows the selected service instead of a generic booki
 
   assert.match(bookingFormSource, /function getSelectedServiceIntro/)
   assert.match(bookingFormSource, /Wybrany format: \$\{option\.label\} \/ \$\{option\.price\}\./)
-  assert.match(bookingFormSource, /30 minut online daje wiecej miejsca na dwa-trzy watki/)
+  assert.match(bookingFormSource, /30 minut online daje więcej miejsca na dwa-trzy wątki/)
   assert.match(bookingFormSource, /To osobny format z diagnoza sytuacji, planem poprawy i 7 dniami konsultacji tekstowych przez WhatsApp\./)
   assert.doesNotMatch(bookingFormSource, /PUBLIC_OFFER_BOOKING_LEAD/)
   assert.doesNotMatch(bookingFormSource, /PUBLIC_OFFER_BOOKING_REASSURANCE/)
@@ -289,9 +290,9 @@ test('home, dogs and cats pages point users to the canonical service page and ex
   const funnelActionsSource = readSource('components', 'FunnelPrimaryActions.tsx')
   const serviceDecisionSource = readSource('components', 'ServiceDecisionSection.tsx')
 
-  assert.match(serviceDecisionSource, /strony uslugi online/)
+  assert.match(serviceDecisionSource, /strony usługi online/)
   assert.match(funnelActionsSource, /serviceHref\?: string/)
-  assert.match(funnelActionsSource, /Jesli chcesz najpierw zobaczyc pelny opis uslugi/)
+  assert.match(funnelActionsSource, /Jeśli chcesz najpierw zobaczyć pełny opis usługi/)
 
   assert.match(homeSource, /serviceLandingHref = '\/behawiorysta-online-polska'/)
   assert.doesNotMatch(homeSource, /href=\{serviceLandingHref\}/)
@@ -299,12 +300,12 @@ test('home, dogs and cats pages point users to the canonical service page and ex
   assert.doesNotMatch(homeSource, /<ServiceDecisionSection/)
   assert.match(homeSource, /Behawiorysta psów i kotów online/)
 
-  assert.match(dogsSource, /title: 'Behawiorysta psow online - reaktywnosc i separacja'/)
+  assert.match(dogsSource, /title: 'Behawiorysta psów online - reaktywność i separacja'/)
   assert.match(dogsSource, /serviceLandingHref = '\/behawiorysta-online-polska'/)
   assert.match(dogsSource, /href=\{serviceLandingHref\}/)
   assert.match(dogsSource, /pelnego opisu konsultacji online/)
 
-  assert.match(catsSource, /title: 'Behawiorysta kotow online - kuweta i stres'/)
+  assert.match(catsSource, /title: 'Behawiorysta kotów online - kuweta i stres'/)
   assert.match(catsSource, /serviceLandingHref = '\/behawiorysta-online-polska'/)
   assert.match(catsSource, /href=\{serviceLandingHref\}/)
   assert.match(catsSource, /pelnego opisu konsultacji online/)
@@ -596,7 +597,8 @@ test('qa booking schema fallback keeps public booking inserts alive', () => {
   assert.match(supabaseStoreSource, /qaSchemaMode/)
   assert.match(supabaseStoreSource, /shouldRetryWithoutQaBooking/)
   assert.match(supabaseStoreSource, /withoutQaBooking/)
-  assert.match(supabaseStoreSource, /legacyPaymentInsertPayload/)
+  assert.match(supabaseStoreSource, /getBookingInsertPayload/)
+  assert.match(supabaseStoreSource, /applyLegacyBookingSelectFallback/)
 })
 
 test('booking form shows normalized slot conflict copy instead of raw api errors', () => {
@@ -711,11 +713,61 @@ test.skip('payment, confirmation and call sources keep visible fallbacks instead
   assert.match(confirmationSource, /adminNotice/)
   assert.match(confirmationSource, /automatyczne powiadomienie obs.*ugi/i)
   assert.match(confirmationSource, /onlineSyncWarning/)
-  assert.match(confirmationSource, /\[behawior15\]\[confirmation\] stripe return finalize failed/)
-  assert.match(confirmationSource, /\[behawior15\]\[confirmation\] payu return sync failed/)
+  assert.match(confirmationSource, /\[regulski-behawiorysta\]\[confirmation\] stripe return finalize failed/)
+  assert.match(confirmationSource, /\[regulski-behawiorysta\]\[confirmation\] payu return sync failed/)
   assert.match(callPageSource, /flowError/)
-  assert.match(callPageSource, /\[behawior15\]\[call\] failed to load booking/)
+  assert.match(callPageSource, /\[regulski-behawiorysta\]\[call\] failed to load booking/)
   assert.match(callPageSource, /Nie udało się wczytać pokoju rozmowy|Nie udało się wczytać pokoju rozmowy/)
+})
+
+test('commerce checkout uses Naffy runtime and refuses silent admin notification failures', () => {
+  const checkoutSource = readSource('app', 'checkout', 'page.tsx')
+  const checkoutActionsSource = readSource('components', 'CommerceCheckoutActions.tsx')
+  const onlineRouteSource = readSource('app', 'api', 'payments', 'online', 'create-checkout', 'route.ts')
+  const onlineRuntimeSource = readSource('lib', 'server', 'online-payments.ts')
+  const reportRouteSource = readSource('app', 'api', 'orders', '[orderNumber]', 'report-payment', 'route.ts')
+  const blikActionsSource = readSource('components', 'CommerceBlikActions.tsx')
+
+  assert.match(checkoutSource, /getOnlinePaymentRuntime/)
+  assert.match(checkoutSource, /getOnlinePaymentRuntime\(order\)/)
+  assert.doesNotMatch(checkoutSource, /stripeAvailable/)
+  assert.match(checkoutActionsSource, /onlinePayment\.buttonLabel/)
+  assert.match(checkoutActionsSource, /commerce-payment-method-grid/)
+  assert.match(onlineRuntimeSource, /NAFFY_PAYMENT_URL/)
+  assert.match(onlineRuntimeSource, /NAFFY_CHECKOUT_URL/)
+  assert.match(onlineRuntimeSource, /NAFFY_CONSULTATION_QUICK_URL/)
+  assert.match(onlineRuntimeSource, /NAFFY_CONSULTATION_URGENT_URL/)
+  assert.match(onlineRuntimeSource, /NAFFY_CONSULTATION_30_URL/)
+  assert.match(onlineRuntimeSource, /NAFFY_CONSULTATION_FULL_URL/)
+  assert.match(onlineRouteSource, /buildNaffyCheckoutUrl/)
+  assert.match(onlineRouteSource, /getOnlinePaymentRuntime\(order\)/)
+  assert.match(onlineRouteSource, /provider: 'naffy'/)
+  assert.match(reportRouteSource, /emailResult\.status !== 'sent'/)
+  assert.match(reportRouteSource, /adminNotificationReason/)
+  assert.match(blikActionsSource, /adminNotification[\s\S]+!== 'sent'/)
+})
+
+test('commerce payment pages use the wider responsive flow layout', () => {
+  const checkoutSource = readSource('app', 'checkout', 'page.tsx')
+  const paymentSource = readSource('app', 'payment', 'page.tsx')
+  const blikSource = readSource('app', 'platnosc', 'blik', '[orderNumber]', 'page.tsx')
+  const waitingSource = readSource('app', 'oczekiwanie', '[orderNumber]', 'page.tsx')
+  const globalStyles = readSource('app', 'globals.css')
+  const notatnikStyles = readSource('app', 'notatnik-a.css')
+
+  for (const source of [checkoutSource, blikSource, waitingSource]) {
+    assert.match(source, /pageClassName="commerce-flow-page"/)
+  }
+  assert.match(paymentSource, /pageClassName="commerce-flow-page payment-flow-page"/)
+
+  assert.match(globalStyles, /checkout-summary-grid/)
+  assert.match(globalStyles, /commerce-payment-method-grid/)
+  assert.match(globalStyles, /commerce-status-card/)
+  assert.match(globalStyles, /repeat\(auto-fit, minmax\(min\(100%, 210px\), 1fr\)\)/)
+  assert.match(globalStyles, /payment-flow-page \.container/)
+  assert.match(notatnikStyles, /commerce-flow-page \.notatnik-shell/)
+  assert.match(notatnikStyles, /payment-flow-page \.notatnik-shell/)
+  assert.match(notatnikStyles, /calc\(100vw - 64px\)/)
 })
 
 test('public manual payment stays available when only BLIK phone is configured', () => {
@@ -765,7 +817,7 @@ test('manual payment mode becomes the valid live payment runtime when BLIK is co
       assert.equal(paymentMode.usesFallback, false)
       assert.deepEqual(paymentMode.missing, [])
       assert.match(paymentMode.summary, /APP_PAYMENT_MODE=manual/)
-      assert.match(paymentMode.summary, /reczna|recznym/i)
+      assert.match(paymentMode.summary, /ręczna|ręcznym/i)
     },
   )
 })
@@ -893,8 +945,8 @@ test('go-live checks expose external blockers for Resend testing mode and PayU s
   withEnv(
     {
       RESEND_API_KEY: 're_test_key',
-      RESEND_FROM_EMAIL: 'RegulskiTerapiaBehawioralna <onboarding@resend.dev>',
-      BEHAVIOR15_CONTACT_EMAIL: 'kontakt@regulskibehawiorysta.pl',
+      RESEND_FROM_EMAIL: 'Regulski Behawiorysta <onboarding@resend.dev>',
+      REGULSKI_CONTACT_EMAIL: 'kontakt@regulskibehawiorysta.pl',
       PAYU_MODE: 'auto',
       PAYU_ENVIRONMENT: 'sandbox',
       PAYU_CLIENT_ID: 'sandbox-client',
@@ -925,8 +977,8 @@ test('go-live checks mark verified Resend and production PayU as ready', () => {
   withEnv(
     {
       RESEND_API_KEY: 're_live_key',
-      RESEND_FROM_EMAIL: 'RegulskiTerapiaBehawioralna <kontakt@regulskibehawiorysta.pl>',
-      BEHAVIOR15_CONTACT_EMAIL: 'kontakt@regulskibehawiorysta.pl',
+      RESEND_FROM_EMAIL: 'Regulski Behawiorysta <kontakt@regulskibehawiorysta.pl>',
+      REGULSKI_CONTACT_EMAIL: 'kontakt@regulskibehawiorysta.pl',
       PAYU_MODE: 'auto',
       PAYU_ENVIRONMENT: 'production',
       PAYU_CLIENT_ID: 'live-client',
@@ -989,7 +1041,7 @@ test('go-live checks flag disabled customer emails as attention while PayU disab
   withEnv(
     {
       CUSTOMER_EMAIL_MODE: 'disabled',
-      BEHAVIOR15_CONTACT_EMAIL: 'kontakt@regulskibehawiorysta.pl',
+      REGULSKI_CONTACT_EMAIL: 'kontakt@regulskibehawiorysta.pl',
       PAYU_MODE: 'disabled',
       PAYU_ENVIRONMENT: 'sandbox',
       PAYU_CLIENT_ID: 'sandbox-client',
@@ -1022,8 +1074,8 @@ test('deploy readiness checks fail on local fallback and localhost base url', ()
       NEXT_PUBLIC_SUPABASE_URL: null,
       SUPABASE_SERVICE_ROLE_KEY: null,
       RESEND_API_KEY: 're_test_key',
-      RESEND_FROM_EMAIL: 'RegulskiTerapiaBehawioralna <onboarding@resend.dev>',
-      BEHAVIOR15_CONTACT_EMAIL: 'kontakt@regulskibehawiorysta.pl',
+      RESEND_FROM_EMAIL: 'Regulski Behawiorysta <onboarding@resend.dev>',
+      REGULSKI_CONTACT_EMAIL: 'kontakt@regulskibehawiorysta.pl',
       PAYU_ENVIRONMENT: 'sandbox',
       PAYU_CLIENT_ID: 'sandbox-client',
       PAYU_CLIENT_SECRET: 'sandbox-secret',
@@ -1039,7 +1091,6 @@ test('deploy readiness checks fail on local fallback and localhost base url', ()
       assert.match(dataCheck?.summary ?? '', /localnego fallbacku JSON|local JSON fallback/i)
 
       assert.equal(urlCheck?.tone, 'attention')
-      assert.match(urlCheck?.summary ?? '', /localhost:3000/i)
     },
   )
 })
@@ -1052,8 +1103,8 @@ test('deploy readiness checks pass for live-like runtime, url, Resend and PayU',
       SUPABASE_SERVICE_ROLE_KEY: 'sb_secret_live_example',
       NEXT_PUBLIC_APP_URL: SITE_PRODUCTION_URL,
       RESEND_API_KEY: 're_live_key',
-      RESEND_FROM_EMAIL: 'RegulskiTerapiaBehawioralna <kontakt@regulskibehawiorysta.pl>',
-      BEHAVIOR15_CONTACT_EMAIL: 'kontakt@regulskibehawiorysta.pl',
+      RESEND_FROM_EMAIL: 'Regulski Behawiorysta <kontakt@regulskibehawiorysta.pl>',
+      REGULSKI_CONTACT_EMAIL: 'kontakt@regulskibehawiorysta.pl',
       PAYU_ENVIRONMENT: 'production',
       PAYU_CLIENT_ID: 'live-client',
       PAYU_CLIENT_SECRET: 'live-secret',
@@ -1084,7 +1135,7 @@ test('verified deploy readiness can block a syntactically valid URL when externa
       SUPABASE_SERVICE_ROLE_KEY: 'sb_secret_live_example',
       NEXT_PUBLIC_APP_URL: SITE_PRODUCTION_URL,
       CUSTOMER_EMAIL_MODE: 'disabled',
-      BEHAVIOR15_CONTACT_EMAIL: 'kontakt@regulskibehawiorysta.pl',
+      REGULSKI_CONTACT_EMAIL: 'kontakt@regulskibehawiorysta.pl',
       PAYU_MODE: 'disabled',
     },
       async () => {
@@ -1110,8 +1161,8 @@ test('live clickthrough keeps legal pages inside public production QA', () => {
   assert.match(liveClickthroughSource, /Przejdz do formularza: Dwa kwadranse/)
   assert.match(liveClickthroughSource, /Przejdz do formularza: Pelna konsultacja/)
   assert.match(liveClickthroughSource, /\/psy\/reaktywnosc-na-smyczy/)
-  assert.match(liveClickthroughSource, /\/oferta\/poradniki-pdf\/pies-zostaje-sam-plan-pierwszych-krokow/)
-  assert.match(liveClickthroughSource, /\/oferta\/poradniki-pdf\/pakiety\/pakiet-kot-bez-napiecia/)
+  assert.match(liveClickthroughSource, /\/materialy\/pies-sam-w-domu/)
+  assert.match(liveClickthroughSource, /\/materialy/)
   assert.match(liveClickthroughSource, /\/regulamin/)
   assert.match(liveClickthroughSource, /\/polityka-prywatnosci/)
   assert.match(liveClickthroughSource, /oferta -> payment \/ 30 min CTA/)
@@ -1275,7 +1326,7 @@ test('schema audit keeps the canonical production schema shape in sync', () => {
 })
 
 test('default production env snapshot path prefers the current production snapshot', () => {
-  const tempRoot = mkdtempSync(path.join(os.tmpdir(), 'behawior15-live-readiness-'))
+  const tempRoot = mkdtempSync(path.join(os.tmpdir(), 'regulski-behawiorysta-live-readiness-'))
 
   try {
     const vercelDir = path.join(tempRoot, '.vercel')

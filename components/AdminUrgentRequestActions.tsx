@@ -36,12 +36,12 @@ export function AdminUrgentRequestActions({ requestId, disabled = false }: Admin
       const payload = (await response.json()) as { ok?: boolean; bookingHref?: string; error?: string }
 
       if (!response.ok || !payload.ok) {
-        throw new Error(payload.error ?? 'Nie udalo sie wyslac odpowiedzi.')
+        throw new Error(payload.error ?? 'Nie udało się wysłać odpowiedzi.')
       }
 
-      setMessage(`Wyslano klientowi odpowiedz i dodano slot do terminarza. Link: ${payload.bookingHref ?? ''}`.trim())
+      setMessage(`Wysłano klientowi odpowiedź i dodano slot do terminarza. Link: ${payload.bookingHref ?? ''}`.trim())
     } catch (submitError) {
-      setError(submitError instanceof Error ? submitError.message : 'Nie udalo sie wyslac odpowiedzi.')
+      setError(submitError instanceof Error ? submitError.message : 'Nie udało się wysłać odpowiedzi.')
     } finally {
       setLoading(false)
     }
@@ -55,11 +55,11 @@ export function AdminUrgentRequestActions({ requestId, disabled = false }: Admin
         type="text"
         value={responseNote}
         onChange={(event) => setResponseNote(event.target.value)}
-        placeholder="Opcjonalna wiadomosc do klienta"
+        placeholder="Opcjonalna wiadomość do klienta"
         disabled={disabled || loading}
       />
       <button type="button" className="button button-primary" onClick={handleRespond} disabled={disabled || loading}>
-        {loading ? 'Wysylam...' : 'Dodaj termin i wyslij'}
+        {loading ? 'Wysyłam...' : 'Dodaj termin i wyślij'}
       </button>
       {message ? <span className="booking-meta">{message}</span> : null}
       {error ? <span className="booking-meta">{error}</span> : null}

@@ -16,7 +16,7 @@ export const metadata: Metadata = buildMarketingMetadata({
   title: 'Oferta: behawiorysta online dla psa i kota',
   path: '/oferta',
   description:
-    'Oferta: Kwadrans 69 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl. Kwadrans to pierwszy krok, a Pelna konsultacja daje diagnoze i 7 dni wsparcia przez WhatsApp.',
+    'Oferta: Kwadrans 69 zł, Dwa kwadranse 169 zł i Pełna konsultacja 470 zł. Kwadrans to pierwszy krok, a Pełna konsultacja daje diagnozę i 7 dni wsparcia przez WhatsApp.',
 })
 
 export default async function OfferPage() {
@@ -28,7 +28,7 @@ export default async function OfferPage() {
       const quickConsultationPrice = await getActiveConsultationPrice()
       quickStartPriceAmount = quickConsultationPrice.amount
     } catch (error) {
-      console.warn('[behawior15][oferta] nie udalo sie pobrac aktywnej ceny konsultacji', error)
+      console.warn('[regulski-behawiorysta][oferta] nie udało się pobrac aktywnej ceny konsultacji', error)
     }
   }
 
@@ -55,8 +55,8 @@ export default async function OfferPage() {
               <div className="section-eyebrow">Oferta</div>
               <h1>Wybierz start dla swojej sytuacji.</h1>
               <p className="hero-text">
-                Trzy glowne uslugi i jedna logika wyboru. Kwadrans jest najprostszym pierwszym krokiem, 30 minut daje szersze uporzadkowanie tematu, a
-                pelna konsultacja sluzy sprawom zlozonym i przewleklym.
+                Trzy główne usługi i jedna logika wyboru. Kwadrans jest najprostszym pierwszym krokiem, 30 minut daje szersze uporządkowanie tematu, a
+                pełna konsultacja służy sprawom złożonym i przewlekłym.
               </p>
 
               <div className="hero-actions top-gap">
@@ -69,35 +69,35 @@ export default async function OfferPage() {
               </div>
 
               <p className="muted top-gap-small">
-                Jesli temat jest zlozony i wiesz, ze potrzebujesz szerszego wejscia, przejdz nizej do pelnej konsultacji. Jesli nie rezerwujesz od razu,
-                napisz krotka wiadomosc.
+                Jeśli temat jest złożony i wiesz, że potrzebujesz szerszego wejścia, przejdź niżej do pełnej konsultacji. Jeśli nie rezerwujesz od razu,
+                napisz krótką wiadomość.
               </p>
             </div>
 
             <aside className="offer-page-hero-card tree-backed-card">
-              <span className="offer-page-hero-label">Jak zaczac</span>
-              <strong>Kwadrans z behawiorysta to najprostszy start. Dwa kwadranse porzadkuja temat szerzej, a Pelna konsultacja daje diagnoze i wsparcie wdrozenia.</strong>
+              <span className="offer-page-hero-label">Jak zacząć</span>
+              <strong>15-minutowa konsultacja behawioralna to najprostszy start. Dwa kwadranse porządkują temat szerzej, a Pełna konsultacja daje diagnozę i wsparcie wdrożenia.</strong>
               <div className="offer-page-hero-stats">
                 <div className="offer-page-hero-stat">
-                  <span>15 min / {quickStartPriceAmount} zl</span>
+                  <span>15 min / {quickStartPriceAmount} zł</span>
                   <strong>Start</strong>
                 </div>
                 <div className="offer-page-hero-stat">
-                  <span>30 min / 169 zl</span>
+                  <span>30 min / 169 zł</span>
                   <strong>Szerszy zakres</strong>
                 </div>
                 <div className="offer-page-hero-stat">
-                  <span>470 zl / pelny zakres</span>
+                  <span>470 zł / pełny zakres</span>
                   <strong>Diagnoza + 7 dni</strong>
                 </div>
               </div>
-              <p className="muted top-gap-small">Priorytetowy wariant pojawia sie dopiero przy rezerwacji Kwadransu, nie jako osobna glowna usluga.</p>
+              <p className="muted top-gap-small">Priorytetowy wariant pojawia się dopiero przy rezerwacji Kwadransu, nie jako osobna główna usługa.</p>
             </aside>
           </div>
         </section>
 
         <section className="panel section-panel editorial-section">
-          <NotatnikSectionHead index="I." kicker="Aktywna oferta" title="Trzy glowne wejscia." />
+          <NotatnikSectionHead index="I." kicker="Aktywna oferta" title="Trzy główne wejścia." />
           <div className="card-grid three-up top-gap">
             {quickStartOffer ? (
               <article className="offer-card tree-backed-card">
@@ -117,10 +117,10 @@ export default async function OfferPage() {
                 </div>
                 <div className="offer-card-meta">
                   <span>dla startu</span>
-                  <span>jedno pytanie albo pierwszy porzadek w temacie</span>
+                  <span>jedno pytanie albo pierwszy porządek w temacie</span>
                 </div>
                 <p className="muted">{quickStartOffer.whenToChoose}</p>
-                <p className="muted">Jesli potrzebujesz szybkiego terminu, dostepny jest Kwadrans na juz (99 zl) - termin potwierdzany do 15 minut od wplaty.</p>
+                <p className="muted">Jeśli potrzebujesz szybkiego terminu, dostępny jest Kwadrans na już (99 zł) - termin potwierdzany do 15 minut od wpłaty.</p>
                 <div className="offer-card-actions top-gap-small">
                   <Link href={quickStartOffer.primaryHref} prefetch={false} className="button button-primary">
                     {quickStartOffer.primaryCtaLabel}
@@ -136,16 +136,16 @@ export default async function OfferPage() {
                     <div className="section-eyebrow">{bridgeOffer.shortTitle}</div>
                     <h3>Konsultacja 30 min</h3>
                   </div>
-                  <span className="offer-price">169 zl</span>
+                  <span className="offer-price">169 zł</span>
                 </div>
                 <p className="offer-card-summary">{bridgeOffer.cardSummary}</p>
                 <div className="offer-card-meta">
                   <span>30 min online</span>
-                  <span>2-3 watki</span>
+                  <span>2-3 wątki</span>
                 </div>
                 <div className="offer-card-meta">
                   <span>szerszy start</span>
-                  <span>gdy 15 minut to za malo</span>
+                  <span>gdy 15 minut to za mało</span>
                 </div>
                 <p className="muted">{bridgeOffer.whenToChoose}</p>
                 <div className="offer-card-actions top-gap-small">
@@ -160,14 +160,14 @@ export default async function OfferPage() {
               <article className="offer-card tree-backed-card">
                 <div className="offer-card-head">
                   <div>
-                    <div className="section-eyebrow">Pelna konsultacja</div>
+                    <div className="section-eyebrow">Pełna konsultacja</div>
                     <h3>Konsultacja behawioralna online</h3>
                   </div>
-                  <span className="offer-price">470 zl</span>
+                  <span className="offer-price">470 zł</span>
                 </div>
                 <p className="offer-card-summary">{fullConsultationOffer.cardSummary}</p>
                 <div className="offer-card-meta">
-                  <span>pelny zakres online</span>
+                  <span>pełny zakres online</span>
                   <span>diagnoza + plan</span>
                 </div>
                 <div className="offer-card-meta">
@@ -186,28 +186,28 @@ export default async function OfferPage() {
         </section>
 
         <section className="panel section-panel editorial-section">
-          <NotatnikSectionHead index="II." kicker="Wybor przed rezerwacja" title="Jedna zasada wyboru przed rezerwacja." />
+          <NotatnikSectionHead index="II." kicker="Wybór przed rezerwacją" title="Jedna zasada wyboru przed rezerwacją." />
           <div className="notatnik-quiet-grid">
             <article className="notatnik-quiet-card">
-              <h3>69 zl</h3>
-              <p>Wybierz, gdy chcesz najprostszy start, jedno pytanie albo pierwsze uporzadkowanie sytuacji.</p>
+              <h3>69 zł</h3>
+              <p>Wybierz, gdy chcesz najprostszy start, jedno pytanie albo pierwsze uporządkowanie sytuacji.</p>
             </article>
             <article className="notatnik-quiet-card">
-              <h3>169 zl</h3>
-              <p>Wybierz, gdy 15 minut to za malo i potrzebujesz spokojniej przejsc przez szerszy temat.</p>
+              <h3>169 zł</h3>
+              <p>Wybierz, gdy 15 minut to za mało i potrzebujesz spokojniej przejść przez szerszy temat.</p>
             </article>
             <article className="notatnik-quiet-card">
-              <h3>470 zl</h3>
-              <p>Wybierz, gdy sprawa jest zlozona, wraca albo od razu potrzebujesz diagnozy, planu i wsparcia wdrozenia.</p>
+              <h3>470 zł</h3>
+              <p>Wybierz, gdy sprawa jest złożona, wraca albo od razu potrzebujesz diagnozy, planu i wsparcia wdrożenia.</p>
             </article>
           </div>
 
           <div className="list-card accent-outline tree-backed-card top-gap">
-            <strong>Chcesz wejsc lzej?</strong>
+            <strong>Chcesz wejść lżej?</strong>
             <span>
-              Niezbednik zostaje materialem pomocniczym, a nie glowna usluga. Jesli chcesz najpierw zobaczyc materialy, przejdz do{' '}
+              Niezbędnik zostaje materiałem pomocniczym, a nie główną usługą. Jeśli chcesz najpierw zobaczyć materiały, przejdź do{' '}
               <Link href="/niezbednik" prefetch={false} className="prep-inline-link">
-                Niezbednika
+                Niezbędnika
               </Link>
               .
             </span>
@@ -215,8 +215,8 @@ export default async function OfferPage() {
         </section>
 
         <NotatnikFinalCta
-          title="Zacznij od formatu, ktory <em>pasuje do skali problemu.</em>"
-          copy="Jesli nadal nie masz pewnosci, zacznij od Kwadransu. To dalej najbezpieczniejszy pierwszy ruch."
+          title="Zacznij od formatu, który <em>pasuje do skali problemu.</em>"
+          copy="Jeśli nadal nie masz pewnosci, zacznij od Kwadransu. To dalej najbezpieczniejszy pierwszy ruch."
           primaryHref={quickStartHref}
           primaryLabel="Zarezerwuj Kwadrans"
           secondaryHref={contactHref}

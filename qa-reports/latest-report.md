@@ -1,7 +1,7 @@
 # Latest QA Report
 
 - Data: 2026-04-20
-- Repo: `behawior15-mvp-full / beh2`
+- Repo: `regulskibehawiorysta`
 - Etap: full local crawl refresh after plan execution
 - Werdykt: `PASS`
 

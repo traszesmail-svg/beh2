@@ -40,7 +40,7 @@ export default async function InternalQaReportPage() {
               <span>{report.exists ? 'Raport znaleziony w repo.' : 'Raport nie istnieje jeszcze w repo.'}</span>
             </div>
             <div className="list-card">
-              <strong>Sciezka zrodlowa</strong>
+              <strong>Sciezka źródlowa</strong>
               <span>{report.filePath}</span>
             </div>
             <div className="list-card">

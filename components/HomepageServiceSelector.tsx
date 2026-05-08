@@ -109,6 +109,11 @@ const heroChoiceDisplay: Record<(typeof heroChoices)[number]['id'], { title: str
   },
 }
 
+const homepageHeroPhoto = {
+  src: '/branding/homepage/hero-man-dog-cat-pexels.jpg',
+  alt: 'Opiekun w spokojnym kontakcie z psem i kotem',
+}
+
 function RouterChoiceIcon({ choiceId }: { choiceId: (typeof heroChoices)[number]['id'] }) {
   if (choiceId === 'dog') {
     return (
@@ -201,14 +206,29 @@ export function HomepageServiceSelector({ mode = 'home', initialAnimal = null }:
   }
 
   return (
-    <div className={`homepage-router${showHero ? '' : ' homepage-router-quiz'}`} id="wybor">
+    <div className={`homepage-router${showHero ? '' : ' homepage-router-quiz'}`} id="wybór">
       {showHero ? (
         <div className="router-hero-stage">
           <header className="router-hero-copy">
-            <h1 className="router-reference-title">Z czym potrzebujesz pomocy u psa lub kota?</h1>
-            <p className="router-reference-copy">
-              Wybierz zwierzę albo odpowiedz na kilka krótkich pytań - podpowiem najlepszy pierwszy krok.
-            </p>
+            <div className="router-hero-intro">
+              <div className="router-hero-text">
+                <h1 className="router-reference-title">Z czym potrzebujesz pomocy u psa lub kota?</h1>
+                <p className="router-reference-copy">
+                  Wybierz zwierzę albo odpowiedz na kilka krótkich pytań - podpowiem najlepszy pierwszy krok.
+                </p>
+              </div>
+
+              <figure className="router-home-photo">
+                <Image
+                  src={homepageHeroPhoto.src}
+                  alt={homepageHeroPhoto.alt}
+                  fill
+                  priority
+                  sizes="(max-width: 760px) 100vw, (max-width: 1180px) 42vw, 460px"
+                  className="router-home-photo-image"
+                />
+              </figure>
+            </div>
             <div className="router-choice-grid" aria-label="Wybierz kierunek">
               {heroChoices.map((choice) => (
                 <Link

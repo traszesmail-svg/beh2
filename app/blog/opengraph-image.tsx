@@ -6,7 +6,7 @@ export const contentType = 'image/png'
 
 export default function OpenGraphImage() {
   return renderOgImage({
-    title: 'Blog o zachowaniu psow i kotow',
+    title: 'Blog o zachowaniu psów i kotów',
     subtitle: 'Praktyczne teksty o spacerach, kuwecie, stresie i konsultacjach online.',
   })
 }

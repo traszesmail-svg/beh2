@@ -61,7 +61,7 @@ function parseEnvLine(line: string) {
 }
 
 export function applyOptionalEnvFileOverride(rootDir = process.cwd()) {
-  const requestedPath = readFlagValue('--env-file') ?? process.env.BEHAWIOR15_ENV_FILE?.trim() ?? null
+  const requestedPath = readFlagValue('--env-file') ?? process.env.REGULSKI_ENV_FILE?.trim() ?? null
 
   if (!requestedPath) {
     return null

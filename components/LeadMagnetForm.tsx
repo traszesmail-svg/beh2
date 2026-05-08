@@ -116,7 +116,7 @@ export function LeadMagnetForm({ magnetId, source, onSuccess, layout = 'vertical
           onChange={(e) => setConsentNewsletter(e.target.checked)}
           className="mt-0.5 accent-accent shrink-0"
         />
-        <span>(opcjonalnie) Chcę otrzymywać newsletter z poradami behawioralnymi — max 1× w miesiącu</span>
+        <span>(opcjonalnie) Chcę otrzymywać newsletter z poradami behawioralnaymi — max 1× w miesiącu</span>
       </label>
 
       {status === 'error' && (

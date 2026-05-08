@@ -71,4 +71,4 @@ Dostaniesz pisemne podsumowanie z planem działania na e-mail. Jeśli problem b�
 
 ---
 
-*Behawior 15 · Krzysztof Regulski*
+*Regulski Behawiorysta · Krzysztof Regulski*

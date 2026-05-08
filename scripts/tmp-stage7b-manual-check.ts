@@ -9,9 +9,9 @@ const retiredLocalSeoPath = `/behawiorysta-${['ol', 'sz', 'tyn'].join('')}`
 
 const routeChecks = [
   { route: '/behawiorysta-online-polska', heading: 'Behawiorysta psów i kotów online' },
-  { route: '/bezplatne-materialy/pies-reaktywnosc-5-krokow', heading: '5 pierwszych kroków, gdy pies szczeka na spacerach' },
-  { route: '/bezplatne-materialy/kot-kuweta-checklista', heading: 'Co sprawdzić, zanim uznasz, że kot załatwia się poza kuwetą złośliwie' },
-  { route: '/bezplatne-materialy/przygotowanie-do-konsultacji-online', heading: 'Jak przygotować się do konsultacji behawioralnej online' },
+  { route: '/bezplatne-materialy/pies-ile-ruchu-potrzebuje', heading: 'Czy Twój pies naprawdę potrzebuje więcej ruchu?' },
+  { route: '/bezplatne-materialy/kot-zyje-w-napieciu', heading: 'Kot żyje w napięciu' },
+  { route: '/bezplatne-materialy/30-zachowan', heading: '30 zachowań do obserwacji' },
   { route: '/blog', heading: 'Teksty o zachowaniu psów i kotów - konkretnie, bez ogólników.' },
   { route: '/niezbednik', heading: 'Niezbędnik - materiały do samodzielnej pracy' },
   { route: '/psy/reaktywnosc-na-smyczy', heading: 'Reaktywność psa na smyczy' },
@@ -114,20 +114,20 @@ async function main() {
       body: JSON.stringify({
         kind: 'lead_magnet',
         email: 'stage7b-lead@example.com',
-        leadMagnetSlug: 'pies-reaktywnosc-5-krokow',
+        leadMagnetSlug: 'pies-ile-ruchu-potrzebuje',
         location: 'stage7b-script',
-        sourcePage: '/bezplatne-materialy/pies-reaktywnosc-5-krokow',
+        sourcePage: '/bezplatne-materialy/pies-ile-ruchu-potrzebuje',
       }),
     })
     const leadMagnetPayload = (await leadMagnetSignupResponse.json()) as { redirectTo?: string }
     assert.equal(leadMagnetSignupResponse.status, 200)
-    assert.equal(leadMagnetPayload.redirectTo?.includes('/bezplatne-materialy/dziekuje?leadMagnet=pies-reaktywnosc-5-krokow'), true)
+    assert.equal(leadMagnetPayload.redirectTo?.includes('/bezplatne-materialy/dziekuje?leadMagnet=pies-ile-ruchu-potrzebuje'), true)
 
-    const fileResponse = await fetch(`${appUrl}/api/lead-magnet/pies-reaktywnosc-5-krokow`, { cache: 'no-store' })
+    const fileResponse = await fetch(`${appUrl}/api/lead-magnet/pies-ile-ruchu-potrzebuje`, { cache: 'no-store' })
     assert.equal(fileResponse.status, 200)
     assert.equal((fileResponse.headers.get('content-type') ?? '').includes('application/pdf'), true)
 
-    const thankYouHtml = await fetch(`${appUrl}/bezplatne-materialy/dziekuje?leadMagnet=pies-reaktywnosc-5-krokow`, {
+    const thankYouHtml = await fetch(`${appUrl}/bezplatne-materialy/dziekuje?leadMagnet=pies-ile-ruchu-potrzebuje`, {
       cache: 'no-store',
     }).then((response) => response.text())
     assert.equal(thankYouHtml.includes('noindex'), true)
@@ -135,7 +135,7 @@ async function main() {
     const sitemapXml = await fetch(`${appUrl}/sitemap.xml`, { cache: 'no-store' }).then((response) => response.text())
     assert.equal(sitemapXml.includes(`${canonicalBase}${retiredLocalSeoPath}`), false)
     assert.equal(sitemapXml.includes('<loc>https://regulskibehawiorysta.pl/behawiorysta-online-polska</loc>'), true)
-    assert.equal(sitemapXml.includes('<loc>https://regulskibehawiorysta.pl/bezplatne-materialy/pies-reaktywnosc-5-krokow</loc>'), true)
+    assert.equal(sitemapXml.includes('<loc>https://regulskibehawiorysta.pl/bezplatne-materialy/pies-ile-ruchu-potrzebuje</loc>'), true)
     assert.equal(sitemapXml.includes('/bezplatne-materialy/dziekuje'), false)
   } finally {
     if (server) {

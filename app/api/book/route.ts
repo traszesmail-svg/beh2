@@ -24,16 +24,16 @@ type ValidatedBookPayload = {
 }
 
 const SERVICES: Record<BookingServiceId, { label: string; price: string }> = {
-  'kwadrans-na-juz': { label: 'Kwadrans na juz', price: '99 zl' },
-  'szybka-konsultacja-15-min': { label: 'Kwadrans z behawiorysta', price: '69 zl' },
-  'konsultacja-30-min': { label: 'Dwa kwadranse', price: '169 zl' },
-  'konsultacja-behawioralna-online': { label: 'Pelna konsultacja', price: '470 zl' },
+  'kwadrans-na-juz': { label: 'Kwadrans na już', price: '99 zł' },
+  'szybka-konsultacja-15-min': { label: '15-minutowa konsultacja behawioralna', price: '69 zł' },
+  'konsultacja-30-min': { label: 'Dwa kwadranse', price: '169 zł' },
+  'konsultacja-behawioralna-online': { label: 'Pełna konsultacja', price: '470 zł' },
 }
 
-const SUCCESS_MESSAGE = 'Dostalem Twoja rezerwacje. Wyslalem tez kopie na podany adres e-mail.'
-const URGENT_SUCCESS_MESSAGE = 'Twoja prosba o Kwadrans na juz dotarla. Wyslalem tez kopie na podany adres e-mail.'
-const GENERIC_ERROR_MESSAGE = 'Nie udalo sie wyslac prosby o rezerwacje. Sprobuj ponownie pozniej.'
-const UNAVAILABLE_MESSAGE = 'Rezerwacja mailowa jest chwilowo niedostepna. Sprobuj pozniej albo napisz przez formularz kontaktowy.'
+const SUCCESS_MESSAGE = 'Dostałem Twoją rezerwację. Wysłałem też kopię na podany adres e-mail.'
+const URGENT_SUCCESS_MESSAGE = 'Twoja prośba o Kwadrans na już dotarła. Wysłałem też kopię na podany adres e-mail.'
+const GENERIC_ERROR_MESSAGE = 'Nie udało się wysłać prośby o rezerwację. Spróbuj ponownie później.'
+const UNAVAILABLE_MESSAGE = 'Rezerwacja mailowa jest chwilowo niedostępna. Spróbuj później albo napisz przez formularz kontaktowy.'
 
 function normalizeSingleLine(value: unknown, maxLength: number) {
   if (typeof value !== 'string') {
@@ -72,7 +72,7 @@ function validatePayload(body: Record<string, unknown>): { payload?: ValidatedBo
   const species = speciesValue === 'pies' || speciesValue === 'kot' ? speciesValue : null
 
   if (!serviceConfig || !name || !email || !species || !description || (!preferredSlots && service !== 'kwadrans-na-juz')) {
-    return { error: 'Uzupelnij usluge, imie, e-mail, gatunek, opis sytuacji i preferowane terminy.' }
+    return { error: 'Uzupełnij usługę, imię, e-mail, gatunek, opis sytuacji i preferowane terminy.' }
   }
 
   if (!isEmailValid(email)) {
@@ -96,7 +96,7 @@ function validatePayload(body: Record<string, unknown>): { payload?: ValidatedBo
       email,
       species,
       description,
-      preferredSlots: preferredSlots ?? 'Chce termin jak najszybciej - prosze o kontakt w ciagu 15 minut.',
+      preferredSlots: preferredSlots ?? 'Chcę termin jak najszybciej - proszę o kontakt w ciągu 15 minut.',
       consentRodo,
       consentRegulamin,
       consentEarlyStart,
@@ -112,7 +112,7 @@ export async function POST(request: Request) {
     try {
       body = (await request.json()) as Record<string, unknown>
     } catch {
-      return NextResponse.json({ error: 'Nie udalo sie odczytac formularza rezerwacji.' }, { status: 400 })
+      return NextResponse.json({ error: 'Nie udało się odczytać formularza rezerwacji.' }, { status: 400 })
     }
 
     const { payload, error } = validatePayload(body)
@@ -139,7 +139,7 @@ export async function POST(request: Request) {
         preferredSlots: payload.preferredSlots,
       })
     } catch (storageError) {
-      console.error('[behawior15][book] lead booking storage failed', storageError)
+      console.error('[regulski-behawiorysta][book] lead booking storage failed', storageError)
       // Continue with email-only flow if storage fails
     }
 
@@ -153,16 +153,16 @@ export async function POST(request: Request) {
     const adminDelivery = await sendBookRequestEmail(submissionWithToken)
 
     if (adminDelivery.status !== 'sent') {
-      console.warn('[behawior15][book] admin email not sent', { status: adminDelivery.status, reason: adminDelivery.reason })
+      console.warn('[regulski-behawiorysta][book] admin email not sent', { status: adminDelivery.status, reason: adminDelivery.reason })
     }
 
     if (adminDelivery.status !== 'failed') {
       const customerDelivery = await sendBookRequestAutoReplyEmail(submissionWithToken)
 
       if (customerDelivery.status === 'failed') {
-        console.error('[behawior15][book] auto-reply failed', customerDelivery.reason)
+        console.error('[regulski-behawiorysta][book] auto-reply failed', customerDelivery.reason)
       } else if (customerDelivery.status === 'skipped') {
-        console.warn('[behawior15][book] auto-reply skipped', customerDelivery.reason)
+        console.warn('[regulski-behawiorysta][book] auto-reply skipped', customerDelivery.reason)
       }
     }
 
@@ -177,7 +177,7 @@ export async function POST(request: Request) {
 
     // If no booking was created and admin email failed, return error
     if (adminDelivery.status === 'failed') {
-      console.error('[behawior15][book] submission failed', adminDelivery.reason)
+      console.error('[regulski-behawiorysta][book] submission failed', adminDelivery.reason)
       return NextResponse.json({ error: GENERIC_ERROR_MESSAGE }, { status: 500 })
     }
 
@@ -188,7 +188,7 @@ export async function POST(request: Request) {
       bookingId: leadBooking?.id,
     })
   } catch (error) {
-    console.error('[behawior15][book] unexpected error', error)
+    console.error('[regulski-behawiorysta][book] unexpected error', error)
     return NextResponse.json({ error: GENERIC_ERROR_MESSAGE }, { status: 500 })
   }
 }

@@ -82,7 +82,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
     calendarUrl,
   })
 
-  // Wyslij email do klienta
+  // Wyślij email do klienta
   const emailResult = await sendLeadBookingConfirmedEmail({
     name: booking.name,
     email: booking.email,

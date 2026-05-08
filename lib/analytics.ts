@@ -1,5 +1,5 @@
-export const ANALYTICS_CONSENT_STORAGE_KEY = 'behawior15.analytics.consent'
-export const ANALYTICS_CONSENT_COOKIE = 'behawior15_analytics_consent'
+export const ANALYTICS_CONSENT_STORAGE_KEY = 'regulski-behawiorysta.analytics.consent'
+export const ANALYTICS_CONSENT_COOKIE = 'regulski_behawiorysta_analytics_consent'
 
 import { pushDebugAnalyticsEvent } from '@/lib/analytics-debug'
 

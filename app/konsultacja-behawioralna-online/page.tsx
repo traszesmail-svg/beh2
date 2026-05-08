@@ -5,7 +5,7 @@ import { NotatnikFinalCta, NotatnikPageShell, NotatnikSectionHead, PUBLIC_SITE_N
 import { Schema } from '@/components/schema'
 import { buildBookHref } from '@/lib/booking-routing'
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
-import { getLeadMagnetBySlug } from '@/lib/growth-layer'
+import { getLeadMagnetBySlug } from '@/lib/active-lead-magnets'
 import { getBreadcrumbJsonLd, getFaqPageJsonLd, getServiceJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
 import type { TrustFaqItem } from '@/lib/trust-layer'
@@ -15,27 +15,27 @@ const heroImage = { src: '/branding/omnie-hero.webp', width: 1024, height: 1536 
 
 const consultationFaqItems: TrustFaqItem[] = [
   {
-    question: 'Kiedy Pelna konsultacja ma sens?',
+    question: 'Kiedy Pełna konsultacja ma sens?',
     answer:
-      'Gdy problem trwa dluzej, wraca, dotyczy kilku obszarow naraz albo od razu wiesz, ze potrzebujesz diagnozy i szerszego planu poprawy.',
+      'Gdy problem trwa dłużej, wraca, dotyczy kilku obszarów naraz albo od razu wiesz, że potrzebujesz diagnozy i szerszego planu poprawy.',
   },
   {
-    question: 'Co dostaje po Pelnej konsultacji?',
+    question: 'Co dostaję po Pełnej konsultacji?',
     answer:
-      'Rozmowe online, diagnoze sytuacji, indywidualny plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp, gdzie mozesz zadawac pytania, wysylac filmy i konsultowac wdrozenie planu.',
+      'Rozmowę online, diagnozę sytuacji, indywidualny plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp, gdzie możesz zadawać pytania, wysyłać filmy i konsultować wdrożenie planu.',
   },
   {
-    question: 'Czy moge zaczac od Kwadransu zamiast Pelnej konsultacji?',
+    question: 'Czy mogę zacząć od Kwadransu zamiast Pełnej konsultacji?',
     answer:
-      'Tak. Jesli nie masz pewnosci, czy temat jest az tak szeroki, zacznij od Kwadransu. Jesli od razu wiesz, ze sprawa jest zlozona, wejdz prosto w Pelna konsultacje.',
+      'Tak. Jeśli nie masz pewności, czy temat jest aż tak szeroki, zacznij od Kwadransu. Jeśli od razu wiesz, że sprawa jest złożona, wejdź prosto w Pełną konsultację.',
   },
 ]
 
 const consultationSummaryCards = [
   {
     eyebrow: 'Kiedy ma sens',
-    title: 'Gdy sprawa jest zlozona albo wraca',
-    copy: 'Problem trwa dluzej, dotyczy kilku obszarow naraz albo od razu wiesz, ze potrzebujesz diagnozy i szerszego planu poprawy.',
+    title: 'Gdy sprawa jest złożona albo wraca',
+    copy: 'Problem trwa dłużej, dotyczy kilku obszarów naraz albo od razu wiesz, że potrzebujesz diagnozy i szerszego planu poprawy.',
   },
   {
     eyebrow: 'Co dostajesz',
@@ -45,7 +45,7 @@ const consultationSummaryCards = [
   {
     eyebrow: 'Co przygotowac',
     title: 'Kilka konkretow zamiast rozbudowanej dokumentacji',
-    copy: 'Wystarczy opis sytuacji, rytm dnia i to, co bylo juz sprawdzane. Nagranie pomaga, ale nie jest warunkiem.',
+    copy: 'Wystarczy opis sytuacji, rytm dnia i to, co bylo już sprawdzane. Nagranie pomaga, ale nie jest warunkiem.',
   },
 ] as const
 
@@ -56,19 +56,19 @@ const consultationDecisionCards = [
   },
   {
     title: 'Dwa kwadranse',
-    copy: 'Wybierz, gdy 15 minut to za malo, ale nie potrzebujesz jeszcze pelnej diagnozy i 7 dni wsparcia.',
+    copy: 'Wybierz, gdy 15 minut to za mało, ale nie potrzebujesz jeszcze pełnej diagnozy i 7 dni wsparcia.',
   },
   {
-    title: 'Pelna konsultacja',
-    copy: 'Wybierz, gdy od razu potrzebujesz diagnozy, planu i spokojnego wsparcia wdrozenia po rozmowie.',
+    title: 'Pełna konsultacja',
+    copy: 'Wybierz, gdy od razu potrzebujesz diagnozy, planu i spokojnego wsparcia wdrożenia po rozmowie.',
   },
 ] as const
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: 'Pelna konsultacja behawioralna online',
+  title: 'Pełna konsultacja behawioralna online',
   path: '/konsultacja-behawioralna-online',
   description:
-    'Pelna konsultacja behawioralna dla psa i kota: rozmowa online, diagnoza, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.',
+    'Pełna konsultacja behawioralna dla psa i kota: rozmowa online, diagnoza, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.',
 })
 
 export default function ConsultationOnlinePage() {
@@ -76,15 +76,15 @@ export default function ConsultationOnlinePage() {
   const consultationHref = buildBookHref(null, 'konsultacja-behawioralna-online')
   const bridgeHref = buildBookHref(null, 'konsultacja-30-min')
   const contactHref = '/kontakt#formularz'
-  const prepGuide = getLeadMagnetBySlug('przygotowanie-do-konsultacji-online')
+  const prepGuide = getLeadMagnetBySlug('30-zachowan')
   const structuredData = [
     getBreadcrumbJsonLd([
-      { name: 'Strona glowna', path: '/' },
+      { name: 'Strona główna', path: '/' },
       { name: 'Konsultacja behawioralna online', path: '/konsultacja-behawioralna-online' },
     ]),
     getServiceJsonLd({
-      name: 'Pelna konsultacja behawioralna',
-      description: 'Pelna konsultacja behawioralna online dla psa lub kota: rozmowa, diagnoza, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.',
+      name: 'Pełna konsultacja behawioralna',
+      description: 'Pełna konsultacja behawioralna online dla psa lub kota: rozmowa, diagnoza, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.',
       serviceUrl: consultationHref,
       offerPrice: 470,
     }),
@@ -93,7 +93,7 @@ export default function ConsultationOnlinePage() {
 
   return (
     <NotatnikPageShell
-      tag="Konsultacja / pelny opis"
+      tag="Konsultacja / pełny opis"
       navItems={PUBLIC_SITE_NAV_ITEMS}
       ctaHref={consultationHref}
       ctaLabel={FUNNEL_CTA_LABELS.consultation}
@@ -103,8 +103,8 @@ export default function ConsultationOnlinePage() {
       <Schema data={structuredData} />
       <section className="notatnik-subhero">
         <div>
-          <div className="notatnik-subhero-tag notatnik-mono">Pelna konsultacja</div>
-          <h1>Pelna konsultacja behawioralna online</h1>
+          <div className="notatnik-subhero-tag notatnik-mono">Pełna konsultacja</div>
+          <h1>Pełna konsultacja behawioralna online</h1>
           <p>{PUBLIC_OFFER_DECISION_COPY.premium}</p>
           <div className="notatnik-subhero-actions">
             <Link href={consultationHref} prefetch={false} className="notatnik-btn">
@@ -118,17 +118,17 @@ export default function ConsultationOnlinePage() {
             </Link>
           </div>
           <p className="notatnik-service-description">
-            Jesli nie masz jeszcze pewnosci, czy temat jest az tak szeroki, zacznij od{' '}
+            Jeśli nie masz jeszcze pewnosci, czy temat jest az tak szeroki, zacznij od{' '}
             <Link href={audioHref} prefetch={false} className="notatnik-inline-link">
               Kwadransu
             </Link>{' '}
             albo{' '}
             <Link href={bridgeHref} prefetch={false} className="notatnik-inline-link">
-              Dwoch kwadransow
+              Dwóch kwadransów
             </Link>
-            . Jesli wolisz najpierw doprecyzowac sytuacje, napisz{' '}
+            . Jeśli wolisz najpierw doprecyzowac sytuację, napisz{' '}
             <Link href={contactHref} prefetch={false} className="notatnik-inline-link">
-              wiadomosc
+              wiadomość
             </Link>
             .
           </p>
@@ -139,14 +139,14 @@ export default function ConsultationOnlinePage() {
             <Image src={heroImage.src} alt="" aria-hidden="true" fill sizes="(max-width: 980px) 100vw, 40vw" priority />
           </div>
           <div className="notatnik-subhero-note">
-            <span>pelny zakres online</span>
+            <span>pełny zakres online</span>
             <span>diagnoza + 7 dni WhatsApp</span>
           </div>
         </div>
       </section>
 
       <section>
-        <NotatnikSectionHead index="I." kicker="Pelna konsultacja w skrocie" title="Trzy rzeczy, ktore warto wiedziec przed rezerwacja." />
+        <NotatnikSectionHead index="I." kicker="Pełna konsultacja w skrócie" title="Trzy rzeczy, które warto wiedzieć przed rezerwacją." />
         <div className="card-grid three-up top-gap-small">
           {consultationSummaryCards.map((card) => (
             <article key={card.title} className="summary-card tree-backed-card">
@@ -158,13 +158,13 @@ export default function ConsultationOnlinePage() {
         </div>
 
         <div className="list-card accent-outline tree-backed-card top-gap-small">
-          <strong>To nie jest dluzszy Kwadrans.</strong>
+          <strong>To nie jest dłuższy Kwadrans.</strong>
           <span>{PUBLIC_OFFER_FULL_CONSULTATION_VALUE}</span>
           {prepGuide ? (
             <span>
-              Chcesz wejsc jeszcze spokojniej? Zobacz{' '}
+              Chcesz wejść jeszcze spokojniej? Zobacz{' '}
               <Link href={`/bezplatne-materialy/${prepGuide.slug}`} prefetch={false} className="notatnik-inline-link">
-                material przygotowujacy
+                materiał przygotowujący
               </Link>
               .
             </span>
@@ -173,7 +173,7 @@ export default function ConsultationOnlinePage() {
       </section>
 
       <section style={{ background: 'var(--paper)' }}>
-        <NotatnikSectionHead index="II." kicker="Wybor przed rezerwacja" title="Jedna zasada wyboru przed rezerwacja." />
+        <NotatnikSectionHead index="II." kicker="Wybór przed rezerwacją" title="Jedna zasada wyboru przed rezerwacją." />
         <div className="notatnik-quiet-grid">
           {consultationDecisionCards.map((card) => (
             <article key={card.title} className="notatnik-quiet-card">
@@ -185,7 +185,7 @@ export default function ConsultationOnlinePage() {
       </section>
 
       <section id="faq">
-        <NotatnikSectionHead index="III." kicker="FAQ" title="Najczestsze pytania o pelna konsultacje." />
+        <NotatnikSectionHead index="III." kicker="FAQ" title="Najczęstsze pytania o pełną konsultację." />
         <div className="card-grid three-up top-gap-small">
           {consultationFaqItems.map((item) => (
             <article key={item.question} className="summary-card tree-backed-card">
@@ -197,8 +197,8 @@ export default function ConsultationOnlinePage() {
       </section>
 
       <NotatnikFinalCta
-        title="Jesli temat jest zlozony, <em>wejdz w Pelna konsultacje.</em>"
-        copy="Jesli nadal sie wahasz, wybierz lzejszy format zamiast rezerwowac najwieksza usluge na sile."
+        title="Jeśli temat jest złożony, <em>wejdź w Pełną konsultację.</em>"
+        copy="Jeśli nadal się wahasz, wybierz lżejszy format zamiast rezerwować największą usługę na siłę."
         primaryHref={consultationHref}
         primaryLabel={FUNNEL_CTA_LABELS.consultation}
         secondaryHref={audioHref}

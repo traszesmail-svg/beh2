@@ -6,7 +6,7 @@ export const contentType = 'image/png'
 
 export default function OpenGraphImage() {
   return renderOgImage({
-    title: 'Pomoc behawioralna dla psow',
-    subtitle: 'Reaktywnosc, spacery, rozlaka i konsultacja online dla opiekunow psow.',
+    title: 'Pomoc behawioralna dla psów',
+    subtitle: 'Reaktywność, spacery, rozłąka i konsultacja online dla opiekunów psów.',
   })
 }

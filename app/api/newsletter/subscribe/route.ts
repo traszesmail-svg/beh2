@@ -31,7 +31,7 @@ export async function POST(request: Request) {
   try {
     body = (await request.json()) as Record<string, unknown>
   } catch {
-    return NextResponse.json({ error: 'Nie udalo sie odczytac formularza.' }, { status: 400 })
+    return NextResponse.json({ error: 'Nie udało się odczytać formularza.' }, { status: 400 })
   }
 
   const email = normalizeSingleLine(body.email, 160)
@@ -84,6 +84,6 @@ export async function POST(request: Request) {
     ok: true,
     signupId: signup.id,
     provider: provider.status,
-    message: 'Dziekuje. Zapis jest przyjety.',
+    message: 'Dziękuję. Zapis jest przyjęty.',
   })
 }

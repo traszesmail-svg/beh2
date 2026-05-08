@@ -189,7 +189,7 @@ function logRuntimeMessage(key: string, summary: string, level: 'info' | 'warn')
   }
 
   reportedRuntimeMessages.add(key)
-  const message = `[behawior15] ${summary}`
+  const message = `[regulski-behawiorysta] ${summary}`
 
   if (level === 'warn') {
     console.warn(message)
@@ -352,7 +352,7 @@ export function getPaymentModeStatus(): RuntimeModeStatus<PaymentMode, ActivePay
         isValid: false,
         usesFallback: false,
         missing: ['MANUAL_PAYMENT_BLIK_PHONE lub MANUAL_PAYMENT_PAYPAL_ME_URL'],
-        summary: 'APP_PAYMENT_MODE=manual wymaga aktywnej konfiguracji wplaty recznej przez BLIK albo PayPal.me.',
+        summary: 'APP_PAYMENT_MODE=manual wymaga aktywnej konfiguracji wpłaty recznej przez BLIK albo PayPal.me.',
       }
     }
 
@@ -362,7 +362,7 @@ export function getPaymentModeStatus(): RuntimeModeStatus<PaymentMode, ActivePay
       isValid: true,
       usesFallback: false,
       missing: [],
-      summary: 'APP_PAYMENT_MODE=manual -> aktywna jest wplata reczna z recznym potwierdzeniem.',
+      summary: 'APP_PAYMENT_MODE=manual -> aktywna jest wpłata ręczna z ręcznym potwierdzeniem.',
     }
   }
 
@@ -374,7 +374,7 @@ export function getPaymentModeStatus(): RuntimeModeStatus<PaymentMode, ActivePay
       isValid: true,
       usesFallback: true,
       missing: [],
-      summary: 'APP_PAYMENT_MODE=auto -> aktywna jest wplata reczna (BLIK/PayPal.me skonfigurowane).',
+      summary: 'APP_PAYMENT_MODE=auto -> aktywna jest wpłata reczna (BLIK/PayPal.me skonfigurowane).',
     }
   }
 
@@ -384,7 +384,7 @@ export function getPaymentModeStatus(): RuntimeModeStatus<PaymentMode, ActivePay
     isValid: true,
     usesFallback: true,
     missing: [],
-    summary: 'APP_PAYMENT_MODE=auto -> aktywny jest testowy bypass platnosci, bo brak konfiguracji platnosci recznej.',
+    summary: 'APP_PAYMENT_MODE=auto -> aktywny jest testowy bypass płatności, bo brak konfiguracji płatności recznej.',
   }
 }
 

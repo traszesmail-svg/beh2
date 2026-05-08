@@ -274,12 +274,12 @@ export function AnalyticsConsent({ measurementId, cookiebotDomainGroupId }: Anal
           <div className="consent-copy">
             <strong id="consent-title">Analityka po Twojej zgodzie</strong>
             <span id="consent-copy">
-              Statystyki wlaczam dopiero po decyzji. Pomagaja mi sprawdzac, skad trafiasz na strone i czy formularze oraz rezerwacja dzialaja poprawnie.
+              Statystyki włączam dopiero po decyzji. Pomagają mi sprawdzać, skąd trafiasz na stronę i czy formularze oraz rezerwacja działają poprawnie.
             </span>
           </div>
           <div className="consent-actions">
             <button type="button" className="button button-ghost small-button" onClick={() => updateConsent('denied')}>
-              Odrzuc
+              Odrzuć
             </button>
             <button type="button" className="button button-primary small-button" onClick={() => updateConsent('granted')}>
               Akceptuje analityke

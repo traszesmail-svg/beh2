@@ -24,7 +24,7 @@ import { CAPBT_PROFILE_URL, INSTAGRAM_PROFILE_URL, getPublicContactDetails } fro
 export const metadata: Metadata = buildMarketingMetadata({
   title: 'Kontakt i rezerwacja konsultacji',
   path: '/kontakt',
-  description: 'Kontakt i rezerwacja konsultacji | formularz, e-mail i spokojny pierwszy krok dla opiekunow psow i kotow.',
+  description: 'Kontakt i rezerwacja konsultacji | formularz, e-mail i spokojny pierwszy krok dla opiekunów psów i kotów.',
 })
 
 const contactFaqItems = FAQ_SHORTLISTS.contact.slice(0, 5)
@@ -50,7 +50,7 @@ const contactSteps = [
 export default function ContactPage() {
   const publicContact = getPublicContactDetails()
   const structuredData = [
-    getBreadcrumbJsonLd([{ name: 'Strona glowna', path: '/' }, { name: 'Kontakt', path: '/kontakt' }]),
+    getBreadcrumbJsonLd([{ name: 'Strona główna', path: '/' }, { name: 'Kontakt', path: '/kontakt' }]),
     getFaqPageJsonLd(contactFaqItems),
   ]
 

@@ -131,7 +131,7 @@ export function PreparationMaterialsCard({
         prepLinkUrl: linkValue,
         prepNotes: notesValue,
       })
-      setMessage('Zapisano materiały do sprawy.')
+      setMessage('Zapisano materiały. Specjalista dostanie powiadomienie.')
     } catch (saveError) {
       setError(saveError instanceof Error ? saveError.message : 'Nie udało się zapisać materiałów.')
     } finally {
@@ -225,16 +225,13 @@ export function PreparationMaterialsCard({
           throw new Error('Brakuje bezpiecznego adresu przesłania pliku.')
         }
 
-        const uploadBody = new FormData()
-        uploadBody.append('cacheControl', '3600')
-        uploadBody.append('', file)
-
         const uploadResponse = await fetch(prepPayload.signedUrl, {
           method: 'PUT',
           headers: {
+            'Content-Type': file.type || 'video/mp4',
             'x-upsert': 'true',
           },
-          body: uploadBody,
+          body: file,
         })
 
         if (!uploadResponse.ok) {
@@ -248,7 +245,7 @@ export function PreparationMaterialsCard({
         })
       }
 
-      setMessage('Nagranie zostało dodane do sprawy.')
+      setMessage('Nagranie zostało dodane. Specjalista dostanie powiadomienie.')
     } catch (uploadError) {
       setError(uploadError instanceof Error ? uploadError.message : 'Nie udało się dodać nagrania.')
     } finally {
@@ -258,20 +255,19 @@ export function PreparationMaterialsCard({
   }
 
   return (
-    <section className="panel section-panel prep-panel">
-      <div className="section-eyebrow">Dodaj materiały do sprawy</div>
+    <section className="panel section-panel prep-panel call-prep-panel">
+      <div className="section-eyebrow">Materiały przed rozmową</div>
       <h2>Nagranie, link lub krótki opis</h2>
       <p className="muted paragraph-gap prep-copy">
-        To nie jest obowiązkowe. Jeśli chcesz, możesz po płatności dodać nagranie MP4, link do zdjęć albo krótki opis sytuacji.
-        To pomoże lepiej przygotować rozmowę i dalszą pracę.
+        Możesz dodać krótkie nagranie zachowania psa lub kota, żeby specjalista lepiej przygotował się do rozmowy.
+        To nie oznacza konsultacji wideo. Ten etap jest opcjonalny.
       </p>
 
       <div className="prep-grid top-gap">
         <div className="prep-card tree-backed-card">
           <strong>Nagranie MP4</strong>
           <span>
-            Krótki materiał do 5 minut bardzo pomaga szybciej zrozumieć sytuację. Akceptujemy tylko MP4 do{' '}
-            {formatPreparationFileSize(PREPARATION_VIDEO_MAX_SIZE_BYTES)}.
+            Akceptujemy tylko MP4 do 5 minut. Limit pliku: {formatPreparationFileSize(PREPARATION_VIDEO_MAX_SIZE_BYTES)}.
           </span>
 
           {videoState.hasVideo ? (
@@ -279,6 +275,7 @@ export function PreparationMaterialsCard({
               href={buildVideoUrl(bookingId, accessToken)}
               target="_blank"
               rel="noopener noreferrer"
+              referrerPolicy="no-referrer"
               className="prep-inline-link top-gap-small"
             >
               {videoState.prepVideoFilename ?? 'Otwórz nagranie'}{' '}
@@ -307,7 +304,7 @@ export function PreparationMaterialsCard({
 
         <div className="prep-card tree-backed-card">
           <strong>Link do zdjęć lub folderu</strong>
-          <span>Może to być YouTube, Google Drive albo inny link, który jest publiczny lub poprawnie udostępniony specjaliście.</span>
+          <span>Może to być YouTube, Google Drive albo inny link poprawnie udostępniony specjaliście.</span>
           <input
             value={linkValue}
             onChange={(event) => setLinkValue(event.target.value)}
@@ -318,7 +315,7 @@ export function PreparationMaterialsCard({
         </div>
       </div>
 
-      <div className="top-gap">
+      <div className="top-gap prep-field">
         <label>Krótki opis sytuacji</label>
         <textarea
           rows={5}
@@ -328,8 +325,8 @@ export function PreparationMaterialsCard({
           placeholder="Napisz, co dokładnie widać, kiedy problem się pojawia i co chcesz omówić podczas rozmowy."
         />
         <div className="disclaimer top-gap-small">
-          Maksymalnie {PREPARATION_NOTES_MAX_LENGTH} znaków. Wystarczy kilka konkretów: co widać, kiedy to się dzieje, od kiedy trwa
-          i co chcesz omówić na rozmowie.
+          Maksymalnie {PREPARATION_NOTES_MAX_LENGTH} znaków. Wystarczy kilka konkretów: co widać, kiedy to się dzieje,
+          od kiedy trwa i co chcesz omówić na rozmowie.
         </div>
       </div>
 

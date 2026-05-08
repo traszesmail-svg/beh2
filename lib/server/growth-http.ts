@@ -14,7 +14,7 @@ export async function handleGrowthFollowupRunRequest(request: Request) {
     const result = await runGrowthFollowupSweep()
     return NextResponse.json({ ok: true, ...result })
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Growth follow-up runner zakonczyl sie bledem.'
+    const message = error instanceof Error ? error.message : 'Growth follow-up runner zakonczyl się bledem.'
     return NextResponse.json({ error: message }, { status: error instanceof ConfigurationError ? 503 : 500 })
   }
 }

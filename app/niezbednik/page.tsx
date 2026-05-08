@@ -4,10 +4,8 @@ import Link from 'next/link'
 import {
   ArrowRight,
   BookOpen,
-  CalendarDays,
   Cat,
   CircleHelp,
-  ClipboardCheck,
   Download,
   Heart,
   Home,
@@ -19,7 +17,7 @@ import {
 import { EditorialIndexTopbar } from '@/components/EditorialIndexTopbar'
 import { Footer } from '@/components/Footer'
 import { PetLeafHeroArt } from '@/components/PetLeafHeroArt'
-import { getLeadMagnetBySlug } from '@/lib/growth-layer'
+import { getLeadMagnetBySlug } from '@/lib/active-lead-magnets'
 import { buildMarketingMetadata } from '@/lib/seo'
 
 export const metadata: Metadata = buildMarketingMetadata({
@@ -34,7 +32,8 @@ type ResourceCard = {
   title: string
   description: string
   href: string
-  icon: LucideIcon
+  coverSrc: string
+  coverAlt: string
   tone: 'dog' | 'cat' | 'neutral'
 }
 
@@ -63,51 +62,57 @@ const heroHighlights = [
 
 const freeResources: ResourceCard[] = [
   {
-    label: 'CHECKLISTA',
-    title: 'Pierwszy dzień psa w domu',
-    description: 'Lista najważniejszych kroków, które pomagają Wam dobrze zacząć.',
-    href: leadMagnetHref('pies-reaktywnosc-5-krokow'),
-    icon: ClipboardCheck,
-    tone: 'dog',
+    label: 'PDF',
+    title: '30 zachowań do obserwacji',
+    description: 'Szeroki start dla opiekuna psa albo kota, gdy trzeba nazwać powtarzające się sygnały.',
+    href: leadMagnetHref('30-zachowan'),
+    coverSrc: '/branding/pdf-covers/30-zachowan.png',
+    coverAlt: 'Okładka PDF 30 zachowań do obserwacji',
+    tone: 'neutral',
   },
   {
-    label: 'CHECKLISTA',
-    title: 'Kocia adaptacja w nowym domu',
-    description: 'Jak przygotować przestrzeń, wspierać poczucie bezpieczeństwa i dać czas.',
-    href: '/materialy/kot-chowa-sie-po-zmianach',
-    icon: Home,
+    label: 'PDF',
+    title: 'Kot żyje w napięciu',
+    description: 'Ciche sygnały stresu, pierwsze obserwacje i bezpieczniejszy porządek w domu.',
+    href: leadMagnetHref('kot-zyje-w-napieciu'),
+    coverSrc: '/branding/pdf-covers/kot-zyje-w-napieciu.png',
+    coverAlt: 'Okładka PDF Kot żyje w napięciu',
     tone: 'cat',
   },
   {
-    label: 'PORADNIK',
-    title: 'Spacery bez frustracji',
-    description: 'Praktyczne wskazówki, jak budować spokojne i przewidywalne spacery.',
+    label: 'PDF',
+    title: 'Pies i poziom ruchu',
+    description: 'Kiedy ruch pomaga, a kiedy dokłada pobudzenia i przeciążenia.',
     href: '/materialy/pies-ile-ruchu-potrzebuje',
-    icon: PawPrint,
+    coverSrc: '/branding/pdf-covers/pies-ile-ruchu-potrzebuje.png',
+    coverAlt: 'Okładka PDF Pies i poziom ruchu',
     tone: 'dog',
   },
   {
-    label: 'MINI PORADNIK',
-    title: 'Lęk u psa - pierwsze kroki',
-    description: 'Jak rozpoznać lęk i jak mądrze wesprzeć psa na co dzień.',
-    href: '/materialy/pies-zostaje-sam',
-    icon: Heart,
+    label: 'PDF',
+    title: 'Pies sam w domu',
+    description: 'Pierwsze kroki przy zostawaniu samemu, nagraniach i bezpiecznej obserwacji.',
+    href: leadMagnetHref('pies-sam-w-domu'),
+    coverSrc: '/branding/pdf-covers/pies-sam-w-domu.png',
+    coverAlt: 'Okładka PDF Pies sam w domu',
     tone: 'dog',
   },
   {
-    label: 'CHECKLISTA',
-    title: 'Kuweta bez problemów',
-    description: 'Co ma znaczenie, gdy kot unika kuwety i jak krok po kroku wrócić do równowagi.',
-    href: leadMagnetHref('kot-kuweta-checklista'),
-    icon: Cat,
+    label: 'PDF',
+    title: 'Pierwszy tydzień z kotem',
+    description: 'Spokojny plan wejścia kota do domu: przestrzeń, rytm i kontakt.',
+    href: leadMagnetHref('pierwszy-tydzien-z-kotem'),
+    coverSrc: '/branding/pdf-covers/pierwszy-tydzien-z-kotem.png',
+    coverAlt: 'Okładka PDF Pierwszy tydzień z kotem',
     tone: 'cat',
   },
   {
-    label: 'PLANER',
-    title: 'Plan pracy z psem - 4 tygodnie',
-    description: 'Gotowy szkielet pracy krok po kroku. Dopasuj go do Waszych potrzeb.',
-    href: leadMagnetHref('przygotowanie-do-konsultacji-online'),
-    icon: CalendarDays,
+    label: 'PDF',
+    title: 'Podstawy przed Kwadransem',
+    description: 'Dwa krótkie materiały porządkujące pierwszą rozmowę o psie albo kocie.',
+    href: '/materialy',
+    coverSrc: '/branding/pdf-covers/kwadrans.png',
+    coverAlt: 'Okładka PDF Podstawy przed Kwadransem',
     tone: 'neutral',
   },
 ]
@@ -135,22 +140,22 @@ const audience: AudienceItem[] = [
 
 const bundles = [
   {
-    title: 'Zestaw: Spokojne spacery',
-    description: 'Checklisty, plan pracy i wskazówki, które pomagają ograniczyć ciągnięcie, reakcje i stres na spacerach.',
-    href: '/materialy/pakiet/pakiet-trudny-pies',
+    title: 'Ścieżka dla psa',
+    description: 'Pies i poziom ruchu, pies sam w domu oraz podstawy przed krótką konsultacją.',
+    href: '/materialy#psy',
     image: '/branding/homepage/choice-dog-clean.png',
     tone: 'dog',
   },
   {
-    title: 'Zestaw: Kocia równowaga',
-    description: 'Kuweta, stres, wzbogacanie środowiska i relacje między kotami w praktyce.',
-    href: '/materialy/pakiet/pakiet-kuweta',
+    title: 'Ścieżka dla kota',
+    description: 'Kot w napięciu, pierwszy tydzień z kotem oraz podstawy przed krótką konsultacją.',
+    href: '/materialy#koty',
     image: '/branding/homepage/choice-cat-clean.png',
     tone: 'cat',
   },
   {
-    title: 'Zestaw: Zrozumieć zachowanie',
-    description: 'Podstawy komunikacji, emocji i uczenia się. Solidna baza dla każdego opiekuna.',
+    title: 'Wszystkie materiały PDF',
+    description: 'Krótka biblioteka poradników dla opiekunów psów i kotów, ułożona według najczęstszych sytuacji.',
     href: '/materialy',
     icon: BookOpen,
     tone: 'neutral',
@@ -179,14 +184,6 @@ const values = [
     icon: ShieldCheck,
   },
 ] as const
-
-function ResourceIcon({ icon: Icon, tone }: { icon: LucideIcon; tone: ResourceCard['tone'] }) {
-  return (
-    <span className={`essentials-index-resource-icon is-${tone}`} aria-hidden="true">
-      <Icon size={58} strokeWidth={1.55} />
-    </span>
-  )
-}
 
 export default function EssentialsPage() {
   return (
@@ -233,7 +230,15 @@ export default function EssentialsPage() {
               <div className="essentials-index-resource-grid">
                 {freeResources.map((item) => (
                   <article key={item.title} className="essentials-index-resource-card">
-                    <ResourceIcon icon={item.icon} tone={item.tone} />
+                    <div className={`essentials-index-resource-cover is-${item.tone}`}>
+                      <Image
+                        src={item.coverSrc}
+                        alt={item.coverAlt}
+                        width={420}
+                        height={540}
+                        sizes="(max-width: 780px) 86vw, (max-width: 1180px) 30vw, 280px"
+                      />
+                    </div>
                     <span className="essentials-index-resource-label">{item.label}</span>
                     <h3>{item.title}</h3>
                     <p>{item.description}</p>
@@ -287,8 +292,8 @@ export default function EssentialsPage() {
 
           <section className="essentials-index-bundles" aria-labelledby="essentials-index-bundles-title">
             <div className="essentials-index-section-head">
-              <h2 id="essentials-index-bundles-title">Gotowe zestawy tematyczne</h2>
-              <p>Więcej wiedzy w jednym miejscu. Zestawy będą rozwijane.</p>
+              <h2 id="essentials-index-bundles-title">Ścieżki tematyczne</h2>
+              <p>Materiały ułożone według sytuacji, żeby łatwiej wybrać dobry pierwszy krok.</p>
             </div>
             <div className="essentials-index-bundle-grid">
               {bundles.map((item) => {

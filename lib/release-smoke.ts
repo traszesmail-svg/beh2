@@ -128,10 +128,10 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
       path: '/oferta',
       required: [
         'Wybierz start dla swojej sytuacji.',
-        'Trzy glowne uslugi i jedna logika wyboru.',
+        'Trzy główne usługi i jedna logika wyboru.',
         'Aktywna oferta',
         'Jedna zasada wyboru przed rezerwacja.',
-        'Kwadrans z behawiorysta to najprostszy start. Dwa kwadranse porzadkuja temat szerzej, a Pelna konsultacja daje diagnoze i wsparcie wdrozenia.',
+        '15-minutowa konsultacja behawioralna to najprostszy start. Dwa kwadranse porzadkuja temat szerzej, a Pełna konsultacja daje diagnozę i wsparcie wdrożenia.',
       ],
       requireBuildMarker: true,
     },
@@ -149,17 +149,17 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
     {
       path: '/behawiorysta-online-polska',
       required: [
-        'Behawiorysta online dla opiekunow psow i kotow',
-        '3 wejscia online',
-        'Wybierz wejscie, ktore pasuje do Twojej sytuacji.',
-        'Jedna logika wyboru przed rezerwacja.',
-        'Najczestsze pytania przed pierwszym ruchem.',
+        'Behawiorysta online dla opiekunów psów i kotów',
+        '3 wejścia online',
+        'Wybierz wejście, które pasuje do Twojej sytuacji.',
+        'Jedna logika wyboru przed rezerwacją.',
+        'Najczęstsze pytania przed pierwszym ruchem.',
       ],
       requireBuildMarker: true,
     },
     {
       path: '/termin?problem=szczeniak',
-      required: ['Wybierz termin', 'Szczeniak / mlody pies'],
+      required: ['Wybierz termin', 'Szczeniak / młody pies'],
       requireBuildMarker: true,
     },
     {

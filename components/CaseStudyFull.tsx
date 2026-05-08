@@ -58,7 +58,7 @@ export function CaseStudyFull({ caseStudy, bookingHref }: CaseStudyFullProps) {
 
           <div className="notatnik-case-detail-section">
             <div className="notatnik-mono">{caseStudy.firstStepLabel}</div>
-            <h2>Co trzeba bylo nazwac najpierw</h2>
+            <h2>Co trzeba bylo nazwać najpierw</h2>
             <p>{caseStudy.firstStepText}</p>
           </div>
 
@@ -72,8 +72,8 @@ export function CaseStudyFull({ caseStudy, bookingHref }: CaseStudyFullProps) {
             <div className="notatnik-mono">Ograniczenie</div>
             <h2>To nie jest obietnica identycznego wyniku</h2>
             <p>
-              To anonimowa sytuacja startowa, ktora pokazuje sposob porzadkowania problemu. Tempo i zakres pracy zaleza od zdrowia, historii,
-              srodowiska i tego, co da sie utrzymac w domu.
+              To anonimowa sytuacja startowa, która pokazuje sposób porządkowania problemu. Tempo i zakres pracy zależą od zdrowia, historii,
+              źrodowiska i tego, co da się utrzymac w domu.
             </p>
           </div>
         </div>
@@ -108,7 +108,7 @@ export function CaseStudyFull({ caseStudy, bookingHref }: CaseStudyFullProps) {
 
           <div className="notatnik-case-side-card is-cta">
             <div className="notatnik-mono">Podobna sytuacja?</div>
-            <p>Nie musisz idealnie dopasowac historii do swojego problemu. Wystarczy krotki opis tego, co dzieje sie teraz.</p>
+            <p>Nie musisz idealnie dopasować historii do swojego problemu. Wystarczy krótki opis tego, co dzieje się teraz.</p>
             <Link href={bookingHref} prefetch={false} className="notatnik-btn">
               <span>Zacznij od Kwadransa</span>
               <span className="notatnik-btn-arrow" aria-hidden="true">

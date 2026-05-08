@@ -21,7 +21,7 @@ paths=(
   /blog
   /behawiorysta-online-polska
   /konsultacja-behawioralna-online
-  /bezplatne-materialy/pies-reaktywnosc-5-krokow
+  /bezplatne-materialy/pies-ile-ruchu-potrzebuje
 )
 
 for url in "${paths[@]}"; do

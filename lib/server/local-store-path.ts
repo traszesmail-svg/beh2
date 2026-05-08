@@ -1,7 +1,7 @@
 import { tmpdir } from 'os'
 import path from 'path'
 
-const VERCEL_LOCAL_DATA_DIR = 'behawior15-local-store'
+const VERCEL_LOCAL_DATA_DIR = 'regulski-behawiorysta-local-store'
 
 export function getLocalStoreDataDir(rootDir = process.cwd()) {
   const configured = process.env.APP_LOCAL_DATA_DIR?.trim()

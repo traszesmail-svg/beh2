@@ -5,8 +5,9 @@ import { access, mkdir, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { loadEnvConfig } from '@next/env'
 import { chromium, type BrowserContext, type Page } from 'playwright-core'
+import { listLeadMagnetPaths } from '@/lib/active-lead-magnets'
 import { buildBookHref } from '@/lib/booking-routing'
-import { OFFERS } from '@/lib/offers'
+import { listMaterialyBundles, listMaterialyGuides } from '@/lib/materialy-catalog'
 import { SITE_PRODUCTION_URL } from '@/lib/site'
 import { resolveBrowserExecutablePath } from './lib/browser-path'
 
@@ -55,7 +56,6 @@ const htmlDir = path.join(reportRoot, 'html')
 const manifestsDir = path.join(reportRoot, 'manifests')
 const contentDir = path.join(rootDir, 'content')
 const blogDir = path.join(contentDir, 'blog-mvp')
-const pdfGuidesSiteDataPath = path.join(contentDir, 'guides', 'site', 'guides-site-data.json')
 const blogRoutePaths = readdirSync(blogDir, { withFileTypes: true })
   .filter((entry) => entry.isFile() && /^\d{2}-wpis-.*\.md$/i.test(entry.name))
   .map((entry) => {
@@ -68,22 +68,13 @@ const blogRoutePaths = readdirSync(blogDir, { withFileTypes: true })
     const fallbackSlug = entry.name.replace(/^\d{2}-wpis-/, '').replace(/\.md$/i, '')
     return `/blog/${fallbackSlug}`
   })
-const pdfGuidesSiteData = JSON.parse(readFileSync(pdfGuidesSiteDataPath, 'utf8')) as {
-  listing: { routePath: string }
-  guides: Array<{ routePath: string }>
-  bundles: Array<{ routePath: string }>
-}
 const pdfRoutePaths = [
-  pdfGuidesSiteData.listing.routePath,
-  ...pdfGuidesSiteData.guides.map((guide) => guide.routePath),
-  ...pdfGuidesSiteData.bundles.map((bundle) => bundle.routePath),
+  '/materialy',
+  ...listMaterialyGuides().map((guide) => `/materialy/${guide.slug}`),
+  ...listMaterialyBundles().map((bundle) => `/materialy/pakiet/${bundle.slug}`),
 ]
 const localSeoPaths = ['/behawiorysta-online-polska']
-const leadMagnetPaths = [
-  '/bezplatne-materialy/pies-reaktywnosc-5-krokow',
-  '/bezplatne-materialy/kot-kuweta-checklista',
-  '/bezplatne-materialy/przygotowanie-do-konsultacji-online',
-]
+const leadMagnetPaths = listLeadMagnetPaths()
 const problemLandingPaths = [
   '/psy/reaktywnosc-na-smyczy',
   '/psy/lek-separacyjny',
@@ -94,6 +85,7 @@ const problemLandingPaths = [
 const BASE_SEEDS = Array.from(new Set([
   '/',
   '/cennik',
+  '/cennik/pelny',
   '/konsultacja-behawioralna-online',
   '/behawiorysta-online-polska',
   '/niezbednik',
@@ -127,7 +119,7 @@ const BASE_SEEDS = Array.from(new Set([
   buildBookHref(null, 'konsultacja-behawioralna-online'),
   buildBookHref(null, 'konsultacja-behawioralna-online', false, 'pies'),
   buildBookHref(null, 'konsultacja-behawioralna-online', false, 'kot'),
-  OFFERS.find((offer) => offer.slug === 'poradniki-pdf')?.primaryHref ?? '/niezbednik',
+  '/materialy',
 ].map((value) => value.trim())))
 
 function normalizeComparablePath(url: string) {
@@ -336,7 +328,7 @@ function detectPhone(text: string) {
 
 function detectOldNames(text: string) {
   const hits: string[] = []
-  const terms = ['coapebehawiorysta', 'coape behawiorysta', 'regulski terapia behawioralna', 'behawiorysta coape / capbt']
+  const terms = ['coapebehawiorysta', 'coape behawiorysta', 'behawiorysta coape / capbt']
   const lower = text.toLowerCase()
   for (const term of terms) {
     if (lower.includes(term)) {

@@ -1,17 +1,17 @@
 import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 
 export const COPY_SERVICE_NAMES = {
-  primary: 'Kwadrans z behawiorysta',
+  primary: '15-minutowa konsultacja behawioralna',
   primaryShort: 'Kwadrans',
   primaryDescriptor: '15 min audio bez kamery',
-  primaryOperational: 'Kwadrans z behawiorysta: 15 min audio bez kamery',
+  primaryOperational: '15-minutowa konsultacja behawioralna: 15 min audio bez kamery',
   bridge: 'Dwa kwadranse z behawiorysta',
   bridgeOperational: 'Dwa kwadranse z behawiorysta: 30 min online',
-  consultation: 'pelna konsultacja behawioralna',
-  consultationOperational: 'pelna konsultacja behawioralna online, diagnoza + 7 dni wsparcia tekstowego przez WhatsApp',
-  toolkit: 'Niezbednik',
-  toolkitOperational: 'Niezbednik - materialy do samodzielnej pracy',
-  contact: 'wiadomosc',
+  consultation: 'pełna konsultacja behawioralna',
+  consultationOperational: 'pełna konsultacja behawioralna online, diagnoza + 7 dni wsparcia tekstowego przez WhatsApp',
+  toolkit: 'Niezbędnik',
+  toolkitOperational: 'Niezbędnik - materiały do samodzielnej pracy',
+  contact: 'wiadomość',
 } as const
 
 export const COPY_CTA = {
@@ -23,19 +23,19 @@ export const COPY_CTA = {
 } as const
 
 export const COPY_HELPERS = {
-  primaryLead: 'Kwadrans z behawiorysta to 15 min audio bez kamery.',
-  startFromAudio: 'Jesli nie wiesz, od czego zaczac, wybierz Kwadrans z behawiorysta.',
+  primaryLead: '15-minutowa konsultacja behawioralna to 15 min audio bez kamery.',
+  startFromAudio: 'Jeśli nie wiesz, od czego zacząć, wybierz 15-minutowa konsultacja behawioralna.',
   startComparison:
-    'Kwadrans z behawiorysta jest nazwa uslugi. 15 min audio bez kamery opisuje tylko jego format. Kwadrans na juz to ten sam format, ale z priorytetem. Dwa kwadranse daja spokojniejszy start online, a pelna konsultacja behawioralna sprawdza sie przy sprawach szerszych, dluzszych albo wielowatkowych.',
-  contactResponseWindow: 'Staram sie odpowiadac w ciagu 1-2 dni roboczych.',
+    '15-minutowa konsultacja behawioralna jest nazwą usługi. 15 min audio bez kamery opisuje tylko jej format. Kwadrans na już to ten sam format, ale z priorytetem. Dwa kwadranse dają spokojniejszy start online, a pełna konsultacja behawioralna sprawdza się przy sprawach szerszych, dłuższych albo wielowątkowych.',
+  contactResponseWindow: 'Staram się odpowiadać w ciągu 1-2 dni roboczych.',
   toolkitIntro:
-    'Niezbednik to materialy, do ktorych mozesz wrocic przed rozmowa, po rozmowie albo wtedy, gdy chcesz spokojnie uporzadkowac temat.',
+    'Niezbędnik to materiały, do których możesz wróćic przed rozmowa, po rozmowie albo wtedy, gdy chcesz spokojnie uporządkować temat.',
   reviewLead:
-    'Jesli konsultacja byla pomocna, mozesz zostawic krotka opinie. Wystarczy kilka zdan o samej rozmowie.',
+    'Jeśli konsultacja była pomocna, możesz zostawrócić krótka opinie. Wystarczy kilka zdan o samej rozmowie.',
   reviewPrivacy:
-    'Opinie publikowane sa z inicjalami, opcjonalnie z imieniem zwierzecia albo miastem, jesli chcesz to podac.',
-  reviewInternalNote: 'To ukryty formularz do zebrania krotkiej opinii po konsultacji.',
+    'Opinie publikowane są z inicjalami, opcjonalnie z imieniem zwierzęcia albo miastem, jeśli chcesz to podać.',
+  reviewInternalNote: 'To ukryty formularz do zebrania krótkiej opinii po konsultacji.',
   aftercareConfirmation:
-    'Po potwierdzeniu wplaty zobaczysz termin, link do rozmowy i dalsza instrukcje.',
-  paymentNoSales: 'Na tej stronie oplacasz rezerwacje i sprawdzasz jej status.',
+    'Po potwierdzeniu wpłaty zobaczysz termin, link do rozmowy i dalszą instrukcję.',
+  paymentNoSales: 'Na tej stronie opłacasz rezerwację i sprawdzasz jej status.',
 } as const

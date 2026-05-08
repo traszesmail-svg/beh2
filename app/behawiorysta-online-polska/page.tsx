@@ -10,66 +10,66 @@ import { getBreadcrumbJsonLd, getFaqPageJsonLd, getServiceJsonLd } from '@/lib/s
 import { buildMarketingMetadata } from '@/lib/seo'
 
 const pageData = getLocalSeoPageByPath('/behawiorysta-online-polska')
-const pageTitle = 'Behawiorysta online dla opiekunow psow i kotow'
+const pageTitle = 'Behawiorysta online dla opiekunów psów i kotów'
 const pageLead =
-  'Pomoc online dla calej Polski. Wybierasz wejscie: pies, kot albo bezposrednio format konsultacji.'
+  'Pomoc online dla całej Polski. Wybierasz wejście: pies, kot albo bezpośrednio format konsultacji.'
 
 const pageEntryCards = [
   {
     title: 'Problem dotyczy psa',
-    copy: 'Spacery, reaktywnosc, rozlaka, pobudzenie albo trudne zachowania w domu.',
+    copy: 'Spacery, reaktywność, rozłąka, pobudzenie albo trudne zachowania w domu.',
     href: '/psy',
-    cta: 'Przejdz do strony psa',
+    cta: 'Przejdź do strony psa',
   },
   {
     title: 'Problem dotyczy kota',
-    copy: 'Kuweta, stres, wycofanie, napiecie w domu albo relacje miedzy kotami.',
+    copy: 'Kuweta, stres, wycofanie, napięcie w domu albo relacje między kotami.',
     href: '/koty',
-    cta: 'Przejdz do strony kota',
+    cta: 'Przejdź do strony kota',
   },
   {
-    title: 'Nie wiesz jeszcze, od czego zaczac',
-    copy: 'Jesli chcesz najpierw dobrac format rozmowy albo zobaczyc roznice miedzy 69 / 169 / 470, zacznij od oferty.',
+    title: 'Nie wiesz jeszcze, od czego zacząć',
+    copy: 'Jeśli chcesz najpierw dobrać format rozmowy albo zobaczyć różnice między 69 / 169 / 470, zacznij od oferty.',
     href: '/oferta',
-    cta: 'Przejdz do oferty',
+    cta: 'Przejdź do oferty',
   },
 ] as const
 
 const onlineDecisionCards = [
   {
-    title: '69 zl',
-    copy: 'Kwadrans jest najprostszym startem, gdy chcesz nazwac problem i ustalic pierwszy krok.',
+    title: '69 zł',
+    copy: 'Kwadrans jest najprostszym startem, gdy chcesz nazwać problem i ustalić pierwszy krok.',
   },
   {
-    title: '169 zl',
-    copy: 'Dwa kwadranse sa dla tematow szerszych, gdy 15 minut to za malo, ale pelna konsultacja bylaby jeszcze zbyt szeroka.',
+    title: '169 zł',
+    copy: 'Dwa kwadranse są dla tematów szerszych, gdy 15 minut to za mało, ale pełna konsultacja byłaby jeszcze zbyt szeroka.',
   },
   {
-    title: '470 zl',
-    copy: 'Pelna konsultacja zostaje dla spraw zlozonych, przewleklych albo wielowatkowych.',
+    title: '470 zł',
+    copy: 'Pełna konsultacja zostaje dla spraw złożonych, przewlekłych albo wielowątkowych.',
   },
 ] as const
 
 const pageFaqItems = [
   {
-    question: 'Czy konsultacja online jest dostepna dla calej Polski?',
-    answer: 'Tak. Pracuje online z opiekunami z calej Polski, w tej samej formule niezaleznie od miejsca.',
+    question: 'Czy konsultacja online jest dostępna dla całej Polski?',
+    answer: 'Tak. Pracuję online z opiekunami z całej Polski, w tej samej formule niezależnie od miejsca.',
   },
   {
-    question: 'Czy potrzebuje kamery albo specjalnego sprzetu?',
-    answer: 'Nie. Przy Kwadransie wystarcza rozmowa glosowa. Przy dluzszej konsultacji wideo moze pomoc, ale nie jest obowiazkowe.',
+    question: 'Czy potrzebuję kamery albo specjalnego sprzętu?',
+    answer: 'Nie. Przy Kwadransie wystarcza rozmowa głosowa. Przy dłuższej konsultacji wideo może pomóc, ale nie jest obowiązkowe.',
   },
   {
-    question: 'Od czego najlepiej zaczac?',
-    answer: 'Jesli nie wiesz jeszcze, jak duzy jest temat, zacznij od Kwadransu. Jesli problem jest zlozony i trwa od dawna, wybierz pelna konsultacje.',
+    question: 'Od czego najlepiej zacząć?',
+    answer: 'Jeśli nie wiesz jeszcze, jak duży jest temat, zacznij od Kwadransu. Jeśli problem jest złożony i trwa od dawna, wybierz pełną konsultację.',
   },
 ]
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: pageData?.title ?? 'Behawiorysta online dla calej Polski',
+  title: pageData?.title ?? 'Behawiorysta online dla całej Polski',
   path: '/behawiorysta-online-polska',
   description:
-    'Behawiorysta online dla calej Polski. Pies, kot albo spokojny start od Kwadransu 69 zl, Dwoch kwadransow 169 zl i Pelnej konsultacji 470 zl.',
+    'Behawiorysta online dla całej Polski. Pies, kot albo spokojny start od Kwadransu 69 zł, Dwóch kwadransów 169 zł i Pełnej konsultacji 470 zł.',
   appendLocalContext: false,
 })
 
@@ -85,24 +85,24 @@ export default function LocalSeoPolandOnlinePage() {
     getServiceJsonLd({
       name: pageTitle,
       description:
-        'Behawiorysta online dla calej Polski. Kwadrans 69 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl dla opiekunow psow i kotow.',
+        'Behawiorysta online dla całej Polski. Kwadrans 69 zł, Dwa kwadranse 169 zł i Pełna konsultacja 470 zł dla opiekunów psów i kotów.',
       serviceUrl: 'https://regulskibehawiorysta.pl/behawiorysta-online-polska',
       offerPrice: 69,
       offerCatalog: [
         {
-          name: 'Kwadrans z behawiorysta',
+          name: '15-minutowa konsultacja behawioralna',
           description: '15 minut rozmowy audio bez kamery jako najprostszy pierwszy krok.',
           url: audioHref,
           price: 69,
         },
         {
           name: 'Dwa kwadranse',
-          description: '30 minut online na szersze uporzadkowanie tematu i krotka notatke.',
+          description: '30 minut online na szersze uporządkowanie tematu i krótką notatkę.',
           url: bridgeHref,
           price: 169,
         },
         {
-          name: 'Pelna konsultacja behawioralna',
+          name: 'Pełna konsultacja behawioralna',
           description: 'Rozmowa online, diagnoza, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.',
           url: consultationHref,
           price: 470,
@@ -111,14 +111,14 @@ export default function LocalSeoPolandOnlinePage() {
     }),
     getFaqPageJsonLd(pageFaqItems),
     getBreadcrumbJsonLd([
-      { name: 'Strona glowna', path: '/' },
-      { name: 'Behawiorysta psow i kotow online', path: '/behawiorysta-online-polska' },
+      { name: 'Strona główna', path: '/' },
+      { name: 'Behawiorysta psów i kotów online', path: '/behawiorysta-online-polska' },
     ]),
   ]
 
   return (
     <NotatnikPageShell
-      tag="Behawiorysta online / cala Polska"
+      tag="Behawiorysta online / cała Polska"
       navItems={PUBLIC_SITE_NAV_ITEMS}
       ctaHref={audioHref}
       ctaLabel={FUNNEL_CTA_LABELS.primary}
@@ -129,7 +129,7 @@ export default function LocalSeoPolandOnlinePage() {
 
       <section className="notatnik-subhero">
         <div>
-          <div className="notatnik-subhero-tag notatnik-mono">Behawiorysta online / cala Polska</div>
+          <div className="notatnik-subhero-tag notatnik-mono">Behawiorysta online / cała Polska</div>
           <h1>{pageTitle}</h1>
           <p>{pageLead}</p>
           <div className="notatnik-subhero-actions">
@@ -140,11 +140,11 @@ export default function LocalSeoPolandOnlinePage() {
               </span>
             </Link>
             <Link href="/oferta" prefetch={false} className="notatnik-btn notatnik-btn-ghost">
-              <span>Zobacz oferte</span>
+              <span>Zobacz ofertę</span>
             </Link>
           </div>
           <p className="notatnik-service-description">
-            Jesli 15 minut to za malo, dalej jest szerszy format. Jesli chcesz najpierw zadac krotkie pytanie, napisz wiadomosc.
+            Jeśli 15 minut to za mało, dalej jest szerszy format. Jeśli chcesz najpierw zadać krótkie pytanie, napisz wiadomość.
           </p>
         </div>
 
@@ -154,13 +154,13 @@ export default function LocalSeoPolandOnlinePage() {
           </div>
           <div className="notatnik-subhero-note">
             <span>Psy i koty / online</span>
-            <span>cala Polska</span>
+            <span>cała Polska</span>
           </div>
         </div>
       </section>
 
       <section>
-        <NotatnikSectionHead index="I." kicker="3 wejscia online" title="Wybierz wejscie, ktore pasuje do Twojej sytuacji." />
+        <NotatnikSectionHead index="I." kicker="3 wejścia online" title="Wybierz wejście, które pasuje do Twojej sytuacji." />
         <div className="card-grid three-up top-gap-small">
           {pageEntryCards.map((item) => (
             <article key={item.title} className="summary-card tree-backed-card">
@@ -175,7 +175,7 @@ export default function LocalSeoPolandOnlinePage() {
       </section>
 
       <section style={{ background: 'var(--paper)' }}>
-        <NotatnikSectionHead index="II." kicker="Wybor przed rezerwacja" title="Jedna logika wyboru przed rezerwacja." />
+        <NotatnikSectionHead index="II." kicker="Wybór przed rezerwacją" title="Jedna logika wyboru przed rezerwacją." />
         <div className="notatnik-quiet-grid">
           {onlineDecisionCards.map((card) => (
             <article key={card.title} className="notatnik-quiet-card">
@@ -186,16 +186,16 @@ export default function LocalSeoPolandOnlinePage() {
         </div>
 
         <div className="list-card accent-outline tree-backed-card top-gap-small">
-          <strong>Do startu wystarczy krotki opis sytuacji.</strong>
+          <strong>Do startu wystarczy krótki opis sytuacji.</strong>
           <span>
-            Nagrania bywaja pomocne, ale nie sa warunkiem. Kamera nie jest potrzebna przy Kwadransie, a przy dluzszej konsultacji ustalamy po prostu
+            Nagrania bywają pomocne, ale nie są warunkiem. Kamera nie jest potrzebna przy Kwadransie, a przy dłuższej konsultacji ustalamy po prostu
             najprostszy sensowny format rozmowy.
           </span>
         </div>
       </section>
 
       <section id="faq">
-        <NotatnikSectionHead index="III." kicker="FAQ" title="Najczestsze pytania przed pierwszym ruchem." />
+        <NotatnikSectionHead index="III." kicker="FAQ" title="Najczęstsze pytania przed pierwszym ruchem." />
         <div className="card-grid three-up top-gap-small">
           {pageFaqItems.map((item) => (
             <article key={item.question} className="summary-card tree-backed-card">
@@ -207,10 +207,10 @@ export default function LocalSeoPolandOnlinePage() {
       </section>
 
       <NotatnikFinalCta
-        title="Jesli nadal nie wiesz, gdzie wejsc, <em>zacznij od Kwadransu.</em>"
-        copy="Ta strona ma tylko uporzadkowac wejscie. Najprostszy pierwszy ruch dalej zostaje ten sam."
+        title="Jeśli nadal nie wiesz, gdzie wejść, <em>zacznij od Kwadransu.</em>"
+        copy="Ta strona ma tylko uporządkować wejście. Najprostszy pierwszy ruch dalej zostaje ten sam."
         primaryHref={audioHref}
-        primaryLabel="Zarezerwuj Kwadrans / 69 zl"
+        primaryLabel="Zarezerwuj Kwadrans / 69 zł"
         secondaryHref="/oferta"
         secondaryLabel="Zobacz oferte"
       />

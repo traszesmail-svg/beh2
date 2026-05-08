@@ -80,8 +80,8 @@ function isSlotUnavailableBookingError(error: unknown): boolean {
   return (
     normalizedMessage.includes('wybrany termin') &&
     (
-      normalizedMessage.includes('nie jest juz dostepny') ||
-      normalizedMessage.includes('nie jest dostepny') ||
+      normalizedMessage.includes('nie jest już dostępny') ||
+      normalizedMessage.includes('nie jest dostępny') ||
       normalizedMessage.includes('zostal przed chwila zajety') ||
       normalizedMessage.includes('zostal zajety') ||
       normalizedMessage.includes('slot no longer available') ||

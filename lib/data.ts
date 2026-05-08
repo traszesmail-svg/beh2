@@ -26,7 +26,7 @@ const LEGACY_CAT_PROBLEM_OPTIONS: ProblemOption[] = [
     id: 'kot-nocna-wokalizacja',
     icon: 'cat',
     title: 'Nocna aktywność i rytm dnia',
-    desc: 'Miauczenie w nocy, pobudki o świcie i rozsypany rytm domu.',
+    desc: 'Miauczenie w nocy, pobudki o śwrócićie i rozsypany rytm domu.',
     marketingTitle: 'Nocna aktywność i rytm dnia',
     marketingDesc: 'Legacy kategoria utrzymana wyłącznie dla zgodności historycznych bookingów i starych linków.',
     examples: ['kot miauczy po nocy', 'kot budzi dom o 4 rano', 'nocne gonitwy i wokalizacja'],

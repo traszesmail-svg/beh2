@@ -9,17 +9,17 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = buildLegalMetadata(
   'Regulamin',
   '/regulamin',
-  'Regulamin serwisu, rezerwacji, platnosci, zmian terminu i reklamacji w serwisie Regulski.',
+  'Regulamin serwisu, rezerwacji, płatności, zmian terminu i reklamacji w serwisie Regulski.',
 )
 
 const summaryItems: LegalSummaryItem[] = [
   {
-    label: 'Uslugi objete dokumentem',
-    value: 'Kwadrans z behawiorysta, Dwa kwadranse oraz podstawowe zasady korzystania z serwisu.',
+    label: 'Usługi objęte dokumentem',
+    value: '15-minutowa konsultacja behawioralna, Dwa kwadranse oraz podstawowe zasady korzystania z serwisu.',
   },
   {
-    label: 'Model platnosci',
-    value: `${PUBLIC_OFFER_PAYMENT_METHODS}. Szczegoly platnosci dostajesz emailem po rezerwacji i potwierdzeniu terminu.`,
+    label: 'Model płatności',
+    value: `${PUBLIC_OFFER_PAYMENT_METHODS}. Szczegóły płatności dostajesz e-mailem po rezerwacji i potwierdzeniu terminu.`,
   },
   {
     label: 'Kontakt w sprawach dokumentu',
@@ -29,32 +29,32 @@ const summaryItems: LegalSummaryItem[] = [
 
 const sections: LegalSection[] = [
   {
-    title: '1. Postanowienia ogolne',
+    title: '1. Postanowienia ogólne',
     body: (
       <>
         <p>
-          Regulamin okresla zasady korzystania z serwisu, skladania rezerwacji oraz realizacji uslug swiadczonych na
-          odleglosc przez Krzysztofa Regulskiego w ramach marki Regulski | Terapia behawioralna.
+          Regulamin określa zasady korzystania z serwisu, składania rezerwacji oraz realizacji usług świadczonych na
+          odległość przez Krzysztofa Regulskiego w ramach marki Regulski Behawiorysta.
         </p>
         <p>
-          Dokument dotyczy uslug publicznie dostepnych w serwisie oraz procesow kontaktu, rezerwacji, potwierdzenia
+          Dokument dotyczy usług publicznie dostępnych w serwisie oraz procesów kontaktu, rezerwacji, potwierdzenia
           terminu i reklamacji.
         </p>
       </>
     ),
   },
   {
-    title: '2. Zakres uslug',
+    title: '2. Zakres usług',
     body: (
       <>
         <ul className="premium-bullet-list">
-          <li>Kwadrans z behawiorysta jest krotka konsultacja zdalna prowadzona w formie audio.</li>
-          <li>Dwa kwadranse sa rozszerzonym formatem audio dla tematow szerszych niz sam Kwadrans.</li>
-          <li>Pelna konsultacja ma osobny regulamin i osobna strone warunkow.</li>
+          <li>15-minutowa konsultacja behawioralna jest krótka konsultacja zdalna prowadzona w formie audio.</li>
+          <li>Dwa kwadranse są rozszerzonym formatem audio dla tematów szerszych niż sam Kwadrans.</li>
+          <li>Pełna konsultacja ma osobny regulamin i osobna stronę warunków.</li>
         </ul>
         <p>
-          Uslugi maja charakter konsultacji behawioralnych swiadczonych na odleglosc. W uzasadnionych przypadkach klient
-          moze zostac poproszony o wczesniejsze wykluczenie tla zdrowotnego lub konsultacje weterynaryjna.
+          Usługi mają charakter konsultacji behawioralnych świadczonych na odległość. W uzasadnionych przypadkach klient
+          może zostać poproszony o wcześniejsze wykluczenie tła zdrowotnego lub konsultację weterynaryjną.
         </p>
       </>
     ),
@@ -64,12 +64,12 @@ const sections: LegalSection[] = [
     body: (
       <>
         <p>
-          Do korzystania z serwisu i realizacji uslug niezbedne sa: urzadzenie z dostepem do internetu, aktualna
-          przegladarka internetowa, aktywny adres e-mail oraz mozliwosc odebrania polaczenia audio albo dolaczenia do
+          Do korzystania z serwisu i realizacji usług niezbędne są: urzłdzenie z dostępem do internetu, aktualna
+          przeglądarka internetowa, aktywny adres e-mail oraz możliwość odebrania połączenia audio albo dołączenia do
           konsultacji online.
         </p>
         <p>
-          Klient powinien zapewnic warunki umozliwiajace spokojny udzial w rozmowie oraz samodzielny dostep do linku
+          Klient powinien zapewnić warunki umożliwiające spokojny udział w rozmowie oraz samodzielny dostęp do linku
           przekazanego po potwierdzeniu rezerwacji.
         </p>
       </>
@@ -80,40 +80,40 @@ const sections: LegalSection[] = [
     body: (
       <>
         <p>
-          Rezerwacja nastepuje po wyborze uslugi, podaniu podstawowych danych kontaktowych oraz wskazaniu preferowanych
-          terminow przez formularz rezerwacyjny albo inna sciezke udostepniona w serwisie.
+          Rezerwacja następuje po wyborze usługi, podaniu podstawowych danych kontaktowych oraz wskazaniu preferowanych
+          terminów przez formularz rezerwacyjny albo inną ścieżkę udostępnioną w serwisie.
         </p>
-        <p>Wiadomosc wyslana przez formularz kontaktowy ma charakter wstepny i nie zastepuje rezerwacji uslugi.</p>
+        <p>Wiadomość wysłana przez formularz kontaktowy ma charakter wstępny i nie zastępuje rezerwacji usługi.</p>
       </>
     ),
   },
   {
-    title: '5. Platnosc i potwierdzenie',
+    title: '5. Płatność i potwierdzenie',
     body: (
       <>
         <p>
-          Publicznie komunikowany model platnosci to {PUBLIC_OFFER_PAYMENT_METHODS}. Szczegoly platnosci klient otrzymuje emailem po rezerwacji i
-          wstepnym potwierdzeniu terminu.
+          Publicznie komunikowany model płatności to {PUBLIC_OFFER_PAYMENT_METHODS}. Szczegóły płatności klient otrzymuje e-mailem po rezerwacji i
+          wstępnym potwierdzeniu terminu.
         </p>
         <p>
-          Potwierdzenie rezerwacji nastepuje do 15 minut od wplaty w godzinach 9-21, poza dniami ustawowo wolnymi od
-          pracy. Termin zostaje ostatecznie zablokowany dopiero po potwierdzeniu wplaty.
+          Potwierdzenie rezerwacji następuje do 15 minut od wpłaty w godzinach 9-21, poza dniami ustawowo wolnymi od
+          pracy. Termin zostaje ostatecznie zablokowany dopiero po potwierdzeniu wpłaty.
         </p>
-        <p>Nieoplacona lub niepotwierdzona rezerwacja moze wygasnac, a termin moze wrocic do puli dostepnych terminow.</p>
+        <p>Nieopłacona lub niepotwierdzona rezerwacja może wygasnąć, a termin może wrócić do puli dostępnych terminów.</p>
       </>
     ),
   },
   {
-    title: '6. Realizacja uslugi',
+    title: '6. Realizacja usługi',
     body: (
       <>
         <p>
-          Po potwierdzeniu wplaty klient otrzymuje dalsza instrukcje, a jezeli usluga tego wymaga, takze link do rozmowy
+          Po potwierdzeniu wpłaty klient otrzymuje dalszą instrukcję, a jeżeli usługa tego wymaga, także link do rozmowy
           albo informacje o kolejnym kroku.
         </p>
         <p>
-          Przed rozmowa klient moze dobrowolnie dodac materialy przygotowawcze, w szczegolnosci krotki opis sprawy, linki
-          lub nagrania. Materialy te maja charakter pomocniczy.
+          Przed rozmowa klient może dobrowolnie dodac materiały przygotowawcze, w szczególności krótki opis sprawy, linki
+          lub nagrania. Materiały te mają charakter pomocniczy.
         </p>
       </>
     ),
@@ -122,36 +122,36 @@ const sections: LegalSection[] = [
     title: '7. Zmiana terminu i rezygnacja',
     body: (
       <>
-        <p>Po potwierdzeniu wplaty klient ma 24 godziny na zgloszenie rezygnacji albo wniosku o zmiane terminu.</p>
+        <p>Po potwierdzeniu wpłaty klient ma 24 godziny na zgłoszenie rezygnacji albo wniosku o zmianę terminu.</p>
         <p>
-          Ewentualny zwrot srodkow wymaga kontaktu i jest rozpatrywany indywidualnie z uwzglednieniem etapu realizacji
-          uslugi oraz przebiegu rezerwacji.
+          Ewentualny zwrot środków wymaga kontaktu i jest rozpatrywany indywidualnie z uwzględnieniem etapu realizacji
+          usługi oraz przebiegu rezerwacji.
         </p>
-        <p>Po uplywie wskazanego terminu zmiana lub odwolanie rezerwacji moze nie byc mozliwe bez poniesienia kosztu uslugi.</p>
+        <p>Po upływie wskazanego terminu zmiana lub odwołanie rezerwacji może nie być możliwe bez poniesienia kosztu usługi.</p>
       </>
     ),
   },
   {
-    title: '8. Nieobecnosc i wygasniecie rezerwacji',
+    title: '8. Nieobecność i wygaśnięcie rezerwacji',
     body: (
       <>
-        <p>Jezeli klient nie oplaci rezerwacji albo wplata nie zostanie potwierdzona, rezerwacja moze zostac zamknieta jako nieaktywna.</p>
-        <p>Jezeli klient nie stawi sie na oplacona usluge bez wczesniejszego kontaktu, rezerwacja moze zostac uznana za zrealizowana.</p>
+        <p>Jeżeli klient nie opłaci rezerwacji albo wpłata nie zostanie potwierdzona, rezerwacja może zostać zamknięta jako nieaktywna.</p>
+        <p>Jeżeli klient nie stawi się na opłaconą usługę bez wcześniejszego kontaktu, rezerwacja może zostać uznana za zrealizowaną.</p>
       </>
     ),
   },
   {
-    title: '9. Ograniczenie odpowiedzialnosci i sila wyzsza',
+    title: '9. Ograniczenie odpowiedzialności i sila wyzsza',
     body: (
       <>
         <p>
-          Usluga ma charakter konsultacji behawioralnej i nie stanowi porady weterynaryjnej ani diagnozy medycznej. Uslugodawca nie ponosi
-          odpowiedzialnosci za brak konkretnych efektow terapeutycznych, jezeli klient nie wdrozyl uzgodnionych zalecen lub zachowanie zwierzecia
-          wynika z przyczyn zdrowotnych wymagajacych interwencji weterynaryjnej.
+          Usługa ma charakter konsultacji behawioralnej i nie stanowi porady weterynaryjnej ani diagnozy medycznej. Usługodawca nie ponosi
+          odpowiedzialności za brak konkretnych efektów terapeutycznych, jeżeli klient nie wdrożył uzgodnionych zaleceń lub zachowanie zwierzęcia
+          wynika z przyczyn zdrowotnych wymagających interwencji weterynaryjnej.
         </p>
         <p>
-          W przypadku sily wyzszej (awaria lacznosci po stronie uslugodawcy, zdarzenia losowe, niedostepnosc platformy technicznej niezalezna od
-          uslugodawcy) realizacja uslugi zostanie przelozna na najblizszy mozliwy termin albo klient otrzyma pelny zwrot wplaty.
+          W przypadku siły wyższej (awaria łączności po stronie usługodawcy, zdarzenia losowe, niedostępność platformy technicznej niezależna od
+          usługodawcy) realizacja usługi zostanie przełożona na najbliższy możliwy termin albo klient otrzyma pełny zwrot wpłaty.
         </p>
       </>
     ),
@@ -160,8 +160,8 @@ const sections: LegalSection[] = [
     title: '10. Reklamacje',
     body: (
       <>
-        <p>Reklamacje dotyczace dzialania serwisu, procesu rezerwacji albo realizacji uslugi mozna zglaszac przez formularz kontaktowy lub e-mail.</p>
-        <p>Zgloszenie powinno zawierac dane pozwalajace zidentyfikowac sprawe oraz krotki opis zastrzezen. Reklamacje sa rozpatrywane bez zbednej zwloki.</p>
+        <p>Reklamacje dotyczące działania serwisu, procesu rezerwacji albo realizacji usługi można zgłaszać przez formularz kontaktowy lub e-mail.</p>
+        <p>Zgłoszenie powinno zawierać dane pozwalające zidentyfikować sprawę oraz krótki opis zastrzeżeń. Reklamacje są rozpatrywane bez zbędnej zwłoki.</p>
       </>
     ),
   },
@@ -169,16 +169,16 @@ const sections: LegalSection[] = [
     title: '11. Dane osobowe',
     body: (
       <>
-        <p>Zasady przetwarzania danych osobowych zwiazanych z serwisem, kontaktem, rezerwacja i realizacja uslug okresla odrebna Polityka prywatnosci.</p>
+        <p>Zasady przetwarzania danych osobowych związanych z serwisem, kontaktem, rezerwacją i realizacją usług określa odrębna Polityka prywatności.</p>
       </>
     ),
   },
   {
-    title: '12. Postanowienia koncowe',
+    title: '12. Postanowienia końcowe',
     body: (
       <>
-        <p>Regulamin obowiazuje od dnia jego opublikowania w serwisie i ma zastosowanie do rezerwacji skladanych po tej dacie.</p>
-        <p>W sprawach nieuregulowanych w regulaminie zastosowanie maja odpowiednie przepisy prawa polskiego.</p>
+        <p>Regulamin obowiązuje od dnia jego opublikowania w serwisie i ma zastosowanie do rezerwacji składanych po tej dacie.</p>
+        <p>W sprawach nieuregulowanych w regulaminie zastosowanie mają odpowiednie przepisy prawa polskiego.</p>
       </>
     ),
   },
@@ -188,18 +188,18 @@ export default function TermsPage() {
   return (
     <LegalPageLayout
       eyebrow="Regulamin"
-      title="Regulamin swiadczenia uslug"
-      intro="Dokument okresla zasady korzystania z serwisu, rezerwacji uslug, dokonywania platnosci, potwierdzen, zmian terminu oraz trybu skladania reklamacji."
-      contactSubject="Pytanie o regulamin - Regulski | Terapia behawioralna"
+      title="Regulamin świadczenia usług"
+      intro="Dokument określa zasady korzystania z serwisu, rezerwacji usług, dokonywania płatności, potwierdzeń, zmian terminu oraz trybu składania reklamacji."
+      contactSubject="Pytanie o regulamin - Regulski Behawiorysta"
       summaryItems={summaryItems}
       sections={sections}
       supportTitle="Kontakt w sprawach regulaminu"
-      supportText="W sprawach dotyczacych rezerwacji, platnosci, zmian terminu, rezygnacji i reklamacji kontakt prowadzony jest przez formularz kontaktowy oraz e-mail."
-      supportNoteTitle="Wniosek o zmiane terminu, rezygnacje lub reklamacje"
-      supportNoteText="W wiadomosci nalezy podac dane pozwalajace zidentyfikowac rezerwacje oraz krotki opis sprawy. Telefon nie jest publicznym kanalem kontaktu serwisu."
+      supportText="W sprawach dotyczących rezerwacji, płatności, zmian terminu, rezygnacji i reklamacji kontakt prowadzony jest przez formularz kontaktowy oraz e-mail."
+      supportNoteTitle="Wniosek o zmianę terminu, rezygnacje lub reklamacje"
+      supportNoteText="W wiadomości należy podać dane pozwalające zidentyfikować rezerwację oraz krótki opis sprawy. Telefon nie jest publicznym kanałem kontaktu serwisu."
       structuredData={[
         getBreadcrumbJsonLd([
-          { name: 'Strona glowna', path: '/' },
+          { name: 'Strona główna', path: '/' },
           { name: 'Regulamin', path: '/regulamin' },
         ]),
       ]}

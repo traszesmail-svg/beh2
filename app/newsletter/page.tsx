@@ -13,24 +13,24 @@ export const dynamic = 'force-static'
 const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min')
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: 'Newsletter dla opiekunow psow i kotow',
+  title: 'Newsletter dla opiekunów psów i kotów',
   path: '/newsletter',
   description:
-    'Spokojny newsletter o zachowaniu psow i kotow: konkretne obserwacje, nowe teksty i materialy bez presji sprzedazowej.',
+    'Spokojny newsletter o zachowaniu psów i kotów: konkretne obserwacje, nowe teksty i materiały bez presji sprzedażowej.',
 })
 
 const newsletterCards = [
   {
-    title: 'Krotkie teksty zamiast kampanii',
-    copy: 'Dostajesz wiadomosc tylko wtedy, gdy pojawia sie sensowny temat: nowy tekst, material albo obserwacja z pracy z psami i kotami.',
+    title: 'Krótkie teksty zamiast kampanii',
+    copy: 'Dostajesz wiadomość tylko wtedy, gdy pojawia się sensowny temat: nowy tekst, materiał albo obserwacja z pracy z psami i kotami.',
   },
   {
     title: 'Segment: pies, kot albo oba',
-    copy: 'Przy zapisie wybierasz najblizszy obszar. To pomaga nie mieszac tematow, ktore nie dotycza Twojej sytuacji.',
+    copy: 'Przy zapisie wybierasz najbliższy obszar. To pomaga nie mieszac tematów, które nie dotycza Twojej sytuacji.',
   },
   {
     title: 'Bez diagnozowania na sile',
-    copy: 'Newsletter ma pomagac nazwac sytuacje i spokojnie przejsc do nastepnego kroku, nie zastepuje konsultacji ani badania zdrowia.',
+    copy: 'Newsletter ma pomagac nazwać sytuację i spokojnie przejść do następnego kroku, nie zastepuje konsultacji ani badania zdrowia.',
   },
 ] as const
 
@@ -48,7 +48,7 @@ export default function NewsletterPage() {
     >
       <Schema
         data={getBreadcrumbJsonLd([
-          { name: 'Strona glowna', path: '/' },
+          { name: 'Strona główna', path: '/' },
           { name: 'Newsletter', path: '/newsletter' },
         ])}
       />
@@ -58,11 +58,11 @@ export default function NewsletterPage() {
           <div className="editorial-section-head">
             <div className="editorial-section-head-copy">
               <div className="section-eyebrow">Newsletter</div>
-              <h1>Spokojne wiadomosci o zachowaniu psow i kotow.</h1>
+              <h1>Spokojne wiadomości o zachowaniu psów i kotów.</h1>
             </div>
             <p className="editorial-section-lead">
               Bez codziennego pisania i bez obietnic cudow. Dostajesz konkret, kiedy jest nowy tekst,
-              material albo temat, ktory moze pomoc uporzadkowac sytuacje w domu.
+              materiał albo temat, który może pomoc uporządkować sytuację w domu.
             </p>
           </div>
 
@@ -70,17 +70,17 @@ export default function NewsletterPage() {
             <NewsletterSignup location="newsletter-page" sourcePage="/newsletter" />
             <aside className="summary-card tree-backed-card newsletter-note-card">
               <div className="section-eyebrow">Co dalej</div>
-              <h2>Jesli temat jest pilny, nie czekaj na newsletter.</h2>
+              <h2>Jeśli temat jest pilny, nie czekaj na newsletter.</h2>
               <p>
-                Newsletter jest wolnym kanalem. Przy problemie, ktory narasta, obejmuje bezpieczenstwo
-                albo mocno obciaza dom, lepszy jest Kwadrans albo dluzsza konsultacja.
+                Newsletter jest wolnym kanałem. Przy problemie, który narasta, obejmuje bezpieczeństwo
+                albo mocno obciąża dom, lepszy jest Kwadrans albo dłuższa konsultacja.
               </p>
               <div className="hero-actions top-gap-small">
                 <Link href={audioHref} prefetch={false} className="button button-primary">
                   Zacznij od Kwadransa
                 </Link>
                 <Link href="/quiz" prefetch={false} className="button button-ghost">
-                  Zrob krotki quiz
+                  Zrob krótki quiz
                 </Link>
               </div>
             </aside>

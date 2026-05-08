@@ -28,7 +28,7 @@ export default function StoriesPage() {
   const leadCaseStudy = REAL_CASE_STUDIES[0]
   const structuredData = [
     getBreadcrumbJsonLd([
-      { name: 'Strona glowna', path: '/' },
+      { name: 'Strona główna', path: '/' },
       { name: 'Historie', path: '/historie' },
     ]),
     getItemListJsonLd(
@@ -50,10 +50,10 @@ export default function StoriesPage() {
           <div className="notatnik-subhero-copy">
             <div className="notatnik-subhero-tag">Historie / punkt startu</div>
             <h1>
-              Zobacz, jak wyglada <em>porzadkowanie problemu</em>.
+              Zobacz, jak wygląda <em>porządkowanie problemu</em>.
             </h1>
             <p>
-              To anonimowe sytuacje startowe, ktore pokazuja sposob myslenia w konsultacji: co trzeba nazwac najpierw, gdzie ustawic priorytet i kiedy
+              To anonimowe sytuacje startowe, które pokazują sposób myślenia w konsultacji: co trzeba nazwać najpierw, gdzie ustawić priorytet i kiedy
               temat wymaga szerszej pracy. Bez obietnic identycznego efektu.
             </p>
             <div className="notatnik-subhero-actions">
@@ -75,9 +75,9 @@ export default function StoriesPage() {
         </section>
 
         <section id="lista">
-          <NotatnikSectionHead index="I." kicker="Anonimowe przypadki" title="Sytuacje najblizsze temu, co opisuja opiekunowie." />
+          <NotatnikSectionHead index="I." kicker="Anonimowe przypadki" title="Sytuacje najbliższe temu, co opisują opiekunowie." />
           <p className="notatnik-service-description">
-            Nie musisz znalezc historii identycznej z Twoja. Te karty maja pomoc zobaczyc, jak wyglada pierwszy krok przy podobnym problemie.
+            Nie musisz znaleźć historii identycznej z Twoją. Te karty mają pomóc zobaczyć, jak wygląda pierwszy krok przy podobnym problemie.
           </p>
           <div className="top-gap-small">
             <CaseStudyGrid caseStudies={REAL_CASE_STUDIES} />
@@ -85,9 +85,9 @@ export default function StoriesPage() {
         </section>
 
         <section id="dalej" className="notatnik-case-final">
-          <NotatnikSectionHead index="II." kicker="Dalej" title="Jesli problem pasuje do kilku historii, zacznij prosto." />
+          <NotatnikSectionHead index="II." kicker="Dalej" title="Jeśli problem pasuje do kilku historii, zacznij prosto." />
           <p className="notatnik-service-description">
-            Przy pierwszym kontakcie nie trzeba znac diagnozy. Wystarczy opis sytuacji, zwierzecia, rytmu dnia i tego, co najbardziej obciaza dom.
+            Przy pierwszym kontakcie nie trzeba znać diagnozy. Wystarczy opis sytuacji, zwierzęcia, rytmu dnia i tego, co najbardziej obciąża dom.
           </p>
           <div className="notatnik-subhero-actions top-gap-small">
             <Link href={audioHref} prefetch={false} className="notatnik-btn">
@@ -97,7 +97,7 @@ export default function StoriesPage() {
               </span>
             </Link>
             <Link href={consultationHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
-              <span>Umow pelna konsultacje</span>
+              <span>Umow pełna konsultacje</span>
             </Link>
           </div>
         </section>

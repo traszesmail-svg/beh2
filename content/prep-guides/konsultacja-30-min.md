@@ -50,4 +50,4 @@ Na koniec dostaniesz: diagnozę sytuacji, priorytety i konkretny plan na następ
 
 ---
 
-*Behawior 15 · Krzysztof Regulski*
+*Regulski Behawiorysta · Krzysztof Regulski*

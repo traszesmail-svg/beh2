@@ -49,7 +49,7 @@ export function PdfBundleCard({ bundle }: PdfBundleCardProps) {
           className="button button-primary"
           data-analytics-event="pdf_order_click"
           data-analytics-location="pdf-bundle-card"
-          data-analytics-cta-label="Zamow pakiet"
+          data-analytics-cta-label="Zamów pakiet"
           data-analytics-item-type="bundle"
           data-analytics-item-slug={bundle.slug}
         >

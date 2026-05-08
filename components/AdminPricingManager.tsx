@@ -43,7 +43,7 @@ export function AdminPricingManager({ currentAmount, currentLabel, updatedAtLabe
       }
 
       setAmount(Number(payload.price?.amount ?? amount).toFixed(2))
-      setSuccess(`Zapisano nową cenę konsultacji: ${payload.price?.formattedAmount ?? amount}. Nowa kwota obejmie tylko kolejne rezerwacje.`)
+      setSuccess(`Zapisano nową cenę konsultacji: ${payload.price?.formattedAmount ?? amount}. Nowa kwota obejmie tylko kolejne rezerwację.`)
       router.refresh()
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : 'Wystąpił błąd zapisu ceny.')

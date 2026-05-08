@@ -32,7 +32,7 @@ export async function POST(request: Request) {
   try {
     body = (await request.json()) as Record<string, unknown>
   } catch {
-    return NextResponse.json({ error: 'Nie udalo sie odczytac formularza.' }, { status: 400 })
+    return NextResponse.json({ error: 'Nie udało się odczytać formularza.' }, { status: 400 })
   }
 
   const phone = normalizePhone(body.phone)
@@ -84,7 +84,7 @@ export async function POST(request: Request) {
     provider: getTwilioNotificationMode(),
     message:
       getTwilioNotificationMode() === 'configured'
-        ? 'Zapis przyjety. Jesli powiadomienie jest wlaczone dla tej sciezki, dostaniesz krotka wiadomosc.'
-        : 'Zapis przyjety. Powiadomienia zewnetrzne nie sa wlaczone bez konfiguracji Twilio.',
+        ? 'Zapis przyjęty. Jeśli powiadomienie jest włączone dla tej ścieżki, dostaniesz krótka wiadomość.'
+        : 'Zapis przyjęty. Powiadomienia zewnętrzne nie są włączone bez konfiguracji Twilio.',
   })
 }

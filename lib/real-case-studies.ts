@@ -38,21 +38,21 @@ export const REAL_CASE_STUDIES = [
     species: 'pies',
     breed: 'mieszaniec',
     age: '3 lata',
-    eyebrow: 'Reaktywnosc na spacerze',
-    headline: 'Spacery, ktore przestaly byc przewidywalne',
+    eyebrow: 'Reaktywność na spacerze',
+    headline: 'Spacery, które przestały być przewidywalne',
     summary:
-      'Pies reagowal na inne psy szczekaniem, szarpaniem smyczy i dlugim pobudzeniem po mijance. Opiekun mial za soba kilka prob treningowych, ale bez jasnosci, czy chodzi o lek, frustracje czy przeciazenie spaceru.',
+      'Pies reagował na inne psy szczekaniem, szarpaniem smyczy i długim pobudzeniem po mijance. Opiekun miał za sobą kilka prób treningowych, ale bez jasności, czy chodzi o lęk, frustrację czy przeciążenie spaceru.',
     firstStepLabel: 'Pierwszy krok',
     firstStepText:
-      'Najpierw nazwalismy wyzwalacze, dystans i prog reakcji. To pozwolilo odsunac przypadkowe techniki i ustalic, czego nie dokladac psu na spacerze.',
+      'Najpierw nazwalismy wyzwalacze, dystans i prog reakcji. To pozwolilo odsunac przypadkowe techniki i ustalić, czego nie dokladac psu na spacerze.',
     nextStepLabel: 'Dalszy kierunek',
     nextStepText:
-      'Dalsza praca opiera sie na przewidywalnym rytmie spaceru, zarzadzaniu odlegloscia i obserwacji momentu, w ktorym pies jeszcze moze wrocic do kontaktu.',
+      'Dalsza praca opiera się na przewidywalnym rytmie spaceru, zarzadzaniu odlegloscia i obserwacji momentu, w którym pies jeszcze może wróćic do kontaktu.',
     metaDescription:
       'Anonimowa sytuacja startowa psa reagujacego na spacerze: wyzwalacze, prog reakcji, pierwszy krok i dalszy kierunek konsultacji.',
     proof: {
-      problemType: 'reaktywnosc na smyczy i pobudzenie spacerowe',
-      serviceFormat: 'Kwadrans + pelna konsultacja online',
+      problemType: 'reaktywność na smyczy i pobudzenie spacerowe',
+      serviceFormat: 'Kwadrans + pełna konsultacja online',
       cooperationStage: 'po uporzadkowaniu pierwszego etapu',
       timeHorizon: 'pierwsze decyzje po rozmowie, dalsza praca w kolejnych tygodniach',
       sourceContext: 'anonimizowany opis sytuacji startowej opiekuna',
@@ -76,20 +76,20 @@ export const REAL_CASE_STUDIES = [
     breed: 'mieszaniec',
     age: '4 lata',
     eyebrow: 'Problemy separacyjne',
-    headline: 'Pies, ktory nie dawal rady zostac sam',
+    headline: 'Pies, który nie dawal rady zostac sam',
     summary:
-      'Po zmianie rytmu dnia pies zaczal wyc po wyjsciu opiekuna, chodzil za nim po mieszkaniu i napinal sie juz przy szykowaniu do wyjscia. Proste rady typu ignorowanie lub wlaczony telewizor nie porzadkowaly tematu.',
+      'Po zmianie rytmu dnia pies zaczal wyc po wyjściu opiekuna, chodzil za nim po mieszkaniu i napinal się już przy szykowaniu do wyjścia. Proste rady typu ignorowanie lub włączony telewizor nie porzadkowaly tematu.',
     firstStepLabel: 'Pierwszy krok',
     firstStepText:
-      'Oddzielilismy zwykly protest od realnego napiecia przy rozstaniu. Pierwszym zadaniem bylo sprawdzic rytual wyjscia i to, czy pies potrafi odpoczac bez opiekuna obok.',
+      'Oddzieliliśmy zwykły protest od realnego napięcia przy rozstaniu. Pierwszym zadaniem było sprawdzić rytuał wyjścia i to, czy pies potrafi odpocząć bez opiekuna obok.',
     nextStepLabel: 'Dalszy kierunek',
     nextStepText:
-      'Plan pracy zaczyna sie od bardzo krotkich prob, monitoringu i budowania spokojnej bazy. Celem pierwszego etapu jest mniej paniki, nie szybkie zostawianie psa na wiele godzin.',
+      'Plan pracy zaczyna się od bardzo krótkich prób, monitoringu i budowania spokojnej bazy. Celem pierwszego etapu jest mniej paniki, nie szybkie zostawianie psa na wiele godzin.',
     metaDescription:
-      'Anonimowa sytuacja startowa psa z problemami separacyjnymi: napiecie przy wyjsciu, zostawanie samemu i pierwszy bezpieczny krok.',
+      'Anonimowa sytuacja startowa psa z problemami separacyjnymi: napięcie przy wyjściu, zostawanie samemu i pierwszy bezpieczny krok.',
     proof: {
-      problemType: 'problemy separacyjne i napiecie przy rozstaniu',
-      serviceFormat: 'Kwadrans + pelna konsultacja online',
+      problemType: 'problemy separacyjne i napięcie przy rozstaniu',
+      serviceFormat: 'Kwadrans + pełna konsultacja online',
       cooperationStage: 'po rozroznieniu protestu i realnego napiecia',
       timeHorizon: 'pierwszy etap rozpisany na kolejne tygodnie spokojnej pracy',
       sourceContext: 'anonimizowany opis po zmianie trybu pracy opiekuna',
@@ -98,11 +98,11 @@ export const REAL_CASE_STUDIES = [
     images: [
       {
         src: '/branding/topic-cards/dog-window-alone.jpg',
-        alt: 'Pies wygladajacy przez okno podczas pozostania w domu.',
+        alt: 'Pies wyglądający przez okno podczas pozostania w domu.',
       },
       {
         src: '/images/cutover/dog-separation.png',
-        alt: 'Pies szukajacy spokojnego miejsca po wyjsciu opiekuna.',
+        alt: 'Pies szukajacy spokojnego miejsca po wyjściu opiekuna.',
       },
     ],
   },
@@ -113,24 +113,24 @@ export const REAL_CASE_STUDIES = [
     breed: 'labrador',
     age: '2 lata',
     eyebrow: 'Luzna smycz',
-    headline: 'Spacer zamienial sie w holowanie',
+    headline: 'Spacer zamienial się w holowanie',
     summary:
-      'Pies ciagnal od szczeniaka. Opiekunka probowala zatrzymywania, zmiany kierunku i nagradzania kontaktu, ale kazda metoda dzialala tylko chwilowo. Pod spodem bylo duzo pobudzenia jeszcze przed wyjsciem.',
+      'Pies ciągnął od szczeniaka. Opiekunka próbowała zatrzymywania, zmiany kierunku i nagradzania kontaktu, ale każda metoda działała tylko chwilowo. Pod spodem było dużo pobudzenia jeszcze przed wyjściem.',
     firstStepLabel: 'Pierwszy krok',
     firstStepText:
-      'Najpierw oddzielilismy nawyk od pobudzenia. Praca miala zaczac sie przed drzwiami, a nie dopiero wtedy, gdy smycz byla juz napieta.',
+      'Najpierw oddzieliliśmy nawyk od pobudzenia. Praca miała zacząć się przed drzwiami, a nie dopiero wtedy, gdy smycz była już napięta.',
     nextStepLabel: 'Dalszy kierunek',
     nextStepText:
-      'Opiekunka dostala jeden punkt startu, prostszy rytm wyjscia i kryterium, kiedy temat wymaga dluzszej konsultacji zamiast kolejnej metody z internetu.',
+      'Opiekunka dostala jeden punkt startu, prostszy rytm wyjścia i kryterium, kiedy temat wymaga dłuższej konsultacji zamiast kolejnej metody z internetu.',
     metaDescription:
       'Anonimowa sytuacja startowa psa ciagnacego na smyczy: pobudzenie, rytm spaceru i pierwszy kierunek pracy.',
     proof: {
-      problemType: 'ciagniecie na smyczy i wysokie pobudzenie',
+      problemType: 'ciągnięcie na smyczy i wysokie pobudzenie',
       serviceFormat: 'start od Kwadransa',
-      cooperationStage: 'po pierwszym ustawieniu cwiczenia i kryteriow dalszej pracy',
+      cooperationStage: 'po pierwszym ustawieniu cwrócićzenia i kryteriow dalszej pracy',
       timeHorizon: 'pierwszy ruch od razu, dalsze decyzje po obserwacji',
-      sourceContext: 'anonimizowany opis po wielu krotkotrwalych probach treningowych',
-      outcomeSnapshot: 'jeden punkt startu zamiast kolejnych desperackich prob',
+      sourceContext: 'anonimizowany opis po wielu krótkotrwałych próbach treningowych',
+      outcomeSnapshot: 'jeden punkt startu zamiast kolejnych desperackich prób',
     },
     images: [
       {
@@ -150,22 +150,22 @@ export const REAL_CASE_STUDIES = [
     breed: 'suczka mix',
     age: '2-3 lata',
     eyebrow: 'Start po adopcji',
-    headline: 'Nowy pies, nowy dom, duzo pytan',
+    headline: 'Nowy pies, nowy dom, dużo pytań',
     summary:
-      'Suczka po adopcji w pierwszych dniach malo jadla, chowala sie i nie reagowala na wolanie. Opiekunka nie wiedziala, czy to typowa adaptacja, czy sygnal wiekszego problemu.',
+      'Suczka po adopcji w pierwszych dniach mało jadła, chowała się i nie reagowała na wołanie. Opiekunka nie wiedziała, czy to typowa adaptacja, czy sygnał większego problemu.',
     firstStepLabel: 'Pierwszy krok',
     firstStepText:
-      'Ustalilismy, co miesci sie w spokojnej adaptacji, a co byloby sygnalem alarmowym. Najwazniejsze byly pierwsze 72 godziny, nie szybkie oswajanie.',
+      'Ustaliliśmy, co mieści się w spokojnej adaptacji, a co byłoby sygnałem alarmowym. Najważniejsze były pierwsze 72 godziny, nie szybkie oswajanie.',
     nextStepLabel: 'Dalszy kierunek',
     nextStepText:
-      'Plan obejmowal mniej stymulacji, bezpieczna przestrzen i obserwacje apetytu, snu oraz reakcji na kontakt. Pierwsze dni dostaly jasne ramy.',
+      'Plan obejmował mniej stymulacji, bezpieczną przestrzeń i obserwacje apetytu, snu oraz reakcji na kontakt. Pierwsze dni dostały jasne ramy.',
     metaDescription:
-      'Anonimowa sytuacja startowa po adopcji psa: pierwsze dni, bezpieczna przestrzen i sygnaly do obserwacji.',
+      'Anonimowa sytuacja startowa po adopcji psa: pierwsze dni, bezpieczna przestrzeń i sygnały do obserwacji.',
     proof: {
       problemType: 'start po adopcji i trudna adaptacja',
       serviceFormat: 'start od Kwadransa',
       cooperationStage: 'po ustawieniu pierwszych 72 godzin',
-      timeHorizon: 'najwazniejsze decyzje podjete na poczatku adaptacji',
+      timeHorizon: 'najważniejsze decyzje podjete na początku adaptacji',
       sourceContext: 'anonimizowany opis pierwszych dni po adopcji',
       outcomeSnapshot: 'mniej presji i jasne ramy pierwszego etapu',
     },
@@ -187,24 +187,24 @@ export const REAL_CASE_STUDIES = [
     breed: 'kot kastrowany',
     age: '4 lata',
     eyebrow: 'Kuweta po zmianie',
-    headline: 'Kot, ktory zaczal omijac kuwete',
+    headline: 'Kot, który zaczął omijać kuwetę',
     summary:
-      'Po przeprowadzce kot zaczal zalatwiac sie na dywanie mimo wczesniejszego korzystania z kuwety. Najpierw trzeba bylo oddzielic zdrowie, stres, ustawienie kuwety i nowe bodzce w mieszkaniu.',
+      'Po przeprowadzce kot zaczął załatwiać się na dywanie mimo wcześniejszego korzystania z kuwety. Najpierw trzeba było oddzielić zdrowie, stres, ustawienie kuwety i nowe bodźce w mieszkaniu.',
     firstStepLabel: 'Pierwszy krok',
     firstStepText:
-      'Pierwsza rozmowa uporzadkowala, czego nie zmieniac losowo i jakie informacje przygotowac do dalszej analizy: zdrowie, mapa kuwet, rytm dnia i miejsca napiecia.',
+      'Pierwsza rozmowa uporzadkowala, czego nie zmieniać losowo i jakie informacje przygotowac do dalszej analizy: zdrowie, mapa kuwet, rytm dnia i miejsca napiecia.',
     nextStepLabel: 'Dalszy kierunek',
     nextStepText:
-      'Dalsza praca skupia sie na srodowisku i zasobach. Przy naglej zmianie zachowania temat zdrowotny zostaje traktowany jako rownolegly priorytet.',
+      'Dalsza praca skupia się na środowisku i zasobach. Przy nagłej zmianie zachowania temat zdrowotny zostaje traktowany jako równoległy priorytet.',
     metaDescription:
-      'Anonimowa sytuacja startowa kota zalatwiajacego sie poza kuweta: zdrowie, stres, kuweta i srodowisko.',
+      'Anonimowa sytuacja startowa kota załatwiającego się poza kuwetą: zdrowie, stres, kuweta i środowisko.',
     proof: {
-      problemType: 'zalatwianie poza kuweta po zmianie w domu',
-      serviceFormat: 'Kwadrans + pelna konsultacja online',
-      cooperationStage: 'po uporzadkowaniu tla i wejsciu w analize srodowiska',
+      problemType: 'załatwianie poza kuwetą po zmianie w domu',
+      serviceFormat: 'Kwadrans + pełna konsultacja online',
+      cooperationStage: 'po uporzadkowaniu tla i wejściu w analize źrodowiska',
       timeHorizon: 'pierwsze decyzje po rozmowie, korekty po obserwacji',
       sourceContext: 'anonimizowany opis po zmianach zwirku i ustawienia kuwety',
-      outcomeSnapshot: 'mniej losowych zmian i jasniejsza kolejnosc sprawdzania',
+      outcomeSnapshot: 'mniej losowych zmian i jaśniejsza kolejność sprawdzania',
     },
     images: [
       {
@@ -224,29 +224,29 @@ export const REAL_CASE_STUDIES = [
     breed: 'dwa koty',
     age: '3 i 5 lat',
     eyebrow: 'Relacje w domu',
-    headline: 'Dwa koty, jedno mieszkanie, duzo napiecia',
+    headline: 'Dwa koty, jedno mieszkanie, dużo napięcia',
     summary:
-      'Po zmianie w domu jeden kot zaczal blokowac dostep do miski i kuwety, a drugi wycofal sie do jednego pokoju. Opiekunowie probowali przeczekac sytuacje albo rozdzielac koty dopiero po incydentach.',
+      'Po zmianie w domu jeden kot zaczął blokować dostęp do miski i kuwety, a drugi wycofał się do jednego pokoju. Opiekunowie próbowali przeczekać sytuację albo rozdzielać koty dopiero po incydentach.',
     firstStepLabel: 'Pierwszy krok',
     firstStepText:
-      'Najpierw nazwalismy, ze to nie jest temat "same sie dogadaja", tylko uklad terytorialny i zasoby, ktore trzeba zabezpieczyc.',
+      'Najpierw nazwaliśmy, że to nie jest temat "same się dogadają", tylko układ terytorialny i zasoby, które trzeba zabezpieczyć.',
     nextStepLabel: 'Dalszy kierunek',
     nextStepText:
-      'Plan opiera sie na rozdzieleniu zasobow, spokojniejszych strefach i reintrodukcji przez zapach. Celem jest spadek napiecia, nie wymuszenie przyjazni.',
+      'Plan opiera się na rozdzieleniu zasobów, spokojniejszych strefach i reintrodukcji przez zapach. Celem jest spadek napiecia, nie wymuszenie przyjazni.',
     metaDescription:
-      'Anonimowa sytuacja startowa konfliktu miedzy kotami: zasoby, przestrzen i spokojny plan pierwszego etapu.',
+      'Anonimowa sytuacja startowa konfliktu między kotami: zasoby, przestrzeń i spokojny plan pierwszego etapu.',
     proof: {
-      problemType: 'konflikt miedzy kotami i blokowanie zasobow',
-      serviceFormat: 'pelna konsultacja online',
+      problemType: 'konflikt między kotami i blokowanie zasobów',
+      serviceFormat: 'pełna konsultacja online',
       cooperationStage: 'po pierwszej analizie przestrzeni i zasad kontaktu',
       timeHorizon: 'pierwszy etap rozpisany na tygodnie spokojnej pracy',
-      sourceContext: 'anonimizowany opis konfliktu przy misce, kuwecie i przejsciach',
+      sourceContext: 'anonimizowany opis konfliktu przy misce, kuwecie i przejśćiach',
       outcomeSnapshot: 'jasniejsze zasady przestrzeni i mniej eskalacji w domu',
     },
     images: [
       {
         src: '/branding/topic-cards/cats/cat-intercat-conflict.jpg',
-        alt: 'Dwa koty spotykajace sie w napietej domowej sytuacji.',
+        alt: 'Dwa koty spotykajace się w napietej domowej sytuacji.',
       },
       {
         src: '/branding/case-cat-snow.jpg',
@@ -260,24 +260,24 @@ export const REAL_CASE_STUDIES = [
     species: 'kot',
     breed: 'kotka',
     age: '5 lat',
-    eyebrow: 'Lek i goscie',
-    headline: 'Kot, ktory chowal sie przez cale wizyty',
+    eyebrow: 'Lęk i goscie',
+    headline: 'Kot, który chowal się przez cale wizyty',
     summary:
-      'Kotka po przeprowadzce przy kazdej wizycie chowala sie na wiele godzin. Proby oswajania przez zapraszanie gosci do jej pokoju zwiekszaly napiecie zamiast je zmniejszac.',
+      'Kotka po przeprowadzce przy kazdej wizycie chowala się na wiele godzin. Proby oswajania przez zapraszanie gosci do jej pokoju zwiekszaly napięcie zamiast je zmniejszac.',
     firstStepLabel: 'Pierwszy krok',
     firstStepText:
-      'Ustalilismy, ze pierwszym celem nie jest kontakt z goscmi, tylko bezpieczna strefa i zmiana oczekiwan wobec kota oraz ludzi.',
+      'Ustalilismy, że pierwszym celem nie jest kontakt z goscmi, tylko bezpieczna strefa i zmiana oczekiwan wobec kota oraz ludzi.',
     nextStepLabel: 'Dalszy kierunek',
     nextStepText:
-      'Dalsza praca polega na kontroli bodzcow, przewidywalnym rytmie wizyt i mozliwosci wyjscia z ukrycia bez presji na interakcje.',
+      'Dalsza praca polega na kontroli bodzcow, przewidywalnym rytmie wizyt i możliwosci wyjścia z ukrycia bez presji na interakcje.',
     metaDescription:
-      'Anonimowa sytuacja startowa kota chowajacego sie przed goscmi: bezpieczna strefa, stres i spokojny plan.',
+      'Anonimowa sytuacja startowa kota chowajacego się przed goscmi: bezpieczna strefa, stres i spokojny plan.',
     proof: {
-      problemType: 'lek kota przy goscich i po przeprowadzce',
+      problemType: 'lęk kota przy gościach i po przeprowadzce',
       serviceFormat: 'start od Kwadransa',
       cooperationStage: 'po ustawieniu bezpiecznej strefy',
       timeHorizon: 'pierwsze decyzje po rozmowie, obserwacja przy kolejnych wizytach',
-      sourceContext: 'anonimizowany opis nieudanych prob oswajania z goscmi',
+      sourceContext: 'anonimizowany opis nieudanych prób oswajania z gośćmi',
       outcomeSnapshot: 'mniej presji na kontakt i bezpieczniejszy rytm wizyt',
     },
     images: [
@@ -297,22 +297,22 @@ export const REAL_CASE_STUDIES = [
     species: 'kot',
     breed: 'kocur',
     age: '1,5 roku',
-    eyebrow: 'Nocna aktywnosc',
-    headline: 'Kot, ktory budzil dom w srodku nocy',
+    eyebrow: 'Nocna aktywność',
+    headline: 'Kot, który budzil dom w srodku nocy',
     summary:
-      'Mlody kot biegal po mieszkaniu, atakowal nogi i domagal sie uwagi w nocy. Problem wygladal jak zlosliwosc albo agresja, ale wymagal sprawdzenia rytmu dnia, zabawy, jedzenia, stresu i zdrowia.',
+      'Mlody kot biegal po mieszkaniu, atakowal nogi i domagal się uwagi w nocy. Problem wygladal jak zlosliwosc albo agresja, ale wymagal sprawdzenia rytmu dnia, zabawy, jedzenia, stresu i zdrowia.',
     firstStepLabel: 'Pierwszy krok',
     firstStepText:
-      'Zaczelismy od mapy dnia: kiedy kot spi, kiedy je, jak wyglada zabawa i co dzieje sie wieczorem. To pokazalo, gdzie powstaje napiecie.',
+      'Zaczelismy od mapy dnia: kiedy kot spi, kiedy je, jak wygląda zabawa i co dzieje się wieczorem. To pokazalo, gdzie powstaje napięcie.',
     nextStepLabel: 'Dalszy kierunek',
     nextStepText:
-      'Dalsza praca porzadkuje wieczorny rytm, wzbogacenie srodowiska i bezpieczne ujscie energii. Nie chodzi o karanie kota, tylko o zmiane ukladu dnia.',
+      'Dalsza praca porządkuje wieczorny rytm, wzbogacenie środowiska i bezpieczne ujście energii. Nie chodzi o karanie kota, tylko o zmianę układu dnia.',
     metaDescription:
-      'Anonimowa sytuacja startowa kota budzacego w nocy: aktywnosc, rytm dnia, zabawa i pierwszy kierunek pracy.',
+      'Anonimowa sytuacja startowa kota budzącego w nocy: aktywność, rytm dnia, zabawa i pierwszy kierunek pracy.',
     proof: {
       problemType: 'nocne pobudzenie i atakowanie opiekuna',
-      serviceFormat: 'pelna konsultacja online',
-      cooperationStage: 'po analizie srodowiska i rytmu dnia',
+      serviceFormat: 'pełna konsultacja online',
+      cooperationStage: 'po analizie źrodowiska i rytmu dnia',
       timeHorizon: 'pierwsze zmiany po uporzadkowaniu wieczoru',
       sourceContext: 'anonimizowany opis nocnych pobudek i codziennego rytmu kota',
       outcomeSnapshot: 'bardziej przewidywalny wieczor i mniej chaosu w nocy',

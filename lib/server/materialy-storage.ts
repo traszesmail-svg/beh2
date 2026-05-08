@@ -1,4 +1,4 @@
-// File-based storage for /materialy orders. Append-only JSON in data/materialy-orders.json.
+// File-based storage for /materiały orders. Append-only JSON in data/materiały-orders.json.
 // Trade-offs: zero infra, no concurrency control beyond a single Node process.
 // Acceptable for low-volume manual BLIK fulfillment; promote to Supabase later if needed.
 

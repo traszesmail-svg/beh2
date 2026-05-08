@@ -61,7 +61,7 @@ export function getBookingAnalyticsContextParams({
 
 export function getFunnelEntryEventForHref(href: string) {
   if (href.startsWith('/niezbednik')) {
-    return 'funnel_entry_niezbednik'
+    return 'funnel_entry_niezbędnik'
   }
 
   if (href.startsWith('/kontakt')) {

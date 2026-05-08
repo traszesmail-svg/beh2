@@ -121,7 +121,7 @@ async function probePublicAppUrl(baseUrl: string): Promise<PublicUrlProbeResult>
       redirect: 'follow',
       cache: 'no-store',
       headers: {
-        'user-agent': 'behawior15-live-readiness/1.0',
+        'user-agent': 'regulski-behawiorysta-live-readiness/1.0',
       },
     })
 

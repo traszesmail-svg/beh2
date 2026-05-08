@@ -39,6 +39,7 @@ export default async function BlikPaymentPage({ params }: { params: { orderNumbe
       ctaLabel="Wpisz kod"
       footerPrimaryHref="/dostep"
       footerPrimaryLabel="Wpisz kod dostępu"
+      pageClassName="commerce-flow-page"
     >
       <div className="container">
         <section className="panel centered-panel hero-surface booking-stage-panel transaction-panel booking-flow-panel">

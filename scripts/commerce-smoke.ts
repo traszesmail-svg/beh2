@@ -26,7 +26,7 @@ async function main() {
 
   const online = await createEbookCommerceOrder({
     productKind: 'guide',
-    productSlug: 'pies-zostaje-sam',
+    productSlug: 'pies-sam-w-domu',
     name: 'Test Online',
     email: 'online@example.com',
   })
@@ -44,7 +44,7 @@ async function main() {
 
   const manual = await createEbookCommerceOrder({
     productKind: 'guide',
-    productSlug: 'kot-i-kuweta-pierwszy-plan-dzialania',
+    productSlug: 'kot-zyje-w-napieciu',
     name: 'Test Blik',
     email: 'blik@example.com',
   })
@@ -83,4 +83,3 @@ main().catch((error) => {
   console.error('commerce-smoke FAIL', error)
   process.exit(1)
 })
-

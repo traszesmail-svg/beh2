@@ -6,7 +6,7 @@ type BeforeAfterBlockProps = {
 }
 
 export function BeforeAfterBlock({
-  beforeTitle = 'Na poczatku',
+  beforeTitle = 'Na początku',
   before,
   afterTitle = 'Po uporzadkowaniu',
   after,

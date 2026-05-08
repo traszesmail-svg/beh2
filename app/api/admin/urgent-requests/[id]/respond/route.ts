@@ -31,14 +31,14 @@ export async function POST(
     const responseNote = normalizeSingleLine(body.responseNote, 500)
 
     if (!proposedDate || !proposedTime) {
-      return NextResponse.json({ error: 'Podaj date i godzine odpowiedzi.' }, { status: 400 })
+      return NextResponse.json({ error: 'Podaj datę i godzinę odpowiedzi.' }, { status: 400 })
     }
 
     const requests = await listUrgentNowRequests()
     const urgentRequest = requests.find((item) => item.id === params.id)
 
     if (!urgentRequest) {
-      return NextResponse.json({ error: 'Nie znaleziono prosby o Kwadrans na juz.' }, { status: 404 })
+      return NextResponse.json({ error: 'Nie znaleziono prośby o Kwadrans na już.' }, { status: 404 })
     }
 
     const slot = await createAvailabilitySlot(proposedDate, proposedTime)
@@ -54,7 +54,7 @@ export async function POST(
     })
 
     if (!updatedRequest) {
-      return NextResponse.json({ error: 'Nie udalo sie zapisac odpowiedzi.' }, { status: 500 })
+      return NextResponse.json({ error: 'Nie udało się zapisać odpowiedzi.' }, { status: 500 })
     }
 
     const emailResult = await sendUrgentNowResponseEmail({
@@ -69,7 +69,7 @@ export async function POST(
 
     if (emailResult.status !== 'sent') {
       return NextResponse.json(
-        { error: emailResult.reason ?? 'Nie udalo sie wyslac odpowiedzi do klienta.' },
+        { error: emailResult.reason ?? 'Nie udało się wysłać odpowiedzi do klienta.' },
         { status: 500 },
       )
     }
@@ -81,7 +81,7 @@ export async function POST(
       bookingHref,
     })
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Nie udalo sie odpowiedziec na prosbe.'
+    const message = error instanceof Error ? error.message : 'Nie udało się odpowiedzieć na prośbę.'
     return NextResponse.json({ error: message }, { status: 400 })
   }
 }

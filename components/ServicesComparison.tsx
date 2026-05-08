@@ -12,14 +12,14 @@ type ServicesComparisonProps = {
 const SERVICES = [
   {
     id: 'szybka-konsultacja-15-min',
-    title: 'Kwadrans z behawiorysta',
+    title: '15-minutowa konsultacja behawioralna',
     badge: 'Najprostszy start',
     price: PUBLIC_OFFER_PRICES.quick,
     duration: '15 min',
     mode: 'audio, bez kamery',
-    who: 'gdy chcesz najprosciej zaczac od jednego pytania albo pierwszego uporzadkowania tematu',
+    who: 'gdy chcesz najprościej zacząć od jednego pytania albo pierwszego uporządkowania tematu',
     plan: 'pierwszy kierunek, priorytet i decyzja, czy ten format wystarczy',
-    materials: 'jasne wskazanie, co zrobic teraz i co obserwowac dalej',
+    materials: 'jasne wskazanie, co zrobić teraz i co obserwować dalej',
     refund: PUBLIC_OFFER_CANCELLATION_COPY,
     cta: 'Wybierz Kwadrans',
   },
@@ -30,24 +30,24 @@ const SERVICES = [
     price: PUBLIC_OFFER_PRICES.bridge,
     duration: '30 min',
     mode: 'audio lub video',
-    who: 'gdy temat jest szerszy i chcesz spokojniej uporzadkowac 2-3 watki',
-    plan: 'wiecej miejsca na kontekst, kolejnosc dzialan i decyzje co dalej',
-    materials: 'krotka notatka po rozmowie',
+    who: 'gdy temat jest szerszy i chcesz spokojniej uporządkować 2-3 wątki',
+    plan: 'więcej miejsca na kontekst, kolejnosc działan i decyzje co dalej',
+    materials: 'krótka notatka po rozmowie',
     refund: PUBLIC_OFFER_CANCELLATION_COPY,
     cta: 'Wybierz Dwa kwadranse',
   },
   {
     id: 'konsultacja-behawioralna-online',
-    title: 'Pelna konsultacja',
+    title: 'Pełna konsultacja',
     badge: null,
     price: PUBLIC_OFFER_PRICES.premium,
-    duration: 'pelny zakres',
+    duration: 'pełny zakres',
     mode: 'audio lub video',
-    who: 'gdy sprawa jest zlozona, przewlekla albo obejmuje kilka obszarow naraz',
+    who: 'gdy sprawa jest złożona, przewlekła albo obejmuje kilka obszarów naraz',
     plan: 'diagnoza sytuacji, plan poprawy i ustalenie priorytetow',
     materials: '7 dni konsultacji tekstowych przez WhatsApp',
-    refund: 'Osobny regulamin dla pelnej konsultacji.',
-    cta: 'Wybierz Pelna konsultacje',
+    refund: 'Osobny regulamin dla pełnej konsultacji.',
+    cta: 'Wybierz Pełną konsultację',
   },
 ] as const
 
@@ -55,7 +55,7 @@ const ROWS = [
   { key: 'price', label: 'Cena' },
   { key: 'duration', label: 'Czas' },
   { key: 'mode', label: 'Forma' },
-  { key: 'who', label: 'Kiedy wybrac' },
+  { key: 'who', label: 'Kiedy wybrać' },
   { key: 'plan', label: 'Po co ten format' },
   { key: 'materials', label: 'Po rozmowie' },
   { key: 'refund', label: 'Zmiana / zwrot' },
@@ -139,7 +139,7 @@ export function ServicesComparison({ species = null, qaBooking = false, classNam
                 <dd>{service.mode}</dd>
               </div>
               <div>
-                <dt>Kiedy wybrac</dt>
+                <dt>Kiedy wybrać</dt>
                 <dd>{service.who}</dd>
               </div>
               <div>
@@ -157,7 +157,7 @@ export function ServicesComparison({ species = null, qaBooking = false, classNam
             </dl>
 
             {service.id === 'konsultacja-behawioralna-online' ? (
-              <div className="notatnik-service-note top-gap-small" aria-label="Zakres pelnej konsultacji">
+              <div className="notatnik-service-note top-gap-small" aria-label="Zakres pełnej konsultacji">
                 <ul className="notatnik-service-list">
                   {PUBLIC_OFFER_FULL_VALUE_POINTS.map((point) => (
                     <li key={point}>{point}</li>

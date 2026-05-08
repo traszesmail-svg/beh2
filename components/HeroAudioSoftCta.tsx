@@ -55,8 +55,8 @@ export function HeroAudioSoftCta({
   analyticsLocation,
   analyticsEvent = 'funnel_entry_15_min',
   className,
-  ariaLabel = 'Otwórz Kwadrans z behawiorystą',
-  kicker = 'Kwadrans z behawiorystą',
+  ariaLabel = 'Otwórz 15-minutową konsultację behawioralną',
+  kicker = '15-minutowa konsultacja behawioralna',
   title = 'Krótka rozmowa, po której łatwiej ustalić pierwszy krok.',
   copy = 'Bez kamery. Po rozmowie wiesz, co zrobić teraz i czy potrzebujesz czegoś więcej.',
 }: HeroAudioSoftCtaProps) {

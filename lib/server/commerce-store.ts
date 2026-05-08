@@ -98,6 +98,10 @@ function getAccessExpiry(productType: CommerceOrder['productType']) {
   return new Date(Date.now() + hours * 3600 * 1000).toISOString()
 }
 
+function usesAccessCode(order: Pick<CommerceOrder, 'productType'>) {
+  return order.productType === 'ebook'
+}
+
 function getStorePath() {
   return path.join(getLocalStoreDataDir(), STORE_FILE)
 }
@@ -145,6 +149,7 @@ function parseMeta(value: string | null): LeadBookingCommerceMeta | null {
 function leadRowToOrder(row: LeadBookingRow): CommerceOrder | null {
   const meta = parseMeta(row.admin_notes)
   if (!meta) return null
+  const hasStoredAccessCode = meta.productType === 'ebook' && row.calendar_url?.startsWith(ACCESS_CODE_PREFIX)
 
   return {
     id: row.id,
@@ -161,13 +166,11 @@ function leadRowToOrder(row: LeadBookingRow): CommerceOrder | null {
     currency: meta.currency,
     paymentMethod: (row.payment_method as CommercePaymentMethod | null) ?? null,
     status: meta.status,
-    accessCode: row.calendar_url?.startsWith(ACCESS_CODE_PREFIX)
-      ? row.calendar_url.slice(ACCESS_CODE_PREFIX.length)
-      : null,
-    accessCodeStatus: meta.accessCodeStatus,
+    accessCode: hasStoredAccessCode ? row.calendar_url!.slice(ACCESS_CODE_PREFIX.length) : null,
+    accessCodeStatus: hasStoredAccessCode ? meta.accessCodeStatus : null,
     accessCodeUsageCount: meta.accessCodeUsageCount,
     accessCodeUsageLimit: meta.accessCodeUsageLimit,
-    accessCodeExpiresAt: meta.accessCodeExpiresAt,
+    accessCodeExpiresAt: hasStoredAccessCode ? meta.accessCodeExpiresAt : null,
     adminConfirmationToken: row.payment_link?.startsWith(CONFIRM_TOKEN_PREFIX)
       ? row.payment_link.slice(CONFIRM_TOKEN_PREFIX.length)
       : null,
@@ -278,7 +281,7 @@ async function insertSupabaseOrder(order: CommerceOrder): Promise<CommerceOrder 
       payment_method: order.paymentMethod,
       payment_link: order.adminConfirmationToken ? `${CONFIRM_TOKEN_PREFIX}${order.adminConfirmationToken}` : null,
       paid_at: order.paidAt,
-      calendar_url: order.accessCode ? `${ACCESS_CODE_PREFIX}${order.accessCode}` : null,
+      calendar_url: usesAccessCode(order) && order.accessCode ? `${ACCESS_CODE_PREFIX}${order.accessCode}` : null,
       admin_notes: JSON.stringify(orderToLeadMeta(order)),
     })
     .select()
@@ -308,7 +311,7 @@ async function updateSupabaseOrder(order: CommerceOrder): Promise<CommerceOrder 
       payment_method: order.paymentMethod,
       payment_link: order.adminConfirmationToken ? `${CONFIRM_TOKEN_PREFIX}${order.adminConfirmationToken}` : null,
       paid_at: order.paidAt,
-      calendar_url: order.accessCode ? `${ACCESS_CODE_PREFIX}${order.accessCode}` : null,
+      calendar_url: usesAccessCode(order) && order.accessCode ? `${ACCESS_CODE_PREFIX}${order.accessCode}` : null,
       admin_notes: JSON.stringify(orderToLeadMeta(order)),
     })
     .eq('preferred_slots', order.orderNumber)
@@ -488,16 +491,21 @@ export async function fulfillCommerceOrder(
   const order = await getCommerceOrder(orderNumber)
   if (!order) return null
 
-  if (!order.accessCode) {
+  if (usesAccessCode(order) && !order.accessCode) {
     order.accessCode = makeAccessCode()
     order.accessCodeStatus = 'active'
     order.accessCodeExpiresAt = getAccessExpiry(order.productType)
+  } else if (!usesAccessCode(order)) {
+    order.accessCode = null
+    order.accessCodeStatus = null
+    order.accessCodeExpiresAt = null
+    order.accessCodeUsageCount = 0
   }
 
   order.paymentMethod = paymentMethod
-  order.status = 'access_sent'
+  order.status = usesAccessCode(order) ? 'access_sent' : 'paid'
   order.paidAt = order.paidAt ?? nowIso()
-  order.accessSentAt = order.accessSentAt ?? nowIso()
+  order.accessSentAt = usesAccessCode(order) ? order.accessSentAt ?? nowIso() : order.accessSentAt
   order.providerPaymentId = options?.providerPaymentId ?? order.providerPaymentId
 
   if (options?.adminTokenUsedAt) {
@@ -528,6 +536,7 @@ export async function rejectCommerceManualPayment(
 }
 
 export function canUseCommerceAccess(order: CommerceOrder) {
+  if (!usesAccessCode(order)) return false
   if (!order.accessCode || order.accessCodeStatus !== 'active') return false
   if (order.status !== 'access_sent' && order.status !== 'paid') return false
   if (order.accessCodeExpiresAt && Date.now() > Date.parse(order.accessCodeExpiresAt)) return false

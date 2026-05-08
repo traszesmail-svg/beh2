@@ -35,7 +35,7 @@ export async function GET(request: Request, { params }: RouteContext) {
       updatedAt: booking.updatedAt,
     })
   } catch (error) {
-    console.error('[behawior15][booking-status-api] load failed', error)
+    console.error('[regulski-behawiorysta][booking-status-api] load failed', error)
     return NextResponse.json({ error: 'Nie udało się odczytać statusu rezerwacji.' }, { status: 500 })
   }
 }

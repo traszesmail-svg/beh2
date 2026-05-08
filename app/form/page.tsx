@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { unstable_noStore as noStore } from 'next/cache'
 import { redirect } from 'next/navigation'
-import { CalendarDays, CircleHelp, GraduationCap, Heart, Leaf, Mail, PawPrint, Phone, ShieldCheck, Video } from 'lucide-react'
+import { CalendarDays, CircleHelp, GraduationCap, Headphones, Heart, Leaf, Mail, PawPrint, ShieldCheck, Video } from 'lucide-react'
 import { BookingForm } from '@/components/BookingForm'
 import { NotatnikFooter, NotatnikSideVisuals, NotatnikTopbar, PUBLIC_BOOKING_FLOW_NAV_ITEMS } from '@/components/NotatnikA'
 import {
@@ -39,9 +39,9 @@ export function generateMetadata(): Metadata {
   return buildTechnicalMetadata({
     title: 'Dane do rezerwacji',
     path: '/form',
-    description: 'Uzupelnij dane potrzebne do potwierdzenia terminu i przejscia do platnosci.',
-    noIndex: false,
-    follow: true,
+    description: 'Uzupełnij krótkie dane potrzebne do rezerwacji 15-minutowej konsultacji behawioralnej.',
+    noIndex: true,
+    follow: false,
   })
 }
 
@@ -93,11 +93,11 @@ export default async function FormPage({
       amount = quickConsultationPrice.amount
       amountLabel = getBookingServicePriceLabel(serviceType, quickConsultationPrice.amount)
     } catch (error) {
-      console.warn('[behawior15][form] failed to load form or slot', error)
-      flowError = 'Formularz chwilowo sie odswieza. Sprobuj ponownie za moment.'
+      console.warn('[regulski-behawiorysta][form] failed to load form or slot', error)
+      flowError = 'Formularz chwilowo się odświeża. Spróbuj ponownie za moment.'
     }
   } else {
-    flowError = 'Formularz chwilowo sie odswieza. Sprobuj ponownie za moment.'
+    flowError = 'Formularz chwilowo się odświeża. Spróbuj ponownie za moment.'
   }
 
   const slotIsBookable = slot
@@ -112,12 +112,12 @@ export default async function FormPage({
     <main className={`notatnik-page booking-form-page booking-form-page-${isCat ? 'cat' : 'dog'}`} data-analytics-disabled={qaBooking ? 'true' : undefined} data-qa-booking={qaBooking ? 'true' : 'false'}>
       <NotatnikSideVisuals variant={isCat ? 'cat' : 'dog'} />
       <div className="notatnik-shell booking-form-shell">
-        <NotatnikTopbar tag="Rezerwacja konsultacji" navItems={PUBLIC_BOOKING_FLOW_NAV_ITEMS} ctaHref={slotsHref} ctaLabel="Wroc do terminow" ctaVariant="ghost" />
+        <NotatnikTopbar tag="Rezerwacja konsultacji" navItems={PUBLIC_BOOKING_FLOW_NAV_ITEMS} ctaHref={slotsHref} ctaLabel="Wróć do terminów" ctaVariant="ghost" />
 
         <section className="booking-form-hero">
           <div className="booking-form-hero-copy">
-            <h1>Zarezerwuj swój pierwszy krok do spokojniejszego życia z {petNoun}.</h1>
-            <p>Wypełnij formularz, aby potwierdzić termin konsultacji. Otrzymasz e-mail z potwierdzeniem i wskazówkami.</p>
+            <h1>Szybka konsultacja behawioralna z Krzysztofem Regulskim.</h1>
+            <p>15 minut rozmowy, żeby uporządkować problem i ustalić pierwszy sensowny krok dla Ciebie i zwierzęcia.</p>
             {qaBooking ? (
               <div className="notatnik-contact-note">
                 <strong>Tryb testowy</strong>
@@ -156,7 +156,7 @@ export default async function FormPage({
 
         <section className="booking-form-layout">
           <article className="booking-form-card" id="formularz">
-            <h2>Twoje dane kontaktowe</h2>
+            <h2>Uzupełnij dane do rozmowy</h2>
 
             {flowError ? (
               <>
@@ -226,14 +226,14 @@ export default async function FormPage({
 
               <div className="booking-form-question">
                 <h3>Masz pytania?</h3>
-                <p>Napisz do mnie - chętnie pomogę.</p>
+                <p>Napisz do mnie, jeśli potrzebujesz doprecyzować rezerwację.</p>
                 <a href={`mailto:${publicContact.email}`}>
                   <Mail size={18} strokeWidth={1.8} aria-hidden="true" />
                   {publicContact.email}
                 </a>
                 <span>
-                  <Phone size={18} strokeWidth={1.8} aria-hidden="true" />
-                  Online w całej Polsce
+                  <Headphones size={18} strokeWidth={1.8} aria-hidden="true" />
+                  Rozmowa telefoniczna lub głosowa online po rezerwacji
                 </span>
               </div>
             </section>

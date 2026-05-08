@@ -38,7 +38,7 @@ function createFutureWarsawDate(yearsAhead: number) {
 
 async function main() {
   process.env.RESEND_API_KEY = ''
-  process.env.BEHAVIOR15_CONTACT_PHONE = '500600700'
+  process.env.REGULSKI_CONTACT_PHONE = '500600700'
   process.env.MANUAL_PAYMENT_BANK_ACCOUNT = '11112222333344445555666677'
   process.env.SMS_PROVIDER = 'disabled'
   const sandbox = await createLocalDataSandbox('verify-flow', rootDir)
@@ -106,7 +106,7 @@ async function main() {
 
     assert(manualPaid?.bookingStatus === 'confirmed', 'Booking po recznej akceptacji nie przeszedl do statusu confirmed.')
     assert(manualPaid?.paymentStatus === 'paid', 'Booking po recznej akceptacji nie ma statusu paid.')
-    assert(manualPaid?.meetingUrl.startsWith('https://meet.jit.si/behawior15-'), 'Nie wygenerowano linku Jitsi.')
+    assert(manualPaid?.meetingUrl.startsWith('https://meet.jit.si/regulski-behawiorysta-'), 'Nie wygenerowano linku Jitsi.')
     assert(
       manualPaid?.smsConfirmationStatus === 'skipped_not_configured',
       'Manual payment success powinien zapisac kontrolowany status SMS przy braku providera.',
@@ -114,7 +114,7 @@ async function main() {
 
     const futureBookingDate = createFutureWarsawDate(5)
     const thirtyMinuteFirstSlot = await createAvailabilitySlot(futureBookingDate, '10:00')
-    const thirtyMinuteSecondSlot = await createAvailabilitySlot(futureBookingDate, '10:20')
+    const thirtyMinuteSecondSlot = await createAvailabilitySlot(futureBookingDate, '10:30')
 
     assert(thirtyMinuteFirstSlot.id !== thirtyMinuteSecondSlot.id, '30 min slots musza byc osobnymi, kolejnymi slotami.')
 
@@ -163,9 +163,9 @@ async function main() {
     assert(thirtyMinutePaid?.paymentStatus === 'paid', 'Booking 30 min po akceptacji nie ma statusu paid.')
 
     const onlineFirstSlot = await createAvailabilitySlot(futureBookingDate, '12:00')
-    const onlineSecondSlot = await createAvailabilitySlot(futureBookingDate, '12:20')
-    const onlineThirdSlot = await createAvailabilitySlot(futureBookingDate, '12:40')
-    const onlineFourthSlot = await createAvailabilitySlot(futureBookingDate, '13:00')
+    const onlineSecondSlot = await createAvailabilitySlot(futureBookingDate, '12:30')
+    const onlineThirdSlot = await createAvailabilitySlot(futureBookingDate, '13:00')
+    const onlineFourthSlot = await createAvailabilitySlot(futureBookingDate, '13:30')
 
     assert(
       new Set([onlineFirstSlot.id, onlineSecondSlot.id, onlineThirdSlot.id, onlineFourthSlot.id]).size === 4,
@@ -220,7 +220,7 @@ async function main() {
       'Booking online powinien zapisac kontrolowany status SMS przy braku providera.',
     )
     assert(
-      onlinePaid?.meetingUrl.startsWith('https://meet.jit.si/behawior15-'),
+      onlinePaid?.meetingUrl.startsWith('https://meet.jit.si/regulski-behawiorysta-'),
       'Booking online nie wygenerowal linku Jitsi.',
     )
 
@@ -285,13 +285,8 @@ async function main() {
     assert(doneBooking?.bookingStatus === 'done', 'Booking nie przeszedl do statusu done.')
     assert(doneBooking?.paymentStatus === 'paid', 'Booking done powinien zachowac payment status paid.')
 
-    const futureAdminSlotDate = new Intl.DateTimeFormat('sv-SE', {
-      timeZone: 'Europe/Warsaw',
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-    }).format(new Date(Date.now() + 5 * 24 * 60 * 60 * 1000))
-    const adminSlot = await createAvailabilitySlot(futureAdminSlotDate, '08:00')
+    const futureAdminSlotDate = createFutureWarsawDate(6)
+    const adminSlot = await createAvailabilitySlot(futureAdminSlotDate, '23:30')
     const adminAvailability = await listAvailabilityAdmin()
     assert(adminAvailability.some((slot) => slot.id === adminSlot.id), 'Admin slot nie zostal dodany.')
 

@@ -1,4 +1,4 @@
-export type ReferenceFaqCategory = 'wspolpraca' | 'konsultacje' | 'pies' | 'kot' | 'platnosci' | 'techniczne'
+export type ReferenceFaqCategory = 'wspolpraca' | 'konsultacje' | 'pies' | 'kot' | 'płatności' | 'techniczne'
 
 export type ReferenceFaqItem = {
   id: string
@@ -17,20 +17,20 @@ export const referenceFaqCategories: Array<{
   { id: 'konsultacje', label: 'Konsultacje', countLabel: '8 pytań', icon: 'calendar' },
   { id: 'pies', label: 'Pies', countLabel: '12 pytań', icon: 'paw' },
   { id: 'kot', label: 'Kot', countLabel: '10 pytań', icon: 'cat' },
-  { id: 'platnosci', label: 'Płatności', countLabel: '6 pytań', icon: 'payment' },
+  { id: 'płatności', label: 'Płatności', countLabel: '6 pytań', icon: 'payment' },
   { id: 'techniczne', label: 'Technicznie', countLabel: '6 pytań', icon: 'screen' },
 ]
 
 export const referenceFaqItems: ReferenceFaqItem[] = [
   {
-    id: 'krotka-wiadomosc-zamiast-konsultacji',
+    id: 'krótka-wiadomość-zamiast-konsultacji',
     category: 'wspolpraca',
     question: 'Kiedy wybrać krótką wiadomość zamiast konsultacji?',
     answer:
       'Gdy nie chcesz rezerwować od razu, masz jedno konkretne pytanie albo chcesz krótko doprecyzować temat. W wiadomości opiszesz sytuację, a ja podpowiem, czy lepszy będzie Kwadrans, pełna konsultacja online czy jeszcze doprecyzowanie tematu.',
   },
   {
-    id: 'czy-wiadomosc-zastepuje-konsultacje',
+    id: 'czy-wiadomość-zastepuje-konsultacje',
     category: 'wspolpraca',
     question: 'Czy krótka wiadomość zastępuje konsultację?',
     answer:
@@ -46,7 +46,7 @@ export const referenceFaqItems: ReferenceFaqItem[] = [
   {
     id: 'kwadrans',
     category: 'konsultacje',
-    question: 'Jak wygląda Kwadrans z behawiorystą?',
+    question: 'Jak wygląda 15-minutowa konsultacja behawioralna?',
     answer:
       'To 15 minut rozmowy audio bez kamery. Służy do nazwania problemu, uporządkowania priorytetu i ustalenia pierwszego konkretnego kroku.',
   },
@@ -69,7 +69,7 @@ export const referenceFaqItems: ReferenceFaqItem[] = [
     category: 'pies',
     question: 'Dla jakich problemów mogę zgłosić się z psem?',
     answer:
-      'Najczęściej ze spacerami, reaktywnością, rozłąką, pobudzeniem, szczeniakiem, niszczeniem w domu, obroną zasobów albo trudnym startem po adopcji.',
+      'Najczęściej że spacerami, reaktywnością, rozłąką, pobudzeniem, szczeniakiem, niszczeniem w domu, obroną zasobów albo trudnym startem po adopcji.',
   },
   {
     id: 'czy-tylko-online',
@@ -123,7 +123,7 @@ export const referenceFaqItems: ReferenceFaqItem[] = [
   {
     id: 'metody-pracy',
     category: 'pies',
-    question: 'Jakie metody pracy stosujesz?',
+    question: 'Jakie metody pracy stosujeszł',
     answer:
       'Pracuję bez przemocy i bez straszenia. Najpierw szukam przyczyny napięcia, potem dobieram kroki, które da się wdrożyć w konkretnym domu.',
   },

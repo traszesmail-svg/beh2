@@ -10,11 +10,11 @@ import { getContactDetails } from '@/lib/site'
 import { isUrgentNowIntent } from '@/lib/urgent-now'
 import type { ProblemType } from '@/lib/types'
 
-const SUCCESS_MESSAGE = 'Dziekuje. Wiadomosc trafila do mnie. Odpowiem na podany adres e-mail.'
-const URGENT_SUCCESS_MESSAGE = 'Dziekuje. Prosba o Kwadrans na juz trafila do mnie. Odpowiem na podany adres e-mail w ciagu 15 minut.'
-const UNAVAILABLE_MESSAGE = 'Formularz kontaktowy jest chwilowo niedostepny. Sprobuj pozniej lub napisz bezposrednio.'
-const GENERIC_ERROR_MESSAGE = 'Nie udalo sie wyslac wiadomosci. Sprobuj ponownie pozniej.'
-const RATE_LIMIT_MESSAGE = 'Za duzo prob w krotkim czasie. Sprobuj ponownie za godzine.'
+const SUCCESS_MESSAGE = 'Dziękuję. Wiadomość trafiła do mnie. Odpowiem na podany adres e-mail.'
+const URGENT_SUCCESS_MESSAGE = 'Dziękuję. Prośba o Kwadrans na już trafiła do mnie. Odpowiem na podany adres e-mail w ciągu 15 minut.'
+const UNAVAILABLE_MESSAGE = 'Formularz kontaktowy jest chwilowo niedostępny. Spróbuj później lub napisz bezpośrednio.'
+const GENERIC_ERROR_MESSAGE = 'Nie udało się wysłać wiadomości. Spróbuj ponownie później.'
+const RATE_LIMIT_MESSAGE = 'Za dużo prób w krótkim czasie. Spróbuj ponownie za godzinę.'
 const CONTACT_RATE_LIMIT_MAX = 3
 const CONTACT_RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000
 
@@ -24,14 +24,14 @@ type RateLimitEntry = {
 }
 
 const globalRateLimitStore = globalThis as typeof globalThis & {
-  __behawior15ContactRateLimitStore?: Map<string, RateLimitEntry>
+  __regulskiBehawiorystaContactRateLimitStore?: Map<string, RateLimitEntry>
 }
 
 const contactRateLimitStore =
-  globalRateLimitStore.__behawior15ContactRateLimitStore ?? new Map<string, RateLimitEntry>()
+  globalRateLimitStore.__regulskiBehawiorystaContactRateLimitStore ?? new Map<string, RateLimitEntry>()
 
-if (!globalRateLimitStore.__behawior15ContactRateLimitStore) {
-  globalRateLimitStore.__behawior15ContactRateLimitStore = contactRateLimitStore
+if (!globalRateLimitStore.__regulskiBehawiorystaContactRateLimitStore) {
+  globalRateLimitStore.__regulskiBehawiorystaContactRateLimitStore = contactRateLimitStore
 }
 
 type ValidatedContactLeadPayload = {
@@ -58,7 +58,7 @@ function getUnavailableMessage(): string {
   const contact = getContactDetails()
 
   if (contact.email) {
-    return `Formularz kontaktowy jest chwilowo niedostepny. Sprobuj pozniej albo napisz na ${contact.email}.`
+    return `Formularz kontaktowy jest chwilowo niedostępny. Spróbuj później albo napisz na ${contact.email}.`
   }
 
   return UNAVAILABLE_MESSAGE
@@ -180,7 +180,7 @@ function validatePayload(body: Record<string, unknown>): { payload?: ValidatedCo
     species && topic ? `${getSpeciesLabel(species)} • ${topic}` : topic ? `Kontakt • ${topic}` : null
 
   if (!name || !contact || !species || !topic || !message || !contextLabel) {
-    return { error: 'Uzupelnij imie, adres e-mail, gatunek, temat i krotki opis problemu.' }
+    return { error: 'Uzupełnij imię, adres e-mail, gatunek, temat i krótki opis problemu.' }
   }
 
   if (species !== 'nie-wiem' && !topicOption) {
@@ -188,19 +188,19 @@ function validatePayload(body: Record<string, unknown>): { payload?: ValidatedCo
   }
 
   if (message.length < 20) {
-    return { error: 'Opisz problem w 2-4 zdaniach, zebym mogl wskazac najprostszy kolejny krok.' }
+    return { error: 'Opisz problem w 2-4 zdaniach, żebym mógł wskazać najprostszy kolejny krok.' }
   }
 
   if (!consentProcessing || !consentPolicy) {
-    return { error: 'Zaznacz zgode na kontakt i akceptacje polityki prywatnosci.' }
+    return { error: 'Zaznacz zgodę na kontakt i akceptację polityki prywatności.' }
   }
 
   if (isUrgentNowIntent(intent) && (!requestedDate || !requestedTime)) {
-    return { error: 'Przy Kwadransie na juz podaj preferowana date i godzine.' }
+    return { error: 'Przy Kwadransie na już podaj preferowaną datę i godzinę.' }
   }
 
   if (isUrgentNowIntent(intent) && species === 'nie-wiem') {
-    return { error: 'Przy prosbie o pilny termin wybierz, czy sprawa dotyczy psa czy kota.' }
+    return { error: 'Przy prosbie o pilny termin wybierz, czy sprawa dotyczy ps? czy kota.' }
   }
 
   return {
@@ -212,7 +212,7 @@ function validatePayload(body: Record<string, unknown>): { payload?: ValidatedCo
       topic,
       message,
       contextLabel,
-      serviceLabel: isUrgentNowIntent(intent) ? 'Kwadrans na juz' : null,
+      serviceLabel: isUrgentNowIntent(intent) ? 'Kwadrans na już' : null,
       requestedDate,
       requestedTime,
       intent,
@@ -231,7 +231,7 @@ export async function POST(request: Request) {
     try {
       body = (await request.json()) as Record<string, unknown>
     } catch {
-      return NextResponse.json({ error: 'Nie udalo sie odczytac formularza kontaktu.' }, { status: 400 })
+      return NextResponse.json({ error: 'Nie udało się odczytać formularza kontaktu.' }, { status: 400 })
     }
 
     const { payload, error } = validatePayload(body)
@@ -277,23 +277,23 @@ export async function POST(request: Request) {
       const customerDelivery = await sendContactLeadAutoReplyEmail(payload)
 
       if (customerDelivery.status === 'failed') {
-        console.error('[behawior15][contact] customer auto-reply failed', customerDelivery.reason)
+        console.error('[regulski-behawiorysta][contact] customer auto-reply failed', customerDelivery.reason)
       } else if (customerDelivery.status === 'skipped') {
-        console.warn('[behawior15][contact] customer auto-reply skipped', customerDelivery.reason)
+        console.warn('[regulski-behawiorysta][contact] customer auto-reply skipped', customerDelivery.reason)
       }
 
       return NextResponse.json({ ok: true, message: isUrgentNowIntent(payload.intent) ? URGENT_SUCCESS_MESSAGE : SUCCESS_MESSAGE })
     }
 
     if (delivery.status === 'skipped') {
-      console.warn('[behawior15][contact] submission skipped', delivery.reason)
+      console.warn('[regulski-behawiorysta][contact] submission skipped', delivery.reason)
       return NextResponse.json({ error: getUnavailableMessage() }, { status: 503 })
     }
 
-    console.error('[behawior15][contact] submission failed', delivery.reason)
+    console.error('[regulski-behawiorysta][contact] submission failed', delivery.reason)
     return NextResponse.json({ error: GENERIC_ERROR_MESSAGE }, { status: 500 })
   } catch (error) {
-    console.error('[behawior15][contact] unexpected error', error)
+    console.error('[regulski-behawiorysta][contact] unexpected error', error)
 
     if (error instanceof ConfigurationError) {
       return NextResponse.json({ error: getUnavailableMessage() }, { status: 503 })

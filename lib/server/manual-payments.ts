@@ -72,17 +72,17 @@ export async function reportManualPayment(
 
   // SMS do klienta: potwierdzenie zgłoszenia, info o czasie oczekiwania
   sendManualPaymentPendingSms(updatedBooking, manualPayment.holdMinutes).catch((err) => {
-    console.warn('[behawior15][manual-payment] pending SMS failed', err)
+    console.warn('[regulski-behawiorysta][manual-payment] pending SMS failed', err)
   })
 
   if (adminNotification.status === 'queued') {
-    console.info('[behawior15][manual-payment] admin notification still pending', {
+    console.info('[regulski-behawiorysta][manual-payment] admin notification still pending', {
       bookingId: updatedBooking.id,
       reason: adminNotification.reason ?? null,
       timeoutMs: MANUAL_PAYMENT_ADMIN_NOTIFICATION_TIMEOUT_MS,
     })
   } else if (adminNotification.status !== 'sent') {
-    console.warn('[behawior15][manual-payment] admin notification not sent', {
+    console.warn('[regulski-behawiorysta][manual-payment] admin notification not sent', {
       bookingId: updatedBooking.id,
       status: adminNotification.status,
       reason: adminNotification.reason ?? null,

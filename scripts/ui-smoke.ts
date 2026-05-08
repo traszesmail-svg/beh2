@@ -386,9 +386,9 @@ async function runUiSmokeOnce() {
   process.env.NEXT_PUBLIC_APP_URL = appUrl
   process.env.ADMIN_ACCESS_SECRET = adminSecret
   process.env.RESEND_API_KEY = ''
-  process.env.BEHAVIOR15_CONTACT_PHONE = '500600700'
+  process.env.REGULSKI_CONTACT_PHONE = '500600700'
   process.env.MANUAL_PAYMENT_BLIK_PHONE = '512992026'
-  process.env.MANUAL_PAYMENT_PAYPAL_ME_URL = 'paypal.me/behawior15'
+  process.env.MANUAL_PAYMENT_PAYPAL_ME_URL = 'paypal.me/regulskibehawiorysta'
   process.env.MANUAL_PAYMENT_ACCOUNT_NAME = 'Krzysztof Regulski'
   process.env.SMS_PROVIDER = 'disabled'
   delete process.env.PAYU_CLIENT_ID
@@ -483,11 +483,9 @@ async function runUiSmokeOnce() {
         assert.ok((await page.locator('.offer-card').count()) >= 3, `${label}: expected simplified public offer cards`)
 
         await page.goto(`${appUrl}/oferta/poradniki-pdf`, { waitUntil: 'domcontentloaded' })
-        assert(page.url().includes('/niezbednik'), `${label}: expected poradniki-pdf route to redirect to /niezbednik`)
-        await page.getByRole('heading', { level: 1, name: /Praktyczne materiały, które naprawdę pomagają\./i }).waitFor({ timeout: slowRouteTimeoutMs })
-        assert.ok((await page.locator('.essentials-index-resource-card').count()) >= 3, `${label}: expected Niezbednik resource cards`)
-        assert.ok((await page.locator('.essentials-index-bundle-card').count()) >= 2, `${label}: expected Niezbednik bundle cards`)
-        assert.equal(await page.locator('.essentials-index-newsletter-form').count(), 1, `${label}: expected Niezbednik newsletter form`)
+        assert(page.url().includes('/materialy'), `${label}: expected poradniki-pdf route to redirect to /materialy`)
+        await page.getByRole('heading', { level: 1, name: /Materiały PDF gotowe do pobrania|Materialy PDF gotowe do pobrania/i }).waitFor({ timeout: slowRouteTimeoutMs })
+        assert.ok((await page.locator('.notatnik-material-card').count()) >= 5, `${label}: expected materialy cards`)
       }
     }
 
@@ -598,9 +596,9 @@ async function runUiSmokeOnce() {
       },
       {
         path: '/oferta/poradniki-pdf',
-        destinationPath: '/niezbednik',
-        heading: /Praktyczne materiały, które naprawdę pomagają\./i,
-        buttonLabels: [/Umów pierwszy krok/i],
+        destinationPath: '/materialy',
+        heading: /Materiały PDF gotowe do pobrania|Materialy PDF gotowe do pobrania/i,
+        buttonLabels: [/Materiały dla psa|Materialy dla psa/i],
       },
     ] as const) {
       await verifyRedirectRoute(publicPage, route.path, route.destinationPath, route.heading, {

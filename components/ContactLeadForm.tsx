@@ -258,7 +258,7 @@ export function ContactLeadForm() {
       trackAnalyticsEvent('contact_form_submitted', {
         source_page: '/kontakt',
         species: selectedSpecies,
-        problem_key: isUnknownSpecies ? 'wlasny-temat' : form.topicId,
+        problem_key: isUnknownSpecies ? 'własny-temat' : form.topicId,
         intent: isUrgentNow ? URGENT_NOW_INTENT : 'contact',
       })
 
@@ -510,7 +510,7 @@ export function ContactLeadForm() {
             <p style={{ marginTop: '12px' }}>
               W międzyczasie możesz zajrzeć po PDF-y w{' '}
               <a href="/materialy" className="prep-inline-link">
-                /materialy
+                /materiały
               </a>{' '}
               - od 19&nbsp;zł, bez dodatkowej rozmowy.
             </p>

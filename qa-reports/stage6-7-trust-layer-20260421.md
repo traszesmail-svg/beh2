@@ -1,7 +1,7 @@
 # Stage 6-7 Trust Layer QA
 
 - Data: 2026-04-21
-- Repo: `behawior15-mvp-full / beh2`
+- Repo: `regulskibehawiorysta`
 - Zakres: etap 6 `trust layer i opinie` + etap 7 `QA i walidacja po wdrożeniu`
 - Werdykt lokalny: `PASS z uwagą`
 

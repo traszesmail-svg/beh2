@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { unstable_noStore as noStore } from 'next/cache'
 import { headers } from 'next/headers'
 import { CallRoom } from '@/components/CallRoom'
-import { Header } from '@/components/Header'
 import { PreparationMaterialsCard } from '@/components/PreparationMaterialsCard'
 import {
   getBookingServiceRoomAccessLabel,
@@ -28,7 +28,7 @@ export function generateMetadata({
   return buildTechnicalMetadata({
     title: 'Pokój rozmowy',
     path: `/call/${params.id}`,
-    description: 'Bezpieczny pokój rozmowy lub konsultacji po potwierdzeniu rezerwacji.',
+    description: 'Bezpieczny pokój rozmowy po potwierdzeniu rezerwacji.',
   })
 }
 
@@ -38,6 +38,35 @@ function readSearchParam(value: string | string[] | undefined): string | null {
   }
 
   return value ?? null
+}
+
+function CallRoomHeader() {
+  return (
+    <header className="call-room-header">
+      <div className="call-room-brand" aria-label="Regulski Behawiorysta">
+        <Image
+          src="/branding/regulski-web/logos/logo-regulski.png"
+          alt="Regulski Behawiorysta"
+          width={72}
+          height={72}
+          priority
+          className="call-room-logo"
+        />
+        <div>
+          <strong>Regulski Behawiorysta</strong>
+          <span>Krzysztof Regulski, behawiorysta zwierzęcy</span>
+        </div>
+      </div>
+      <nav className="call-room-nav" aria-label="Linki pomocnicze">
+        <a href="/opinie" target="_blank" rel="noopener noreferrer">
+          Opinie
+        </a>
+        <a href="/faq" target="_blank" rel="noopener noreferrer">
+          FAQ
+        </a>
+      </nav>
+    </header>
+  )
 }
 
 export default async function CallPage({
@@ -59,7 +88,7 @@ export default async function CallPage({
     try {
       booking = await getBookingForViewer(params.id, accessToken, headers().get('authorization'))
     } catch (error) {
-      console.warn('[behawior15][call] failed to load booking', {
+      console.warn('[regulski-behawiorysta][call] failed to load booking', {
         bookingId: params.id,
         hasAccessToken: Boolean(accessToken),
         error,
@@ -72,7 +101,7 @@ export default async function CallPage({
     return (
       <main className="page-wrap">
         <div className="container">
-          <Header />
+          <CallRoomHeader />
           <section className="panel centered-panel">
             <h1>Pokój rozmowy chwilowo niedostępny</h1>
             <div className="stack-gap">
@@ -98,7 +127,7 @@ export default async function CallPage({
     return (
       <main className="page-wrap">
         <div className="container">
-          <Header />
+          <CallRoomHeader />
           <section className="panel centered-panel">
             <h1>Link do pokoju rozmowy wygasł</h1>
             <div className="stack-gap">
@@ -126,17 +155,17 @@ export default async function CallPage({
   return (
     <main className="page-wrap" data-analytics-disabled={qaBooking ? 'true' : undefined} data-qa-booking={qaBooking ? 'true' : 'false'}>
       <div className="container">
-        <Header />
+        <CallRoomHeader />
 
         {hasAccess ? (
           <>
-            <div className="panel section-panel">
+            <div className="panel section-panel call-summary-panel">
               <div className="section-eyebrow">Potwierdzona rezerwacja</div>
               <h2>{getProblemLabel(booking.problemType)}</h2>
               <p className="muted paragraph-gap">
-                {`${getBookingServiceTitle(serviceType)}. Tutaj wejdziesz do ${roomAccessLabel}. Jeśli chcesz, poniżej dodasz materiały do sprawy.`}
+                {`${getBookingServiceTitle(serviceType)}. Tutaj wejdziesz do ${roomAccessLabel}. Poniżej możesz dodać krótkie materiały do przygotowania rozmowy.`}
               </p>
-              <div className="list-card top-gap">
+              <div className="list-card top-gap call-description-card">
                 <strong>Opis zgłoszenia</strong>
                 <span>{booking.description}</span>
               </div>

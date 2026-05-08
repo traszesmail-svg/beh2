@@ -43,6 +43,18 @@ function clientIp(request: Request) {
     null
 }
 
+function alreadyConfirmedMessage(productType: string) {
+  return productType === 'consultation'
+    ? 'Konsultacja była już potwierdzona. Ponowne kliknięcie nie wysyła kolejnych maili.'
+    : 'Kod dostępu został już wysłany do klienta. Ponowne kliknięcie nie tworzy nowego kodu.'
+}
+
+function confirmedMessage(productType: string) {
+  return productType === 'consultation'
+    ? 'Konsultacja została potwierdzona. Klient dostał mail z terminem i linkiem do rozmowy, a behawiorysta dostał osobne potwierdzenie z plikiem kalendarza.'
+    : 'Kod dostępu został wysłany do klienta.'
+}
+
 export async function GET(request: Request, { params }: { params: { token: string } }) {
   const url = new URL(request.url)
   const action = url.searchParams.get('action') === 'reject' ? 'reject' : 'approve'
@@ -52,8 +64,8 @@ export async function GET(request: Request, { params }: { params: { token: strin
     return html('Link jest nieprawidłowy', 'Nie znaleziono zamówienia przypisanego do tego tokenu.', 400)
   }
 
-  if (order.adminConfirmationTokenUsedAt && order.status === 'access_sent') {
-    return html('Płatność była już potwierdzona', 'Kod dostępu został już wysłany do klienta. Ponowne kliknięcie nie tworzy nowego kodu.')
+  if (order.adminConfirmationTokenUsedAt && (order.status === 'access_sent' || order.status === 'paid')) {
+    return html('Płatność była już potwierdzona', alreadyConfirmedMessage(order.productType))
   }
 
   if (order.adminConfirmationTokenUsedAt) {
@@ -67,16 +79,16 @@ export async function GET(request: Request, { params }: { params: { token: strin
         adminIp: clientIp(request),
         adminUserAgent: request.headers.get('user-agent'),
       })
-      return html('Płatność odrzucona', 'Zamówienie zostało oznaczone jako anulowane. Kod dostępu nie został wydany.')
+      return html('Płatność odrzucona', 'Zamówienie zostało oznaczone jako anulowane. Dostęp nie został wydany.')
     }
 
-    await fulfillCommerceOrderAndNotify(order.orderNumber, 'blik_phone', {
+    const confirmedOrder = await fulfillCommerceOrderAndNotify(order.orderNumber, 'blik_phone', {
       adminTokenUsedAt: new Date().toISOString(),
       adminIp: clientIp(request),
       adminUserAgent: request.headers.get('user-agent'),
     })
 
-    return html('Płatność potwierdzona', 'Kod dostępu został wysłany do klienta.')
+    return html('Płatność potwierdzona', confirmedMessage(confirmedOrder.productType))
   } catch (error) {
     return html(
       'Nie udało się wykonać decyzji',

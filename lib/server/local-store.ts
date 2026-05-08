@@ -14,7 +14,7 @@ import { createActiveConsultationPrice, DEFAULT_PRICE_PLN, parseConsultationPric
 import { buildSeedAvailabilitySlots, hasFutureAvailabilitySlots } from '@/lib/server/availability-seed'
 import { createCustomerAccessToken, hasValidCustomerAccessToken } from '@/lib/server/customer-access'
 import { getReservationWindowMinutes } from '@/lib/server/env'
-import { createMeetingUrl } from '@/lib/server/jitsi'
+import { createMeetingUrl, normalizeMeetingUrl } from '@/lib/server/jitsi'
 import { getLocalStoreDataDir } from '@/lib/server/local-store-path'
 import { getManualPaymentConfig } from '@/lib/server/payment-options'
 import {
@@ -25,6 +25,7 @@ import {
 import { createFunnelEventRecord, normalizeFunnelEventProperties } from '@/lib/server/funnel-events'
 import {
   sendBookingConfirmationEmail,
+  sendBookingPaymentConfirmedOwnerEmail,
   sendBookingOwnerNotificationEmail,
   sendBookingReservationCreatedEmail,
   sendBookingManualPaymentPendingEmail,
@@ -173,6 +174,7 @@ function normalizeBookingRecord(booking: BookingRecord): BookingRecord {
     customerAccessTokenHash: booking.customerAccessTokenHash ?? '',
     paymentMethod: booking.paymentMethod ?? null,
     paymentReference: booking.paymentReference ?? null,
+    meetingUrl: normalizeMeetingUrl(booking.id, booking.meetingUrl),
     qaBooking: booking.qaBooking ?? false,
     paymentReportedAt: booking.paymentReportedAt ?? null,
     paymentRejectedAt: booking.paymentRejectedAt ?? null,
@@ -515,7 +517,7 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
     const bookingId = crypto.randomUUID()
     const accessToken = createCustomerAccessToken()
     const reservationExpiresAt = new Date(Date.now() + getReservationWindowMinutes() * 60 * 1000).toISOString()
-    console.info('[behawior15][pricing] booking-created', {
+    console.info('[regulski-behawiorysta][pricing] booking-created', {
       bookingId,
       amount: getBookingServicePrice(serviceType, pricing.amount),
       summary: `${pricing.summary} Service: ${serviceType}`,
@@ -580,7 +582,7 @@ export async function createPendingBooking(form: BookingFormData): Promise<Booki
     await sendBookingReservationCreatedEmail(booking, accessToken.rawToken)
     const ownerNotification = await sendBookingOwnerNotificationEmail(booking)
     if (ownerNotification.status !== 'sent') {
-      console.error('[behawior15][booking-owner-notification] failed', {
+      console.error('[regulski-behawiorysta][booking-owner-notification] failed', {
         bookingId: booking.id,
         reason: ownerNotification.reason,
         status: ownerNotification.status,
@@ -853,10 +855,12 @@ export async function markBookingPaid(
     const shouldSendConfirmation = shouldSendBookingConfirmationAfterPayment(booking)
     const shouldAttemptSms = Boolean(paymentData?.triggerPaymentConfirmationSms) && !booking.smsConfirmationStatus
     const slots = resolveBookingSlots(store.availability, booking)
+    const normalizedMeetingUrl = normalizeMeetingUrl(booking.id, booking.meetingUrl)
 
     booking.bookingStatus = booking.bookingStatus === 'done' ? 'done' : 'confirmed'
     booking.paymentStatus = 'paid'
     booking.paidAt = nowIso
+    booking.meetingUrl = normalizedMeetingUrl
     booking.cancelledAt = null
     booking.expiredAt = null
     booking.paymentMethod = paymentData?.paymentMethod ?? booking.paymentMethod ?? null
@@ -919,6 +923,7 @@ export async function markBookingPaid(
 
     if (shouldSendConfirmation) {
       await sendBookingConfirmationEmail(booking)
+      await sendBookingPaymentConfirmedOwnerEmail(booking)
     }
 
     if (shouldAttemptSms) {

@@ -110,9 +110,9 @@ async function main() {
     const defaultProductionSnapshotPath = getDefaultProductionEnvSnapshotPath(rootDir)
 
     if (existsSync(defaultProductionSnapshotPath)) {
-      process.env.BEHAWIOR15_ENV_FILE = defaultProductionSnapshotPath
+      process.env.REGULSKI_ENV_FILE = defaultProductionSnapshotPath
       envOverridePath = applyOptionalEnvFileOverride(rootDir)
-      delete process.env.BEHAWIOR15_ENV_FILE
+      delete process.env.REGULSKI_ENV_FILE
       usedDefaultProductionSnapshot = true
     }
   }

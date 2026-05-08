@@ -27,7 +27,7 @@ export default async function AdminLeadBookingDetailPage({ params }: { params: {
       <main className="container" style={{ maxWidth: '900px', padding: '32px 20px' }}>
         <div style={{ marginBottom: '20px' }}>
           <Link href="/admin/lead-bookings" style={{ color: '#2f7667' }}>
-            ← Wszystkie rezerwacje
+            ← Wszystkie rezerwację
           </Link>
         </div>
 

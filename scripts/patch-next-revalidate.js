@@ -12,11 +12,11 @@ const targetPath = path.join(
   'index.js',
 )
 
-const patchMarker = '__behawior15PatchedRevalidateTag'
+const patchMarker = '__regulskiBehawiorystaPatchedRevalidateTag'
 
 function patchIncrementalCacheRuntime(filePath) {
   if (!fs.existsSync(filePath)) {
-    console.warn(`[behawior15][prebuild] missing file: ${filePath}`)
+    console.warn(`[regulski-behawiorysta][prebuild] missing file: ${filePath}`)
     return
   }
 
@@ -65,12 +65,12 @@ function patchIncrementalCacheRuntime(filePath) {
     }`
 
   if (!source.includes(original)) {
-    console.warn('[behawior15][prebuild] Next incremental cache patch target not found')
+    console.warn('[regulski-behawiorysta][prebuild] Next incremental cache patch target not found')
     return
   }
 
   fs.writeFileSync(filePath, source.replace(original, replacement))
-  console.log('[behawior15][prebuild] patched Next incremental cache revalidateTag guard')
+  console.log('[regulski-behawiorysta][prebuild] patched Next incremental cache revalidateTag guard')
 }
 
 patchIncrementalCacheRuntime(targetPath)

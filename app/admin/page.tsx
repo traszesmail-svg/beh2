@@ -114,7 +114,7 @@ export default async function AdminPage() {
     : null
   const dataLoadIssue =
     dataLoadErrors.length > 0
-      ? `Nie wszystkie dane panelu mogly sie zaladowac: ${dataLoadErrors.join(' | ')}`
+      ? `Nie wszystkie dane panelu mogły się załadować: ${dataLoadErrors.join(' | ')}`
       : null
 
   return (
@@ -165,7 +165,7 @@ export default async function AdminPage() {
               </div>
             </div>
             <div className="summary-card">
-              <div className="stat-label">Kwadrans na juz</div>
+              <div className="stat-label">Kwadrans na już</div>
               <div className="summary-value">{urgentRequests.length}</div>
             </div>
           </div>
@@ -218,14 +218,14 @@ export default async function AdminPage() {
           </div>
 
           <div className="top-gap">
-            <div className="section-eyebrow">Kwadrans na juz</div>
+            <div className="section-eyebrow">Kwadrans na już</div>
             <h2>Prosby o pilny termin</h2>
             <p className="muted paragraph-gap">
-              Klient wpisuje preferowana date i godzine przez formularz. Tutaj dodajesz termin do kalendarza i od razu odsylasz mu gotowy link.
+              Klient wpisuje preferowaną datę i godzinę przez formularz. Tutaj dodajesz termin do kalendarza i od razu odsyłasz mu gotowy link.
             </p>
 
             {urgentRequests.length === 0 ? (
-              <div className="list-card tree-backed-card">Brak aktywnych prosb o Kwadrans na juz.</div>
+              <div className="list-card tree-backed-card">Brak aktywnych prosb o Kwadrans na już.</div>
             ) : (
               <div className="booking-list">
                 {urgentRequests.map((request) => (
@@ -238,7 +238,7 @@ export default async function AdminPage() {
                       <div className="booking-meta">
                         Preferowany termin: {request.requestedDate} {request.requestedTime}
                       </div>
-                      <div className="booking-meta">Status: {request.status === 'responded' ? 'odpowiedziano' : 'nowa prosba'}</div>
+                      <div className="booking-meta">Status: {request.status === 'responded' ? 'odpowiedziano' : 'nowa prośba'}</div>
                     </div>
                     <div className="booking-description">
                       <div>{request.message}</div>
@@ -332,7 +332,7 @@ export default async function AdminPage() {
           <div className="top-gap">
             <div className="section-eyebrow">Cena konsultacji</div>
             <h2>Aktywna cena dla nowych rezerwacji</h2>
-            <p className="muted paragraph-gap">Nowa cena dotyczy tylko kolejnych bookingów. Opłacone lub zapisane wcześniej rezerwacje zachowują swoją historyczną kwotę.</p>
+            <p className="muted paragraph-gap">Nowa cena dotyczy tylko kolejnych bookingów. Opłacone lub zapisane wcześniej rezerwację zachowują swoją historyczną kwotę.</p>
             {runtime.data.isValid && price ? (
               <AdminPricingManager currentAmount={price.amount} currentLabel={price.formattedAmount} updatedAtLabel={priceUpdatedAtLabel} />
             ) : (

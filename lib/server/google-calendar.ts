@@ -39,11 +39,50 @@ export function buildGoogleCalendarUrl(
 
   const params = new URLSearchParams({
     action: 'TEMPLATE',
-    text: `Behawior 15 – ${booking.ownerName}`,
+    text: `Regulski Behawiorysta – ${booking.ownerName}`,
     dates: `${toGoogleCalendarDate(start)}/${toGoogleCalendarDate(end)}`,
     details: `Link do rozmowy: ${booking.meetingUrl}`,
     location: booking.meetingUrl,
   })
 
   return `https://calendar.google.com/calendar/render?${params.toString()}`
+}
+
+function escapeIcsText(value: string): string {
+  return value
+    .replace(/\\/g, '\\\\')
+    .replace(/;/g, '\\;')
+    .replace(/,/g, '\\,')
+    .replace(/\r?\n/g, '\\n')
+}
+
+export function buildGoogleCalendarIcs(
+  booking: Pick<BookingRecord, 'id' | 'bookingDate' | 'bookingTime' | 'serviceType' | 'amount' | 'ownerName' | 'meetingUrl'>,
+): string {
+  const serviceType = resolveBookingServiceType(booking.serviceType, booking.amount)
+  const durationMinutes = getBookingServiceRoomDurationMinutes(serviceType)
+  const start = parseLocalDateTime(booking.bookingDate, booking.bookingTime)
+  const end = new Date(start.getTime() + durationMinutes * 60 * 1000)
+  const now = new Date()
+  const summary = `Regulski Behawiorysta - ${booking.ownerName}`
+  const details = `Link do rozmowy: ${booking.meetingUrl}`
+
+  return [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Regulski Behawiorysta//Rezerwacja//PL',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    'BEGIN:VEVENT',
+    `UID:${booking.id}@regulskibehawiorysta.pl`,
+    `DTSTAMP:${toGoogleCalendarDate(now)}`,
+    `DTSTART:${toGoogleCalendarDate(start)}`,
+    `DTEND:${toGoogleCalendarDate(end)}`,
+    `SUMMARY:${escapeIcsText(summary)}`,
+    `DESCRIPTION:${escapeIcsText(details)}`,
+    `LOCATION:${escapeIcsText(booking.meetingUrl)}`,
+    'END:VEVENT',
+    'END:VCALENDAR',
+    '',
+  ].join('\r\n')
 }

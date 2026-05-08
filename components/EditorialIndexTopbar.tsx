@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { Menu } from 'lucide-react'
+import { ThemeToggle } from '@/components/ThemeToggle'
 import { REGULSKI_WEB_LOGO } from '@/lib/regulski-web-assets'
 
 const EDITORIAL_INDEX_NAV_ITEMS = [
@@ -19,8 +20,9 @@ export function EditorialIndexTopbar() {
           <Image src={REGULSKI_WEB_LOGO} alt="" width={512} height={512} priority />
         </span>
         <span className="blog-index-brand-copy">
-          <span>Regulski</span>
-          <small>Terapia behawioralna</small>
+          <span className="blog-index-brand-name-full">Regulski Behawiorysta</span>
+          <span className="blog-index-brand-name-short" aria-hidden="true">Regulski</span>
+          <small>Krzysztof Regulski - behawiorysta zwierzęcy</small>
         </span>
       </Link>
 
@@ -32,7 +34,10 @@ export function EditorialIndexTopbar() {
         ))}
       </nav>
 
-      <details className="blog-index-mobile-menu">
+      <div className="blog-index-actions" aria-label="Narzędzia strony">
+        <ThemeToggle />
+
+        <details className="blog-index-mobile-menu">
         <summary aria-label="Otwórz menu">
           <Menu size={20} strokeWidth={2} aria-hidden="true" />
         </summary>
@@ -43,7 +48,8 @@ export function EditorialIndexTopbar() {
             </Link>
           ))}
         </div>
-      </details>
+        </details>
+      </div>
     </header>
   )
 }

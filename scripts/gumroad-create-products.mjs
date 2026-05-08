@@ -8,7 +8,7 @@ import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const __dir = dirname(fileURLToPath(import.meta.url))
-const BOOKING_URL = 'https://behawior15.pl/book'
+const BOOKING_URL = 'https://regulskibehawiorysta.pl/termin'
 
 const PRODUCTS = [
   {

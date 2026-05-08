@@ -166,31 +166,31 @@ const BLOG_COVER_BY_SLUG: Record<string, BlogPostCover> = {
   },
   'kot-drapie-meble': {
     src: '/blog-covers/blog-kot-drapie-meble-photo.webp',
-    alt: 'Kot drapiący słupek drapaka w domowym wnętrzu.',
+    alt: 'Kot przy kanapie i drapaku pokazujący wybór miejsca do drapania.',
     width: BLOG_COVER_WIDTH,
     height: BLOG_COVER_HEIGHT,
   },
   'nowy-pies-pierwsze-72-godziny': {
     src: '/blog-covers/blog-nowy-pies-pierwsze-72-godziny-photo.webp',
-    alt: 'Pies odpoczywający na kanapie w jasnym domowym wnętrzu po adopcji.',
+    alt: 'Pies w nowym mieszkaniu obok opiekunów podczas spokojnej adaptacji.',
     width: BLOG_COVER_WIDTH,
     height: BLOG_COVER_HEIGHT,
   },
   'kiedy-behawiorysta-kiedy-trener-psa': {
     src: '/blog-covers/blog-kiedy-behawiorysta-kiedy-trener-psa-photo.webp',
-    alt: 'Opiekun ćwiczący z psem na zewnątrz w spokojnym kontakcie.',
+    alt: 'Specjalista robi notatki przy opiekunie i psie podczas spokojnej konsultacji.',
     width: BLOG_COVER_WIDTH,
     height: BLOG_COVER_HEIGHT,
   },
   'behawiorysta-zoopsycholog-trener-do-kogo-sie-zglosic': {
     src: '/blog-covers/blog-behawiorysta-zoopsycholog-trener-do-kogo-sie-zglosic-photo.webp',
-    alt: 'Pies i kot odpoczywający w jasnym domowym wnętrzu.',
+    alt: 'Opiekun rozmawia przy notatkach z psem obok, wybierając odpowiednią formę pomocy.',
     width: BLOG_COVER_WIDTH,
     height: BLOG_COVER_HEIGHT,
   },
   'ile-kosztuje-konsultacja-behawioralna': {
     src: '/blog-covers/blog-ile-kosztuje-konsultacja-behawioralna-photo.webp',
-    alt: 'Dokumenty, notatki i kalkulator na biurku podczas przygotowania kosztu konsultacji.',
+    alt: 'Notatnik, laptop i pies przy stole podczas omawiania zakresu konsultacji.',
     width: BLOG_COVER_WIDTH,
     height: BLOG_COVER_HEIGHT,
   },
@@ -208,19 +208,19 @@ const BLOG_COVER_BY_SLUG: Record<string, BlogPostCover> = {
   },
   'reaktywnosc-na-smyczy-cwiczenie-luznej-smyczy': {
     src: '/blog-covers/blog-reaktywnosc-na-smyczy-cwiczenie-luznej-smyczy-photo.webp',
-    alt: 'Dwa psy na smyczach podczas spokojnego spaceru na zewnątrz.',
+    alt: 'Pies na smyczy skupiony na opiekunie podczas spokojnego ćwrócićzenia spacerowego.',
     width: BLOG_COVER_WIDTH,
     height: BLOG_COVER_HEIGHT,
   },
   'jak-nagrac-psa-zostawionego-samemu': {
     src: '/blog-covers/blog-jak-nagrac-psa-zostawionego-samemu-photo.webp',
-    alt: 'Pies odpoczywający na łóżku obok osoby pracującej przy laptopie.',
+    alt: 'Telefon ustawiony do nagrywania psa w mieszkaniu przed wyjściem opiekuna.',
     width: BLOG_COVER_WIDTH,
     height: BLOG_COVER_HEIGHT,
   },
   'rutyna-wyjscia-oswajanie-psa-z-samotnoscia': {
     src: '/blog-covers/blog-rutyna-wyjscia-oswajanie-psa-z-samotnoscia-photo.webp',
-    alt: 'Pies leżący na legowisku w domu w spokojnym świetle.',
+    alt: 'Pies obserwujący uchylone drzwi podczas ćwrócićzenia spokojnej rutyny wyjścia.',
     width: BLOG_COVER_WIDTH,
     height: BLOG_COVER_HEIGHT,
   },
@@ -232,19 +232,19 @@ const BLOG_COVER_BY_SLUG: Record<string, BlogPostCover> = {
   },
   'stres-kota-a-zachowania-toaletowe': {
     src: '/blog-covers/blog-stres-kota-a-zachowania-toaletowe-photo.webp',
-    alt: 'Kot odpoczywający w spokojnym domowym wnętrzu z roślinami.',
+    alt: 'Dwa koty przy kuwecie w łazience, pokazujące napięcie wokół miejsca toaletowego.',
     width: BLOG_COVER_WIDTH,
     height: BLOG_COVER_HEIGHT,
   },
   'jak-wprowadzic-nowego-kota-do-domu': {
     src: '/blog-covers/blog-jak-wprowadzic-nowego-kota-do-domu-photo.webp',
-    alt: 'Dwa koty leżące blisko siebie na łóżku w domowym wnętrzu.',
+    alt: 'Dwa koty rozdzielone przeszkodą podczas spokojnego wprowadzania nowego kota.',
     width: BLOG_COVER_WIDTH,
     height: BLOG_COVER_HEIGHT,
   },
   'agresja-przekierowana-u-kota': {
     src: '/blog-covers/blog-agresja-przekierowana-u-kota-photo.webp',
-    alt: 'Dwa koty siedzące na podłodze w domu, widoczne w spokojnym dystansie.',
+    alt: 'Kot pobudzony przy oknie obserwujący bodziec na zewnątrz mieszkania.',
     width: BLOG_COVER_WIDTH,
     height: BLOG_COVER_HEIGHT,
   },
@@ -262,13 +262,13 @@ const BLOG_COVER_BY_SLUG: Record<string, BlogPostCover> = {
   },
   'jak-ustawic-kuwete-dla-kota': {
     src: '/blog-covers/blog-jak-ustawic-kuwete-dla-kota-photo.webp',
-    alt: 'Kot odpoczywający w jasnej łazience, nawiązujący do ustawienia kuwety w spokojnym miejscu.',
+    alt: 'Kuweta ustawiona w spokojnym miejscu przy oknie, z kotami w pobliżu.',
     width: BLOG_COVER_WIDTH,
     height: BLOG_COVER_HEIGHT,
   },
   'jak-zapoznac-dwa-koty': {
     src: '/blog-covers/blog-jak-zapoznac-dwa-koty-photo.webp',
-    alt: 'Dwa koty leżące w jednym pomieszczeniu w spokojnym świetle z zachowanym dystansem.',
+    alt: 'Dwa koty po przeciwnych stronach przeszkody podczas stopniowego zapoznawania.',
     width: BLOG_COVER_WIDTH,
     height: BLOG_COVER_HEIGHT,
   },
@@ -306,69 +306,69 @@ export function getBlogPostCover(post: Pick<BlogPost, 'slug' | 'categoryHref'>):
 }
 
 const SERVICE_LANDING_LINK: BlogSupportLink = {
-  label: 'Behawiorysta psow i kotow online',
+  label: 'Behawiorysta psów i kotów online',
   href: '/behawiorysta-online-polska',
-  description: 'Glowna strona uslugi, jesli chcesz przejsc z tresci edukacyjnej do pelniejszego opisu pomocy.',
+  description: 'Główna strona usługi, jeśli chcesz przejść z treści edukacyjnej do pełniejszego opisu pomocy.',
 }
 
 const CONSULTATION_PAGE_LINK: BlogSupportLink = {
   label: 'Konsultacja behawioralna online',
   href: '/konsultacja-behawioralna-online',
-  description: 'Opis pelnej konsultacji, przebiegu rozmowy i tego, kiedy warto wejsc w szersza konsultacje.',
+  description: 'Opis pełnej konsultacji, przebiegu rozmowy i tego, kiedy warto wejść w szersza konsultacje.',
 }
 
 const PREP_GUIDE_LINK: BlogSupportLink = {
-  label: 'Bezplatny material przygotowujacy',
-  href: '/bezplatne-materialy/przygotowanie-do-konsultacji-online',
-  description: 'Lekki przewodnik, jesli chcesz najpierw uporzadkowac opis problemu i przygotowanie do rozmowy.',
+  label: 'Bezpłatny materiał startowy',
+  href: '/bezplatne-materialy/30-zachowan',
+  description: 'Szeroki przewodnik, jeśli chcesz najpierw uporządkować obserwacje przed rozmowa.',
 }
 
 const REACTIVITY_LANDING_LINK: BlogSupportLink = {
-  label: 'Reaktywnosc na smyczy',
+  label: 'Reaktywność na smyczy',
   href: '/psy/reaktywnosc-na-smyczy',
-  description: 'Glowny landing problemowy dla spacerow, szczekania, napiecia i pracy ponizej progu.',
+  description: 'Główny landing problemowy dla spacerów, szczekania, napięcia i pracy poniżej progu.',
 }
 
 const REACTIVITY_GUIDE_LINK: BlogSupportLink = {
-  label: 'Bezplatny przewodnik dla reaktywnego psa',
-  href: '/bezplatne-materialy/pies-reaktywnosc-5-krokow',
-  description: 'Piec pierwszych krokow i prosty plan obserwacji, zanim zaczniesz dokladac kolejne techniki.',
+  label: 'Bezpłatny PDF: pies i poziom ruchu',
+  href: '/bezplatne-materialy/pies-ile-ruchu-potrzebuje',
+  description: 'Materiał o tym, kiedy ruch pomaga, a kiedy doklada pobudzenia i przeciazenia.',
 }
 
 const SEPARATION_LANDING_LINK: BlogSupportLink = {
-  label: 'Lek separacyjny u psa',
+  label: 'Lęk separacyjny u psa',
   href: '/psy/lek-separacyjny',
-  description: 'Glowny landing problemowy o zostawaniu samemu, diagnozie i pierwszym bezpiecznym planie.',
+  description: 'Główny landing problemowy o zostawaniu samemu, diagnozie i pierwszym bezpiecznym planie.',
 }
 
 const SEPARATION_GUIDE_LINK: BlogSupportLink = {
   label: 'PDF: pies zostaje sam',
-  href: '/oferta/poradniki-pdf/pies-zostaje-sam-plan-pierwszych-krokow',
-  description: 'Material startowy o samotnosci psa, jesli chcesz najpierw spokojnie przeczytac plan pierwszych krokow.',
+  href: '/materialy/pies-sam-w-domu',
+  description: 'Materiał startowy o samotności psa, jeśli chcesz najpierw spokojnie przeczytać plan pierwszych kroków.',
 }
 
 const LITTER_LANDING_LINK: BlogSupportLink = {
-  label: 'Zalatwianie poza kuweta',
+  label: 'Załatwianie poza kuwetą',
   href: '/koty/zalatwianie-poza-kuweta',
-  description: 'Glowny landing problemowy o zdrowiu, kuwecie, stresie i kolejnosci sprawdzania przyczyn.',
+  description: 'Główny landing problemowy o zdrowiu, kuwecie, stresie i kolejności sprawdzania przyczyn.',
 }
 
 const LITTER_GUIDE_LINK: BlogSupportLink = {
-  label: 'Bezplatna checklista kuwety',
-  href: '/bezplatne-materialy/kot-kuweta-checklista',
-  description: 'Lista kontrolna zdrowia, kuwety i srodowiska, zanim zaczniesz zmieniac wszystko naraz.',
+  label: 'Bezpłatny PDF: kot w napięciu',
+  href: '/bezplatne-materialy/kot-zyje-w-napieciu',
+  description: 'Materiał o cichych sygnałach stresu, które często stoją za szerszym problemem.',
 }
 
 const CAT_CONFLICT_LANDING_LINK: BlogSupportLink = {
-  label: 'Konflikt miedzy kotami',
+  label: 'Konflikt między kotami',
   href: '/koty/konflikt-miedzy-kotami',
-  description: 'Glowny landing problemowy dla napiecia, gonitw, blokowania zasobow i trudnych relacji w domu.',
+  description: 'Główny landing problemowy dla napięcia, gonitw, blokowania zasobów i trudnych relacji w domu.',
 }
 
 const CAT_CONFLICT_GUIDE_LINK: BlogSupportLink = {
-  label: 'PDF: konflikt miedzy kotami',
-  href: '/oferta/poradniki-pdf/konflikt-miedzy-kotami-w-domu',
-  description: 'Dalszy material, jesli chcesz przejsc od pojedynczego artykulu do spokojniejszego planu pracy w domu.',
+  label: 'PDF: kot żyje w napięciu',
+  href: '/materialy/kot-zyje-w-napieciu',
+  description: 'Dalszy materiał, jeśli chcesz przejść od pojedynczego artykułu do spokojniejszej obserwacji domu.',
 }
 
 const BLOG_POST_CONFIGS: BlogPostConfig[] = [
@@ -382,24 +382,24 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
     audioHref: buildBookHref(null, 'szybka-konsultacja-15-min', false, 'pies'),
     supportLinks: [
       {
-        label: 'Szczeniak / mlody pies',
+        label: 'Szczeniak / młody pies',
         href: '/psy',
-        description: 'Hub tematow psich, jesli pierwsza noc laczy sie z gryzieniem, pobudzeniem albo separacja.',
+        description: 'Hub tematów psich, jeśli pierwsza noc laczy się z gryzieniem, pobudzeniem albo separacja.',
       },
       {
         label: 'PDF: Szczeniak pierwsze 30 dni',
-        href: '/oferta/poradniki-pdf/szczeniak-pierwsze-30-dni',
-        description: 'Szerszy material o pierwszym miesiacu, rytmie dnia, snie i bezpiecznych nawykach.',
+        href: '/materialy',
+        description: 'Szerszy materiał o pierwszym miesiacu, rytmie dnia, snie i bezpiecznych nawykach.',
       },
       {
         label: FUNNEL_CTA_LABELS.primary,
         href: buildBookHref(null, 'szybka-konsultacja-15-min', false, 'pies'),
-        description: 'Dobry start, jesli chcesz omowic pierwsze noce i ustawic spokojniejszy rytm.',
+        description: 'Dobry start, jeśli chcesz omówić pierwsze noce i ustawić spokojniejszy rytm.',
       },
       {
         label: 'Quiz',
         href: '/quiz',
-        description: 'Krotki wybor sciezki, jesli nie wiesz, czy wystarczy Kwadrans czy potrzeba szerszej rozmowy.',
+        description: 'Krótki wybór ścieżki, jeśli nie wiesz, czy wystarczy Kwadrans czy potrzeba szerszej rozmowy.',
       },
     ],
   },
@@ -420,7 +420,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
       {
         label: 'Psy',
         href: '/psy',
-        description: 'Więcej tematów związanych ze spacerem, regulacją i codzienną pracą z psem.',
+        description: 'Więcej tematów związanych że spacerem, regulacją i codzienną pracą z psem.',
       },
       {
         label: FUNNEL_CTA_LABELS.primary,
@@ -549,7 +549,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
       {
         label: 'Psy',
         href: '/psy',
-        description: 'Więcej tematów związanych ze spacerem i regulacją psa.',
+        description: 'Więcej tematów związanych że spacerem i regulacją psa.',
       },
       {
         label: FUNNEL_CTA_LABELS.primary,
@@ -699,7 +699,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
       {
         label: 'Konsultacja online',
         href: '/konsultacja-behawioralna-online',
-        description: 'Szczegoly dluzszej konsultacji online.',
+        description: 'Szczegoly dłuższej konsultacji online.',
       },
       {
         label: FUNNEL_CTA_LABELS.primary,
@@ -758,7 +758,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
       {
         label: 'Cennik',
         href: '/cennik',
-        description: 'Jesli po przygotowaniu chcesz od razu porownac dostepne formaty przed rezerwacja.',
+        description: 'Jeśli po przygotowaniu chcesz od razu porownac dostępne formaty przed rezerwacja.',
       },
       SERVICE_LANDING_LINK,
     ],
@@ -776,7 +776,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
       {
         label: 'Pies szczeka na inne psy',
         href: '/blog/dlaczego-moj-pies-szczeka-na-inne-psy',
-        description: 'Warto to przeczytac razem z praktyka luznej smyczy, zeby lepiej nazwac emocje i wyzwalacze na spacerze.',
+        description: 'Warto to przeczytac razem z praktyka luznej smyczy, żeby lepiej nazwać emocje i wyzwalacze na spacerze.',
       },
       REACTIVITY_GUIDE_LINK,
       SERVICE_LANDING_LINK,
@@ -795,7 +795,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
       {
         label: 'Pies wyje, kiedy zostaje sam',
         href: '/blog/pies-wyje-kiedy-zostaje-sam',
-        description: 'Najblizszy artykul, jesli chcesz najpierw odroznic lek separacyjny od innych scenariuszy.',
+        description: 'Najbliższy artykuł, jeśli chcesz najpierw odróżnic lęk separacyjny od innych scenariuszy.',
       },
       SEPARATION_GUIDE_LINK,
       SERVICE_LANDING_LINK,
@@ -814,7 +814,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
       {
         label: 'Jak nagrac psa zostawionego samemu',
         href: '/blog/jak-nagrac-psa-zostawionego-samemu',
-        description: 'Daje material do oceny, jesli po pracy nad rutyna potrzebujesz lepiej zobaczyc, co napedza problem.',
+        description: 'Daje materiał do oceny, jeśli po pracy nad rutyną potrzebujesz lepiej zobaczyć, co napędza problem.',
       },
       SEPARATION_GUIDE_LINK,
       SERVICE_LANDING_LINK,
@@ -831,9 +831,9 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
     supportLinks: [
       LITTER_LANDING_LINK,
       {
-        label: 'Jak ustawic kuwete dla kota',
+        label: 'Jak ustawić kuwetę dla kota',
         href: '/blog/jak-ustawic-kuwete-dla-kota',
-        description: 'Najblizszy tekst, jesli po wyborze kuwety chcesz od razu dopiac jej lokalizacje i liczbe.',
+        description: 'Najbliższy tekst, jeśli po wyborze kuwety chcesz od razu dopiąć jej lokalizację i liczbę.',
       },
       LITTER_GUIDE_LINK,
       SERVICE_LANDING_LINK,
@@ -850,9 +850,9 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
     supportLinks: [
       LITTER_LANDING_LINK,
       {
-        label: 'Kot zalatwia sie poza kuweta',
+        label: 'Kot załatwia się poza kuwetą',
         href: '/blog/kot-zalatwia-sie-poza-kuweta',
-        description: 'Najszerszy wpis startowy, jesli chcesz zobaczyc cala sekwencje filtrow przed dalsza praca.',
+        description: 'Najszerszy wpis startowy, jeśli chcesz zobaczyć cala sekwencje filtrow przed dalsza praca.',
       },
       LITTER_GUIDE_LINK,
       SERVICE_LANDING_LINK,
@@ -871,7 +871,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
       {
         label: 'Jak zapoznac dwa koty',
         href: '/blog/jak-zapoznac-dwa-koty',
-        description: 'Rozpisuje szerzej sam proces zapoznania, jesli ten etap w domu dopiero przed toba.',
+        description: 'Rozpisuje szerzej sam proces zapoznania, jeśli ten etap w domu dopiero przed toba.',
       },
       CAT_CONFLICT_GUIDE_LINK,
       SERVICE_LANDING_LINK,
@@ -890,7 +890,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
       {
         label: 'Jak zapoznac dwa koty',
         href: '/blog/jak-zapoznac-dwa-koty',
-        description: 'Dobry kolejny tekst, jesli konflikt jest zwiazany z granicami, dystansem i powolnym wprowadzaniem kontaktu.',
+        description: 'Dobry kolejny tekst, jeśli konflikt jest zwiazany z granicami, dystansem i powolnym wprowadzaniem kontaktu.',
       },
       CAT_CONFLICT_GUIDE_LINK,
       SERVICE_LANDING_LINK,
@@ -926,9 +926,9 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
     supportLinks: [
       SEPARATION_LANDING_LINK,
       {
-        label: 'Rutyna wyjscia i oswajanie z samotnoscia',
+        label: 'Rutyna wyjścia i oswajanie z samotnością',
         href: '/blog/rutyna-wyjscia-oswajanie-psa-z-samotnoscia',
-        description: 'Dalej porzadkuje prace krok po kroku, jesli chcesz utrzymac plan bez przeskakiwania etapow.',
+        description: 'Dalej porządkuje prace krok po kroku, jeśli chcesz utrzymac plan bez przeskakiwania etapow.',
       },
       SEPARATION_GUIDE_LINK,
       SERVICE_LANDING_LINK,
@@ -945,9 +945,9 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
     supportLinks: [
       LITTER_LANDING_LINK,
       {
-        label: 'Jak wybrac kuwete i zwirek',
+        label: 'Jak wybrać kuwetę i żwirek',
         href: '/blog/jak-wybrac-kuwete-i-zwirek-dla-kota',
-        description: 'Najblizszy tekst, jesli po ustawieniu kuwety chcesz jeszcze sprawdzic rozmiar, zwirek i typowe bledy wyboru.',
+        description: 'Najbliższy tekst, jeśli po ustawieniu kuwety chcesz jeszcze sprawdzić rozmiar, zwirek i typowe bledy wyboru.',
       },
       LITTER_GUIDE_LINK,
       SERVICE_LANDING_LINK,
@@ -966,7 +966,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
       {
         label: 'Jak wprowadzic nowego kota do domu',
         href: '/blog/jak-wprowadzic-nowego-kota-do-domu',
-        description: 'Dobry tekst siostrzany, jesli chcesz zaczac jeszcze krok wczesniej od calego procesu wdrozenia nowego kota.',
+        description: 'Dobry tekst siostrzany, jeśli chcesz zacząć jeszcze krok wcześniej od całego procesu wdrożenia nowego kota.',
       },
       CAT_CONFLICT_GUIDE_LINK,
       SERVICE_LANDING_LINK,
@@ -1146,7 +1146,7 @@ function parseMarkdownBlocks(source: string): BlogMarkdownBlock[] {
       const quoteLines: string[] = []
 
       while (index < lines.length && (lines[index]?.trim() ?? '').startsWith('>')) {
-        quoteLines.push((lines[index] ?? '').replace(/^>\s?/, ''))
+        quoteLines.push((lines[index] ?? '').replace(/^>\są/, ''))
         index += 1
       }
 

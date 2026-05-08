@@ -6,8 +6,8 @@ import { createPendingTestimonial } from '@/lib/server/testimonial-store'
 import { sendClientTestimonialNotificationEmail } from '@/lib/server/notifications'
 import { TESTIMONIAL_ISSUE_OPTIONS, isTestimonialIssueCategory, TESTIMONIAL_FORM_LIMITS } from '@/lib/testimonials'
 
-const SUCCESS_MESSAGE = 'Dzieki. Opinia trafila do weryfikacji. Odezwe sie po sprawdzeniu.'
-const GENERIC_ERROR_MESSAGE = 'Nie udalo sie wyslac opinii. Sprobuj ponownie pozniej.'
+const SUCCESS_MESSAGE = 'Dzięki. Opinia trafiła do weryfikacji. Odezwę się po sprawdzeniu.'
+const GENERIC_ERROR_MESSAGE = 'Nie udało się wysłać opinii. Spróbuj ponownie później.'
 
 function isEmailValid(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
     try {
       body = (await request.json()) as Record<string, unknown>
     } catch {
-      return NextResponse.json({ error: 'Nie udalo sie odczytac formularza.' }, { status: 400 })
+      return NextResponse.json({ error: 'Nie udało się odczytać formularza.' }, { status: 400 })
     }
 
     if (typeof body.website === 'string' && body.website.trim()) {
@@ -47,7 +47,7 @@ export async function POST(request: Request) {
     const consentPublish = body.consentPublish === true
 
     if (!displayName || !email || !issueCategory || !opinion) {
-      return NextResponse.json({ error: 'Uzupelnij wszystkie wymagane pola.' }, { status: 400 })
+      return NextResponse.json({ error: 'Uzupełnij wszystkie wymagane pola.' }, { status: 400 })
     }
 
     if (!isEmailValid(email)) {
@@ -60,11 +60,11 @@ export async function POST(request: Request) {
     }
 
     if (opinion.length < 20) {
-      return NextResponse.json({ error: 'Opinia jest za krotka. Napisz kilka zdan.' }, { status: 400 })
+      return NextResponse.json({ error: 'Opinia jest za krótka. Napisz kilka zdan.' }, { status: 400 })
     }
 
     if (!consentPublish) {
-      return NextResponse.json({ error: 'Zaznacz zgode na publikacje.' }, { status: 400 })
+      return NextResponse.json({ error: 'Zaznacz zgodę na publikację.' }, { status: 400 })
     }
 
     const record = await createPendingTestimonial({

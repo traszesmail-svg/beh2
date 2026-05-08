@@ -41,6 +41,7 @@ const RELEASE_ID = '2026-04-23-live-verification-v1'
 
 export const metadata: Metadata = {
   metadataBase,
+  referrer: 'no-referrer',
   title: {
     default: SITE_NAME,
     template: `%s | ${SITE_SHORT_NAME}`,

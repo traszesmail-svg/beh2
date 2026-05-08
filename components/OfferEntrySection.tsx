@@ -32,33 +32,33 @@ function getSpeciesLabel(species?: BookingSpecies | null) {
 
 function getAudioDescription(species?: BookingSpecies | null) {
   if (species === 'pies') {
-    return `${COPY_SERVICE_NAMES.primary} to najprostszy start dla opiekuna psa, gdy chcesz omowic jedno pytanie albo spokojnie ustalic, od czego zaczac.`
+    return `${COPY_SERVICE_NAMES.primary} to najprostszy start dla opiekuna psa, gdy chcesz omówić jedno pytanie albo spokojnie ustalić, od czego zacząć.`
   }
 
   if (species === 'kot') {
-    return `${COPY_SERVICE_NAMES.primary} to najprostszy start dla opiekuna kota, gdy chcesz uporzadkowac temat i sprawdzic najlepszy pierwszy krok.`
+    return `${COPY_SERVICE_NAMES.primary} to najprostszy start dla opiekuna kota, gdy chcesz uporządkować temat i sprawdzić najlepszy pierwszy krok.`
   }
 
-  return `${COPY_SERVICE_NAMES.primary} to najprostszy start dla opiekuna psa lub kota, gdy chcesz uporzadkowac jeden temat i ruszyc z wlasciwego miejsca.`
+  return `${COPY_SERVICE_NAMES.primary} to najprostszy start dla opiekuna psa lub kota, gdy chcesz uporządkować jeden temat i ruszyć z właściwego miejsca.`
 }
 
 function getFullConsultationDescription(species?: BookingSpecies | null) {
   if (species === 'pies') {
-    return 'Dla psa przy temacie bardziej zlozonym, dluzej trwajacym albo obejmujacym kilka watkow.'
+    return 'Dla psa przy temacie bardziej złożonym, dłużej trwającym albo obejmującym kilka wątków.'
   }
 
   if (species === 'kot') {
-    return 'Dla kota przy temacie szerszym, dluzej trwajacym albo obejmujacym kilka obszarow naraz.'
+    return 'Dla kota przy temacie szerszym, dłużej trwającym albo obejmującym kilka obszarów naraz.'
   }
 
-  return 'Dla spraw bardziej zlozonych, dluzej trwajacych albo wielowatkowych, gdy potrzebna jest pelniejsza konsultacja.'
+  return 'Dla spraw bardziej złożonych, dłużej trwających albo wielowątkowych, gdy potrzebna jest pełniejsza konsultacja.'
 }
 
 export function OfferEntrySection({
   species = null,
   sectionId,
   eyebrow = 'Oferta',
-  title = 'Trzy glowne formaty konsultacji — Kwadrans, Dwa kwadranse i Pelna konsultacja.',
+  title = 'Trzy główne formaty konsultacji — Kwadrans, Dwa kwadranse i Pełna konsultacja.',
   description = PUBLIC_OFFER_BOOKING_LEAD,
 }: OfferEntrySectionProps) {
   const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min', false, species)
@@ -91,13 +91,13 @@ export function OfferEntrySection({
           <div className="section-eyebrow">{COPY_SERVICE_NAMES.primary}</div>
           <h3>{COPY_SERVICE_NAMES.primary}</h3>
           <p>{getAudioDescription(species)}</p>
-          <div className="editorial-hero-meta" aria-label="Parametry uslugi">
-            {/* Kwadrans zostaje nazwa uslugi, a format idzie w descriptorze. */}
+          <div className="editorial-hero-meta" aria-label="Parametry usługi">
+            {/* Kwadrans zostaje nazwą usługi, a format idzie w descriptorze. */}
             <span>{COPY_SERVICE_NAMES.primaryDescriptor}</span>
             <span>{formatPricePln(PUBLIC_OFFER_PRICES.quick)}</span>
-            <span>69 zl / 15 min</span>
+            <span>69 zł / 15 min</span>
           </div>
-          <p className="muted">Dla {speciesLabel}, gdy temat jest jeden albo chcesz spokojnie ustalic kierunek bez przechodzenia od razu do dluzszej konsultacji.</p>
+          <p className="muted">Dla {speciesLabel}, gdy temat jest jeden albo chcesz spokojnie ustalić kierunek bez przechodzenia od razu do dłuższej konsultacji.</p>
           <p className="muted">{PUBLIC_OFFER_PRIORITY_VARIANT_NOTE}</p>
           <div className="hero-actions top-gap-small">
             <Link href={audioHref} prefetch={false} className="button button-primary">
@@ -109,13 +109,13 @@ export function OfferEntrySection({
         <article className="summary-card tree-backed-card">
           <div className="section-eyebrow">{COPY_SERVICE_NAMES.bridge}</div>
           <h3>{COPY_SERVICE_NAMES.bridge}</h3>
-          <p>Format dla tematow szerszych, gdy 15 minut to za malo, ale pelna konsultacja bylaby jeszcze zbyt szerokim startem.</p>
-          <div className="editorial-hero-meta" aria-label="Parametry uslugi posredniej">
+          <p>Format dla tematów szerszych, gdy 15 minut to za mało, ale pełna konsultacja byłaby jeszcze zbyt szerokim startem.</p>
+          <div className="editorial-hero-meta" aria-label="Parametry usługi posredniej">
             <span>30 min online</span>
             <span>{formatPricePln(PUBLIC_OFFER_PRICES.bridge)}</span>
             <span>szerszy zakres</span>
           </div>
-          <p className="muted">Dla {speciesLabel}, gdy chcesz uporzadkowac 2-3 watki i po rozmowie dostac krotka notatke.</p>
+          <p className="muted">Dla {speciesLabel}, gdy chcesz uporządkować 2-3 wątki i po rozmowie dostac krótka notatkę.</p>
           <div className="hero-actions top-gap-small">
             <Link href={bridgeHref} prefetch={false} className="button button-ghost">
               {COPY_CTA.bridge}
@@ -124,15 +124,15 @@ export function OfferEntrySection({
         </article>
 
         <article className="summary-card tree-backed-card">
-          <div className="section-eyebrow">Pelna konsultacja</div>
-          <h3>Pelna konsultacja behawioralna</h3>
-          <p>{getFullConsultationDescription(species)} Po rozmowie dostajesz diagnoze, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.</p>
-          <div className="editorial-hero-meta" aria-label="Parametry uslugi">
-            <span>pelny zakres online</span>
+          <div className="section-eyebrow">Pełna konsultacja</div>
+          <h3>Pełna konsultacja behawioralna</h3>
+          <p>{getFullConsultationDescription(species)} Po rozmowie dostajesz diagnozę, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.</p>
+          <div className="editorial-hero-meta" aria-label="Parametry usługi">
+            <span>pełny zakres online</span>
             <span>{formatPricePln(PUBLIC_OFFER_PRICES.premium)}</span>
             <span>diagnoza + 7 dni WhatsApp</span>
           </div>
-          <p className="muted">Dla {speciesLabel}, gdy problem trwa dluzej, wraca albo obejmuje kilka obszarow naraz.</p>
+          <p className="muted">Dla {speciesLabel}, gdy problem trwa dłużej, wraca albo obejmuje kilka obszarów naraz.</p>
           <p className="muted">{PUBLIC_OFFER_FULL_CONSULTATION_VALUE}</p>
           <div className="hero-actions top-gap-small">
             <Link href={fullConsultationHref} prefetch={false} className="button button-ghost">
@@ -147,7 +147,7 @@ export function OfferEntrySection({
         <Link href={messageHref} prefetch={false} className="prep-inline-link">
           {COPY_CTA.contact.toLowerCase()}
         </Link>{' '}
-        pomaga wtedy, gdy chcesz tylko krotko doprecyzowac temat. Jesli wolisz najpierw materialy, nadal mozesz wejsc do Niezbednika.
+        pomaga wtedy, gdy chcesz tylko krótko doprecyzować temat. Jeśli wolisz najpierw materiały, nadal możesz wejść do Niezbędnika.
       </p>
       <p className="muted top-gap-small">{PUBLIC_OFFER_BOOKING_REASSURANCE}</p>
     </section>

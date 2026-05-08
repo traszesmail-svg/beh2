@@ -28,7 +28,7 @@ export const metadata: Metadata = buildMarketingMetadata({
   title: 'Opinie o konsultacjach behawioralnych',
   path: '/opinie',
   description:
-    'Krotkie glosy po konsultacjach, przykladowe sytuacje startowe i publiczne sygnaly zaufania przed pierwszym kontaktem.',
+    'Krótkie głosy po konsultacjach, przykładowe sytuacje startowe i publiczne sygnały zaufania przed pierwszym kontaktem.',
 })
 
 type SectionIntroProps = {
@@ -77,38 +77,38 @@ const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min')
 const contactHref = '/kontakt#formularz'
 const profilePhoto = { src: '/branding/omnie3.png', width: 1024, height: 1536 } as const
 
-const heroSignals = ['spacery', 'reaktywnosc', 'kuweta', 'wycofanie', 'napiecie w domu', 'relacje miedzy zwierzetami'] as const
+const heroSignals = ['spacery', 'reaktywność', 'kuweta', 'wycofanie', 'napięcie w domu', 'relacje między zwierzętami'] as const
 
 const opinionCards: OpinionCard[] = [
   {
     quote:
-      'Po konsultacji przestalam skakac miedzy rozwiazaniami. Zostal jeden plan spacerow, jasna kolejnosc i wreszcie wiedzialam, co naprawde obserwowac.',
+      'Po konsultacji przestałam skakać między rozwiązaniami. Został jeden plan spacerów, jasna kolejność i wreszcie wiedziałam, co naprawdę obserwować.',
     name: 'M.K.',
     signature: 'opiekunka psa',
     label: 'Pies',
     problemType: 'spacery i pobudzenie',
     cooperationStage: 'po pierwszej konsultacji',
-    format: 'po pelnej konsultacji',
-    outcome: 'jeden plan spacerow i czytelne obserwacje zamiast wielu technik naraz',
+    format: 'po pełnej konsultacji',
+    outcome: 'jeden plan spacerów i czytelne obserwacje zamiast wielu technik naraz',
   },
   {
     quote:
-      'Najbardziej pomoglo spokojne uporzadkowanie kuwety, przestrzeni i rytmu domu. Temat przestal byc chaotyczny, a stal sie czytelny i duzo mniej obciazajacy.',
+      'Najbardziej pomogło spokojne uporządkowanie kuwety, przestrzeni i rytmu domu. Temat przestał być chaotyczny, a stał się czytelny i dużo mniej obciążający.',
     name: 'A.P.',
     signature: 'opiekunka kota',
     label: 'Kot',
-    problemType: 'kuweta i srodowisko',
+    problemType: 'kuweta i środowisko',
     cooperationStage: 'po pierwszej konsultacji',
-    format: 'po pelnej konsultacji',
-    outcome: 'porzadek w srodowisku i mniej napiecia zamiast kolejnych losowych zmian',
+    format: 'po pełnej konsultacji',
+    outcome: 'porządek w środowisku i mniej napięcia zamiast kolejnych losowych zmian',
   },
   {
     quote:
-      'To byla pierwsza rozmowa, po ktorej poczulam ulge, a nie wiecej presji. Dostalam jasny kierunek, spokojne wytlumaczenie i zero oceniania.',
+      'To była pierwsza rozmowa, po której poczułam ulgę, a nie więcej presji. Dostałam jasny kierunek, spokojne wytłumaczenie i zero oceniania.',
     name: 'K.S.',
     signature: 'opiekunka psa i kota',
     label: 'Styl pracy',
-    problemType: 'niepewnosc od czego zaczac',
+    problemType: 'niepewność, od czego zacząć',
     cooperationStage: 'po pierwszym kontakcie',
     format: 'po Kwadransie',
     outcome: 'jasny dalszy krok bez presji i bez oceniania',
@@ -131,21 +131,21 @@ const trustCards: TrustCard[] = [
   {
     eyebrow: 'CAPBT',
     title: 'Publiczny profil specjalisty',
-    copy: 'Status i profil sa widoczne publicznie. Na stronie zostaje ta sama, ostrozna warstwa opisu kwalifikacji.',
+    copy: 'Status i profil są widoczne publicznie. Na stronie zostaje ta sama, ostrożna warstwa opisu kwalifikacji.',
     href: CAPBT_PROFILE_URL,
-    cta: 'Otworz profil',
+    cta: 'Otwórz profil',
   },
   {
     eyebrow: 'Publikacje',
-    title: `${MEDIA_MENTIONS.length} opublikowane artykuly`,
-    copy: 'Mozesz sprawdzic publiczne publikacje i zobaczyc, jak opisywane sa podobne tematy poza sama strona sprzedazowa.',
+    title: `${MEDIA_MENTIONS.length} opublikowane artykuły`,
+    copy: 'Możesz sprawdzić publiczne publikacje i zobaczyć, jak opisywane są podobne tematy poza samą stroną sprzedażową.',
     href: MEDIA_MENTIONS[0]?.href ?? '/blog',
-    cta: MEDIA_MENTIONS[0] ? 'Zobacz artykul' : 'Zobacz blog',
+    cta: MEDIA_MENTIONS[0] ? 'Zobacz artykuł' : 'Zobacz blog',
   },
   {
     eyebrow: 'Przypadki',
     title: `${REAL_CASE_STUDIES.length} opisanych sytuacji startowych`,
-    copy: 'Na tej stronie zostaja skrocone historie z kontekstem problemu, pierwszym krokiem i pierwszym efektem.',
+    copy: 'Na tej stronie zostają skrócone historie z kontekstem problemu, pierwszym krokiem i pierwszym efektem.',
     href: '/historie',
     cta: 'Zobacz historie',
   },
@@ -159,10 +159,10 @@ export default function OpinionsPage() {
       '@context': 'https://schema.org',
       '@type': 'ProfessionalService',
       name: SITE_NAME,
-      description: `${SITE_TAGLINE}. Opinie i przykladowe sytuacje po konsultacjach online.`,
+      description: `${SITE_TAGLINE}. Opinie i przykładowe sytuacje po konsultacjach online.`,
       url: new URL('/opinie', baseUrl).toString(),
       areaServed: [{ '@type': 'Country', name: 'Polska' }],
-      serviceType: ['Opinie po konsultacjach', 'Przykladowe sytuacje startowe', 'Konsultacje behawioralne dla psow i kotow'],
+      serviceType: ['Opinie po konsultacjach', 'Przykładowe sytuacje startowe', 'Konsultacje behawioralne dla psów i kotów'],
       provider: {
         '@type': 'Person',
         name: SPECIALIST_NAME,
@@ -193,7 +193,7 @@ export default function OpinionsPage() {
       })),
     },
     getBreadcrumbJsonLd([
-      { name: 'Strona glowna', path: '/' },
+      { name: 'Strona główna', path: '/' },
       { name: 'Opinie', path: '/opinie' },
     ]),
   ]
@@ -203,9 +203,9 @@ export default function OpinionsPage() {
       tag="Opinie / historie po rozmowie"
       navItems={PUBLIC_SITE_NAV_ITEMS}
       ctaHref={audioHref}
-      ctaLabel="Kwadrans z behawiorysta"
+      ctaLabel="15-minutowa konsultacja behawioralna"
       footerPrimaryHref={audioHref}
-      footerPrimaryLabel="Kwadrans z behawiorysta"
+      footerPrimaryLabel="15-minutowa konsultacja behawioralna"
     >
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
 
@@ -214,9 +214,9 @@ export default function OpinionsPage() {
           <div className="editorial-hero-grid opinions-hero-grid">
             <div className="editorial-hero-copy opinions-hero-copy">
               <div className="section-eyebrow">Opinie po konsultacjach</div>
-              <h1>Co opiekunowie mowia o konsultacjach</h1>
+              <h1>Co opiekunowie mówią o konsultacjach</h1>
               <p className="editorial-hero-lead">
-                Krotkie glosy po konsultacjach i kilka przykladowych sytuacji startowych. To ma pomoc ocenic styl pracy i pierwszy efekt, nie obiecywac
+                Krótkie głosy po konsultacjach i kilka przykładowych sytuacji startowych. To ma pomóc ocenić styl pracy i pierwszy efekt, nie obiecywać
                 identycznego wyniku.
               </p>
 
@@ -229,23 +229,23 @@ export default function OpinionsPage() {
                 actionsClassName="hero-actions editorial-hero-actions opinions-hero-actions"
                 note={
                   <>
-                    Jesli po tych historiach widzisz cos bliskiego swojej sytuacji, zacznij od spokojnego pierwszego kroku albo uzyj{' '}
+                    Jeśli po tych historiach widzisz coś bliskiego swojej sytuacji, zacznij od spokojnego pierwszego kroku albo użyj{' '}
                     <Link href={contactHref} prefetch={false} className="prep-inline-link">
-                      krotkiej wiadomosci
+                      krótkiej wiadomości
                     </Link>
                     .
                   </>
                 }
               />
 
-              <div className="opinions-hero-signals" aria-label="Najczestsze tematy">
+              <div className="opinions-hero-signals" aria-label="Najczęstsze tematy">
                 {heroSignals.map((signal) => (
                   <span key={signal}>{signal}</span>
                 ))}
               </div>
             </div>
 
-            <aside className="opinions-hero-visual" aria-label="Profil i przykladowy start">
+            <aside className="opinions-hero-visual" aria-label="Profil i przykładowy start">
               <article className="summary-card tree-backed-card opinions-profile-card">
                 <div className="opinions-profile-media">
                   <Image
@@ -270,9 +270,9 @@ export default function OpinionsPage() {
               </article>
 
               <article className="summary-card tree-backed-card opinions-hero-case-card">
-                <div className="section-eyebrow">Przykladowa sytuacja startowa</div>
+                <div className="section-eyebrow">Przykładowa sytuacja startowa</div>
                 <h3>{leadCaseStudy.headline}</h3>
-                <div className="editorial-hero-meta opinions-case-meta" aria-label="Meta przykladowej sytuacji">
+                <div className="editorial-hero-meta opinions-case-meta" aria-label="Meta przykładowej sytuacji">
                   <span>{getSpeciesLabel(leadCaseStudy.species)}</span>
                   <span>{leadCaseStudy.breed}</span>
                   <span>{leadCaseStudy.age}</span>
@@ -297,9 +297,9 @@ export default function OpinionsPage() {
 
         <section className="panel section-panel editorial-section" id="opinie">
           <SectionIntro
-            eyebrow="3 glosy po konsultacjach"
+            eyebrow="3 głosy po konsultacjach"
             title="Najmocniejsze opinie po pierwszym etapie pracy."
-            description="Krotko: co uporzadkowal pierwszy krok i z jakiego typu sytuacja to przyszlo."
+            description="Krótko: co uporządkował pierwszy krok i z jakiego typu sytuacją to przyszło."
           />
 
           <div className="card-grid three-up">
@@ -323,9 +323,9 @@ export default function OpinionsPage() {
 
         <section className="panel section-panel editorial-section" id="przypadki">
           <SectionIntro
-            eyebrow="3 przykladowe przypadki"
+            eyebrow="3 przykładowe przypadki"
             title="Kontekst problemu, pierwszy ruch i dalszy kierunek."
-            description="Te karty pokazuja, od czego zwykle zaczyna sie porzadkowanie tematu po rozmowie."
+            description="Te karty pokazują, od czego zwykle zaczyna się porządkowanie tematu po rozmowie."
           />
 
           <div className="premium-two-column-grid opinions-case-grid">
@@ -360,7 +360,7 @@ export default function OpinionsPage() {
                 </div>
                 <div className="top-gap-small">
                   <Link href={getRealCaseStudyPath(caseStudy)} prefetch={false} className="prep-inline-link">
-                    Czytaj cala historie
+                    Czytaj całą historię
                   </Link>
                 </div>
               </article>
@@ -370,9 +370,9 @@ export default function OpinionsPage() {
 
         <section className="panel section-panel editorial-section" id="zaufanie">
           <SectionIntro
-            eyebrow="3 sygnaly zaufania"
-            title="Co mozesz sprawdzic publicznie."
-            description="Bez dodatkowych warstw sprzedazowych: profil, publikacje i opisane sytuacje startowe."
+            eyebrow="3 sygnały zaufania"
+            title="Co możesz sprawdzić publicznie."
+            description="Bez dodatkowych warstw sprzedażowych: profil, publikacje i opisane sytuacje startowe."
           />
 
           <div className="card-grid three-up">
@@ -393,16 +393,16 @@ export default function OpinionsPage() {
 
         <EditorialFaqSection
           id="faq"
-          title="Najczestsze pytania po przeczytaniu opinii"
-          description="Trzy najwazniejsze odpowiedzi przed pierwszym kontaktem."
+          title="Najczęstsze pytania po przeczytaniu opinii"
+          description="Trzy najważniejsze odpowiedzi przed pierwszym kontaktem."
           items={faqItems}
         />
 
         <section className="panel cta-panel editorial-final-panel" id="kontakt">
           <div className="editorial-final-copy">
             <div className="section-eyebrow">Ostatni krok</div>
-            <h2>Jesli widzisz tu cos bliskiego swojej sytuacji, zrob pierwszy spokojny krok</h2>
-            <p>Nie musisz znalezc historii identycznej z Twoja. Wystarczy krotki opis sytuacji i decyzja, od jakiego formatu chcesz zaczac.</p>
+            <h2>Jeśli widzisz tu coś bliskiego swojej sytuacji, zrób pierwszy spokojny krok</h2>
+            <p>Nie musisz znaleźć historii identycznej z Twoją. Wystarczy krótki opis sytuacji i decyzja, od jakiego formatu chcesz zacząć.</p>
 
             <FunnelPrimaryActions
               audioHref={audioHref}
@@ -412,9 +412,9 @@ export default function OpinionsPage() {
               secondaryLocation="opinions-final-toolkit"
               note={
                 <>
-                  Jesli nie masz pewnosci, czy wystarczy Kwadrans, napisz{' '}
+                  Jeśli nie masz pewności, czy wystarczy Kwadrans, napisz{' '}
                   <Link href={contactHref} prefetch={false} className="prep-inline-link">
-                    wiadomosc
+                    wiadomość
                   </Link>
                   .
                 </>

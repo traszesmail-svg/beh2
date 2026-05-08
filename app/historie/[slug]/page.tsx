@@ -80,7 +80,7 @@ export default function StoryDetailPage({ params }: StoryPageProps) {
 
   const structuredData = [
     getBreadcrumbJsonLd([
-      { name: 'Strona glowna', path: '/' },
+      { name: 'Strona główna', path: '/' },
       { name: 'Historie', path: '/historie' },
       { name: caseStudy.headline, path: getRealCaseStudyPath(caseStudy) },
     ]),

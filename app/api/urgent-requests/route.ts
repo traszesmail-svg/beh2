@@ -9,7 +9,7 @@ import { sendUrgentCustomerAckSms } from '@/lib/server/sms'
 import type { ProblemType } from '@/lib/types'
 
 const SUCCESS_MESSAGE =
-  'Prosba trafila do mnie. Odpiszę na podany adres e-mail w ciągu 15 minut z proponowanym terminem.'
+  'Prośba trafiła do mnie. Odpiszę na podany adres e-mail w ciągu 15 minut z proponowanym terminem.'
 
 const RATE_LIMIT_MAX = 3
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000
@@ -103,11 +103,11 @@ function validate(body: Record<string, unknown>): { payload?: ValidatedUrgentPay
   const consentProcessing = body.consentProcessing === true
   const consentPolicy = body.consentPolicy === true
 
-  if (!name || !email) return { error: 'Uzupelnij imie i adres e-mail.' }
+  if (!name || !email) return { error: 'Uzupełnij imię i adres e-mail.' }
   if (!species || !topicOption) return { error: 'Wybierz gatunek i temat konsultacji.' }
-  if (!message || message.length < 10) return { error: 'Opisz krotko sytuacje.' }
-  if (!requestedDate || !requestedTime) return { error: 'Podaj preferowana date i godzine.' }
-  if (!consentProcessing || !consentPolicy) return { error: 'Zaznacz zgode na kontakt i akceptacje polityki prywatnosci.' }
+  if (!message || message.length < 10) return { error: 'Opisz krótko sytuację.' }
+  if (!requestedDate || !requestedTime) return { error: 'Podaj preferowaną datę i godzinę.' }
+  if (!consentProcessing || !consentPolicy) return { error: 'Zaznacz zgodę na kontakt i akceptację polityki prywatności.' }
 
   return {
     payload: {
@@ -131,7 +131,7 @@ export async function POST(request: Request) {
     try {
       body = (await request.json()) as Record<string, unknown>
     } catch {
-      return NextResponse.json({ error: 'Nie udalo sie odczytac formularza.' }, { status: 400 })
+      return NextResponse.json({ error: 'Nie udało się odczytać formularza.' }, { status: 400 })
     }
 
     if (body.website) {
@@ -140,13 +140,13 @@ export async function POST(request: Request) {
 
     const { payload, error } = validate(body)
     if (error || !payload) {
-      return NextResponse.json({ error: error ?? 'Blad walidacji.' }, { status: 400 })
+      return NextResponse.json({ error: error ?? 'Błąd walidacji.' }, { status: 400 })
     }
 
     const rateLimit = consumeRateLimit(request)
     if (!rateLimit.allowed) {
       return NextResponse.json(
-        { error: 'Za duzo prob w krotkim czasie. Sprobuj ponownie za godzine.' },
+        { error: 'Za dużo prób w krótkim czasie. Spróbuj ponownie za godzinę.' },
         { status: 429, headers: { 'Retry-After': String(rateLimit.retryAfterSeconds) } },
       )
     }
@@ -193,7 +193,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ ok: true, message: SUCCESS_MESSAGE, requestId: record.id })
   } catch (err) {
-    console.error('[behawior15][urgent-requests] unexpected error', err)
-    return NextResponse.json({ error: 'Nie udalo sie wyslac prosby. Sprobuj ponownie.' }, { status: 500 })
+    console.error('[regulski-behawiorysta][urgent-requests] unexpected error', err)
+    return NextResponse.json({ error: 'Nie udało się wysłać prośby. Spróbuj ponownie.' }, { status: 500 })
   }
 }

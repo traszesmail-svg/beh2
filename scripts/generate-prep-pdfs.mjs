@@ -192,7 +192,7 @@ function buildHtmlPage(slug, content) {
 </head>
 <body>
   <div class="header">
-    <div class="header-brand">Behawior 15 · Krzysztof Regulski</div>
+    <div class="header-brand">Regulski Behawiorysta · Krzysztof Regulski</div>
     <div class="header-service">${esc(serviceLabel)}</div>
   </div>
 
@@ -201,8 +201,8 @@ function buildHtmlPage(slug, content) {
   </div>
 
   <div class="footer">
-    <span>behawior15.pl</span>
-    <span>Poradnik przygotowawczy · Behawior 15</span>
+    <span>regulskibehawiorysta.pl</span>
+    <span>Poradnik przygotowawczy · Regulski Behawiorysta</span>
   </div>
 </body>
 </html>`

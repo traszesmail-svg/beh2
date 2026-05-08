@@ -1348,20 +1348,20 @@ async function main() {
       step.notes.push('Polityka prywatności używa nowego shellu prawnego bez publicznego telefonu i starego menu.')
     })
 
-    await runStep(results, '/oferta/poradniki-pdf guide nav', publicPage, async (step) => {
-      await publicPage.goto(`${baseUrl}/oferta/poradniki-pdf/pies-zostaje-sam-plan-pierwszych-krokow`, { waitUntil: 'domcontentloaded' })
+    await runStep(results, '/materialy guide nav', publicPage, async (step) => {
+      await publicPage.goto(`${baseUrl}/materialy/pies-sam-w-domu`, { waitUntil: 'domcontentloaded' })
       await waitForAnyVisible([publicPage.locator('main h1').first()], 20000)
-      await assertPublicSiteNavVisible(publicPage, '/oferta/poradniki-pdf/pies-zostaje-sam-plan-pierwszych-krokow')
-      await assertLegacyHeaderLinksHidden(publicPage, '/oferta/poradniki-pdf/pies-zostaje-sam-plan-pierwszych-krokow')
-      step.notes.push('Strona pojedynczego PDF ma ten sam publiczny topbar co glowne templatey.')
+      await assertPublicSiteNavVisible(publicPage, '/materialy/pies-sam-w-domu')
+      await assertLegacyHeaderLinksHidden(publicPage, '/materialy/pies-sam-w-domu')
+      step.notes.push('Strona pojedynczego aktualnego PDF ma ten sam publiczny topbar co glowne templatey.')
     })
 
-    await runStep(results, '/oferta/poradniki-pdf bundle nav', publicPage, async (step) => {
-      await publicPage.goto(`${baseUrl}/oferta/poradniki-pdf/pakiety/pakiet-kot-bez-napiecia`, { waitUntil: 'domcontentloaded' })
+    await runStep(results, '/materialy listing nav', publicPage, async (step) => {
+      await publicPage.goto(`${baseUrl}/materialy`, { waitUntil: 'domcontentloaded' })
       await waitForAnyVisible([publicPage.locator('main h1').first()], 20000)
-      await assertPublicSiteNavVisible(publicPage, '/oferta/poradniki-pdf/pakiety/pakiet-kot-bez-napiecia')
-      await assertLegacyHeaderLinksHidden(publicPage, '/oferta/poradniki-pdf/pakiety/pakiet-kot-bez-napiecia')
-      step.notes.push('Strona pakietu PDF ma ten sam publiczny topbar co glowne templatey.')
+      await assertPublicSiteNavVisible(publicPage, '/materialy')
+      await assertLegacyHeaderLinksHidden(publicPage, '/materialy')
+      step.notes.push('Katalog aktualnych PDF ma ten sam publiczny topbar co glowne templatey.')
     })
 
     await publicContext.close()

@@ -1,17 +1,18 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { BadgeCheck, BookOpen, HeartHandshake, ShieldCheck, UserRound } from 'lucide-react'
+import { HeartHandshake, ShieldCheck, UserRound } from 'lucide-react'
 import { CredentialsGrid } from '@/components/CredentialsGrid'
-import { ReferenceContactCard, ReferenceFinalCta, ReferencePageShell } from '@/components/ReferencePageShell'
+import { ReferenceFinalCta, ReferencePageShell } from '@/components/ReferencePageShell'
 import { Schema } from '@/components/schema'
 import { buildBookHref } from '@/lib/booking-routing'
 import { getBreadcrumbJsonLd, getFaqPageJsonLd, getPersonJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
 import {
-  CAPBT_ORG_URL,
+  CAPBT_POLSKA_LOGO,
   CAPBT_PROFILE_URL,
-  INSTAGRAM_PROFILE_URL,
+  COAPE_ORG_URL,
+  COAPE_POLSKA_LOGO,
   MEDIA_MENTIONS,
   ABOUT_SPECIALIST_PHOTO,
   SPECIALIST_NAME,
@@ -28,7 +29,6 @@ export const metadata: Metadata = buildMarketingMetadata({
 })
 
 const bookHref = buildBookHref(null, 'szybka-konsultacja-15-min')
-const consultationHref = buildBookHref(null, 'konsultacja-behawioralna-online')
 const contactHref = '/kontakt#formularz'
 
 const workStyleCards = [
@@ -49,29 +49,45 @@ const workStyleCards = [
   },
 ]
 
-const proofCards = [
+const organizationProofCards = [
   {
-    label: 'Status publiczny',
+    label: 'CAPBT / COAPE',
     title: SPECIALIST_PUBLIC_STATUS,
     copy: SPECIALIST_STATUS_EXPLANATION,
     href: CAPBT_PROFILE_URL,
     cta: 'Zweryfikuj profil',
+    logo: CAPBT_POLSKA_LOGO,
   },
   {
-    label: 'Środowisko zawodowe',
-    title: 'COAPE / CAPBT',
-    copy: 'Publiczne punkty odniesienia dla sposobu pracy i profilu zawodowego.',
-    href: CAPBT_ORG_URL,
+    label: 'COAPE Polska',
+    title: 'COAPE',
+    copy: 'Publiczny punkt odniesienia dla kwalifikacji i sposobu pracy ze zwierzętami towarzyszącymi.',
+    href: COAPE_ORG_URL,
     cta: 'Zobacz organizację',
-  },
-  {
-    label: 'Publiczne treści',
-    title: 'Publikacje i Instagram',
-    copy: 'Możesz sprawdzić sposób komunikacji i tematy, o których piszę poza samą stroną.',
-    href: MEDIA_MENTIONS[0]?.href ?? INSTAGRAM_PROFILE_URL,
-    cta: MEDIA_MENTIONS[0] ? 'Zobacz artykuł' : 'Otwórz Instagram',
+    logo: COAPE_POLSKA_LOGO,
   },
 ]
+
+const articleThumbnails: Record<string, { src: string; alt: string }> = {
+  'magwet-litter-box': {
+    src: '/branding/topic-cards/cats/cat-litter-box.jpg',
+    alt: 'Kot przy kuwecie jako miniatura artykułu o terapii behawioralnej i farmakologicznej',
+  },
+  'magwet-fear': {
+    src: '/branding/case-studies/blog-case-animals.jpg',
+    alt: 'Pies i kot jako miniatura artykułu o strachu, lęku i fobii',
+  },
+}
+
+const articleProofCards = MEDIA_MENTIONS.map((mention) => ({
+  ...mention,
+  thumbnail:
+    articleThumbnails[mention.id] ??
+    ({
+      src: '/branding/case-studies/blog-case-animals.jpg',
+      alt: 'Miniatura publikacji',
+    } as const),
+}))
 
 export default function AboutPage() {
   const faqItems = FAQ_SHORTLISTS.consultation.slice(0, 3)
@@ -118,12 +134,16 @@ export default function AboutPage() {
         </figure>
       </section>
 
-      <section className="reference-category-grid" aria-label="Najważniejsze informacje">
+      <section className="reference-about-info-strip" aria-label="Szybkie informacje">
+        <div className="reference-about-info-title">
+          <span className="reference-pill">O pracy</span>
+          <h2>Szybkie informacje</h2>
+        </div>
         {workStyleCards.map((card) => {
           const Icon = card.icon
 
           return (
-            <article key={card.title} className="reference-category-card reference-static-card">
+            <article key={card.title} className="reference-about-info-item">
               <Icon size={25} strokeWidth={1.7} aria-hidden="true" />
               <span>
                 <strong>{card.title}</strong>
@@ -134,81 +154,63 @@ export default function AboutPage() {
         })}
       </section>
 
-      <section className="reference-main-layout">
-        <div className="reference-content-column">
-          <section className="reference-section-card">
-            <h2>Kwalifikacje i profil</h2>
-            <p>
-              Na stronie pokazuję tylko publicznie wspierane informacje: status, organizacje i profil, które można
-              sprawdzić samodzielnie.
-            </p>
-            <CredentialsGrid />
-          </section>
+      <section className="reference-content-column reference-wide-column">
+        <section className="reference-section-card">
+          <h2>Kwalifikacje i profil</h2>
+          <p>
+            Na stronie pokazuję tylko publicznie wspierane informacje: status, organizacje i profil, które można
+            sprawdzić samodzielnie.
+          </p>
+          <CredentialsGrid />
+        </section>
 
-          <section className="reference-section-card">
-            <h2>Co możesz sprawdzić publicznie</h2>
-            <div className="reference-proof-grid">
-              {proofCards.map((card) => (
-                <article key={card.title} className="reference-proof-card">
-                  <span>{card.label}</span>
-                  <h3>{card.title}</h3>
-                  <p>{card.copy}</p>
-                  <a href={card.href} target="_blank" rel="noopener noreferrer">
-                    {card.cta}
-                  </a>
-                </article>
-              ))}
-            </div>
-          </section>
+        <section className="reference-section-card reference-public-proof-section">
+          <h2>Co możesz sprawdzić publicznie</h2>
+          <div className="reference-proof-feature-grid">
+            {organizationProofCards.map((card) => (
+              <article key={card.title} className="reference-proof-card reference-logo-proof-card">
+                <span>{card.label}</span>
+                <div className="reference-logo-proof-media">
+                  <Image src={card.logo.src} alt={card.logo.alt} width={card.logo.width} height={card.logo.height} />
+                </div>
+                <h3>{card.title}</h3>
+                <p>{card.copy}</p>
+                <a href={card.href} target="_blank" rel="noopener noreferrer">
+                  {card.cta}
+                </a>
+              </article>
+            ))}
 
-          <section className="reference-section-card">
-            <h2>Najczęstsze pytania o sposób pracy</h2>
-            <div className="reference-compact-faq">
-              {faqItems.map((item, index) => (
-                <details key={item.question} open={index === 0}>
-                  <summary>
-                    <span>{String(index + 1).padStart(2, '0')}</span>
-                    {item.question}
-                  </summary>
-                  <p>{item.answer}</p>
-                </details>
-              ))}
-            </div>
-          </section>
-        </div>
-
-        <aside className="reference-sidebar">
-          <div className="reference-side-card">
-            <h2>Szybkie informacje</h2>
-            <div className="reference-info-list">
-              <div className="reference-info-row">
-                <BadgeCheck size={24} strokeWidth={1.7} aria-hidden="true" />
-                <span>
-                  <strong>Dyplomant COAPE</strong>
-                  <small>Publiczny profil CAPBT / COAPE.</small>
-                </span>
-              </div>
-              <div className="reference-info-row">
-                <BookOpen size={24} strokeWidth={1.7} aria-hidden="true" />
-                <span>
-                  <strong>Psy i koty</strong>
-                  <small>Sprawy behawioralne, start i dalsze kroki.</small>
-                </span>
-              </div>
-              <div className="reference-info-row">
-                <HeartHandshake size={24} strokeWidth={1.7} aria-hidden="true" />
-                <span>
-                  <strong>Bez oceniania</strong>
-                  <small>Praca z sytuacją, nie z poczuciem winy opiekuna.</small>
-                </span>
-              </div>
-            </div>
-            <Link href={consultationHref} prefetch={false} className="reference-btn reference-btn-secondary">
-              Jak wygląda pełna konsultacja
-            </Link>
+            {articleProofCards.map((card) => (
+              <article key={card.id} className="reference-proof-card reference-article-proof-card">
+                <div className="reference-article-proof-thumb">
+                  <Image src={card.thumbnail.src} alt={card.thumbnail.alt} fill sizes="(max-width: 760px) 90vw, 260px" />
+                </div>
+                <span>{card.label}</span>
+                <h3>{card.title}</h3>
+                <p>{card.summary}</p>
+                <a href={card.href} target="_blank" rel="noopener noreferrer">
+                  {card.cta}
+                </a>
+              </article>
+            ))}
           </div>
-          <ReferenceContactCard />
-        </aside>
+        </section>
+
+        <section className="reference-section-card">
+          <h2>Najczęstsze pytania o sposób pracy</h2>
+          <div className="reference-compact-faq">
+            {faqItems.map((item, index) => (
+              <details key={item.question} open={index === 0}>
+                <summary>
+                  <span>{String(index + 1).padStart(2, '0')}</span>
+                  {item.question}
+                </summary>
+                <p>{item.answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
       </section>
 
       <ReferenceFinalCta

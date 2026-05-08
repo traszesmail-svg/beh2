@@ -7,6 +7,6 @@ export const contentType = 'image/png'
 export default function OpenGraphImage() {
   return renderOgImage({
     title: 'Niezbednik',
-    subtitle: 'Materialy dla opiekunow psow i kotow: przewodniki, checklisty i punkty startu.',
+    subtitle: 'Materiały dla opiekunów psów i kotów: przewodniki, checklisty i punkty startu.',
   })
 }

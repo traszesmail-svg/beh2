@@ -1,4 +1,4 @@
-// POST /api/materialy/confirm — owner-side endpoint to confirm a BLIK payment
+// POST /api/materiały/confirm — owner-side endpoint to confirm a BLIK payment
 // and release the unlock code to the customer. Authenticated by a shared
 // admin secret in the `x-admin-secret` header (or `?secret=` query string).
 //
@@ -45,10 +45,10 @@ export async function POST(request: Request) {
 
   const existing = await getOrderById(orderId)
   if (!existing) {
-    return NextResponse.json({ ok: false, error: 'Nie znaleziono zamowienia.' }, { status: 404 })
+    return NextResponse.json({ ok: false, error: 'Nie znaleziono zamówienia.' }, { status: 404 })
   }
   if (existing.status === 'cancelled') {
-    return NextResponse.json({ ok: false, error: 'Zamowienie anulowane.' }, { status: 409 })
+    return NextResponse.json({ ok: false, error: 'Zamówienie anulowane.' }, { status: 409 })
   }
   if (existing.status === 'paid' || existing.status === 'used') {
     return NextResponse.json({ ok: true, code: existing.code, expiresAt: existing.expiresAt, alreadyPaid: true })
@@ -56,7 +56,7 @@ export async function POST(request: Request) {
 
   const updated = await confirmPayment(orderId)
   if (!updated || !updated.code || !updated.expiresAt) {
-    return NextResponse.json({ ok: false, error: 'Nie udalo sie potwierdzic zamowienia.' }, { status: 500 })
+    return NextResponse.json({ ok: false, error: 'Nie udało się potwierdzić zamówienia.' }, { status: 500 })
   }
 
   const item = updated.productKind === 'guide'
@@ -78,7 +78,7 @@ export async function POST(request: Request) {
   }
 
   void sendMaterialyCodeCustomerEmail(payload, updated.code, updated.expiresAt).catch((err) => {
-    console.error('[materialy/confirm] code email failed', err)
+    console.error('[materiały/confirm] code email failed', err)
   })
 
   return NextResponse.json({

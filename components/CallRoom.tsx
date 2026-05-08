@@ -90,11 +90,11 @@ function getCallRoomCopy(serviceType: BookingServiceType, roomAccessLabel: strin
       'Spokojne miejsce, słuchawki albo głośnik oraz 2-3 najważniejsze obserwacje o zwierzęciu, żeby rozmowę wykorzystać konkretnie.',
     activeAfterLabel: 'Po rozmowie',
     activeAfterCopy:
-      'Jesli po rozmowie temat okaze sie szerszy, kolejnym krokiem moga byc Dwa kwadranse albo pelna konsultacja behawioralna.',
+      'Jeśli po rozmowie temat okaże się szerszy, kolejnym krokiem mogą być Dwa kwadranse albo pełna konsultacja behawioralna.',
     lockedAfterLabel: 'Co stanie się dalej',
     lockedAfterCopy: `Gdy nadejdzie czas wejścia, ${roomAccessLabel} stanie się aktywny i będzie można uruchomić licznik rozmowy.`,
     completionNextStep:
-      'Jesli po rozmowie temat okaze sie szerszy, kolejnym krokiem moga byc Dwa kwadranse albo pelna konsultacja behawioralna.',
+      'Jeśli po rozmowie temat okaże się szerszy, kolejnym krokiem mogą być Dwa kwadranse albo pełna konsultacja behawioralna.',
   }
 }
 
@@ -148,7 +148,7 @@ export function CallRoom({
   const roomUnlocked = finished || unlockInSeconds === 0
   const roomStatusLabel = roomUnlocked
     ? finished
-      ? 'Rozmowa zakonczona'
+      ? 'Rozmowa zakończona'
       : running
         ? 'Rozmowa aktywna'
         : 'Pokój aktywny'
@@ -246,47 +246,64 @@ export function CallRoom({
 
     const context = new AudioContextConstructor()
     const masterGain = context.createGain()
-    const lowPad = context.createOscillator()
-    const midPad = context.createOscillator()
-    const shimmer = context.createOscillator()
-    const shimmerGain = context.createGain()
-    const pulse = context.createOscillator()
-    const pulseGain = context.createGain()
+    const timeouts: number[] = []
+    let stopped = false
 
-    masterGain.gain.value = 0.016
-    lowPad.type = 'sine'
-    lowPad.frequency.value = 196
-    midPad.type = 'triangle'
-    midPad.frequency.value = 293.66
-    shimmer.type = 'sine'
-    shimmer.frequency.value = 392
-    shimmerGain.gain.value = 0.003
-    pulse.type = 'sine'
-    pulse.frequency.value = 0.08
-    pulseGain.gain.value = 0.008
-
-    pulse.connect(pulseGain)
-    pulseGain.connect(masterGain.gain)
-    lowPad.connect(masterGain)
-    midPad.connect(masterGain)
-    shimmer.connect(shimmerGain)
-    shimmerGain.connect(masterGain)
+    masterGain.gain.value = 0.055
     masterGain.connect(context.destination)
 
-    lowPad.start()
-    midPad.start()
-    shimmer.start()
-    pulse.start()
+    const motif = [
+      { frequency: 261.63, duration: 0.55 },
+      { frequency: 329.63, duration: 0.55 },
+      { frequency: 392, duration: 0.55 },
+      { frequency: 523.25, duration: 0.85 },
+      { frequency: 392, duration: 0.5 },
+      { frequency: 329.63, duration: 0.5 },
+      { frequency: 293.66, duration: 0.7 },
+      { frequency: 261.63, duration: 1.1 },
+    ]
+
+    function playTone(frequency: number, startAt: number, duration: number) {
+      const oscillator = context.createOscillator()
+      const gain = context.createGain()
+      const endAt = startAt + duration
+
+      oscillator.type = 'sine'
+      oscillator.frequency.setValueAtTime(frequency, startAt)
+      gain.gain.setValueAtTime(0.0001, startAt)
+      gain.gain.exponentialRampToValueAtTime(0.052, startAt + 0.04)
+      gain.gain.exponentialRampToValueAtTime(0.0001, Math.max(startAt + 0.08, endAt - 0.12))
+      oscillator.connect(gain)
+      gain.connect(masterGain)
+      oscillator.start(startAt)
+      oscillator.stop(endAt)
+    }
+
+    function scheduleMotif() {
+      if (stopped) return
+
+      let cursor = context.currentTime + 0.05
+
+      for (const note of motif) {
+        playTone(note.frequency, cursor, note.duration)
+        cursor += note.duration + 0.08
+      }
+
+      const timeout = window.setTimeout(scheduleMotif, 7800)
+      timeouts.push(timeout)
+    }
 
     if (context.state === 'suspended') {
       void context.resume().catch(() => {})
     }
 
+    scheduleMotif()
+
     return () => {
-      lowPad.stop()
-      midPad.stop()
-      shimmer.stop()
-      pulse.stop()
+      stopped = true
+      for (const timeout of timeouts) {
+        window.clearTimeout(timeout)
+      }
       void context.close().catch(() => {})
     }
   }, [ambienceEnabled, roomUnlocked])
@@ -314,7 +331,7 @@ export function CallRoom({
       setFinished(true)
       router.refresh()
     } catch (finishError) {
-      console.error('[behawior15][room] finish failed', finishError)
+      console.error('[regulski-behawiorysta][room] finish failed', finishError)
       setError(finishError instanceof Error ? finishError.message : 'Wystąpił błąd podczas zamykania konsultacji.')
     }
   }
@@ -381,7 +398,7 @@ export function CallRoom({
                 className="button button-primary big-button"
                 disabled={running || finished}
               >
-                {running ? 'Rozmowa trwa' : finished ? 'Rozmowa zakonczona' : `Uruchom licznik ${roomDurationMinutes} minut`}
+                {running ? 'Rozmowa trwa' : finished ? 'Rozmowa zakończona' : `Uruchom licznik ${roomDurationMinutes} minut`}
               </button>
               {!finished ? (
                 <a href={meetingUrl} target="_blank" rel="noopener noreferrer" className="button button-ghost big-button">
@@ -402,7 +419,7 @@ export function CallRoom({
                 className="button button-ghost big-button"
                 onClick={() => setAmbienceEnabled((current) => !current)}
               >
-                {ambienceEnabled ? 'Wycisz dźwięk oczekiwania' : 'Włącz delikatny dźwięk oczekiwania'}
+                {ambienceEnabled ? 'Wycisz dźwięk oczekiwania' : 'Włącz spokojny motyw oczekiwania'}
               </button>
             </>
           )}

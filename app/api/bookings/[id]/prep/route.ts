@@ -22,6 +22,7 @@ import {
   getPublicFeatureUnavailableMessage,
   getSupabaseServerConfig,
 } from '@/lib/server/env'
+import { sendBookingPreparationMaterialsOwnerEmail } from '@/lib/server/notifications'
 import { BookingPreparationPatch, BookingRecord } from '@/lib/types'
 
 export const runtime = 'nodejs'
@@ -39,6 +40,38 @@ function buildPrepPayload(booking: BookingRecord) {
     prepNotes: booking.prepNotes ?? null,
     prepUploadedAt: booking.prepUploadedAt ?? null,
     canEdit: canEditPreparationMaterials(booking),
+  }
+}
+
+function buildPrepVideoAccessUrl(request: Request, bookingId: string) {
+  const url = new URL(`/api/bookings/${bookingId}/prep/video`, request.url)
+  const access = resolveAccessToken(request)
+
+  if (access) {
+    url.searchParams.set('access', access)
+  }
+
+  return url.toString()
+}
+
+async function notifyOwnerAboutPreparationMaterials(
+  request: Request,
+  booking: BookingRecord,
+  changedFields: Array<'video' | 'link' | 'notes'>,
+) {
+  const result = await sendBookingPreparationMaterialsOwnerEmail(booking, {
+    changedFields,
+    videoUrl: booking.prepVideoPath ? buildPrepVideoAccessUrl(request, booking.id) : null,
+    linkUrl: booking.prepLinkUrl,
+    notes: booking.prepNotes,
+  })
+
+  if (result.status !== 'sent') {
+    console.warn('[regulski-behawiorysta][prep-materials] owner notification skipped', {
+      bookingId: booking.id,
+      status: result.status,
+      reason: result.reason,
+    })
   }
 }
 
@@ -138,6 +171,8 @@ export async function POST(
       if (!updatedBooking) {
         return NextResponse.json({ error: 'Nie znaleziono rezerwacji do zapisania materiałów.' }, { status: 404 })
       }
+
+      await notifyOwnerAboutPreparationMaterials(request, updatedBooking, ['video'])
 
       return NextResponse.json({ ok: true, prep: buildPrepPayload(updatedBooking) })
     }
@@ -266,6 +301,14 @@ export async function PATCH(
     if (!updatedBooking) {
       return NextResponse.json({ error: 'Nie znaleziono rezerwacji do aktualizacji.' }, { status: 404 })
     }
+
+    const changedFields: Array<'video' | 'link' | 'notes'> = []
+
+    if (Object.prototype.hasOwnProperty.call(patch, 'prepVideoPath')) changedFields.push('video')
+    if (Object.prototype.hasOwnProperty.call(patch, 'prepLinkUrl')) changedFields.push('link')
+    if (Object.prototype.hasOwnProperty.call(patch, 'prepNotes')) changedFields.push('notes')
+
+    await notifyOwnerAboutPreparationMaterials(request, updatedBooking, changedFields)
 
     return NextResponse.json({ ok: true, prep: buildPrepPayload(updatedBooking) })
   } catch (error) {

@@ -177,7 +177,7 @@ function getQaCheckoutContactGateStatus(email: string, phone: string): { isAllow
   if (!qaEnabled) {
     return {
       isAllowed: false,
-      reason: 'Testowy checkout QA jest wylaczony. Ustaw TEST_CHECKOUT_ENABLED=true.',
+      reason: 'Testowy checkout QA jest wyłączony. Ustaw TEST_CHECKOUT_ENABLED=true.',
     }
   }
 

@@ -78,7 +78,7 @@ function wrapText(text, maxChars) {
 }
 
 // =====================================================================
-// PDF 1: 30 zachowan
+// PDF 1: 30 zachowań
 // =====================================================================
 await makePdf('30-zachowan.pdf', async (doc, fonts) => {
   let page = addPage(doc);
@@ -86,58 +86,58 @@ await makePdf('30-zachowan.pdf', async (doc, fonts) => {
   page.drawRectangle({ x: 0, y: 742, width: 595, height: 100, color: C.accent });
   page.drawText('DARMOWY PORADNIK', { x: 30, y: 820, size: 10, font: fonts.bold, color: C.white });
   page.drawText('KRZYSZTOF REGULSKI  -  COAPE / CAPBT', { x: 30, y: 750, size: 9, font: fonts.regular, color: C.white });
-  page.drawText('30 zachowan', { x: 30, y: 680, size: 52, font: fonts.bold, color: C.ink });
+  page.drawText('30 zachowań', { x: 30, y: 680, size: 52, font: fonts.bold, color: C.ink });
   page.drawText('do obserwacji', { x: 30, y: 618, size: 52, font: fonts.bold, color: C.accent });
-  page.drawText('Sygnaly u psa i kota - co naprawde znacza', { x: 30, y: 585, size: 15, font: fonts.regular, color: C.muted });
+  page.drawText('Sygnały u psa i kota - co naprawde znacza', { x: 30, y: 585, size: 15, font: fonts.regular, color: C.muted });
   page.drawRectangle({ x: 30, y: 480, width: 240, height: 80, color: C.accentLight, borderColor: C.accent, borderWidth: 1 });
-  page.drawText('Co znajdziesz w srodku:', { x: 42, y: 545, size: 10, font: fonts.bold, color: C.ink });
-  ['15 sygnalow psa + interpretacja', '15 sygnalow kota + interpretacja', 'Kiedy reagowac, kiedy obserwowac', 'Kiedy do behawiorysty'].forEach((t, i) => {
+  page.drawText('Co znajdziesz w środku:', { x: 42, y: 545, size: 10, font: fonts.bold, color: C.ink });
+  ['15 sygnałów psa + interpretacja', '15 sygnałów kota + interpretacja', 'Kiedy reagować, kiedy obserwować', 'Kiedy do behawiorysty'].forEach((t, i) => {
     page.drawText('- ' + t, { x: 42, y: 527 - i * 14, size: 9, font: fonts.regular, color: C.ink });
   });
   page.drawText('regulskibehawiorysta.pl', { x: 30, y: 60, size: 10, font: fonts.bold, color: C.accent });
-  page.drawText('konsultacje behawioralne psow i kotow online', { x: 30, y: 45, size: 9, font: fonts.regular, color: C.muted });
+  page.drawText('konsultację behawioralne psów i kotów online', { x: 30, y: 45, size: 9, font: fonts.regular, color: C.muted });
 
-  // Strona 2 - Wstep
+  // Strona 2 - Wstęp
   page = addPage(doc);
   page.drawRectangle({ x: 0, y: 0, width: 595, height: 842, color: C.white });
   header(page, fonts);
-  page.drawText('Wstep', { x: 30, y: 790, size: 20, font: fonts.bold, color: C.accent });
+  page.drawText('Wstęp', { x: 30, y: 790, size: 20, font: fonts.bold, color: C.accent });
   const wstep = [
-    'Ta lista powstala po wielu rozmowach z opiekunami psow i kotow,',
-    'ktorzy pytali mnie: "Czy to normalne?" - i czesto nie wiedzieli,',
-    'ze warto bylo wczesniej reagowac.',
+    'Ta lista powstała po wielu rozmowach z opiekunami psów i kotów,',
+    'którzy pytali mnie: "Czy to normalne?" - i często nie wiedzieli,',
+    'że warto bylo wczesniej reagować.',
     '',
-    'Nie jest to lista diagnoz. To zbior sygnalow, ktore warto znac -',
-    'zeby wiedziec, kiedy zachowanie zwierzecia jest komunikatem,',
-    'a kiedy powodem do kontaktu z weterynarzem lub behawiorysty.',
+    'Nie jest to lista diagnoz. To zbior sygnałów, które warto znać -',
+    'żeby wiedzieć, kiedy zachowanie zwierzęcia jest komunikatem,',
+    'a kiedy powodem do kontaktu z lekarzem weterynarii lub behawiorystą.',
     '',
-    'Jak korzystac z tej listy:',
-    '- Przejrzyj ja spokojnie - nie szukaj problemow na sile.',
-    '- Jesli widzisz kilka sygnalow naraz - warto porozmawiac.',
-    '- Jedno zachowanie nie jest diagnoza. Kontekst jest wszystkim.',
-    '- Nagla zmiana zachowania: zawsze najpierw weterynarz.',
+    'Jak korzystać z tej listy:',
+    '- Przejrzyj ją spokojnie - nie szukaj problemów na siłę.',
+    '- Jeśli widzisz kilka sygnałów naraz - warto porozmawiać.',
+    '- Jedno zachowanie nie jest diagnozą. Kontekst jest wszystkim.',
+    '- Nagła zmiana zachowania: zawsze najpierw weterynarz.',
   ];
   wstep.forEach((line, i) => {
     page.drawText(line, { x: 30, y: 758 - i * 16, size: 10, font: fonts.regular, color: C.ink });
   });
   footer(page, fonts, 2);
 
-  // Strona 3 - Pies czesc 1
+  // Strona 3 - Pies część 1
   page = addPage(doc);
   page.drawRectangle({ x: 0, y: 0, width: 595, height: 842, color: C.white });
   header(page, fonts);
   page.drawRectangle({ x: 30, y: 775, width: 200, height: 22, color: C.accent });
-  page.drawText('Pies - 15 sygnalow (1-8)', { x: 38, y: 781, size: 11, font: fonts.bold, color: C.white });
+  page.drawText('Pies - 15 sygnałów (1-8)', { x: 38, y: 781, size: 11, font: fonts.bold, color: C.white });
 
   const dogBehaviors = [
-    ['1. Oblizywanie pyska', 'Sygnal uspokajajacy, stres lub napiecie. Nie mylic z oblizywaniem po jedzeniu.'],
-    ['2. Ziewanie poza snem', 'Stres, nie zmeczenie. Czesto w sytuacjach nowych lub napiecia.'],
-    ['3. Odwracanie glowy', '"Nie szukam konfliktu" - sygnal deeskalacji. Szanuj to.'],
-    ['4. Sztywnienie ciala', 'Alarm. Pies przygotowuje sie do reakcji. Nie ignoruj.'],
-    ['5. Widoczne bialka oczu', 'Duzy stres lub dyskomfort. Daj przestrzen.'],
-    ['6. Drapanie sie bez powodu', 'Sygnal uspokajajacy lub przekierowanie uwagi.'],
+    ['1. Oblizywanie pyska', 'Sygnał uspokajający, stres lub napięcie. Nie mylic z oblizywaniem po jedzeniu.'],
+    ['2. Ziewanie poza snem', 'Stres, nie zmęczenie. Często w sytuacjach nowych lub napiecia.'],
+    ['3. Odwracanie głowy', '"Nie szukam konfliktu" - sygnał deeskalacji. Szanuj to.'],
+    ['4. Sztywnienie ciała', 'Alarm. Pies przygotowuje się do reakcji. Nie ignoruj.'],
+    ['5. Widoczne białka oczu', 'Duży stres lub dyskomfort. Daj przestrzeń.'],
+    ['6. Drapanie się bez powodu', 'Sygnał uspokajający lub przekierowanie uwagi.'],
     ['7. Spuszczone uszy + ogon', 'Submisja lub strach. Nie wymuszaj kontaktu.'],
-    ['8. Merdanie nisko i szybko', 'Nie zawsze radosc - mieszane uczucia, ostroznosc.'],
+    ['8. Merdanie nisko i szybko', 'Nie zawsze radość - mieszane uczucia, ostrożność.'],
   ];
 
   let y = 755;
@@ -151,21 +151,21 @@ await makePdf('30-zachowan.pdf', async (doc, fonts) => {
   });
   footer(page, fonts, 3);
 
-  // Strona 4 - Pies czesc 2
+  // Strona 4 - Pies część 2
   page = addPage(doc);
   page.drawRectangle({ x: 0, y: 0, width: 595, height: 842, color: C.white });
   header(page, fonts);
   page.drawRectangle({ x: 30, y: 775, width: 200, height: 22, color: C.accent });
-  page.drawText('Pies - sygnaly 9-15', { x: 38, y: 781, size: 11, font: fonts.bold, color: C.white });
+  page.drawText('Pies - sygnały 9-15', { x: 38, y: 781, size: 11, font: fonts.bold, color: C.white });
 
   const dogBehaviors2 = [
-    ['9. Warczenie', 'Jasny komunikat. NIE karac - warczenie to ostrzezenie. Karanie usuwa sygnal, nie problem.'],
-    ['10. Niechec do ulubionego jedzenia', 'Stres lub choroba. Wymaga uwagi.'],
-    ['11. Czeste zalatwianie sie', 'Moze byc stres lub problem zdrowotny - weterynarz.'],
-    ['12. Niszczenie kiedy sam', 'Lek separacyjny vs. nuda - rozne podejscia. Obserwuj kontekst.'],
-    ['13. Chowanie sie stale', 'Jesli regularne - niepokojace. Bol, stres, choroba.'],
-    ['14. Glosne wzdychanie', 'Kontekst decyduje: relaks albo frustracja.'],
-    ['15. Luk przy podejsciu', 'Chec zaangazowania, ale ostrozna. Zaproc, nie wymuczaj.'],
+    ['9. Warczenie', 'Jasny komunikat. NIE karać - warczenie to ostrzeżenie. Karanie usuwa sygnał, nie problem.'],
+    ['10. Niechęć do ulubionego jedzenia', 'Stres lub choroba. Wymaga uwagi.'],
+    ['11. Częste załatwianie się', 'Może być stres lub problem zdrowotny - weterynarz.'],
+    ['12. Niszczenie kiedy sam', 'Lęk separacyjny vs. nuda - różne podejścia. Obserwuj kontekst.'],
+    ['13. Chowanie się stale', 'Jeśli regularne - niepokojące. Ból, stres, choroba.'],
+    ['14. Głośne wzdychanie', 'Kontekst decyduje: relaks albo frustracja.'],
+    ['15. Łuk przy podejsciu', 'Chęć zaangazowania, ale ostrozna. Zaproś, nie wymuszaj.'],
   ];
 
   y = 755;
@@ -180,25 +180,25 @@ await makePdf('30-zachowan.pdf', async (doc, fonts) => {
 
   accentBox(page, 30, y - 10, 535, 55);
   page.drawText('Wazne przy warczeniu:', { x: 40, y: y - 20, size: 10, font: fonts.bold, color: C.accent });
-  page.drawText('Pies ktory nie warczy, nie "jest grzeczny" - moze nauczyl sie,', { x: 40, y: y - 35, size: 9, font: fonts.regular, color: C.ink });
-  page.drawText('ze ostrzeganie nic nie daje. To jest bardziej niebezpieczne.', { x: 40, y: y - 48, size: 9, font: fonts.regular, color: C.ink });
+  page.drawText('Pies który nie warczy, nie "jest grzeczny" - może nauczył się,', { x: 40, y: y - 35, size: 9, font: fonts.regular, color: C.ink });
+  page.drawText('że ostrzeganie nic nie daje. To jest bardziej niebezpieczne.', { x: 40, y: y - 48, size: 9, font: fonts.regular, color: C.ink });
   footer(page, fonts, 4);
 
-  // Strona 5 - Kot czesc 1
+  // Strona 5 - Kot część 1
   page = addPage(doc);
   page.drawRectangle({ x: 0, y: 0, width: 595, height: 842, color: C.white });
   header(page, fonts);
   page.drawRectangle({ x: 30, y: 775, width: 200, height: 22, color: C.accent });
-  page.drawText('Kot - 15 sygnalow (1-8)', { x: 38, y: 781, size: 11, font: fonts.bold, color: C.white });
+  page.drawText('Kot - 15 sygnałów (1-8)', { x: 38, y: 781, size: 11, font: fonts.bold, color: C.white });
 
   const catBehaviors = [
-    ['1. Mruczenie', 'Kontentnos, ALE tez bol lub stres. Kontekst jest kluczowy.'],
+    ['1. Mruczenie', 'Zadowolenie, ALE też ból lub stres. Kontekst jest kluczowy.'],
     ['2. Powolne mruganie', '"Ufam ci" - odpowiedz tym samym. Komunikat pozytywny.'],
-    ['3. Machanie kocowka ogona', 'Irytacja, nie radosc. Daj przestrzen.'],
-    ['4. Plasie uszy do tylu', 'Strach lub agresja obronna. Nie zblizaj sie.'],
-    ['5. Splaszczenie ciala', 'Strach lub silny stres.'],
-    ['6. Ogon w ksztalt U', 'Strach lub bolesnos.'],
-    ['7. Uniesiony ogon prosto', 'Pozytywne powitanie, otwartosc na kontakt.'],
+    ['3. Machanie końcówką ogona', 'Irytacja, nie radość. Daj przestrzeń.'],
+    ['4. Płaskie uszy do tyłu', 'Strach lub agresja obronna. Nie zbliżaj się.'],
+    ['5. Spłaszczenie ciała', 'Strach lub silny stres.'],
+    ['6. Ogon w kształt U', 'Strach lub bolesność.'],
+    ['7. Uniesiony ogon prosto', 'Pozytywne powitanie, otwartość na kontakt.'],
     ['8. Drapanie mebli', 'Naturalne. Dostarcz drapaka w dobrym miejscu.'],
   ];
 
@@ -213,21 +213,21 @@ await makePdf('30-zachowan.pdf', async (doc, fonts) => {
   });
   footer(page, fonts, 5);
 
-  // Strona 6 - Kot czesc 2
+  // Strona 6 - Kot część 2
   page = addPage(doc);
   page.drawRectangle({ x: 0, y: 0, width: 595, height: 842, color: C.white });
   header(page, fonts);
   page.drawRectangle({ x: 30, y: 775, width: 200, height: 22, color: C.accent });
-  page.drawText('Kot - sygnaly 9-15', { x: 38, y: 781, size: 11, font: fonts.bold, color: C.white });
+  page.drawText('Kot - sygnały 9-15', { x: 38, y: 781, size: 11, font: fonts.bold, color: C.white });
 
   const catBehaviors2 = [
-    ['9. Sikanie poza kuweta', 'ZAWSZE: 1) weterynarz, 2) sprawdz kuwete, 3) stres/srodowisko.'],
-    ['10. Spreyowanie', 'Komunikacja terytorialna. Czesto stres lub koty w domu.'],
-    ['11. Mlaskanie przy oknie', 'Frustracja lowiecka - daj zabawy wechowe/ruchowe.'],
-    ['12. Ukrywanie sie', 'Stres, nowosc lub choroba. Jesli stale - niepokojace.'],
-    ['13. Nadmierne lizanie ciala', 'Stres, bol lub alergia. Obserwuj lokalizacje.'],
-    ['14. Ataki na lydki i rece', 'Niedobor bodzcow lowieckich. Zabawa 2× dziennie.'],
-    ['15. Regularne wymioty', 'Nie norma. Weterynarz - rozne przyczyny.'],
+    ['9. Sikanie poza kuweta', 'ZAWSZE: 1) weterynarz, 2) sprawdź kuwetę, 3) stres/środowisko.'],
+    ['10. Spreyowanie', 'Komunikacja terytorialna. Często stres lub koty w domu.'],
+    ['11. Mlaskanie przy oknie', 'Frustracja łowiecka - daj zabawy węchowe/ruchowe.'],
+    ['12. Ukrywanie się', 'Stres, nowość lub choroba. Jeśli stale - niepokojące.'],
+    ['13. Nadmierne lizanie ciała', 'Stres, ból lub alergia. Obserwuj lokalizację.'],
+    ['14. Ataki na łydki i ręce', 'Niedobór bodźców łowieckich. Zabawa 2× dziennie.'],
+    ['15. Regularne wymioty', 'Nie norma. Weterynarz - różne przyczyny.'],
   ];
 
   y = 755;
@@ -245,18 +245,18 @@ await makePdf('30-zachowan.pdf', async (doc, fonts) => {
   page = addPage(doc);
   page.drawRectangle({ x: 0, y: 0, width: 595, height: 842, color: C.white });
   header(page, fonts);
-  page.drawText('Kiedy skontaktowac sie z behawiorysty?', { x: 30, y: 790, size: 16, font: fonts.bold, color: C.ink });
+  page.drawText('Kiedy skontaktować się z behawiorystą?', { x: 30, y: 790, size: 16, font: fonts.bold, color: C.ink });
 
   const signals = [
-    'Zachowanie trwa ponad 4 tygodnie mimo zmian w srodowisku',
-    'Pojawilo sie nagle - sprawdz najpierw weterynarz',
-    'Wyraznie sie nasila w czasie',
-    'Pies / kot przestaje jesc, pic, lub rani siebie',
-    'Konflikt miedzy zwierzetami w domu',
-    'Coraz trudniej Ci z tym emocjonalnie radzic',
+    'Zachowanie trwa ponad 4 tygodnie mimo zmian w środowisku',
+    'Pojawiło się nagle - sprawdź najpierw u lekarza weterynarii',
+    'Wyraźnie się nasila w czasie',
+    'Pies / kot przestaje jeść, pić, lub rani siebie',
+    'Konflikt między zwierzętami w domu',
+    'Coraz trudniej Ci z tym emocjonalnie radzić',
   ];
 
-  page.drawText('Sygnaly, ktore wymagaja konsultacji:', { x: 30, y: 758, size: 11, font: fonts.bold, color: C.accent });
+  page.drawText('Sygnały, które wymagaja konsultacji:', { x: 30, y: 758, size: 11, font: fonts.bold, color: C.accent });
   y = 738;
   signals.forEach((s) => {
     page.drawText('-', { x: 30, y, size: 10, font: fonts.bold, color: C.accent });
@@ -269,9 +269,9 @@ await makePdf('30-zachowan.pdf', async (doc, fonts) => {
 
   y -= 20;
   accentBox(page, 30, y - 10, 535, 80);
-  page.drawText('Zarezerwuj konsultacje online', { x: 40, y: y - 20, size: 13, font: fonts.bold, color: C.accent });
+  page.drawText('Zarezerwuj konsultację online', { x: 40, y: y - 20, size: 13, font: fonts.bold, color: C.accent });
   page.drawText('Kwadrans 69 zl  -  Dwa kwadranse 169 zl  -  Pelna konsultacja 470 zl', { x: 40, y: y - 38, size: 9, font: fonts.regular, color: C.ink });
-  page.drawText('Bez kary, bez przymusu. Pierwszy krok nie musi byc duzy.', { x: 40, y: y - 53, size: 9, font: fonts.regular, color: C.muted });
+  page.drawText('Bez kary, bez przymusu. Pierwszy krok nie musi być duży.', { x: 40, y: y - 53, size: 9, font: fonts.regular, color: C.muted });
   page.drawText('regulskibehawiorysta.pl/book', { x: 40, y: y - 68, size: 10, font: fonts.bold, color: C.accent });
   footer(page, fonts, 7);
 
@@ -297,23 +297,23 @@ await makePdf('pies-sam-w-domu.pdf', async (doc, fonts) => {
   page.drawText('DARMOWY PORADNIK', { x: 30, y: 820, size: 10, font: fonts.bold, color: C.white });
   page.drawText('KRZYSZTOF REGULSKI  -  COAPE / CAPBT', { x: 30, y: 750, size: 9, font: fonts.regular, color: C.white });
   page.drawText('Pies sam w domu', { x: 30, y: 680, size: 42, font: fonts.bold, color: C.ink });
-  page.drawText('7 krokow do spokoju', { x: 30, y: 630, size: 30, font: fonts.bold, color: C.accent });
-  page.drawText('Wprowadzenie do pracy z lekiem separacyjnym', { x: 30, y: 598, size: 13, font: fonts.regular, color: C.muted });
+  page.drawText('7 kroków do spokoju', { x: 30, y: 630, size: 30, font: fonts.bold, color: C.accent });
+  page.drawText('Wprowadzenie do pracy z lękiem separacyjnym', { x: 30, y: 598, size: 13, font: fonts.regular, color: C.muted });
   page.drawRectangle({ x: 30, y: 490, width: 240, height: 85, color: C.accentLight, borderColor: C.accent, borderWidth: 1 });
   page.drawText('W tym poradniku:', { x: 42, y: 558, size: 10, font: fonts.bold, color: C.ink });
-  ['Jak rozpoznac lek (nie nude)', '7 krokow stopniowego przyzwyczajania', 'Najczestsze bledy opiekunow', 'Plan na pierwsze 14 dni'].forEach((t, i) => {
+  ['Jak rozpoznać lek (nie nude)', '7 kroków stopniowego przyzwyczajania', 'Najczęstsze błędy opiekunów', 'Plan na pierwsze 14 dni'].forEach((t, i) => {
     page.drawText('- ' + t, { x: 42, y: 540 - i * 14, size: 9, font: fonts.regular, color: C.ink });
   });
   page.drawText('regulskibehawiorysta.pl', { x: 30, y: 60, size: 10, font: fonts.bold, color: C.accent });
 
-  // Strona 2 - Nuda vs Lek
+  // Strona 2 - Nuda vs Lęk
   page = addPage(doc);
   page.drawRectangle({ x: 0, y: 0, width: 595, height: 842, color: C.white });
   header(page, fonts);
-  page.drawText('Nuda czy lek? Jak odroznic', { x: 30, y: 790, size: 18, font: fonts.bold, color: C.ink });
+  page.drawText('Nuda czy lęk? Jak odróżnić', { x: 30, y: 790, size: 18, font: fonts.bold, color: C.ink });
   const nudaLek = [
-    ['NUDA', ['Niszczenie gdy pies ma energię', 'Kradnie rzeczy i gryzie', 'Spokojny przy wyjsciu', 'Wita radosnie po powrocie']],
-    ['LEK SEPARACYJNY', ['Niszczenie przy drzwiach/oknach', 'Wyje, szczeka, skowyczy', 'Niepokój przed wyjsciem', 'Hiper-przywiazanie do opiekuna']],
+    ['NUDA', ['Niszczenie gdy pies ma energię', 'Kradnie rzeczy i gryzie', 'Spokojny przy wyjściu', 'Wita radosnie po powrocie']],
+    ['LĘK SEPARACYJNY', ['Niszczenie przy drzwiach/oknach', 'Wyje, szczeka, skowyczy', 'Niepokój przed wyjściem', 'Hiper-przywiązanie do opiekuna']],
   ];
   let y = 760;
   nudaLek.forEach(([title, items]) => {
@@ -328,22 +328,22 @@ await makePdf('pies-sam-w-domu.pdf', async (doc, fonts) => {
   });
   footer(page, fonts, 2);
 
-  // Strony 3-4 - 7 krokow
+  // Strony 3-4 - 7 kroków
   const steps = [
-    ['Krok 1: Obserwacja bez oceniania', 'Przez 3-5 dni obserwuj bez zmieniania. Nagraj wideo przez 30 min po wyjsciu. To twoj punkt startowy.'],
-    ['Krok 2: Cwicz rozstania w domu', 'Wyjdz do innego pokoju. Wróc zanim pies zareaguje. Zwiększaj czas o kilka sekund dziennie.'],
-    ['Krok 3: Zneutralizuj sygnaly wyjscia', 'Klucze, kurtka, buty - ubieraj je losowo bez wychodzenia. Pies uczy sie, ze to nie = samotnosc.'],
-    ['Krok 4: Progi nie sa szczytami', 'Wychodz za drzwi na 1 sekunde. Wróc. Pies spokojny? Nastepnym razem 2 sekundy. Nie spiesz sie.'],
-    ['Krok 5: Aktywizacja przed wyjsciem', '20-30 minut zabawy wechowej lub fizycznej. Zmeczony pies latwiej odpuszcza.'],
-    ['Krok 6: Bezpieczne miejsce', 'Boks / mata / pokój - nie wiezienie, ale azyl. Buduj pozytywne skojarzenie przez kilka tygodni.'],
-    ['Krok 7: Konsekwencja i cierpliwosc', 'Postep nie jest liniowy. Regres po weekendzie jest normalny. Kluczowa jest regularnosc, nie dlugosc sesji.'],
+    ['Krok 1: Obserwacja bez oceniania', 'Przez 3-5 dni obserwuj bez zmieniania. Nagraj wideo przez 30 min po wyjściu. To twoj punkt startowy.'],
+    ['Krok 2: Cwicz rozstania w domu', 'Wyjdź do innego pokoju. Wróć zanim pies zareaguje. Zwiększaj czas o kilka sekund dziennie.'],
+    ['Krok 3: Zneutralizuj sygnały wyjścia', 'Klucze, kurtka, buty - ubieraj je losowo bez wychodzenia. Pies uczy się, że to nie = samotność.'],
+    ['Krok 4: Progi nie są szczytami', 'Wychodź za drzwi na 1 sekundę. Wróć. Pies spokojny? Następnym razem 2 sekundy. Nie spiesz się.'],
+    ['Krok 5: Aktywizacja przed wyjściem', '20-30 minut zabawy wechowej lub fizycznej. Zmęczony pies łatwiej odpuszcza.'],
+    ['Krok 6: Bezpieczne miejsce', 'Boks / mata / pokój - nie więzienie, ale azyl. Buduj pozytywne skojarzenie przez kilka tygodni.'],
+    ['Krok 7: Konsekwencja i cierpliwość', 'Postęp nie jest liniowy. Regres po weekendzie jest normalny. Kluczowa jest regularność, nie długość sesji.'],
   ];
 
   for (let p = 0; p < 2; p++) {
     page = addPage(doc);
     page.drawRectangle({ x: 0, y: 0, width: 595, height: 842, color: C.white });
     header(page, fonts);
-    page.drawText('7 krokow stopniowego przyzwyczajania', { x: 30, y: 790, size: 15, font: fonts.bold, color: C.ink });
+    page.drawText('7 kroków stopniowego przyzwyczajania', { x: 30, y: 790, size: 15, font: fonts.bold, color: C.ink });
     y = 760;
     const chunk = steps.slice(p * 3, p * 3 + (p === 0 ? 3 : 4));
     chunk.forEach(([title, desc]) => {
@@ -366,9 +366,9 @@ await makePdf('pies-sam-w-domu.pdf', async (doc, fonts) => {
   header(page, fonts);
   page.drawText('Plan na pierwsze 14 dni', { x: 30, y: 790, size: 18, font: fonts.bold, color: C.ink });
   const plan = [
-    ['Dni 1-3', 'Obserwacja + nagranie. Zadnych zmian.'],
-    ['Dni 4-7', 'Cwiczenia w domu. Rozstania 1-30 sekund.'],
-    ['Dni 8-10', 'Progi (1-5 minut). Neutralizuj sygnaly wyjscia.'],
+    ['Dni 1-3', 'Obserwacja + nagranie. Żadnych zmian.'],
+    ['Dni 4-7', 'Ćwiczenia w domu. Rozstania 1-30 sekund.'],
+    ['Dni 8-10', 'Progi (1-5 minut). Neutralizuj sygnały wyjścia.'],
     ['Dni 11-14', 'Stopniowo do 15-20 minut. Oceniaj spokój, nie czas.'],
   ];
   y = 758;
@@ -381,13 +381,13 @@ await makePdf('pies-sam-w-domu.pdf', async (doc, fonts) => {
   y -= 20;
   accentBox(page, 30, y - 10, 535, 80);
   page.drawText('Potrzebujesz indywidualnego planu?', { x: 40, y: y - 22, size: 12, font: fonts.bold, color: C.accent });
-  page.drawText('Jesli po 14 dniach nie widzisz poprawy - to czas na konsultacje.', { x: 40, y: y - 40, size: 9, font: fonts.regular, color: C.ink });
+  page.drawText('Jeśli po 14 dniach nie widzisz poprawy - to czas na konsultację.', { x: 40, y: y - 40, size: 9, font: fonts.regular, color: C.ink });
   page.drawText('regulskibehawiorysta.pl/book', { x: 40, y: y - 58, size: 10, font: fonts.bold, color: C.accent });
   footer(page, fonts, 5);
 });
 
 // =====================================================================
-// PDF 3: Pierwszy tydzien z kotem
+// PDF 3: Pierwszy tydzień z kotem
 // =====================================================================
 await makePdf('pierwszy-tydzien-z-kotem.pdf', async (doc, fonts) => {
   let page = addPage(doc);
@@ -395,31 +395,31 @@ await makePdf('pierwszy-tydzien-z-kotem.pdf', async (doc, fonts) => {
   page.drawRectangle({ x: 0, y: 742, width: 595, height: 100, color: C.accent });
   page.drawText('DARMOWY PORADNIK', { x: 30, y: 820, size: 10, font: fonts.bold, color: C.white });
   page.drawText('KRZYSZTOF REGULSKI  -  COAPE / CAPBT', { x: 30, y: 750, size: 9, font: fonts.regular, color: C.white });
-  page.drawText('Pierwszy tydzien', { x: 30, y: 680, size: 42, font: fonts.bold, color: C.ink });
+  page.drawText('Pierwszy tydzień', { x: 30, y: 680, size: 42, font: fonts.bold, color: C.ink });
   page.drawText('z kotem', { x: 30, y: 632, size: 42, font: fonts.bold, color: C.accent });
   page.drawText('Checklist + plan na pierwsze 7 dni', { x: 30, y: 598, size: 13, font: fonts.regular, color: C.muted });
   page.drawRectangle({ x: 30, y: 490, width: 240, height: 85, color: C.accentLight, borderColor: C.accent, borderWidth: 1 });
-  page.drawText('Co znajdziesz w srodku:', { x: 42, y: 558, size: 10, font: fonts.bold, color: C.ink });
-  ['Lista zakupow (10 pozycji)', 'Pokoj bezpieczny - jak zorganizowac', 'Wprowadzenie krok po kroku', 'Drukowana checklist 7 dni'].forEach((t, i) => {
+  page.drawText('Co znajdziesz w środku:', { x: 42, y: 558, size: 10, font: fonts.bold, color: C.ink });
+  ['Lista zakupów (10 pozycji)', 'Pokój bezpieczny - jak zorganizować', 'Wprowadzenie krok po kroku', 'Drukowana checklist 7 dni'].forEach((t, i) => {
     page.drawText('- ' + t, { x: 42, y: 540 - i * 14, size: 9, font: fonts.regular, color: C.ink });
   });
   page.drawText('regulskibehawiorysta.pl', { x: 30, y: 60, size: 10, font: fonts.bold, color: C.accent });
 
-  // Lista zakupow
+  // Lista zakupów
   page = addPage(doc);
   page.drawRectangle({ x: 0, y: 0, width: 595, height: 842, color: C.white });
   header(page, fonts);
-  page.drawText('Lista zakupow - 10 niezbednych rzeczy', { x: 30, y: 790, size: 16, font: fonts.bold, color: C.ink });
+  page.drawText('Lista zakupów - 10 niezbędnych rzeczy', { x: 30, y: 790, size: 16, font: fonts.bold, color: C.ink });
   const zakupy = [
-    ['1. Kuweta', 'Otwarta lub zamknieta. Min. 1,5x dlugosc ciala kota.'],
-    ['2. Zwirek', 'Na poczatek: bentonitowy, bez zapachu. Zmiana stopniowa.'],
+    ['1. Kuweta', 'Otwarta lub zamknięta. Min. 1,5x długość ciała kota.'],
+    ['2. Żwirek', 'Na początek: bentonitowy, bez zapachu. Zmiana stopniowa.'],
     ['3. Drapak wysoki', 'Min. 90 cm. Stabilny. Przy miejscu do spania.'],
-    ['4. Miseczki', 'Plyukie, szerokie - koty nie lubia wasami dotykac krawedzi.'],
-    ['5. Fontanna wody', 'Koty pija wiecej z ruchomej wody. Zalecane.'],
-    ['6. Transporter', 'Musi byc zawsze dostepny - nie tylko na wizyty u wet.'],
-    ['7. Legowisko', 'Cieple, z bokami. Kilka opcji - kot wybierze.'],
-    ['8. Zabawki', 'Wedka z piorem + mysz do noszenia. Min. 2x dziennie 10-15 min.'],
-    ['9. Strefa wspinaczki', 'Polki, drzewko - koty potrzebuja wysokosci.'],
+    ['4. Miseczki', 'Płytkie, szerokie - koty nie lubią wąsami dotykać krawędzi.'],
+    ['5. Fontanna wody', 'Koty piją więcej z ruchomej wody. Zalecane.'],
+    ['6. Transporter', 'Musi być zawsze dostępny - nie tylko na wizyty u wet.'],
+    ['7. Legowisko', 'Ciepłe, z bokami. Kilka opcji - kot wybierze.'],
+    ['8. Zabawki', 'Wędka z piórem + mysz do noszenia. Min. 2x dziennie 10-15 min.'],
+    ['9. Strefa wspinaczki', 'Półki, drzewko - koty potrzebują wysokości.'],
     ['10. Feliway (opcjonalnie)', 'Redukuje stres przy przeprowadzce.'],
   ];
   let y = 760;
@@ -439,10 +439,10 @@ await makePdf('pierwszy-tydzien-z-kotem.pdf', async (doc, fonts) => {
   header(page, fonts);
   page.drawText('Plan na pierwsze 7 dni', { x: 30, y: 790, size: 18, font: fonts.bold, color: C.ink });
   const planKot = [
-    ['Dzien 1', 'Pokoj bezpieczny. Karmienie bez nacisku. Zostaw w spokoju.'],
-    ['Dni 2-3', 'Krotkie wizyty bez wymuszania kontaktu. Daj inicjatywe kotowi.'],
+    ['Dzień 1', 'Pokój bezpieczny. Karmienie bez nacisku. Zostaw w spokoju.'],
+    ['Dni 2-3', 'Krótkie wizyty bez wymuszania kontaktu. Daj inicjatywę kotowi.'],
     ['Dni 4-5', 'Stopniowo otwierasz drzwi do reszty mieszkania.'],
-    ['Dni 6-7', 'Eksploracja w swoim tempie. Zabawy wedka 2x dziennie.'],
+    ['Dni 6-7', 'Eksploracja w swoim tempie. Zabawy wędką 2x dziennie.'],
   ];
   y = 755;
   planKot.forEach(([day, desc]) => {
@@ -454,11 +454,11 @@ await makePdf('pierwszy-tydzien-z-kotem.pdf', async (doc, fonts) => {
 
   y -= 20;
   accentBox(page, 30, y - 10, 535, 75);
-  page.drawText('Wazna zasada pierwszego tygodnia:', { x: 40, y: y - 22, size: 11, font: fonts.bold, color: C.accent });
-  page.drawText('Nie przyspieszaj socjalizacji. Kot ktory dostal czas - latwiej ufa.', { x: 40, y: y - 38, size: 9, font: fonts.regular, color: C.ink });
-  page.drawText('Kot ktory byl zmuszany - moze potrzebowac miesiecy.', { x: 40, y: y - 52, size: 9, font: fonts.regular, color: C.ink });
+  page.drawText('Ważna zasada pierwszego tygodnia:', { x: 40, y: y - 22, size: 11, font: fonts.bold, color: C.accent });
+  page.drawText('Nie przyspieszaj socjalizacji. Kot który dostał czas - łatwiej ufa.', { x: 40, y: y - 38, size: 9, font: fonts.regular, color: C.ink });
+  page.drawText('Kot który byl zmuszany - może potrzebowac miesięcy.', { x: 40, y: y - 52, size: 9, font: fonts.regular, color: C.ink });
   y -= 100;
-  page.drawText('Pytania? Zarezerwuj konsultacje:', { x: 30, y, size: 11, font: fonts.bold, color: C.ink });
+  page.drawText('Pytania? Zarezerwuj konsultację:', { x: 30, y, size: 11, font: fonts.bold, color: C.ink });
   page.drawText('regulskibehawiorysta.pl/book', { x: 30, y: y - 18, size: 11, font: fonts.bold, color: C.accent });
   footer(page, fonts, 3);
 });

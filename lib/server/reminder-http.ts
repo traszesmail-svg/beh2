@@ -12,14 +12,14 @@ export async function handleReminderRunRequest(request: Request) {
 
     const result = await runBookingReminderSweep()
 
-    console.info('[behawior15][reminder] run', result)
+    console.info('[regulski-behawiorysta][reminder] run', result)
 
     return NextResponse.json({
       ok: true,
       ...result,
     })
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Reminder runner zakonczyl sie bledem.'
+    const message = error instanceof Error ? error.message : 'Reminder runner zakonczyl się bledem.'
     return NextResponse.json({ error: message }, { status: error instanceof ConfigurationError ? 503 : 500 })
   }
 }

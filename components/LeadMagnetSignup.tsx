@@ -29,6 +29,16 @@ export function LeadMagnetSignup({
   const [status, setStatus] = useState<FormState>('idle')
   const [feedback, setFeedback] = useState('')
 
+  function startDownload(downloadUrl: string) {
+    const anchor = document.createElement('a')
+    anchor.href = downloadUrl
+    anchor.download = ''
+    anchor.rel = 'noopener'
+    document.body.appendChild(anchor)
+    anchor.click()
+    anchor.remove()
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
@@ -56,7 +66,13 @@ export function LeadMagnetSignup({
         }),
       })
 
-      const payload = (await response.json()) as { ok?: boolean; redirectTo?: string; error?: string; message?: string }
+      const payload = (await response.json()) as {
+        ok?: boolean
+        downloadUrl?: string
+        redirectTo?: string
+        error?: string
+        message?: string
+      }
 
       if (!response.ok || !payload.ok) {
         throw new Error(payload.error ?? 'Nie udało się zapisać do pobrania materiału.')
@@ -67,6 +83,20 @@ export function LeadMagnetSignup({
         source_page: sourcePage,
         lead_magnet_slug: magnet.slug,
       })
+
+      if (payload.downloadUrl) {
+        startDownload(payload.downloadUrl)
+        setStatus('success')
+        setFeedback('Pobieranie rozpoczęte. Link zapasowy wysłałem też na e-mail.')
+        setEmail('')
+
+        if (payload.redirectTo) {
+          window.setTimeout(() => {
+            window.location.assign(payload.redirectTo as string)
+          }, 900)
+        }
+        return
+      }
 
       if (payload.redirectTo) {
         window.location.assign(payload.redirectTo)

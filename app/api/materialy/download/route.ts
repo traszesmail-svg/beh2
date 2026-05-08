@@ -1,4 +1,4 @@
-// POST /api/materialy/download — exchanges (email + 6-digit code) for a PDF stream.
+// POST /api/materiały/download — exchanges (email + 6-digit code) for a PDF stream.
 // For bundles we build a temporary zip on the fly; for single guides we stream the file.
 // Increments usedCount; after 3 successful downloads the order is marked 'used'.
 
@@ -45,10 +45,10 @@ export async function POST(request: Request) {
   if (!result.ok) {
     const map: Record<string, { msg: string; status: number }> = {
       'wrong-code': { msg: 'Kod nie pasuje do tego e-maila.', status: 400 },
-      'not-paid': { msg: 'Zamowienie nie zostalo jeszcze potwierdzone. Poczekaj na e-mail z kodem.', status: 409 },
-      'expired': { msg: 'Kod wygasl. Napisz na kontakt@regulskibehawiorysta.pl, wyslemy nowy.', status: 410 },
-      'limit-reached': { msg: 'Kod zostal juz wykorzystany 3 razy. Napisz na kontakt@regulskibehawiorysta.pl.', status: 410 },
-      'not-found': { msg: 'Zamowienie nie istnieje.', status: 404 },
+      'not-paid': { msg: 'Zamówienie nie zostalo jeszcze potwierdzone. Poczekaj na e-mail z kodem.', status: 409 },
+      'expired': { msg: 'Kod wygasł. Napisz na kontakt@regulskibehawiorysta.pl, wyślemy nowy.', status: 410 },
+      'limit-reached': { msg: 'Kod zostal już wykorzystany 3 razy. Napisz na kontakt@regulskibehawiorysta.pl.', status: 410 },
+      'not-found': { msg: 'Zamówienie nie istnieje.', status: 404 },
     }
     const fallback = { msg: 'Kod jest nieprawidlowy.', status: 400 }
     const m = map[result.reason] ?? fallback
@@ -59,11 +59,11 @@ export async function POST(request: Request) {
   if (order.productKind === 'guide') {
     const guide = getMaterialyGuideBySlug(order.productSlug)
     if (!guide) {
-      return NextResponse.json({ ok: false, error: 'Material nie jest dostepny.' }, { status: 410 })
+      return NextResponse.json({ ok: false, error: 'Materiał nie jest dostępny.' }, { status: 410 })
     }
     const filePath = safePdfPath(guide.pdfFile)
     if (!filePath) {
-      return NextResponse.json({ ok: false, error: 'Niepoprawna sciezka pliku.' }, { status: 500 })
+      return NextResponse.json({ ok: false, error: 'Niepoprawna ścieżka pliku.' }, { status: 500 })
     }
     let buf: Buffer
     try {
@@ -87,7 +87,7 @@ export async function POST(request: Request) {
   // code submission, not 3 × bundle. Practical and simple.)
   const bundle = getMaterialyBundleBySlug(order.productSlug)
   if (!bundle) {
-    return NextResponse.json({ ok: false, error: 'Pakiet nie jest dostepny.' }, { status: 410 })
+    return NextResponse.json({ ok: false, error: 'Pakiet nie jest dostępny.' }, { status: 410 })
   }
   // For bundles we expose one PDF per response. Client should request the bundle
   // index first via a `?part=index` flag, then re-issue the form with the same
@@ -101,11 +101,11 @@ export async function POST(request: Request) {
   const partGuideSlug = bundle.guideSlugs[partIndex]
   const partGuide = getMaterialyGuideBySlug(partGuideSlug)
   if (!partGuide) {
-    return NextResponse.json({ ok: false, error: 'Material nie jest dostepny.' }, { status: 410 })
+    return NextResponse.json({ ok: false, error: 'Materiał nie jest dostępny.' }, { status: 410 })
   }
   const filePath = safePdfPath(partGuide.pdfFile)
   if (!filePath) {
-    return NextResponse.json({ ok: false, error: 'Niepoprawna sciezka pliku.' }, { status: 500 })
+    return NextResponse.json({ ok: false, error: 'Niepoprawna ścieżka pliku.' }, { status: 500 })
   }
   let buf: Buffer
   try {

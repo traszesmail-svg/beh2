@@ -45,7 +45,7 @@ export async function GET(request: Request) {
       holdMinutes: manual.holdMinutes,
     })
   } catch (error) {
-    console.error('[behawior15][blik-phone] error', error)
+    console.error('[regulski-behawiorysta][blik-phone] error', error)
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Błąd serwera.' },
       { status: 500 },

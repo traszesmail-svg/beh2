@@ -45,8 +45,8 @@ function isSlotUnavailableBookingMessage(value: string) {
 
   return (
     normalized.includes('wybrany termin') &&
-    (normalized.includes('nie jest juz dostepny') ||
-      normalized.includes('nie jest dostepny') ||
+    (normalized.includes('nie jest już dostępny') ||
+      normalized.includes('nie jest dostępny') ||
       normalized.includes('zostal przed chwila zajety') ||
       normalized.includes('zostal zajety') ||
       normalized.includes('slot no longer available') ||
@@ -70,8 +70,7 @@ export function BookingForm({
   const [ownerName, setOwnerName] = useState('')
   const [description, setDescription] = useState('')
   const [email, setEmail] = useState('')
-  const [phone, setPhone] = useState('')
-  const [privacyAccepted, setPrivacyAccepted] = useState(false)
+  const [termsAccepted, setTermsAccepted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
   const animalType = formCopy.animalType
@@ -112,21 +111,18 @@ export function BookingForm({
       return
     }
 
-    if (phone.trim().length > 0 && !/^\+?\d[\d\s-]{6,}$/.test(phone.trim())) {
-      setError('Podaj poprawny numer telefonu albo zostaw to pole puste.')
+    if (description.trim().length < 10) {
+      setError('Napisz jednym zdaniem, z czym chcesz wejść na rozmowę.')
       return
     }
 
-    if (!privacyAccepted) {
-      setError('Zaznacz zgodę na przetwarzanie danych, żeby przejść dalej.')
+    if (!termsAccepted) {
+      setError('Zaakceptuj regulamin usługi i politykę prywatności, żeby przejść dalej.')
       return
     }
 
     setIsSubmitting(true)
-    const normalizedDescription =
-      description.trim().length >= 20
-        ? description.trim()
-        : 'Klient nie podał dodatkowego opisu w formularzu rezerwacji.'
+    const normalizedDescription = description.trim()
 
     try {
       const response = await fetch('/api/bookings', {
@@ -142,7 +138,7 @@ export function BookingForm({
           petAge: 'Nie podano w formularzu rezerwacji.',
           durationNotes: 'Nie podano w formularzu rezerwacji.',
           description: normalizedDescription,
-          phone,
+          phone: '',
           email,
           slotId,
           qaBooking,
@@ -158,7 +154,7 @@ export function BookingForm({
 
       if (!response.ok || !payload.bookingId || !payload.accessToken) {
         if (payload.errorCode === 'slot_unavailable' || (typeof payload.error === 'string' && isSlotUnavailableBookingMessage(payload.error))) {
-          setError('Ten termin właśnie się zapełnił. Wróć do listy terminów i wybierz inną godzinę rozmowy.')
+          setError('Ten termin został właśnie zajęty. Wróć do listy terminów i wybierz inną godzinę rozmowy.')
         } else {
           setError(payload.error ?? 'Rezerwacja chwilowo jest niedostępna. Odśwież stronę za moment i spróbuj ponownie.')
         }
@@ -187,10 +183,10 @@ export function BookingForm({
         ),
       )
     } catch (submissionError) {
-      console.error('[behawior15][booking-form] submit failed', submissionError)
+      console.error('[regulski-behawiorysta][booking-form] submit failed', submissionError)
       const message = submissionError instanceof Error ? submissionError.message : 'Wystąpił błąd formularza.'
       if (isSlotUnavailableBookingMessage(message)) {
-        setError('Ten termin właśnie się zapełnił. Wróć do listy terminów i wybierz inną godzinę rozmowy.')
+        setError('Ten termin został właśnie zajęty. Wróć do listy terminów i wybierz inną godzinę rozmowy.')
       } else {
         setError(message)
       }
@@ -228,28 +224,16 @@ export function BookingForm({
         />
       </div>
 
-      <div className="booking-details-field">
-        <label htmlFor="booking-phone">Numer telefonu</label>
-        <input
-          id="booking-phone"
-          type="tel"
-          value={phone}
-          onChange={(event) => setPhone(event.target.value)}
-          placeholder="Wpisz swój numer telefonu"
-          data-booking-field="phone"
-        />
-      </div>
-
       <div className="booking-details-field booking-details-field-wide">
-        <label htmlFor="booking-description">Kilka słów o sytuacji (opcjonalnie)</label>
-        <p>Napisz krótko, z czym się mierzysz i czego oczekujesz od konsultacji.</p>
+        <label htmlFor="booking-description">Krótki opis problemu</label>
+        <p>Wystarczy kilka zdań. Szczegóły możesz dopisać później w materiałach przed rozmową.</p>
         <textarea
           id="booking-description"
-          rows={5}
+          rows={4}
           maxLength={500}
           value={description}
           onChange={(event) => setDescription(event.target.value)}
-          placeholder="Opisz swoją sytuację..."
+          placeholder="Napisz jednym zdaniem, z czym chcesz wejść na rozmowę."
           data-booking-field="description"
         />
         <small>{description.length} / 500</small>
@@ -259,13 +243,17 @@ export function BookingForm({
         <input
           id="booking-privacy"
           type="checkbox"
-          checked={privacyAccepted}
-          onChange={(event) => setPrivacyAccepted(event.target.checked)}
+          checked={termsAccepted}
+          onChange={(event) => setTermsAccepted(event.target.checked)}
         />
         <span>
-          Wyrażam zgodę na przetwarzanie moich danych osobowych zgodnie z{' '}
+          Akceptuję{' '}
+          <a href="/regulamin" target="_blank" rel="noopener noreferrer">
+            regulamin usługi
+          </a>{' '}
+          i zapoznałem/am się z{' '}
           <a href="/polityka-prywatnosci" target="_blank" rel="noopener noreferrer">
-            Polityką prywatności
+            polityką prywatności
           </a>
           .
         </span>

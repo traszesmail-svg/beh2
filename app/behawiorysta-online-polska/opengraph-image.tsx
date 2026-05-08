@@ -6,7 +6,7 @@ export const contentType = 'image/png'
 
 export default function OpenGraphImage() {
   return renderOgImage({
-    title: 'Behawiorysta online dla calej Polski',
-    subtitle: 'Pomoc online dla opiekunow psow i kotow z calej Polski.',
+    title: 'Behawiorysta online dla całej Polski',
+    subtitle: 'Pomoc online dla opiekunów psów i kotów z całej Polski.',
   })
 }

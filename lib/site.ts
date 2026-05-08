@@ -28,16 +28,16 @@ export const HOME_HERO_PHOTO = {
   alt: 'Krzysztof Regulski trzyma kota na rękach, z ciasteczkiem w dłoni, jako główne zdjęcie strony głównej',
 }
 
-export const SITE_NAME = 'Regulski | Terapia behawioralna'
-export const SITE_SHORT_NAME = 'Regulski'
+export const SITE_NAME = 'Regulski Behawiorysta'
+export const SITE_SHORT_NAME = 'Regulski Behawiorysta'
 export const SITE_HEADER_BRAND = 'Regulski Behawiorysta'
-export const SITE_HEADER_SUBTITLE = 'Behawiorysta psów i kotów online'
+export const SITE_HEADER_SUBTITLE = 'Krzysztof Regulski - behawiorysta zwierzęcy'
 export const SITE_URL_FALLBACK = 'http://localhost:3000'
 export const SITE_PRODUCTION_URL = 'https://regulskibehawiorysta.pl'
 export const PUBLIC_CONTACT_EMAIL_FALLBACK = 'kontakt@regulskibehawiorysta.pl'
-export const SITE_TAGLINE = 'Profesjonalna pomoc behawioralna dla psów i kotów'
+export const SITE_TAGLINE = 'Konsultacje behawioralne psów i kotów'
 export const SITE_DESCRIPTION =
-  'Behawiorysta psow i kotow online. Spokojny pierwszy krok, konsultacje online i materialy pomocnicze z jasnym planem dzialania.'
+  'Krótkie konsultacje behawioralne dla opiekunów psów i kotów. Rozmowa z Krzysztofem Regulskim, behawiorystą zwierzęcym i trenerem COAPE.'
 
 export const SPECIALIST_NAME = 'Krzysztof Regulski'
 export const SPECIALIST_PUBLIC_STATUS = 'Dyplomant COAPE'
@@ -114,7 +114,7 @@ export const LANDING_SPECIALIST_PHOTO = {
   src: '/images/hero-main.png',
   width: 1024,
   height: 1536,
-  alt: 'Krzysztof Regulski trzyma kota na rękach, z ciasteczkiem w dłoni, jako główne zdjęcie marki Regulski Terapia behawioralna',
+  alt: 'Krzysztof Regulski trzyma kota na rękach, z ciasteczkiem w dłoni, jako główne zdjęcie marki Regulski Behawiorysta',
 }
 
 export const SPECIALIST_PHOTO = LANDING_SPECIALIST_PHOTO
@@ -157,7 +157,7 @@ export const SITE_OG_IMAGE = {
   url: '/images/cutover/therapy-animals.png',
   width: 1200,
   height: 630,
-  alt: 'Terapia behawioralna dla zwierząt jako obraz do udostępnień marki Regulski Terapia behawioralna',
+  alt: 'Terapia behawioralna dla zwierząt jako obraz do udostępnień marki Regulski Behawiorysta',
 } as const
 
 export const SUPPORTING_SPECIALIST_PHOTO = {
@@ -282,7 +282,7 @@ export const CAT_TOPIC_VISUALS = {
 export const TOPIC_VISUALS: Record<ProblemType, { src: string; alt: string; width: number; height: number }> = {
   szczeniak: {
     src: '/images/cutover/dog-puppy-home.png',
-    alt: 'Wesoły szczeniak w przytulnym salonie jako ilustracja startu ze szczeniakiem i młodym psem',
+    alt: 'Wesoły szczeniak w przytulnym salonie jako ilustracja startu że szczeniakiem i młodym psem',
     width: 1024,
     height: 1536,
   },
@@ -441,9 +441,8 @@ function normalizePublicPhone(value: string | null): PublicPhone {
 }
 
 export function getContactDetails() {
-  const emailCandidate =
-    extractConfiguredEmail(process.env.BEHAVIOR15_CONTACT_EMAIL?.trim() || null) ?? PUBLIC_CONTACT_EMAIL_FALLBACK
-  const phoneCandidate = process.env.BEHAVIOR15_CONTACT_PHONE?.trim() || null
+  const emailCandidate = extractConfiguredEmail(process.env.REGULSKI_CONTACT_EMAIL?.trim() || null) ?? PUBLIC_CONTACT_EMAIL_FALLBACK
+  const phoneCandidate = process.env.REGULSKI_CONTACT_PHONE?.trim() || null
   const phone = normalizePublicPhone(phoneCandidate)
 
   return {

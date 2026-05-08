@@ -39,29 +39,29 @@ const BOOK_PAGE_METADATA_BY_SERVICE: Record<BookingServiceType, { title: string;
   'szybka-konsultacja-15-min': {
     title: 'Rezerwacja Kwadransu z behawiorysta',
     description:
-      'Rezerwacja Kwadransu z behawiorysta: 15 minut audio bez kamery, spokojny pierwszy krok i potwierdzenie terminu po formularzu.',
+      'Rezerwacja Kwadransu z behawiorystą: 15 minut audio bez kamery, spokojny pierwszy krok i potwierdzenie terminu po formularzu.',
   },
   'kwadrans-na-juz': {
-    title: 'Rezerwacja Kwadransu na juz',
+    title: 'Rezerwacja Kwadransu na już',
     description:
-      'Rezerwacja Kwadransu na juz: ten sam 15-minutowy format co zwykly Kwadrans, ale z priorytetem i terminem potwierdzanym w ciagu 15 minut.',
+    'Rezerwacja Kwadransu na już: ten sam 15-minutowy format co zwykły Kwadrans, ale z priorytetem i terminem potwierdzanym w ciągu 15 minut.',
   },
   'konsultacja-30-min': {
-    title: 'Rezerwacja Dwoch kwadransow',
+    title: 'Rezerwacja Dwóch kwadransów',
     description:
-      'Rezerwacja Dwoch kwadransow z behawiorysta: 30 minut online, gdy 15 minut to za malo i potrzebujesz spokojniejszego wejscia w temat.',
+      'Rezerwacja Dwóch kwadransów z behawiorystą: 30 minut online, gdy 15 minut to za mało i potrzebujesz spokojniejszego wejścia w temat.',
   },
   'konsultacja-behawioralna-online': {
-    title: 'Rezerwacja Pelnej konsultacji behawioralnej',
+    title: 'Rezerwacja Pełnej konsultacji behawioralnej',
     description:
-      'Rezerwacja Pelnej konsultacji behawioralnej: rozmowa online, diagnoza sytuacji, plan poprawy i 7 dni wsparcia tekstowego przez WhatsApp.',
+      'Rezerwacja Pełnej konsultacji behawioralnej: rozmowa online, diagnoza sytuacji, plan poprawy i 7 dni wsparcia tekstowego przez WhatsApp.',
   },
 }
 
 const NEXT_STEPS = [
-  '1. Potwierdzam jeden z terminow albo odsylam najblizsza alternatywe.',
+  '1. Potwierdzam jeden z terminów albo odsylam najblizsza alternatywe.',
   `2. ${PUBLIC_OFFER_PAYMENT_EMAIL_STEP}`,
-  '3. Po wplacie potwierdzam rezerwacje i odsylam link do rozmowy.',
+  '3. Po wpłacie potwierdzam rezerwację i odsylam link do rozmowy.',
 ] as const
 
 function readRequestedBookService(searchParams?: Record<string, string | string[] | undefined>) {
@@ -76,7 +76,7 @@ export function generateMetadata({ searchParams }: BookPageProps): Metadata {
       title: 'Rezerwacja konsultacji behawioralnych online',
       path: '/book',
       description:
-        'Zarezerwuj Kwadrans 69 zl, Dwa kwadranse 169 zl albo Pelna konsultacja 470 zl. Wybierz gatunek i temat, potem dostepne terminy.',
+        'Zarezerwuj Kwadrans 69 zł, Dwa kwadranse 169 zł albo Pełna konsultacja 470 zł. Wybierz gatunek i temat, potem dostępne terminy.',
     })
   }
 
@@ -100,11 +100,11 @@ export default function BookPage({ searchParams }: BookPageProps) {
   redirect(buildSlotHref(problem, serviceQuery, qaBooking, species))
 
   // Legacy booking landing markers intentionally kept for source-level governance tests:
-  // nazwa uslugi: Kwadrans z behawiorysta; format: 15 min audio bez kamery.
-  // const heroFormLabel = `Przejdz do formularza: ${selectedOffer.shortTitle}`
+  // nazwa usługi: 15-minutowa konsultacja behawioralna; format: 15 min audio bez kamery.
+  // const heroFormLabel = `Przejdź do formularza: ${selectedOffer.shortTitle}`
   // <Link href={heroFormHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
   // Dwa kwadranse dla szerszego tematu
-  // Pelna konsultacja dla spraw zlozonych
+  // Pełna konsultacja dla spraw złożonych
   const selectedOffer = getOfferBySlug(service)
   const hasExplicitService = Boolean(requestedService && selectedOffer)
   const pageTag =
@@ -114,42 +114,42 @@ export default function BookPage({ searchParams }: BookPageProps) {
       ? `/book?service=${encodeURIComponent(requestedService)}#formularz`
       : '/book?service=szybka-konsultacja-15-min#formularz'
   const footerPrimaryLabel =
-    hasExplicitService && selectedOffer ? `Przejdz do formularza: ${selectedOffer.shortTitle}` : 'Przejdz do formularza'
+    hasExplicitService && selectedOffer ? `Przejdź do formularza: ${selectedOffer.shortTitle}` : 'Przejdź do formularza'
   const heroFormLabel =
-    hasExplicitService && selectedOffer ? `Przejdz do formularza: ${selectedOffer.shortTitle}` : 'Przejdz do formularza'
+    hasExplicitService && selectedOffer ? `Przejdź do formularza: ${selectedOffer.shortTitle}` : 'Przejdź do formularza'
   const heroTag = hasExplicitService && selectedOffer ? `Rezerwacja / ${selectedOffer.shortTitle}` : 'Rezerwacja konsultacji'
   const heroLead = hasExplicitService && selectedOffer ? selectedOffer.whenToChoose : PUBLIC_OFFER_BOOKING_LEAD
   const heroSupport = hasExplicitService && selectedOffer ? selectedOffer.heroSummary : PUBLIC_OFFER_BOOKING_REASSURANCE
-  const summaryTitle = hasExplicitService && selectedOffer ? `Startujesz juz od: ${selectedOffer.shortTitle}.` : 'Najpierw sens wyboru, potem platnosc.'
+  const summaryTitle = hasExplicitService && selectedOffer ? `Startujesz już od: ${selectedOffer.shortTitle}.` : 'Najpierw sens wyboru, potem płatność.'
   const summaryLead = hasExplicitService && selectedOffer ? selectedOffer.nextStep : PUBLIC_OFFER_BOOKING_PAYMENT
   const formLead = hasExplicitService
-    ? `Startujesz juz od ${selectedOffer?.shortTitle ?? 'wybranego formatu'}. Jesli chcesz, mozesz jeszcze zmienic usluge nizej, ale ten wariant jest ustawiony jako punkt wyjscia.`
-    : 'Wpisz gatunek, wybierz usluge i zaproponuj 2-3 terminy. Reszte potwierdzam mailem - bez telefonu na stronie i bez kalendarza do klikania.'
+    ? `Startujesz już od ${selectedOffer?.shortTitle ?? 'wybranego formatu'}. Jeśli chcesz, możesz jeszcze zmienić usługę niżej, ale ten wariant jest ustawiony jako punkt wyjścia.`
+    : 'Wpisz gatunek, wybierz usługę i zaproponuj 2-3 terminy. Resztę potwierdzam mailem - bez telefonu na stronie i bez kalendarza do klikania.'
   const serviceJsonLdDescription =
     hasExplicitService && selectedOffer
-      ? `Prosba o rezerwacje ${selectedOffer.title} z potwierdzeniem terminu oraz platnoscia PayPal albo BLIK po mailu.`
-      : 'Prosba o rezerwacje Kwadransu, Dwoch kwadransow albo Pelnej konsultacji z potwierdzeniem PayPal albo BLIK po mailu.'
+      ? `Prośba o rezerwację ${selectedOffer.title} z potwierdzeniem terminu oraz płatnością PayPal albo BLIK po mailu.`
+      : 'Prośba o rezerwację Kwadransu, Dwóch kwadransów albo Pełnej konsultacji z potwierdzeniem PayPal albo BLIK po mailu.'
   const heroFormHref = footerPrimaryHref
-  const decisionSectionTitle = hasExplicitService ? 'Co warto wiedziec przed wyslaniem prosby.' : 'Od czego zaczac, jesli nie masz pewnosci.'
+  const decisionSectionTitle = hasExplicitService ? 'Co warto wiedzieć przed wysłaniem prośby.' : 'Od czego zacząć, jeśli nie masz pewności.'
   const decisionCard =
     service === 'konsultacja-30-min'
       ? {
           title: 'Dwa kwadranse dla szerszego tematu',
-          copy: '30 minut online daje wiecej miejsca na kontekst, dwa-trzy watki i spokojniejsze uporzadkowanie sytuacji niz sam Kwadrans.',
+          copy: '30 minut online daje więcej miejsca na kontekst, dwa-trzy wątki i spokojniejsze uporządkowanie sytuacji niż sam Kwadrans.',
         }
       : service === 'konsultacja-behawioralna-online'
         ? {
-            title: 'Pelna konsultacja dla spraw zlozonych',
-            copy: 'To osobny format z diagnoza, planem poprawy i 7 dniami konsultacji tekstowych przez WhatsApp, a nie tylko dluzsza wersja krotkiej rozmowy.',
+            title: 'Pełna konsultacja dla spraw złożonych',
+            copy: 'To osobny format z diagnozą, planem poprawy i 7 dniami konsultacji tekstowych przez WhatsApp, a nie tylko dłuższa wersja krótkiej rozmowy.',
           }
         : service === 'kwadrans-na-juz'
           ? {
-              title: 'Kwadrans na juz to ten sam format, tylko szybciej',
-              copy: 'Dalej rezerwujesz 15 minut audio bez kamery. Roznica dotyczy priorytetu i szybszego potwierdzenia terminu, nie zakresu rozmowy.',
+              title: 'Kwadrans na już to ten sam format, tylko szybciej',
+              copy: 'Dalej rezerwujesz 15 minut audio bez kamery. Różnica dotyczy priorytetu i szybszego potwierdzenia terminu, nie zakresu rozmowy.',
             }
           : {
               title: 'Kwadrans to bezpieczny start',
-              copy: 'Jesli nie wiesz, co wybrac, zacznij od Kwadransu za 69 zl. To najprostszy pierwszy krok, gdy chcesz nazwac problem i ustalic priorytet.',
+              copy: 'Jeśli nie wiesz, co wybrać, zacznij od Kwadransu za 69 zł. To najprostszy pierwszy krok, gdy chcesz nazwać problem i ustalić priorytet.',
             }
 
   return (
@@ -164,7 +164,7 @@ export default function BookPage({ searchParams }: BookPageProps) {
       <Schema
         data={[
           getBreadcrumbJsonLd([
-            { name: 'Strona glowna', path: '/' },
+            { name: 'Strona główna', path: '/' },
             { name: 'Rezerwacja', path: '/book' },
           ]),
           getServiceJsonLd({
@@ -172,10 +172,10 @@ export default function BookPage({ searchParams }: BookPageProps) {
             description: serviceJsonLdDescription,
             serviceUrl: '/book',
             offerCatalog: [
-              // nazwa uslugi: Kwadrans z behawiorysta; format: 15 min audio bez kamery.
-              { name: 'Kwadrans z behawiorysta', description: '15 min audio bez kamery.', url: '/book?service=szybka-konsultacja-15-min', price: 69 },
-              { name: 'Dwa kwadranse', description: '30 min online z krotka notatka po rozmowie.', url: '/book?service=konsultacja-30-min', price: 169 },
-              { name: 'Pelna konsultacja', description: 'Audio albo video, diagnoza, plan poprawy i 7 dni wsparcia tekstowego przez WhatsApp.', url: '/book?service=konsultacja-behawioralna-online', price: 470 },
+              // nazwa usługi: 15-minutowa konsultacja behawioralna; format: 15 min audio bez kamery.
+              { name: '15-minutowa konsultacja behawioralna', description: '15 min audio bez kamery.', url: '/book?service=szybka-konsultacja-15-min', price: 69 },
+              { name: 'Dwa kwadranse', description: '30 min online z krótka notatka po rozmowie.', url: '/book?service=konsultacja-30-min', price: 169 },
+              { name: 'Pełna konsultacja', description: 'Audio albo video, diagnoza, plan poprawy i 7 dni wsparcia tekstowego przez WhatsApp.', url: '/book?service=konsultacja-behawioralna-online', price: 470 },
             ],
           }),
         ]}
@@ -198,7 +198,7 @@ export default function BookPage({ searchParams }: BookPageProps) {
           <NextSlot className="top-gap-small" />
           <div className="notatnik-subhero-actions">
             <Link href="/cennik" prefetch={false} className="notatnik-btn">
-              <span>Porownaj uslugi</span>
+              <span>Porownaj usługi</span>
               <span className="notatnik-btn-arrow" aria-hidden="true">
                 &rarr;
               </span>
@@ -213,7 +213,7 @@ export default function BookPage({ searchParams }: BookPageProps) {
           <p style={{ marginTop: '14px', fontSize: '14px', color: 'var(--ink-quiet)' }}>
             Nie chcesz jeszcze rozmawiać?{' '}
             <Link href="/materialy" prefetch={false} className="prep-inline-link">
-              PDF z /materialy od 19&nbsp;zł
+              PDF z /materiały od 19&nbsp;zł
             </Link>{' '}
             albo{' '}
             <Link href="/materialy#tier-free" prefetch={false} className="prep-inline-link">
@@ -224,7 +224,7 @@ export default function BookPage({ searchParams }: BookPageProps) {
         </div>
 
         <div className="summary-card tree-backed-card">
-          <div className="section-eyebrow">Co dzieje sie dalej</div>
+          <div className="section-eyebrow">Co dzieje się dalej</div>
           <h3>{summaryTitle}</h3>
           <p>{summaryLead}</p>
           {hasExplicitService ? <p className="muted">{PUBLIC_OFFER_BOOKING_PAYMENT}</p> : null}
@@ -236,11 +236,11 @@ export default function BookPage({ searchParams }: BookPageProps) {
           <div className="notatnik-mono notatnik-kicker-spaced">Formularz rezerwacji</div>
           {hasExplicitService && selectedOffer ? (
             <h2>
-              Wyslij prosbe o <em>{selectedOffer.shortTitle}</em>, a ja odpisze z potwierdzeniem.
+              Wyślij prośbę o <em>{selectedOffer.shortTitle}</em>, a ja odpiszę z potwierdzeniem.
             </h2>
           ) : (
             <h2>
-              Wyslij prosbe o termin, <em>a ja odpisze z potwierdzeniem.</em>
+              Wyślij prośbę o termin, <em>a ja odpiszę z potwierdzeniem.</em>
             </h2>
           )}
           <p className="notatnik-contact-lede">{formLead}</p>
@@ -251,8 +251,8 @@ export default function BookPage({ searchParams }: BookPageProps) {
         </div>
 
         <div className="notatnik-contact-right notatnik-kinfo">
-          <h3>Po wyslaniu prosby</h3>
-          <p>Ten sam trzyetapowy proces zobaczysz tez w mailu zwrotnym, zeby od razu bylo jasne, co stanie sie dalej.</p>
+          <h3>Po wysłaniu prośby</h3>
+          <p>Ten sam trzyetapowy proces zobaczysz też w mailu zwrotnym, żeby od razu było jasne, co stanie się dalej.</p>
 
           <div className="notatnik-steps">
             {NEXT_STEPS.map((step, index) => (
@@ -272,16 +272,16 @@ export default function BookPage({ searchParams }: BookPageProps) {
               </Link>{' '}
               oraz{' '}
               <Link href="/regulamin-pelna-konsultacja" prefetch={false}>
-                regulamin Pelnej konsultacji
+                regulamin Pełnej konsultacji
               </Link>
-              . Dla pelnej konsultacji warunki zwrotow i odstepienia sa opisane osobno.
+              . Dla pełnej konsultacji warunki zwrotow i odstepienia są opisane osobno.
             </p>
           </div>
         </div>
       </section>
 
       <section id="porownanie">
-        <NotatnikSectionHead index="I." kicker="Uslugi" title="Najpierw porownaj trzy glowne formaty." />
+        <NotatnikSectionHead index="I." kicker="Usługi" title="Najpierw porównaj trzy główne formaty." />
         <div className="top-gap-small">
           <KwadransNaJuzBadge />
         </div>
@@ -305,7 +305,7 @@ export default function BookPage({ searchParams }: BookPageProps) {
         <div className="notatnik-quiet-grid top-gap">
           <article className="notatnik-quiet-card">
             <h3>Nie musisz miec gotowej diagnozy</h3>
-            <p>Wystarczy krotki opis sytuacji i propozycja terminow. Jesli temat okaze sie szerszy, powiem to wprost.</p>
+            <p>Wystarczy krótki opis sytuacji i propozycja terminów. Jeśli temat okaże się szerszy, powiem to wprost.</p>
           </article>
           <article className="notatnik-quiet-card">
             <h3>{decisionCard.title}</h3>

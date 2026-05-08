@@ -144,7 +144,7 @@ export function AdminMaterialyOrders({ initialOrders }: Props) {
       </button>
 
       <style jsx>{`
-        .admin-materialy { margin-top: 24px; }
+        .admin-materiały { margin-top: 24px; }
         .admin-error {
           background: #fde0e0;
           border: 1px solid #cc6655;

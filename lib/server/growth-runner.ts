@@ -1,4 +1,4 @@
-import { getLeadMagnetBySlug } from '@/lib/growth-layer'
+import { getLeadMagnetBySlug } from '@/lib/active-lead-magnets'
 import {
   listGrowthSignups,
   markGrowthSignupStageSent,

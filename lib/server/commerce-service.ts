@@ -6,6 +6,10 @@ import {
   getMaterialyGuideBySlug,
 } from '@/lib/materialy-catalog'
 import {
+  getBookingServiceTitle,
+  resolveBookingServiceType,
+} from '@/lib/booking-services'
+import {
   type CommerceOrder,
   type CommercePaymentMethod,
   isValidCommerceEmail,
@@ -65,9 +69,8 @@ export async function createOrReuseConsultationCommerceOrder(
     return existing
   }
 
-  const serviceName = booking.serviceType
-    ? `Konsultacja - ${booking.serviceType}`
-    : 'Konsultacja behawioralna'
+  const serviceType = resolveBookingServiceType(booking.serviceType, booking.amount)
+  const serviceName = getBookingServiceTitle(serviceType)
 
   return createCommerceOrder({
     customerEmail: booking.email,
@@ -80,6 +83,7 @@ export async function createOrReuseConsultationCommerceOrder(
     meta: {
       bookingId: booking.id,
       bookingAccessToken: accessToken ?? null,
+      serviceType,
       animalType: booking.animalType,
       problemType: booking.problemType,
     },
@@ -94,7 +98,7 @@ export async function createEbookCommerceOrder(input: EbookOrderInput) {
   const notes = trim(input.notes, 1200)
 
   if (!name || !email || !isValidCommerceEmail(email)) {
-    throw new Error('Podaj imie i poprawny adres e-mail.')
+    throw new Error('Podaj imię i poprawny adres e-mail.')
   }
 
   const guide = input.productKind === 'guide' ? getMaterialyGuideBySlug(productSlug) : null
@@ -140,7 +144,10 @@ export async function fulfillCommerceOrderAndNotify(
   },
 ) {
   const orderBefore = await getCommerceOrder(orderNumber)
-  const alreadySent = orderBefore?.status === 'access_sent' && Boolean(orderBefore.accessCode)
+  const alreadySent =
+    orderBefore?.productType === 'ebook' &&
+    orderBefore.status === 'access_sent' &&
+    Boolean(orderBefore.accessCode)
   const order = await fulfillCommerceOrder(orderNumber, method, options)
 
   if (!order) {
@@ -156,7 +163,7 @@ export async function fulfillCommerceOrderAndNotify(
     })
   }
 
-  if (!alreadySent) {
+  if (!alreadySent && order.productType === 'ebook') {
     await sendCommerceAccessCodeCustomerEmail(order)
   }
 
@@ -169,5 +176,5 @@ export function getCommerceOrderPublicAmount(order: CommerceOrder, method: 'onli
 
 export function getCommerceOrderPriceLabel(order: CommerceOrder, method: 'online' | 'blik_phone') {
   const amount = getCommerceOrderPublicAmount(order, method)
-  return `${amount.toFixed(Number.isInteger(amount) ? 0 : 2)} zl`
+  return `${amount.toFixed(Number.isInteger(amount) ? 0 : 2)} zł`
 }

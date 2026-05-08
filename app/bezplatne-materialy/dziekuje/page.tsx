@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { TrustSignalSection } from '@/components/TrustSignalSection'
 import { NotatnikPageShell, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { buildBookHref } from '@/lib/booking-routing'
-import { getLeadMagnetBySlug } from '@/lib/growth-layer'
+import { getLeadMagnetBySlug } from '@/lib/active-lead-magnets'
 import { buildTechnicalMetadata } from '@/lib/seo'
 import { TRUST_SIGNAL_SETS } from '@/lib/trust-layer'
 
@@ -25,12 +25,12 @@ export default function LeadMagnetThankYouPage({
 
   return (
     <NotatnikPageShell
-      tag="Material pobrany"
+      tag="Materiał pobrany"
       navItems={PUBLIC_SITE_NAV_ITEMS}
       ctaHref={audioHref}
-      ctaLabel="Kwadrans / 69 zl"
+      ctaLabel="Kwadrans / 69 zł"
       footerPrimaryHref={audioHref}
-      footerPrimaryLabel="Kwadrans z behawiorysta"
+      footerPrimaryLabel="15-minutowa konsultacja behawioralna"
       sideVisualVariant="materials"
     >
       <div className="container editorial-stack">
@@ -50,7 +50,7 @@ export default function LeadMagnetThankYouPage({
                   </a>
                 ) : null}
                 <Link href={audioHref} prefetch={false} className="button button-ghost big-button">
-                  Zarezerwuj Kwadrans z behawiorystą
+                  Zarezerwuj 15-minutowa konsultacja behawioralna
                 </Link>
               </div>
 
@@ -85,7 +85,7 @@ export default function LeadMagnetThankYouPage({
               },
               {
                 title: 'Jeśli temat zostaje chaotyczny, przejdź do rozmowy',
-                copy: 'Kwadrans z behawiorystą pozostaje najprostszym sposobem na ustawienie priorytetu, gdy sam materiał nie wystarcza.',
+                copy: '15-minutowa konsultacja behawioralna pozostaje najprostszym sposobem na ustawienie priorytetu, gdy sam materiał nie wystarcza.',
               },
             ]}
           />
@@ -94,7 +94,7 @@ export default function LeadMagnetThankYouPage({
         <TrustSignalSection
           eyebrow="Po pobraniu"
           title="Materiał pomaga uporządkować temat przed rozmową"
-          description="Jeśli po lekturze nadal potrzebujesz odniesienia do swojej sytuacji, najprostszym kolejnym krokiem jest Kwadrans z behawiorystą."
+          description="Jeśli po lekturze nadal potrzebujesz odniesienia do swojej sytuacji, najprostszym kolejnym krokiem jest 15-minutowa konsultacja behawioralna."
           items={TRUST_SIGNAL_SETS.toolkit}
         />
 

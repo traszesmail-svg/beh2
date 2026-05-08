@@ -61,7 +61,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const title = SLUG_TITLES[params.slug] ?? 'Jak się przygotować'
   return {
-    title: `${title} · Behawior 15`,
+    title: `${title} · Regulski Behawiorysta`,
     description: 'Krótki poradnik przygotowawczy przed konsultacją behawioralną online.',
   }
 }
@@ -83,7 +83,7 @@ export default function PrepGuidePage({ params }: { params: Params }) {
       />
       <hr style={{ margin: '40px 0', borderColor: '#e9dfcf' }} />
       <p style={{ fontSize: 13, color: '#6b625b' }}>
-        Behawior 15 · Krzysztof Regulski
+        Regulski Behawiorysta · Krzysztof Regulski
       </p>
     </main>
   )

@@ -42,7 +42,7 @@ export async function GET(request: Request) {
       results: results.map((r) => (r.status === 'fulfilled' ? r.value.status : 'rejected')),
     })
   } catch (err) {
-    console.error('[behawior15][cron][urgent-reminders] error', err)
+    console.error('[regulski-behawiorysta][cron][urgent-reminders] error', err)
     return NextResponse.json({ error: 'Internal error' }, { status: 500 })
   }
 }

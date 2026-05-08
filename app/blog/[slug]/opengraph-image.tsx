@@ -15,6 +15,6 @@ function formatSlugTitle(slug: string) {
 export default function OpenGraphImage({ params }: { params: { slug: string } }) {
   return renderOgImage({
     title: formatSlugTitle(params.slug),
-    subtitle: 'Wpis blogowy Regulski o zachowaniu psow i kotow.',
+    subtitle: 'Wpis blogowy Regulski o zachowaniu psów i kotów.',
   })
 }

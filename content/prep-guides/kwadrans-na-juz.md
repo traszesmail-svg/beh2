@@ -41,4 +41,4 @@ Link do pokoju rozmowy dostałeś/dostałaś mailem. Klikaj 2 minuty przed czase
 
 ---
 
-*Behawior 15 · Krzysztof Regulski*
+*Regulski Behawiorysta · Krzysztof Regulski*

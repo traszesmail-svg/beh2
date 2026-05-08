@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import {
   appendSearchParams,
@@ -7,6 +8,15 @@ import {
   readProblemTypeSearchParam,
   readQaBookingSearchParam,
 } from '@/lib/booking-routing'
+import { buildTechnicalMetadata } from '@/lib/seo'
+
+export const metadata: Metadata = buildTechnicalMetadata({
+  title: 'Wybór tematu konsultacji',
+  path: '/problem',
+  description: 'Wybierz temat 15-minutowej konsultacji behawioralnej z Krzysztofem Regulskim.',
+  noIndex: true,
+  follow: false,
+})
 
 export default function LegacyProblemPage({
   searchParams,

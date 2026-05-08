@@ -1,4 +1,4 @@
-// POST /api/admin/materialy/confirm — owner confirms BLIK payment from the admin UI.
+// POST /api/admin/materiały/confirm — owner confirms BLIK payment from the admin UI.
 // Protected by middleware-level Basic Auth (no extra header needed here).
 //
 // Request body: { orderId: string }
@@ -30,10 +30,10 @@ export async function POST(request: Request) {
 
   const existing = await getOrderById(orderId)
   if (!existing) {
-    return NextResponse.json({ ok: false, error: 'Nie znaleziono zamowienia.' }, { status: 404 })
+    return NextResponse.json({ ok: false, error: 'Nie znaleziono zamówienia.' }, { status: 404 })
   }
   if (existing.status === 'cancelled') {
-    return NextResponse.json({ ok: false, error: 'Zamowienie anulowane.' }, { status: 409 })
+    return NextResponse.json({ ok: false, error: 'Zamówienie anulowane.' }, { status: 409 })
   }
   if (existing.status === 'paid' || existing.status === 'used') {
     return NextResponse.json({
@@ -47,7 +47,7 @@ export async function POST(request: Request) {
 
   const updated = await confirmPayment(orderId)
   if (!updated || !updated.code || !updated.expiresAt) {
-    return NextResponse.json({ ok: false, error: 'Nie udalo sie potwierdzic zamowienia.' }, { status: 500 })
+    return NextResponse.json({ ok: false, error: 'Nie udało się potwierdzić zamówienia.' }, { status: 500 })
   }
 
   const item = updated.productKind === 'guide'
@@ -69,7 +69,7 @@ export async function POST(request: Request) {
   }
 
   void sendMaterialyCodeCustomerEmail(payload, updated.code, updated.expiresAt).catch((err) => {
-    console.error('[admin/materialy/confirm] code email failed', err)
+    console.error('[admin/materiały/confirm] code email failed', err)
   })
 
   return NextResponse.json({

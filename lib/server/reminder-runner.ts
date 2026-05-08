@@ -5,10 +5,10 @@ import { LocalTimeWindow, getWarsawDateTime, shouldSendReminderForBooking } from
 import { BookingRecord } from '@/lib/types'
 
 export const REMINDER_RUN_PATH = '/api/reminders/run'
-export const SUPABASE_REMINDER_JOB_NAME = 'behavior15-booking-reminders'
+export const SUPABASE_REMINDER_JOB_NAME = 'regulski-booking-reminders'
 export const SUPABASE_REMINDER_SCHEDULE = '*/5 * * * *'
-export const SUPABASE_REMINDER_APP_URL_SECRET = 'behavior15_app_url'
-export const SUPABASE_REMINDER_CRON_SECRET = 'behavior15_cron_secret'
+export const SUPABASE_REMINDER_APP_URL_SECRET = 'regulski_app_url'
+export const SUPABASE_REMINDER_CRON_SECRET = 'regulski_cron_secret'
 
 type ReminderDeliveryResult = Awaited<ReturnType<typeof sendBookingReminderEmail>>
 

@@ -20,7 +20,7 @@ const CONFIGS: Record<string, CoverConfig> = {
   'pies-ciagnie-na-smyczy-od-czego-zaczac':
     { photo: 'dog-leash', label: 'Smycz', accent: '#1a6fa0' },
   'reaktywnosc-na-smyczy-cwiczenie-luznej-smyczy':
-    { photo: 'dog-leash', label: 'Ćwiczenie', accent: '#1a6fa0' },
+    { photo: 'dog-leash', label: 'Ćwrócićzenie', accent: '#1a6fa0' },
   'kot-drapie-meble':
     { photo: 'cat-scratch', label: 'Drapanie', accent: '#a03020' },
   'nowy-pies-pierwsze-72-godziny':

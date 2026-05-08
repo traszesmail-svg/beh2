@@ -5,18 +5,18 @@ import { getBreadcrumbJsonLd } from '@/lib/schema'
 import { buildLegalMetadata } from '@/lib/seo'
 
 export const metadata: Metadata = buildLegalMetadata(
-  'Regulamin Pelnej konsultacji',
+  'Regulamin Pełnej konsultacji',
   '/regulamin-pelna-konsultacja',
-  'Zasady rezerwacji, platnosci, realizacji i reklamacji pelnej konsultacji behawioralnej online.',
+  'Zasady rezerwacji, płatności, realizacji i reklamacji pełnej konsultacji behawioralnej online.',
 )
 
 const summaryItems: LegalSummaryItem[] = [
   {
     label: 'Produkt objety dokumentem',
-    value: 'Pelna konsultacja behawioralna online: 470 zl, diagnoza i 7 dni konsultacji tekstowych przez WhatsApp.',
+    value: 'Pełna konsultacja behawioralna online: 470 zł, diagnoza i 7 dni konsultacji tekstowych przez WhatsApp.',
   },
   {
-    label: 'Platnosc',
+    label: 'Płatność',
     value: `${PUBLIC_OFFER_PAYMENT_METHODS} po potwierdzeniu terminu. Potwierdzenie rezerwacji do 15 minut w godzinach 9-21.`,
   },
 ]
@@ -27,44 +27,44 @@ const sections: LegalSection[] = [
     body: (
       <>
         <p>
-          Regulamin okresla zasady rezerwacji, platnosci, realizacji i reklamacji uslugi Pelna konsultacja behawioralna
+          Regulamin określa zasady rezerwacji, płatności, realizacji i reklamacji usługi Pełna konsultacja behawioralna
           online.
         </p>
         <p>
-          Uslugodawca: Krzysztof Regulski, e-mail: kontakt@regulskibehawiorysta.pl.
+          Usługodawca: Krzysztof Regulski, e-mail: kontakt@regulskibehawiorysta.pl.
         </p>
-        <p>Konsultacja jest usluga cyfrowa swiadczona przez internet. Nie ma charakteru porady weterynaryjnej ani diagnozy medycznej.</p>
+        <p>Konsultacja jest usługa cyfrowa swiadczona przez internet. Nie ma charakteru porady weterynaryjnej ani diagnozy medycznej.</p>
       </>
     ),
   },
   {
-    title: '2. Przedmiot i zakres uslugi',
+    title: '2. Przedmiot i zakres usługi',
     body: (
       <>
         <ul className="premium-bullet-list">
-          <li>Konsultacja odbywa sie online w formie rozmowy audio lub audio/video.</li>
-          <li>W ramach konsultacji uslugodawca analizuje opisana sytuacje psa lub kota, porzadkuje priorytety i przekazuje diagnoze behawioralna sytuacji.</li>
-          <li>Po konsultacji klient otrzymuje diagnoze behawioralna sytuacji i indywidualny plan poprawy.</li>
-          <li>Przez 7 dni od konsultacji klient moze przez WhatsApp zadawac pytania, wysylac wiadomosci tekstowe i filmy oraz konsultowac wdrazanie planu.</li>
-          <li>Jesli po 7 dniach brak postepu albo nie ma poczucia, ze to skuteczna droga do rozwiazania, uslugodawca moze wskazac zasadnosc wizyty domowej i terapii ustalanej indywidualnie.</li>
+          <li>Konsultacja odbywa się online w formie rozmowy audio lub audio/video.</li>
+          <li>W ramach konsultacji usługodawca analizuje opisaną sytuację psa lub kota, porządkuje priorytety i przekazuje diagnozę behawioralną sytuacji.</li>
+          <li>Po konsultacji klient otrzymuje diagnozę behawioralną sytuacji i indywidualny plan poprawy.</li>
+          <li>Przez 7 dni od konsultacji klient może przez WhatsApp zadawac pytania, wysyłac wiadomości tekstowe i filmy oraz konsultowac wdrazanie planu.</li>
+          <li>Jeśli po 7 dniach brak postępu albo nie ma poczucia, że to skuteczna droga do rozwiązania, usługodawca może wskazać zasadność wizyty domowej i terapii ustalanej indywidualnie.</li>
           <li>Konsultacja nie obejmuje diagnostyki weterynaryjnej, zalece farmakologicznych ani interwencji w stanach naglych.</li>
         </ul>
         <p>
-          Jezeli opisana sytuacja wymaga interwencji weterynarza lub innego specjalisty, uslugodawca informuje o tym
-          klienta i moze odmowic dalszej realizacji konsultacji, zwracajac 100% wplaty.
+          Jeżeli opisana sytuacja wymaga interwencji weterynarza lub innego specjalisty, usługodawca informuje o tym
+          klienta i może odmowrócić dalszej realizacji konsultacji, zwracajac 100% wpłaty.
         </p>
       </>
     ),
   },
   {
-    title: '3. Cena i platnosc',
+    title: '3. Cena i płatność',
     body: (
       <>
-        <p>Cena konsultacji: 470 zl brutto.</p>
-        <p>Metody platnosci: {PUBLIC_OFFER_PAYMENT_METHODS}. Dane do wplaty klient otrzymuje emailem po zaakceptowaniu wstepnego terminu.</p>
-        <p>Platnosc przyjmowana jest w godzinach 9:00-21:00, poza dniami ustawowo wolnymi od pracy.</p>
-        <p>Potwierdzenie wplyniecia platnosci i ostateczne potwierdzenie rezerwacji nastepuje do 15 minut od zaksiogowania wplaty w oknie obslugi.</p>
-        <p>Rezerwacja bez dokonanej platnosci nie jest wiazaca. Termin wraca do puli po 24 godzinach od wyslania danych do platnosci.</p>
+        <p>Cena konsultacji: 470 zł brutto.</p>
+        <p>Metody płatności: {PUBLIC_OFFER_PAYMENT_METHODS}. Dane do wpłaty klient otrzymuje emailem po zaakceptowaniu wstępnego terminu.</p>
+        <p>Płatność przyjmowana jest w godzinach 9:00-21:00, poza dniami ustawowo wolnymi od pracy.</p>
+        <p>Potwierdzenie wplyniecia płatności i ostateczne potwierdzenie rezerwacji nastepuje do 15 minut od zaksiogowania wpłaty w oknie obsługi.</p>
+        <p>Rezerwacja bez dokonanej płatności nie jest wiazaca. Termin wraca do puli po 24 godzinach od wyslania danych do płatności.</p>
       </>
     ),
   },
@@ -73,12 +73,12 @@ const sections: LegalSection[] = [
     body: (
       <>
         <p>
-          Konsultacja odbywa sie przez Jitsi Meet — nie wymaga instalacji aplikacji ani konta. Wystarczy kliknac link przeslany e-mailem przed rozmowa.
+          Konsultacja odbywa się przez Jitsi Meet — nie wymaga instalacji aplikacji ani konta. Wystarczy kliknac link przeslany e-mailem przed rozmowa.
         </p>
         <p>
-          Przy formacie 15 i 30 minut potrzebne jest tylko audio (mikrofon i glosnik albo sluchawki). Przy Pelnej konsultacji kamera moze pomoc, ale nie jest obowiazkowa.
+          Przy formacie 15 i 30 minut potrzebne jest tylko audio (mikrofon i głośnik albo sluchawki). Przy Pełnej konsultacji kamera może pomoc, ale nie jest obowiązkowa.
         </p>
-        <p>Wymagany jest dostep do internetu, aktualna przegladarka (Chrome, Firefox, Safari, Edge) oraz aktywny adres e-mail.</p>
+        <p>Wymagany jest dostęp do internetu, aktualna przeglądarka (Chrome, Firefox, Safari, Edge) oraz aktywny adres e-mail.</p>
       </>
     ),
   },
@@ -86,11 +86,11 @@ const sections: LegalSection[] = [
     title: '5. Rezerwacja terminu',
     body: (
       <>
-          <p>Klient inicjuje rezerwacje przez formularz na stronie /book, wskazujac preferowane terminy oraz opis sytuacji.</p>
-          <p>Uslugodawca odpowiada w ciagu kilku godzin, potwierdza jeden z zaproponowanych terminow albo proponuje inny, wraz z dalszym krokiem platnosci.</p>
-          <p>Konsultacja jest zarezerwowana dopiero po potwierdzeniu wplaty przez uslugodawce.</p>
-          <p>Na 24 godziny przed konsultacja klient otrzymuje e-mail z linkiem do rozmowy i lista materialow do przygotowania, jezeli sa potrzebne.</p>
-          <p>Po zakonczeniu konsultacji dalszy 7-dniowy kontakt tekstowy odbywa sie przez WhatsApp, chyba ze strony ustala inny kanal pisemny.</p>
+          <p>Klient inicjuje rezerwację przez formularz na stronie /book, wskazujac preferowane terminy oraz opis sytuacji.</p>
+          <p>Usługodawca odpowiada w ciągu kilku godzin, potwierdza jeden z zaproponowanych terminów albo proponuje inny, wraz z dalszym krokiem płatności.</p>
+          <p>Konsultacja jest zarezerwowana dopiero po potwierdzeniu wpłaty przez uslugodawce.</p>
+          <p>Na 24 godziny przed konsultacja klient otrzymuje e-mail z linkiem do rozmowy i lista materiałów do przygotowania, jeżeli są potrzebne.</p>
+          <p>Po zakonczeniu konsultacji dalszy 7-dniowy kontakt tekstowy odbywa się przez WhatsApp, chyba że strony ustala inny kanal pisemny.</p>
         </>
       ),
   },
@@ -98,9 +98,9 @@ const sections: LegalSection[] = [
     title: '6. Zmiana terminu i anulacja',
     body: (
       <>
-        <p>Do 48 godzin przed konsultacja klient moze bezplatnie zmienic termin albo zrezygnowac i otrzymac zwrot 100% wplaty.</p>
-        <p>Pomiedzy 48 a 24 godzinami przed terminem mozliwa jest bezplatna zmiana terminu albo zwrot 50% wplaty.</p>
-        <p>Krocej niz 24 godziny przed terminem wplata nie podlega zwrotowi, chyba ze przyczyna jest sila wyzsza lub niedostepnosc uslugodawcy.</p>
+        <p>Do 48 godzin przed konsultacja klient może bezpłatnie zmienic termin albo zrezygnowac i otrzymac zwrot 100% wpłaty.</p>
+        <p>Pomiędzy 48 a 24 godzinami przed terminem możliwa jest bezpłatna zmiana terminu albo zwrot 50% wpłaty.</p>
+        <p>Krocej niz 24 godziny przed terminem wpłata nie podlega zwrotowi, chyba że przyczyna jest sila wyzsza lub niedostępnosc uslugodawcy.</p>
       </>
     ),
   },
@@ -108,19 +108,19 @@ const sections: LegalSection[] = [
     title: '7. No-show i odwolanie przez uslugodawce',
     body: (
       <>
-        <p>Jesli klient nie dolaczy do rozmowy w ciagu 15 minut od planowanego poczatku i nie skontaktuje sie z uslugodawca, konsultacja uznawana jest za zrealizowana bez prawa do zwrotu.</p>
-        <p>W przypadku problemow technicznych udokumentowanych przez klienta uslugodawca proponuje nowy termin bez doplaty.</p>
-        <p>W sytuacjach wyjatkowych uslugodawca moze odwolac konsultacje. W takim przypadku klient otrzymuje wybor: nowy termin w ciagu 30 dni albo pelny zwrot wplaty.</p>
+        <p>Jeśli klient nie dołączy do rozmowy w ciągu 15 minut od planowanego początku i nie skontaktuje się z usługodawcą, konsultacja uznawana jest za zrealizowaną bez prawa do zwrotu.</p>
+        <p>W przypadku problemów technicznych udokumentowanych przez klienta usługodawca proponuje nowy termin bez dopłaty.</p>
+        <p>W sytuacjach wyjątkowych usługodawca może odwołać konsultację. W takim przypadku klient otrzymuje wybór: nowy termin w ciągu 30 dni albo pełny zwrot wpłaty.</p>
       </>
     ),
   },
   {
-    title: '8. Prawo odstapienia od umowy',
+    title: '8. Prawo odstąpienia od umowy',
     body: (
       <>
-        <p>Konsument ma prawo odstapic od umowy zawartej na odleglosc w terminie 14 dni bez podania przyczyny, z zastrzezeniem przepisow szczegolnych o uslugach wykonanych za zgoda klienta.</p>
-        <p>Akceptujac regulamin przy rezerwacji, klient wyraza zgode na rozpoczecie swiadczenia uslugi przed uplywem 14-dniowego terminu i przyjmuje do wiadomosci, ze po zakonczonej konsultacji traci prawo odstapienia od umowy.</p>
-        <p>Do momentu rozpoczecia konsultacji klient zachowuje prawo odstapienia na zasadach ogolnych. Zgloszenie e-mailem jest wystarczajace.</p>
+        <p>Konsument ma prawo odstąpić od umowy zawartej na odległość w terminie 14 dni bez podania przyczyny, z zastrzeżeniem przepisów szczególnych o usługach wykonanych za zgodą klienta.</p>
+        <p>Akceptując regulamin przy rezerwacji, klient wyraża zgodę na rozpoczęcie świadczenia usługi przed upływem 14-dniowego terminu i przyjmuje do wiadomości, że po zakończonej konsultacji traci prawo odstąpienia od umowy.</p>
+        <p>Do momentu rozpoczęcia konsultacji klient zachowuje prawo odstąpienia na zasadach ogólnych. Zgłoszenie e-mailem jest wystarczające.</p>
       </>
     ),
   },
@@ -128,19 +128,19 @@ const sections: LegalSection[] = [
     title: '9. Reklamacje',
     body: (
       <>
-        <p>Klient moze zlozyc reklamacje e-mailem na kontakt@regulskibehawiorysta.pl w ciagu 14 dni od konsultacji.</p>
-        <p>Reklamacja powinna zawierac imie i nazwisko, date konsultacji oraz opis nieprawidlowosci.</p>
-        <p>Uslugodawca rozpatruje reklamacje w ciagu 14 dni roboczych. Jezeli reklamacja jest zasadna, klient otrzymuje zwrot czesci lub calosci wplaty albo darmowa konsultacje uzupelniajaca.</p>
+        <p>Klient może złożyć reklamację e-mailem na kontakt@regulskibehawiorysta.pl w ciągu 14 dni od konsultacji.</p>
+        <p>Reklamacja powinna zawierać imię i nazwisko, datę konsultacji oraz opis nieprawidłowości.</p>
+        <p>Usługodawca rozpatruje reklamację w ciągu 14 dni roboczych. Jeżeli reklamacja jest zasadna, klient otrzymuje zwrot części lub całości wpłaty albo darmową konsultację uzupełniającą.</p>
       </>
     ),
   },
   {
-    title: '10. Ochrona danych osobowych i poufnosc',
+    title: '10. Ochrona danych osobowych i poufność',
     body: (
       <>
-        <p>Administratorem danych osobowych klienta jest uslugodawca wskazany w naglowku dokumentu.</p>
-        <p>Dane sa przetwarzane w celu realizacji konsultacji, wystawienia dokumentu sprzedazowego i kontaktu zwrotnego. Szczegoly znajduja sie w Polityce prywatnosci.</p>
-        <p>Uslugodawca zachowuje poufnosc informacji przekazanych przez klienta podczas konsultacji. Konsultacja nie jest nagrywana bez wyraznej zgody klienta.</p>
+        <p>Administratorem danych osobowych klienta jest usługodawca wskazany w nagłówku dokumentu.</p>
+        <p>Dane są przetwarzane w celu realizacji konsultacji, wystawienia dokumentu sprzedażowego i kontaktu zwrotnego. Szczegóły znajdują się w Polityce prywatności.</p>
+        <p>Usługodawca zachowuje poufność informacji przekazanych przez klienta podczas konsultacji. Konsultacja nie jest nagrywana bez wyraźnej zgody klienta.</p>
       </>
     ),
   },
@@ -148,9 +148,9 @@ const sections: LegalSection[] = [
     title: '11. Postanowienia koncowe',
     body: (
       <>
-        <p>W sprawach nieuregulowanych regulaminem zastosowanie maja przepisy prawa polskiego, w szczegolnosci Kodeksu cywilnego i ustawy o prawach konsumenta.</p>
-        <p>Uslugodawca zastrzega prawo do zmiany regulaminu. Rezerwacje oplacone przed zmiana regulaminu sa realizowane na zasadach obowiazujacych w momencie rezerwacji.</p>
-        <p>Regulamin wchodzi w zycie z dniem opublikowania na stronie /regulamin-pelna-konsultacja.</p>
+        <p>W sprawach nieuregulowanych regulaminem zastosowanie mają przepisy prawa polskiego, w szczegolnosci Kodeksu cywilnego i ustawy o prawach konsumenta.</p>
+        <p>Uslugodawca zastrzega prawo do zmiany regulaminu. Rezerwacje opłacone przed zmiana regulaminu są realizowane na zasadach obowiazujacych w momencie rezerwacji.</p>
+        <p>Regulamin wchodzi w zycie z dniem opublikowania na stronie /regulamin-pełna-konsultacja.</p>
       </>
     ),
   },
@@ -159,20 +159,20 @@ const sections: LegalSection[] = [
 export default function FullConsultationTermsPage() {
   return (
     <LegalPageLayout
-      eyebrow="Regulamin / pelna konsultacja"
-      title="Regulamin Pelnej konsultacji behawioralnej online"
-      intro="Dokument opisuje zasady rezerwacji, platnosci, zmian terminu, realizacji, 7 dni wsparcia tekstowego i reklamacji dla Pelnej konsultacji online."
-      contactSubject="Pytanie o regulamin Pelnej konsultacji"
+      eyebrow="Regulamin / pełna konsultacja"
+      title="Regulamin Pełnej konsultacji behawioralnej online"
+      intro="Dokument opisuje zasady rezerwacji, płatności, zmian terminu, realizacji, 7 dni wsparcia tekstowego i reklamacji dla Pełnej konsultacji online."
+      contactSubject="Pytanie o regulamin Pełnej konsultacji"
       summaryItems={summaryItems}
       sections={sections}
-      supportTitle="Kontakt w sprawach Pelnej konsultacji"
-      supportText="Dokument obejmuje warunki rezerwacji, diagnozy, planu poprawy i 7 dni wsparcia tekstowego po Pelnej konsultacji."
-      supportNoteTitle="Kontakt i obsluga dokumentu"
-      supportNoteText="W sprawach dotyczacych regulaminu, reklamacji lub realizacji Pelnej konsultacji kontakt prowadzony jest przez formularz i e-mail."
+      supportTitle="Kontakt w sprawach Pełnej konsultacji"
+      supportText="Dokument obejmuje warunki rezerwacji, diagnozy, planu poprawy i 7 dni wsparcia tekstowego po Pełnej konsultacji."
+      supportNoteTitle="Kontakt i obsługa dokumentu"
+      supportNoteText="W sprawach dotyczących regulaminu, reklamacji lub realizacji Pełnej konsultacji kontakt prowadzony jest przez formularz i e-mail."
       structuredData={[
         getBreadcrumbJsonLd([
-          { name: 'Strona glowna', path: '/' },
-          { name: 'Regulamin Pelnej konsultacji', path: '/regulamin-pelna-konsultacja' },
+          { name: 'Strona główna', path: '/' },
+          { name: 'Regulamin Pełnej konsultacji', path: '/regulamin-pelna-konsultacja' },
         ]),
       ]}
     />

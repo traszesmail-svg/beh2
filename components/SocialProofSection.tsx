@@ -129,26 +129,26 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
       <div className="section-head">
         <div>
           <div className="section-eyebrow">Opinie i realne przypadki</div>
-          <h2 id="historie-heading">Historie opiekunow i efekty konsultacji</h2>
+          <h2 id="historie-heading">Historie opiekunów i efekty konsultacji</h2>
         </div>
         <div className="muted">
-          Pokazujemy krotki kontekst, typ problemu, format pracy i pierwszy kierunek dzialania.
+          Pokazujemy krótki kontekst, typ problemu, format pracy i pierwszy kierunek działania.
           <br />
-          Obok sa publikacje i krotkie informacje o profilu.
+          Obok są publikacje i krótkie informacje o profilu.
         </div>
       </div>
 
       <div className="summary-grid trust-grid top-gap">
         <div className="summary-card tree-backed-card">
           <div className="stat-label">Typowe starty</div>
-          <span>Najczestsze sprawy z opisanym formatem pracy, etapem i przyblizonym czasem.</span>
+          <span>Najczęstsze sprawy z opisanym formatem pracy, etapem i przyblizonym czasem.</span>
         </div>
         <div className="summary-card tree-backed-card">
           <div className="stat-label">Profil i publikacje</div>
-          <span>Obok przykladow sa tez podstawowe informacje o kwalifikacjach i artykulach.</span>
+          <span>Obok przykladow są też podstawowe informacje o kwalifikacjach i artykułach.</span>
         </div>
         <div className="summary-card tree-backed-card">
-          <div className="stat-label">Reczne sprawdzenie</div>
+          <div className="stat-label">Reczne sprawdzićenie</div>
           <span>Nic nie trafia na strone automatycznie.</span>
         </div>
       </div>
@@ -164,7 +164,7 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
           <div className="section-eyebrow">Profil i publikacje</div>
           <h3>Dodatkowe informacje</h3>
         </div>
-        <div className="muted">CAPBT, Instagram i publikacje branzowe pokazuja dodatkowy kontekst pracy.</div>
+        <div className="muted">CAPBT, Instagram i publikacje branżowe pokazują dodatkowy kontekst pracy.</div>
       </div>
 
       <div className="media-grid top-gap">
@@ -187,9 +187,9 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
           <div className="section-head top-gap">
             <div>
               <div className="section-eyebrow">Wybrane opinie</div>
-              <h3>Krotkie opinie klientow</h3>
+              <h3>Krótkie opinie klientow</h3>
             </div>
-            <div className="muted">Opinie sa dodawane dopiero po wczesniejszym sprawdzeniu zgody.</div>
+            <div className="muted">Opinie są dodawane dopiero po wczesniejszym sprawdzeniu zgody.</div>
           </div>
 
           <div className="summary-grid top-gap">
@@ -225,7 +225,7 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
                     </div>
                   </div>
                   <strong>{testimonial.quote}</strong>
-                  {!testimonial.consent ? <span>Dane szczegolowe zostana uzupelnione po osobnej zgodzie na publikacje.</span> : null}
+                  {!testimonial.consent ? <span>Dane szczegółowe zostaną uzupełnione po osobnej zgodzie na publikację.</span> : null}
                 </article>
               )
             })}
@@ -233,15 +233,15 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
         </>
       ) : (
         <div className="real-case-empty top-gap">
-          <strong>Wybrane opinie pojawia sie po recznej akceptacji.</strong>
+          <strong>Wybrane opinie pojawia się po recznej akceptacji.</strong>
           <p>
-            Na ten moment pokazujemy przede wszystkim realne przypadki, publiczne profile i publikacje. Dzieki temu sekcja nie opiera sie na
+            Na ten moment pokazujemy przede wszystkim realne przypadki, publiczne profile i publikacje. Dzięki temu sekcja nie opiera się na
             pustych deklaracjach.
           </p>
         </div>
       )}
 
-      <div className="info-box top-gap">Opinie i dane kontaktowe z formularza sa sprawdzane recznie. Nic nie trafia na strone automatycznie.</div>
+      <div className="info-box top-gap">Opinie i dane kontaktowe z formularza są sprawdzane recznie. Nic nie trafia na strone automatycznie.</div>
 
       {showSubmissionForm ? (
         <div className="top-gap">
@@ -251,14 +251,14 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
         <div className="offer-detail-cta-band top-gap">
           <div className="offer-detail-cta-copy">
             <span className="section-eyebrow">Dalszy krok</span>
-            <strong>Chcesz zobaczyc pelna sekcje opinii?</strong>
-            <span>Jesli wolisz spokojniejszy start, mozesz wybrac Kwadrans z behawiorysta albo Niezbednik.</span>
-            <span>Pelny formularz publikacji i dodatkowe wskazowki sa na osobnej podstronie.</span>
+            <strong>Chcesz zobaczyć pełna sekcje opinii?</strong>
+            <span>Jeśli wolisz spokojniejszy start, możesz wybrać 15-minutową konsultację behawioralną albo Niezbędnik.</span>
+            <span>Pełny formularz publikacji i dodatkowe wskazowki są na osobnej podstronie.</span>
           </div>
 
           <div className="hero-actions offer-detail-actions">
             <Link href="/opinie" prefetch={false} className="button button-primary big-button">
-              Zobacz pelna sekcje opinii
+              Zobacz pełna sekcje opinii
             </Link>
             <Link href="/book" prefetch={false} className="button button-ghost big-button">
               {FUNNEL_CTA_LABELS.primary}

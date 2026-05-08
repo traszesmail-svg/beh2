@@ -16,6 +16,7 @@ export type CommerceAccessStatus = 'active' | 'used' | 'expired' | 'revoked'
 export type CommerceProductMeta = {
   bookingId?: string
   bookingAccessToken?: string | null
+  serviceType?: string
   productKind?: 'guide' | 'bundle'
   productSlug?: string
   downloadSlug?: string

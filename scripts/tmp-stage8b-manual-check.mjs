@@ -7,14 +7,14 @@ const appUrl = `http://127.0.0.1:${port}`
 const canonicalBase = 'https://regulskibehawiorysta.pl'
 
 const routeChecks = [
-  { route: '/bezplatne-materialy/pies-reaktywnosc-5-krokow', heading: '5 pierwszych kroków, gdy pies szczeka na spacerach' },
+  { route: '/bezplatne-materialy/pies-ile-ruchu-potrzebuje', heading: 'Czy Twój pies naprawdę potrzebuje więcej ruchu?' },
   {
-    route: '/bezplatne-materialy/kot-kuweta-checklista',
-    heading: 'Co sprawdzić, zanim uznasz, że kot załatwia się poza kuwetą złośliwie',
+    route: '/bezplatne-materialy/kot-zyje-w-napieciu',
+    heading: 'Kot żyje w napięciu',
   },
   {
-    route: '/bezplatne-materialy/przygotowanie-do-konsultacji-online',
-    heading: 'Jak przygotować się do konsultacji behawioralnej online',
+    route: '/bezplatne-materialy/30-zachowan',
+    heading: '30 zachowań do obserwacji',
   },
   { route: '/opinie', heading: 'Co opiekunowie mówią o konsultacjach' },
   { route: '/o-mnie', heading: 'Krzysztof Regulski - behawiorysta psów i kotów' },
@@ -84,14 +84,14 @@ async function main() {
       console.log(JSON.stringify({ route: check.route, h1: extractH1(html), status: response.status }))
     }
 
-    const dogMagnetHtml = await fetch(`${appUrl}/bezplatne-materialy/pies-reaktywnosc-5-krokow`, { cache: 'no-store' }).then((res) => res.text())
+    const dogMagnetHtml = await fetch(`${appUrl}/bezplatne-materialy/pies-ile-ruchu-potrzebuje`, { cache: 'no-store' }).then((res) => res.text())
     assert.equal(dogMagnetHtml.includes('Krótki FAQ przed pobraniem'), true)
     assert.equal(dogMagnetHtml.includes('To nie jest kolejny przypadkowy PDF do zapisania na później'), true)
 
-    const thankYouHtml = await fetch(`${appUrl}/bezplatne-materialy/dziekuje?leadMagnet=pies-reaktywnosc-5-krokow`, {
+    const thankYouHtml = await fetch(`${appUrl}/bezplatne-materialy/dziekuje?leadMagnet=pies-ile-ruchu-potrzebuje`, {
       cache: 'no-store',
     }).then((res) => res.text())
-    assert.equal(thankYouHtml.includes('Po kilku dniach wróć do wyzwalaczy i progu'), true)
+    assert.equal(thankYouHtml.includes('ruch, pobudzenie czy odpoczynek'), true)
     assert.equal(thankYouHtml.includes('noindex'), true)
 
     const pricingHtml = await fetch(`${appUrl}/cennik`, { cache: 'no-store' }).then((res) => res.text())
@@ -121,11 +121,11 @@ async function main() {
     assert.equal(landingHtml.includes('Na landingach problemowych trust ma tylko dopiąć decyzję'), true)
 
     const sitemapXml = await fetch(`${appUrl}/sitemap.xml`, { cache: 'no-store' }).then((res) => res.text())
-    assert.equal(sitemapXml.includes('<loc>https://regulskibehawiorysta.pl/bezplatne-materialy/pies-reaktywnosc-5-krokow</loc>'), true)
+    assert.equal(sitemapXml.includes('<loc>https://regulskibehawiorysta.pl/bezplatne-materialy/pies-ile-ruchu-potrzebuje</loc>'), true)
     assert.equal(sitemapXml.includes('/bezplatne-materialy/dziekuje'), false)
 
     const dogMagnetCanonical = extractCanonical(dogMagnetHtml)
-    assert.equal(dogMagnetCanonical, `${canonicalBase}/bezplatne-materialy/pies-reaktywnosc-5-krokow`)
+    assert.equal(dogMagnetCanonical, `${canonicalBase}/bezplatne-materialy/pies-ile-ruchu-potrzebuje`)
   } finally {
     if (server) {
       server.kill()

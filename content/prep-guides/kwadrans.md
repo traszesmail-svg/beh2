@@ -44,4 +44,4 @@ Dostaniesz jeden konkretny następny krok — nie listę 12 ćwiczeń. Coś, co 
 
 ---
 
-*Behawior 15 · Krzysztof Regulski*
+*Regulski Behawiorysta · Krzysztof Regulski*

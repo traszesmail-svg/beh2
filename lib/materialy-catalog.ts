@@ -1,10 +1,7 @@
-// Catalog of downloadable PDF guides for the /materialy funnel.
-// Three tiers:
-//  - "free"     → lead magnets (email gate, instant download)
-//  - "single"   → standalone PDF (19 or 29 zł, BLIK manual)
-//  - "bundle"   → 3-PDF themed bundle (49 zł, BLIK manual)
+// Source of truth for the public /materiały funnel.
+// Keep this catalog aligned with the PDF files that are meant to be visible on the site.
 
-export type MaterialyCategory = 'cat' | 'dog' | 'puppy'
+export type MaterialyCategory = 'cat' | 'dog' | 'both'
 export type MaterialyTier = 'free' | 'single' | 'bundle'
 export type MaterialyPriceCode = 'free' | 'p19' | 'p29' | 'p49'
 
@@ -17,15 +14,16 @@ export type MaterialyGuide = {
   priceCode: MaterialyPriceCode
   shortPromise: string
   forWhom: string
-  pdfFile: string // filename inside content/guides/pdf/
+  pdfFile: string
   highlights: string[]
+  previewPageCount: number
 }
 
 export type MaterialyBundle = {
   slug: string
   title: string
   subtitle: string
-  category: MaterialyCategory
+  category: Exclude<MaterialyCategory, 'both'>
   priceCode: 'p49'
   guideSlugs: string[]
   shortPromise: string
@@ -45,9 +43,7 @@ export const PRICE_AMOUNT_PLN: Record<MaterialyPriceCode, number> = {
   p49: 49,
 }
 
-// 23 guides total. 2 free lead magnets + 6 flagship singles (29 zł) + 15 standard singles (19 zł).
 const RAW_GUIDES: MaterialyGuide[] = [
-  // ─── FREE LEAD MAGNETS ─────────────────────────────────────────────────
   {
     slug: 'kot-zyje-w-napieciu',
     title: 'Kot żyje w napięciu',
@@ -55,342 +51,96 @@ const RAW_GUIDES: MaterialyGuide[] = [
     category: 'cat',
     tier: 'free',
     priceCode: 'free',
-    shortPromise: 'Mapa codziennych sygnałów napięcia i pierwsza reakcja środowiskowa.',
-    forWhom: 'Dla opiekuna kota, który zauważa, że coś jest nie tak — wycofanie, czujność, drobne objawy somatyczne — ale nie wie, od czego zacząć.',
+    shortPromise: 'Mapa codziennych sygnałów napięcia i pierwszych reakcji środowiskowych.',
+    forWhom: 'Dla opiekuna kota, który widzi wycofanie, czujność albo drobne sygnały stresu i chce zacząć od spokojnej obserwacji.',
     pdfFile: 'kot-zyje-w-napieciu.pdf',
-    highlights: ['mapa stresorów domowych', 'co realnie pomaga w pierwszych 14 dniach', 'kiedy iść do lekarza'],
+    highlights: ['sygnały napięcia', 'pierwsze zmiany w domu', 'kiedy sprawdzić zdrowie'],
+    previewPageCount: 9,
   },
   {
     slug: 'pies-ile-ruchu-potrzebuje',
     title: 'Czy Twój pies naprawdę potrzebuje więcej ruchu?',
-    subtitle: 'Kiedy „dodaj ruchu" pogarsza sprawę i jak to rozpoznać',
+    subtitle: 'Kiedy dokładanie aktywności pogarsza sprawę i jak to rozpoznać',
     category: 'dog',
     tier: 'free',
     priceCode: 'free',
-    shortPromise: 'Prosty filtr: czy psu brakuje ruchu, czy odpoczynku.',
-    forWhom: 'Dla opiekuna psa, który słyszy „dodaj mu ruchu" jako odpowiedź na wszystko, ale widzi, że to nie pomaga albo szkodzi.',
+    shortPromise: 'Prosty filtr: czy psu brakuje ruchu, czy odpoczynku i regulacji.',
+    forWhom: 'Dla opiekuna psa, który słyszy "dodaj ruchu", ale widzi, że po spacerach pies jest bardziej pobudzony, a nie spokojniejszy.',
     pdfFile: 'pies-ile-ruchu-potrzebuje.pdf',
-    highlights: ['cztery scenariusze przeciążenia', 'jak ustawić dzień bez maratonów', 'sygnały, że pies potrzebuje wyciszenia, nie więcej spacerów'],
+    highlights: ['ruch kontra odpoczynek', 'sygnały przeciążenia', 'bezpieczniejszy rytm dnia'],
+    previewPageCount: 8,
   },
-
-  // ─── FLAGSHIPS (29 zł) ────────────────────────────────────────────────
   {
-    slug: 'kot-i-kuweta-pierwszy-plan-dzialania',
-    title: 'Kot i kuweta — pierwszy plan działania',
-    subtitle: 'Pierwszy plan przy sikaniu lub załatwianiu się poza kuwetą',
+    slug: 'kwadrans-podstawy-kota',
+    title: 'Kwadrans: podstawy kota',
+    subtitle: 'Krótki materiał porządkujący pierwszą rozmowę o kocie',
     category: 'cat',
-    tier: 'single',
-    priceCode: 'p29',
-    shortPromise: 'Szczegółowy poradnik porządkujący diagnozę wstępną, środowisko, kuwetę, lokalizacje i plan monitorowania.',
-    forWhom: 'Dla opiekuna kota z problemami około-kuwetowymi, który chce uporządkować temat bez przypadkowych rad z internetu.',
-    pdfFile: 'kot-i-kuweta-pierwszy-plan-dzialania.pdf',
-    highlights: ['diagnoza wstępna i audyt kuwety', 'plan monitorowania i działań na 14 dni', 'kiedy lekarz, kiedy zmiana środowiska'],
+    tier: 'free',
+    priceCode: 'free',
+    shortPromise: 'Co warto zauważyć przed Kwadransem, żeby rozmowa szybciej zeszła do konkretu.',
+    forWhom: 'Dla opiekuna kota, który chce przygotować najważniejsze informacje przed krótką konsultacją.',
+    pdfFile: 'kwadrans-podstawy-kota.pdf',
+    highlights: ['opis problemu', 'rytm dnia', 'co przygotować przed rozmową'],
+    previewPageCount: 11,
   },
   {
-    slug: 'kot-problem-poza-kuweta',
-    title: 'Problem poza kuwetą',
-    subtitle: 'Pełny przewodnik diagnostyczny — od bólu po napięcie społeczne',
-    category: 'cat',
-    tier: 'single',
-    priceCode: 'p29',
-    shortPromise: 'Najszerszy materiał kuwetowy: różnicowanie, audyt, plan i routing do kolejnych kroków.',
-    forWhom: 'Dla opiekuna, u którego problem trwa dłużej niż tydzień, wraca falami albo łączy się z napięciem w domu.',
-    pdfFile: 'kot-problem-poza-kuweta.pdf',
-    highlights: ['cztery warstwy problemu (medycznie / kuweta / środowisko / społeczna)', 'audyt kuwety i plan na 14 dni', 'kiedy konsultacja, kiedy lekarz'],
-  },
-  {
-    slug: 'pies-zostaje-sam',
-    title: 'Pies zostaje sam i wpada w panikę?',
-    subtitle: 'Jak odróżnić separację od frustracji, protestu i chaosu po wyjściu',
+    slug: 'kwadrans-podstawy-psa',
+    title: 'Kwadrans: podstawy psa',
+    subtitle: 'Krótki materiał porządkujący pierwszą rozmowę o psie',
     category: 'dog',
-    tier: 'single',
-    priceCode: 'p29',
-    shortPromise: 'Cztery ścieżki problemu, plan pierwszych 72 godzin i 14 dni, co podpowiada nagranie.',
-    forWhom: 'Dla opiekuna psa, który podejrzewa, że to nie jest tylko nuda albo protest, lecz realna panika.',
-    pdfFile: 'pies-zostaje-sam.pdf',
-    highlights: ['różnicowanie paniki, frustracji, protestu i przeciążenia', 'plan 72 godzin + 14 dni', 'co nagrywać i na co patrzeć'],
+    tier: 'free',
+    priceCode: 'free',
+    shortPromise: 'Najważniejsze informacje przed Kwadransem, bez rozpisywania całej historii od zera.',
+    forWhom: 'Dla opiekuna psa, który chce szybko zebrać kontekst do krótkiej konsultacji.',
+    pdfFile: 'kwadrans-podstawy-psa.pdf',
+    highlights: ['jedno główne pytanie', 'krótka historia problemu', 'co pomaga w diagnozie'],
+    previewPageCount: 11,
   },
   {
-    slug: 'pies-reaktywny-na-spacerze',
-    title: 'Pies reaktywny na spacerze',
-    subtitle: 'Pierwszy plan pracy przy szczekaniu, spinaniu się i trudnych mijankach',
-    category: 'dog',
-    tier: 'single',
-    priceCode: 'p29',
-    shortPromise: 'Krótki poradnik porządkujący pierwsze decyzje przy reaktywności spacerowej.',
-    forWhom: 'Dla opiekuna psa, które źle znoszą mijanie psów, ludzi albo innych bodźców na spacerze.',
-    pdfFile: 'pies-reaktywny-na-spacerze.pdf',
-    highlights: ['diagnoza reaktywności spacerowej', 'plan dystansu i separacji', 'kiedy specjalista'],
+    slug: '30-zachowan',
+    title: '30 zachowań do obserwacji',
+    subtitle: 'Sygnały u psa i kota, które warto zanotować przed decyzją o kolejnym kroku',
+    category: 'both',
+    tier: 'free',
+    priceCode: 'free',
+    shortPromise: 'Lista zachowań i sygnałów, które pomagają oddzielić incydent od wzorca.',
+    forWhom: 'Dla opiekuna psa albo kota, który chce spokojnie sprawdzić, co właściwie wraca w codzienności.',
+    pdfFile: '30-zachowan.pdf',
+    highlights: ['sygnały ciała', 'kiedy obserwować', 'kiedy przejść do rozmowy'],
+    previewPageCount: 11,
   },
   {
-    slug: 'pies-trudny-spacer',
-    title: 'Trudny spacer',
-    subtitle: 'Pies reaktywny, ciągnący, spięty — od czego zacząć układanie',
-    category: 'dog',
-    tier: 'single',
-    priceCode: 'p29',
-    shortPromise: 'Mapa wyzwalaczy spacerowych i pierwszy plan dystansu, rytmu i regeneracji.',
-    forWhom: 'Dla opiekuna psa, dla którego spacer to seria mijanek, pobudzenia i uczenia się reaktywności.',
-    pdfFile: 'pies-trudny-spacer.pdf',
-    highlights: ['mapa wyzwalaczy', 'praca z dystansem zamiast „odczulania siłą"', 'kiedy potrzebny jest specjalista'],
-  },
-  {
-    slug: 'kot-broni-sie-przy-pielegnacji',
-    title: 'Kot broni się przy pielęgnacji',
-    subtitle: 'Czesanie, obcinanie pazurów, transporter, łapanie — bez walki',
+    slug: 'pierwszy-tydzien-z-kotem',
+    title: 'Pierwszy tydzień z kotem',
+    subtitle: 'Plan spokojnego wejścia kota do domu i pierwszych dni bez presji',
     category: 'cat',
-    tier: 'single',
-    priceCode: 'p29',
-    shortPromise: 'Plan stopniowego oswajania kota z procedurami, których nie da się pominąć.',
-    forWhom: 'Dla opiekuna kota, który po każdym czesaniu albo obcinaniu pazurów ma w domu walkę i ranę zaufania.',
-    pdfFile: 'kot-broni-sie-przy-pielegnacji.pdf',
-    highlights: ['protokół na obcinanie pazurów', 'transporter bez walki', 'czego nie robić, jeśli kot syczy'],
-  },
-
-  // ─── STANDARDS 19 zł — koty ───────────────────────────────────────────
-  {
-    slug: 'kot-boi-sie-kuwety',
-    title: 'Kot boi się kuwety?',
-    subtitle: 'Jak rozpoznać lęk kuwetowy i odbudować poczucie bezpieczeństwa',
-    category: 'cat',
-    tier: 'single',
-    priceCode: 'p19',
-    shortPromise: '5 sygnałów ostrzegawczych, audyt kuwety i plan na 14 dni.',
-    forWhom: 'Dla opiekuna kota, który widzi wahanie przy wejściu, ucieczkę po mikcji albo nocne korzystanie z kuwety.',
-    pdfFile: 'kot-boi-sie-kuwety.pdf',
-    highlights: ['5 sygnałów ostrzegawczych', 'plan na 14 dni', 'kiedy lekarz, kiedy zmiana środowiska'],
+    tier: 'free',
+    priceCode: 'free',
+    shortPromise: 'Praktyczny plan pierwszych dni: przestrzeń, rytm, kontakt i obserwacja.',
+    forWhom: 'Dla opiekuna, który przyjmuje kota do domu albo chce naprawić zbyt szybki start po adopcji.',
+    pdfFile: 'pierwszy-tydzien-z-kotem.pdf',
+    highlights: ['pokój bezpieczny', 'pierwsze rytuały', 'czego nie przyspieszać'],
+    previewPageCount: 11,
   },
   {
-    slug: 'konflikt-miedzy-kotami',
-    title: 'Czy to jeszcze zabawa?',
-    subtitle: '7 cichych oznak konfliktu między kotami',
-    category: 'cat',
-    tier: 'single',
-    priceCode: 'p19',
-    shortPromise: 'Starter, który pomaga rozpoznać presję społeczną, blokowanie zasobów i pierwszy plan zmian.',
-    forWhom: 'Dla opiekuna 2+ kotów, gdzie napięcie jest „ciche", ale w domu coś nie gra.',
-    pdfFile: 'konflikt-miedzy-kotami.pdf',
-    highlights: ['7 cichych oznak napięcia', 'mapa zasobów i przejść', 'plan zmian na 14 dni'],
-  },
-  {
-    slug: 'kot-budzi-dom-po-nocy',
-    title: 'Kot budzi dom po nocy',
-    subtitle: 'Wokalizacje, bieganie i atak o 5 rano — co naprawdę się dzieje',
-    category: 'cat',
-    tier: 'single',
-    priceCode: 'p19',
-    shortPromise: 'Diagnostyka nocnej aktywności i plan zmiany rytmu dnia kota.',
-    forWhom: 'Dla opiekuna, który nie śpi, bo kot żyje nocą.',
-    pdfFile: 'kot-budzi-dom-po-nocy.pdf',
-    highlights: ['cztery typy nocnej aktywności', 'jak ustawić wieczór, by kot spał', 'kiedy iść do lekarza'],
-  },
-  {
-    slug: 'kot-chowa-sie-po-zmianach',
-    title: 'Kot chowa się po zmianach',
-    subtitle: 'Remont, gość, nowy dom — jak pomóc kotu wrócić do siebie',
-    category: 'cat',
-    tier: 'single',
-    priceCode: 'p19',
-    shortPromise: 'Plan pierwszych dni i tygodni po zmianie, której kot się boi.',
-    forWhom: 'Dla opiekuna kota, który po przeprowadzce, remoncie albo zmianie w domu zniknął na całe dni.',
-    pdfFile: 'kot-chowa-sie-po-zmianach.pdf',
-    highlights: ['protokół „bezpiecznego pokoju"', 'kiedy się martwić', 'co realnie pomaga, a co pogarsza'],
-  },
-  {
-    slug: 'kot-gryzie-przy-glaskaniu',
-    title: 'Kot gryzie przy głaskaniu',
-    subtitle: 'Petting-induced aggression — jak czytać próg i go nie przekraczać',
-    category: 'cat',
-    tier: 'single',
-    priceCode: 'p19',
-    shortPromise: 'Jak nauczyć się czytać kota tak, by nie kończyć interakcji ugryzieniem.',
-    forWhom: 'Dla opiekuna kota, który wchodzi na kolana i po chwili gryzie albo drapie.',
-    pdfFile: 'kot-gryzie-przy-glaskaniu.pdf',
-    highlights: ['mapa sygnałów wczesnego napięcia', 'gdzie i jak głaskać', 'jak przerwać interakcję bez urazy'],
-  },
-  {
-    slug: 'koty-zabawa-czy-napiecie',
-    title: 'Koty: zabawa czy napięcie?',
-    subtitle: 'Jak odróżnić zdrową gonitwę od konfliktu pod przykrywką',
-    category: 'cat',
-    tier: 'single',
-    priceCode: 'p19',
-    shortPromise: 'Filtr diagnostyczny dla domu wielokotowego: zabawa czy konflikt.',
-    forWhom: 'Dla opiekuna 2+ kotów, który nie wie, czy ich gonitwy to zabawa, czy realny problem.',
-    pdfFile: 'koty-zabawa-czy-napiecie.pdf',
-    highlights: ['7 sygnałów konfliktu pod przykrywką zabawy', 'kiedy interweniować', 'co notować'],
-  },
-  {
-    slug: 'miauczenie-o-swicie',
-    title: 'Miauczenie o świcie',
-    subtitle: 'Kot, który budzi cię o 4:30 — co stoi za wokalizacją',
-    category: 'cat',
-    tier: 'single',
-    priceCode: 'p19',
-    shortPromise: 'Diagnostyka „świcącego" kota i jak nie utrwalać wzorca.',
-    forWhom: 'Dla opiekuna, który próbował już wszystkiego — od ignorowania po dolewanie karmy — i nic nie pomaga.',
-    pdfFile: 'miauczenie-o-swicie.pdf',
-    highlights: ['cztery przyczyny świtającej wokalizacji', 'czego nie robić', 'jak realnie zmienić rytm'],
-  },
-
-  // ─── STANDARDS 19 zł — psy ────────────────────────────────────────────
-  {
-    slug: 'pies-szczeka-na-gosci',
-    title: 'Pies szczeka na gości i dzwonek',
-    subtitle: 'Plan na codzienną wizytę kuriera, sąsiada, rodziny',
+    slug: 'pies-sam-w-domu',
+    title: 'Pies sam w domu',
+    subtitle: 'Pierwsze kroki, gdy zostawanie samemu zaczyna wyglądać jak problem',
     category: 'dog',
-    tier: 'single',
-    priceCode: 'p19',
-    shortPromise: 'Cztery typy szczekania i plan, który nie polega na karaniu.',
-    forWhom: 'Dla opiekuna psa, dla którego dzwonek do drzwi to katastrofa.',
-    pdfFile: 'pies-szczeka-na-gosci.pdf',
-    highlights: ['typy szczekania na ludzi', 'plan z dzwonkiem i bez', 'kiedy interweniować, kiedy zignorować'],
-  },
-  {
-    slug: 'pies-niszczy-w-domu',
-    title: 'Pies niszczy w domu',
-    subtitle: 'Co stoi za demolką: nuda, frustracja, separacja, zdrowie',
-    category: 'dog',
-    tier: 'single',
-    priceCode: 'p19',
-    shortPromise: 'Filtr czterech przyczyn niszczenia i pierwszy plan działania.',
-    forWhom: 'Dla opiekuna psa, który po powrocie zastaje rozprute kanapy, kable, buty.',
-    pdfFile: 'pies-niszczy-w-domu.pdf',
-    highlights: ['cztery główne przyczyny niszczenia', 'co podpowiada nagranie', 'co podać psu zamiast walki'],
-  },
-  {
-    slug: 'pies-broni-zasobow',
-    title: 'Pies broni zasobów',
-    subtitle: 'Resource guarding — od warknięcia po realny problem',
-    category: 'dog',
-    tier: 'single',
-    priceCode: 'p19',
-    shortPromise: 'Jak rozpoznać guarding wcześnie i nie utrwalić go karą.',
-    forWhom: 'Dla opiekuna psa, który warczy nad miską, kością albo kanapą.',
-    pdfFile: 'pies-broni-zasobow.pdf',
-    highlights: ['skala intensywności guardingu', 'plan wymiany zasobu', 'czego nigdy nie robić'],
-  },
-  {
-    slug: 'pies-pogon-i-hamulce',
-    title: 'Pogoń, demolka i brak hamulców',
-    subtitle: 'Pies, który nie umie się zatrzymać — co naprawdę można zrobić',
-    category: 'dog',
-    tier: 'single',
-    priceCode: 'p19',
-    shortPromise: 'Praca z impulsami i regulacją — dla psów, które nie umieją odpuścić.',
-    forWhom: 'Dla opiekuna psa, dla którego każdy bodziec jest sygnałem do biegu.',
-    pdfFile: 'pies-pogon-i-hamulce.pdf',
-    highlights: ['skąd biorą się impulsy', 'plan pracy z hamulcami', 'kiedy specjalista'],
-  },
-  {
-    slug: 'pies-glupieje-na-smyczy',
-    title: 'Dlaczego pies głupieje na smyczy',
-    subtitle: 'Frustracja smyczowa, brak hamulców, błędy z linki',
-    category: 'dog',
-    tier: 'single',
-    priceCode: 'p19',
-    shortPromise: 'Jak nie pomylić frustracji smyczowej z reaktywnością.',
-    forWhom: 'Dla opiekuna psa, który na smyczy jest „inny" — spięty, ciągnący, łatwo wyprowadzany z równowagi.',
-    pdfFile: 'pies-glupieje-na-smyczy.pdf',
-    highlights: ['filtr: frustracja czy reaktywność', 'jak prowadzić spacer „spadkowy"', 'czego unikać'],
-  },
-  {
-    slug: 'pies-do-pracy-z-ludzmi',
-    title: 'Pies do pracy z ludźmi',
-    subtitle: 'Psy interwencyjne, terapeutyczne, asystujące — czego się spodziewać',
-    category: 'dog',
-    tier: 'single',
-    priceCode: 'p19',
-    shortPromise: 'Co naprawdę oznacza „pies do pracy" i kiedy to nie jest dobry pomysł.',
-    forWhom: 'Dla opiekuna, który myśli o pracy z psem albo ma psa o silnej motywacji do kontaktu.',
-    pdfFile: 'pies-do-pracy-z-ludzmi.pdf',
-    highlights: ['kiedy pies nadaje się do pracy', 'czego potrzebuje opiekun', 'czerwone flagi'],
-  },
-  {
-    slug: 'szczeniak-gryzie-i-skacze',
-    title: 'Szczeniak gryzie i skacze',
-    subtitle: 'Pierwsze tygodnie z psem — gryzienie, skakanie, brak granic',
-    category: 'puppy',
-    tier: 'single',
-    priceCode: 'p19',
-    shortPromise: 'Jak ustawić pierwsze tygodnie tak, by szczeniak nie nauczył się złych nawyków.',
-    forWhom: 'Dla opiekuna szczeniaka, który gryzie ręce, ubrania i skacze po wszystkich.',
-    pdfFile: 'szczeniak-gryzie-i-skacze.pdf',
-    highlights: ['plan pierwszych 14 dni', 'jak reagować na gryzienie', 'czego nie robić'],
-  },
-  {
-    slug: 'szczeniak-wyciszanie',
-    title: 'Szczeniak nie umie się wyciszyć',
-    subtitle: 'Plan dnia, sen i regulacja w pierwszych miesiącach',
-    category: 'puppy',
-    tier: 'single',
-    priceCode: 'p19',
-    shortPromise: 'Jak ułożyć dzień szczeniaka, żeby umiał odpoczywać.',
-    forWhom: 'Dla opiekuna szczeniaka, który wieczorem jest „nie do wytrzymania", a mimo to nie potrafi zasnąć.',
-    pdfFile: 'szczeniak-wyciszanie.pdf',
-    highlights: ['rytm dnia młodego psa', 'sygnały zmęczenia', 'kiedy więcej snu, kiedy więcej ruchu'],
+    tier: 'free',
+    priceCode: 'free',
+    shortPromise: 'Jak zebrać kontekst, odróżnić scenariusze i nie pogłębiać napięcia.',
+    forWhom: 'Dla opiekuna psa, który widzi wycie, niszczenie, pobudzenie albo trudny powrót po wyjściu z domu.',
+    pdfFile: 'pies-sam-w-domu.pdf',
+    highlights: ['co nagrywać', 'pierwsze 72 godziny', 'czego nie robić na siłę'],
+    previewPageCount: 11,
   },
 ]
 
-const RAW_BUNDLES: MaterialyBundle[] = [
-  {
-    slug: 'pakiet-kuweta',
-    title: 'Pakiet „Kuweta"',
-    subtitle: 'Trzy materiały kuwetowe w jednej cenie',
-    category: 'cat',
-    priceCode: 'p49',
-    guideSlugs: ['kot-problem-poza-kuweta', 'kot-boi-sie-kuwety', 'konflikt-miedzy-kotami'],
-    shortPromise: 'Pełna ścieżka kuwetowa: od pierwszego objawu po napięcie społeczne w domu wielokotowym.',
-  },
-  {
-    slug: 'pakiet-kocie-napiecie',
-    title: 'Pakiet „Kocie napięcie"',
-    subtitle: 'Wycofanie, nocne pobudzenie, zmiana — co kot przeżywa pod skórą',
-    category: 'cat',
-    priceCode: 'p49',
-    guideSlugs: ['kot-chowa-sie-po-zmianach', 'kot-budzi-dom-po-nocy', 'koty-zabawa-czy-napiecie'],
-    shortPromise: 'Trzy materiały o napięciu kota: jak je rozpoznać, jak nie pogarszać.',
-  },
-  {
-    slug: 'pakiet-trudny-pies',
-    title: 'Pakiet „Trudny pies"',
-    subtitle: 'Spacer, dzwonek, smycz — codzienność, która rozpada plan',
-    category: 'dog',
-    priceCode: 'p49',
-    guideSlugs: ['pies-trudny-spacer', 'pies-glupieje-na-smyczy', 'pies-szczeka-na-gosci'],
-    shortPromise: 'Trzy materiały o psie, który „się nie nadaje do miasta" — i jak to naprawdę zmienić.',
-  },
-  {
-    slug: 'pakiet-szczeniak-start',
-    title: 'Pakiet „Szczeniak start"',
-    subtitle: 'Pierwsze tygodnie z psem bez chaosu',
-    category: 'puppy',
-    priceCode: 'p49',
-    guideSlugs: ['szczeniak-gryzie-i-skacze', 'szczeniak-wyciszanie', 'pies-glupieje-na-smyczy'],
-    shortPromise: 'Trzy materiały dla nowego opiekuna szczeniaka — jak nie uczyć go rzeczy do odkręcania.',
-  },
-  {
-    slug: 'pakiet-pies-zostaje-sam',
-    title: 'Pakiet „Pies zostaje sam"',
-    subtitle: 'Samotność, niszczenie, dzwonek — codzienność po wyjściu z domu',
-    category: 'dog',
-    priceCode: 'p49',
-    guideSlugs: ['pies-zostaje-sam', 'pies-niszczy-w-domu', 'pies-szczeka-na-gosci'],
-    shortPromise: 'Trzy materiały o psie, który nie potrafi zostać sam — i jak to czytać szerzej niż tylko separacja.',
-  },
-  {
-    slug: 'pakiet-kocia-pielegnacja',
-    title: 'Pakiet „Kocia pielęgnacja"',
-    subtitle: 'Czesanie, dotyk, kontakt — bez wojny',
-    category: 'cat',
-    priceCode: 'p49',
-    guideSlugs: ['kot-broni-sie-przy-pielegnacji', 'kot-gryzie-przy-glaskaniu', 'kot-budzi-dom-po-nocy'],
-    shortPromise: 'Trzy materiały o pracy z kotem, który nie chce być dotykany — i jak go czytać.',
-  },
-]
+const RAW_BUNDLES: MaterialyBundle[] = []
 
-const guidesBySlug = new Map(RAW_GUIDES.map((g) => [g.slug, g] as const))
-const bundlesBySlug = new Map(RAW_BUNDLES.map((b) => [b.slug, b] as const))
+const guidesBySlug = new Map(RAW_GUIDES.map((guide) => [guide.slug, guide] as const))
+const bundlesBySlug = new Map(RAW_BUNDLES.map((bundle) => [bundle.slug, bundle] as const))
 
 export function listMaterialyGuides(): MaterialyGuide[] {
   return RAW_GUIDES
@@ -408,39 +158,39 @@ export function getMaterialyBundleBySlug(slug: string): MaterialyBundle | null {
   return bundlesBySlug.get(slug) ?? null
 }
 
-const MATERIALY_GUIDE_COVER_SLUGS = new Set([
-  'konflikt-miedzy-kotami',
-  'kot-boi-sie-kuwety',
-  'kot-budzi-dom-po-nocy',
-  'kot-chowa-sie-po-zmianach',
-  'kot-zyje-w-napieciu',
-  'pies-ile-ruchu-potrzebuje',
-])
+export function getMaterialyGuideCoverSrc(guide: Pick<MaterialyGuide, 'slug'>): string {
+  return `/branding/pdf-covers/${guide.slug}.png`
+}
 
-export function getMaterialyGuideCoverSrc(guide: Pick<MaterialyGuide, 'slug'>): string | null {
-  return MATERIALY_GUIDE_COVER_SLUGS.has(guide.slug) ? `/branding/pdf-covers/${guide.slug}.png` : null
+export function getMaterialyGuidePreviewSrcs(guide: Pick<MaterialyGuide, 'slug' | 'previewPageCount'>, limit = 3): string[] {
+  const count = Math.max(0, Math.min(limit, guide.previewPageCount))
+
+  return Array.from({ length: count }, (_, index) => {
+    const page = String(index + 1).padStart(2, '0')
+    return `/branding/pdf-previews/${guide.slug}/page_${page}.png`
+  })
 }
 
 export function listMaterialyByTier(tier: MaterialyTier): (MaterialyGuide | MaterialyBundle)[] {
-  if (tier === 'free') return RAW_GUIDES.filter((g) => g.tier === 'free')
   if (tier === 'bundle') return RAW_BUNDLES
-  return RAW_GUIDES.filter((g) => g.tier === 'single')
+  return RAW_GUIDES.filter((guide) => guide.tier === tier)
 }
 
-export function listMaterialyByCategory(cat: MaterialyCategory): MaterialyGuide[] {
-  return RAW_GUIDES.filter((g) => g.category === cat)
+export function listMaterialyByCategory(category: MaterialyCategory): MaterialyGuide[] {
+  return RAW_GUIDES.filter((guide) => guide.category === category)
 }
 
 export function bundleSavings(bundle: MaterialyBundle): number {
   const sum = bundle.guideSlugs
     .map((slug) => guidesBySlug.get(slug))
-    .filter((g): g is MaterialyGuide => g !== undefined)
-    .reduce((acc, g) => acc + PRICE_AMOUNT_PLN[g.priceCode], 0)
+    .filter((guide): guide is MaterialyGuide => guide !== undefined)
+    .reduce((acc, guide) => acc + PRICE_AMOUNT_PLN[guide.priceCode], 0)
+
   return Math.max(0, sum - PRICE_AMOUNT_PLN[bundle.priceCode])
 }
 
-export function categoryLabel(cat: MaterialyCategory): string {
-  if (cat === 'cat') return 'Kot'
-  if (cat === 'dog') return 'Pies'
-  return 'Szczeniak'
+export function categoryLabel(category: MaterialyCategory): string {
+  if (category === 'cat') return 'Kot'
+  if (category === 'dog') return 'Pies'
+  return 'Pies i kot'
 }

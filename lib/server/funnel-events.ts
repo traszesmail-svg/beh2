@@ -6,7 +6,7 @@ const FUNNEL_EVENT_TYPES = new Set<FunnelEventType>([
   'view_page',
   'funnel_entry_15_min',
   'funnel_entry_60_min',
-  'funnel_entry_niezbednik',
+  'funnel_entry_niezbędnik',
   'newsletter_signup',
   'lead_magnet_signup',
   'booking_start',

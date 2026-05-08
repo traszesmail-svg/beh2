@@ -31,10 +31,23 @@ export function CommerceBlikActions({ orderNumber, phone, maskedPhone }: Props) 
       const response = await fetch(`/api/orders/${encodeURIComponent(orderNumber)}/report-payment`, {
         method: 'POST',
       })
-      const payload = (await response.json()) as { redirectTo?: string; error?: string }
+      const payload = (await response.json()) as {
+        redirectTo?: string
+        error?: string
+        adminNotification?: 'sent' | 'skipped' | 'failed'
+        adminNotificationReason?: string | null
+      }
 
       if (!response.ok) {
         throw new Error(payload.error ?? 'Nie udało się zgłosić płatności.')
+      }
+
+      if (payload.adminNotification && payload.adminNotification !== 'sent') {
+        throw new Error(
+          payload.adminNotificationReason
+            ? `Zgłoszenie zapisane, ale mail do behawiorysty nie wyszedł: ${payload.adminNotificationReason}`
+            : 'Zgłoszenie zapisane, ale mail do behawiorysty nie wyszedł.',
+        )
       }
 
       window.location.assign(payload.redirectTo ?? `/oczekiwanie/${encodeURIComponent(orderNumber)}`)

@@ -78,7 +78,7 @@ export function ConfirmationStatusWatcher({
             return
           }
 
-          console.warn('[behawior15][confirmation-status] polling failed', error)
+          console.warn('[regulski-behawiorysta][confirmation-status] polling failed', error)
           setPollFailureCount((current) => {
             const next = current + 1
 

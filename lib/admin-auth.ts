@@ -1,6 +1,6 @@
 export const ADMIN_BASIC_AUTH_USERNAME = 'admin'
 export const ADMIN_ACCESS_SECRET_ENV = 'ADMIN_ACCESS_SECRET'
-export const ADMIN_BASIC_AUTH_REALM = 'Behawior15 Admin'
+export const ADMIN_BASIC_AUTH_REALM = 'Regulski Behawiorysta Admin'
 
 function readAdminAccessSecret(): string | null {
   const value = process.env[ADMIN_ACCESS_SECRET_ENV]?.trim()

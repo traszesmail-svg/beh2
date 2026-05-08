@@ -16,7 +16,7 @@ export const pageHeroes: Record<string, PageHero> = {
   },
   'psy': {
     illustration: '/illustrations/psy-main.svg',
-    alt: 'Właściciel bawiący się ze swoim psem',
+    alt: 'Właściciel bawiący się że swoim psem',
   },
   'psy-reaktywnosc': {
     illustration: '/illustrations/psy-reaktywnosc.svg',
@@ -67,7 +67,7 @@ export const pageHeroes: Record<string, PageHero> = {
     illustration: '/illustrations/blog.svg',
     alt: 'Czytanie artykułów behawioralnych',
   },
-  niezbednik: {
+  niezbędnik: {
     illustration: '/illustrations/niezbednik.svg',
     alt: 'Pobieranie darmowych materiałów',
   },

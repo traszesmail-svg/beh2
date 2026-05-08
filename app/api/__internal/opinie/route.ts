@@ -121,14 +121,14 @@ export async function POST(request: Request) {
     }
 
     if (delivery.status === 'skipped') {
-      console.warn('[behawior15][opinie] submission skipped', delivery.reason)
+      console.warn('[regulski-behawiorysta][opinie] submission skipped', delivery.reason)
       return NextResponse.json({ error: getUnavailableMessage() }, { status: 503 })
     }
 
-    console.error('[behawior15][opinie] submission failed', delivery.reason)
+    console.error('[regulski-behawiorysta][opinie] submission failed', delivery.reason)
     return NextResponse.json({ error: GENERIC_ERROR_MESSAGE }, { status: 500 })
   } catch (error) {
-    console.error('[behawior15][opinie] unexpected error', error)
+    console.error('[regulski-behawiorysta][opinie] unexpected error', error)
 
     if (error instanceof ConfigurationError) {
       return NextResponse.json({ error: getUnavailableMessage() }, { status: 503 })

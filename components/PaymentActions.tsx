@@ -1,13 +1,16 @@
 ﻿'use client'
 
 import { useState } from 'react'
+import { CreditCard, LockKeyhole } from 'lucide-react'
 import type { AnimalType, BookingStatus, ProblemType, QaCheckoutEligibility } from '@/lib/types'
 import type { BookingServiceType } from '@/lib/booking-services'
+import { formatCommercePrice, getManualAmountForProduct } from '@/lib/commerce'
 
 interface PaymentActionsProps {
   bookingId: string
   accessToken: string
   amountLabel: string
+  manualAmountLabel?: string | null
   roomAccessLabel: string
   paymentReference: string
   manualAvailable: boolean
@@ -31,14 +34,18 @@ export function PaymentActions({
   bookingId,
   accessToken,
   amountLabel,
+  manualAmountLabel,
   roomAccessLabel,
   paymentReference,
+  manualAvailable,
+  amount,
   qaBooking = false,
   qaEligibility = null,
 }: PaymentActionsProps) {
   const [error, setError] = useState('')
   const [qaLoading, setQaLoading] = useState(false)
   const [commerceLoading, setCommerceLoading] = useState(false)
+  const [selectedMethod, setSelectedMethod] = useState<'online' | 'manual'>(manualAvailable ? 'manual' : 'online')
   const qaAvailable = Boolean(qaBooking && qaEligibility?.isAllowed)
 
   async function handleQaSubmit() {
@@ -61,22 +68,27 @@ export function PaymentActions({
           accessToken,
         }),
       })
-      const payload = (await response.json()) as { redirectTo?: string; error?: string }
+      const payload = (await response.json()) as { onlineCheckoutUrl?: string | null; redirectTo?: string; error?: string }
 
-      if (!response.ok || !payload.redirectTo) {
+      if (!response.ok || (!payload.onlineCheckoutUrl && !payload.redirectTo)) {
         throw new Error(payload.error ?? 'Nie udało się uruchomić testowej płatności.')
       }
 
-      window.location.assign(payload.redirectTo)
+      window.location.assign(payload.onlineCheckoutUrl ?? payload.redirectTo)
     } catch (paymentError) {
-      console.error('[behawior15][payment] qa checkout failed', paymentError)
+      console.error('[regulski-behawiorysta][payment] qa checkout failed', paymentError)
       setError(paymentError instanceof Error ? paymentError.message : 'Wystąpił błąd testowej płatności.')
     } finally {
       setQaLoading(false)
     }
   }
 
-  async function handleCommerceCheckout() {
+  async function handleCommerceCheckout(method: 'online' | 'manual') {
+    if (method === 'manual' && !manualAvailable) {
+      setError('BLIK na telefon jest chwilowo niedostępny. Wybierz płatność online albo napisz wiadomość.')
+      return
+    }
+
     setError('')
     setCommerceLoading(true)
 
@@ -92,13 +104,28 @@ export function PaymentActions({
           accessToken,
         }),
       })
-      const payload = (await response.json()) as { redirectTo?: string; error?: string }
+      const payload = (await response.json()) as {
+        orderNumber?: string
+        onlineCheckoutUrl?: string | null
+        redirectTo?: string
+        error?: string
+      }
 
-      if (!response.ok || !payload.redirectTo) {
+      if (!response.ok || (!payload.onlineCheckoutUrl && !payload.redirectTo && !payload.orderNumber)) {
         throw new Error(payload.error ?? 'Nie udało się przygotować płatności.')
       }
 
-      window.location.assign(payload.redirectTo)
+      if (method === 'online' && payload.onlineCheckoutUrl) {
+        window.location.assign(payload.onlineCheckoutUrl)
+        return
+      }
+
+      if (method === 'manual' && payload.orderNumber) {
+        window.location.assign(`/platnosc/blik/${encodeURIComponent(payload.orderNumber)}`)
+        return
+      }
+
+      window.location.assign(payload.redirectTo ?? `/checkout?orderNumber=${encodeURIComponent(payload.orderNumber ?? '')}`)
     } catch (paymentError) {
       console.error('[commerce][payment] checkout create failed', paymentError)
       setError(paymentError instanceof Error ? paymentError.message : 'Wystąpił błąd przygotowania płatności.')
@@ -172,36 +199,85 @@ export function PaymentActions({
     )
   }
 
+  const isManualSelected = selectedMethod === 'manual'
+  const onlineAmountLabel = amountLabel || formatCommercePrice(amount)
+  const blikAmountLabel = manualAmountLabel ?? formatCommercePrice(getManualAmountForProduct('consultation', amount))
+  const selectedAmountLabel = isManualSelected ? blikAmountLabel : onlineAmountLabel
+
   return (
-    <div className="stack-gap top-gap" data-payment-method-selected="commerce">
+    <div className="payment-ref-action" data-payment-method-selected={selectedMethod}>
       {error ? <div className="error-box">{error}</div> : null}
 
-      <div className="list-card accent-outline payment-next-card tree-backed-card">
-        <strong>Wybierz metodę płatności</strong>
-        <span>
-          Przejdziesz do nowego checkoutu: płatność online albo BLIK na telefon. Po potwierdzeniu dostaniesz kod dostępu i link do {roomAccessLabel}.
-        </span>
+      <div className="payment-ref-method-lead">
+        <LockKeyhole aria-hidden="true" />
+        <span>Najtaniej: BLIK na telefon, bez prowizji pośrednika. Po potwierdzeniu dostaniesz link do {roomAccessLabel}.</span>
       </div>
 
-      <div className="summary-grid trust-grid">
-        <div className="summary-card trust-card tree-backed-card">
-          <strong>Płatność online</strong>
-          <span>Karta, Apple Pay, Google Pay albo BLIK online, jeśli jest dostępny w bramce. Dostęp po płatności automatycznie.</span>
-        </div>
-        <div className="summary-card trust-card tree-backed-card payment-method-card-active">
-          <strong>BLIK na telefon</strong>
-          <span>Tańsza opcja z ręcznym potwierdzeniem. Po kliknięciu „Zapłaciłem/am” dostaję e-mail z przyciskiem potwierdzenia.</span>
-        </div>
-      </div>
-
-      <div className="hero-actions">
+      <div className="payment-ref-method-tabs" role="radiogroup" aria-label="Metoda płatności">
         <button
           type="button"
-          className="button button-primary big-button"
-          onClick={handleCommerceCheckout}
+          className="payment-ref-method-tab payment-ref-method-tab--blik"
+          data-selected={isManualSelected ? 'true' : 'false'}
+          data-payment-method="manual"
+          onClick={() => setSelectedMethod('manual')}
+          disabled={!manualAvailable}
+          role="radio"
+          aria-checked={isManualSelected}
+        >
+          <span className="payment-ref-blik-mark" aria-hidden="true">BLIK</span>
+          <span>
+            <strong>BLIK na telefon</strong>
+            <em>{manualAvailable ? 'Najtaniej, bez prowizji operatora płatności' : 'Chwilowo niedostępne'}</em>
+            <small>polecane</small>
+          </span>
+        </button>
+        <button
+          type="button"
+          className="payment-ref-method-tab"
+          data-selected={selectedMethod === 'online' ? 'true' : 'false'}
+          data-payment-method="online"
+          onClick={() => setSelectedMethod('online')}
+          role="radio"
+          aria-checked={selectedMethod === 'online'}
+        >
+          <CreditCard aria-hidden="true" />
+          <span>
+            <strong>Karta / Apple Pay / Google Pay</strong>
+            <em>Płatność online; portfele zależą od urządzenia i przeglądarki</em>
+          </span>
+        </button>
+      </div>
+
+      <div className="payment-ref-method-panel">
+        <h3>{selectedMethod === 'online' ? 'Płatność online' : 'BLIK na telefon'}</h3>
+        <p>
+          {selectedMethod === 'online'
+            ? 'Po kliknięciu otworzy się bezpieczny checkout online z kartą oraz, gdy urządzenie je udostępnia, Apple Pay i Google Pay.'
+            : 'Przejdziesz do instrukcji BLIK na telefon. To najtańsza ścieżka, bo nie dolicza prowizji pośrednika. Numer służy wyłącznie do opłaconej ścieżki płatności.'}
+        </p>
+        <div className="payment-ref-field">
+          <span>Kwota</span>
+          <strong>{selectedAmountLabel}</strong>
+        </div>
+        <div className="payment-ref-field">
+          <span>Referencja</span>
+          <strong>{paymentReference}</strong>
+        </div>
+      </div>
+
+      <div className="payment-ref-submit-row">
+        <button
+          type="button"
+          className="payment-ref-submit"
+          data-payment-submit={isManualSelected ? 'manual' : 'online'}
+          onClick={() => handleCommerceCheckout(selectedMethod)}
           disabled={commerceLoading}
         >
-          {commerceLoading ? 'Przygotowuję płatność...' : 'Przejdź do płatności'}
+          {commerceLoading
+            ? 'Przygotowuję płatność...'
+            : selectedMethod === 'online'
+              ? `Zapłać kartą / Apple Pay / Google Pay - ${onlineAmountLabel}`
+              : `Zapłać BLIK na telefon - ${blikAmountLabel}`}
         </button>
       </div>
     </div>

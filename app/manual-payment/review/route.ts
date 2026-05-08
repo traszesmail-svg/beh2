@@ -41,7 +41,7 @@ function buildHtml(title: string, message: string, status: 'success' | 'error', 
         <body>
           <main>
             <article>
-              <div class="badge">Regulski | Terapia behawioralna</div>
+              <div class="badge">Regulski Behawiorysta</div>
               <h1>${title}</h1>
               <p>${message}</p>
               ${actionLink}

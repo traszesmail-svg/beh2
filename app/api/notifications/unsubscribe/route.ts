@@ -31,7 +31,7 @@ export async function POST(request: Request) {
   try {
     body = (await request.json()) as Record<string, unknown>
   } catch {
-    return NextResponse.json({ error: 'Nie udalo sie odczytac formularza.' }, { status: 400 })
+    return NextResponse.json({ error: 'Nie udało się odczytać formularza.' }, { status: 400 })
   }
 
   const phone = normalizePhone(body.phone)

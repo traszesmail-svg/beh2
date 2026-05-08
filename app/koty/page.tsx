@@ -1,252 +1,350 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { NextSlot } from '@/components/NextSlot'
-import { NotatnikFooter, NotatnikSectionHead, NotatnikSideVisuals, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
-import { OfferCards } from '@/components/OfferCards'
-import { RegulskiWebHero } from '@/components/RegulskiWebHero'
+import {
+  ArrowRight,
+  Check,
+  ChevronDown,
+  GraduationCap,
+  Heart,
+  Leaf,
+  Mail,
+  PawPrint,
+  ShieldCheck,
+  Sparkles,
+  UserRound,
+  Globe2,
+} from 'lucide-react'
+import { ThemeToggle } from '@/components/ThemeToggle'
 import { Schema } from '@/components/schema'
 import { buildBookHref } from '@/lib/booking-routing'
-import { getBreadcrumbJsonLd, getFaqPageJsonLd, getServiceJsonLd } from '@/lib/schema'
+import { getBreadcrumbJsonLd, getServiceJsonLd } from '@/lib/schema'
+import { CAPBT_PROFILE_URL, getPublicContactDetails } from '@/lib/site'
+import { REGULSKI_WEB_LOGO } from '@/lib/regulski-web-assets'
 import { buildMarketingMetadata } from '@/lib/seo'
-import { FAQ_SHORTLISTS } from '@/lib/trust-layer'
 
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: 'Behawiorysta kotow online - kuweta i stres',
+  title: 'Behawiorysta kotów online | Regulski Behawiorysta',
   path: '/koty',
-  description: 'Pomoc behawioralna online dla opiekunow kotow. Kwadrans 69 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl.',
+  description:
+    'Pomoc behawioralna online dla opiekunów kotów. Krótki wybór tematu, konsultacja 15 minut albo dłuższe wsparcie z Krzysztofem Regulskim.',
 })
 
 const quickHref = buildBookHref(null, 'szybka-konsultacja-15-min', false, 'kot')
 const bridgeHref = buildBookHref(null, 'konsultacja-30-min', false, 'kot')
 const consultationHref = buildBookHref(null, 'konsultacja-behawioralna-online', false, 'kot')
-const serviceLandingHref = '/behawiorysta-online-polska'
+const catHeroImage = '/branding/topic-cards/cats/cat-night-meowing.jpg'
 
-const catProblemTopics = [
+const navItems = [
+  { href: '/psy', label: 'Pies' },
+  { href: '/koty', label: 'Kot' },
+  { href: '/o-mnie', label: 'O mnie' },
+  { href: '/cennik', label: 'Cennik' },
+  { href: '/niezbednik', label: 'Niezbędnik' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/kontakt', label: 'Kontakt' },
+] as const
+
+const trustItems = [
   {
-    id: 'problemy-kuwetowe',
-    number: 'i.',
-    icon: 'cat-litter',
-    title: 'Kot sika albo robi kupę poza kuwetą',
-    description:
-      'Sikanie na łóżko, kanapę, dywan, ubrania albo załatwianie się obok kuwety. Najpierw trzeba rozdzielić zdrowie, stres, kuwetę i relacje w domu.',
-    href: '/koty/zalatwianie-poza-kuweta',
-    ctaLabel: 'Omów problem',
+    icon: Leaf,
+    title: 'Bez kar i przymusu',
+    copy: 'Pracuję etycznie i z szacunkiem.',
   },
   {
-    id: 'agresja-gryzienie-drapanie',
-    number: 'ii.',
-    icon: 'cat-stress',
-    title: 'Agresja, gryzienie i drapanie',
-    description:
-      'Kot atakuje ręce, rzuca się na domowników, gryzie przy głaskaniu albo drapie w kontakcie. Sprawdzamy, czy chodzi o ból, strach, frustrację, zabawę czy przekroczone granice.',
-    href: quickHref,
-    ctaLabel: 'Omów problem',
+    icon: PawPrint,
+    title: 'Indywidualne podejście',
+    copy: 'Dopasowane do Waszych potrzeb i możliwości.',
   },
   {
-    id: 'konflikt-miedzy-kotami',
-    number: 'iii.',
-    icon: 'cat-conflict',
-    title: 'Koty nie dogadują się w domu',
-    description:
-      'Syczenie, gonitwy, blokowanie przejść, napięcie przy misce, kuwecie albo legowisku. Układamy przestrzeń, zasoby i bezpieczne zasady kontaktu.',
-    href: '/koty/konflikt-miedzy-kotami',
-    ctaLabel: 'Umów konsultację',
+    icon: GraduationCap,
+    title: 'Wiedza i doświadczenie',
+    copy: 'Praktyka oparta na nauce i wieloletniej pracy.',
   },
   {
-    id: 'dokocenie',
-    number: 'iv.',
-    icon: 'cat-conflict',
-    title: 'Dokocenie i wprowadzenie nowego kota',
-    description:
-      'Nowy kot w domu, trudne zapoznanie, stres rezydenta albo konflikty po połączeniu kotów. Pomagamy zaplanować tempo, przestrzeń i pierwsze kontakty.',
-    href: quickHref,
-    ctaLabel: 'Omów dokocenie',
-  },
-  {
-    id: 'lek-stres-wycofanie',
-    number: 'v.',
-    icon: 'cat-stress',
-    title: 'Kot się boi, chowa albo żyje w napięciu',
-    description:
-      'Kot unika kontaktu, chowa się, zamiera, reaguje paniką na ludzi, dźwięki albo zmiany w domu. Szukamy źródła stresu i sposobu na odzyskanie poczucia bezpieczeństwa.',
-    href: quickHref,
-    ctaLabel: 'Omów problem',
-  },
-  {
-    id: 'miauczenie-nocna-aktywnosc',
-    number: 'vi.',
-    icon: 'cat-other',
-    title: 'Kot miauczy, nawołuje albo budzi w nocy',
-    description:
-      'Nadmierne miauczenie, nocne bieganie, domaganie się uwagi albo jedzenia. Sprawdzamy rytm dnia, potrzeby, stres, zdrowie i schematy utrwalone w domu.',
-    href: quickHref,
-    ctaLabel: 'Zacznij od Kwadransa',
-  },
-  {
-    id: 'drapanie-mebli-niszczenie',
-    number: 'vii.',
-    icon: 'cat-other',
-    title: 'Kot drapie meble albo niszczy rzeczy',
-    description:
-      'Drapanie kanapy, foteli, dywanów, gryzienie roślin albo przedmiotów. Nie walczymy z naturalnym zachowaniem - ustawiamy środowisko tak, żeby kot miał lepsze opcje.',
-    href: quickHref,
-    ctaLabel: 'Omów problem',
-  },
-  {
-    id: 'wylizywanie-siersci',
-    number: 'viii.',
-    icon: 'cat-stress',
-    title: 'Kot nadmiernie się wylizuje albo wygryza sierść',
-    description:
-      'Łysiejące miejsca, wygryzanie futra, kompulsywne mycie albo rany od lizania. Najpierw trzeba wykluczyć przyczyny zdrowotne, a potem ocenić stres i środowisko.',
-    href: quickHref,
-    ctaLabel: 'Omów problem',
-  },
-  {
-    id: 'sprawa-zlozona-kot',
-    number: 'ix.',
-    icon: 'cat-other',
-    title: 'Nie wiesz, który temat wybrać?',
-    description:
-      'Problem pasuje do kilku kategorii albo trudno go nazwać jednym słowem. Zacznij od krótkiego omówienia sytuacji i ustalenia pierwszego priorytetu.',
-    href: quickHref,
-    ctaLabel: 'Zacznij od Kwadransa',
+    icon: Heart,
+    title: 'Empatia i zrozumienie',
+    copy: 'Wsparcie dla Ciebie i Twojego kota.',
   },
 ] as const
 
+const footerTrust = [
+  'Certyfikowany behawiorysta COAPE / CAPBT',
+  'Technik weterynarii',
+  'Pracuję online',
+  'Dla kotów i psów',
+  'W całej Polsce',
+] as const
+
+const reviews = [
+  {
+    quote: 'Dzięki konsultacji lepiej rozumiem mojego kota i wiem, jak mu pomóc. Efekty przerosły moje oczekiwania.',
+    author: 'Kasia i Luna',
+  },
+  {
+    quote: 'Profesjonalne podejście, ogromna wiedza i empatia. Polecam każdemu, kto chce naprawdę pomóc swojemu kotu.',
+    author: 'Marta i Filemon',
+  },
+  {
+    quote: 'Świetna wiedza poparta praktyką i cierpliwość. W końcu rozumiemy się z naszym kotem.',
+    author: 'Tomek i Mru',
+  },
+] as const
+
+function BrandLockup({ compact = false }: { compact?: boolean }) {
+  return (
+    <Link href="/" prefetch={false} className="cat-ref-brand" aria-label="Regulski Behawiorysta - strona główna">
+      <span className="cat-ref-logo" aria-hidden="true">
+        <Image src={REGULSKI_WEB_LOGO} alt="" width={512} height={512} priority={!compact} />
+      </span>
+      <span className="cat-ref-brand-copy">
+        <strong>Regulski</strong>
+        <em>Terapia behawioralna</em>
+      </span>
+    </Link>
+  )
+}
+
+function SelectLike({ label, value }: { label: string; value: string }) {
+  return (
+    <label className="cat-ref-select">
+      <span>{label}</span>
+      <span className="cat-ref-select-box">
+        {value}
+        <ChevronDown aria-hidden="true" />
+      </span>
+    </label>
+  )
+}
+
 export default function CatsPage() {
-  const faqItems = FAQ_SHORTLISTS.cats.slice(0, 3)
+  const contact = getPublicContactDetails()
   const structuredData = [
-    getBreadcrumbJsonLd([{ name: 'Strona glowna', path: '/' }, { name: 'Koty', path: '/koty' }]),
+    getBreadcrumbJsonLd([{ name: 'Strona główna', path: '/' }, { name: 'Koty', path: '/koty' }]),
     getServiceJsonLd({
-      name: 'Pomoc behawioralna dla opiekunow kotow online',
-      description: 'Konsultacje online dla opiekunow kotow: kuweta, wycofanie, stres po zmianach i napiecie miedzy kotami.',
-      serviceUrl: serviceLandingHref,
+      name: 'Pomoc behawioralna dla opiekunów kotów online',
+      description: 'Konsultacje online dla opiekunów kotów: kuweta, wycofanie, stres po zmianach i napięcie między kotami.',
+      serviceUrl: '/behawiorysta-online-polska',
       offerPrice: 69,
       offerCatalog: [
         {
-          name: 'Kwadrans z behawiorysta',
+          name: '15-minutowa konsultacja behawioralna',
           description: '15 minut rozmowy audio bez kamery dla opiekuna kota.',
           url: quickHref,
           price: 69,
         },
         {
           name: 'Dwa kwadranse',
-          description: '30 minut online na spokojniejsze uporzadkowanie tematu kota.',
+          description: '30 minut online na spokojniejsze uporządkowanie tematu kota.',
           url: bridgeHref,
           price: 169,
         },
         {
-          name: 'Pelna konsultacja behawioralna',
-          description: 'Szersza konsultacja online dla tematow kocich wielowatkowych albo dlugotrwalych.',
+          name: 'Pełna konsultacja behawioralna',
+          description: 'Szersza konsultacja online dla tematów kocich wielowątkowych albo długotrwałych.',
           url: consultationHref,
           price: 470,
         },
       ],
     }),
-    getFaqPageJsonLd(faqItems),
   ]
 
   return (
-    <main className="notatnik-page">
+    <main className="cat-ref-page">
       <Schema data={structuredData} />
-      <NotatnikSideVisuals variant="cat" />
-      <div className="notatnik-shell">
-        <NotatnikTopbar tag="Kot / strona gatunku" navItems={PUBLIC_SITE_NAV_ITEMS} ctaHref={quickHref} ctaLabel="Kwadrans / 69 zl" />
-
-        <section className="notatnik-subhero notatnik-subhero-pet">
-          <div className="notatnik-subhero-copy">
-            <h1>
-              Twoj kot zachowuje sie w sposob, <em>ktory Cie niepokoi</em>.
-            </h1>
-            <p>
-              Pomagam opiekunom kotow zrozumiec, co stoi za trudnym zachowaniem i jak zaczac to porzadkowac bez stresu dla kota i dla Ciebie. Nie
-              oceniam. Szukam przyczyny, nie winy.
-            </p>
-            <NextSlot className="top-gap-small" />
-            <p className="notatnik-service-description">
-              Kwadrans 69 zl, Dwa kwadranse 169 zl i Pelna konsultacja 470 zl. Dla kota obowiazuje ta sama logika 3 formatow.
-            </p>
-            <div className="info-box top-gap-small">
-              Przy naglej zmianie zachowania albo problemie z kuweta pierwszym krokiem bywa weterynarz. To dalej moze byc poczatek dobrej diagnozy, nie
-              przeszkoda.
-            </div>
-            <div className="notatnik-subhero-actions">
-              <Link href={quickHref} prefetch={false} className="notatnik-btn">
-                <span>Zarezerwuj Kwadrans</span>
-                <span className="notatnik-btn-arrow" aria-hidden="true">
-                  &rarr;
-                </span>
-              </Link>
-              <Link href={consultationHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
-                <span>Umow Pelna konsultacje</span>
-              </Link>
-            </div>
-          </div>
-
-          <div className="notatnik-subhero-media">
-            <RegulskiWebHero variant="cats" priority className="notatnik-pet-hero-visual" />
-          </div>
-        </section>
-
-        <section id="tematy" className="notatnik-pet-topic-section">
-          <NotatnikSectionHead index="I." kicker="Najczestsze tematy" title="Najczęstsze problemy behawioralne kotów" />
-          <p className="notatnik-service-description top-gap-small">
-            Wybierz temat najbliższy temu, co dzieje się u Twojego kota. Nie musisz trafić idealnie - wiele problemów się łączy. Jeśli nie wiesz, od czego zacząć, wybierz Kwadrans.
-          </p>
-          <div className="notatnik-topic-grid notatnik-topic-grid-with-icons">
-            {catProblemTopics.map((topic) => (
-              <Link key={topic.id} href={topic.href} prefetch={false} className="notatnik-topic-card notatnik-topic-card-with-icon">
-                <Image
-                  src={`/branding/pet-topics/subcategories/${topic.icon}.png`}
-                  alt=""
-                  width={126}
-                  height={126}
-                  className="notatnik-topic-card-icon"
-                />
-                <div className="notatnik-topic-number">{topic.number}</div>
-                <h3>{topic.title}</h3>
-                <p>{topic.description}</p>
-                <span className="notatnik-topic-card-action">
-                  {topic.ctaLabel}
-                </span>
+      <div className="cat-ref-shell">
+        <header className="cat-ref-header">
+          <BrandLockup />
+          <nav className="cat-ref-nav" aria-label="Nawigacja">
+            {navItems.map((item) => (
+              <Link key={item.href} href={item.href} prefetch={false} data-active={item.href === '/koty' ? 'true' : 'false'}>
+                {item.label}
               </Link>
             ))}
+          </nav>
+          <div className="cat-ref-header-actions">
+            <Link href={quickHref} prefetch={false} className="cat-ref-primary">
+              Umów pierwszy krok
+            </Link>
+            <Link href="/kontakt" prefetch={false} className="cat-ref-round" aria-label="Kontakt">
+              <UserRound aria-hidden="true" />
+            </Link>
+            <ThemeToggle />
+          </div>
+        </header>
+
+        <section className="cat-ref-hero">
+          <div className="cat-ref-hero-copy">
+            <h1>
+              <span>Pierwszy krok</span>
+              <span>do spokojniejszego życia</span>
+              <span>
+                z Twoim <em>kotem</em>
+              </span>
+            </h1>
+            <p>Odpowiedz na kilka pytań, a pomogę dobrać najlepsze wsparcie dla Ciebie i Twojego kota.</p>
+          </div>
+          <div className="cat-ref-hero-media" aria-hidden="true">
+            <Image
+              src={catHeroImage}
+              alt=""
+              fill
+              priority
+              sizes="(max-width: 900px) 90vw, 520px"
+              className="cat-ref-hero-image"
+            />
           </div>
         </section>
 
-        <section id="faq">
-          <NotatnikSectionHead index="II." kicker="FAQ" title="3 szybkie odpowiedzi przy tematach kocich." />
-          <div className="card-grid three-up top-gap-small">
-            {faqItems.map((item) => (
-              <article key={item.question} className="summary-card tree-backed-card">
-                <h3>{item.question}</h3>
-                <p>{item.answer}</p>
+        <section className="cat-ref-values" aria-label="Zasady pracy">
+          {trustItems.map((item) => {
+            const Icon = item.icon
+
+            return (
+              <article key={item.title}>
+                <Icon aria-hidden="true" />
+                <strong>{item.title}</strong>
+                <p>{item.copy}</p>
+              </article>
+            )
+          })}
+        </section>
+
+        <section className="cat-ref-choice" aria-labelledby="cat-choice-title">
+          <div className="cat-ref-choice-head">
+            <h2 id="cat-choice-title">Krótki wybór</h2>
+            <p>Nie wiesz, co wybrać? Przejdź przez krótki wybór, a pomogę Ci znaleźć najlepsze rozwiązanie.</p>
+          </div>
+
+          <div className="cat-ref-choice-grid">
+            <div className="cat-ref-step">
+              <strong>1. Z kim potrzebujesz wsparcia?</strong>
+              <div className="cat-ref-animal-options">
+                <Link href="/psy" prefetch={false} className="cat-ref-animal-card">
+                  <span className="cat-ref-animal-photo">
+                    <Image src="/images/homepage/home-bg-dog-1to1.png" alt="" fill sizes="92px" />
+                  </span>
+                  Pies
+                </Link>
+                <span className="cat-ref-animal-card cat-ref-animal-card-active" aria-current="true">
+                  <span className="cat-ref-animal-photo">
+                    <Image src="/images/homepage/home-bg-cat-1to1.png" alt="" fill sizes="92px" />
+                  </span>
+                  Kot
+                  <Check aria-hidden="true" />
+                </span>
+              </div>
+              <Link href="/wybor" prefetch={false} className="cat-ref-text-link">
+                Nie wiem, z kim potrzebuję wsparcia
+              </Link>
+            </div>
+
+            <SelectLike label="2. Opisz ogólny problem:" value="Wybierz problem" />
+            <SelectLike label="3. Jakiej pomocy szukasz?" value="Wybierz formę pomocy" />
+            <SelectLike label="4. Doświadczenie:" value="Wybierz doświadczenie" />
+
+            <div className="cat-ref-choice-action">
+              <div>
+                <Sparkles aria-hidden="true" />
+                <span>
+                  Pokaż dostępne opcje
+                  <small>zajmie to 2-3 minuty</small>
+                </span>
+              </div>
+              <Link href={quickHref} prefetch={false} className="cat-ref-primary cat-ref-choice-button">
+                Zobacz rekomendację
+                <ArrowRight aria-hidden="true" />
+              </Link>
+              <small>Bez zobowiązań</small>
+            </div>
+          </div>
+        </section>
+
+        <section className="cat-ref-proof-strip" aria-label="Dlaczego warto">
+          {footerTrust.map((item) => (
+            <span key={item}>
+              <ShieldCheck aria-hidden="true" />
+              {item}
+            </span>
+          ))}
+        </section>
+
+        <section className="cat-ref-reviews" aria-labelledby="cat-reviews-title">
+          <h2 id="cat-reviews-title">Co mówią opiekunowie kotów?</h2>
+          <div className="cat-ref-review-grid">
+            {reviews.map((review) => (
+              <article key={review.author} className="cat-ref-review-card">
+                <div aria-hidden="true" className="cat-ref-stars">
+                  ★★★★★
+                </div>
+                <p>“{review.quote}”</p>
+                <strong>- {review.author}</strong>
               </article>
             ))}
           </div>
+          <Link href="/opinie" prefetch={false} className="cat-ref-more-link">
+            Zobacz więcej opinii <ArrowRight aria-hidden="true" />
+          </Link>
         </section>
 
-        <section id="cennik">
-          <NotatnikSectionHead index="III." kicker="Cennik / wybor sciezki" title="Najpierw cena, potem najprostsza sciezka." />
-          <div className="top-gap-small">
-            <OfferCards />
+        <section className="cat-ref-final">
+          <div>
+            <h2>Gotowy na pierwszy krok?</h2>
+            <p>Wybierz dogodny termin i zacznijmy wspólnie pracę nad spokojniejszym życiem Waszego kota.</p>
+            <div className="cat-ref-final-actions">
+              <Link href={quickHref} prefetch={false} className="cat-ref-light-button">
+                Umów pierwszy krok <ArrowRight aria-hidden="true" />
+              </Link>
+              <Link href="/kontakt#formularz" prefetch={false} className="cat-ref-outline-button">
+                Wyślij krótką wiadomość
+              </Link>
+            </div>
           </div>
-          <div className="notatnik-pdf-fallback top-gap-small">
-            <span>Jesli nie rezerwujesz rozmowy, przejdz do materialow PDF.</span>
-            <Link href="/materialy" prefetch={false} className="notatnik-inline-link">
-              Zobacz materialy
-            </Link>
-            <Link href={serviceLandingHref} prefetch={false} className="notatnik-inline-link">
-              Przejdz do pelnego opisu konsultacji online
-            </Link>
+          <div className="cat-ref-final-media" aria-hidden="true">
+            <Image src={catHeroImage} alt="" fill sizes="(max-width: 900px) 0px, 420px" />
           </div>
         </section>
 
-        <NotatnikFooter primaryHref={quickHref} primaryLabel="Kwadrans z behawiorysta" showReviews={false} />
+        <section className="cat-ref-credential-strip" aria-label="Kwalifikacje i dostępność">
+          {footerTrust.map((item) => (
+            <span key={item}>
+              <ShieldCheck aria-hidden="true" />
+              {item}
+            </span>
+          ))}
+        </section>
+
+        <footer className="cat-ref-footer">
+          <BrandLockup compact />
+          <nav aria-label="Linki stopki">
+            {navItems.map((item) => (
+              <Link key={item.href} href={item.href} prefetch={false}>
+                {item.label}
+              </Link>
+            ))}
+            <Link href="/polityka-prywatnosci" prefetch={false}>
+              Polityka prywatności
+            </Link>
+            <Link href="/regulamin" prefetch={false}>
+              Regulamin
+            </Link>
+            <a href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer">
+              Profil COAPE/CAPBT
+            </a>
+          </nav>
+          <div className="cat-ref-footer-contact">
+            <a href={`mailto:${contact.email}`}>
+              <Mail aria-hidden="true" />
+              {contact.email}
+            </a>
+            <span>
+              <Globe2 aria-hidden="true" />
+              Online w całej Polsce
+            </span>
+          </div>
+        </footer>
       </div>
     </main>
   )

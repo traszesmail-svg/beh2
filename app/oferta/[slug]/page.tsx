@@ -72,7 +72,7 @@ export default async function OfferDetailPage({ params }: OfferDetailPageProps) 
       const quickConsultationPrice = await getActiveConsultationPrice()
       priceLabel = formatPricePln(quickConsultationPrice.amount)
     } catch (error) {
-      console.warn('[behawior15][oferta-detail] nie udało się pobrać aktywnej ceny konsultacji', error)
+      console.warn('[regulski-behawiorysta][oferta-detail] nie udało się pobrać aktywnej ceny konsultacji', error)
       priceLabel = formatPricePln(DEFAULT_PRICE_PLN)
     }
   }

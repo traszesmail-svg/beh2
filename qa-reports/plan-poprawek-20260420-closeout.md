@@ -1,7 +1,7 @@
 # Plan Poprawek 2026-04-20: Closeout
 
 Data: 2026-04-20
-Repo: `behawior15-mvp-full / beh2`
+Repo: `regulskibehawiorysta`
 Zakres: domknięcie planu z `PLAN_POPRAWEK_REGULSKIBEHAWIORYSTA_2026-04-20.md`
 Status: `PASS`
 

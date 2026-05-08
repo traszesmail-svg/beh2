@@ -14,7 +14,7 @@ type Props = {
 type SubmitState =
   | { status: 'idle' }
   | { status: 'submitting' }
-  | { status: 'free-ok'; orderId: string }
+  | { status: 'free-ok'; orderId: string; downloadUrl: string | null }
   | { status: 'error'; message: string }
 
 export function MaterialyOrderForm({ productKind, productSlug, productTitle, priceLabel, priceAmount }: Props) {
@@ -27,6 +27,16 @@ export function MaterialyOrderForm({ productKind, productSlug, productTitle, pri
   const [consentProcessing, setConsentProcessing] = useState(false)
   const [consentPolicy, setConsentPolicy] = useState(false)
   const [state, setState] = useState<SubmitState>({ status: 'idle' })
+
+  function startDownload(downloadUrl: string) {
+    const anchor = document.createElement('a')
+    anchor.href = downloadUrl
+    anchor.download = ''
+    anchor.rel = 'noopener'
+    document.body.appendChild(anchor)
+    anchor.click()
+    anchor.remove()
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -41,13 +51,13 @@ export function MaterialyOrderForm({ productKind, productSlug, productTitle, pri
           kind: 'ebook',
           productKind,
           productSlug,
-          name,
+          name: isFree ? name || email.split('@')[0] || 'Czytelnik' : name,
           email,
           phone,
           notes,
           website,
-          consentProcessing,
-          consentPolicy,
+          consentProcessing: isFree ? true : consentProcessing,
+          consentPolicy: isFree ? true : consentPolicy,
         }),
       })
       const data = (await res.json()) as Record<string, unknown>
@@ -58,7 +68,11 @@ export function MaterialyOrderForm({ productKind, productSlug, productTitle, pri
       }
 
       if (data.free === true) {
-        setState({ status: 'free-ok', orderId: String(data.orderNumber ?? data.orderId) })
+        const downloadUrl = typeof data.downloadUrl === 'string' ? data.downloadUrl : null
+        if (downloadUrl) {
+          startDownload(downloadUrl)
+        }
+        setState({ status: 'free-ok', orderId: String(data.orderNumber ?? data.orderId), downloadUrl })
         return
       }
 
@@ -71,40 +85,52 @@ export function MaterialyOrderForm({ productKind, productSlug, productTitle, pri
   if (state.status === 'free-ok') {
     return (
       <div className="materialy-success">
-        <h2>Sprawdź skrzynkę e-mail</h2>
+        <h2>Pobieranie rozpoczęte</h2>
         <p>
-          Wysłałem kod dostępu na <strong>{email}</strong>. Numer zamówienia: <code>{state.orderId}</code>.
+          PDF powinien pobrać się automatycznie. Wysłałem też kod dostępu na <strong>{email}</strong>, gdyby trzeba
+          było wrócić do pliku później.
         </p>
-        <p>
-          Wpisz kod razem z e-mailem na stronie{' '}
-          <Link href="/dostep" className="notatnik-inline-link">
-            /dostep
+        <div className="hero-actions">
+          {state.downloadUrl ? (
+            <a href={state.downloadUrl} className="notatnik-btn">
+              <span>Pobierz PDF ponownie</span>
+              <span className="notatnik-btn-arrow" aria-hidden="true">
+                &rarr;
+              </span>
+            </a>
+          ) : null}
+          <Link href="/dostep" className="notatnik-btn notatnik-btn-ghost">
+            <span>Wpisz kod z maila</span>
           </Link>
-          , żeby otworzyć materiał.
+        </div>
+        <p className="field-help">
+          Numer zamówienia: <code>{state.orderId}</code>.
         </p>
       </div>
     )
   }
 
   return (
-    <form className="materialy-form" onSubmit={handleSubmit} noValidate>
+    <form className="materialy-form" onSubmit={handleSubmit} noValidate data-free-download={isFree ? 'true' : 'false'}>
       <p className="form-summary">
         Zamawiasz: <strong>{productTitle}</strong> - <strong>{priceLabel}</strong>
         {!isFree && ' (płatność online albo BLIK na telefon w kolejnym kroku)'}
       </p>
 
-      <label>
-        Imię
-        <input
-          type="text"
-          name="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-          maxLength={120}
-          autoComplete="given-name"
-        />
-      </label>
+      {!isFree ? (
+        <label>
+          Imię
+          <input
+            type="text"
+            name="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            maxLength={120}
+            autoComplete="given-name"
+          />
+        </label>
+      ) : null}
 
       <label>
         E-mail
@@ -116,6 +142,7 @@ export function MaterialyOrderForm({ productKind, productSlug, productTitle, pri
           required
           maxLength={160}
           autoComplete="email"
+          placeholder="twoj@email.pl"
         />
       </label>
 
@@ -133,16 +160,18 @@ export function MaterialyOrderForm({ productKind, productSlug, productTitle, pri
         </label>
       ) : null}
 
-      <label>
-        Krótka notatka (opcjonalnie)
-        <textarea
-          name="notes"
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          maxLength={1200}
-          rows={3}
-        />
-      </label>
+      {!isFree ? (
+        <label>
+          Krótka notatka (opcjonalnie)
+          <textarea
+            name="notes"
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            maxLength={1200}
+            rows={3}
+          />
+        </label>
+      ) : null}
 
       <input
         type="text"
@@ -155,46 +184,59 @@ export function MaterialyOrderForm({ productKind, productSlug, productTitle, pri
         className="sr-only"
       />
 
-      <label className="consent-line">
-        <input
-          type="checkbox"
-          checked={consentProcessing}
-          onChange={(e) => setConsentProcessing(e.target.checked)}
-          required
-        />
-        <span>
-          Wyrażam zgodę na przetwarzanie danych zgodnie z{' '}
+      {isFree ? (
+        <p className="field-help free-download-note">
+          Po wpisaniu e-maila PDF pobierze się od razu. Link i kod zapasowy wyślę też na skrzynkę. Dane obsługuję
+          zgodnie z{' '}
           <Link href="/polityka-prywatnosci" className="notatnik-inline-link">
             polityką prywatności
           </Link>
           .
-        </span>
-      </label>
+        </p>
+      ) : (
+        <>
+          <label className="consent-line">
+            <input
+              type="checkbox"
+              checked={consentProcessing}
+              onChange={(e) => setConsentProcessing(e.target.checked)}
+              required
+            />
+            <span>
+              Wyrażam zgodę na przetwarzanie danych zgodnie z{' '}
+              <Link href="/polityka-prywatnosci" className="notatnik-inline-link">
+                polityką prywatności
+              </Link>
+              .
+            </span>
+          </label>
 
-      <label className="consent-line">
-        <input
-          type="checkbox"
-          checked={consentPolicy}
-          onChange={(e) => setConsentPolicy(e.target.checked)}
-          required
-        />
-        <span>
-          Zapoznałem się z{' '}
-          <Link href="/polityka-prywatnosci" className="notatnik-inline-link">
-            polityką prywatności
-          </Link>{' '}
-          i{' '}
-          <Link href="/regulamin" className="notatnik-inline-link">
-            regulaminem
-          </Link>
-          .
-        </span>
-      </label>
+          <label className="consent-line">
+            <input
+              type="checkbox"
+              checked={consentPolicy}
+              onChange={(e) => setConsentPolicy(e.target.checked)}
+              required
+            />
+            <span>
+              Zapoznałem się z{' '}
+              <Link href="/polityka-prywatnosci" className="notatnik-inline-link">
+                polityką prywatności
+              </Link>{' '}
+              i{' '}
+              <Link href="/regulamin" className="notatnik-inline-link">
+                regulaminem
+              </Link>
+              .
+            </span>
+          </label>
+        </>
+      )}
 
       {state.status === 'error' ? <p className="form-error">{state.message}</p> : null}
 
       <button type="submit" className="notatnik-btn" disabled={state.status === 'submitting'}>
-        <span>{state.status === 'submitting' ? 'Wysyłam...' : isFree ? 'Pobierz bezpłatnie' : 'Przejdź do płatności'}</span>
+        <span>{state.status === 'submitting' ? 'Przygotowuję...' : isFree ? 'Pobierz PDF' : 'Przejdź do płatności'}</span>
         {state.status !== 'submitting' ? (
           <span className="notatnik-btn-arrow" aria-hidden="true">
             &rarr;

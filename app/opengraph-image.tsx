@@ -6,7 +6,7 @@ export const contentType = 'image/png'
 
 export default function OpenGraphImage() {
   return renderOgImage({
-    title: 'Behawiorysta psow i kotow online',
-    subtitle: 'Kwadrans z behawiorysta, konsultacje online i spokojny pierwszy krok.',
+    title: 'Behawiorysta psów i kotów online',
+    subtitle: '15-minutowa konsultacja behawioralna, konsultacje online i spokojny pierwszy krok.',
   })
 }

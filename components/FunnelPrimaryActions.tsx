@@ -28,7 +28,7 @@ export function FunnelPrimaryActions({
   actionsClassName = 'hero-actions editorial-final-actions',
   noteClassName = 'muted top-gap-small',
   serviceHref,
-  serviceLabel = 'strony uslugi online',
+  serviceLabel = 'strony usługi online',
   serviceLocation,
 }: FunnelPrimaryActionsProps) {
   const quickService = getServiceAnalyticsParams('szybka-konsultacja-15-min')
@@ -38,7 +38,7 @@ export function FunnelPrimaryActions({
     <>
       {serviceHref ? (
         <>
-          Jesli chcesz najpierw zobaczyc pelny opis uslugi, przejdz do{' '}
+          Jeśli chcesz najpierw zobaczyć pełny opis usługi, przejdź do{' '}
           <Link
             href={serviceHref}
             prefetch={false}
@@ -52,11 +52,11 @@ export function FunnelPrimaryActions({
           .{' '}
         </>
       ) : null}
-      Jesli chcesz najpierw napisac, uzyj{' '}
+      Jeśli chcesz najpierw napisac, uzyj{' '}
       <Link href={contactHref} prefetch={false} className="prep-inline-link">
         {COPY_CTA.contact.toLowerCase()}
       </Link>
-      . Jesli chcesz najpierw siegnac po materialy, przejdz do{' '}
+      . Jeśli chcesz najpierw siegnac po materiały, przejdź do{' '}
       <Link href={FUNNEL_SECONDARY_HREF} prefetch={false} className="prep-inline-link">
         {COPY_CTA.toolkit}
       </Link>

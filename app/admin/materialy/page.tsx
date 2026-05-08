@@ -20,7 +20,7 @@ export default async function AdminMaterialyPage() {
           <p style={{ marginBottom: '12px' }}>
             <Link href="/admin">&larr; Panel admina</Link>
           </p>
-          <h1>Zamówienia /materialy</h1>
+          <h1>Zamówienia /materiały</h1>
           <p style={{ color: '#5e4a3c', maxWidth: '720px' }}>
             Po wpływie BLIK kliknij „Potwierdź wpłatę i wyślij kod&quot;. Klient dostanie 6-cyfrowy kod
             mailem i pobierze PDF na <Link href="/materialy/pobranie">/materialy/pobranie</Link>.

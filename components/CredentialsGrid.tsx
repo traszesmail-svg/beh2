@@ -11,8 +11,8 @@ interface Credential {
 }
 
 const credentials: Credential[] = [
-  { icon: 'award', title: 'Behawiorysta COAPE', sub: 'Międzynarodowy standard analizy zachowania w realnej codzienności.' },
-  { icon: 'paw-print', title: 'Trener zwierząt towarzyszących', sub: 'Pierwszy krok wykonalny dla opiekuna i bezpieczny dla pupila.' },
+  { icon: 'award', title: 'Behawiorysta i trener zwierząt towarzyszących COAPE', sub: 'Analiza zachowania i praktyczny trening prowadzone w jednym, spójnym planie.' },
+  { icon: 'utensils', title: 'Modyfikacja diety', sub: 'Niezbędne wsparcie terapii behawioralnej.' },
   { icon: 'stethoscope', title: 'Technik weterynarii', sub: 'Kontekst zdrowia, bezpieczeństwa i sytuacji wymagających lekarza.' },
   { icon: 'hand-heart', title: 'Bez kar i przymusu', sub: 'Praca oparta na zaufaniu, dobrostanie i jasnej komunikacji.' },
 ];

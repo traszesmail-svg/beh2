@@ -57,9 +57,14 @@ export function CustomerEmailStatusNotice({
 
   return (
     <div className={`${toneClass}${className ? ` ${className}` : ''}`} data-customer-email-state={status.state}>
-      <strong>{getTitle(status, context)}</strong>
+      <strong>{getTitle(status, context)}</strong>{' '}
       <span>{getBody(status, recipientEmail, context)}</span>
-      {!isReady && !isBlocked ? <span>Następny krok: {status.nextStep}</span> : null}
+      {!isReady && !isBlocked ? (
+        <>
+          {' '}
+          <span>Następny krok: {status.nextStep}</span>
+        </>
+      ) : null}
     </div>
   )
 }

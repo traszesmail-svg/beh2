@@ -31,8 +31,8 @@ export async function POST(request: Request) {
       !isProblemType(rawProblemType) ||
       (rawServiceType !== null && !isBookingServiceType(rawServiceType)) ||
       !isAnimalType(rawAnimalType) ||
-      typeof body.petAge !== 'string' ||
-      typeof body.durationNotes !== 'string' ||
+      (body.petAge !== undefined && typeof body.petAge !== 'string') ||
+      (body.durationNotes !== undefined && typeof body.durationNotes !== 'string') ||
       typeof body.description !== 'string' ||
       typeof body.email !== 'string' ||
       typeof body.slotId !== 'string'
@@ -44,8 +44,12 @@ export async function POST(request: Request) {
     const problemType = rawProblemType as ProblemType
     const animalType = rawAnimalType
     const serviceType = rawServiceType
-    const petAge = body.petAge
-    const durationNotes = body.durationNotes
+    const petAge = typeof body.petAge === 'string' && body.petAge.trim()
+      ? body.petAge.trim()
+      : 'Nie podano w formularzu rezerwacji.'
+    const durationNotes = typeof body.durationNotes === 'string' && body.durationNotes.trim()
+      ? body.durationNotes.trim()
+      : 'Nie podano w formularzu rezerwacji.'
     const description = body.description
     const phone = rawPhone
     const email = body.email
@@ -64,10 +68,10 @@ export async function POST(request: Request) {
       }
     }
 
-    const fields = [ownerName, petAge, durationNotes, description, email, slotId]
+    const fields = [ownerName, description, email, slotId]
 
     if (fields.some((value) => value.trim().length === 0)) {
-      return NextResponse.json({ error: 'Uzupelnij wszystkie pola formularza.' }, { status: 400 })
+      return NextResponse.json({ error: 'Uzupełnij imię, e-mail, termin i krótki opis problemu.' }, { status: 400 })
     }
 
     if (!isEmailValid(email.trim())) {
@@ -78,9 +82,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Podaj poprawny numer telefonu albo zostaw to pole puste.' }, { status: 400 })
     }
 
-    if (description.trim().length < 20) {
+    if (description.trim().length < 10) {
       return NextResponse.json(
-        { error: 'Dodaj krotki, ale konkretny opis sytuacji, aby dobrze wykorzystac wybrany czas rozmowy.' },
+        { error: 'Napisz jednym zdaniem, z czym chcesz wejść na rozmowę.' },
         { status: 400 },
       )
     }
@@ -88,7 +92,7 @@ export async function POST(request: Request) {
     const problemSpecies = getProblemSpecies(problemType)
 
     if ((problemSpecies === 'kot' && animalType !== 'Kot') || (problemSpecies === 'pies' && animalType !== 'Pies')) {
-      return NextResponse.json({ error: 'Gatunek i temat musza wskazywac ten sam typ sprawy.' }, { status: 400 })
+      return NextResponse.json({ error: 'Gatunek i temat muszą wskazywać ten sam typ sprawy.' }, { status: 400 })
     }
 
     const result = await createPendingBooking({
@@ -110,7 +114,7 @@ export async function POST(request: Request) {
       accessToken: result.accessToken,
     })
   } catch (error) {
-    console.error('[behawior15][booking-api] create failed', error)
+    console.error('[regulski-behawiorysta][booking-api] create failed', error)
     const failure = getBookingApiErrorSnapshot(error)
     return NextResponse.json({ error: failure.message, errorCode: failure.code }, { status: failure.status })
   }

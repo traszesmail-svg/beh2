@@ -310,9 +310,9 @@ async function runQaSmokeOnce() {
   process.env.QA_CHECKOUT_PHONE_ALLOWLIST = qaSmokePhone
   process.env.VERCEL_ENV = 'production'
   process.env.RESEND_API_KEY = ''
-  process.env.BEHAVIOR15_CONTACT_PHONE = '500600700'
+  process.env.REGULSKI_CONTACT_PHONE = '500600700'
   process.env.MANUAL_PAYMENT_BLIK_PHONE = '512992026'
-  process.env.MANUAL_PAYMENT_PAYPAL_ME_URL = 'paypal.me/behawior15'
+  process.env.MANUAL_PAYMENT_PAYPAL_ME_URL = 'paypal.me/regulskibehawiorysta'
   process.env.MANUAL_PAYMENT_ACCOUNT_NAME = 'Krzysztof Regulski'
   process.env.SMS_PROVIDER = 'disabled'
   delete process.env.PAYU_CLIENT_ID
@@ -339,9 +339,9 @@ async function runQaSmokeOnce() {
       `set "QA_CHECKOUT_PHONE_ALLOWLIST=${qaSmokePhone}"`,
       'set "VERCEL_ENV=production"',
       'set "RESEND_API_KEY="',
-      'set "BEHAVIOR15_CONTACT_PHONE=500600700"',
+      'set "REGULSKI_CONTACT_PHONE=500600700"',
       'set "MANUAL_PAYMENT_BLIK_PHONE=512992026"',
-      'set "MANUAL_PAYMENT_PAYPAL_ME_URL=paypal.me/behawior15"',
+      'set "MANUAL_PAYMENT_PAYPAL_ME_URL=paypal.me/regulskibehawiorysta"',
       'set "MANUAL_PAYMENT_ACCOUNT_NAME=Krzysztof Regulski"',
       'set "SMS_PROVIDER=disabled"',
       `set "APP_LOCAL_DATA_DIR=${dataDir}"`,

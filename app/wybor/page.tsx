@@ -11,9 +11,9 @@ import { buildMarketingMetadata } from '@/lib/seo'
 import { CAPBT_PROFILE_URL, INSTAGRAM_PROFILE_URL, getPublicContactDetails } from '@/lib/site'
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: 'Krotki wybor pierwszego kroku',
+  title: 'Krótki wybór pierwszego kroku',
   path: '/wybor',
-  description: 'Krotki wybor dla opiekunow psow i kotow: wybierz zwierze, temat i zakres sprawy.',
+  description: 'Krótki wybór dla opiekunów psów i kotów: wybierz zwierzę, temat i zakres sprawy.',
 })
 
 const quickInfoCards = [
@@ -96,18 +96,18 @@ export default function ChoicePage({ searchParams }: { searchParams?: { animal?:
     <main className={`notatnik-page homepage-shell choice-page choice-page-${isCat ? 'cat' : 'dog'}`}>
       <Schema
         data={getBreadcrumbJsonLd([
-          { name: 'Strona glowna', path: '/' },
-          { name: 'Krotki wybor', path: '/wybor' },
+          { name: 'Strona główna', path: '/' },
+          { name: 'Krótki wybór', path: '/wybor' },
         ])}
       />
       <NotatnikSideVisuals variant={isCat ? 'cat' : 'dog'} />
 
       <div className="notatnik-shell homepage-main">
         <NotatnikTopbar
-          tag="Krotki wybor"
+          tag="Krótki wybór"
           navItems={PUBLIC_SITE_NAV_ITEMS}
           ctaHref="/wybor"
-          ctaLabel="Krotki wybor"
+          ctaLabel="Krótki wybór"
           ctaVariant="accent"
         />
 

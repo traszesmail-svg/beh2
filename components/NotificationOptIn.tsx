@@ -38,7 +38,7 @@ export function NotificationOptIn({
 
     if (!consent) {
       setStatus('error')
-      setFeedback('Zaznacz zgode na kontakt.')
+      setFeedback('Zaznacz zgodę na kontakt.')
       return
     }
 
@@ -63,7 +63,7 @@ export function NotificationOptIn({
       const payload = (await response.json()) as { ok?: boolean; error?: string; message?: string }
 
       if (!response.ok || !payload.ok) {
-        throw new Error(payload.error ?? 'Nie udalo sie zapisac powiadomienia.')
+        throw new Error(payload.error ?? 'Nie udało się zapisać powiadomienia.')
       }
 
       trackAnalyticsEvent('notification_optin_submitted', {
@@ -73,21 +73,21 @@ export function NotificationOptIn({
       })
 
       setStatus('success')
-      setFeedback(payload.message ?? 'Zapis przyjety.')
+      setFeedback(payload.message ?? 'Zapis przyjęty.')
       setPhone('')
       setConsent(false)
     } catch (error) {
       setStatus('error')
-      setFeedback(error instanceof Error ? error.message : 'Nie udalo sie zapisac powiadomienia.')
+      setFeedback(error instanceof Error ? error.message : 'Nie udało się zapisać powiadomienia.')
     }
   }
 
   return (
     <article className="summary-card tree-backed-card notification-optin-card">
       <div className="section-eyebrow">Opcjonalne przypomnienie</div>
-      <h3>Dostan krotkie przypomnienie o wyniku.</h3>
+      <h3>Dostan krótkie przypomnienie o wyniku.</h3>
       <p className="muted">
-        Zapis jest dobrowolny. Bez konfiguracji zewnetrznego kanalu numer zostaje tylko zapisany jako opt-in.
+        Zapis jest dobrowolny. Bez konfiguracji zewnętrznego kanału numer zostaje tylko zapisany jako opt-in.
       </p>
 
       <form className="form-grid top-gap-small compact-form-grid" onSubmit={handleSubmit} noValidate>
@@ -119,7 +119,7 @@ export function NotificationOptIn({
 
         <label className="full-width checkbox-field">
           <input type="checkbox" checked={consent} onChange={(event) => setConsent(event.target.checked)} />
-          <span>Wyrazam zgode na jednorazowy kontakt w sprawie wyniku quizu i wiem, ze moge sie wypisac.</span>
+          <span>Wyrażam zgodę na jednorazowy kontakt w sprawie wyniku quizu i wiem, że mogę się wypisać.</span>
         </label>
 
         <div className="full-width hero-actions">

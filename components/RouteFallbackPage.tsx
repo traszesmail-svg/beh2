@@ -29,8 +29,8 @@ export function RouteFallbackPage({
   actions,
   footerCtaHref = '/book',
   footerCtaLabel = FUNNEL_CTA_LABELS.primary,
-  footerHeadline = 'Wróć do sprawdzonego punktu startu',
-  footerDescription = 'Najprościej wrócić do strony głównej, wejść na stronę psa lub kota albo wybrać Kwadrans z behawiorystą.',
+  footerHeadline = 'Wróć do sprawdzićonego punktu startu',
+  footerDescription = 'Najprościej wrócić do strony głównej, wejść na stronę psa lub kota albo wybrać 15-minutową konsultację behawioralną.',
 }: RouteFallbackPageProps) {
   return (
     <main className="page-wrap marketing-page">
@@ -59,7 +59,7 @@ export function RouteFallbackPage({
 
             <div className="list-card tree-backed-card">
               <strong>Najbezpieczniej teraz</strong>
-              <span>Wróć do strony głównej, strony psa lub kota albo wybierz Kwadrans z behawiorystą.</span>
+              <span>Wróć do strony głównej, strony psa lub kota albo wybierz 15-minutową konsultację behawioralną.</span>
             </div>
           </div>
 

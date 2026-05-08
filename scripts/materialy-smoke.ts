@@ -1,6 +1,6 @@
 // Storage-level smoke test for the /materialy funnel.
-// Walks through the order/confirm/download lifecycle for both a free lead
-// magnet and a paid guide, then a bundle. Does not touch the network or email.
+// Walks through the order/download lifecycle for active recovered materials.
+// p49 bundles are intentionally not published.
 //
 //   npx tsx scripts/materialy-smoke.ts
 
@@ -88,10 +88,10 @@ async function smokeFreeGuide() {
 }
 
 async function smokePaidGuide() {
-  console.log('\n[2] Paid guide flow')
+  console.log('\n[2] Paid guide flow retired')
   const guide = listMaterialyGuides().find((g) => g.priceCode === 'p19')
   if (!guide) {
-    ok('found a paid 19 zł guide', false)
+    ok('no paid 19 zl guide is active after ODZYSKANE cleanup', true)
     return
   }
   ok('paid guide present in catalog', true, guide.slug)
@@ -135,10 +135,10 @@ async function smokePaidGuide() {
 }
 
 async function smokeBundle() {
-  console.log('\n[3] Bundle flow')
+  console.log('\n[3] Bundle flow retired')
   const bundle = listMaterialyBundles()[0]
   if (!bundle) {
-    ok('found a bundle', false)
+    ok('no bundle is active while p49 is excluded', true)
     return
   }
   ok('bundle present in catalog', true, bundle.slug)

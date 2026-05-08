@@ -40,7 +40,7 @@ const STATUS_INFO: Record<
   },
   cancelled: {
     label: 'Rezerwacja anulowana',
-    description: 'Ta rezerwacja została anulowana. Jeśli to pomyłka, skontaktuj się ze mną.',
+    description: 'Ta rezerwacja została anulowana. Jeśli to pomyłka, skontaktuj się że mną.',
     color: '#8a3022',
   },
 }

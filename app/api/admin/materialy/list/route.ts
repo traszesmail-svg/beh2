@@ -1,4 +1,4 @@
-// GET /api/admin/materialy/list — list every order (admin view).
+// GET /api/admin/materiały/list — list every order (admin view).
 // Protected by middleware-level Basic Auth.
 
 export const dynamic = 'force-dynamic'

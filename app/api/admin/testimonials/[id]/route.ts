@@ -22,7 +22,7 @@ export async function POST(request: Request, { params }: Params) {
     return NextResponse.json({ ok: true, status })
   } catch (error) {
     console.error('[admin/testimonials] update failed', error)
-    return NextResponse.json({ error: 'Nie udalo sie zaktualizowac statusu.' }, { status: 500 })
+    return NextResponse.json({ error: 'Nie udało się zaktualizować statusu.' }, { status: 500 })
   }
 }
 
@@ -39,7 +39,7 @@ export async function GET(request: Request, { params }: Params) {
     const status = action === 'publish' ? 'published' : 'skipped'
     await updatePendingTestimonialStatus(id, status)
 
-    const label = action === 'publish' ? 'opublikowana' : 'odlozona'
+    const label = action === 'publish' ? 'opublikowana' : 'odłożona'
     return new Response(
       `<!DOCTYPE html><html lang="pl"><head><meta charset="utf-8"><title>Opinia ${label}</title>
       <style>body{font-family:sans-serif;padding:40px;max-width:500px;margin:0 auto;color:#1f1a17}
@@ -50,6 +50,6 @@ export async function GET(request: Request, { params }: Params) {
     )
   } catch (error) {
     console.error('[admin/testimonials] update failed', error)
-    return new Response('Blad podczas aktualizacji statusu.', { status: 500, headers: { 'Content-Type': 'text/html; charset=utf-8' } })
+    return new Response('Błąd podczas aktualizacji statusu.', { status: 500, headers: { 'Content-Type': 'text/html; charset=utf-8' } })
   }
 }

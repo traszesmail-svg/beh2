@@ -29,7 +29,7 @@ export function ServiceDecisionSection({
   serviceLead,
   quickBullets,
   consultationBullets,
-  serviceLinkLabel = 'strony uslugi online',
+  serviceLinkLabel = 'strony usługi online',
 }: ServiceDecisionSectionProps) {
   return (
     <section className="notatnik-service-section">
@@ -59,11 +59,11 @@ export function ServiceDecisionSection({
         </article>
 
         <article className="notatnik-service-card">
-          <div className="notatnik-mono">Pelna konsultacja</div>
+          <div className="notatnik-mono">Pełna konsultacja</div>
           <h3>{PUBLIC_OFFER_DECISION_COPY.premium}</h3>
           <p>{PUBLIC_OFFER_FULL_CONSULTATION_VALUE}</p>
-          <div className="notatnik-service-meta" aria-label="Parametry pelnej konsultacji">
-            <span>pelny zakres online</span>
+          <div className="notatnik-service-meta" aria-label="Parametry pełnej konsultacji">
+            <span>pełny zakres online</span>
             <span>{getPublicServicePriceLabel('konsultacja-behawioralna-online')}</span>
             <span>diagnoza + 7 dni</span>
           </div>
@@ -73,7 +73,7 @@ export function ServiceDecisionSection({
             ))}
           </ul>
           <p className="notatnik-service-note">
-            Po rozmowie mozesz przez 7 dni pisac przez WhatsApp, zadawac pytania, wysylac filmy i konsultowac kazdy krok planu. Jesli ten etap nie daje realnego kierunku, kolejnym krokiem bywa wizyta domowa i terapia ustalana indywidualnie.
+            Po rozmowie możesz przez 7 dni pisać przez WhatsApp, zadawac pytania, wysyłac filmy i konsultowac kazdy krok planu. Jeśli ten etap nie daje realnego kierunku, kolejnym krokiem bywa wizyta domowa i terapia ustalana indywidualnie.
           </p>
           <div className="notatnik-service-actions">
             <Link href={consultationHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
@@ -84,7 +84,7 @@ export function ServiceDecisionSection({
       </div>
 
       <p className="notatnik-service-note">
-        Jesli chcesz najpierw zobaczyc pelny opis szerokiej uslugi online dla calej Polski, przejdz do{' '}
+        Jeśli chcesz najpierw zobaczyć pełny opis szerokiej usługi online dla calej Polski, przejdź do{' '}
         <Link href={serviceHref} prefetch={false} className="notatnik-inline-link">
           {serviceLinkLabel}
         </Link>

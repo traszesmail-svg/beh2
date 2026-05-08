@@ -88,67 +88,67 @@ const nextConfig = {
       },
       {
         source: '/oferta/poradniki-pdf',
-        destination: '/niezbednik',
+        destination: '/materialy',
         statusCode: 301,
       },
       {
         source: '/oferta/poradniki-pdf/pies_zostaje_sam_i_wpada_w_panike_v2',
-        destination: '/oferta/poradniki-pdf/pies-zostaje-sam-plan-pierwszych-krokow',
+        destination: '/materialy/pies-sam-w-domu',
         statusCode: 301,
       },
       {
         source: '/oferta/poradniki-pdf/pies_szczeka_na_gosci_i_dzwonek_v2',
-        destination: '/oferta/poradniki-pdf/pies-boi-sie-gosci-i-dzwiekow',
+        destination: '/materialy',
         statusCode: 301,
       },
       {
         source: '/oferta/poradniki-pdf/dlaczego_pies_glupieje_na_smyczy_v2',
-        destination: '/oferta/poradniki-pdf/pies-reaktywny-na-spacerze',
+        destination: '/materialy/pies-ile-ruchu-potrzebuje',
         statusCode: 301,
       },
       {
         source: '/oferta/poradniki-pdf/trudny_spacer_v2',
-        destination: '/oferta/poradniki-pdf/pies-reaktywny-na-spacerze',
+        destination: '/materialy/pies-ile-ruchu-potrzebuje',
         statusCode: 301,
       },
       {
         source: '/oferta/poradniki-pdf/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2',
-        destination: '/oferta/poradniki-pdf/pies-ile-ruchu-potrzebuje',
+        destination: '/materialy/pies-ile-ruchu-potrzebuje',
         statusCode: 301,
       },
       {
         source: '/oferta/poradniki-pdf/szczeniak_gryzie_i_skacze_v2',
-        destination: '/oferta/poradniki-pdf/szczeniak-gryzienie-i-skakanie',
+        destination: '/materialy',
         statusCode: 301,
       },
       {
         source: '/oferta/poradniki-pdf/szczeniak_nie_umie_sie_wyciszyc_v2',
-        destination: '/oferta/poradniki-pdf/szczeniak-wyciszanie',
+        destination: '/materialy',
         statusCode: 301,
       },
       {
         source: '/oferta/poradniki-pdf/pies_niszczy_w_domu_v2',
-        destination: '/oferta/poradniki-pdf/pies-niszczy-w-domu',
+        destination: '/materialy/pies-sam-w-domu',
         statusCode: 301,
       },
       {
         source: '/oferta/poradniki-pdf/pies_broni_zasobow_v2',
-        destination: '/oferta/poradniki-pdf/pies-broni-zasobow',
+        destination: '/materialy',
         statusCode: 301,
       },
       {
         source: '/oferta/poradniki-pdf/pogon_demolka_i_brak_hamulcow_v2',
-        destination: '/oferta/poradniki-pdf/pies-impulsy-i-hamulce',
+        destination: '/materialy',
         statusCode: 301,
       },
       {
         source: '/oferta/poradniki-pdf/pies_do_pracy_z_ludzmi_v2',
-        destination: '/oferta/poradniki-pdf/pies-do-pracy-z-ludzmi',
+        destination: '/materialy',
         statusCode: 301,
       },
       {
         source: '/oferta/poradniki-pdf/szczeniak-pierwsze-30-dni',
-        destination: '/materialy/szczeniak-gryzie-i-skacze',
+        destination: '/materialy',
         statusCode: 301,
       },
       {
@@ -158,7 +158,7 @@ const nextConfig = {
       },
       {
         source: '/oferta/poradniki-pdf/pakiety/pakiet-kota-domowego',
-        destination: '/materialy/pakiet/pakiet-kocie-napiecie',
+        destination: '/materialy',
         statusCode: 301,
       },
     ]

@@ -1,7 +1,9 @@
 import assert from 'node:assert/strict'
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
-import { listLeadMagnetPaths, listLocalSeoPaths } from '../lib/growth-layer'
+import { listLeadMagnetPaths } from '../lib/active-lead-magnets'
+import { listLocalSeoPaths } from '../lib/growth-layer'
+import { listMaterialyBundles, listMaterialyGuides } from '../lib/materialy-catalog'
 import { OFFERS } from '../lib/offers'
 
 type SourceMap = Map<string, string[]>
@@ -42,11 +44,6 @@ const OUTPUT_PATH = path.join(PUBLIC_DIR, 'sitemap.xml')
 const REPORT_PATH = path.join(REPORT_DIR, 'sitemap-regeneration.md')
 const CANONICAL_BASE_URL = 'https://regulskibehawiorysta.pl'
 const QUICK_CONSULTATION_OFFER_PATH = '/oferta/szybka-konsultacja-15-min'
-const LEAD_MAGNET_SLUGS = [
-  'pies-reaktywnosc-5-krokow',
-  'kot-kuweta-checklista',
-  'przygotowanie-do-konsultacji-online',
-] as const
 const LEGACY_OFFER_SLUGS = new Set(['konsultacja-behawioralna-online', 'poradniki-pdf'])
 
 const PAGE_FILE_RE = /^page\.(?:ts|tsx|js|jsx)$/i
@@ -62,7 +59,6 @@ const EXCLUDED_ROUTE_EXACT = new Set([
   '/confirmation',
   '/confirm',
   '/problem',
-  '/materialy',
   '/przybornik',
   '/pokoj',
   '/admin',
@@ -91,7 +87,6 @@ const EXCLUDED_ROUTE_PREFIXES = [
   '/confirmation/',
   '/confirm/',
   '/problem/',
-  '/materialy/',
   '/przybornik/',
   '/pokoj/',
 ]
@@ -99,6 +94,7 @@ const EXCLUDED_ROUTE_PREFIXES = [
 const MAIN_SERVICE_PAGES = new Set([
   '/',
   '/cennik',
+  '/cennik/pelny',
   '/kontakt',
   '/koty',
   '/konsultacja-behawioralna-online',
@@ -240,8 +236,7 @@ function discoverPdfRoutes(): SourceMap {
 function discoverLeadMagnetRoutes(): SourceMap {
   const discovered: SourceMap = new Map()
 
-  for (const slug of LEAD_MAGNET_SLUGS) {
-    const routePath = `/bezplatne-materialy/${slug}`
+  for (const routePath of listLeadMagnetPaths()) {
     if (isExcludedRoutePath(routePath)) {
       continue
     }
@@ -364,6 +359,8 @@ function collectCandidateMap(): SourceMap {
 
   mergeRoutes(listLeadMagnetPaths(), 'lead-magnet-route')
   mergeRoutes(listLocalSeoPaths(), 'local-seo-route')
+  mergeRoutes(['/materialy', ...listMaterialyGuides().map((guide) => `/materialy/${guide.slug}`)], 'materialy-route')
+  mergeRoutes(listMaterialyBundles().map((bundle) => `/materialy/pakiet/${bundle.slug}`), 'materialy-bundle-route')
   mergeRoutes(
     OFFERS.filter((offer) => !LEGACY_OFFER_SLUGS.has(offer.slug)).map((offer) => `/oferta/${offer.slug}`),
     'offer-detail-route',
@@ -407,7 +404,9 @@ function collectCandidateMap(): SourceMap {
 }
 
 function getChangeFrequency(routePath: string): SitemapEntry['changefreq'] {
-  return routePath === '/' || routePath === '/cennik' || routePath === '/oferta' ? 'weekly' : 'monthly'
+  return routePath === '/' || routePath === '/cennik' || routePath === '/cennik/pelny' || routePath === '/oferta'
+    ? 'weekly'
+    : 'monthly'
 }
 
 function getPriority(routePath: string): number {
