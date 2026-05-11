@@ -26,6 +26,7 @@ const quickHref = buildBookHref(null, 'szybka-konsultacja-15-min', false)
 function MaterialyGuideCard({ guide }: { guide: MaterialyGuide }) {
   const coverSrc = getMaterialyGuideCoverSrc(guide)
   const previews = getMaterialyGuidePreviewSrcs(guide, 2)
+  const ctaLabel = guide.priceCode === 'free' ? 'Pobierz po e-mailu' : `Zamów za ${PRICE_LABEL[guide.priceCode]}`
 
   return (
     <article className="notatnik-material-card notatnik-material-card-with-cover">
@@ -70,7 +71,7 @@ function MaterialyGuideCard({ guide }: { guide: MaterialyGuide }) {
       </ul>
 
       <Link href={`/materialy/${guide.slug}`} prefetch={false}>
-        Pobierz po e-mailu &rarr;
+        {ctaLabel} &rarr;
       </Link>
     </article>
   )
@@ -140,7 +141,7 @@ export default function MaterialyLandingPage() {
       <section id="psy" style={{ background: 'var(--paper)' }}>
         <NotatnikSectionHead index="II." kicker="Psy" title="Materiały dla opiekunów psów." />
         <p style={{ maxWidth: '720px', color: 'var(--ink-quiet)' }}>
-          Zostawanie samemu, poziom ruchu i przygotowanie do krótkiej rozmowy.
+          Zostawanie samemu, smycz, goście, zasoby, niszczenie w domu, pobudzenie i pierwsze plany pracy ze szczeniakiem.
         </p>
         <div className="notatnik-material-grid top-gap-small">
           {dogGuides.map((guide) => (
@@ -152,7 +153,7 @@ export default function MaterialyLandingPage() {
       <section id="koty">
         <NotatnikSectionHead index="III." kicker="Koty" title="Materiały dla opiekunów kotów." />
         <p style={{ maxWidth: '720px', color: 'var(--ink-quiet)' }}>
-          Napięcie, pierwszy tydzień i podstawy przed konsultacją.
+          Kuweta, napięcie między kotami, nocne i poranne miauczenie, chowanie się po zmianach oraz kontakt z człowiekiem.
         </p>
         <div className="notatnik-material-grid top-gap-small">
           {catGuides.map((guide) => (

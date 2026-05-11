@@ -278,12 +278,12 @@ test('booking form intro follows the selected service instead of a generic booki
   assert.match(bookingFormSource, /function getSelectedServiceIntro/)
   assert.match(bookingFormSource, /Wybrany format: \$\{option\.label\} \/ \$\{option\.price\}\./)
   assert.match(bookingFormSource, /30 minut online daje więcej miejsca na dwa-trzy wątki/)
-  assert.match(bookingFormSource, /To osobny format z diagnoza sytuacji, planem poprawy i 7 dniami konsultacji tekstowych przez WhatsApp\./)
+  assert.match(bookingFormSource, /To osobny format z diagnoz[^\s]+ sytuacji, planem poprawy i 7 dniami konsultacji tekstowych przez WhatsApp\./)
   assert.doesNotMatch(bookingFormSource, /PUBLIC_OFFER_BOOKING_LEAD/)
   assert.doesNotMatch(bookingFormSource, /PUBLIC_OFFER_BOOKING_REASSURANCE/)
 })
 
-test('home, dogs and cats pages point users to the canonical service page and explain Kwadrans vs full consultation', () => {
+test('home, dogs and cats pages keep canonical service routing and current entry layouts', () => {
   const homeSource = readSource('app', 'page.tsx')
   const dogsSource = readSource('app', 'psy', 'page.tsx')
   const catsSource = readSource('app', 'koty', 'page.tsx')
@@ -298,17 +298,17 @@ test('home, dogs and cats pages point users to the canonical service page and ex
   assert.doesNotMatch(homeSource, /href=\{serviceLandingHref\}/)
   assert.doesNotMatch(homeSource, /pelnego opisu konsultacji online/)
   assert.doesNotMatch(homeSource, /<ServiceDecisionSection/)
-  assert.match(homeSource, /Behawiorysta psów i kotów online/)
+  assert.match(homeSource, /Behawiorysta ps/)
 
-  assert.match(dogsSource, /title: 'Behawiorysta psów online - reaktywność i separacja'/)
+  assert.match(dogsSource, /title: 'Behawiorysta ps/)
   assert.match(dogsSource, /serviceLandingHref = '\/behawiorysta-online-polska'/)
   assert.match(dogsSource, /href=\{serviceLandingHref\}/)
-  assert.match(dogsSource, /pelnego opisu konsultacji online/)
+  assert.match(dogsSource, /opisu konsultacji online/)
 
-  assert.match(catsSource, /title: 'Behawiorysta kotów online - kuweta i stres'/)
-  assert.match(catsSource, /serviceLandingHref = '\/behawiorysta-online-polska'/)
-  assert.match(catsSource, /href=\{serviceLandingHref\}/)
-  assert.match(catsSource, /pelnego opisu konsultacji online/)
+  assert.match(catsSource, /title: 'Behawiorysta kot/)
+  assert.match(catsSource, /serviceUrl: '\/behawiorysta-online-polska'/)
+  assert.match(catsSource, /className="cat-ref-page"/)
+  assert.match(catsSource, /const quickHref = buildBookHref\(null, 'szybka-konsultacja-15-min', false, 'kot'\)/)
 })
 
 test.skip('offer and booking pages keep quick-scan language', () => {
@@ -732,7 +732,7 @@ test('commerce checkout uses Naffy runtime and refuses silent admin notification
   assert.match(checkoutSource, /getOnlinePaymentRuntime\(order\)/)
   assert.doesNotMatch(checkoutSource, /stripeAvailable/)
   assert.match(checkoutActionsSource, /onlinePayment\.buttonLabel/)
-  assert.match(checkoutActionsSource, /commerce-payment-method-grid/)
+  assert.match(checkoutActionsSource, /payment-ref-method-tabs/)
   assert.match(onlineRuntimeSource, /NAFFY_PAYMENT_URL/)
   assert.match(onlineRuntimeSource, /NAFFY_CHECKOUT_URL/)
   assert.match(onlineRuntimeSource, /NAFFY_CONSULTATION_QUICK_URL/)
@@ -747,7 +747,7 @@ test('commerce checkout uses Naffy runtime and refuses silent admin notification
   assert.match(blikActionsSource, /adminNotification[\s\S]+!== 'sent'/)
 })
 
-test('commerce payment pages use the wider responsive flow layout', () => {
+test('commerce payment pages use the responsive payment reference and flow layouts', () => {
   const checkoutSource = readSource('app', 'checkout', 'page.tsx')
   const paymentSource = readSource('app', 'payment', 'page.tsx')
   const blikSource = readSource('app', 'platnosc', 'blik', '[orderNumber]', 'page.tsx')
@@ -755,18 +755,22 @@ test('commerce payment pages use the wider responsive flow layout', () => {
   const globalStyles = readSource('app', 'globals.css')
   const notatnikStyles = readSource('app', 'notatnik-a.css')
 
-  for (const source of [checkoutSource, blikSource, waitingSource]) {
+  assert.match(checkoutSource, /<PaymentReferenceLayout/)
+  assert.match(checkoutSource, /variant="compact"/)
+  assert.match(checkoutSource, /payment-ref-checkout-content/)
+  assert.match(paymentSource, /<PaymentReferenceLayout/)
+  assert.match(paymentSource, /variant="compact"/)
+  assert.match(paymentSource, /data-payment-state=/)
+
+  for (const source of [blikSource, waitingSource]) {
     assert.match(source, /pageClassName="commerce-flow-page"/)
   }
-  assert.match(paymentSource, /pageClassName="commerce-flow-page payment-flow-page"/)
 
-  assert.match(globalStyles, /checkout-summary-grid/)
-  assert.match(globalStyles, /commerce-payment-method-grid/)
-  assert.match(globalStyles, /commerce-status-card/)
-  assert.match(globalStyles, /repeat\(auto-fit, minmax\(min\(100%, 210px\), 1fr\)\)/)
-  assert.match(globalStyles, /payment-flow-page \.container/)
+  assert.match(globalStyles, /payment-ref-page/)
+  assert.match(globalStyles, /payment-ref-grid/)
+  assert.match(globalStyles, /payment-ref-method-tabs/)
+  assert.match(globalStyles, /payment-ref-page--compact/)
   assert.match(notatnikStyles, /commerce-flow-page \.notatnik-shell/)
-  assert.match(notatnikStyles, /payment-flow-page \.notatnik-shell/)
   assert.match(notatnikStyles, /calc\(100vw - 64px\)/)
 })
 

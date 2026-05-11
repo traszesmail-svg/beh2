@@ -174,7 +174,7 @@ export default function BookPage({ searchParams }: BookPageProps) {
             offerCatalog: [
               // nazwa usługi: 15-minutowa konsultacja behawioralna; format: 15 min audio bez kamery.
               { name: '15-minutowa konsultacja behawioralna', description: '15 min audio bez kamery.', url: '/book?service=szybka-konsultacja-15-min', price: 69 },
-              { name: 'Dwa kwadranse', description: '30 min online z krótka notatka po rozmowie.', url: '/book?service=konsultacja-30-min', price: 169 },
+              { name: 'Dwa kwadranse', description: '30 min online z krótką notatką po rozmowie.', url: '/book?service=konsultacja-30-min', price: 169 },
               { name: 'Pełna konsultacja', description: 'Audio albo video, diagnoza, plan poprawy i 7 dni wsparcia tekstowego przez WhatsApp.', url: '/book?service=konsultacja-behawioralna-online', price: 470 },
             ],
           }),

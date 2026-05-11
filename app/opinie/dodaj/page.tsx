@@ -70,7 +70,7 @@ export default function AddOpinionPage() {
         <input type="text" name="website" value={fields.website} onChange={handleChange} style={{ display: 'none' }} tabIndex={-1} aria-hidden="true" autoComplete="off" />
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <label htmlFor="displayName" style={{ fontWeight: 600 }}>Imie lub inicjaly do publikacji *</label>
+          <label htmlFor="displayName" style={{ fontWeight: 600 }}>Imię lub inicjały do publikacji *</label>
           <input
             id="displayName"
             name="displayName"
@@ -122,7 +122,7 @@ export default function AddOpinionPage() {
             placeholder="Co konkretnie pomogło? Co się zmieniło po konsultacji?"
             style={{ ...inputStyle, resize: 'vertical' }}
           />
-          <span style={{ fontSize: 12, color: '#6b625b' }}>{fields.opinion.length}/600 znakow</span>
+          <span style={{ fontSize: 12, color: '#6b625b' }}>{fields.opinion.length}/600 znaków</span>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>

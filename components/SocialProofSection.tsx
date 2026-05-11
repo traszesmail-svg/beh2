@@ -101,7 +101,7 @@ function CaseCard({ caseStudy }: { caseStudy: (typeof REAL_CASE_STUDIES)[number]
         </div>
 
         <div className="real-case-next">
-          <strong>Zrodlo i efekt</strong>
+          <strong>Źródło i efekt</strong>
           <span>
             {caseStudy.proof.sourceContext}. Efekt pierwszego etapu: {caseStudy.proof.outcomeSnapshot}.
           </span>

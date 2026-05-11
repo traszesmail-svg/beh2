@@ -51,7 +51,7 @@ export function PdfOrderForm({ itemType, itemSlug, itemTitle, itemPrice }: PdfOr
 
     if (!consentProcessing || !consentPolicy) {
       setStatus('error')
-      setFeedback('Zaznacz zgody na kontakt i polityke prywatnosci.')
+      setFeedback('Zaznacz zgody na kontakt i politykę prywatności.')
       return
     }
 
@@ -110,7 +110,7 @@ export function PdfOrderForm({ itemType, itemSlug, itemTitle, itemPrice }: PdfOr
       </div>
 
       <div className="form-field">
-        <label htmlFor="pdf-order-name">Imie</label>
+        <label htmlFor="pdf-order-name">Imię</label>
         <input id="pdf-order-name" value={name} onChange={(event) => setName(event.target.value)} placeholder="np. Anna" autoComplete="name" />
       </div>
 
@@ -157,7 +157,7 @@ export function PdfOrderForm({ itemType, itemSlug, itemTitle, itemPrice }: PdfOr
             checked={consentPolicy}
             onChange={(event) => setConsentPolicy(event.target.checked)}
           />
-          <span>Akceptuje polityke prywatnosci i regulamin w zakresie potrzebnym do kontaktu.</span>
+          <span>Akceptuję politykę prywatności i regulamin w zakresie potrzebnym do kontaktu.</span>
         </label>
       </fieldset>
 

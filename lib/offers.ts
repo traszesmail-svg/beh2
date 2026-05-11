@@ -117,20 +117,20 @@ export const OFFERS: Offer[] = [
   },
   {
     slug: 'konsultacja-30-min',
-    title: 'Dwa kwadranse z behawiorysta',
+    title: 'Dwa kwadranse z behawiorystą',
     shortTitle: 'Dwa kwadranse',
     eyebrow: 'Szerszy zakres',
     kind: 'booking',
     priceLabel: formatPricePln(169),
     priceAmount: 169,
-    forWho: 'Dla spraw, które potrzebuja więcej czasu niz sam Kwadrans, ale nie wymagaja od razu pełnej konsultacji.',
+    forWho: 'Dla spraw, które potrzebują więcej czasu niż sam Kwadrans, ale nie wymagają od razu pełnej konsultacji.',
     whenToChoose: 'Gdy temat jest szerszy niż jedno pytanie, chcesz spokojniej wejść w rozmowę online albo potrzebujesz 30 minut na uporządkowanie dwóch-trzech wątków.',
     nextStep: 'Od razu rezerwujesz 30-minutowy termin online i przechodzisz do formularza oraz płatności.',
     cardSummary: 'Szerszy zakres, gdy 15 minut to za mało.',
     heroSummary: '30 minut rozmowy online, gdy 15 minut to za mało, ale pełna konsultacja byłaby jeszcze za szerokim startem.',
     descriptions: [
       'To format dla sytuacji, w których potrzebujesz chwili więcej na kontekst i pytania, ale nadal zależy Ci na prostym starcie.',
-      'Po rozmowie masz jasniejszy kierunek, pierwsze zalecenia, krótka notatkę i decyzje, czy kolejny krok to już pełna konsultacja behawioralna.',
+      'Po rozmowie masz jaśniejszy kierunek, pierwsze zalecenia, krótką notatkę i decyzję, czy kolejny krok to już pełna konsultacja behawioralna.',
     ],
     bestFor: ['spokojniejszy start online', 'dwa-trzy wątki naraz', 'gdy 15 min to za mało'],
     outcomes: ['więcej czasu na uporządkowanie sytuacji', 'wstępne zalecenia i krótka notatka po rozmowie', 'decyzja, czy potrzebna jest pełna konsultacja'],
@@ -157,13 +157,13 @@ export const OFFERS: Offer[] = [
     whenToChoose: 'Gdy problem trwa dłużej, wraca albo obejmuje kilka obszarów naraz i potrzebuje pełniejszej analizy.',
     nextStep: 'Rezerwujesz pełną konsultację online. Po rozmowie dostajesz diagnozę, aktualizowany plan pracy i zalecenia dzienne pod nadzorem behawiorysty przez 7 dni.',
     cardSummary: 'Diagnoza, plan pracy i 7 dni codziennych zaleceń pod nadzorem.',
-    heroSummary: 'Rozmowa online z diagnoza, indywidualnym planem i 7 dniami codziennych zaleceń pod nadzorem behawiorysty (8h/dzien przez WhatsApp).',
+    heroSummary: 'Rozmowa online z diagnozą, indywidualnym planem i 7 dniami codziennych zaleceń pod nadzorem behawiorysty (8h dziennie przez WhatsApp).',
     descriptions: [
       'To format dla sytuacji, w których szybki start byłby zbyt płytki: problem wraca, narasta albo dotyka kilku rzeczy naraz.',
       'Po rozmowie dostajesz diagnozę sytuacji, indywidualny plan pracy i codzienne zalecenia przez 7 dni pod nadzorem behawiorysty dostępnego na WhatsApp 8h dziennie.',
     ],
     bestFor: ['temat złożony', 'kilka problemów naraz', 'gdy potrzebujesz diagnozy i codziennego wsparcia wdrożenia'],
-    outcomes: ['diagnoza sytuacji i priorytetow', 'aktualizowany plan pracy krok po kroku', '7 dni codziennych zaleceń — behawiorysta dostępny 8h/dzien przez WhatsApp'],
+    outcomes: ['diagnoza sytuacji i priorytetów', 'aktualizowany plan pracy krok po kroku', '7 dni codziennych zaleceń — behawiorysta dostępny 8h dziennie przez WhatsApp'],
     primaryCtaLabel: FUNNEL_CTA_LABELS.consultation,
     primaryHref: buildBookHref(null, 'konsultacja-behawioralna-online'),
     detailHref: '/konsultacja-behawioralna-online',
@@ -185,16 +185,16 @@ export const OFFERS: Offer[] = [
     priceLabel: null,
     priceAmount: null,
     forWho: 'Dla osób, które chcą wracać do materiałów i rekomendacji między rozmowami.',
-    whenToChoose: 'Gdy chcesz spokojnie wróćic do tematu, przygotowac się do rozmowy albo sprawdzić, czy z czyms da się ruszyć samodzielnie.',
-    nextStep: 'Najpierw porzadkujesz temat, a potem latwiej decydujesz, czy wystarczy materiał, czy lepiej wejść w rozmowe.',
+    whenToChoose: 'Gdy chcesz spokojnie wrócić do tematu, przygotować się do rozmowy albo sprawdzić, czy z czymś da się ruszyć samodzielnie.',
+    nextStep: 'Najpierw porządkujesz temat, a potem łatwiej decydujesz, czy wystarczy materiał, czy lepiej wejść w rozmowę.',
     cardSummary: 'Materiały do samodzielnej pracy jako drugi krok.',
     heroSummary: 'Materiały do samodzielnej pracy: własne przewodniki, książki i narzędzia dobrane pod konkretne sytuację.',
     descriptions: [
-      'Znajdziesz tu materiały, do których możesz wróćic przed rozmowa, po rozmowie albo między kolejnymi krokami.',
-      'To miejsce z przewodnikami i narzedziami dobranymi pod konkretne sytuację.',
+      'Znajdziesz tu materiały, do których możesz wrócić przed rozmową, po rozmowie albo między kolejnymi krokami.',
+      'To miejsce z przewodnikami i narzędziami dobranymi pod konkretne sytuacje.',
     ],
-    bestFor: ['powrot do zaleceń', 'materiały pomocnicze', 'spokojne poglebienie tematu'],
-    outcomes: ['czytelny materiał na później', 'mniej chaosu między krokami', 'latwiejsza decyzja o kolejnym ruchu'],
+    bestFor: ['powrót do zaleceń', 'materiały pomocnicze', 'spokojne pogłębienie tematu'],
+    outcomes: ['czytelny materiał na później', 'mniej chaosu między krokami', 'łatwiejsza decyzja o kolejnym ruchu'],
     primaryCtaLabel: FUNNEL_CTA_LABELS.secondary,
     primaryHref: '/niezbednik',
     detailCtaLabel: FUNNEL_CTA_LABELS.secondary,
@@ -205,7 +205,7 @@ export const OFFERS: Offer[] = [
     imageAlt: CAT_HOME_PHOTO.alt,
     imageWidth: CAT_HOME_PHOTO.width,
     imageHeight: CAT_HOME_PHOTO.height,
-    note: 'Niezbędnik pomaga przygotowac się do rozmowy albo wróćic do zaleceń po konsultacji.',
+    note: 'Niezbędnik pomaga przygotować się do rozmowy albo wrócić do zaleceń po konsultacji.',
   },
 ]
 
@@ -228,7 +228,7 @@ export const CAT_POPULAR_CATEGORIES = [
   },
   {
     title: 'Wycofanie i napięcie',
-    summary: 'Wycofanie, stres po zmianie i trudnosc z powrotem do codziennego spokoju.',
+    summary: 'Wycofanie, stres po zmianie i trudność z powrotem do codziennego spokoju.',
   },
   {
     title: 'Wokalizacja i pobudzenie',
@@ -241,7 +241,7 @@ export const PDF_TOPICS: PdfTopic[] = [
     id: 'pies-ciagnie-na-smyczy',
     animal: 'Pies',
     title: 'Pies ciągnie na smyczy',
-    summary: 'Na pierwszy start że spacerem i napieciem.',
+    summary: 'Na pierwszy start ze spacerem i napięciem.',
   },
   {
     id: 'pies-zostaje-sam',
@@ -264,20 +264,20 @@ export const PDF_TOPICS: PdfTopic[] = [
   {
     id: 'pies-boi-sie',
     animal: 'Pies',
-    title: 'Pies boi się ludzi albo dzwiekow',
-    summary: 'Na pierwszy porządek przy lęku i przeciazeniu.',
+    title: 'Pies boi się ludzi albo dźwięków',
+    summary: 'Na pierwszy porządek przy lęku i przeciążeniu.',
   },
   {
     id: 'kot-poza-kuweta-plan',
     animal: 'Kot',
-    title: 'Kot sika poza kuweta',
+    title: 'Kot sika poza kuwetą',
     summary: 'Na pierwszy porządek przy kuwecie i stresie.',
   },
   {
     id: 'kot-kuweta-wet-czy-behawior',
     animal: 'Kot',
     title: 'Kuweta: wet czy zachowanie',
-    summary: 'Na szybkie odroznienie alarmu od stresu.',
+    summary: 'Na szybkie odróżnienie alarmu od stresu.',
   },
   {
     id: 'konflikt-miedzy-kotami-pdf',
@@ -288,14 +288,14 @@ export const PDF_TOPICS: PdfTopic[] = [
   {
     id: 'kot-wycofany',
     animal: 'Kot',
-    title: 'Kot lekowy albo wycofany',
+    title: 'Kot lękowy albo wycofany',
     summary: 'Na prosty start przy chowaniu się i napięciu.',
   },
   {
     id: 'kot-przy-dotyku',
     animal: 'Kot',
-    title: 'Kot przy trudnym dotyku i pielegnacji',
-    summary: 'Na start przy pielegnacji i trudnym kontakcie.',
+    title: 'Kot przy trudnym dotyku i pielęgnacji',
+    summary: 'Na start przy pielęgnacji i trudnym kontakcie.',
   },
 ]
 
@@ -308,7 +308,7 @@ export function getOfferDetailHref(offer: Pick<Offer, 'slug' | 'detailHref'>) {
 }
 
 export function getOfferDetailCtaLabel(offer: Pick<Offer, 'detailCtaLabel'>) {
-  return offer.detailCtaLabel ?? 'Zobacz szczegoly'
+  return offer.detailCtaLabel ?? 'Zobacz szczegóły'
 }
 
 export function getOfferByServiceSlug(serviceSlug: string) {

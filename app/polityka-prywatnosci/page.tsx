@@ -106,7 +106,7 @@ const sections: LegalSection[] = [
     body: (
       <>
         <p>
-          Telefon nie jest publikowany jako publiczny kanal kontaktu serwisu. Publiczny kontakt odbywa się przez formularz
+          Telefon nie jest publikowany jako publiczny kanał kontaktu serwisu. Publiczny kontakt odbywa się przez formularz
           i e-mail.
         </p>
         <p>

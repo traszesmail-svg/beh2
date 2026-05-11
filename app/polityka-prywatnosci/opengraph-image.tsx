@@ -6,7 +6,7 @@ export const contentType = 'image/png'
 
 export default function OpenGraphImage() {
   return renderOgImage({
-    title: 'Polityka prywatnosci',
+    title: 'Polityka prywatności',
     subtitle: 'Zasady przetwarzania danych w serwisie regulskibehawiorysta.pl.',
   })
 }

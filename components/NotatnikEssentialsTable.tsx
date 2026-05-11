@@ -21,7 +21,7 @@ const FILTERS = [
   { key: 'kot', label: 'Kot' },
   { key: 'przewodnik', label: 'Przewodnik' },
   { key: 'ksiazka', label: 'Ksiazka' },
-  { key: 'narzedzie', label: 'Narzedzie' },
+  { key: 'narzedzie', label: 'Narzędzie' },
 ] as const
 
 export function NotatnikEssentialsTable({ rows }: { rows: NotatnikEssentialRow[] }) {

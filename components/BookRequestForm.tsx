@@ -87,12 +87,12 @@ function getSelectedServiceIntro(service: BookingServiceType) {
     case 'konsultacja-30-min':
       return {
         title: `Wybrany format: ${option.label} / ${option.price}.`,
-        copy: '30 minut online daje więcej miejsca na dwa-trzy wątki i spokojniejsze uporządkowanie sytuacji niz sam Kwadrans.',
+        copy: '30 minut online daje więcej miejsca na dwa-trzy wątki i spokojniejsze uporządkowanie sytuacji niż sam Kwadrans.',
       }
     case 'konsultacja-behawioralna-online':
       return {
         title: `Wybrany format: ${option.label} / ${option.price}.`,
-        copy: 'To osobny format z diagnoza sytuacji, planem poprawy i 7 dniami konsultacji tekstowych przez WhatsApp.',
+        copy: 'To osobny format z diagnozą sytuacji, planem poprawy i 7 dniami konsultacji tekstowych przez WhatsApp.',
       }
     case 'kwadrans-na-juz':
       return {
@@ -150,7 +150,7 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
     }
 
     if (description.length < 20 || description.length > 1000) {
-      return 'Opis sytuacji powinien miec od 20 do 1000 znakow.'
+      return 'Opis sytuacji powinien mieć od 20 do 1000 znaków.'
     }
 
     if (!isUrgentNow && !preferredSlots) {
@@ -191,7 +191,7 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
           species: form.species,
           description: normalizeLongText(form.description),
           preferredSlots: isUrgentNow
-            ? 'Chce termin jak najszybciej - prosze o kontakt w ciągu 15 minut.'
+            ? 'Chcę termin jak najszybciej - proszę o kontakt w ciągu 15 minut.'
             : normalizeLongText(form.preferredSlots),
           consentRodo: form.consentRodo,
           consentRegulamin: form.consentRegulamin,
@@ -271,7 +271,7 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
 
       {showEntryServiceBox && entryServiceOption ? (
         <div className="info-box full-width">
-          <strong>Ten formularz otworzyl się z usługa: {entryServiceOption.label}.</strong> Nizej wybrales już inny format, wiec po wysłaniu prośby zapisze się aktualny wybór.
+          <strong>Ten formularz otworzył się z usługą: {entryServiceOption.label}.</strong> Niżej wybrałeś już inny format, więc po wysłaniu prośby zapisze się aktualny wybór.
         </div>
       ) : null}
 
@@ -286,14 +286,14 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
             className="notatnik-inline-link"
             onClick={() => updateField('service', 'szybka-konsultacja-15-min')}
           >
-            Wróć do zwyklego Kwadransu
+            Wróć do zwykłego Kwadransu
           </button>
         </div>
       ) : null}
 
       <fieldset className="full-width form-field consent-stack">
         <legend className="field-legend">
-          {showServiceChangeLegend ? 'Zmien usługę, jeśli potrzebujesz innego formatu' : 'Wybierz usługę'}
+          {showServiceChangeLegend ? 'Zmień usługę, jeśli potrzebujesz innego formatu' : 'Wybierz usługę'}
         </legend>
         {PRIMARY_SERVICE_OPTIONS.map((option) => (
           <label key={option.value} className="checkbox-card" htmlFor={`service-${option.value}`}>
@@ -318,7 +318,7 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
             onChange={() => updateField('service', 'kwadrans-na-juz')}
           />
           <span>
-            ⚡ {URGENT_SERVICE_OPTION.label} / {URGENT_SERVICE_OPTION.price} — termin na dzis, sytuację kryzysowe
+            ⚡ {URGENT_SERVICE_OPTION.label} / {URGENT_SERVICE_OPTION.price} — termin na dziś, sytuacje kryzysowe
           </span>
         </label>
       </fieldset>
@@ -331,14 +331,14 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
             className="notatnik-inline-link"
             onClick={() => updateField('service', 'kwadrans-na-juz')}
           >
-            Przejdz do Kwadransu na już
+            Przejdź do Kwadransu na już
           </button>
           <div className="field-help top-gap-small">{PUBLIC_OFFER_BOOKING_PRIORITY_NOTE}</div>
         </div>
       ) : null}
 
       <div className="form-field full-width">
-        <label htmlFor="book-name">Imie</label>
+        <label htmlFor="book-name">Imię</label>
         <input
           id="book-name"
           name="name"
@@ -397,13 +397,13 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
           onChange={(event) => updateField('description', event.target.value.slice(0, 1000))}
           placeholder="Napisz, co dzieje się teraz, od kiedy trwa problem i co najbardziej chcesz uporządkować."
         />
-        <div className="field-help">{form.description.length}/1000 znakow</div>
+        <div className="field-help">{form.description.length}/1000 znaków</div>
       </div>
 
       <div className="full-width form-field">
         <label htmlFor="book-preferred-slots">Preferowane terminy</label>
         {isUrgentNow ? (
-          <div className="info-box">Chce termin jak najszybciej - prosze o kontakt w ciągu 15 minut.</div>
+          <div className="info-box">Chcę termin jak najszybciej - proszę o kontakt w ciągu 15 minut.</div>
         ) : (
           <>
             <SlotPicker
@@ -443,7 +443,7 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
             required
           />
           <span>
-            Zapoznalem/am się z{' '}
+            Zapoznałem/am się z{' '}
             <Link href="/regulamin" prefetch={false}>
               regulaminem
             </Link>{' '}
@@ -451,7 +451,7 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
             <Link href="/regulamin-pelna-konsultacja" prefetch={false}>
               regulaminem Pełnej konsultacji
             </Link>{' '}
-            i akceptuje warunki.
+            i akceptuję warunki.
           </span>
         </label>
 
@@ -465,7 +465,7 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
           />
           <span>
             Wyrażam zgodę na rozpoczęcie świadczenia usługi przed upływem 14 dni i przyjmuję do wiadomości, że po
-            wykonaniu konsultacji trace prawo odstapienia od umowy.
+            wykonaniu konsultacji tracę prawo odstąpienia od umowy.
           </span>
         </label>
       </fieldset>

@@ -69,14 +69,14 @@ export default function QuizPage() {
           <NotatnikSectionHead index="I." kicker="Zasada" title="Najpierw najprostszy sensowny krok." />
           <p className="notatnik-service-description">
             W realnych sytuacjach zachowania lacza się że zdrowiem, źrodowiskiem, relacjami i rytmem dnia.
-            Quiz ma skrocic wybór ścieżki: materiał albo PDF, jeśli to wystarczy, a rozmowa wtedy, gdy temat wymaga dopytania.
+            Quiz ma skrócić wybór ścieżki: materiał albo PDF, jeśli to wystarczy, a rozmowa wtedy, gdy temat wymaga dopytania.
           </p>
           <div className="hero-actions top-gap-small">
             <Link href="/niezbednik" prefetch={false} className="button button-ghost">
-              Przejdz do Niezbędnika
+              Przejdź do Niezbędnika
             </Link>
             <Link href={bookingHrefs.kwadrans} prefetch={false} className="button button-ghost">
-              Umow Kwadrans
+              Umów Kwadrans
             </Link>
           </div>
         </section>

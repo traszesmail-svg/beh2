@@ -68,7 +68,7 @@ export default async function FormPage({
   const slotsHref = buildSlotHref(problem, serviceQuery, qaBooking, species)
   const isCat = species === 'kot'
   const publicContact = getPublicContactDetails()
-  const petImage = isCat ? '/images/homepage/home-bg-cat-1to1.png' : '/images/homepage/home-bg-dog-1to1.png'
+  const petImage = isCat ? '/images/homepage/home-bg-cat-1to1.webp' : '/images/homepage/home-bg-dog-1to1.webp'
   const petNoun = isCat ? 'kotem' : 'psem'
   const heroImageAlt = isCat
     ? 'Kot siedzący w spokojnym domowym świetle'

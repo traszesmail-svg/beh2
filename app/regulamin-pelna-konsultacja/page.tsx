@@ -12,7 +12,7 @@ export const metadata: Metadata = buildLegalMetadata(
 
 const summaryItems: LegalSummaryItem[] = [
   {
-    label: 'Produkt objety dokumentem',
+    label: 'Produkt objęty dokumentem',
     value: 'Pełna konsultacja behawioralna online: 470 zł, diagnoza i 7 dni konsultacji tekstowych przez WhatsApp.',
   },
   {
@@ -23,7 +23,7 @@ const summaryItems: LegalSummaryItem[] = [
 
 const sections: LegalSection[] = [
   {
-    title: '1. Postanowienia ogolne',
+    title: '1. Postanowienia ogólne',
     body: (
       <>
         <p>
@@ -33,7 +33,7 @@ const sections: LegalSection[] = [
         <p>
           Usługodawca: Krzysztof Regulski, e-mail: kontakt@regulskibehawiorysta.pl.
         </p>
-        <p>Konsultacja jest usługa cyfrowa swiadczona przez internet. Nie ma charakteru porady weterynaryjnej ani diagnozy medycznej.</p>
+        <p>Konsultacja jest usługą cyfrową świadczoną przez internet. Nie ma charakteru porady weterynaryjnej ani diagnozy medycznej.</p>
       </>
     ),
   },
@@ -45,13 +45,13 @@ const sections: LegalSection[] = [
           <li>Konsultacja odbywa się online w formie rozmowy audio lub audio/video.</li>
           <li>W ramach konsultacji usługodawca analizuje opisaną sytuację psa lub kota, porządkuje priorytety i przekazuje diagnozę behawioralną sytuacji.</li>
           <li>Po konsultacji klient otrzymuje diagnozę behawioralną sytuacji i indywidualny plan poprawy.</li>
-          <li>Przez 7 dni od konsultacji klient może przez WhatsApp zadawac pytania, wysyłac wiadomości tekstowe i filmy oraz konsultowac wdrazanie planu.</li>
+          <li>Przez 7 dni od konsultacji klient może przez WhatsApp zadawać pytania, wysyłać wiadomości tekstowe i filmy oraz konsultować wdrażanie planu.</li>
           <li>Jeśli po 7 dniach brak postępu albo nie ma poczucia, że to skuteczna droga do rozwiązania, usługodawca może wskazać zasadność wizyty domowej i terapii ustalanej indywidualnie.</li>
-          <li>Konsultacja nie obejmuje diagnostyki weterynaryjnej, zalece farmakologicznych ani interwencji w stanach naglych.</li>
+          <li>Konsultacja nie obejmuje diagnostyki weterynaryjnej, zaleceń farmakologicznych ani interwencji w stanach nagłych.</li>
         </ul>
         <p>
           Jeżeli opisana sytuacja wymaga interwencji weterynarza lub innego specjalisty, usługodawca informuje o tym
-          klienta i może odmowrócić dalszej realizacji konsultacji, zwracajac 100% wpłaty.
+          klienta i może odmówić dalszej realizacji konsultacji, zwracając 100% wpłaty.
         </p>
       </>
     ),
@@ -63,8 +63,8 @@ const sections: LegalSection[] = [
         <p>Cena konsultacji: 470 zł brutto.</p>
         <p>Metody płatności: {PUBLIC_OFFER_PAYMENT_METHODS}. Dane do wpłaty klient otrzymuje emailem po zaakceptowaniu wstępnego terminu.</p>
         <p>Płatność przyjmowana jest w godzinach 9:00-21:00, poza dniami ustawowo wolnymi od pracy.</p>
-        <p>Potwierdzenie wplyniecia płatności i ostateczne potwierdzenie rezerwacji nastepuje do 15 minut od zaksiogowania wpłaty w oknie obsługi.</p>
-        <p>Rezerwacja bez dokonanej płatności nie jest wiazaca. Termin wraca do puli po 24 godzinach od wyslania danych do płatności.</p>
+        <p>Potwierdzenie wpłynięcia płatności i ostateczne potwierdzenie rezerwacji następuje do 15 minut od zaksięgowania wpłaty w oknie obsługi.</p>
+        <p>Rezerwacja bez dokonanej płatności nie jest wiążąca. Termin wraca do puli po 24 godzinach od wysłania danych do płatności.</p>
       </>
     ),
   },
@@ -73,10 +73,10 @@ const sections: LegalSection[] = [
     body: (
       <>
         <p>
-          Konsultacja odbywa się przez Jitsi Meet — nie wymaga instalacji aplikacji ani konta. Wystarczy kliknac link przeslany e-mailem przed rozmowa.
+          Konsultacja odbywa się przez Jitsi Meet — nie wymaga instalacji aplikacji ani konta. Wystarczy kliknąć link przesłany e-mailem przed rozmową.
         </p>
         <p>
-          Przy formacie 15 i 30 minut potrzebne jest tylko audio (mikrofon i głośnik albo sluchawki). Przy Pełnej konsultacji kamera może pomoc, ale nie jest obowiązkowa.
+          Przy formacie 15 i 30 minut potrzebne jest tylko audio (mikrofon i głośnik albo słuchawki). Przy Pełnej konsultacji kamera może pomóc, ale nie jest obowiązkowa.
         </p>
         <p>Wymagany jest dostęp do internetu, aktualna przeglądarka (Chrome, Firefox, Safari, Edge) oraz aktywny adres e-mail.</p>
       </>
@@ -86,11 +86,11 @@ const sections: LegalSection[] = [
     title: '5. Rezerwacja terminu',
     body: (
       <>
-          <p>Klient inicjuje rezerwację przez formularz na stronie /book, wskazujac preferowane terminy oraz opis sytuacji.</p>
+          <p>Klient inicjuje rezerwację przez formularz na stronie /book, wskazując preferowane terminy oraz opis sytuacji.</p>
           <p>Usługodawca odpowiada w ciągu kilku godzin, potwierdza jeden z zaproponowanych terminów albo proponuje inny, wraz z dalszym krokiem płatności.</p>
-          <p>Konsultacja jest zarezerwowana dopiero po potwierdzeniu wpłaty przez uslugodawce.</p>
-          <p>Na 24 godziny przed konsultacja klient otrzymuje e-mail z linkiem do rozmowy i lista materiałów do przygotowania, jeżeli są potrzebne.</p>
-          <p>Po zakonczeniu konsultacji dalszy 7-dniowy kontakt tekstowy odbywa się przez WhatsApp, chyba że strony ustala inny kanal pisemny.</p>
+          <p>Konsultacja jest zarezerwowana dopiero po potwierdzeniu wpłaty przez usługodawcę.</p>
+          <p>Na 24 godziny przed konsultacją klient otrzymuje e-mail z linkiem do rozmowy i listą materiałów do przygotowania, jeżeli są potrzebne.</p>
+          <p>Po zakończeniu konsultacji dalszy 7-dniowy kontakt tekstowy odbywa się przez WhatsApp, chyba że strony ustalą inny kanał pisemny.</p>
         </>
       ),
   },
@@ -98,14 +98,14 @@ const sections: LegalSection[] = [
     title: '6. Zmiana terminu i anulacja',
     body: (
       <>
-        <p>Do 48 godzin przed konsultacja klient może bezpłatnie zmienic termin albo zrezygnowac i otrzymac zwrot 100% wpłaty.</p>
+        <p>Do 48 godzin przed konsultacją klient może bezpłatnie zmienić termin albo zrezygnować i otrzymać zwrot 100% wpłaty.</p>
         <p>Pomiędzy 48 a 24 godzinami przed terminem możliwa jest bezpłatna zmiana terminu albo zwrot 50% wpłaty.</p>
-        <p>Krocej niz 24 godziny przed terminem wpłata nie podlega zwrotowi, chyba że przyczyna jest sila wyzsza lub niedostępnosc uslugodawcy.</p>
+        <p>Krócej niż 24 godziny przed terminem wpłata nie podlega zwrotowi, chyba że przyczyną jest siła wyższa lub niedostępność usługodawcy.</p>
       </>
     ),
   },
   {
-    title: '7. No-show i odwolanie przez uslugodawce',
+    title: '7. No-show i odwołanie przez usługodawcę',
     body: (
       <>
         <p>Jeśli klient nie dołączy do rozmowy w ciągu 15 minut od planowanego początku i nie skontaktuje się z usługodawcą, konsultacja uznawana jest za zrealizowaną bez prawa do zwrotu.</p>
@@ -145,12 +145,12 @@ const sections: LegalSection[] = [
     ),
   },
   {
-    title: '11. Postanowienia koncowe',
+    title: '11. Postanowienia końcowe',
     body: (
       <>
-        <p>W sprawach nieuregulowanych regulaminem zastosowanie mają przepisy prawa polskiego, w szczegolnosci Kodeksu cywilnego i ustawy o prawach konsumenta.</p>
-        <p>Uslugodawca zastrzega prawo do zmiany regulaminu. Rezerwacje opłacone przed zmiana regulaminu są realizowane na zasadach obowiazujacych w momencie rezerwacji.</p>
-        <p>Regulamin wchodzi w zycie z dniem opublikowania na stronie /regulamin-pełna-konsultacja.</p>
+        <p>W sprawach nieuregulowanych regulaminem zastosowanie mają przepisy prawa polskiego, w szczególności Kodeksu cywilnego i ustawy o prawach konsumenta.</p>
+        <p>Usługodawca zastrzega prawo do zmiany regulaminu. Rezerwacje opłacone przed zmianą regulaminu są realizowane na zasadach obowiązujących w momencie rezerwacji.</p>
+        <p>Regulamin wchodzi w życie z dniem opublikowania na stronie /regulamin-pelna-konsultacja.</p>
       </>
     ),
   },

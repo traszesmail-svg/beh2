@@ -95,7 +95,7 @@ const reviews: OpinionReview[] = [
     service: 'Konsultacje online',
     text:
       'Dzięki spotkaniom z panem Krzysztofem nauczyłam się, jak wspierać mojego kota w trudnych sytuacjach. Spokój w domu wrócił, a nasza relacja jest lepsza niż kiedykolwiek.',
-    avatar: '/images/homepage/home-bg-cat-1to1.png',
+    avatar: '/images/homepage/home-bg-cat-1to1.webp',
     categories: ['Kot', 'Konsultacje online'],
   },
   {
@@ -223,7 +223,7 @@ function HeroVisual() {
     <div className="opinions-showcase-hero-visual" aria-hidden="true">
       <div className="opinions-showcase-hero-media opinions-showcase-hero-dog">
         <Image
-          src="/images/homepage/home-bg-dog-1to1.png"
+          src="/images/homepage/home-bg-dog-1to1.webp"
           alt=""
           fill
           priority
@@ -232,7 +232,7 @@ function HeroVisual() {
       </div>
       <div className="opinions-showcase-hero-media opinions-showcase-hero-cat">
         <Image
-          src="/images/homepage/home-bg-cat-1to1.png"
+          src="/images/homepage/home-bg-cat-1to1.webp"
           alt=""
           fill
           priority
@@ -332,7 +332,7 @@ export default function OpinionsPage() {
             </div>
           </div>
           <div className="opinions-story-photo" aria-hidden="true">
-            <Image src="/images/homepage/home-bg-cat-1to1.png" alt="" fill sizes="(max-width: 860px) 90vw, 390px" />
+            <Image src="/images/homepage/home-bg-cat-1to1.webp" alt="" fill sizes="(max-width: 860px) 90vw, 390px" />
           </div>
         </section>
 

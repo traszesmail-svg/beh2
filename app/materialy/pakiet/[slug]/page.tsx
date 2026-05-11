@@ -81,7 +81,7 @@ export default function MaterialyBundlePage({ params }: { params: Params }) {
 
         <div className="summary-card tree-backed-card">
           <div className="section-eyebrow">{guides.length} przewodniki w pakiecie</div>
-          <h3>Tansze niz osobno</h3>
+          <h3>Tańsze niż osobno</h3>
           <p>
             {savings > 0
               ? `Suma pojedynczych cen to ${priceAmount + savings} zł. Pakiet kosztuje ${priceAmount} zł — oszczędzasz ${savings} zł.`

@@ -58,13 +58,13 @@ export function CaseStudyFull({ caseStudy, bookingHref }: CaseStudyFullProps) {
 
           <div className="notatnik-case-detail-section">
             <div className="notatnik-mono">{caseStudy.firstStepLabel}</div>
-            <h2>Co trzeba bylo nazwać najpierw</h2>
+            <h2>Co trzeba było nazwać najpierw</h2>
             <p>{caseStudy.firstStepText}</p>
           </div>
 
           <div className="notatnik-case-detail-section">
             <div className="notatnik-mono">{caseStudy.nextStepLabel}</div>
-            <h2>Jak wygladal dalszy kierunek</h2>
+            <h2>Jak wyglądał dalszy kierunek</h2>
             <p>{caseStudy.nextStepText}</p>
           </div>
 
@@ -73,12 +73,12 @@ export function CaseStudyFull({ caseStudy, bookingHref }: CaseStudyFullProps) {
             <h2>To nie jest obietnica identycznego wyniku</h2>
             <p>
               To anonimowa sytuacja startowa, która pokazuje sposób porządkowania problemu. Tempo i zakres pracy zależą od zdrowia, historii,
-              źrodowiska i tego, co da się utrzymac w domu.
+              środowiska i tego, co da się utrzymać w domu.
             </p>
           </div>
         </div>
 
-        <aside className="notatnik-case-detail-side" aria-label="Najwazniejsze informacje">
+        <aside className="notatnik-case-detail-side" aria-label="Najważniejsze informacje">
           <div className="notatnik-case-side-card">
             <div className="notatnik-mono">Zakres</div>
             <div className="notatnik-case-pills">
@@ -89,7 +89,7 @@ export function CaseStudyFull({ caseStudy, bookingHref }: CaseStudyFullProps) {
           </div>
 
           <div className="notatnik-case-side-card">
-            <div className="notatnik-mono">Zrodlo</div>
+            <div className="notatnik-mono">Źródło</div>
             <p>{caseStudy.proof.sourceContext}.</p>
           </div>
 

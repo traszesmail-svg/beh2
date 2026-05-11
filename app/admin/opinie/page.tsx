@@ -110,7 +110,7 @@ export default async function AdminOpiniePage() {
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
             <thead>
               <tr style={{ borderBottom: '1px solid #e9dfcf' }}>
-                <th style={thStyle}>Imie</th>
+                <th style={thStyle}>Imię</th>
                 <th style={thStyle}>Kategoria</th>
                 <th style={thStyle}>Status</th>
                 <th style={thStyle}>Data</th>

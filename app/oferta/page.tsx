@@ -41,7 +41,7 @@ export default async function OfferPage() {
 
   return (
     <NotatnikPageShell
-      tag="Oferta / start i porownanie"
+      tag="Oferta / start i porównanie"
       navItems={PUBLIC_SITE_NAV_ITEMS}
       ctaHref={quickStartHref}
       ctaLabel={FUNNEL_CTA_LABELS.primary}

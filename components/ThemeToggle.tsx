@@ -62,7 +62,7 @@ export function ThemeToggle() {
       type="button"
       className="notatnik-theme-toggle"
       onClick={handleToggle}
-      aria-label={isDark ? 'Przelacz na jasny motyw' : 'Przelacz na ciemny motyw'}
+      aria-label={isDark ? 'Przełącz na jasny motyw' : 'Przełącz na ciemny motyw'}
       aria-pressed={isDark}
       title={isDark ? 'Jasny motyw' : 'Ciemny motyw'}
     >

@@ -131,7 +131,7 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
         'Trzy główne usługi i jedna logika wyboru.',
         'Aktywna oferta',
         'Jedna zasada wyboru przed rezerwacja.',
-        '15-minutowa konsultacja behawioralna to najprostszy start. Dwa kwadranse porzadkuja temat szerzej, a Pełna konsultacja daje diagnozę i wsparcie wdrożenia.',
+        '15-minutowa konsultacja behawioralna to najprostszy start. Dwa kwadranse porządkują temat szerzej, a Pełna konsultacja daje diagnozę i wsparcie wdrożenia.',
       ],
       requireBuildMarker: true,
     },
@@ -164,7 +164,7 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
     },
     {
       path: '/polityka-prywatnosci',
-      required: ['Polityka prywatnosci', 'Kontakt w sprawach danych osobowych'],
+      required: ['Polityka prywatności', 'Kontakt w sprawach danych osobowych'],
       requireBuildMarker: true,
     },
   ]

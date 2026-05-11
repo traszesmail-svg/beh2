@@ -43,7 +43,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     helper: 'Wybierz najważniejszy wątek. Jeśli jest ich kilka, zaznacz wariant złożony.',
     options: [
       { id: 'single_behavior', label: 'Jedno zachowanie', helper: 'Np. szczekanie w jednym kontekście, kuweta, ciągnięcie, nocne miauczenie.' },
-      { id: 'routine_stress', label: 'Stres w codziennej rutynie', helper: 'Problem wraca w domu, na spacerze, przy gosciach albo zmianach.' },
+      { id: 'routine_stress', label: 'Stres w codziennej rutynie', helper: 'Problem wraca w domu, na spacerze, przy gościach albo zmianach.' },
       { id: 'relationship', label: 'Relacje i konflikt', helper: 'Dotyczy ludzi, drugiego zwierzęcia, zasobów albo kontaktu.' },
       { id: 'many_threads', label: 'Kilka wątków naraz', helper: 'Trudno wskazać jeden problem, bo rzeczy się łączą.' },
     ],
@@ -51,7 +51,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
   {
     id: 'safety',
     title: 'Czy pojawia się ryzyko bezpieczeństwa?',
-    helper: 'Tu nie chodzi o straszenie, tylko o dobranie formatu bez skracania waznej analizy.',
+    helper: 'Tu nie chodzi o straszenie, tylko o dobranie formatu bez skracania ważnej analizy.',
     options: [
       { id: 'none', label: 'Nie widzę takiego ryzyka', helper: 'Problem jest trudny, ale bez ataków, pogryzień albo paniki.' },
       { id: 'manageable', label: 'Są silne reakcje, ale do opanowania', helper: 'Np. szczekanie, ucieczka, warczenie, napięcie przy dystansie.' },
@@ -70,12 +70,12 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
   },
   {
     id: 'duration',
-    title: 'Jak dlugo to trwa?',
-    helper: 'Czas trwania pomaga dobrac zakres, nie diagnozę.',
+    title: 'Jak długo to trwa?',
+    helper: 'Czas trwania pomaga dobrać zakres, nie diagnozę.',
     options: [
       { id: 'fresh', label: 'Od niedawna', helper: 'Dni albo kilka tygodni.' },
       { id: 'returning', label: 'Wraca regularnie', helper: 'Są lepsze i gorsze okresy.' },
-      { id: 'long', label: 'Dluzej niz kilka miesiecy', helper: 'Problem utrwalil się w codziennosci.' },
+      { id: 'long', label: 'Dłużej niż kilka miesięcy', helper: 'Problem utrwalił się w codzienności.' },
     ],
   },
   {
@@ -85,23 +85,23 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     options: [
       { id: 'rare', label: 'Sporadycznie', helper: 'Raz na jakiś czas albo w bardzo konkretnych sytuacjach.' },
       { id: 'weekly', label: 'Kilka razy w tygodniu', helper: 'Wraca regularnie, ale nie dominuje całego dnia.' },
-      { id: 'daily', label: 'Codziennie lub prawie codziennie', helper: 'Wplywa na rytm domu, spacery, sen albo relacje.' },
+      { id: 'daily', label: 'Codziennie lub prawie codziennie', helper: 'Wpływa na rytm domu, spacery, sen albo relacje.' },
     ],
   },
   {
     id: 'predictability',
-    title: 'Czy umiesz przewidziec, kiedy to się wydarzy?',
-    helper: 'Im mniej przewidywalny obraz, tym więcej trzeba dopytac.',
+    title: 'Czy umiesz przewidzieć, kiedy to się wydarzy?',
+    helper: 'Im mniej przewidywalny obraz, tym więcej trzeba dopytać.',
     options: [
       { id: 'clear', label: 'Tak, wyzwalacz jest jasny', helper: 'Wiem, kiedy zaczyna się problem i co go uruchamia.' },
       { id: 'partial', label: 'Częściowo', helper: 'Widzę pewne schematy, ale nie wszystkie sytuacje pasują.' },
-      { id: 'unclear', label: 'Nie, to wygląda chaotycznie', helper: 'Problem pojawia się nagle albo trudno polaczyc fakty.' },
+      { id: 'unclear', label: 'Nie, to wygląda chaotycznie', helper: 'Problem pojawia się nagle albo trudno połączyć fakty.' },
     ],
   },
   {
     id: 'resources',
     title: 'Czy w tle są zasoby, rutyna albo środowisko?',
-    helper: 'Dotyczy przestrzeni, spacerow, kuwety, karmienia, nudy, zmian w domu i relacji.',
+    helper: 'Dotyczy przestrzeni, spacerów, kuwety, karmienia, nudy, zmian w domu i relacji.',
     options: [
       { id: 'simple', label: 'Raczej jeden prosty element', helper: 'Np. miejsce kuwety, smycz, jedna pora dnia, jeden bodziec.' },
       { id: 'several', label: 'Kilka elementów naraz', helper: 'Rutyna, przestrzeń, reakcje ludzi i emocje zwierzęcia się łączą.' },
@@ -121,11 +121,11 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
   {
     id: 'goal',
     title: 'Jaki efekt byłby teraz najbardziej pomocny?',
-    helper: 'Dzięki temu wynik nie pcha od razu w za duzy format.',
+    helper: 'Dzięki temu wynik nie pcha od razu w za duży format.',
     options: [
       { id: 'material', label: 'Najpierw materiał lub PDF', helper: 'Chcesz spróbować prostego, uporządkowanego kroku samodzielnie.' },
       { id: 'priority', label: 'Ustalić pierwszy priorytet w rozmowie', helper: 'Chcesz szybko wiedzieć, co robić jako pierwsze.' },
-      { id: 'plan', label: 'Ulozyc plan na kilka krokow', helper: 'Potrzebujesz więcej kontekstu i konkretnego kierunku.' },
+      { id: 'plan', label: 'Ułożyć plan na kilka kroków', helper: 'Potrzebujesz więcej kontekstu i konkretnego kierunku.' },
       { id: 'diagnosis', label: 'Pełniej przeanalizować sytuację', helper: 'Sprawa jest złożona, utrwalona albo dotyczy bezpieczeństwa.' },
     ],
   },
@@ -217,7 +217,7 @@ export function resolveQuizResult(answers: QuizAnswers): QuizResult {
           : 'Przed rozmową przydadzą się nagrania, opis rutyny i krótka lista tego, co było już próbowane.',
       materialTitle,
       materialHref,
-      materialCopy: 'Materiały mogą pomoc przygotowac dane do konsultacji, ale nie powinny zastapic analizy przy czerwonych flagach.',
+        materialCopy: 'Materiały mogą pomóc przygotować dane do konsultacji, ale nie powinny zastąpić analizy przy czerwonych flagach.',
     }
   }
 
@@ -234,7 +234,7 @@ export function resolveQuizResult(answers: QuizAnswers): QuizResult {
     note: 'Jeśli w trakcie rozmowy wyjdzie, że problem jest szerszy, łatwiej będzie zdecydować o dalszym kroku.',
       materialTitle,
       materialHref,
-      materialCopy: 'Zacznij od PDF-u lub checklisty, jeśli chcesz przygotowac obserwacje przed rozmowa.',
+      materialCopy: 'Zacznij od PDF-u lub checklisty, jeśli chcesz przygotować obserwacje przed rozmową.',
     }
   }
 
@@ -245,7 +245,7 @@ export function resolveQuizResult(answers: QuizAnswers): QuizResult {
       'To dobry pierwszy krok, gdy temat jest wąski, świeży albo da się go uporządkować jedną decyzją. Materiał z Niezbędnika może być pierwszym przygotowaniem, a Kwadrans pomaga sprawdzić, czy idziesz w dobrą stronę.',
     reasons: [
       duration === 'fresh' ? 'problem wygląda na świeży' : 'problem nie wymaga od razu pełnej analizy',
-      predictability === 'clear' ? 'wyzwalacz jest dosc czytelny' : 'potrzebujesz przede wszystkim pierwszego priorytetu',
+      predictability === 'clear' ? 'wyzwalacz jest dość czytelny' : 'potrzebujesz przede wszystkim pierwszego priorytetu',
       'można zacząć od materiału lub krótkiej rozmowy audio bez kamery',
     ],
     note: 'Kwadrans nie musi zamykać sprawy. Ma pomóc wybrać najprostszy następny krok.',

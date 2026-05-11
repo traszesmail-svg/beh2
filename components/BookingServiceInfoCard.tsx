@@ -14,7 +14,7 @@ type BookingServiceInfoCardProps = {
 export function BookingServiceInfoCard({
   serviceType,
   quickConsultationPrice,
-  title = 'Informacje o usludze',
+  title = 'Informacje o usłudze',
   stageLabel = 'Ta usługa',
   emphasis,
 }: BookingServiceInfoCardProps) {
@@ -38,7 +38,7 @@ export function BookingServiceInfoCard({
           <strong>{priceLabel}</strong>
         </div>
         <div className="booking-service-info-item">
-          <span className="booking-service-info-key">Usluga</span>
+          <span className="booking-service-info-key">Usługa</span>
           <strong>{serviceLabel}</strong>
         </div>
         <div className="booking-service-info-item">
@@ -46,11 +46,11 @@ export function BookingServiceInfoCard({
           <strong>{formatLabel}</strong>
         </div>
         <div className="booking-service-info-item">
-          <span className="booking-service-info-key">Zmiana / odwolanie</span>
+          <span className="booking-service-info-key">Zmiana / odwołanie</span>
           <strong>{cancellationPolicy}</strong>
         </div>
       </div>
-      <div className="booking-stage-sidecard-pills" aria-label="Najwazniejsze informacje">
+      <div className="booking-stage-sidecard-pills" aria-label="Najważniejsze informacje">
         <span className="hero-proof-pill">{service.mode === 'audio' ? COPY_SERVICE_NAMES.primaryShort : service.slotBadge}</span>
         <span className="hero-proof-pill">{service.mode === 'audio' ? 'bez kamery' : getBookingServiceDurationLabel(serviceType)}</span>
       </div>

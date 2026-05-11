@@ -4,7 +4,9 @@ export const REGULSKI_WEB_HERO = {
   home: '/branding/regulski-web/hero/hero-home.webp',
   dogs: '/branding/regulski-web/hero/hero-dogs.webp',
   cats: '/branding/regulski-web/hero/hero-cats.webp',
+  niezbednik: '/branding/regulski-web/hero/hero-niezbednik.webp',
   niezbędnik: '/branding/regulski-web/hero/hero-niezbednik.webp',
+  materialy: '/branding/regulski-web/hero/hero-materialy.webp',
   materiały: '/branding/regulski-web/hero/hero-materialy.webp',
   cennik: '/branding/regulski-web/hero/hero-cennik.webp',
   faq: '/branding/regulski-web/hero/hero-faq.webp',
@@ -17,6 +19,7 @@ export type RegulskiWebHeroVariant = keyof typeof REGULSKI_WEB_HERO
 export const REGULSKI_WEB_TILE = {
   dog: '/branding/regulski-web/tiles/tile-dog.webp',
   cat: '/branding/regulski-web/tiles/tile-cat.webp',
+  niezbednik: '/branding/regulski-web/tiles/tile-niezbednik.webp',
   niezbędnik: '/branding/regulski-web/tiles/tile-niezbednik.webp',
   oferta: '/branding/regulski-web/tiles/tile-oferta.webp',
   oMnie: '/branding/regulski-web/tiles/tile-o-mnie.webp',

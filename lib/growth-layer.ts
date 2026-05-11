@@ -80,7 +80,7 @@ const TOPICAL_CLUSTERS: TopicalCluster[] = [
     blogLinks: [
       {
         href: '/blog/dlaczego-moj-pies-szczeka-na-inne-psy',
-        label: 'Blog: dlaczego moj pies szczeka na inne psy',
+        label: 'Blog: dlaczego mój pies szczeka na inne psy',
         copy: 'Pomaga szybciej nazwać wzorzec spacerowy i zobaczyć, co realnie napędza reakcje psa.',
       },
       {
@@ -106,7 +106,7 @@ const TOPICAL_CLUSTERS: TopicalCluster[] = [
       {
         href: '/blog/pies-wyje-kiedy-zostaje-sam',
         label: 'Blog: pies wyje, kiedy zostaje sam',
-        copy: 'Pomaga odróżnic lęk separacyjny od frustracji, nudy i innych scenariuszy zostawania samemu.',
+        copy: 'Pomaga odróżnić lęk separacyjny od frustracji, nudy i innych scenariuszy zostawania samemu.',
       },
       {
         href: '/blog/jak-nagrac-psa-zostawionego-samemu',
@@ -131,12 +131,12 @@ const TOPICAL_CLUSTERS: TopicalCluster[] = [
       {
         href: '/blog/kot-zalatwia-sie-poza-kuweta',
         label: 'Blog: kot załatwia się poza kuwetą',
-        copy: 'Najszerszy punkt startu przed rozpisaniem zdrowia, kuwety i napiecia środowiskowego.',
+        copy: 'Najszerszy punkt startu przed rozpisaniem zdrowia, kuwety i napięcia środowiskowego.',
       },
       {
         href: '/blog/jak-wybrac-kuwete-i-zwirek-dla-kota',
         label: 'Blog: jak wybrać kuwetę i żwirek',
-        copy: 'Porzadkuje wybór kuwety i zwirku, zanim zaczniesz zmieniać caly dom naraz.',
+        copy: 'Porządkuje wybór kuwety i żwirku, zanim zaczniesz zmieniać cały dom naraz.',
       },
       {
         href: '/blog/stres-kota-a-zachowania-toaletowe',
@@ -177,10 +177,10 @@ export const LOCAL_SEO_PAGES: LocalSeoPage[] = [
   {
     path: '/behawiorysta-online-polska',
     title: 'Behawiorysta psów i kotów online - cała Polska',
-    description: 'Behawiorysta psów i kotów online dla opiekunów z calej Polski. 15 min audio na start, pełna konsultacja przy sprawach szerszych.',
+    description: 'Behawiorysta psów i kotów online dla opiekunów z całej Polski. 15 min audio na start, pełna konsultacja przy sprawach szerszych.',
     h1: 'Behawiorysta psów i kotów online',
     intro: [
-      'Pracuje online z opiekunami psów i kotów z calej Polski.',
+      'Pracuję online z opiekunami psów i kotów z całej Polski.',
       'Nie prowadzę wizyt domowych ani konsultacji stacjonarnych. Pracujemy zdalnie, na podstawie opisu sytuacji, historii problemu i tego, jak wygląda codzienność zwierzęcia.',
       'Ta strona jest głównym punktem wejścia dla usługi. Jeśli temat dotyczy konkretnego problemu psa albo kota, niżej znajdziesz przejście do odpowiedniej kategorii.',
     ],

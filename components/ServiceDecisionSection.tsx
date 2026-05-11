@@ -73,7 +73,7 @@ export function ServiceDecisionSection({
             ))}
           </ul>
           <p className="notatnik-service-note">
-            Po rozmowie możesz przez 7 dni pisać przez WhatsApp, zadawac pytania, wysyłac filmy i konsultowac kazdy krok planu. Jeśli ten etap nie daje realnego kierunku, kolejnym krokiem bywa wizyta domowa i terapia ustalana indywidualnie.
+            Po rozmowie możesz przez 7 dni pisać przez WhatsApp, zadawać pytania, wysyłać filmy i konsultować każdy krok planu. Jeśli ten etap nie daje realnego kierunku, kolejnym krokiem bywa wizyta domowa i terapia ustalana indywidualnie.
           </p>
           <div className="notatnik-service-actions">
             <Link href={consultationHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
@@ -84,7 +84,7 @@ export function ServiceDecisionSection({
       </div>
 
       <p className="notatnik-service-note">
-        Jeśli chcesz najpierw zobaczyć pełny opis szerokiej usługi online dla calej Polski, przejdź do{' '}
+        Jeśli chcesz najpierw zobaczyć pełny opis szerokiej usługi online dla całej Polski, przejdź do{' '}
         <Link href={serviceHref} prefetch={false} className="notatnik-inline-link">
           {serviceLinkLabel}
         </Link>

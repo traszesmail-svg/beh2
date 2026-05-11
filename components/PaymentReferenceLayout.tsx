@@ -113,7 +113,7 @@ function PaymentReferenceHero({
   lead: string
   heroImage?: 'dog' | 'cat'
 }) {
-  const imageSrc = heroImage === 'cat' ? '/images/homepage/home-bg-cat-1to1.png' : '/images/homepage/home-bg-dog-1to1.png'
+  const imageSrc = heroImage === 'cat' ? '/images/homepage/home-bg-cat-1to1.webp' : '/images/homepage/home-bg-dog-1to1.webp'
   const imageAlt =
     heroImage === 'cat'
       ? 'Kot w spokojnym leśnym kadrze jako ilustracja konsultacji behawioralnej'
@@ -257,7 +257,7 @@ function PaymentReferenceQuote() {
       </div>
       <div className="payment-ref-quote-media" aria-hidden="true">
         <Image
-          src="/images/homepage/home-bg-dog-1to1.png"
+          src="/images/homepage/home-bg-dog-1to1.webp"
           alt=""
           fill
           sizes="(max-width: 820px) 0px, 320px"

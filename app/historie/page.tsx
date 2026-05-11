@@ -97,7 +97,7 @@ export default function StoriesPage() {
               </span>
             </Link>
             <Link href={consultationHref} prefetch={false} className="notatnik-btn notatnik-btn-ghost">
-              <span>Umow pełna konsultacje</span>
+              <span>Umów pełną konsultację</span>
             </Link>
           </div>
         </section>

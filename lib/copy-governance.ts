@@ -29,7 +29,7 @@ export const COPY_HELPERS = {
     '15-minutowa konsultacja behawioralna jest nazwą usługi. 15 min audio bez kamery opisuje tylko jej format. Kwadrans na już to ten sam format, ale z priorytetem. Dwa kwadranse dają spokojniejszy start online, a pełna konsultacja behawioralna sprawdza się przy sprawach szerszych, dłuższych albo wielowątkowych.',
   contactResponseWindow: 'Staram się odpowiadać w ciągu 1-2 dni roboczych.',
   toolkitIntro:
-    'Niezbędnik to materiały, do których możesz wróćic przed rozmowa, po rozmowie albo wtedy, gdy chcesz spokojnie uporządkować temat.',
+    'Niezbędnik to materiały, do których możesz wrócić przed rozmową, po rozmowie albo wtedy, gdy chcesz spokojnie uporządkować temat.',
   reviewLead:
     'Jeśli konsultacja była pomocna, możesz zostawrócić krótka opinie. Wystarczy kilka zdan o samej rozmowie.',
   reviewPrivacy:

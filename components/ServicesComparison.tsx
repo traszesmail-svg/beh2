@@ -31,7 +31,7 @@ const SERVICES = [
     duration: '30 min',
     mode: 'audio lub video',
     who: 'gdy temat jest szerszy i chcesz spokojniej uporządkować 2-3 wątki',
-    plan: 'więcej miejsca na kontekst, kolejnosc działan i decyzje co dalej',
+    plan: 'więcej miejsca na kontekst, kolejność działań i decyzję, co dalej',
     materials: 'krótka notatka po rozmowie',
     refund: PUBLIC_OFFER_CANCELLATION_COPY,
     cta: 'Wybierz Dwa kwadranse',
@@ -44,7 +44,7 @@ const SERVICES = [
     duration: 'pełny zakres',
     mode: 'audio lub video',
     who: 'gdy sprawa jest złożona, przewlekła albo obejmuje kilka obszarów naraz',
-    plan: 'diagnoza sytuacji, plan poprawy i ustalenie priorytetow',
+    plan: 'diagnoza sytuacji, plan poprawy i ustalenie priorytetów',
     materials: '7 dni konsultacji tekstowych przez WhatsApp',
     refund: 'Osobny regulamin dla pełnej konsultacji.',
     cta: 'Wybierz Pełną konsultację',
@@ -68,8 +68,8 @@ function getHref(serviceId: (typeof SERVICES)[number]['id'], species?: BookingSp
 
 export function ServicesComparison({ species = null, qaBooking = false, className }: ServicesComparisonProps) {
   return (
-    <section className={className ? `services-comparison ${className}` : 'services-comparison'} aria-label="Porownanie uslug">
-      <div className="services-comparison-desktop" role="table" aria-label="Tabela porownawcza uslug">
+    <section className={className ? `services-comparison ${className}` : 'services-comparison'} aria-label="Porównanie usług">
+      <div className="services-comparison-desktop" role="table" aria-label="Tabela porównawcza usług">
         <div className="services-comparison-grid services-comparison-grid-head" role="rowgroup">
           <div className="services-comparison-cell services-comparison-feature" role="columnheader">
             Cecha

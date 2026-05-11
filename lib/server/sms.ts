@@ -141,7 +141,7 @@ export function buildPaymentConfirmationSmsMessage(
   const withDetails = `Potwierdzenie płatności: ${serviceName}, termin: ${formatBookingDateTimeForSms(
     booking.bookingDate,
     booking.bookingTime,
-  )}. Szczegoly: ${SITE_PRODUCTION_URL}. Dziękuję, Krzysztof Regulski`
+  )}. Szczegóły: ${SITE_PRODUCTION_URL}. Dziękuję, Krzysztof Regulski`
 
   if (withDetails.length <= 160) {
     return withDetails
@@ -397,6 +397,6 @@ export async function sendAdminUrgentReminderSms(
   topic: string,
 ): Promise<PaymentConfirmationSmsResult> {
   const adminPhone = process.env.ADMIN_PHONE?.trim() || null
-  const message = `KWADRANS NA JUZ: ${customerName} (${topic}). Pozostalo 5 minut na odpowiedz. ID: ${requestId.slice(0, 8)}`
+  const message = `KWADRANS NA JUŻ: ${customerName} (${topic}). Pozostało 5 minut na odpowiedź. ID: ${requestId.slice(0, 8)}`
   return sendRawSms(`urgent-reminder-${requestId}`, adminPhone, message, 'urgent-admin-reminder')
 }

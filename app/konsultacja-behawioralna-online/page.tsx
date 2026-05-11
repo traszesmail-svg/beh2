@@ -43,7 +43,7 @@ const consultationSummaryCards = [
     copy: 'To osobny format pracy: rozmowa online, plan poprawy i konsultacje tekstowe przez WhatsApp po rozmowie.',
   },
   {
-    eyebrow: 'Co przygotowac',
+    eyebrow: 'Co przygotować',
     title: 'Kilka konkretow zamiast rozbudowanej dokumentacji',
     copy: 'Wystarczy opis sytuacji, rytm dnia i to, co bylo już sprawdzane. Nagranie pomaga, ale nie jest warunkiem.',
   },
@@ -114,7 +114,7 @@ export default function ConsultationOnlinePage() {
               </span>
             </Link>
             <Link href="/cennik" prefetch={false} className="notatnik-btn notatnik-btn-ghost">
-              <span>Cennik i porownanie</span>
+              <span>Cennik i porównanie</span>
             </Link>
           </div>
           <p className="notatnik-service-description">

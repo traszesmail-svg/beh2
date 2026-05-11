@@ -69,6 +69,9 @@ type NotatnikPageShellProps = {
 
 export type NotatnikSideVisualVariant = 'home' | 'mixed' | 'dog' | 'cat' | 'materials' | 'blog' | 'about' | 'pricing' | 'contact' | 'booking'
 
+const DOG_SIDE_VISUAL = '/images/homepage/home-bg-dog-1to1.webp'
+const CAT_SIDE_VISUAL = '/images/homepage/home-bg-cat-1to1.webp'
+
 function NotatnikButtonArrow() {
   return (
     <span className="notatnik-btn-arrow" aria-hidden="true">
@@ -159,44 +162,44 @@ export function NotatnikTopbar({ navItems, showUtilityLinks = true }: NotatnikTo
 
 const SIDE_VISUALS: Record<NotatnikSideVisualVariant, { left: string; right: string }> = {
   home: {
-    left: '/images/homepage/home-bg-dog-1to1.png',
-    right: '/images/homepage/home-bg-cat-1to1.png',
+    left: DOG_SIDE_VISUAL,
+    right: CAT_SIDE_VISUAL,
   },
   mixed: {
-    left: '/images/homepage/home-bg-dog-1to1.png',
-    right: '/images/homepage/home-bg-cat-1to1.png',
+    left: DOG_SIDE_VISUAL,
+    right: CAT_SIDE_VISUAL,
   },
   dog: {
-    left: '/images/homepage/home-bg-dog-1to1.png',
-    right: '/images/homepage/home-bg-cat-1to1.png',
+    left: DOG_SIDE_VISUAL,
+    right: CAT_SIDE_VISUAL,
   },
   cat: {
-    left: '/images/homepage/home-bg-dog-1to1.png',
-    right: '/images/homepage/home-bg-cat-1to1.png',
+    left: DOG_SIDE_VISUAL,
+    right: CAT_SIDE_VISUAL,
   },
   materials: {
-    left: '/images/homepage/home-bg-dog-1to1.png',
-    right: '/images/homepage/home-bg-cat-1to1.png',
+    left: DOG_SIDE_VISUAL,
+    right: CAT_SIDE_VISUAL,
   },
   blog: {
-    left: '/images/homepage/home-bg-dog-1to1.png',
-    right: '/images/homepage/home-bg-cat-1to1.png',
+    left: DOG_SIDE_VISUAL,
+    right: CAT_SIDE_VISUAL,
   },
   about: {
-    left: '/images/homepage/home-bg-dog-1to1.png',
-    right: '/images/homepage/home-bg-cat-1to1.png',
+    left: DOG_SIDE_VISUAL,
+    right: CAT_SIDE_VISUAL,
   },
   pricing: {
-    left: '/images/homepage/home-bg-dog-1to1.png',
-    right: '/images/homepage/home-bg-cat-1to1.png',
+    left: DOG_SIDE_VISUAL,
+    right: CAT_SIDE_VISUAL,
   },
   contact: {
-    left: '/images/homepage/home-bg-dog-1to1.png',
-    right: '/images/homepage/home-bg-cat-1to1.png',
+    left: DOG_SIDE_VISUAL,
+    right: CAT_SIDE_VISUAL,
   },
   booking: {
-    left: '/images/homepage/home-bg-dog-1to1.png',
-    right: '/images/homepage/home-bg-cat-1to1.png',
+    left: DOG_SIDE_VISUAL,
+    right: CAT_SIDE_VISUAL,
   },
 }
 
@@ -209,28 +212,28 @@ export function NotatnikSideVisuals({ variant = 'mixed' }: { variant?: NotatnikS
         className="notatnik-side-visual notatnik-side-visual-left"
         aria-hidden="true"
       >
-        <Image
+        <span
           className="notatnik-side-visual-image"
-          src={visuals.left}
-          alt=""
           aria-hidden="true"
-          fill
-          priority
-          sizes="(max-width: 980px) 0px, (max-width: 1280px) 210px, 320px"
+          style={{
+            backgroundImage: `url(${visuals.left})`,
+            backgroundPosition: 'right center',
+            backgroundSize: 'cover',
+          }}
         />
       </div>
       <div
         className="notatnik-side-visual notatnik-side-visual-right"
         aria-hidden="true"
       >
-        <Image
+        <span
           className="notatnik-side-visual-image"
-          src={visuals.right}
-          alt=""
           aria-hidden="true"
-          fill
-          priority
-          sizes="(max-width: 980px) 0px, (max-width: 1280px) 220px, 340px"
+          style={{
+            backgroundImage: `url(${visuals.right})`,
+            backgroundPosition: 'left center',
+            backgroundSize: 'cover',
+          }}
         />
       </div>
     </>

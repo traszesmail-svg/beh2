@@ -227,7 +227,7 @@ export default function DogsPage() {
         </section>
 
         <section id="cennik">
-          <NotatnikSectionHead index="III." kicker="Cennik / wybor sciezki" title="Najpierw cena, potem najprostsza sciezka." />
+          <NotatnikSectionHead index="III." kicker="Cennik / wybór ścieżki" title="Najpierw cena, potem najprostsza ścieżka." />
           <div className="top-gap-small">
             <OfferCards />
           </div>
@@ -237,7 +237,7 @@ export default function DogsPage() {
                   Zobacz materiały
             </Link>
             <Link href={serviceLandingHref} prefetch={false} className="notatnik-inline-link">
-              Przejdz do pelnego opisu konsultacji online
+              Przejdź do pełnego opisu konsultacji online
             </Link>
           </div>
         </section>

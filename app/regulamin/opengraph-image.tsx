@@ -7,6 +7,6 @@ export const contentType = 'image/png'
 export default function OpenGraphImage() {
   return renderOgImage({
     title: 'Regulamin',
-    subtitle: 'Zasady rezerwacji, płatności i realizacji uslug na regulskibehawiorysta.pl.',
+    subtitle: 'Zasady rezerwacji, płatności i realizacji usług na regulskibehawiorysta.pl.',
   })
 }

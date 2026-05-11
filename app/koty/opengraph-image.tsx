@@ -7,6 +7,6 @@ export const contentType = 'image/png'
 export default function OpenGraphImage() {
   return renderOgImage({
     title: 'Pomoc behawioralna dla kotów',
-    subtitle: 'Kuweta, stres i relacje między kotami uporzadkowane spokojnie online.',
+    subtitle: 'Kuweta, stres i relacje między kotami uporządkowane spokojnie online.',
   })
 }

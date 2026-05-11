@@ -224,13 +224,13 @@ export default function CatsPage() {
               <div className="cat-ref-animal-options">
                 <Link href="/psy" prefetch={false} className="cat-ref-animal-card">
                   <span className="cat-ref-animal-photo">
-                    <Image src="/images/homepage/home-bg-dog-1to1.png" alt="" fill sizes="92px" />
+                    <Image src="/images/homepage/home-bg-dog-1to1.webp" alt="" fill sizes="92px" />
                   </span>
                   Pies
                 </Link>
                 <span className="cat-ref-animal-card cat-ref-animal-card-active" aria-current="true">
                   <span className="cat-ref-animal-photo">
-                    <Image src="/images/homepage/home-bg-cat-1to1.png" alt="" fill sizes="92px" />
+                    <Image src="/images/homepage/home-bg-cat-1to1.webp" alt="" fill sizes="92px" />
                   </span>
                   Kot
                   <Check aria-hidden="true" />

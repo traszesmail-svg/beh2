@@ -771,8 +771,8 @@ export function ProblemLandingPage({ routePath }: { routePath: string }) {
             <aside className="editorial-hero-visual" aria-label={landing.visualAlt}>
               <HeroIllustration
                 slug={
-                  landing.slug === 'reaktywność-na-smyczy' ? 'psy-reaktywność'
-                  : landing.slug === 'lęk-separacyjny' ? 'psy-separacja'
+                  landing.slug === 'reaktywnosc-na-smyczy' ? 'psy-reaktywnosc'
+                  : landing.slug === 'lek-separacyjny' ? 'psy-separacja'
                   : landing.slug === 'zalatwianie-poza-kuweta' ? 'koty-kuweta'
                   : 'koty-konflikt'
                 }
@@ -829,7 +829,7 @@ export function ProblemLandingPage({ routePath }: { routePath: string }) {
           items={[
             {
               title: 'Najpierw diagnoza, potem technika',
-              copy: 'Najważniejsze jest zrozumienie wyzwalaczy, tła i priorytetu, zanim wejdziesz w kolejne ćwrócićzenia.',
+              copy: 'Najważniejsze jest zrozumienie wyzwalaczy, tła i priorytetu, zanim wejdziesz w kolejne ćwiczenia.',
             },
             {
               title: 'Jeśli online nie wystarczy, powiem to wprost',

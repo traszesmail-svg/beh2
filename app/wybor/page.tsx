@@ -85,7 +85,7 @@ export default function ChoicePage({ searchParams }: { searchParams?: { animal?:
   const initialAnimal = getInitialAnimal(searchParams?.animal)
   const isCat = initialAnimal === 'cat'
   const petLabel = isCat ? 'kotem' : 'psem'
-  const petImage = isCat ? '/images/homepage/home-bg-cat-1to1.png' : '/images/homepage/home-bg-dog-1to1.png'
+  const petImage = isCat ? '/images/homepage/home-bg-cat-1to1.webp' : '/images/homepage/home-bg-dog-1to1.webp'
   const petImageAlt = isCat
     ? 'Kot siedzący w spokojnym naturalnym świetle'
     : 'Pies siedzący w spokojnym naturalnym świetle'

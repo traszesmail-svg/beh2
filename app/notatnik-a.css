@@ -328,6 +328,7 @@ html[data-theme='dark'] .notatnik-page {
   width: 100% !important;
   height: 100% !important;
   max-width: none !important;
+  background-repeat: no-repeat;
   object-fit: cover;
   transform: none;
 }
@@ -5709,13 +5710,13 @@ html[data-theme='dark'] .notatnik-page .materialy-form .consent-line {
   border-radius: 14px;
   background:
     linear-gradient(90deg, rgba(10, 54, 32, 0.98) 0%, rgba(12, 68, 39, 0.94) 58%, rgba(12, 68, 39, 0.42) 100%),
-    url('/images/homepage/home-bg-dog-1to1.png') right center / auto 150% no-repeat;
+    url('/images/homepage/home-bg-dog-1to1.webp') right center / auto 150% no-repeat;
 }
 
 .booking-form-page-cat .notatnik-final-reviews {
   background:
     linear-gradient(90deg, rgba(10, 54, 32, 0.98) 0%, rgba(12, 68, 39, 0.94) 58%, rgba(12, 68, 39, 0.42) 100%),
-    url('/images/homepage/home-bg-cat-1to1.png') right center / auto 150% no-repeat;
+    url('/images/homepage/home-bg-cat-1to1.webp') right center / auto 150% no-repeat;
 }
 
 .booking-form-page .notatnik-final-review-kicker {
@@ -5911,7 +5912,9 @@ html[data-theme='dark'] .notatnik-page .materialy-form .consent-line {
 
   .notatnik-brand {
     min-width: 0;
-    gap: 12px;
+    max-width: min(294px, calc(100vw - 104px));
+    gap: 10px;
+    overflow: hidden;
   }
 
   .notatnik-brand-credential {
@@ -5928,7 +5931,11 @@ html[data-theme='dark'] .notatnik-page .materialy-form .consent-line {
   }
 
   .notatnik-brand-mark {
-    font-size: 29px;
+    max-width: 100%;
+    overflow: hidden;
+    font-size: 24px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .notatnik-nav,
@@ -5946,6 +5953,18 @@ html[data-theme='dark'] .notatnik-page .materialy-form .consent-line {
 
   .notatnik-mobile-menu {
     display: block;
+  }
+
+  .notatnik-brand-tag {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .notatnik-brand-copy {
+    max-width: 100%;
+    overflow: hidden;
   }
 
   .notatnik-brand-tag {
@@ -6964,6 +6983,27 @@ html[data-theme='dark'] .notatnik-page .materialy-form .consent-line {
   .page-wrap.opinions-page .site-footer-grid,
   .page-wrap.opinions-dowodowa-page .site-footer-grid {
     grid-template-columns: 1fr;
+  }
+
+  .page-wrap.marketing-page .editorial-hero-grid,
+  .page-wrap.editorial-home-page .editorial-hero-grid,
+  .page-wrap.premium-home-page .editorial-hero-grid,
+  .page-wrap.money-page .editorial-hero-grid,
+  .page-wrap.authority-page .editorial-hero-grid,
+  .page-wrap.faq-page .editorial-hero-grid,
+  .page-wrap.opinions-page .editorial-hero-grid,
+  .page-wrap.opinions-dowodowa-page .editorial-hero-grid,
+  .page-wrap.marketing-page .editorial-hero-copy,
+  .page-wrap.editorial-home-page .editorial-hero-copy,
+  .page-wrap.premium-home-page .editorial-hero-copy,
+  .page-wrap.money-page .editorial-hero-copy,
+  .page-wrap.authority-page .editorial-hero-copy,
+  .page-wrap.faq-page .editorial-hero-copy,
+  .page-wrap.opinions-page .editorial-hero-copy,
+  .page-wrap.opinions-dowodowa-page .editorial-hero-copy {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
   .page-wrap.marketing-page .header-nav,
@@ -14373,13 +14413,13 @@ a.reference-info-row,
     padding: 34px 24px;
     background:
       linear-gradient(180deg, rgba(10, 54, 32, 0.96) 0%, rgba(12, 68, 39, 0.88) 70%, rgba(12, 68, 39, 0.64) 100%),
-      url('/images/homepage/home-bg-dog-1to1.png') right bottom / auto 88% no-repeat;
+      url('/images/homepage/home-bg-dog-1to1.webp') right bottom / auto 88% no-repeat;
   }
 
   .booking-form-page-cat .notatnik-final-reviews {
     background:
       linear-gradient(180deg, rgba(10, 54, 32, 0.96) 0%, rgba(12, 68, 39, 0.88) 70%, rgba(12, 68, 39, 0.64) 100%),
-      url('/images/homepage/home-bg-cat-1to1.png') right bottom / auto 88% no-repeat;
+      url('/images/homepage/home-bg-cat-1to1.webp') right bottom / auto 88% no-repeat;
   }
 
   .booking-form-page .notatnik-final-review-quote {

@@ -111,7 +111,7 @@ export function UrgentForm() {
     }
 
     if (message.trim().length < 10) {
-      setFeedback('Opisz krótko sytuację (minimum 10 znakow).')
+      setFeedback('Opisz krótko sytuację (minimum 10 znaków).')
       return
     }
 
@@ -168,7 +168,7 @@ export function UrgentForm() {
         {secondsLeft !== null && secondsLeft > 0 && (
           <div className="urgent-countdown">
             <div className="urgent-countdown-label notatnik-mono">Czas do odpowiedzi</div>
-            <div className="urgent-countdown-clock" aria-live="polite" aria-label={`Pozostalo ${formatCountdown(secondsLeft)}`}>
+            <div className="urgent-countdown-clock" aria-live="polite" aria-label={`Pozostało ${formatCountdown(secondsLeft)}`}>
               {formatCountdown(secondsLeft)}
             </div>
             <p className="urgent-countdown-note">Jeśli nic nie dostaniesz po tym czasie, napisz bezpośrednio.</p>
@@ -177,7 +177,7 @@ export function UrgentForm() {
 
         {secondsLeft === 0 && (
           <div className="urgent-countdown urgent-countdown-expired">
-            <p>Czas minal. Jeśli nie dostales odpowiedzi, napisz bezpośrednio przez formularz kontaktu.</p>
+            <p>Czas minął. Jeśli nie dostałeś odpowiedzi, napisz bezpośrednio przez formularz kontaktu.</p>
             <a href="/kontakt#formularz" className="notatnik-inline-link">Formularz kontaktu</a>
           </div>
         )}
@@ -227,7 +227,7 @@ export function UrgentForm() {
       </div>
 
       <div className="form-field">
-        <label htmlFor="urgent-name" className="form-label">Imie</label>
+        <label htmlFor="urgent-name" className="form-label">Imię</label>
         <input
           id="urgent-name"
           type="text"
@@ -297,9 +297,9 @@ export function UrgentForm() {
         <label className="form-checkbox-label">
           <input type="checkbox" checked={consentPolicy} onChange={(event) => setConsentPolicy(event.target.checked)} />
           <span>
-            Zapoznalam/em się z{' '}
-            <a href="/polityka-prywatnosci" target="_blank" className="notatnik-inline-link">polityka prywatnosci</a>
-            {' '}i akceptuje jej warunki.
+            Zapoznałam/em się z{' '}
+            <a href="/polityka-prywatnosci" target="_blank" className="notatnik-inline-link">polityką prywatności</a>
+            {' '}i akceptuję jej warunki.
           </span>
         </label>
       </div>

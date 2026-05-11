@@ -105,7 +105,7 @@ export const reviews: Review[] = [
     problem: 'lęk przed wizytami',
     rating: 5,
     date: '2024-11-04',
-    text: 'Whisky chowała się 2 dni po każdej wizycie znajomych. Krzysztof wytłumaczył mi mechanizm, dał konkretne ćwrócićzenia. Teraz wychodzi po godzinie. Profesjonalizm na najwyższym poziomie.',
+    text: 'Whisky chowała się 2 dni po każdej wizycie znajomych. Krzysztof wytłumaczył mi mechanizm, dał konkretne ćwiczenia. Teraz wychodzi po godzinie. Profesjonalizm na najwyższym poziomie.',
     source: 'email',
     consultationType: 'standardowa',
   },

@@ -30,6 +30,7 @@ export function HeroIllustration({ slug, emojiPlaceholder = '🎨', className = 
             width={400}
             height={400}
             className="w-full h-auto"
+            style={{ width: '100%', height: 'auto' }}
             unoptimized
             onError={() => setFailed(true)}
           />

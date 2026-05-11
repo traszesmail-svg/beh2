@@ -208,7 +208,7 @@ const BLOG_COVER_BY_SLUG: Record<string, BlogPostCover> = {
   },
   'reaktywnosc-na-smyczy-cwiczenie-luznej-smyczy': {
     src: '/blog-covers/blog-reaktywnosc-na-smyczy-cwiczenie-luznej-smyczy-photo.webp',
-    alt: 'Pies na smyczy skupiony na opiekunie podczas spokojnego ćwrócićzenia spacerowego.',
+    alt: 'Pies na smyczy skupiony na opiekunie podczas spokojnego ćwiczenia spacerowego.',
     width: BLOG_COVER_WIDTH,
     height: BLOG_COVER_HEIGHT,
   },
@@ -220,7 +220,7 @@ const BLOG_COVER_BY_SLUG: Record<string, BlogPostCover> = {
   },
   'rutyna-wyjscia-oswajanie-psa-z-samotnoscia': {
     src: '/blog-covers/blog-rutyna-wyjscia-oswajanie-psa-z-samotnoscia-photo.webp',
-    alt: 'Pies obserwujący uchylone drzwi podczas ćwrócićzenia spokojnej rutyny wyjścia.',
+    alt: 'Pies obserwujący uchylone drzwi podczas ćwiczenia spokojnej rutyny wyjścia.',
     width: BLOG_COVER_WIDTH,
     height: BLOG_COVER_HEIGHT,
   },
@@ -384,7 +384,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
       {
         label: 'Szczeniak / młody pies',
         href: '/psy',
-        description: 'Hub tematów psich, jeśli pierwsza noc laczy się z gryzieniem, pobudzeniem albo separacja.',
+        description: 'Hub tematów psich, jeśli pierwsza noc łączy się z gryzieniem, pobudzeniem albo separacją.',
       },
       {
         label: 'PDF: Szczeniak pierwsze 30 dni',
@@ -699,7 +699,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
       {
         label: 'Konsultacja online',
         href: '/konsultacja-behawioralna-online',
-        description: 'Szczegoly dłuższej konsultacji online.',
+        description: 'Szczegóły dłuższej konsultacji online.',
       },
       {
         label: FUNNEL_CTA_LABELS.primary,
@@ -758,7 +758,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
       {
         label: 'Cennik',
         href: '/cennik',
-        description: 'Jeśli po przygotowaniu chcesz od razu porownac dostępne formaty przed rezerwacja.',
+        description: 'Jeśli po przygotowaniu chcesz od razu porównać dostępne formaty przed rezerwacją.',
       },
       SERVICE_LANDING_LINK,
     ],
@@ -795,7 +795,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
       {
         label: 'Pies wyje, kiedy zostaje sam',
         href: '/blog/pies-wyje-kiedy-zostaje-sam',
-        description: 'Najbliższy artykuł, jeśli chcesz najpierw odróżnic lęk separacyjny od innych scenariuszy.',
+        description: 'Najbliższy artykuł, jeśli chcesz najpierw odróżnić lęk separacyjny od innych scenariuszy.',
       },
       SEPARATION_GUIDE_LINK,
       SERVICE_LANDING_LINK,
@@ -852,7 +852,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
       {
         label: 'Kot załatwia się poza kuwetą',
         href: '/blog/kot-zalatwia-sie-poza-kuweta',
-        description: 'Najszerszy wpis startowy, jeśli chcesz zobaczyć cala sekwencje filtrow przed dalsza praca.',
+        description: 'Najszerszy wpis startowy, jeśli chcesz zobaczyć całą sekwencję filtrów przed dalszą pracą.',
       },
       LITTER_GUIDE_LINK,
       SERVICE_LANDING_LINK,
@@ -907,9 +907,9 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
     supportLinks: [
       REACTIVITY_LANDING_LINK,
       {
-        label: 'Luzna smycz z reaktywnym psem',
+        label: 'Luźna smycz z reaktywnym psem',
         href: '/blog/reaktywnosc-na-smyczy-cwiczenie-luznej-smyczy',
-        description: 'Przechodzi z pojedynczej zasady w bardziej uporzadkowana procedure spacerowa.',
+        description: 'Przechodzi z pojedynczej zasady w bardziej uporządkowaną procedurę spacerową.',
       },
       REACTIVITY_GUIDE_LINK,
       SERVICE_LANDING_LINK,
@@ -928,7 +928,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
       {
         label: 'Rutyna wyjścia i oswajanie z samotnością',
         href: '/blog/rutyna-wyjscia-oswajanie-psa-z-samotnoscia',
-        description: 'Dalej porządkuje prace krok po kroku, jeśli chcesz utrzymac plan bez przeskakiwania etapow.',
+        description: 'Dalej porządkuje pracę krok po kroku, jeśli chcesz utrzymać plan bez przeskakiwania etapów.',
       },
       SEPARATION_GUIDE_LINK,
       SERVICE_LANDING_LINK,

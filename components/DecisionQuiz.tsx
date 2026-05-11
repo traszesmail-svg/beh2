@@ -158,10 +158,10 @@ export function DecisionQuiz({ bookingHrefs }: DecisionQuizProps) {
                 })
               }
             >
-              Przejdz do rezerwacji
+              Przejdź do rezerwacji
             </Link>
             <button type="button" className="button button-ghost" onClick={goBack}>
-              Zmien odpowiedzi
+              Zmień odpowiedzi
             </button>
           </div>
         </article>
@@ -213,7 +213,7 @@ export function DecisionQuiz({ bookingHrefs }: DecisionQuizProps) {
 
   return (
     <div className="decision-quiz">
-      <div className="decision-quiz-progress" aria-label="Postep quizu">
+      <div className="decision-quiz-progress" aria-label="Postęp quizu">
         <span>
           {stepIndex + 1}/{QUIZ_QUESTIONS.length}
         </span>

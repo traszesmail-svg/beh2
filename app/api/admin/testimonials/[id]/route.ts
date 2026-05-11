@@ -45,7 +45,7 @@ export async function GET(request: Request, { params }: Params) {
       <style>body{font-family:sans-serif;padding:40px;max-width:500px;margin:0 auto;color:#1f1a17}
       .ok{color:#1f7a1f;font-size:1.2em}a{color:#1f1a17}</style></head>
       <body><p class="ok">Opinia ${label}.</p>
-      <p><a href="/admin/opinie">Przejdz do panelu opinii</a></p></body></html>`,
+      <p><a href="/admin/opinie">Przejdź do panelu opinii</a></p></body></html>`,
       { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' } },
     )
   } catch (error) {

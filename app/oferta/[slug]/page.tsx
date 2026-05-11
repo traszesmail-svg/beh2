@@ -79,7 +79,7 @@ export default async function OfferDetailPage({ params }: OfferDetailPageProps) 
 
   return (
     <NotatnikPageShell
-      tag="Oferta / szczegoly"
+      tag="Oferta / szczegóły"
       navItems={PUBLIC_SITE_NAV_ITEMS}
       ctaHref={offer.primaryHref}
       ctaLabel={offer.primaryCtaLabel}

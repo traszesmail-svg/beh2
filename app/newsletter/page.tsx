@@ -62,7 +62,7 @@ export default function NewsletterPage() {
             </div>
             <p className="editorial-section-lead">
               Bez codziennego pisania i bez obietnic cudow. Dostajesz konkret, kiedy jest nowy tekst,
-              materiał albo temat, który może pomoc uporządkować sytuację w domu.
+              materiał albo temat, który może pomóc uporządkować sytuację w domu.
             </p>
           </div>
 

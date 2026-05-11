@@ -48,9 +48,9 @@ const sections: LegalSection[] = [
     body: (
       <>
         <ul className="premium-bullet-list">
-          <li>15-minutowa konsultacja behawioralna jest krótka konsultacja zdalna prowadzona w formie audio.</li>
+          <li>15-minutowa konsultacja behawioralna jest krótką konsultacją zdalną prowadzoną w formie audio.</li>
           <li>Dwa kwadranse są rozszerzonym formatem audio dla tematów szerszych niż sam Kwadrans.</li>
-          <li>Pełna konsultacja ma osobny regulamin i osobna stronę warunków.</li>
+          <li>Pełna konsultacja ma osobny regulamin i osobną stronę warunków.</li>
         </ul>
         <p>
           Usługi mają charakter konsultacji behawioralnych świadczonych na odległość. W uzasadnionych przypadkach klient
@@ -64,7 +64,7 @@ const sections: LegalSection[] = [
     body: (
       <>
         <p>
-          Do korzystania z serwisu i realizacji usług niezbędne są: urzłdzenie z dostępem do internetu, aktualna
+          Do korzystania z serwisu i realizacji usług niezbędne są: urządzenie z dostępem do internetu, aktualna
           przeglądarka internetowa, aktywny adres e-mail oraz możliwość odebrania połączenia audio albo dołączenia do
           konsultacji online.
         </p>
@@ -112,7 +112,7 @@ const sections: LegalSection[] = [
           albo informacje o kolejnym kroku.
         </p>
         <p>
-          Przed rozmowa klient może dobrowolnie dodac materiały przygotowawcze, w szczególności krótki opis sprawy, linki
+          Przed rozmową klient może dobrowolnie dodać materiały przygotowawcze, w szczególności krótki opis sprawy, linki
           lub nagrania. Materiały te mają charakter pomocniczy.
         </p>
       </>
@@ -141,7 +141,7 @@ const sections: LegalSection[] = [
     ),
   },
   {
-    title: '9. Ograniczenie odpowiedzialności i sila wyzsza',
+    title: '9. Ograniczenie odpowiedzialności i siła wyższa',
     body: (
       <>
         <p>
@@ -195,7 +195,7 @@ export default function TermsPage() {
       sections={sections}
       supportTitle="Kontakt w sprawach regulaminu"
       supportText="W sprawach dotyczących rezerwacji, płatności, zmian terminu, rezygnacji i reklamacji kontakt prowadzony jest przez formularz kontaktowy oraz e-mail."
-      supportNoteTitle="Wniosek o zmianę terminu, rezygnacje lub reklamacje"
+      supportNoteTitle="Wniosek o zmianę terminu, rezygnację lub reklamację"
       supportNoteText="W wiadomości należy podać dane pozwalające zidentyfikować rezerwację oraz krótki opis sprawy. Telefon nie jest publicznym kanałem kontaktu serwisu."
       structuredData={[
         getBreadcrumbJsonLd([

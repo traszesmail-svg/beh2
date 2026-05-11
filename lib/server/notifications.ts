@@ -1037,7 +1037,7 @@ export async function sendPdfOrderAutoReplyEmail(submission: PdfOrderSubmission)
   }
 
   const action = getPdfOrderCustomerCta(submission)
-  const hasPaypalButton = action.label === 'Przejdz do PayPal'
+  const hasPaypalButton = action.label === 'Przejdź do PayPal'
   const subject = `Dostałem zamówienie: ${submission.itemTitle}`
   const html = renderEmailShell(
     `Cześć ${escapeHtml(submission.name)}, dostałem Twoje zamówienie.`,
@@ -1057,7 +1057,7 @@ export async function sendPdfOrderAutoReplyEmail(submission: PdfOrderSubmission)
       <p style="margin-top:0;color:#6b625b;">${
         hasPaypalButton
           ? 'Przycisk prowadzi bezpośrednio do PayPal, żeby ograniczyc widocznosc numeru telefonu.'
-          : 'Jeśli wybierzesz BLIK na telefon, szczegoly dostaniesz mailowo bez publikowania numeru na stronie.'
+          : 'Jeśli wybierzesz BLIK na telefon, szczegóły dostaniesz mailowo bez publikowania numeru na stronie.'
       }</p>
       ${renderContactBlockHtml()}
     `,
@@ -1073,7 +1073,7 @@ export async function sendPdfOrderAutoReplyEmail(submission: PdfOrderSubmission)
     `Produkt: ${submission.itemTitle}`,
     `Cena: ${submission.itemPrice}`,
     'Metody płatności: PayPal albo BLIK na telefon.',
-    `${hasPaypalButton ? 'Przycisk do PayPal' : 'Szczegoly zamówienia'}: ${action.href}`,
+    `${hasPaypalButton ? 'Przycisk do PayPal' : 'Szczegóły zamówienia'}: ${action.href}`,
     'Jeśli chcesz coś doprecyzować, po prostu odpowiedz na tego maila.',
     renderContactBlockText(),
   ].join('\n')
@@ -1192,7 +1192,7 @@ export async function sendBookRequestAutoReplyEmail(submission: BookRequestSubmi
       ${
         reservationHref
           ? renderEmailActionButton({ href: reservationHref, label: 'Zobacz status rezerwacji' })
-          : renderEmailActionButton({ href: faqHref, label: 'Najczesciej zadawane pytania' })
+          : renderEmailActionButton({ href: faqHref, label: 'Najczęściej zadawane pytania' })
       }
       ${renderContactBlockHtml()}
     `,
@@ -1218,7 +1218,7 @@ export async function sendBookRequestAutoReplyEmail(submission: BookRequestSubmi
     '',
     reservationHref
       ? `Zobacz status rezerwacji: ${reservationHref}`
-      : `Najczesciej zadawane pytania: ${faqHref}`,
+      : `Najczęściej zadawane pytania: ${faqHref}`,
     '',
     'Jeśli chcesz coś dopowiedzieć, po prostu odpowiedz na tego maila.',
     renderContactBlockText(),

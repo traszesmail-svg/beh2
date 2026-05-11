@@ -80,7 +80,7 @@ function validatePayload(body: Record<string, unknown>): { payload?: ValidatedBo
   }
 
   if (description.length < 20) {
-    return { error: 'Opis sytuacji powinien miec co najmniej 20 znakow.' }
+    return { error: 'Opis sytuacji powinien mieć co najmniej 20 znaków.' }
   }
 
   if (!consentRodo || !consentRegulamin || !consentEarlyStart) {
