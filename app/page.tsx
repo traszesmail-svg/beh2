@@ -4,7 +4,7 @@ import { EditorialIndexTopbar } from '@/components/EditorialIndexTopbar'
 import { FaqAccordion } from '@/components/FaqAccordion'
 import { HomepageServiceSelector } from '@/components/HomepageServiceSelector'
 import { Reveal } from '@/components/Reveal'
-import { NotatnikFooter, NotatnikSideVisuals } from '@/components/NotatnikA'
+import { NotatnikFooter } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
 import { homepageProcessSteps } from '@/lib/homepage-data'
 import { getBreadcrumbJsonLd, getFaqPageJsonLd, getServiceJsonLd } from '@/lib/schema'
@@ -63,7 +63,6 @@ export default function HomePage() {
   return (
     <main className="notatnik-page homepage-shell">
       <Schema data={structuredData} />
-      <NotatnikSideVisuals variant="home" />
       <div className="notatnik-shell homepage-main">
         <EditorialIndexTopbar />
 
