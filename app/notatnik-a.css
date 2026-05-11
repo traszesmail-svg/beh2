@@ -4577,6 +4577,10 @@ html[data-theme='dark'] .notatnik-subhero-pet-figure {
   margin-top: 2px;
 }
 
+.notatnik-page .materialy-form .consent-line .notatnik-inline-link {
+  margin-inline: 0.18em;
+}
+
 .notatnik-page .materialy-form .form-summary,
 .notatnik-page .materialy-form .materialy-success,
 .notatnik-page .materialy-form .form-error {

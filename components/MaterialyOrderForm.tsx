@@ -195,7 +195,7 @@ export function MaterialyOrderForm({ productKind, productSlug, productTitle, pri
         </p>
       ) : (
         <>
-          <label className="consent-line">
+          <label className="consent-line" aria-label="Wyrażam zgodę na przetwarzanie danych zgodnie z polityką prywatności.">
             <input
               type="checkbox"
               checked={consentProcessing}
@@ -211,7 +211,7 @@ export function MaterialyOrderForm({ productKind, productSlug, productTitle, pri
             </span>
           </label>
 
-          <label className="consent-line">
+          <label className="consent-line" aria-label="Zapoznałem się z polityką prywatności i regulaminem.">
             <input
               type="checkbox"
               checked={consentPolicy}
