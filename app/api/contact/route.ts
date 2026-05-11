@@ -183,7 +183,7 @@ function validatePayload(body: Record<string, unknown>): { payload?: ValidatedCo
     return { error: 'Uzupełnij imię, adres e-mail, gatunek, temat i krótki opis problemu.' }
   }
 
-  if (species !== 'nie-wiem' && !topicOption) {
+  if (species !== 'nie-wiem' && !topicOption && !legacyTopic) {
     return { error: 'Wybierz temat.' }
   }
 
@@ -200,7 +200,7 @@ function validatePayload(body: Record<string, unknown>): { payload?: ValidatedCo
   }
 
   if (isUrgentNowIntent(intent) && species === 'nie-wiem') {
-    return { error: 'Przy prosbie o pilny termin wybierz, czy sprawa dotyczy ps? czy kota.' }
+    return { error: 'Przy prośbie o pilny termin wybierz, czy sprawa dotyczy psa czy kota.' }
   }
 
   return {

@@ -192,13 +192,8 @@ export default function PrivacyPolicyPage() {
       eyebrow="Polityka prywatności"
       title="Polityka prywatności"
       intro="Dokument opisuje zasady przetwarzania danych osobowych w związku z korzystaniem z serwisu, formularza kontaktowego, rezerwacji usług, potwierdzeń, materiałów przygotowawczych oraz formularzy materiałów bezpłatnych i newslettera."
-      contactSubject="Prywatnosc i dane - Regulski Behawiorysta"
       summaryItems={summaryItems}
       sections={sections}
-      supportTitle="Kontakt w sprawach danych osobowych"
-      supportText="W sprawach dotyczących danych osobowych, zakresu przetwarzania lub realizacji praw osoby, której dane dotyczą, kontakt prowadzony jest przez formularz kontaktowy oraz e-mail."
-      supportNoteTitle="Zadanie dotyczące danych"
-      supportNoteText="W wiadomości warto wskazać, czego dotyczy zadanie oraz podać dane pozwalające zidentyfikować zgłoszenie, rezerwację lub formularz."
       structuredData={[
         getBreadcrumbJsonLd([
           { name: 'Strona główna', path: '/' },

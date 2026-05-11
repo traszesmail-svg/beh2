@@ -131,7 +131,7 @@ const PROBLEM_LANDING_CONFIGS: ProblemLandingConfig[] = [
     visualAlt: TOPIC_VISUALS.spacer.alt,
     visualWidth: 1024,
     visualHeight: 1536,
-    toolkitHref: '/bezplatne-materialy/pies-ile-ruchu-potrzebuje',
+    toolkitHref: '/materialy#psy',
     toolkitLabel: 'Bezpłatny materiał: pies i poziom ruchu',
     crossLinks: [
       {
@@ -140,7 +140,7 @@ const PROBLEM_LANDING_CONFIGS: ProblemLandingConfig[] = [
         copy: 'Jeśli obok spacerów widzisz też trudność z rozłąką albo z wyciszeniem po wyjściu opiekuna, sprawdź też ten temat.',
       },
       {
-        href: '/materialy/pies-ile-ruchu-potrzebuje',
+        href: '/materialy#psy',
         label: 'PDF: pies i poziom ruchu',
         copy: 'Jeśli jeden materiał to za mało, zacznij od sprawdzenia rytmu dnia, odpoczynku i przeciążenia.',
       },
@@ -158,7 +158,7 @@ const PROBLEM_LANDING_CONFIGS: ProblemLandingConfig[] = [
     visualAlt: TOPIC_VISUALS.separacja.alt,
     visualWidth: 1024,
     visualHeight: 1536,
-    toolkitHref: '/materialy/pies-sam-w-domu',
+    toolkitHref: '/materialy#psy',
     toolkitLabel: 'PDF: pies zostaje sam',
     crossLinks: [
       {
@@ -185,7 +185,7 @@ const PROBLEM_LANDING_CONFIGS: ProblemLandingConfig[] = [
     visualAlt: TOPIC_VISUALS['kot-kuweta'].alt,
     visualWidth: 1024,
     visualHeight: 1536,
-    toolkitHref: '/bezplatne-materialy/kot-zyje-w-napieciu',
+    toolkitHref: '/materialy#koty',
     toolkitLabel: 'Bezpłatny materiał: kot żyje w napięciu',
     crossLinks: [
       {
@@ -207,7 +207,7 @@ const PROBLEM_LANDING_CONFIGS: ProblemLandingConfig[] = [
     visualAlt: TOPIC_VISUALS['kot-konflikt'].alt,
     visualWidth: 1024,
     visualHeight: 1536,
-    toolkitHref: '/bezplatne-materialy/kot-zyje-w-napieciu',
+    toolkitHref: '/materialy#koty',
     toolkitLabel: 'PDF: kot żyje w napięciu',
     crossLinks: [
       {

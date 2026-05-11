@@ -14,6 +14,25 @@ function createUnauthorizedResponse(message: string, status: number) {
 }
 
 export function middleware(request: NextRequest) {
+  if (request.nextUrl.pathname === '/form') {
+    const hasBookingContext = request.nextUrl.searchParams.has('problem') && request.nextUrl.searchParams.has('slotId')
+
+    if (!hasBookingContext) {
+      const destination = new URL('/book', request.url)
+
+      for (const key of ['service', 'qa', 'species']) {
+        const value = request.nextUrl.searchParams.get(key)
+        if (value) {
+          destination.searchParams.set(key, value)
+        }
+      }
+
+      return NextResponse.redirect(destination, 307)
+    }
+
+    return NextResponse.next()
+  }
+
   if (request.nextUrl.pathname.startsWith('/api/admin/confirm-payment/')) {
     return NextResponse.next()
   }
@@ -32,5 +51,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/__internal/:path*', '/api/admin/:path*', '/api/availability/:path*'],
+  matcher: ['/form', '/admin/:path*', '/__internal/:path*', '/api/admin/:path*', '/api/availability/:path*'],
 }

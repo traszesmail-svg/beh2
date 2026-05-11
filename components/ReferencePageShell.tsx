@@ -74,7 +74,7 @@ export function ReferenceFinalCta({
   )
 }
 
-export function ReferenceContactCard({ title = 'Kontakt bez formularza' }: { title?: string }) {
+export function ReferenceContactCard({ title = 'Kontakt' }: { title?: string }) {
   const contact = getPublicContactDetails()
 
   return (
@@ -132,8 +132,8 @@ export function ReferenceFooter() {
       </Link>
 
       <nav className="reference-footer-nav" aria-label="Nawigacja w stopce">
-        <Link href="/psy" prefetch={false}>Pies</Link>
-        <Link href="/koty" prefetch={false}>Kot</Link>
+        <Link href="/wybor" prefetch={false}>Krótki wybór</Link>
+        <Link href="/cennik" prefetch={false}>Cennik</Link>
         <Link href="/o-mnie" prefetch={false}>O mnie</Link>
         <Link href="/blog" prefetch={false}>Blog</Link>
         <Link href="/kontakt" prefetch={false}>Kontakt</Link>

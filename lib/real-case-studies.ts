@@ -340,7 +340,7 @@ export function getRealCaseProofPills(caseStudy: RealCaseStudy) {
 }
 
 export function getRealCaseStudyPath(caseStudy: RealCaseStudy) {
-  return `/historie/${caseStudy.slug}`
+  return `/opinie#${caseStudy.slug}`
 }
 
 export function getRealCaseStudyBySlug(slug: string) {
@@ -348,7 +348,7 @@ export function getRealCaseStudyBySlug(slug: string) {
 }
 
 export function listRealCaseStudyPaths() {
-  return ['/historie', ...REAL_CASE_STUDIES.map(getRealCaseStudyPath)]
+  return ['/opinie']
 }
 
 export function getRealCaseSpeciesLabel(species: RealCaseStudy['species']) {

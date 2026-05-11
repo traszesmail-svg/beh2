@@ -143,21 +143,6 @@ export default async function AdminLeadBookingsPage() {
                   >
                     Zarządzaj →
                   </Link>
-                  <a
-                    href={`/rezerwacja/${booking.id}?token=${booking.accessToken}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      padding: '8px 16px',
-                      background: 'rgba(245, 241, 234, 1)',
-                      color: 'rgba(31, 26, 23, 0.8)',
-                      borderRadius: '8px',
-                      textDecoration: 'none',
-                      fontSize: '14px',
-                    }}
-                  >
-                    Widok klienta ↗
-                  </a>
                 </div>
               </article>
             ))}

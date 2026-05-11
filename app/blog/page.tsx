@@ -7,9 +7,7 @@ import { Footer } from '@/components/Footer'
 import { EditorialIndexTopbar } from '@/components/EditorialIndexTopbar'
 import { Schema } from '@/components/schema'
 import { BLOG_ROUTE_BASE, getBlogListingMetadata, listBlogPosts, type BlogPost } from '@/lib/blog'
-import { buildBookHref } from '@/lib/booking-routing'
 import { repairCopy } from '@/lib/copy'
-import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { getBreadcrumbJsonLd, getItemListJsonLd } from '@/lib/schema'
 import { getCanonicalBaseUrl } from '@/lib/server/env'
 
@@ -196,8 +194,6 @@ export default function BlogPage({ searchParams }: { searchParams?: BlogSearchPa
   const paginatedPosts = filteredPosts.slice((currentPage - 1) * BLOG_PAGE_SIZE, currentPage * BLOG_PAGE_SIZE)
   const popularPosts = orderedPosts.slice(0, 5)
   const paginationPages = getPaginationPages(currentPage, totalPages)
-  const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min')
-  const urgentHref = buildBookHref(null, 'kwadrans-na-juz')
   const structuredData = [
     getBreadcrumbJsonLd([
       { name: 'Strona główna', path: '/' },
@@ -206,7 +202,7 @@ export default function BlogPage({ searchParams }: { searchParams?: BlogSearchPa
     getItemListJsonLd(
       posts.map((post) => ({
         name: repairCopy(post.h1),
-        url: new URL(post.path, getCanonicalBaseUrl()).toString(),
+        url: new URL(`${BLOG_ROUTE_BASE}#artykuły`, getCanonicalBaseUrl()).toString(),
       })),
       'https://schema.org/ItemListOrderDescending',
     ),
@@ -242,20 +238,31 @@ export default function BlogPage({ searchParams }: { searchParams?: BlogSearchPa
             </div>
           </section>
 
+          <nav className="blog-index-category-strip" aria-label="Kategorie bloga">
+            {categories.map((category) => (
+              <Link
+                key={category.id}
+                href={category.href}
+                prefetch={false}
+                className={category.id === activeCategory?.id ? 'is-active' : undefined}
+                aria-current={category.id === activeCategory?.id ? 'page' : undefined}
+              >
+                <span>{repairCopy(category.label)}</span>
+                <small>{category.count}</small>
+              </Link>
+            ))}
+          </nav>
+
           <section id="artykuły" className="blog-index-layout" aria-label="Artykuły i kategorie">
             <div className="blog-index-grid">
               {paginatedPosts.map((post) => (
                 <article key={post.slug} className="blog-index-card">
-                  <Link href={post.path} prefetch={false} className="blog-index-card-media" aria-label={repairCopy(post.title)}>
+                  <div className="blog-index-card-media" aria-label={repairCopy(post.title)}>
                     <Image src={post.cover.src} alt={post.cover.alt} fill sizes="(max-width: 760px) 92vw, (max-width: 1180px) 42vw, 300px" />
                     <span className={`blog-index-card-badge ${getSpeciesClass(post)}`}>{getSpeciesBadge(post)}</span>
-                  </Link>
+                  </div>
                   <div className="blog-index-card-body">
-                    <h2>
-                      <Link href={post.path} prefetch={false}>
-                        {repairCopy(post.title)}
-                      </Link>
-                    </h2>
+                    <h2>{repairCopy(post.title)}</h2>
                     <p>{repairCopy(post.excerpt)}</p>
                   </div>
                   <div className="blog-index-card-meta">
@@ -267,9 +274,9 @@ export default function BlogPage({ searchParams }: { searchParams?: BlogSearchPa
                       <Clock3 size={14} strokeWidth={1.8} aria-hidden="true" />
                       {post.readingTimeMinutes} min czytania
                     </span>
-                    <Link href={post.path} prefetch={false} aria-label={`Czytaj: ${repairCopy(post.title)}`}>
+                    <span className="blog-index-card-read-state" aria-label={`Artykuł dostępny na liście: ${repairCopy(post.title)}`}>
                       <ArrowRight size={16} strokeWidth={1.9} aria-hidden="true" />
-                    </Link>
+                    </span>
                   </div>
                 </article>
               ))}
@@ -324,11 +331,11 @@ export default function BlogPage({ searchParams }: { searchParams?: BlogSearchPa
                 <ol className="blog-index-popular-list">
                   {popularPosts.map((post, index) => (
                     <li key={post.slug}>
-                      <Link href={post.path} prefetch={false}>
+                      <span className="blog-index-popular-item">
                         <span>{String(index + 1).padStart(2, '0')}</span>
                         <strong>{repairCopy(post.title)}</strong>
                         <ChevronRight size={17} strokeWidth={1.8} aria-hidden="true" />
-                      </Link>
+                      </span>
                     </li>
                   ))}
                 </ol>
@@ -387,26 +394,6 @@ export default function BlogPage({ searchParams }: { searchParams?: BlogSearchPa
             </nav>
           ) : null}
 
-          <section className="blog-index-support">
-            <span className="blog-index-support-icon" aria-hidden="true">
-              <CalendarDays size={34} strokeWidth={1.7} />
-            </span>
-            <div>
-              <h2>Potrzebujesz indywidualnego wsparcia?</h2>
-              <p>Artykuły to dobry start, ale nic nie zastąpi dopasowanej pomocy. Wspólnie znajdziemy najlepsze rozwiązanie dla Was.</p>
-            </div>
-            <div className="blog-index-support-actions">
-              <Link href="/kontakt#formularz" prefetch={false} className="blog-index-button is-primary">
-                Wyślij krótką wiadomość
-              </Link>
-              <Link href={audioHref} prefetch={false} className="blog-index-button is-secondary">
-                {FUNNEL_CTA_LABELS.primary}
-              </Link>
-              <Link href={urgentHref} prefetch={false} className="blog-index-button is-urgent">
-                Szybka pomoc
-              </Link>
-            </div>
-          </section>
         </div>
 
         <Footer variant="full" showReviews={false} />

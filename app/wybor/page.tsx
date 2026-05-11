@@ -1,38 +1,19 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { BadgeCheck, BookOpen, CalendarCheck, Globe2, HeartHandshake, Mail, PawPrint, ShieldCheck, Sparkles } from 'lucide-react'
+import { BookOpen, HeartHandshake, PawPrint, ShieldCheck, Sparkles } from 'lucide-react'
 import { HomepageServiceSelector } from '@/components/HomepageServiceSelector'
 import { NotatnikFooter, NotatnikSideVisuals, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
 import { type HomepageSelectorAnimal } from '@/lib/homepage-data'
 import { getBreadcrumbJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
-import { CAPBT_PROFILE_URL, INSTAGRAM_PROFILE_URL, getPublicContactDetails } from '@/lib/site'
 
 export const metadata: Metadata = buildMarketingMetadata({
   title: 'Krótki wybór pierwszego kroku',
   path: '/wybor',
   description: 'Krótki wybór dla opiekunów psów i kotów: wybierz zwierzę, temat i zakres sprawy.',
 })
-
-const quickInfoCards = [
-  {
-    icon: BadgeCheck,
-    title: 'Dyplomant COAPE',
-    copy: 'Publiczny profil CAPBT / COAPE.',
-  },
-  {
-    icon: BookOpen,
-    title: 'Psy i koty',
-    copy: 'Sprawy behawioralne, start i dalsze kroki.',
-  },
-  {
-    icon: HeartHandshake,
-    title: 'Bez oceniania',
-    copy: 'Praca z sytuacją, nie z poczuciem winy opiekuna.',
-  },
-] as const
 
 const choiceProofItems = [
   { icon: PawPrint, title: 'Indywidualne podejście', copy: 'Dopasowane do potrzeb i możliwości.' },
@@ -90,7 +71,6 @@ export default function ChoicePage({ searchParams }: { searchParams?: { animal?:
     ? 'Kot siedzący w spokojnym naturalnym świetle'
     : 'Pies siedzący w spokojnym naturalnym świetle'
   const reviews = isCat ? choiceReviewSets.cat : choiceReviewSets.dog
-  const publicContact = getPublicContactDetails()
 
   return (
     <main className={`notatnik-page homepage-shell choice-page choice-page-${isCat ? 'cat' : 'dog'}`}>
@@ -154,64 +134,6 @@ export default function ChoicePage({ searchParams }: { searchParams?: { animal?:
           <Link href="/opinie" prefetch={false} className="choice-review-link">
             Zobacz więcej opinii
           </Link>
-        </section>
-
-        <section className="choice-contact-section">
-          <article className="choice-info-card">
-            <h2>Szybkie informacje</h2>
-            <div className="choice-info-list">
-              {quickInfoCards.map((card) => {
-                const Icon = card.icon
-
-                return (
-                  <div key={card.title} className="choice-info-row">
-                    <Icon size={24} strokeWidth={1.7} aria-hidden="true" />
-                    <span>
-                      <strong>{card.title}</strong>
-                      <small>{card.copy}</small>
-                    </span>
-                  </div>
-                )
-              })}
-            </div>
-            <Link href="/konsultacja-behawioralna-online" prefetch={false} className="choice-secondary-link">
-              Jak wygląda pełna konsultacja
-            </Link>
-          </article>
-
-          <article className="choice-info-card">
-            <h2>Kontakt bez formularza</h2>
-            <div className="choice-info-list">
-              <a href={`mailto:${publicContact.email}`} className="choice-info-row">
-                <Mail size={22} strokeWidth={1.7} aria-hidden="true" />
-                <span>
-                  <strong>E-mail</strong>
-                  <small>{publicContact.email}</small>
-                </span>
-              </a>
-              <div className="choice-info-row">
-                <CalendarCheck size={22} strokeWidth={1.7} aria-hidden="true" />
-                <span>
-                  <strong>Odpowiedź</strong>
-                  <small>1-2 dni robocze</small>
-                </span>
-              </div>
-              <a href={INSTAGRAM_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="choice-info-row">
-                <Globe2 size={22} strokeWidth={1.7} aria-hidden="true" />
-                <span>
-                  <strong>Instagram</strong>
-                  <small>@regulskibehawiorysta</small>
-                </span>
-              </a>
-              <a href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="choice-info-row">
-                <Globe2 size={22} strokeWidth={1.7} aria-hidden="true" />
-                <span>
-                  <strong>Profil COAPE</strong>
-                  <small>behawioryscicoape.pl/Regulski</small>
-                </span>
-              </a>
-            </div>
-          </article>
         </section>
 
         <NotatnikFooter showReviews={false} />

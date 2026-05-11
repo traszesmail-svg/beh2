@@ -1,41 +1,82 @@
 'use client'
 
-import { useState } from 'react'
+import Image from 'next/image'
+import { useState, type ChangeEvent, type CSSProperties, type FormEvent } from 'react'
+import { REGULSKI_WEB_LOGO } from '@/lib/regulski-web-assets'
 import { TESTIMONIAL_ISSUE_OPTIONS } from '@/lib/testimonials'
+
+const MAX_PHOTO_SIZE_BYTES = 25 * 1024 * 1024
 
 export default function AddOpinionPage() {
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [photoFile, setPhotoFile] = useState<File | null>(null)
   const [fields, setFields] = useState({
     displayName: '',
     email: '',
     issueCategory: '',
     opinion: '',
-    photoUrl: '',
     consentPublish: false,
     website: '',
   })
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
-    const { name, value, type } = e.target
+  function handleChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
+    const { name, value, type } = event.target
     setFields((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
+      [name]: type === 'checkbox' ? (event.target as HTMLInputElement).checked : value,
     }))
   }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
+  function handlePhotoChange(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0] ?? null
+
+    if (!file) {
+      setPhotoFile(null)
+      return
+    }
+
+    if (!file.type.startsWith('image/')) {
+      setPhotoFile(null)
+      event.target.value = ''
+      setStatus('error')
+      setErrorMessage('Dodaj plik graficzny, np. JPG, PNG albo WEBP.')
+      return
+    }
+
+    if (file.size > MAX_PHOTO_SIZE_BYTES) {
+      setPhotoFile(null)
+      event.target.value = ''
+      setStatus('error')
+      setErrorMessage('Zdjęcie jest za duże. Limit załącznika to 25 MB.')
+      return
+    }
+
+    setStatus('idle')
+    setErrorMessage(null)
+    setPhotoFile(file)
+  }
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
     setStatus('sending')
     setErrorMessage(null)
 
     try {
+      const formData = new FormData()
+      Object.entries(fields).forEach(([key, value]) => {
+        formData.append(key, String(value))
+      })
+
+      if (photoFile) {
+        formData.append('photo', photoFile)
+      }
+
       const response = await fetch('/api/testimonials/submit', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(fields),
+        body: formData,
       })
-      const data = await response.json() as { ok?: boolean; message?: string; error?: string }
+      const data = (await response.json()) as { ok?: boolean; message?: string; error?: string }
 
       if (response.ok && data.ok) {
         setStatus('sent')
@@ -51,26 +92,37 @@ export default function AddOpinionPage() {
 
   if (status === 'sent') {
     return (
-      <main style={{ maxWidth: 560, margin: '60px auto', padding: '0 20px', fontFamily: 'sans-serif', color: '#1f1a17' }}>
+      <main style={pageStyle}>
+        <BrandHeader />
         <h1 style={{ fontSize: '1.5rem' }}>Dzięki za opinię</h1>
-        <p>Opinia trafiła do weryfikacji. Odezwę się po sprawdzeniu - najczęściej w ciągu 1-2 dni roboczych.</p>
+        <p>Opinia trafiła do weryfikacji. Odezwę się po sprawdzeniu, najczęściej w ciągu 1-2 dni roboczych.</p>
       </main>
     )
   }
 
   return (
-    <main style={{ maxWidth: 560, margin: '60px auto', padding: '0 20px', fontFamily: 'sans-serif', color: '#1f1a17' }}>
+    <main style={pageStyle}>
+      <BrandHeader />
       <h1 style={{ fontSize: '1.5rem', marginBottom: 8 }}>Dodaj opinię</h1>
       <p style={{ color: '#6b625b', marginBottom: 32 }}>
         Ta strona jest dostępna tylko dla osób, które przeszły konsultacje. Opinia trafia do weryfikacji przed
-        publikacja.
+        publikacją.
       </p>
 
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-        <input type="text" name="website" value={fields.website} onChange={handleChange} style={{ display: 'none' }} tabIndex={-1} aria-hidden="true" autoComplete="off" />
+        <input
+          type="text"
+          name="website"
+          value={fields.website}
+          onChange={handleChange}
+          style={{ display: 'none' }}
+          tabIndex={-1}
+          aria-hidden="true"
+          autoComplete="off"
+        />
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <label htmlFor="displayName" style={{ fontWeight: 600 }}>Imię lub inicjały do publikacji *</label>
+        <div style={fieldStyle}>
+          <label htmlFor="displayName" style={labelStyle}>Imię lub inicjały do publikacji *</label>
           <input
             id="displayName"
             name="displayName"
@@ -84,8 +136,8 @@ export default function AddOpinionPage() {
           />
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <label htmlFor="email" style={{ fontWeight: 600 }}>Adres e-mail (do kontaktu, nie publikowany) *</label>
+        <div style={fieldStyle}>
+          <label htmlFor="email" style={labelStyle}>Adres e-mail (do kontaktu, nie publikowany) *</label>
           <input
             id="email"
             name="email"
@@ -99,18 +151,25 @@ export default function AddOpinionPage() {
           />
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <label htmlFor="issueCategory" style={{ fontWeight: 600 }}>Czego dotyczyła konsultacja? *</label>
-          <select id="issueCategory" name="issueCategory" value={fields.issueCategory} onChange={handleChange} required style={inputStyle}>
+        <div style={fieldStyle}>
+          <label htmlFor="issueCategory" style={labelStyle}>Czego dotyczyła konsultacja? *</label>
+          <select
+            id="issueCategory"
+            name="issueCategory"
+            value={fields.issueCategory}
+            onChange={handleChange}
+            required
+            style={inputStyle}
+          >
             <option value="">Wybierz temat</option>
-            {TESTIMONIAL_ISSUE_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            {TESTIMONIAL_ISSUE_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>{option.label}</option>
             ))}
           </select>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <label htmlFor="opinion" style={{ fontWeight: 600 }}>Tresc opinii *</label>
+        <div style={fieldStyle}>
+          <label htmlFor="opinion" style={labelStyle}>Treść opinii *</label>
           <textarea
             id="opinion"
             name="opinion"
@@ -122,22 +181,22 @@ export default function AddOpinionPage() {
             placeholder="Co konkretnie pomogło? Co się zmieniło po konsultacji?"
             style={{ ...inputStyle, resize: 'vertical' }}
           />
-          <span style={{ fontSize: 12, color: '#6b625b' }}>{fields.opinion.length}/600 znaków</span>
+          <span style={hintStyle}>{fields.opinion.length}/600 znaków</span>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <label htmlFor="photoUrl" style={{ fontWeight: 600 }}>Link do zdjecia psa / kota (opcjonalnie)</label>
+        <div style={fieldStyle}>
+          <label htmlFor="photo" style={labelStyle}>Zdjęcie psa / kota (opcjonalnie)</label>
           <input
-            id="photoUrl"
-            name="photoUrl"
-            type="url"
-            value={fields.photoUrl}
-            onChange={handleChange}
-            maxLength={500}
-            placeholder="https://..."
+            id="photo"
+            name="photo"
+            type="file"
+            accept="image/*"
+            onChange={handlePhotoChange}
             style={inputStyle}
           />
-          <span style={{ fontSize: 12, color: '#6b625b' }}>Możesz wrzucić zdjęcie na Google Drive, Dropbox itp. i wkleić link.</span>
+          <span style={hintStyle}>
+            Możesz dodać zdjęcie jako załącznik. Limit to 25 MB, zgodnie z limitem pojedynczej wiadomości Gmail.
+          </span>
         </div>
 
         <label style={{ display: 'flex', gap: 10, alignItems: 'flex-start', cursor: 'pointer' }}>
@@ -177,8 +236,8 @@ export default function AddOpinionPage() {
           {status === 'sending' ? 'Wysyłam...' : 'Wyślij opinię'}
         </button>
 
-        <p style={{ fontSize: 12, color: '#6b625b' }}>
-          Pola oznaczone * są wymagane. Opinia trafia do weryfikacji przed publikacją - nie pojawia się automatycznie na
+        <p style={hintStyle}>
+          Pola oznaczone * są wymagane. Opinia trafia do weryfikacji przed publikacją i nie pojawia się automatycznie na
           stronie.
         </p>
       </form>
@@ -186,7 +245,51 @@ export default function AddOpinionPage() {
   )
 }
 
-const inputStyle: React.CSSProperties = {
+function BrandHeader() {
+  return (
+    <a href="/" style={brandStyle} aria-label="Regulski Behawiorysta">
+      <Image src={REGULSKI_WEB_LOGO} alt="" width={58} height={58} priority />
+      <span>
+        <strong style={{ display: 'block', fontSize: 18 }}>Regulski Behawiorysta</strong>
+        <small style={{ color: '#6b625b' }}>opinie po konsultacji</small>
+      </span>
+    </a>
+  )
+}
+
+const pageStyle: CSSProperties = {
+  maxWidth: 560,
+  margin: '60px auto',
+  padding: '0 20px',
+  fontFamily: 'sans-serif',
+  color: '#1f1a17',
+}
+
+const brandStyle: CSSProperties = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: 12,
+  color: '#1f1a17',
+  textDecoration: 'none',
+  marginBottom: 28,
+}
+
+const fieldStyle: CSSProperties = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 6,
+}
+
+const labelStyle: CSSProperties = {
+  fontWeight: 600,
+}
+
+const hintStyle: CSSProperties = {
+  fontSize: 12,
+  color: '#6b625b',
+}
+
+const inputStyle: CSSProperties = {
   padding: '10px 14px',
   borderRadius: 8,
   border: '1px solid #d9cfc3',

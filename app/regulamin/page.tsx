@@ -190,13 +190,8 @@ export default function TermsPage() {
       eyebrow="Regulamin"
       title="Regulamin świadczenia usług"
       intro="Dokument określa zasady korzystania z serwisu, rezerwacji usług, dokonywania płatności, potwierdzeń, zmian terminu oraz trybu składania reklamacji."
-      contactSubject="Pytanie o regulamin - Regulski Behawiorysta"
       summaryItems={summaryItems}
       sections={sections}
-      supportTitle="Kontakt w sprawach regulaminu"
-      supportText="W sprawach dotyczących rezerwacji, płatności, zmian terminu, rezygnacji i reklamacji kontakt prowadzony jest przez formularz kontaktowy oraz e-mail."
-      supportNoteTitle="Wniosek o zmianę terminu, rezygnację lub reklamację"
-      supportNoteText="W wiadomości należy podać dane pozwalające zidentyfikować rezerwację oraz krótki opis sprawy. Telefon nie jest publicznym kanałem kontaktu serwisu."
       structuredData={[
         getBreadcrumbJsonLd([
           { name: 'Strona główna', path: '/' },

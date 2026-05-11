@@ -1,8 +1,7 @@
 import type { Metadata } from 'next'
 import { ReferenceFaq } from '@/components/ReferenceFaq'
-import { ReferenceFinalCta, ReferencePageShell } from '@/components/ReferencePageShell'
+import { ReferencePageShell } from '@/components/ReferencePageShell'
 import { Schema } from '@/components/schema'
-import { buildBookHref } from '@/lib/booking-routing'
 import { referenceFaqItems } from '@/lib/reference-faq'
 import { getBreadcrumbJsonLd, getFaqPageJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
@@ -13,7 +12,7 @@ export const metadata: Metadata = buildMarketingMetadata({
   description: 'FAQ o konsultacjach behawioralnych online, pierwszym kontakcie, płatnościach, psach i kotach.',
 })
 
-const bookHref = buildBookHref(null, 'szybka-konsultacja-15-min')
+const bookHref = '/wybor'
 const contactHref = '/kontakt#formularz'
 
 export default function FaqPage() {
@@ -28,15 +27,7 @@ export default function FaqPage() {
           getFaqPageJsonLd(referenceFaqItems),
         ]}
       />
-      <ReferenceFaq bookHref={bookHref} contactHref={contactHref} />
-      <ReferenceFinalCta
-        title="Gotowy na pierwszy krok?"
-        copy="Wybierz dogodny termin albo napisz kilka zdań - podpowiem Ci najlepszą ścieżkę."
-        primaryHref={bookHref}
-        primaryLabel="Umów pierwszy krok"
-        secondaryHref={contactHref}
-        secondaryLabel="Wyślij krótką wiadomość"
-      />
+      <ReferenceFaq contactHref={contactHref} />
     </ReferencePageShell>
   )
 }

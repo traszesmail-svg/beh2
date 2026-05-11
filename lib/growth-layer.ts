@@ -79,17 +79,17 @@ const TOPICAL_CLUSTERS: TopicalCluster[] = [
     },
     blogLinks: [
       {
-        href: '/blog/dlaczego-moj-pies-szczeka-na-inne-psy',
+        href: '/blog',
         label: 'Blog: dlaczego mój pies szczeka na inne psy',
         copy: 'Pomaga szybciej nazwać wzorzec spacerowy i zobaczyć, co realnie napędza reakcje psa.',
       },
       {
-        href: '/blog/pies-ciagnie-na-smyczy',
+        href: '/blog',
         label: 'Blog: pies ciągnie na smyczy',
         copy: 'Praktyczny wpis o tym, dlaczego pies ciągnie i jak zacząć to zmieniać na spacerze.',
       },
       {
-        href: '/blog/reaktywnosc-na-smyczy-cwiczenie-luznej-smyczy',
+        href: '/blog',
         label: 'Blog: luzna smycz z reaktywnym psem',
         copy: 'Przechodzi z rozumienia problemu do pierwszej praktyki spacerowej bez szarpania.',
       },
@@ -104,17 +104,17 @@ const TOPICAL_CLUSTERS: TopicalCluster[] = [
     },
     blogLinks: [
       {
-        href: '/blog/pies-wyje-kiedy-zostaje-sam',
+        href: '/blog',
         label: 'Blog: pies wyje, kiedy zostaje sam',
         copy: 'Pomaga odróżnić lęk separacyjny od frustracji, nudy i innych scenariuszy zostawania samemu.',
       },
       {
-        href: '/blog/jak-nagrac-psa-zostawionego-samemu',
+        href: '/blog',
         label: 'Blog: jak nagrac psa zostawionego samemu',
         copy: 'Pokazuje, jak zebrać materiał, który realnie skraca droge do dobrej diagnozy.',
       },
       {
-        href: '/blog/rutyna-wyjscia-oswajanie-psa-z-samotnoscia',
+        href: '/blog',
         label: 'Blog: rutyna wyjścia i oswajanie z samotnością',
         copy: 'Rozwija temat pierwszego planu treningowego bez skokow i bez przypadkowego przyspieszania.',
       },
@@ -129,17 +129,17 @@ const TOPICAL_CLUSTERS: TopicalCluster[] = [
     },
     blogLinks: [
       {
-        href: '/blog/kot-zalatwia-sie-poza-kuweta',
+        href: '/blog',
         label: 'Blog: kot załatwia się poza kuwetą',
         copy: 'Najszerszy punkt startu przed rozpisaniem zdrowia, kuwety i napięcia środowiskowego.',
       },
       {
-        href: '/blog/jak-wybrac-kuwete-i-zwirek-dla-kota',
+        href: '/blog',
         label: 'Blog: jak wybrać kuwetę i żwirek',
         copy: 'Porządkuje wybór kuwety i żwirku, zanim zaczniesz zmieniać cały dom naraz.',
       },
       {
-        href: '/blog/stres-kota-a-zachowania-toaletowe',
+        href: '/blog',
         label: 'Blog: stres kota a zachowania toaletowe',
         copy: 'Dopina warstwę środowiskową, kiedy zdrowie i sama kuweta nie tłumaczą już problemu.',
       },
@@ -154,17 +154,17 @@ const TOPICAL_CLUSTERS: TopicalCluster[] = [
     },
     blogLinks: [
       {
-        href: '/blog/jak-wprowadzic-nowego-kota-do-domu',
+        href: '/blog',
         label: 'Blog: jak wprowadzic nowego kota',
         copy: 'Pomaga nie zepsuć relacji już na starcie, zanim napięcie zamieni się w stały konflikt.',
       },
       {
-        href: '/blog/agresja-przekierowana-u-kota',
+        href: '/blog',
         label: 'Blog: agresja przekierowana u kota',
         copy: 'Ważny kontekst, gdy napięcie eksploduje nagle i wydaje się nieadekwatne do sytuacji.',
       },
       {
-        href: '/blog/jak-zapoznac-dwa-koty',
+        href: '/blog',
         label: 'Blog: jak zapoznac dwa koty',
         copy: 'Przechodzi krok po kroku przez spokojny proces zapoznania, zanim koty zaczna mieszkac razem.',
       },

@@ -14,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildHomeMetadata()
 }
 
-const serviceLandingHref = '/behawiorysta-online-polska'
+const serviceLandingHref = '/'
 
 const processIcons = [MessageSquareText, Headphones, CalendarCheck] as const
 

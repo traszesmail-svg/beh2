@@ -21,8 +21,8 @@ export function CaseStudyFull({ caseStudy, bookingHref }: CaseStudyFullProps) {
 
   return (
     <article className="notatnik-case-detail-article">
-      <Link href="/historie" prefetch={false} className="notatnik-inline-link">
-        Wszystkie historie
+      <Link href="/opinie" prefetch={false} className="notatnik-inline-link">
+        Opinie i przykłady
       </Link>
 
       <header className="notatnik-case-detail-hero">

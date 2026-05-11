@@ -162,13 +162,8 @@ export default function FullConsultationTermsPage() {
       eyebrow="Regulamin / pełna konsultacja"
       title="Regulamin Pełnej konsultacji behawioralnej online"
       intro="Dokument opisuje zasady rezerwacji, płatności, zmian terminu, realizacji, 7 dni wsparcia tekstowego i reklamacji dla Pełnej konsultacji online."
-      contactSubject="Pytanie o regulamin Pełnej konsultacji"
       summaryItems={summaryItems}
       sections={sections}
-      supportTitle="Kontakt w sprawach Pełnej konsultacji"
-      supportText="Dokument obejmuje warunki rezerwacji, diagnozy, planu poprawy i 7 dni wsparcia tekstowego po Pełnej konsultacji."
-      supportNoteTitle="Kontakt i obsługa dokumentu"
-      supportNoteText="W sprawach dotyczących regulaminu, reklamacji lub realizacji Pełnej konsultacji kontakt prowadzony jest przez formularz i e-mail."
       structuredData={[
         getBreadcrumbJsonLd([
           { name: 'Strona główna', path: '/' },

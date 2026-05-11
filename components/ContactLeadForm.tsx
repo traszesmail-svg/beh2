@@ -2,23 +2,20 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { trackAnalyticsEvent } from '@/lib/analytics'
-import { getProblemOptionsForSpecies, getPublicProblemOptionById, type FunnelSpecies } from '@/lib/funnel'
+import { type FunnelSpecies } from '@/lib/funnel'
 import { URGENT_NOW_INTENT, isUrgentNowIntent } from '@/lib/urgent-now'
 
 type FormState = 'idle' | 'loading' | 'success' | 'error'
 type Species = FunnelSpecies
-type UnknownSpecies = 'nie-wiem'
-type SelectedSpecies = Species | UnknownSpecies | ''
+type SelectedSpecies = Species | ''
 
 type SubmissionPayload = {
   name: string
   contact: string
   species: SelectedSpecies
-  topicId: string
-  customTopic: string
   message: string
   requestedDate: string
   requestedTime: string
@@ -34,8 +31,6 @@ function createInitialForm(species: SelectedSpecies = ''): SubmissionPayload {
     name: '',
     contact: '',
     species,
-    topicId: '',
-    customTopic: '',
     message: '',
     requestedDate: '',
     requestedTime: '',
@@ -80,8 +75,6 @@ export function ContactLeadForm() {
   const [status, setStatus] = useState<FormState>('idle')
   const [feedback, setFeedback] = useState('')
   const startedRef = useRef(false)
-  const knownSpecies = form.species === 'pies' || form.species === 'kot' ? form.species : null
-  const topicOptions = useMemo(() => (knownSpecies ? getProblemOptionsForSpecies(knownSpecies) : []), [knownSpecies])
   const messageLength = form.message.length
   const isSubmitDisabled = status === 'loading' || !form.consentProcessing || !form.consentPolicy
 
@@ -98,16 +91,9 @@ export function ContactLeadForm() {
       return {
         ...current,
         species: presetSpecies,
-        topicId: '',
-        customTopic: '',
       }
     })
   }, [presetSpecies])
-
-  useEffect(() => {
-    const validTopics = new Set<string>(topicOptions.map((option) => option.id))
-    setForm((current) => (current.topicId && !validTopics.has(current.topicId) ? { ...current, topicId: '' } : current))
-  }, [topicOptions])
 
   function markStarted() {
     if (startedRef.current) {
@@ -133,7 +119,7 @@ export function ContactLeadForm() {
     setForm((current) => ({ ...current, [key]: value }))
   }
 
-  function chooseSpecies(species: Species | UnknownSpecies) {
+  function chooseSpecies(species: Species) {
     markStarted()
 
     if (status === 'success') {
@@ -144,8 +130,6 @@ export function ContactLeadForm() {
     setForm((current) => ({
       ...current,
       species,
-      topicId: current.species === species ? current.topicId : '',
-      customTopic: current.species === species ? current.customTopic : '',
     }))
   }
 
@@ -153,7 +137,6 @@ export function ContactLeadForm() {
     const normalizedName = normalizeShortText(form.name)
     const normalizedContact = normalizeShortText(form.contact)
     const normalizedMessage = normalizeLongText(form.message)
-    const normalizedCustomTopic = normalizeShortText(form.customTopic)
 
     if (!normalizedName) {
       return 'Podaj imię.'
@@ -164,15 +147,7 @@ export function ContactLeadForm() {
     }
 
     if (!form.species) {
-      return 'Wybierz psa, kota albo Nie wiem.'
-    }
-
-    if (form.species === 'nie-wiem') {
-      if (normalizedCustomTopic.length < 3) {
-        return 'Wpisz własny temat.'
-      }
-    } else if (!form.topicId || !getPublicProblemOptionById(form.species, form.topicId)) {
-      return 'Wybierz temat.'
+      return 'Wybierz psa albo kota.'
     }
 
     if (normalizedMessage.length < 20) {
@@ -185,10 +160,6 @@ export function ContactLeadForm() {
 
     if (isUrgentNow && (!form.requestedDate || !form.requestedTime)) {
       return 'Przy Kwadransie na już podaj preferowaną datę i godzinę.'
-    }
-
-    if (isUrgentNow && form.species === 'nie-wiem') {
-      return 'Przy prośbie o pilny termin wybierz, czy sprawa dotyczy psa czy kota.'
     }
 
     if (!form.consentProcessing || !form.consentPolicy) {
@@ -214,7 +185,7 @@ export function ContactLeadForm() {
 
     if (!selectedSpecies) {
       setStatus('error')
-      setFeedback('Wybierz psa, kota albo Nie wiem.')
+      setFeedback('Wybierz psa albo kota.')
       return
     }
 
@@ -222,8 +193,6 @@ export function ContactLeadForm() {
     setFeedback('')
 
     const normalizedMessage = normalizeLongText(form.message)
-    const isUnknownSpecies = selectedSpecies === 'nie-wiem'
-    const normalizedCustomTopic = normalizeShortText(form.customTopic)
 
     try {
       const response = await fetch('/api/contact', {
@@ -236,8 +205,8 @@ export function ContactLeadForm() {
           email: normalizeShortText(form.contact),
           contact: normalizeShortText(form.contact),
           species: selectedSpecies,
-          topicId: isUnknownSpecies ? 'inne' : form.topicId,
-          topic: isUnknownSpecies ? normalizedCustomTopic : undefined,
+          topicId: 'inne',
+          topic: 'Wiadomość z formularza kontaktowego',
           message: normalizedMessage,
           requestedDate: isUrgentNow ? form.requestedDate : null,
           requestedTime: isUrgentNow ? form.requestedTime : null,
@@ -258,7 +227,7 @@ export function ContactLeadForm() {
       trackAnalyticsEvent('contact_form_submitted', {
         source_page: '/kontakt',
         species: selectedSpecies,
-        problem_key: isUnknownSpecies ? 'własny-temat' : form.topicId,
+        problem_key: 'kontakt',
         intent: isUrgentNow ? URGENT_NOW_INTENT : 'contact',
       })
 
@@ -315,52 +284,8 @@ export function ContactLeadForm() {
             <Image src="/branding/homepage/choice-cat-clean.png" alt="" width={40} height={46} aria-hidden="true" />
             <span>Kot</span>
           </button>
-          <button
-            type="button"
-            className={`contact-species-card${form.species === 'nie-wiem' ? ' is-selected' : ''}`}
-            aria-pressed={form.species === 'nie-wiem'}
-            onClick={() => chooseSpecies('nie-wiem')}
-            onFocus={markStarted}
-          >
-            <Image src="/branding/homepage/choice-question-clean.png" alt="" width={38} height={38} aria-hidden="true" />
-            <span>Nie wiem</span>
-          </button>
         </div>
       </fieldset>
-
-      {form.species === 'nie-wiem' ? (
-        <div className="form-field">
-          <label htmlFor="contact-custom-topic">Własny temat</label>
-          <input
-            id="contact-custom-topic"
-            name="topic"
-            value={form.customTopic}
-            onChange={(event) => updateField('customTopic', event.target.value.slice(0, 120))}
-            onFocus={markStarted}
-            placeholder="np. nie wiem, od czego zacząć"
-            autoComplete="off"
-          />
-        </div>
-      ) : (
-        <div className="form-field">
-          <label htmlFor="contact-topic">Temat</label>
-          <select
-            id="contact-topic"
-            name="topic"
-            value={form.topicId}
-            onChange={(event) => updateField('topicId', event.target.value)}
-            onFocus={markStarted}
-            disabled={!knownSpecies}
-          >
-            <option value="">{knownSpecies ? 'Wybierz temat' : 'Najpierw wybierz gatunek'}</option>
-            {topicOptions.map((topic) => (
-              <option key={topic.id} value={topic.id}>
-                {topic.title}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
 
       <div className="form-field">
         <label htmlFor="contact-name">Imię</label>
@@ -438,9 +363,7 @@ export function ContactLeadForm() {
           placeholder={
             isUrgentNow
               ? 'Napisz w 2-4 zdaniach, czego dotyczy temat i czy wskazana data/godzina są sztywne czy orientacyjne.'
-              : form.species === 'nie-wiem'
-                ? 'Opisz po swojemu, co się dzieje i czego nie jesteś pewien/pewna.'
-                : 'Napisz w 2-4 zdaniach, co dzieje się teraz, od kiedy to trwa i co najbardziej chcesz uporządkować.'
+              : 'Napisz w 2-4 zdaniach, co dzieje się teraz, od kiedy to trwa i co najbardziej chcesz uporządkować.'
           }
           enterKeyHint="send"
           maxLength={MESSAGE_MAX_LENGTH}
@@ -507,13 +430,17 @@ export function ContactLeadForm() {
         <div className={`info-box full-width ${status === 'error' ? 'error-box' : ''}`} role="status">
           <p>{feedback}</p>
           {status === 'success' ? (
-            <p style={{ marginTop: '12px' }}>
-              W międzyczasie możesz zajrzeć po PDF-y w{' '}
-              <a href="/materialy" className="prep-inline-link">
-                /materiały
-              </a>{' '}
-              - od 19&nbsp;zł, bez dodatkowej rozmowy.
-            </p>
+            <div className="contact-success-next">
+              <p>W międzyczasie możesz zajrzeć do materiałów i Niezbędnika. Są tam bezpłatne PDF-y, przewodniki i gotowe ścieżki tematyczne.</p>
+              <div>
+                <Link href="/materialy" prefetch={false} className="prep-inline-link">
+                  Zobacz materiały
+                </Link>
+                <Link href="/niezbednik" prefetch={false} className="prep-inline-link">
+                  Przejdź do Niezbędnika
+                </Link>
+              </div>
+            </div>
           ) : null}
         </div>
       ) : null}

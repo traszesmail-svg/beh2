@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { Zap } from 'lucide-react'
 import { Footer } from '@/components/Footer'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { INSTAGRAM_PROFILE_URL } from '@/lib/site'
@@ -122,6 +123,10 @@ export function NotatnikTopbar({ navItems, showUtilityLinks = true }: NotatnikTo
       ) : null}
 
       <div className="notatnik-topbar-actions">
+        <Link href="/wybor" prefetch={false} className="notatnik-topbar-quick-help">
+          <Zap size={16} strokeWidth={2.1} aria-hidden="true" />
+          <span>Szybki start</span>
+        </Link>
         {showUtilityLinks ? <ThemeToggle /> : null}
         {showUtilityLinks ? (
           <a
@@ -147,6 +152,9 @@ export function NotatnikTopbar({ navItems, showUtilityLinks = true }: NotatnikTo
           </summary>
           <div className="notatnik-mobile-menu-panel">
             <nav aria-label="Menu mobilne">
+              <Link href="/wybor" prefetch={false}>
+                Szybki start
+              </Link>
               {navItems.map((item) => (
                 <Link key={item.href} href={item.href} prefetch={false}>
                   {item.label}

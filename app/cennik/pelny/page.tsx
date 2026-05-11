@@ -1,13 +1,11 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
-import { ReferenceFinalCta, ReferencePageShell } from '@/components/ReferencePageShell'
+import { ReferencePageShell } from '@/components/ReferencePageShell'
 import { Schema } from '@/components/schema'
 import { getBreadcrumbJsonLd, getServiceJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
 import {
   PricingCardsSection,
   bookHref,
-  contactHref,
   getPricingOfferCatalog,
 } from '../pricing-page-content'
 
@@ -41,32 +39,14 @@ export default function FullPricingPage() {
       <section className="reference-hero reference-pricing-hero">
         <div className="reference-hero-copy">
           <span className="reference-pill">Pełny cennik</span>
-          <h1>Pełny cennik formatów konsultacji.</h1>
+          <h1>Pełny cennik: krótka rozmowa, dłuższa rozmowa albo pełny plan.</h1>
           <p>
-            Tu jest pełna tabela formatów, cen i zakresów. Wybierz najkrótszą rozmowę, która wystarczy do Twojej
-            sytuacji, albo pełną konsultację, jeśli potrzebny jest plan pracy.
+            Poniżej masz wszystkie formaty w jednym miejscu. Kliknięcie w dowolny format prowadzi do wyboru psa, kota i najbliższego tematu, żeby nie zaczynać od przypadkowej rezerwacji.
           </p>
-          <div className="reference-hero-actions">
-            <Link href={bookHref} prefetch={false} className="reference-btn reference-btn-primary">
-              Umów pierwszy krok
-            </Link>
-            <Link href="/cennik" prefetch={false} className="reference-btn reference-btn-secondary">
-              Wróć do skrótu cennika
-            </Link>
-          </div>
         </div>
       </section>
 
       <PricingCardsSection className="reference-full-pricing-section" />
-
-      <ReferenceFinalCta
-        title="Gotowy wybrać format?"
-        copy="Zarezerwuj najkrótszy pasujący format albo wyślij krótką wiadomość, jeśli nadal nie wiesz, od czego zacząć."
-        primaryHref={bookHref}
-        primaryLabel="Umów pierwszy krok"
-        secondaryHref={contactHref}
-        secondaryLabel="Wyślij krótką wiadomość"
-      />
     </ReferencePageShell>
   )
 }

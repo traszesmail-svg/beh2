@@ -26,11 +26,11 @@ const quickHref = buildBookHref(null, 'szybka-konsultacja-15-min', false)
 function MaterialyGuideCard({ guide }: { guide: MaterialyGuide }) {
   const coverSrc = getMaterialyGuideCoverSrc(guide)
   const previews = getMaterialyGuidePreviewSrcs(guide, 2)
-  const ctaLabel = guide.priceCode === 'free' ? 'Pobierz po e-mailu' : `Zamów za ${PRICE_LABEL[guide.priceCode]}`
+  const ctaLabel = guide.priceCode === 'free' ? 'Zobacz w Niezbędniku' : 'Zapytaj o PDF'
 
   return (
     <article className="notatnik-material-card notatnik-material-card-with-cover">
-      <Link href={`/materialy/${guide.slug}`} prefetch={false} className="notatnik-material-cover-link" aria-label={`Zobacz ${guide.title}`}>
+      <span className="notatnik-material-cover-link" aria-label={`Okładka ${guide.title}`}>
         <span className="notatnik-material-cover-frame">
           <Image
             src={coverSrc}
@@ -41,7 +41,7 @@ function MaterialyGuideCard({ guide }: { guide: MaterialyGuide }) {
             unoptimized
           />
         </span>
-      </Link>
+      </span>
 
       <div className="notatnik-material-tag notatnik-mono">
         {categoryLabel(guide.category)} · {PRICE_LABEL[guide.priceCode]}
@@ -70,7 +70,7 @@ function MaterialyGuideCard({ guide }: { guide: MaterialyGuide }) {
         ))}
       </ul>
 
-      <Link href={`/materialy/${guide.slug}`} prefetch={false}>
+      <Link href={guide.priceCode === 'free' ? '/niezbednik' : '/kontakt#formularz'} prefetch={false}>
         {ctaLabel} &rarr;
       </Link>
     </article>

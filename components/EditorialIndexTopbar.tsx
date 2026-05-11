@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { Menu } from 'lucide-react'
+import { Menu, Zap } from 'lucide-react'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { REGULSKI_WEB_LOGO } from '@/lib/regulski-web-assets'
 
@@ -35,6 +35,10 @@ export function EditorialIndexTopbar() {
       </nav>
 
       <div className="blog-index-actions" aria-label="Narzędzia strony">
+        <Link href="/wybor" prefetch={false} className="blog-index-topbar-cta">
+          <Zap size={16} strokeWidth={2.1} aria-hidden="true" />
+          <span>Szybki start</span>
+        </Link>
         <ThemeToggle />
 
         <details className="blog-index-mobile-menu">
@@ -42,6 +46,9 @@ export function EditorialIndexTopbar() {
           <Menu size={20} strokeWidth={2} aria-hidden="true" />
         </summary>
         <div>
+          <Link href="/wybor" prefetch={false}>
+            Szybki start
+          </Link>
           {EDITORIAL_INDEX_NAV_ITEMS.map((item) => (
             <Link key={item.href} href={item.href} prefetch={false}>
               {item.label}

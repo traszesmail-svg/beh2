@@ -32,7 +32,7 @@ export const LEAD_MAGNETS: LeadMagnet[] = [
     categoryLabel: 'Psy',
     relatedLinks: [
       { href: '/psy/reaktywnosc-na-smyczy', label: 'Reaktywność na smyczy' },
-      { href: '/materialy/pies-sam-w-domu', label: 'PDF: pies sam w domu' },
+      { href: '/materialy#psy', label: 'PDF: pies sam w domu' },
       { href: '/behawiorysta-online-polska', label: 'Behawiorysta psów i kotów online' },
     ],
     asset: {
@@ -154,7 +154,7 @@ export const LEAD_MAGNETS: LeadMagnet[] = [
     categoryHref: '/koty',
     categoryLabel: 'Koty',
     relatedLinks: [
-      { href: '/materialy/kot-zyje-w-napieciu', label: 'PDF: kot żyje w napięciu' },
+      { href: '/materialy#koty', label: 'PDF: kot żyje w napięciu' },
       { href: '/koty', label: 'Pomoc dla kotów' },
       { href: '/behawiorysta-online-polska', label: 'Behawiorysta psów i kotów online' },
     ],
@@ -196,7 +196,7 @@ export const LEAD_MAGNETS: LeadMagnet[] = [
     categoryLabel: 'Psy',
     relatedLinks: [
       { href: '/psy/lek-separacyjny', label: 'Lęk separacyjny u psa' },
-      { href: '/materialy/pies-ile-ruchu-potrzebuje', label: 'PDF: pies i poziom ruchu' },
+      { href: '/materialy#psy', label: 'PDF: pies i poziom ruchu' },
       { href: '/behawiorysta-online-polska', label: 'Behawiorysta psów i kotów online' },
     ],
     asset: {

@@ -16,13 +16,13 @@ export const PUBLIC_OFFER_LEAD =
 
 export const PUBLIC_OFFER_DECISION_COPY = {
   quick:
-    'Kwadrans jest najprostszym startem, gdy chcesz nazwać problem, ustalić priorytet i wiedzieć, co robić dalej.',
+    'Kwadrans jest najprostszym startem, gdy chcesz dostać diagnozę behawioralną na podstawie uzyskanych informacji, ustalić priorytet i wiedzieć, co robić dalej.',
   urgent:
     'Kwadrans na już to ten sam 15-minutowy format audio co Kwadrans za 69 zł — różnica polega tylko na szybszym potwierdzeniu terminu (do 15 minut od wpłaty). To nie jest dłuższa konsultacja.',
   bridge:
     'Dwa kwadranse są dla tematów szerszych, gdy 15 minut to za mało, ale pełna konsultacja byłaby jeszcze zbyt szerokim startem.',
   premium:
-    'Pełna konsultacja jest dla spraw złożonych, przewlekłych albo wielowątkowych, gdy potrzebujesz diagnozy, planu i wsparcia wdrożenia.',
+    'Pełna konsultacja jest dla spraw złożonych, przewlekłych albo wielowątkowych, gdy potrzebujesz diagnozy, prawdopodobnej etiologii, możliwego przebiegu problemu, planu i wsparcia wdrożenia.',
 } as const
 
 export const PUBLIC_OFFER_START_GUIDE = [
@@ -41,10 +41,10 @@ export const PUBLIC_OFFER_BOOKING_PRIORITY_NOTE =
   'Kwadrans na już ma identyczny zakres co zwykły Kwadrans. Różnica dotyczy tylko szybkości potwierdzenia terminu, nie długości ani treści rozmowy.'
 
 export const PUBLIC_OFFER_BOOKING_LEAD =
-  'Wybierasz zakres konsultacji, który pasuje do skali problemu. Kwadrans jest najprostszym startem, Dwa kwadranse są dla tematów szerszych, a Pełna konsultacja dla spraw złożonych i przewlekłych.'
+  'Wybierasz zakres konsultacji, który pasuje do skali problemu. Kwadrans daje diagnozę behawioralną na podstawie uzyskanych informacji, Dwa kwadranse dają więcej czasu na kontekst, a Pełna konsultacja dodaje prawdopodobną etiologię, możliwy przebieg problemu i plan pracy.'
 
 export const PUBLIC_OFFER_BOOKING_REASSURANCE =
-  'Nie musisz mieć gotowej diagnozy. Wystarczy krótki opis sytuacji i propozycja terminów. Po wysłaniu formularza potwierdzam, który format i termin mają w Twojej sytuacji najwięcej sensu.'
+  'Nie musisz mieć gotowej diagnozy. Wystarczy krótki opis sytuacji i propozycja terminów. Diagnozę stawiam na podstawie uzyskanych informacji, a przy pełnej konsultacji dokładam prawdopodobną etiologię i możliwy przebieg problemu.'
 
 export const PUBLIC_OFFER_BOOKING_PROCESS = [
   '1. Wybierasz zakres konsultacji i wpisujesz krótki opis sytuacji.',
@@ -61,20 +61,20 @@ export const PUBLIC_OFFER_BOOKING_PAYMENT =
   `Najpierw uzgadniamy termin, dopiero potem wysyłam dane do płatności. Rezerwacje możesz opłacić przez ${PUBLIC_OFFER_PAYMENT_METHODS}. Po wpłacie wraca potwierdzenie i link do rozmowy.`
 
 export const PUBLIC_OFFER_FULL_CONSULTATION_VALUE =
-  'Pełna konsultacja nie jest dłuższą wersją Kwadransu. To osobny format dla spraw, które wymagają więcej czasu, szerszego tła i wsparcia po rozmowie. Obejmuje konsultację online, diagnozę sytuacji, aktualizowany plan pracy i 7 dni codziennych zaleceń pod nadzorem behawiorysty dostępnego 8h dziennie przez WhatsApp.'
+  'Pełna konsultacja nie jest dłuższą wersją Kwadransu. To osobny format dla spraw, które wymagają więcej czasu, szerszego tła i wsparcia po rozmowie. Obejmuje konsultację online, diagnozę sytuacji, prawdopodobną etiologię, możliwy przebieg problemu, aktualizowany plan pracy i 7 dni codziennych zaleceń pod nadzorem behawiorysty dostępnego 8h dziennie przez WhatsApp.'
 
 export const PUBLIC_OFFER_CANCELLATION_COPY =
   'Krótkie formaty mają 24 godziny na bezpłatną rezygnację po potwierdzeniu wpłaty. Zmianę terminu ustalamy w tym samym oknie. Pełna konsultacja ma osobny regulamin.'
 
 export const PUBLIC_OFFER_PRICING_DECISION_COPY = [
-  'Kwadrans za 69 zł to najprostszy start, gdy chcesz nazwać problem i ustalić priorytet.',
+  'Kwadrans za 69 zł to najprostszy start, gdy chcesz dostać diagnozę behawioralną na podstawie uzyskanych informacji i ustalić priorytet.',
   'Dwa kwadranse za 169 zł są dla tematów szerszych, gdy 15 minut to za mało.',
-  'Pełna konsultacja za 470 zł jest dla spraw złożonych, przewlekłych albo wielowątkowych.',
+  'Pełna konsultacja za 470 zł jest dla spraw złożonych, przewlekłych albo wielowątkowych: z diagnozą, prawdopodobną etiologią, możliwym przebiegiem problemu i planem pracy.',
 ] as const
 
 export const PUBLIC_OFFER_FULL_VALUE_POINTS = [
   'Rozmowa online audio albo audio/video',
-  'diagnoza sytuacji i kolejnych priorytetów',
+  'diagnoza sytuacji, prawdopodobna etiologia i możliwy przebieg problemu',
   'aktualizowany plan pracy po rozmowie',
-  '7 dni codziennych zaleceń — behawiorysta dostępny 8h dziennie przez WhatsApp',
+  '7 dni codziennych zaleceń - behawiorysta dostępny 8h dziennie przez WhatsApp',
 ] as const

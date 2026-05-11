@@ -56,7 +56,6 @@ export function Footer(props: FooterProps) {
                 <small>{SPECIALIST_NAME} - behawiorysta zwierzęcy</small>
               </span>
             </Link>
-            <p>Konsultacja odbywa się po rezerwacji i opłaceniu terminu. Pracuję online oraz lokalnie w Olsztynie.</p>
             {contact.email && contactHref ? (
               <p>
                 E-mail:{' '}

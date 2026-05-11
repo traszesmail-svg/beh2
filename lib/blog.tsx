@@ -319,7 +319,7 @@ const CONSULTATION_PAGE_LINK: BlogSupportLink = {
 
 const PREP_GUIDE_LINK: BlogSupportLink = {
   label: 'Bezpłatny materiał startowy',
-  href: '/bezplatne-materialy/30-zachowan',
+  href: '/niezbednik',
   description: 'Szeroki przewodnik, jeśli chcesz najpierw uporządkować obserwacje przed rozmowa.',
 }
 
@@ -331,7 +331,7 @@ const REACTIVITY_LANDING_LINK: BlogSupportLink = {
 
 const REACTIVITY_GUIDE_LINK: BlogSupportLink = {
   label: 'Bezpłatny PDF: pies i poziom ruchu',
-  href: '/bezplatne-materialy/pies-ile-ruchu-potrzebuje',
+  href: '/materialy#psy',
   description: 'Materiał o tym, kiedy ruch pomaga, a kiedy doklada pobudzenia i przeciazenia.',
 }
 
@@ -343,7 +343,7 @@ const SEPARATION_LANDING_LINK: BlogSupportLink = {
 
 const SEPARATION_GUIDE_LINK: BlogSupportLink = {
   label: 'PDF: pies zostaje sam',
-  href: '/materialy/pies-sam-w-domu',
+  href: '/materialy#psy',
   description: 'Materiał startowy o samotności psa, jeśli chcesz najpierw spokojnie przeczytać plan pierwszych kroków.',
 }
 
@@ -355,7 +355,7 @@ const LITTER_LANDING_LINK: BlogSupportLink = {
 
 const LITTER_GUIDE_LINK: BlogSupportLink = {
   label: 'Bezpłatny PDF: kot w napięciu',
-  href: '/bezplatne-materialy/kot-zyje-w-napieciu',
+  href: '/materialy#koty',
   description: 'Materiał o cichych sygnałach stresu, które często stoją za szerszym problemem.',
 }
 
@@ -367,7 +367,7 @@ const CAT_CONFLICT_LANDING_LINK: BlogSupportLink = {
 
 const CAT_CONFLICT_GUIDE_LINK: BlogSupportLink = {
   label: 'PDF: kot żyje w napięciu',
-  href: '/materialy/kot-zyje-w-napieciu',
+  href: '/materialy#koty',
   description: 'Dalszy materiał, jeśli chcesz przejść od pojedynczego artykułu do spokojniejszej obserwacji domu.',
 }
 
@@ -543,7 +543,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
       },
       {
         label: 'Szczekanie na inne psy',
-        href: '/blog/dlaczego-moj-pies-szczeka-na-inne-psy',
+        href: '/blog',
         description: 'Powiązany wpis o trudnościach spacerowych.',
       },
       {
@@ -729,7 +729,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
       },
       {
         label: 'Behawiorysta czy trener',
-        href: '/blog/behawiorysta-zoopsycholog-trener-do-kogo-sie-zglosic',
+        href: '/blog',
         description: 'Powiązany wpis o wyborze odpowiedniej pomocy.',
       },
       {
@@ -775,7 +775,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
       REACTIVITY_LANDING_LINK,
       {
         label: 'Pies szczeka na inne psy',
-        href: '/blog/dlaczego-moj-pies-szczeka-na-inne-psy',
+        href: '/blog',
         description: 'Warto to przeczytac razem z praktyka luznej smyczy, żeby lepiej nazwać emocje i wyzwalacze na spacerze.',
       },
       REACTIVITY_GUIDE_LINK,
@@ -794,7 +794,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
       SEPARATION_LANDING_LINK,
       {
         label: 'Pies wyje, kiedy zostaje sam',
-        href: '/blog/pies-wyje-kiedy-zostaje-sam',
+        href: '/blog',
         description: 'Najbliższy artykuł, jeśli chcesz najpierw odróżnić lęk separacyjny od innych scenariuszy.',
       },
       SEPARATION_GUIDE_LINK,
@@ -813,7 +813,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
       SEPARATION_LANDING_LINK,
       {
         label: 'Jak nagrac psa zostawionego samemu',
-        href: '/blog/jak-nagrac-psa-zostawionego-samemu',
+        href: '/blog',
         description: 'Daje materiał do oceny, jeśli po pracy nad rutyną potrzebujesz lepiej zobaczyć, co napędza problem.',
       },
       SEPARATION_GUIDE_LINK,
@@ -832,7 +832,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
       LITTER_LANDING_LINK,
       {
         label: 'Jak ustawić kuwetę dla kota',
-        href: '/blog/jak-ustawic-kuwete-dla-kota',
+        href: '/blog',
         description: 'Najbliższy tekst, jeśli po wyborze kuwety chcesz od razu dopiąć jej lokalizację i liczbę.',
       },
       LITTER_GUIDE_LINK,
@@ -851,7 +851,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
       LITTER_LANDING_LINK,
       {
         label: 'Kot załatwia się poza kuwetą',
-        href: '/blog/kot-zalatwia-sie-poza-kuweta',
+        href: '/blog',
         description: 'Najszerszy wpis startowy, jeśli chcesz zobaczyć całą sekwencję filtrów przed dalszą pracą.',
       },
       LITTER_GUIDE_LINK,
@@ -870,7 +870,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
       CAT_CONFLICT_LANDING_LINK,
       {
         label: 'Jak zapoznac dwa koty',
-        href: '/blog/jak-zapoznac-dwa-koty',
+        href: '/blog',
         description: 'Rozpisuje szerzej sam proces zapoznania, jeśli ten etap w domu dopiero przed toba.',
       },
       CAT_CONFLICT_GUIDE_LINK,
@@ -889,7 +889,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
       CAT_CONFLICT_LANDING_LINK,
       {
         label: 'Jak zapoznac dwa koty',
-        href: '/blog/jak-zapoznac-dwa-koty',
+        href: '/blog',
         description: 'Dobry kolejny tekst, jeśli konflikt jest zwiazany z granicami, dystansem i powolnym wprowadzaniem kontaktu.',
       },
       CAT_CONFLICT_GUIDE_LINK,
@@ -908,7 +908,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
       REACTIVITY_LANDING_LINK,
       {
         label: 'Luźna smycz z reaktywnym psem',
-        href: '/blog/reaktywnosc-na-smyczy-cwiczenie-luznej-smyczy',
+        href: '/blog',
         description: 'Przechodzi z pojedynczej zasady w bardziej uporządkowaną procedurę spacerową.',
       },
       REACTIVITY_GUIDE_LINK,
@@ -927,7 +927,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
       SEPARATION_LANDING_LINK,
       {
         label: 'Rutyna wyjścia i oswajanie z samotnością',
-        href: '/blog/rutyna-wyjscia-oswajanie-psa-z-samotnoscia',
+        href: '/blog',
         description: 'Dalej porządkuje pracę krok po kroku, jeśli chcesz utrzymać plan bez przeskakiwania etapów.',
       },
       SEPARATION_GUIDE_LINK,
@@ -946,7 +946,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
       LITTER_LANDING_LINK,
       {
         label: 'Jak wybrać kuwetę i żwirek',
-        href: '/blog/jak-wybrac-kuwete-i-zwirek-dla-kota',
+        href: '/blog',
         description: 'Najbliższy tekst, jeśli po ustawieniu kuwety chcesz jeszcze sprawdzić rozmiar, zwirek i typowe bledy wyboru.',
       },
       LITTER_GUIDE_LINK,
@@ -965,7 +965,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
       CAT_CONFLICT_LANDING_LINK,
       {
         label: 'Jak wprowadzic nowego kota do domu',
-        href: '/blog/jak-wprowadzic-nowego-kota-do-domu',
+        href: '/blog',
         description: 'Dobry tekst siostrzany, jeśli chcesz zacząć jeszcze krok wcześniej od całego procesu wdrożenia nowego kota.',
       },
       CAT_CONFLICT_GUIDE_LINK,

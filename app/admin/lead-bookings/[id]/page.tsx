@@ -113,17 +113,6 @@ export default async function AdminLeadBookingDetailPage({ params }: { params: {
             Utworzono: {new Date(booking.createdAt).toLocaleString('pl-PL')} | Zaktualizowano:{' '}
             {new Date(booking.updatedAt).toLocaleString('pl-PL')}
           </p>
-
-          <p style={{ marginTop: '12px' }}>
-            <a
-              href={`/rezerwacja/${booking.id}?token=${booking.accessToken}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: '#2f7667', textDecoration: 'underline' }}
-            >
-              Otwórz widok klienta ↗
-            </a>
-          </p>
         </article>
       </main>
     </>

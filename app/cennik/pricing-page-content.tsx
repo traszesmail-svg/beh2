@@ -1,10 +1,9 @@
 import Link from 'next/link'
-import { CalendarCheck, CheckCircle2, CreditCard, Monitor, WalletCards } from 'lucide-react'
-import { buildBookHref } from '@/lib/booking-routing'
+import { CheckCircle2, WalletCards } from 'lucide-react'
 import { FUNNEL_SERVICE_CONFIG, type PublicBookingServiceType } from '@/lib/funnel'
 import { PUBLIC_OFFER_BOOKING_PAYMENT, PUBLIC_OFFER_CANCELLATION_COPY } from '@/lib/public-offer-copy'
 
-export const bookHref = buildBookHref(null, 'szybka-konsultacja-15-min')
+export const bookHref = '/wybor'
 export const contactHref = '/kontakt#formularz'
 export const fullPricingHref = '/cennik/pelny'
 
@@ -25,7 +24,7 @@ export const pricingCards: Array<{
     price: '69 zł',
     copy: '15 minut audio bez kamery, gdy chcesz nazwać problem i ustalić pierwszy sensowny krok.',
     features: ['jedno pytanie albo pierwszy porządek', 'audio bez kamery', 'dobry start przed większą decyzją'],
-    cta: 'Zarezerwuj Kwadrans',
+    cta: 'Wybierz ścieżkę',
     featured: true,
   },
   {
@@ -35,7 +34,7 @@ export const pricingCards: Array<{
     price: '99 zł',
     copy: 'Ten sam 15-minutowy format, ale z priorytetem i możliwie szybkim potwierdzeniem terminu.',
     features: ['ten sam zakres co Kwadrans', 'szybsze potwierdzenie', 'dla tematów pilnych, ale krótkich'],
-    cta: 'Sprawdź termin',
+    cta: 'Wybierz ścieżkę',
   },
   {
     service: 'konsultacja-30-min',
@@ -44,7 +43,7 @@ export const pricingCards: Array<{
     price: '169 zł',
     copy: '30 minut online, gdy temat ma kilka wątków albo potrzebujesz spokojniejszego wejścia.',
     features: ['więcej kontekstu niż w Kwadransie', 'dla kilku pytań naraz', 'dobry most przed pełną konsultacją'],
-    cta: 'Zarezerwuj 30 min',
+    cta: 'Wybierz ścieżkę',
   },
   {
     service: 'konsultacja-behawioralna-online',
@@ -53,7 +52,7 @@ export const pricingCards: Array<{
     price: '470 zł',
     copy: 'Rozmowa online, analiza sytuacji, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.',
     features: ['sprawy złożone i przewlekłe', 'plan pracy po konsultacji', '7 dni kontaktu tekstowego'],
-    cta: 'Zarezerwuj pełną konsultację',
+    cta: 'Wybierz ścieżkę',
   },
 ]
 
@@ -86,7 +85,7 @@ export function getPricingOfferCatalog() {
     return {
       name: service.title,
       description: service.publicSummary,
-      url: buildBookHref(null, card.service),
+      url: bookHref,
       price: service.priceAmount,
     }
   })
@@ -101,7 +100,7 @@ export function PricingSummaryCard() {
       </div>
       <div className="reference-price-ladder">
         {pricingCards.map((card) => (
-          <Link key={card.service} href={buildBookHref(null, card.service)} prefetch={false}>
+          <Link key={card.service} href={bookHref} prefetch={false}>
             <span>{card.title}</span>
             <strong>{card.price}</strong>
           </Link>
@@ -111,37 +110,6 @@ export function PricingSummaryCard() {
         <Link href={fullPricingHref} prefetch={false} className="reference-btn reference-btn-secondary">
           Zobacz pełny cennik
         </Link>
-      </div>
-    </div>
-  )
-}
-
-export function PricingBookingNotesCard() {
-  return (
-    <div className="reference-side-card reference-pricing-side-info">
-      <h2>Przed rezerwacją</h2>
-      <div className="reference-info-list">
-        <div className="reference-info-row">
-          <CalendarCheck size={24} strokeWidth={1.7} aria-hidden="true" />
-          <span>
-            <strong>Termin po wyborze</strong>
-            <small>Rezerwujesz format i wybierasz dostępny termin.</small>
-          </span>
-        </div>
-        <div className="reference-info-row">
-          <CreditCard size={24} strokeWidth={1.7} aria-hidden="true" />
-          <span>
-            <strong>Płatność ręczna</strong>
-            <small>Po potwierdzeniu widzisz instrukcję płatności.</small>
-          </span>
-        </div>
-        <div className="reference-info-row">
-          <Monitor size={24} strokeWidth={1.7} aria-hidden="true" />
-          <span>
-            <strong>Online w Polsce</strong>
-            <small>Spokojna rozmowa bez stresu dla zwierzęcia.</small>
-          </span>
-        </div>
       </div>
     </div>
   )
@@ -169,7 +137,7 @@ export function PricingCardsSection({ className = '' }: { className?: string }) 
               ))}
             </ul>
             <Link
-              href={buildBookHref(null, card.service)}
+              href={bookHref}
               prefetch={false}
               className={card.featured ? 'reference-btn reference-btn-primary' : 'reference-btn reference-btn-secondary'}
             >

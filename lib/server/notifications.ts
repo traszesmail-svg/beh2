@@ -17,10 +17,11 @@ const EMAIL_BRAND_NAME = 'Regulski Behawiorysta'
 const DEFAULT_RESEND_FROM_EMAIL = `${EMAIL_BRAND_NAME} <kontakt@regulskibehawiorysta.pl>`
 const DEFAULT_MAIL_PROVIDER = 'resend'
 
-type EmailAttachment = {
+export type EmailAttachment = {
   filename: string
   content: string
   contentType?: string
+  encoding?: 'utf8' | 'base64'
 }
 
 type SendEmailPayload = {
@@ -481,6 +482,10 @@ function repairEmailPayload(payload: SendEmailPayload): SendEmailPayload {
   }
 }
 
+function decodeEmailAttachment(attachment: EmailAttachment): Buffer {
+  return Buffer.from(attachment.content, attachment.encoding === 'base64' ? 'base64' : 'utf8')
+}
+
 function buildAbsoluteUrl(pathname: string): string {
   return new URL(pathname, getBaseUrl()).toString()
 }
@@ -624,7 +629,7 @@ async function deliverEmail(payload: SendEmailPayload, audience: EmailAudience =
         replyTo,
         attachments: cleanedPayload.attachments?.map((attachment) => ({
           filename: attachment.filename,
-          content: Buffer.from(attachment.content, 'utf8'),
+          content: decodeEmailAttachment(attachment),
           contentType: attachment.contentType,
         })),
       })
@@ -641,7 +646,7 @@ async function deliverEmail(payload: SendEmailPayload, audience: EmailAudience =
 
     const resendAttachments = cleanedPayload.attachments?.map((attachment) => ({
       filename: attachment.filename,
-      content: Buffer.from(attachment.content, 'utf8').toString('base64'),
+      content: attachment.encoding === 'base64' ? attachment.content : decodeEmailAttachment(attachment).toString('base64'),
       content_type: attachment.contentType,
     }))
 
@@ -1172,12 +1177,6 @@ export async function sendBookRequestAutoReplyEmail(submission: BookRequestSubmi
   }
 
   const faqHref = buildAbsoluteUrl('/faq')
-  const reservationHref =
-    submission.leadBookingId && submission.leadBookingAccessToken
-      ? buildAbsoluteUrl(
-          `/rezerwacja/${submission.leadBookingId}?token=${submission.leadBookingAccessToken}`,
-        )
-      : null
   const subject = `Dostałem Twoją rezerwację - ${submission.serviceLabel}`
   const html = renderEmailShell(
     `Cześć ${escapeHtml(submission.name)}, dostałem Twoją rezerwację.`,
@@ -1189,11 +1188,7 @@ export async function sendBookRequestAutoReplyEmail(submission: BookRequestSubmi
       <p>3. Po płatności potwierdzam rezerwację do 15 minut i odsyłam link do rozmowy oraz wpis do kalendarza.</p>
       <p><strong>Twoje preferowane terminy:</strong><br />${formatMultilineHtml(submission.preferredSlots)}</p>
       <p><strong>Status:</strong> Czeka na potwierdzenie terminu.</p>
-      ${
-        reservationHref
-          ? renderEmailActionButton({ href: reservationHref, label: 'Zobacz status rezerwacji' })
-          : renderEmailActionButton({ href: faqHref, label: 'Najczęściej zadawane pytania' })
-      }
+      ${renderEmailActionButton({ href: faqHref, label: 'Najczęściej zadawane pytania' })}
       ${renderContactBlockHtml()}
     `,
     'Jeśli chcesz coś dopowiedzieć, po prostu odpowiedz na tego maila.',
@@ -1216,9 +1211,7 @@ export async function sendBookRequestAutoReplyEmail(submission: BookRequestSubmi
     '',
     'Status: Czeka na potwierdzenie terminu.',
     '',
-    reservationHref
-      ? `Zobacz status rezerwacji: ${reservationHref}`
-      : `Najczęściej zadawane pytania: ${faqHref}`,
+    `Najczęściej zadawane pytania: ${faqHref}`,
     '',
     'Jeśli chcesz coś dopowiedzieć, po prostu odpowiedz na tego maila.',
     renderContactBlockText(),
@@ -1996,6 +1989,8 @@ export type ClientTestimonialSubmission = {
   issueCategory: string
   opinion: string
   photoUrl: string | null
+  photoLabel?: string | null
+  photoAttachment?: EmailAttachment | null
 }
 
 export async function sendClientTestimonialNotificationEmail(
@@ -2014,9 +2009,15 @@ export async function sendClientTestimonialNotificationEmail(
   const skipUrl = `${baseUrl}/api/admin/testimonials/${submission.id}?action=skip`
 
   const subject = `Nowa opinia od klienta - ${submission.displayName}`
-  const photoBlock = submission.photoUrl
-    ? `<p><strong>Zdjęcie:</strong> <a href="${escapeHtml(submission.photoUrl)}">${escapeHtml(submission.photoUrl)}</a></p>`
-    : '<p><strong>Zdjęcie:</strong> brak</p>'
+  const hasPhotoLink = submission.photoUrl ? /^https?:\/\//i.test(submission.photoUrl) : false
+  const photoLabel = submission.photoLabel ?? submission.photoUrl
+  const photoBlock = submission.photoAttachment
+    ? `<p><strong>Zdjęcie:</strong> załącznik ${escapeHtml(photoLabel ?? submission.photoAttachment.filename)}</p>`
+    : submission.photoUrl
+      ? hasPhotoLink
+        ? `<p><strong>Zdjęcie:</strong> <a href="${escapeHtml(submission.photoUrl)}">${escapeHtml(submission.photoUrl)}</a></p>`
+        : `<p><strong>Zdjęcie:</strong> ${escapeHtml(submission.photoUrl)}</p>`
+      : '<p><strong>Zdjęcie:</strong> brak</p>'
 
   const html = renderEmailShell(
     'Nowa opinia od klienta',
@@ -2046,13 +2047,16 @@ export async function sendClientTestimonialNotificationEmail(
     `Email: ${submission.email}`,
     `Kategoria: ${submission.issueCategory}`,
     `Treść: ${submission.opinion}`,
-    `Zdjęcie: ${submission.photoUrl ?? 'brak'}`,
+    `Zdjęcie: ${photoLabel ?? 'brak'}`,
     '',
     `Opublikuj: ${publishUrl}`,
     `Odłóż: ${skipUrl}`,
   ].join('\n')
 
-  return deliverEmail({ to: recipient, subject, html, text }, 'internal')
+  const attachments = submission.photoAttachment ? [submission.photoAttachment] : undefined
+  const replyTo = isValidPublicEmail(submission.email) ? submission.email : undefined
+
+  return deliverEmail({ to: recipient, subject, html, text, replyTo, attachments }, 'internal')
 }
 
 // ── /materialy funnel ───────────────────────────────────────────────────────

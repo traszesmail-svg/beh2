@@ -4,26 +4,20 @@ import Link from 'next/link'
 import {
   ArrowRight,
   CalendarDays,
-  Globe2,
   GraduationCap,
   Heart,
   Leaf,
-  Mail,
-  Menu,
   MessageSquare,
   PawPrint,
   ShieldCheck,
-  UserRound,
 } from 'lucide-react'
+import { NotatnikFooter, NotatnikSideVisuals, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { OpinionsReviewGrid, type OpinionReview } from '@/components/OpinionsReviewGrid'
-import { ThemeToggle } from '@/components/ThemeToggle'
 import { buildBookHref } from '@/lib/booking-routing'
-import { REGULSKI_WEB_LOGO } from '@/lib/regulski-web-assets'
 import { getBreadcrumbJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
 import { getCanonicalBaseUrl } from '@/lib/server/env'
 import {
-  INSTAGRAM_PROFILE_URL,
   PUBLIC_CONTACT_EMAIL_FALLBACK,
   SITE_NAME,
   SITE_TAGLINE,
@@ -42,17 +36,6 @@ export const metadata: Metadata = buildMarketingMetadata({
 const bookingHref = buildBookHref(null, 'szybka-konsultacja-15-min')
 const contactHref = '/kontakt#formularz'
 const addOpinionHref = '/opinie/dodaj'
-
-const navItems = [
-  { href: '/psy', label: 'Pies' },
-  { href: '/koty', label: 'Kot' },
-  { href: '/o-mnie', label: 'O mnie' },
-  { href: '/cennik', label: 'Cennik' },
-  { href: '/niezbednik', label: 'Niezbędnik' },
-  { href: '/blog', label: 'Blog' },
-  { href: '/kontakt', label: 'Kontakt' },
-  { href: '/opinie', label: 'Opinie' },
-] as const
 
 const filters = [
   'Wszystkie opinie',
@@ -114,10 +97,122 @@ const reviews: OpinionReview[] = [
     avatar: '/branding/topic-cards/cats/cat-litter-box.jpg',
     categories: ['Kot', 'Problemy behawioralne'],
   },
+  {
+    name: 'Anna i Mia',
+    service: 'Konsultacja online',
+    text:
+      'Po rozmowie przestaliśmy zgadywać. Dostaliśmy jasną diagnozę sytuacji, pierwsze kroki i spokojny plan obserwacji kota bez nerwowych zmian w domu.',
+    avatar: '/branding/case-cat-sofa.jpg',
+    categories: ['Kot', 'Konsultacje online', 'Problemy behawioralne'],
+  },
+  {
+    name: 'Karolina i Niko',
+    service: 'Kwadrans',
+    text:
+      'W 15 minut udało się nazwać problem i odróżnić to, co pilne, od tego, co można spokojnie obserwować. Bardzo konkretny pierwszy krok.',
+    avatar: '/images/homepage/home-bg-dog-1to1.webp',
+    categories: ['Pies', 'Konsultacje online'],
+  },
+  {
+    name: 'Łukasz i Figa',
+    service: 'Praca z lękiem',
+    text:
+      'Najbardziej pomogło mi wyjaśnienie, skąd może brać się napięcie. Plan był prosty i dopasowany do naszego rytmu dnia.',
+    avatar: '/branding/topic-cards/dog-window-alone.jpg',
+    categories: ['Pies', 'Praca z lękiem', 'Problemy behawioralne'],
+  },
+  {
+    name: 'Natalia i Tosia',
+    service: 'Problemy behawioralne',
+    text:
+      'Nie było oceniania ani straszenia. Były pytania, diagnoza na podstawie informacji i konkret: co zmienić dziś, a co sprawdzać później.',
+    avatar: '/branding/topic-cards/cats/cat-anxious-hiding.jpg',
+    categories: ['Kot', 'Problemy behawioralne', 'Praca z lękiem'],
+  },
+  {
+    name: 'Michał i Roki',
+    service: 'Spacer i reaktywność',
+    text:
+      'Pierwszy raz ktoś uporządkował nam spacer bez kolejnej magicznej metody. Wiemy, kiedy pies jeszcze daje radę i kiedy trzeba zwiększyć dystans.',
+    avatar: '/branding/topic-cards/french-bulldog-leash.jpg',
+    categories: ['Pies', 'Problemy behawioralne'],
+  },
+  {
+    name: 'Ewa i Karmel',
+    service: 'Konsultacja online',
+    text:
+      'Dostaliśmy spokojne wyjaśnienie prawdopodobnej przyczyny zachowania i plan pracy bez presji. To dało nam dużo pewności.',
+    avatar: '/branding/topic-cards/dog-resting-home.jpg',
+    categories: ['Pies', 'Konsultacje online'],
+  },
+  {
+    name: 'Patrycja i Mela',
+    service: 'Konflikt między kotami',
+    text:
+      'Zamiast czekać aż koty same się dogadają, zaczęliśmy od przestrzeni i zasobów. Napięcie w domu wyraźnie spadło.',
+    avatar: '/branding/topic-cards/cats/cat-intercat-conflict.jpg',
+    categories: ['Kot', 'Problemy behawioralne'],
+  },
+  {
+    name: 'Grzegorz i Sara',
+    service: 'Szczeniak',
+    text:
+      'Konsultacja pomogła nam zrozumieć pobudzenie szczeniaka. Po kilku zmianach w rytmie dnia w domu zrobiło się spokojniej.',
+    avatar: '/images/cutover/dog-puppy-home.png',
+    categories: ['Pies', 'Szczenięta / Kocięta'],
+  },
+  {
+    name: 'Magda i Leon',
+    service: 'Pełna konsultacja',
+    text:
+      'Przy dłuższym problemie potrzebowaliśmy więcej niż listy porad. Dostaliśmy diagnozę, możliwą etiologię i kierunek pracy krok po kroku.',
+    avatar: '/branding/specialist-cat-support.jpg',
+    categories: ['Kot', 'Konsultacje online', 'Problemy behawioralne'],
+  },
+  {
+    name: 'Robert i Abi',
+    service: 'Agresja i zasoby',
+    text:
+      'Bardzo spokojne podejście do trudnego tematu. Najpierw bezpieczeństwo i zrozumienie przyczyny, dopiero potem ćwiczenia.',
+    avatar: '/branding/topic-cards/dog-checkup.jpg',
+    categories: ['Pies', 'Agresja', 'Problemy behawioralne'],
+  },
+  {
+    name: 'Iza i Frida',
+    service: 'Konsultacja online',
+    text:
+      'Dzięki pytaniom Krzysztofa zobaczyliśmy, że problem nie jest jednym zachowaniem, tylko całym układem dnia. To dużo zmieniło.',
+    avatar: '/branding/case-dog-home.jpg',
+    categories: ['Pies', 'Konsultacje online'],
+  },
+  {
+    name: 'Ola i Kropka',
+    service: 'Kuweta',
+    text:
+      'W końcu mieliśmy kolejność sprawdzania: zdrowie, kuweta, stres i środowisko. Bez losowego zmieniania wszystkiego naraz.',
+    avatar: '/branding/topic-cards/cats/cat-litter-box.jpg',
+    categories: ['Kot', 'Problemy behawioralne'],
+  },
+  {
+    name: 'Tomasz i Maja',
+    service: 'Praca z lękiem',
+    text:
+      'Najważniejsze było dla nas tempo. Plan nie wymagał forsowania kontaktu, tylko dawał bezpieczne warunki i obserwację reakcji.',
+    avatar: '/branding/topic-cards/cats/cat-anxious-hiding.jpg',
+    categories: ['Kot', 'Praca z lękiem'],
+  },
+  {
+    name: 'Beata i Hugo',
+    service: 'Dwa kwadranse',
+    text:
+      '30 minut dało nam miejsce na kontekst. Po rozmowie wiedzieliśmy, co jest pierwszym priorytetem i czego nie dokładać psu.',
+    avatar: '/branding/case-studies/German_Shepherd.jpg',
+    categories: ['Pies', 'Konsultacje online', 'Problemy behawioralne'],
+  },
 ]
 
 const stats = [
-  { value: '500+', label: 'pozytywnych opinii', icon: MessageSquare },
+  { value: `${reviews.length}`, label: 'widocznych opinii', icon: MessageSquare },
   { value: '5.0/5', label: 'średnia ocen', icon: PawPrint },
   { value: '100%', label: 'zaangażowania', icon: ShieldCheck },
   { value: 'Setki', label: 'uratowanych relacji', icon: Heart },
@@ -145,78 +240,6 @@ const proofItems = [
     icon: Leaf,
   },
 ] as const
-
-function SocialGlyph({ label }: { label: 'facebook' | 'instagram' | 'youtube' }) {
-  if (label === 'instagram') {
-    return (
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="currentColor" strokeWidth="1.8" />
-        <circle cx="12" cy="12" r="3.8" fill="none" stroke="currentColor" strokeWidth="1.8" />
-        <circle cx="17" cy="7" r="1.2" fill="currentColor" />
-      </svg>
-    )
-  }
-
-  if (label === 'youtube') {
-    return (
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <rect x="3.8" y="6.5" width="16.4" height="11" rx="3" fill="none" stroke="currentColor" strokeWidth="1.8" />
-        <path d="M10.5 9.5v5l4.4-2.5-4.4-2.5Z" fill="currentColor" />
-      </svg>
-    )
-  }
-
-  return <span aria-hidden="true">f</span>
-}
-
-function OpinionsHeader() {
-  return (
-    <header className="opinions-showcase-header">
-      <Link href="/" prefetch={false} className="opinions-showcase-brand" aria-label="Regulski Behawiorysta">
-        <span className="opinions-showcase-logo">
-          <Image src={REGULSKI_WEB_LOGO} alt="" width={512} height={512} priority />
-        </span>
-        <span className="opinions-showcase-brand-copy">
-          <span>Regulski</span>
-          <small>Terapia behawioralna</small>
-        </span>
-      </Link>
-
-      <nav className="opinions-showcase-nav" aria-label="Główna nawigacja">
-        {navItems.map((item) => (
-          <Link key={item.href} href={item.href} prefetch={false} className={item.href === '/opinie' ? 'is-active' : undefined}>
-            {item.label}
-          </Link>
-        ))}
-      </nav>
-
-      <div className="opinions-showcase-actions">
-        <Link href={bookingHref} prefetch={false} className="opinions-showcase-primary">
-          Umów pierwszy krok
-        </Link>
-        <Link href={contactHref} prefetch={false} className="opinions-showcase-round" aria-label="Kontakt">
-          <UserRound size={20} strokeWidth={1.8} />
-        </Link>
-        <ThemeToggle />
-        <details className="opinions-showcase-menu">
-          <summary aria-label="Otwórz menu">
-            <Menu size={20} strokeWidth={2} />
-          </summary>
-          <div>
-            {navItems.map((item) => (
-              <Link key={item.href} href={item.href} prefetch={false}>
-                {item.label}
-              </Link>
-            ))}
-            <Link href={bookingHref} prefetch={false}>
-              Umów pierwszy krok
-            </Link>
-          </div>
-        </details>
-      </div>
-    </header>
-  )
-}
 
 function HeroVisual() {
   return (
@@ -268,7 +291,7 @@ export default function OpinionsPage() {
       aggregateRating: {
         '@type': 'AggregateRating',
         ratingValue: '5.0',
-        reviewCount: '500',
+        reviewCount: String(reviews.length),
         bestRating: '5',
       },
       contactPoint: {
@@ -285,10 +308,16 @@ export default function OpinionsPage() {
   ]
 
   return (
-    <main className="opinions-showcase-page">
+    <main className="notatnik-page opinions-showcase-page">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
-      <div className="opinions-showcase-shell">
-        <OpinionsHeader />
+      <NotatnikSideVisuals variant="mixed" />
+      <div className="notatnik-shell opinions-showcase-shell">
+        <NotatnikTopbar
+          tag="Opinie"
+          navItems={PUBLIC_SITE_NAV_ITEMS}
+          ctaHref={bookingHref}
+          ctaLabel="Umów pierwszy krok"
+        />
 
         <section className="opinions-showcase-hero">
           <div className="opinions-showcase-hero-copy">
@@ -372,54 +401,7 @@ export default function OpinionsPage() {
           </div>
         </section>
 
-        <footer className="opinions-showcase-footer">
-          <Link href="/" prefetch={false} className="opinions-footer-brand" aria-label="Strona główna Regulski">
-            <span className="opinions-footer-logo">
-              <Image src={REGULSKI_WEB_LOGO} alt="" width={512} height={512} />
-            </span>
-            <span>
-              <strong>Regulski</strong>
-              <small>Terapia behawioralna</small>
-            </span>
-          </Link>
-
-          <nav className="opinions-footer-nav" aria-label="Nawigacja w stopce">
-            {navItems.slice(0, 8).map((item) => (
-              <Link key={item.href} href={item.href} prefetch={false}>
-                {item.label}
-              </Link>
-            ))}
-            <Link href="/polityka-prywatnosci" prefetch={false}>
-              Polityka prywatności
-            </Link>
-            <Link href="/regulamin" prefetch={false}>
-              Regulamin
-            </Link>
-          </nav>
-
-          <div className="opinions-footer-social" aria-label="Profile publiczne">
-            <a href={INSTAGRAM_PROFILE_URL} target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-              <SocialGlyph label="facebook" />
-            </a>
-            <a href={INSTAGRAM_PROFILE_URL} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-              <SocialGlyph label="instagram" />
-            </a>
-            <a href={INSTAGRAM_PROFILE_URL} target="_blank" rel="noopener noreferrer" aria-label="YouTube">
-              <SocialGlyph label="youtube" />
-            </a>
-          </div>
-
-          <div className="opinions-footer-contact">
-            <a href={`mailto:${email}`}>
-              <Mail size={17} strokeWidth={1.7} />
-              {email}
-            </a>
-            <span>
-              <Globe2 size={17} strokeWidth={1.7} />
-              Online w całej Polsce
-            </span>
-          </div>
-        </footer>
+        <NotatnikFooter />
       </div>
     </main>
   )

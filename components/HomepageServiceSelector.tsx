@@ -58,7 +58,7 @@ function buildSelectorHref(answers: HomepageSelectorAnswers, resultKey: Homepage
     params.set('species', species)
   }
 
-  return `/termin?${params.toString()}`
+  return `/book?${params.toString()}`
 }
 
 function buildProblemQuestion(animal: HomepageSelectorAnimal | null): HomepageSelectorQuestion {
@@ -90,7 +90,7 @@ const heroChoices = [
     id: 'unknown',
     title: 'Nie wiem, od czego zacząć',
     copy: 'Materiały, wiadomość albo quiz - wybierz spokojny start.',
-    href: '/od-czego-zaczac',
+    href: '/quiz',
   },
 ] as const
 
@@ -110,8 +110,8 @@ const heroChoiceDisplay: Record<(typeof heroChoices)[number]['id'], { title: str
 }
 
 const homepageHeroPhoto = {
-  src: '/branding/homepage/hero-man-dog-cat-pexels.jpg',
-  alt: 'Opiekun w spokojnym kontakcie z psem i kotem',
+  src: '/images/hero-main.png',
+  alt: 'Krzysztof Regulski trzyma kota na rękach',
 }
 
 function RouterChoiceIcon({ choiceId }: { choiceId: (typeof heroChoices)[number]['id'] }) {
@@ -212,7 +212,7 @@ export function HomepageServiceSelector({ mode = 'home', initialAnimal = null }:
           <header className="router-hero-copy">
             <div className="router-hero-intro">
               <div className="router-hero-text">
-                <h1 className="router-reference-title">Z czym potrzebujesz pomocy u psa lub kota?</h1>
+                <h1 className="router-reference-title">A Tobie jak mogę pomóc?</h1>
                 <p className="router-reference-copy">
                   Wybierz zwierzę albo odpowiedz na kilka krótkich pytań - podpowiem najlepszy pierwszy krok.
                 </p>

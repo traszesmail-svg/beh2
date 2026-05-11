@@ -1,11 +1,8 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
-import Link from 'next/link'
-import { HeartHandshake, ShieldCheck, UserRound } from 'lucide-react'
 import { CredentialsGrid } from '@/components/CredentialsGrid'
-import { ReferenceFinalCta, ReferencePageShell } from '@/components/ReferencePageShell'
+import { ReferencePageShell } from '@/components/ReferencePageShell'
 import { Schema } from '@/components/schema'
-import { buildBookHref } from '@/lib/booking-routing'
 import { getBreadcrumbJsonLd, getFaqPageJsonLd, getPersonJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
 import {
@@ -27,27 +24,6 @@ export const metadata: Metadata = buildMarketingMetadata({
   description:
     'Krzysztof Regulski - behawiorysta psów i kotów online. Podejście, kwalifikacje, profil publiczny i informacje przed pierwszym kontaktem.',
 })
-
-const bookHref = buildBookHref(null, 'szybka-konsultacja-15-min')
-const contactHref = '/kontakt#formularz'
-
-const workStyleCards = [
-  {
-    icon: UserRound,
-    title: 'Zaczynam od codzienności',
-    copy: 'Interesuje mnie, kiedy problem się pojawia, co go poprzedza i co najbardziej obciąża dom.',
-  },
-  {
-    icon: HeartHandshake,
-    title: 'Bez oceniania opiekuna',
-    copy: 'Rozmowa ma pomóc zrozumieć sytuację, a nie egzaminować z idealnej opieki nad psem albo kotem.',
-  },
-  {
-    icon: ShieldCheck,
-    title: 'Oddzielam objaw od tła',
-    copy: 'Sprawdzam środowisko, relacje, rytm dnia, zdrowie i to, co może podtrzymywać zachowanie.',
-  },
-]
 
 const organizationProofCards = [
   {
@@ -93,7 +69,7 @@ export default function AboutPage() {
   const faqItems = FAQ_SHORTLISTS.consultation.slice(0, 3)
 
   return (
-    <ReferencePageShell className="reference-about-page" ctaHref={bookHref}>
+    <ReferencePageShell className="reference-about-page" ctaHref="/wybor">
       <Schema
         data={[
           getPersonJsonLd(),
@@ -113,14 +89,6 @@ export default function AboutPage() {
             Pomagam uporządkować sytuację psa albo kota tak, żeby po rozmowie został jasny pierwszy krok. Bez sztucznej
             pewności tam, gdzie najpierw trzeba coś sprawdzić.
           </p>
-          <div className="reference-hero-actions">
-            <Link href={bookHref} prefetch={false} className="reference-btn reference-btn-primary">
-              Umów pierwszy krok
-            </Link>
-            <Link href={contactHref} prefetch={false} className="reference-btn reference-btn-secondary">
-              Wyślij krótką wiadomość
-            </Link>
-          </div>
         </div>
         <figure className="reference-photo-card">
           <Image
@@ -134,27 +102,17 @@ export default function AboutPage() {
         </figure>
       </section>
 
-      <section className="reference-about-info-strip" aria-label="Szybkie informacje">
-        <div className="reference-about-info-title">
-          <span className="reference-pill">O pracy</span>
-          <h2>Szybkie informacje</h2>
-        </div>
-        {workStyleCards.map((card) => {
-          const Icon = card.icon
-
-          return (
-            <article key={card.title} className="reference-about-info-item">
-              <Icon size={25} strokeWidth={1.7} aria-hidden="true" />
-              <span>
-                <strong>{card.title}</strong>
-                <small>{card.copy}</small>
-              </span>
-            </article>
-          )
-        })}
-      </section>
-
       <section className="reference-content-column reference-wide-column">
+        <section className="reference-section-card reference-about-bio-card">
+          <h2>O mnie i pracy z trudnymi problemami</h2>
+          <p>
+            Od ponad 10 lat jestem behawiorystą zwierzęcym oraz trenerem COAPE, specjalizującym się w pracy z psami i kotami z trudnymi problemami behawioralnymi. Zajmuję się m.in. terapią zwierząt agresywnych, odbudową zaburzonych relacji psio-kocich oraz kompleksowym rozwiązywaniem problemów behawioralnych kotów.
+          </p>
+          <p>
+            Jako technik weterynarii łączę wiedzę behawioralną z medyczną, skutecznie stosując w uzasadnionych przypadkach farmakoterapię jako wsparcie terapii behawioralnej. Prowadzę również hotel resocjalizacyjny dla psów i kotów, zapewniający bezpieczne warunki do pracy terapeutycznej, indywidualne podejście oraz stały nadzór specjalistyczny.
+          </p>
+        </section>
+
         <section className="reference-section-card">
           <h2>Kwalifikacje i profil</h2>
           <p>
@@ -212,15 +170,6 @@ export default function AboutPage() {
           </div>
         </section>
       </section>
-
-      <ReferenceFinalCta
-        title="Gotowy na pierwszy krok?"
-        copy="Jeśli chcesz sprawdzić, czy ten sposób pracy pasuje do Twojej sytuacji, zacznij od Kwadransu albo wyślij krótką wiadomość."
-        primaryHref={bookHref}
-        primaryLabel="Umów pierwszy krok"
-        secondaryHref={contactHref}
-        secondaryLabel="Wyślij krótką wiadomość"
-      />
     </ReferencePageShell>
   )
 }

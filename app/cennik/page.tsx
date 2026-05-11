@@ -1,15 +1,12 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
-import { ReferenceFinalCta, ReferencePageShell } from '@/components/ReferencePageShell'
+import { ReferencePageShell } from '@/components/ReferencePageShell'
 import { Schema } from '@/components/schema'
-import { PUBLIC_OFFER_BOOKING_PROCESS } from '@/lib/public-offer-copy'
 import { getBreadcrumbJsonLd, getServiceJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
 import {
-  PricingBookingNotesCard,
+  PricingCardsSection,
   PricingSummaryCard,
   bookHref,
-  contactHref,
   getPricingOfferCatalog,
   pricingFaqItems,
 } from './pricing-page-content'
@@ -43,36 +40,17 @@ export default function PricingPage() {
       <section className="reference-hero reference-pricing-hero">
         <div className="reference-hero-copy">
           <span className="reference-pill">Cennik</span>
-          <h1>Cennik konsultacji behawioralnych.</h1>
+          <h1>Wybierz rozmowę na miarę sytuacji.</h1>
           <p>
-            Wybierz najmniejszy format, który pasuje do sytuacji. Kwadrans jest pierwszym krokiem, Dwa kwadranse dają
-            więcej miejsca, a pełna konsultacja obejmuje plan i dalsze wsparcie.
+            Zacznij od najkrótszego formatu, jeśli potrzebujesz uporządkować temat. Wybierz dłuższą rozmowę, gdy sprawa ma kilka wątków albo wymaga planu pracy.
           </p>
-          <div className="reference-hero-actions">
-            <Link href={bookHref} prefetch={false} className="reference-btn reference-btn-primary">
-              Umów pierwszy krok
-            </Link>
-            <Link href={contactHref} prefetch={false} className="reference-btn reference-btn-secondary">
-              Wyślij krótką wiadomość
-            </Link>
-          </div>
         </div>
         <PricingSummaryCard />
       </section>
 
-      <section className="reference-main-layout">
+      <section className="reference-main-layout reference-main-layout-single">
         <div className="reference-content-column">
-          <section className="reference-section-card">
-            <h2>Jak wygląda rezerwacja</h2>
-            <div className="reference-steps">
-              {PUBLIC_OFFER_BOOKING_PROCESS.map((step, index) => (
-                <article key={step} className="reference-step">
-                  <span>{String(index + 1).padStart(2, '0')}</span>
-                  <p>{step}</p>
-                </article>
-              ))}
-            </div>
-          </section>
+          <PricingCardsSection className="reference-pricing-cards-featured" />
 
           <section className="reference-section-card">
             <h2>Najczęstsze pytania przed wyborem</h2>
@@ -89,20 +67,7 @@ export default function PricingPage() {
             </div>
           </section>
         </div>
-
-        <aside className="reference-sidebar">
-          <PricingBookingNotesCard />
-        </aside>
       </section>
-
-      <ReferenceFinalCta
-        title="Gotowy na pierwszy krok?"
-        copy="Wybierz dogodny termin albo napisz krótko, co się dzieje - podpowiem, od którego formatu zacząć."
-        primaryHref={bookHref}
-        primaryLabel="Umów pierwszy krok"
-        secondaryHref={contactHref}
-        secondaryLabel="Wyślij krótką wiadomość"
-      />
     </ReferencePageShell>
   )
 }

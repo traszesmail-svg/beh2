@@ -76,7 +76,7 @@ export function buildSlotHref(
   qaBooking?: boolean,
   species?: BookingSpecies | null,
 ): string {
-  return buildQueryHref('/termin', {
+  return buildQueryHref('/book', {
     problem,
     service: serviceType ?? null,
     qa: qaBooking ? '1' : null,

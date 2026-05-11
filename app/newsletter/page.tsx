@@ -1,16 +1,11 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { NewsletterSignup } from '@/components/NewsletterSignup'
 import { NotatnikPageShell, NotatnikSectionHead, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
-import { buildBookHref } from '@/lib/booking-routing'
-import { FUNNEL_CTA_LABELS } from '@/lib/funnel'
 import { getBreadcrumbJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
 
 export const dynamic = 'force-static'
-
-const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min')
 
 export const metadata: Metadata = buildMarketingMetadata({
   title: 'Newsletter dla opiekunów psów i kotów',
@@ -39,10 +34,10 @@ export default function NewsletterPage() {
     <NotatnikPageShell
       tag="Newsletter"
       navItems={PUBLIC_SITE_NAV_ITEMS}
-      ctaHref={audioHref}
-      ctaLabel={FUNNEL_CTA_LABELS.primary}
-      footerPrimaryHref={audioHref}
-      footerPrimaryLabel={FUNNEL_CTA_LABELS.primary}
+      ctaHref="/wybor"
+      ctaLabel="Szybki start"
+      footerPrimaryHref="/wybor"
+      footerPrimaryLabel="Szybki start"
       sideVisualVariant="blog"
       pageClassName="newsletter-page"
     >
@@ -68,22 +63,6 @@ export default function NewsletterPage() {
 
           <div className="premium-two-column-grid top-gap-small">
             <NewsletterSignup location="newsletter-page" sourcePage="/newsletter" />
-            <aside className="summary-card tree-backed-card newsletter-note-card">
-              <div className="section-eyebrow">Co dalej</div>
-              <h2>Jeśli temat jest pilny, nie czekaj na newsletter.</h2>
-              <p>
-                Newsletter jest wolnym kanałem. Przy problemie, który narasta, obejmuje bezpieczeństwo
-                albo mocno obciąża dom, lepszy jest Kwadrans albo dłuższa konsultacja.
-              </p>
-              <div className="hero-actions top-gap-small">
-                <Link href={audioHref} prefetch={false} className="button button-primary">
-                  Zacznij od Kwadransa
-                </Link>
-                <Link href="/quiz" prefetch={false} className="button button-ghost">
-                  Zrob krótki quiz
-                </Link>
-              </div>
-            </aside>
           </div>
         </section>
 

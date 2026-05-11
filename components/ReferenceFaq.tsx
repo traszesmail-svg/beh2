@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import {
   CalendarDays,
@@ -11,15 +12,12 @@ import {
   Monitor,
   PawPrint,
   Plus,
-  Search,
 } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { PetLeafHeroArt } from '@/components/PetLeafHeroArt'
 import { trackAnalyticsEvent } from '@/lib/analytics'
 import { referenceFaqCategories, referenceFaqItems, type ReferenceFaqCategory } from '@/lib/reference-faq'
 
 type ReferenceFaqProps = {
-  bookHref: string
   contactHref: string
 }
 
@@ -32,27 +30,24 @@ function CategoryIcon({ icon }: { icon: (typeof referenceFaqCategories)[number][
   return <MessageCircleQuestion size={25} strokeWidth={1.7} aria-hidden="true" />
 }
 
-export function ReferenceFaq({ bookHref, contactHref }: ReferenceFaqProps) {
-  const [query, setQuery] = useState('')
+export function ReferenceFaq({ contactHref }: ReferenceFaqProps) {
   const [activeCategory, setActiveCategory] = useState<ReferenceFaqCategory | 'all'>('all')
   const [openId, setOpenId] = useState(referenceFaqItems[0]?.id ?? '')
   const [showAll, setShowAll] = useState(false)
 
+  const categoryCounts = useMemo(() => {
+    return referenceFaqCategories.reduce<Record<ReferenceFaqCategory, number>>((counts, category) => {
+      counts[category.id] = referenceFaqItems.filter((item) => item.category === category.id).length
+
+      return counts
+    }, {} as Record<ReferenceFaqCategory, number>)
+  }, [])
+
   const filteredItems = useMemo(() => {
-    const normalizedQuery = query.trim().toLowerCase()
+    return referenceFaqItems.filter((item) => activeCategory === 'all' || item.category === activeCategory)
+  }, [activeCategory])
 
-    return referenceFaqItems.filter((item) => {
-      const matchesCategory = activeCategory === 'all' || item.category === activeCategory
-      const matchesQuery =
-        normalizedQuery.length === 0 ||
-        item.question.toLowerCase().includes(normalizedQuery) ||
-        item.answer.toLowerCase().includes(normalizedQuery)
-
-      return matchesCategory && matchesQuery
-    })
-  }, [activeCategory, query])
-
-  const visibleItems = showAll || query || activeCategory !== 'all' ? filteredItems : filteredItems.slice(0, 15)
+  const visibleItems = showAll || activeCategory !== 'all' ? filteredItems : filteredItems.slice(0, 15)
 
   function toggleOpen(id: string, question: string, index: number) {
     const nextId = openId === id ? '' : id
@@ -73,19 +68,23 @@ export function ReferenceFaq({ bookHref, contactHref }: ReferenceFaqProps) {
             Zebrałem najczęstsze pytania opiekunów psów i kotów. Jeśli nie znajdziesz odpowiedzi - napisz do mnie,
             chętnie pomogę.
           </p>
-          <label className="reference-search">
-            <Search size={20} strokeWidth={1.8} aria-hidden="true" />
-            <span className="sr-only">Szukaj w pytaniach</span>
-            <input
-              type="search"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Szukaj w pytaniach..."
-            />
-          </label>
+          <div className="reference-hero-actions">
+            <Link href="/wybor" prefetch={false} className="reference-btn reference-btn-primary">
+              Umów pierwszy krok
+            </Link>
+            <Link href={contactHref} prefetch={false} className="reference-btn reference-btn-secondary">
+              Wyślij krótką wiadomość
+            </Link>
+          </div>
         </div>
-        <div className="reference-hero-art">
-          <PetLeafHeroArt className="reference-pet-leaf-art" />
+        <div className="reference-hero-art reference-hero-art-photo">
+          <Image
+            src="/branding/side-visuals/blog-laptop-notes.jpg"
+            alt="Opiekun szuka informacji przy komputerze"
+            width={960}
+            height={720}
+            priority
+          />
         </div>
       </section>
 
@@ -102,7 +101,7 @@ export function ReferenceFaq({ bookHref, contactHref }: ReferenceFaqProps) {
             <CategoryIcon icon={category.icon} />
             <span>
               <strong>{category.label}</strong>
-              <small>{category.countLabel}</small>
+              <small>{categoryCounts[category.id]} pytań</small>
             </span>
           </button>
         ))}
@@ -112,8 +111,7 @@ export function ReferenceFaq({ bookHref, contactHref }: ReferenceFaqProps) {
         <div className="reference-faq-list-wrap">
           <h2>Popularne pytania</h2>
           <div className="reference-faq-list">
-            {visibleItems.length > 0 ? (
-              visibleItems.map((item, index) => {
+            {visibleItems.map((item, index) => {
                 const isOpen = openId === item.id
 
                 return (
@@ -134,18 +132,9 @@ export function ReferenceFaq({ bookHref, contactHref }: ReferenceFaqProps) {
                     </div>
                   </article>
                 )
-              })
-            ) : (
-              <div className="reference-empty-state">
-                <strong>Nie znalazłem pytania.</strong>
-                <p>Skróć wyszukiwanie albo napisz krótką wiadomość - odpowiem i podpowiem kolejny krok.</p>
-                <Link href={contactHref} prefetch={false} className="reference-btn reference-btn-primary">
-                  Wyślij krótką wiadomość
-                </Link>
-              </div>
-            )}
+              })}
           </div>
-          {filteredItems.length > 8 ? (
+          {activeCategory === 'all' && filteredItems.length > 15 ? (
             <button type="button" className="reference-show-all" onClick={() => setShowAll((value) => !value)}>
               {showAll ? 'Pokaż mniej pytań' : 'Zobacz wszystkie pytania'}
               <ChevronDown size={16} strokeWidth={1.8} aria-hidden="true" />
@@ -154,17 +143,6 @@ export function ReferenceFaq({ bookHref, contactHref }: ReferenceFaqProps) {
         </div>
 
         <aside className="reference-sidebar">
-          <div className="reference-side-card reference-help-card">
-            <h2>Nie znalazłeś odpowiedzi?</h2>
-            <p>Napisz krótko, co Cię nurtuje - odpowiem możliwie szybko i podpowiem kolejny krok.</p>
-            <Link href={contactHref} prefetch={false} className="reference-btn reference-btn-primary">
-              Wyślij krótką wiadomość
-            </Link>
-            <Link href={bookHref} prefetch={false} className="reference-btn reference-btn-secondary">
-              Umów pierwszy krok
-            </Link>
-          </div>
-
           <div className="reference-side-card">
             <h2>Szybkie odpowiedzi</h2>
             <div className="reference-info-list">

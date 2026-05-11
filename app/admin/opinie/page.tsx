@@ -10,10 +10,14 @@ function formatDate(iso: string) {
   return new Date(iso).toLocaleString('pl-PL', { dateStyle: 'short', timeStyle: 'short' })
 }
 
+function isExternalUrl(value: string): boolean {
+  return /^https?:\/\//i.test(value)
+}
+
 const STATUS_LABELS: Record<string, string> = {
   pending: 'Oczekuje',
   published: 'Opublikowana',
-  skipped: 'Odlozona',
+  skipped: 'Odłożona',
 }
 
 export default async function AdminOpiniePage() {
@@ -34,23 +38,23 @@ export default async function AdminOpiniePage() {
   return (
     <main style={{ maxWidth: 760, margin: '40px auto', padding: '0 20px', fontFamily: 'sans-serif', color: '#1f1a17' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 32 }}>
-        <h1 style={{ margin: 0, fontSize: '1.4rem' }}>Opinie klientow</h1>
-        <Link href="/admin" style={{ fontSize: 13, color: '#6b625b' }}>← Panel admin</Link>
+        <h1 style={{ margin: 0, fontSize: '1.4rem' }}>Opinie klientów</h1>
+        <Link href="/admin" style={{ fontSize: 13, color: '#6b625b' }}>Panel admin</Link>
       </div>
 
       {loadError && (
         <p style={{ color: '#b91c1c', background: '#fef2f2', padding: '12px 16px', borderRadius: 8 }}>
-          Błąd ladowania danych: {loadError}
+          Błąd ładowania danych: {loadError}
         </p>
       )}
 
       <section>
         <h2 style={{ fontSize: '1rem', marginBottom: 16 }}>
-          Oczekujace na decyzje ({pending.length})
+          Oczekujące na decyzję ({pending.length})
         </h2>
 
         {pending.length === 0 && !loadError && (
-          <p style={{ color: '#6b625b' }}>Brak oczekujacych opinii.</p>
+          <p style={{ color: '#6b625b' }}>Brak oczekujących opinii.</p>
         )}
 
         {pending.map((t) => (
@@ -82,7 +86,14 @@ export default async function AdminOpiniePage() {
 
             {t.photoUrl && (
               <p style={{ margin: '0 0 14px', fontSize: 13 }}>
-                Zdjecie: <a href={t.photoUrl} target="_blank" rel="noopener noreferrer" style={{ color: '#1f1a17' }}>{t.photoUrl}</a>
+                Zdjęcie:{' '}
+                {isExternalUrl(t.photoUrl) ? (
+                  <a href={t.photoUrl} target="_blank" rel="noopener noreferrer" style={{ color: '#1f1a17' }}>
+                    {t.photoUrl}
+                  </a>
+                ) : (
+                  <span>{t.photoUrl}</span>
+                )}
               </p>
             )}
 
@@ -97,7 +108,7 @@ export default async function AdminOpiniePage() {
                 href={`/api/admin/testimonials/${t.id}?action=skip`}
                 style={btnStyle('#6b625b')}
               >
-                Odloz
+                Odłóż
               </a>
             </div>
           </article>

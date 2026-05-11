@@ -1,10 +1,7 @@
 import assert from 'node:assert/strict'
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
-import { listLeadMagnetPaths } from '../lib/active-lead-magnets'
 import { listLocalSeoPaths } from '../lib/growth-layer'
-import { listMaterialyBundles, listMaterialyGuides } from '../lib/materialy-catalog'
-import { OFFERS } from '../lib/offers'
 
 type SourceMap = Map<string, string[]>
 
@@ -36,15 +33,12 @@ type ExcludedValidationOutcome = Extract<ValidationOutcome, { keep: false }>
 const ROOT_DIR = process.cwd()
 const APP_DIR = path.join(ROOT_DIR, 'app')
 const PAGES_DIR = path.join(ROOT_DIR, 'pages')
-const BLOG_DIR = path.join(ROOT_DIR, 'content', 'blog-mvp')
 const BASELINE_SITEMAP_MANIFEST_PATH = path.join(ROOT_DIR, 'qa-reports', 'full-crawl', 'manifests', 'manifest.csv')
 const PUBLIC_DIR = path.join(ROOT_DIR, 'public')
 const REPORT_DIR = path.join(ROOT_DIR, 'qa-reports')
 const OUTPUT_PATH = path.join(PUBLIC_DIR, 'sitemap.xml')
 const REPORT_PATH = path.join(REPORT_DIR, 'sitemap-regeneration.md')
 const CANONICAL_BASE_URL = 'https://regulskibehawiorysta.pl'
-const QUICK_CONSULTATION_OFFER_PATH = '/oferta/szybka-konsultacja-15-min'
-const LEGACY_OFFER_SLUGS = new Set(['konsultacja-behawioralna-online', 'poradniki-pdf'])
 
 const PAGE_FILE_RE = /^page\.(?:ts|tsx|js|jsx)$/i
 const SPECIAL_PAGES_RE = /^(?:_document|_error|404|500)\.(?:ts|tsx|js|jsx)$/i
@@ -56,6 +50,7 @@ const EXCLUDED_ROUTE_EXACT = new Set([
   '/slot',
   '/form',
   '/payment',
+  '/termin',
   '/confirmation',
   '/confirm',
   '/problem',
@@ -64,11 +59,23 @@ const EXCLUDED_ROUTE_EXACT = new Set([
   '/admin',
   '/__internal/opinie',
   '/%5F%5Finternal/qa-report',
+  '/produkt',
+  '/urgent',
+  '/od-czego-zaczac',
+  '/oferta',
+  '/jak-sie-przygotowac',
+  '/historie',
+  '/materialy/pobranie',
+  '/bezplatne-materialy/dziekuje',
   '/oferta/konsultacja-behawioralna-online',
   '/oferta/poradniki-pdf',
   '/behawiorysta-psow',
   '/behawiorysta-kotow',
   '/behawiorysta-olsztyn',
+  '/behawiorysta-online-polska',
+  '/konsultacja-behawioralna-online',
+  '/psy',
+  '/koty',
   '/metodyka',
 ])
 
@@ -84,11 +91,19 @@ const EXCLUDED_ROUTE_PREFIXES = [
   '/slot/',
   '/form/',
   '/payment/',
+  '/termin/',
   '/confirmation/',
   '/confirm/',
   '/problem/',
   '/przybornik/',
   '/pokoj/',
+  '/oferta/',
+  '/jak-sie-przygotowac/',
+  '/historie/',
+  '/bezplatne-materialy/',
+  '/rezerwacja/',
+  '/psy/',
+  '/koty/',
 ]
 
 const MAIN_SERVICE_PAGES = new Set([
@@ -96,9 +111,6 @@ const MAIN_SERVICE_PAGES = new Set([
   '/cennik',
   '/cennik/pelny',
   '/kontakt',
-  '/koty',
-  '/konsultacja-behawioralna-online',
-  '/psy',
 ])
 
 const LEGAL_PAGES = new Set([
@@ -199,34 +211,7 @@ function hasValidStaticRoute(routePath: string, source: string): boolean {
 }
 
 function discoverBlogRoutes(): SourceMap {
-  const discovered: SourceMap = new Map()
-  const entries = readdirSync(BLOG_DIR, { withFileTypes: true })
-
-  for (const entry of entries) {
-    if (!entry.isFile() || !/\.md$/i.test(entry.name)) {
-      continue
-    }
-
-    const filePath = path.join(BLOG_DIR, entry.name)
-    const source = readFileSync(filePath, 'utf8')
-    const slugMatch = source.match(/^slug:\s*["']?([^"\r\n"']+)/m)
-    if (!slugMatch?.[1]) {
-      // Ignore editorial notes and planning docs that live alongside real posts.
-      continue
-    }
-
-    const slug = slugMatch[1].trim()
-    const routePath = `/blog/${slug}`
-
-    if (!routePath || isExcludedRoutePath(routePath)) {
-      continue
-    }
-
-    const existingSources = discovered.get(routePath) ?? []
-    discovered.set(routePath, [...existingSources, `blog:${path.relative(ROOT_DIR, filePath).replace(/\\/g, '/')}`])
-  }
-
-  return discovered
+  return new Map()
 }
 
 function discoverPdfRoutes(): SourceMap {
@@ -234,18 +219,7 @@ function discoverPdfRoutes(): SourceMap {
 }
 
 function discoverLeadMagnetRoutes(): SourceMap {
-  const discovered: SourceMap = new Map()
-
-  for (const routePath of listLeadMagnetPaths()) {
-    if (isExcludedRoutePath(routePath)) {
-      continue
-    }
-
-    const existingSources = discovered.get(routePath) ?? []
-    discovered.set(routePath, [...existingSources, 'lead-magnet-slug'])
-  }
-
-  return discovered
+  return new Map()
 }
 
 function walkAppRoutes(currentDir: string, segments: string[] = []): SourceMap {
@@ -357,14 +331,7 @@ function collectCandidateMap(): SourceMap {
     }
   }
 
-  mergeRoutes(listLeadMagnetPaths(), 'lead-magnet-route')
   mergeRoutes(listLocalSeoPaths(), 'local-seo-route')
-  mergeRoutes(['/materialy', ...listMaterialyGuides().map((guide) => `/materialy/${guide.slug}`)], 'materialy-route')
-  mergeRoutes(listMaterialyBundles().map((bundle) => `/materialy/pakiet/${bundle.slug}`), 'materialy-bundle-route')
-  mergeRoutes(
-    OFFERS.filter((offer) => !LEGACY_OFFER_SLUGS.has(offer.slug)).map((offer) => `/oferta/${offer.slug}`),
-    'offer-detail-route',
-  )
 
   for (const [routePath, sources] of walkAppRoutes(APP_DIR)) {
     for (const source of sources) {
@@ -398,13 +365,11 @@ function collectCandidateMap(): SourceMap {
     }
   }
 
-  merge(QUICK_CONSULTATION_OFFER_PATH, 'offer:szybka-konsultacja-15-min')
-
   return candidates
 }
 
 function getChangeFrequency(routePath: string): SitemapEntry['changefreq'] {
-  return routePath === '/' || routePath === '/cennik' || routePath === '/cennik/pelny' || routePath === '/oferta'
+  return routePath === '/' || routePath === '/cennik' || routePath === '/cennik/pelny'
     ? 'weekly'
     : 'monthly'
 }
@@ -724,7 +689,7 @@ async function main() {
 
   assert.equal(
     uniqueCandidatePaths.some((routePath) =>
-      ['_v2', 'olsztyn', '/oferta/konsultacja-', '/behawiorysta-psow', '/behawiorysta-kotow'].some((needle) =>
+      ['_v2', 'olsztyn', '/oferta', '/behawiorysta-psow', '/behawiorysta-kotow'].some((needle) =>
         routePath.includes(needle),
       ),
     ),

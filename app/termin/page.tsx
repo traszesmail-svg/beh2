@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { unstable_noStore as noStore } from 'next/cache'
+import { redirect } from 'next/navigation'
 import { CalendarDays, Cat, Check, ChevronDown, Dog, Headphones, PawPrint } from 'lucide-react'
 import { EditorialIndexTopbar } from '@/components/EditorialIndexTopbar'
 import { NotatnikFooter, NotatnikSideVisuals } from '@/components/NotatnikA'
@@ -15,6 +16,7 @@ import {
   type BookingServiceType,
 } from '@/lib/booking-services'
 import {
+  appendSearchParams,
   buildFormHref,
   buildSlotHref,
   readBookingSpeciesSearchParam,
@@ -134,7 +136,7 @@ function getServiceQuery(serviceType: BookingServiceType) {
   return serviceType === DEFAULT_BOOKING_SERVICE ? null : serviceType
 }
 
-export default async function TerminPage({
+export async function BookingSlotCalendar({
   searchParams,
 }: {
   searchParams?: Record<string, string | string[] | undefined>
@@ -142,7 +144,7 @@ export default async function TerminPage({
   noStore()
 
   const requestedProblem = readProblemTypeSearchParam(searchParams?.problem)
-  const problem = requestedProblem ?? 'inne'
+  const problem = requestedProblem ?? 'szczeniak'
   const serviceType = normalizeBookingServiceType(readBookingServiceSearchParam(searchParams?.service))
   const serviceQuery = getServiceQuery(serviceType)
   const qaBooking = readQaBookingSearchParam(searchParams?.qa)
@@ -170,8 +172,8 @@ export default async function TerminPage({
   }
 
   const calendar = buildCalendarDays(groupedAvailability)
-  const problemSpecies = requestedSpecies ?? (problem === 'inne' ? 'inne' : getProblemSpecies(problem))
-  const contactHref = problemSpecies === 'inne' ? '/kontakt#formularz' : `/kontakt?species=${problemSpecies}#formularz`
+  const problemSpecies = requestedSpecies ?? getProblemSpecies(problem)
+  const contactHref = `/kontakt?species=${problemSpecies}#formularz`
   const isUrgentBooking = serviceType === 'kwadrans-na-juz'
   const sideVisualVariant = 'booking'
   const modeLabel =
@@ -210,11 +212,11 @@ export default async function TerminPage({
             <Cat size={18} strokeWidth={1.9} aria-hidden="true" />
             Kot
           </Link>
-          <Link href={buildSlotHref('inne', serviceQuery, qaBooking)} prefetch={false} className={problemSpecies === 'inne' ? 'is-selected' : ''}>
-            <PawPrint size={18} strokeWidth={1.9} aria-hidden="true" />
-            Nie wiem
-          </Link>
         </div>
+        <Link href="/quiz" prefetch={false} className="termin-inline-topic-select">
+          <PawPrint size={18} strokeWidth={1.9} aria-hidden="true" />
+          Nie wiem - przejdź przez krótki quiz
+        </Link>
       </div>
       <div>
         <span>Temat konsultacji</span>
@@ -232,7 +234,7 @@ export default async function TerminPage({
         data={getBreadcrumbJsonLd([
           { name: 'Strona główna', path: '/' },
           { name: 'Krótki wybór', path: '/wybor' },
-          { name: 'Termin', path: '/termin' },
+          { name: 'Termin', path: '/book' },
         ])}
       />
       <NotatnikSideVisuals variant={sideVisualVariant} />
@@ -326,8 +328,8 @@ export default async function TerminPage({
                 </article>
                 <article>
                   <Check size={30} strokeWidth={1.7} aria-hidden="true" />
-                  <strong>3. Otrzymaj wskazówki</strong>
-                  <span>Dostajesz konkretne zalecenia i plan pierwszych kroków.</span>
+                  <strong>3. Otrzymaj diagnozę</strong>
+                  <span>W Kwadransie dostajesz diagnozę na podstawie uzyskanych informacji i plan pierwszych kroków.</span>
                 </article>
               </div>
             </section>
@@ -351,4 +353,12 @@ export default async function TerminPage({
       </div>
     </main>
   )
+}
+
+export default function TerminRedirectPage({
+  searchParams,
+}: {
+  searchParams?: Record<string, string | string[] | undefined>
+}) {
+  redirect(appendSearchParams('/book', searchParams))
 }

@@ -13,6 +13,39 @@ const blockSearchIndexing = process.env.VERCEL_ENV
   ? process.env.VERCEL_ENV !== 'production'
   : process.env.NODE_ENV !== 'production'
 
+const REMOVED_MATERIALY_SLUGS = [
+  'kot-zyje-w-napieciu',
+  'pies-ile-ruchu-potrzebuje',
+  'kwadrans-podstawy-kota',
+  'kwadrans-podstawy-psa',
+  '30-zachowan',
+  'pierwszy-tydzien-z-kotem',
+  'pies-sam-w-domu',
+  'konflikt-miedzy-kotami',
+  'kot-boi-sie-kuwety',
+  'kot-budzi-dom-po-nocy',
+  'kot-chowa-sie-po-zmianach',
+  'kot-gryzie-przy-glaskaniu',
+  'koty-zabawa-czy-napiecie',
+  'miauczenie-o-swicie',
+  'pies-broni-zasobow',
+  'pies-do-pracy-z-ludzmi',
+  'pies-glupieje-na-smyczy',
+  'pies-niszczy-w-domu',
+  'pies-pogon-i-hamulce',
+  'pies-szczeka-na-gosci',
+  'szczeniak-gryzie-i-skacze',
+  'szczeniak-wyciszanie',
+]
+
+const REMOVED_LEAD_MAGNET_SLUGS = [
+  'pies-ile-ruchu-potrzebuje',
+  'kot-zyje-w-napieciu',
+  '30-zachowan',
+  'pierwszy-tydzien-z-kotem',
+  'pies-sam-w-domu',
+]
+
 const nextConfig = {
   images: {
     remotePatterns: [
@@ -37,13 +70,113 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: '/przybornik',
+        source: '/termin',
+        destination: '/book',
+        statusCode: 301,
+      },
+      {
+        source: '/behawiorysta-online-polska',
+        destination: '/',
+        statusCode: 301,
+      },
+      {
+        source: '/konsultacja-behawioralna-online',
+        destination: '/',
+        statusCode: 301,
+      },
+      {
+        source: '/psy',
+        destination: '/',
+        statusCode: 301,
+      },
+      {
+        source: '/psy/:path*',
+        destination: '/',
+        statusCode: 301,
+      },
+      {
+        source: '/koty',
+        destination: '/',
+        statusCode: 301,
+      },
+      {
+        source: '/koty/:path*',
+        destination: '/',
+        statusCode: 301,
+      },
+      {
+        source: '/od-czego-zaczac',
+        destination: '/o-mnie',
+        statusCode: 301,
+      },
+      {
+        source: '/urgent',
+        destination: '/wybor',
+        statusCode: 301,
+      },
+      {
+        source: '/produkt',
         destination: '/niezbednik',
         statusCode: 301,
       },
       {
+        source: '/oferta',
+        destination: '/cennik',
+        statusCode: 301,
+      },
+      {
+        source: '/oferta/:path*',
+        destination: '/cennik',
+        statusCode: 301,
+      },
+      {
         source: '/jak-sie-przygotowac',
-        destination: '/book',
+        destination: '/faq',
+        statusCode: 301,
+      },
+      {
+        source: '/jak-sie-przygotowac/:slug',
+        destination: '/faq',
+        statusCode: 301,
+      },
+      {
+        source: '/historie',
+        destination: '/opinie',
+        statusCode: 301,
+      },
+      {
+        source: '/historie/:slug',
+        destination: '/opinie',
+        statusCode: 301,
+      },
+      {
+        source: '/blog/:slug',
+        destination: '/blog',
+        statusCode: 301,
+      },
+      {
+        source: '/rezerwacja/:id',
+        destination: '/wybor',
+        statusCode: 301,
+      },
+      {
+        source: '/materialy/pakiet/:slug',
+        destination: '/materialy',
+        statusCode: 301,
+      },
+      ...REMOVED_MATERIALY_SLUGS.map((slug) => ({
+        source: `/materialy/${slug}`,
+        destination: '/materialy',
+        statusCode: 301,
+      })),
+      ...REMOVED_LEAD_MAGNET_SLUGS.map((slug) => ({
+        source: `/bezplatne-materialy/${slug}`,
+        destination: '/niezbednik',
+        statusCode: 301,
+      })),
+      {
+        source: '/przybornik',
+        destination: '/niezbednik',
         statusCode: 301,
       },
       {
@@ -53,37 +186,37 @@ const nextConfig = {
       },
       {
         source: '/blog/prog-pobudzenia-u-psa',
-        destination: '/blog/dlaczego-moj-pies-szczeka-na-inne-psy',
+        destination: '/blog',
         statusCode: 301,
       },
       {
         source: '/blog/pies-cignnie-na-smyczy',
-        destination: '/blog/pies-ciagnie-na-smyczy',
+        destination: '/blog',
         statusCode: 301,
       },
       {
         source: '/blog/pies-cignnie-na-smyczy-od-czego-zaczac',
-        destination: '/blog/pies-ciagnie-na-smyczy-od-czego-zaczac',
+        destination: '/blog',
         statusCode: 301,
       },
       {
         source: '/oferta/konsultacja-behawioralna-online',
-        destination: '/konsultacja-behawioralna-online',
+        destination: '/',
         statusCode: 301,
       },
       {
         source: '/behawiorysta-olsztyn',
-        destination: '/behawiorysta-online-polska',
+        destination: '/',
         statusCode: 301,
       },
       {
         source: '/behawiorysta-psow',
-        destination: '/psy',
+        destination: '/',
         statusCode: 301,
       },
       {
         source: '/behawiorysta-kotow',
-        destination: '/koty',
+        destination: '/',
         statusCode: 301,
       },
       {
@@ -93,7 +226,7 @@ const nextConfig = {
       },
       {
         source: '/oferta/poradniki-pdf/pies_zostaje_sam_i_wpada_w_panike_v2',
-        destination: '/materialy/pies-sam-w-domu',
+        destination: '/materialy',
         statusCode: 301,
       },
       {
@@ -103,17 +236,17 @@ const nextConfig = {
       },
       {
         source: '/oferta/poradniki-pdf/dlaczego_pies_glupieje_na_smyczy_v2',
-        destination: '/materialy/pies-ile-ruchu-potrzebuje',
+        destination: '/materialy',
         statusCode: 301,
       },
       {
         source: '/oferta/poradniki-pdf/trudny_spacer_v2',
-        destination: '/materialy/pies-ile-ruchu-potrzebuje',
+        destination: '/materialy',
         statusCode: 301,
       },
       {
         source: '/oferta/poradniki-pdf/czy_twoj_pies_naprawde_potrzebuje_wiecej_ruchu_v2',
-        destination: '/materialy/pies-ile-ruchu-potrzebuje',
+        destination: '/materialy',
         statusCode: 301,
       },
       {
@@ -128,7 +261,7 @@ const nextConfig = {
       },
       {
         source: '/oferta/poradniki-pdf/pies_niszczy_w_domu_v2',
-        destination: '/materialy/pies-sam-w-domu',
+        destination: '/materialy',
         statusCode: 301,
       },
       {
@@ -153,7 +286,7 @@ const nextConfig = {
       },
       {
         source: '/oferta/poradniki-pdf/kot-stres-srodowisko-i-bledy-opiekuna',
-        destination: '/materialy/kot-zyje-w-napieciu',
+        destination: '/materialy',
         statusCode: 301,
       },
       {

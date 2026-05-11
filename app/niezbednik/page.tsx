@@ -16,7 +16,6 @@ import {
 } from 'lucide-react'
 import { EditorialIndexTopbar } from '@/components/EditorialIndexTopbar'
 import { Footer } from '@/components/Footer'
-import { PetLeafHeroArt } from '@/components/PetLeafHeroArt'
 import { getLeadMagnetBySlug } from '@/lib/active-lead-magnets'
 import { buildMarketingMetadata } from '@/lib/seo'
 
@@ -51,7 +50,10 @@ function leadMagnetHref(slug: string) {
     throw new Error(`Missing lead magnet required by /niezbednik: ${slug}`)
   }
 
-  return `/bezplatne-materialy/${magnet.slug}`
+  if (magnet.slug.includes('pies')) return '/materialy#psy'
+  if (magnet.slug.includes('kot')) return '/materialy#koty'
+
+  return '/materialy#start'
 }
 
 const heroHighlights = [
@@ -83,7 +85,7 @@ const freeResources: ResourceCard[] = [
     label: 'PDF',
     title: 'Pies i poziom ruchu',
     description: 'Kiedy ruch pomaga, a kiedy dokłada pobudzenia i przeciążenia.',
-    href: '/materialy/pies-ile-ruchu-potrzebuje',
+    href: '/materialy#psy',
     coverSrc: '/branding/pdf-covers/pies-ile-ruchu-potrzebuje.png',
     coverAlt: 'Okładka PDF Pies i poziom ruchu',
     tone: 'dog',
@@ -215,8 +217,46 @@ export default function EssentialsPage() {
               </div>
             </div>
 
-            <div className="essentials-index-hero-art" aria-hidden="true">
-              <PetLeafHeroArt />
+            <div className="essentials-index-hero-art essentials-index-hero-photo">
+              <Image
+                src="/branding/side-visuals/blog-laptop-notes.jpg"
+                alt="Opiekun szuka informacji przy komputerze"
+                width={960}
+                height={720}
+                priority
+              />
+            </div>
+          </section>
+
+          <section className="essentials-index-bundles essentials-index-bundles-top" aria-labelledby="essentials-index-bundles-title">
+            <div className="essentials-index-section-head">
+              <h2 id="essentials-index-bundles-title">Ścieżki tematyczne</h2>
+              <p>Materiały ułożone według sytuacji, żeby łatwiej wybrać dobry pierwszy krok.</p>
+            </div>
+            <div className="essentials-index-bundle-grid">
+              {bundles.map((item) => {
+                const Icon = 'icon' in item ? item.icon : null
+
+                return (
+                  <article key={item.title} className={`essentials-index-bundle-card is-${item.tone}`}>
+                    <span className="essentials-index-bundle-media" aria-hidden="true">
+                      {'image' in item ? (
+                        <Image src={item.image} alt="" width={112} height={112} />
+                      ) : Icon ? (
+                        <Icon size={72} strokeWidth={1.55} />
+                      ) : null}
+                    </span>
+                    <div>
+                      <h3>{item.title}</h3>
+                      <p>{item.description}</p>
+                      <Link href={item.href} prefetch={false} className="essentials-index-small-link">
+                        <span>Zobacz zestaw</span>
+                        <ArrowRight size={15} strokeWidth={1.8} aria-hidden="true" />
+                      </Link>
+                    </div>
+                  </article>
+                )
+              })}
             </div>
           </section>
 
@@ -288,38 +328,6 @@ export default function EssentialsPage() {
                 </div>
               </section>
             </aside>
-          </section>
-
-          <section className="essentials-index-bundles" aria-labelledby="essentials-index-bundles-title">
-            <div className="essentials-index-section-head">
-              <h2 id="essentials-index-bundles-title">Ścieżki tematyczne</h2>
-              <p>Materiały ułożone według sytuacji, żeby łatwiej wybrać dobry pierwszy krok.</p>
-            </div>
-            <div className="essentials-index-bundle-grid">
-              {bundles.map((item) => {
-                const Icon = 'icon' in item ? item.icon : null
-
-                return (
-                  <article key={item.title} className={`essentials-index-bundle-card is-${item.tone}`}>
-                    <span className="essentials-index-bundle-media" aria-hidden="true">
-                      {'image' in item ? (
-                        <Image src={item.image} alt="" width={112} height={112} />
-                      ) : Icon ? (
-                        <Icon size={72} strokeWidth={1.55} />
-                      ) : null}
-                    </span>
-                    <div>
-                      <h3>{item.title}</h3>
-                      <p>{item.description}</p>
-                      <Link href={item.href} prefetch={false} className="essentials-index-small-link">
-                        <span>Zobacz zestaw</span>
-                        <ArrowRight size={15} strokeWidth={1.8} aria-hidden="true" />
-                      </Link>
-                    </div>
-                  </article>
-                )
-              })}
-            </div>
           </section>
 
           <section className="essentials-index-newsletter" aria-labelledby="essentials-index-newsletter-title">

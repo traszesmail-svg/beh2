@@ -52,8 +52,6 @@ type PaymentReferenceLayoutProps = {
 }
 
 const navItems = [
-  { href: '/psy', label: 'Pies' },
-  { href: '/koty', label: 'Kot' },
   { href: '/o-mnie', label: 'O mnie' },
   { href: '/cennik', label: 'Cennik' },
   { href: '/niezbednik', label: 'Niezbędnik' },

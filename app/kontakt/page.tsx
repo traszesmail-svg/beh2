@@ -1,17 +1,11 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
-import Link from 'next/link'
 import { Suspense } from 'react'
 import {
-  AtSign,
-  CheckCircle2,
   Globe2,
-  Headphones,
   Heart,
-  Mail,
   MessageCircle,
   PawPrint,
-  Volume2,
 } from 'lucide-react'
 import { ContactLeadForm } from '@/components/ContactLeadForm'
 import { NotatnikFooter, NotatnikSideVisuals, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
@@ -19,7 +13,6 @@ import { Schema } from '@/components/schema'
 import { getBreadcrumbJsonLd, getFaqPageJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
 import { FAQ_SHORTLISTS } from '@/lib/trust-layer'
-import { CAPBT_PROFILE_URL, INSTAGRAM_PROFILE_URL, getPublicContactDetails } from '@/lib/site'
 
 export const metadata: Metadata = buildMarketingMetadata({
   title: 'Kontakt i rezerwacja konsultacji',
@@ -29,26 +22,7 @@ export const metadata: Metadata = buildMarketingMetadata({
 
 const contactFaqItems = FAQ_SHORTLISTS.contact.slice(0, 5)
 
-const contactSteps = [
-  {
-    title: 'Opisujesz sytuację',
-    copy: 'Wybierasz gatunek albo Nie wiem, wpisujesz temat i piszesz kilka zdań.',
-    icon: MessageCircle,
-  },
-  {
-    title: 'Czytam i porządkuję temat',
-    copy: 'Sprawdzam, czy wystarczy odpowiedź, Kwadrans czy pełna konsultacja.',
-    icon: Volume2,
-  },
-  {
-    title: 'Dostajesz rekomendację',
-    copy: 'Odpowiadam w ciągu 1-2 dni roboczych z jasnym kolejnym krokiem.',
-    icon: CheckCircle2,
-  },
-] as const
-
 export default function ContactPage() {
-  const publicContact = getPublicContactDetails()
   const structuredData = [
     getBreadcrumbJsonLd([{ name: 'Strona główna', path: '/' }, { name: 'Kontakt', path: '/kontakt' }]),
     getFaqPageJsonLd(contactFaqItems),
@@ -65,10 +39,10 @@ export default function ContactPage() {
           <div className="contact-hero-copy">
             <figure className="contact-intro-photo">
               <Image
-                src="/branding/omnie3.png"
-                alt="Krzysztof Regulski w granatowym stroju medycznym podczas kontaktu online"
-                width={320}
-                height={480}
+                src="/images/hero-main.png"
+                alt="Krzysztof Regulski trzyma kota na rękach"
+                width={720}
+                height={860}
                 priority
               />
             </figure>
@@ -77,61 +51,13 @@ export default function ContactPage() {
               Wystarczy gatunek, temat i kilka zdań. Odpowiem w ciągu 1-2 dni roboczych i wskażę
               najprostszy kolejny krok.
             </p>
-            <section id="jak-wyglada-kontakt" className="contact-process-panel contact-process-panel-hero" aria-labelledby="contact-process-title">
-              <h2 id="contact-process-title">Jak wygląda kontakt?</h2>
-              <div className="contact-process-list">
-                {contactSteps.map((step, index) => {
-                  const Icon = step.icon
-
-                  return (
-                    <article key={step.title} className="contact-process-step">
-                      <span className="contact-process-icon" aria-hidden="true">
-                        <Icon size={24} strokeWidth={1.85} />
-                      </span>
-                      <div>
-                        <strong>
-                          {index + 1}. {step.title}
-                        </strong>
-                        <p>{step.copy}</p>
-                      </div>
-                    </article>
-                  )
-                })}
-              </div>
-            </section>
-            <section id="kontakt-bez-formularza" className="contact-direct-panel contact-direct-panel-hero" aria-labelledby="contact-direct-title">
-              <h2 id="contact-direct-title">Kontakt bez formularza</h2>
-              <div className="contact-direct-grid">
-                <span>
-                  <Mail size={20} strokeWidth={1.8} aria-hidden="true" />
-                  <strong>E-mail</strong>
-                  <a href={`mailto:${publicContact.email}`}>{publicContact.email}</a>
-                </span>
-                <span>
-                  <Headphones size={20} strokeWidth={1.8} aria-hidden="true" />
-                  <strong>Odpowiedź</strong>
-                  1-2 dni robocze
-                </span>
-                <span>
-                  <MessageCircle size={20} strokeWidth={1.8} aria-hidden="true" />
-                  <strong>Forma</strong>
-                  formularz / e-mail
-                </span>
-                <span>
-                  <AtSign size={20} strokeWidth={1.8} aria-hidden="true" />
-                  <strong>Instagram</strong>
-                  <Link href={INSTAGRAM_PROFILE_URL} target="_blank" rel="noopener noreferrer">
-                    @regulskibehawiorysta
-                  </Link>
-                </span>
-                <span>
-                  <Globe2 size={20} strokeWidth={1.8} aria-hidden="true" />
-                  <strong>Profil</strong>
-                  <Link href={CAPBT_PROFILE_URL} target="_blank" rel="noopener noreferrer">
-                    behawioryscicoape.pl/Regulski
-                  </Link>
-                </span>
-              </div>
+            <section className="contact-bio-card" aria-label="O specjaliście">
+              <p>
+                Od ponad 10 lat jestem behawiorystą zwierzęcym oraz trenerem COAPE, specjalizującym się w pracy z psami i kotami z trudnymi problemami behawioralnymi. Zajmuję się m.in. terapią zwierząt agresywnych, odbudową zaburzonych relacji psio-kocich oraz kompleksowym rozwiązywaniem problemów behawioralnych kotów.
+              </p>
+              <p>
+                Jako technik weterynarii łączę wiedzę behawioralną z medyczną, skutecznie stosując w uzasadnionych przypadkach farmakoterapię jako wsparcie terapii behawioralnej. Prowadzę również hotel resocjalizacyjny dla psów i kotów, zapewniający bezpieczne warunki do pracy terapeutycznej, indywidualne podejście oraz stały nadzór specjalistyczny.
+              </p>
             </section>
             <div className="contact-hero-proof" aria-label="Najważniejsze informacje">
               <span>
