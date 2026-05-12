@@ -86,24 +86,24 @@ function getSelectedServiceIntro(service: BookingServiceType) {
   switch (service) {
     case 'konsultacja-30-min':
       return {
-        title: `Wybrany format: ${option.label} / ${option.price}.`,
+        title: `Wybrana rozmowa: ${option.label} / ${option.price}.`,
         copy: '30 minut online daje więcej miejsca na dwa-trzy wątki i spokojniejsze uporządkowanie sytuacji niż sam Kwadrans.',
       }
     case 'konsultacja-behawioralna-online':
       return {
-        title: `Wybrany format: ${option.label} / ${option.price}.`,
-        copy: 'To osobny format z diagnozą sytuacji, planem poprawy i 7 dniami konsultacji tekstowych przez WhatsApp.',
+        title: `Wybrana rozmowa: ${option.label} / ${option.price}.`,
+        copy: 'To osobny format z diagnozą behawioralną opartą na danych, planem działania i 7 dniami konsultacji tekstowych przez WhatsApp.',
       }
     case 'kwadrans-na-juz':
       return {
-        title: `Wybrany format: ${option.label} / ${option.price}.`,
+        title: `Wybrana rozmowa: ${option.label} / ${option.price}.`,
         copy: 'To ten sam 15-minutowy format co zwykły Kwadrans, tylko z priorytetem i szybszym potwierdzeniem terminu.',
       }
     case 'szybka-konsultacja-15-min':
     default:
       return {
-        title: `Wybrany format: ${option.label} / ${option.price}.`,
-        copy: 'Kwadrans to 15 minut audio bez kamery. Dobry pierwszy krok, gdy chcesz spokojnie nazwać problem i ustalić priorytet.',
+        title: `Wybrana rozmowa: ${option.label} / ${option.price}.`,
+        copy: 'Kwadrans to 15 minut audio bez kamery. Dobry pierwszy krok, gdy chcesz spokojnie nazwać sytuację i ustalić priorytet.',
       }
   }
 }
@@ -271,7 +271,7 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
 
       {showEntryServiceBox && entryServiceOption ? (
         <div className="info-box full-width">
-          <strong>Ten formularz otworzył się z usługą: {entryServiceOption.label}.</strong> Niżej wybrałeś już inny format, więc po wysłaniu prośby zapisze się aktualny wybór.
+          <strong>Ten formularz otworzył się z usługą: {entryServiceOption.label}.</strong> Niżej wybrałeś już inną rozmowę, więc po wysłaniu prośby zapisze się aktualny wybór.
         </div>
       ) : null}
 
@@ -293,7 +293,7 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
 
       <fieldset className="full-width form-field consent-stack">
         <legend className="field-legend">
-          {showServiceChangeLegend ? 'Zmień usługę, jeśli potrzebujesz innego formatu' : 'Wybierz usługę'}
+          {showServiceChangeLegend ? 'Zmień usługę, jeśli potrzebujesz innej rozmowy' : 'Wybierz usługę'}
         </legend>
         {PRIMARY_SERVICE_OPTIONS.map((option) => (
           <label key={option.value} className="checkbox-card" htmlFor={`service-${option.value}`}>

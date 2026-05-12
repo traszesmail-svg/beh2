@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { CheckCircle2, WalletCards } from 'lucide-react'
 import { FUNNEL_SERVICE_CONFIG, type PublicBookingServiceType } from '@/lib/funnel'
-import { PUBLIC_OFFER_BOOKING_PAYMENT, PUBLIC_OFFER_CANCELLATION_COPY } from '@/lib/public-offer-copy'
 
 export const bookHref = '/wybor'
 export const contactHref = '/kontakt#formularz'
@@ -11,8 +10,10 @@ export const pricingCards: Array<{
   service: PublicBookingServiceType
   badge: string
   title: string
+  summaryTitle: string
   price: string
   copy: string
+  supportCopy: string
   features: string[]
   cta: string
   featured?: boolean
@@ -20,61 +21,74 @@ export const pricingCards: Array<{
   {
     service: 'szybka-konsultacja-15-min',
     badge: 'najprostszy start',
-    title: 'Kwadrans',
+    title: 'Kwadrans - gdy potrzebujesz pierwszego kierunku',
+    summaryTitle: 'Kwadrans',
     price: '69 zł',
-    copy: '15 minut audio bez kamery, gdy chcesz nazwać problem i ustalić pierwszy sensowny krok.',
-    features: ['diagnoza behawioralna na podstawie informacji z rozmowy', 'audio bez kamery', 'dobry start przed większą decyzją'],
-    cta: 'Wybierz ścieżkę',
+    copy: '15 minut rozmowy audio bez kamery. Dobre, gdy masz jedno główne pytanie i chcesz wiedzieć, co zrobić najpierw - a czego na razie nie ruszać.',
+    supportCopy:
+      'Dostajesz wstępną diagnozę behawioralną na podstawie przekazanych informacji: co może być głównym mechanizmem zachowania, co warto sprawdzić i czego nie robić na ślepo.',
+    features: ['jedno główne pytanie albo pierwszy porządek', 'audio bez kamery', 'wstępna diagnoza behawioralna', 'dobry start przed większą decyzją'],
+    cta: 'Chcę zacząć od Kwadransa',
     featured: true,
   },
   {
     service: 'kwadrans-na-juz',
     badge: 'priorytet',
-    title: 'Kwadrans na już',
+    title: 'Kwadrans priorytetowy - gdy nie chcesz czekać',
+    summaryTitle: 'Kwadrans na już',
     price: '99 zł',
-    copy: 'Ten sam 15-minutowy format, ale z priorytetem i możliwie szybkim potwierdzeniem terminu.',
-    features: ['diagnoza w tym samym 15-minutowym zakresie', 'szybsze potwierdzenie', 'dla tematów pilnych, ale krótkich'],
-    cta: 'Wybierz ścieżkę',
+    copy: 'Ten sam 15-minutowy format, tylko z szybszym potraktowaniem wiadomości i terminu. Dla sytuacji, w których potrzebujesz kierunku możliwie szybko.',
+    supportCopy:
+      'Na podstawie opisu i odpowiedzi dostajesz wstępną diagnozę behawioralną opartą na przekazanych informacjach oraz pierwszy kierunek działania.',
+    features: ['ten sam zakres co Kwadrans', 'szybsze potwierdzenie', 'wstępna diagnoza behawioralna', 'dla tematów pilnych, ale krótkich'],
+    cta: 'Chcę szybszy termin',
   },
   {
     service: 'konsultacja-30-min',
     badge: 'więcej czasu',
-    title: 'Dwa kwadranse',
+    title: 'Dwa kwadranse - gdy jedno pytanie robi się kilkoma',
+    summaryTitle: 'Dwa kwadranse',
     price: '169 zł',
-    copy: '30 minut online, gdy temat ma kilka wątków albo potrzebujesz spokojniejszego wejścia.',
-    features: ['diagnoza z większą ilością kontekstu', 'dla kilku pytań naraz', 'dobry most przed pełną konsultacją'],
-    cta: 'Wybierz ścieżkę',
+    copy: '30 minut rozmowy, gdy czujesz, że to nie jest jedna rzecz: zachowanie, emocje, dom, spacer albo relacje zaczynają się mieszać.',
+    supportCopy:
+      'Wspólnie układamy fakty, szukamy najbardziej prawdopodobnej przyczyny zachowania i tworzę diagnozę behawioralną opartą na Twoim opisie, formularzu i kontekście domu, spacerów albo relacji między zwierzętami.',
+    features: ['więcej kontekstu niż w Kwadransie', 'dobre przy kilku pytaniach naraz', 'diagnoza behawioralna oparta na danych', 'dobry most przed pełną konsultacją'],
+    cta: 'Chcę spokojniej omówić temat',
   },
   {
     service: 'konsultacja-behawioralna-online',
     badge: 'pełny zakres',
-    title: 'Pełna konsultacja',
+    title: 'Pełna konsultacja - gdy potrzebny jest plan, nie tylko podpowiedź',
+    summaryTitle: 'Pełna konsultacja',
     price: '470 zł',
-    copy: 'Rozmowa online, analiza sytuacji, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.',
-    features: ['diagnoza, prawdopodobna etiologia i przebieg problemu', 'plan pracy po konsultacji', '7 dni kontaktu tekstowego'],
-    cta: 'Wybierz ścieżkę',
+    copy: 'Pełna rozmowa online, diagnoza behawioralna oparta na danych, plan działania i 7 dni wsparcia tekstowego.',
+    supportCopy:
+      'To najlepszy wybór, gdy zachowanie trwa długo, ma kilka warstw albo wpływa na życie całego domu. Diagnoza behawioralna powstaje na podstawie formularza, rozmowy, historii zachowania, kontekstu zdrowia, diety, środowiska, nagrań i danych, które przekażesz przed konsultacją.',
+    features: ['sprawy złożone albo trwające długo', 'pełniejsza diagnoza behawioralna', 'plan pracy po konsultacji', '7 dni kontaktu tekstowego'],
+    cta: 'Chcę pełną konsultację',
   },
 ]
 
 export const pricingFaqItems = [
   {
-    question: 'Czym różni się Kwadrans od Kwadransu na już?',
+    question: 'Czy w Kwadransie też dostanę diagnozę behawioralną?',
     answer:
-      'Zakres jest taki sam: 15 minut audio bez kamery. Wariant za 99 zł dotyczy priorytetu i możliwie szybkiego terminu, a nie dłuższej konsultacji.',
+      'Tak, ale zakres diagnozy behawioralnej zależy od ilości informacji. W Kwadransie dostajesz wstępną diagnozę behawioralną i pierwszy kierunek działania. Przy sprawach złożonych pełniejsza diagnoza behawioralna wymaga dłuższej rozmowy, formularza, historii zachowania i czasem nagrań.',
   },
   {
     question: 'Kiedy wybrać Dwa kwadranse?',
     answer:
-      'Gdy jedno pytanie rozlewa się na kilka wątków, a 15 minut byłoby za ciasne na spokojne uporządkowanie sytuacji.',
+      'Gdy jedno pytanie zaczyna łączyć się z kilkoma rzeczami: spacerem, emocjami, domem, relacją, dietą albo zdrowiem. 30 minut daje więcej miejsca na uporządkowanie faktów i spokojniejszą diagnozę behawioralną opartą na danych.',
   },
   {
     question: 'Kiedy od razu pełna konsultacja?',
     answer:
-      'Przy sprawach złożonych, przewlekłych albo takich, które wymagają diagnozy, planu pracy i dalszego kontaktu po rozmowie.',
+      'Gdy zachowanie trwa długo, wraca mimo prób, wpływa na życie domowników albo dotyczy kilku obszarów naraz. Pełna konsultacja ma sens wtedy, gdy potrzebujesz nie tylko odpowiedzi, ale diagnozy behawioralnej, planu i możliwości dopytania po rozmowie.',
   },
   {
-    question: 'Jak wygląda płatność?',
-    answer: `${PUBLIC_OFFER_BOOKING_PAYMENT} ${PUBLIC_OFFER_CANCELLATION_COPY}`,
+    question: 'Czy diagnoza behawioralna zastępuje wizytę u lekarza weterynarii?',
+    answer:
+      'Nie. Diagnoza behawioralna opiera się na informacjach o zachowaniu, środowisku, rutynie, diecie i historii zwierzęcia. Jeśli coś może mieć tło zdrowotne, warto równolegle skonsultować się z lekarzem weterynarii.',
   },
 ]
 
@@ -101,7 +115,7 @@ export function PricingSummaryCard() {
       <div className="reference-price-ladder">
         {pricingCards.map((card) => (
           <div key={card.service} className="reference-price-ladder-row">
-            <span>{card.title}</span>
+            <span>{card.summaryTitle}</span>
             <strong>{card.price}</strong>
           </div>
         ))}
@@ -118,7 +132,7 @@ export function PricingSummaryCard() {
 export function PricingCardsSection({ className = '' }: { className?: string }) {
   return (
     <section className={`reference-section-card ${className}`.trim()}>
-      <h2>Wybierz format</h2>
+      <h2>Pomóż mi dobrać rozmowę</h2>
       <div className="reference-pricing-grid">
         {pricingCards.map((card) => (
           <article key={card.service} className={`reference-price-card${card.featured ? ' is-featured' : ''}`}>
@@ -128,6 +142,7 @@ export function PricingCardsSection({ className = '' }: { className?: string }) 
               <strong>{card.price}</strong>
             </div>
             <p>{card.copy}</p>
+            <p>{card.supportCopy}</p>
             <ul>
               {card.features.map((feature) => (
                 <li key={feature}>

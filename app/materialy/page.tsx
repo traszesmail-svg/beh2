@@ -184,7 +184,7 @@ export default function MaterialyLandingPage() {
         title="Jeśli materiał nie wystarczy, <em>Kwadrans porządkuje temat w 15 minut.</em>"
         copy="PDF jest dobry jako spokojny start. Gdy objaw wraca albo łączy się z innymi wątkami, rozmowa szybciej ustawia priorytet."
         primaryHref={quickHref}
-        primaryLabel="Zarezerwuj Kwadrans / 69 zł"
+        primaryLabel="Umów spokojny pierwszy krok / 69 zł"
         secondaryHref="/niezbednik"
         secondaryLabel="Zobacz Niezbędnik"
       />

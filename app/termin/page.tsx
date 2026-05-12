@@ -328,8 +328,8 @@ export async function BookingSlotCalendar({
                 </article>
                 <article>
                   <Check size={30} strokeWidth={1.7} aria-hidden="true" />
-                  <strong>3. Otrzymaj diagnozę</strong>
-                  <span>W Kwadransie dostajesz diagnozę na podstawie uzyskanych informacji i plan pierwszych kroków.</span>
+                  <strong>3. Otrzymaj diagnozę behawioralną</strong>
+                  <span>W Kwadransie dostajesz diagnozę behawioralną opartą na informacjach przekazanych przez opiekuna i plan pierwszych kroków.</span>
                 </article>
               </div>
             </section>

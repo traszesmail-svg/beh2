@@ -17,7 +17,7 @@ import { FAQ_SHORTLISTS } from '@/lib/trust-layer'
 export const metadata: Metadata = buildMarketingMetadata({
   title: 'Kontakt i rezerwacja konsultacji',
   path: '/kontakt',
-  description: 'Kontakt i rezerwacja konsultacji | formularz, e-mail i spokojny pierwszy krok dla opiekunów psów i kotów.',
+  description: 'Kontakt i spokojny pierwszy krok dla opiekunów psów i kotów. Opisz sytuację własnymi słowami.',
 })
 
 const contactFaqItems = FAQ_SHORTLISTS.contact.slice(0, 5)
@@ -46,10 +46,15 @@ export default function ContactPage() {
                 priority
               />
             </figure>
-            <h1>Napisz, zanim zarezerwujesz.</h1>
+            <h1>Napisz krótko, co się dzieje. Pomogę Ci wybrać najrozsądniejszy pierwszy krok.</h1>
             <p>
-              Wystarczy gatunek, temat i kilka zdań. Odpowiem w ciągu 1-2 dni roboczych i wskażę
-              najprostszy kolejny krok.
+              Nie musisz wiedzieć, czy to lęk, agresja, stres, problem zdrowotny czy zły nawyk. Opisz sytuację własnymi słowami: co się dzieje, od kiedy, w jakich momentach i co najbardziej Cię martwi.
+            </p>
+            <p>
+              Odpowiem i podpowiem, czy wystarczy krótka rozmowa, czy lepiej od razu zaplanować pełną konsultację.
+            </p>
+            <p>
+              Jako behawiorysta, doświadczony technik weterynarii i dietetyk patrzę na zachowanie szerzej: przez emocje, zdrowie, ból, dietę, środowisko i codzienną rutynę. Dzięki temu mogę pomóc oddzielić objaw od możliwej przyczyny i wybrać pierwszy krok, który ma sens.
             </p>
             <div className="contact-hero-proof" aria-label="Najważniejsze informacje">
               <span>

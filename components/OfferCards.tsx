@@ -18,8 +18,8 @@ const offers: Offer[] = [
     icon: 'timer',
     title: 'Kwadrans',
     price: '69 zł',
-    desc: '15 minut audio bez kamery: diagnoza behawioralna na podstawie uzyskanych informacji i pierwszy kierunek.',
-    features: ['diagnoza w Kwadrans', '15 min audio', '69 zł'],
+    desc: '15 minut audio bez kamery: diagnoza behawioralna oparta na informacjach przekazanych przez opiekuna i pierwszy kierunek.',
+    features: ['diagnoza behawioralna w Kwadrans', '15 min audio', '69 zł'],
     highlight: true,
     bookUrl: '/book',
   },
@@ -28,8 +28,8 @@ const offers: Offer[] = [
     icon: 'zap',
     title: 'Kwadrans na już',
     price: '99 zł',
-    desc: 'Ten sam zakres co Kwadrans 69 zł: diagnoza w rozmowie audio, tylko dla pilniejszego terminu.',
-    features: ['wariant pilny', 'diagnoza w 15 min', 'ten sam zakres'],
+    desc: 'Ten sam zakres co Kwadrans 69 zł: diagnoza behawioralna oparta na informacjach przekazanych przez opiekuna, tylko dla pilniejszego terminu.',
+    features: ['wariant pilny', 'diagnoza behawioralna w 15 min', 'ten sam zakres'],
     bookUrl: '/book?service=kwadrans-na-juz',
   },
   {
@@ -46,8 +46,8 @@ const offers: Offer[] = [
     icon: 'clipboard-list',
     title: 'Pełna konsultacja',
     price: '470 zł',
-    desc: 'Rozmowa online, diagnoza, prawdopodobna etiologia, możliwy przebieg problemu i 7 dni konsultacji WhatsApp.',
-    features: ['Diagnoza i etiologia', 'Plan poprawy', '7 dni WhatsApp'],
+    desc: 'Rozmowa online, diagnoza behawioralna oparta na danych, prawdopodobna etiologia, możliwy przebieg sytuacji i 7 dni konsultacji WhatsApp.',
+    features: ['Diagnoza behawioralna i etiologia', 'Plan działania', '7 dni WhatsApp'],
     bookUrl: '/book?service=konsultacja-behawioralna-online',
   },
 ]
@@ -77,7 +77,7 @@ export function OfferCards() {
           </ul>
 
           <Link href={offer.bookUrl} prefetch={false} className="offer-format-link">
-            Zarezerwuj
+            Umów spokojny pierwszy krok
             <Icon name="arrow-right" size={16} />
           </Link>
         </article>

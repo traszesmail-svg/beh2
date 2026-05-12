@@ -17,9 +17,9 @@ type NewsletterSignupProps = {
 
 const NEWSLETTER_SIGNUP_COPY = {
   title: 'Newsletter dla opiekunów psów i kotów',
-  lead: 'Piszę raz na jakiś czas, tylko kiedy mam coś konkretnego. Głównie o tym, co napędza zachowanie zwierząt i co z tym zrobić bez nadmiaru teorii.',
+  lead: 'Raz w miesiącu spokojna porcja wiedzy o psach, kotach i pierwszych krokach w trudnych sytuacjach.',
   buttonLabel: 'Zapisz się',
-  note: 'Raz na 1-2 tygodnie. Możesz wypisac się w kazdej chwili.',
+  note: 'Bez spamu, bez codziennych maili. Możesz wypisać się jednym kliknięciem.',
   successTitle: 'Dziękuję za zapis',
   successBody: 'Na liście zostajesz po to, żeby dostawać praktyczne treści, a nie częste kampanie sprzedażowe.',
 } as const

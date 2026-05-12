@@ -24,12 +24,12 @@ const defaultFAQs: FAQ[] = [
   {
     icon: 'clipboard-list',
     question: 'Co obejmuje Pełna konsultacja 470 zł?',
-    answer: 'Rozmowe online, diagnozę sytuacji, plan poprawy i 7 dni konsultacji WhatsApp.',
+    answer: 'Rozmowę online, diagnozę behawioralną opartą na danych, plan działania i 7 dni konsultacji WhatsApp.',
   },
   {
     icon: 'lightbulb',
     question: 'Co jeśli nie wiem, od czego zacząć?',
-    answer: 'Najprostszy start to Kwadrans 69 zł albo materiał z Niezbędnika. Po krótkim opisie sytuacji wybierzemy najlepszy krok.',
+    answer: 'Najprostszy start to Kwadrans 69 zł albo materiał z Niezbędnika. Po krótkim opisie sytuacji wybierzemy najrozsądniejszy krok na ten moment.',
   },
 ];
 

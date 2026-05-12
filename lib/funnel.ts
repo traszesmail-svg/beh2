@@ -11,11 +11,11 @@ export type LegacyBookingServiceType = 'konsultacja-30-min'
 export type AnyBookingServiceType = PublicBookingServiceType | LegacyBookingServiceType
 
 export const FUNNEL_CTA_LABELS = {
-  primary: 'Zarezerwuj 15-minutową konsultację behawioralną',
-  bridge: 'Zarezerwuj Dwa kwadranse z behawiorystą',
+  primary: 'Umów spokojny pierwszy krok',
+  bridge: 'Chcę spokojniej omówić temat',
   secondary: 'Przejdź do Niezbędnika',
-  consultation: 'Zarezerwuj pełną konsultację behawioralną',
-  contact: 'Napisz wiadomość',
+  consultation: 'Chcę pełną konsultację',
+  contact: 'Opisz krótko, co się dzieje',
 } as const
 
 export type FunnelServiceConfig = {
@@ -51,10 +51,10 @@ export const FUNNEL_SERVICE_CONFIG: Record<AnyBookingServiceType, FunnelServiceC
     pricePrefix: null,
     mode: 'audio',
     slotSpan: 1,
-    slotSummary: '15-minutowa konsultacja behawioralna: diagnoza behawioralna na podstawie uzyskanych informacji i pierwszy kierunek rozmowy audio.',
+    slotSummary: '15-minutowa konsultacja behawioralna: diagnoza behawioralna oparta na informacjach przekazanych przez opiekuna i pierwszy kierunek rozmowy audio.',
     slotBadge: '15 min audio',
-    roomSummary: '15-minutowa konsultacja behawioralna: diagnoza behawioralna na podstawie uzyskanych informacji, bez kamery.',
-    publicSummary: '15 minut rozmowy audio bez kamery: diagnoza na podstawie uzyskanych informacji i uporządkowanie jednego tematu.',
+    roomSummary: '15-minutowa konsultacja behawioralna: diagnoza behawioralna oparta na informacjach przekazanych przez opiekuna, bez kamery.',
+    publicSummary: '15 minut rozmowy audio bez kamery: diagnoza behawioralna oparta na informacjach przekazanych przez opiekuna i uporządkowanie jednego tematu.',
     bookingLead: 'Wybierz gatunek i temat. Potem zobaczysz dostępne terminy 15-minutowej konsultacji.',
     availabilityLabel: 'Terminy pokażą się po wyborze tematu.',
     noAvailabilityMessage: 'Jeśli dziś nie ma terminu, sprawdź później albo napisz wiadomość.',
@@ -71,10 +71,10 @@ export const FUNNEL_SERVICE_CONFIG: Record<AnyBookingServiceType, FunnelServiceC
     pricePrefix: null,
     mode: 'audio',
     slotSpan: 1,
-    slotSummary: 'Kwadrans na już: termin w ciągu 15 minut, diagnoza behawioralna w 15-minutowej rozmowie audio.',
+    slotSummary: 'Kwadrans na już: termin w ciągu 15 minut, diagnoza behawioralna oparta na informacjach w 15-minutowej rozmowie audio.',
     slotBadge: 'teraz / 15 min',
-    roomSummary: 'Kwadrans na już: diagnoza behawioralna w 15-minutowej rozmowie audio bez kamery, start w ciągu 15 minut od potwierdzenia wpłaty.',
-    publicSummary: 'To ten sam 15-minutowy format co Kwadrans za 69 zł: diagnoza na podstawie uzyskanych informacji, ale z priorytetem terminu.',
+    roomSummary: 'Kwadrans na już: diagnoza behawioralna oparta na informacjach w 15-minutowej rozmowie audio bez kamery, start w ciągu 15 minut od potwierdzenia wpłaty.',
+    publicSummary: 'To ten sam 15-minutowy format co Kwadrans za 69 zł: diagnoza behawioralna oparta na informacjach przekazanych przez opiekuna, ale z priorytetem terminu.',
     bookingLead: 'Napisz krótko, co się dzieje, i potwierdź wpłatę. Odpiszemy z terminem w ciągu 15 minut.',
     availabilityLabel: 'Dostępność zależy od bieżącej okazji - odpiszemy do 15 minut w godzinach dyżuru.',
     noAvailabilityMessage: 'Jeśli w tej chwili nie mam wolnego okienka, pokażę Ci najbliższy wolny Kwadrans.',
@@ -111,11 +111,11 @@ export const FUNNEL_SERVICE_CONFIG: Record<AnyBookingServiceType, FunnelServiceC
     pricePrefix: null,
     mode: 'online',
     slotSpan: 3,
-    slotSummary: 'Pełna konsultacja behawioralna: rozmowa online, diagnoza, prawdopodobna etiologia i plan pracy.',
+    slotSummary: 'Pełna konsultacja behawioralna: rozmowa online, diagnoza behawioralna oparta na danych, prawdopodobna etiologia i plan pracy.',
     slotBadge: 'pełny zakres',
-    roomSummary: 'Pełna konsultacja behawioralna online: rozmowa, diagnoza, prawdopodobna etiologia, możliwy przebieg problemu i 7 dni konsultacji tekstowych przez WhatsApp.',
+    roomSummary: 'Pełna konsultacja behawioralna online: rozmowa, diagnoza behawioralna oparta na danych, prawdopodobna etiologia, możliwy przebieg sytuacji i 7 dni konsultacji tekstowych przez WhatsApp.',
     publicSummary:
-      'Pełna konsultacja behawioralna online: rozmowa audio lub video, diagnoza, prawdopodobna etiologia, możliwy przebieg problemu, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.',
+      'Pełna konsultacja behawioralna online: rozmowa audio lub video, diagnoza behawioralna oparta na danych, prawdopodobna etiologia, możliwy przebieg sytuacji, plan działania i 7 dni konsultacji tekstowych przez WhatsApp.',
     bookingLead: 'Wybierz gatunek i temat. Potem zobaczysz najbliższe dostępne terminy pełnej konsultacji behawioralnej.',
     availabilityLabel: 'Najbliższe dostępne terminy pokażą się po wyborze tematu.',
     noAvailabilityMessage:

@@ -196,11 +196,11 @@ export function TerminCalendarPicker({ monthLabel, slotCount, days, summary, cho
         {selectedSlot ? (
           <Link href={selectedSlot.href} prefetch={false} className="notatnik-btn termin-summary-cta">
             <CalendarDays size={17} strokeWidth={1.9} aria-hidden="true" />
-            <span>Zarezerwuj termin</span>
+            <span>Umów spokojny pierwszy krok</span>
           </Link>
         ) : (
           <Link href={summary.contactHref} prefetch={false} className="notatnik-btn termin-summary-cta">
-            <span>Napisz wiadomość</span>
+            <span>Opisz krótko, co się dzieje</span>
           </Link>
         )}
         <small>Płatność i rezerwacja online po wypełnieniu formularza.</small>

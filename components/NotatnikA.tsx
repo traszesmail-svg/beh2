@@ -99,7 +99,7 @@ function NotatnikBrandLockup() {
       </span>
       <span className="notatnik-brand-copy">
         <span className="notatnik-brand-mark">Regulski Behawiorysta</span>
-        <span className="notatnik-brand-tag">Krzysztof Regulski - behawiorysta zwierzęcy</span>
+        <span className="notatnik-brand-tag">behawiorysta, technik weterynarii i dietetyk</span>
       </span>
     </Link>
   )

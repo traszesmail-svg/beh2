@@ -134,7 +134,7 @@ export default async function PaymentPage({
       ? `Wpłata jest już zgłoszona. Potwierdzimy ją ręcznie do 15 minut. Po zmianie statusu zobaczysz ${roomAccessLabel} i dalszą instrukcję.`
       : manualPayment.isAvailable
         ? `Wybierz BLIK na telefon albo płatność online. BLIK jest najtańszą opcją bez prowizji pośrednika, a szczegóły rezerwacji zostają obok.`
-        : 'Płatność jest chwilowo niedostępna. Napisz wiadomość i wróć do rezerwacji później.'
+        : 'Płatność jest chwilowo niedostępna. Opisz krótko, co się dzieje, i wróć do rezerwacji później.'
 
   const paymentSummaryRows: PaymentReferenceSummaryRow[] = booking
     ? [
@@ -256,7 +256,7 @@ export default async function PaymentPage({
                 Wróć do rezerwacji
               </Link>
               <Link href="/kontakt#formularz" className="payment-ref-secondary-button">
-                Napisz wiadomość
+                Opisz krótko, co się dzieje
               </Link>
             </div>
           </div>
@@ -268,7 +268,7 @@ export default async function PaymentPage({
                 Wróć do tematów
               </Link>
               <Link href="/kontakt#formularz" className="payment-ref-secondary-button">
-                Napisz wiadomość
+                Opisz krótko, co się dzieje
               </Link>
             </div>
           </div>
@@ -322,7 +322,7 @@ export default async function PaymentPage({
                   Wybierz nowy termin
                 </Link>
                 <Link href="/kontakt#formularz" className="payment-ref-secondary-button">
-                  Napisz wiadomość
+                  Opisz krótko, co się dzieje
                 </Link>
               </div>
             ) : (

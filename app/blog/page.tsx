@@ -14,7 +14,7 @@ import { getCanonicalBaseUrl } from '@/lib/server/env'
 export const metadata: Metadata = getBlogListingMetadata({
   title: 'Blog o zachowaniu psów i kotów',
   path: BLOG_ROUTE_BASE,
-  description: 'Blog o zachowaniu psów i kotów: praktyczne teksty o spacerach, kuwecie, stresie i konsultacjach online.',
+  description: 'Krótkie teksty o tym, co opiekun widzi na co dzień: szczekanie, kuweta, napięcie, ciągnięcie, wycofanie, konflikty i zmiany w domu.',
 })
 
 const FEATURED_BLOG_SLUGS = [
@@ -218,10 +218,9 @@ export default function BlogPage({ searchParams }: { searchParams?: BlogSearchPa
           <section className="blog-index-hero" aria-labelledby="blog-index-title">
             <div className="blog-index-hero-copy">
               <span className="blog-index-pill">Blog</span>
-              <h1 id="blog-index-title">Wiedza, która pomaga zrozumieć i działać.</h1>
+              <h1 id="blog-index-title">Zanim zaczniesz poprawiać zachowanie, warto zrozumieć, po co ono się pojawia</h1>
               <p>
-                Praktyczne artykuły o psach i kotach: o zachowaniu, emocjach, relacji i codziennych trudnościach.
-                Bez mitów, bez presji, za to z empatią i doświadczeniem.
+                Krótkie teksty o tym, co opiekun widzi na co dzień: szczekanie, kuweta, napięcie, ciągnięcie, wycofanie, konflikty i zmiany w domu. Bez straszenia i bez prostych rad typu zrób tak zawsze.
               </p>
             </div>
 
@@ -329,11 +328,20 @@ export default function BlogPage({ searchParams }: { searchParams?: BlogSearchPa
                 </ol>
               </section>
 
+              <section className="blog-index-side-card">
+                <h2>Nie musisz czytać wszystkiego</h2>
+                <p>Opisz sytuację, a pomogę wybrać pierwszy krok.</p>
+                <Link href="/kontakt#formularz" prefetch={false} className="blog-index-newsletter-link">
+                  Opisz krótko, co się dzieje
+                  <ArrowRight size={16} strokeWidth={1.9} aria-hidden="true" />
+                </Link>
+              </section>
+
               <section className="blog-index-newsletter-card">
                 <div className="blog-index-newsletter-head">
                   <div>
                     <h2>Newsletter</h2>
-                    <p>Jeden właściwy formularz jest na osobnej stronie newslettera.</p>
+                    <p>Raz w miesiącu spokojna porcja wiedzy o psach, kotach i pierwszych krokach w trudnych sytuacjach.</p>
                   </div>
                   <Mail size={34} strokeWidth={1.5} aria-hidden="true" />
                 </div>
@@ -341,7 +349,7 @@ export default function BlogPage({ searchParams }: { searchParams?: BlogSearchPa
                   Przejdź do zapisu
                   <ArrowRight size={16} strokeWidth={1.9} aria-hidden="true" />
                 </Link>
-                <small>Bez podwójnego wpisywania maila na blogu.</small>
+                <small>Bez spamu, bez codziennych maili. Możesz wypisać się jednym kliknięciem.</small>
               </section>
             </aside>
           </section>

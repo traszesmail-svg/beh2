@@ -52,7 +52,7 @@ Jak to działa:
 
 Co dostaniesz:
 — Pełniejszy obraz sytuacji (czas na historię i kontekst)
-— Diagnozę tego, co faktycznie się dzieje
+— Diagnozę behawioralną opartą na informacjach z rozmowy
 — Konkretny plan działania na najbliższe 2 tygodnie
 
 Jak to działa:
@@ -69,7 +69,7 @@ Dla kogo: problem trwa od jakiegoś czasu lub chcesz spokojnie przejść przez s
 
 Co dostaniesz:
 — Pełny wywiad behawioralny
-— Diagnozę: co się naprawdę dzieje i dlaczego
+— Diagnozę behawioralną opartą na informacjach z rozmowy: co może napędzać zachowanie
 — Pisemny plan działania wysłany e-mailem po spotkaniu
 — 7 dni konsultacji tekstowych przez WhatsApp
 

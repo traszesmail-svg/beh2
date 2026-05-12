@@ -1,11 +1,11 @@
 ---
 slug: jak-zapoznac-dwa-koty
-title_seo: Jak zapoznać dwa koty — plan na pierwsze tygodnie
+title_seo: Jak zapoznać dwa koty, żeby nie zepsuć relacji w pierwszy tydzień
 meta_description: Szybkie zapoznanie kotów prawie zawsze kończy się konfliktem. Sprawdź, jak to zrobić z planem — przez zapach, nie przez pierwsze spojrzenie.
-h1: Jak zapoznać dwa koty
+h1: Jak zapoznać dwa koty, żeby nie zepsuć relacji w pierwszy tydzień
 ---
 
-# Jak zapoznać dwa koty
+# Jak zapoznać dwa koty, żeby nie zepsuć relacji w pierwszy tydzień
 
 **Krótka odpowiedź:** nie przez bezpośrednie spotkanie. Koty poznają się najpierw przez zapach, potem przez szparę w drzwiach, na końcu twarzą w twarz. Cały proces trwa minimum 3–4 tygodnie. Przyspieszenie go prawie zawsze wraca jako kilkumiesięczny konflikt.
 

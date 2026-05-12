@@ -111,7 +111,7 @@ const TOPICAL_CLUSTERS: TopicalCluster[] = [
       {
         href: '/blog',
         label: 'Blog: jak nagrac psa zostawionego samemu',
-        copy: 'Pokazuje, jak zebrać materiał, który realnie skraca droge do dobrej diagnozy.',
+        copy: 'Pokazuje, jak zebrać materiał, który realnie skraca drogę do dobrej diagnozy behawioralnej.',
       },
       {
         href: '/blog',
@@ -225,7 +225,7 @@ export const NEWSLETTER_SIGNUP_COPY = {
   title: 'Newsletter dla opiekunów psów i kotów',
   lead: 'Piszę raz na jakiś czas, tylko kiedy mam coś konkretnego. Głównie o tym, co napędza zachowanie zwierząt i co z tym zrobić bez nadmiaru teorii.',
   buttonLabel: 'Zapisz się',
-  note: 'Raz na 1-2 tygodnie. Możesz wypisać się w każdej chwili.',
+  note: 'Raz w miesiącu spokojna porcja wiedzy o psach, kotach i pierwszych krokach w trudnych sytuacjach. Możesz wypisać się jednym kliknięciem.',
   successTitle: 'Dziękuję za zapis',
   successBody: 'Na liście zostajesz po to, żeby dostawać praktyczne treści, a nie częste kampanie sprzedażowe.',
 } as const

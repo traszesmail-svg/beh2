@@ -114,7 +114,7 @@ await makePdf('30-zachowan.pdf', async (doc, fonts) => {
     'Jak korzystać z tej listy:',
     '- Przejrzyj ją spokojnie - nie szukaj problemów na siłę.',
     '- Jeśli widzisz kilka sygnałów naraz - warto porozmawiać.',
-    '- Jedno zachowanie nie jest diagnozą. Kontekst jest wszystkim.',
+    '- Jedno zachowanie nie jest diagnozą behawioralną. Kontekst jest wszystkim.',
     '- Nagła zmiana zachowania: zawsze najpierw weterynarz.',
   ];
   wstep.forEach((line, i) => {
@@ -269,7 +269,7 @@ await makePdf('30-zachowan.pdf', async (doc, fonts) => {
 
   y -= 20;
   accentBox(page, 30, y - 10, 535, 80);
-  page.drawText('Zarezerwuj konsultację online', { x: 40, y: y - 20, size: 13, font: fonts.bold, color: C.accent });
+  page.drawText('Umów spokojny pierwszy krok', { x: 40, y: y - 20, size: 13, font: fonts.bold, color: C.accent });
   page.drawText('Kwadrans 69 zl  -  Dwa kwadranse 169 zl  -  Pelna konsultacja 470 zl', { x: 40, y: y - 38, size: 9, font: fonts.regular, color: C.ink });
   page.drawText('Bez kary, bez przymusu. Pierwszy krok nie musi być duży.', { x: 40, y: y - 53, size: 9, font: fonts.regular, color: C.muted });
   page.drawText('regulskibehawiorysta.pl/book', { x: 40, y: y - 68, size: 10, font: fonts.bold, color: C.accent });
@@ -458,7 +458,7 @@ await makePdf('pierwszy-tydzien-z-kotem.pdf', async (doc, fonts) => {
   page.drawText('Nie przyspieszaj socjalizacji. Kot który dostał czas - łatwiej ufa.', { x: 40, y: y - 38, size: 9, font: fonts.regular, color: C.ink });
   page.drawText('Kot który byl zmuszany - może potrzebowac miesięcy.', { x: 40, y: y - 52, size: 9, font: fonts.regular, color: C.ink });
   y -= 100;
-  page.drawText('Pytania? Zarezerwuj konsultację:', { x: 30, y, size: 11, font: fonts.bold, color: C.ink });
+  page.drawText('Pytania? Umów spokojny pierwszy krok:', { x: 30, y, size: 11, font: fonts.bold, color: C.ink });
   page.drawText('regulskibehawiorysta.pl/book', { x: 30, y: y - 18, size: 11, font: fonts.bold, color: C.accent });
   footer(page, fonts, 3);
 });

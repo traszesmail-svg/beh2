@@ -59,7 +59,7 @@ export default function HomePage() {
         Chcesz uporządkować zachowanie swojego psa lub kota?
       </h1>
       <p className="text-lg text-neutral-600">
-        Wybierz format konsultacji dopasowany do sytuacji.
+        Pomóż mi dobrać rozmowę dopasowaną do sytuacji.
       </p>
       <CTAButtons />
       <KwadransNaJuzBadge />

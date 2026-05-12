@@ -65,15 +65,14 @@ export function ReferenceFaq({ contactHref }: ReferenceFaqProps) {
           <span className="reference-pill">FAQ</span>
           <h1>Najczęstsze pytania i odpowiedzi.</h1>
           <p>
-            Zebrałem najczęstsze pytania opiekunów psów i kotów. Jeśli nie znajdziesz odpowiedzi - napisz do mnie,
-            chętnie pomogę.
+            Zebrałem najczęstsze pytania opiekunów psów i kotów. Jeśli nie znajdziesz odpowiedzi, opisz sytuację własnymi słowami.
           </p>
           <div className="reference-hero-actions">
             <Link href="/wybor" prefetch={false} className="reference-btn reference-btn-primary">
-              Umów pierwszy krok
+              Pomóż mi dobrać pierwszy krok
             </Link>
             <Link href={contactHref} prefetch={false} className="reference-btn reference-btn-secondary">
-              Wyślij krótką wiadomość
+              Opisz krótko, co się dzieje
             </Link>
           </div>
         </div>
@@ -157,7 +156,7 @@ export function ReferenceFaq({ contactHref }: ReferenceFaqProps) {
                 <MessageCircleQuestion size={24} strokeWidth={1.7} aria-hidden="true" />
                 <span>
                   <strong>Bez oceniania</strong>
-                  <small>Każda sytuacja jest inna. Jesteś w dobrych rękach.</small>
+                  <small>Każda sytuacja jest inna. Zaczynamy od faktów i spokojnego pierwszego kroku.</small>
                 </span>
               </div>
               <div className="reference-info-row">

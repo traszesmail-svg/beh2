@@ -13,7 +13,7 @@ export const metadata: Metadata = buildLegalMetadata(
 const summaryItems: LegalSummaryItem[] = [
   {
     label: 'Produkt objęty dokumentem',
-    value: 'Pełna konsultacja behawioralna online: 470 zł, diagnoza i 7 dni konsultacji tekstowych przez WhatsApp.',
+    value: 'Pełna konsultacja behawioralna online: 470 zł, diagnoza behawioralna oparta na danych i 7 dni konsultacji tekstowych przez WhatsApp.',
   },
   {
     label: 'Płatność',
@@ -43,8 +43,8 @@ const sections: LegalSection[] = [
       <>
         <ul className="premium-bullet-list">
           <li>Konsultacja odbywa się online w formie rozmowy audio lub audio/video.</li>
-          <li>W ramach konsultacji usługodawca analizuje opisaną sytuację psa lub kota, porządkuje priorytety i przekazuje diagnozę behawioralną sytuacji.</li>
-          <li>Po konsultacji klient otrzymuje diagnozę behawioralną sytuacji i indywidualny plan poprawy.</li>
+          <li>W ramach konsultacji usługodawca analizuje opisaną sytuację psa lub kota, porządkuje priorytety i przekazuje diagnozę behawioralną opartą na danych od klienta.</li>
+          <li>Po konsultacji klient otrzymuje diagnozę behawioralną opartą na danych od klienta i indywidualny plan działania.</li>
           <li>Przez 7 dni od konsultacji klient może przez WhatsApp zadawać pytania, wysyłać wiadomości tekstowe i filmy oraz konsultować wdrażanie planu.</li>
           <li>Jeśli po 7 dniach brak postępu albo nie ma poczucia, że to skuteczna droga do rozwiązania, usługodawca może wskazać zasadność wizyty domowej i terapii ustalanej indywidualnie.</li>
           <li>Konsultacja nie obejmuje diagnostyki weterynaryjnej, zaleceń farmakologicznych ani interwencji w stanach nagłych.</li>

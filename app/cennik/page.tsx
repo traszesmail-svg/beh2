@@ -14,7 +14,7 @@ export const metadata: Metadata = buildMarketingMetadata({
   title: 'Cennik konsultacji behawioralnych',
   path: '/cennik',
   description:
-    'Kwadrans 69 zł, Dwa kwadranse 169 zł, Pełna konsultacja 470 zł. Kwadrans na już (99 zł) to ten sam format z szybkim terminem - dostępny przy rezerwacji.',
+    'Kwadrans 69 zł, Kwadrans na już 99 zł, Dwa kwadranse 169 zł i Pełna konsultacja 470 zł. W każdej usłudze diagnoza behawioralna oparta na danych od opiekuna.',
 })
 
 export default function PricingPage() {
@@ -27,9 +27,9 @@ export default function PricingPage() {
             { name: 'Cennik', path: '/cennik' },
           ]),
           getServiceJsonLd({
-            name: 'Cennik konsultacji behawioralnych - psy i koty',
+            name: 'Cennik rozmów behawioralnych - psy i koty',
             description:
-              'Formaty konsultacji: Kwadrans, Kwadrans na już, Dwa kwadranse i Pełna konsultacja behawioralna online.',
+              'Formaty rozmowy: Kwadrans, Kwadrans na już, Dwa kwadranse i Pełna konsultacja online.',
             serviceUrl: '/cennik',
             offerCatalog: getPricingOfferCatalog(),
           }),
@@ -39,9 +39,12 @@ export default function PricingPage() {
       <section className="reference-hero reference-pricing-hero">
         <div className="reference-hero-copy">
           <span className="reference-pill">Cennik</span>
-          <h1>Skrócony cennik konsultacji.</h1>
+          <h1>Wybierz rozmowę na miarę sytuacji</h1>
           <p>
-            Tu masz szybki podgląd cen. Pełny opis formatów i wybór ścieżki jest dopiero w pełnym cenniku.
+            Nie musisz od razu wiedzieć, czego potrzebujesz. Jeśli chcesz tylko sprawdzić, od czego zacząć - wystarczy Kwadrans. Jeśli sprawa trwa długo, wraca w różnych sytuacjach albo wpływa na życie całego domu, spokojniej będzie wybrać dłuższy format.
+          </p>
+          <p>
+            W każdej usłudze dostajesz diagnozę behawioralną opartą na informacjach, które przekażesz. Im więcej danych mamy - opis, formularz, nagrania, historia zachowania, kontekst zdrowia, diety i domu - tym precyzyjniej można określić, co może napędzać zachowanie.
           </p>
         </div>
         <PricingSummaryCard />
@@ -49,6 +52,16 @@ export default function PricingPage() {
 
       <section className="reference-main-layout reference-main-layout-single">
         <div className="reference-content-column">
+          <section className="reference-section-card">
+            <h2>W każdej usłudze dostajesz diagnozę behawioralną opartą na danych</h2>
+            <p>
+              To nie jest przypadkowa porada z internetu. Analizuję opis sytuacji, odpowiedzi z formularza, historię zachowania, kontekst domu lub spacerów i - jeśli je masz - nagrania. Dzięki temu łatwiej ustalić, co naprawdę może napędzać zachowanie i od czego zacząć.
+            </p>
+            <p>
+              Jako doświadczony technik weterynarii i dietetyk patrzę też szerzej: na zdrowie, ból, dietę, środowisko i rytm dnia. Jeśli coś może mieć tło zdrowotne, powiem jasno, kiedy warto równolegle skonsultować się z lekarzem weterynarii.
+            </p>
+          </section>
+
           <section className="reference-section-card">
             <h2>Najczęstsze pytania przed wyborem</h2>
             <div className="reference-compact-faq">

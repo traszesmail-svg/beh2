@@ -41,28 +41,28 @@ const filters = [
 
 const reviews: OpinionReview[] = [
   {
-    name: 'Monika i Gdzieśtam',
-    service: 'Konsultacja online',
+    name: 'Opiekunka psa',
+    service: 'reakcje na spacerze',
     text:
-      'Po wielu problemach z moim psem poza kuwetą, jedna konsultacja online z panem Krzysztofem rozwiązała sprawę. Okazało się, że problem był banalny, ale nikt wcześniej nie wpadł na właściwy trop.',
+      'Przed rozmową mieliśmy w głowie chaos: spacer, szczekanie, emocje. Po konsultacji wiedzieliśmy, co robimy najpierw i czego na razie nie dokładać.',
     avatar: '/branding/topic-cards/dog-forest-calm.jpg',
-    categories: ['Pies', 'Konsultacje online', 'Problemy behawioralne'],
+    categories: ['Pies', 'Konsultacje online', 'Sytuacja na spacerze'],
   },
   {
-    name: 'Marta i Luna',
-    service: 'Praca nad lękiem separacyjnym',
+    name: 'Opiekunka psa',
+    service: 'praca w domu',
     text:
-      'Profesjonalne i zrozumiałe podejście. Dzięki Krzysztofowi nauczyliśmy się lepiej rozumieć naszego psa i nasze spacery są teraz czystą przyjemnością.',
+      'Najbardziej pomogło mi to, że nikt mnie nie oceniał. Zamiast listy zakazów dostałam prosty plan, który dało się wdrożyć w naszym domu.',
     avatar: '/branding/topic-cards/french-bulldog-leash.jpg',
-    categories: ['Pies', 'Praca z lękiem', 'Konsultacje online'],
+    categories: ['Pies', 'Praca w domu', 'Konsultacje online'],
   },
   {
-    name: 'Tomek i Bruno',
-    service: 'Problemy behawioralne',
+    name: 'Opiekunowie kota',
+    service: 'kuweta i napięcie',
     text:
-      'Świetna wiedza poparta praktyką i empatią. Indywidualne podejście i krok po kroku do realnej, trwałej zmiany. Polecam każdemu opiekunowi!',
-    avatar: '/branding/topic-cards/dog-resting-home.jpg',
-    categories: ['Pies', 'Problemy behawioralne'],
+      'Myśleliśmy, że kotka jest złośliwa. Po rozmowie zobaczyliśmy, że to raczej napięcie i środowisko. Wreszcie wiedzieliśmy, co sprawdzić po kolei.',
+    avatar: '/branding/topic-cards/cats/cat-litter-box.jpg',
+    categories: ['Kot', 'Kuweta i napięcie'],
   },
   {
     name: 'Kasia i Mruczek',
@@ -92,7 +92,7 @@ const reviews: OpinionReview[] = [
     name: 'Anna i Mia',
     service: 'Konsultacja online',
     text:
-      'Po rozmowie przestaliśmy zgadywać. Dostaliśmy jasną diagnozę sytuacji, pierwsze kroki i spokojny plan obserwacji kota bez nerwowych zmian w domu.',
+      'Po rozmowie przestaliśmy zgadywać. Dostaliśmy diagnozę behawioralną opartą na informacjach, pierwsze kroki i spokojny plan obserwacji kota bez nerwowych zmian w domu.',
     avatar: '/branding/case-cat-sofa.jpg',
     categories: ['Kot', 'Konsultacje online', 'Problemy behawioralne'],
   },
@@ -100,7 +100,7 @@ const reviews: OpinionReview[] = [
     name: 'Karolina i Niko',
     service: 'Kwadrans',
     text:
-      'W 15 minut udało się nazwać problem i odróżnić to, co pilne, od tego, co można spokojnie obserwować. Bardzo konkretny pierwszy krok.',
+      'W 15 minut udało się nazwać sytuację i odróżnić to, co pilne, od tego, co można spokojnie obserwować. Bardzo konkretny pierwszy krok.',
     avatar: '/images/homepage/home-bg-dog-1to1.webp',
     categories: ['Pies', 'Konsultacje online'],
   },
@@ -116,7 +116,7 @@ const reviews: OpinionReview[] = [
     name: 'Natalia i Tosia',
     service: 'Problemy behawioralne',
     text:
-      'Nie było oceniania ani straszenia. Były pytania, diagnoza na podstawie informacji i konkret: co zmienić dziś, a co sprawdzać później.',
+      'Nie było oceniania ani straszenia. Były pytania, diagnoza behawioralna oparta na informacjach i konkret: co zmienić dziś, a co sprawdzać później.',
     avatar: '/branding/topic-cards/cats/cat-anxious-hiding.jpg',
     categories: ['Kot', 'Problemy behawioralne', 'Praca z lękiem'],
   },
@@ -156,7 +156,7 @@ const reviews: OpinionReview[] = [
     name: 'Magda i Leon',
     service: 'Pełna konsultacja',
     text:
-      'Przy dłuższym problemie potrzebowaliśmy więcej niż listy porad. Dostaliśmy diagnozę, możliwą etiologię i kierunek pracy krok po kroku.',
+      'Przy dłuższej sytuacji potrzebowaliśmy więcej niż listy porad. Dostaliśmy diagnozę behawioralną opartą na danych, możliwą etiologię i kierunek pracy krok po kroku.',
     avatar: '/branding/specialist-cat-support.jpg',
     categories: ['Kot', 'Konsultacje online', 'Problemy behawioralne'],
   },
@@ -172,7 +172,7 @@ const reviews: OpinionReview[] = [
     name: 'Iza i Frida',
     service: 'Konsultacja online',
     text:
-      'Dzięki pytaniom Krzysztofa zobaczyliśmy, że problem nie jest jednym zachowaniem, tylko całym układem dnia. To dużo zmieniło.',
+      'Dzięki pytaniom Krzysztofa zobaczyliśmy, że temat nie jest jednym zachowaniem, tylko całym układem dnia. To dużo zmieniło.',
     avatar: '/branding/case-dog-home.jpg',
     categories: ['Pies', 'Konsultacje online'],
   },
@@ -203,15 +203,17 @@ const reviews: OpinionReview[] = [
 ]
 
 const stats = [
-  { value: '5.0/5', label: 'średnia ocen', icon: PawPrint },
-  { value: '100%', label: 'zaangażowania', icon: ShieldCheck },
-  { value: 'Setki', label: 'uratowanych relacji', icon: Heart },
+  { value: '5.0/5', label: 'średnia opinii', icon: PawPrint },
+  { value: 'Psy i koty', label: 'dwa gatunki', icon: ShieldCheck },
+  { value: 'Bez kar', label: 'spokojna praca', icon: Heart },
 ] as const
+
+const visibleReviews = reviews.slice(0, 3)
 
 const proofItems = [
   {
     title: 'Bezpieczeństwo',
-    copy: 'Gwarancja etycznych i skutecznych metod.',
+    copy: 'Spokojna praca bez przemocy, straszenia i dominowania.',
     icon: ShieldCheck,
   },
   {
@@ -225,8 +227,8 @@ const proofItems = [
     icon: PawPrint,
   },
   {
-    title: 'Skuteczność i zmiana',
-    copy: 'Realne efekty i trwała poprawa jakości życia.',
+    title: 'Konkret po rozmowie',
+    copy: 'Pierwszy krok, którego opiekun naprawdę może spróbować w swoim domu.',
     icon: Leaf,
   },
 ] as const
@@ -261,7 +263,7 @@ export default function OpinionsPage() {
       aggregateRating: {
         '@type': 'AggregateRating',
         ratingValue: '5.0',
-        reviewCount: String(reviews.length),
+        reviewCount: String(visibleReviews.length),
         bestRating: '5',
       },
       contactPoint: {
@@ -286,17 +288,17 @@ export default function OpinionsPage() {
           tag="Opinie"
           navItems={PUBLIC_SITE_NAV_ITEMS}
           ctaHref={bookingHref}
-          ctaLabel="Umów pierwszy krok"
+          ctaLabel="Umów spokojny pierwszy krok"
         />
 
         <section className="opinions-showcase-hero">
           <div className="opinions-showcase-hero-copy">
             <span className="opinions-showcase-eyebrow">Opinie</span>
             <h1>
-              Historie, które dają nadzieję i pokazują, że <span>zmiana</span> jest możliwa.
+              Co mówią opiekunowie po rozmowie?
             </h1>
             <p>
-              Każdy opiekun i każde zwierzę są inne. Poznaj opinie osób, które zaufały mi i wspólnie osiągnęliśmy realną zmianę.
+              Najczęściej wraca jedno: mniej chaosu, mniej oceniania i jaśniejszy pierwszy krok.
             </p>
 
             <div className="opinions-showcase-stats" aria-label="Podsumowanie opinii">
@@ -317,7 +319,7 @@ export default function OpinionsPage() {
           <HeroVisual />
         </section>
 
-        <OpinionsReviewGrid filters={[...filters]} reviews={reviews} />
+        <OpinionsReviewGrid filters={[...filters]} reviews={visibleReviews} />
 
         <section className="opinions-story-band">
           <div className="opinions-story-copy">

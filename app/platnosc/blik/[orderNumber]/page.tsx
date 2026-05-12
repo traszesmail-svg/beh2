@@ -48,7 +48,7 @@ export default async function BlikPaymentPage({ params }: { params: { orderNumbe
               <h1>Nie znaleziono zamówienia</h1>
               <div className="error-box">Ten link do płatności jest nieprawidłowy albo wygasł.</div>
               <Link href="/kontakt#formularz" className="button button-primary big-button">
-                Napisz wiadomość
+                Opisz krótko, co się dzieje
               </Link>
             </div>
           ) : !manual.isAvailable || !fullPhone ? (

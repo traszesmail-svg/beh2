@@ -128,7 +128,7 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
         'Kwadrans',
         'Dwa kwadranse',
         'Pełna konsultacja',
-        'Wybierz format',
+        'Pomóż mi dobrać rozmowę',
       ],
       requireBuildMarker: true,
     },

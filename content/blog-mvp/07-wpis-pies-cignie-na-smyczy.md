@@ -1,11 +1,11 @@
 ---
 slug: pies-ciagnie-na-smyczy
-title_seo: Pies ciągnie na smyczy — kiedy to nawyk, a kiedy problem
+title_seo: Pies ciągnie na smyczy: kiedy ćwiczyć chodzenie, a kiedy najpierw obniżyć emocje
 meta_description: Ciągnięcie na smyczy to jeden z najczęstszych powodów frustracji na spacerze. Sprawdź, co za tym stoi i od czego zacząć — bez frustracji i bez szarpania.
-h1: Pies ciągnie na smyczy — kiedy to nawyk, a kiedy problem
+h1: Pies ciągnie na smyczy: kiedy ćwiczyć chodzenie, a kiedy najpierw obniżyć emocje
 ---
 
-# Pies ciągnie na smyczy — kiedy to nawyk, a kiedy problem
+# Pies ciągnie na smyczy: kiedy ćwiczyć chodzenie, a kiedy najpierw obniżyć emocje
 
 **Krótka odpowiedź:** ciągnięcie na smyczy rzadko jest „złośliwością" albo „dominacją". W większości przypadków to wyuczone zachowanie — pies ciągnął, dostawał to, czego chciał, i nauczył się, że tak właśnie się porusza. Zanim zaczniesz trenować, warto wiedzieć, co tak naprawdę wzmacniało ciągnięcie przez ostatnie miesiące.
 

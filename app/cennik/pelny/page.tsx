@@ -10,10 +10,10 @@ import {
 } from '../pricing-page-content'
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: 'Pełny cennik konsultacji behawioralnych',
+  title: 'Pełny cennik rozmów behawioralnych',
   path: '/cennik/pelny',
   description:
-    'Pełna tabela formatów: Kwadrans 69 zł, Kwadrans na już 99 zł, Dwa kwadranse 169 zł i Pełna konsultacja 470 zł.',
+    'Pełna tabela rozmów: Kwadrans 69 zł, Kwadrans na już 99 zł, Dwa kwadranse 169 zł i Pełna konsultacja 470 zł.',
 })
 
 export default function FullPricingPage() {
@@ -27,9 +27,9 @@ export default function FullPricingPage() {
             { name: 'Pełny cennik', path: '/cennik/pelny' },
           ]),
           getServiceJsonLd({
-            name: 'Pełny cennik konsultacji behawioralnych - psy i koty',
+            name: 'Pełny cennik rozmów behawioralnych - psy i koty',
             description:
-              'Pełna tabela formatów konsultacji: Kwadrans, Kwadrans na już, Dwa kwadranse i Pełna konsultacja behawioralna online.',
+              'Pełna tabela rozmów: Kwadrans, Kwadrans na już, Dwa kwadranse i Pełna konsultacja online.',
             serviceUrl: '/cennik/pelny',
             offerCatalog: getPricingOfferCatalog(),
           }),
@@ -39,9 +39,9 @@ export default function FullPricingPage() {
       <section className="reference-hero reference-pricing-hero">
         <div className="reference-hero-copy">
           <span className="reference-pill">Pełny cennik</span>
-          <h1>Pełny cennik: krótka rozmowa, dłuższa rozmowa albo pełny plan.</h1>
+          <h1>Wybierz rozmowę na miarę sytuacji</h1>
           <p>
-            Poniżej masz wszystkie formaty w jednym miejscu. Kliknięcie w dowolny format prowadzi do wyboru psa, kota i najbliższego tematu, żeby nie zaczynać od przypadkowej rezerwacji.
+            Poniżej masz wszystkie rozmowy w jednym miejscu. Kliknięcie w dowolną opcję prowadzi do tego samego wyboru psa, kota i najbliższego tematu, żeby zacząć od danych, a nie od zgadywania.
           </p>
         </div>
       </section>

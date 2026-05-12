@@ -824,11 +824,11 @@ export function ProblemLandingPage({ routePath }: { routePath: string }) {
 
         <TrustSignalSection
           eyebrow="Zaufanie"
-          title="Spokojna diagnoza przed kolejnymi próbami"
-          description="Przy takich problemach najważniejsze jest dobre rozpoznanie sytuacji i uczciwy pierwszy plan."
+          title="Spokojna diagnoza behawioralna oparta na danych przed kolejnymi próbami"
+          description="Przy takich sytuacjach najważniejsze jest dobre rozpoznanie kontekstu i uczciwy pierwszy plan."
           items={[
             {
-              title: 'Najpierw diagnoza, potem technika',
+              title: 'Najpierw diagnoza behawioralna oparta na informacjach, potem technika',
               copy: 'Najważniejsze jest zrozumienie wyzwalaczy, tła i priorytetu, zanim wejdziesz w kolejne ćwiczenia.',
             },
             {

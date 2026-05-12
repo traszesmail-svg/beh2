@@ -124,7 +124,7 @@ export function DecisionQuiz({ bookingHrefs }: DecisionQuizProps) {
           <h2>{result.title}</h2>
           <p>{result.summary}</p>
 
-          <div className="decision-quiz-result-price" aria-label="Sugerowany format">
+          <div className="decision-quiz-result-price" aria-label="Sugerowana rozmowa">
             <span>{resultMeta.label}</span>
             <strong>{resultMeta.price}</strong>
             <small>{resultMeta.duration}</small>
@@ -158,7 +158,7 @@ export function DecisionQuiz({ bookingHrefs }: DecisionQuizProps) {
                 })
               }
             >
-              Przejdź do rezerwacji
+              Pokaż mi, od czego zacząć
             </Link>
             <button type="button" className="button button-ghost" onClick={goBack}>
               Zmień odpowiedzi
@@ -169,9 +169,9 @@ export function DecisionQuiz({ bookingHrefs }: DecisionQuizProps) {
         <div className="decision-quiz-followups">
           <article className="summary-card tree-backed-card">
             <div className="section-eyebrow">Zachowaj wynik</div>
-            <h3>Dostanę informacje o nowych tekstach i materiałach.</h3>
+            <h3>Raz w miesiącu spokojna porcja wiedzy.</h3>
             <p className="muted">
-              To zwykły zapis newsletterowy. Nie musisz go robić, żeby przejść do rezerwacji.
+              Bez spamu, bez codziennych maili. Możesz wypisać się jednym kliknięciem.
             </p>
             <form className="form-grid top-gap-small compact-form-grid" onSubmit={submitEmail} noValidate>
               <div className="form-field">
@@ -223,7 +223,7 @@ export function DecisionQuiz({ bookingHrefs }: DecisionQuizProps) {
       </div>
 
       <article className="summary-card tree-backed-card decision-quiz-card">
-        <div className="section-eyebrow">Profesjonalny quiz decyzyjny</div>
+        <div className="section-eyebrow">Szybki start</div>
         <h2>{currentQuestion.title}</h2>
         {currentQuestion.helper ? <p className="muted">{currentQuestion.helper}</p> : null}
 

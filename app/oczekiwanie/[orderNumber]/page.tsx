@@ -86,7 +86,7 @@ export default async function WaitingPage({ params }: { params: { orderNumber: s
               <h1>Nie znaleziono zamówienia</h1>
               <div className="error-box">Ten link jest nieprawidłowy albo wygasł.</div>
               <Link href="/kontakt#formularz" className="button button-primary big-button">
-                Napisz wiadomość
+                Opisz krótko, co się dzieje
               </Link>
             </div>
           ) : (

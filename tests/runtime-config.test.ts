@@ -253,7 +253,7 @@ test('copy governance keeps Kwadrans as the primary service name and format as s
   assert.match(bookingServiceInfoCardSource, /const formatLabel = service\.mode === 'audio' \? COPY_SERVICE_NAMES\.primaryDescriptor : 'rozmowa online'/)
   assert.match(bookingServiceInfoCardSource, /COPY_SERVICE_NAMES\.primaryShort/)
 
-  assert.match(contactSource, /Napisz, zanim zarezerwujesz/)
+  assert.match(contactSource, /Napisz krótko, co się dzieje/)
   assert.doesNotMatch(contactSource, /<h3>Kwadrans z behawiorysta<\/h3>/)
   assert.doesNotMatch(contactSource, /contact-booking-panel/)
   assert.match(bookSource, /BookingSlotCalendar/)
@@ -274,9 +274,9 @@ test('booking form intro follows the selected service instead of a generic booki
   const bookingFormSource = readSource('components', 'BookRequestForm.tsx')
 
   assert.match(bookingFormSource, /function getSelectedServiceIntro/)
-  assert.match(bookingFormSource, /Wybrany format: \$\{option\.label\} \/ \$\{option\.price\}\./)
+  assert.match(bookingFormSource, /Wybrana rozmowa: \$\{option\.label\} \/ \$\{option\.price\}\./)
   assert.match(bookingFormSource, /30 minut online daje więcej miejsca na dwa-trzy wątki/)
-  assert.match(bookingFormSource, /To osobny format z diagnoz[^\s]+ sytuacji, planem poprawy i 7 dniami konsultacji tekstowych przez WhatsApp\./)
+  assert.match(bookingFormSource, /To osobny format z diagnoz[^\s]+ behawioraln[^\s]+ opart[^\s]+ na danych, planem działania i 7 dniami konsultacji tekstowych przez WhatsApp\./)
   assert.doesNotMatch(bookingFormSource, /PUBLIC_OFFER_BOOKING_LEAD/)
   assert.doesNotMatch(bookingFormSource, /PUBLIC_OFFER_BOOKING_REASSURANCE/)
 })
@@ -356,7 +356,7 @@ test.skip('offer and booking pages keep quick-scan language', () => {
 
   assert.match(offersSource, /return offer\.detailCtaLabel \?\? 'Zobacz szczegóły'/)
   assert.match(offersSource, /primaryCtaLabel: 'Umów 15 min'/)
-  assert.match(offersSource, /primaryCtaLabel: 'Napisz wiadomość'/)
+  assert.match(offersSource, /primaryCtaLabel: 'Opisz krótko, co się dzieje'/)
   assert.match(offersSource, /priceLabel: formatPricePln\(119\)/)
   assert.match(offersSource, /priceLabel: formatPricePln\(350\)/)
   assert.doesNotMatch(offersSource, /Czy to dla Ciebie\?/)

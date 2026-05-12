@@ -276,7 +276,7 @@ export default async function FormPage({
           </span>
           <div>
             <h2>Gotowy na pierwszy krok?</h2>
-            <p>Zarezerwuj termin i zacznijcie wspólnie pracę nad spokojniejszym życiem.</p>
+            <p>Umów spokojny pierwszy krok i zacznijcie od uporządkowania sytuacji.</p>
           </div>
           <div className="booking-form-final-actions">
             <a href="#formularz" className="notatnik-btn notatnik-btn-accent">

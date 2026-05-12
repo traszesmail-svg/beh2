@@ -162,7 +162,7 @@ export default async function CheckoutPage({
             <div className="error-box">Wróć do formularza albo napisz wiadomość, jeśli rezerwacja została już utworzona.</div>
             <div className="payment-ref-button-row">
               <Link href="/kontakt#formularz" className="payment-ref-submit">
-                Napisz wiadomość
+                Opisz krótko, co się dzieje
               </Link>
             </div>
           </div>

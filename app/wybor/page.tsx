@@ -10,17 +10,17 @@ import { getBreadcrumbJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: 'Krótki wybór pierwszego kroku',
+  title: 'Pomóż mi dobrać pierwszy krok',
   path: '/wybor',
-  description: 'Krótki wybór dla opiekunów psów i kotów: wybierz zwierzę, temat i zakres sprawy.',
+  description: 'Krótki wybór dla opiekunów psów i kotów: opisz sytuację i sprawdź najrozsądniejszy pierwszy krok.',
 })
 
 const choiceProofItems = [
-  { icon: PawPrint, title: 'Indywidualne podejście', copy: 'Dopasowane do potrzeb i możliwości.' },
-  { icon: BookOpen, title: 'Wiedza i doświadczenie', copy: 'Praktyka oparta na nauce.' },
+  { icon: PawPrint, title: 'Zaczynamy od sytuacji', copy: 'Nie musisz znać fachowej nazwy zachowania.' },
+  { icon: BookOpen, title: 'Szersze spojrzenie', copy: 'Behawior, zdrowie, dieta, środowisko i rutyna.' },
   { icon: HeartHandshake, title: 'Empatia i zrozumienie', copy: 'Wsparcie bez oceniania.' },
   { icon: ShieldCheck, title: 'Bez presji i kar', copy: 'Spokojna, etyczna praca.' },
-  { icon: Sparkles, title: 'Konkretny pierwszy krok', copy: 'Rekomendacja zamiast zgadywania.' },
+  { icon: Sparkles, title: 'Konkretny pierwszy krok', copy: 'Najrozsądniejszy kierunek zamiast zgadywania.' },
 ] as const
 
 const choiceReviewSets = {
@@ -65,12 +65,15 @@ function getInitialAnimal(value: string | string[] | undefined): HomepageSelecto
 export default function ChoicePage({ searchParams }: { searchParams?: { animal?: string | string[] } }) {
   const initialAnimal = getInitialAnimal(searchParams?.animal)
   const isCat = initialAnimal === 'cat'
-  const petLabel = isCat ? 'kotem' : 'psem'
   const petImage = isCat ? '/images/homepage/home-bg-cat-1to1.webp' : '/images/homepage/home-bg-dog-1to1.webp'
   const petImageAlt = isCat
     ? 'Kot siedzący w spokojnym naturalnym świetle'
     : 'Pies siedzący w spokojnym naturalnym świetle'
   const reviews = isCat ? choiceReviewSets.cat : choiceReviewSets.dog
+  const heroTitle = isCat ? 'Co Twój kot próbuje pokazać zachowaniem?' : 'Co dzieje się z Twoim psem?'
+  const heroCopy = isCat
+    ? 'Kuweta, chowanie się, napięcie między kotami, nocne miauczenie albo nagła zmiana zachowania nie muszą oznaczać złośliwości. Kot często pokazuje w ten sposób stres, ból, przeciążenie, konflikt albo problem w środowisku.'
+    : 'Szczekanie, ciągnięcie, lęk, napięcie, niszczenie w domu albo trudne spacery nie zawsze oznaczają zły nawyk. Czasem pies pokazuje emocje, przeciążenie, ból, stres albo brak poczucia bezpieczeństwa. Zacznijmy od uporządkowania sytuacji.'
 
   return (
     <main className={`notatnik-page homepage-shell choice-page choice-page-${isCat ? 'cat' : 'dog'}`}>
@@ -94,8 +97,8 @@ export default function ChoicePage({ searchParams }: { searchParams?: { animal?:
         <section className="choice-first-screen">
           <div className="choice-hero">
             <div className="choice-hero-copy">
-              <h1>Pierwszy krok do spokojniejszego życia z {petLabel}.</h1>
-              <p>Odpowiedz na kilka pytań i pomóż mi dobrać najlepsze wsparcie dla Ciebie i Twojego zwierzęcia.</p>
+              <h1>{heroTitle}</h1>
+              <p>{heroCopy}</p>
             </div>
             <figure className="choice-hero-media" aria-label={petImageAlt}>
               <Image src={petImage} alt={petImageAlt} fill priority sizes="(max-width: 980px) 100vw, 420px" />

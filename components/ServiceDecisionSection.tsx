@@ -65,7 +65,7 @@ export function ServiceDecisionSection({
           <div className="notatnik-service-meta" aria-label="Parametry pełnej konsultacji">
             <span>pełny zakres online</span>
             <span>{getPublicServicePriceLabel('konsultacja-behawioralna-online')}</span>
-            <span>diagnoza + 7 dni</span>
+            <span>diagnoza behawioralna + 7 dni</span>
           </div>
           <ul className="notatnik-service-list">
             {consultationBullets.map((bullet) => (

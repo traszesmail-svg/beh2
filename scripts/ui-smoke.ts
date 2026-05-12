@@ -17,7 +17,7 @@ const roomActiveTimeoutMs = 30000
 const retryActionTimeoutMs = 20000
 const uiSmokeOwnerName = 'UI Smoke'
 const uiSmokeEmail = 'ui-smoke@example.com'
-const primaryBookingLabel = /Zarezerwuj Kwadrans z behawiorysta|Zarezerwuj Kwadrans z behawiorystą/i
+const primaryBookingLabel = /Umów spokojny pierwszy krok/i
 
 function getWarsawSlotInMinutes(offsetMinutes: number) {
   const target = new Date(Date.now() + offsetMinutes * 60 * 1000)

@@ -232,7 +232,7 @@ export const FAQ_SHORTLISTS = {
     {
       question: 'Czy każda zmiana zachowania kota jest behawioralna?',
       answer:
-        'Nie. Przy nagłych zmianach pierwszym krokiem bywa weterynarz. To element bezpiecznej diagnozy, nie przeszkoda.',
+        'Nie. Przy nagłych zmianach pierwszym krokiem bywa weterynarz. To element bezpiecznej diagnozy behawioralnej, nie przeszkoda.',
     },
     {
       question: 'Czy online wystarczy przy kuwecie albo konflikcie między kotami?',
@@ -323,7 +323,7 @@ export const TRUST_SIGNAL_SETS = {
   ] satisfies TrustSignalItem[],
   consultation: [
     {
-      title: 'Diagnoza przed techniką',
+      title: 'Diagnoza behawioralna przed techniką',
       copy: 'Konsultacja zaczyna się od tego, co napędza zachowanie, a nie od dopisywania gotowej metody.',
     },
     {

@@ -53,7 +53,9 @@ export function Footer(props: FooterProps) {
               </span>
               <span className="site-footer-brand-copy">
                 <span>{SITE_HEADER_BRAND}</span>
-                <small>{SPECIALIST_NAME} - behawiorysta zwierzęcy</small>
+                <small>
+                  Krzysztof Regulski - behawiorysta zwierzęcy, doświadczony technik weterynarii i dietetyk. Pomagam opiekunom psów i kotów zrozumieć zachowanie, znaleźć możliwą przyczynę i wybrać pierwszy krok bez presji, kar i zgadywania.
+                </small>
               </span>
             </Link>
             {contact.email && contactHref ? (

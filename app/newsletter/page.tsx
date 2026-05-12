@@ -16,8 +16,8 @@ export const metadata: Metadata = buildMarketingMetadata({
 
 const newsletterCards = [
   {
-    title: 'Krótkie teksty zamiast kampanii',
-    copy: 'Dostajesz wiadomość tylko wtedy, gdy pojawia się sensowny temat: nowy tekst, materiał albo obserwacja z pracy z psami i kotami.',
+    title: 'Raz w miesiącu, bez codziennego szumu',
+    copy: 'Raz w miesiącu spokojna porcja wiedzy o psach, kotach i pierwszych krokach w trudnych sytuacjach.',
   },
   {
     title: 'Segment: pies, kot albo oba',
@@ -53,11 +53,10 @@ export default function NewsletterPage() {
           <div className="editorial-section-head">
             <div className="editorial-section-head-copy">
               <div className="section-eyebrow">Newsletter</div>
-              <h1>Spokojne wiadomości o zachowaniu psów i kotów.</h1>
+              <h1>Raz w miesiącu spokojna porcja wiedzy o psach i kotach.</h1>
             </div>
             <p className="editorial-section-lead">
-              Bez codziennego pisania i bez obietnic cudow. Dostajesz konkret, kiedy jest nowy tekst,
-              materiał albo temat, który może pomóc uporządkować sytuację w domu.
+              Bez spamu, bez codziennych maili. Dostajesz konkret o zachowaniu, napięciu, środowisku i pierwszych krokach w trudnych sytuacjach.
             </p>
           </div>
 

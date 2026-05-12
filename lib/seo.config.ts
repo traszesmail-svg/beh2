@@ -96,20 +96,20 @@ export const pageSeo: Record<string, PageSeo> = {
   },
   '/cennik': {
     title: 'Cennik konsultacji behawioralnych | Regulski',
-    description: 'Kwadrans 69 zł, Dwa kwadranse 169 zł, Pełna konsultacja 470 zł. Wybierz format dopasowany do sytuacji. Płatność po potwierdzeniu terminu.',
+    description: 'Kwadrans 69 zł, Dwa kwadranse 169 zł, Pełna konsultacja 470 zł. Pomóż mi dobrać rozmowę dopasowaną do sytuacji. Płatność po potwierdzeniu terminu.',
     keywords: ['cennik behawiorysta', 'cena konsultacji behawioralnej', 'konsultacja online cena'],
     priority: 0.9,
     changefreq: 'monthly',
   },
   '/cennik/pelny': {
     title: 'Pełny cennik konsultacji behawioralnych | Regulski',
-    description: 'Pełna tabela formatów: Kwadrans 69 zł, Kwadrans na już 99 zł, Dwa kwadranse 169 zł i Pełna konsultacja 470 zł.',
+    description: 'Pełna tabela rozmów: Kwadrans 69 zł, Kwadrans na już 99 zł, Dwa kwadranse 169 zł i Pełna konsultacja 470 zł.',
     keywords: ['pełny cennik behawiorysta', 'cena konsultacji behawioralnej', 'kwadrans behawiorysta cena'],
     priority: 0.8,
     changefreq: 'monthly',
   },
   '/book': {
-    title: 'Zarezerwuj konsultację online | Regulski',
+    title: 'Umów spokojny pierwszy krok | Regulski',
     description: 'Wybierz termin konsultacji online z behawiorystą. Kwadrans, Dwa kwadranse lub Pełna konsultacja. Płatność po potwierdzeniu.',
     keywords: ['rezerwacja behawiorysta', 'zapisać się behawiorysta', 'umówić konsultację'],
     priority: 0.8,

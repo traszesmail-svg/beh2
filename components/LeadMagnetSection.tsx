@@ -76,7 +76,7 @@ export function LeadMagnetSection({ magnetId, pathname = '/', variant = 'card' }
             <LeadMagnetForm magnetId={magnet.id} source="section" layout="vertical" />
 
             <p className="text-xs text-muted-2 mt-4">
-              💡 Jeśli wybierzesz później newsletter — max 1× w miesiącu, zero ofert sprzedażowych.
+              Jeśli wybierzesz później newsletter: raz w miesiącu spokojna porcja wiedzy o psach, kotach i pierwszych krokach w trudnych sytuacjach.
             </p>
           </div>
 

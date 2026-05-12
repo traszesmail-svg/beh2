@@ -1,11 +1,11 @@
 ---
 slug: kot-zalatwia-sie-poza-kuweta
-title_seo: Kot załatwia się poza kuwetą — co robić
+title_seo: Kot załatwia się poza kuwetą: co sprawdzić, zanim uznasz, że robi na złość
 meta_description: Załatwianie się poza kuwetą to u kota sygnał, nie charakter. Sprawdź, co zweryfikować w pierwszej kolejności: zdrowie, kuwetę, teren i napięcie w domu.
-h1: Kot załatwia się poza kuwetą
+h1: Kot załatwia się poza kuwetą: co sprawdzić, zanim uznasz, że robi na złość
 ---
 
-# Kot załatwia się poza kuwetą
+# Kot załatwia się poza kuwetą: co sprawdzić, zanim uznasz, że robi na złość
 
 **Krótka odpowiedź:** kot, który załatwia się poza kuwetą, prawie nigdy nie robi tego „na złość”. Najczęstsze przyczyny to: problem zdrowotny (szczególnie dróg moczowych), źle dobrana kuweta albo żwirek, zbyt mało zasobów w domu dla liczby kotów, stres i napięcie środowiskowe. Sprawdza się je w kolejności, a nie wszystkie naraz.
 

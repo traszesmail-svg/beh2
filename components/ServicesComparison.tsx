@@ -18,10 +18,10 @@ const SERVICES = [
     duration: '15 min',
     mode: 'audio, bez kamery',
     who: 'gdy chcesz najprościej zacząć od jednego pytania albo pierwszego uporządkowania tematu',
-    plan: 'diagnoza behawioralna na podstawie uzyskanych informacji, priorytet i decyzja, czy ten format wystarczy',
-    materials: 'jasne wskazanie, co zrobić teraz i co obserwować dalej po diagnozie',
+    plan: 'diagnoza behawioralna oparta na informacjach przekazanych przez opiekuna, priorytet i decyzja, czy ta rozmowa wystarczy',
+    materials: 'jasne wskazanie, co zrobić teraz i co obserwować dalej po diagnozie behawioralnej',
     refund: PUBLIC_OFFER_CANCELLATION_COPY,
-    cta: 'Wybierz Kwadrans',
+    cta: 'Chcę zacząć od Kwadransa',
   },
   {
     id: 'konsultacja-30-min',
@@ -34,7 +34,7 @@ const SERVICES = [
     plan: 'więcej miejsca na kontekst, kolejność działań i decyzję, co dalej',
     materials: 'krótka notatka po rozmowie',
     refund: PUBLIC_OFFER_CANCELLATION_COPY,
-    cta: 'Wybierz Dwa kwadranse',
+    cta: 'Chcę spokojniej omówić temat',
   },
   {
     id: 'konsultacja-behawioralna-online',
@@ -43,11 +43,11 @@ const SERVICES = [
     price: PUBLIC_OFFER_PRICES.premium,
     duration: 'pełny zakres',
     mode: 'audio lub video',
-    who: 'gdy sprawa jest złożona, przewlekła albo obejmuje kilka obszarów naraz',
-    plan: 'diagnoza sytuacji, prawdopodobna etiologia, możliwy przebieg problemu i plan poprawy',
+    who: 'gdy sytuacja jest złożona, trwa długo albo obejmuje kilka obszarów naraz',
+    plan: 'diagnoza behawioralna oparta na danych, prawdopodobna etiologia, możliwy przebieg sytuacji i plan działania',
     materials: '7 dni konsultacji tekstowych przez WhatsApp po ustaleniu planu',
     refund: 'Osobny regulamin dla pełnej konsultacji.',
-    cta: 'Wybierz Pełną konsultację',
+    cta: 'Chcę pełną konsultację',
   },
 ] as const
 
@@ -56,7 +56,7 @@ const ROWS = [
   { key: 'duration', label: 'Czas' },
   { key: 'mode', label: 'Forma' },
   { key: 'who', label: 'Kiedy wybrać' },
-  { key: 'plan', label: 'Po co ten format' },
+  { key: 'plan', label: 'Po co ta rozmowa' },
   { key: 'materials', label: 'Po rozmowie' },
   { key: 'refund', label: 'Zmiana / zwrot' },
   { key: 'cta', label: 'CTA' },
@@ -143,7 +143,7 @@ export function ServicesComparison({ species = null, qaBooking = false, classNam
                 <dd>{service.who}</dd>
               </div>
               <div>
-                <dt>Po co ten format</dt>
+                <dt>Po co ta rozmowa</dt>
                 <dd>{service.plan}</dd>
               </div>
               <div>

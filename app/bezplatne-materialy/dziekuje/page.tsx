@@ -50,7 +50,7 @@ export default function LeadMagnetThankYouPage({
                   </a>
                 ) : null}
                 <Link href={audioHref} prefetch={false} className="button button-ghost big-button">
-                  Zarezerwuj 15-minutową konsultację behawioralną
+                  Umów spokojny pierwszy krok
                 </Link>
               </div>
 

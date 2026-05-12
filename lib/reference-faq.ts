@@ -25,37 +25,37 @@ export const referenceFaqItems: ReferenceFaqItem[] = [
   {
     id: 'krótka-wiadomość-zamiast-konsultacji',
     category: 'wspolpraca',
-    question: 'Kiedy wybrać krótką wiadomość zamiast konsultacji?',
+    question: 'Czy muszę już wiedzieć, co jest przyczyną?',
     answer:
-      'Gdy nie chcesz rezerwować od razu, masz jedno konkretne pytanie albo chcesz krótko doprecyzować temat. W wiadomości opiszesz sytuację, a ja podpowiem, czy lepszy będzie Kwadrans, pełna konsultacja online czy jeszcze doprecyzowanie tematu.',
+      'Nie. Od tego zaczynamy - od uporządkowania obserwacji. Wystarczy opis codziennej sytuacji. Na tej podstawie tworzę diagnozę behawioralną opartą na dostępnych danych.',
   },
   {
     id: 'czy-wiadomość-zastepuje-konsultacje',
     category: 'wspolpraca',
-    question: 'Czy krótka wiadomość zastępuje konsultację?',
+    question: 'Czy w każdej usłudze dostaję diagnozę behawioralną?',
     answer:
-      'Nie. Wiadomość pomaga wybrać dobry pierwszy krok i ocenić, czy temat nadaje się do Kwadransu, Dwóch kwadransów albo pełnej konsultacji.',
+      'Tak. W każdej usłudze dostajesz diagnozę behawioralną opartą na informacjach, które przekażesz: opisie sytuacji, formularzu, historii zachowania, kontekście domu lub spacerów i nagraniach, jeśli są. Zakres diagnozy behawioralnej zależy od ilości danych i długości rozmowy.',
   },
   {
     id: 'diagnoza-lub-weterynarz',
     category: 'konsultacje',
-    question: 'Czy muszę mieć diagnozę lub opinię weterynarza?',
+    question: 'Czy diagnoza behawioralna zastępuje lekarza weterynarii?',
     answer:
-      'Nie musisz. Przy nagłej zmianie zachowania, bólu, problemach z jedzeniem, załatwianiem albo poruszaniem się mogę jednak poprosić o konsultację weterynaryjną równolegle z pracą behawioralną.',
+      'Nie. Zachowanie może mieć związek ze zdrowiem, bólem, dietą albo środowiskiem. Jako technik weterynarii i dietetyk patrzę szerzej, ale jeśli coś wymaga konsultacji lekarskiej, powiem to jasno.',
   },
   {
     id: 'kwadrans',
     category: 'konsultacje',
-    question: 'Jak wygląda 15-minutowa konsultacja behawioralna?',
+    question: 'Co realnie da mi 15 minut rozmowy?',
     answer:
-      'To 15 minut rozmowy audio bez kamery. Służy do nazwania problemu, uporządkowania priorytetu i ustalenia pierwszego konkretnego kroku.',
+      'Nie rozwiążemy całej złożonej sprawy w 15 minut, ale możemy nazwać główny kierunek, ustalić priorytet i zatrzymać działania, które mogą pogarszać sytuację.',
   },
   {
     id: 'pelna-konsultacja',
     category: 'konsultacje',
-    question: 'Jak wygląda pełna konsultacja behawioralna online?',
+    question: 'Kiedy pełna konsultacja ma więcej sensu niż szybka rozmowa?',
     answer:
-      'To szersza rozmowa online audio albo audio/video, analiza sytuacji, diagnoza behawioralna, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.',
+      'Gdy zachowanie trwa długo, dotyczy kilku sytuacji albo mocno wpływa na życie domowników. Wtedy potrzebna jest pełniejsza diagnoza behawioralna, plan i możliwość dopytania po rozmowie.',
   },
   {
     id: 'problemy-kot',
@@ -123,16 +123,16 @@ export const referenceFaqItems: ReferenceFaqItem[] = [
   {
     id: 'metody-pracy',
     category: 'pies',
-    question: 'Jakie metody pracy stosujesz?',
+    question: 'Jakimi metodami pracujesz?',
     answer:
-      'Pracuję bez przemocy i bez straszenia. Najpierw szukam przyczyny napięcia, potem dobieram kroki, które da się wdrożyć w konkretnym domu.',
+      'Bez przemocy, bez straszenia i bez dominowania. Najpierw szukam, co zwiększa napięcie, a potem dobieram takie kroki, które opiekun naprawdę może wdrożyć w swoim domu.',
   },
   {
     id: 'diagnoza-na-podstawie-informacji',
     category: 'konsultacje',
-    question: 'Czy po rozmowie dostanę diagnozę?',
+    question: 'Czy zakres diagnozy behawioralnej zależy od długości rozmowy?',
     answer:
-      'W krótkich formatach dostajesz diagnozę behawioralną na podstawie zebranych informacji i pierwszy krok. W pełnej konsultacji omawiam też prawdopodobną etiologię i możliwy przebieg problemu.',
+      'Tak. W Kwadransie dostajesz wstępną diagnozę behawioralną opartą na informacjach przekazanych przez opiekuna i pierwszy kierunek działania. Przy sprawach złożonych pełniejsza diagnoza behawioralna wymaga dłuższej rozmowy, formularza, historii zachowania i czasem nagrań.',
   },
   {
     id: 'pies-reaktywny-na-spacerze',

@@ -30,22 +30,22 @@ export type QuizResult = {
 export const QUIZ_QUESTIONS: QuizQuestion[] = [
   {
     id: 'species',
-    title: 'Kogo dotyczy problem?',
+    title: 'Kogo dotyczy sytuacja?',
     helper: 'Wybierz gatunek, z którym chcesz zacząć.',
     options: [
-      { id: 'pies', label: 'Pies', helper: 'Spacer, separacja, pobudzenie, agresja, szczeniak.' },
+      { id: 'pies', label: 'Pies', helper: 'Spacer, zostawanie samemu, pobudzenie, napięcie, szczeniak.' },
       { id: 'kot', label: 'Kot', helper: 'Kuweta, stres, relacje między kotami, nocna aktywność.' },
     ],
   },
   {
     id: 'main_topic',
-    title: 'Jaki obszar jest najbliższy sytuacji?',
-    helper: 'Wybierz najważniejszy wątek. Jeśli jest ich kilka, zaznacz wariant złożony.',
+    title: 'Co najbardziej przypomina Waszą sytuację?',
+    helper: 'Wybierz najważniejszy wątek. Jeśli jest ich kilka, zaznacz odpowiedź o kilku rzeczach naraz.',
     options: [
       { id: 'single_behavior', label: 'Jedno zachowanie', helper: 'Np. szczekanie w jednym kontekście, kuweta, ciągnięcie, nocne miauczenie.' },
       { id: 'routine_stress', label: 'Stres w codziennej rutynie', helper: 'Problem wraca w domu, na spacerze, przy gościach albo zmianach.' },
       { id: 'relationship', label: 'Relacje i konflikt', helper: 'Dotyczy ludzi, drugiego zwierzęcia, zasobów albo kontaktu.' },
-      { id: 'many_threads', label: 'Kilka wątków naraz', helper: 'Trudno wskazać jeden problem, bo rzeczy się łączą.' },
+      { id: 'many_threads', label: 'Kilka wątków naraz', helper: 'Trudno wskazać jedną rzecz, bo tematy się łączą.' },
     ],
   },
   {
@@ -70,17 +70,17 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
   },
   {
     id: 'duration',
-    title: 'Jak długo to trwa?',
-    helper: 'Czas trwania pomaga dobrać zakres, nie diagnozę.',
+    title: 'Jak bardzo potrzebujesz teraz uporządkowania?',
+    helper: 'Czas trwania pomaga dobrać zakres rozmowy, nie zastępuje diagnozy behawioralnej.',
     options: [
-      { id: 'fresh', label: 'Od niedawna', helper: 'Dni albo kilka tygodni.' },
-      { id: 'returning', label: 'Wraca regularnie', helper: 'Są lepsze i gorsze okresy.' },
-      { id: 'long', label: 'Dłużej niż kilka miesięcy', helper: 'Problem utrwalił się w codzienności.' },
+      { id: 'fresh', label: 'Chcę tylko wiedzieć, od czego zacząć', helper: 'Sytuacja jest świeża albo potrzebujesz pierwszego kierunku.' },
+      { id: 'returning', label: 'To łączy się z kilkoma rzeczami', helper: 'Są lepsze i gorsze okresy, a temat wraca w różnych kontekstach.' },
+      { id: 'long', label: 'To trwa długo albo wpływa na całe życie w domu', helper: 'Warto spokojniej zebrać dane i ułożyć plan działania.' },
     ],
   },
   {
     id: 'frequency',
-    title: 'Jak często problem się pojawia?',
+    title: 'Jak często to się pojawia?',
     helper: 'Częstotliwość pokazuje, czy wystarczy instrukcja, czy potrzebny jest plan.',
     options: [
       { id: 'rare', label: 'Sporadycznie', helper: 'Raz na jakiś czas albo w bardzo konkretnych sytuacjach.' },
@@ -93,7 +93,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     title: 'Czy umiesz przewidzieć, kiedy to się wydarzy?',
     helper: 'Im mniej przewidywalny obraz, tym więcej trzeba dopytać.',
     options: [
-      { id: 'clear', label: 'Tak, wyzwalacz jest jasny', helper: 'Wiem, kiedy zaczyna się problem i co go uruchamia.' },
+      { id: 'clear', label: 'Tak, wyzwalacz jest jasny', helper: 'Wiem, kiedy zaczyna się zachowanie i co je uruchamia.' },
       { id: 'partial', label: 'Częściowo', helper: 'Widzę pewne schematy, ale nie wszystkie sytuacje pasują.' },
       { id: 'unclear', label: 'Nie, to wygląda chaotycznie', helper: 'Problem pojawia się nagle albo trudno połączyć fakty.' },
     ],
@@ -195,7 +195,7 @@ export function resolveQuizResult(answers: QuizAnswers): QuizResult {
     reasons.push('warto równolegle sprawdzić warstwę zdrowotną')
   }
   if (mainTopic === 'many_threads' || resources === 'several' || resources === 'multi_pet') {
-    reasons.push('problem łączy kilka obszarów, a nie jedną prostą wskazówkę')
+    reasons.push('sytuacja łączy kilka obszarów, a nie jedną prostą wskazówkę')
   }
   if (duration === 'long' || frequency === 'daily') {
     reasons.push('wzorzec jest utrwalony albo czesto wraca')
@@ -207,9 +207,9 @@ export function resolveQuizResult(answers: QuizAnswers): QuizResult {
   if (score >= 8) {
     return {
       serviceKey: 'pelna-konsultacja',
-      title: 'Najbliżej pasuje pełna konsultacja',
+      title: 'Na podstawie odpowiedzi najrozsądniejszy pierwszy krok to: pełna konsultacja',
       summary:
-        'To format dla spraw złożonych, utrwalonych, wielowątkowych albo dotyczących bezpieczeństwa. Najpierw warto zebrać kontekst, a dopiero potem układać plan.',
+        'To rozmowa dla sytuacji utrwalonych, wielowątkowych albo dotyczących bezpieczeństwa. Najpierw warto zebrać kontekst, a dopiero potem układać plan działania.',
       reasons: reasons.length > 0 ? reasons.slice(0, 4) : ['sprawa wymaga szerszego zebrania informacji'],
       note:
         medicalChange === 'yes'
@@ -224,14 +224,14 @@ export function resolveQuizResult(answers: QuizAnswers): QuizResult {
   if (score >= 4) {
     return {
       serviceKey: 'dwa-kwadranse',
-      title: 'Najbliżej pasują Dwa kwadranse',
+      title: 'Na podstawie odpowiedzi najrozsądniejszy pierwszy krok to: Dwa kwadranse',
       summary:
-        'To spokojniejszy start, gdy temat ma kilka elementów albo 15 minut może być za krótkie. Nadal zaczynasz od pierwszego sensownego kroku, bez przeskakiwania do za dużego formatu.',
+        'To spokojniejszy start, gdy temat ma kilka elementów albo 15 minut może być za krótkie. Nadal zaczynasz od pierwszego sensownego kroku, bez przeskakiwania za daleko.',
       reasons:
         reasons.length > 0
           ? reasons.slice(0, 4)
-          : ['jest czas na dopytanie o rytm dnia i tło problemu', 'można uporządkować 2-3 wątki bez pełnej konsultacji'],
-    note: 'Jeśli w trakcie rozmowy wyjdzie, że problem jest szerszy, łatwiej będzie zdecydować o dalszym kroku.',
+          : ['jest czas na dopytanie o rytm dnia i tło sytuacji', 'można uporządkować 2-3 wątki bez pełnej konsultacji'],
+    note: 'Jeśli w trakcie rozmowy wyjdzie, że sytuacja jest szersza, łatwiej będzie zdecydować o dalszym kroku.',
       materialTitle,
       materialHref,
       materialCopy: 'Zacznij od PDF-u lub checklisty, jeśli chcesz przygotować obserwacje przed rozmową.',
@@ -240,17 +240,17 @@ export function resolveQuizResult(answers: QuizAnswers): QuizResult {
 
   return {
     serviceKey: 'kwadrans',
-    title: goal === 'material' ? 'Najpierw materiał lub PDF, potem Kwadrans jeśli trzeba' : 'Najbliżej pasuje Kwadrans',
+    title: goal === 'material' ? 'Na podstawie odpowiedzi najrozsądniejszy pierwszy krok to: materiał lub PDF, potem Kwadrans jeśli trzeba' : 'Na podstawie odpowiedzi najrozsądniejszy pierwszy krok to: Kwadrans',
     summary:
       'To dobry pierwszy krok, gdy temat jest wąski, świeży albo da się go uporządkować jedną decyzją. Materiał z Niezbędnika może być pierwszym przygotowaniem, a Kwadrans pomaga sprawdzić, czy idziesz w dobrą stronę.',
     reasons: [
-      duration === 'fresh' ? 'problem wygląda na świeży' : 'problem nie wymaga od razu pełnej analizy',
+      duration === 'fresh' ? 'sytuacja wygląda na świeżą' : 'sytuacja nie wymaga od razu pełnej analizy',
       predictability === 'clear' ? 'wyzwalacz jest dość czytelny' : 'potrzebujesz przede wszystkim pierwszego priorytetu',
       'można zacząć od materiału lub krótkiej rozmowy audio bez kamery',
     ],
     note: 'Kwadrans nie musi zamykać sprawy. Ma pomóc wybrać najprostszy następny krok.',
     materialTitle,
     materialHref,
-    materialCopy: 'Jeśli chcesz zacząć samodzielnie, wybierz PDF lub checklistę. Gdy po materiale temat nadal jest niejasny, zarezerwuj Kwadrans.',
+    materialCopy: 'Jeśli chcesz zacząć samodzielnie, wybierz PDF lub checklistę. Gdy po materiale temat nadal jest niejasny, umów Kwadrans.',
   }
 }

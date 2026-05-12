@@ -622,7 +622,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
     supportLinks: [
       SEPARATION_LANDING_LINK,
       {
-        label: 'Pies wyje, kiedy zostaje sam',
+      label: 'Pies wyje, kiedy zostaje sam: co nagrać i sprawdzić',
         href: '/blog',
         description: 'Najbliższy artykuł, jeśli chcesz najpierw odróżnić lęk separacyjny od innych scenariuszy.',
       },
@@ -679,7 +679,7 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
     supportLinks: [
       LITTER_LANDING_LINK,
       {
-        label: 'Kot załatwia się poza kuwetą',
+      label: 'Kot załatwia się poza kuwetą: co sprawdzić',
         href: '/blog',
         description: 'Najszerszy wpis startowy, jeśli chcesz zobaczyć całą sekwencję filtrów przed dalszą pracą.',
       },

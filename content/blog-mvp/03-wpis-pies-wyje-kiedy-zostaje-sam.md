@@ -1,11 +1,11 @@
 ---
 slug: pies-wyje-kiedy-zostaje-sam
-title_seo: Pies wyje, kiedy zostaje sam — co robić
+title_seo: Pies wyje, kiedy zostaje sam: co nagrać i sprawdzić, zanim zaczniesz trening
 meta_description: Wycie, szczekanie i niszczenie po wyjściu z domu to najczęściej lęk, nie złośliwość. Zobacz, co sprawdzić, zanim zaczniesz trening zostawania samemu.
-h1: Pies wyje, kiedy zostaje sam
+h1: Pies wyje, kiedy zostaje sam: co nagrać i sprawdzić, zanim zaczniesz trening
 ---
 
-# Pies wyje, kiedy zostaje sam
+# Pies wyje, kiedy zostaje sam: co nagrać i sprawdzić, zanim zaczniesz trening
 
 **Krótka odpowiedź:** jeśli pies wyje, szczeka albo niszczy coś w domu po twoim wyjściu, zwykle nie jest to protest. To reakcja na lęk, brak poczucia bezpieczeństwa albo brak wyuczonego schematu, co ma robić sam. „Zostawanie samemu” nie jest umiejętnością wrodzoną — trzeba jej nauczyć.
 

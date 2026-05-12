@@ -90,7 +90,7 @@ export function LeadMagnetForm({ magnetId, source, onSuccess, layout = 'vertical
           {status === 'loading' ? (
             <Loader2 className="animate-spin" size={18} />
           ) : (
-            'Wyślij mi PDF'
+            'Chcę dostać PDF i zacząć spokojnie'
           )}
         </button>
       </div>
@@ -116,7 +116,7 @@ export function LeadMagnetForm({ magnetId, source, onSuccess, layout = 'vertical
           onChange={(e) => setConsentNewsletter(e.target.checked)}
           className="mt-0.5 accent-accent shrink-0"
         />
-        <span>(opcjonalnie) Chcę otrzymywać newsletter z poradami behawioralnaymi — max 1× w miesiącu</span>
+        <span>(opcjonalnie) Chcę otrzymywać newsletter. Raz w miesiącu spokojna porcja wiedzy o psach, kotach i pierwszych krokach w trudnych sytuacjach.</span>
       </label>
 
       {status === 'error' && (

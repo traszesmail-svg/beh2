@@ -151,11 +151,11 @@ export function ContactLeadForm() {
     }
 
     if (normalizedMessage.length < 20) {
-      return 'Opisz problem w 2-4 zdaniach.'
+      return 'Opisz sytuację w 2-4 zdaniach.'
     }
 
     if (normalizedMessage.length > MESSAGE_MAX_LENGTH) {
-      return 'Skróć opis problemu do krótkiej wiadomości.'
+      return 'Skróć opis sytuacji do krótkiej wiadomości.'
     }
 
     if (isUrgentNow && (!form.requestedDate || !form.requestedTime)) {
@@ -256,8 +256,8 @@ export function ContactLeadForm() {
           ? 'Wyślij kolejną prośbę'
           : 'Wyślij kolejną'
         : isUrgentNow
-          ? 'Wyślij prośbę'
-          : 'Wyślij'
+          ? 'Wyślij opis sytuacji'
+          : 'Wyślij opis sytuacji'
 
   return (
     <form className="form-grid top-gap" onSubmit={handleSubmit} noValidate>
@@ -348,7 +348,7 @@ export function ContactLeadForm() {
 
       <div className="full-width form-field">
         <div className="contact-message-label-row">
-          <label htmlFor="contact-message">{isUrgentNow ? 'Krótki opis i kontekst terminu' : 'Krótki opis problemu'}</label>
+          <label htmlFor="contact-message">{isUrgentNow ? 'Krótki opis i kontekst terminu' : 'Krótki opis sytuacji'}</label>
           <span className="contact-message-count" aria-live="polite">
             {messageLength}/{MESSAGE_MAX_LENGTH}
           </span>
@@ -363,7 +363,7 @@ export function ContactLeadForm() {
           placeholder={
             isUrgentNow
               ? 'Napisz w 2-4 zdaniach, czego dotyczy temat i czy wskazana data/godzina są sztywne czy orientacyjne.'
-              : 'Napisz w 2-4 zdaniach, co dzieje się teraz, od kiedy to trwa i co najbardziej chcesz uporządkować.'
+              : 'Napisz po ludzku, co się dzieje: od kiedy trwa sytuacja, kiedy się pojawia, co już próbowaliście i co najbardziej Cię martwi.'
           }
           enterKeyHint="send"
           maxLength={MESSAGE_MAX_LENGTH}

@@ -20,10 +20,10 @@ import { getLeadMagnetBySlug } from '@/lib/active-lead-magnets'
 import { buildMarketingMetadata } from '@/lib/seo'
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: 'Niezbędnik - praktyczne materiały dla opiekunów psów i kotów',
+  title: 'Niezbędnik - PDF-y i checklisty dla opiekunów psów i kotów',
   path: '/niezbednik',
   description:
-    'Niezbędnik: darmowe checklisty, krótkie poradniki i plany do pobrania dla opiekunów psów i kotów.',
+    'Niezbędnik: krótkie PDF-y, checklisty i materiały, które pomagają nazwać sytuację i przygotować się do spokojniejszej rozmowy.',
 })
 
 type ResourceCard = {
@@ -65,7 +65,7 @@ const heroHighlights = [
 const freeResources: ResourceCard[] = [
   {
     label: 'PDF',
-    title: '30 zachowań do obserwacji',
+    title: '30 sygnałów, które warto zauważyć, zanim problem urośnie',
     description: 'Szeroki start dla opiekuna psa albo kota, gdy trzeba nazwać powtarzające się sygnały.',
     href: leadMagnetHref('30-zachowan'),
     coverSrc: '/branding/pdf-covers/30-zachowan.png',
@@ -74,7 +74,7 @@ const freeResources: ResourceCard[] = [
   },
   {
     label: 'PDF',
-    title: 'Kot żyje w napięciu',
+    title: 'Czy Twój kot żyje w napięciu? Ciche sygnały, które łatwo przegapić',
     description: 'Ciche sygnały stresu, pierwsze obserwacje i bezpieczniejszy porządek w domu.',
     href: leadMagnetHref('kot-zyje-w-napieciu'),
     coverSrc: '/branding/pdf-covers/kot-zyje-w-napieciu.png',
@@ -83,7 +83,7 @@ const freeResources: ResourceCard[] = [
   },
   {
     label: 'PDF',
-    title: 'Pies i poziom ruchu',
+    title: 'Czy Twój pies potrzebuje więcej ruchu - czy mniej pobudzenia?',
     description: 'Kiedy ruch pomaga, a kiedy dokłada pobudzenia i przeciążenia.',
     href: '/materialy#psy',
     coverSrc: '/branding/pdf-covers/pies-ile-ruchu-potrzebuje.png',
@@ -92,7 +92,7 @@ const freeResources: ResourceCard[] = [
   },
   {
     label: 'PDF',
-    title: 'Pies sam w domu',
+    title: 'Pies sam w domu: co sprawdzić, zanim zaczniesz trening zostawania',
     description: 'Pierwsze kroki przy zostawaniu samemu, nagraniach i bezpiecznej obserwacji.',
     href: leadMagnetHref('pies-sam-w-domu'),
     coverSrc: '/branding/pdf-covers/pies-sam-w-domu.png',
@@ -101,7 +101,7 @@ const freeResources: ResourceCard[] = [
   },
   {
     label: 'PDF',
-    title: 'Pierwszy tydzień z kotem',
+    title: 'Pierwszy tydzień z kotem: spokojny start bez przyspieszania kontaktu',
     description: 'Spokojny plan wejścia kota do domu: przestrzeń, rytm i kontakt.',
     href: leadMagnetHref('pierwszy-tydzien-z-kotem'),
     coverSrc: '/branding/pdf-covers/pierwszy-tydzien-z-kotem.png',
@@ -110,7 +110,7 @@ const freeResources: ResourceCard[] = [
   },
   {
     label: 'PDF',
-    title: 'Podstawy przed Kwadransem',
+    title: 'Przed Kwadransem: co przygotować, żeby 15 minut naprawdę pomogło',
     description: 'Dwa krótkie materiały porządkujące pierwszą rozmowę o psie albo kocie.',
     href: '/materialy',
     coverSrc: '/branding/pdf-covers/kwadrans.png',
@@ -197,10 +197,9 @@ export default function EssentialsPage() {
           <section className="essentials-index-hero" aria-labelledby="essentials-index-title">
             <div className="essentials-index-hero-copy">
               <span className="essentials-index-pill">Niezbędnik</span>
-              <h1 id="essentials-index-title">Praktyczne materiały, które naprawdę pomagają.</h1>
+              <h1 id="essentials-index-title">Nie wszystko trzeba od razu konsultować. Czasem najpierw wystarczy dobrze poobserwować.</h1>
               <p>
-                Sprawdzone checklisty, mini poradniki i planery do pobrania. Stworzone, żeby wspierać Cię w
-                codziennym życiu z psem lub kotem.
+                Tu znajdziesz krótkie PDF-y, checklisty i materiały, które pomagają nazwać sytuację, zobaczyć powtarzalne sygnały i przygotować się do spokojniejszej rozmowy.
               </p>
               <div className="essentials-index-hero-highlights" aria-label="Najważniejsze cechy materiałów">
                 {heroHighlights.map((item) => {
@@ -230,8 +229,8 @@ export default function EssentialsPage() {
 
           <section className="essentials-index-bundles essentials-index-bundles-top" aria-labelledby="essentials-index-bundles-title">
             <div className="essentials-index-section-head">
-              <h2 id="essentials-index-bundles-title">Ścieżki tematyczne</h2>
-              <p>Materiały ułożone według sytuacji, żeby łatwiej wybrać dobry pierwszy krok.</p>
+              <h2 id="essentials-index-bundles-title">Wybierz sytuację najbliższą Twojej</h2>
+              <p>Nie musisz czytać wszystkiego. Wybierz to, co najbardziej przypomina Wasz dom, spacer albo problem z kuwetą.</p>
             </div>
             <div className="essentials-index-bundle-grid">
               {bundles.map((item) => {
@@ -263,8 +262,8 @@ export default function EssentialsPage() {
           <section className="essentials-index-layout" aria-label="Materiały do pobrania">
             <div className="essentials-index-main">
               <div className="essentials-index-section-head">
-                <h2>Bezpłatne materiały</h2>
-                <p>Pobierz i korzystaj na co dzień.</p>
+                <h2>Zacznij bez płacenia i bez presji</h2>
+                <p>Pobierz, przejrzyj spokojnie i sprawdź, co zaczyna się powtarzać.</p>
               </div>
 
               <div className="essentials-index-resource-grid">
@@ -283,7 +282,7 @@ export default function EssentialsPage() {
                     <h3>{item.title}</h3>
                     <p>{item.description}</p>
                     <Link href={item.href} prefetch={false} className="essentials-index-download">
-                      <span>Pobierz PDF</span>
+                      <span>Sprawdź, czy ten PDF pasuje do Twojej sytuacji</span>
                       <Download size={16} strokeWidth={1.8} aria-hidden="true" />
                     </Link>
                   </article>
@@ -321,8 +320,8 @@ export default function EssentialsPage() {
               <Mail size={40} strokeWidth={1.6} />
             </span>
             <div>
-              <h2 id="essentials-index-newsletter-title">Nowe materiały prosto na Twoją skrzynkę</h2>
-              <p>Zapisz się na newsletter i otrzymuj praktyczne materiały, nowości i wskazówki.</p>
+              <h2 id="essentials-index-newsletter-title">Raz w miesiącu spokojna porcja wiedzy</h2>
+              <p>Raz w miesiącu spokojna porcja wiedzy o psach, kotach i pierwszych krokach w trudnych sytuacjach.</p>
             </div>
             <form className="essentials-index-newsletter-form" action="/newsletter">
               <label className="sr-only" htmlFor="essentials-newsletter-email">
@@ -330,7 +329,7 @@ export default function EssentialsPage() {
               </label>
               <input id="essentials-newsletter-email" name="email" type="email" placeholder="Twój e-mail" />
               <button type="submit">Zapisz się</button>
-              <small>Bez spamu. W każdej chwili możesz się wypisać.</small>
+              <small>Bez spamu, bez codziennych maili. Możesz wypisać się jednym kliknięciem.</small>
             </form>
           </section>
 

@@ -51,14 +51,14 @@ function getFullConsultationDescription(species?: BookingSpecies | null) {
     return 'Dla kota przy temacie szerszym, dłużej trwającym albo obejmującym kilka obszarów naraz.'
   }
 
-  return 'Dla spraw bardziej złożonych, dłużej trwających albo wielowątkowych, gdy potrzebna jest pełniejsza konsultacja.'
+  return 'Dla sytuacji bardziej złożonych, dłużej trwających albo wielowątkowych, gdy potrzebna jest pełniejsza konsultacja.'
 }
 
 export function OfferEntrySection({
   species = null,
   sectionId,
   eyebrow = 'Oferta',
-  title = 'Trzy główne formaty konsultacji — Kwadrans, Dwa kwadranse i Pełna konsultacja.',
+  title = 'Trzy główne rozmowy: Kwadrans, Dwa kwadranse i Pełna konsultacja.',
   description = PUBLIC_OFFER_BOOKING_LEAD,
 }: OfferEntrySectionProps) {
   const audioHref = buildBookHref(null, 'szybka-konsultacja-15-min', false, species)
@@ -126,13 +126,13 @@ export function OfferEntrySection({
         <article className="summary-card tree-backed-card">
           <div className="section-eyebrow">Pełna konsultacja</div>
           <h3>Pełna konsultacja behawioralna</h3>
-          <p>{getFullConsultationDescription(species)} Po rozmowie dostajesz diagnozę, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.</p>
+          <p>{getFullConsultationDescription(species)} Po rozmowie dostajesz diagnozę behawioralną opartą na danych, plan działania i 7 dni konsultacji tekstowych przez WhatsApp.</p>
           <div className="editorial-hero-meta" aria-label="Parametry usługi">
             <span>pełny zakres online</span>
             <span>{formatPricePln(PUBLIC_OFFER_PRICES.premium)}</span>
-            <span>diagnoza + 7 dni WhatsApp</span>
+            <span>diagnoza behawioralna + 7 dni WhatsApp</span>
           </div>
-          <p className="muted">Dla {speciesLabel}, gdy problem trwa dłużej, wraca albo obejmuje kilka obszarów naraz.</p>
+          <p className="muted">Dla {speciesLabel}, gdy sytuacja trwa dłużej, wraca albo obejmuje kilka obszarów naraz.</p>
           <p className="muted">{PUBLIC_OFFER_FULL_CONSULTATION_VALUE}</p>
           <div className="hero-actions top-gap-small">
             <Link href={fullConsultationHref} prefetch={false} className="button button-ghost">

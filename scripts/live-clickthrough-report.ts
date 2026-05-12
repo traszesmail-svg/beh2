@@ -1320,7 +1320,7 @@ async function main() {
 
     await runStep(results, '/kontakt', publicPage, async (step) => {
       await publicPage.goto(`${baseUrl}/kontakt`, { waitUntil: 'domcontentloaded' })
-      await waitForAnyBodyText(publicPage, [/Napisz wiadomość/i, /Piszesz do mnie/i], 20000)
+      await waitForAnyBodyText(publicPage, [/Napisz krótko, co się dzieje/i, /Wyślij opis sytuacji/i], 20000)
       await assertNoPublicPhoneLinks(publicPage, '/kontakt')
       step.notes.push('Kontakt jest skrócony do akcji i krótkiej tożsamości.')
     })
@@ -1339,7 +1339,7 @@ async function main() {
       await publicPage.goto(`${baseUrl}/polityka-prywatnosci`, { waitUntil: 'domcontentloaded' })
       await waitForAnyBodyText(
         publicPage,
-        [/Jak przetwarzane są dane w marce Regulski \| Terapia behawioralna/i, /Napisz wiadomość/i, /Publiczny profil CAPBT \/ COAPE/i],
+        [/Jak przetwarzane są dane w marce Regulski \| Terapia behawioralna/i, /Opisz krótko, co się dzieje/i, /Publiczny profil CAPBT \/ COAPE/i],
         20000,
       )
       await assertNoPublicPhoneLinks(publicPage, '/polityka-prywatnosci')

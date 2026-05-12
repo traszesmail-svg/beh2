@@ -14,12 +14,12 @@ export const PUBLIC_OFFER_FAQ_ITEMS: TrustFaqItem[] = [
   {
     question: 'Co obejmuje Pełna konsultacja 470 zł?',
     answer:
-      'Rozmowę online audio albo audio/video, diagnozę sytuacji, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp. W tym czasie można zadawać pytania, wysyłać filmy i konsultować kolejne kroki.',
+      'Rozmowę online audio albo audio/video, diagnozę behawioralną opartą na danych, plan działania i 7 dni konsultacji tekstowych przez WhatsApp. W tym czasie można zadawać pytania, wysyłać filmy i konsultować kolejne kroki.',
   },
   {
     question: 'Kiedy nie warto zaczynac od Kwadransu?',
     answer:
-      'Nie wtedy, gdy od razu widzisz, że temat jest złożony, przewlekły albo dotyczy kilku obszarów naraz. W takiej sytuacji lepiej od razu wejść w Dwa kwadranse albo Pełną konsultację.',
+      'Nie wtedy, gdy od razu widzisz, że temat jest złożony, trwa długo albo dotyczy kilku obszarów naraz. W takiej sytuacji lepiej od razu wejść w Dwa kwadranse albo Pełną konsultację.',
   },
   {
     question: 'Co jeśli wybiore za maly format?',

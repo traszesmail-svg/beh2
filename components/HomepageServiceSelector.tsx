@@ -68,8 +68,8 @@ function buildProblemQuestion(animal: HomepageSelectorAnimal | null): HomepageSe
   return {
     id: 'problem',
     label: '2',
-    title: 'Co jest najbliżej problemu?',
-    helper: isCat ? 'Wybierz najbliższy koci temat.' : 'Wybierz najbliższy psi temat.',
+    title: 'Co najbardziej przypomina Waszą sytuację?',
+    helper: isCat ? 'Wybierz najbliższy koci sygnał.' : 'Wybierz najbliższą psią sytuację.',
     options: homepageProblemOptionsByAnimal[animal ?? 'dog'],
   }
 }
@@ -78,19 +78,19 @@ const heroChoices = [
   {
     id: 'dog',
     title: 'Mam psa',
-    copy: 'Spacery, lęk, reaktywność, szczeniak i inne problemy.',
+    copy: 'Coś dzieje się na spacerach, w domu albo w kontakcie z ludźmi i psami.',
     href: '/wybor?animal=dog',
   },
   {
     id: 'cat',
     title: 'Mam kota',
-    copy: 'Kuweta, stres, konflikt, zmiany w domu i sen.',
+    copy: 'Kuweta, napięcie, stres, drugi kot albo zmiana w domu.',
     href: '/wybor?animal=cat',
   },
   {
     id: 'unknown',
-    title: 'Nie wiem',
-    copy: 'Przejdź przez quiz i dobierz spokojny pierwszy krok.',
+    title: 'Nie wiem, co wybrać',
+    copy: 'Przeprowadź mnie przez kilka pytań i pokaż najrozsądniejszy pierwszy krok.',
     href: '/quiz',
   },
 ] as const
@@ -98,15 +98,15 @@ const heroChoices = [
 const heroChoiceDisplay: Record<(typeof heroChoices)[number]['id'], { title: string; copy: string }> = {
   dog: {
     title: 'Mam psa',
-    copy: 'Spacery, lęki, reakcje, szczeniak i inne problemy.',
+    copy: 'Coś dzieje się na spacerach, w domu albo w kontakcie z ludźmi i psami.',
   },
   cat: {
     title: 'Mam kota',
-    copy: 'Kuweta, stres, konflikty, zmiany w domu i inne.',
+    copy: 'Kuweta, napięcie, stres, drugi kot albo zmiana w domu.',
   },
   unknown: {
-    title: 'Nie wiem',
-    copy: 'Quiz pomoże dobrać pierwszy krok bez zgadywania.',
+    title: 'Nie wiem, co wybrać',
+    copy: 'Przeprowadź mnie przez kilka pytań i pokaż najrozsądniejszy pierwszy krok.',
   },
 }
 
@@ -210,9 +210,9 @@ export function HomepageServiceSelector({ mode = 'home', initialAnimal = null }:
           <header className="router-hero-copy">
             <div className="router-hero-intro">
               <div className="router-hero-text">
-                <h1 className="router-reference-title">A Tobie jak mogę pomóc?</h1>
+                <h1 className="router-reference-title">Co się dzieje z Twoim psem albo kotem?</h1>
                 <p className="router-reference-copy">
-                  Wybierz zwierzę albo odpowiedz na kilka krótkich pytań - podpowiem najlepszy pierwszy krok.
+                  Nie musisz znać fachowej nazwy problemu. Opisz to tak, jak wygląda w domu, na spacerze albo przy kuwecie. Pomogę Ci zrozumieć, co może stać za zachowaniem i od czego zacząć spokojnie, bez oceniania i bez kar.
                 </p>
               </div>
 
@@ -250,6 +250,9 @@ export function HomepageServiceSelector({ mode = 'home', initialAnimal = null }:
                 </Link>
               ))}
             </div>
+            <p className="router-reference-copy router-choice-microcopy">
+              Nie musisz diagnozować psa ani kota. Wystarczy, że opiszesz, co widzisz na co dzień.
+            </p>
           </header>
         </div>
       ) : null}
@@ -263,7 +266,7 @@ export function HomepageServiceSelector({ mode = 'home', initialAnimal = null }:
             <article className="home-guided-step">
               <div className="home-guided-step-head">
                 <span>1</span>
-                <strong>Kogo dotyczy problem?</strong>
+                <strong>Kogo dotyczy sytuacja?</strong>
               </div>
               <div className="home-guided-animal-options">
                 {homepageAnimalQuestion.options.map((option) => (
@@ -291,7 +294,7 @@ export function HomepageServiceSelector({ mode = 'home', initialAnimal = null }:
             <article className="home-guided-step">
               <div className="home-guided-step-head">
                 <span>2</span>
-                <strong>Co jest najbliżej problemu?</strong>
+                <strong>Co najbardziej przypomina Waszą sytuację?</strong>
               </div>
               <p>Wybierz temat z listy dopasowanej do Twojego zwierzęcia.</p>
               <label className="home-guided-select">
@@ -317,7 +320,7 @@ export function HomepageServiceSelector({ mode = 'home', initialAnimal = null }:
             <article className="home-guided-step">
               <div className="home-guided-step-head">
                 <span>3</span>
-                <strong>Jak pilna jest sytuacja?</strong>
+                <strong>Jak bardzo potrzebujesz teraz uporządkowania?</strong>
               </div>
               <div className="home-guided-urgency-options">
                 {urgencyQuestion.options.map((option) => (
@@ -336,13 +339,13 @@ export function HomepageServiceSelector({ mode = 'home', initialAnimal = null }:
 
             <aside className="home-guided-result" aria-live="polite">
               <div className="home-guided-result-copy">
-                <span>Rekomendacja</span>
+                <span>Najrozsądniejszy pierwszy krok</span>
                 <h3>{isComplete ? recommendation.title : 'Wybierz 3 odpowiedzi'}</h3>
-                <p>{isComplete ? recommendation.summary : 'Po ostatniej odpowiedzi pokażę format, cenę i przycisk do terminu.'}</p>
+                <p>{isComplete ? recommendation.summary : 'Po ostatniej odpowiedzi pokażę rozmowę, cenę i spokojny następny krok.'}</p>
               </div>
 
-              <div className="home-guided-price-card" aria-label="Cena rekomendowanego formatu">
-                <small>{isComplete ? recommendation.duration : 'Cena i format'}</small>
+              <div className="home-guided-price-card" aria-label="Cena rekomendowanej rozmowy">
+                <small>{isComplete ? recommendation.duration : 'Cena i rozmowa'}</small>
                 <strong>{isComplete ? recommendation.price : 'po wyborze'}</strong>
               </div>
 
@@ -363,7 +366,7 @@ export function HomepageServiceSelector({ mode = 'home', initialAnimal = null }:
                   </Link>
                 ) : (
                   <button type="button" className="notatnik-btn notatnik-btn-accent" disabled>
-                    <span>Sprawdź rekomendację</span>
+                    <span>Pokaż mi, od czego zacząć</span>
                   </button>
                 )}
               </div>
