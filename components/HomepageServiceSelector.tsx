@@ -86,6 +86,12 @@ const heroChoices = [
     copy: 'Kuweta, stres, konflikt, zmiany w domu i sen.',
     href: '/wybor?animal=cat',
   },
+  {
+    id: 'unknown',
+    title: 'Nie wiem',
+    copy: 'Przejdź przez quiz i dobierz spokojny pierwszy krok.',
+    href: '/quiz',
+  },
 ] as const
 
 const heroChoiceDisplay: Record<(typeof heroChoices)[number]['id'], { title: string; copy: string }> = {
@@ -97,11 +103,10 @@ const heroChoiceDisplay: Record<(typeof heroChoices)[number]['id'], { title: str
     title: 'Mam kota',
     copy: 'Kuweta, stres, konflikty, zmiany w domu i inne.',
   },
-}
-
-const homepageHeroPhoto = {
-  src: '/images/hero-main.jpg',
-  alt: 'Krzysztof Regulski trzyma kota na rękach',
+  unknown: {
+    title: 'Nie wiem',
+    copy: 'Quiz pomoże dobrać pierwszy krok bez zgadywania.',
+  },
 }
 
 function RouterChoiceIcon({ choiceId }: { choiceId: (typeof heroChoices)[number]['id'] }) {
@@ -208,16 +213,6 @@ export function HomepageServiceSelector({ mode = 'home', initialAnimal = null }:
                 </p>
               </div>
 
-              <figure className="router-home-photo">
-                <Image
-                  src={homepageHeroPhoto.src}
-                  alt={homepageHeroPhoto.alt}
-                  fill
-                  priority
-                  sizes="(max-width: 760px) 100vw, (max-width: 1180px) 42vw, 460px"
-                  className="router-home-photo-image"
-                />
-              </figure>
             </div>
             <div className="router-choice-grid" aria-label="Wybierz kierunek">
               {heroChoices.map((choice) => (

@@ -13,12 +13,12 @@ export const referenceFaqCategories: Array<{
   countLabel: string
   icon: 'message' | 'calendar' | 'paw' | 'cat' | 'payment' | 'screen'
 }> = [
-  { id: 'wspolpraca', label: 'Współpraca', countLabel: '10 pytań', icon: 'message' },
-  { id: 'konsultacje', label: 'Konsultacje', countLabel: '8 pytań', icon: 'calendar' },
-  { id: 'pies', label: 'Pies', countLabel: '12 pytań', icon: 'paw' },
-  { id: 'kot', label: 'Kot', countLabel: '10 pytań', icon: 'cat' },
-  { id: 'płatności', label: 'Płatności', countLabel: '6 pytań', icon: 'payment' },
-  { id: 'techniczne', label: 'Technicznie', countLabel: '6 pytań', icon: 'screen' },
+  { id: 'wspolpraca', label: 'Współpraca', countLabel: '5 pytań', icon: 'message' },
+  { id: 'konsultacje', label: 'Konsultacje', countLabel: '5 pytań', icon: 'calendar' },
+  { id: 'pies', label: 'Pies', countLabel: '5 pytań', icon: 'paw' },
+  { id: 'kot', label: 'Kot', countLabel: '5 pytań', icon: 'cat' },
+  { id: 'płatności', label: 'Płatności', countLabel: '5 pytań', icon: 'payment' },
+  { id: 'techniczne', label: 'Technicznie', countLabel: '5 pytań', icon: 'screen' },
 ]
 
 export const referenceFaqItems: ReferenceFaqItem[] = [
@@ -123,8 +123,113 @@ export const referenceFaqItems: ReferenceFaqItem[] = [
   {
     id: 'metody-pracy',
     category: 'pies',
-    question: 'Jakie metody pracy stosujeszł',
+    question: 'Jakie metody pracy stosujesz?',
     answer:
       'Pracuję bez przemocy i bez straszenia. Najpierw szukam przyczyny napięcia, potem dobieram kroki, które da się wdrożyć w konkretnym domu.',
+  },
+  {
+    id: 'diagnoza-na-podstawie-informacji',
+    category: 'konsultacje',
+    question: 'Czy po rozmowie dostanę diagnozę?',
+    answer:
+      'W krótkich formatach dostajesz diagnozę behawioralną na podstawie zebranych informacji i pierwszy krok. W pełnej konsultacji omawiam też prawdopodobną etiologię i możliwy przebieg problemu.',
+  },
+  {
+    id: 'pies-reaktywny-na-spacerze',
+    category: 'pies',
+    question: 'Czy konsultacja online ma sens przy psie reaktywnym na spacerze?',
+    answer:
+      'Tak, jeśli możesz opisać sytuacje, dystanse, wyzwalacze i reakcje psa. Nagranie spaceru pomaga, ale nie jest obowiązkowe na pierwszy kontakt.',
+  },
+  {
+    id: 'pies-lek-separacyjny',
+    category: 'pies',
+    question: 'Czy pomagasz przy lęku separacyjnym?',
+    answer:
+      'Tak. Najpierw porządkujemy objawy, rytm dnia i warunki zostawania psa. Potem ustalamy bezpieczny pierwszy etap pracy bez forsowania samotności.',
+  },
+  {
+    id: 'pies-szczeniak',
+    category: 'pies',
+    question: 'Czy mogę zgłosić szczeniaka?',
+    answer:
+      'Tak. Przy szczeniaku najczęściej omawiam gryzienie, pobudzenie, odpoczynek, naukę samotności, spacery i zasady w domu.',
+  },
+  {
+    id: 'kot-kuweta',
+    category: 'kot',
+    question: 'Czy konsultacja obejmuje problemy z kuwetą?',
+    answer:
+      'Tak. Przy kuwecie trzeba uporządkować zdrowie, żwirek, liczbę kuwet, lokalizację, stres i ostatnie zmiany w domu. Nie zaczynam od losowych porad.',
+  },
+  {
+    id: 'kot-konflikt',
+    category: 'kot',
+    question: 'Czy pomagasz przy konflikcie między kotami?',
+    answer:
+      'Tak. Analizuję zasoby, przestrzeń, historię relacji, napięcia i momenty eskalacji. Celem jest plan, który zmniejsza presję między kotami.',
+  },
+  {
+    id: 'kot-stres-po-zmianach',
+    category: 'kot',
+    question: 'Czy mogę zgłosić kota po przeprowadzce albo zmianach w domu?',
+    answer:
+      'Tak. Zmiany środowiska często nasilają chowanie się, wokalizację, napięcie albo problemy kuwetowe. W konsultacji ustalamy, co stabilizować najpierw.',
+  },
+  {
+    id: 'kot-nocna-aktywnosc',
+    category: 'kot',
+    question: 'Czy zajmujesz się nocną aktywnością kota?',
+    answer:
+      'Tak. Sprawdzamy rytm dnia, karmienie, zabawę, frustrację, zdrowie i środowisko. Dopiero potem dobieramy zmiany, które nie nasilą napięcia.',
+  },
+  {
+    id: 'platnosc-jakie-metody',
+    category: 'płatności',
+    question: 'Jak mogę zapłacić za konsultację?',
+    answer:
+      'Aktualny przepływ opiera się na płatności ręcznej: BLIK na telefon albo PayPal. Po rezerwacji dostajesz dalszy krok i potwierdzenie.',
+  },
+  {
+    id: 'platnosc-kiedy-potwierdzenie',
+    category: 'płatności',
+    question: 'Kiedy termin jest potwierdzony?',
+    answer:
+      'Termin jest potwierdzony po rezerwacji i sprawdzeniu płatności. Jeśli coś wymaga doprecyzowania, kontaktuję się mailowo.',
+  },
+  {
+    id: 'platnosc-faktura',
+    category: 'płatności',
+    question: 'Czy mogę poprosić o potwierdzenie płatności?',
+    answer:
+      'Tak. Jeśli potrzebujesz potwierdzenia, napisz to w wiadomości albo odpowiedz na mail dotyczący rezerwacji.',
+  },
+  {
+    id: 'platnosc-brak-przejscia',
+    category: 'płatności',
+    question: 'Co jeśli płatność albo strona płatności się nie otworzy?',
+    answer:
+      'Wróć do wyboru terminu albo napisz przez formularz kontaktowy. Nie ponawiaj kilku prób na ślepo, jeśli nie masz pewności, czy zamówienie powstało.',
+  },
+  {
+    id: 'platnosc-anulowanie',
+    category: 'płatności',
+    question: 'Czy mogę zmienić termin po opłaceniu?',
+    answer:
+      'Jeśli potrzebujesz zmiany, napisz jak najszybciej. Możliwość przełożenia zależy od czasu do konsultacji i dostępnych terminów.',
+  },
+  {
+    id: 'techniczne-kamera',
+    category: 'techniczne',
+    question: 'Czy muszę mieć włączoną kamerę?',
+    answer:
+      'Nie zawsze. Kwadrans jest rozmową audio. Przy pełnej konsultacji kamera lub nagrania mogą pomóc, ale forma zależy od sytuacji i możliwości opiekuna.',
+  },
+  {
+    id: 'techniczne-nagrania',
+    category: 'techniczne',
+    question: 'Czy mogę wysłać nagrania zachowania?',
+    answer:
+      'Tak, jeśli są krótkie i pokazują realną sytuację. Nagrania traktuję jako materiał pomocniczy, a nie obowiązkowy warunek rozmowy.',
   },
 ]

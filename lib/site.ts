@@ -22,10 +22,10 @@ export const HOME_HELP_CHOICE_PHOTO = {
 }
 
 export const HOME_HERO_PHOTO = {
-  src: '/images/hero-main.jpg',
+  src: '/images/cutover/therapy-animals.png',
   width: 1024,
   height: 1536,
-  alt: 'Krzysztof Regulski trzyma kota na rękach, z ciasteczkiem w dłoni, jako główne zdjęcie strony głównej',
+  alt: 'Pies i kot w spokojnym kadrze jako ilustracja pomocy behawioralnej online',
 }
 
 export const SITE_NAME = 'Regulski Behawiorysta'
@@ -111,10 +111,10 @@ export const CONSULTATION_PRICE_COMPARE_COPY =
   'Jeśli temat okaże się szerszy, po tej rozmowie łatwiej zdecydować o kolejnym kroku.'
 
 export const LANDING_SPECIALIST_PHOTO = {
-  src: '/images/hero-main.jpg',
+  src: '/images/cutover/therapy-animals.png',
   width: 1024,
   height: 1536,
-  alt: 'Krzysztof Regulski trzyma kota na rękach, z ciasteczkiem w dłoni, jako główne zdjęcie marki Regulski Behawiorysta',
+  alt: 'Pies i kot w spokojnym kadrze jako ilustracja marki Regulski Behawiorysta',
 }
 
 export const SPECIALIST_PHOTO = LANDING_SPECIALIST_PHOTO

@@ -18,10 +18,10 @@ type OpinionsReviewGridProps = {
 }
 
 export function OpinionsReviewGrid({ filters, reviews }: OpinionsReviewGridProps) {
-  const [activeFilter, setActiveFilter] = useState(filters[0] ?? 'Wszystkie opinie')
+  const [activeFilter, setActiveFilter] = useState<string | null>(null)
 
   const visibleReviews = useMemo(() => {
-    if (activeFilter === 'Wszystkie opinie') {
+    if (!activeFilter) {
       return reviews
     }
 

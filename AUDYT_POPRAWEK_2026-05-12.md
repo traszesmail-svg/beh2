@@ -30,7 +30,7 @@ Dodatkowo po deployu sprawdzone zostaly `/opinie` i `/opinie/dodaj`: oba zwrocil
 
 Potwierdzenie obrazow po zmianach:
 
-- `/` renderuje `/_next/image?url=%2Fimages%2Fhero-main.jpg...`.
+- `/` nie renderuje juz starego zdjecia ze strony glownej.
 - `/kontakt` renderuje `/_next/image?url=%2Fbranding%2Fomnie3.png...`.
 - `/blog` ma pseudo-element `Regulski` na miniaturze z `top: 14px` i `right: 16px`.
 
@@ -38,10 +38,10 @@ Potwierdzenie obrazow po zmianach:
 
 - Strona glowna ma naglowek `A Tobie jak moge pomoc?`.
 - Na stronie glownej stare haslo `Z czym potrzebujesz` nie wystepuje.
-- Strona glowna uzywa ostrego zdjecia `/images/hero-main.jpg`, bez rozmytej twarzy z wersji PNG.
-- Ze strony glownej usuniety jest kafel `Nie wiem, od czego zaczac` prowadzacy do `/quiz`.
+- Strona glowna nie uzywa juz starego zdjecia z osoba i kotem; hero zostal uproszczony do tekstu i wyboru pies/kot/nie wiem.
+- Na stronie glownej kafel `Nie wiem` prowadzi do `/quiz`.
 - Gorny pasek na stronie glownej, blogu, niezbedniku, kontakcie i stronach referencyjnych korzysta ze wspolnego wariantu `NotatnikTopbar`.
-- Link `Szybki start` prowadzi do `/wybor`.
+- Link `Szybki start` prowadzi do strony glownej `/`.
 - Na legalnych stronach przycisk powrotu prowadzi do strony glownej, nie do cennika.
 - Usuniete sa bloki/teksty typu `Kontakt w sprawie Pelnej konsultacji`, `Kontakt i obsluga dokumentu`, `Kontakt bez formularza`, `Masz pytanie do dokumentu`.
 - Usuniety jest problematyczny tekst stopki `Konsultacja odbywa sie po rezerwacji i oplaceniu terminu...`.

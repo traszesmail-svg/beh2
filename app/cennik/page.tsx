@@ -4,7 +4,6 @@ import { Schema } from '@/components/schema'
 import { getBreadcrumbJsonLd, getServiceJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
 import {
-  PricingCardsSection,
   PricingSummaryCard,
   bookHref,
   getPricingOfferCatalog,
@@ -40,9 +39,9 @@ export default function PricingPage() {
       <section className="reference-hero reference-pricing-hero">
         <div className="reference-hero-copy">
           <span className="reference-pill">Cennik</span>
-          <h1>Wybierz rozmowę na miarę sytuacji.</h1>
+          <h1>Skrócony cennik konsultacji.</h1>
           <p>
-            Zacznij od najkrótszego formatu, jeśli potrzebujesz uporządkować temat. Wybierz dłuższą rozmowę, gdy sprawa ma kilka wątków albo wymaga planu pracy.
+            Tu masz szybki podgląd cen. Pełny opis formatów i wybór ścieżki jest dopiero w pełnym cenniku.
           </p>
         </div>
         <PricingSummaryCard />
@@ -50,8 +49,6 @@ export default function PricingPage() {
 
       <section className="reference-main-layout reference-main-layout-single">
         <div className="reference-content-column">
-          <PricingCardsSection className="reference-pricing-cards-featured" />
-
           <section className="reference-section-card">
             <h2>Najczęstsze pytania przed wyborem</h2>
             <div className="reference-compact-faq">

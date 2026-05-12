@@ -100,10 +100,10 @@ export function PricingSummaryCard() {
       </div>
       <div className="reference-price-ladder">
         {pricingCards.map((card) => (
-          <Link key={card.service} href={bookHref} prefetch={false}>
+          <div key={card.service} className="reference-price-ladder-row">
             <span>{card.title}</span>
             <strong>{card.price}</strong>
-          </Link>
+          </div>
         ))}
       </div>
       <div className="reference-pricing-summary-action">

@@ -44,13 +44,20 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Podaj poprawny adres e-mail.' }, { status: 400 })
   }
 
-  const signup = await upsertGrowthSignup({
-    kind: 'newsletter',
-    email,
-    segment,
-    location,
-    sourcePage,
-  })
+  let signupId: string | null = null
+
+  try {
+    const signup = await upsertGrowthSignup({
+      kind: 'newsletter',
+      email,
+      segment,
+      location,
+      sourcePage,
+    })
+    signupId = signup.id
+  } catch (error) {
+    console.warn('[regulski][newsletter] signup save skipped', error)
+  }
 
   try {
     await recordFunnelEvent({
@@ -82,7 +89,7 @@ export async function POST(request: Request) {
 
   return NextResponse.json({
     ok: true,
-    signupId: signup.id,
+    signupId,
     provider: provider.status,
     message: 'Dziękuję. Zapis jest przyjęty.',
   })

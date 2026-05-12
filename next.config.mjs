@@ -150,11 +150,6 @@ const nextConfig = {
         statusCode: 301,
       },
       {
-        source: '/blog/:slug',
-        destination: '/blog',
-        statusCode: 301,
-      },
-      {
         source: '/rezerwacja/:id',
         destination: '/wybor',
         statusCode: 301,

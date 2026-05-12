@@ -3,11 +3,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import {
   ArrowRight,
-  CalendarDays,
   GraduationCap,
   Heart,
   Leaf,
-  MessageSquare,
   PawPrint,
   ShieldCheck,
 } from 'lucide-react'
@@ -34,18 +32,11 @@ export const metadata: Metadata = buildMarketingMetadata({
 })
 
 const bookingHref = buildBookHref(null, 'szybka-konsultacja-15-min')
-const contactHref = '/kontakt#formularz'
 const addOpinionHref = '/opinie/dodaj'
 
 const filters = [
-  'Wszystkie opinie',
   'Pies',
   'Kot',
-  'Konsultacje online',
-  'Problemy behawioralne',
-  'Praca z lękiem',
-  'Agresja',
-  'Szczenięta / Kocięta',
 ] as const
 
 const reviews: OpinionReview[] = [
@@ -212,7 +203,6 @@ const reviews: OpinionReview[] = [
 ]
 
 const stats = [
-  { value: `${reviews.length}`, label: 'widocznych opinii', icon: MessageSquare },
   { value: '5.0/5', label: 'średnia ocen', icon: PawPrint },
   { value: '100%', label: 'zaangażowania', icon: ShieldCheck },
   { value: 'Setki', label: 'uratowanych relacji', icon: Heart },
@@ -244,34 +234,14 @@ const proofItems = [
 function HeroVisual() {
   return (
     <div className="opinions-showcase-hero-visual" aria-hidden="true">
-      <div className="opinions-showcase-hero-media opinions-showcase-hero-dog">
-        <Image
-          src="/images/homepage/home-bg-dog-1to1.webp"
-          alt=""
-          fill
-          priority
-          sizes="(max-width: 860px) 92vw, 520px"
-        />
-      </div>
-      <div className="opinions-showcase-hero-media opinions-showcase-hero-cat">
-        <Image
-          src="/images/homepage/home-bg-cat-1to1.webp"
-          alt=""
-          fill
-          priority
-          sizes="(max-width: 860px) 40vw, 240px"
-        />
-      </div>
-      <svg className="opinions-showcase-wave" viewBox="0 0 600 150" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M0 78C112 116 188 146 300 142C418 137 504 92 600 64V150H0V78Z" />
-      </svg>
-      <svg className="opinions-showcase-branch" viewBox="0 0 120 260" aria-hidden="true">
-        <path d="M66 244C55 186 56 127 72 40" fill="none" stroke="currentColor" strokeWidth="2" />
-        <path d="M70 96C96 80 105 56 100 31C75 43 62 64 70 96Z" fill="currentColor" />
-        <path d="M60 142C31 125 19 100 24 74C51 86 66 111 60 142Z" fill="currentColor" />
-        <path d="M63 187C93 171 106 143 101 112C72 127 56 154 63 187Z" fill="currentColor" />
-        <path d="M55 219C29 207 17 184 22 158C47 169 62 193 55 219Z" fill="currentColor" />
-      </svg>
+      <Image
+        src="/images/opinions/dog-cat-header.png"
+        alt=""
+        fill
+        priority
+        sizes="(max-width: 860px) 92vw, 520px"
+        className="opinions-showcase-hero-image"
+      />
     </div>
   )
 }
@@ -381,24 +351,6 @@ export default function OpinionsPage() {
               </article>
             )
           })}
-        </section>
-
-        <section className="opinions-final-cta">
-          <span className="opinions-final-icon" aria-hidden="true">
-            <CalendarDays size={34} strokeWidth={1.75} />
-          </span>
-          <div>
-            <h2>Gotowy na pierwszy krok?</h2>
-            <p>Umów konsultację i zacznijcie wspólnie pracę nad spokojniejszym życiem Waszego zwierzęcia.</p>
-          </div>
-          <div className="opinions-final-actions">
-            <Link href={bookingHref} prefetch={false} className="opinions-showcase-primary">
-              Umów pierwszy krok <ArrowRight size={17} strokeWidth={1.8} />
-            </Link>
-            <Link href={contactHref} prefetch={false} className="opinions-final-secondary">
-              Wyślij krótką wiadomość
-            </Link>
-          </div>
         </section>
 
         <NotatnikFooter />

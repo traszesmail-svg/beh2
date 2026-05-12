@@ -71,10 +71,6 @@ export async function POST(request: Request) {
     signupId = signup.id
   } catch (error) {
     console.warn('[regulski-behawiorysta][growth-signup] signup save skipped', error)
-
-    if (kind !== 'lead_magnet') {
-      return NextResponse.json({ error: 'Nie udało się zapisać formularza.' }, { status: 500 })
-    }
   }
 
   try {

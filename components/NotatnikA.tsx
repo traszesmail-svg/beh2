@@ -123,7 +123,7 @@ export function NotatnikTopbar({ navItems, showUtilityLinks = true }: NotatnikTo
       ) : null}
 
       <div className="notatnik-topbar-actions">
-        <Link href="/wybor" prefetch={false} className="notatnik-topbar-quick-help">
+        <Link href="/" prefetch={false} className="notatnik-topbar-quick-help">
           <Zap size={16} strokeWidth={2.1} aria-hidden="true" />
           <span>Szybki start</span>
         </Link>
@@ -152,7 +152,7 @@ export function NotatnikTopbar({ navItems, showUtilityLinks = true }: NotatnikTo
           </summary>
           <div className="notatnik-mobile-menu-panel">
             <nav aria-label="Menu mobilne">
-              <Link href="/wybor" prefetch={false}>
+              <Link href="/" prefetch={false}>
                 Szybki start
               </Link>
               {navItems.map((item) => (

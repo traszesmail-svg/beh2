@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
 import Link from 'next/link'
 import { Fragment } from 'react'
 import { ArrowRight, CalendarDays, ChevronLeft, ChevronRight, Clock3, Mail } from 'lucide-react'
+import { BlogArticlePreview } from '@/components/BlogArticlePreview'
 import { Footer } from '@/components/Footer'
 import { EditorialIndexTopbar } from '@/components/EditorialIndexTopbar'
 import { Schema } from '@/components/schema'
@@ -202,7 +202,7 @@ export default function BlogPage({ searchParams }: { searchParams?: BlogSearchPa
     getItemListJsonLd(
       posts.map((post) => ({
         name: repairCopy(post.h1),
-        url: new URL(`${BLOG_ROUTE_BASE}#artykuły`, getCanonicalBaseUrl()).toString(),
+        url: new URL(post.path, getCanonicalBaseUrl()).toString(),
       })),
       'https://schema.org/ItemListOrderDescending',
     ),
@@ -225,8 +225,13 @@ export default function BlogPage({ searchParams }: { searchParams?: BlogSearchPa
               </p>
             </div>
 
-            <div className="blog-index-hero-art" aria-hidden="true">
-              <Image src="/blog-covers/blog-index-hero-photo.webp" alt="" width={640} height={400} priority />
+            <div className="blog-index-hero-art blog-index-hero-screen" aria-hidden="true">
+              <BlogArticlePreview
+                title="Artykuły o zachowaniu psów i kotów"
+                excerpt="Praktyczne teksty, które możesz otworzyć i przeczytać bez pośrednich ekranów."
+                categoryLabel="Blog"
+                variant="hero"
+              />
             </div>
           </section>
 
@@ -248,9 +253,15 @@ export default function BlogPage({ searchParams }: { searchParams?: BlogSearchPa
           <section id="artykuły" className="blog-index-layout" aria-label="Artykuły i kategorie">
             <div className="blog-index-grid">
               {paginatedPosts.map((post) => (
-                <article key={post.slug} className="blog-index-card">
+                <Link key={post.slug} href={post.path} prefetch={false} className="blog-index-card">
                   <div className="blog-index-card-media" aria-label={repairCopy(post.title)}>
-                    <Image src={post.cover.src} alt={post.cover.alt} fill sizes="(max-width: 760px) 92vw, (max-width: 1180px) 42vw, 300px" />
+                    <BlogArticlePreview
+                      title={post.title}
+                      excerpt={post.excerpt}
+                      categoryLabel={post.categoryLabel}
+                      publishedAtLabel={post.publishedAtLabel}
+                      readingTimeMinutes={post.readingTimeMinutes}
+                    />
                     <span className={`blog-index-card-badge ${getSpeciesClass(post)}`}>{getSpeciesBadge(post)}</span>
                   </div>
                   <div className="blog-index-card-body">
@@ -270,7 +281,7 @@ export default function BlogPage({ searchParams }: { searchParams?: BlogSearchPa
                       <ArrowRight size={16} strokeWidth={1.9} aria-hidden="true" />
                     </span>
                   </div>
-                </article>
+                </Link>
               ))}
               {paginatedPosts.length === 0 ? (
                 <div className="blog-index-empty">
@@ -308,11 +319,11 @@ export default function BlogPage({ searchParams }: { searchParams?: BlogSearchPa
                 <ol className="blog-index-popular-list">
                   {popularPosts.map((post, index) => (
                     <li key={post.slug}>
-                      <span className="blog-index-popular-item">
+                      <Link href={post.path} prefetch={false} className="blog-index-popular-item">
                         <span>{String(index + 1).padStart(2, '0')}</span>
                         <strong>{repairCopy(post.title)}</strong>
                         <ChevronRight size={17} strokeWidth={1.8} aria-hidden="true" />
-                      </span>
+                      </Link>
                     </li>
                   ))}
                 </ol>
@@ -321,19 +332,16 @@ export default function BlogPage({ searchParams }: { searchParams?: BlogSearchPa
               <section className="blog-index-newsletter-card">
                 <div className="blog-index-newsletter-head">
                   <div>
-                    <h2>Zapisz się do newslettera</h2>
-                    <p>Raz w tygodniu praktyczna wiedza i prosty kierunek działania.</p>
+                    <h2>Newsletter</h2>
+                    <p>Jeden właściwy formularz jest na osobnej stronie newslettera.</p>
                   </div>
                   <Mail size={34} strokeWidth={1.5} aria-hidden="true" />
                 </div>
-                <form className="blog-index-newsletter-form" action="/newsletter">
-                  <label className="sr-only" htmlFor="blog-newsletter-email">
-                    Twój e-mail
-                  </label>
-                  <input id="blog-newsletter-email" name="email" type="email" placeholder="Twój e-mail" />
-                  <button type="submit">Zapisz się</button>
-                </form>
-                <small>Bez spamu. Możesz wypisać się w każdej chwili.</small>
+                <Link href="/newsletter" prefetch={false} className="blog-index-newsletter-link">
+                  Przejdź do zapisu
+                  <ArrowRight size={16} strokeWidth={1.9} aria-hidden="true" />
+                </Link>
+                <small>Bez podwójnego wpisywania maila na blogu.</small>
               </section>
             </aside>
           </section>

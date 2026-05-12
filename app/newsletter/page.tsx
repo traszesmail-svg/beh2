@@ -34,9 +34,9 @@ export default function NewsletterPage() {
     <NotatnikPageShell
       tag="Newsletter"
       navItems={PUBLIC_SITE_NAV_ITEMS}
-      ctaHref="/wybor"
+      ctaHref="/"
       ctaLabel="Szybki start"
-      footerPrimaryHref="/wybor"
+      footerPrimaryHref="/"
       footerPrimaryLabel="Szybki start"
       sideVisualVariant="blog"
       pageClassName="newsletter-page"

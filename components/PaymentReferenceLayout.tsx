@@ -89,7 +89,7 @@ function PaymentReferenceHeader() {
         ))}
       </nav>
       <div className="payment-ref-actions">
-        <Link href="/wybor" prefetch={false} className="payment-ref-primary-link">
+        <Link href="/" prefetch={false} className="payment-ref-primary-link">
           <Zap aria-hidden="true" />
           Szybki start
         </Link>

@@ -102,7 +102,6 @@ test.skip('home hero uses the approved cutover assets', () => {
   assert.equal(casesSource.length, 10)
   assert.equal(casesSource.every((caseStudy) => caseStudy.images.length === 2), true)
   assert.match(siteSource, /HOME_HERO_PHOTO/)
-  assert.match(siteSource, /hero-main\.png/)
   assert.match(siteSource, /dog-puppy-home\.png/)
   assert.match(siteSource, /dog-kitchen-chaos\.png/)
   assert.match(siteSource, /home-cat-hidden\.png/)

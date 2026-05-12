@@ -19988,7 +19988,7 @@ select:focus-visible {
 
 .opinions-showcase-stats {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0;
   width: min(100%, 620px);
   margin-top: 14px;
@@ -20032,7 +20032,9 @@ select:focus-visible {
   min-height: 395px;
   align-self: stretch;
   overflow: hidden;
-  border-radius: 0 0 45% 45% / 0 0 15% 15%;
+  border-radius: 28px;
+  background: #e9e2d2;
+  box-shadow: 0 28px 70px rgba(24, 42, 26, 0.18);
 }
 
 .opinions-showcase-hero-visual::before {
@@ -20055,6 +20057,11 @@ select:focus-visible {
 
 .opinions-showcase-hero-media img {
   object-fit: cover;
+}
+
+.opinions-showcase-hero-image {
+  object-fit: cover;
+  object-position: 50% 50%;
 }
 
 .opinions-showcase-hero-dog {
