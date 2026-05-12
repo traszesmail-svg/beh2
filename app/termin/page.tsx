@@ -213,9 +213,9 @@ export async function BookingSlotCalendar({
             Kot
           </Link>
         </div>
-        <Link href="/quiz" prefetch={false} className="termin-inline-topic-select">
+        <Link href="/wybor" prefetch={false} className="termin-inline-topic-select">
           <PawPrint size={18} strokeWidth={1.9} aria-hidden="true" />
-          Nie wiem - przejdź przez krótki quiz
+          Zmień wybór
         </Link>
       </div>
       <div>

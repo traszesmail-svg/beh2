@@ -236,7 +236,7 @@ export function ContactLeadForm() {
         payload.message ??
           (isUrgentNow
             ? 'Dziękuję. Prośba o Kwadrans na już została przyjęta. Odpowiem na podany adres e-mail w ciągu 15 minut z propozycją terminu.'
-            : 'Wysłane. Odpowiem w 1-2 dni robocze. Sprawdź skrzynkę - masz też kopię.'),
+            : 'Dziękuję za wiadomość. Wiadomość trafiła do mnie. Odpowiem na podany adres e-mail.'),
       )
       setForm(createInitialForm(presetSpecies ?? ''))
       startedRef.current = false

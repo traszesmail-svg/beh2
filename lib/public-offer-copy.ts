@@ -26,7 +26,7 @@ export const PUBLIC_OFFER_DECISION_COPY = {
 } as const
 
 export const PUBLIC_OFFER_START_GUIDE = [
-  'Nie wiesz, od czego zacząć? Zacznij od Kwadransu.',
+  'Najprostszy start to Kwadrans.',
   '15 minut to za mało? Wybierz Dwa kwadranse.',
   'Sprawa jest złożona albo przewlekła? Wybierz Pełną konsultację.',
 ] as const

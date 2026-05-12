@@ -10,7 +10,7 @@ import { getContactDetails } from '@/lib/site'
 import { isUrgentNowIntent } from '@/lib/urgent-now'
 import type { ProblemType } from '@/lib/types'
 
-const SUCCESS_MESSAGE = 'Dziękuję. Wiadomość trafiła do mnie. Odpowiem na podany adres e-mail.'
+const SUCCESS_MESSAGE = 'Dziękuję za wiadomość. Wiadomość trafiła do mnie. Odpowiem na podany adres e-mail.'
 const URGENT_SUCCESS_MESSAGE = 'Dziękuję. Prośba o Kwadrans na już trafiła do mnie. Odpowiem na podany adres e-mail w ciągu 15 minut.'
 const UNAVAILABLE_MESSAGE = 'Formularz kontaktowy jest chwilowo niedostępny. Spróbuj później lub napisz bezpośrednio.'
 const GENERIC_ERROR_MESSAGE = 'Nie udało się wysłać wiadomości. Spróbuj ponownie później.'

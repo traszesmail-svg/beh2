@@ -397,9 +397,9 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
         description: 'Dobry start, jeśli chcesz omówić pierwsze noce i ustawić spokojniejszy rytm.',
       },
       {
-        label: 'Quiz',
-        href: '/quiz',
-        description: 'Krótki wybór ścieżki, jeśli nie wiesz, czy wystarczy Kwadrans czy potrzeba szerszej rozmowy.',
+        label: 'Krótki wybór',
+        href: '/wybor',
+        description: 'Krótki wybór ścieżki, jeśli wahasz się między Kwadransem a szerszą rozmową.',
       },
     ],
   },

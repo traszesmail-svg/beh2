@@ -60,7 +60,7 @@ export const homepageUrgencyQuestion: HomepageSelectorQuestion = {
   id: 'urgency',
   label: '3',
   title: 'Jak pilna albo złożona jest sytuacja?',
-  helper: 'To pomaga dobrać zakres rozmowy, nie diagnozę.',
+  helper: 'To pomaga dobrać zakres rozmowy i sposób postawienia diagnozy.',
   options: [
     { id: 'starter', label: 'Szybki pierwszy kierunek', helper: 'Chcę wiedzieć, od czego zacząć.' },
     { id: 'multi', label: 'Kilka wątków', helper: 'Problem łączy się z kilkoma sytuacjami.' },
@@ -81,7 +81,7 @@ export const homepageSelectorRecommendations: Record<
 > = {
   quarter: {
     title: 'Kwadrans',
-    summary: 'Szybki pierwszy krok: nazywamy sytuację i ustalamy, od czego zacząć.',
+    summary: 'Szybki pierwszy krok: na podstawie uzyskanych informacji dostajesz diagnozę i kierunek działania.',
     ctaLabel: 'Umów Kwadrans',
     service: 'szybka-konsultacja-15-min',
     price: '69 zł',
@@ -89,7 +89,7 @@ export const homepageSelectorRecommendations: Record<
   },
   double: {
     title: 'Dwa kwadranse',
-    summary: 'Dobry wybór, gdy temat ma kilka wątków i potrzebuje spokojniejszego uporządkowania.',
+    summary: 'Dobry wybór, gdy temat ma kilka wątków i potrzebuje diagnozy z większą ilością kontekstu.',
     ctaLabel: 'Umów Dwa kwadranse',
     service: 'konsultacja-30-min',
     price: '169 zł',
@@ -97,7 +97,7 @@ export const homepageSelectorRecommendations: Record<
   },
   full: {
     title: 'Pełna konsultacja',
-    summary: 'Dla spraw złożonych, przewlekłych albo takich, w których trzeba szerzej zebrać kontekst.',
+    summary: 'Dla spraw złożonych: diagnoza, prawdopodobna etiologia, możliwy przebieg problemu i plan pracy.',
     ctaLabel: 'Umów pełną konsultację',
     service: 'konsultacja-behawioralna-online',
     price: '470 zł',
@@ -118,8 +118,8 @@ export const homepageProcessSteps = [
   },
   {
     step: '3',
-    title: 'Dostajesz pierwszy konkretny krok',
-    copy: 'Otrzymujesz konkretne wskazówki i plan działania.',
+    title: 'Dostajesz diagnozę i pierwszy krok',
+    copy: 'W krótkim formacie dostajesz diagnozę na podstawie rozmowy, a w pełnej konsultacji także szersze omówienie przyczyn i przebiegu problemu.',
   },
 ] as const
 

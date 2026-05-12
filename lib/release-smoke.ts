@@ -117,7 +117,6 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
         'A Tobie jak mogę pomóc?',
         'Mam psa',
         'Mam kota',
-        'Nie wiem, od czego zacząć',
         'Jak wygląda współpraca?',
       ],
       requireBuildMarker: true,

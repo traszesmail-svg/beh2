@@ -133,7 +133,7 @@ const audience: AudienceItem[] = [
     tone: 'cat',
   },
   {
-    title: 'Nie wiesz, od czego zacząć?',
+    title: 'Spokojny pierwszy krok',
     description: 'Zacznij od prostych materiałów - krok po kroku będzie łatwiej.',
     icon: CircleHelp,
     tone: 'neutral',
@@ -313,20 +313,6 @@ export default function EssentialsPage() {
                 </div>
               </section>
 
-              <section className="essentials-index-choice-card">
-                <div>
-                  <h2>Nie wiesz, co wybrać?</h2>
-                  <p>Napisz krótko o swojej sytuacji - podpowiem, które materiały będą dla Ciebie najważniejsze.</p>
-                </div>
-                <div className="essentials-index-choice-actions">
-                  <Link href="/kontakt#formularz" prefetch={false} className="essentials-index-button is-primary">
-                    Wyślij krótką wiadomość
-                  </Link>
-                  <Link href="/wybor" prefetch={false} className="essentials-index-button is-secondary">
-                    Umów pierwszy krok
-                  </Link>
-                </div>
-              </section>
             </aside>
           </section>
 

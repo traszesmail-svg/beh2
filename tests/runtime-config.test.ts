@@ -227,14 +227,13 @@ test('service-page architecture keeps one broad online landing and redirects hel
   assert.match(growthLayerSource, /href: '\/konsultacja-behawioralna-online'/)
 
   assert.match(nextConfigSource, /source: '\/behawiorysta-psow'/)
-  assert.match(nextConfigSource, /destination: '\/psy'/)
   assert.match(nextConfigSource, /source: '\/behawiorysta-kotow'/)
-  assert.match(nextConfigSource, /destination: '\/koty'/)
+  assert.match(nextConfigSource, /source: '\/psy'/)
+  assert.match(nextConfigSource, /source: '\/koty'/)
+  assert.match(nextConfigSource, /destination: '\/'/)
 
   assert.match(uiSmokeSource, /path: '\/behawiorysta-psow'/)
-  assert.match(uiSmokeSource, /destinationPath: '\/psy'/)
   assert.match(uiSmokeSource, /path: '\/behawiorysta-kotow'/)
-  assert.match(uiSmokeSource, /destinationPath: '\/koty'/)
 })
 
 test('copy governance keeps Kwadrans as the primary service name and format as supporting detail', () => {
@@ -258,18 +257,18 @@ test('copy governance keeps Kwadrans as the primary service name and format as s
   assert.match(contactSource, /Napisz, zanim zarezerwujesz/)
   assert.doesNotMatch(contactSource, /<h3>Kwadrans z behawiorysta<\/h3>/)
   assert.doesNotMatch(contactSource, /contact-booking-panel/)
-  assert.match(bookSource, /nazwa usługi: 15-minutowa konsultacja behawioralna/)
-  assert.match(bookSource, /format: 15 min audio bez kamery/)
+  assert.match(bookSource, /BookingSlotCalendar/)
+  assert.match(bookSource, /15-minutowej konsultacji behawioralnej/)
 })
 
 test('book page keeps a distinct jump-to-form CTA for explicit services', () => {
   const bookSource = readSource('app', 'book', 'page.tsx')
 
-  assert.match(bookSource, /const heroFormLabel =/)
-  assert.match(bookSource, /Przejdź do formularza: \$\{selectedOffer\.shortTitle\}/)
-  assert.match(bookSource, /<Link href=\{heroFormHref\} prefetch=\{false\} className="notatnik-btn notatnik-btn-ghost">/)
-  assert.match(bookSource, /Dwa kwadranse dla szerszego tematu/)
-  assert.match(bookSource, /Pełna konsultacja dla spraw złożonych/)
+  assert.match(bookSource, /import \{ BookingSlotCalendar \} from '@\/app\/termin\/page'/)
+  assert.match(bookSource, /return <BookingSlotCalendar searchParams=\{searchParams\} \/>/)
+  assert.match(bookSource, /path: '\/book'/)
+  assert.match(bookSource, /Dwóch kwadransów/)
+  assert.match(bookSource, /Pełnej konsultacji online/)
 })
 
 test('booking form intro follows the selected service instead of a generic booking lead', () => {
@@ -285,8 +284,7 @@ test('booking form intro follows the selected service instead of a generic booki
 
 test('home, dogs and cats pages keep canonical service routing and current entry layouts', () => {
   const homeSource = readSource('app', 'page.tsx')
-  const dogsSource = readSource('app', 'psy', 'page.tsx')
-  const catsSource = readSource('app', 'koty', 'page.tsx')
+  const nextConfigSource = readSource('next.config.mjs')
   const funnelActionsSource = readSource('components', 'FunnelPrimaryActions.tsx')
   const serviceDecisionSource = readSource('components', 'ServiceDecisionSection.tsx')
 
@@ -294,21 +292,17 @@ test('home, dogs and cats pages keep canonical service routing and current entry
   assert.match(funnelActionsSource, /serviceHref\?: string/)
   assert.match(funnelActionsSource, /Jeśli chcesz najpierw zobaczyć pełny opis usługi/)
 
-  assert.match(homeSource, /serviceLandingHref = '\/behawiorysta-online-polska'/)
+  assert.match(homeSource, /serviceLandingHref = '\/'/)
   assert.doesNotMatch(homeSource, /href=\{serviceLandingHref\}/)
   assert.doesNotMatch(homeSource, /pelnego opisu konsultacji online/)
   assert.doesNotMatch(homeSource, /<ServiceDecisionSection/)
   assert.match(homeSource, /Behawiorysta ps/)
 
-  assert.match(dogsSource, /title: 'Behawiorysta ps/)
-  assert.match(dogsSource, /serviceLandingHref = '\/behawiorysta-online-polska'/)
-  assert.match(dogsSource, /href=\{serviceLandingHref\}/)
-  assert.match(dogsSource, /opisu konsultacji online/)
-
-  assert.match(catsSource, /title: 'Behawiorysta kot/)
-  assert.match(catsSource, /serviceUrl: '\/behawiorysta-online-polska'/)
-  assert.match(catsSource, /className="cat-ref-page"/)
-  assert.match(catsSource, /const quickHref = buildBookHref\(null, 'szybka-konsultacja-15-min', false, 'kot'\)/)
+  assert.match(nextConfigSource, /source: '\/psy'/)
+  assert.match(nextConfigSource, /source: '\/psy\/:path\*'/)
+  assert.match(nextConfigSource, /source: '\/koty'/)
+  assert.match(nextConfigSource, /source: '\/koty\/:path\*'/)
+  assert.match(nextConfigSource, /destination: '\/'/)
 })
 
 test.skip('offer and booking pages keep quick-scan language', () => {
@@ -533,7 +527,7 @@ test('qa checkout routing stays isolated and allowlist-gated', () => {
   assert.equal(readQaBookingSearchParam(undefined), false)
 
   assert.equal(buildBookHref(null, null, true), '/book?qa=1')
-  assert.equal(buildSlotHref('szczeniak', null, true), '/termin?problem=szczeniak&qa=1')
+  assert.equal(buildSlotHref('szczeniak', null, true), '/book?problem=szczeniak&qa=1')
   assert.equal(buildFormHref('szczeniak', 'slot-123', 'konsultacja-30-min', true), '/form?problem=szczeniak&slotId=slot-123&service=konsultacja-30-min&qa=1')
   assert.equal(buildPaymentHref('booking-123', 'access-token', 'konsultacja-30-min', true), '/payment?bookingId=booking-123&access=access-token&service=konsultacja-30-min&qa=1')
 

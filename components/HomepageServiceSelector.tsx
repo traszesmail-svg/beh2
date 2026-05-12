@@ -86,12 +86,6 @@ const heroChoices = [
     copy: 'Kuweta, stres, konflikt, zmiany w domu i sen.',
     href: '/wybor?animal=cat',
   },
-  {
-    id: 'unknown',
-    title: 'Nie wiem, od czego zacząć',
-    copy: 'Materiały, wiadomość albo quiz - wybierz spokojny start.',
-    href: '/quiz',
-  },
 ] as const
 
 const heroChoiceDisplay: Record<(typeof heroChoices)[number]['id'], { title: string; copy: string }> = {
@@ -103,14 +97,10 @@ const heroChoiceDisplay: Record<(typeof heroChoices)[number]['id'], { title: str
     title: 'Mam kota',
     copy: 'Kuweta, stres, konflikty, zmiany w domu i inne.',
   },
-  unknown: {
-    title: 'Nie wiem, od czego zacząć',
-    copy: 'Odpowiedz na kilka pytań, podpowiem najlepszy krok.',
-  },
 }
 
 const homepageHeroPhoto = {
-  src: '/images/hero-main.png',
+  src: '/images/hero-main.jpg',
   alt: 'Krzysztof Regulski trzyma kota na rękach',
 }
 
@@ -259,7 +249,7 @@ export function HomepageServiceSelector({ mode = 'home', initialAnimal = null }:
       {!showHero ? (
         <section className="home-guided-selector" aria-labelledby="home-guided-selector-title">
           <div className="home-guided-copy">
-            <h2 id="home-guided-selector-title">Nie wiesz, co wybrać? Przejdź przez krótki wybór</h2>
+            <h2 id="home-guided-selector-title">Przejdź przez krótki wybór</h2>
           </div>
           <div className="home-guided-grid">
             <article className="home-guided-step">

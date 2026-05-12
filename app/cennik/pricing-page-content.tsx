@@ -23,7 +23,7 @@ export const pricingCards: Array<{
     title: 'Kwadrans',
     price: '69 zł',
     copy: '15 minut audio bez kamery, gdy chcesz nazwać problem i ustalić pierwszy sensowny krok.',
-    features: ['jedno pytanie albo pierwszy porządek', 'audio bez kamery', 'dobry start przed większą decyzją'],
+    features: ['diagnoza behawioralna na podstawie informacji z rozmowy', 'audio bez kamery', 'dobry start przed większą decyzją'],
     cta: 'Wybierz ścieżkę',
     featured: true,
   },
@@ -33,7 +33,7 @@ export const pricingCards: Array<{
     title: 'Kwadrans na już',
     price: '99 zł',
     copy: 'Ten sam 15-minutowy format, ale z priorytetem i możliwie szybkim potwierdzeniem terminu.',
-    features: ['ten sam zakres co Kwadrans', 'szybsze potwierdzenie', 'dla tematów pilnych, ale krótkich'],
+    features: ['diagnoza w tym samym 15-minutowym zakresie', 'szybsze potwierdzenie', 'dla tematów pilnych, ale krótkich'],
     cta: 'Wybierz ścieżkę',
   },
   {
@@ -42,7 +42,7 @@ export const pricingCards: Array<{
     title: 'Dwa kwadranse',
     price: '169 zł',
     copy: '30 minut online, gdy temat ma kilka wątków albo potrzebujesz spokojniejszego wejścia.',
-    features: ['więcej kontekstu niż w Kwadransie', 'dla kilku pytań naraz', 'dobry most przed pełną konsultacją'],
+    features: ['diagnoza z większą ilością kontekstu', 'dla kilku pytań naraz', 'dobry most przed pełną konsultacją'],
     cta: 'Wybierz ścieżkę',
   },
   {
@@ -51,7 +51,7 @@ export const pricingCards: Array<{
     title: 'Pełna konsultacja',
     price: '470 zł',
     copy: 'Rozmowa online, analiza sytuacji, plan poprawy i 7 dni konsultacji tekstowych przez WhatsApp.',
-    features: ['sprawy złożone i przewlekłe', 'plan pracy po konsultacji', '7 dni kontaktu tekstowego'],
+    features: ['diagnoza, prawdopodobna etiologia i przebieg problemu', 'plan pracy po konsultacji', '7 dni kontaktu tekstowego'],
     cta: 'Wybierz ścieżkę',
   },
 ]

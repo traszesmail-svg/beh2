@@ -33,16 +33,16 @@ export default function ContactPage() {
       <Schema data={structuredData} />
       <NotatnikSideVisuals variant="contact" />
       <div className="notatnik-shell contact-shell">
-        <NotatnikTopbar tag="Kontakt" navItems={PUBLIC_SITE_NAV_ITEMS} />
+        <NotatnikTopbar tag="Kontakt" navItems={PUBLIC_SITE_NAV_ITEMS} showUtilityLinks={false} />
 
         <section className="contact-hero-grid" id="formularz">
           <div className="contact-hero-copy">
             <figure className="contact-intro-photo">
               <Image
-                src="/images/hero-main.png"
-                alt="Krzysztof Regulski trzyma kota na rękach"
-                width={720}
-                height={860}
+                src="/branding/omnie3.png"
+                alt="Krzysztof Regulski w granatowym stroju medycznym podczas kontaktu online"
+                width={320}
+                height={480}
                 priority
               />
             </figure>
@@ -51,14 +51,6 @@ export default function ContactPage() {
               Wystarczy gatunek, temat i kilka zdań. Odpowiem w ciągu 1-2 dni roboczych i wskażę
               najprostszy kolejny krok.
             </p>
-            <section className="contact-bio-card" aria-label="O specjaliście">
-              <p>
-                Od ponad 10 lat jestem behawiorystą zwierzęcym oraz trenerem COAPE, specjalizującym się w pracy z psami i kotami z trudnymi problemami behawioralnymi. Zajmuję się m.in. terapią zwierząt agresywnych, odbudową zaburzonych relacji psio-kocich oraz kompleksowym rozwiązywaniem problemów behawioralnych kotów.
-              </p>
-              <p>
-                Jako technik weterynarii łączę wiedzę behawioralną z medyczną, skutecznie stosując w uzasadnionych przypadkach farmakoterapię jako wsparcie terapii behawioralnej. Prowadzę również hotel resocjalizacyjny dla psów i kotów, zapewniający bezpieczne warunki do pracy terapeutycznej, indywidualne podejście oraz stały nadzór specjalistyczny.
-              </p>
-            </section>
             <div className="contact-hero-proof" aria-label="Najważniejsze informacje">
               <span>
                 <Heart size={20} strokeWidth={1.8} aria-hidden="true" />

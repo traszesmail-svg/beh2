@@ -18,6 +18,7 @@ import {
   ShieldCheck,
   UserRound,
   Video,
+  Zap,
 } from 'lucide-react'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { CAPBT_PROFILE_URL, getPublicContactDetails } from '@/lib/site'
@@ -88,8 +89,9 @@ function PaymentReferenceHeader() {
         ))}
       </nav>
       <div className="payment-ref-actions">
-        <Link href="/book" prefetch={false} className="payment-ref-primary-link">
-          Umów pierwszy krok
+        <Link href="/wybor" prefetch={false} className="payment-ref-primary-link">
+          <Zap aria-hidden="true" />
+          Szybki start
         </Link>
         <Link href="/kontakt" prefetch={false} className="payment-ref-round-link" aria-label="Kontakt">
           <UserRound aria-hidden="true" />
@@ -188,7 +190,7 @@ function PaymentReferenceSummary({
         <ShieldCheck aria-hidden="true" />
         <span>
           <strong>Bezpiecznie i bez publicznego telefonu</strong>
-          <em>Płatność potwierdza termin. Rozmowa odbywa się po rezerwacji i opłaceniu usługi.</em>
+          <em>Płatność potwierdza termin. Po potwierdzeniu dostajesz dalszy krok i link do rozmowy.</em>
         </span>
       </div>
     </aside>

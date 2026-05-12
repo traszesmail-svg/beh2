@@ -61,7 +61,7 @@ export function TerminCalendarPicker({ monthLabel, slotCount, days, summary, cho
   const selectedSlot = selectedDay?.slots.find((slot) => slot.id === selectedSlotId) ?? selectedDay?.slots[0] ?? flatSlots[0] ?? null
   const SpeciesIcon = getSpeciesIcon(summary.species)
   const ModeIcon = summary.modeLabel.toLowerCase().includes('video') ? Video : Headphones
-  const speciesLabel = summary.species === 'kot' ? 'Kot' : summary.species === 'pies' ? 'Pies' : 'Nie wiem'
+  const speciesLabel = summary.species === 'kot' ? 'Kot' : summary.species === 'pies' ? 'Pies' : 'Do wyboru'
 
   function chooseDay(day: TerminCalendarDay) {
     setSelectedDayDate(day.date)

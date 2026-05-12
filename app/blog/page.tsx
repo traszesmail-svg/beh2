@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Fragment } from 'react'
-import { ArrowRight, CalendarDays, ChevronLeft, ChevronRight, Clock3, Mail, Search } from 'lucide-react'
+import { ArrowRight, CalendarDays, ChevronLeft, ChevronRight, Clock3, Mail } from 'lucide-react'
 import { Footer } from '@/components/Footer'
 import { EditorialIndexTopbar } from '@/components/EditorialIndexTopbar'
 import { Schema } from '@/components/schema'
@@ -185,7 +185,7 @@ export default function BlogPage({ searchParams }: { searchParams?: BlogSearchPa
   const categories = buildCategories(posts)
   const categoryId = normalizeParam(searchParams?.category) || 'all'
   const activeCategory = categories.find((category) => category.id === categoryId && category.id !== 'niezbędnik') ?? categories[0]
-  const query = repairCopy(getSingleParam(searchParams?.q) ?? '').trim()
+  const query = ''
   const orderedPosts = orderBlogPosts(posts)
   const filteredPosts = filterBlogPosts(orderedPosts, activeCategory, query)
   const totalPages = Math.max(1, Math.ceil(filteredPosts.length / BLOG_PAGE_SIZE))
@@ -223,14 +223,6 @@ export default function BlogPage({ searchParams }: { searchParams?: BlogSearchPa
                 Praktyczne artykuły o psach i kotach: o zachowaniu, emocjach, relacji i codziennych trudnościach.
                 Bez mitów, bez presji, za to z empatią i doświadczeniem.
               </p>
-              <form className="blog-index-search" action="/blog" role="search">
-                <Search size={18} strokeWidth={1.9} aria-hidden="true" />
-                <label className="sr-only" htmlFor="blog-search">
-                  Szukaj w artykułach
-                </label>
-                {activeCategory?.id !== 'all' ? <input type="hidden" name="category" value={activeCategory?.id} /> : null}
-                <input id="blog-search" name="q" type="search" placeholder="Szukaj w artykułach..." defaultValue={query} />
-              </form>
             </div>
 
             <div className="blog-index-hero-art" aria-hidden="true">
@@ -283,7 +275,7 @@ export default function BlogPage({ searchParams }: { searchParams?: BlogSearchPa
               {paginatedPosts.length === 0 ? (
                 <div className="blog-index-empty">
                   <h2>Brak artykułów dla tego filtra</h2>
-                  <p>Zmień kategorię albo wyczyść wyszukiwanie, żeby zobaczyć pełną listę wpisów.</p>
+                  <p>Zmień kategorię, żeby zobaczyć pełną listę wpisów.</p>
                   <Link href={`${BLOG_ROUTE_BASE}#artykuły`} prefetch={false} className="blog-index-button is-secondary">
                     Pokaż wszystkie artykuły
                   </Link>
@@ -308,21 +300,6 @@ export default function BlogPage({ searchParams }: { searchParams?: BlogSearchPa
                       <ChevronRight size={17} strokeWidth={1.8} aria-hidden="true" />
                     </Link>
                   ))}
-                </div>
-              </section>
-
-              <section className="blog-index-start-card">
-                <div>
-                  <h2>Nie wiesz, od czego zacząć?</h2>
-                  <p>Opisz krótko, co się dzieje, a pomogę Ci wybrać najlepszy pierwszy krok.</p>
-                </div>
-                <div className="blog-index-start-actions">
-                  <Link href="/kontakt#formularz" prefetch={false} className="blog-index-button is-primary">
-                    Wyślij krótką wiadomość
-                  </Link>
-                  <Link href="/wybor" prefetch={false} className="blog-index-button is-secondary">
-                    Umów pierwszy krok
-                  </Link>
                 </div>
               </section>
 
