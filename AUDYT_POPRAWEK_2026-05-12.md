@@ -22,6 +22,8 @@ Zakres: strony wskazane w liscie uzytkownika oraz niedomkniete punkty z poprzedn
 
 Weryfikacja po zmianach: `npm.cmd run build` przeszedl bez bledow. Lokalny smoke test Puppeteer na `next start` zwrocil 200 i brak bledow konsoli dla: `/`, `/kontakt`, `/blog`, `/niezbednik`, `/cennik`, `/cennik/pelny`, `/faq`, `/checkout`, `/payment`, `/termin`.
 
+Po produkcyjnym deployu domena `https://regulskibehawiorysta.pl` zwrocila 200 i brak overlayow Next.js dla: `/`, `/kontakt`, `/o-mnie`, `/blog`, `/niezbednik`, `/cennik`, `/cennik/pelny`, `/faq`, `/checkout`, `/payment`, `/termin`. Nie bylo bledow `console.error` w smoke tescie.
+
 Potwierdzenie obrazow po zmianach:
 
 - `/` renderuje `/_next/image?url=%2Fimages%2Fhero-main.jpg...`.
@@ -93,8 +95,8 @@ Potwierdzenie obrazow po zmianach:
 - `/wybor`
 - `/zamow-pdf`
 
-## Plan po tej serii
+## Status repo i deployu
 
-1. Jesli akceptujesz ten stan, zrobic commit.
-2. Wdrozyc produkcyjnie i sprawdzic live po deployu.
-3. Osobno przejrzec strony z sekcji `nadal nieobjete pelna recenzja tresciowa`.
+Kod zostal zbudowany, przetestowany, wypchniety do repo i wdrozony produkcyjnie przez Vercel. Alias produkcyjny: `https://regulskibehawiorysta.pl`.
+
+Nastepny osobny etap to recenzja tresciowa stron z sekcji `nadal nieobjete pelna recenzja tresciowa`.
