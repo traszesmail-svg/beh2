@@ -16,6 +16,8 @@ Zakres: strony wskazane w liscie uzytkownika oraz niedomkniete punkty z poprzedn
 - `/cennik`
 - `/cennik/pelny`
 - `/o-mnie`
+- `/opinie`
+- `/opinie/dodaj`
 - `/checkout`
 - `/payment`
 - `/termin`
@@ -23,6 +25,8 @@ Zakres: strony wskazane w liscie uzytkownika oraz niedomkniete punkty z poprzedn
 Weryfikacja po zmianach: `npm.cmd run build` przeszedl bez bledow. Lokalny smoke test Puppeteer na `next start` zwrocil 200 i brak bledow konsoli dla: `/`, `/kontakt`, `/blog`, `/niezbednik`, `/cennik`, `/cennik/pelny`, `/faq`, `/checkout`, `/payment`, `/termin`.
 
 Po produkcyjnym deployu domena `https://regulskibehawiorysta.pl` zwrocila 200 i brak overlayow Next.js dla: `/`, `/kontakt`, `/o-mnie`, `/blog`, `/niezbednik`, `/cennik`, `/cennik/pelny`, `/faq`, `/checkout`, `/payment`, `/termin`. Nie bylo bledow `console.error` w smoke tescie.
+
+Dodatkowo po deployu sprawdzone zostaly `/opinie` i `/opinie/dodaj`: oba zwrocily 200, bez overlayow, bez znakow `�` i bez widocznego mojibake. `/opinie/dodaj` ma logo Regulski, pole dodania zdjecia oraz opis limitu 25 MB. Endpoint `/api/testimonials/submit` zwrocil 200 w bezpiecznym tescie honeypotowym, bez generowania prawdziwej opinii ani maila.
 
 Potwierdzenie obrazow po zmianach:
 
@@ -84,8 +88,6 @@ Potwierdzenie obrazow po zmianach:
 - `/metodyka`
 - `/newsletter`
 - `/oczekiwanie/[orderNumber]`
-- `/opinie`
-- `/opinie/dodaj`
 - `/platnosc/blik/[orderNumber]`
 - `/pokoj`
 - `/problem`
