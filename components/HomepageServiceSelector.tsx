@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { ArrowRight, ChevronDown } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { trackAnalyticsEvent } from '@/lib/analytics'
+import { ABOUT_SPECIALIST_PHOTO } from '@/lib/site'
 import {
   homepageAnimalQuestion,
   homepageProblemOptionsByAnimal,
@@ -108,6 +109,8 @@ const heroChoiceDisplay: Record<(typeof heroChoices)[number]['id'], { title: str
     copy: 'Quiz pomoże dobrać pierwszy krok bez zgadywania.',
   },
 }
+
+const homepageHeroPhoto = ABOUT_SPECIALIST_PHOTO
 
 function RouterChoiceIcon({ choiceId }: { choiceId: (typeof heroChoices)[number]['id'] }) {
   if (choiceId === 'dog') {
@@ -213,6 +216,16 @@ export function HomepageServiceSelector({ mode = 'home', initialAnimal = null }:
                 </p>
               </div>
 
+              <figure className="router-home-photo">
+                <Image
+                  src={homepageHeroPhoto.src}
+                  alt={homepageHeroPhoto.alt}
+                  fill
+                  priority
+                  sizes="(max-width: 760px) 100vw, (max-width: 1180px) 42vw, 460px"
+                  className="router-home-photo-image"
+                />
+              </figure>
             </div>
             <div className="router-choice-grid" aria-label="Wybierz kierunek">
               {heroChoices.map((choice) => (
