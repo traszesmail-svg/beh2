@@ -89,9 +89,9 @@ function PaymentReferenceHeader() {
         ))}
       </nav>
       <div className="payment-ref-actions">
-        <Link href="/" prefetch={false} className="payment-ref-primary-link">
+        <Link href="/wybor" prefetch={false} className="payment-ref-primary-link">
           <Zap aria-hidden="true" />
-          Szybki start
+          Quiz
         </Link>
         <Link href="/kontakt" prefetch={false} className="payment-ref-round-link" aria-label="Kontakt">
           <UserRound aria-hidden="true" />

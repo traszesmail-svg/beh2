@@ -69,7 +69,7 @@ export const referenceFaqItems: ReferenceFaqItem[] = [
     category: 'pies',
     question: 'Dla jakich problemów mogę zgłosić się z psem?',
     answer:
-      'Najczęściej że spacerami, reaktywnością, rozłąką, pobudzeniem, szczeniakiem, niszczeniem w domu, obroną zasobów albo trudnym startem po adopcji.',
+      'Najczęściej ze spacerami, reaktywnością, rozłąką, pobudzeniem, szczeniakiem, niszczeniem w domu, obroną zasobów albo trudnym startem po adopcji.',
   },
   {
     id: 'czy-tylko-online',

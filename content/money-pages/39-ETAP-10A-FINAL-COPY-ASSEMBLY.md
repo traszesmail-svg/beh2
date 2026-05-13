@@ -166,7 +166,7 @@ Nagłówek: Najpierw 15 minut — potem decyzja
 
 Konsultacja 60-minutowa to konkretna praca — analiza zachowania, historia psa, środowisko, plan. Żeby była skuteczna, muszę wiedzieć z czym mamy do czynienia.
 
-Rozmowa audio to właśnie ten krok. Opisujesz sytuację, ja zadaję pytania. Po 15 minutach wiesz, czy konsultacja ma sens, co będzie jej celem i czego możesz się spodziewać.
+Rozmowa audio to właśnie ten krok. Mówisz, co naprawdę się dzieje, ja zadaję pytania. Po 15 minutach wiesz, czy konsultacja ma sens, co będzie jej celem i czego możesz się spodziewać.
 
 Jeśli problem jest prosty — możliwe, że wystarczy kilka konkretnych odpowiedzi i skierowanie do właściwych materiałów.
 
@@ -211,7 +211,7 @@ Powiem Ci to wprost i jeśli mogę — wskażę, kto lub co może być pomocne. 
 
 Nagłówek: Zacznij od jednej rozmowy.
 
-Lead: 15 minut audio. Opisujesz sytuację — ja oceniam, czy mogę pomóc i co byłoby kolejnym krokiem. Bez kamery. Bez zobowiązań do dalszej pracy.
+Lead: 15 minut audio. Mówisz, co naprawdę się dzieje — ja oceniam, czy mogę pomóc i co byłoby kolejnym krokiem. Bez kamery. Bez zobowiązań do dalszej pracy.
 
 - PRIMARY: Zarezerwuj 15 min audio — 69 zł
 - SECONDARY: Pobierz bezpłatny Niezbędnik
@@ -1156,7 +1156,7 @@ W przypadku pytań wstępnych lub organizacyjnych możliwy jest kontakt przez fo
 
 **T-04** — Krótka rozmowa audio nie zobowiązuje do niczego więcej. To punkt wyjścia, nie umowa na cykl zajęć.
 
-**T-05** — Opisujesz sytuację swoimi słowami. Nie wymagam gotowych diagnoz ani fachowego słownictwa.
+**T-05** — Mówisz, co naprawdę się dzieje swoimi słowami. Nie wymagam gotowych diagnoz ani fachowego słownictwa.
 
 **T-06** — Przy pierwszym kontakcie wystarczy powiedzieć, co cię niepokoi. Resztę ustalimy razem.
 

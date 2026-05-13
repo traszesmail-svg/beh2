@@ -1,9 +1,11 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { ReferencePageShell } from '@/components/ReferencePageShell'
 import { Schema } from '@/components/schema'
 import { getBreadcrumbJsonLd, getServiceJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
 import {
+  PricingDirectBookingSection,
   PricingSummaryCard,
   bookHref,
   getPricingOfferCatalog,
@@ -60,7 +62,12 @@ export default function PricingPage() {
             <p>
               Jako doświadczony technik weterynarii i dietetyk patrzę też szerzej: na zdrowie, ból, dietę, środowisko i rytm dnia. Jeśli coś może mieć tło zdrowotne, powiem jasno, kiedy warto równolegle skonsultować się z lekarzem weterynarii.
             </p>
+            <Link href={bookHref} prefetch={false} className="reference-btn reference-btn-primary">
+              Pomóż mi dobrać pierwszy krok
+            </Link>
           </section>
+
+          <PricingDirectBookingSection />
 
           <section className="reference-section-card">
             <h2>Najczęstsze pytania przed wyborem</h2>

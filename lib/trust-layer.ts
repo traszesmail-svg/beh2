@@ -17,7 +17,7 @@ export const FAQ_SHORTLISTS = {
     {
       question: 'Czym jest 15-minutowa konsultacja behawioralna?',
       answer:
-        'To 15 minut rozmowy audio bez kamery. Opisujesz sytuację, ustalamy priorytet i wybieramy pierwszy konkretny krok.',
+        'To 15 minut rozmowy audio bez kamery. Mówisz, co naprawdę się dzieje, ustalamy priorytet i wybieramy pierwszy konkretny krok.',
     },
     {
       question: 'Czy Kwadrans wystarczy?',
@@ -71,7 +71,7 @@ export const FAQ_SHORTLISTS = {
         'Tak. Sprawdzamy rytm dnia, obciążenie i to, co pomaga wracać do równowagi bez dokładania presji.',
     },
     {
-      question: 'Co jeśli pies ma kilka trudności narazł',
+      question: 'Co jeśli pies ma kilka trudności naraz?',
       answer: 'To bardzo częste. Najpierw wybieramy temat, od którego warto zacząć, żeby reszta też mogła się uporządkować.',
     },
   ] satisfies TrustFaqItem[],
@@ -92,7 +92,7 @@ export const FAQ_SHORTLISTS = {
         'Nie. Konsultacja jest po to, żeby oddzielić objaw od tła i ustalić, co dziś naprawdę wymaga uwagi.',
     },
     {
-      question: 'Kiedy najpierw weterynarzł',
+      question: 'Kiedy najpierw weterynarz?',
       answer:
         'Przy nagłej zmianie zachowania, szczególnie u kota. Najpierw wykluczamy tło zdrowotne, potem dokładamy warstwę behawioralną.',
     },
@@ -220,7 +220,7 @@ export const FAQ_SHORTLISTS = {
     {
       question: 'Z czym najczęściej zgłaszają się opiekunowie psów?',
       answer:
-        'Najczęściej że spacerami, reaktywnością, rozłąką, pobudzeniem w domu albo trudnym startem po adopcji.',
+        'Najczęściej ze spacerami, reaktywnością, rozłąką, pobudzeniem w domu albo trudnym startem po adopcji.',
     },
   ] satisfies TrustFaqItem[],
   catBehaviorist: [

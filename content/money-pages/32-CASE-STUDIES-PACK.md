@@ -93,7 +93,7 @@ To właśnie dobry punkt startowy: nie wyeliminowanie problemu, ale zrozumienie,
 *M.K., mieszaniec, Warszawa*
 
 **CTA:**
-Jeśli twój pies reaguje na smyczy i kolejne próby nic nie zmieniają — zacznij od 15 min audio. Opisujesz sytuację, ustalamy priorytet.
+Jeśli twój pies reaguje na smyczy i kolejne próby nic nie zmieniają — zacznij od 15 min audio. Mówisz, co naprawdę się dzieje, ustalamy priorytet.
 [Zamów 15 min audio — 69 zł](/call) · [Reaktywność na smyczy — więcej informacji](/psy/reaktywnosc-na-smyczy)
 
 **Miejsca użycia:**

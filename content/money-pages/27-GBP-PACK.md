@@ -153,7 +153,7 @@ Przez formularz kontaktowy na stronie. Opisz gatunek, problem i dostępność. O
 
 **Nazwa usługi:** Konsultacja wstępna 15 min audio
 **Opis:**
-> Rozmowa głosem, bez kamery, bez długiego przygotowania. Dla jednego pytania, orientacji w temacie albo sprawdzenia, od czego zacząć. Opisujesz sytuację — pytam, ustalamy priorytet i daję ci jeden konkretny kierunek. To samodzielny, użyteczny format — nie wstęp do dłuższej konsultacji.
+> Rozmowa głosem, bez kamery, bez długiego przygotowania. Dla jednego pytania, orientacji w temacie albo sprawdzenia, od czego zacząć. Mówisz, co naprawdę się dzieje — pytam, ustalamy priorytet i daję ci jeden konkretny kierunek. To samodzielny, użyteczny format — nie wstęp do dłuższej konsultacji.
 **Cena:** 69 zł
 
 ---

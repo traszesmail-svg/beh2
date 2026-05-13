@@ -12,7 +12,7 @@ import { buildMarketingMetadata } from '@/lib/seo'
 export const metadata: Metadata = buildMarketingMetadata({
   title: 'Pomóż mi dobrać pierwszy krok',
   path: '/wybor',
-  description: 'Krótki wybór dla opiekunów psów i kotów: opisz sytuację i sprawdź najrozsądniejszy pierwszy krok.',
+  description: 'Quiz dla opiekunów psów i kotów: opisz sytuację i sprawdź najrozsądniejszy pierwszy krok.',
 })
 
 const choiceProofItems = [
@@ -26,30 +26,30 @@ const choiceProofItems = [
 const choiceReviewSets = {
   dog: [
     {
-      author: 'Kasia i Niko',
-      text: 'Po 3 miesiącach współpracy nasz pies stał się spokojniejszy i bardziej pewny siebie.',
+      author: 'Opiekunka psa - reakcje na spacerze',
+      text: 'Przed rozmową mieliśmy w głowie chaos: spacer, szczekanie, emocje. Po konsultacji wiedzieliśmy, co robimy najpierw i czego na razie nie dokładać.',
     },
     {
-      author: 'Marta i Luna',
-      text: 'Profesjonalne i zrozumiałe podejście. Dzięki konsultacji lepiej rozumiemy naszego psa.',
+      author: 'Opiekunka psa - praca w domu',
+      text: 'Najbardziej pomogło mi to, że nikt mnie nie oceniał. Zamiast listy zakazów dostałam prosty plan, który dało się wdrożyć w naszym domu.',
     },
     {
-      author: 'Tomek i Bruno',
-      text: 'Świetna wiedza poparta praktyką i empatią. Indywidualne podejście krok po kroku.',
+      author: 'Opiekunowie kota - kuweta i napięcie',
+      text: 'Myśleliśmy, że kotka jest złośliwa. Po rozmowie zobaczyliśmy, że to raczej napięcie i środowisko. Wreszcie wiedzieliśmy, co sprawdzić po kolei.',
     },
   ],
   cat: [
     {
-      author: 'Marta i Luna',
-      text: 'Konsultacja pomogła nam spokojniej spojrzeć na zachowanie kotki i dobrać pierwszy krok.',
+      author: 'Opiekunka psa - reakcje na spacerze',
+      text: 'Przed rozmową mieliśmy w głowie chaos: spacer, szczekanie, emocje. Po konsultacji wiedzieliśmy, co robimy najpierw i czego na razie nie dokładać.',
     },
     {
-      author: 'Ania i Mela',
-      text: 'Zamiast zgadywać, dostaliśmy jasne wskazówki dopasowane do naszego kota i domu.',
+      author: 'Opiekunka psa - praca w domu',
+      text: 'Najbardziej pomogło mi to, że nikt mnie nie oceniał. Zamiast listy zakazów dostałam prosty plan, który dało się wdrożyć w naszym domu.',
     },
     {
-      author: 'Paweł i Tosia',
-      text: 'Spokojne, konkretne podejście do kociego stresu bez straszenia i oceniania.',
+      author: 'Opiekunowie kota - kuweta i napięcie',
+      text: 'Myśleliśmy, że kotka jest złośliwa. Po rozmowie zobaczyliśmy, że to raczej napięcie i środowisko. Wreszcie wiedzieliśmy, co sprawdzić po kolei.',
     },
   ],
 } as const
@@ -70,27 +70,25 @@ export default function ChoicePage({ searchParams }: { searchParams?: { animal?:
     ? 'Kot siedzący w spokojnym naturalnym świetle'
     : 'Pies siedzący w spokojnym naturalnym świetle'
   const reviews = isCat ? choiceReviewSets.cat : choiceReviewSets.dog
-  const heroTitle = isCat ? 'Co Twój kot próbuje pokazać zachowaniem?' : 'Co dzieje się z Twoim psem?'
-  const heroCopy = isCat
-    ? 'Kuweta, chowanie się, napięcie między kotami, nocne miauczenie albo nagła zmiana zachowania nie muszą oznaczać złośliwości. Kot często pokazuje w ten sposób stres, ból, przeciążenie, konflikt albo problem w środowisku.'
-    : 'Szczekanie, ciągnięcie, lęk, napięcie, niszczenie w domu albo trudne spacery nie zawsze oznaczają zły nawyk. Czasem pies pokazuje emocje, przeciążenie, ból, stres albo brak poczucia bezpieczeństwa. Zacznijmy od uporządkowania sytuacji.'
+  const heroTitle = isCat ? 'Zobaczmy, co Twój kot próbuje pokazać zachowaniem' : 'Zacznijmy od tego, co najbardziej przeszkadza Wam dziś'
+  const heroCopy = 'Odpowiedz na kilka krótkich pytań. Na końcu zobaczysz najrozsądniejszy format rozmowy - bez zgadywania, co wybrać.'
 
   return (
     <main className={`notatnik-page homepage-shell choice-page choice-page-${isCat ? 'cat' : 'dog'}`}>
       <Schema
         data={getBreadcrumbJsonLd([
           { name: 'Strona główna', path: '/' },
-          { name: 'Krótki wybór', path: '/wybor' },
+          { name: 'Quiz', path: '/wybor' },
         ])}
       />
       <NotatnikSideVisuals variant={isCat ? 'cat' : 'dog'} />
 
       <div className="notatnik-shell homepage-main">
         <NotatnikTopbar
-          tag="Krótki wybór"
+          tag="Quiz"
           navItems={PUBLIC_SITE_NAV_ITEMS}
           ctaHref="/wybor"
-          ctaLabel="Krótki wybór"
+          ctaLabel="Quiz"
           ctaVariant="accent"
         />
 
@@ -107,7 +105,7 @@ export default function ChoicePage({ searchParams }: { searchParams?: { animal?:
           <HomepageServiceSelector mode="quiz" initialAnimal={initialAnimal} />
         </section>
 
-        <section className="choice-proof-strip" aria-label="Dlaczego warto zacząć od krótkiego wyboru">
+        <section className="choice-proof-strip" aria-label="Dlaczego warto zacząć od quizu">
           {choiceProofItems.map((item) => {
             const Icon = item.icon
 
@@ -124,7 +122,7 @@ export default function ChoicePage({ searchParams }: { searchParams?: { animal?:
         </section>
 
         <section className="choice-reviews-section" aria-labelledby="choice-reviews-title">
-          <h2 id="choice-reviews-title">Co mówią opiekunowie?</h2>
+          <h2 id="choice-reviews-title">Co mówią opiekunowie po rozmowie?</h2>
           <div className="choice-review-grid">
             {reviews.map((review) => (
               <article key={review.author} className="choice-review-card">

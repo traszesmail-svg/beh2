@@ -124,15 +124,185 @@ const BLOG_AUTHOR_NAME = SPECIALIST_NAME
 const DOG_AUDIO_HREF = buildBookHref(null, 'szybka-konsultacja-15-min', false, 'pies')
 const CAT_AUDIO_HREF = buildBookHref(null, 'szybka-konsultacja-15-min', false, 'kot')
 const GENERIC_AUDIO_HREF = buildBookHref(null, 'szybka-konsultacja-15-min')
-const BLOG_PREVIEW_COVER: BlogPostCover = {
-  src: '/blog/opengraph-image',
-  alt: 'Tekstowy podglad artykulu blogowego Regulski Behawiorysta.',
-  width: 1200,
-  height: 630,
+const BLOG_COVER_WIDTH = 640
+const BLOG_COVER_HEIGHT = 400
+
+const BLOG_COVER_BY_SLUG: Record<string, BlogPostCover> = {
+  'szczeniak-pierwsza-noc': {
+    src: '/blog-covers/blog-szczeniak-pierwsza-noc-photo.webp',
+    alt: 'Szczeniak śpiący na kanapie w spokojnym domowym wnętrzu.',
+    width: BLOG_COVER_WIDTH,
+    height: BLOG_COVER_HEIGHT,
+  },
+  'dlaczego-moj-pies-szczeka-na-inne-psy': {
+    src: '/blog-covers/blog-dlaczego-moj-pies-szczeka-na-inne-psy-photo.webp',
+    alt: 'Dwa psy na smyczach zatrzymane w dystansie podczas spokojnego mijania na spacerze.',
+    width: BLOG_COVER_WIDTH,
+    height: BLOG_COVER_HEIGHT,
+  },
+  'pies-wyje-kiedy-zostaje-sam': {
+    src: '/blog-covers/blog-pies-wyje-kiedy-zostaje-sam-photo.webp',
+    alt: 'Pies siedzący na kanapie i patrzący przez okno podczas zostawania samemu w domu.',
+    width: BLOG_COVER_WIDTH,
+    height: BLOG_COVER_HEIGHT,
+  },
+  'kot-zalatwia-sie-poza-kuweta': {
+    src: '/blog-covers/blog-kot-zalatwia-sie-poza-kuweta-photo.webp',
+    alt: 'Kot w spokojnym domowym wnętrzu wychodzący z kuwety ustawionej obok rośliny.',
+    width: BLOG_COVER_WIDTH,
+    height: BLOG_COVER_HEIGHT,
+  },
+  'jak-wyglada-konsultacja-behawioralna-online': {
+    src: '/blog-covers/blog-jak-wyglada-konsultacja-behawioralna-online-photo.webp',
+    alt: 'Opiekun siedzący z psem przy laptopie w domowym wnętrzu podczas rozmowy online.',
+    width: BLOG_COVER_WIDTH,
+    height: BLOG_COVER_HEIGHT,
+  },
+  'pies-ciagnie-na-smyczy': {
+    src: '/blog-covers/blog-pies-ciagnie-na-smyczy-photo.webp',
+    alt: 'Pies na smyczy idący chodnikiem obok opiekuna podczas spaceru.',
+    width: BLOG_COVER_WIDTH,
+    height: BLOG_COVER_HEIGHT,
+  },
+  'kot-drapie-meble': {
+    src: '/blog-covers/blog-kot-drapie-meble-photo.webp',
+    alt: 'Kot przy kanapie i drapaku pokazujący wybór miejsca do drapania.',
+    width: BLOG_COVER_WIDTH,
+    height: BLOG_COVER_HEIGHT,
+  },
+  'nowy-pies-pierwsze-72-godziny': {
+    src: '/blog-covers/blog-nowy-pies-pierwsze-72-godziny-photo.webp',
+    alt: 'Pies w nowym mieszkaniu obok opiekunów podczas spokojnej adaptacji.',
+    width: BLOG_COVER_WIDTH,
+    height: BLOG_COVER_HEIGHT,
+  },
+  'kiedy-behawiorysta-kiedy-trener-psa': {
+    src: '/blog-covers/blog-kiedy-behawiorysta-kiedy-trener-psa-photo.webp',
+    alt: 'Specjalista robi notatki przy opiekunie i psie podczas spokojnej konsultacji.',
+    width: BLOG_COVER_WIDTH,
+    height: BLOG_COVER_HEIGHT,
+  },
+  'behawiorysta-zoopsycholog-trener-do-kogo-sie-zglosic': {
+    src: '/blog-covers/blog-behawiorysta-zoopsycholog-trener-do-kogo-sie-zglosic-photo.webp',
+    alt: 'Opiekun rozmawia przy notatkach z psem obok, wybierając odpowiednią formę pomocy.',
+    width: BLOG_COVER_WIDTH,
+    height: BLOG_COVER_HEIGHT,
+  },
+  'ile-kosztuje-konsultacja-behawioralna': {
+    src: '/blog-covers/blog-ile-kosztuje-konsultacja-behawioralna-photo.webp',
+    alt: 'Notatnik, laptop i pies przy stole podczas omawiania zakresu konsultacji.',
+    width: BLOG_COVER_WIDTH,
+    height: BLOG_COVER_HEIGHT,
+  },
+  'czym-jest-coape-behawiorysta-po-tej-szkole': {
+    src: '/blog-covers/blog-czym-jest-coape-behawiorysta-po-tej-szkole-photo.webp',
+    alt: 'Pies siedzący obok certyfikatu i nagrody, nawiązujący do kwalifikacji szkoleniowych.',
+    width: BLOG_COVER_WIDTH,
+    height: BLOG_COVER_HEIGHT,
+  },
+  'jak-przygotowac-sie-do-konsultacji-behawioralnej-online': {
+    src: '/blog-covers/blog-jak-przygotowac-sie-do-konsultacji-behawioralnej-online-photo.webp',
+    alt: 'Opiekun z kotem przy laptopie w domu podczas przygotowania do konsultacji online.',
+    width: BLOG_COVER_WIDTH,
+    height: BLOG_COVER_HEIGHT,
+  },
+  'reaktywnosc-na-smyczy-cwiczenie-luznej-smyczy': {
+    src: '/blog-covers/blog-reaktywnosc-na-smyczy-cwiczenie-luznej-smyczy-photo.webp',
+    alt: 'Pies na smyczy skupiony na opiekunie podczas spokojnego ćwiczenia spacerowego.',
+    width: BLOG_COVER_WIDTH,
+    height: BLOG_COVER_HEIGHT,
+  },
+  'jak-nagrac-psa-zostawionego-samemu': {
+    src: '/blog-covers/blog-jak-nagrac-psa-zostawionego-samemu-photo.webp',
+    alt: 'Telefon ustawiony do nagrywania psa w mieszkaniu przed wyjściem opiekuna.',
+    width: BLOG_COVER_WIDTH,
+    height: BLOG_COVER_HEIGHT,
+  },
+  'rutyna-wyjscia-oswajanie-psa-z-samotnoscia': {
+    src: '/blog-covers/blog-rutyna-wyjscia-oswajanie-psa-z-samotnoscia-photo.webp',
+    alt: 'Pies obserwujący uchylone drzwi podczas ćwiczenia spokojnej rutyny wyjścia.',
+    width: BLOG_COVER_WIDTH,
+    height: BLOG_COVER_HEIGHT,
+  },
+  'jak-wybrac-kuwete-i-zwirek-dla-kota': {
+    src: '/blog-covers/blog-jak-wybrac-kuwete-i-zwirek-dla-kota-photo.webp',
+    alt: 'Kot przy krytej kuwecie w domowym wnętrzu, nawiązujący do wyboru kuwety i żwirku.',
+    width: BLOG_COVER_WIDTH,
+    height: BLOG_COVER_HEIGHT,
+  },
+  'stres-kota-a-zachowania-toaletowe': {
+    src: '/blog-covers/blog-stres-kota-a-zachowania-toaletowe-photo.webp',
+    alt: 'Dwa koty przy kuwecie w łazience, pokazujące napięcie wokół miejsca toaletowego.',
+    width: BLOG_COVER_WIDTH,
+    height: BLOG_COVER_HEIGHT,
+  },
+  'jak-wprowadzic-nowego-kota-do-domu': {
+    src: '/blog-covers/blog-jak-wprowadzic-nowego-kota-do-domu-photo.webp',
+    alt: 'Dwa koty rozdzielone przeszkodą podczas spokojnego wprowadzania nowego kota.',
+    width: BLOG_COVER_WIDTH,
+    height: BLOG_COVER_HEIGHT,
+  },
+  'agresja-przekierowana-u-kota': {
+    src: '/blog-covers/blog-agresja-przekierowana-u-kota-photo.webp',
+    alt: 'Kot pobudzony przy oknie obserwujący bodziec na zewnątrz mieszkania.',
+    width: BLOG_COVER_WIDTH,
+    height: BLOG_COVER_HEIGHT,
+  },
+  'pies-ciagnie-na-smyczy-od-czego-zaczac': {
+    src: '/blog-covers/blog-pies-ciagnie-na-smyczy-od-czego-zaczac-photo.webp',
+    alt: 'Pies na smyczy siedzący przy opiekunie na miejskim chodniku.',
+    width: BLOG_COVER_WIDTH,
+    height: BLOG_COVER_HEIGHT,
+  },
+  'jak-nauczyc-psa-zostawania-samemu': {
+    src: '/blog-covers/blog-jak-nauczyc-psa-zostawania-samemu-photo.webp',
+    alt: 'Pies patrzący przez okno w mieszkaniu podczas spokojnej nauki zostawania samemu.',
+    width: BLOG_COVER_WIDTH,
+    height: BLOG_COVER_HEIGHT,
+  },
+  'jak-ustawic-kuwete-dla-kota': {
+    src: '/blog-covers/blog-jak-ustawic-kuwete-dla-kota-photo.webp',
+    alt: 'Kuweta ustawiona w spokojnym miejscu przy oknie, z kotami w pobliżu.',
+    width: BLOG_COVER_WIDTH,
+    height: BLOG_COVER_HEIGHT,
+  },
+  'jak-zapoznac-dwa-koty': {
+    src: '/blog-covers/blog-jak-zapoznac-dwa-koty-photo.webp',
+    alt: 'Dwa koty po przeciwnych stronach przeszkody podczas stopniowego zapoznawania.',
+    width: BLOG_COVER_WIDTH,
+    height: BLOG_COVER_HEIGHT,
+  },
 }
 
-export function getBlogPostCover(_post: Pick<BlogPost, 'slug' | 'categoryHref'>): BlogPostCover {
-  return BLOG_PREVIEW_COVER
+function getFallbackBlogCover(categoryHref: string): BlogPostCover {
+  if (categoryHref === '/koty') {
+    return {
+      src: '/blog-covers/cat-general.jpg',
+      alt: 'Kot w domowym otoczeniu.',
+      width: BLOG_COVER_WIDTH,
+      height: BLOG_COVER_HEIGHT,
+    }
+  }
+
+  if (categoryHref === '/psy') {
+    return {
+      src: '/blog-covers/dog-reactive.jpg',
+      alt: 'Pies podczas spaceru z opiekunem.',
+      width: BLOG_COVER_WIDTH,
+      height: BLOG_COVER_HEIGHT,
+    }
+  }
+
+  return {
+    src: '/blog-covers/consultation.jpg',
+    alt: 'Notatki i laptop przygotowane do konsultacji online.',
+    width: BLOG_COVER_WIDTH,
+    height: BLOG_COVER_HEIGHT,
+  }
+}
+
+export function getBlogPostCover(post: Pick<BlogPost, 'slug' | 'categoryHref'>): BlogPostCover {
+  return BLOG_COVER_BY_SLUG[post.slug] ?? getFallbackBlogCover(post.categoryHref)
 }
 const SERVICE_LANDING_LINK: BlogSupportLink = {
   label: 'Behawiorysta psów i kotów online',
@@ -226,9 +396,9 @@ const BLOG_POST_CONFIGS: BlogPostConfig[] = [
         description: 'Dobry start, jeśli chcesz omówić pierwsze noce i ustawić spokojniejszy rytm.',
       },
       {
-        label: 'Krótki wybór',
+        label: 'Quiz',
         href: '/wybor',
-        description: 'Krótki wybór ścieżki, jeśli wahasz się między Kwadransem a szerszą rozmową.',
+        description: 'Quiz, jeśli wahasz się między Kwadransem a szerszą rozmową.',
       },
     ],
   },
@@ -1371,10 +1541,10 @@ export function getBlogListingMetadata({ title, description, path: routePath }: 
 
 export function getBlogPostMetadata({ post, description }: BlogPostMetadataInput): Metadata {
   const cover = {
-    url: SITE_OG_IMAGE.url,
-    width: SITE_OG_IMAGE.width,
-    height: SITE_OG_IMAGE.height,
-    alt: SITE_OG_IMAGE.alt,
+    url: post.cover.src,
+    width: post.cover.width,
+    height: post.cover.height,
+    alt: post.cover.alt,
   }
 
   return {
@@ -1404,7 +1574,7 @@ export function getBlogPostMetadata({ post, description }: BlogPostMetadataInput
       card: 'summary_large_image',
       title: `${post.seoTitle} | ${SITE_SHORT_NAME}`,
       description,
-      images: [SITE_OG_IMAGE.url],
+      images: [post.cover.src],
     },
   }
 }
@@ -1434,7 +1604,7 @@ export function getBlogArticleJsonLd(post: BlogPost, baseUrl: string) {
     datePublished: post.publishedAt,
     dateModified: post.publishedAt,
     articleSection: post.categoryLabel,
-    image: [new URL(SITE_OG_IMAGE.url, baseUrl).toString()],
+    image: [new URL(post.cover.src, baseUrl).toString()],
     wordCount: post.wordCount,
     inLanguage: 'pl-PL',
   }

@@ -191,7 +191,7 @@
 
 - **HTTP Status:** 200
 - **Title:** Kontakt i rezerwacja konsultacji | Regulski
-- **H1:** Napisz, zanim zarezerwujesz.
+- **H1:** Napisz krótko, co się dzieje. Pomogę Ci wybrać najrozsądniejszy pierwszy krok.
 - **Metryki:** 3 obrazów, 37 linków, 1 formularzy
 - **Problemy (1):**
   - ⚠️ Obrazy bez ALT: 2

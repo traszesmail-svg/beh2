@@ -127,7 +127,7 @@ export default function HomePage() {
           </div>
         </Reveal>
 
-        <NotatnikFooter primaryHref="/wybor" primaryLabel="Przejdź przez krótki wybór" />
+        <NotatnikFooter primaryHref="/wybor" primaryLabel="Quiz" />
       </div>
     </main>
   )

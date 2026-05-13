@@ -34,7 +34,7 @@ Dwie formy kontaktu, zaprojektowane pod różne potrzeby. Zanim wybierzesz — p
 - zaczynasz z nowym psem lub kotem i chcesz ustawić fundament.
 
 **Co obejmuje:**
-Krótka rozmowa głosem, bez konieczności włączania kamery. Opisujesz sytuację, zadaję pytania, ustalamy priorytet i daję ci jeden konkretny kierunek na najbliższy tydzień lub dwa. Nie jest to „wstępna rozmowa przed prawdziwą konsultacją" — to samodzielny, użyteczny format.
+Krótka rozmowa głosem, bez konieczności włączania kamery. Mówisz, co naprawdę się dzieje, zadaję pytania, ustalamy priorytet i daję ci jeden konkretny kierunek na najbliższy tydzień lub dwa. Nie jest to „wstępna rozmowa przed prawdziwą konsultacją" — to samodzielny, użyteczny format.
 
 **Kiedy 15 minut nie wystarczy:**
 Jeśli problem jest wielowątkowy, trwa wiele miesięcy albo dotyczy kilku kwestii naraz — 15 minut daje orientację, ale plan wymaga więcej czasu. W takiej sytuacji powiem ci o tym wprost i zaproponuję 60 min.

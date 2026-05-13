@@ -30,14 +30,15 @@ export function FinalReviewsQuoteCarousel({ reviews, intervalMs = 4000 }: FinalR
     return null
   }
 
+  const reviewSignature = review.problem ? `${review.author} - ${review.problem}` : review.author
+
   return (
-    <section className="notatnik-final notatnik-final-reviews" aria-label="Opinie klientów">
-      <p className="notatnik-final-review-kicker">Opinie po konsultacji</p>
+    <section className="notatnik-final notatnik-final-reviews" aria-label="Opinie opiekunów po rozmowie">
+      <h2 className="notatnik-final-review-kicker">Co mówią opiekunowie po rozmowie?</h2>
       <blockquote key={review.id} className="notatnik-final-review-quote">
         <p>&ldquo;{review.text}&rdquo;</p>
         <footer>
-          <strong>{review.author}</strong>
-          <span>{review.problem}</span>
+          <strong>{reviewSignature}</strong>
         </footer>
       </blockquote>
 

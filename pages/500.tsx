@@ -14,7 +14,7 @@ export default function Custom500() {
         { href: '/oferta', label: 'Oferta' },
       ]}
       footerCtaHref="/kontakt"
-      footerCtaLabel="Napisz wiadomość"
+      footerCtaLabel="Opisz krótko, co się dzieje"
       footerHeadline="Masz bezpieczną ścieżkę wyjścia"
       footerDescription="Jeśli błąd był chwilowy, wróć do strony głównej. Jeśli potrzebujesz pomocy, napisz wiadomość i przejdziemy dalej ręcznie."
     />

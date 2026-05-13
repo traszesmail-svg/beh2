@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Zap } from 'lucide-react'
 import { Footer } from '@/components/Footer'
+import { NotatnikMobileMenuAutoClose } from '@/components/NotatnikMobileMenu'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { INSTAGRAM_PROFILE_URL } from '@/lib/site'
 import { REGULSKI_WEB_LOGO } from '@/lib/regulski-web-assets'
@@ -99,13 +100,21 @@ function NotatnikBrandLockup() {
       </span>
       <span className="notatnik-brand-copy">
         <span className="notatnik-brand-mark">Regulski Behawiorysta</span>
-        <span className="notatnik-brand-tag">behawiorysta, technik weterynarii i dietetyk</span>
+        <span className="notatnik-brand-tag">
+          <span>Terapia behawioralna dla przewodników</span>
+          <span>zwierząt towarzyszących</span>
+        </span>
       </span>
     </Link>
   )
 }
 
-export function NotatnikTopbar({ navItems, showUtilityLinks = true }: NotatnikTopbarProps) {
+export function NotatnikTopbar({
+  navItems,
+  ctaHref = '/wybor',
+  ctaLabel = 'Quiz',
+  showUtilityLinks = false,
+}: NotatnikTopbarProps) {
   const hasNavItems = navItems.length > 0
 
   return (
@@ -123,9 +132,9 @@ export function NotatnikTopbar({ navItems, showUtilityLinks = true }: NotatnikTo
       ) : null}
 
       <div className="notatnik-topbar-actions">
-        <Link href="/" prefetch={false} className="notatnik-topbar-quick-help">
+        <Link href={ctaHref} prefetch={false} className="notatnik-topbar-quick-help">
           <Zap size={16} strokeWidth={2.1} aria-hidden="true" />
-          <span>Szybki start</span>
+          <span>{ctaLabel}</span>
         </Link>
         {showUtilityLinks ? <ThemeToggle /> : null}
         {showUtilityLinks ? (
@@ -141,6 +150,8 @@ export function NotatnikTopbar({ navItems, showUtilityLinks = true }: NotatnikTo
         ) : null}
       </div>
 
+      {hasNavItems ? <NotatnikMobileMenuAutoClose /> : null}
+
       {hasNavItems ? (
         <details className="notatnik-mobile-menu">
           <summary aria-label="Otwórz menu">
@@ -152,8 +163,8 @@ export function NotatnikTopbar({ navItems, showUtilityLinks = true }: NotatnikTo
           </summary>
           <div className="notatnik-mobile-menu-panel">
             <nav aria-label="Menu mobilne">
-              <Link href="/" prefetch={false}>
-                Szybki start
+              <Link href={ctaHref} prefetch={false} className="notatnik-mobile-menu-cta">
+                {ctaLabel}
               </Link>
               {navItems.map((item) => (
                 <Link key={item.href} href={item.href} prefetch={false}>

@@ -181,6 +181,36 @@ export function Header() {
     }
   }, [])
 
+  useEffect(() => {
+    if (!menuOpen) {
+      return
+    }
+
+    const closeMenu = () => {
+      setMenuOpen(false)
+    }
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        closeMenu()
+      }
+    }
+
+    window.addEventListener('scroll', closeMenu, { passive: true })
+    window.addEventListener('wheel', closeMenu, { passive: true })
+    window.addEventListener('touchmove', closeMenu, { passive: true })
+    window.addEventListener('resize', closeMenu)
+    window.addEventListener('keydown', onKeyDown)
+
+    return () => {
+      window.removeEventListener('scroll', closeMenu)
+      window.removeEventListener('wheel', closeMenu)
+      window.removeEventListener('touchmove', closeMenu)
+      window.removeEventListener('resize', closeMenu)
+      window.removeEventListener('keydown', onKeyDown)
+    }
+  }, [menuOpen])
+
   const activeHref = activeSection ? buildSectionHref(pathname, activeSection) : pathname
 
   function getLinkState(item: NavItem) {

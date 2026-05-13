@@ -16,7 +16,7 @@ export interface LeadMagnet {
 export const LEAD_MAGNETS: LeadMagnet[] = [
   {
     id: 'pies-sam-w-domu',
-    title: 'Pies sam w domu — 7 kroków',
+    title: 'Pies sam w domu: co sprawdzić, zanim zaczniesz trening zostawania',
     subtitle: 'Wprowadzenie do pracy z lękiem separacyjnym',
     description: 'Praktyczny przewodnik: jak rozpoznać lęk, jak nie pogłębiać problemu, jak rozpocząć stopniowe przyzwyczajanie psa do bycia samym.',
     bullets: [
@@ -32,7 +32,7 @@ export const LEAD_MAGNETS: LeadMagnet[] = [
   },
   {
     id: 'pierwszy-tydzien-z-kotem',
-    title: 'Pierwszy tydzień z kotem',
+    title: 'Pierwszy tydzień z kotem: spokojny start bez przyspieszania kontaktu',
     subtitle: 'Checklist + plan na pierwsze 7 dni',
     description: 'Co przygotować zanim kot przekroczy próg domu, jak zaaranżować pokój bezpieczny, jak wprowadzić kota stopniowo do reszty mieszkania.',
     bullets: [
@@ -48,7 +48,7 @@ export const LEAD_MAGNETS: LeadMagnet[] = [
   },
   {
     id: 'lista-30-zachowan',
-    title: '30 zachowań do obserwacji',
+    title: '30 sygnałów, które warto zauważyć, zanim problem urośnie',
     subtitle: 'Sygnały u psa i kota — co znaczą',
     description: 'Lista najczęstszych zachowań psów i kotów wraz z interpretacją: co zwierzę komunikuje, kiedy reagować, kiedy obserwować dalej.',
     bullets: [

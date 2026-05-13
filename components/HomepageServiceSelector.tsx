@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { ArrowRight, ChevronDown } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { trackAnalyticsEvent } from '@/lib/analytics'
-import { ABOUT_SPECIALIST_PHOTO } from '@/lib/site'
+import { HOME_HERO_PHOTO } from '@/lib/site'
 import {
   homepageAnimalQuestion,
   homepageProblemOptionsByAnimal,
@@ -70,7 +70,7 @@ function buildProblemQuestion(animal: HomepageSelectorAnimal | null): HomepageSe
     label: '2',
     title: 'Co najbardziej przypomina Waszą sytuację?',
     helper: isCat ? 'Wybierz najbliższy koci sygnał.' : 'Wybierz najbliższą psią sytuację.',
-    options: homepageProblemOptionsByAnimal[animal ?? 'dog'],
+    options: animal ? homepageProblemOptionsByAnimal[animal] : [],
   }
 }
 
@@ -91,7 +91,7 @@ const heroChoices = [
     id: 'unknown',
     title: 'Nie wiem, co wybrać',
     copy: 'Przeprowadź mnie przez kilka pytań i pokaż najrozsądniejszy pierwszy krok.',
-    href: '/quiz',
+    href: '/wybor',
   },
 ] as const
 
@@ -110,7 +110,7 @@ const heroChoiceDisplay: Record<(typeof heroChoices)[number]['id'], { title: str
   },
 }
 
-const homepageHeroPhoto = ABOUT_SPECIALIST_PHOTO
+const homepageHeroPhoto = HOME_HERO_PHOTO
 
 function RouterChoiceIcon({ choiceId }: { choiceId: (typeof heroChoices)[number]['id'] }) {
   if (choiceId === 'dog') {
@@ -203,6 +203,10 @@ export function HomepageServiceSelector({ mode = 'home', initialAnimal = null }:
     }
   }
 
+  function chooseAnimal(option: HomepageSelectorOption) {
+    chooseAnswer('animal', option)
+  }
+
   return (
     <div className={`homepage-router${showHero ? '' : ' homepage-router-quiz'}`} id="wybór">
       {showHero ? (
@@ -245,6 +249,7 @@ export function HomepageServiceSelector({ mode = 'home', initialAnimal = null }:
                     <RouterChoiceIcon choiceId={choice.id} />
                   </span>
                   <strong>{heroChoiceDisplay[choice.id].title}</strong>
+                  {choice.id === 'unknown' ? <em className="router-choice-quiz-label">Quiz</em> : null}
                   <span>{heroChoiceDisplay[choice.id].copy}</span>
                   <ArrowRight className="router-choice-arrow" size={18} strokeWidth={1.8} aria-hidden="true" />
                 </Link>
@@ -260,7 +265,7 @@ export function HomepageServiceSelector({ mode = 'home', initialAnimal = null }:
       {!showHero ? (
         <section className="home-guided-selector" aria-labelledby="home-guided-selector-title">
           <div className="home-guided-copy">
-            <h2 id="home-guided-selector-title">Przejdź przez krótki wybór</h2>
+            <h2 id="home-guided-selector-title">Quiz</h2>
           </div>
           <div className="home-guided-grid">
             <article className="home-guided-step">
@@ -274,15 +279,10 @@ export function HomepageServiceSelector({ mode = 'home', initialAnimal = null }:
                     key={option.id}
                     href={`/wybor?animal=${option.id}`}
                     prefetch={false}
+                    scroll={false}
                     className={answers.animal === option.id ? 'is-selected' : ''}
                     aria-current={answers.animal === option.id ? 'true' : undefined}
-                    onClick={() =>
-                      trackAnalyticsEvent('topic_selected', {
-                        location: 'home-router',
-                        question: 'animal',
-                        answer: option.id,
-                      })
-                    }
+                    onClick={() => chooseAnimal(option)}
                   >
                     {option.id === 'dog' ? <RouterChoiceIcon choiceId="dog" /> : <RouterChoiceIcon choiceId="cat" />}
                     <span>{option.label}</span>
@@ -306,7 +306,7 @@ export function HomepageServiceSelector({ mode = 'home', initialAnimal = null }:
                     if (option) chooseAnswer('problem', option)
                   }}
                 >
-                  <option value="">Wybierz...</option>
+                  <option value="">{animal ? 'Wybierz...' : 'Najpierw wybierz psa albo kota'}</option>
                   {problemQuestion.options.map((option) => (
                     <option key={option.id} value={option.id}>
                       {option.label}

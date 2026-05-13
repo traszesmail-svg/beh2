@@ -114,7 +114,7 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
     {
       path: '/',
       required: [
-        'A Tobie jak mogę pomóc?',
+        'Co się dzieje z Twoim psem albo kotem?',
         'Mam psa',
         'Mam kota',
         'Jak wygląda współpraca?',
@@ -135,9 +135,9 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
     {
       path: '/niezbednik',
       required: [
-        'Praktyczne materiały, które naprawdę pomagają.',
-        'Ścieżki tematyczne',
-        'Bezpłatne materiały',
+        'Nie wszystko trzeba od razu konsultować. Czasem najpierw wystarczy dobrze poobserwować.',
+        'Wybierz sytuację najbliższą Twojej',
+        'Zacznij bez płacenia i bez presji',
         'Nowe materiały prosto na Twoją skrzynkę',
       ],
       requireBuildMarker: true,

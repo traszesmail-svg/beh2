@@ -66,7 +66,7 @@ Format: obszar → 5–10 wariantów + 3 neutralne + 3 decyzyjne.
 ## 4. Sekcja „Jak wygląda pierwszy krok"
 
 **Neutralne:**
-- Rezerwujesz termin. Opisujesz sytuację w kilku zdaniach. Dzwonię o umówionej godzinie.
+- Rezerwujesz termin. Mówisz, co naprawdę się dzieje w kilku zdaniach. Dzwonię o umówionej godzinie.
 - Krok 1: rezerwacja. Krok 2: krótki opis w formularzu. Krok 3: rozmowa głosem.
 - Trzy minuty, żeby zarezerwować. Piętnaście minut, żeby ustalić priorytet.
 

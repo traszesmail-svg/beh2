@@ -183,7 +183,7 @@ export function InternalOpinionForm() {
           value={form.displayName}
           onChange={(event) => updateField('displayName', event.target.value)}
           onFocus={markStarted}
-          placeholder="np. Marta K. albo A.K. - możesz też zostać przy samych inicjałach"
+          placeholder="np. Opiekunka psa albo same inicjały"
           autoComplete="name"
         />
       </div>

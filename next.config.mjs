@@ -52,6 +52,7 @@ const nextConfig = {
       { protocol: 'https', hostname: 'upload.wikimedia.org' },
       { protocol: 'https', hostname: 'images.unsplash.com' },
       { protocol: 'https', hostname: 'plus.unsplash.com' },
+      { protocol: 'https', hostname: 'magwet.pl' },
     ],
   },
   experimental: {
@@ -111,6 +112,11 @@ const nextConfig = {
       },
       {
         source: '/urgent',
+        destination: '/wybor',
+        statusCode: 301,
+      },
+      {
+        source: '/quiz',
         destination: '/wybor',
         statusCode: 301,
       },

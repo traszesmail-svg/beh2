@@ -17,6 +17,34 @@
   --shadow: 0 28px 80px rgba(97, 74, 44, 0.12);
 }
 
+/* Final focus override: clicks and taps must not show browser square outlines. */
+:where(a, button, summary, [role='button']):focus,
+:where(a, button, summary, [role='button']):focus-visible {
+  outline: 0 !important;
+  outline-offset: 0 !important;
+}
+
+:where(a, button, summary, [role='button']):focus:not(:focus-visible) {
+  box-shadow: none !important;
+}
+
+:where(a, button, summary, [role='button']):focus:not(:focus-visible) {
+  outline: none;
+}
+
+:where(a, button, summary, [role='button']) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(a, button, summary, [role='button']):focus {
+  outline: none;
+}
+
+:where(a, button, summary, [role='button']):focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(47, 118, 103, 0.22);
+}
+
 .notatnik-page.homepage-shell.start-showcase-page .notatnik-shell.homepage-main.start-showcase-shell {
   width: min(1180px, calc(100vw - 136px));
   overflow: visible;

@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowLeft, ArrowRight, CalendarDays, Clock3 } from 'lucide-react'
-import { BlogArticlePreview } from '@/components/BlogArticlePreview'
 import { EditorialIndexTopbar } from '@/components/EditorialIndexTopbar'
-import { Footer } from '@/components/Footer'
+import { NotatnikFooter } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
 import {
   BLOG_ROUTE_BASE,
@@ -85,14 +85,9 @@ export default function BlogArticlePage({ params }: BlogArticlePageProps) {
               <h1>{repairCopy(post.h1)}</h1>
               <p>{repairCopy(post.metaDescription)}</p>
             </div>
-            <BlogArticlePreview
-              title={post.title}
-              excerpt={post.excerpt}
-              categoryLabel={post.categoryLabel}
-              publishedAtLabel={post.publishedAtLabel}
-              readingTimeMinutes={post.readingTimeMinutes}
-              variant="hero"
-            />
+            <figure className="blog-article-hero-media">
+              <Image src={post.cover.src} alt={post.cover.alt} fill sizes="(max-width: 980px) 92vw, 38vw" priority />
+            </figure>
           </section>
 
           <section className="blog-article-panel">
@@ -117,7 +112,7 @@ export default function BlogArticlePage({ params }: BlogArticlePageProps) {
           ) : null}
         </div>
 
-        <Footer variant="full" showReviews={false} />
+        <NotatnikFooter showReviews={false} />
       </div>
     </main>
   )

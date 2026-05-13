@@ -46,7 +46,7 @@ export const PRICE_AMOUNT_PLN: Record<MaterialyPriceCode, number> = {
 const RAW_GUIDES: MaterialyGuide[] = [
   {
     slug: 'kot-zyje-w-napieciu',
-    title: 'Kot żyje w napięciu',
+    title: 'Czy Twój kot żyje w napięciu? Ciche sygnały, które łatwo przegapić',
     subtitle: 'Jak rozpoznać kota w długim stresie i co naprawdę ma znaczenie',
     category: 'cat',
     tier: 'free',
@@ -59,7 +59,7 @@ const RAW_GUIDES: MaterialyGuide[] = [
   },
   {
     slug: 'pies-ile-ruchu-potrzebuje',
-    title: 'Czy Twój pies naprawdę potrzebuje więcej ruchu?',
+    title: 'Czy Twój pies potrzebuje więcej ruchu - czy mniej pobudzenia?',
     subtitle: 'Kiedy dokładanie aktywności pogarsza sprawę i jak to rozpoznać',
     category: 'dog',
     tier: 'free',
@@ -72,7 +72,7 @@ const RAW_GUIDES: MaterialyGuide[] = [
   },
   {
     slug: 'kwadrans-podstawy-kota',
-    title: 'Kwadrans: podstawy kota',
+    title: 'Przed Kwadransem: co przygotować, żeby 15 minut naprawdę pomogło',
     subtitle: 'Krótki materiał porządkujący pierwszą rozmowę o kocie',
     category: 'cat',
     tier: 'free',
@@ -85,7 +85,7 @@ const RAW_GUIDES: MaterialyGuide[] = [
   },
   {
     slug: 'kwadrans-podstawy-psa',
-    title: 'Kwadrans: podstawy psa',
+    title: 'Przed Kwadransem: co przygotować, żeby 15 minut naprawdę pomogło',
     subtitle: 'Krótki materiał porządkujący pierwszą rozmowę o psie',
     category: 'dog',
     tier: 'free',
@@ -98,7 +98,7 @@ const RAW_GUIDES: MaterialyGuide[] = [
   },
   {
     slug: '30-zachowan',
-    title: '30 zachowań do obserwacji',
+    title: '30 sygnałów, które warto zauważyć, zanim problem urośnie',
     subtitle: 'Sygnały u psa i kota, które warto zanotować przed decyzją o kolejnym kroku',
     category: 'both',
     tier: 'free',
@@ -111,7 +111,7 @@ const RAW_GUIDES: MaterialyGuide[] = [
   },
   {
     slug: 'pierwszy-tydzien-z-kotem',
-    title: 'Pierwszy tydzień z kotem',
+    title: 'Pierwszy tydzień z kotem: spokojny start bez przyspieszania kontaktu',
     subtitle: 'Plan spokojnego wejścia kota do domu i pierwszych dni bez presji',
     category: 'cat',
     tier: 'free',
@@ -124,7 +124,7 @@ const RAW_GUIDES: MaterialyGuide[] = [
   },
   {
     slug: 'pies-sam-w-domu',
-    title: 'Pies sam w domu',
+    title: 'Pies sam w domu: co sprawdzić, zanim zaczniesz trening zostawania',
     subtitle: 'Pierwsze kroki, gdy zostawanie samemu zaczyna wyglądać jak problem',
     category: 'dog',
     tier: 'free',

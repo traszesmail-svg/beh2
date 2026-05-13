@@ -15,7 +15,7 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import { EditorialIndexTopbar } from '@/components/EditorialIndexTopbar'
-import { Footer } from '@/components/Footer'
+import { NotatnikFooter } from '@/components/NotatnikA'
 import { getLeadMagnetBySlug } from '@/lib/active-lead-magnets'
 import { buildMarketingMetadata } from '@/lib/seo'
 
@@ -69,7 +69,7 @@ const freeResources: ResourceCard[] = [
     description: 'Szeroki start dla opiekuna psa albo kota, gdy trzeba nazwać powtarzające się sygnały.',
     href: leadMagnetHref('30-zachowan'),
     coverSrc: '/branding/pdf-covers/30-zachowan.png',
-    coverAlt: 'Okładka PDF 30 zachowań do obserwacji',
+    coverAlt: 'Okładka PDF 30 sygnałów, które warto zauważyć, zanim problem urośnie',
     tone: 'neutral',
   },
   {
@@ -78,7 +78,7 @@ const freeResources: ResourceCard[] = [
     description: 'Ciche sygnały stresu, pierwsze obserwacje i bezpieczniejszy porządek w domu.',
     href: leadMagnetHref('kot-zyje-w-napieciu'),
     coverSrc: '/branding/pdf-covers/kot-zyje-w-napieciu.png',
-    coverAlt: 'Okładka PDF Kot żyje w napięciu',
+    coverAlt: 'Okładka PDF Czy Twój kot żyje w napięciu? Ciche sygnały, które łatwo przegapić',
     tone: 'cat',
   },
   {
@@ -87,7 +87,7 @@ const freeResources: ResourceCard[] = [
     description: 'Kiedy ruch pomaga, a kiedy dokłada pobudzenia i przeciążenia.',
     href: '/materialy#psy',
     coverSrc: '/branding/pdf-covers/pies-ile-ruchu-potrzebuje.png',
-    coverAlt: 'Okładka PDF Pies i poziom ruchu',
+    coverAlt: 'Okładka PDF Czy Twój pies potrzebuje więcej ruchu - czy mniej pobudzenia?',
     tone: 'dog',
   },
   {
@@ -96,7 +96,7 @@ const freeResources: ResourceCard[] = [
     description: 'Pierwsze kroki przy zostawaniu samemu, nagraniach i bezpiecznej obserwacji.',
     href: leadMagnetHref('pies-sam-w-domu'),
     coverSrc: '/branding/pdf-covers/pies-sam-w-domu.png',
-    coverAlt: 'Okładka PDF Pies sam w domu',
+    coverAlt: 'Okładka PDF Pies sam w domu: co sprawdzić, zanim zaczniesz trening zostawania',
     tone: 'dog',
   },
   {
@@ -105,7 +105,7 @@ const freeResources: ResourceCard[] = [
     description: 'Spokojny plan wejścia kota do domu: przestrzeń, rytm i kontakt.',
     href: leadMagnetHref('pierwszy-tydzien-z-kotem'),
     coverSrc: '/branding/pdf-covers/pierwszy-tydzien-z-kotem.png',
-    coverAlt: 'Okładka PDF Pierwszy tydzień z kotem',
+    coverAlt: 'Okładka PDF Pierwszy tydzień z kotem: spokojny start bez przyspieszania kontaktu',
     tone: 'cat',
   },
   {
@@ -114,7 +114,7 @@ const freeResources: ResourceCard[] = [
     description: 'Dwa krótkie materiały porządkujące pierwszą rozmowę o psie albo kocie.',
     href: '/materialy',
     coverSrc: '/branding/pdf-covers/kwadrans.png',
-    coverAlt: 'Okładka PDF Podstawy przed Kwadransem',
+    coverAlt: 'Okładka PDF Przed Kwadransem: co przygotować, żeby 15 minut naprawdę pomogło',
     tone: 'neutral',
   },
 ]
@@ -350,7 +350,7 @@ export default function EssentialsPage() {
           </section>
         </div>
 
-        <Footer variant="full" showReviews={false} />
+        <NotatnikFooter showReviews={false} />
       </div>
     </main>
   )

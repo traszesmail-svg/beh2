@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { CheckCircle2, WalletCards } from 'lucide-react'
+import { buildBookHref } from '@/lib/booking-routing'
 import { FUNNEL_SERVICE_CONFIG, type PublicBookingServiceType } from '@/lib/funnel'
 
 export const bookHref = '/wybor'
@@ -22,7 +23,7 @@ export const pricingCards: Array<{
     service: 'szybka-konsultacja-15-min',
     badge: 'najprostszy start',
     title: 'Kwadrans - gdy potrzebujesz pierwszego kierunku',
-    summaryTitle: 'Kwadrans',
+    summaryTitle: 'Kwadrans  gdy potrzebujesz pierwszego kierunku',
     price: '69 zł',
     copy: '15 minut rozmowy audio bez kamery. Dobre, gdy masz jedno główne pytanie i chcesz wiedzieć, co zrobić najpierw - a czego na razie nie ruszać.',
     supportCopy:
@@ -35,19 +36,19 @@ export const pricingCards: Array<{
     service: 'kwadrans-na-juz',
     badge: 'priorytet',
     title: 'Kwadrans priorytetowy - gdy nie chcesz czekać',
-    summaryTitle: 'Kwadrans na już',
+    summaryTitle: 'Kwadrans priorytetowy  gdy nie chcesz czekać',
     price: '99 zł',
     copy: 'Ten sam 15-minutowy format, tylko z szybszym potraktowaniem wiadomości i terminu. Dla sytuacji, w których potrzebujesz kierunku możliwie szybko.',
     supportCopy:
-      'Na podstawie opisu i odpowiedzi dostajesz wstępną diagnozę behawioralną opartą na przekazanych informacjach oraz pierwszy kierunek działania.',
-    features: ['ten sam zakres co Kwadrans', 'szybsze potwierdzenie', 'wstępna diagnoza behawioralna', 'dla tematów pilnych, ale krótkich'],
+      'Na podstawie opisu i odpowiedzi dostajesz wstępną diagnozę sytuacji oraz pierwszy kierunek działania.',
+    features: ['ten sam zakres co Kwadrans', 'szybsze potwierdzenie', 'wstępna diagnoza sytuacji', 'dla tematów pilnych, ale krótkich'],
     cta: 'Chcę szybszy termin',
   },
   {
     service: 'konsultacja-30-min',
     badge: 'więcej czasu',
     title: 'Dwa kwadranse - gdy jedno pytanie robi się kilkoma',
-    summaryTitle: 'Dwa kwadranse',
+    summaryTitle: 'Dwa kwadranse  gdy jedno pytanie robi się kilkoma',
     price: '169 zł',
     copy: '30 minut rozmowy, gdy czujesz, że to nie jest jedna rzecz: zachowanie, emocje, dom, spacer albo relacje zaczynają się mieszać.',
     supportCopy:
@@ -59,15 +60,19 @@ export const pricingCards: Array<{
     service: 'konsultacja-behawioralna-online',
     badge: 'pełny zakres',
     title: 'Pełna konsultacja - gdy potrzebny jest plan, nie tylko podpowiedź',
-    summaryTitle: 'Pełna konsultacja',
+    summaryTitle: 'Pełna konsultacja  gdy potrzebny jest plan, nie tylko podpowiedź',
     price: '470 zł',
     copy: 'Pełna rozmowa online, diagnoza behawioralna oparta na danych, plan działania i 7 dni wsparcia tekstowego.',
     supportCopy:
-      'To najlepszy wybór, gdy zachowanie trwa długo, ma kilka warstw albo wpływa na życie całego domu. Diagnoza behawioralna powstaje na podstawie formularza, rozmowy, historii zachowania, kontekstu zdrowia, diety, środowiska, nagrań i danych, które przekażesz przed konsultacją.',
+      'To najlepszy wybór, gdy zachowanie trwa długo, ma kilka warstw albo wpływa na życie całego domu. Diagnoza powstaje na podstawie formularza, rozmowy, historii zachowania, kontekstu zdrowia, diety, środowiska, nagrań i danych, które przekażesz przed konsultacją.',
     features: ['sprawy złożone albo trwające długo', 'pełniejsza diagnoza behawioralna', 'plan pracy po konsultacji', '7 dni kontaktu tekstowego'],
     cta: 'Chcę pełną konsultację',
   },
 ]
+
+function getDirectBookingHref(service: PublicBookingServiceType) {
+  return buildBookHref(null, service)
+}
 
 export const pricingFaqItems = [
   {
@@ -99,7 +104,7 @@ export function getPricingOfferCatalog() {
     return {
       name: service.title,
       description: service.publicSummary,
-      url: bookHref,
+      url: getDirectBookingHref(card.service),
       price: service.priceAmount,
     }
   })
@@ -114,10 +119,10 @@ export function PricingSummaryCard() {
       </div>
       <div className="reference-price-ladder">
         {pricingCards.map((card) => (
-          <div key={card.service} className="reference-price-ladder-row">
+          <Link key={card.service} href={getDirectBookingHref(card.service)} prefetch={false} className="reference-price-ladder-row">
             <span>{card.summaryTitle}</span>
             <strong>{card.price}</strong>
-          </div>
+          </Link>
         ))}
       </div>
       <div className="reference-pricing-summary-action">
@@ -129,10 +134,38 @@ export function PricingSummaryCard() {
   )
 }
 
+export function PricingDirectBookingSection() {
+  return (
+    <section className="reference-section-card reference-pricing-direct-section">
+      <div className="reference-section-split-head">
+        <div>
+          <h2>Wiesz już, czego potrzebujesz?</h2>
+          <p>
+            Możesz od razu przejść do konkretnego formatu. Jeśli nie masz pewności,
+            zostaje spokojny wybór przez kilka pytań.
+          </p>
+        </div>
+        <Link href={bookHref} prefetch={false} className="reference-btn reference-btn-secondary">
+          Pomóż mi dobrać pierwszy krok
+        </Link>
+      </div>
+      <div className="reference-pricing-direct-grid">
+        {pricingCards.map((card) => (
+          <Link key={card.service} href={getDirectBookingHref(card.service)} prefetch={false} className="reference-pricing-direct-card">
+            <span>{card.badge}</span>
+            <strong>{card.title}</strong>
+            <small>{card.price}</small>
+          </Link>
+        ))}
+      </div>
+    </section>
+  )
+}
+
 export function PricingCardsSection({ className = '' }: { className?: string }) {
   return (
     <section className={`reference-section-card ${className}`.trim()}>
-      <h2>Pomóż mi dobrać rozmowę</h2>
+      <h2>Wybierz konkretną rozmowę</h2>
       <div className="reference-pricing-grid">
         {pricingCards.map((card) => (
           <article key={card.service} className={`reference-price-card${card.featured ? ' is-featured' : ''}`}>
@@ -151,13 +184,18 @@ export function PricingCardsSection({ className = '' }: { className?: string }) 
                 </li>
               ))}
             </ul>
-            <Link
-              href={bookHref}
-              prefetch={false}
-              className={card.featured ? 'reference-btn reference-btn-primary' : 'reference-btn reference-btn-secondary'}
-            >
-              {card.cta}
-            </Link>
+            <div className="reference-price-actions">
+              <Link
+                href={getDirectBookingHref(card.service)}
+                prefetch={false}
+                className={card.featured ? 'reference-btn reference-btn-primary' : 'reference-btn reference-btn-secondary'}
+              >
+                {card.cta}
+              </Link>
+              <Link href={bookHref} prefetch={false} className="reference-price-helper-link">
+                Nie wiem, pomóż dobrać
+              </Link>
+            </div>
           </article>
         ))}
       </div>

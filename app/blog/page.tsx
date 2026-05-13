@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { Fragment } from 'react'
 import { ArrowRight, CalendarDays, ChevronLeft, ChevronRight, Clock3, Mail } from 'lucide-react'
-import { BlogArticlePreview } from '@/components/BlogArticlePreview'
-import { Footer } from '@/components/Footer'
 import { EditorialIndexTopbar } from '@/components/EditorialIndexTopbar'
+import { NotatnikFooter } from '@/components/NotatnikA'
 import { Schema } from '@/components/schema'
 import { BLOG_ROUTE_BASE, getBlogListingMetadata, listBlogPosts, type BlogPost } from '@/lib/blog'
 import { repairCopy } from '@/lib/copy'
@@ -220,17 +220,12 @@ export default function BlogPage({ searchParams }: { searchParams?: BlogSearchPa
               <span className="blog-index-pill">Blog</span>
               <h1 id="blog-index-title">Zanim zaczniesz poprawiać zachowanie, warto zrozumieć, po co ono się pojawia</h1>
               <p>
-                Krótkie teksty o tym, co opiekun widzi na co dzień: szczekanie, kuweta, napięcie, ciągnięcie, wycofanie, konflikty i zmiany w domu. Bez straszenia i bez prostych rad typu zrób tak zawsze.
+                Krótkie teksty o tym, co opiekun widzi na co dzień: szczekanie, kuweta, napięcie, ciągnięcie, wycofanie, konflikty i zmiany w domu. Bez prostych rad typu zrób tak zawsze.
               </p>
             </div>
 
             <div className="blog-index-hero-art blog-index-hero-screen" aria-hidden="true">
-              <BlogArticlePreview
-                title="Artykuły o zachowaniu psów i kotów"
-                excerpt="Praktyczne teksty, które możesz otworzyć i przeczytać bez pośrednich ekranów."
-                categoryLabel="Blog"
-                variant="hero"
-              />
+              <Image src="/blog-covers/blog-index-hero-photo.webp" alt="" width={640} height={400} priority />
             </div>
           </section>
 
@@ -254,13 +249,7 @@ export default function BlogPage({ searchParams }: { searchParams?: BlogSearchPa
               {paginatedPosts.map((post) => (
                 <Link key={post.slug} href={post.path} prefetch={false} className="blog-index-card">
                   <div className="blog-index-card-media" aria-label={repairCopy(post.title)}>
-                    <BlogArticlePreview
-                      title={post.title}
-                      excerpt={post.excerpt}
-                      categoryLabel={post.categoryLabel}
-                      publishedAtLabel={post.publishedAtLabel}
-                      readingTimeMinutes={post.readingTimeMinutes}
-                    />
+                    <Image src={post.cover.src} alt={post.cover.alt} fill sizes="(max-width: 760px) 92vw, (max-width: 1180px) 42vw, 300px" />
                     <span className={`blog-index-card-badge ${getSpeciesClass(post)}`}>{getSpeciesBadge(post)}</span>
                   </div>
                   <div className="blog-index-card-body">
@@ -389,7 +378,7 @@ export default function BlogPage({ searchParams }: { searchParams?: BlogSearchPa
 
         </div>
 
-        <Footer variant="full" showReviews={false} />
+        <NotatnikFooter showReviews={false} />
       </div>
     </main>
   )

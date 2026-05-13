@@ -13,7 +13,7 @@ const STATIC_ROUTES: Array<{ path: string; priority: number; changeFrequency: Me
   { path: '/regulamin', priority: 0.4, changeFrequency: 'yearly' },
   { path: '/polityka-prywatnosci', priority: 0.4, changeFrequency: 'yearly' },
   { path: '/newsletter', priority: 0.5, changeFrequency: 'monthly' },
-  { path: '/quiz', priority: 0.7, changeFrequency: 'monthly' },
+  { path: '/wybor', priority: 0.7, changeFrequency: 'monthly' },
   { path: '/niezbednik', priority: 0.8, changeFrequency: 'weekly' },
   { path: '/materialy', priority: 0.8, changeFrequency: 'weekly' },
   { path: '/opinie', priority: 0.6, changeFrequency: 'monthly' },

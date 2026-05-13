@@ -25,12 +25,12 @@ type ReferenceFinalCtaProps = {
 export function ReferencePageShell({
   className,
   ctaHref,
-  ctaLabel = 'Umów pierwszy krok',
+  ctaLabel = 'Quiz',
   children,
 }: ReferencePageShellProps) {
   return (
     <main className={className ? `notatnik-page reference-page ${className}` : 'notatnik-page reference-page'}>
-      <div className="reference-shell">
+      <div className="notatnik-shell reference-shell">
         <NotatnikTopbar
           tag="Regulski"
           navItems={PUBLIC_SITE_NAV_ITEMS}
@@ -132,7 +132,7 @@ export function ReferenceFooter() {
       </Link>
 
       <nav className="reference-footer-nav" aria-label="Nawigacja w stopce">
-        <Link href="/wybor" prefetch={false}>Krótki wybór</Link>
+        <Link href="/wybor" prefetch={false}>Quiz</Link>
         <Link href="/cennik" prefetch={false}>Cennik</Link>
         <Link href="/o-mnie" prefetch={false}>O mnie</Link>
         <Link href="/blog" prefetch={false}>Blog</Link>

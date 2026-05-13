@@ -233,7 +233,7 @@ export async function BookingSlotCalendar({
       <Schema
         data={getBreadcrumbJsonLd([
           { name: 'Strona główna', path: '/' },
-          { name: 'Krótki wybór', path: '/wybor' },
+          { name: 'Quiz', path: '/wybor' },
           { name: 'Termin', path: '/book' },
         ])}
       />

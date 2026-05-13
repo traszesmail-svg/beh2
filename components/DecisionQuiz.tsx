@@ -120,7 +120,7 @@ export function DecisionQuiz({ bookingHrefs }: DecisionQuizProps) {
     return (
       <div className="decision-quiz decision-quiz-result">
         <article className="summary-card tree-backed-card decision-quiz-result-card">
-          <div className="section-eyebrow">Wynik quizu</div>
+          <div className="section-eyebrow">Najrozsądniejszy pierwszy krok</div>
           <h2>{result.title}</h2>
           <p>{result.summary}</p>
 
@@ -223,7 +223,7 @@ export function DecisionQuiz({ bookingHrefs }: DecisionQuizProps) {
       </div>
 
       <article className="summary-card tree-backed-card decision-quiz-card">
-        <div className="section-eyebrow">Szybki start</div>
+        <div className="section-eyebrow">Quiz</div>
         <h2>{currentQuestion.title}</h2>
         {currentQuestion.helper ? <p className="muted">{currentQuestion.helper}</p> : null}
 

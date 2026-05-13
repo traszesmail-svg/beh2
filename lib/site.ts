@@ -22,10 +22,10 @@ export const HOME_HELP_CHOICE_PHOTO = {
 }
 
 export const HOME_HERO_PHOTO = {
-  src: '/images/cutover/therapy-animals.png',
-  width: 1024,
-  height: 1536,
-  alt: 'Pies i kot w spokojnym kadrze jako ilustracja pomocy behawioralnej online',
+  src: '/images/krzysztof-vet-action.jpg',
+  width: 2720,
+  height: 4030,
+  alt: 'Krzysztof Regulski w niebieskim kitlu podczas pracy z kotem',
 }
 
 export const SITE_NAME = 'Regulski Behawiorysta'

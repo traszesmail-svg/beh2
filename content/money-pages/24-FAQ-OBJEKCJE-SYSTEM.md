@@ -24,7 +24,7 @@ Pełny pakiet odpowiedzi. Format: obiekcja → krótka / średnia / długa / war
 > 15 min audio to samodzielny format. Nie jest to próbka konsultacji ani wstęp do godzinnej rozmowy — to odrębna usługa z konkretnym efektem.
 
 **Wersja do bloga / landingu:**
-> Jeśli nie wiesz jeszcze, jak duży jest problem — 15 min audio jest właśnie po to. Opisujesz sytuację, pytam, ustalamy priorytet. Wychodzisz z jednym kierunkiem.
+> Jeśli nie wiesz jeszcze, jak duży jest problem — 15 min audio jest właśnie po to. Mówisz, co naprawdę się dzieje, pytam, ustalamy priorytet. Wychodzisz z jednym kierunkiem.
 
 ---
 

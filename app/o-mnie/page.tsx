@@ -46,12 +46,12 @@ const organizationProofCards = [
 
 const articleThumbnails: Record<string, { src: string; alt: string }> = {
   'magwet-litter-box': {
-    src: '/branding/topic-cards/cats/cat-litter-box.jpg',
-    alt: 'Kot przy kuwecie jako miniatura artykułu o terapii behawioralnej i farmakologicznej',
+    src: 'https://magwet.pl/assets/magwet_logo_green-2c8e69910c786ae0c91c1e2a409bf5e8effee4241abbf9778fd43858d3cf696d.png',
+    alt: 'Logo Magazynu Weterynaryjnego',
   },
   'magwet-fear': {
-    src: '/branding/case-studies/blog-case-animals.jpg',
-    alt: 'Pies i kot jako miniatura artykułu o strachu, lęku i fobii',
+    src: 'https://magwet.pl/assets/magwet_logo_green-2c8e69910c786ae0c91c1e2a409bf5e8effee4241abbf9778fd43858d3cf696d.png',
+    alt: 'Logo Magazynu Weterynaryjnego',
   },
 }
 
@@ -60,8 +60,8 @@ const articleProofCards = MEDIA_MENTIONS.map((mention) => ({
   thumbnail:
     articleThumbnails[mention.id] ??
     ({
-      src: '/branding/case-studies/blog-case-animals.jpg',
-      alt: 'Miniatura publikacji',
+      src: 'https://magwet.pl/assets/magwet_logo_green-2c8e69910c786ae0c91c1e2a409bf5e8effee4241abbf9778fd43858d3cf696d.png',
+      alt: 'Logo Magazynu Weterynaryjnego',
     } as const),
 }))
 
@@ -104,12 +104,15 @@ export default function AboutPage() {
 
       <section className="reference-content-column reference-wide-column">
         <section className="reference-section-card reference-about-bio-card">
-          <h2>O mnie i pracy z trudnymi problemami</h2>
+          <h2>Jak pracuję z opiekunami psów i kotów</h2>
           <p>
-            Od ponad 10 lat jestem behawiorystą zwierzęcym oraz trenerem COAPE, specjalizującym się w pracy z psami i kotami z trudnymi problemami behawioralnymi. Zajmuję się m.in. terapią zwierząt agresywnych, odbudową zaburzonych relacji psio-kocich oraz kompleksowym rozwiązywaniem problemów behawioralnych kotów.
+            Od ponad 10 lat pomagam opiekunom psów i kotów zrozumieć zachowania, które w domu albo na spacerze zaczynają robić się trudne. Pracuję spokojnie, bez oceniania i bez kar - najpierw szukam przyczyny napięcia, dopiero potem dobieram konkretne kroki.
           </p>
           <p>
-            Jako technik weterynarii łączę wiedzę behawioralną z medyczną, skutecznie stosując w uzasadnionych przypadkach farmakoterapię jako wsparcie terapii behawioralnej. Prowadzę również hotel resocjalizacyjny dla psów i kotów, zapewniający bezpieczne warunki do pracy terapeutycznej, indywidualne podejście oraz stały nadzór specjalistyczny.
+            Możesz zgłosić się z codziennym tematem, takim jak szczekanie, ciągnięcie, kuweta, stres czy napięcie między zwierzętami - ale też z sytuacją bardziej złożoną, która trwa od miesięcy i zaczyna wpływać na całe życie w domu.
+          </p>
+          <p>
+            Jako behawiorysta, doświadczony technik weterynarii i dietetyk patrzę na zachowanie szerzej: przez emocje, zdrowie, ból, dietę, środowisko i codzienną rutynę. Dzięki temu mogę pomóc oddzielić objaw od możliwej przyczyny i wybrać pierwszy krok, który ma sens.
           </p>
         </section>
 
@@ -141,7 +144,7 @@ export default function AboutPage() {
 
             {articleProofCards.map((card) => (
               <article key={card.id} className="reference-proof-card reference-article-proof-card">
-                <div className="reference-article-proof-thumb">
+                <div className="reference-article-proof-thumb reference-magwet-proof-thumb">
                   <Image src={card.thumbnail.src} alt={card.thumbnail.alt} fill sizes="(max-width: 760px) 90vw, 260px" />
                 </div>
                 <span>{card.label}</span>

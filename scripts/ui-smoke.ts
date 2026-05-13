@@ -507,12 +507,12 @@ async function runUiSmokeOnce() {
       },
       {
         path: '/kontakt',
-        heading: /Napisz, zanim zarezerwujesz\./i,
+        heading: /Napisz krótko, co się dzieje\. Pomogę Ci wybrać najrozsądniejszy pierwszy krok\./i,
         buttonLabels: [/Kwadrans/i],
       },
       {
         path: '/niezbednik',
-        heading: /Praktyczne materiały, które naprawdę pomagają\./i,
+        heading: /Nie wszystko trzeba od razu konsultować\. Czasem najpierw wystarczy dobrze poobserwować\./i,
         buttonLabels: [/Umów pierwszy krok/i],
       },
       {

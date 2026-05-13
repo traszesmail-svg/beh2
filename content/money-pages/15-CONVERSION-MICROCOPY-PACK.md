@@ -48,7 +48,7 @@ Mikrocopy do warstwy money pages i końcówki lejka.
 
 ### /kontakt
 
-> Napisz, zanim zarezerwujesz — jeśli najpierw chcesz zapytać.
+> Napisz krótko, co się dzieje. Pomogę Ci wybrać najrozsądniejszy pierwszy krok — jeśli najpierw chcesz zapytać.
 
 > Nie musisz od razu wiedzieć, czego potrzebujesz. Opisz sytuację — odpiszę.
 
@@ -168,7 +168,7 @@ Z kontekstem:
 
 ### „Jak wygląda pierwszy krok"
 
-> Rezerwujesz 15 min audio. Opisujesz sytuację w kilku zdaniach przy rezerwacji. Dzwonię o umówionej godzinie. Wychodzisz z jednym konkretnym kierunkiem.
+> Rezerwujesz 15 min audio. Mówisz, co naprawdę się dzieje w kilku zdaniach przy rezerwacji. Dzwonię o umówionej godzinie. Wychodzisz z jednym konkretnym kierunkiem.
 
 > Krok pierwszy: rezerwacja. Krok drugi: krótki opis w formularzu. Krok trzeci: rozmowa głosem. Resztę ustalamy w trakcie.
 

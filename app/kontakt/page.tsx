@@ -4,6 +4,7 @@ import { Suspense } from 'react'
 import {
   Globe2,
   Heart,
+  Mail,
   MessageCircle,
   PawPrint,
 } from 'lucide-react'
@@ -12,6 +13,7 @@ import { NotatnikFooter, NotatnikSideVisuals, NotatnikTopbar, PUBLIC_SITE_NAV_IT
 import { Schema } from '@/components/schema'
 import { getBreadcrumbJsonLd, getFaqPageJsonLd } from '@/lib/schema'
 import { buildMarketingMetadata } from '@/lib/seo'
+import { buildMailtoHref, getPublicContactDetails } from '@/lib/site'
 import { FAQ_SHORTLISTS } from '@/lib/trust-layer'
 
 export const metadata: Metadata = buildMarketingMetadata({
@@ -23,6 +25,14 @@ export const metadata: Metadata = buildMarketingMetadata({
 const contactFaqItems = FAQ_SHORTLISTS.contact.slice(0, 5)
 
 export default function ContactPage() {
+  const contact = getPublicContactDetails()
+  const fallbackMailHref = contact.email
+    ? buildMailtoHref(
+        contact.email,
+        'Pytanie z formularza - Regulski Behawiorysta',
+        'Opis sytuacji:\n\nGatunek:\nOd kiedy trwa:\nCo najbardziej martwi:\n',
+      )
+    : null
   const structuredData = [
     getBreadcrumbJsonLd([{ name: 'Strona główna', path: '/' }, { name: 'Kontakt', path: '/kontakt' }]),
     getFaqPageJsonLd(contactFaqItems),
@@ -53,9 +63,6 @@ export default function ContactPage() {
             <p>
               Odpowiem i podpowiem, czy wystarczy krótka rozmowa, czy lepiej od razu zaplanować pełną konsultację.
             </p>
-            <p>
-              Jako behawiorysta, doświadczony technik weterynarii i dietetyk patrzę na zachowanie szerzej: przez emocje, zdrowie, ból, dietę, środowisko i codzienną rutynę. Dzięki temu mogę pomóc oddzielić objaw od możliwej przyczyny i wybrać pierwszy krok, który ma sens.
-            </p>
             <div className="contact-hero-proof" aria-label="Najważniejsze informacje">
               <span>
                 <Heart size={20} strokeWidth={1.8} aria-hidden="true" />
@@ -83,6 +90,15 @@ export default function ContactPage() {
             <Suspense fallback={<div className="info-box">Ładuję formularz...</div>}>
               <ContactLeadForm />
             </Suspense>
+            {fallbackMailHref && contact.email ? (
+              <div className="contact-form-fallback">
+                <Mail size={18} strokeWidth={1.8} aria-hidden="true" />
+                <span>
+                  Jeśli formularz się nie załaduje, możesz napisać bezpośrednio:{' '}
+                  <a href={fallbackMailHref}>{contact.email}</a>
+                </span>
+              </div>
+            ) : null}
             <div className="contact-form-note">
               <MessageCircle size={18} strokeWidth={1.8} aria-hidden="true" />
               <span>

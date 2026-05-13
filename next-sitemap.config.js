@@ -34,6 +34,7 @@ module.exports = {
     '/konsultacja-behawioralna-online',
     '/qa-share-20260328-v7n3m8',
     '/urgent',
+    '/quiz',
     '/produkt',
     '/od-czego-zaczac',
     '/oferta',

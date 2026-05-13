@@ -39,7 +39,7 @@ export function Footer(props: FooterProps) {
   const buildMarker = getBuildMarkerSnapshot()
   const footerReviews = props.reviewSpecies === 'dog' ? dogReviews : props.reviewSpecies === 'cat' ? catReviews : reviews
   const contact = getPublicContactDetails()
-  const contactHref = contact.email ? buildMailtoHref(contact.email, 'Pytanie że stopki - Regulski Behawiorysta') : null
+  const contactHref = contact.email ? buildMailtoHref(contact.email, 'Pytanie ze stopki - Regulski Behawiorysta') : null
 
   return (
     <>

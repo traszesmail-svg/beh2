@@ -9,7 +9,7 @@ Format: pytanie → krótka odpowiedź → długa odpowiedź → miejsca użycia
 
 **FAQ 1.1**
 **Pytanie:** Czym jest 15 min audio?
-**Krótka:** Rozmowa głosem, bez kamery, 15 minut. Opisujesz sytuację, pytam, ustalamy priorytet i daję ci jeden konkretny kierunek.
+**Krótka:** Rozmowa głosem, bez kamery, 15 minut. Mówisz, co naprawdę się dzieje, pytam, ustalamy priorytet i daję ci jeden konkretny kierunek.
 **Długa:** 15 min audio to samodzielny format konsultacji — nie wstęp do dłuższej rozmowy. Przy jednym konkretnym pytaniu lub orientacji w temacie wystarcza. Wychodzisz z jednym priorytetem i kierunkiem: co zrobić teraz, co obserwować, czy temat wymaga głębszej pracy. Przy złożonych problemach — powiem ci wprost, że potrzebujesz godziny.
 **Gdzie:** /cennik, /konsultacja-behawioralna-online, /behawiorysta-psow, /behawiorysta-kotow
 

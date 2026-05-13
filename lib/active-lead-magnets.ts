@@ -3,10 +3,10 @@ import type { LeadMagnet } from '@/lib/growth-layer'
 export const LEAD_MAGNETS: LeadMagnet[] = [
   {
     slug: 'pies-ile-ruchu-potrzebuje',
-    title: 'Czy Twój pies naprawdę potrzebuje więcej ruchu?',
-    shortTitle: 'Pies i poziom ruchu',
+    title: 'Czy Twój pies potrzebuje więcej ruchu - czy mniej pobudzenia?',
+    shortTitle: 'Czy Twój pies potrzebuje więcej ruchu - czy mniej pobudzenia?',
     subtitle: 'Krótki PDF o tym, kiedy ruch pomaga, a kiedy tylko dokłada pobudzenia.',
-    h1: 'Czy Twój pies naprawdę potrzebuje więcej ruchu?',
+    h1: 'Czy Twój pies potrzebuje więcej ruchu - czy mniej pobudzenia?',
     lead: 'Materiał pomaga odróżnić brak ruchu od przeciążenia i zacząć od bezpieczniejszego rytmu dnia.',
     bullets: ['jak rozpoznać przeciążenie', 'kiedy odpoczynek jest ważniejszy niż dłuższy spacer', 'co obserwować przez pierwsze dni'],
     benefitCards: [
@@ -32,7 +32,7 @@ export const LEAD_MAGNETS: LeadMagnet[] = [
     categoryLabel: 'Psy',
     relatedLinks: [
       { href: '/psy/reaktywnosc-na-smyczy', label: 'Reaktywność na smyczy' },
-      { href: '/materialy#psy', label: 'PDF: pies sam w domu' },
+      { href: '/materialy#psy', label: 'PDF: Pies sam w domu: co sprawdzić, zanim zaczniesz trening zostawania' },
       { href: '/behawiorysta-online-polska', label: 'Behawiorysta psów i kotów online' },
     ],
     asset: {
@@ -44,10 +44,10 @@ export const LEAD_MAGNETS: LeadMagnet[] = [
   },
   {
     slug: 'kot-zyje-w-napieciu',
-    title: 'Kot żyje w napięciu',
-    shortTitle: 'Kot w napięciu',
+    title: 'Czy Twój kot żyje w napięciu? Ciche sygnały, które łatwo przegapić',
+    shortTitle: 'Czy Twój kot żyje w napięciu?',
     subtitle: 'PDF o cichych sygnałach stresu i pierwszych zmianach w domu.',
-    h1: 'Kot żyje w napięciu',
+    h1: 'Czy Twój kot żyje w napięciu? Ciche sygnały, które łatwo przegapić',
     lead: 'Materiał pomaga zauważyć sygnały, które łatwo pomylić z charakterem kota albo zwykłym humorem.',
     bullets: ['jak czytać ciche sygnały napięcia', 'co sprawdzić w środowisku', 'kiedy zacząć od zdrowia'],
     benefitCards: [
@@ -85,10 +85,10 @@ export const LEAD_MAGNETS: LeadMagnet[] = [
   },
   {
     slug: '30-zachowan',
-    title: '30 zachowań do obserwacji',
-    shortTitle: '30 zachowań',
+    title: '30 sygnałów, które warto zauważyć, zanim problem urośnie',
+    shortTitle: '30 sygnałów, które warto zauważyć',
     subtitle: 'Lista sygnałów u psa i kota, które warto zanotować przed decyzją o kolejnym kroku.',
-    h1: '30 zachowań do obserwacji',
+    h1: '30 sygnałów, które warto zauważyć, zanim problem urośnie',
     lead: 'Materiał pomaga oddzielić pojedynczy incydent od wzorca, który warto omówić albo monitorować.',
     bullets: ['zachowania u psa i kota', 'co obserwować bez paniki', 'kiedy materiał nie wystarcza'],
     benefitCards: [
@@ -126,10 +126,10 @@ export const LEAD_MAGNETS: LeadMagnet[] = [
   },
   {
     slug: 'pierwszy-tydzien-z-kotem',
-    title: 'Pierwszy tydzień z kotem',
-    shortTitle: 'Pierwszy tydzień z kotem',
+    title: 'Pierwszy tydzień z kotem: spokojny start bez przyspieszania kontaktu',
+    shortTitle: 'Pierwszy tydzień z kotem: spokojny start',
     subtitle: 'Plan spokojnego wejścia kota do domu i pierwszych dni bez presji.',
-    h1: 'Pierwszy tydzień z kotem',
+    h1: 'Pierwszy tydzień z kotem: spokojny start bez przyspieszania kontaktu',
     lead: 'Materiał porządkuje przestrzeń, rytm i kontakt w pierwszych dniach po adopcji albo zmianie domu.',
     bullets: ['pokój bezpieczny', 'pierwsze rytuały', 'czego nie przyspieszać'],
     benefitCards: [
@@ -154,7 +154,7 @@ export const LEAD_MAGNETS: LeadMagnet[] = [
     categoryHref: '/koty',
     categoryLabel: 'Koty',
     relatedLinks: [
-      { href: '/materialy#koty', label: 'PDF: kot żyje w napięciu' },
+      { href: '/materialy#koty', label: 'PDF: Czy Twój kot żyje w napięciu? Ciche sygnały, które łatwo przegapić' },
       { href: '/koty', label: 'Pomoc dla kotów' },
       { href: '/behawiorysta-online-polska', label: 'Behawiorysta psów i kotów online' },
     ],
@@ -167,10 +167,10 @@ export const LEAD_MAGNETS: LeadMagnet[] = [
   },
   {
     slug: 'pies-sam-w-domu',
-    title: 'Pies sam w domu',
-    shortTitle: 'Pies sam w domu',
+    title: 'Pies sam w domu: co sprawdzić, zanim zaczniesz trening zostawania',
+    shortTitle: 'Pies sam w domu: co sprawdzić przed treningiem',
     subtitle: 'Pierwsze kroki, gdy zostawanie samemu zaczyna wyglądać jak problem.',
-    h1: 'Pies sam w domu',
+    h1: 'Pies sam w domu: co sprawdzić, zanim zaczniesz trening zostawania',
     lead: 'Materiał pomaga zebrać kontekst, odróżnić możliwe scenariusze i nie pogłębiać napięcia przy wychodzeniu.',
     bullets: ['co nagrywać', 'pierwsze 72 godziny', 'czego nie robić na siłę'],
     benefitCards: [
@@ -196,7 +196,7 @@ export const LEAD_MAGNETS: LeadMagnet[] = [
     categoryLabel: 'Psy',
     relatedLinks: [
       { href: '/psy/lek-separacyjny', label: 'Lęk separacyjny u psa' },
-      { href: '/materialy#psy', label: 'PDF: pies i poziom ruchu' },
+      { href: '/materialy#psy', label: 'PDF: Czy Twój pies potrzebuje więcej ruchu - czy mniej pobudzenia?' },
       { href: '/behawiorysta-online-polska', label: 'Behawiorysta psów i kotów online' },
     ],
     asset: {

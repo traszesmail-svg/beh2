@@ -27,7 +27,7 @@ export const PUBLIC_OFFER_FAQ_ITEMS: TrustFaqItem[] = [
       'W trakcie wyboru i po pierwszym opisie sytuacji powiem wprost, czy wystarczy Kwadrans, czy lepiej od razu przejść do Dwóch kwadransów albo Pełnej konsultacji.',
   },
   {
-    question: 'Jak działa Kwadrans na jużł',
+    question: 'Jak działa Kwadrans na już?',
     answer:
       'To ten sam 15-minutowy format co zwykły Kwadrans, ale z priorytetem i możliwie szybkim terminem. Różnica dotyczy czasu wejścia, nie zakresu rozmowy.',
   },
