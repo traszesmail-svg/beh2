@@ -309,30 +309,19 @@ export function BookRequestForm({ initialService, initialSpecies, entryService }
             </span>
           </label>
         ))}
-        <label className="checkbox-card" htmlFor="service-kwadrans-na-juz">
-          <input
-            id="service-kwadrans-na-juz"
-            type="radio"
-            name="service"
-            checked={form.service === 'kwadrans-na-juz'}
-            onChange={() => updateField('service', 'kwadrans-na-juz')}
-          />
+        <Link className="checkbox-card" href="/kwadrans-na-juz" prefetch={false}>
           <span>
             ⚡ {URGENT_SERVICE_OPTION.label} / {URGENT_SERVICE_OPTION.price} — termin na dziś, sytuacje kryzysowe
           </span>
-        </label>
+        </Link>
       </fieldset>
 
       {showPriorityPrompt ? (
         <div className="info-box full-width">
           <strong>Chcesz szybciej?</strong> {PUBLIC_OFFER_BOOKING_PRIORITY_PROMPT}{' '}
-          <button
-            type="button"
-            className="notatnik-inline-link"
-            onClick={() => updateField('service', 'kwadrans-na-juz')}
-          >
+          <Link href="/kwadrans-na-juz" prefetch={false} className="notatnik-inline-link">
             Przejdź do Kwadransu na już
-          </button>
+          </Link>
           <div className="field-help top-gap-small">{PUBLIC_OFFER_BOOKING_PRIORITY_NOTE}</div>
         </div>
       ) : null}

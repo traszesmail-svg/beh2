@@ -198,7 +198,7 @@ export const LOCAL_SEO_PAGES: LocalSeoPage[] = [
     ],
     firstStepCards: [
       { title: '15 min audio', copy: 'Krótka rozmowa głosowa bez kamery. Dobra na jedno pytanie, pierwszy ogląd sytuacji i ustalenie priorytetu.' },
-      { title: 'Niezbędnik', copy: 'Materiały startowe, jeśli chcesz najpierw coś spokojnie przeczytać i uporządkować obserwacje.' },
+      { title: 'Materiały PDF', copy: 'Materiały startowe, jeśli chcesz najpierw coś spokojnie przeczytać i uporządkować obserwacje.' },
       { title: 'Pełna konsultacja', copy: 'Dłuższa rozmowa online dla spraw złożonych, utrwalonych albo wielowątkowych.' },
     ],
     faq: [

@@ -22,10 +22,10 @@ export const HOME_HELP_CHOICE_PHOTO = {
 }
 
 export const HOME_HERO_PHOTO = {
-  src: '/images/krzysztof-vet-action.jpg',
-  width: 2720,
-  height: 4030,
-  alt: 'Krzysztof Regulski w niebieskim kitlu podczas pracy z kotem',
+  src: '/branding/omnie.png',
+  width: 1024,
+  height: 1536,
+  alt: 'Krzysztof Regulski w granatowym kitlu z kotem na rękach i przysmakiem w kształcie małej kości',
 }
 
 export const SITE_NAME = 'Regulski Behawiorysta'
@@ -119,9 +119,9 @@ export const LANDING_SPECIALIST_PHOTO = {
 
 export const SPECIALIST_PHOTO = LANDING_SPECIALIST_PHOTO
 export const ABOUT_SPECIALIST_PHOTO = {
-  src: '/branding/omnie2.png',
-  width: 1024,
-  height: 1536,
+  src: HOME_HERO_PHOTO.src,
+  width: HOME_HERO_PHOTO.width,
+  height: HOME_HERO_PHOTO.height,
   alt: 'Krzysztof Regulski w granatowym stroju medycznym z informacją o pomocy behawioralnej dla psów i kotów',
 }
 

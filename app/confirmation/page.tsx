@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import { unstable_noStore as noStore } from 'next/cache'
 import { headers } from 'next/headers'
+import { CalendarDays } from 'lucide-react'
 import { AnalyticsEventOnMount } from '@/components/AnalyticsEventOnMount'
 import { BookingStageEyebrow } from '@/components/BookingStageEyebrow'
 import { getBookingAnalyticsContextParams } from '@/lib/analytics-schema'
@@ -31,6 +32,8 @@ import { SmsConfirmationStatus } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
+
+const bookingFlowSteps = ['Termin', 'Godzina', 'Dane', 'Płatność'] as const
 
 export function generateMetadata(): Metadata {
   return buildTechnicalMetadata({
@@ -102,7 +105,7 @@ function getConfirmedChecklist(serviceType: BookingServiceType) {
     items: [
       'Zachowaj termin i wróć do tego linku kilka minut przed rozmową audio.',
       'Możesz dodać krótkie nagranie zachowania psa lub kota, żeby specjalista lepiej przygotował się do rozmowy. To nie oznacza konsultacji wideo.',
-      'Przed rozmową możesz też spokojnie przejrzeć Niezbędnik, jeśli chcesz uporządkować temat jeszcze lepiej.',
+      'Przed rozmową możesz też spokojnie przejrzeć materiały PDF, jeśli chcesz uporządkować temat jeszcze lepiej.',
     ],
     materialsLead:
       'To nie jest obowiązkowe. Jeśli chcesz, możesz teraz dodać nagranie, link do materiałów albo krótki opis sytuacji, żeby szybciej uporządkować temat przed rozmową.',
@@ -263,6 +266,23 @@ export default async function ConfirmationPage({
       footerPrimaryLabel={FUNNEL_CTA_LABELS.primary}
     >
       <div className="container">
+        <section className="booking-flow-stage-head confirmation-flow-stage-head" aria-label="Etap rezerwacji">
+          <div className="termin-breadcrumb">
+            <CalendarDays size={15} strokeWidth={1.85} aria-hidden="true" />
+            <span>Wybór terminu</span>
+            <span>/</span>
+            <strong>Booking</strong>
+          </div>
+          <div className="termin-step-track booking-flow-step-track" aria-label="Etapy rezerwacji">
+            {bookingFlowSteps.map((step, index) => (
+              <span key={step} className={index === 3 ? 'is-active' : ''}>
+                <strong>{index + 1}</strong>
+                {step}
+              </span>
+            ))}
+          </div>
+        </section>
+
         <section className="panel centered-panel hero-surface booking-stage-panel transaction-panel booking-flow-panel" data-confirmation-state={confirmationState} data-booking-id={booking?.id ?? ''}>
           <BookingStageEyebrow stage="confirmation" className="section-eyebrow" />
           {isConfirmed ? <div className="muted top-gap-small">{COPY_HELPERS.aftercareConfirmation}</div> : null}

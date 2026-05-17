@@ -29,7 +29,7 @@ const defaultFAQs: FAQ[] = [
   {
     icon: 'lightbulb',
     question: 'Co jeśli nie wiem, od czego zacząć?',
-    answer: 'Najprostszy start to Kwadrans 69 zł albo materiał z Niezbędnika. Po krótkim opisie sytuacji wybierzemy najrozsądniejszy krok na ten moment.',
+    answer: 'Najprostszy start to Kwadrans 69 zł albo materiał PDF. Po krótkim opisie sytuacji wybierzemy najrozsądniejszy krok na ten moment.',
   },
 ];
 

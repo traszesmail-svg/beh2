@@ -56,6 +56,8 @@ module.exports = {
     '/problem',
     '/materialy/pobranie',
     '/bezplatne-materialy/dziekuje',
+    '/niezbednik',
+    '/niezbednik/*',
     '/przybornik',
   ],
   robotsTxtOptions: {

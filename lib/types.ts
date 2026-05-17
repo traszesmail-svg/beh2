@@ -28,7 +28,6 @@ export type FunnelEventType =
   | 'view_page'
   | 'funnel_entry_15_min'
   | 'funnel_entry_60_min'
-  | 'funnel_entry_niezbędnik'
   | 'newsletter_signup'
   | 'lead_magnet_signup'
   | 'booking_start'

@@ -88,7 +88,6 @@ const BASE_SEEDS = Array.from(new Set([
   '/cennik/pelny',
   '/konsultacja-behawioralna-online',
   '/behawiorysta-online-polska',
-  '/niezbednik',
   '/opinie',
   '/koty',
   '/psy',
@@ -357,7 +356,7 @@ function extractPrimaryCtas(page: Page, mode: CrawlMode) {
           }
         })
         .filter((item) => item.display !== 'none' && item.visibility !== 'hidden' && item.opacity !== '0' && item.width > 0 && item.height > 0)
-        .filter((item) => /button|cta|action|funnel|header|footer/i.test(String(item.className)) || /15 min|konsult|Niezbędnik|kontakt|zgłosz|zamów|sprawdź|pobierz/i.test(item.text))
+        .filter((item) => /button|cta|action|funnel|header|footer/i.test(String(item.className)) || /15 min|konsult|Materialy|kontakt|zgłosz|zamów|sprawdź|pobierz/i.test(item.text))
         .slice(0, 8)
         .map((item) => `[${modeLabel}] ${item.text}`),
     mode,
@@ -849,7 +848,7 @@ async function run() {
         '',
       ]),
       '## CTA Hierarchy Summary',
-      '- Primary CTA order was checked heuristically from the rendered DOM, with `15 min audio` treated as the main action and `Niezbędnik` as the supporting action.',
+      '- Primary CTA order was checked heuristically from the rendered DOM, with `15 min audio` treated as the main action and `Materialy` as the supporting action.',
       '- Any deviations, hidden duplicates, or mobile menu changes are recorded in the per-page findings above.',
       '',
       '## Limitations',

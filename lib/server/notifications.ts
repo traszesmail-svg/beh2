@@ -837,7 +837,7 @@ export type PdfOrderSubmission = {
 }
 
 export type BookRequestSubmission = {
-  service: 'kwadrans-na-już' | 'szybka-konsultacja-15-min' | 'konsultacja-30-min' | 'konsultacja-behawioralna-online'
+  service: 'kwadrans-na-juz' | 'szybka-konsultacja-15-min' | 'konsultacja-30-min' | 'konsultacja-behawioralna-online'
   serviceLabel: string
   servicePrice: string
   name: string
@@ -1115,12 +1115,12 @@ export async function sendBookRequestEmail(submission: BookRequestSubmission): P
     ? buildAbsoluteUrl(`/admin/quick-confirm/${submission.leadBookingId}?token=${confirmToken}`)
     : null
   const subject =
-    submission.service === 'kwadrans-na-już'
+    submission.service === 'kwadrans-na-juz'
       ? `PILNE - Kwadrans na już: ${submission.name}`
       : `REZERWACJA [${submission.serviceLabel}] - ${submission.name} (${speciesLabel})`
   const html = renderEmailShell(
     'Nowa prośba o rezerwację',
-    submission.service === 'kwadrans-na-już'
+    submission.service === 'kwadrans-na-juz'
       ? 'Klient wysłał pilną prośbę o Kwadrans na już. Wróć z odpowiedzią priorytetowo i odeślij potwierdzenie terminu z PayPal albo instrukcją BLIK na telefon.'
       : 'Klient wysłał prośbę o rezerwację konsultacji. Odpowiedz z potwierdzonym terminem i preferuj PayPal albo BLIK na telefon bez eksponowania numeru publicznie.',
     `
@@ -1130,14 +1130,14 @@ export async function sendBookRequestEmail(submission: BookRequestSubmission): P
       <p><strong>E-mail:</strong> ${replyTo ? `<a href="mailto:${escapeHtml(submission.email)}">${escapeHtml(submission.email)}</a>` : escapeHtml(submission.email)}</p>
       <p><strong>Preferowane terminy:</strong><br />${formatMultilineHtml(submission.preferredSlots)}</p>
       <p><strong>Opis sytuacji:</strong><br />${formatMultilineHtml(submission.description)}</p>
-      <p><strong>Następny krok:</strong> ${submission.service === 'kwadrans-na-już' ? 'odpisz w ciągu 15 minut z pierwszym wolnym terminem i dalszym krokiem płatności.' : 'Gdy klient wpłaci, kliknij przycisk niżej, wpisz termin i system wyśle klientowi link do pokoju.'}</p>
+      <p><strong>Następny krok:</strong> ${submission.service === 'kwadrans-na-juz' ? 'odpisz w ciągu 15 minut z pierwszym wolnym terminem i dalszym krokiem płatności.' : 'Gdy klient wpłaci, kliknij przycisk niżej, wpisz termin i system wyśle klientowi link do pokoju.'}</p>
       ${quickConfirmHref ? renderEmailActionButton({ href: quickConfirmHref, label: 'Potwierdź płatność i wyślij termin klientowi' }) : ''}
       ${adminPanelHref ? `<p style="margin-top:12px;font-size:13px"><a href="${escapeHtml(adminPanelHref)}" style="color:#666">lub otwórz pełny panel admina</a></p>` : ''}
     `,
     'To jest manualny flow rezerwacji po potwierdzeniu terminu, bez publicznego numeru telefonu.',
   )
   const text = [
-    submission.service === 'kwadrans-na-już' ? 'Nowa pilna prośba o rezerwację.' : 'Nowa prośba o rezerwację.',
+    submission.service === 'kwadrans-na-juz' ? 'Nowa pilna prośba o rezerwację.' : 'Nowa prośba o rezerwację.',
     `Usługa: ${submission.serviceLabel} (${submission.servicePrice})`,
     `Gatunek: ${speciesLabel}`,
     `Imię: ${submission.name}`,
@@ -1149,7 +1149,7 @@ export async function sendBookRequestEmail(submission: BookRequestSubmission): P
     'Opis sytuacji:',
     submission.description,
     '',
-    submission.service === 'kwadrans-na-już'
+    submission.service === 'kwadrans-na-juz'
       ? 'Następny krok: odpisz w ciągu 15 minut z pierwszym wolnym terminem i dalszym krokiem płatności.'
       : 'Następny krok: potwierdź termin i wyślij klientowi PayPal albo instrukcję BLIK na telefon.',
   ].join('\n')
@@ -1183,7 +1183,7 @@ export async function sendBookRequestAutoReplyEmail(submission: BookRequestSubmi
     `Prośba o ${escapeHtml(submission.serviceLabel)} (${escapeHtml(submission.servicePrice)}) trafiła do mnie poprawnie. Płatność zostaje w modelu PayPal albo BLIK na telefon, bez publikowania numeru na stronie.`,
     `
       <p><strong>Co dalej:</strong></p>
-      <p>${submission.service === 'kwadrans-na-już' ? '1. Odezwę się w ciągu 15 minut z pierwszym wolnym terminem i dalszym krokiem płatności.' : '1. Odezwę się w ciągu kilku godzin, między 9 a 21, z potwierdzeniem terminu i dalszym krokiem płatności.'}</p>
+      <p>${submission.service === 'kwadrans-na-juz' ? '1. Odezwę się w ciągu 15 minut z pierwszym wolnym terminem i dalszym krokiem płatności.' : '1. Odezwę się w ciągu kilku godzin, między 9 a 21, z potwierdzeniem terminu i dalszym krokiem płatności.'}</p>
       <p>2. Dostaniesz PayPal albo instrukcje BLIK na telefon, zależnie od najprostszego wariantu dla tej rezerwacji.</p>
       <p>3. Po płatności potwierdzam rezerwację do 15 minut i odsyłam link do rozmowy oraz wpis do kalendarza.</p>
       <p><strong>Twoje preferowane terminy:</strong><br />${formatMultilineHtml(submission.preferredSlots)}</p>
@@ -1200,7 +1200,7 @@ export async function sendBookRequestAutoReplyEmail(submission: BookRequestSubmi
     'Płatność zostaje w modelu PayPal albo BLIK na telefon, bez publikowania numeru na stronie.',
     '',
     'Co dalej:',
-    submission.service === 'kwadrans-na-już'
+    submission.service === 'kwadrans-na-juz'
       ? '1. Odezwę się w ciągu 15 minut z pierwszym wolnym terminem i dalszym krokiem płatności.'
       : '1. Odezwę się w ciągu kilku godzin, między 9 a 21, z potwierdzeniem terminu i dalszym krokiem płatności.',
     '2. Dostaniesz PayPal albo instrukcje BLIK na telefon.',
@@ -1375,25 +1375,27 @@ type UrgentNowResponseEmailPayload = {
 export async function sendUrgentNowResponseEmail(payload: UrgentNowResponseEmailPayload): Promise<DeliveryResult> {
   const subject = `Kwadrans na już - proponowany termin ${payload.proposedDate} ${payload.proposedTime}`
   const noteBlock = payload.responseNote ? `<p><strong>Dodatkowa wiadomość:</strong><br />${formatMultilineHtml(payload.responseNote)}</p>` : ''
+  const paymentHref = /^https?:\/\//i.test(payload.bookingHref) ? payload.bookingHref : buildAbsoluteUrl(payload.bookingHref)
   const html = renderEmailShell(
     'Mam dla Ciebie termin Kwadransu na już',
-    'Dodalem proponowany termin do terminarza. Możesz od razu przejść do formularza i dokonczyc rezerwację.',
+    'Dodałem proponowany termin do terminarza. Możesz od razu przejść do płatności i dokończyć rezerwację.',
     `
       <p><strong>Temat:</strong> ${escapeHtml(payload.topic)}</p>
       <p><strong>Proponowany termin:</strong> ${escapeHtml(payload.proposedDate)} o ${escapeHtml(payload.proposedTime)}</p>
-      <p><strong>Link do terminu:</strong> <a href="${escapeHtml(payload.bookingHref)}">${escapeHtml(payload.bookingHref)}</a></p>
+      <p><strong>Link do płatności:</strong> <a href="${escapeHtml(paymentHref)}">${escapeHtml(paymentHref)}</a></p>
+      ${renderEmailActionButton({ href: paymentHref, label: 'Przejdź do płatności' })}
       ${noteBlock}
       ${renderContactBlockHtml()}
     `,
-    'Jeśli termin przestal pasowac, odpowiedz na tego maila albo napisz przez formularz kontaktu.',
+    'Jeśli termin przestał pasować, odpowiedz na tego maila albo napisz przez formularz kontaktu.',
   )
   const text = [
     `Mam dla Ciebie termin Kwadransu na już.`,
     `Temat: ${payload.topic}`,
     `Proponowany termin: ${payload.proposedDate} ${payload.proposedTime}`,
-    `Link do terminu: ${payload.bookingHref}`,
+    `Link do płatności: ${paymentHref}`,
     payload.responseNote ? `Dodatkowa wiadomość: ${payload.responseNote}` : null,
-    'Jeśli termin przestal pasowac, odpowiedz na tego maila albo napisz przez formularz kontaktu.',
+    'Jeśli termin przestał pasować, odpowiedz na tego maila albo napisz przez formularz kontaktu.',
     renderContactBlockText(),
   ]
     .filter((line): line is string => Boolean(line))
@@ -1894,6 +1896,7 @@ type UrgentNowSubmission = {
   message: string
   requestedDate?: string | null
   requestedTime?: string | null
+  requestedSlotsSummary?: string | null
 }
 
 export async function sendUrgentNowCustomerAckEmail(submission: UrgentNowSubmission): Promise<DeliveryResult> {
@@ -1906,22 +1909,22 @@ export async function sendUrgentNowCustomerAckEmail(submission: UrgentNowSubmiss
   const subject = 'Kwadrans na już - dostałem Twoją prośbę, odpiszę w 15 minut'
   const html = renderEmailShell(
     `Cześć ${escapeHtml(submission.name.split(' ')[0])}, dostałem Twoją prośbę o Kwadrans na już.`,
-    'Odpiszę na ten adres e-mail w ciągu 15 minut z propozycją terminu.',
+    'Odpiszę na ten adres e-mail w ciągu 15 minut z konkretną godziną albo najbliższym realnym terminem i linkiem do płatności.',
     `
       <p><strong>Temat:</strong> ${escapeHtml(submission.topic)}</p>
-      ${submission.requestedDate && submission.requestedTime ? `<p><strong>Preferowany termin:</strong> ${escapeHtml(submission.requestedDate)} o ${escapeHtml(submission.requestedTime)}</p>` : ''}
+      ${submission.requestedSlotsSummary ? `<p><strong>Wybrane godziny:</strong> ${escapeHtml(submission.requestedSlotsSummary)}</p>` : ''}
       <p>Jeśli coś się zmieni albo zechcesz doprecyzować temat, po prostu odpowiedz na tego maila.</p>
       ${renderContactBlockHtml()}
     `,
-    'Poczekaj chwilę — termin będzie gotowy za kilkanaście minut.',
+    'Poczekaj chwilę — wrócę z godziną i dalszym krokiem płatności.',
   )
   const text = [
     `Cześć ${submission.name.split(' ')[0]},`,
     '',
-    'Dostałem Twoją prośbę o Kwadrans na już. Odpiszę w ciągu 15 minut z propozycją terminu.',
+    'Dostałem Twoją prośbę o Kwadrans na już. Odpiszę w ciągu 15 minut z konkretną godziną albo najbliższym realnym terminem i linkiem do płatności.',
     '',
     `Temat: ${submission.topic}`,
-    submission.requestedDate && submission.requestedTime ? `Preferowany termin: ${submission.requestedDate} ${submission.requestedTime}` : null,
+    submission.requestedSlotsSummary ? `Wybrane godziny: ${submission.requestedSlotsSummary}` : null,
     '',
     'Jeśli coś się zmieni, po prostu odpowiedz na tego maila.',
     renderContactBlockText(),
@@ -1945,13 +1948,14 @@ export async function sendUrgentNowAdminAlertEmail(submission: UrgentNowSubmissi
   const replyTo = isValidPublicEmail(submission.email) ? submission.email : undefined
   const phoneBlock = submission.phone ? `<p><strong>Telefon:</strong> ${escapeHtml(submission.phone)}</p>` : ''
   const preferredBlock =
-    submission.requestedDate && submission.requestedTime
-      ? `<p><strong>Preferowany termin:</strong> ${escapeHtml(submission.requestedDate)} o ${escapeHtml(submission.requestedTime)}</p>`
+    submission.requestedSlotsSummary
+      ? `<p><strong>Wybrane godziny klienta:</strong> ${escapeHtml(submission.requestedSlotsSummary)}</p>`
       : ''
+  const adminConfirmHref = buildAbsoluteUrl(`/admin/urgent-confirm/${submission.requestId}`)
   const subject = `KWADRANS NA JUZ: ${submission.name} - ${submission.topic} [ID: ${submission.requestId.slice(0, 8)}]`
   const html = renderEmailShell(
     'Nowe zgłoszenie Kwadrans na już',
-    'Klient czeka na odpowiedź w ciągu 15 minut. Potwierdź termin albo zaproponuj inny.',
+    'Klient czeka na odpowiedź w ciągu 15 minut. Wybierz godzinę na dziś albo podaj najbliższy realny termin.',
     `
       <p><strong>Imię:</strong> ${escapeHtml(submission.name)}</p>
       <p><strong>E-mail:</strong> ${replyTo ? `<a href="mailto:${escapeHtml(submission.email)}">${escapeHtml(submission.email)}</a>` : escapeHtml(submission.email)}</p>
@@ -1961,8 +1965,9 @@ export async function sendUrgentNowAdminAlertEmail(submission: UrgentNowSubmissi
       ${preferredBlock}
       <p><strong>Opis:</strong><br />${formatMultilineHtml(submission.message)}</p>
       <p><strong>ID prośby:</strong> ${escapeHtml(submission.requestId)}</p>
+      ${renderEmailActionButton({ href: adminConfirmHref, label: 'Wybierz godzinę i wyślij link do płatności' })}
     `,
-    'Odpowiedz na maila klienta albo użyj panelu admin do zatwierdzenia terminu.',
+    'Po zatwierdzeniu system utworzy rezerwację Kwadransu na już i wyśle klientowi link do płatności.',
   )
   const text = [
     'KWADRANS NA JUZ - nowe zgłoszenie.',
@@ -1971,10 +1976,10 @@ export async function sendUrgentNowAdminAlertEmail(submission: UrgentNowSubmissi
     submission.phone ? `Telefon: ${submission.phone}` : null,
     `Gatunek: ${submission.species}`,
     `Temat: ${submission.topic}`,
-    submission.requestedDate && submission.requestedTime ? `Preferowany termin: ${submission.requestedDate} ${submission.requestedTime}` : null,
+    submission.requestedSlotsSummary ? `Wybrane godziny klienta: ${submission.requestedSlotsSummary}` : null,
     `Opis: ${submission.message}`,
     `ID prośby: ${submission.requestId}`,
-    'Odpowiedz w ciągu 15 minut.',
+    `Wybierz godzinę i wyślij link do płatności: ${adminConfirmHref}`,
   ]
     .filter((line): line is string => typeof line === 'string')
     .join('\n')

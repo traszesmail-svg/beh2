@@ -13,7 +13,7 @@ export type AnyBookingServiceType = PublicBookingServiceType | LegacyBookingServ
 export const FUNNEL_CTA_LABELS = {
   primary: 'Umów spokojny pierwszy krok',
   bridge: 'Chcę spokojniej omówić temat',
-  secondary: 'Przejdź do Niezbędnika',
+  secondary: 'Zobacz materiały PDF',
   consultation: 'Chcę pełną konsultację',
   contact: 'Opisz krótko, co się dzieje',
 } as const

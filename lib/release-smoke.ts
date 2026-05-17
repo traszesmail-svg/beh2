@@ -133,16 +133,6 @@ export function getDefaultReleaseSmokeRules(): ReleaseSmokeRule[] {
       requireBuildMarker: true,
     },
     {
-      path: '/niezbednik',
-      required: [
-        'Nie wszystko trzeba od razu konsultować. Czasem najpierw wystarczy dobrze poobserwować.',
-        'Wybierz sytuację najbliższą Twojej',
-        'Zacznij bez płacenia i bez presji',
-        'Nowe materiały prosto na Twoją skrzynkę',
-      ],
-      requireBuildMarker: true,
-    },
-    {
       path: '/behawiorysta-online-polska',
       required: [
         'Behawiorysta online dla opiekunów psów i kotów',

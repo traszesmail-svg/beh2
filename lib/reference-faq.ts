@@ -18,7 +18,7 @@ export const referenceFaqCategories: Array<{
   { id: 'pies', label: 'Pies', countLabel: '5 pytań', icon: 'paw' },
   { id: 'kot', label: 'Kot', countLabel: '5 pytań', icon: 'cat' },
   { id: 'płatności', label: 'Płatności', countLabel: '5 pytań', icon: 'payment' },
-  { id: 'techniczne', label: 'Technicznie', countLabel: '5 pytań', icon: 'screen' },
+  { id: 'techniczne', label: 'Techniczne', countLabel: '5 pytań', icon: 'screen' },
 ]
 
 export const referenceFaqItems: ReferenceFaqItem[] = [
@@ -27,7 +27,7 @@ export const referenceFaqItems: ReferenceFaqItem[] = [
     category: 'wspolpraca',
     question: 'Czy muszę już wiedzieć, co jest przyczyną?',
     answer:
-      'Nie. Od tego zaczynamy - od uporządkowania obserwacji. Wystarczy opis codziennej sytuacji. Na tej podstawie tworzę diagnozę behawioralną opartą na dostępnych danych.',
+      'Nie. To kluczowy etap naszej współpracy. Podczas konsultacji wspólnie poszukamy źródła trudności i ustalimy dalszy plan działania.',
   },
   {
     id: 'czy-wiadomość-zastepuje-konsultacje',

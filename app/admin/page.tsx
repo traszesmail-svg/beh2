@@ -14,6 +14,7 @@ import { getRuntimeModeSnapshot } from '@/lib/server/env'
 import { getGoLiveChecks } from '@/lib/server/go-live'
 import { getPaymentOptionsSummary } from '@/lib/server/payment-options'
 import { readLatestQaReport } from '@/lib/server/qa-report'
+import { parseUrgentRequestedSlotsFromMessage, stripUrgentRequestedSlotsFromMessage } from '@/lib/urgent-now'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -228,20 +229,26 @@ export default async function AdminPage() {
               <div className="list-card tree-backed-card">Brak aktywnych prosb o Kwadrans na już.</div>
             ) : (
               <div className="booking-list">
-                {urgentRequests.map((request) => (
-                  <div key={request.id} className="booking-row" data-urgent-request-id={request.id}>
+                {urgentRequests.map((request) => {
+                  const requestedSlots = parseUrgentRequestedSlotsFromMessage(request.message, {
+                    date: request.requestedDate,
+                    time: request.requestedTime,
+                  })
+
+                  return (
+                    <div key={request.id} className="booking-row" data-urgent-request-id={request.id}>
                     <div>
                       <div className="booking-title">{request.topicLabel}</div>
                       <div className="booking-meta">
                         {request.name} - {request.email} - {request.species}
                       </div>
-                      <div className="booking-meta">
-                        Preferowany termin: {request.requestedDate} {request.requestedTime}
-                      </div>
+                        <div className="booking-meta">
+                          Wybrane godziny: {requestedSlots.map((slot) => `${slot.date} ${slot.time}`).join(', ')}
+                        </div>
                       <div className="booking-meta">Status: {request.status === 'responded' ? 'odpowiedziano' : 'nowa prośba'}</div>
                     </div>
                     <div className="booking-description">
-                      <div>{request.message}</div>
+                        <div>{stripUrgentRequestedSlotsFromMessage(request.message)}</div>
                       {request.proposedDate && request.proposedTime ? (
                         <div className="booking-meta top-gap-small">
                           Odeslany termin: {request.proposedDate} {request.proposedTime}
@@ -249,9 +256,16 @@ export default async function AdminPage() {
                       ) : null}
                       {request.bookingHref ? <div className="booking-meta">Link: {request.bookingHref}</div> : null}
                     </div>
-                    <AdminUrgentRequestActions requestId={request.id} disabled={request.status === 'responded'} />
-                  </div>
-                ))}
+                    <AdminUrgentRequestActions
+                      requestId={request.id}
+                      disabled={request.status === 'responded'}
+                      requestedDate={request.requestedDate}
+                      requestedTime={request.requestedTime}
+                      requestedSlots={requestedSlots}
+                    />
+                    </div>
+                  )
+                })}
               </div>
             )}
           </div>

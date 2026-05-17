@@ -431,13 +431,10 @@ export function ContactLeadForm() {
           <p>{feedback}</p>
           {status === 'success' ? (
             <div className="contact-success-next">
-              <p>W międzyczasie możesz zajrzeć do materiałów i Niezbędnika. Są tam bezpłatne PDF-y, przewodniki i gotowe ścieżki tematyczne.</p>
+              <p>W międzyczasie możesz zajrzeć do materiałów. Są tam bezpłatne PDF-y, przewodniki i gotowe ścieżki tematyczne.</p>
               <div>
                 <Link href="/materialy" prefetch={false} className="prep-inline-link">
                   Zobacz materiały
-                </Link>
-                <Link href="/niezbednik" prefetch={false} className="prep-inline-link">
-                  Przejdź do Niezbędnika
                 </Link>
               </div>
             </div>

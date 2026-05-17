@@ -147,7 +147,7 @@ export function OfferEntrySection({
         <Link href={messageHref} prefetch={false} className="prep-inline-link">
           {COPY_CTA.contact.toLowerCase()}
         </Link>{' '}
-        pomaga wtedy, gdy chcesz tylko krótko doprecyzować temat. Jeśli wolisz najpierw materiały, nadal możesz wejść do Niezbędnika.
+        pomaga wtedy, gdy chcesz tylko krótko doprecyzować temat. Jeśli wolisz najpierw materiały, możesz przejść do materiałów PDF.
       </p>
       <p className="muted top-gap-small">{PUBLIC_OFFER_BOOKING_REASSURANCE}</p>
     </section>

@@ -382,6 +382,19 @@ export async function sendUrgentCustomerAckSms(
   return sendRawSms(`urgent-ack-${requestId}`, phone, message, 'urgent-customer-ack')
 }
 
+export async function sendUrgentPaymentLinkSms(
+  requestId: string,
+  customerName: string,
+  phone: string | null | undefined,
+  proposedDate: string,
+  proposedTime: string,
+  paymentUrl: string,
+): Promise<PaymentConfirmationSmsResult> {
+  const firstName = customerName.split(' ')[0] || customerName
+  const message = `Cześć ${firstName}, mam termin Kwadransu na już: ${proposedDate} ${proposedTime}. Opłać tutaj: ${paymentUrl} Krzysztof Regulski`
+  return sendRawSms(`urgent-payment-${requestId}`, phone, message, 'urgent-payment-link')
+}
+
 export async function sendManualPaymentPendingSms(
   booking: Pick<BookingRecord, 'id' | 'ownerName' | 'phone' | 'customerPhoneNormalized'>,
   holdMinutes: number,

@@ -17,7 +17,9 @@ const roomActiveTimeoutMs = 30000
 const retryActionTimeoutMs = 20000
 const uiSmokeOwnerName = 'UI Smoke'
 const uiSmokeEmail = 'ui-smoke@example.com'
-const primaryBookingLabel = /Umów spokojny pierwszy krok/i
+const homeHeading = /Behawiorysta psów i kotów online|Behawiorysta psow i kotow online/i
+const materialyHeading = /Materia.*PDF.*opiekun/i
+const pricingHeading = /Cennik konsultacji behawioralnych\.|Wybierz rozmowę dopasowaną do sytuacji|Wybierz rozmowe dopasowana do sytuacji/i
 
 function getWarsawSlotInMinutes(offsetMinutes: number) {
   const target = new Date(Date.now() + offsetMinutes * 60 * 1000)
@@ -423,7 +425,7 @@ async function runUiSmokeOnce() {
       '/psy',
       '/book',
       '/oferta',
-      '/niezbednik',
+      '/materialy',
     ].map((route) => fetch(`${appUrl}${route}`, { cache: 'no-store' }).catch(() => null)))
 
     browser = await chromium.launch({
@@ -446,9 +448,9 @@ async function runUiSmokeOnce() {
     await publicPage
       .getByRole('heading', {
         level: 1,
-        name: /Jak mogę Ci pomóc\?/i,
+        name: homeHeading,
       })
-      .waitFor()
+      .waitFor({ timeout: slowRouteTimeoutMs })
 
     const desktopPage = await adminContext.newPage()
 
@@ -457,35 +459,10 @@ async function runUiSmokeOnce() {
         ['mobile', publicPage],
         ['desktop', desktopPage],
       ] as const) {
-        await page.goto(`${appUrl}/koty`, { waitUntil: 'domcontentloaded' })
-        await page
-          .getByRole('heading', {
-            name: /Twoj kot zachowuje sie w sposob, ktory Cie niepokoi|Twój kot zachowuje się w sposób, który Cię niepokoi/i,
-          })
-          .waitFor({ timeout: slowRouteTimeoutMs })
-        await waitForButtonLink(page, /Kwadrans/i)
-        await page.getByRole('link', { name: /Zobacz materialy/i }).first().waitFor({ timeout: slowRouteTimeoutMs })
-        assert.ok((await page.locator('.summary-card').count()) >= 2, `${label}: expected cat page summary cards`)
-
-        await page.goto(`${appUrl}/psy`, { waitUntil: 'domcontentloaded' })
-        await page
-          .getByRole('heading', {
-            name: /Twoj pies zachowuje sie w sposob, ktory Cie niepokoi|Twój pies zachowuje się w sposób, który Cię niepokoi/i,
-          })
-          .waitFor({ timeout: slowRouteTimeoutMs })
-        await waitForButtonLink(page, /Kwadrans/i)
-        await page.getByRole('link', { name: /Zobacz materialy/i }).first().waitFor({ timeout: slowRouteTimeoutMs })
-        assert.ok((await page.locator('.summary-card').count()) >= 2, `${label}: expected dog page summary cards`)
-
-        await page.goto(`${appUrl}/oferta`, { waitUntil: 'domcontentloaded' })
-        await page.getByRole('heading', { level: 1, name: /Wybierz start dla swojej sytuacji\./i }).waitFor({ timeout: slowRouteTimeoutMs })
-        await page.getByRole('heading', { name: /Jedna zasada wyboru przed rezerwacja\./i }).waitFor({ timeout: slowRouteTimeoutMs })
-        assert.ok((await page.locator('.offer-card').count()) >= 3, `${label}: expected simplified public offer cards`)
-
-        await page.goto(`${appUrl}/oferta/poradniki-pdf`, { waitUntil: 'domcontentloaded' })
-        assert(page.url().includes('/materialy'), `${label}: expected poradniki-pdf route to redirect to /materialy`)
-        await page.getByRole('heading', { level: 1, name: /Materiały PDF gotowe do pobrania|Materialy PDF gotowe do pobrania/i }).waitFor({ timeout: slowRouteTimeoutMs })
-        assert.ok((await page.locator('.notatnik-material-card').count()) >= 5, `${label}: expected materialy cards`)
+        await verifyRedirectRoute(page, '/koty', '/', homeHeading)
+        await verifyRedirectRoute(page, '/psy', '/', homeHeading)
+        await verifyRedirectRoute(page, '/oferta', '/cennik', pricingHeading)
+        await verifyRedirectRoute(page, '/oferta/poradniki-pdf', '/cennik', pricingHeading)
       }
     }
 
@@ -497,37 +474,27 @@ async function runUiSmokeOnce() {
     for (const route of [
       {
         path: '/opinie',
-        heading: /Co opiekunowie mowia o konsultacjach|Co opiekunowie mówią o konsultacjach/i,
-        buttonLabels: [/Kwadrans/i],
+        heading: /Co opiekunowie mowia o konsultacjach|Co opiekunowie mówią o konsultacjach|Co mówią opiekunowie po rozmowie|Co mowia opiekunowie po rozmowie/i,
       },
       {
         path: '/o-mnie',
-        heading: /Krzysztof Regulski - behawiorysta psow i kotow|Krzysztof Regulski - behawiorysta psów i kotów/i,
-        buttonLabels: [/Kwadrans/i],
+        heading: /Krzysztof Regulski - behawiorysta psow i kotow|Krzysztof Regulski - behawiorysta psów i kotów|Krzysztof Regulski\. Behawiorysta psów i kotów|Krzysztof Regulski\. Behawiorysta psow i kotow/i,
       },
       {
         path: '/kontakt',
         heading: /Napisz krótko, co się dzieje\. Pomogę Ci wybrać najrozsądniejszy pierwszy krok\./i,
-        buttonLabels: [/Kwadrans/i],
       },
       {
-        path: '/niezbednik',
-        heading: /Nie wszystko trzeba od razu konsultować\. Czasem najpierw wystarczy dobrze poobserwować\./i,
-        buttonLabels: [/Umów pierwszy krok/i],
+        path: '/materialy',
+        heading: materialyHeading,
       },
       {
         path: '/cennik',
-        heading: /Cennik konsultacji behawioralnych\./i,
-        buttonLabels: [/Kwadrans/i],
-      },
-      {
-        path: '/konsultacja-behawioralna-online',
-        heading: /Pelna konsultacja behawioralna online|Konsultacja behawioralna online 60 min|Konsultacja behawioralna online - jak to wygląda/i,
-        buttonLabels: [/pelna konsultac|pełna konsultac|60 min/i],
+        heading: pricingHeading,
       },
       {
         path: '/blog',
-        heading: /Wiedza, która pomaga zrozumieć i działać|Teksty o zachowaniu psów i kotów - konkretnie, bez ogólników/i,
+        heading: /Wiedza, która pomaga zrozumieć i działać|Teksty o zachowaniu psów i kotów - konkretnie, bez ogólników|Zanim zaczniesz poprawiać zachowanie, warto zrozumieć, po co ono się pojawia/i,
       },
       {
         path: '/blog/dlaczego-moj-pies-szczeka-na-inne-psy',
@@ -545,60 +512,60 @@ async function runUiSmokeOnce() {
         path: '/blog/jak-wyglada-konsultacja-behawioralna-online',
         heading: /Jak wygląda konsultacja behawioralna online/i,
       },
-      {
-        path: '/psy/lek-separacyjny',
-        heading: /Lęk separacyjny u psa/i,
-        buttonLabels: [primaryBookingLabel],
-      },
-      {
-        path: '/psy/reaktywnosc-na-smyczy',
-        heading: /Reaktywność psa na smyczy/i,
-        buttonLabels: [primaryBookingLabel],
-      },
-      {
-        path: '/koty/konflikt-miedzy-kotami',
-        heading: /Konflikt między kotami w domu/i,
-        buttonLabels: [primaryBookingLabel],
-      },
-      {
-        path: '/koty/zalatwianie-poza-kuweta',
-        heading: /Kot załatwia się poza kuwetą/i,
-        buttonLabels: [primaryBookingLabel],
-      },
     ] as const) {
       await verifyPublicRoute(publicPage, route.path, route.heading, { buttonLabels: route.buttonLabels })
     }
 
     for (const route of [
       {
+        path: '/konsultacja-behawioralna-online',
+        destinationPath: '/',
+        heading: homeHeading,
+      },
+      {
+        path: '/psy/lek-separacyjny',
+        destinationPath: '/',
+        heading: homeHeading,
+      },
+      {
+        path: '/psy/reaktywnosc-na-smyczy',
+        destinationPath: '/',
+        heading: homeHeading,
+      },
+      {
+        path: '/koty/konflikt-miedzy-kotami',
+        destinationPath: '/',
+        heading: homeHeading,
+      },
+      {
+        path: '/koty/zalatwianie-poza-kuweta',
+        destinationPath: '/',
+        heading: homeHeading,
+      },
+      {
         path: '/oferta/konsultacja-behawioralna-online',
-        destinationPath: '/konsultacja-behawioralna-online',
-        heading: /Pelna konsultacja behawioralna online|Konsultacja behawioralna online 60 min|Konsultacja behawioralna online - jak to wygląda/i,
-        buttonLabels: [/pelna konsultac|pełna konsultac|60 min/i],
+        destinationPath: '/cennik',
+        heading: pricingHeading,
       },
       {
         path: '/behawiorysta-olsztyn',
-        destinationPath: '/behawiorysta-online-polska',
-        heading: /Behawiorysta online dla opiekunow psow i kotow|Behawiorysta online dla opiekunów psów i kotów|Behawiorysta psów i kotów online/i,
-        buttonLabels: [/Kwadrans/i],
+        destinationPath: '/',
+        heading: homeHeading,
       },
       {
         path: '/behawiorysta-psow',
-        destinationPath: '/psy',
-        heading: /Twoj pies zachowuje sie w sposob, ktory Cie niepokoi|Twój pies zachowuje się w sposób, który Cię niepokoi/i,
-        buttonLabels: [/Kwadrans/i],
+        destinationPath: '/',
+        heading: homeHeading,
       },
       {
         path: '/behawiorysta-kotow',
-        destinationPath: '/koty',
-        heading: /Twoj kot zachowuje sie w sposob, ktory Cie niepokoi|Twój kot zachowuje się w sposób, który Cię niepokoi/i,
-        buttonLabels: [/Kwadrans/i],
+        destinationPath: '/',
+        heading: homeHeading,
       },
       {
         path: '/oferta/poradniki-pdf',
-        destinationPath: '/materialy',
-        heading: /Materiały PDF gotowe do pobrania|Materialy PDF gotowe do pobrania/i,
-        buttonLabels: [/Materiały dla psa|Materialy dla psa/i],
+        destinationPath: '/cennik',
+        heading: pricingHeading,
       },
     ] as const) {
       await verifyRedirectRoute(publicPage, route.path, route.destinationPath, route.heading, {
@@ -607,7 +574,6 @@ async function runUiSmokeOnce() {
     }
 
     await publicPage.goto(`${appUrl}/book`, { waitUntil: 'domcontentloaded' })
-    await publicPage.waitForURL(/\/termin/, { timeout: routeNavigationTimeoutMs, waitUntil: 'domcontentloaded' })
     await publicPage.getByRole('heading', { name: /Wybierz termin konsultacji/i }).waitFor()
 
     await publicPage.goto(`${appUrl}/slot?problem=szczeniak`, { waitUntil: 'domcontentloaded' })

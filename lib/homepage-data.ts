@@ -109,12 +109,12 @@ export const homepageProcessSteps = [
   {
     step: '1',
     title: 'Mówisz, co naprawdę się dzieje',
-    copy: 'Bez fachowych nazw. Wystarczy: co robi pies albo kot, kiedy to się dzieje, od kiedy trwa i co już próbowaliście.',
+    copy: 'Wystarczy, że powiesz, co robi pies albo kot, kiedy to się dzieje, jak długo trwa i co już próbowaliście.',
   },
   {
     step: '2',
-    title: 'Układamy fakty i szukamy przyczyny',
-    copy: 'Na podstawie opisu, formularza, historii zachowania i - jeśli są - nagrań tworzę diagnozę behawioralną opartą na dostępnych danych.',
+    title: 'Porządkujemy informacje i szukamy przyczyny',
+    copy: 'Na podstawie opisu, formularza, historii zachowania i nagrań, jeśli są, tworzę diagnozę behawioralną opartą na dostępnych danych.',
   },
   {
     step: '3',

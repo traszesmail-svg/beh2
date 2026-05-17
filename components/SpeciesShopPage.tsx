@@ -1,8 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { Footer } from '@/components/Footer'
-import { Header } from '@/components/Header'
-import { NotatnikSideVisuals } from '@/components/NotatnikA'
+import { NotatnikFooter, NotatnikSideVisuals, NotatnikTopbar, PUBLIC_SITE_NAV_ITEMS } from '@/components/NotatnikA'
 import { BookShelfCard, BundleShelfCard, PdfShelfCard, ShopAnchorNav } from '@/components/ShopCatalog'
 import { FUNNEL_SECONDARY_LABEL, FUNNEL_UPGRADE_HREF, FUNNEL_UPGRADE_LABEL } from '@/lib/offers'
 import {
@@ -34,7 +32,7 @@ export function SpeciesShopPage({
   const speciesLabel = species === 'koty' ? 'kotów' : 'psów'
   const pdfCardsOnly = pdfCards.filter((card) => card.kind === 'pdf')
   const bundleCardsOnly = pdfCards.filter((card) => card.kind === 'pakiet')
-  const pdfShelfHref = '/niezbednik#polecane-starty'
+  const pdfShelfHref = '/materialy'
   const speciesAnchors = [
     { href: `#${species}-konsultacja`, label: 'Konsultacja 15 min' },
     { href: `#${species}-pdf`, label: 'Materiały PDF' },
@@ -107,7 +105,7 @@ export function SpeciesShopPage({
     <main className="page-wrap marketing-page">
       <NotatnikSideVisuals variant={species === 'koty' ? 'cat' : 'dog'} />
       <div className="container">
-        <Header />
+        <NotatnikTopbar tag="Regulski" navItems={PUBLIC_SITE_NAV_ITEMS} showUtilityLinks={false} />
 
         <section className="panel section-panel hero-surface shop-hero-panel">
           <div className="shop-hero-grid">
@@ -252,7 +250,7 @@ export function SpeciesShopPage({
           </div>
         </section>
 
-        <Footer variant="full" ctaHref={consultHref} ctaLabel="Umów 15 min" secondaryHref={pdfShelfHref} secondaryLabel="Zobacz materiały PDF" />
+        <NotatnikFooter showReviews={false} />
       </div>
     </main>
   )

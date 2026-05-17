@@ -20,6 +20,7 @@ import { buildBookMetadata, buildHomeMetadata } from '@/lib/seo'
 import { getDeployReadinessChecks, getGoLiveChecks, getVerifiedDeployReadinessChecks } from '@/lib/server/go-live'
 import { getPaymentModeStatus } from '@/lib/server/env'
 import { getQaCheckoutEligibility, getQaCheckoutPaymentReference, getPublicManualPaymentConfig } from '@/lib/server/payment-options'
+import { buildTodayUrgentSlotCandidates, isTodayUrgentSlotCandidate } from '@/lib/urgent-now'
 import { auditSupabaseSchemaText, getSupabaseSchemaAudit } from '@/scripts/lib/schema-audit'
 import { getDefaultProductionEnvSnapshotPath } from '@/scripts/lib/env-file'
 
@@ -30,6 +31,31 @@ function readSource(...parts: string[]) {
 function countMatches(source: string, pattern: RegExp) {
   return Array.from(source.matchAll(pattern)).length
 }
+
+test('kwadrans na juz candidates stay on today between the next half-hour and 18:00', () => {
+  const slots = buildTodayUrgentSlotCandidates(new Date('2026-05-15T13:17:00+02:00'))
+
+  assert.deepEqual(
+    slots.map((slot) => slot.id),
+    [
+      '2026-05-15-13:30',
+      '2026-05-15-14:00',
+      '2026-05-15-14:30',
+      '2026-05-15-15:00',
+      '2026-05-15-15:30',
+    ],
+  )
+  assert.equal(isTodayUrgentSlotCandidate('2026-05-15', '14:00', new Date('2026-05-15T13:17:00+02:00')), true)
+  assert.equal(isTodayUrgentSlotCandidate('2026-05-16', '14:00', new Date('2026-05-15T13:17:00+02:00')), false)
+})
+
+test('kwadrans na juz candidates never roll into tomorrow after 18:00', () => {
+  assert.deepEqual(
+    buildTodayUrgentSlotCandidates(new Date('2026-05-15T17:40:00+02:00')).map((slot) => slot.id),
+    ['2026-05-15-18:00'],
+  )
+  assert.deepEqual(buildTodayUrgentSlotCandidates(new Date('2026-05-15T18:01:00+02:00')), [])
+})
 
 function withEnv(
   overrides: Record<string, string | null | undefined>,

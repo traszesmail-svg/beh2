@@ -129,13 +129,6 @@ export const pageSeo: Record<string, PageSeo> = {
     priority: 0.6,
     changefreq: 'weekly',
   },
-  '/niezbednik': {
-    title: 'Darmowe materiały dla opiekunów psów i kotów | Regulski',
-    description: 'PDF-y, listy, ściągawki — gotowe materiały do pobrania dla opiekunów. Pierwszy tydzień że szczeniakiem, jak wprowadzić kota, lista zachowań do obserwacji.',
-    keywords: ['darmowe materiały behawiorysta', 'PDF szczeniak', 'lista zachowań kota'],
-    priority: 0.6,
-    changefreq: 'monthly',
-  },
   '/kontakt': {
     title: 'Kontakt — Regulski Behawiorysta',
     description: 'Email, WhatsApp, formularz kontaktowy. Odpowiadam zwykle w ciągu 24h. Bez publicznego telefonu — kontakt mailowy lub przez rezerwację.',

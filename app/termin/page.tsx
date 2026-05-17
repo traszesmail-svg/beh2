@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { unstable_noStore as noStore } from 'next/cache'
 import { redirect } from 'next/navigation'
@@ -42,7 +43,7 @@ export const metadata: Metadata = buildMarketingMetadata({
   description: 'Prosty widok wyboru terminu po krótkim wyborze tematu psa albo kota.',
 })
 
-const terminSteps = ['Gatunek', 'Temat', 'Termin', 'Dane'] as const
+const terminSteps = ['Termin', 'Godzina', 'Dane', 'Płatność'] as const
 
 const bookingFaqItems = [
   'Jak wygląda konsultacja online?',
@@ -173,6 +174,8 @@ export async function BookingSlotCalendar({
 
   const calendar = buildCalendarDays(groupedAvailability)
   const problemSpecies = requestedSpecies ?? getProblemSpecies(problem)
+  const petVisualSrc = problemSpecies === 'kot' ? '/wybor/cat-hero-photo.png' : '/branding/case-studies/German_Shepherd.jpg'
+  const petVisualAlt = problemSpecies === 'kot' ? 'Spokojny kot w domu' : 'Spokojny pies w naturalnym świetle'
   const contactHref = `/kontakt?species=${problemSpecies}#formularz`
   const isUrgentBooking = serviceType === 'kwadrans-na-juz'
   const sideVisualVariant = 'booking'
@@ -229,11 +232,11 @@ export async function BookingSlotCalendar({
   )
 
   return (
-    <main className="notatnik-page termin-page" data-analytics-disabled={qaBooking ? 'true' : undefined}>
+    <main className={`notatnik-page termin-page termin-${problemSpecies}-page`} data-analytics-disabled={qaBooking ? 'true' : undefined}>
       <Schema
         data={getBreadcrumbJsonLd([
           { name: 'Strona główna', path: '/' },
-          { name: 'Quiz', path: '/wybor' },
+          { name: 'Quiz', path: '/quiz' },
           { name: 'Termin', path: '/book' },
         ])}
       />
@@ -245,9 +248,9 @@ export async function BookingSlotCalendar({
           <div className="termin-calendar-head">
             <div className="termin-breadcrumb">
               <CalendarDays size={17} strokeWidth={1.8} aria-hidden="true" />
-              <span>Umów konsultację</span>
+              <span>Wybór terminu</span>
               <span>/</span>
-              <strong>booking</strong>
+              <strong>Booking</strong>
             </div>
             {isUrgentBooking ? (
               <h1>Rezerwacja Kwadrans na już</h1>
@@ -257,13 +260,17 @@ export async function BookingSlotCalendar({
             <p>
               {isUrgentBooking
                 ? 'Wybierz najbliższy dostępny termin krótkiej konsultacji. Zajmie Ci to tylko chwilę.'
-                : 'Wybierz dogodną dla Ciebie datę i godzinę krótkiej konsultacji. Zajmie Ci to tylko chwilę.'}
+                : 'Wybierz dogodny dla Ciebie dzień i godzinę. Konsultacja odbywa się online.'}
             </p>
           </div>
 
+          <figure className="termin-hero-photo" aria-hidden="true">
+            <Image src={petVisualSrc} alt={petVisualAlt} fill priority sizes="(max-width: 680px) 340px, 430px" />
+          </figure>
+
           <div className="termin-step-track" aria-label="Etapy rezerwacji">
             {terminSteps.map((step, index) => (
-              <span key={step} className={index === 2 ? 'is-active' : ''}>
+              <span key={step} className={index === 0 ? 'is-active' : ''}>
                 <strong>{index + 1}</strong>
                 {step}
               </span>

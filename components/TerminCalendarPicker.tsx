@@ -1,8 +1,9 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useMemo, useState, type ReactNode } from 'react'
-import { CalendarDays, Cat, Check, Clock3, Dog, Headphones, PawPrint, Tag, Video } from 'lucide-react'
+import { CalendarDays, Cat, Check, Clock3, Dog, Headphones, Lightbulb, PawPrint, Tag, Video } from 'lucide-react'
 import { trackAnalyticsEvent } from '@/lib/analytics'
 
 export type TerminCalendarSlot = {
@@ -62,6 +63,8 @@ export function TerminCalendarPicker({ monthLabel, slotCount, days, summary, cho
   const SpeciesIcon = getSpeciesIcon(summary.species)
   const ModeIcon = summary.modeLabel.toLowerCase().includes('video') ? Video : Headphones
   const speciesLabel = summary.species === 'kot' ? 'Kot' : summary.species === 'pies' ? 'Pies' : 'Do wyboru'
+  const petVisualSrc = summary.species === 'kot' ? '/wybor/cat-hero-photo.png' : '/branding/case-studies/German_Shepherd.jpg'
+  const petVisualAlt = summary.species === 'kot' ? 'Spokojny kot w domu' : 'Spokojny pies'
 
   function chooseDay(day: TerminCalendarDay) {
     setSelectedDayDate(day.date)
@@ -143,6 +146,18 @@ export function TerminCalendarPicker({ monthLabel, slotCount, days, summary, cho
             <div className="termin-time-empty">Brak terminów w tym dniu.</div>
           )}
         </div>
+        <div className="termin-calendar-hint-card">
+          <span aria-hidden="true">
+            <Lightbulb size={23} strokeWidth={1.85} />
+          </span>
+          <div>
+            <strong>Nie wiesz, którą godzinę wybrać?</strong>
+            <p>Wybierz moment, w którym możesz spokojnie skupić się na rozmowie. Szczegóły doprecyzujemy w formularzu.</p>
+          </div>
+        </div>
+        <div className="termin-calendar-pet-visual" aria-hidden="true">
+          <Image src={petVisualSrc} alt={petVisualAlt} fill sizes="(max-width: 680px) 320px, 360px" />
+        </div>
         {choicePanel ? <div className="termin-calendar-choice-slot">{choicePanel}</div> : null}
       </div>
 
@@ -196,7 +211,7 @@ export function TerminCalendarPicker({ monthLabel, slotCount, days, summary, cho
         {selectedSlot ? (
           <Link href={selectedSlot.href} prefetch={false} className="notatnik-btn termin-summary-cta">
             <CalendarDays size={17} strokeWidth={1.9} aria-hidden="true" />
-            <span>Umów spokojny pierwszy krok</span>
+            <span>Zarezerwuj wybrany termin</span>
           </Link>
         ) : (
           <Link href={summary.contactHref} prefetch={false} className="notatnik-btn termin-summary-cta">

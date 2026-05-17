@@ -132,7 +132,7 @@ export function ReferenceFooter() {
       </Link>
 
       <nav className="reference-footer-nav" aria-label="Nawigacja w stopce">
-        <Link href="/wybor" prefetch={false}>Quiz</Link>
+        <Link href="/quiz" prefetch={false}>Quiz</Link>
         <Link href="/cennik" prefetch={false}>Cennik</Link>
         <Link href="/o-mnie" prefetch={false}>O mnie</Link>
         <Link href="/blog" prefetch={false}>Blog</Link>

@@ -51,7 +51,7 @@ export const FUNNEL_UPGRADE_HREF = buildBookHref(null, 'konsultacja-30-min')
 export const FUNNEL_UPGRADE_LABEL = FUNNEL_CTA_LABELS.bridge
 export const FUNNEL_FULL_CONSULTATION_HREF = buildBookHref(null, 'konsultacja-behawioralna-online')
 export const FUNNEL_FULL_CONSULTATION_LABEL = FUNNEL_CTA_LABELS.consultation
-export const FUNNEL_SECONDARY_HREF = '/niezbednik'
+export const FUNNEL_SECONDARY_HREF = '/materialy'
 export const FUNNEL_SECONDARY_LABEL = FUNNEL_CTA_LABELS.secondary
 
 export const OFFERS: Offer[] = [
@@ -177,9 +177,9 @@ export const OFFERS: Offer[] = [
   },
   {
     slug: 'poradniki-pdf',
-    contactServiceSlugs: ['poradniki-pdf', 'poradnik-pdf', 'pdf', 'poradniki', 'niezbędnik'],
-    title: 'Niezbędnik',
-    shortTitle: 'Niezbędnik',
+    contactServiceSlugs: ['poradniki-pdf', 'poradnik-pdf', 'pdf', 'poradniki'],
+    title: 'Materiały PDF',
+    shortTitle: 'Materiały PDF',
     eyebrow: 'Materiały pomocnicze',
     kind: 'resource',
     priceLabel: null,
@@ -196,16 +196,16 @@ export const OFFERS: Offer[] = [
     bestFor: ['powrót do zaleceń', 'materiały pomocnicze', 'spokojne pogłębienie tematu'],
     outcomes: ['czytelny materiał na później', 'mniej chaosu między krokami', 'łatwiejsza decyzja o kolejnym ruchu'],
     primaryCtaLabel: FUNNEL_CTA_LABELS.secondary,
-    primaryHref: '/niezbednik',
+    primaryHref: '/materialy',
     detailCtaLabel: FUNNEL_CTA_LABELS.secondary,
-    detailHref: '/niezbednik',
+    detailHref: '/materialy',
     secondaryCtaLabel: FUNNEL_CTA_LABELS.primary,
     secondaryHref: buildBookHref(),
     imageSrc: CAT_HOME_PHOTO.src,
     imageAlt: CAT_HOME_PHOTO.alt,
     imageWidth: CAT_HOME_PHOTO.width,
     imageHeight: CAT_HOME_PHOTO.height,
-    note: 'Niezbędnik pomaga przygotować się do rozmowy albo wrócić do zaleceń po konsultacji.',
+    note: 'Materiały PDF pomagają przygotować się do rozmowy albo wrócić do zaleceń po konsultacji.',
   },
 ]
 

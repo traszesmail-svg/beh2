@@ -440,7 +440,7 @@ async function assertPublicSiteNavVisible(page: Page, routePath: string) {
   const nav = page.locator('header.notatnik-topbar nav[aria-label="Glowne sekcje"]').first()
   await waitForAnyVisible([nav], 20000)
 
-  for (const label of ['Pies', 'Kot', 'Niezbednik', 'Blog', 'O mnie', 'Cennik', 'Kontakt']) {
+  for (const label of ['O mnie', 'Cennik', 'FAQ', 'Blog', 'Kontakt']) {
     const link = nav.getByRole('link', { name: new RegExp(`^${escapeRegExp(label)}$`, 'i') }).first()
 
     if (!(await isVisible(link))) {

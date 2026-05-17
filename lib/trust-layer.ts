@@ -247,19 +247,19 @@ export const FAQ_SHORTLISTS = {
   ] satisfies TrustFaqItem[],
   toolkit: [
     {
-      question: 'Czy Niezbędnik zastępuje konsultację?',
+      question: 'Czy materiały PDF zastępują konsultację?',
       answer:
         'Nie. To uporządkowany hub materiałów do samodzielnej pracy. Jeśli temat jest mieszany albo wraca, rozmowa zwykle daje lepszy start.',
     },
     {
-      question: 'Od czego zacząć w Niezbędniku?',
+      question: 'Od czego zacząć w materiałach PDF?',
       answer:
         'Od jednego materiału najbliższego Twojej sytuacji. Jeśli po przejrzeniu nadal nie wiesz, co wybrać, napisz krótką wiadomość.',
     },
     {
       question: 'Czy materiały są tylko dla osób przed konsultacją?',
       answer:
-        'Nie. W Niezbędniku są bezpłatne materiały startowe, własne przewodniki i materiały uzupełniające do dalszej pracy.',
+        'Nie. W materiałach PDF są materiały startowe, własne przewodniki i materiały uzupełniające do dalszej pracy.',
     },
     {
       question: 'Czy po materiale warto wrócić do rozmowy?',
@@ -338,7 +338,7 @@ export const TRUST_SIGNAL_SETS = {
   toolkit: [
     {
       title: 'Materiały jako wsparcie, nie zamiennik rozmowy',
-      copy: 'Niezbędnik ma porządkować temat i dawać punkt startu. Gdy sytuacja jest wielowątkowa, lepiej przejść do rozmowy.',
+      copy: 'Materiały PDF mają porządkować temat i dawać punkt startu. Gdy sytuacja jest wielowątkowa, lepiej przejść do rozmowy.',
     },
     {
       title: 'Selekcja zamiast katalogu wszystkiego',

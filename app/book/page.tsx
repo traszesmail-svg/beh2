@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
+import { redirect } from 'next/navigation'
 import { BookingSlotCalendar } from '@/app/termin/page'
+import { appendSearchParams, readSearchParam } from '@/lib/booking-routing'
 import { buildMarketingMetadata } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
@@ -17,5 +19,9 @@ export default function BookPage({
 }: {
   searchParams?: Record<string, string | string[] | undefined>
 }) {
+  if (readSearchParam(searchParams?.service) === 'kwadrans-na-juz') {
+    redirect(appendSearchParams('/kwadrans-na-juz', searchParams, ['service']))
+  }
+
   return <BookingSlotCalendar searchParams={searchParams} />
 }

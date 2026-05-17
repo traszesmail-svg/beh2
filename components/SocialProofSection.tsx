@@ -252,7 +252,7 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
           <div className="offer-detail-cta-copy">
             <span className="section-eyebrow">Dalszy krok</span>
             <strong>Chcesz zobaczyć pełna sekcje opinii?</strong>
-            <span>Jeśli wolisz spokojniejszy start, możesz wybrać 15-minutową konsultację behawioralną albo Niezbędnik.</span>
+            <span>Jeśli wolisz spokojniejszy start, możesz wybrać 15-minutową konsultację behawioralną albo materiały PDF.</span>
             <span>Pełny formularz publikacji i dodatkowe wskazowki są na osobnej podstronie.</span>
           </div>
 
@@ -263,7 +263,7 @@ export function SocialProofSection({ showSubmissionForm = true }: SocialProofSec
             <Link href="/book" prefetch={false} className="button button-ghost big-button">
               {FUNNEL_CTA_LABELS.primary}
             </Link>
-            <Link href="/niezbednik" prefetch={false} className="button button-ghost big-button">
+            <Link href="/materialy" prefetch={false} className="button button-ghost big-button">
               {FUNNEL_CTA_LABELS.secondary}
             </Link>
           </div>

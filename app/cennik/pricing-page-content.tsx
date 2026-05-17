@@ -47,8 +47,8 @@ export const pricingCards: Array<{
   {
     service: 'konsultacja-30-min',
     badge: 'więcej czasu',
-    title: 'Dwa kwadranse - gdy jedno pytanie robi się kilkoma',
-    summaryTitle: 'Dwa kwadranse  gdy jedno pytanie robi się kilkoma',
+    title: 'Dwa kwadranse - gdy z jednego pytania robi się kilka',
+    summaryTitle: 'Dwa kwadranse  gdy z jednego pytania robi się kilka',
     price: '169 zł',
     copy: '30 minut rozmowy, gdy czujesz, że to nie jest jedna rzecz: zachowanie, emocje, dom, spacer albo relacje zaczynają się mieszać.',
     supportCopy:
@@ -70,7 +70,7 @@ export const pricingCards: Array<{
   },
 ]
 
-function getDirectBookingHref(service: PublicBookingServiceType) {
+export function getDirectBookingHref(service: PublicBookingServiceType) {
   return buildBookHref(null, service)
 }
 
@@ -131,34 +131,6 @@ export function PricingSummaryCard() {
         </Link>
       </div>
     </div>
-  )
-}
-
-export function PricingDirectBookingSection() {
-  return (
-    <section className="reference-section-card reference-pricing-direct-section">
-      <div className="reference-section-split-head">
-        <div>
-          <h2>Wiesz już, czego potrzebujesz?</h2>
-          <p>
-            Możesz od razu przejść do konkretnego formatu. Jeśli nie masz pewności,
-            zostaje spokojny wybór przez kilka pytań.
-          </p>
-        </div>
-        <Link href={bookHref} prefetch={false} className="reference-btn reference-btn-secondary">
-          Pomóż mi dobrać pierwszy krok
-        </Link>
-      </div>
-      <div className="reference-pricing-direct-grid">
-        {pricingCards.map((card) => (
-          <Link key={card.service} href={getDirectBookingHref(card.service)} prefetch={false} className="reference-pricing-direct-card">
-            <span>{card.badge}</span>
-            <strong>{card.title}</strong>
-            <small>{card.price}</small>
-          </Link>
-        ))}
-      </div>
-    </section>
   )
 }
 

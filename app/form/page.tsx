@@ -35,6 +35,8 @@ import { getPublicContactDetails } from '@/lib/site'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
+const bookingFlowSteps = ['Termin', 'Godzina', 'Dane', 'Płatność'] as const
+
 export function generateMetadata(): Metadata {
   return buildTechnicalMetadata({
     title: 'Dane do rezerwacji',
@@ -68,8 +70,7 @@ export default async function FormPage({
   const slotsHref = buildSlotHref(problem, serviceQuery, qaBooking, species)
   const isCat = species === 'kot'
   const publicContact = getPublicContactDetails()
-  const petImage = isCat ? '/images/homepage/home-bg-cat-1to1.webp' : '/images/homepage/home-bg-dog-1to1.webp'
-  const petNoun = isCat ? 'kotem' : 'psem'
+  const petImage = isCat ? '/wybor/cat-hero-photo.png' : '/faq/faq-help-illustration-clean.png'
   const heroImageAlt = isCat
     ? 'Kot siedzący w spokojnym domowym świetle'
     : 'Pies siedzący w spokojnym leśnym świetle'
@@ -114,10 +115,27 @@ export default async function FormPage({
       <div className="notatnik-shell booking-form-shell">
         <NotatnikTopbar tag="Rezerwacja konsultacji" navItems={PUBLIC_BOOKING_FLOW_NAV_ITEMS} ctaHref={slotsHref} ctaLabel="Wróć do terminów" ctaVariant="ghost" />
 
+        <section className="booking-flow-stage-head" aria-label="Etap rezerwacji">
+          <div className="termin-breadcrumb">
+            <CalendarDays size={15} strokeWidth={1.85} aria-hidden="true" />
+            <span>Wybór terminu</span>
+            <span>/</span>
+            <strong>Booking</strong>
+          </div>
+          <div className="termin-step-track booking-flow-step-track" aria-label="Etapy rezerwacji">
+            {bookingFlowSteps.map((step, index) => (
+              <span key={step} className={index === 2 ? 'is-active' : ''}>
+                <strong>{index + 1}</strong>
+                {step}
+              </span>
+            ))}
+          </div>
+        </section>
+
         <section className="booking-form-hero">
           <div className="booking-form-hero-copy">
-            <h1>Szybka konsultacja behawioralna z Krzysztofem Regulskim.</h1>
-            <p>15 minut rozmowy, żeby uporządkować problem i ustalić pierwszy sensowny krok dla Ciebie i zwierzęcia.</p>
+            <h1>Uzupełnij dane do rozmowy</h1>
+            <p>Podaj krótki opis sytuacji. To wystarczy, żeby przygotować rozmowę i nie tracić czasu na zbędne pytania.</p>
             {qaBooking ? (
               <div className="notatnik-contact-note">
                 <strong>Tryb testowy</strong>
